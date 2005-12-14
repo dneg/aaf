@@ -52,11 +52,11 @@ using namespace std;
 class TestFileBuilder
 {
     public:
-    
+
         enum TrackType { NONE, AUDIO, PICTURE, TIMECODE, EDGECODE, AUXILIARY };
         static const int INPUT_SEGMENT = 1;
         static const int RENDERING = 2;
-    
+
         TestFileBuilder( const char* outFile );
         ~TestFileBuilder();
 
@@ -90,28 +90,28 @@ class TestFileBuilder
 
         //Create Segments:
         //Type A:
-        shared_ptr<AxComponent> CreateTimecode( TrackType essenceType, const AxString& strNothing, aafLength_t length, bool hasLength );
-        shared_ptr<AxComponent> CreateEdgecode( TrackType essenceType, const AxString& strNothing, aafLength_t length, bool hasLength );
-        shared_ptr<AxComponent> CreateTimecodeStream12M( TrackType essenceType, const AxString& strNothing, aafLength_t length, bool hasLength );
-        shared_ptr<AxComponent> CreateEOC( TrackType essenceType, const AxString& strNothing, aafLength_t length, bool hasLength );
-        shared_ptr<AxComponent> CreateOOF( TrackType essenceType, const AxString& strNothing, aafLength_t length, bool hasLength );
+        shared_ptr<AxComponent> CreateTimecode( TrackType essenceType, const AxString& strNothing, aafLength_t length, bool hasLength, int intNothing, bool boolNothing );
+        shared_ptr<AxComponent> CreateEdgecode( TrackType essenceType, const AxString& strNothing, aafLength_t length, bool hasLength, int intNothing, bool boolNothing );
+        shared_ptr<AxComponent> CreateTimecodeStream12M( TrackType essenceType, const AxString& strNothing, aafLength_t length, bool hasLength, int intNothing, bool boolNothing );
+        shared_ptr<AxComponent> CreateEOC( TrackType essenceType, const AxString& strNothing, aafLength_t length, bool hasLength, int intNothing, bool boolNothing );
+        shared_ptr<AxComponent> CreateOOF( TrackType essenceType, const AxString& strNothing, aafLength_t length, bool hasLength, int startTime, bool hasStartTime );
 
         //Type B:
-        shared_ptr<AxComponent> CreateSourceClip( TrackType essenceType, const AxString& strNothing, aafLength_t length, bool hasLength );
+        shared_ptr<AxComponent> CreateSourceClip( TrackType essenceType, const AxString& strNothing, aafLength_t length, bool hasLength, int startTime, bool hasStartTime );
 
         //Type C:
-        shared_ptr<AxComponent> CreateTransition( TrackType essenceType, const AxString& strNothing, aafLength_t length, bool hasLength );
-        shared_ptr<AxComponent> CreateSequence( TrackType essenceType, const AxString& strNothing, aafLength_t length, bool hasLength );
-        shared_ptr<AxComponent> CreateCommentMarker( TrackType essenceType, const AxString& strNothing, aafLength_t length, bool hasLength );
-        shared_ptr<AxComponent> CreateDescriptiveMarker( TrackType essenceType, const AxString& strNothing, aafLength_t length, bool hasLength );
-        
+        shared_ptr<AxComponent> CreateTransition( TrackType essenceType, const AxString& strNothing, aafLength_t length, bool hasLength, int intNothing, bool boolNothing );
+        shared_ptr<AxComponent> CreateSequence( TrackType essenceType, const AxString& strNothing, aafLength_t length, bool hasLength, int intNothing, bool boolNothing );
+        shared_ptr<AxComponent> CreateCommentMarker( TrackType essenceType, const AxString& strNothing, aafLength_t length, bool hasLength, int position, bool hasPosition );
+        shared_ptr<AxComponent> CreateDescriptiveMarker( TrackType essenceType, const AxString& strNothing, aafLength_t length, bool hasLength, int position, bool hasPosition );
+
         //Type D:
-        shared_ptr<AxComponent> CreateOperationGroup( TrackType essenceType, const AxString& opDef, aafLength_t length, bool hasLength );
-       
+        shared_ptr<AxComponent> CreateOperationGroup( TrackType essenceType, const AxString& opDef, aafLength_t length, bool hasLength, int intNothing, bool boolNothing );
+
         //Fill Components:
         //Type B:
         void InitializeSourceClip( shared_ptr<AxSourceReference> parent, AxMob& child );
-        
+
         //Type C:
         void AddToTransition( shared_ptr<AxComponent> parent, AxComponent& child );
         void AddToSequence( shared_ptr<AxComponent> parent, AxComponent& child );
@@ -119,34 +119,34 @@ class TestFileBuilder
 
         //Type D:
         void AddToOperationGroup( shared_ptr<AxSegment> parent, AxSegment& child, int property );
-        
+
         //Annotation:
         void AddComment( shared_ptr<AxComponent> axComponent, const AxString& name, const AxString& value );
         void AddKLVData( shared_ptr<AxComponent> axComponent, const AxString& keyName, const AxString& value );
 
         //Mob Slots:
-        void AttachTimelineSlot( AxMob& parent, AxSegment& axSegment, aafRational_t editRate, const AxString& name, bool isNamed, int physicalTrackNum, bool isNumbered, int markedIn, bool isMarkedIn, int markedOut, bool isMarkedOut );
-        void AttachEventSlot( AxMob& parent, AxSegment& axSegment, aafRational_t editRate, const AxString& name, bool isNamed, int physicalTrackNum, bool isNumbered, int intNothing1, bool boolNothing1, int intNothing2, bool boolNothing2 );
-        void AttachStaticSlot( AxMob& parent, AxSegment& axSegment, aafRational_t editRate, const AxString& name, bool isNamed, int physicalTrackNum, bool isNumbered, int intNothing1, bool boolNothing1, int intNothing2, bool boolNothing2 );
-        
+        void AttachTimelineSlot( AxMob& parent, AxSegment& axSegment, aafRational_t editRate, const AxString& name, bool isNamed, int physicalTrackNum, bool isNumbered, int markedIn, bool isMarkedIn, int markedOut, bool isMarkedOut, int orgin );
+        void AttachEventSlot( AxMob& parent, AxSegment& axSegment, aafRational_t editRate, const AxString& name, bool isNamed, int physicalTrackNum, bool isNumbered, int intNothing1, bool boolNothing1, int intNothing2, bool boolNothing2, int intNothing3 );
+        void AttachStaticSlot( AxMob& parent, AxSegment& axSegment, aafRational_t editRate, const AxString& name, bool isNamed, int physicalTrackNum, bool isNumbered, int intNothing1, bool boolNothing1, int intNothing2, bool boolNothing2, int intNothing3 );
+
         //Parameters:
         void AttachConstantRationalParameter( AxOperationGroup& axOpGroup, const aafUID_t& paramDefId, aafUInt32 numerator, aafUInt32 denominator, const aafUID_t& uidNothing );
         void AttachVaryingRationalParameter( AxOperationGroup& axOpGroup, const aafUID_t& paramDefId, aafUInt32 numerator, aafUInt32 denominator, const aafUID_t& interpolationDefId );
-        
+
         //Interchange Objects:
         void AttachDescriptiveFramework( shared_ptr<AxDescriptiveMarker> axMarker );
-        
+
         //Other:
         void SetOperationalPattern( aafUID_t pattern );
         void UseLegacyEffectDefinitions();
 
     private:
-    
+
         AxFile _axFile;
         aafUInt32 _mobCount;
         map<AxString, aafUID_t> _namedAUIDs;
         bool _useLegacyEffectDefinitions;
-        
+
         const aafMobID_t GenerateMobId();
         const aafUID_t GenerateAUID();
         void AddDataDef( AxComponent& axComponent, TrackType essenceType );

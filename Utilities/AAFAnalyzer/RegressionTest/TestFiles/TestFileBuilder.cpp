@@ -63,20 +63,20 @@ using namespace aafanalyzer;
 //======================================================================
 //======================================================================
 
-namespace aafanalyzer 
+namespace aafanalyzer
 {
 
 using namespace std;
 using namespace boost;
 
 /*
- * 
+ *
  * Constructor/Destructor
- * 
+ *
  */
 
-TestFileBuilder::TestFileBuilder( const char* outFile) 
-    : _mobCount( 0 ), 
+TestFileBuilder::TestFileBuilder( const char* outFile)
+    : _mobCount( 0 ),
       _useLegacyEffectDefinitions( false )
 {
     AxInit initObj;
@@ -84,7 +84,7 @@ TestFileBuilder::TestFileBuilder( const char* outFile)
     ssOutFile << outFile;
     AxString filename( ssOutFile.str().c_str() );
 
-        
+
     try {
         if ( AxFile::isAAFFile( filename ) ) {
             throw AxString( L"Error: File already exists" );
@@ -100,10 +100,10 @@ TestFileBuilder::TestFileBuilder( const char* outFile)
 
     wcout << L"Create new AAF File"<< endl;
     _axFile.OpenNewModify( filename );
-    
+
     AxHeader axHeader( _axFile.getHeader() );
     AxDictionary axDictionary( axHeader.GetDictionary() );
-    
+
     shared_ptr<AxDataDef> spAxDataDef( new AxDataDef( AxCreateInstance<IAAFDataDef>( axDictionary ) ) );
     spAxDataDef->Initialize( kAAFDataDef_Unknown, L"Unknown", L"Unknown" );
     axDictionary.RegisterDataDef( *spAxDataDef );
@@ -112,15 +112,15 @@ TestFileBuilder::TestFileBuilder( const char* outFile)
 TestFileBuilder::~TestFileBuilder()
 {
     _axFile.Save();
-    _axFile.Close();   
+    _axFile.Close();
 }
 
 /*
- * 
+ *
  * Definitions
- * 
+ *
  */
- 
+
 void TestFileBuilder::CreateKLVDataDefinition( const AxString& name, const AxString& description )
 {
     AxHeader axHeader( _axFile.getHeader() );
@@ -130,7 +130,7 @@ void TestFileBuilder::CreateKLVDataDefinition( const AxString& name, const AxStr
     aafUID_t auid = GenerateAUID();
 
     axDictionary.RegisterKLVDataKey( auid, axDictionary.LookupTypeDef( kAAFTypeID_String ) );
-   
+
     axKLVDef.Initialize( auid, name, description );
     _namedAUIDs[name] = auid;
 
@@ -144,10 +144,10 @@ void TestFileBuilder::CreateTaggedValueDefinition( const AxString& name, const A
 
     AxTaggedValueDef axTaggedDef( AxCreateInstance<IAAFTaggedValueDefinition> ( axDictionary ) );
     aafUID_t auid = GenerateAUID();
-   
+
     axTaggedDef.Initialize( auid, name, description );
     _namedAUIDs[name] = auid;
-    
+
     axDictionary.RegisterTaggedValueDef( axTaggedDef );
 }
 
@@ -158,24 +158,24 @@ void TestFileBuilder::CreateOperationDefinition( const AxString& name, const AxS
 
     AxOperationDef axOpDef( AxCreateInstance<IAAFOperationDef> ( axDictionary ) );
     aafUID_t auid = GenerateAUID();
-   
+
     axOpDef.Initialize( auid, name, description );
     _namedAUIDs[name] = auid;
-    
+
     axDictionary.RegisterOperationDef( axOpDef );
 }
 
 /*
- * 
+ *
  * Mobs
- * 
+ *
  */
 
 shared_ptr<AxMob> TestFileBuilder::AddTopLevel( const AxString& name, bool isNamed, aafRational_t ratNothing, aafUInt32 intNothing, bool boolNothing )
-{           
+{
     AxHeader axHeader( _axFile.getHeader() );
     AxDictionary axDictionary( axHeader.GetDictionary() );
-    
+
     shared_ptr<AxCompositionMob> spAxCompMob( new AxCompositionMob( AxCreateInstance<IAAFCompositionMob>( axDictionary ) ) );
     if ( isNamed )
     {
@@ -185,15 +185,15 @@ shared_ptr<AxMob> TestFileBuilder::AddTopLevel( const AxString& name, bool isNam
     spAxCompMob->SetMobID( this->GenerateMobId() );
 
     axHeader.AddMob( *spAxCompMob );
-    
-    return spAxCompMob;    
+
+    return spAxCompMob;
 }
 
 shared_ptr<AxMob> TestFileBuilder::AddLowerLevel( const AxString& name, bool isNamed, aafRational_t ratNothing, aafUInt32 intNothing, bool boolNothing )
-{           
+{
     AxHeader axHeader( _axFile.getHeader() );
     AxDictionary axDictionary( axHeader.GetDictionary() );
-    
+
     shared_ptr<AxCompositionMob> spAxCompMob( new AxCompositionMob( AxCreateInstance<IAAFCompositionMob>( axDictionary ) ) );
     if ( isNamed )
     {
@@ -203,15 +203,15 @@ shared_ptr<AxMob> TestFileBuilder::AddLowerLevel( const AxString& name, bool isN
     spAxCompMob->SetMobID( this->GenerateMobId() );
 
     axHeader.AddMob( *spAxCompMob );
-    
-    return spAxCompMob;   
+
+    return spAxCompMob;
 }
 
 shared_ptr<AxMob> TestFileBuilder::AddSubClip( const AxString& name, bool isNamed, aafRational_t ratNothing, aafUInt32 intNothing, bool boolNothing )
-{           
+{
     AxHeader axHeader( _axFile.getHeader() );
     AxDictionary axDictionary( axHeader.GetDictionary() );
-    
+
     shared_ptr<AxCompositionMob> spAxCompMob( new AxCompositionMob( AxCreateInstance<IAAFCompositionMob>( axDictionary ) ) );
     if ( isNamed )
     {
@@ -221,15 +221,15 @@ shared_ptr<AxMob> TestFileBuilder::AddSubClip( const AxString& name, bool isName
     spAxCompMob->SetMobID( this->GenerateMobId() );
 
     axHeader.AddMob( *spAxCompMob );
-    
-    return spAxCompMob;   
+
+    return spAxCompMob;
 }
 
 shared_ptr<AxMob> TestFileBuilder::AddAdjustedClip( const AxString& name, bool isNamed, aafRational_t ratNothing, aafUInt32 intNothing, bool boolNothing )
-{           
+{
     AxHeader axHeader( _axFile.getHeader() );
     AxDictionary axDictionary( axHeader.GetDictionary() );
-    
+
     shared_ptr<AxCompositionMob> spAxCompMob( new AxCompositionMob( AxCreateInstance<IAAFCompositionMob>( axDictionary ) ) );
     if ( isNamed )
     {
@@ -239,12 +239,12 @@ shared_ptr<AxMob> TestFileBuilder::AddAdjustedClip( const AxString& name, bool i
     spAxCompMob->SetMobID( this->GenerateMobId() );
 
     axHeader.AddMob( *spAxCompMob );
-    
+
     return spAxCompMob;
 }
 
 shared_ptr<AxMob> TestFileBuilder::AddTemplateClip( const AxString& name, bool isNamed, aafRational_t ratNothing, aafUInt32 intNothing, bool boolNothing )
-{ 
+{
     AxHeader axHeader( _axFile.getHeader() );
     AxDictionary axDictionary( axHeader.GetDictionary() );
 
@@ -258,12 +258,12 @@ shared_ptr<AxMob> TestFileBuilder::AddTemplateClip( const AxString& name, bool i
     spAxMasterMob->SetMobID( this->GenerateMobId() );
 
     axHeader.AddMob( *spAxMasterMob );
-    
+
     return spAxMasterMob;
 }
 
 shared_ptr<AxMob> TestFileBuilder::AddClip( const AxString& name, bool isNamed, aafRational_t ratNothing, aafUInt32 intNothing, bool boolNothing )
-{ 
+{
     AxHeader axHeader( _axFile.getHeader() );
     AxDictionary axDictionary( axHeader.GetDictionary() );
 
@@ -276,7 +276,7 @@ shared_ptr<AxMob> TestFileBuilder::AddClip( const AxString& name, bool isNamed, 
     spAxMasterMob->SetMobID( this->GenerateMobId() );
 
     axHeader.AddMob( *spAxMasterMob );
-    
+
     return spAxMasterMob;
 }
 
@@ -299,15 +299,15 @@ shared_ptr<AxMob> TestFileBuilder::AddFileSource( const AxString& name, bool isN
     //non-normative essence types are being declared elsewhere and we don't want
     //to confuse between them and a "basic" file source mob.
     aafUInt8* buffer = new aafUInt8[ sizeof(aafUInt8[44]) ];
-    AxBuffer<aafUInt8> header = AxBuffer<aafUInt8>( std::auto_ptr<aafUInt8>( buffer ), sizeof( aafUInt8[44] ) );;   
+    AxBuffer<aafUInt8> header = AxBuffer<aafUInt8>( std::auto_ptr<aafUInt8>( buffer ), sizeof( aafUInt8[44] ) );;
     axFileDes.SetSummary( header.GetSize(), header.GetPtr().get() );
-    
+
     axFileDes.SetSampleRate( sampleRate );
     spAxSrcMob->SetEssenceDescriptor( axFileDes );
     spAxSrcMob->SetMobID( this->GenerateMobId() );
 
     axHeader.AddMob( *spAxSrcMob );
-    
+
     return spAxSrcMob;
 }
 
@@ -329,7 +329,7 @@ shared_ptr<AxMob> TestFileBuilder::AddMonoAudioFileSource( const AxString& name,
     spAxSrcMob->SetMobID( this->GenerateMobId() );
 
     axHeader.AddMob( *spAxSrcMob );
-    
+
     return spAxSrcMob;
 }
 
@@ -351,7 +351,7 @@ shared_ptr<AxMob> TestFileBuilder::AddMultiChannelAudioFileSource( const AxStrin
     spAxSrcMob->SetMobID( this->GenerateMobId() );
 
     axHeader.AddMob( *spAxSrcMob );
-    
+
     return spAxSrcMob;
 }
 
@@ -372,12 +372,12 @@ shared_ptr<AxMob> TestFileBuilder::AddRGBAFileSource( const AxString& name, bool
     {
         axRGBADes.SetAlphaTransparency( alphaVal );
     }
-    
+
     spAxSrcMob->SetEssenceDescriptor( axRGBADes );
     spAxSrcMob->SetMobID( this->GenerateMobId() );
 
     axHeader.AddMob( *spAxSrcMob );
-    
+
     return spAxSrcMob;
 }
 
@@ -398,12 +398,12 @@ shared_ptr<AxMob> TestFileBuilder::AddCDCIFileSource( const AxString& name, bool
     {
         axCDCIDes.SetAlphaTransparency( alphaVal );
     }
-    
+
     spAxSrcMob->SetEssenceDescriptor( axCDCIDes );
     spAxSrcMob->SetMobID( this->GenerateMobId() );
 
     axHeader.AddMob( *spAxSrcMob );
-    
+
     return spAxSrcMob;
 }
 
@@ -416,7 +416,7 @@ shared_ptr<AxMob> TestFileBuilder::AddRecordingSource( const AxString& name, boo
     if ( isNamed )
     {
         spAxSrcMob->SetName( name );
-    }   
+    }
 
     AxRecordingDescriptor axRecording( AxCreateInstance<IAAFRecordingDescriptor>( axDictionary ) );
     axRecording.Initialize();
@@ -424,7 +424,7 @@ shared_ptr<AxMob> TestFileBuilder::AddRecordingSource( const AxString& name, boo
     spAxSrcMob->SetMobID( this->GenerateMobId() );
 
     axHeader.AddMob( *spAxSrcMob );
-    
+
     return spAxSrcMob;
 }
 
@@ -445,7 +445,7 @@ shared_ptr<AxMob> TestFileBuilder::AddImportSource( const AxString& name, bool i
     spAxSrcMob->SetMobID( this->GenerateMobId() );
 
     axHeader.AddMob( *spAxSrcMob );
-    
+
     return spAxSrcMob;
 }
 
@@ -466,8 +466,8 @@ shared_ptr<AxMob> TestFileBuilder::AddTapeSource( const AxString& name, bool isN
     spAxSrcMob->SetMobID( this->GenerateMobId() );
 
     axHeader.AddMob( *spAxSrcMob );
-    
-    return spAxSrcMob;  
+
+    return spAxSrcMob;
 }
 
 shared_ptr<AxMob> TestFileBuilder::AddFilmSource( const AxString& name, bool isNamed, aafRational_t ratNothing, aafUInt32 intNothing, bool boolNothing )
@@ -486,8 +486,8 @@ shared_ptr<AxMob> TestFileBuilder::AddFilmSource( const AxString& name, bool isN
     spAxSrcMob->SetMobID( this->GenerateMobId() );
 
     axHeader.AddMob( *spAxSrcMob );
-    
-    return spAxSrcMob;  
+
+    return spAxSrcMob;
 }
 
 shared_ptr<AxMob> TestFileBuilder::AddAuxiliarySource( const AxString& name, bool isNamed, aafRational_t ratNothing, aafUInt32 intNothing, bool boolNothing )
@@ -496,10 +496,7 @@ shared_ptr<AxMob> TestFileBuilder::AddAuxiliarySource( const AxString& name, boo
     AxDictionary axDictionary( axHeader.GetDictionary() );
 
     shared_ptr<AxSourceMob> spAxSrcMob( new AxSourceMob( AxCreateInstance<IAAFSourceMob>( axDictionary ) ) );
-    if ( isNamed )
-    {
-        spAxSrcMob->SetName( name );
-    }
+    spAxSrcMob->SetName( name );
 
     AxAuxiliaryDescriptor axAux( AxCreateInstance<IAAFAuxiliaryDescriptor>( axDictionary ) );
     axAux.SetMimeType( L"audio/midi" );
@@ -507,17 +504,17 @@ shared_ptr<AxMob> TestFileBuilder::AddAuxiliarySource( const AxString& name, boo
     spAxSrcMob->SetMobID( this->GenerateMobId() );
 
     axHeader.AddMob( *spAxSrcMob );
-    
-    return spAxSrcMob;  
+
+    return spAxSrcMob;
 }
 
 /*
- * 
+ *
  * Create Components
- * 
+ *
  */
 
-shared_ptr<AxComponent> TestFileBuilder::CreateTimecode( TrackType essenceType, const AxString& strNothing, aafLength_t length, bool hasLength )
+shared_ptr<AxComponent> TestFileBuilder::CreateTimecode( TrackType essenceType, const AxString& strNothing, aafLength_t length, bool hasLength, int intNothing, bool boolNothing )
 {
     AxHeader axHeader( _axFile.getHeader() );
     AxDictionary axDictionary( axHeader.GetDictionary() );
@@ -528,20 +525,19 @@ shared_ptr<AxComponent> TestFileBuilder::CreateTimecode( TrackType essenceType, 
     tc.startFrame = 1;
     tc.drop = 1;
     tc.fps = 1;
-    
+
     axTimecode->Initialize( 0, tc );
     if ( hasLength )
     {
         axTimecode->SetLength( length );
     }
-
     AddDataDef( *axTimecode, essenceType );
-    
+
     return axTimecode;
-    
+
 }
 
-shared_ptr<AxComponent> TestFileBuilder::CreateEdgecode( TrackType essenceType, const AxString& strNothing, aafLength_t length, bool hasLength )
+shared_ptr<AxComponent> TestFileBuilder::CreateEdgecode( TrackType essenceType, const AxString& strNothing, aafLength_t length, bool hasLength, int intNothing, bool boolNothing )
 {
     AxHeader axHeader( _axFile.getHeader() );
     AxDictionary axDictionary( axHeader.GetDictionary() );
@@ -560,7 +556,7 @@ shared_ptr<AxComponent> TestFileBuilder::CreateEdgecode( TrackType essenceType, 
     ec.header[5] = 1;
     ec.header[6] = 1;
     ec.header[7] = 1;
-        
+
     axEdgecode->Initialize( 0, ec );
     if ( hasLength )
     {
@@ -568,28 +564,27 @@ shared_ptr<AxComponent> TestFileBuilder::CreateEdgecode( TrackType essenceType, 
     }
     AddDataDef( *axEdgecode, essenceType );
 
-    return axEdgecode;    
+    return axEdgecode;
 
 }
 
-shared_ptr<AxComponent> TestFileBuilder::CreateTimecodeStream12M( TrackType essenceType, const AxString& strNothing, aafLength_t length, bool hasLength )
+shared_ptr<AxComponent> TestFileBuilder::CreateTimecodeStream12M( TrackType essenceType, const AxString& strNothing, aafLength_t length, bool hasLength, int intNothing, bool boolNothing )
 {
     AxHeader axHeader( _axFile.getHeader() );
     AxDictionary axDictionary( axHeader.GetDictionary() );
 
     shared_ptr<AxTimecodeStream12M> axTimecodeStream( new AxTimecodeStream12M( AxCreateInstance<IAAFTimecodeStream12M>( axDictionary ) ) );
-    
+
     if ( hasLength )
     {
         axTimecodeStream->SetLength( length );
     }
-    
     AddDataDef( *axTimecodeStream, essenceType );
-    
+
     return axTimecodeStream;
 }
 
-shared_ptr<AxComponent> TestFileBuilder::CreateEOC( TrackType essenceType, const AxString& strNothing, aafLength_t length, bool hasLength )
+shared_ptr<AxComponent> TestFileBuilder::CreateEOC( TrackType essenceType, const AxString& strNothing, aafLength_t length, bool hasLength, int intNothing, bool boolNothing )
 {
     AxHeader axHeader( _axFile.getHeader() );
     AxDictionary axDictionary( axHeader.GetDictionary() );
@@ -600,18 +595,18 @@ shared_ptr<AxComponent> TestFileBuilder::CreateEOC( TrackType essenceType, const
     srcRef.sourceID     = AxConstants::NULL_MOBID;
     srcRef.sourceSlotID = 0;
     srcRef.startTime    = 0;
-    
+
     AddDataDef( *axSrcClip, essenceType );
     if ( hasLength )
     {
         axSrcClip->SetLength( length );
     }
     axSrcClip->SetSourceReference( srcRef );
-    
+
     return axSrcClip;
 }
 
-shared_ptr<AxComponent> TestFileBuilder::CreateOOF( TrackType essenceType, const AxString& strNothing, aafLength_t length, bool hasLength )
+shared_ptr<AxComponent> TestFileBuilder::CreateOOF( TrackType essenceType, const AxString& strNothing, aafLength_t length, bool hasLength, int startTime, bool hasStartTime )
 {
     AxHeader axHeader( _axFile.getHeader() );
     AxDictionary axDictionary( axHeader.GetDictionary() );
@@ -621,53 +616,63 @@ shared_ptr<AxComponent> TestFileBuilder::CreateOOF( TrackType essenceType, const
     aafSourceRef_t srcRef;
     srcRef.sourceID     = this->GenerateMobId();
     srcRef.sourceSlotID = 1;
-    srcRef.startTime    = 1;
-    
+    if ( hasStartTime )
+    {
+        srcRef.startTime = startTime;
+    }
+
     AddDataDef( *axSrcClip, essenceType );
     if ( hasLength )
     {
         axSrcClip->SetLength( length );
     }
     axSrcClip->SetSourceReference( srcRef );
-    
+
     return axSrcClip;
 }
 
-shared_ptr<AxComponent> TestFileBuilder::CreateSourceClip( TrackType essenceType, const AxString& strNothing, aafLength_t length, bool hasLength )
+shared_ptr<AxComponent> TestFileBuilder::CreateSourceClip( TrackType essenceType, const AxString& strNothing, aafLength_t length, bool hasLength, int startTime, bool hasStartTime )
 {
     AxHeader axHeader( _axFile.getHeader() );
     AxDictionary axDictionary( axHeader.GetDictionary() );
 
     shared_ptr<AxSourceClip> axSrcClip( new AxSourceClip( AxCreateInstance<IAAFSourceClip>( axDictionary ) ) );
-    
+
     if ( hasLength )
     {
         axSrcClip->SetLength( length );
     }
-    
     AddDataDef( *axSrcClip, essenceType );
-    
-    return axSrcClip;   
+
+    aafSourceRef_t srcRef;
+    if ( hasStartTime )
+    {
+        srcRef.startTime = startTime;
+    }
+
+    axSrcClip->SetSourceReference( srcRef );
+
+    return axSrcClip;
 }
 
-shared_ptr<AxComponent> TestFileBuilder::CreateTransition( TrackType essenceType, const AxString& strNothing, aafLength_t length, bool hasLength )
+shared_ptr<AxComponent> TestFileBuilder::CreateTransition( TrackType essenceType, const AxString& strNothing, aafLength_t length, bool hasLength, int intNothing, bool boolNothing )
 {
     AxHeader axHeader( _axFile.getHeader() );
     AxDictionary axDictionary( axHeader.GetDictionary() );
 
     shared_ptr<AxTransition> axTransition( new AxTransition( AxCreateInstance<IAAFTransition>( axDictionary ) ) );
-    
+
     AddDataDef( *axTransition, essenceType );
     if ( hasLength )
     {
         axTransition->SetLength( length );
     }
     axTransition->SetCutPoint( 1 );
-    
+
     return axTransition;
 }
 
-shared_ptr<AxComponent> TestFileBuilder::CreateSequence( TrackType essenceType, const AxString& strNothing, aafLength_t length, bool hasLength )
+shared_ptr<AxComponent> TestFileBuilder::CreateSequence( TrackType essenceType, const AxString& strNothing, aafLength_t length, bool hasLength, int intNothing, bool boolNothing )
 {
     AxHeader axHeader( _axFile.getHeader() );
     AxDictionary axDictionary( axHeader.GetDictionary() );
@@ -677,91 +682,93 @@ shared_ptr<AxComponent> TestFileBuilder::CreateSequence( TrackType essenceType, 
     {
         axSequence->SetLength( length );
     }
-    
     AddDataDef( *axSequence, essenceType );
-    
+
     return axSequence;
 }
 
-shared_ptr<AxComponent> TestFileBuilder::CreateCommentMarker( TrackType essenceType, const AxString& strNothing, aafLength_t length, bool hasLength )
+shared_ptr<AxComponent> TestFileBuilder::CreateCommentMarker( TrackType essenceType, const AxString& strNothing, aafLength_t length, bool hasLength, int position, bool hasPosition )
 {
     AxHeader axHeader( _axFile.getHeader() );
     AxDictionary axDictionary( axHeader.GetDictionary() );
 
     shared_ptr<AxCommentMarker> axCommentMarker( new AxCommentMarker( AxCreateInstance<IAAFCommentMarker>( axDictionary ) ) );
-    
+
     if ( hasLength )
     {
         axCommentMarker->SetLength( length );
     }
-    
+    if ( hasPosition )
+    {
+        axCommentMarker->SetPosition( position );
+    }
     AddDataDef( *axCommentMarker, essenceType );
-    
+
     return axCommentMarker;
 }
 
-shared_ptr<AxComponent> TestFileBuilder::CreateDescriptiveMarker( TrackType essenceType, const AxString& strNothing, aafLength_t length, bool hasLength )
+shared_ptr<AxComponent> TestFileBuilder::CreateDescriptiveMarker( TrackType essenceType, const AxString& strNothing, aafLength_t length, bool hasLength, int position, bool hasPosition )
 {
     AxHeader axHeader( _axFile.getHeader() );
     AxDictionary axDictionary( axHeader.GetDictionary() );
 
     shared_ptr<AxDescriptiveMarker> axDesMarker( new AxDescriptiveMarker( AxCreateInstance<IAAFDescriptiveMarker>( axDictionary ) ) );
-    
+
     if ( hasLength )
     {
         axDesMarker->SetLength( length );
     }
-    
+    if ( hasPosition )
+    {
+        axDesMarker->SetPosition( position );
+    }
     AddDataDef( *axDesMarker, essenceType );
-    
+
     return axDesMarker;
 }
 
-shared_ptr<AxComponent> TestFileBuilder::CreateOperationGroup( TrackType essenceType, const AxString& opDef, aafLength_t length, bool hasLength )
+shared_ptr<AxComponent> TestFileBuilder::CreateOperationGroup( TrackType essenceType, const AxString& opDef, aafLength_t length, bool hasLength, int intNothing, bool boolNothing )
 {
     AxHeader axHeader( _axFile.getHeader() );
     AxDictionary axDictionary( axHeader.GetDictionary() );
 
     shared_ptr<AxOperationGroup> axOpGroup( new AxOperationGroup( AxCreateInstance<IAAFOperationGroup>( axDictionary ) ) );
-    
+
     AddDataDef( *axOpGroup, essenceType );
-    
     if ( hasLength )
     {
         axOpGroup->SetLength( length );
     }
-
     axOpGroup->SetOperationDef( *(this->GetOperationDef( opDef, axDictionary )) );
-    
+
     return axOpGroup;
 }
 
 /*
- * 
+ *
  * Fill Components
- * 
+ *
  */
 
 void TestFileBuilder::InitializeSourceClip( shared_ptr<AxSourceReference> parent, AxMob& child )
 {
-    
+
     shared_ptr<AxSourceClip> axSrcClip = dynamic_pointer_cast<AxSourceClip>( parent );
-    
-    aafSourceRef_t srcRef;
+
+    aafSourceRef_t srcRef = axSrcClip->GetSourceReference();
     srcRef.sourceID     = child.GetMobID();
     srcRef.sourceSlotID = 1;
-    srcRef.startTime    = 0;    
-    
+
     axSrcClip->SetSourceReference( srcRef );
-  
+
 }
 
 void TestFileBuilder::AddToTransition( shared_ptr<AxComponent> parent, AxComponent& child )
 {
     shared_ptr<AxTransition> axTransition = dynamic_pointer_cast<AxTransition>( parent );
-    
+
     shared_ptr<AxOperationGroup> axOpGroup( new AxOperationGroup( AxQueryInterface<IAAFComponent, IAAFOperationGroup>( child ) ) );
-    
+
     axTransition->SetOperationGroup( *axOpGroup );
 }
 
@@ -775,9 +782,9 @@ void TestFileBuilder::AddToSequence( shared_ptr<AxComponent> parent, AxComponent
 void TestFileBuilder::AddToCommentMarker( shared_ptr<AxComponent> parent, AxComponent& child )
 {
     shared_ptr<AxCommentMarker> axCommentMarker = dynamic_pointer_cast<AxCommentMarker>( parent );
-    
+
     shared_ptr<AxSourceReference> axSrcRef( new AxSourceReference( AxQueryInterface<IAAFComponent, IAAFSourceReference>( child ) ) );
-    
+
     axCommentMarker->SetAnnotation( *axSrcRef );
 }
 
@@ -787,15 +794,15 @@ void TestFileBuilder::AddToOperationGroup( shared_ptr<AxSegment> parent, AxSegme
 
     if ( property == INPUT_SEGMENT )
     {
-        child.SetDataDef( axOpGroup->GetDataDef() );   
-        axOpGroup->AppendInputSegment( child );    
+        child.SetDataDef( axOpGroup->GetDataDef() );
+        axOpGroup->AppendInputSegment( child );
     }
 }
 
 /*
- * 
+ *
  * Annotations
- * 
+ *
  */
 
 void TestFileBuilder::AddComment( shared_ptr<AxComponent> axComponent, const AxString& name, const AxString& value )
@@ -805,7 +812,7 @@ void TestFileBuilder::AddComment( shared_ptr<AxComponent> axComponent, const AxS
 
 void TestFileBuilder::AddKLVData( shared_ptr<AxComponent> axComponent, const AxString& keyName, const AxString& value )
 {
-    
+
     AxHeader axHeader( _axFile.getHeader() );
     AxDictionary axDictionary( axHeader.GetDictionary() );
 
@@ -827,32 +834,32 @@ void TestFileBuilder::AddKLVData( shared_ptr<AxComponent> axComponent, const AxS
     AxString internalValue = value;
     int length = sizeof( internalValue );
     aafUInt8* val = reinterpret_cast<aafUInt8*>( &internalValue );
-    
+
     //Create and append the KLVData object.
     AxKLVData axKLVData( AxCreateInstance<IAAFKLVData>( axDictionary ) );
     axKLVData.Initialize( key, length, val );
-    
+
     axComponent->AppendKLVData( axKLVData );
 }
 
 /*
- * 
+ *
  * Mob Slots
- * 
+ *
  */
 
-void TestFileBuilder::AttachTimelineSlot( AxMob& parent, AxSegment& axSegment, aafRational_t editRate, const AxString& name, bool isNamed, int physicalTrackNum, bool isNumbered, int markedIn, bool isMarkedIn, int markedOut, bool isMarkedOut )
+void TestFileBuilder::AttachTimelineSlot( AxMob& parent, AxSegment& axSegment, aafRational_t editRate, const AxString& name, bool isNamed, int physicalTrackNum, bool isNumbered, int markedIn, bool isMarkedIn, int markedOut, bool isMarkedOut, int orgin )
 {
 
     AxHeader axHeader( _axFile.getHeader() );
     AxDictionary axDictionary( axHeader.GetDictionary() );
-    
+
     AxTimelineMobSlot axTimelineMobSlot( AxCreateInstance<IAAFTimelineMobSlot>( axDictionary ) );
-    
+
     axTimelineMobSlot.SetEditRate( editRate );
     axTimelineMobSlot.SetSegment( axSegment );
     axTimelineMobSlot.SetSlotID( parent.CountSlots() + 1 );
-    axTimelineMobSlot.SetOrigin( 0 );
+    axTimelineMobSlot.SetOrigin( orgin );
     if ( isNamed )
     {
         axTimelineMobSlot.SetName( name );
@@ -874,12 +881,12 @@ void TestFileBuilder::AttachTimelineSlot( AxMob& parent, AxSegment& axSegment, a
 
 }
 
-void TestFileBuilder::AttachEventSlot( AxMob& parent, AxSegment& axSegment, aafRational_t editRate, const AxString& name, bool isNamed, int physicalTrackNum, bool isNumbered, int intNothing1, bool boolNothing1, int intNothing2, bool boolNothing2 )
+void TestFileBuilder::AttachEventSlot( AxMob& parent, AxSegment& axSegment, aafRational_t editRate, const AxString& name, bool isNamed, int physicalTrackNum, bool isNumbered, int intNothing1, bool boolNothing1, int intNothing2, bool boolNothing2, int intNothing3 )
 {
 
     AxHeader axHeader( _axFile.getHeader() );
     AxDictionary axDictionary( axHeader.GetDictionary() );
-    
+
     AxEventMobSlot axEventMobSlot( AxCreateInstance<IAAFEventMobSlot>( axDictionary ) );
 
     axEventMobSlot.SetEditRate( editRate );
@@ -898,13 +905,13 @@ void TestFileBuilder::AttachEventSlot( AxMob& parent, AxSegment& axSegment, aafR
 
 }
 
-void TestFileBuilder::AttachStaticSlot( AxMob& parent, AxSegment& axSegment, aafRational_t editRate, const AxString& name, bool isNamed, int physicalTrackNum, bool isNumbered, int intNothing1, bool boolNothing1, int intNothing2, bool boolNothing2 )
+void TestFileBuilder::AttachStaticSlot( AxMob& parent, AxSegment& axSegment, aafRational_t editRate, const AxString& name, bool isNamed, int physicalTrackNum, bool isNumbered, int intNothing1, bool boolNothing1, int intNothing2, bool boolNothing2, int intNothing3 )
 {
     AxHeader axHeader( _axFile.getHeader() );
     AxDictionary axDictionary( axHeader.GetDictionary() );
-    
+
     AxStaticMobSlot axStaticMobSlot( AxCreateInstance<IAAFStaticMobSlot>( axDictionary ) );
-          
+
     axStaticMobSlot.SetSegment( axSegment );
     axStaticMobSlot.SetSlotID( parent.CountSlots() + 1 );
     if ( isNamed )
@@ -915,29 +922,29 @@ void TestFileBuilder::AttachStaticSlot( AxMob& parent, AxSegment& axSegment, aaf
     {
         axStaticMobSlot.SetPhysicalNum( physicalTrackNum );
     }
-    
+
     parent.AppendSlot( axStaticMobSlot );
 }
 
 /*
- * 
+ *
  * Parameters
- * 
+ *
  */
 
 void TestFileBuilder::AttachConstantRationalParameter( AxOperationGroup& axOpGroup, const aafUID_t& paramDefId, aafUInt32 numerator, aafUInt32 denominator, const aafUID_t& uidNothing )
 {
     AxHeader axHeader( _axFile.getHeader() );
     AxDictionary axDictionary( axHeader.GetDictionary() );
-    
+
     AxConstantValue axParam( AxCreateInstance<IAAFConstantValue>( axDictionary ) );
-    
+
     aafRational_t param;
     param.numerator = numerator;
     param.denominator = denominator;
-    
+
     axParam.Initialize( *(this->GetParameterDef( paramDefId, axDictionary )), sizeof(param), (aafDataBuffer_t)&param );
-    
+
     axOpGroup.AddParameter( axParam );
 }
 
@@ -945,11 +952,11 @@ void TestFileBuilder::AttachVaryingRationalParameter( AxOperationGroup& axOpGrou
 {
     AxHeader axHeader( _axFile.getHeader() );
     AxDictionary axDictionary( axHeader.GetDictionary() );
-    
+
     AxVaryingValue axParam( AxCreateInstance<IAAFVaryingValue>( axDictionary ) );
-    
+
     axParam.Initialize( *(this->GetParameterDef( paramDefId, axDictionary )), *(this->GetInterpolationDef( interpolationDefId, axDictionary ) ) );
-    
+
     axOpGroup.AddParameter( axParam );
 }
 
@@ -957,9 +964,9 @@ void TestFileBuilder::AttachDescriptiveFramework( shared_ptr<AxDescriptiveMarker
 {
     AxHeader axHeader( _axFile.getHeader() );
     AxDictionary axDictionary( axHeader.GetDictionary() );
-    
+
     AxDescriptiveFramework axDesFwk( AxCreateInstance<IAAFDescriptiveFramework>( axDictionary ) );
-    
+
     axMarker->SetDescriptiveFramework( axDesFwk );
 }
 
@@ -975,9 +982,9 @@ void TestFileBuilder::UseLegacyEffectDefinitions()
 }
 
 /*
- * 
+ *
  * Helper Functions
- * 
+ *
  */
 
 //Return a mob ID that is unique within this file.
@@ -1028,7 +1035,7 @@ const aafUID_t TestFileBuilder::GenerateAUID()
 void TestFileBuilder::AddDataDef( AxComponent& axComponent, TrackType essenceType )
 {
     AxHeader axHeader( _axFile.getHeader() );
-    AxDictionary axDictionary( axHeader.GetDictionary() );    
+    AxDictionary axDictionary( axHeader.GetDictionary() );
 
     switch ( essenceType )
     {
@@ -1047,7 +1054,7 @@ shared_ptr<AxOperationDef> TestFileBuilder::GetOperationDef( const AxString& opD
     {
         AxOperationDef axOpDef( AxCreateInstance<IAAFOperationDef> ( axDictionary ) );
         aafUID_t opDefId;
-        
+
         if ( opDef == L"Video Dissolve" )
         {
             aafUID_t dataDefId;
@@ -1121,7 +1128,7 @@ shared_ptr<AxOperationDef> TestFileBuilder::GetOperationDef( const AxString& opD
                 dataDefId = kAAFDataDef_Picture;
             }
             AxDataDef axDataDef( axDictionary.LookupDataDef( dataDefId ) );
-            opDefId = kAAFOperationDef_VideoRepeat;       
+            opDefId = kAAFOperationDef_VideoRepeat;
             axOpDef.Initialize( opDefId,
                         L"Video Repeat",
                         L"Video Repeat" );
@@ -1142,7 +1149,7 @@ shared_ptr<AxOperationDef> TestFileBuilder::GetOperationDef( const AxString& opD
                 dataDefId = kAAFDataDef_Picture;
             }
             AxDataDef axDataDef( axDictionary.LookupDataDef( dataDefId ) );
-            opDefId = kAAFOperationDef_Flip;       
+            opDefId = kAAFOperationDef_Flip;
             axOpDef.Initialize( opDefId,
                         L"Video Flip",
                         L"Video Flip" );
@@ -1163,7 +1170,7 @@ shared_ptr<AxOperationDef> TestFileBuilder::GetOperationDef( const AxString& opD
                 dataDefId = kAAFDataDef_Picture;
             }
             AxDataDef axDataDef( axDictionary.LookupDataDef( dataDefId ) );
-            opDefId = kAAFOperationDef_Flop;       
+            opDefId = kAAFOperationDef_Flop;
             axOpDef.Initialize( opDefId,
                         L"Video Flop",
                         L"Video Flop" );
@@ -1184,7 +1191,7 @@ shared_ptr<AxOperationDef> TestFileBuilder::GetOperationDef( const AxString& opD
                 dataDefId = kAAFDataDef_Picture;
             }
             AxDataDef axDataDef( axDictionary.LookupDataDef( dataDefId ) );
-            opDefId = kAAFOperationDef_FlipFlop;       
+            opDefId = kAAFOperationDef_FlipFlop;
             axOpDef.Initialize( opDefId,
                         L"Video Flip Flop",
                         L"Video Flip Flop" );
@@ -1205,7 +1212,7 @@ shared_ptr<AxOperationDef> TestFileBuilder::GetOperationDef( const AxString& opD
                 dataDefId = kAAFDataDef_Picture;
             }
             AxDataDef axDataDef( axDictionary.LookupDataDef( dataDefId ) );
-            opDefId = kAAFOperationDef_VideoPosition;       
+            opDefId = kAAFOperationDef_VideoPosition;
             axOpDef.Initialize( opDefId,
                         L"Video Position",
                         L"Video Position" );
@@ -1225,7 +1232,7 @@ shared_ptr<AxOperationDef> TestFileBuilder::GetOperationDef( const AxString& opD
                 dataDefId = kAAFDataDef_Picture;
             }
             AxDataDef axDataDef( axDictionary.LookupDataDef( dataDefId ) );
-            opDefId = kAAFOperationDef_VideoCrop;       
+            opDefId = kAAFOperationDef_VideoCrop;
             axOpDef.Initialize( opDefId,
                         L"Video Crop",
                         L"Cideo Crop" );
@@ -1245,7 +1252,7 @@ shared_ptr<AxOperationDef> TestFileBuilder::GetOperationDef( const AxString& opD
                 dataDefId = kAAFDataDef_Picture;
             }
             AxDataDef axDataDef( axDictionary.LookupDataDef( dataDefId ) );
-            opDefId = kAAFOperationDef_VideoScale;       
+            opDefId = kAAFOperationDef_VideoScale;
             axOpDef.Initialize( opDefId,
                         L"Video Scale",
                         L"Video Scale" );
@@ -1265,7 +1272,7 @@ shared_ptr<AxOperationDef> TestFileBuilder::GetOperationDef( const AxString& opD
                 dataDefId = kAAFDataDef_Picture;
             }
             AxDataDef axDataDef( axDictionary.LookupDataDef( dataDefId ) );
-            opDefId = kAAFOperationDef_VideoRotate;       
+            opDefId = kAAFOperationDef_VideoRotate;
             axOpDef.Initialize( opDefId,
                         L"Video Rotate",
                         L"Video Rotate" );
@@ -1285,7 +1292,7 @@ shared_ptr<AxOperationDef> TestFileBuilder::GetOperationDef( const AxString& opD
                 dataDefId = kAAFDataDef_Picture;
             }
             AxDataDef axDataDef( axDictionary.LookupDataDef( dataDefId ) );
-            opDefId = kAAFOperationDef_VideoCornerPinning;       
+            opDefId = kAAFOperationDef_VideoCornerPinning;
             axOpDef.Initialize( opDefId,
                         L"Video Corner Pinning",
                         L"Video Corner Pinning" );
@@ -1305,7 +1312,7 @@ shared_ptr<AxOperationDef> TestFileBuilder::GetOperationDef( const AxString& opD
                 dataDefId = kAAFDataDef_Picture;
             }
             AxDataDef axDataDef( axDictionary.LookupDataDef( dataDefId ) );
-            opDefId = kAAFOperationDef_VideoAlphaWithinVideoKey;       
+            opDefId = kAAFOperationDef_VideoAlphaWithinVideoKey;
             axOpDef.Initialize( opDefId,
                         L"Alpha With Video Key effect",
                         L"Alpha With Video Key effect" );
@@ -1326,7 +1333,7 @@ shared_ptr<AxOperationDef> TestFileBuilder::GetOperationDef( const AxString& opD
                 dataDefId = kAAFDataDef_Picture;
             }
             AxDataDef axDataDef( axDictionary.LookupDataDef( dataDefId ) );
-            opDefId = kAAFOperationDef_VideoSeparateAlphaKey;       
+            opDefId = kAAFOperationDef_VideoSeparateAlphaKey;
             axOpDef.Initialize( opDefId,
                         L"Separate Alpha Key effect",
                         L"Separate Alpha Key effect" );
@@ -1347,7 +1354,7 @@ shared_ptr<AxOperationDef> TestFileBuilder::GetOperationDef( const AxString& opD
                 dataDefId = kAAFDataDef_Picture;
             }
             AxDataDef axDataDef( axDictionary.LookupDataDef( dataDefId ) );
-            opDefId = kAAFOperationDef_VideoLuminanceKey;       
+            opDefId = kAAFOperationDef_VideoLuminanceKey;
             axOpDef.Initialize( opDefId,
                         L"Luminance Key",
                         L"Luminance Key" );
@@ -1368,7 +1375,7 @@ shared_ptr<AxOperationDef> TestFileBuilder::GetOperationDef( const AxString& opD
                 dataDefId = kAAFDataDef_Picture;
             }
             AxDataDef axDataDef( axDictionary.LookupDataDef( dataDefId ) );
-            opDefId = kAAFOperationDef_VideoChromaKey;       
+            opDefId = kAAFOperationDef_VideoChromaKey;
             axOpDef.Initialize( opDefId,
                         L"Chroma Key",
                         L"Chroma Key" );
@@ -1389,7 +1396,7 @@ shared_ptr<AxOperationDef> TestFileBuilder::GetOperationDef( const AxString& opD
                 dataDefId = kAAFDataDef_Sound;
             }
             AxDataDef axDataDef( axDictionary.LookupDataDef( dataDefId ) );
-            opDefId = kAAFOperationDef_MonoAudioGain;       
+            opDefId = kAAFOperationDef_MonoAudioGain;
             axOpDef.Initialize( opDefId,
                         L"Mono Audio Gain",
                         L"Mono Audio Gain" );
@@ -1410,7 +1417,7 @@ shared_ptr<AxOperationDef> TestFileBuilder::GetOperationDef( const AxString& opD
                 dataDefId = kAAFDataDef_Sound;
             }
             AxDataDef axDataDef( axDictionary.LookupDataDef( dataDefId ) );
-            opDefId = kAAFOperationDef_MonoAudioPan;       
+            opDefId = kAAFOperationDef_MonoAudioPan;
             axOpDef.Initialize( opDefId,
                         L"Mono Audio Pan",
                         L"Mono Audio Pan" );
@@ -1431,7 +1438,7 @@ shared_ptr<AxOperationDef> TestFileBuilder::GetOperationDef( const AxString& opD
                 dataDefId = kAAFDataDef_Sound;
             }
             AxDataDef axDataDef( axDictionary.LookupDataDef( dataDefId ) );
-            opDefId = kAAFOperationDef_MonoAudioDissolve,       
+            opDefId = kAAFOperationDef_MonoAudioDissolve,
             axOpDef.Initialize( opDefId,
                         L"Mono Audio Dissolve",
                         L"Mono Audio Dissolve" );
@@ -1451,7 +1458,7 @@ shared_ptr<AxOperationDef> TestFileBuilder::GetOperationDef( const AxString& opD
                 dataDefId = kAAFDataDef_Sound;
             }
             AxDataDef axDataDef( axDictionary.LookupDataDef( dataDefId ) );
-            opDefId = kAAFOperationDef_TwoParameterMonoAudioDissolve;       
+            opDefId = kAAFOperationDef_TwoParameterMonoAudioDissolve;
             axOpDef.Initialize( opDefId,
                         L"Two-Parameter Mono Audio Dissolve",
                         L"Two-Parameter Mono Audio Dissolve" );
@@ -1459,7 +1466,7 @@ shared_ptr<AxOperationDef> TestFileBuilder::GetOperationDef( const AxString& opD
             axOpDef.SetNumberInputs( 2 );
             axOpDef.SetDataDef( axDataDef );
         }
-        
+
         axDictionary.RegisterOperationDef( axOpDef );
         _namedAUIDs[opDef] = opDefId;
     }
@@ -1472,7 +1479,7 @@ shared_ptr<AxParameterDef> TestFileBuilder::GetParameterDef( const aafUID_t& par
 {
     if ( !axDictionary.isKnownParameterDef( paramDefId ) )
     {
-        
+
         AxParameterDef axParamDef( AxCreateInstance<IAAFParameterDef> ( axDictionary ) );
         AxTypeDef axTypeDef( axDictionary.LookupTypeDef( kAAFTypeID_Rational ) );
 
@@ -1485,7 +1492,7 @@ shared_ptr<AxParameterDef> TestFileBuilder::GetParameterDef( const aafUID_t& par
                 axTypeDef
             );
         }
-        
+
         axDictionary.RegisterParameterDef( axParamDef );
     }
     shared_ptr<AxParameterDef> spParamDef( new AxParameterDef( axDictionary.LookupParameterDef( paramDefId ) ) );
@@ -1497,7 +1504,7 @@ shared_ptr<AxInterpolationDef> TestFileBuilder::GetInterpolationDef( const aafUI
 {
     if ( !axDictionary.isKnownInterpolationDef( interpolationDefId ) )
     {
-        
+
         AxInterpolationDef axIntDef( AxCreateInstance<IAAFInterpolationDef> ( axDictionary ) );
 
         if ( interpolationDefId == kAAFInterpolationDef_BSpline )
@@ -1548,7 +1555,7 @@ shared_ptr<AxInterpolationDef> TestFileBuilder::GetInterpolationDef( const aafUI
                 L"Power"
             );
         }
-        
+
         axDictionary.RegisterInterpolationDef( axIntDef );
     }
     shared_ptr<AxInterpolationDef> spIntDef( new AxInterpolationDef( axDictionary.LookupInterpolationDef( interpolationDefId ) ) );

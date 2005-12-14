@@ -3,20 +3,20 @@
 
 <aaf-file>
 
-	<!-- Test everything outside of a transition -->
+    <!-- Test everything outside of a transition -->
     <top-level name="Video Dissolve not in Transition">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence track-type="picture">
+            <sequence length="0" track-type="picture">
                 <eoc track-type="picture" length="1"/>
                 <video-dissolve track-type="picture" length="1"/>
                 <eoc track-type="picture" length="1"/>
             </sequence>
         </timeline-mob-slot>
     </top-level>
-    
+
     <top-level name="SMPTE Video Wipe not in Transition">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence track-type="picture">
+            <sequence length="0" track-type="picture">
                 <eoc track-type="picture" length="1"/>
                 <smpte-video-wipe track-type="picture" length="1"/>
                 <eoc track-type="picture" length="1"/>
@@ -26,7 +26,7 @@
 
     <top-level name="Video Speed Control not in Transition">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence track-type="picture">
+            <sequence length="0" track-type="picture">
                 <eoc track-type="picture" length="1"/>
                 <video-speed-control track-type="picture" length="1">
                     <constant-speed-ratio denominator="1" numerator="1"/>
@@ -38,7 +38,7 @@
 
     <top-level name="Video Repeat not in Transition">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence track-type="picture">
+            <sequence length="0" track-type="picture">
                 <eoc track-type="picture" length="1"/>
                 <video-repeat track-type="picture" length="1"/>
                 <eoc track-type="picture" length="1"/>
@@ -48,7 +48,7 @@
 
     <top-level name="Video Flip not in Transition">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence track-type="picture">
+            <sequence length="0" track-type="picture">
                 <eoc track-type="picture" length="1"/>
                 <video-flip track-type="picture" length="1"/>
                 <eoc track-type="picture" length="1"/>
@@ -58,7 +58,7 @@
 
     <top-level name="Video Flop not in Transition">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence track-type="picture">
+            <sequence length="0" track-type="picture">
                 <eoc track-type="picture" length="1"/>
                 <video-flop track-type="picture" length="1"/>
                 <eoc track-type="picture" length="1"/>
@@ -68,7 +68,7 @@
 
     <top-level name="Video Flip-Flop not in Transition">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence track-type="picture">
+            <sequence length="0" track-type="picture">
                 <eoc track-type="picture" length="1"/>
                 <video-flip-flop track-type="picture" length="1"/>
                 <eoc track-type="picture" length="1"/>
@@ -78,7 +78,7 @@
 
     <top-level name="Video Position not in Transition">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence track-type="picture">
+            <sequence length="0" track-type="picture">
                 <eoc track-type="picture" length="1"/>
                 <video-position track-type="picture" length="1"/>
                 <eoc track-type="picture" length="1"/>
@@ -88,7 +88,7 @@
 
     <top-level name="Video Crop not in Transition">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence track-type="picture">
+            <sequence length="0" track-type="picture">
                 <eoc track-type="picture" length="1"/>
                 <video-crop track-type="picture" length="1"/>
                 <eoc track-type="picture" length="1"/>
@@ -98,7 +98,7 @@
 
     <top-level name="Video Scale not in Transition">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence track-type="picture">
+            <sequence length="0" track-type="picture">
                 <eoc track-type="picture" length="1"/>
                 <video-scale track-type="picture" length="1"/>
                 <eoc track-type="picture" length="1"/>
@@ -108,7 +108,7 @@
 
     <top-level name="Video Rotate not in Transition">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence track-type="picture">
+            <sequence length="0" track-type="picture">
                 <eoc track-type="picture" length="1"/>
                 <video-rotate track-type="picture" length="1"/>
                 <eoc track-type="picture" length="1"/>
@@ -118,7 +118,7 @@
 
     <top-level name="Video Corner Pinning not in Transition">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence track-type="picture">
+            <sequence length="0" track-type="picture">
                 <eoc track-type="picture" length="1"/>
                 <video-corner-pinning track-type="picture" length="1"/>
                 <eoc track-type="picture" length="1"/>
@@ -128,7 +128,7 @@
 
     <top-level name="Alpha With Video Key not in Transition">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence track-type="picture">
+            <sequence length="0" track-type="picture">
                 <eoc track-type="picture" length="1"/>
                 <alpha-with-video-key track-type="picture" length="1"/>
                 <eoc track-type="picture" length="1"/>
@@ -138,7 +138,7 @@
 
     <top-level name="Separate Alpha Key not in Transition">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence track-type="picture">
+            <sequence length="0" track-type="picture">
                 <eoc track-type="picture" length="1"/>
                 <separate-alpha-key track-type="picture" length="1"/>
                 <eoc track-type="picture" length="1"/>
@@ -148,7 +148,7 @@
 
     <top-level name="Luminance Key not in Transition">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence track-type="picture">
+            <sequence length="0" track-type="picture">
                 <eoc track-type="picture" length="1"/>
                 <luminance-key track-type="picture" length="1"/>
                 <eoc track-type="picture" length="1"/>
@@ -158,7 +158,7 @@
 
     <top-level name="Chroma Key not in Transition">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence track-type="picture">
+            <sequence length="0" track-type="picture">
                 <eoc track-type="picture" length="1"/>
                 <chroma-key track-type="picture" length="1"/>
                 <eoc track-type="picture" length="1"/>
@@ -168,7 +168,7 @@
 
     <top-level name="Mono Audio Gain not in Transition">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence track-type="audio">
+            <sequence length="0" track-type="audio">
                 <eoc track-type="audio" length="1"/>
                 <mono-audio-gain track-type="audio" length="1"/>
                 <eoc track-type="audio" length="1"/>
@@ -178,7 +178,7 @@
 
     <top-level name="Mono Audio Pan not in Transition">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence track-type="audio">
+            <sequence length="0" track-type="audio">
                 <eoc track-type="audio" length="1"/>
                 <mono-audio-pan track-type="audio" length="1"/>
                 <eoc track-type="audio" length="1"/>
@@ -188,7 +188,7 @@
 
     <top-level name="Mono Audio Dissolve not in Transition">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence track-type="audio">
+            <sequence length="0" track-type="audio">
                 <eoc track-type="audio" length="1"/>
                 <mono-audio-dissolve track-type="audio" length="1"/>
                 <eoc track-type="audio" length="1"/>
@@ -198,7 +198,7 @@
 
     <top-level name="Two Parameter Mobo Audio Dissolve not in Transition">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence track-type="audio">
+            <sequence length="0" track-type="audio">
                 <eoc track-type="audio" length="1"/>
                 <two-parameter-mono-audio-dissolve track-type="audio" length="1"/>
                 <eoc track-type="audio" length="1"/>
@@ -206,26 +206,26 @@
         </timeline-mob-slot>
     </top-level>
 
-	<!-- Test everything as a child of a transition -->
+    <!-- Test everything as a child of a transition -->
     <top-level name="Video Dissolve child of Transition">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence track-type="picture">
+            <sequence length="0" track-type="picture">
                 <eoc track-type="picture" length="1"/>
-               	<transition track-type="picture" length="1">
-	                <video-dissolve track-type="picture"/>
+                   <transition track-type="picture" length="1">
+                    <video-dissolve length="0" track-type="picture"/>
                 </transition>
                 <eoc track-type="picture" length="1"/>
             </sequence>
         </timeline-mob-slot>
     </top-level>
-    
+
     <top-level name="SMPTE Video Wipe child of Transition">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence track-type="picture">
+            <sequence length="0" track-type="picture">
                 <eoc track-type="picture" length="1"/>
-				<transition track-type="picture" length="1">
-   		            <smpte-video-wipe track-type="picture"/>
-				</transition>
+                <transition track-type="picture" length="1">
+                       <smpte-video-wipe length="0" track-type="picture"/>
+                </transition>
                 <eoc track-type="picture" length="1"/>
             </sequence>
         </timeline-mob-slot>
@@ -233,12 +233,12 @@
 
     <top-level name="Video Speed Control child of Transition">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence track-type="picture">
+            <sequence length="0" track-type="picture">
                 <eoc track-type="picture" length="1"/>
-				<transition track-type="picture" length="1">
-           		    <video-speed-control track-type="picture">
-	                    <constant-speed-ratio denominator="1" numerator="1"/>
-	                </video-speed-control>
+                <transition track-type="picture" length="1">
+                       <video-speed-control length="0" track-type="picture">
+                        <constant-speed-ratio denominator="1" numerator="1"/>
+                    </video-speed-control>
                 </transition>
                 <eoc track-type="picture" length="1"/>
             </sequence>
@@ -247,11 +247,11 @@
 
     <top-level name="Video Repeat child of Transition">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence track-type="picture">
+            <sequence length="0" track-type="picture">
                 <eoc track-type="picture" length="1"/>
-				<transition track-type="picture" length="1">
-               		<video-repeat track-type="picture"/>
-				</transition>
+                <transition track-type="picture" length="1">
+                       <video-repeat length="0" track-type="picture"/>
+                </transition>
                 <eoc track-type="picture" length="1"/>
             </sequence>
         </timeline-mob-slot>
@@ -259,11 +259,11 @@
 
     <top-level name="Video Flip child of Transition">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence track-type="picture">
+            <sequence length="0" track-type="picture">
                 <eoc track-type="picture" length="1"/>
-				<transition track-type="picture" length="1">
-               		<video-flip track-type="picture"/>
-				</transition>
+                <transition track-type="picture" length="1">
+                       <video-flip length="0" track-type="picture"/>
+                </transition>
                 <eoc track-type="picture" length="1"/>
             </sequence>
         </timeline-mob-slot>
@@ -271,11 +271,11 @@
 
     <top-level name="Video Flop child of Transition">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence track-type="picture">
+            <sequence length="0" track-type="picture">
                 <eoc track-type="picture" length="1"/>
-				<transition track-type="picture" length="1">
-               		<video-flop track-type="picture"/>
-				</transition>
+                <transition track-type="picture" length="1">
+                       <video-flop length="0" track-type="picture"/>
+                </transition>
                 <eoc track-type="picture" length="1"/>
             </sequence>
         </timeline-mob-slot>
@@ -283,11 +283,11 @@
 
     <top-level name="Video Flip-Flop child of Transition">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence track-type="picture">
+            <sequence length="0" track-type="picture">
                 <eoc track-type="picture" length="1"/>
-				<transition track-type="picture" length="1">
-               		<video-flip-flop track-type="picture"/>
-				</transition>
+                <transition track-type="picture" length="1">
+                       <video-flip-flop length="0" track-type="picture"/>
+                </transition>
                 <eoc track-type="picture" length="1"/>
             </sequence>
         </timeline-mob-slot>
@@ -295,11 +295,11 @@
 
     <top-level name="Video Position child of Transition">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence track-type="picture">
+            <sequence length="0" track-type="picture">
                 <eoc track-type="picture" length="1"/>
-				<transition track-type="picture" length="1">
-               		<video-position track-type="picture"/>
-				</transition>
+                <transition track-type="picture" length="1">
+                       <video-position length="0" track-type="picture"/>
+                </transition>
                 <eoc track-type="picture" length="1"/>
             </sequence>
         </timeline-mob-slot>
@@ -307,11 +307,11 @@
 
     <top-level name="Video Crop child of Transition">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence track-type="picture">
+            <sequence length="0" track-type="picture">
                 <eoc track-type="picture" length="1"/>
-				<transition track-type="picture" length="1">
-               		<video-crop track-type="picture"/>
-				</transition>
+                <transition track-type="picture" length="1">
+                       <video-crop length="0" track-type="picture"/>
+                </transition>
                 <eoc track-type="picture" length="1"/>
             </sequence>
         </timeline-mob-slot>
@@ -319,11 +319,11 @@
 
     <top-level name="Video Scale child of Transition">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence track-type="picture">
+            <sequence length="0" track-type="picture">
                 <eoc track-type="picture" length="1"/>
-				<transition track-type="picture" length="1">
-	                <video-scale track-type="picture"/>
-				</transition>
+                <transition track-type="picture" length="1">
+                    <video-scale length="0" track-type="picture"/>
+                </transition>
                 <eoc track-type="picture" length="1"/>
             </sequence>
         </timeline-mob-slot>
@@ -331,11 +331,11 @@
 
     <top-level name="Video Rotate child of Transition">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence track-type="picture">
+            <sequence length="0" track-type="picture">
                 <eoc track-type="picture" length="1"/>
-				<transition track-type="picture" length="1">
-       		        <video-rotate track-type="picture"/>
-				</transition>
+                <transition track-type="picture" length="1">
+                       <video-rotate length="0" track-type="picture"/>
+                </transition>
                 <eoc track-type="picture" length="1"/>
             </sequence>
         </timeline-mob-slot>
@@ -343,11 +343,11 @@
 
     <top-level name="Video Corner Pinning child of Transition">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence track-type="picture">
+            <sequence length="0" track-type="picture">
                 <eoc track-type="picture" length="1"/>
-				<transition track-type="picture" length="1">
-               		<video-corner-pinning track-type="picture"/>
-				</transition>
+                <transition track-type="picture" length="1">
+                       <video-corner-pinning length="0" track-type="picture"/>
+                </transition>
                 <eoc track-type="picture" length="1"/>
             </sequence>
         </timeline-mob-slot>
@@ -355,11 +355,11 @@
 
     <top-level name="Alpha With Video Key child of Transition">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence track-type="picture">
+            <sequence length="0" track-type="picture">
                 <eoc track-type="picture" length="1"/>
-				<transition track-type="picture" length="1">
-               		<alpha-with-video-key track-type="picture"/>
-				</transition>
+                <transition track-type="picture" length="1">
+                       <alpha-with-video-key length="0" track-type="picture"/>
+                </transition>
                 <eoc track-type="picture" length="1"/>
             </sequence>
         </timeline-mob-slot>
@@ -367,11 +367,11 @@
 
     <top-level name="Separate Alpha Key child of Transition">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence track-type="picture">
+            <sequence length="0" track-type="picture">
                 <eoc track-type="picture" length="1"/>
-				<transition track-type="picture" length="1">
-               		<separate-alpha-key track-type="picture"/>
-				</transition>
+                <transition track-type="picture" length="1">
+                       <separate-alpha-key length="0" track-type="picture"/>
+                </transition>
                 <eoc track-type="picture" length="1"/>
             </sequence>
         </timeline-mob-slot>
@@ -379,11 +379,11 @@
 
     <top-level name="Luminance Key child of Transition">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence track-type="picture">
+            <sequence length="0" track-type="picture">
                 <eoc track-type="picture" length="1"/>
-				<transition track-type="picture" length="1">
-	                <luminance-key track-type="picture"/>
-				</transition>
+                <transition track-type="picture" length="1">
+                    <luminance-key length="0" track-type="picture"/>
+                </transition>
                 <eoc track-type="picture" length="1"/>
             </sequence>
         </timeline-mob-slot>
@@ -391,11 +391,11 @@
 
     <top-level name="Chroma Key child of Transition">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence track-type="picture">
+            <sequence length="0" track-type="picture">
                 <eoc track-type="picture" length="1"/>
-				<transition track-type="picture" length="1">
-       		        <chroma-key track-type="picture"/>
-				</transition>
+                <transition track-type="picture" length="1">
+                       <chroma-key length="0" track-type="picture"/>
+                </transition>
                 <eoc track-type="picture" length="1"/>
             </sequence>
         </timeline-mob-slot>
@@ -403,11 +403,11 @@
 
     <top-level name="Mono Audio Gain child of Transition">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence track-type="audio">
+            <sequence length="0" track-type="audio">
                 <eoc track-type="audio" length="1"/>
-				<transition track-type="audio" length="1">
-               		<mono-audio-gain track-type="audio"/>
-				</transition>
+                <transition track-type="audio" length="1">
+                       <mono-audio-gain length="0" track-type="audio"/>
+                </transition>
                 <eoc track-type="audio" length="1"/>
             </sequence>
         </timeline-mob-slot>
@@ -415,11 +415,11 @@
 
     <top-level name="Mono Audio Pan child of Transition">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence track-type="audio">
+            <sequence length="0" track-type="audio">
                 <eoc track-type="audio" length="1"/>
-				<transition track-type="audio" length="1">
-	                <mono-audio-pan track-type="audio"/>
-				</transition>
+                <transition track-type="audio" length="1">
+                    <mono-audio-pan length="0" track-type="audio"/>
+                </transition>
                 <eoc track-type="audio" length="1"/>
             </sequence>
         </timeline-mob-slot>
@@ -427,11 +427,11 @@
 
     <top-level name="Mono Audio Dissolve child of Transition">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence track-type="audio">
+            <sequence length="0" track-type="audio">
                 <eoc track-type="audio" length="1"/>
-				<transition track-type="audio" length="1">
-       		        <mono-audio-dissolve track-type="audio"/>
-				</transition>
+                <transition track-type="audio" length="1">
+                       <mono-audio-dissolve length="0" track-type="audio"/>
+                </transition>
                 <eoc track-type="audio" length="1"/>
             </sequence>
         </timeline-mob-slot>
@@ -439,40 +439,40 @@
 
     <top-level name="Two Parameter Mobo Audio Dissolve child of Transition">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence track-type="audio">
+            <sequence length="0" track-type="audio">
                 <eoc track-type="audio" length="1"/>
-				<transition track-type="audio" length="1">
-               		<two-parameter-mono-audio-dissolve track-type="audio"/>
-				</transition>
+                <transition track-type="audio" length="1">
+                       <two-parameter-mono-audio-dissolve length="0" track-type="audio"/>
+                </transition>
                 <eoc track-type="audio" length="1"/>
             </sequence>
         </timeline-mob-slot>
     </top-level>
 
-	<!-- Test everything as a descendant of a transition -->
+    <!-- Test everything as a descendant of a transition -->
     <top-level name="Video Dissolve grandchild of Transition">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence track-type="picture">
+            <sequence length="0" track-type="picture">
                 <eoc track-type="picture" length="1"/>
-               	<transition track-type="picture" length="1">
-                    <video-dissolve track-type="picture">
-                        <video-dissolve track-type="picture"/>
-	                </video-dissolve>
+                   <transition track-type="picture" length="1">
+                    <video-dissolve length="0" track-type="picture">
+                        <video-dissolve length="0" track-type="picture"/>
+                    </video-dissolve>
                 </transition>
                 <eoc track-type="picture" length="1"/>
             </sequence>
         </timeline-mob-slot>
     </top-level>
-    
+
     <top-level name="SMPTE Video Wipe grandchild of Transition">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence track-type="picture">
+            <sequence length="0" track-type="picture">
                 <eoc track-type="picture" length="1"/>
-				<transition track-type="picture" length="1">
-                    <video-dissolve track-type="picture">
-	   		            <smpte-video-wipe track-type="picture"/>
+                <transition track-type="picture" length="1">
+                    <video-dissolve length="0" track-type="picture">
+                           <smpte-video-wipe length="0" track-type="picture"/>
                     </video-dissolve>
-				</transition>
+                </transition>
                 <eoc track-type="picture" length="1"/>
             </sequence>
         </timeline-mob-slot>
@@ -480,12 +480,12 @@
 
     <top-level name="Video Speed Control grandchild of Transition">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence track-type="picture">
+            <sequence length="0" track-type="picture">
                 <eoc track-type="picture" length="1"/>
-				<transition track-type="picture" length="1">
-                    <video-dissolve track-type="picture">
-	           		    <video-speed-control track-type="picture">
-                        	<constant-speed-ratio denominator="1" numerator="1"/>
+                <transition track-type="picture" length="1">
+                    <video-dissolve length="0" track-type="picture">
+                           <video-speed-control length="0" track-type="picture">
+                            <constant-speed-ratio denominator="1" numerator="1"/>
                         </video-speed-control>
                     </video-dissolve>
                 </transition>
@@ -496,13 +496,13 @@
 
     <top-level name="Video Repeat grandchild of Transition">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence track-type="picture">
+            <sequence length="0" track-type="picture">
                 <eoc track-type="picture" length="1"/>
-				<transition track-type="picture" length="1">
-                    <video-dissolve track-type="picture">
-	               		<video-repeat track-type="picture"/>
+                <transition track-type="picture" length="1">
+                    <video-dissolve length="0" track-type="picture">
+                           <video-repeat length="0" track-type="picture"/>
                     </video-dissolve>
-				</transition>
+                </transition>
                 <eoc track-type="picture" length="1"/>
             </sequence>
         </timeline-mob-slot>
@@ -510,13 +510,13 @@
 
     <top-level name="Video Flip grandchild of Transition">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence track-type="picture">
+            <sequence length="0" track-type="picture">
                 <eoc track-type="picture" length="1"/>
-				<transition track-type="picture" length="1">
-                    <video-dissolve track-type="picture">
-	               		<video-flip track-type="picture"/>
+                <transition track-type="picture" length="1">
+                    <video-dissolve length="0" track-type="picture">
+                           <video-flip length="0" track-type="picture"/>
                     </video-dissolve>
-				</transition>
+                </transition>
                 <eoc track-type="picture" length="1"/>
             </sequence>
         </timeline-mob-slot>
@@ -524,13 +524,13 @@
 
     <top-level name="Video Flop grandchild of Transition">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence track-type="picture">
+            <sequence length="0" track-type="picture">
                 <eoc track-type="picture" length="1"/>
-				<transition track-type="picture" length="1">
-                    <video-dissolve track-type="picture">
-	               		<video-flop track-type="picture"/>
+                <transition track-type="picture" length="1">
+                    <video-dissolve length="0" track-type="picture">
+                           <video-flop length="0" track-type="picture"/>
                     </video-dissolve>
-				</transition>
+                </transition>
                 <eoc track-type="picture" length="1"/>
             </sequence>
         </timeline-mob-slot>
@@ -538,13 +538,13 @@
 
     <top-level name="Video Flip-Flop grandchild of Transition">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence track-type="picture">
+            <sequence length="0" track-type="picture">
                 <eoc track-type="picture" length="1"/>
-				<transition track-type="picture" length="1">
-                    <video-dissolve track-type="picture">
-	               		<video-flip-flop track-type="picture"/>
+                <transition track-type="picture" length="1">
+                    <video-dissolve length="0" track-type="picture">
+                           <video-flip-flop length="0" track-type="picture"/>
                     </video-dissolve>
-				</transition>
+                </transition>
                 <eoc track-type="picture" length="1"/>
             </sequence>
         </timeline-mob-slot>
@@ -552,13 +552,13 @@
 
     <top-level name="Video Position grandchild of Transition">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence track-type="picture">
+            <sequence length="0" track-type="picture">
                 <eoc track-type="picture" length="1"/>
-				<transition track-type="picture" length="1">
-                    <video-dissolve track-type="picture">
-	               		<video-position track-type="picture"/>
+                <transition track-type="picture" length="1">
+                    <video-dissolve length="0" track-type="picture">
+                           <video-position length="0" track-type="picture"/>
                     </video-dissolve>
-				</transition>
+                </transition>
                 <eoc track-type="picture" length="1"/>
             </sequence>
         </timeline-mob-slot>
@@ -566,13 +566,13 @@
 
     <top-level name="Video Crop grandchild of Transition">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence track-type="picture">
+            <sequence length="0" track-type="picture">
                 <eoc track-type="picture" length="1"/>
-				<transition track-type="picture" length="1">
-                    <video-dissolve track-type="picture">
-	               		<video-crop track-type="picture"/>
+                <transition track-type="picture" length="1">
+                    <video-dissolve length="0" track-type="picture">
+                           <video-crop length="0" track-type="picture"/>
                     </video-dissolve>
-				</transition>
+                </transition>
                 <eoc track-type="picture" length="1"/>
             </sequence>
         </timeline-mob-slot>
@@ -580,13 +580,13 @@
 
     <top-level name="Video Scale grandchild of Transition">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence track-type="picture">
+            <sequence length="0" track-type="picture">
                 <eoc track-type="picture" length="1"/>
-				<transition track-type="picture" length="1">
-                    <video-dissolve track-type="picture">
-		                <video-scale track-type="picture"/>
+                <transition track-type="picture" length="1">
+                    <video-dissolve length="0" track-type="picture">
+                        <video-scale length="0" track-type="picture"/>
                     </video-dissolve>
-				</transition>
+                </transition>
                 <eoc track-type="picture" length="1"/>
             </sequence>
         </timeline-mob-slot>
@@ -594,13 +594,13 @@
 
     <top-level name="Video Rotate grandchild of Transition">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence track-type="picture">
+            <sequence length="0" track-type="picture">
                 <eoc track-type="picture" length="1"/>
-				<transition track-type="picture" length="1">
-                    <video-dissolve track-type="picture">
-	       		        <video-rotate track-type="picture"/>
+                <transition track-type="picture" length="1">
+                    <video-dissolve length="0" track-type="picture">
+                           <video-rotate length="0" track-type="picture"/>
                     </video-dissolve>
-				</transition>
+                </transition>
                 <eoc track-type="picture" length="1"/>
             </sequence>
         </timeline-mob-slot>
@@ -608,13 +608,13 @@
 
     <top-level name="Video Corner Pinning grandchild of Transition">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence track-type="picture">
+            <sequence length="0" track-type="picture">
                 <eoc track-type="picture" length="1"/>
-				<transition track-type="picture" length="1">
-                    <video-dissolve track-type="picture">
-	               		<video-corner-pinning track-type="picture"/>
+                <transition track-type="picture" length="1">
+                    <video-dissolve length="0" track-type="picture">
+                           <video-corner-pinning length="0" track-type="picture"/>
                     </video-dissolve>
-				</transition>
+                </transition>
                 <eoc track-type="picture" length="1"/>
             </sequence>
         </timeline-mob-slot>
@@ -622,13 +622,13 @@
 
     <top-level name="Alpha With Video Key grandchild of Transition">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence track-type="picture">
+            <sequence length="0" track-type="picture">
                 <eoc track-type="picture" length="1"/>
-				<transition track-type="picture" length="1">
-                    <video-dissolve track-type="picture">
-	               		<alpha-with-video-key track-type="picture"/>
+                <transition track-type="picture" length="1">
+                    <video-dissolve length="0" track-type="picture">
+                           <alpha-with-video-key length="0" track-type="picture"/>
                     </video-dissolve>
-				</transition>
+                </transition>
                 <eoc track-type="picture" length="1"/>
             </sequence>
         </timeline-mob-slot>
@@ -636,13 +636,13 @@
 
     <top-level name="Separate Alpha Key grandchild of Transition">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence track-type="picture">
+            <sequence length="0" track-type="picture">
                 <eoc track-type="picture" length="1"/>
-				<transition track-type="picture" length="1">
-                    <video-dissolve track-type="picture">
-	               		<separate-alpha-key track-type="picture"/>
+                <transition track-type="picture" length="1">
+                    <video-dissolve length="0" track-type="picture">
+                           <separate-alpha-key length="0" track-type="picture"/>
                     </video-dissolve>
-				</transition>
+                </transition>
                 <eoc track-type="picture" length="1"/>
             </sequence>
         </timeline-mob-slot>
@@ -650,13 +650,13 @@
 
     <top-level name="Luminance Key grandchild of Transition">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence track-type="picture">
+            <sequence length="0" track-type="picture">
                 <eoc track-type="picture" length="1"/>
-				<transition track-type="picture" length="1">
-                    <video-dissolve track-type="picture">
-		                <luminance-key track-type="picture"/>
+                <transition track-type="picture" length="1">
+                    <video-dissolve length="0" track-type="picture">
+                        <luminance-key length="0" track-type="picture"/>
                     </video-dissolve>
-				</transition>
+                </transition>
                 <eoc track-type="picture" length="1"/>
             </sequence>
         </timeline-mob-slot>
@@ -664,13 +664,13 @@
 
     <top-level name="Chroma Key grandchild of Transition">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence track-type="picture">
+            <sequence length="0" track-type="picture">
                 <eoc track-type="picture" length="1"/>
-				<transition track-type="picture" length="1">
-                    <video-dissolve track-type="picture">
-	       		        <chroma-key track-type="picture"/>
+                <transition track-type="picture" length="1">
+                    <video-dissolve length="0" track-type="picture">
+                           <chroma-key length="0" track-type="picture"/>
                     </video-dissolve>
-				</transition>
+                </transition>
                 <eoc track-type="picture" length="1"/>
             </sequence>
         </timeline-mob-slot>
@@ -678,13 +678,13 @@
 
     <top-level name="Mono Audio Gain grandchild of Transition">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence track-type="audio">
+            <sequence length="0" track-type="audio">
                 <eoc track-type="audio" length="1"/>
-				<transition track-type="audio" length="1">
-                    <two-parameter-mono-audio-dissolve track-type="audio">
-	              		<mono-audio-gain track-type="audio"/>
+                <transition track-type="audio" length="1">
+                    <two-parameter-mono-audio-dissolve length="0" track-type="audio">
+                          <mono-audio-gain length="0" track-type="audio"/>
                     </two-parameter-mono-audio-dissolve>
-				</transition>
+                </transition>
                 <eoc track-type="audio" length="1"/>
             </sequence>
         </timeline-mob-slot>
@@ -692,13 +692,13 @@
 
     <top-level name="Mono Audio Pan grandchild of Transition">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence track-type="audio">
+            <sequence length="0" track-type="audio">
                 <eoc track-type="audio" length="1"/>
-				<transition track-type="audio" length="1">
-                    <two-parameter-mono-audio-dissolve track-type="audio">
-	                	<mono-audio-pan track-type="audio"/>
+                <transition track-type="audio" length="1">
+                    <two-parameter-mono-audio-dissolve length="0" track-type="audio">
+                        <mono-audio-pan length="0" track-type="audio"/>
                     </two-parameter-mono-audio-dissolve>
-				</transition>
+                </transition>
                 <eoc track-type="audio" length="1"/>
             </sequence>
         </timeline-mob-slot>
@@ -706,13 +706,13 @@
 
     <top-level name="Mono Audio Dissolve grandchild of Transition">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence track-type="audio">
+            <sequence length="0" track-type="audio">
                 <eoc track-type="audio" length="1"/>
-				<transition track-type="audio" length="1">
-                    <two-parameter-mono-audio-dissolve track-type="audio">
-	       		        <mono-audio-dissolve track-type="audio"/>
+                <transition track-type="audio" length="1">
+                    <two-parameter-mono-audio-dissolve length="0" track-type="audio">
+                           <mono-audio-dissolve length="0" track-type="audio"/>
                     </two-parameter-mono-audio-dissolve>
-				</transition>
+                </transition>
                 <eoc track-type="audio" length="1"/>
             </sequence>
         </timeline-mob-slot>
@@ -720,13 +720,13 @@
 
     <top-level name="Two Parameter Mobo Audio Dissolve grandchild of Transition">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence track-type="audio">
+            <sequence length="0" track-type="audio">
                 <eoc track-type="audio" length="1"/>
-				<transition track-type="audio" length="1">
-                    <two-parameter-mono-audio-dissolve track-type="audio">
-	               		<two-parameter-mono-audio-dissolve track-type="audio"/>
+                <transition track-type="audio" length="1">
+                    <two-parameter-mono-audio-dissolve length="0" track-type="audio">
+                           <two-parameter-mono-audio-dissolve length="0" track-type="audio"/>
                     </two-parameter-mono-audio-dissolve>
-				</transition>
+                </transition>
                 <eoc track-type="audio" length="1"/>
             </sequence>
         </timeline-mob-slot>
@@ -735,12 +735,12 @@
     <!-- Test Speed Ratio parameter -->
     <top-level name="Speed Ratio Zero Denominator">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence track-type="picture">
+            <sequence length="0" track-type="picture">
                 <eoc track-type="picture" length="1"/>
-				<transition track-type="picture" length="1">
-                    <video-dissolve track-type="picture">
-	           		    <video-speed-control track-type="picture">
-                        	<constant-speed-ratio denominator="0" numerator="1"/>
+                <transition track-type="picture" length="1">
+                    <video-dissolve length="0" track-type="picture">
+                           <video-speed-control length="0" track-type="picture">
+                            <constant-speed-ratio denominator="0" numerator="1"/>
                         </video-speed-control>
                     </video-dissolve>
                 </transition>
@@ -748,15 +748,15 @@
             </sequence>
         </timeline-mob-slot>
     </top-level>
-    
+
     <top-level name="Speed Ratio of Zero">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence track-type="picture">
+            <sequence length="0" track-type="picture">
                 <eoc track-type="picture" length="1"/>
-				<transition track-type="picture" length="1">
-                    <video-dissolve track-type="picture">
-	           		    <video-speed-control track-type="picture">
-                        	<constant-speed-ratio denominator="1" numerator="0"/>
+                <transition track-type="picture" length="1">
+                    <video-dissolve length="0" track-type="picture">
+                           <video-speed-control length="0" track-type="picture">
+                            <constant-speed-ratio denominator="1" numerator="0"/>
                         </video-speed-control>
                     </video-dissolve>
                 </transition>
@@ -764,14 +764,14 @@
             </sequence>
         </timeline-mob-slot>
     </top-level>
-    
+
     <top-level name="Speed Ratio Missing">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence track-type="picture">
+            <sequence length="0" track-type="picture">
                 <eoc track-type="picture" length="1"/>
-				<transition track-type="picture" length="1">
-                    <video-dissolve track-type="picture">
-	           		    <video-speed-control track-type="picture"/>
+                <transition track-type="picture" length="1">
+                    <video-dissolve length="0" track-type="picture">
+                           <video-speed-control length="0" track-type="picture"/>
                     </video-dissolve>
                 </transition>
                 <eoc track-type="picture" length="1"/>
@@ -781,11 +781,11 @@
 
     <top-level name="Varying Speed Ration">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence track-type="picture">
+            <sequence length="0" track-type="picture">
                 <eoc track-type="picture" length="1"/>
-				<transition track-type="picture" length="1">
-                    <video-dissolve track-type="picture">
-	           		    <video-speed-control track-type="picture">
+                <transition track-type="picture" length="1">
+                    <video-dissolve length="0" track-type="picture">
+                           <video-speed-control length="0" track-type="picture">
                             <varying-speed-ratio interpolator="linear" denominator="1" numerator="1"/>
                         </video-speed-control>
                     </video-dissolve>
@@ -794,391 +794,391 @@
             </sequence>
         </timeline-mob-slot>
     </top-level>
-    
+
     <!-- Test Two-Parameter Mono Audio Dissolve Effects -->
     <top-level name="Two-Parameter Mono Audio Dissolve - No Incoming Segment">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence track-type="audio">
+            <sequence length="0" track-type="audio">
                 <eoc track-type="audio" length="10"/>
-				<transition track-type="audio" length="10">
-                    <two-parameter-mono-audio-dissolve track-type="audio"/>
+                <transition track-type="audio" length="10">
+                    <two-parameter-mono-audio-dissolve length="0" track-type="audio"/>
                 </transition>
             </sequence>
         </timeline-mob-slot>
     </top-level>
-    
+
     <!-- Test the Alpha Effects -->
     <top-level name="Alpha With Video Key - Too Few Inputs">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence track-type="picture">
+            <sequence length="0" track-type="picture">
                 <alpha-with-video-key track-type="picture" length="1">
-					<eoc track-type="picture"/>
-                </alpha-with-video-key>    
+                    <eoc length="0" track-type="picture"/>
+                </alpha-with-video-key>
             </sequence>
         </timeline-mob-slot>
     </top-level>
-    
+
     <top-level name="Alpha With Video Key - Too Many Inputs">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence track-type="picture">
+            <sequence length="0" track-type="picture">
                 <alpha-with-video-key track-type="picture" length="1">
-					<eoc track-type="picture"/>
-                    <eoc track-type="picture"/>
-                    <eoc track-type="picture"/>
-                </alpha-with-video-key>    
+                    <eoc length="0" track-type="picture"/>
+                    <eoc length="0" track-type="picture"/>
+                    <eoc length="0" track-type="picture"/>
+                </alpha-with-video-key>
             </sequence>
         </timeline-mob-slot>
     </top-level>
-    
+
     <top-level name="Alpha With Video Key - Foreground is EOC">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence track-type="picture">
+            <sequence length="0" track-type="picture">
                 <alpha-with-video-key track-type="picture" length="1">
-					<eoc track-type="picture"/>
-                    <eoc track-type="picture"/>
-                </alpha-with-video-key>    
+                    <eoc length="0" track-type="picture"/>
+                    <eoc length="0" track-type="picture"/>
+                </alpha-with-video-key>
             </sequence>
         </timeline-mob-slot>
     </top-level>
-    
+
     <top-level name="Alpha With Video Key - Input is out of file">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence track-type="picture">
+            <sequence length="0" track-type="picture">
                 <alpha-with-video-key track-type="picture" length="1">
-					<eoc track-type="picture"/>
-                    <oof track-type="picture"/>
-                </alpha-with-video-key>    
+                    <eoc length="0" track-type="picture"/>
+                    <oof length="0" track-type="picture"/>
+                </alpha-with-video-key>
             </sequence>
         </timeline-mob-slot>
     </top-level>
-    
+
     <top-level name="Alpha With Video Key - Input is not Source Reference">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence track-type="picture">
+            <sequence length="0" track-type="picture">
                 <alpha-with-video-key track-type="picture" length="1">
-					<eoc track-type="picture"/>
-					<comment-marker track-type="picture"/>
-                </alpha-with-video-key>    
+                    <eoc length="0" track-type="picture"/>
+                    <comment-marker length="0" track-type="picture"/>
+                </alpha-with-video-key>
             </sequence>
         </timeline-mob-slot>
     </top-level>
-    
+
     <top-level name="Alpha With Video Key - Input is Composition">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence track-type="picture">
+            <sequence length="0" track-type="picture">
                 <alpha-with-video-key track-type="picture" length="1">
-					<eoc track-type="picture"/>
-                    <source-clip track-type="picture">
+                    <eoc length="0" track-type="picture"/>
+                    <source-clip length="0" track-type="picture">
                         <top-level>
                             <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-                                <eoc track-type="picture"/>
+                                <eoc length="0" track-type="picture"/>
                             </timeline-mob-slot>
                         </top-level>
                     </source-clip>
-                </alpha-with-video-key>    
+                </alpha-with-video-key>
             </sequence>
         </timeline-mob-slot>
     </top-level>
-    
+
     <top-level name="Alpha With Video Key - Input is Master">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence track-type="picture">
+            <sequence length="0" track-type="picture">
                 <alpha-with-video-key track-type="picture" length="1">
-					<eoc track-type="picture"/>
-                    <source-clip track-type="picture">
+                    <eoc length="0" track-type="picture"/>
+                    <source-clip length="0" track-type="picture">
                         <template-clip>
                             <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-                                <eoc track-type="picture"/>
+                                <eoc length="0" track-type="picture"/>
                             </timeline-mob-slot>
                         </template-clip>
                     </source-clip>
-                </alpha-with-video-key>    
+                </alpha-with-video-key>
             </sequence>
         </timeline-mob-slot>
     </top-level>
-    
+
     <top-level name="Alpha With Video Key - Input is Illegal Source">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence track-type="picture">
+            <sequence length="0" track-type="picture">
                 <alpha-with-video-key track-type="picture" length="1">
-					<eoc track-type="picture"/>
-                    <source-clip track-type="picture">
+                    <eoc length="0" track-type="picture"/>
+                    <source-clip length="0" track-type="picture">
                         <tape-source>
                             <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-                                <eoc track-type="picture"/>
+                                <eoc length="0" track-type="picture"/>
                             </timeline-mob-slot>
                         </tape-source>
                     </source-clip>
-                </alpha-with-video-key>    
+                </alpha-with-video-key>
             </sequence>
         </timeline-mob-slot>
     </top-level>
-    
+
     <top-level name="Alpha With Video Key - Input is CDIC Source with Alpha Transparency Set">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence track-type="picture">
+            <sequence length="0" track-type="picture">
                 <alpha-with-video-key track-type="picture" length="1">
-					<eoc track-type="picture"/>
-                    <source-clip track-type="picture">
-						<cdci-source sample-rate-denominator="1" sample-rate-numerator="1" alpha-transparency="max">
+                    <eoc length="0" track-type="picture"/>
+                    <source-clip length="0" track-type="picture">
+                        <cdci-source sample-rate-denominator="1" sample-rate-numerator="1" alpha-transparency="max">
                             <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-								<eoc track-type="picture"/>
+                                <eoc length="0" track-type="picture"/>
                             </timeline-mob-slot>
                         </cdci-source>
                     </source-clip>
-                </alpha-with-video-key>    
+                </alpha-with-video-key>
             </sequence>
         </timeline-mob-slot>
     </top-level>
-    
+
     <top-level name="Alpha With Video Key - Input is CDIC Source without Alpha Transparency Set">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence track-type="picture">
+            <sequence length="0" track-type="picture">
                 <alpha-with-video-key track-type="picture" length="1">
-					<eoc track-type="picture"/>
-                    <source-clip track-type="picture">
-						<cdci-source sample-rate-denominator="1" sample-rate-numerator="1">
+                    <eoc length="0" track-type="picture"/>
+                    <source-clip length="0" track-type="picture">
+                        <cdci-source sample-rate-denominator="1" sample-rate-numerator="1">
                             <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-								<eoc track-type="picture"/>
+                                <eoc length="0" track-type="picture"/>
                             </timeline-mob-slot>
                         </cdci-source>
                     </source-clip>
-                </alpha-with-video-key>    
+                </alpha-with-video-key>
             </sequence>
         </timeline-mob-slot>
     </top-level>
-    
+
     <top-level name="Alpha With Video Key - Input is RGBA Source with Alpha Transparency Set">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence track-type="picture">
+            <sequence length="0" track-type="picture">
                 <alpha-with-video-key track-type="picture" length="1">
-					<eoc track-type="picture"/>
-                    <source-clip track-type="picture">
-						<rgba-source sample-rate-denominator="1" sample-rate-numerator="1" alpha-transparency="min">
+                    <eoc length="0" track-type="picture"/>
+                    <source-clip length="0" track-type="picture">
+                        <rgba-source sample-rate-denominator="1" sample-rate-numerator="1" alpha-transparency="min">
                             <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-								<eoc track-type="picture"/>
+                                <eoc length="0" track-type="picture"/>
                             </timeline-mob-slot>
                         </rgba-source>
                     </source-clip>
-                </alpha-with-video-key>    
+                </alpha-with-video-key>
             </sequence>
         </timeline-mob-slot>
     </top-level>
-    
+
     <top-level name="Alpha With Video Key - Input is RGBA Source without Alpha Transparency Set">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence track-type="picture">
+            <sequence length="0" track-type="picture">
                 <alpha-with-video-key track-type="picture" length="1">
-					<eoc track-type="picture"/>
-                    <source-clip track-type="picture">
-						<rgba-source sample-rate-denominator="1" sample-rate-numerator="1">
+                    <eoc length="0" track-type="picture"/>
+                    <source-clip length="0" track-type="picture">
+                        <rgba-source sample-rate-denominator="1" sample-rate-numerator="1">
                             <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-								<eoc track-type="picture"/>
+                                <eoc length="0" track-type="picture"/>
                             </timeline-mob-slot>
                         </rgba-source>
                     </source-clip>
-                </alpha-with-video-key>    
+                </alpha-with-video-key>
             </sequence>
         </timeline-mob-slot>
     </top-level>
 
     <top-level name="Seperate Alpha Key - Too Few Inputs">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence track-type="picture">
+            <sequence length="0" track-type="picture">
                 <separate-alpha-key track-type="picture" length="1">
-					<eoc track-type="picture"/>
-                    <eoc track-type="picture"/>
-                </separate-alpha-key>    
+                    <eoc length="0" track-type="picture"/>
+                    <eoc length="0" track-type="picture"/>
+                </separate-alpha-key>
             </sequence>
         </timeline-mob-slot>
     </top-level>
-    
+
     <top-level name="Seperate Alpha Key - Too Many Inputs">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence track-type="picture">
+            <sequence length="0" track-type="picture">
                 <separate-alpha-key track-type="picture" length="1">
-					<eoc track-type="picture"/>
-                    <eoc track-type="picture"/>
-                    <eoc track-type="picture"/>
-                    <eoc track-type="picture"/>
-                </separate-alpha-key>    
+                    <eoc length="0" track-type="picture"/>
+                    <eoc length="0" track-type="picture"/>
+                    <eoc length="0" track-type="picture"/>
+                    <eoc length="0" track-type="picture"/>
+                </separate-alpha-key>
             </sequence>
         </timeline-mob-slot>
     </top-level>
-    
+
     <top-level name="Seperate Alpha Key - Foreground is EOC">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence track-type="picture">
+            <sequence length="0" track-type="picture">
                 <separate-alpha-key track-type="picture" length="1">
-					<eoc track-type="picture"/>
-                    <eoc track-type="picture"/>
-                    <eoc track-type="picture"/>
-                </separate-alpha-key>    
+                    <eoc length="0" track-type="picture"/>
+                    <eoc length="0" track-type="picture"/>
+                    <eoc length="0" track-type="picture"/>
+                </separate-alpha-key>
             </sequence>
         </timeline-mob-slot>
     </top-level>
-    
+
     <top-level name="Seperate Alpha Key - Input is out of file">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence track-type="picture">
+            <sequence length="0" track-type="picture">
                 <separate-alpha-key track-type="picture" length="1">
-					<eoc track-type="picture"/>
-                    <eoc track-type="picture"/>
-                    <oof track-type="picture"/>
-                </separate-alpha-key>    
+                    <eoc length="0" track-type="picture"/>
+                    <eoc length="0" track-type="picture"/>
+                    <oof length="0" track-type="picture"/>
+                </separate-alpha-key>
             </sequence>
         </timeline-mob-slot>
     </top-level>
-    
+
     <top-level name="Seperate Alpha Key - Input is not Source Reference">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence track-type="picture">
+            <sequence length="0" track-type="picture">
                 <separate-alpha-key track-type="picture" length="1">
-					<eoc track-type="picture"/>
-					<comment-marker track-type="picture"/>
-                </separate-alpha-key>    
+                    <eoc length="0" track-type="picture"/>
+                    <comment-marker length="0" track-type="picture"/>
+                </separate-alpha-key>
             </sequence>
         </timeline-mob-slot>
     </top-level>
-    
+
     <top-level name="Seperate Alpha Key - Input is Composition">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence track-type="picture">
+            <sequence length="0" track-type="picture">
                 <separate-alpha-key track-type="picture" length="1">
-					<eoc track-type="picture"/>
-                    <eoc track-type="picture"/>
-                    <source-clip track-type="picture">
+                    <eoc length="0" track-type="picture"/>
+                    <eoc length="0" track-type="picture"/>
+                    <source-clip length="0" track-type="picture">
                         <top-level>
                             <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-                                <eoc track-type="picture"/>
+                                <eoc length="0" track-type="picture"/>
                             </timeline-mob-slot>
                         </top-level>
                     </source-clip>
-                </separate-alpha-key>    
+                </separate-alpha-key>
             </sequence>
         </timeline-mob-slot>
     </top-level>
-    
+
     <top-level name="Seperate Alpha Key - Input is Master">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence track-type="picture">
+            <sequence length="0" track-type="picture">
                 <separate-alpha-key track-type="picture" length="1">
-					<eoc track-type="picture"/>
-                    <eoc track-type="picture"/>
-                    <source-clip track-type="picture">
+                    <eoc length="0" track-type="picture"/>
+                    <eoc length="0" track-type="picture"/>
+                    <source-clip length="0" track-type="picture">
                         <template-clip>
                             <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-                                <eoc track-type="picture"/>
+                                <eoc length="0" track-type="picture"/>
                             </timeline-mob-slot>
                         </template-clip>
                     </source-clip>
-                </separate-alpha-key>    
+                </separate-alpha-key>
             </sequence>
         </timeline-mob-slot>
     </top-level>
-    
+
     <top-level name="Seperate Alpha Key - Input is Illegal Source">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence track-type="picture">
+            <sequence length="0" track-type="picture">
                 <separate-alpha-key track-type="picture" length="1">
-					<eoc track-type="picture"/>
-                    <eoc track-type="picture"/>
-                    <source-clip track-type="picture">
+                    <eoc length="0" track-type="picture"/>
+                    <eoc length="0" track-type="picture"/>
+                    <source-clip length="0" track-type="picture">
                         <tape-source>
                             <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-                                <eoc track-type="picture"/>
+                                <eoc length="0" track-type="picture"/>
                             </timeline-mob-slot>
                         </tape-source>
                     </source-clip>
-                </separate-alpha-key>    
+                </separate-alpha-key>
             </sequence>
         </timeline-mob-slot>
     </top-level>
-    
+
     <top-level name="Seperate Alpha Key - Input is CDIC Source with Alpha Transparency Set">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence track-type="picture">
+            <sequence length="0" track-type="picture">
                 <separate-alpha-key track-type="picture" length="1">
-					<eoc track-type="picture"/>
-                    <eoc track-type="picture"/>
-                    <source-clip track-type="picture">
-						<cdci-source sample-rate-denominator="1" sample-rate-numerator="1" alpha-transparency="max">
+                    <eoc length="0" track-type="picture"/>
+                    <eoc length="0" track-type="picture"/>
+                    <source-clip length="0" track-type="picture">
+                        <cdci-source sample-rate-denominator="1" sample-rate-numerator="1" alpha-transparency="max">
                             <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-								<eoc track-type="picture"/>
+                                <eoc length="0" track-type="picture"/>
                             </timeline-mob-slot>
                         </cdci-source>
                     </source-clip>
-                </separate-alpha-key>    
+                </separate-alpha-key>
             </sequence>
         </timeline-mob-slot>
     </top-level>
-    
+
     <top-level name="Seperate Alpha Key - Input is CDIC Source without Alpha Transparency Set">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence track-type="picture">
+            <sequence length="0" track-type="picture">
                 <separate-alpha-key track-type="picture" length="1">
-					<eoc track-type="picture"/>
-                    <eoc track-type="picture"/>
-                    <source-clip track-type="picture">
-						<cdci-source sample-rate-denominator="1" sample-rate-numerator="1">
+                    <eoc length="0" track-type="picture"/>
+                    <eoc length="0" track-type="picture"/>
+                    <source-clip length="0" track-type="picture">
+                        <cdci-source sample-rate-denominator="1" sample-rate-numerator="1">
                             <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-								<eoc track-type="picture"/>
+                                <eoc length="0" track-type="picture"/>
                             </timeline-mob-slot>
                         </cdci-source>
                     </source-clip>
-                </separate-alpha-key>    
+                </separate-alpha-key>
             </sequence>
         </timeline-mob-slot>
     </top-level>
-    
+
     <top-level name="Seperate Alpha Key - Input is RGBA Source with Alpha Transparency Set">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence track-type="picture">
+            <sequence length="0" track-type="picture">
                 <separate-alpha-key track-type="picture" length="1">
-					<eoc track-type="picture"/>
-                    <eoc track-type="picture"/>
-                    <source-clip track-type="picture">
-						<rgba-source sample-rate-denominator="1" sample-rate-numerator="1" alpha-transparency="min">
+                    <eoc length="0" track-type="picture"/>
+                    <eoc length="0" track-type="picture"/>
+                    <source-clip length="0" track-type="picture">
+                        <rgba-source sample-rate-denominator="1" sample-rate-numerator="1" alpha-transparency="min">
                             <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-								<eoc track-type="picture"/>
+                                <eoc length="0" track-type="picture"/>
                             </timeline-mob-slot>
                         </rgba-source>
                     </source-clip>
-                </separate-alpha-key>    
+                </separate-alpha-key>
             </sequence>
         </timeline-mob-slot>
     </top-level>
-    
+
     <top-level name="Seperate Alpha Key - Input is RGBA Source without Alpha Transparency Set">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence track-type="picture">
+            <sequence length="0" track-type="picture">
                 <separate-alpha-key track-type="picture" length="1">
-					<eoc track-type="picture"/>
-                    <eoc track-type="picture"/>
-                    <source-clip track-type="picture">
-						<rgba-source sample-rate-denominator="1" sample-rate-numerator="1">
+                    <eoc length="0" track-type="picture"/>
+                    <eoc length="0" track-type="picture"/>
+                    <source-clip length="0" track-type="picture">
+                        <rgba-source sample-rate-denominator="1" sample-rate-numerator="1">
                             <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-								<eoc track-type="picture"/>
+                                <eoc length="0" track-type="picture"/>
                             </timeline-mob-slot>
                         </rgba-source>
                     </source-clip>
-                </separate-alpha-key>    
+                </separate-alpha-key>
             </sequence>
         </timeline-mob-slot>
     </top-level>
-    
+
     <!-- Test that the correct result are produced when a failure occus on one
          branch of the file, but not on the next branch. -->
     <top-level name="Heredity Test">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence track-type="audio">
+            <sequence length="0" track-type="audio">
                 <eoc track-type="audio" length="1"/>
                 <mono-audio-dissolve track-type="audio" length="1"/>
                 <eoc track-type="audio" length="1"/>
             </sequence>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence track-type="audio">
+            <sequence length="0" track-type="audio">
                 <eoc track-type="audio" length="1"/>
                 <mono-audio-pan track-type="audio" length="1"/>
                 <eoc track-type="audio" length="1"/>

@@ -33,29 +33,31 @@ class SlotInfo
 
     public:
 
-        SlotInfo( const AxString& element, const aafRational_t editRate, InputParser::OptionalStringAttrib name, InputParser::OptionalIntAttrib physicalTrackNum, InputParser::OptionalIntAttrib markedInPoint, InputParser::OptionalIntAttrib markedOutPoint )
-            : element( element ), 
-              editRate( editRate ), 
+        SlotInfo( const AxString& element, const aafRational_t editRate, InputParser::OptionalStringAttrib name, InputParser::OptionalIntAttrib physicalTrackNum, InputParser::OptionalIntAttrib markedInPoint, InputParser::OptionalIntAttrib markedOutPoint, aafPosition_t orgin )
+            : element( element ),
+              editRate( editRate ),
               name( name ),
               physicalTrackNum( physicalTrackNum ),
               componentsSinceSlot( 0 ),
               markedInPoint( markedInPoint ),
-              markedOutPoint( markedOutPoint )
+              markedOutPoint( markedOutPoint ),
+              orgin( orgin )
         {}
-        
+
         ~SlotInfo()
         {}
 
         SlotInfo( const SlotInfo& other )
-            : element( other.element ), 
-              editRate( other.editRate ), 
+            : element( other.element ),
+              editRate( other.editRate ),
               name( other.name ),
               physicalTrackNum( other.physicalTrackNum ),
               componentsSinceSlot( other.componentsSinceSlot ),
               markedInPoint( other.markedInPoint ),
-              markedOutPoint( other.markedOutPoint )
+              markedOutPoint( other.markedOutPoint ),
+              orgin( other.orgin )
         {}
-        
+
         AxString                            element;
         aafRational_t                       editRate;
         InputParser::OptionalStringAttrib   name;
@@ -63,11 +65,12 @@ class SlotInfo
         aafUInt32                           componentsSinceSlot;
         InputParser::OptionalIntAttrib      markedInPoint;
         InputParser::OptionalIntAttrib      markedOutPoint;
+        aafPosition_t                       orgin;
 
     private:
-    
+
         //prohibited:
-        SlotInfo& operator=( const SlotInfo& other );        
+        SlotInfo& operator=( const SlotInfo& other );
 
 };
 

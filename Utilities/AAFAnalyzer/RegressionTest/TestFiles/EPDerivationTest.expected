@@ -91,67 +91,6 @@
 
             Name:   Verify Mob Chain
             Desc:   Verify the structure of one mob chain.
-            Detail: Analyzing root composition mob "L01 Top Level"
-            Result: Passed
-            Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
-            Warning Requirements: None
-            Failing Requirements: None
-
-                Name:   MobChainVisitor
-                Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top-Level Composition: "L01 Top Level"
-                Detail: OK   -   Transition to Adjusted-Clip Composition: "L02 Adjusted Clip"
-                Detail: OK   -     Transition to Template Clip: "L03 Template Clip A"
-                Detail: OK   -       Transition to Source Clip
-                Detail: OK   -   Transition to Sub-Clip Composition: "L02 Sub-Clip"
-                Detail: OK   -     Transition to Adjusted-Clip Composition: "L03 Adjusted Clip"
-                Detail: OK   -       Transition to Clip: "L05 Clip A"
-                Detail: OK   -         Transition to Film Source: "L06 Film Source"
-                Detail: OK   -           Transition to Source Clip
-                Detail: OK   -   Transition to Clip: "L05 Clip B"
-                Detail: OK   -     Transition to Tape Source: "L06 Tape Source"
-                Detail: OK   -       Transition to Film Source: "L07 Film Source A"
-                Detail: OK   -         Transition to Source Clip
-                Detail: OK   -     Transition to Source Clip
-                Detail: OK   -   Transition to Template Clip: "L02 Template Clip"
-                Detail: OK   -     Transition to Source Clip
-                Detail: OK   -   Transition to Lower-Level Composition: "L02 Lower Level"
-                Detail: OK   -     Transition to Lower-Level Composition: "L03 Lower Level"
-                Detail: OK   -       Transition to Clip: "L05 Clip C"
-                Detail: OK   -         Transition to Source Clip
-                Detail: OK   -         Transition to File Source: "L06 File Source"
-                Detail: OK   -           Transition to Import Source: "L07 Import Source"
-                Detail: OK   -             Transition to Film Source: "L08 Film Source A"
-                Detail: OK   -               Transition to Source Clip
-                Detail: OK   -             Transition to Tape Source: "L08 Tape Source A"
-                Detail: OK   -               Transition to Source Clip
-                Detail: OK   -           Transition to Recording Source: "L07 Recording Source"
-                Detail: OK   -             Transition to Source Clip
-                Detail: OK   -           Transition to File Source: "L07 File Source"
-                Detail: OK   -             Transition to Tape Source: "L08 Tape Source B"
-                Detail: OK   -               Transition to Source Clip
-                Detail: OK   -             Transition to Film Source: "L08 Film Source B"
-                Detail: OK   -               Transition to Source Clip
-                Detail: OK   -             Transition to Source Clip
-                Detail: OK   -       Transition to Sub-Clip Composition: "L04 Sub-Clip"
-                Detail: OK   -         Transition to Template Clip: "L05 Template Clip A"
-                Detail: OK   -           Transition to Source Clip
-                Detail: OK   -         Transition to Clip: "L05 Clip D"
-                Detail: OK   -           Transition to Import Source: "L06 Import Source"
-                Detail: OK   -             Transition to Source Clip
-                Detail: OK   -             Transition to Source Clip
-                Detail: OK   -       Transition to Adjusted-Clip Composition: "L04 Adjusted Clip"
-                Detail: OK   -         Transition to Template Clip: "L05 Template Clip B"
-                Detail: OK   -           Transition to Source Clip
-                Detail: OK   -     Transition to Template Clip: "L03 Template Clip B"
-                Detail: OK   -       Transition to Source Clip
-                Result: Passed
-                Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
-                Warning Requirements: None
-                Failing Requirements: None
-
-            Name:   Verify Mob Chain
-            Desc:   Verify the structure of one mob chain.
             Detail: Analyzing root composition mob "Invalid out of Recording Source: Top Level C"
             Result: Failed
             Reason: Visitor Failed - See "MobChainVisitor" Visitor for details.
@@ -1472,6 +1411,26 @@
 
             Name:   Verify Mob Chain
             Desc:   Verify the structure of one mob chain.
+            Detail: Analyzing root composition mob "Missing EOC Import Source: Top-Level"
+            Result: Failed
+            Reason: Visitor Failed - See "MobChainVisitor" Visitor for details.
+            Passing Requirements: REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
+            Warning Requirements: None
+            Failing Requirements: REQ_EP_017
+
+                Name:   MobChainVisitor
+                Desc:   Visit mobs and verify derivation order.
+                Detail: OK   - Transition to Top-Level Composition: "Missing EOC Import Source: Top-Level"
+                Detail: OK   -   Transition to Clip: "Missing EOC Import Source: Clip"
+                Detail: OK   -     Transition to Import Source: "Missing EOC Import Source"
+                Result: Failed
+                Reason: End of derivation chain encountered without a zero-valued source clip or out of file reference at Source Mob: "Missing EOC Import Source"
+                Passing Requirements: REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_017
+
+            Name:   Verify Mob Chain
+            Desc:   Verify the structure of one mob chain.
             Detail: Analyzing root composition mob "Missing EOC Adjusted Clip: Top-Level"
             Result: Failed
             Reason: Visitor Failed - See "MobChainVisitor" Visitor for details.
@@ -1626,26 +1585,6 @@
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_055
-
-            Name:   Verify Mob Chain
-            Desc:   Verify the structure of one mob chain.
-            Detail: Analyzing root composition mob "Missing EOC Import Source: Top-Level"
-            Result: Failed
-            Reason: Visitor Failed - See "MobChainVisitor" Visitor for details.
-            Passing Requirements: REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
-            Warning Requirements: None
-            Failing Requirements: REQ_EP_017
-
-                Name:   MobChainVisitor
-                Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top-Level Composition: "Missing EOC Import Source: Top-Level"
-                Detail: OK   -   Transition to Clip: "Missing EOC Import Source: Clip"
-                Detail: OK   -     Transition to Import Source: "Missing EOC Import Source"
-                Result: Failed
-                Reason: End of derivation chain encountered without a zero-valued source clip or out of file reference at Source Mob: "Missing EOC Import Source"
-                Passing Requirements: REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
-                Warning Requirements: None
-                Failing Requirements: REQ_EP_017
 
             Name:   Verify Mob Chain
             Desc:   Verify the structure of one mob chain.
@@ -1897,6 +1836,67 @@
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_076; REQ_EP_083
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_030; REQ_EP_072
+
+            Name:   Verify Mob Chain
+            Desc:   Verify the structure of one mob chain.
+            Detail: Analyzing root composition mob "L01 Top Level"
+            Result: Passed
+            Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
+            Warning Requirements: None
+            Failing Requirements: None
+
+                Name:   MobChainVisitor
+                Desc:   Visit mobs and verify derivation order.
+                Detail: OK   - Transition to Top-Level Composition: "L01 Top Level"
+                Detail: OK   -   Transition to Adjusted-Clip Composition: "L02 Adjusted Clip"
+                Detail: OK   -     Transition to Template Clip: "L03 Template Clip A"
+                Detail: OK   -       Transition to Source Clip
+                Detail: OK   -   Transition to Sub-Clip Composition: "L02 Sub-Clip"
+                Detail: OK   -     Transition to Adjusted-Clip Composition: "L03 Adjusted Clip"
+                Detail: OK   -       Transition to Clip: "L05 Clip A"
+                Detail: OK   -         Transition to Film Source: "L06 Film Source"
+                Detail: OK   -           Transition to Source Clip
+                Detail: OK   -   Transition to Clip: "L05 Clip B"
+                Detail: OK   -     Transition to Tape Source: "L06 Tape Source"
+                Detail: OK   -       Transition to Film Source: "L07 Film Source A"
+                Detail: OK   -         Transition to Source Clip
+                Detail: OK   -     Transition to Source Clip
+                Detail: OK   -   Transition to Template Clip: "L02 Template Clip"
+                Detail: OK   -     Transition to Source Clip
+                Detail: OK   -   Transition to Lower-Level Composition: "L02 Lower Level"
+                Detail: OK   -     Transition to Lower-Level Composition: "L03 Lower Level"
+                Detail: OK   -       Transition to Clip: "L05 Clip C"
+                Detail: OK   -         Transition to Source Clip
+                Detail: OK   -         Transition to File Source: "L06 File Source"
+                Detail: OK   -           Transition to Import Source: "L07 Import Source"
+                Detail: OK   -             Transition to Film Source: "L08 Film Source A"
+                Detail: OK   -               Transition to Source Clip
+                Detail: OK   -             Transition to Tape Source: "L08 Tape Source A"
+                Detail: OK   -               Transition to Source Clip
+                Detail: OK   -           Transition to Recording Source: "L07 Recording Source"
+                Detail: OK   -             Transition to Source Clip
+                Detail: OK   -           Transition to File Source: "L07 File Source"
+                Detail: OK   -             Transition to Tape Source: "L08 Tape Source B"
+                Detail: OK   -               Transition to Source Clip
+                Detail: OK   -             Transition to Film Source: "L08 Film Source B"
+                Detail: OK   -               Transition to Source Clip
+                Detail: OK   -             Transition to Source Clip
+                Detail: OK   -       Transition to Sub-Clip Composition: "L04 Sub-Clip"
+                Detail: OK   -         Transition to Template Clip: "L05 Template Clip A"
+                Detail: OK   -           Transition to Source Clip
+                Detail: OK   -         Transition to Clip: "L05 Clip D"
+                Detail: OK   -           Transition to Import Source: "L06 Import Source"
+                Detail: OK   -             Transition to Source Clip
+                Detail: OK   -             Transition to Source Clip
+                Detail: OK   -       Transition to Adjusted-Clip Composition: "L04 Adjusted Clip"
+                Detail: OK   -         Transition to Template Clip: "L05 Template Clip B"
+                Detail: OK   -           Transition to Source Clip
+                Detail: OK   -     Transition to Template Clip: "L03 Template Clip B"
+                Detail: OK   -       Transition to Source Clip
+                Result: Passed
+                Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
+                Warning Requirements: None
+                Failing Requirements: None
 
             Name:   Verify Mob Chain
             Desc:   Verify the structure of one mob chain.

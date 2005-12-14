@@ -36,7 +36,6 @@
 #include <AxComponent.h>
 #include <AxParameter.h>
 #include <AxEx.h>
-#include <AxIterator.h>
 #include <AxEssence.h>
 
 //AAF files
@@ -57,7 +56,7 @@ class TransitionInputVisitor : public TypedVisitor
     public:
         TransitionInputVisitor()
         {}
-        
+
         ~TransitionInputVisitor()
         {}
 
@@ -69,7 +68,7 @@ class TransitionInputVisitor : public TypedVisitor
             _spIaafTransition = AxQueryInterface<IAAFTransition, IAAFComponent>( node.GetAAFObjectOfType() );
             return true;
         }
-        
+
         bool PreOrderVisit( AAFTypedObjNode<IAAFSequence>& node )
         {
             AxSequence axSequence( node.GetAAFObjectOfType() );
@@ -87,13 +86,13 @@ class TransitionInputVisitor : public TypedVisitor
                     break;
                 }
             }
-            
+
             if ( index >= numComponents )
             {
                 //A fatal error has occured as the transition was not found.
                 //Throw an exception.
             }
-            
+
             //Get the preceeding and following components
             if ( index > 0 )
             {
@@ -109,28 +108,28 @@ class TransitionInputVisitor : public TypedVisitor
             //no need to traverse any further.
             return false;
         }
-        
+
         IAAFComponentSP GetPreceedingComponent()
         {
             return _spPreceeding;
         }
-        
+
         IAAFComponentSP GetFollowingComponent()
         {
             return _spFollowing;
         }
-      
+
         IAAFTransitionSP GetTransition()
         {
             return AxQueryInterface<IAAFComponent, IAAFTransition>( _spIaafTransition );
         }
-        
+
     private:
-    
+
         IAAFComponentSP _spIaafTransition;
         IAAFComponentSP _spPreceeding;
         IAAFComponentSP _spFollowing;
-    
+
         // prohibited
         TransitionInputVisitor( const TransitionInputVisitor& );
         TransitionInputVisitor& operator=( const TransitionInputVisitor& );
@@ -147,14 +146,14 @@ class AlphaEffectVisitor : public EPTypedVisitor
               _spResult( spResult ),
               _testPassed( true )
         {}
-        
+
         ~AlphaEffectVisitor()
         {}
 
         //Note: All we want to accomplish is to visit the mob node, we do not
         //      need to traverse any further so all visit methods will return
         //      false.
-        
+
         bool PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPRGBAImageFileSource>& node )
         {
             //This is an acceptable input, so just test for the
@@ -166,7 +165,7 @@ class AlphaEffectVisitor : public EPTypedVisitor
             CheckTransparency( axImageDesc, mobName );
             return false;
         }
-        
+
         bool PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPCDCIImageFileSource>& node )
         {
             //This is an acceptable input, so just test for the
@@ -178,7 +177,7 @@ class AlphaEffectVisitor : public EPTypedVisitor
             CheckTransparency( axImageDesc, mobName );
             return false;
         }
-        
+
         bool PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPImageFileSource>& node )
         {
             //This is not an acceptable input, so fail the descriptor
@@ -187,7 +186,7 @@ class AlphaEffectVisitor : public EPTypedVisitor
             AxString mobName = this->GetMobName( axMob, EPCDCIImageFileSource::GetName() );
 
             _spResult->AddInformationResult(
-                _descriptorReq, 
+                _descriptorReq,
                 L"Input " + mobName + L" to " + EffectType::GetName() + L" in " +
                      _slotName + L" does not have a RGBADescriptor or a CDCIDescriptor.",
                 TestResult::FAIL );
@@ -199,7 +198,7 @@ class AlphaEffectVisitor : public EPTypedVisitor
             CheckTransparency( axImageDesc, mobName );
             return false;
         }
-        
+
         bool PreOrderVisit( AAFTypedObjNode<IAAFCompositionMob>& node )
         {
             //This is invalid input and does not have the AlphaTransparency
@@ -209,7 +208,7 @@ class AlphaEffectVisitor : public EPTypedVisitor
             FailBothRequirements( mobName );
             return false;
         }
-        
+
         bool PreOrderVisit( AAFTypedObjNode<IAAFMasterMob>& node )
         {
             //This is invalid input and does not have the AlphaTransparency
@@ -219,7 +218,7 @@ class AlphaEffectVisitor : public EPTypedVisitor
             FailBothRequirements( mobName );
             return false;
         }
-        
+
         bool PreOrderVisit( AAFTypedObjNode<IAAFSourceMob>& node )
         {
             //This is invalid input and does not have the AlphaTransparency
@@ -229,7 +228,7 @@ class AlphaEffectVisitor : public EPTypedVisitor
             FailBothRequirements( mobName );
             return false;
         }
-        
+
         bool PreOrderVisit( AAFTypedObjNode<IAAFMob>& node )
         {
             //This is invalid input and does not have the AlphaTransparency
@@ -239,12 +238,12 @@ class AlphaEffectVisitor : public EPTypedVisitor
             FailBothRequirements( mobName );
             return false;
         }
-        
+
         bool GetTestResult()
         {
             return _testPassed;
         }
-        
+
     private:
 
         void CheckTransparency( AxDigitalImageDescriptor& axDescriptor, const AxString& inputName )
@@ -258,9 +257,9 @@ class AlphaEffectVisitor : public EPTypedVisitor
                 if ( ex.getHResult() == AAFRESULT_PROP_NOT_PRESENT )
                 {
                     _spResult->AddInformationResult(
-                        _alphaReq, 
+                        _alphaReq,
                         L"Input " + inputName + L" to " + EffectType::GetName() +
-                             L" in " + _slotName + 
+                             L" in " + _slotName +
                              L" does not have the DigitalImageDescriptor::AlphaTransparency property.",
                         TestResult::FAIL );
                     _testPassed = false;
@@ -271,29 +270,29 @@ class AlphaEffectVisitor : public EPTypedVisitor
                 }
             }
         }
-    
+
         void FailBothRequirements( const AxString& inputName )
         {
             AxString ident = L"Input " + inputName + L" to " + EffectType::GetName() + L" in " + _slotName;
 
             _spResult->AddInformationResult(
-                _descriptorReq, 
+                _descriptorReq,
                 ident + L" does not have a RGBADescriptor or a CDCIDescriptor.",
                 TestResult::FAIL );
             _spResult->AddInformationResult(
-                _alphaReq, 
+                _alphaReq,
                 ident + L" does not have the DigitalImageDescriptor::AlphaTransparency property.",
                 TestResult::FAIL );
             _testPassed = false;
         }
-    
-    
+
+
         const AxString _descriptorReq;
         const AxString _alphaReq;
         const AxString _slotName;
         shared_ptr<DetailLevelTestResult> _spResult;
         bool _testPassed;
-        
+
         // prohibited
         AlphaEffectVisitor();
         AlphaEffectVisitor( const AlphaEffectVisitor& );
@@ -307,7 +306,7 @@ class AlphaEffectVisitor : public EPTypedVisitor
 namespace aafanalyzer {
 
 using namespace boost;
- 
+
 EPEffectVisitor::EPEffectVisitor( wostream& log, shared_ptr<EdgeMap> spEdgeMap )
     : _log(log),
       _spEdgeMap( spEdgeMap ),
@@ -321,7 +320,7 @@ EPEffectVisitor::EPEffectVisitor( wostream& log, shared_ptr<EdgeMap> spEdgeMap )
 {
     _isParentTransition.push( false );
 }
-    
+
 EPEffectVisitor::~EPEffectVisitor()
 {}
 
@@ -342,7 +341,7 @@ bool EPEffectVisitor::PreOrderVisit( EPTypedObjNode<IAAFOperationGroup, EPVideoD
     {
         _isParentTransition.push( false );
     }
-    
+
     return testPassed;
 }
 
@@ -350,14 +349,14 @@ bool EPEffectVisitor::PreOrderVisit( EPTypedObjNode<IAAFOperationGroup, EPSMPTEV
 {
     bool testPassed = true;
     testPassed = VeirfyTransitionRequirement( node, true, L"REQ_EP_183", EPSMPTEVideoWipeEffect::GetName() );
-    
+
     //If the traversal is going to stop, do not update the parent as this nodes
     //children will not be visited and this node will not be post order visited.
     if ( testPassed )
     {
         _isParentTransition.push( false );
     }
-    
+
     return testPassed;
 }
 
@@ -365,9 +364,9 @@ bool EPEffectVisitor::PreOrderVisit( EPTypedObjNode<IAAFOperationGroup, EPVideoS
 {
     bool testPassed = true;
     testPassed = VeirfyTransitionRequirement( node, false, L"REQ_EP_186", EPVideoSpeedControlEffect::GetName() );
-    
+
     AxOperationGroup axOpGroup( node.GetAAFObjectOfType() );
-    
+
     wstringstream ss;
     ss << EPVideoSpeedControlEffect::GetName() << L" in "
        << this->GetMobSlotName( _spEdgeMap, node );
@@ -400,7 +399,7 @@ bool EPEffectVisitor::PreOrderVisit( EPTypedObjNode<IAAFOperationGroup, EPVideoS
                        << L").";
 
                     _spResult->AddInformationResult( L"REQ_EP_187", ss.str().c_str(), TestResult::FAIL );
-                    
+
                     testPassed = false;
                 }
             }
@@ -436,7 +435,7 @@ bool EPEffectVisitor::PreOrderVisit( EPTypedObjNode<IAAFOperationGroup, EPVideoS
     {
         _isParentTransition.push( false );
     }
-    
+
     return testPassed;
 }
 
@@ -444,14 +443,14 @@ bool EPEffectVisitor::PreOrderVisit( EPTypedObjNode<IAAFOperationGroup, EPVideoR
 {
     bool testPassed = true;
     testPassed = VeirfyTransitionRequirement( node, false, L"REQ_EP_190", EPVideoRepeatEffect::GetName() );
-    
+
     //If the traversal is going to stop, do not update the parent as this nodes
     //children will not be visited and this node will not be post order visited.
     if ( testPassed )
     {
         _isParentTransition.push( false );
     }
-    
+
     return testPassed;
 }
 
@@ -459,14 +458,14 @@ bool EPEffectVisitor::PreOrderVisit( EPTypedObjNode<IAAFOperationGroup, EPVideoF
 {
     bool testPassed = true;
     testPassed = VeirfyTransitionRequirement( node, false, L"REQ_EP_194", EPVideoFlipEffect::GetName() );
-    
+
     //If the traversal is going to stop, do not update the parent as this nodes
     //children will not be visited and this node will not be post order visited.
     if ( testPassed )
     {
         _isParentTransition.push( false );
     }
-    
+
     return testPassed;
 }
 
@@ -474,14 +473,14 @@ bool EPEffectVisitor::PreOrderVisit( EPTypedObjNode<IAAFOperationGroup, EPVideoF
 {
     bool testPassed = true;
     testPassed = VeirfyTransitionRequirement( node, false, L"REQ_EP_197", EPVideoFlopEffect::GetName() );
-    
+
     //If the traversal is going to stop, do not update the parent as this nodes
     //children will not be visited and this node will not be post order visited.
     if ( testPassed )
     {
         _isParentTransition.push( false );
     }
-    
+
     return testPassed;
 }
 
@@ -489,14 +488,14 @@ bool EPEffectVisitor::PreOrderVisit( EPTypedObjNode<IAAFOperationGroup, EPVideoF
 {
     bool testPassed = true;
     testPassed = VeirfyTransitionRequirement( node, false, L"REQ_EP_200", EPVideoFlipFlopEffect::GetName() );
-    
+
     //If the traversal is going to stop, do not update the parent as this nodes
     //children will not be visited and this node will not be post order visited.
     if ( testPassed )
     {
         _isParentTransition.push( false );
     }
-    
+
     return testPassed;
 }
 
@@ -504,14 +503,14 @@ bool EPEffectVisitor::PreOrderVisit( EPTypedObjNode<IAAFOperationGroup, EPVideoP
 {
     bool testPassed = true;
     testPassed = VeirfyTransitionRequirement( node, false, L"REQ_EP_203", EPVideoPositionEffect::GetName() );
-    
+
     //If the traversal is going to stop, do not update the parent as this nodes
     //children will not be visited and this node will not be post order visited.
     if ( testPassed )
     {
         _isParentTransition.push( false );
     }
-    
+
     return testPassed;
 }
 
@@ -519,14 +518,14 @@ bool EPEffectVisitor::PreOrderVisit( EPTypedObjNode<IAAFOperationGroup, EPVideoC
 {
     bool testPassed = true;
     testPassed = VeirfyTransitionRequirement( node, false, L"REQ_EP_206", EPVideoCropEffect::GetName() );
-    
+
     //If the traversal is going to stop, do not update the parent as this nodes
     //children will not be visited and this node will not be post order visited.
     if ( testPassed )
     {
         _isParentTransition.push( false );
     }
-    
+
     return testPassed;
 }
 
@@ -534,14 +533,14 @@ bool EPEffectVisitor::PreOrderVisit( EPTypedObjNode<IAAFOperationGroup, EPVideoS
 {
     bool testPassed = true;
     testPassed = VeirfyTransitionRequirement( node, false, L"REQ_EP_209", EPVideoScaleEffect::GetName() );
-    
+
     //If the traversal is going to stop, do not update the parent as this nodes
     //children will not be visited and this node will not be post order visited.
     if ( testPassed )
     {
         _isParentTransition.push( false );
     }
-    
+
     return testPassed;
 }
 
@@ -549,14 +548,14 @@ bool EPEffectVisitor::PreOrderVisit( EPTypedObjNode<IAAFOperationGroup, EPVideoR
 {
     bool testPassed = true;
     testPassed = VeirfyTransitionRequirement( node, false, L"REQ_EP_212", EPVideoRotateEffect::GetName() );
-    
+
     //If the traversal is going to stop, do not update the parent as this nodes
     //children will not be visited and this node will not be post order visited.
     if ( testPassed )
     {
         _isParentTransition.push( false );
     }
-    
+
     return testPassed;
 }
 
@@ -564,14 +563,14 @@ bool EPEffectVisitor::PreOrderVisit( EPTypedObjNode<IAAFOperationGroup, EPVideoC
 {
     bool testPassed = true;
     testPassed = VeirfyTransitionRequirement( node, false, L"REQ_EP_215", EPVideoCornerPinningEffect::GetName() );
-    
+
     //If the traversal is going to stop, do not update the parent as this nodes
     //children will not be visited and this node will not be post order visited.
     if ( testPassed )
     {
         _isParentTransition.push( false );
     }
-    
+
     return testPassed;
 }
 
@@ -579,17 +578,17 @@ bool EPEffectVisitor::PreOrderVisit( EPTypedObjNode<IAAFOperationGroup, EPAlphaW
 {
     bool testPassed = true;
     testPassed = VeirfyTransitionRequirement( node, false, L"REQ_EP_220", EPAlphaWithVideoKeyEffect::GetName() );
-    
+
     AxOperationGroup axOpGroup( node.GetAAFObjectOfType() );
     testPassed = VerifyAlphaRequirements( axOpGroup, EPAlphaWithVideoKeyEffect::GetName(), 2, L"REQ_EP_218", L"REQ_EP_219", this->GetMobSlotName( _spEdgeMap, node ) ) && testPassed;
-    
+
     //If the traversal is going to stop, do not update the parent as this nodes
     //children will not be visited and this node will not be post order visited.
     if ( testPassed )
     {
         _isParentTransition.push( false );
     }
-    
+
     return testPassed;
 }
 
@@ -597,17 +596,17 @@ bool EPEffectVisitor::PreOrderVisit( EPTypedObjNode<IAAFOperationGroup, EPSepara
 {
     bool testPassed = true;
     testPassed = VeirfyTransitionRequirement( node, false, L"REQ_EP_225", EPSeparateAlphaKeyEffect::GetName() );
-    
+
     AxOperationGroup axOpGroup( node.GetAAFObjectOfType() );
     testPassed = VerifyAlphaRequirements( axOpGroup, EPSeparateAlphaKeyEffect::GetName(), 3, L"REQ_EP_223", L"REQ_EP_224", this->GetMobSlotName( _spEdgeMap, node ) ) && testPassed;
-    
+
     //If the traversal is going to stop, do not update the parent as this nodes
     //children will not be visited and this node will not be post order visited.
     if ( testPassed )
     {
         _isParentTransition.push( false );
     }
-    
+
     return testPassed;
 }
 
@@ -615,14 +614,14 @@ bool EPEffectVisitor::PreOrderVisit( EPTypedObjNode<IAAFOperationGroup, EPLumina
 {
     bool testPassed = true;
     testPassed = VeirfyTransitionRequirement( node, false, L"REQ_EP_228", EPLuminanceKeyEffect::GetName() );
-    
+
     //If the traversal is going to stop, do not update the parent as this nodes
     //children will not be visited and this node will not be post order visited.
     if ( testPassed )
     {
         _isParentTransition.push( false );
     }
-    
+
     return testPassed;
 }
 
@@ -630,14 +629,14 @@ bool EPEffectVisitor::PreOrderVisit( EPTypedObjNode<IAAFOperationGroup, EPChroma
 {
     bool testPassed = true;
     testPassed = VeirfyTransitionRequirement( node, false, L"REQ_EP_231", EPChromaKeyEffect::GetName() );
-    
+
     //If the traversal is going to stop, do not update the parent as this nodes
     //children will not be visited and this node will not be post order visited.
     if ( testPassed )
     {
         _isParentTransition.push( false );
     }
-    
+
     return testPassed;
 }
 
@@ -645,14 +644,14 @@ bool EPEffectVisitor::PreOrderVisit( EPTypedObjNode<IAAFOperationGroup, EPMonoAu
 {
     bool testPassed = true;
     testPassed = VeirfyTransitionRequirement( node, false, L"REQ_EP_234", EPMonoAudioGainEffect::GetName() );
-    
+
     //If the traversal is going to stop, do not update the parent as this nodes
     //children will not be visited and this node will not be post order visited.
     if ( testPassed )
     {
         _isParentTransition.push( false );
     }
-    
+
     return testPassed;
 }
 
@@ -660,14 +659,14 @@ bool EPEffectVisitor::PreOrderVisit( EPTypedObjNode<IAAFOperationGroup, EPMonoAu
 {
     bool testPassed = true;
     testPassed = VeirfyTransitionRequirement( node, false, L"REQ_EP_240", EPMonoAudioPanEffect::GetName() );
-    
+
     //If the traversal is going to stop, do not update the parent as this nodes
     //children will not be visited and this node will not be post order visited.
     if ( testPassed )
     {
         _isParentTransition.push( false );
     }
-    
+
     return testPassed;
 }
 
@@ -675,14 +674,14 @@ bool EPEffectVisitor::PreOrderVisit( EPTypedObjNode<IAAFOperationGroup, EPSingle
 {
     bool testPassed = true;
     testPassed = VeirfyTransitionRequirement( node, true, L"REQ_EP_244", EPSingleParameterAudioDissolveEffect::GetName() );
-    
+
     //If the traversal is going to stop, do not update the parent as this nodes
     //children will not be visited and this node will not be post order visited.
     if ( testPassed )
     {
         _isParentTransition.push( false );
     }
-    
+
     return testPassed;
 }
 
@@ -690,7 +689,7 @@ bool EPEffectVisitor::PreOrderVisit( EPTypedObjNode<IAAFOperationGroup, EPTwoPar
 {
     bool testPassed = true;
     testPassed = VeirfyTransitionRequirement( node, true, L"REQ_EP_247", EPTwoParameterAudioDissolveEffect::GetName() );
-    
+
     AxString name = EPTwoParameterAudioDissolveEffect::GetName() + L" in " + this->GetMobSlotName( _spEdgeMap, node );
     if ( !testPassed )
     {
@@ -705,10 +704,10 @@ bool EPEffectVisitor::PreOrderVisit( EPTypedObjNode<IAAFOperationGroup, EPTwoPar
         shared_ptr<Node> spNode( node.GetSharedPointerToNode() );
         DepthFirstTraversal dft( _spEdgeMap, spNode );
         dft.TraverseUp( spVisitor );
-        
+
         bool incomingPassed = true;
         bool outgoingPassed = true;
-        
+
         aafLength_t transitionLen;
         AxTransition axTransition( spVisitor->GetTransition() );
         try
@@ -719,7 +718,7 @@ bool EPEffectVisitor::PreOrderVisit( EPTypedObjNode<IAAFOperationGroup, EPTwoPar
         {
             if ( ex.getHResult() == AAFRESULT_PROP_NOT_PRESENT )
             {
-                AxString explain = L"Transition object of " + name 
+                AxString explain = L"Transition object of " + name
                                  + L" does not have a length property.";
                 _spResult->AddInformationResult( L"REQ_EP_248", explain, TestResult::FAIL );
                 _spResult->AddInformationResult( L"REQ_EP_249", explain, TestResult::FAIL );
@@ -731,10 +730,10 @@ bool EPEffectVisitor::PreOrderVisit( EPTypedObjNode<IAAFOperationGroup, EPTwoPar
                 throw ex;
             }
         }
-        
+
         if ( spVisitor->GetFollowingComponent() )
         {
-            aafLength_t incomingLen;            
+            aafLength_t incomingLen;
             AxComponent incoming( spVisitor->GetFollowingComponent() );
             try
             {
@@ -744,7 +743,7 @@ bool EPEffectVisitor::PreOrderVisit( EPTypedObjNode<IAAFOperationGroup, EPTwoPar
             {
                 if ( ex.getHResult() == AAFRESULT_PROP_NOT_PRESENT )
                 {
-                    AxString explain = L"Incoming segment of " + name 
+                    AxString explain = L"Incoming segment of " + name
                                      + L" does not have a length property.";
                     _spResult->AddInformationResult( L"REQ_EP_248", explain, TestResult::FAIL );
                     _spResult->AddInformationResult( L"REQ_EP_249", explain, TestResult::FAIL );
@@ -755,18 +754,18 @@ bool EPEffectVisitor::PreOrderVisit( EPTypedObjNode<IAAFOperationGroup, EPTwoPar
                     throw ex;
                 }
             }
-            
+
             if ( incomingPassed && incomingLen < transitionLen )
             {
                 wstringstream ss;
-                
+
                 ss << name << L" has an incoming segment with length = "
                    << incomingLen << L" and a transition with length = "
                    << transitionLen << L".";
                 _spResult->AddInformationResult( L"REQ_EP_248", ss.str().c_str(), TestResult::FAIL );
                 _spResult->AddInformationResult( L"REQ_EP_249", ss.str().c_str(), TestResult::FAIL );
                 incomingPassed = false;
-            }            
+            }
         }
         else
         {
@@ -775,10 +774,10 @@ bool EPEffectVisitor::PreOrderVisit( EPTypedObjNode<IAAFOperationGroup, EPTwoPar
             _spResult->AddInformationResult( L"REQ_EP_249", explain, TestResult::FAIL );
             testPassed = false;
         }
-        
+
         if ( spVisitor->GetPreceedingComponent() )
         {
-            aafLength_t outgoingLen;            
+            aafLength_t outgoingLen;
             AxComponent outgoing( spVisitor->GetPreceedingComponent() );
             try
             {
@@ -788,7 +787,7 @@ bool EPEffectVisitor::PreOrderVisit( EPTypedObjNode<IAAFOperationGroup, EPTwoPar
             {
                 if ( ex.getHResult() == AAFRESULT_PROP_NOT_PRESENT )
                 {
-                    AxString explain = L"Outgoing segment of " + name 
+                    AxString explain = L"Outgoing segment of " + name
                                      + L" does not have a length property.";
                     _spResult->AddInformationResult( L"REQ_EP_249", explain, TestResult::FAIL );
                     outgoingPassed = false;
@@ -798,17 +797,17 @@ bool EPEffectVisitor::PreOrderVisit( EPTypedObjNode<IAAFOperationGroup, EPTwoPar
                     throw ex;
                 }
             }
-            
+
             if ( outgoingPassed && outgoingLen < transitionLen )
             {
                 wstringstream ss;
-                
+
                 ss << name << L" has an outgoing segment with length = "
                    << outgoingLen << L" and a transition with length = "
                    << transitionLen << L".";
                 _spResult->AddInformationResult( L"REQ_EP_249", ss.str().c_str(), TestResult::FAIL );
                 outgoingPassed = false;
-            }            
+            }
         }
         else
         {
@@ -816,18 +815,18 @@ bool EPEffectVisitor::PreOrderVisit( EPTypedObjNode<IAAFOperationGroup, EPTwoPar
             _spResult->AddInformationResult( L"REQ_EP_249", explain, TestResult::FAIL );
             testPassed = false;
         }
-        
+
         testPassed = incomingPassed && outgoingPassed;
-        
+
     }
-    
+
     //If the traversal is going to stop, do not update the parent as this nodes
     //children will not be visited and this node will not be post order visited.
     if ( testPassed )
     {
         _isParentTransition.push( false );
     }
-    
+
     return testPassed;
 }
 
@@ -836,7 +835,7 @@ bool EPEffectVisitor::PreOrderVisit( AAFTypedObjNode<IAAFTransition>& node )
     _isParentTransition.push( true );
     return true;
 }
-    
+
 bool EPEffectVisitor::PostOrderVisit( AAFTypedObjNode<IAAFOperationGroup>& node )
 {
     _isParentTransition.pop();
@@ -891,7 +890,7 @@ bool EPEffectVisitor::VerifyAlphaRequirements( AxOperationGroup& axOpGroup, cons
         {
             AxSourceReference axSourceRef( spSrcRef );
             aafMobID_t mobid = axSourceRef.GetSourceID();
-            
+
             //Make sure the source reference leads to a mob.
             if ( AxConstants::NULL_MOBID == mobid )
             {
@@ -906,7 +905,7 @@ bool EPEffectVisitor::VerifyAlphaRequirements( AxOperationGroup& axOpGroup, cons
                     TestResult::FAIL );
                 return false;
             }
-    
+
             //Make sure the source reference leads to a mob in this file.
             shared_ptr<Node> spInputNode = MobNodeMap::GetInstance().GetMobNode(mobid);
             if ( !spInputNode )
@@ -947,10 +946,10 @@ bool EPEffectVisitor::VerifyAlphaRequirements( AxOperationGroup& axOpGroup, cons
     {
         //Incorrect number of Input Segments - don't know which one to check so fail
         wstringstream ss;
-        
-        ss << expectedInputs << L" segments and found " 
+
+        ss << expectedInputs << L" segments and found "
            << axOpGroup.CountSourceSegments() << L" segments.";
-        
+
         _spResult->AddInformationResult(
             descriptorReq,
             effectType +  L" in " + slotName + L" has an incorrect number of input segments. " +

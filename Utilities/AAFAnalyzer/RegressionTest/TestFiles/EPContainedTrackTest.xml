@@ -3,188 +3,188 @@
 
 <aaf-file>
 
-    <!-- Test Top-Level Compositions -->   
+    <!-- Test Top-Level Compositions -->
 
     <top-level name="One Primary">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="1">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </top-level>
 
-	<top-level name="One Primary, One Alternative">
+    <top-level name="One Primary, One Alternative">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="1">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="2">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </top-level>
-    
+
     <top-level name="Two Primary">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="1">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="1">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </top-level>
-    
+
     <top-level name="One Alternative">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="2">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </top-level>
-    
+
     <top-level name="One Primary, Two Alternative">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="1">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="2">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="2">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </top-level>
-    
+
     <top-level name="One Primary, One Reserved(3)">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="1">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="3">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </top-level>
-    
+
     <top-level name="One Primary, One Reserved(4)">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="1">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="4">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </top-level>
-    
+
     <top-level name="One Primary, One Reserved(5)">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="1">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="5">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </top-level>
-    
+
     <top-level name="One Primary, One Reserved(6)">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="1">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="6">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </top-level>
-    
+
     <top-level name="One Reserved(3)">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="3">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </top-level>
-    
+
     <top-level name="One Reserved(4)">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="4">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </top-level>
-    
+
     <top-level name="One Reserved(5)">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="5">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </top-level>
-    
+
     <top-level name="One Reserved(6)">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="6">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </top-level>
-    
+
     <top-level name="One Primary, One Illegal">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="7">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="1">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </top-level>
-    
+
     <top-level name="One Illegal">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="9">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </top-level>
-    
+
     <top-level name="One Primary, One Unknown">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="1">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <timecode  track-type="timecode"/>
+            <timecode length="0"  track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </top-level>
-    
+
     <top-level name="One Unknown">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <timecode  track-type="timecode"/>
+            <timecode length="0"  track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </top-level>
 
@@ -192,1102 +192,1102 @@
 
     <tape-source name="One Primary">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="1">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </tape-source>
-    
+
     <tape-source name="One Primary, One Aux1">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="1">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="3">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </tape-source>
-    
+
     <tape-source name="One Primary, One Aux2">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="1">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="4">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </tape-source>
-    
+
     <tape-source name="One Primary, One Aux3">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="1">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="5">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </tape-source>
-    
+
     <tape-source name="One Primary, One Aux4">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="1">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="6">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </tape-source>
-    
+
     <tape-source name="One Primary, One Aux5">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="1">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="7">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </tape-source>
-    
-	<tape-source name="One Primary, One Aux1, One Aux2">
+
+    <tape-source name="One Primary, One Aux1, One Aux2">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="1">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="3">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="4">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </tape-source>
-    
+
     <tape-source name="One Primary, One Aux1, One Aux3">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="1">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="3">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="5">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
        </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </tape-source>
-    
+
     <tape-source name="One Primary, One Aux1, One Aux4">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="1">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="3">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="6">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </tape-source>
-    
+
     <tape-source name="One Primary, One Aux1, One Aux5">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="1">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="3">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="7">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </tape-source>
-    
+
     <tape-source name="One Primary, One Aux2, One Aux3">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="1">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="4">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="5">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </tape-source>
-    
+
     <tape-source name="One Primary, One Aux2, One Aux4">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="1">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="4">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="6">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </tape-source>
-    
+
     <tape-source name="One Primary, One Aux2, One Aux5">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="1">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="4">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="7">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </tape-source>
-    
+
     <tape-source name="One Primary, One Aux3, One Aux4">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="1">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="5">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="6">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </tape-source>
-    
+
     <tape-source name="One Primary, One Aux3, One Aux5">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="1">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="5">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="7">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </tape-source>
-    
+
     <tape-source name="One Primary, One Aux4, One Aux5">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="1">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="6">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="7">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </tape-source>
-    
+
     <tape-source name="One Primary, One Aux1, One Aux2, One Aux3">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="1">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="3">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="4">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="5">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </tape-source>
-    
+
     <tape-source name="One Primary, One Aux1, One Aux2, One Aux4">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="1">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="3">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="4">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="6">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </tape-source>
-    
+
     <tape-source name="One Primary, One Aux1, One Aux2, One Aux5">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="1">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="3">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="4">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="7">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </tape-source>
-    
+
     <tape-source name="One Primary, One Aux1, One Aux3, One Aux4">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="1">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="3">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="5">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="6">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </tape-source>
-    
+
     <tape-source name="One Primary, One Aux1, One Aux3, One Aux5">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="1">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="3">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="5">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="7">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </tape-source>
-    
+
     <tape-source name="One Primary, One Aux1, One Aux4, One Aux5">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="1">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="3">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="6">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="7">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </tape-source>
-    
+
     <tape-source name="One Primary, One Aux2, One Aux3, One Aux4">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="1">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="4">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="5">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="6">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </tape-source>
-    
+
     <tape-source name="One Primary, One Aux2, One Aux3, One Aux5">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="1">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="4">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="5">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="7">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </tape-source>
-    
+
     <tape-source name="One Primary, One Aux2, One Aux4, One Aux5">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="1">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="4">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="6">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="7">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </tape-source>
-    
+
     <tape-source name="One Primary, One Aux3, One Aux4, One Aux5">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="1">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="5">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="6">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="7">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </tape-source>
-    
+
     <tape-source name="One Primary, One Aux1, One Aux2, One Aux3, One Aux4">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="1">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="3">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="4">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="5">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="6">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </tape-source>
-    
-	<tape-source name="One Primary, One Aux1, One Aux2, One Aux3, One Aux5">
+
+    <tape-source name="One Primary, One Aux1, One Aux2, One Aux3, One Aux5">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="1">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="3">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="4">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="5">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="7">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </tape-source>
-    
-	<tape-source name="One Primary, One Aux1, One Aux2, One Aux4, One Aux5">
+
+    <tape-source name="One Primary, One Aux1, One Aux2, One Aux4, One Aux5">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="1">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="3">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="4">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="6">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="7">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </tape-source>
-    
+
     <tape-source name="One Primary, One Aux1, One Aux3, One Aux4, One Aux5">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="1">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="3">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="5">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="6">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="7">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </tape-source>
-    
+
     <tape-source name="One Primary, One Aux2, One Aux3, One Aux4, One Aux5">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="1">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="4">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="5">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="6">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="7">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </tape-source>
-    
+
     <tape-source name="One Primary, One Aux1, One Aux2, One Aux3, One Aux4, One Aux5">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="1">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="3">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="4">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="5">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="6">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="7">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </tape-source>
-    
+
     <tape-source name="One Aux1">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="3">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </tape-source>
-    
+
     <tape-source name="One Aux2">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="4">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </tape-source>
-    
+
     <tape-source name="One Aux3">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="5">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </tape-source>
-    
+
     <tape-source name="One Aux4">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="6">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </tape-source>
-    
+
     <tape-source name="One Aux5">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="7">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </tape-source>
-    
+
     <tape-source name="One Aux1, One Aux2">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="3">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="4">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </tape-source>
-    
+
     <tape-source name="One Aux1, One Aux3">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="3">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="5">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </tape-source>
-    
+
     <tape-source name="One Aux1, One Aux4">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="3">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="6">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </tape-source>
-    
+
     <tape-source name="One Aux1, One Aux5">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="3">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="7">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </tape-source>
-    
+
     <tape-source name="One Aux2, One Aux3">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="4">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="5">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </tape-source>
-    
+
     <tape-source name="One Aux2, One Aux4">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="4">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="6">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </tape-source>
-    
+
     <tape-source name="One Aux2, One Aux5">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="4">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="7">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </tape-source>
-    
+
     <tape-source name="One Aux3, One Aux4">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="5">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="6">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </tape-source>
-    
+
     <tape-source name="One Aux3, One Aux5">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="5">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="7">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </tape-source>
-    
-	<tape-source name="One Aux4, One Aux5">
+
+    <tape-source name="One Aux4, One Aux5">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="6">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="7">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </tape-source>
-    
-	<tape-source name="One Aux1, One Aux2, One Aux3">
+
+    <tape-source name="One Aux1, One Aux2, One Aux3">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="3">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="4">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="5">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </tape-source>
-    
+
     <tape-source name="One Aux1, One Aux2, One Aux4">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="3">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="4">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="6">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </tape-source>
-    
+
     <tape-source name="One Aux1, One Aux2, One Aux5">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="3">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="4">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="7">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </tape-source>
-    
+
     <tape-source name="One Aux1, One Aux3, One Aux4">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="3">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="5">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="6">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </tape-source>
-    
+
     <tape-source name="One Aux1, One Aux3, One Aux5">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="3">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="5">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="7">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </tape-source>
-    
+
     <tape-source name="One Aux1, One Aux4, One Aux5">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="3">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="6">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="7">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </tape-source>
-    
-	<tape-source name="One Aux2, One Aux3, One Aux4">
+
+    <tape-source name="One Aux2, One Aux3, One Aux4">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="4">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="5">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="6">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </tape-source>
-    
+
     <tape-source name="One Aux2, One Aux3, One Aux5">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="4">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="5">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="7">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </tape-source>
-    
+
     <tape-source name="One Aux3, One Aux4, One Aux5">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="5">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="6">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="7">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </tape-source>
-    
-	<tape-source name="One Aux1, One Aux2, One Aux3, One Aux4">
+
+    <tape-source name="One Aux1, One Aux2, One Aux3, One Aux4">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="3">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="4">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="5">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="6">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </tape-source>
-    
+
     <tape-source name="One Aux1, One Aux2, One Aux3, One Aux5">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="3">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="4">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="5">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="7">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </tape-source>
-    
+
     <tape-source name="One Aux1, One Aux2, One Aux4, One Aux5">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="3">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="4">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="6">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="7">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </tape-source>
-    
+
     <tape-source name="One Aux1, One Aux3, One Aux4, One Aux5">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="3">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="5">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="6">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="7">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </tape-source>
-    
-	<tape-source name="One Aux2, One Aux3, One Aux4, One Aux5">
+
+    <tape-source name="One Aux2, One Aux3, One Aux4, One Aux5">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="4">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="5">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="6">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="7">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </tape-source>
-        
+
     <tape-source name="One Aux1, One Aux2, One Aux3, One Aux4, One Aux5">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="3">
-			<timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="4">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="5">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="6">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="7">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </tape-source>
-    
+
     <tape-source name="Two Primary">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="1">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="1">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </tape-source>
-    
+
     <tape-source name="Two Aux1">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="3">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="3">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </tape-source>
-    
+
     <tape-source name="Two Aux2">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="4">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="4">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </tape-source>
-    
+
     <tape-source name="Two Aux3">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="5">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="5">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </tape-source>
-    
+
     <tape-source name="Two Aux4">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="6">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="6">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </tape-source>
-    
+
     <tape-source name="Two Aux5">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="7">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="7">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </tape-source>
-    
+
     <tape-source name="Reserved(2)">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="2">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </tape-source>
-    
+
     <tape-source name="Reserved(8)">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="8">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </tape-source>
-    
+
     <tape-source name="Reserved(9)">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="9">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </tape-source>
-    
+
     <tape-source name="Reserved(10)">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="10">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </tape-source>
-    
+
     <tape-source name="Reserved(11)">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="11">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </tape-source>
-    
+
     <tape-source name="Reserved(12)">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="12">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </tape-source>
-    
+
     <tape-source name="Illegal">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="17">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </tape-source>
-    
+
     <tape-source name="No Timecodes">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </tape-source>
-    
+
     <tape-source name="One Primary, One Unknown">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="1">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </tape-source>
-    
+
     <tape-source name="One Unknown">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </tape-source>
 
@@ -1295,396 +1295,396 @@
 
     <film-source name="No Edgecodes">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </film-source>
-    
+
     <film-source name="One Keycode">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="1">
-	        <edgecode track-type="edgecode"/>
+            <edgecode length="0" track-type="edgecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </film-source>
-    
+
     <film-source name="One Ink">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="2">
-	        <edgecode track-type="edgecode"/>
+            <edgecode length="0" track-type="edgecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </film-source>
-    
+
     <film-source name="One Aux. Ink">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="3">
-	        <edgecode track-type="edgecode"/>
+            <edgecode length="0" track-type="edgecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </film-source>
-    
+
     <film-source name="One Keycode, One Ink">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="1">
-	        <edgecode track-type="edgecode"/>
+            <edgecode length="0" track-type="edgecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="2">
-	        <edgecode track-type="edgecode"/>
+            <edgecode length="0" track-type="edgecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </film-source>
-    
+
     <film-source name="One Keycode, One Aux. Ink">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="1">
-	        <edgecode track-type="edgecode"/>
+            <edgecode length="0" track-type="edgecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="3">
-	        <edgecode track-type="edgecode"/>
+            <edgecode length="0" track-type="edgecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </film-source>
-    
+
     <film-source name="One Ink, One Aux. Ink">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="2">
-	        <edgecode track-type="edgecode"/>
+            <edgecode length="0" track-type="edgecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="3">
-	        <edgecode track-type="edgecode"/>
+            <edgecode length="0" track-type="edgecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </film-source>
-    
+
     <film-source name="One Keycode, One Ink, One Aux. Ink">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="1">
-	        <edgecode track-type="edgecode"/>
+            <edgecode length="0" track-type="edgecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="2">
-	        <edgecode track-type="edgecode"/>
+            <edgecode length="0" track-type="edgecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="3">
-	        <edgecode track-type="edgecode"/>
+            <edgecode length="0" track-type="edgecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </film-source>
-    
+
     <film-source name="One Illegal">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="4">
-	        <edgecode track-type="edgecode"/>
+            <edgecode length="0" track-type="edgecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </film-source>
-    
+
     <film-source name="One Keycode, One Illegal">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="1">
-			<edgecode track-type="edgecode"/>
+            <edgecode length="0" track-type="edgecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="7">
-	        <edgecode track-type="edgecode"/>
+            <edgecode length="0" track-type="edgecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </film-source>
-    
+
     <film-source name="Two Keycodes">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="1">
-			<edgecode track-type="edgecode"/>
+            <edgecode length="0" track-type="edgecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="1">
-	        <edgecode track-type="edgecode"/>
+            <edgecode length="0" track-type="edgecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </film-source>
-    
+
     <film-source name="Two Inks">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="2">
-			<edgecode track-type="edgecode"/>
+            <edgecode length="0" track-type="edgecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="2">
-	        <edgecode track-type="edgecode"/>
+            <edgecode length="0" track-type="edgecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </film-source>
-    
+
     <film-source name="Two Aux Inks">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="3">
-			<edgecode track-type="edgecode"/>
+            <edgecode length="0" track-type="edgecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="3">
-	        <edgecode track-type="edgecode"/>
+            <edgecode length="0" track-type="edgecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </film-source>
-    
+
     <film-source name="One Unknown">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <edgecode track-type="edgecode"/>
+            <edgecode length="0" track-type="edgecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </film-source>
 
     <!-- Test Sub-Clip Compositions -->
 
-	<sub-clip name="Sub-Clip - Audio Timeline Source Clip">
+    <sub-clip name="Sub-Clip - Audio Timeline Source Clip">
         <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1" physical-track-number="1">
-	        <source-clip track-type="audio">
-				<template-clip name="Template Clip A">
-			        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        			<eoc track-type="none"/>
-			        </timeline-mob-slot>
+            <source-clip length="0" track-type="audio">
+                <template-clip name="Template Clip A">
+                    <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+                        <eoc length="0" track-type="none"/>
+                    </timeline-mob-slot>
                 </template-clip>
-        	</source-clip>
+            </source-clip>
         </timeline-mob-slot>
-    </sub-clip>  
+    </sub-clip>
     <sub-clip name="Sub-Clip - Audio Static Source Clip">
-		<static-mob-slot physical-track-number="1">
-	        <source-clip track-type="audio">
-				<template-clip name="Template Clip B">
-			        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        			<eoc track-type="none"/>
-			        </timeline-mob-slot>
+        <static-mob-slot physical-track-number="1">
+            <source-clip length="0" track-type="audio">
+                <template-clip name="Template Clip B">
+                    <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+                        <eoc length="0" track-type="none"/>
+                    </timeline-mob-slot>
                 </template-clip>
-        	</source-clip>
+            </source-clip>
         </static-mob-slot>
-    </sub-clip>   
+    </sub-clip>
     <sub-clip name="Sub-Clip - Video Timeline Source Clip">
         <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1" physical-track-number="1">
-	        <source-clip track-type="picture">
-				<template-clip name="Template Clip D">
-			        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        			<eoc track-type="none"/>
-			        </timeline-mob-slot>
+            <source-clip length="0" track-type="picture">
+                <template-clip name="Template Clip D">
+                    <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+                        <eoc length="0" track-type="none"/>
+                    </timeline-mob-slot>
                 </template-clip>
-        	</source-clip>
+            </source-clip>
         </timeline-mob-slot>
     </sub-clip>
     <sub-clip name="Sub-Clip - Video Static Source Clip">
         <static-mob-slot physical-track-number="1">
-	        <source-clip track-type="picture">
-				<template-clip name="Template Clip E">
-			        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        			<eoc track-type="none"/>
-			        </timeline-mob-slot>
+            <source-clip length="0" track-type="picture">
+                <template-clip name="Template Clip E">
+                    <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+                        <eoc length="0" track-type="none"/>
+                    </timeline-mob-slot>
                 </template-clip>
-        	</source-clip>
+            </source-clip>
         </static-mob-slot>
     </sub-clip>
 
     <sub-clip name="Sub-Clip - Audio Timeline Operation Group">
-		<timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1" physical-track-number="1">
-	        <mono-audio-dissolve track-type="audio">
-    			<source-clip track-type="audio">
-					<template-clip name="Template Clip G">
-				        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-		        			<eoc track-type="none"/>
-				        </timeline-mob-slot>
+        <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1" physical-track-number="1">
+            <mono-audio-dissolve length="0" track-type="audio">
+                <source-clip length="0" track-type="audio">
+                    <template-clip name="Template Clip G">
+                        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+                            <eoc length="0" track-type="none"/>
+                        </timeline-mob-slot>
                     </template-clip>
                 </source-clip>
-		   	</mono-audio-dissolve>
+               </mono-audio-dissolve>
         </timeline-mob-slot>
     </sub-clip>
     <sub-clip name="Sub-Clip - Audio Static Operation Group">
         <static-mob-slot physical-track-number="1">
-	        <mono-audio-dissolve track-type="audio">
-                <source-clip track-type="audio">
+            <mono-audio-dissolve length="0" track-type="audio">
+                <source-clip length="0" track-type="audio">
                     <template-clip name="Template Clip H">
-				        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-		        			<eoc track-type="none"/>
-				        </timeline-mob-slot>
+                        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+                            <eoc length="0" track-type="none"/>
+                        </timeline-mob-slot>
                     </template-clip>
                 </source-clip>
-	       	</mono-audio-dissolve>
+               </mono-audio-dissolve>
         </static-mob-slot>
     </sub-clip>
 
     <sub-clip name="Sub-Clip - Video Timeline Operation Group">
         <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1" physical-track-number="1">
-	        <video-dissolve track-type="picture">
-                <source-clip track-type="picture">
-			        <template-clip name="Template Clip J">
-				        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-		        			<eoc track-type="none"/>
-				        </timeline-mob-slot>
+            <video-dissolve length="0" track-type="picture">
+                <source-clip length="0" track-type="picture">
+                    <template-clip name="Template Clip J">
+                        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+                            <eoc length="0" track-type="none"/>
+                        </timeline-mob-slot>
                     </template-clip>
                 </source-clip>
-    		</video-dissolve>
+            </video-dissolve>
         </timeline-mob-slot>
     </sub-clip>
     <sub-clip name="Sub-Clip - Video Static Operation Group">
         <static-mob-slot physical-track-number="1">
-	        <video-dissolve track-type="picture">
-                <source-clip track-type="picture">
-			        <template-clip name="Template Clip K">
-				        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-		        			<eoc track-type="none"/>
-				        </timeline-mob-slot>
+            <video-dissolve length="0" track-type="picture">
+                <source-clip length="0" track-type="picture">
+                    <template-clip name="Template Clip K">
+                        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+                            <eoc length="0" track-type="none"/>
+                        </timeline-mob-slot>
                     </template-clip>
                 </source-clip>
-	    	</video-dissolve>
+            </video-dissolve>
         </static-mob-slot>
     </sub-clip>
 
     <sub-clip name="Sub-Clip - Timecode Track">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <timecode  track-type="timecode"/>
+            <timecode length="0"  track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-   			<eoc track-type="none"/>
+               <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </sub-clip>
-    
+
     <!-- Test Adjusted-Clip Compositions -->
 
-	<adjusted-clip name="Adjusted Clip - Audio Timeline Source Clip">
-		<timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1" physical-track-number="1">
-	        <source-clip track-type="audio">
-				<template-clip name="Template Clip M">
-			        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        			<eoc track-type="none"/>
-			        </timeline-mob-slot>
+    <adjusted-clip name="Adjusted Clip - Audio Timeline Source Clip">
+        <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1" physical-track-number="1">
+            <source-clip length="0" track-type="audio">
+                <template-clip name="Template Clip M">
+                    <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+                        <eoc length="0" track-type="none"/>
+                    </timeline-mob-slot>
                 </template-clip>
-        	</source-clip>
+            </source-clip>
         </timeline-mob-slot>
     </adjusted-clip>
     <adjusted-clip name="Adjusted Clip - Audio Static Source Clip">
         <static-mob-slot physical-track-number="1">
-	        <source-clip track-type="audio">
-				<template-clip name="Template Clip N">
-			        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        			<eoc track-type="none"/>
-			        </timeline-mob-slot>
+            <source-clip length="0" track-type="audio">
+                <template-clip name="Template Clip N">
+                    <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+                        <eoc length="0" track-type="none"/>
+                    </timeline-mob-slot>
                 </template-clip>
-        	</source-clip>
+            </source-clip>
         </static-mob-slot>
     </adjusted-clip>
     <adjusted-clip name="Adjusted Clip - Video Timeline Source Clip">
         <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1" physical-track-number="1">
-	        <source-clip track-type="picture">
-				<template-clip name="Template Clip P">
-			        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        			<eoc track-type="none"/>
-			        </timeline-mob-slot>
+            <source-clip length="0" track-type="picture">
+                <template-clip name="Template Clip P">
+                    <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+                        <eoc length="0" track-type="none"/>
+                    </timeline-mob-slot>
                 </template-clip>
-        	</source-clip>
+            </source-clip>
         </timeline-mob-slot>
     </adjusted-clip>
     <adjusted-clip name="Adjusted Clip - Video Static Source Clip">
         <static-mob-slot physical-track-number="1">
-	        <source-clip track-type="picture">
-				<template-clip name="Template Clip Q">
-			        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        			<eoc track-type="none"/>
-			        </timeline-mob-slot>
+            <source-clip length="0" track-type="picture">
+                <template-clip name="Template Clip Q">
+                    <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+                        <eoc length="0" track-type="none"/>
+                    </timeline-mob-slot>
                 </template-clip>
-        	</source-clip>
+            </source-clip>
         </static-mob-slot>
     </adjusted-clip>
 
     <adjusted-clip name="Adjusted Clip - Audio Timeline Operation Group">
         <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1" physical-track-number="1">
-	        <mono-audio-dissolve track-type="audio">
-                <source-clip track-type="audio">
-					<template-clip name="Template Clip S">
-				        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-		        			<eoc track-type="none"/>
-				        </timeline-mob-slot>
+            <mono-audio-dissolve length="0" track-type="audio">
+                <source-clip length="0" track-type="audio">
+                    <template-clip name="Template Clip S">
+                        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+                            <eoc length="0" track-type="none"/>
+                        </timeline-mob-slot>
                     </template-clip>
                 </source-clip>
-	        </mono-audio-dissolve>
+            </mono-audio-dissolve>
         </timeline-mob-slot>
     </adjusted-clip>
     <adjusted-clip name="Adjusted Clip - Audio Static Operation Group">
         <static-mob-slot physical-track-number="1">
-	        <mono-audio-dissolve track-type="audio">
-                <source-clip track-type="audio">
-	    	        <template-clip name="Template Clip T">
-				        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-		        			<eoc track-type="none"/>
-				        </timeline-mob-slot>
+            <mono-audio-dissolve length="0" track-type="audio">
+                <source-clip length="0" track-type="audio">
+                    <template-clip name="Template Clip T">
+                        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+                            <eoc length="0" track-type="none"/>
+                        </timeline-mob-slot>
                     </template-clip>
                 </source-clip>
-	        </mono-audio-dissolve>
+            </mono-audio-dissolve>
         </static-mob-slot>
     </adjusted-clip>
 
     <adjusted-clip name="Adjusted Clip - Video Timeline Operation Group">
         <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1" physical-track-number="1">
-	        <video-dissolve track-type="picture">
-                <source-clip track-type="picture">
-		            <template-clip name="Template Clip V">
-				        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-		        			<eoc track-type="none"/>
-				        </timeline-mob-slot>
+            <video-dissolve length="0" track-type="picture">
+                <source-clip length="0" track-type="picture">
+                    <template-clip name="Template Clip V">
+                        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+                            <eoc length="0" track-type="none"/>
+                        </timeline-mob-slot>
                     </template-clip>
                 </source-clip>
-	        </video-dissolve>
+            </video-dissolve>
         </timeline-mob-slot>
     </adjusted-clip>
     <adjusted-clip name="Adjusted Clip - Video Static Operation Group">
         <static-mob-slot physical-track-number="1">
-	        <video-dissolve track-type="picture">
-                <source-clip track-type="picture">
-		            <template-clip name="Template Clip W">
-				        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-		        			<eoc track-type="none"/>
-				        </timeline-mob-slot>
+            <video-dissolve length="0" track-type="picture">
+                <source-clip length="0" track-type="picture">
+                    <template-clip name="Template Clip W">
+                        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+                            <eoc length="0" track-type="none"/>
+                        </timeline-mob-slot>
                     </template-clip>
                 </source-clip>
-	        </video-dissolve>
+            </video-dissolve>
         </static-mob-slot>
     </adjusted-clip>
 
     <adjusted-clip name="Adjusted Clip - Timecode Track">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-	        <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-			<eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </adjusted-clip>
-    
+
     <!-- Check the contents of primarty timecode tracks -->
     <top-level name="Top Level - Correct Primary Timecode">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="1">
-            <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
     </top-level>
-    
+
     <top-level name="Top Level - Incorrect Primary Timecode">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="1">
-            <timecode-stream-12m track-type="timecode"/>
+            <timecode-stream-12m length="0" track-type="timecode"/>
         </timeline-mob-slot>
     </top-level>
-    
+
     <lower-level name="Lower Level - Correct Primary Timecode">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="1">
-            <timecode track-type="timecode"/>
+            <timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
     </lower-level>
-    
+
     <lower-level name="Lower Level - Incorrect Primary Timecode">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="1">
-            <timecode-stream-12m track-type="timecode"/>
+            <timecode-stream-12m length="0" track-type="timecode"/>
         </timeline-mob-slot>
     </lower-level>
 
@@ -1692,92 +1692,92 @@
     <auxiliary-source name="Aux. Source No Mob Slot">
         <bad-eoc/>
     </auxiliary-source>
-    
+
     <auxiliary-source name="Aux. Source Timeline Mob Slot with Bad Segment">
-		<timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <source-clip track-type="audio">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+            <source-clip length="0" track-type="audio">
                 <template-clip>
                     <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-                        <eoc track-type="audio"/>
+                        <eoc length="0" track-type="audio"/>
                     </timeline-mob-slot>
                 </template-clip>
             </source-clip>
         </timeline-mob-slot>
     </auxiliary-source>
-    
+
     <auxiliary-source name="Aux. Source Static Mob Slot with Bad Segment">
-		<static-mob-slot>
-            <source-clip track-type="audio">
+        <static-mob-slot>
+            <source-clip length="0" track-type="audio">
                 <template-clip>
                     <static-mob-slot>
-                        <eoc track-type="audio"/>
+                        <eoc length="0" track-type="audio"/>
                     </static-mob-slot>
                 </template-clip>
             </source-clip>
         </static-mob-slot>
     </auxiliary-source>
-    
+
     <auxiliary-source name="Aux. Source Timeline Mob Slot with Good Segment">
-		<timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <source-clip track-type="auxiliary">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+            <source-clip length="0" track-type="auxiliary">
                 <template-clip>
                     <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-                        <eoc track-type="auxiliary"/>
+                        <eoc length="0" track-type="auxiliary"/>
                     </timeline-mob-slot>
                 </template-clip>
             </source-clip>
         </timeline-mob-slot>
     </auxiliary-source>
-    
+
     <auxiliary-source name="Aux. Source Static Mob Slot with Good Segment">
-		<static-mob-slot>
-            <source-clip track-type="auxiliary">
+        <static-mob-slot>
+            <source-clip length="0" track-type="auxiliary">
                 <template-clip>
                     <static-mob-slot>
-                        <eoc track-type="auxiliary"/>
+                        <eoc length="0" track-type="auxiliary"/>
                     </static-mob-slot>
                 </template-clip>
             </source-clip>
         </static-mob-slot>
     </auxiliary-source>
-    
+
     <auxiliary-source name="Aux. Source 2 Good Segments, 2 Bad Segments">
-		<timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <source-clip track-type="audio">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+            <source-clip length="0" track-type="audio">
                 <template-clip>
                     <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-                        <eoc track-type="audio"/>
+                        <eoc length="0" track-type="audio"/>
                     </timeline-mob-slot>
                 </template-clip>
             </source-clip>
         </timeline-mob-slot>
-		<static-mob-slot>
-            <source-clip track-type="audio">
+        <static-mob-slot>
+            <source-clip length="0" track-type="audio">
                 <template-clip>
                     <static-mob-slot>
-                        <eoc track-type="audio"/>
+                        <eoc length="0" track-type="audio"/>
                     </static-mob-slot>
                 </template-clip>
             </source-clip>
         </static-mob-slot>
-		<timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <source-clip track-type="auxiliary">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+            <source-clip length="0" track-type="auxiliary">
                 <template-clip>
                     <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-                        <eoc track-type="auxiliary"/>
+                        <eoc length="0" track-type="auxiliary"/>
                     </timeline-mob-slot>
                 </template-clip>
             </source-clip>
         </timeline-mob-slot>
-		<static-mob-slot>
-            <source-clip track-type="auxiliary">
+        <static-mob-slot>
+            <source-clip length="0" track-type="auxiliary">
                 <template-clip>
                     <static-mob-slot>
-                        <eoc track-type="auxiliary"/>
+                        <eoc length="0" track-type="auxiliary"/>
                     </static-mob-slot>
                 </template-clip>
             </source-clip>
         </static-mob-slot>
     </auxiliary-source>
-    
+
 </aaf-file>

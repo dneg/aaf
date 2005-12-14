@@ -2,99 +2,1254 @@
 <!DOCTYPE aaf-file SYSTEM "../TestFiles/EPDerivationChain.dtd">
 
 <aaf-file>
-	
+
     <!--
          Set up a file that can be used to test that:
-        
+
          (1) The TestGraph is build properly.
          (2) References are correctly resolved.
-        
+
          The regression test code assumes the structure of this file, therefore
          any modifications to this file should be accompinied by modifications
          to the regression test.
     -->
 
     <!--
-		 NOTE: The structure of these 5 mobs are identical with the following
-        	   exceptions.
-        	(1) Mob 1 referes to Mob 2, Mob 3, Mob 4 and Mob 5 while the other
-        		mobs have end of chain references.
-        	(2) Mob 1, Mob 4 and Mob 5 have their first slot contain a sequence
-        		of 3 source clips and their second slot contain a single source
-        		clip.  Mob 2 and Mob 3 have the order of slots refersed.
+         NOTE: The structure of these 5 mobs are identical with the following
+               exceptions.
+            (1) Mob 1 referes to Mob 2, Mob 3, Mob 4 and Mob 5 while the other
+                mobs have end of chain references.
+            (2) Mob 1, Mob 4 and Mob 5 have their first slot contain a sequence
+                of 3 source clips and their second slot contain a single source
+                clip.  Mob 2 and Mob 3 have the order of slots reversed.
     -->
-    
+
     <top-level name="Mob 1">
+
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Slot 1.A">
             <sequence track-type="audio">
-                <source-clip track-type="audio" length="1">
-                                    
+                <source-clip track-type="audio" length="1" start-time="0">
+
                     <clip name="Mob 2">
                         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Slot 2.B">
-							<eoc track-type="audio" length="1"/>
+                            <eoc track-type="audio" length="1"/>
                         </timeline-mob-slot>
                         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Slot 2.A">
                             <sequence track-type="audio">
-								<eoc track-type="audio" length="1"/>
+                                <eoc track-type="audio" length="1"/>
                                 <eoc track-type="audio" length="1"/>
                                 <eoc track-type="audio" length="1"/>
                             </sequence>
                         </timeline-mob-slot>
                     </clip>
-                    
+
                 </source-clip>
-				<source-clip track-type="audio" length="1">
-                    
+                <source-clip track-type="audio" length="1" start-time="0">
+
                     <clip name="Mob 3">
-						<timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Slot 3.B">
-							<eoc track-type="audio" length="1"/>
+                        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Slot 3.B">
+                            <eoc track-type="audio" length="1"/>
                         </timeline-mob-slot>
                         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Slot 3.A">
                             <sequence track-type="audio">
-								<eoc track-type="audio" length="1"/>
+                                <eoc track-type="audio" length="1"/>
                                 <eoc track-type="audio" length="1"/>
                                 <eoc track-type="audio" length="1"/>
                             </sequence>
                         </timeline-mob-slot>
                     </clip>
-                    
+
                 </source-clip>
-				<source-clip track-type="audio" length="1">
-                    
+                <source-clip track-type="audio" length="3" start-time="0">
+
                     <clip name="Mob 4">
                         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Slot 4.A">
                             <sequence track-type="audio">
-								<eoc track-type="audio" length="1"/>
+                                <eoc track-type="audio" length="1"/>
                                 <eoc track-type="audio" length="1"/>
                                 <eoc track-type="audio" length="1"/>
                             </sequence>
                         </timeline-mob-slot>
                         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Slot 4.B">
-							<eoc track-type="audio" length="1"/>
+                            <eoc track-type="audio" length="1"/>
                         </timeline-mob-slot>
                     </clip>
-                    
+
                 </source-clip>
             </sequence>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Slot 1.B">
-            <source-clip track-type="audio" length="1">
-                
+            <source-clip track-type="audio" length="3" start-time="0">
+
                     <clip name="Mob 5">
                         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Slot 5.A">
                             <sequence track-type="audio">
-								<eoc track-type="audio" length="1"/>
+                                <eoc track-type="audio" length="1"/>
                                 <eoc track-type="audio" length="1"/>
                                 <eoc track-type="audio" length="1"/>
                             </sequence>
                         </timeline-mob-slot>
                         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Slot 5.B">
-							<eoc track-type="audio" length="1"/>
+                            <eoc track-type="audio" length="1"/>
                         </timeline-mob-slot>
                     </clip>
-                
+
             </source-clip>
         </timeline-mob-slot>
+
+        <!-- The above was a basic test (length of the SourceClip always
+             included all Components of a Sequence), now, test situations where
+             length is an issue -->
+
+        <!-- TimelineMobSlot-to-TimelineMobSlot tests -->
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Slot 1.C">
+            <source-clip track-type="audio" start-time="0" length="1">
+
+                <clip name="Mob 6">
+                    <timeline-mob-slot edit-rate-denominator="2" edit-rate-numerator="1" orgin="2" name="Slot 6.A">
+                        <sequence track-type="audio">
+                            <oof track-type="audio" length="4"/>
+                            <oof track-type="audio" length="4"/>
+                            <oof track-type="audio" length="4"/>
+                        </sequence>
+                    </timeline-mob-slot>
+                </clip>
+
+            </source-clip>
+        </timeline-mob-slot>
+
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Slot 1.D">
+            <source-clip track-type="audio" start-time="0" length="2">
+
+                <clip name="Mob 7">
+                    <timeline-mob-slot edit-rate-denominator="2" edit-rate-numerator="1" orgin="2" name="Slot 7.A">
+                        <sequence track-type="audio">
+                            <oof track-type="audio" length="4"/>
+                            <oof track-type="audio" length="4"/>
+                            <oof track-type="audio" length="4"/>
+                        </sequence>
+                    </timeline-mob-slot>
+                </clip>
+
+            </source-clip>
+        </timeline-mob-slot>
+
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Slot 1.E">
+            <source-clip track-type="audio" start-time="1" length="1">
+
+                <clip name="Mob 8">
+                    <timeline-mob-slot edit-rate-denominator="2" edit-rate-numerator="1" orgin="0" name="Slot 8.A">
+                        <sequence track-type="audio">
+                            <oof track-type="audio" length="6"/>
+                            <oof track-type="audio" length="4"/>
+                            <oof track-type="audio" length="4"/>
+                        </sequence>
+                    </timeline-mob-slot>
+                </clip>
+
+            </source-clip>
+        </timeline-mob-slot>
+
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Slot 1.F">
+            <source-clip track-type="audio" start-time="1" length="2">
+
+                <clip name="Mob 9">
+                    <timeline-mob-slot edit-rate-denominator="2" edit-rate-numerator="1" orgin="0" name="Slot 9.A">
+                        <sequence track-type="audio">
+                            <oof track-type="audio" length="4"/>
+                            <oof track-type="audio" length="4"/>
+                            <oof track-type="audio" length="4"/>
+                        </sequence>
+                    </timeline-mob-slot>
+                </clip>
+
+            </source-clip>
+        </timeline-mob-slot>
+
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Slot 1.G">
+            <source-clip track-type="audio" start-time="3" length="1">
+
+                <clip name="Mob 10">
+                    <timeline-mob-slot edit-rate-denominator="2" edit-rate-numerator="1" orgin="0" name="Slot 10.A">
+                        <sequence track-type="audio">
+                            <oof track-type="audio" length="4"/>
+                            <oof track-type="audio" length="6"/>
+                            <oof track-type="audio" length="4"/>
+                        </sequence>
+                    </timeline-mob-slot>
+                </clip>
+
+            </source-clip>
+        </timeline-mob-slot>
+
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Slot 1.H">
+            <source-clip track-type="audio" start-time="3" length="2">
+
+                <clip name="Mob 11">
+                    <timeline-mob-slot edit-rate-denominator="2" edit-rate-numerator="1" orgin="0" name="Slot 11.A">
+                        <sequence track-type="audio">
+                            <oof track-type="audio" length="4"/>
+                            <oof track-type="audio" length="4"/>
+                            <oof track-type="audio" length="4"/>
+                        </sequence>
+                    </timeline-mob-slot>
+                </clip>
+
+            </source-clip>
+        </timeline-mob-slot>
+
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Slot 1.I">
+            <source-clip track-type="audio" start-time="5" length="1">
+
+                <clip name="Mob 12">
+                    <timeline-mob-slot edit-rate-denominator="2" edit-rate-numerator="1" orgin="0" name="Slot 12.A">
+                        <sequence track-type="audio">
+                            <oof track-type="audio" length="4"/>
+                            <oof track-type="audio" length="4"/>
+                            <oof track-type="audio" length="6"/>
+                        </sequence>
+                    </timeline-mob-slot>
+                </clip>
+
+            </source-clip>
+        </timeline-mob-slot>
+
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Slot 1.J">
+            <source-clip track-type="audio" start-time="5" length="2">
+
+                <clip name="Mob 13">
+                    <timeline-mob-slot edit-rate-denominator="2" edit-rate-numerator="1" orgin="0" name="Slot 13.A">
+                        <sequence track-type="audio">
+                            <oof track-type="audio" length="4"/>
+                            <oof track-type="audio" length="4"/>
+                            <oof track-type="audio" length="4"/>
+                        </sequence>
+                    </timeline-mob-slot>
+                </clip>
+
+            </source-clip>
+        </timeline-mob-slot>
+
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Slot 1.K">
+            <source-clip track-type="audio" start-time="6" length="1">
+
+                <clip name="Mob 14">
+                    <timeline-mob-slot edit-rate-denominator="2" edit-rate-numerator="1" orgin="0" name="Slot 14.A">
+                        <sequence track-type="audio">
+                            <oof track-type="audio" length="4"/>
+                            <oof track-type="audio" length="4"/>
+                            <oof track-type="audio" length="4"/>
+                        </sequence>
+                    </timeline-mob-slot>
+                </clip>
+
+            </source-clip>
+        </timeline-mob-slot>
+
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Slot 1.L">
+            <source-clip track-type="audio" start-time="1" length="4">
+
+                <clip name="Mob 15">
+                    <timeline-mob-slot edit-rate-denominator="2" edit-rate-numerator="1" orgin="0" name="Slot 15.A">
+                        <sequence track-type="audio">
+                            <oof track-type="audio" length="4"/>
+                            <oof track-type="audio" length="4"/>
+                            <oof track-type="audio" length="4"/>
+                        </sequence>
+                    </timeline-mob-slot>
+                </clip>
+
+            </source-clip>
+        </timeline-mob-slot>
+
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Slot 1.M">
+            <source-clip track-type="audio" start-time="0" length="6">
+
+                <clip name="Mob 16">
+                    <timeline-mob-slot edit-rate-denominator="2" edit-rate-numerator="1" orgin="2" name="Slot 16.A">
+                        <sequence track-type="audio">
+                            <oof track-type="audio" length="4"/>
+                            <oof track-type="audio" length="4"/>
+                            <oof track-type="audio" length="4"/>
+                        </sequence>
+                    </timeline-mob-slot>
+                </clip>
+
+            </source-clip>
+        </timeline-mob-slot>
+
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Slot 1.N">
+            <source-clip track-type="audio" start-time="1" length="6">
+
+                <clip name="Mob 17">
+                    <timeline-mob-slot edit-rate-denominator="2" edit-rate-numerator="1" orgin="0" name="Slot 17.A">
+                        <sequence track-type="audio">
+                            <oof track-type="audio" length="4"/>
+                            <oof track-type="audio" length="4"/>
+                            <oof track-type="audio" length="4"/>
+                        </sequence>
+                    </timeline-mob-slot>
+                </clip>
+
+            </source-clip>
+        </timeline-mob-slot>
+
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Slot 1.O">
+            <source-clip track-type="audio" start-time="0" length="4">
+
+                <clip name="Mob 18">
+                    <timeline-mob-slot edit-rate-denominator="2" edit-rate-numerator="1" orgin="2" name="Slot 18.A">
+                        <sequence track-type="audio">
+                            <oof track-type="audio" length="4"/>
+                            <oof track-type="audio" length="4"/>
+                            <oof track-type="audio" length="4"/>
+                        </sequence>
+                    </timeline-mob-slot>
+                </clip>
+
+            </source-clip>
+        </timeline-mob-slot>
+
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Slot 1.P">
+            <source-clip track-type="audio" start-time="3" length="4">
+
+                <clip name="Mob 19">
+                    <timeline-mob-slot edit-rate-denominator="2" edit-rate-numerator="1" orgin="0" name="Slot 19.A">
+                        <sequence track-type="audio">
+                            <oof track-type="audio" length="4"/>
+                            <oof track-type="audio" length="4"/>
+                            <oof track-type="audio" length="4"/>
+                        </sequence>
+                    </timeline-mob-slot>
+                </clip>
+
+            </source-clip>
+        </timeline-mob-slot>
+
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Slot 1.Q">
+            <source-clip track-type="audio" start-time="0" length="8">
+
+                <clip name="Mob 20">
+                    <timeline-mob-slot edit-rate-denominator="2" edit-rate-numerator="1" orgin="2" name="Slot 20.A">
+                        <sequence track-type="audio">
+                            <oof track-type="audio" length="4"/>
+                            <oof track-type="audio" length="4"/>
+                            <oof track-type="audio" length="4"/>
+                        </sequence>
+                    </timeline-mob-slot>
+                </clip>
+
+            </source-clip>
+        </timeline-mob-slot>
+
+        <!-- TimelineMobSlot-to-EventMobSlot tests -->
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Slot 1.R">
+            <source-clip track-type="audio" start-time="0" length="1">
+
+                <clip name="Mob 21">
+                    <event-mob-slot edit-rate-denominator="2" edit-rate-numerator="1" name="Slot 21.A">
+                        <sequence track-type="audio">
+                            <comment-marker track-type="audio" position="2" length="4"/>
+                            <comment-marker track-type="audio" position="6" length="4"/>
+                            <comment-marker track-type="audio" position="10" length="4"/>
+                        </sequence>
+                    </event-mob-slot>
+                </clip>
+
+            </source-clip>
+        </timeline-mob-slot>
+
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Slot 1.S">
+            <source-clip track-type="audio" start-time="6" length="1">
+
+                <clip name="Mob 22">
+                    <event-mob-slot edit-rate-denominator="2" edit-rate-numerator="1" name="Slot 22.A">
+                        <sequence track-type="audio">
+                            <comment-marker track-type="audio" position="0" length="4"/>
+                            <comment-marker track-type="audio" position="4" length="4"/>
+                            <comment-marker track-type="audio" position="8" length="4"/>
+                        </sequence>
+                    </event-mob-slot>
+                </clip>
+
+            </source-clip>
+        </timeline-mob-slot>
+
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Slot 1.T">
+            <source-clip track-type="audio" start-time="2" length="1">
+
+                <clip name="Mob 23">
+                    <event-mob-slot edit-rate-denominator="2" edit-rate-numerator="1" name="Slot 23.A">
+                        <sequence track-type="audio">
+                            <comment-marker track-type="audio" position="0" length="4"/>
+                            <comment-marker track-type="audio" position="6" length="4"/>
+                            <comment-marker track-type="audio" position="10" length="4"/>
+                        </sequence>
+                    </event-mob-slot>
+                </clip>
+
+            </source-clip>
+        </timeline-mob-slot>
+
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Slot 1.U">
+            <source-clip track-type="audio" start-time="4" length="1">
+
+                <clip name="Mob 24">
+                    <event-mob-slot edit-rate-denominator="2" edit-rate-numerator="1" name="Slot 24.A">
+                        <sequence track-type="audio">
+                            <comment-marker track-type="audio" position="0" length="4"/>
+                            <comment-marker track-type="audio" position="4" length="4"/>
+                            <comment-marker track-type="audio" position="10" length="4"/>
+                        </sequence>
+                    </event-mob-slot>
+                </clip>
+
+            </source-clip>
+        </timeline-mob-slot>
+
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Slot 1.V">
+            <source-clip track-type="audio" start-time="0" length="2">
+
+                <clip name="Mob 25">
+                    <event-mob-slot edit-rate-denominator="2" edit-rate-numerator="1" name="Slot 25.A">
+                        <sequence track-type="audio">
+                            <comment-marker track-type="audio" position="2" length="4"/>
+                            <comment-marker track-type="audio" position="6" length="4"/>
+                            <comment-marker track-type="audio" position="10" length="4"/>
+                        </sequence>
+                    </event-mob-slot>
+                </clip>
+
+            </source-clip>
+        </timeline-mob-slot>
+
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Slot 1.W">
+            <source-clip track-type="audio" start-time="1" length="1">
+
+                <clip name="Mob 26">
+                    <event-mob-slot edit-rate-denominator="2" edit-rate-numerator="1" name="Slot 26.A">
+                        <sequence track-type="audio">
+                            <comment-marker track-type="audio" position="0" length="6"/>
+                            <comment-marker track-type="audio" position="6" length="4"/>
+                            <comment-marker track-type="audio" position="10" length="4"/>
+                        </sequence>
+                    </event-mob-slot>
+                </clip>
+
+            </source-clip>
+        </timeline-mob-slot>
+
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Slot 1.X">
+            <source-clip track-type="audio" start-time="3" length="1">
+
+                <clip name="Mob 27">
+                    <event-mob-slot edit-rate-denominator="2" edit-rate-numerator="1" name="Slot 27.A">
+                        <sequence track-type="audio">
+                            <comment-marker track-type="audio" position="0" length="4"/>
+                            <comment-marker track-type="audio" position="4" length="6"/>
+                            <comment-marker track-type="audio" position="10" length="4"/>
+                        </sequence>
+                    </event-mob-slot>
+                </clip>
+
+            </source-clip>
+        </timeline-mob-slot>
+
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Slot 1.Y">
+            <source-clip track-type="audio" start-time="5" length="1">
+
+                <clip name="Mob 28">
+                    <event-mob-slot edit-rate-denominator="2" edit-rate-numerator="1" name="Slot 28.A">
+                        <sequence track-type="audio">
+                            <comment-marker track-type="audio" position="0" length="4"/>
+                            <comment-marker track-type="audio" position="4" length="4"/>
+                            <comment-marker track-type="audio" position="8" length="6"/>
+                        </sequence>
+                    </event-mob-slot>
+                </clip>
+
+            </source-clip>
+        </timeline-mob-slot>
+
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Slot 1.Z">
+            <source-clip track-type="audio" start-time="5" length="2">
+
+                <clip name="Mob 29">
+                    <event-mob-slot edit-rate-denominator="2" edit-rate-numerator="1" name="Slot 29.A">
+                        <sequence track-type="audio">
+                            <comment-marker track-type="audio" position="0" length="4"/>
+                            <comment-marker track-type="audio" position="4" length="4"/>
+                            <comment-marker track-type="audio" position="8" length="4"/>
+                        </sequence>
+                    </event-mob-slot>
+                </clip>
+
+            </source-clip>
+        </timeline-mob-slot>
+
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Slot 1.AA">
+            <source-clip track-type="audio" start-time="1" length="2">
+
+                <clip name="Mob 30">
+                    <event-mob-slot edit-rate-denominator="2" edit-rate-numerator="1" name="Slot 30.A">
+                        <sequence track-type="audio">
+                            <comment-marker track-type="audio" position="0" length="4"/>
+                            <comment-marker track-type="audio" position="6" length="4"/>
+                            <comment-marker track-type="audio" position="10" length="4"/>
+                        </sequence>
+                    </event-mob-slot>
+                </clip>
+
+            </source-clip>
+        </timeline-mob-slot>
+
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Slot 1.AB">
+            <source-clip track-type="audio" start-time="2" length="2">
+
+                <clip name="Mob 31">
+                    <event-mob-slot edit-rate-denominator="2" edit-rate-numerator="1" name="Slot 31.A">
+                        <sequence track-type="audio">
+                            <comment-marker track-type="audio" position="0" length="4"/>
+                            <comment-marker track-type="audio" position="6" length="4"/>
+                            <comment-marker track-type="audio" position="10" length="4"/>
+                        </sequence>
+                    </event-mob-slot>
+                </clip>
+
+            </source-clip>
+        </timeline-mob-slot>
+
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Slot 1.AC">
+            <source-clip track-type="audio" start-time="3" length="2">
+
+                <clip name="Mob 32">
+                    <event-mob-slot edit-rate-denominator="2" edit-rate-numerator="1" name="Slot 32.A">
+                        <sequence track-type="audio">
+                            <comment-marker track-type="audio" position="0" length="4"/>
+                            <comment-marker track-type="audio" position="4" length="4"/>
+                            <comment-marker track-type="audio" position="10" length="4"/>
+                        </sequence>
+                    </event-mob-slot>
+                </clip>
+
+            </source-clip>
+        </timeline-mob-slot>
+
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Slot 1.AD">
+            <source-clip track-type="audio" start-time="4" length="2">
+
+                <clip name="Mob 33">
+                    <event-mob-slot edit-rate-denominator="2" edit-rate-numerator="1" name="Slot 33.A">
+                        <sequence track-type="audio">
+                            <comment-marker track-type="audio" position="0" length="4"/>
+                            <comment-marker track-type="audio" position="4" length="4"/>
+                            <comment-marker track-type="audio" position="10" length="4"/>
+                        </sequence>
+                    </event-mob-slot>
+                </clip>
+
+            </source-clip>
+        </timeline-mob-slot>
+
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Slot 1.AE">
+            <source-clip track-type="audio" start-time="0" length="4">
+
+                <clip name="Mob 34">
+                    <event-mob-slot edit-rate-denominator="2" edit-rate-numerator="1" name="Slot 34.A">
+                        <sequence track-type="audio">
+                            <comment-marker track-type="audio" position="2" length="4"/>
+                            <comment-marker track-type="audio" position="6" length="4"/>
+                            <comment-marker track-type="audio" position="10" length="4"/>
+                        </sequence>
+                    </event-mob-slot>
+                </clip>
+
+            </source-clip>
+        </timeline-mob-slot>
+
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Slot 1.AF">
+            <source-clip track-type="audio" start-time="1" length="2">
+
+                <clip name="Mob 35">
+                    <event-mob-slot edit-rate-denominator="2" edit-rate-numerator="1" name="Slot 35.A">
+                        <sequence track-type="audio">
+                            <comment-marker track-type="audio" position="0" length="4"/>
+                            <comment-marker track-type="audio" position="4" length="4"/>
+                            <comment-marker track-type="audio" position="8" length="4"/>
+                        </sequence>
+                    </event-mob-slot>
+                </clip>
+
+            </source-clip>
+        </timeline-mob-slot>
+
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Slot 1.AG">
+            <source-clip track-type="audio" start-time="3" length="2">
+
+                <clip name="Mob 36">
+                    <event-mob-slot edit-rate-denominator="2" edit-rate-numerator="1" name="Slot 36.A">
+                        <sequence track-type="audio">
+                            <comment-marker track-type="audio" position="0" length="4"/>
+                            <comment-marker track-type="audio" position="4" length="4"/>
+                            <comment-marker track-type="audio" position="8" length="4"/>
+                        </sequence>
+                    </event-mob-slot>
+                </clip>
+
+            </source-clip>
+        </timeline-mob-slot>
+
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Slot 1.AH">
+            <source-clip track-type="audio" start-time="3" length="4">
+
+                <clip name="Mob 37">
+                    <event-mob-slot edit-rate-denominator="2" edit-rate-numerator="1" name="Slot 37.A">
+                        <sequence track-type="audio">
+                            <comment-marker track-type="audio" position="0" length="4"/>
+                            <comment-marker track-type="audio" position="4" length="4"/>
+                            <comment-marker track-type="audio" position="8" length="4"/>
+                        </sequence>
+                    </event-mob-slot>
+                </clip>
+
+            </source-clip>
+        </timeline-mob-slot>
+
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Slot 1.AI">
+            <source-clip track-type="audio" start-time="0" length="6">
+
+                <clip name="Mob 38">
+                    <event-mob-slot edit-rate-denominator="2" edit-rate-numerator="1" name="Slot 38.A">
+                        <sequence track-type="audio">
+                            <comment-marker track-type="audio" position="2" length="4"/>
+                            <comment-marker track-type="audio" position="6" length="4"/>
+                            <comment-marker track-type="audio" position="12" length="4"/>
+                        </sequence>
+                    </event-mob-slot>
+                </clip>
+
+            </source-clip>
+        </timeline-mob-slot>
+
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Slot 1.AJ">
+            <source-clip track-type="audio" start-time="2" length="6">
+
+                <clip name="Mob 39">
+                    <event-mob-slot edit-rate-denominator="2" edit-rate-numerator="1" name="Slot 39.A">
+                        <sequence track-type="audio">
+                            <comment-marker track-type="audio" position="0" length="4"/>
+                            <comment-marker track-type="audio" position="6" length="4"/>
+                            <comment-marker track-type="audio" position="10" length="4"/>
+                        </sequence>
+                    </event-mob-slot>
+                </clip>
+
+            </source-clip>
+        </timeline-mob-slot>
+
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Slot 1.AK">
+            <source-clip track-type="audio" start-time="0" length="6">
+
+                <clip name="Mob 40">
+                    <event-mob-slot edit-rate-denominator="2" edit-rate-numerator="1" name="Slot 40.A">
+                        <sequence track-type="audio">
+                            <comment-marker track-type="audio" position="2" length="4"/>
+                            <comment-marker track-type="audio" position="6" length="4"/>
+                            <comment-marker track-type="audio" position="10" length="4"/>
+                        </sequence>
+                    </event-mob-slot>
+                </clip>
+
+            </source-clip>
+        </timeline-mob-slot>
+
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Slot 1.AL">
+            <source-clip track-type="audio" start-time="0" length="8">
+
+                <clip name="Mob 41">
+                    <event-mob-slot edit-rate-denominator="2" edit-rate-numerator="1" name="Slot 41.A">
+                        <sequence track-type="audio">
+                            <comment-marker track-type="audio" position="2" length="4"/>
+                            <comment-marker track-type="audio" position="6" length="4"/>
+                            <comment-marker track-type="audio" position="10" length="4"/>
+                        </sequence>
+                    </event-mob-slot>
+                </clip>
+
+            </source-clip>
+        </timeline-mob-slot>
+
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Slot 1.AM">
+            <source-clip track-type="audio" start-time="1" length="6">
+
+                <clip name="Mob 42">
+                    <event-mob-slot edit-rate-denominator="2" edit-rate-numerator="1" name="Slot 42.A">
+                        <sequence track-type="audio">
+                            <comment-marker track-type="audio" position="0" length="4"/>
+                            <comment-marker track-type="audio" position="4" length="4"/>
+                            <comment-marker track-type="audio" position="8" length="4"/>
+                        </sequence>
+                    </event-mob-slot>
+                </clip>
+
+            </source-clip>
+        </timeline-mob-slot>
+
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Slot 1.AN">
+            <source-clip track-type="audio" start-time="1" length="4">
+
+                <clip name="Mob 43">
+                    <event-mob-slot edit-rate-denominator="2" edit-rate-numerator="1" name="Slot 43.A">
+                        <sequence track-type="audio">
+                            <comment-marker track-type="audio" position="0" length="4"/>
+                            <comment-marker track-type="audio" position="4" length="4"/>
+                            <comment-marker track-type="audio" position="8" length="4"/>
+                        </sequence>
+                    </event-mob-slot>
+                </clip>
+
+            </source-clip>
+        </timeline-mob-slot>
+
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Slot 1.AO">
+            <source-clip track-type="audio" start-time="0" length="10">
+
+                <clip name="Mob 44">
+                    <event-mob-slot edit-rate-denominator="2" edit-rate-numerator="1" name="Slot 44.A">
+                        <sequence track-type="audio">
+                            <comment-marker track-type="audio" position="2" length="4"/>
+                            <comment-marker track-type="audio" position="8" length="4"/>
+                            <comment-marker track-type="audio" position="14" length="4"/>
+                        </sequence>
+                    </event-mob-slot>
+                </clip>
+
+            </source-clip>
+        </timeline-mob-slot>
+
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Slot 1.AP">
+            <source-clip track-type="audio" start-time="0" length="1">
+
+                <clip name="Mob 45">
+                    <event-mob-slot edit-rate-denominator="2" edit-rate-numerator="1" name="Slot 45.A">
+                        <comment-marker track-type="audio" position="1"/>
+                    </event-mob-slot>
+                </clip>
+
+            </source-clip>
+        </timeline-mob-slot>
+
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Slot 1.AQ">
+            <source-clip track-type="audio" start-time="0" length="2">
+
+                <clip name="Mob 46">
+                    <event-mob-slot edit-rate-denominator="2" edit-rate-numerator="1" name="Slot 46.A">
+                        <sequence track-type="audio">
+                            <comment-marker track-type="audio" position="1"/>
+                            <comment-marker track-type="audio" position="3"/>
+                            <comment-marker track-type="audio" position="5"/>
+                        </sequence>
+                    </event-mob-slot>
+                </clip>
+
+            </source-clip>
+        </timeline-mob-slot>
+
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Slot 1.AR">
+            <source-clip track-type="audio" start-time="1" length="1">
+
+                <clip name="Mob 47">
+                    <event-mob-slot edit-rate-denominator="2" edit-rate-numerator="1" name="Slot 47.A">
+                        <sequence track-type="audio">
+                            <comment-marker track-type="audio" position="1"/>
+                            <comment-marker track-type="audio" position="5"/>
+                            <comment-marker track-type="audio" position="9"/>
+                        </sequence>
+                    </event-mob-slot>
+                </clip>
+
+            </source-clip>
+        </timeline-mob-slot>
+
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Slot 1.AS">
+            <source-clip track-type="audio" start-time="1" length="1">
+
+                <clip name="Mob 48">
+                    <event-mob-slot edit-rate-denominator="2" edit-rate-numerator="1" name="Slot 48.A">
+                        <comment-marker track-type="audio" position="1"/>
+                    </event-mob-slot>
+                </clip>
+
+            </source-clip>
+        </timeline-mob-slot>
+
+        <!-- TimelineMobSlot-to-StaticMobSlot tests -->
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Slot 1.AT">
+            <source-clip track-type="audio" length="1">
+
+                <clip name="Mob 49">
+                    <static-mob-slot name="Slot 49.A">
+                        <sequence track-type="audio">
+                            <!--
+                                Note: According to the AAF Object Specification, this should be illegal
+                                      since Components in StaticMobSlots can not have length properties.
+                                      Currently the code allows it, so we will still test resolving
+                                      references even though the length property is ignored
+                            -->
+                            <operation-group operation-definition="video-dissolve" track-type="audio" length="1"/>
+                            <operation-group operation-definition="video-dissolve" track-type="audio" length="1"/>
+                            <operation-group operation-definition="video-dissolve" track-type="audio" length="1"/>
+                        </sequence>
+                    </static-mob-slot>
+                </clip>
+
+            </source-clip>
+        </timeline-mob-slot>
+
+        <!-- StaticMobSlot-to-TimelineMobSlot tests -->
+        <static-mob-slot name="Slot 1.AU">
+            <source-clip track-type="audio" start-time="4">
+
+                <clip name="Mob 50">
+                    <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="2" name="Slot 50.A">
+                        <sequence track-type="audio">
+                            <operation-group operation-definition="video-dissolve" track-type="audio" length="2"/>
+                            <operation-group operation-definition="video-dissolve" track-type="audio" length="2"/>
+                            <operation-group operation-definition="video-dissolve" track-type="audio" length="2"/>
+                        </sequence>
+                    </timeline-mob-slot>
+                </clip>
+
+            </source-clip>
+        </static-mob-slot>
+
+        <!-- StaticMobSlot-to-EventMobSlot tests -->
+        <static-mob-slot name="Slot 1.AV">
+            <source-clip track-type="audio" start-time="4">
+
+                <clip name="Mob 51">
+                    <event-mob-slot edit-rate-denominator="1" edit-rate-numerator="2" name="Slot 51.A">
+                        <sequence track-type="audio">
+                            <comment-marker track-type="audio" position="2" length="1"/>
+                            <comment-marker track-type="audio" position="2"/>
+                            <comment-marker track-type="audio" position="2" length="1"/>
+                        </sequence>
+                    </event-mob-slot>
+                </clip>
+
+            </source-clip>
+        </static-mob-slot>
+
+        <!-- StaticMobSlot-to-StaticMobSlot tests -->
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Slot 1.AW">
+            <source-clip track-type="audio" length="1">
+
+                <clip name="Mob 52">
+                    <static-mob-slot name="Slot 52.A">
+                        <sequence track-type="audio">
+                            <!--
+                                Note: According to the AAF Object Specification, this should be illegal
+                                      since Components in StaticMobSlots can not have length properties.
+                                      Currently the code allows it, so we will still test resolving
+                                      references even though the length property is ignored
+                            -->
+                            <operation-group operation-definition="video-dissolve" track-type="audio" length="1"/>
+                            <operation-group operation-definition="video-dissolve" track-type="audio" length="1"/>
+                            <operation-group operation-definition="video-dissolve" track-type="audio" length="1"/>
+                        </sequence>
+                    </static-mob-slot>
+                </clip>
+
+            </source-clip>
+        </timeline-mob-slot>
+
+        <!-- Transition tests -->
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Slot 1.AX">
+            <source-clip track-type="audio" start-time="0" length="1">
+
+                <clip name="Mob 53">
+                    <timeline-mob-slot edit-rate-denominator="2" edit-rate-numerator="1" orgin="2" name="Slot 53.A">
+                        <sequence track-type="audio">
+                            <oof track-type="audio" length="6"/>
+                            <transition track-type="audio" length="4">
+                                <mono-audio-dissolve track-type="audio"/>
+                            </transition>
+                            <oof track-type="audio" length="6"/>
+                        </sequence>
+                    </timeline-mob-slot>
+                </clip>
+
+            </source-clip>
+        </timeline-mob-slot>
+
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Slot 1.AY">
+            <source-clip track-type="audio" start-time="0" length="2">
+
+                <clip name="Mob 54">
+                    <timeline-mob-slot edit-rate-denominator="2" edit-rate-numerator="1" orgin="2" name="Slot 54.A">
+                        <sequence track-type="audio">
+                            <oof track-type="audio" length="6"/>
+                            <transition track-type="audio" length="4">
+                                <mono-audio-dissolve track-type="audio"/>
+                            </transition>
+                            <oof track-type="audio" length="6"/>
+                        </sequence>
+                    </timeline-mob-slot>
+                </clip>
+
+            </source-clip>
+        </timeline-mob-slot>
+
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Slot 1.AZ">
+            <source-clip track-type="audio" start-time="0" length="4">
+
+                <clip name="Mob 55">
+                    <timeline-mob-slot edit-rate-denominator="2" edit-rate-numerator="1" orgin="0" name="Slot 55.A">
+                        <sequence track-type="audio">
+                            <oof track-type="audio" length="6"/>
+                            <transition track-type="audio" length="4">
+                                <mono-audio-dissolve track-type="audio"/>
+                            </transition>
+                            <oof track-type="audio" length="6"/>
+                        </sequence>
+                    </timeline-mob-slot>
+                </clip>
+
+            </source-clip>
+        </timeline-mob-slot>
+
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Slot 1.BA">
+            <source-clip track-type="audio" start-time="0" length="2">
+
+                <clip name="Mob 56">
+                    <timeline-mob-slot edit-rate-denominator="2" edit-rate-numerator="1" orgin="0" name="Slot 56.A">
+                        <sequence track-type="audio">
+                            <oof track-type="audio" length="6"/>
+                            <transition track-type="audio" length="4">
+                                <mono-audio-dissolve track-type="audio"/>
+                            </transition>
+                            <oof track-type="audio" length="6"/>
+                        </sequence>
+                    </timeline-mob-slot>
+                </clip>
+
+            </source-clip>
+        </timeline-mob-slot>
+
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Slot 1.BB">
+            <source-clip track-type="audio" start-time="1" length="2">
+
+                <clip name="Mob 57">
+                    <timeline-mob-slot edit-rate-denominator="2" edit-rate-numerator="1" orgin="0" name="Slot 57.A">
+                        <sequence track-type="audio">
+                            <oof track-type="audio" length="6"/>
+                            <transition track-type="audio" length="4">
+                                <mono-audio-dissolve track-type="audio"/>
+                            </transition>
+                            <oof track-type="audio" length="6"/>
+                        </sequence>
+                    </timeline-mob-slot>
+                </clip>
+
+            </source-clip>
+        </timeline-mob-slot>
+
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Slot 1.BC">
+            <source-clip track-type="audio" start-time="2" length="2">
+
+                <clip name="Mob 58">
+                    <timeline-mob-slot edit-rate-denominator="2" edit-rate-numerator="1" orgin="0" name="Slot 58.A">
+                        <sequence track-type="audio">
+                            <oof track-type="audio" length="6"/>
+                            <transition track-type="audio" length="4">
+                                <mono-audio-dissolve track-type="audio"/>
+                            </transition>
+                            <oof track-type="audio" length="6"/>
+                        </sequence>
+                    </timeline-mob-slot>
+                </clip>
+
+            </source-clip>
+        </timeline-mob-slot>
+
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Slot 1.BD">
+            <source-clip track-type="audio" start-time="3" length="2">
+
+                <clip name="Mob 59">
+                    <timeline-mob-slot edit-rate-denominator="2" edit-rate-numerator="1" orgin="0" name="Slot 59.A">
+                        <sequence track-type="audio">
+                            <oof track-type="audio" length="6"/>
+                            <transition track-type="audio" length="4">
+                                <mono-audio-dissolve track-type="audio"/>
+                            </transition>
+                            <oof track-type="audio" length="6"/>
+                        </sequence>
+                    </timeline-mob-slot>
+                </clip>
+
+            </source-clip>
+        </timeline-mob-slot>
+
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Slot 1.BE">
+            <source-clip track-type="audio" start-time="4" length="1">
+
+                <clip name="Mob 60">
+                    <timeline-mob-slot edit-rate-denominator="2" edit-rate-numerator="1" orgin="0" name="Slot 60.A">
+                        <sequence track-type="audio">
+                            <oof track-type="audio" length="6"/>
+                            <transition track-type="audio" length="4">
+                                <mono-audio-dissolve track-type="audio"/>
+                            </transition>
+                            <oof track-type="audio" length="6"/>
+                        </sequence>
+                    </timeline-mob-slot>
+                </clip>
+
+            </source-clip>
+        </timeline-mob-slot>
+
+        <!-- Nested Sequence tests -->
+
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Slot 1.BF">
+            <source-clip track-type="audio" start-time="1" length="2">
+
+                <clip name="Mob 61">
+                    <timeline-mob-slot edit-rate-denominator="2" edit-rate-numerator="1" orgin="0" name="Slot 61.A">
+                        <sequence track-type="audio" length="12">
+                            <oof track-type="audio" length="4"/>
+                            <sequence track-type="audio" length="0">
+                                <oof track-type="audio" length="4"/>
+                                <oof track-type="audio" length="4"/>
+                                <oof track-type="audio" length="4"/>
+                            </sequence>
+                            <oof track-type="audio" length="4"/>
+                        </sequence>
+                    </timeline-mob-slot>
+                </clip>
+
+            </source-clip>
+        </timeline-mob-slot>
+
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Slot 1.BG">
+            <source-clip track-type="audio" start-time="3" length="2">
+
+                <clip name="Mob 62">
+                    <timeline-mob-slot edit-rate-denominator="2" edit-rate-numerator="1" orgin="0" name="Slot 62.A">
+                        <sequence track-type="audio" length="12">
+                            <oof track-type="audio" length="4"/>
+                            <sequence track-type="audio" length="0">
+                                <oof track-type="audio" length="4"/>
+                                <oof track-type="audio" length="4"/>
+                                <oof track-type="audio" length="4"/>
+                            </sequence>
+                            <oof track-type="audio" length="4"/>
+                        </sequence>
+                    </timeline-mob-slot>
+                </clip>
+
+            </source-clip>
+        </timeline-mob-slot>
+
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Slot 1.BH">
+            <source-clip track-type="audio" start-time="5" length="2">
+
+                <clip name="Mob 63">
+                    <timeline-mob-slot edit-rate-denominator="2" edit-rate-numerator="1" orgin="0" name="Slot 63.A">
+                        <sequence track-type="audio" length="12">
+                            <oof track-type="audio" length="4"/>
+                            <sequence track-type="audio" length="0">
+                                <oof track-type="audio" length="4"/>
+                                <oof track-type="audio" length="4"/>
+                                <oof track-type="audio" length="4"/>
+                            </sequence>
+                            <oof track-type="audio" length="4"/>
+                        </sequence>
+                    </timeline-mob-slot>
+                </clip>
+
+            </source-clip>
+        </timeline-mob-slot>
+
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Slot 1.BI">
+            <source-clip track-type="audio" start-time="7" length="2">
+
+                <clip name="Mob 64">
+                    <timeline-mob-slot edit-rate-denominator="2" edit-rate-numerator="1" orgin="0" name="Slot 64.A">
+                        <sequence track-type="audio" length="12">
+                            <oof track-type="audio" length="4"/>
+                            <sequence track-type="audio" length="0">
+                                <oof track-type="audio" length="4"/>
+                                <oof track-type="audio" length="4"/>
+                                <oof track-type="audio" length="4"/>
+                            </sequence>
+                            <oof track-type="audio" length="4"/>
+                        </sequence>
+                    </timeline-mob-slot>
+                </clip>
+
+            </source-clip>
+        </timeline-mob-slot>
+
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Slot 1.BJ">
+            <source-clip track-type="audio" start-time="2" length="1">
+
+                <clip name="Mob 65">
+                    <timeline-mob-slot edit-rate-denominator="2" edit-rate-numerator="1" orgin="0" name="Slot 65.A">
+                        <sequence track-type="audio" length="12">
+                            <oof track-type="audio" length="4"/>
+                            <sequence track-type="audio" length="0">
+                                <oof track-type="audio" length="4"/>
+                                <oof track-type="audio" length="4"/>
+                                <oof track-type="audio" length="4"/>
+                            </sequence>
+                            <oof track-type="audio" length="4"/>
+                        </sequence>
+                    </timeline-mob-slot>
+                </clip>
+
+            </source-clip>
+        </timeline-mob-slot>
+
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Slot 1.BK">
+            <source-clip track-type="audio" start-time="4" length="1">
+
+                <clip name="Mob 66">
+                    <timeline-mob-slot edit-rate-denominator="2" edit-rate-numerator="1" orgin="0" name="Slot 66.A">
+                        <sequence track-type="audio" length="12">
+                            <oof track-type="audio" length="4"/>
+                            <sequence track-type="audio" length="0">
+                                <oof track-type="audio" length="4"/>
+                                <oof track-type="audio" length="4"/>
+                                <oof track-type="audio" length="4"/>
+                            </sequence>
+                            <oof track-type="audio" length="4"/>
+                        </sequence>
+                    </timeline-mob-slot>
+                </clip>
+
+            </source-clip>
+        </timeline-mob-slot>
+
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Slot 1.BL">
+            <source-clip track-type="audio" start-time="6" length="1">
+
+                <clip name="Mob 67">
+                    <timeline-mob-slot edit-rate-denominator="2" edit-rate-numerator="1" orgin="0" name="Slot 67.A">
+                        <sequence track-type="audio" length="12">
+                            <oof track-type="audio" length="4"/>
+                            <sequence track-type="audio" length="0">
+                                <oof track-type="audio" length="4"/>
+                                <oof track-type="audio" length="4"/>
+                                <oof track-type="audio" length="4"/>
+                            </sequence>
+                            <oof track-type="audio" length="4"/>
+                        </sequence>
+                    </timeline-mob-slot>
+                </clip>
+
+            </source-clip>
+        </timeline-mob-slot>
+
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Slot 1.BM">
+            <source-clip track-type="audio" start-time="1" length="4">
+
+                <clip name="Mob 68">
+                    <timeline-mob-slot edit-rate-denominator="2" edit-rate-numerator="1" orgin="0" name="Slot 68.A">
+                        <sequence track-type="audio" length="12">
+                            <oof track-type="audio" length="4"/>
+                            <sequence track-type="audio" length="0">
+                                <oof track-type="audio" length="4"/>
+                                <oof track-type="audio" length="4"/>
+                                <oof track-type="audio" length="4"/>
+                            </sequence>
+                            <oof track-type="audio" length="4"/>
+                        </sequence>
+                    </timeline-mob-slot>
+                </clip>
+
+            </source-clip>
+        </timeline-mob-slot>
+
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Slot 1.BN">
+            <source-clip track-type="audio" start-time="5" length="4">
+
+                <clip name="Mob 69">
+                    <timeline-mob-slot edit-rate-denominator="2" edit-rate-numerator="1" orgin="0" name="Slot 69.A">
+                        <sequence track-type="audio" length="12">
+                            <oof track-type="audio" length="4"/>
+                            <sequence track-type="audio" length="0">
+                                <oof track-type="audio" length="4"/>
+                                <oof track-type="audio" length="4"/>
+                                <oof track-type="audio" length="4"/>
+                            </sequence>
+                            <oof track-type="audio" length="4"/>
+                        </sequence>
+                    </timeline-mob-slot>
+                </clip>
+
+            </source-clip>
+        </timeline-mob-slot>
+
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Slot 1.BO">
+            <source-clip track-type="audio" start-time="1" length="6">
+
+                <clip name="Mob 70">
+                    <timeline-mob-slot edit-rate-denominator="2" edit-rate-numerator="1" orgin="0" name="Slot 70.A">
+                        <sequence track-type="audio" length="12">
+                            <oof track-type="audio" length="4"/>
+                            <sequence track-type="audio" length="0">
+                                <oof track-type="audio" length="4"/>
+                                <oof track-type="audio" length="4"/>
+                                <oof track-type="audio" length="4"/>
+                            </sequence>
+                            <oof track-type="audio" length="4"/>
+                        </sequence>
+                    </timeline-mob-slot>
+                </clip>
+
+            </source-clip>
+        </timeline-mob-slot>
+
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Slot 1.BP">
+            <source-clip track-type="audio" start-time="3" length="6">
+
+                <clip name="Mob 71">
+                    <timeline-mob-slot edit-rate-denominator="2" edit-rate-numerator="1" orgin="0" name="Slot 71.A">
+                        <sequence track-type="audio" length="12">
+                            <oof track-type="audio" length="4"/>
+                            <sequence track-type="audio" length="0">
+                                <oof track-type="audio" length="4"/>
+                                <oof track-type="audio" length="4"/>
+                                <oof track-type="audio" length="4"/>
+                            </sequence>
+                            <oof track-type="audio" length="4"/>
+                        </sequence>
+                    </timeline-mob-slot>
+                </clip>
+
+            </source-clip>
+        </timeline-mob-slot>
+
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Slot 1.BQ">
+            <source-clip track-type="audio" start-time="1" length="8">
+
+                <clip name="Mob 72">
+                    <timeline-mob-slot edit-rate-denominator="2" edit-rate-numerator="1" orgin="0" name="Slot 72.A">
+                        <sequence track-type="audio" length="12">
+                            <oof track-type="audio" length="4"/>
+                            <sequence track-type="audio" length="0">
+                                <oof track-type="audio" length="4"/>
+                                <oof track-type="audio" length="4"/>
+                                <oof track-type="audio" length="4"/>
+                            </sequence>
+                            <oof track-type="audio" length="4"/>
+                        </sequence>
+                    </timeline-mob-slot>
+                </clip>
+
+            </source-clip>
+        </timeline-mob-slot>
+
     </top-level>
-        
+
 </aaf-file>

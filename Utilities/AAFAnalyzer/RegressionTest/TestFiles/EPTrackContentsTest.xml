@@ -2,599 +2,599 @@
 <!DOCTYPE aaf-file SYSTEM "EPDerivationChain.dtd">
 
 <aaf-file>
-   
+
     <!-- Test for required Physical Track Number -->
 
     <top-level name="Top-Level Essence With Physical Track Number">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Essence with Physical Track Number A" physical-track-number="1">
-	        <source-clip track-type="audio">
-    	        <template-clip>
+            <source-clip length="0" track-type="audio">
+                <template-clip>
                     <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-                    	<eoc track-type="none"/>
+                        <eoc length="0" track-type="none"/>
                     </timeline-mob-slot>
                 </template-clip>
-        	</source-clip>
+            </source-clip>
         </timeline-mob-slot>
     </top-level>
     <top-level name="Top-Level Essence Without Physical Track Number">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Essence without Physical Track Number A">
-	        <source-clip track-type="audio">
-    	        <template-clip>
+            <source-clip length="0" track-type="audio">
+                <template-clip>
                     <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-                    	<eoc track-type="none"/>
+                        <eoc length="0" track-type="none"/>
                     </timeline-mob-slot>
                 </template-clip>
-        	</source-clip>
+            </source-clip>
         </timeline-mob-slot>
     </top-level>
     <top-level name="Top-Level Non-Essence Without Physical Track Number">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Non-Essence without Physical Track Number A">
-	        <source-clip track-type="none">
-    	        <template-clip>
+            <source-clip length="0" track-type="none">
+                <template-clip>
                     <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-                    	<eoc track-type="none"/>
+                        <eoc length="0" track-type="none"/>
                     </timeline-mob-slot>
                 </template-clip>
-        	</source-clip>
+            </source-clip>
         </timeline-mob-slot>
     </top-level>
-    
+
     <lower-level name="Lower-Level Essence With Physical Track Number">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Essence with Physical Track Number B" physical-track-number="1">
-	        <source-clip track-type="audio">
-    	        <template-clip>
+            <source-clip length="0" track-type="audio">
+                <template-clip>
                     <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-                    	<eoc track-type="none"/>
+                        <eoc length="0" track-type="none"/>
                     </timeline-mob-slot>
                 </template-clip>
-        	</source-clip>
+            </source-clip>
         </timeline-mob-slot>
     </lower-level>
     <lower-level name="Lower-Level Essence Without Physical Track Number">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Essence without Physical Track Number B">
-	        <source-clip track-type="audio">
-    	        <template-clip>
+            <source-clip length="0" track-type="audio">
+                <template-clip>
                     <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-                    	<eoc track-type="none"/>
+                        <eoc length="0" track-type="none"/>
                     </timeline-mob-slot>
                 </template-clip>
-        	</source-clip>
+            </source-clip>
         </timeline-mob-slot>
     </lower-level>
     <lower-level name="Lower-Level Non-Essence Without Physical Track Number">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Non-Essence without Physical Track Number B">
-	        <source-clip track-type="none">
-    	        <template-clip>
+            <source-clip length="0" track-type="none">
+                <template-clip>
                     <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-                    	<eoc track-type="none"/>
+                        <eoc length="0" track-type="none"/>
                     </timeline-mob-slot>
                 </template-clip>
-        	</source-clip>
+            </source-clip>
         </timeline-mob-slot>
     </lower-level>
-    
+
     <adjusted-clip name="Adjusted Clip Essence With Physical Track Number">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Essence with Physical Track Number C" physical-track-number="1">
-	        <source-clip track-type="audio">
-    	        <template-clip>
+            <source-clip length="0" track-type="audio">
+                <template-clip>
                     <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-                    	<eoc track-type="none"/>
+                        <eoc length="0" track-type="none"/>
                     </timeline-mob-slot>
                 </template-clip>
-        	</source-clip>
+            </source-clip>
         </timeline-mob-slot>
     </adjusted-clip>
     <adjusted-clip name="Adjusted Clip Essence Without Physical Track Number">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Essence without Physical Track Number C">
-	        <source-clip track-type="audio">
-    	        <template-clip>
+            <source-clip length="0" track-type="audio">
+                <template-clip>
                     <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-                    	<eoc track-type="none"/>
+                        <eoc length="0" track-type="none"/>
                     </timeline-mob-slot>
                 </template-clip>
-        	</source-clip>
+            </source-clip>
         </timeline-mob-slot>
     </adjusted-clip>
     <adjusted-clip name="Adjusted Clip Non-Essence Without Physical Track Number">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Non-Essence without Physical Track Number C">
-	        <source-clip track-type="none">
-    	        <template-clip>
+            <source-clip length="0" track-type="none">
+                <template-clip>
                     <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-                    	<eoc track-type="none"/>
+                        <eoc length="0" track-type="none"/>
                     </timeline-mob-slot>
                 </template-clip>
-        	</source-clip>
+            </source-clip>
         </timeline-mob-slot>
     </adjusted-clip>
-    
+
     <sub-clip name="Sub-Clip Essence With Physical Track Number">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Essence with Physical Track Number D" physical-track-number="1">
-	        <source-clip track-type="audio">
-    	        <template-clip>
+            <source-clip length="0" track-type="audio">
+                <template-clip>
                     <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-                    	<eoc track-type="none"/>
+                        <eoc length="0" track-type="none"/>
                     </timeline-mob-slot>
                 </template-clip>
-        	</source-clip>
+            </source-clip>
         </timeline-mob-slot>
     </sub-clip>
     <sub-clip name="Sub-Clip Essence Without Physical Track Number">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Essence without Physical Track Number D">
-	        <source-clip track-type="audio">
-    	        <template-clip>
+            <source-clip length="0" track-type="audio">
+                <template-clip>
                     <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-                    	<eoc track-type="none"/>
+                        <eoc length="0" track-type="none"/>
                     </timeline-mob-slot>
                 </template-clip>
-        	</source-clip>
+            </source-clip>
         </timeline-mob-slot>
     </sub-clip>
     <sub-clip name="Sub-Clip Non-Essence Without Physical Track Number">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Non-Essence without Physical Track Number D">
-	        <source-clip track-type="none">
-    	        <template-clip>
+            <source-clip length="0" track-type="none">
+                <template-clip>
                     <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-                    	<eoc track-type="none"/>
+                        <eoc length="0" track-type="none"/>
                     </timeline-mob-slot>
                 </template-clip>
-        	</source-clip>
+            </source-clip>
         </timeline-mob-slot>
     </sub-clip>
- 
+
     <template-clip name="Template Essence With Physical Track Number">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Essence with Physical Track Number E" physical-track-number="1">
-	        <source-clip track-type="audio">
-    	        <template-clip>
+            <source-clip length="0" track-type="audio">
+                <template-clip>
                     <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-                    	<eoc track-type="none"/>
+                        <eoc length="0" track-type="none"/>
                     </timeline-mob-slot>
                 </template-clip>
-        	</source-clip>
+            </source-clip>
         </timeline-mob-slot>
     </template-clip>
     <template-clip name="Template Essence Without Physical Track Number">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Essence without Physical Track Number E">
-	        <source-clip track-type="audio">
-    	        <template-clip>
+            <source-clip length="0" track-type="audio">
+                <template-clip>
                     <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-                    	<eoc track-type="none"/>
+                        <eoc length="0" track-type="none"/>
                     </timeline-mob-slot>
                 </template-clip>
-        	</source-clip>
+            </source-clip>
         </timeline-mob-slot>
     </template-clip>
     <template-clip name="Template Non-Essence Without Physical Track Number">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Non-Essence without Physical Track Number E">
-	        <source-clip track-type="none">
-    	        <template-clip>
+            <source-clip length="0" track-type="none">
+                <template-clip>
                     <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-                    	<eoc track-type="none"/>
+                        <eoc length="0" track-type="none"/>
                     </timeline-mob-slot>
                 </template-clip>
-        	</source-clip>
+            </source-clip>
         </timeline-mob-slot>
     </template-clip>
-    
+
     <clip name="Clip Essence With Physical Track Number">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Essence with Physical Track Number F" physical-track-number="1">
-	        <source-clip track-type="audio">
-    	        <template-clip>
+            <source-clip length="0" track-type="audio">
+                <template-clip>
                     <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-                    	<eoc track-type="none"/>
+                        <eoc length="0" track-type="none"/>
                     </timeline-mob-slot>
                 </template-clip>
-        	</source-clip>
+            </source-clip>
         </timeline-mob-slot>
     </clip>
     <clip name="Clip Essence Without Physical Track Number">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Essence without Physical Track Number F">
-	        <source-clip track-type="audio">
-    	        <template-clip>
+            <source-clip length="0" track-type="audio">
+                <template-clip>
                     <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-                    	<eoc track-type="none"/>
+                        <eoc length="0" track-type="none"/>
                     </timeline-mob-slot>
                 </template-clip>
-        	</source-clip>
+            </source-clip>
         </timeline-mob-slot>
     </clip>
     <clip name="Clip Non-Essence Without Physical Track Number">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Non-Essence without Physical Track Number F">
-	        <source-clip track-type="none">
-    	        <template-clip>
+            <source-clip length="0" track-type="none">
+                <template-clip>
                     <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-                    	<eoc track-type="none"/>
+                        <eoc length="0" track-type="none"/>
                     </timeline-mob-slot>
                 </template-clip>
-        	</source-clip>
+            </source-clip>
         </timeline-mob-slot>
     </clip>
-    
+
     <file-source name="File Source Essence With Physical Track Number" sample-rate-numerator="1" sample-rate-denominator="1">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Essence with Physical Track Number G" physical-track-number="1">
-	        <source-clip track-type="audio">
-    	        <template-clip>
+            <source-clip length="0" track-type="audio">
+                <template-clip>
                     <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-                    	<eoc track-type="none"/>
+                        <eoc length="0" track-type="none"/>
                     </timeline-mob-slot>
                 </template-clip>
-        	</source-clip>
+            </source-clip>
         </timeline-mob-slot>
     </file-source>
     <file-source name="File Source Essence Without Physical Track Number" sample-rate-numerator="1" sample-rate-denominator="1">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Essence without Physical Track Number G">
-	        <source-clip track-type="audio">
-    	        <template-clip>
+            <source-clip length="0" track-type="audio">
+                <template-clip>
                     <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-                    	<eoc track-type="none"/>
+                        <eoc length="0" track-type="none"/>
                     </timeline-mob-slot>
                 </template-clip>
-        	</source-clip>
+            </source-clip>
         </timeline-mob-slot>
     </file-source>
     <file-source name="File Source Non-Essence Without Physical Track Number" sample-rate-numerator="1" sample-rate-denominator="1">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Non-Essence without Physical Track Number G">
-	        <source-clip track-type="none">
-    	        <template-clip>
+            <source-clip length="0" track-type="none">
+                <template-clip>
                     <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-                    	<eoc track-type="none"/>
+                        <eoc length="0" track-type="none"/>
                     </timeline-mob-slot>
                 </template-clip>
-        	</source-clip>
+            </source-clip>
         </timeline-mob-slot>
     </file-source>
-    
+
     <recording-source name="Recording Source Essence With Physical Track Number">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Essence with Physical Track Number H" physical-track-number="1">
-	        <source-clip track-type="audio">
-    	        <template-clip>
+            <source-clip length="0" track-type="audio">
+                <template-clip>
                     <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-                    	<eoc track-type="none"/>
+                        <eoc length="0" track-type="none"/>
                     </timeline-mob-slot>
                 </template-clip>
-        	</source-clip>
+            </source-clip>
         </timeline-mob-slot>
     </recording-source>
     <recording-source name="Recording Source Essence Without Physical Track Number">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Essence without Physical Track Number H">
-	        <source-clip track-type="audio">
-    	        <template-clip>
+            <source-clip length="0" track-type="audio">
+                <template-clip>
                     <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-                    	<eoc track-type="none"/>
+                        <eoc length="0" track-type="none"/>
                     </timeline-mob-slot>
                 </template-clip>
-        	</source-clip>
+            </source-clip>
         </timeline-mob-slot>
     </recording-source>
     <recording-source name="Recording Source Non-Essence Without Physical Track Number">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Non-Essence without Physical Track Number H">
-	        <source-clip track-type="none">
-    	        <template-clip>
+            <source-clip length="0" track-type="none">
+                <template-clip>
                     <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-                    	<eoc track-type="none"/>
+                        <eoc length="0" track-type="none"/>
                     </timeline-mob-slot>
                 </template-clip>
-        	</source-clip>
+            </source-clip>
         </timeline-mob-slot>
     </recording-source>
-    
+
     <import-source name="Import Source Essence With Physical Track Number">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Essence with Physical Track Number I" physical-track-number="1">
-	        <source-clip track-type="audio">
-    	        <template-clip>
+            <source-clip length="0" track-type="audio">
+                <template-clip>
                     <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-                    	<eoc track-type="none"/>
+                        <eoc length="0" track-type="none"/>
                     </timeline-mob-slot>
                 </template-clip>
-        	</source-clip>
+            </source-clip>
         </timeline-mob-slot>
     </import-source>
     <import-source name="Import Source Essence Without Physical Track Number">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Essence without Physical Track Number I">
-	        <source-clip track-type="audio">
-    	        <template-clip>
+            <source-clip length="0" track-type="audio">
+                <template-clip>
                     <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-                    	<eoc track-type="none"/>
+                        <eoc length="0" track-type="none"/>
                     </timeline-mob-slot>
                 </template-clip>
-        	</source-clip>
+            </source-clip>
         </timeline-mob-slot>
     </import-source>
     <import-source name="Import Source Non-Essence Without Physical Track Number">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Non-Essence without Physical Track Number I">
-	        <source-clip track-type="none">
-    	        <template-clip>
+            <source-clip length="0" track-type="none">
+                <template-clip>
                     <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-                    	<eoc track-type="none"/>
+                        <eoc length="0" track-type="none"/>
                     </timeline-mob-slot>
                 </template-clip>
-        	</source-clip>
+            </source-clip>
         </timeline-mob-slot>
     </import-source>
-    
+
     <tape-source name="Tape Source Essence With Physical Track Number">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Essence with Physical Track Number J" physical-track-number="1">
-	        <source-clip track-type="audio">
-    	        <template-clip>
+            <source-clip length="0" track-type="audio">
+                <template-clip>
                     <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-                    	<eoc track-type="none"/>
+                        <eoc length="0" track-type="none"/>
                     </timeline-mob-slot>
                 </template-clip>
-        	</source-clip>
+            </source-clip>
         </timeline-mob-slot>
     </tape-source>
     <tape-source name="Tape Source Essence Without Physical Track Number">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Essence without Physical Track Number J">
-	        <source-clip track-type="audio">
-    	        <template-clip>
+            <source-clip length="0" track-type="audio">
+                <template-clip>
                     <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-                    	<eoc track-type="none"/>
+                        <eoc length="0" track-type="none"/>
                     </timeline-mob-slot>
                 </template-clip>
-        	</source-clip>
+            </source-clip>
         </timeline-mob-slot>
     </tape-source>
     <tape-source name="Tape Source Non-Essence Without Physical Track Number">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Non-Essence without Physical Track Number J">
-	        <source-clip track-type="none">
-    	        <template-clip>
+            <source-clip length="0" track-type="none">
+                <template-clip>
                     <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-                    	<eoc track-type="none"/>
+                        <eoc length="0" track-type="none"/>
                     </timeline-mob-slot>
                 </template-clip>
-        	</source-clip>
+            </source-clip>
         </timeline-mob-slot>
     </tape-source>
-    
+
     <film-source name="Film Source Essence With Physical Track Number">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Essence with Physical Track Number K" physical-track-number="1">
-	        <source-clip track-type="audio">
-    	        <template-clip>
+            <source-clip length="0" track-type="audio">
+                <template-clip>
                     <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-                    	<eoc track-type="none"/>
+                        <eoc length="0" track-type="none"/>
                     </timeline-mob-slot>
                 </template-clip>
-        	</source-clip>
+            </source-clip>
         </timeline-mob-slot>
     </film-source>
     <film-source name="Film Source Essence Without Physical Track Number">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Essence without Physical Track Number K">
-	        <source-clip track-type="audio">
-    	        <template-clip>
+            <source-clip length="0" track-type="audio">
+                <template-clip>
                     <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-                    	<eoc track-type="none"/>
+                        <eoc length="0" track-type="none"/>
                     </timeline-mob-slot>
                 </template-clip>
-        	</source-clip>
+            </source-clip>
         </timeline-mob-slot>
     </film-source>
     <film-source name="Film Source Non-Essence Without Physical Track Number">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Non-Essence without Physical Track Number K">
-	        <source-clip track-type="none">
-    	        <template-clip>
+            <source-clip length="0" track-type="none">
+                <template-clip>
                     <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-                    	<eoc track-type="none"/>
+                        <eoc length="0" track-type="none"/>
                     </timeline-mob-slot>
                 </template-clip>
-        	</source-clip>
+            </source-clip>
         </timeline-mob-slot>
     </film-source>
-    
+
     <!-- Test marked IN and OUT points with all types of timeline mob slots -->
-    
+
     <top-level name="Audio Timeline Slot - No IN; No OUT">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <eoc track-type="audio"/>
+            <eoc length="0" track-type="audio"/>
         </timeline-mob-slot>
     </top-level>
-    
+
     <top-level name="Audio Timeline Slot - No IN; OUT">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" marked-out-point="10">
-            <eoc track-type="audio"/>
+            <eoc length="0" track-type="audio"/>
         </timeline-mob-slot>
     </top-level>
-    
+
     <top-level name="Audio Timeline Slot - IN; No OUT">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" marked-in-point="10">
-            <eoc track-type="audio"/>
+            <eoc length="0" track-type="audio"/>
         </timeline-mob-slot>
     </top-level>
-    
+
     <top-level name="Audio Timeline Slot - IN after OUT">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" marked-in-point="10" marked-out-point="5">
-            <eoc track-type="audio"/>
+            <eoc length="0" track-type="audio"/>
         </timeline-mob-slot>
     </top-level>
-    
+
     <top-level name="Audio Timeline Slot - IN at OUT">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" marked-in-point="10" marked-out-point="10">
-            <eoc track-type="audio"/>
+            <eoc length="0" track-type="audio"/>
         </timeline-mob-slot>
     </top-level>
-    
+
     <top-level name="Audio Timeline Slot - IN before OUT">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" marked-in-point="10" marked-out-point="20">
-            <eoc track-type="audio"/>
+            <eoc length="0" track-type="audio"/>
         </timeline-mob-slot>
     </top-level>
-    
+
     <top-level name="Auxiliary Timeline Slot - No IN; No OUT">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <eoc track-type="auxiliary"/>
+            <eoc length="0" track-type="auxiliary"/>
         </timeline-mob-slot>
     </top-level>
-    
+
     <top-level name="Auxiliary Timeline Slot - No IN; OUT">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" marked-out-point="10">
-            <eoc track-type="auxiliary"/>
+            <eoc length="0" track-type="auxiliary"/>
         </timeline-mob-slot>
     </top-level>
-    
+
     <top-level name="Auxiliary Timeline Slot - IN; No OUT">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" marked-in-point="10">
-            <eoc track-type="auxiliary"/>
+            <eoc length="0" track-type="auxiliary"/>
         </timeline-mob-slot>
     </top-level>
-    
+
     <top-level name="Auxiliary Timeline Slot - IN after OUT">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" marked-in-point="10" marked-out-point="5">
-            <eoc track-type="auxiliary"/>
+            <eoc length="0" track-type="auxiliary"/>
         </timeline-mob-slot>
     </top-level>
-    
+
     <top-level name="Auxiliary Timeline Slot - IN at OUT">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" marked-in-point="10" marked-out-point="10">
-            <eoc track-type="auxiliary"/>
+            <eoc length="0" track-type="auxiliary"/>
         </timeline-mob-slot>
     </top-level>
-    
+
     <top-level name="Auxiliary Timeline Slot - IN before OUT">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" marked-in-point="10" marked-out-point="20">
-            <eoc track-type="auxiliary"/>
+            <eoc length="0" track-type="auxiliary"/>
         </timeline-mob-slot>
     </top-level>
-    
+
     <top-level name="Edgecode Timeline Slot - No IN; No OUT">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <eoc track-type="edgecode"/>
+            <eoc length="0" track-type="edgecode"/>
         </timeline-mob-slot>
     </top-level>
-    
+
     <top-level name="Edgecode Timeline Slot - No IN; OUT">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" marked-out-point="10">
-            <eoc track-type="edgecode"/>
+            <eoc length="0" track-type="edgecode"/>
         </timeline-mob-slot>
     </top-level>
-    
+
     <top-level name="Edgecode Timeline Slot - IN; No OUT">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" marked-in-point="10">
-            <eoc track-type="edgecode"/>
+            <eoc length="0" track-type="edgecode"/>
         </timeline-mob-slot>
     </top-level>
-    
+
     <top-level name="Edgecode Timeline Slot - IN after OUT">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" marked-in-point="10" marked-out-point="5">
-            <eoc track-type="edgecode"/>
+            <eoc length="0" track-type="edgecode"/>
         </timeline-mob-slot>
     </top-level>
-    
+
     <top-level name="Edgecode Timeline Slot - IN at OUT">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" marked-in-point="10" marked-out-point="10">
-            <eoc track-type="edgecode"/>
+            <eoc length="0" track-type="edgecode"/>
         </timeline-mob-slot>
     </top-level>
-    
+
     <top-level name="Edgecode Timeline Slot - IN before OUT">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" marked-in-point="10" marked-out-point="20">
-            <eoc track-type="edgecode"/>
+            <eoc length="0" track-type="edgecode"/>
         </timeline-mob-slot>
     </top-level>
-    
+
     <top-level name="Unknown Timeline Slot - No IN; No OUT">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </top-level>
-    
+
     <top-level name="Unknown Timeline Slot - No IN; OUT">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" marked-out-point="10">
-            <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </top-level>
-    
+
     <top-level name="Unknown Timeline Slot - IN; No OUT">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" marked-in-point="10">
-            <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </top-level>
-    
+
     <top-level name="Unknown Timeline Slot - IN after OUT">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" marked-in-point="10" marked-out-point="5">
-            <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </top-level>
-    
+
     <top-level name="Unknown Timeline Slot - IN at OUT">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" marked-in-point="10" marked-out-point="10">
-            <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </top-level>
-    
+
     <top-level name="Unknown Timeline Slot - IN before OUT">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" marked-in-point="10" marked-out-point="20">
-            <eoc track-type="none"/>
+            <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
     </top-level>
-    
+
     <top-level name="Video Timeline Slot - No IN; No OUT">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <eoc track-type="picture"/>
+            <eoc length="0" track-type="picture"/>
         </timeline-mob-slot>
     </top-level>
-    
+
     <top-level name="Video Timeline Slot - No IN; OUT">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" marked-out-point="10">
-            <eoc track-type="picture"/>
+            <eoc length="0" track-type="picture"/>
         </timeline-mob-slot>
     </top-level>
-    
+
     <top-level name="Video Timeline Slot - IN; No OUT">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" marked-in-point="10">
-            <eoc track-type="picture"/>
+            <eoc length="0" track-type="picture"/>
         </timeline-mob-slot>
     </top-level>
-    
+
     <top-level name="Video Timeline Slot - IN after OUT">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" marked-in-point="10" marked-out-point="5">
-            <eoc track-type="picture"/>
+            <eoc length="0" track-type="picture"/>
         </timeline-mob-slot>
     </top-level>
-    
+
     <top-level name="Video Timeline Slot - IN at OUT">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" marked-in-point="10" marked-out-point="10">
-            <eoc track-type="picture"/>
+            <eoc length="0" track-type="picture"/>
         </timeline-mob-slot>
     </top-level>
-    
+
     <top-level name="Video Timeline Slot - IN before OUT">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" marked-in-point="10" marked-out-point="20">
-            <eoc track-type="picture"/>
+            <eoc length="0" track-type="picture"/>
         </timeline-mob-slot>
     </top-level>
-    
+
     <top-level name="Timecode Timeline Slot - No IN; No OUT">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <eoc track-type="timecode"/>
+            <eoc length="0" track-type="timecode"/>
         </timeline-mob-slot>
     </top-level>
-    
+
     <top-level name="Timecode Timeline Slot - No IN; OUT">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" marked-out-point="10">
-            <eoc track-type="picture"/>
+            <eoc length="0" track-type="picture"/>
         </timeline-mob-slot>
     </top-level>
-    
+
     <top-level name="Timecode Timeline Slot - IN; No OUT">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" marked-in-point="10">
-            <eoc track-type="picture"/>
+            <eoc length="0" track-type="picture"/>
         </timeline-mob-slot>
     </top-level>
-    
+
     <top-level name="Timecode Timeline Slot - IN after OUT">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" marked-in-point="10" marked-out-point="5">
-            <eoc track-type="picture"/>
+            <eoc length="0" track-type="picture"/>
         </timeline-mob-slot>
     </top-level>
-    
+
     <top-level name="Timecode Timeline Slot - IN at OUT">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" marked-in-point="10" marked-out-point="10">
-            <eoc track-type="picture"/>
+            <eoc length="0" track-type="picture"/>
         </timeline-mob-slot>
     </top-level>
-    
+
     <top-level name="Timecode Timeline Slot - IN before OUT">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" marked-in-point="10" marked-out-point="20">
-            <eoc track-type="picture"/>
+            <eoc length="0" track-type="picture"/>
         </timeline-mob-slot>
     </top-level>
-    
+
 </aaf-file>

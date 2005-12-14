@@ -53,7 +53,7 @@ public:
 
     InputParser( const char* outFile );
     ~InputParser();
-    
+
     typedef pair<const AxString, const bool> OptionalStringAttrib;
     typedef pair<const int, const bool> OptionalIntAttrib;
 
@@ -64,21 +64,21 @@ public:
     void StartElement(const AxString& name, const char** attribs);
     void EndElement(const AxString& name);
     void EndData(const AxString& contents);
-    
+
     void ParseXML( const char* filename ) const;
-    
+
  private:
- 
+
     typedef shared_ptr<AxMob>(TestFileBuilder::*ptrToAddFunction)( const AxString& name, bool isNamed, aafRational_t rationalParam, aafUInt32 optIntParam, bool hasOptIntParam );
-    typedef shared_ptr<AxComponent>(TestFileBuilder::*ptrToCreateFunction)( TestFileBuilder::TrackType essenceType, const AxString& strParam, aafLength_t length, bool hasLength );
-    typedef void(TestFileBuilder::*ptrToAttachSlotFunction)( AxMob& parent, AxSegment& axSegment, aafRational_t editRate, const AxString& name, bool isNamed, int physicalTrackNum, bool isNumbered, int markedIn, bool isMarkedIn, int markedOut, bool isMarkedOut );
+    typedef shared_ptr<AxComponent>(TestFileBuilder::*ptrToCreateFunction)( TestFileBuilder::TrackType essenceType, const AxString& strParam, aafLength_t length, bool hasLength, int intParam, bool hasIntParam );
+    typedef void(TestFileBuilder::*ptrToAttachSlotFunction)( AxMob& parent, AxSegment& axSegment, aafRational_t editRate, const AxString& name, bool isNamed, int physicalTrackNum, bool isNumbered, int markedIn, bool isMarkedIn, int markedOut, bool isMarkedOut, int orgin );
     typedef void(TestFileBuilder::*ptrToAttachParameterFunction)( AxOperationGroup& axOpGroup, const aafUID_t& paramDefId, aafUInt32 intParam1, aafUInt32 intParam2, const aafUID_t& interpolationDefId );
     typedef void(TestFileBuilder::*ptrToCreateDefFunction)( const AxString& name, const AxString& description );
     typedef void(TestFileBuilder::*ptrToAddAnnotationFunction)( shared_ptr<AxComponent> axComponent, const AxString& keyName, const AxString& value );
 
     //Components can be divided into 4 distinct classes based upon the types of
     //objects that may be attached.  Each class has its own signature for attaching:
-    
+
     //Type A (No objects can be attached)
     //Filler, Event, GPITrigger, Timecode, TimecodeStream, TimecodeStream12M, Edgecode, ScopeReference
     //NOTE: No fill function is needed because no objects are attached.
@@ -87,7 +87,7 @@ public:
     //      no different from a normal create function.  Fill functions for
     //      these descendant classes will be classified as needed, but, in many
     //      cases will be Type A.
-    
+
     //Type B (One Mob Referenced)
     //SourceReference, SourceClip
     typedef void(TestFileBuilder::*ptrToFillFunctionB) ( shared_ptr<AxSourceReference> parent, AxMob& child );
@@ -97,11 +97,11 @@ public:
     //      fill function will be classified as Type B, therefore, a map is
     //      still being used although at the present it contains only one
     //      element.
-    
+
     //Type C (Interchange Objects can be attached (one or many in an array) )
     //Transition, Sequence, CommentMarker, DescriptiveMarker, Pulldown
     typedef void(TestFileBuilder::*ptrToFillFunctionC) ( shared_ptr<AxComponent> parent, AxComponent& child );
-    
+
     //Type D (Multiple Segments assigned to different properties)
     //OperationGroup, Selector, EssenceGroups
     typedef void(TestFileBuilder::*ptrToFillFunctionD) ( shared_ptr<AxSegment> parent, AxSegment& child, int property );
@@ -121,7 +121,7 @@ public:
     map<AxString, ptrToFillFunctionB> _fillSegmentMapB;
     map<AxString, ptrToFillFunctionC> _fillSegmentMapC;
     map<AxString, ptrToFillFunctionD> _fillSegmentMapD;
-    
+
     map<AxString, ptrToAttachParameterFunction> _attachParameterMap;
     map<AxString, ptrToAddAnnotationFunction> _annotationMap;
 
@@ -133,9 +133,9 @@ public:
     map<TypeDPair, int> _typeDPropertyMap;
     map<AxString, aafUID_t> _operationalPatternMap;
     map<AxString, AxString> _annotationIds;
-    
+
     TestFileBuilder _testFile;
-    
+
     const AxString GetStringAttribValue( const AxString& attrib, const char** attribs, const unsigned int size, const AxString& default_val ) const;
     const int GetIntAtribValue( const AxString& attrib, const char** attribs, const unsigned int size, const int default_val ) const;
     const int GetBoolAtribValue( const AxString& attrib, const char** attribs, const unsigned int size, const int default_val ) const;

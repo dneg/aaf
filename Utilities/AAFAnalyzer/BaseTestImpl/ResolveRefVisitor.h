@@ -24,6 +24,20 @@
 //AAF Analyzer Base files
 #include <TypedVisitor.h>
 
+//AAF files
+#include <AAFSmartPointer2.h>
+
+//STL files
+#include <set>
+#include <stack>
+
+class AxSourceClip;
+class AxSegment;
+class AxComponent;
+class AxTimelineMobSlot;
+class AxEventMobSlot;
+class AxMobSlot;
+
 namespace aafanalyzer {
 
 using namespace std;
@@ -39,14 +53,30 @@ class ResolveRefVisitor : public TypedVisitor
   ResolveRefVisitor(wostream& os, shared_ptr<EdgeMap> spEdgeMap);
   virtual ~ResolveRefVisitor();
 
+  virtual bool PreOrderVisit(AAFTypedObjNode<IAAFTimelineMobSlot>& node);
+  virtual bool PreOrderVisit(AAFTypedObjNode<IAAFEventMobSlot>& node);
+  virtual bool PreOrderVisit(AAFTypedObjNode<IAAFStaticMobSlot>& node);
+  virtual bool PreOrderVisit(AAFTypedObjNode<IAAFMobSlot>& node);
+
   virtual bool PostOrderVisit(AAFTypedObjNode<IAAFSourceClip>& node);
-  
+  virtual bool PostOrderVisit(AAFTypedObjNode<IAAFTimelineMobSlot>& node);
+  virtual bool PostOrderVisit(AAFTypedObjNode<IAAFEventMobSlot>& node);
+  virtual bool PostOrderVisit(AAFTypedObjNode<IAAFStaticMobSlot>& node);
+  virtual bool PostOrderVisit(AAFTypedObjNode<IAAFMobSlot>& node);
+
   shared_ptr<const DetailLevelTestResult> GetTestResult() const;
 
  private:
+
+  shared_ptr<set<IAAFSmartPointer2<IAAFComponent> > > GetComponentsInRange( shared_ptr<Node> spMobSlotNode, AxSourceClip& axSrcClp );
+  shared_ptr<set<IAAFSmartPointer2<IAAFComponent> > > GetComponentsToTimelineSlot( AxTimelineMobSlot& axMobSlot, AxSourceClip& axSrcClp, AxSegment& asSegment, double startTime );
+  shared_ptr<set<IAAFSmartPointer2<IAAFComponent> > > GetComponentsToEventSlot( AxEventMobSlot& axMobSlot, AxSourceClip& axSrcClp );
+  shared_ptr<set<IAAFSmartPointer2<IAAFComponent> > > GetComponentsToFromGenericSlot( AxSegment& axSegment );
+
   wostream& _os;
   shared_ptr<EdgeMap> _spEdgeMap;
   shared_ptr< DetailLevelTestResult > _spResult;
+  stack<pair<aafUID_t, aafRational_t> > _parentSlots;
 
   // prohibited
   ResolveRefVisitor();

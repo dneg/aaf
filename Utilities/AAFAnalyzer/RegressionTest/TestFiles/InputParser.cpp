@@ -50,7 +50,7 @@ using namespace aafanalyzer;
 //======================================================================
 //======================================================================
 
-namespace aafanalyzer 
+namespace aafanalyzer
 {
 
 using namespace std;
@@ -58,8 +58,8 @@ using namespace boost;
 
 InputParser::InputParser( const char* outFile )
     : _testFile( outFile )
-{   
-    
+{
+
     /*
      *  Note: This class uses maps of function pointer to call the appropriate
      *       functions in the TestFileBuilder class.  The same could be
@@ -68,32 +68,32 @@ InputParser::InputParser( const char* outFile )
      *       statement comparison) and to eliminate the need to maintain multiple
      *       if statements (only maps need to be maintained).
      */
-     
+
     /*
-     * 
+     *
      * This generated file has much of the setup code, the following are
      * initialized within the file:
-     * 
+     *
      * 1. _createSegmentMap[OperationGroup] = &TestFileBuilder::CreateOperationGroup;
      * 2. _fillSegmentMapD[OperationGroup] = &TestFileBuilder::AddToOperationGroup;
      * 3. _typeDPropertyMap[TypeDPair( OperationGroup, Segment )] = &TestFileBuilder::INPUT_SEGMENT;
      * 4. _effectMap[Non-OperationGroup Component] = L"";
      * 5. _optRationalParam[MaterialType] = L"";
      * 6. _essenceMap[EssenceType] = TestFileBuilder::Upper(EssenceType);
-     * 
+     *
      * For (5), a default value is provided for all Material Types but can be
      * overridden by specifying a value below the include.
-     * 
+     *
      */
     #include "InputParser.cpp.gen"
-    
+
     /*
-     * 
+     *
      * The following entries must be made manually as they depend upon the type
      * of object being added.
-     * 
+     *
      */
-     
+
      //Pointers to functions to add Definitions objects.
      _definitionMap[L"klv-data-def"]     = &TestFileBuilder::CreateKLVDataDefinition;
      _definitionMap[L"tagged-value-def"] = &TestFileBuilder::CreateTaggedValueDefinition;
@@ -116,7 +116,7 @@ InputParser::InputParser( const char* outFile )
     _materialTypeMap[L"tape-source"]         = &TestFileBuilder::AddTapeSource;
     _materialTypeMap[L"film-source"]         = &TestFileBuilder::AddFilmSource;
     _materialTypeMap[L"auxiliary-source"]    = &TestFileBuilder::AddAuxiliarySource;
-    
+
     //Pointers to functions to create empty components.
     _createSegmentMap[L"source-clip"]         = &TestFileBuilder::CreateSourceClip;
     _createSegmentMap[L"timecode"]            = &TestFileBuilder::CreateTimecode;
@@ -130,8 +130,8 @@ InputParser::InputParser( const char* outFile )
     _createSegmentMap[L"descriptive-marker"]  = &TestFileBuilder::CreateDescriptiveMarker;
     _createSegmentMap[L"operation-group"]     = &TestFileBuilder::CreateOperationGroup;
     //Any new (non-OperationGroup) component must be added to this list.
-    
-    
+
+
     //Pointers to functions to fill components.
     _fillSegmentMapB[L"source-clip"]        = &TestFileBuilder::InitializeSourceClip;
     _fillSegmentMapC[L"transition"]         = &TestFileBuilder::AddToTransition;
@@ -140,16 +140,16 @@ InputParser::InputParser( const char* outFile )
     _fillSegmentMapC[L"descriptive-marker"] = &TestFileBuilder::AddToCommentMarker;
     _fillSegmentMapD[L"operation-group"]    = &TestFileBuilder::AddToOperationGroup;
     //Any new Type B, C or D (non-OperationGroup) component must be added to this list.
-    
+
     //Pointers to functions to attach slots.
     _attachSlotMap[L"timeline-mob-slot"] = &TestFileBuilder::AttachTimelineSlot;
     _attachSlotMap[L"static-mob-slot"]   = &TestFileBuilder::AttachStaticSlot;
     _attachSlotMap[L"event-mob-slot"]    = &TestFileBuilder::AttachEventSlot;
-    
+
     //Pointer to functions to attach parameters.
     _attachParameterMap[L"constant-speed-ratio"] = &TestFileBuilder::AttachConstantRationalParameter;
     _attachParameterMap[L"varying-speed-ratio"]  = &TestFileBuilder::AttachVaryingRationalParameter;
-    
+
     //Pointer to functions to add annotations (to components).
     _annotationMap[L"comment"]  = &TestFileBuilder::AddComment;
     _annotationMap[L"klv-data"] = &TestFileBuilder::AddKLVData;
@@ -157,10 +157,10 @@ InputParser::InputParser( const char* outFile )
     //Prefix used to look up the annotation id in the xml.
     _annotationIds[L"comment"]  = L"";
     _annotationIds[L"klv-data"] = L"key-";
-    
+
     //Override optional rational parameter names
     _optRationalParam[L"file-source"] = L"sample-rate";
-    
+
     //Set up the effect parameters
     _effectMap[L"video-dissolve"]                    = L"Video Dissolve";
     _effectMap[L"smpte-video-wipe"]                  = L"SMPTE Video Wipe";
@@ -183,11 +183,11 @@ InputParser::InputParser( const char* outFile )
     _effectMap[L"mono-audio-dissolve"]               = L"Mono Audio Dissolve";
     _effectMap[L"two-parameter-mono-audio-dissolve"] = L"Two-Parameter Mono Audio Dissolve";
     //Any new effects must be added to this list.
-    
+
     //Set up the parameter parameters
     _parameterTypeMap[L"constant-speed-ratio"] = kAAFParameterDef_SpeedRatio;
     _parameterTypeMap[L"varying-speed-ratio"]  = kAAFParameterDef_SpeedRatio;
-    
+
     //Set up the interpolation map
     _interpolationTypeMap[L"b-spline"] = kAAFInterpolationDef_BSpline;
     _interpolationTypeMap[L"constant"] = kAAFInterpolationDef_Constant;
@@ -195,7 +195,7 @@ InputParser::InputParser( const char* outFile )
     _interpolationTypeMap[L"log"]      = kAAFInterpolationDef_Log;
     _interpolationTypeMap[L"none"]     = kAAFInterpolationDef_None;
     _interpolationTypeMap[L"power"]    = kAAFInterpolationDef_Power;
-    
+
     //Set up property constants
     //Any new (Type D Component, object) pair must be added to this list if it is
     //not an (OperationGroup, Segment) pair.
@@ -211,15 +211,15 @@ InputParser::~InputParser()
 
 void InputParser::ParseXML( const char* filename ) const
 {
-    
+
     //Variables needed to run the expat XML parser.
     const int BUF_SIZE = 256;
     int done;
     char buffer[BUF_SIZE] = "";
-    
+
     //Create the XML parser
     XML_Parser parser = XML_ParserCreate(NULL);
- 
+
     //Setup event handlers for the XML parser.
     try
     {
@@ -242,10 +242,10 @@ void InputParser::ParseXML( const char* filename ) const
     //Parse the file using a buffer of the specified size.
     while ( !inp.eof() )
     {
-        
+
         inp.read(buffer, BUF_SIZE);
         const size_t len = inp.gcount();
-               
+
         done = len < sizeof(buffer);
 
         if ( !XML_Parse(parser, buffer, len, done) )
@@ -255,28 +255,28 @@ void InputParser::ParseXML( const char* filename ) const
             throw string( msg.str() );
         }
     }
-    
+
     XML_ParserFree(parser);
-    
+
 }
 
 //Called when an open tag is encountered.
 void InputParser::StartElement(const AxString& name, const char** attribs)
 {
-       
-    /* 
+
+    /*
      * On average elements in the material type map will occur in an XML file
      * more often so search it first.  The next most often used elements will
      * be in the segment map so search it second.  EOC reference will be the
      * third most often elements, followed by timecodes, then edgecodes and
      * finally oof references.
-     * 
+     *
      */
     if ( _materialTypeMap.find( name ) != _materialTypeMap.end() )
     {
         wostringstream ss;
         AxString atrName;
-        
+
         //Find the mob name.
         OptionalStringAttrib mobName = GetOptionalStringAttribValue( L"name", attribs, 8, L"" );
 
@@ -287,7 +287,7 @@ void InputParser::StartElement(const AxString& name, const char** attribs)
         aafRational_t optRational;
         optRational.numerator = rationalNumerator.first;
         optRational.denominator = rationalDenominator.first;
-        
+
         //Note: This logic will have to change a bit if another type of mob
         //requires an optional aafUInt32 parameter.
         aafAlphaTransparency_t transType;
@@ -298,8 +298,8 @@ void InputParser::StartElement(const AxString& name, const char** attribs)
         else
         {
             transType = kAAFMinValueTransparent;
-        }            
-        
+        }
+
         //Call the appropriate add function.
         shared_ptr<AxMob> spMob = (_testFile.*_materialTypeMap[name])( mobName.first, mobName.second, optRational, transType, alphaTransparency.second );
 
@@ -309,19 +309,28 @@ void InputParser::StartElement(const AxString& name, const char** attribs)
             shared_ptr<AxSourceReference> axSrcRef = dynamic_pointer_cast<AxSourceReference>( _componentStack.top().second );
             (_testFile.*_fillSegmentMapB[_componentStack.top().first])( axSrcRef, *spMob );
         }
-        
+
         //Push the new mob onto the stack.
         _mobStack.push( spMob );
-        
+
     }
     else if ( _createSegmentMap.find( name ) != _createSegmentMap.end() )
     {
-        AxString essenceType = GetStringAttribValue( L"track-type", attribs, 6, L"none" );
-        AxString effectType = GetStringAttribValue( L"operation-definition", attribs, 6, name );        
-        OptionalIntAttrib length = GetOptionalIntAttribValue( L"length", attribs, 6, 1 );
+        AxString essenceType = GetStringAttribValue( L"track-type", attribs, 10, L"none" );
+        AxString effectType = GetStringAttribValue( L"operation-definition", attribs, 10, name );
+        OptionalIntAttrib length = GetOptionalIntAttribValue( L"length", attribs, 10, 0 );
+        OptionalIntAttrib startTime = GetOptionalIntAttribValue( L"start-time", attribs, 10, 0 );
+        OptionalIntAttrib position = GetOptionalIntAttribValue( L"position", attribs, 10, 0 );
+
+        //The default value of both startTime and position is 0.  Therefore we
+        //will either get 0 (if neither is present) or the value of the
+        //specified property (since start-time and position do not occur on the
+        //same segments).
+        int intParam = startTime.first + position.first;
+        bool hasIntParam = startTime.second || position.second;
 
         //Create an empty segment and push it onto the segment stack
-        shared_ptr<AxComponent> spComponent = (_testFile.*_createSegmentMap[name])( _essenceMap[essenceType], _effectMap[effectType], length.first, length.second );
+        shared_ptr<AxComponent> spComponent = (_testFile.*_createSegmentMap[name])( _essenceMap[essenceType], _effectMap[effectType], length.first, length.second, intParam, hasIntParam );
 
         if ( !_slotStack.empty() )
         {
@@ -346,13 +355,14 @@ void InputParser::StartElement(const AxString& name, const char** attribs)
     else if ( _attachSlotMap.find( name ) != _attachSlotMap.end() )
     {
         aafRational_t editRate;
-        editRate.numerator = GetIntAtribValue(L"edit-rate-numerator", attribs, 12, 1);
-        editRate.denominator = GetIntAtribValue(L"edit-rate-denominator", attribs, 12, 1);
-        OptionalStringAttrib segName = GetOptionalStringAttribValue( L"name", attribs, 12, L"" );
-        OptionalIntAttrib physicalTrackNum = GetOptionalIntAttribValue( L"physical-track-number", attribs, 12, 1 );
-        OptionalIntAttrib markedInPoint = GetOptionalIntAttribValue( L"marked-in-point", attribs, 12, 0 );
-        OptionalIntAttrib markedOutPoint = GetOptionalIntAttribValue( L"marked-out-point", attribs, 12, 0 );
-        _slotStack.push( SlotInfo( name, editRate, segName, physicalTrackNum, markedInPoint, markedOutPoint ) );
+        editRate.numerator = GetIntAtribValue(L"edit-rate-numerator", attribs, 14, 1);
+        editRate.denominator = GetIntAtribValue(L"edit-rate-denominator", attribs, 14, 1);
+        OptionalStringAttrib segName = GetOptionalStringAttribValue( L"name", attribs, 14, L"" );
+        OptionalIntAttrib physicalTrackNum = GetOptionalIntAttribValue( L"physical-track-number", attribs, 14, 1 );
+        OptionalIntAttrib markedInPoint = GetOptionalIntAttribValue( L"marked-in-point", attribs, 14, 0 );
+        OptionalIntAttrib markedOutPoint = GetOptionalIntAttribValue( L"marked-out-point", attribs, 14, 0 );
+        int orgin = GetIntAtribValue( L"orgin", attribs, 14, 0 );
+        _slotStack.push( SlotInfo( name, editRate, segName, physicalTrackNum, markedInPoint, markedOutPoint, orgin ) );
     }
     else if ( _attachParameterMap.find( name ) != _attachParameterMap.end() )
     {
@@ -362,13 +372,13 @@ void InputParser::StartElement(const AxString& name, const char** attribs)
         aafUInt32 boolParam = GetBoolAtribValue( L"bool-value", attribs, 6, false );
         aafUInt32 intParam = GetIntAtribValue( L"int-value", attribs, 6, 0 );
         aafUInt32 param1 = numerator + boolParam + intParam;
-        
+
         aafUInt32 param2 = GetIntAtribValue( L"denominator", attribs, 6, 0 );
         AxString interpolator = GetStringAttribValue( L"interpolator", attribs, 6, L"none" );
-        
+
         shared_ptr<AxOperationGroup> axOpGroup = dynamic_pointer_cast<AxOperationGroup>( _componentStack.top().second );
         (_testFile.*_attachParameterMap[name])( *axOpGroup, _parameterTypeMap[name], param1, param2, _interpolationTypeMap[interpolator] );
-        
+
     }
     else if ( _definitionMap.find( name ) != _definitionMap.end() )
     {
@@ -404,7 +414,7 @@ void InputParser::StartElement(const AxString& name, const char** attribs)
     {
         //Do nothing
     }
-       
+
 }
 
 //Called when a close tag is encountered.
@@ -419,18 +429,19 @@ void InputParser::EndElement(const AxString& name)
     {
         //Call the appropriate attach function.
         shared_ptr<AxSegment> axSegment = dynamic_pointer_cast<AxSegment>( _componentStack.top().second );
-        (_testFile.*_attachSlotMap[name])( 
-            *(_mobStack.top()), 
-            *axSegment, 
-            _slotStack.top().editRate, 
-            _slotStack.top().name.first, 
+        (_testFile.*_attachSlotMap[name])(
+            *(_mobStack.top()),
+            *axSegment,
+            _slotStack.top().editRate,
+            _slotStack.top().name.first,
             _slotStack.top().name.second,
-            _slotStack.top().physicalTrackNum.first, 
+            _slotStack.top().physicalTrackNum.first,
             _slotStack.top().physicalTrackNum.second,
             _slotStack.top().markedInPoint.first,
             _slotStack.top().markedInPoint.second,
             _slotStack.top().markedOutPoint.first,
-            _slotStack.top().markedOutPoint.second
+            _slotStack.top().markedOutPoint.second,
+            _slotStack.top().orgin
            );
         _componentStack.pop();
         _slotStack.pop();
@@ -450,7 +461,7 @@ void InputParser::EndElement(const AxString& name)
             _componentStack.pop();
         }
     }
-    
+
 }
 
 //Called after a string of data (between tags) has been loaded.
@@ -468,9 +479,9 @@ void InputParser::__StartElement(void *userData, const char *name, const char **
     InputParser* me = (InputParser*) userData;
     wostringstream msg;
     msg << name;
-    
+
     //Note: The atts parameter is not changed to a shared pointer because
-    //      the memory management is done by the XML parser.    
+    //      the memory management is done by the XML parser.
     me->StartElement( msg.str().c_str(), atts );
 }
 
@@ -495,12 +506,12 @@ void InputParser::__EndData(void *userData, const char *s, int len)
 
 const AxString InputParser::GetStringAttribValue( const AxString& attrib, const char** attribs, const unsigned int size, const AxString& default_val ) const
 {
-    
+
     for ( unsigned int i = 0; i < size; i += 2 )
     {
         wostringstream ss;
         AxString atrName;
-        
+
         ss << attribs[i];
         atrName = ss.str().c_str();
         if ( atrName == attrib )
@@ -514,7 +525,7 @@ const AxString InputParser::GetStringAttribValue( const AxString& attrib, const 
             break;
         }
     }
-    
+
     return default_val;
 }
 
@@ -525,14 +536,14 @@ const int InputParser::GetIntAtribValue( const AxString& attrib, const char** at
     {
         wostringstream wss;
         AxString atrName;
-        
+
         wss << attribs[i];
         atrName = wss.str().c_str();
         if ( atrName == attrib )
         {
             stringstream ss;
             int retVal;
-            
+
             ss << attribs[i+1];
             ss >> retVal;
             return retVal;
@@ -542,7 +553,7 @@ const int InputParser::GetIntAtribValue( const AxString& attrib, const char** at
             break;
         }
     }
- 
+
     return default_val;
 }
 
@@ -553,13 +564,13 @@ const int InputParser::GetBoolAtribValue( const AxString& attrib, const char** a
     {
         wostringstream wss;
         AxString atrName;
-        
+
         wss << attribs[i];
         atrName = wss.str().c_str();
         if ( atrName == attrib )
         {
             wstringstream ss;
-            
+
             ss << attribs[i+1];
             AxString boolStr =  ss.str().c_str();
             if ( boolStr == L"true" )
@@ -576,18 +587,18 @@ const int InputParser::GetBoolAtribValue( const AxString& attrib, const char** a
             break;
         }
     }
- 
+
     return default_val;
 }
 
 const InputParser::OptionalStringAttrib InputParser::GetOptionalStringAttribValue( const AxString& attrib, const char** attribs, const unsigned int size, const AxString& default_val ) const
 {
-    
+
     for ( unsigned int i = 0; i < size; i += 2 )
     {
         wostringstream ss;
         AxString atrName;
-        
+
         ss << attribs[i];
         atrName = ss.str().c_str();
         if ( atrName == attrib )
@@ -601,7 +612,7 @@ const InputParser::OptionalStringAttrib InputParser::GetOptionalStringAttribValu
             break;
         }
     }
-    
+
     return OptionalStringAttrib( default_val, false );
 }
 
@@ -612,24 +623,24 @@ const InputParser::OptionalIntAttrib InputParser::GetOptionalIntAttribValue( con
     {
         wostringstream wss;
         AxString atrName;
-        
+
         wss << attribs[i];
         atrName = wss.str().c_str();
         if ( atrName == attrib )
         {
             stringstream ss;
             int retVal;
-            
+
             ss << attribs[i+1];
             ss >> retVal;
             return OptionalIntAttrib( retVal, true );
-        } 
+        }
         else if ( atrName.length() == 0 )
         {
             break;
         }
     }
- 
+
     return OptionalIntAttrib( default_val, false );
 }
 
@@ -644,10 +655,10 @@ int main( int argc, char** argv )
 
     //Input file is the second last argument.
     pair<bool,const char*> inputArg = args.get( argc-2, 1 );
-    
+
     //Requirements Filename is last argument.
     pair<bool, const char*> outputArg = args.get( argc-1, 2 );
-        
+
     //Convert the XML file to an AAF file.
     try
     {

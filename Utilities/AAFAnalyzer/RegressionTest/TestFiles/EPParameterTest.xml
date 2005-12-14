@@ -2,54 +2,54 @@
 <!DOCTYPE aaf-file SYSTEM "EPDerivationChain.dtd">
 
 <aaf-file operational-pattern="invalid">
-   
-	<!-- Make sure all and only valid interpolators are accepted -->
+
+    <!-- Make sure all and only valid interpolators are accepted -->
     <top-level name="None Interpolator">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-			<video-speed-control track-type="picture">
+            <video-speed-control length="0" track-type="picture">
                 <varying-speed-ratio interpolator="none" denominator="1" numerator="1"/>
             </video-speed-control>
         </timeline-mob-slot>
     </top-level>
-    
+
     <top-level name="B-Spline Interpolator">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-			<video-speed-control track-type="picture">
+            <video-speed-control length="0" track-type="picture">
                 <varying-speed-ratio interpolator="b-spline" denominator="1" numerator="1"/>
             </video-speed-control>
         </timeline-mob-slot>
     </top-level>
-    
+
     <top-level name="Constant Interpolator">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-			<video-speed-control track-type="picture">
+            <video-speed-control length="0" track-type="picture">
                 <varying-speed-ratio interpolator="constant" denominator="1" numerator="1"/>
             </video-speed-control>
         </timeline-mob-slot>
     </top-level>
-    
+
     <top-level name="Linear Interpolator">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-			<video-speed-control track-type="picture">
+            <video-speed-control length="0" track-type="picture">
                 <varying-speed-ratio interpolator="linear" denominator="1" numerator="1"/>
             </video-speed-control>
         </timeline-mob-slot>
     </top-level>
-    
+
     <top-level name="Log Interpolator">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-			<video-speed-control track-type="picture">
+            <video-speed-control length="0" track-type="picture">
                 <varying-speed-ratio interpolator="log" denominator="1" numerator="1"/>
             </video-speed-control>
         </timeline-mob-slot>
     </top-level>
-    
+
     <top-level name="Power Interpolator">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-			<video-speed-control track-type="picture">
+            <video-speed-control length="0" track-type="picture">
                 <varying-speed-ratio interpolator="power" denominator="1" numerator="1"/>
             </video-speed-control>
         </timeline-mob-slot>
     </top-level>
-    
+
 </aaf-file>
