@@ -16,11 +16,10 @@
 
                 Name:   Edit Protocol Edit Rate Visitor
                 Desc:   -
-                Detail: 2 audio track(s) have an edit rate of 600/24.
                 Detail: 1 audio track(s) have an sample rate of 600/24.
                 Detail: 1 audio track(s) have an sample rate of 1200000/24.
                 Result: Failed
-                Reason: All audio tracks within the file do not have the same edit and sample rates.
+                Reason: All audio tracks within the file do not have the same sample rate.
                 Passing Requirements: None
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_099

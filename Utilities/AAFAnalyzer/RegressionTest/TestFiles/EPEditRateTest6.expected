@@ -1,24 +1,14 @@
         Name:   Edit Protocol Edit Rate Test
         Desc:   Verify that all essence tracks have valid edit rates.
-        Result: Failed
-        Reason: Test Failed - See "Edit Protocol Edit Rate Visitor" Visitor for details
-        Passing Requirements: REQ_EP_091; REQ_EP_092; REQ_EP_100
+        Result: Passed
+        Passing Requirements: REQ_EP_091; REQ_EP_092; REQ_EP_099; REQ_EP_100
         Warning Requirements: None
-        Failing Requirements: REQ_EP_099
+        Failing Requirements: None
 
             Name:   Edit Protocol Edit Rate Visitor
             Desc:   Ensure all essence tracks have valid edit rates.
-            Result: Failed
-            Reason: 
-            Passing Requirements: REQ_EP_091; REQ_EP_092; REQ_EP_100
+            Result: Passed
+            Passing Requirements: REQ_EP_091; REQ_EP_092; REQ_EP_099; REQ_EP_100
             Warning Requirements: None
-            Failing Requirements: REQ_EP_099
-
-                Name:   Edit Protocol Edit Rate Visitor
-                Desc:   -
-                Result: Failed
-                Reason: All audio tracks have an edit rate of 600/24 but a sample rate of 1200000/24.
-                Passing Requirements: None
-                Warning Requirements: None
-                Failing Requirements: REQ_EP_099
+            Failing Requirements: None
 
