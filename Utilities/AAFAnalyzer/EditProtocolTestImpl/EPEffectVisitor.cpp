@@ -403,7 +403,7 @@ bool EPEffectVisitor::PreOrderVisit( EPTypedObjNode<IAAFOperationGroup, EPVideoS
                     testPassed = false;
                 }
             }
-            catch ( const AxEx& ex )
+            catch ( const AxEx& )
             {
                 ss << L" has a Speed Ratio parameter that does not have a rational value.";
                 _spResult->AddInformationResult( L"REQ_EP_187", ss.str().c_str(), TestResult::FAIL );

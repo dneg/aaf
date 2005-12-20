@@ -45,7 +45,10 @@
 
 //libURI files
 //libURI can be found at: http://sourceforge.net/projects/liburi/
-#include <URI.h>
+
+//Test is not being run since libURI is insufficient, so get rid of
+//the problem code.  Leave it commented for future reference.
+//#include <URI.h>
 
 //STL files
 #include <sstream>
@@ -289,27 +292,27 @@ bool EPLocatorVisitor::PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPImportSour
 bool EPLocatorVisitor::CheckNetworkLocator( AxNetworkLocator& axNetLocator )
 {
 
-    try
-    {
+//    try
+//    {
         //1. Has a URI that complies with RFC 2396.
         //NOTE: This code is not sufficient.  The libURI library does not seem
         //      to accept relative URIs (or I don't correctly understand how
         //      to specify one) and the library will not take wide characters.
         //      A new URI validator needs to be found/written.
-        AxString path( axNetLocator.GetPath() );
-        stringstream ss;
-        ss << path.c_str();
-        libURI::URI( ss.str().c_str() );
+//        AxString path( axNetLocator.GetPath() );
+//        stringstream ss;
+//        ss << path.c_str();
+//        libURI::URI( ss.str().c_str() );
 
         //TODO: 2. Is an absolute or relative URI (can it be anything else).
         //TODO: 3. If absolute, conforms to RFC 1738.
         //TODO: 4. If relative, the base URI is determined from the URI of the AAF file
         //         itself.
-    }
-    catch ( libURI::URIException ex ) 
-    {
-        return false;
-    }
+//    }
+//    catch ( libURI::URIException ex ) 
+//    {
+//        return false;
+//    }
   
     return true;
 }

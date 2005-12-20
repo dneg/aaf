@@ -211,7 +211,8 @@ void RegisterTests()
     TestInfoRegistrar<EPNameTest> epNameTest;
     TestInfoRegistrar<EPContainedTrackTest> epTrackTest;
     TestInfoRegistrar<EPTrackContentsTest> epTrackContentsTest;
-    TestInfoRegistrar<EPLocatorTest> epLocatorTest;
+    //TODO: Uncomment when Locator Test is being run.
+	//TestInfoRegistrar<EPLocatorTest> epLocatorTest;
     TestInfoRegistrar<EPEditRateTest> epEditRateTest;
     TestInfoRegistrar<EPEffectTest> epEffectTest;
     TestInfoRegistrar<EPAnnotationTest> epAnnotationTest;

@@ -20,7 +20,12 @@
 
 //Regression Test Files files
 #include "InputParser.h"
-#include "SlotInfo.h"
+
+/* On  Windows,  this  should  be  set  if  Expat is going to be linked 
+   statically with the code that calls it; this is required to get all the
+   right MSVC magic annotations correct. This is ignored on other platforms.
+*/
+#define XML_STATIC
 
 //Expat files
 #include <expat.h>
@@ -28,6 +33,7 @@
 //Ax files
 #include <AxMob.h>
 #include <AxComponent.h>
+#include <AxInit.h>
 
 //AAF files
 #include <AAFOperationDefs.h>
@@ -94,12 +100,59 @@ InputParser::InputParser( const char* outFile )
      *
      */
 
-     //Pointers to functions to add Definitions objects.
-     _definitionMap[L"klv-data-def"]     = &TestFileBuilder::CreateKLVDataDefinition;
-     _definitionMap[L"tagged-value-def"] = &TestFileBuilder::CreateTaggedValueDefinition;
-     _definitionMap[L"operation-def"]    = &TestFileBuilder::CreateOperationDefinition;
+    //Pointers to functions to add Definitions objects.
+	SetupDefinitionMap();
 
     //Pointers to functions to add Mobs to an AAF file.
+	SetupMaterialTypeMap();
+
+    //Pointers to functions to create empty components.
+	SetupCreateSegmentMap();
+
+    //Pointers to functions to fill components.
+	SetupFillSegmentMap();
+
+    //Pointers to functions to attach slots.
+	SetupAttachSlotMap();
+
+    //Pointer to functions to attach parameters.
+	SetupAttachParameterMap();
+
+    //Pointer to functions to add annotations (to components).
+	SetupAnnotationMap();
+
+    //Prefix used to look up the annotation id in the xml.
+	SetupAnnotationIDMap();
+
+    //Override optional rational parameter names
+	SetupOptionalRationalParamMap();
+
+    //Set up the effect parameters
+	SetupEffectMap();
+
+    //Set up the parameter parameters
+	SetupParameterTypeMap();
+
+    //Set up the interpolation map
+	SetupInterpolationTypeMap();
+
+    //Set up property constants
+    //Any new (Type D Component, object) pair must be added to this list if it is
+    //not an (OperationGroup, Segment) pair.
+
+    //Set up the operational pattern map.
+	SetupOperationalPatternMap();
+}
+
+void InputParser::SetupDefinitionMap()
+{
+    _definitionMap[L"klv-data-def"]     = &TestFileBuilder::CreateKLVDataDefinition;
+    _definitionMap[L"tagged-value-def"] = &TestFileBuilder::CreateTaggedValueDefinition;
+    _definitionMap[L"operation-def"]    = &TestFileBuilder::CreateOperationDefinition;
+}
+
+void InputParser::SetupMaterialTypeMap()
+{
     _materialTypeMap[L"top-level"]           = &TestFileBuilder::AddTopLevel;
     _materialTypeMap[L"lower-level"]         = &TestFileBuilder::AddLowerLevel;
     _materialTypeMap[L"sub-clip"]            = &TestFileBuilder::AddSubClip;
@@ -116,8 +169,10 @@ InputParser::InputParser( const char* outFile )
     _materialTypeMap[L"tape-source"]         = &TestFileBuilder::AddTapeSource;
     _materialTypeMap[L"film-source"]         = &TestFileBuilder::AddFilmSource;
     _materialTypeMap[L"auxiliary-source"]    = &TestFileBuilder::AddAuxiliarySource;
+}
 
-    //Pointers to functions to create empty components.
+void InputParser::SetupCreateSegmentMap()
+{
     _createSegmentMap[L"source-clip"]         = &TestFileBuilder::CreateSourceClip;
     _createSegmentMap[L"timecode"]            = &TestFileBuilder::CreateTimecode;
     _createSegmentMap[L"edgecode"]            = &TestFileBuilder::CreateEdgecode;
@@ -130,9 +185,10 @@ InputParser::InputParser( const char* outFile )
     _createSegmentMap[L"descriptive-marker"]  = &TestFileBuilder::CreateDescriptiveMarker;
     _createSegmentMap[L"operation-group"]     = &TestFileBuilder::CreateOperationGroup;
     //Any new (non-OperationGroup) component must be added to this list.
+}
 
-
-    //Pointers to functions to fill components.
+void InputParser::SetupFillSegmentMap()
+{
     _fillSegmentMapB[L"source-clip"]        = &TestFileBuilder::InitializeSourceClip;
     _fillSegmentMapC[L"transition"]         = &TestFileBuilder::AddToTransition;
     _fillSegmentMapC[L"sequence"]           = &TestFileBuilder::AddToSequence;
@@ -140,28 +196,40 @@ InputParser::InputParser( const char* outFile )
     _fillSegmentMapC[L"descriptive-marker"] = &TestFileBuilder::AddToCommentMarker;
     _fillSegmentMapD[L"operation-group"]    = &TestFileBuilder::AddToOperationGroup;
     //Any new Type B, C or D (non-OperationGroup) component must be added to this list.
+}
 
-    //Pointers to functions to attach slots.
+void InputParser::SetupAttachSlotMap()
+{
     _attachSlotMap[L"timeline-mob-slot"] = &TestFileBuilder::AttachTimelineSlot;
     _attachSlotMap[L"static-mob-slot"]   = &TestFileBuilder::AttachStaticSlot;
     _attachSlotMap[L"event-mob-slot"]    = &TestFileBuilder::AttachEventSlot;
+}
 
-    //Pointer to functions to attach parameters.
+void InputParser::SetupAttachParameterMap()
+{
     _attachParameterMap[L"constant-speed-ratio"] = &TestFileBuilder::AttachConstantRationalParameter;
     _attachParameterMap[L"varying-speed-ratio"]  = &TestFileBuilder::AttachVaryingRationalParameter;
+}
 
-    //Pointer to functions to add annotations (to components).
+void InputParser::SetupAnnotationMap()
+{
     _annotationMap[L"comment"]  = &TestFileBuilder::AddComment;
     _annotationMap[L"klv-data"] = &TestFileBuilder::AddKLVData;
+}
 
-    //Prefix used to look up the annotation id in the xml.
+void InputParser::SetupAnnotationIDMap()
+{
     _annotationIds[L"comment"]  = L"";
     _annotationIds[L"klv-data"] = L"key-";
+}
 
-    //Override optional rational parameter names
-    _optRationalParam[L"file-source"] = L"sample-rate";
+void InputParser::SetupOptionalRationalParamMap()
+{
+	_optRationalParam[L"file-source"] = L"sample-rate";
+}
 
-    //Set up the effect parameters
+void InputParser::SetupEffectMap()
+{
     _effectMap[L"video-dissolve"]                    = L"Video Dissolve";
     _effectMap[L"smpte-video-wipe"]                  = L"SMPTE Video Wipe";
     _effectMap[L"video-speed-control"]               = L"Video Speed Control";
@@ -183,27 +251,28 @@ InputParser::InputParser( const char* outFile )
     _effectMap[L"mono-audio-dissolve"]               = L"Mono Audio Dissolve";
     _effectMap[L"two-parameter-mono-audio-dissolve"] = L"Two-Parameter Mono Audio Dissolve";
     //Any new effects must be added to this list.
+}
 
-    //Set up the parameter parameters
+void InputParser::SetupParameterTypeMap()
+{
     _parameterTypeMap[L"constant-speed-ratio"] = kAAFParameterDef_SpeedRatio;
     _parameterTypeMap[L"varying-speed-ratio"]  = kAAFParameterDef_SpeedRatio;
+}
 
-    //Set up the interpolation map
+void InputParser::SetupInterpolationTypeMap()
+{
     _interpolationTypeMap[L"b-spline"] = kAAFInterpolationDef_BSpline;
     _interpolationTypeMap[L"constant"] = kAAFInterpolationDef_Constant;
     _interpolationTypeMap[L"linear"]   = kAAFInterpolationDef_Linear;
     _interpolationTypeMap[L"log"]      = kAAFInterpolationDef_Log;
     _interpolationTypeMap[L"none"]     = kAAFInterpolationDef_None;
     _interpolationTypeMap[L"power"]    = kAAFInterpolationDef_Power;
+}
 
-    //Set up property constants
-    //Any new (Type D Component, object) pair must be added to this list if it is
-    //not an (OperationGroup, Segment) pair.
-
-    //Set up the operational pattern map.
+void InputParser::SetupOperationalPatternMap()
+{
     _operationalPatternMap[L"edit-protocol"] = kAAFOPDef_EditProtocol;
     _operationalPatternMap[L"invalid"]       = kAAFOperationDef_Unknown;      //Any invalid AUID will do.
-
 }
 
 InputParser::~InputParser()
@@ -278,11 +347,11 @@ void InputParser::StartElement(const AxString& name, const char** attribs)
         AxString atrName;
 
         //Find the mob name.
-        OptionalStringAttrib mobName = GetOptionalStringAttribValue( L"name", attribs, 8, L"" );
+        SlotInfo::OptionalStringAttrib mobName = GetOptionalStringAttribValue( L"name", attribs, 8, L"" );
 
-        OptionalIntAttrib rationalNumerator = GetOptionalIntAttribValue( _optRationalParam[name] + L"-numerator", attribs, 8, 1 );
-        OptionalIntAttrib rationalDenominator = GetOptionalIntAttribValue( _optRationalParam[name] + L"-denominator", attribs, 8, 1 );
-        OptionalStringAttrib alphaTransparency = GetOptionalStringAttribValue( L"alpha-transparency", attribs, 8, L"max" );
+        SlotInfo::OptionalIntAttrib rationalNumerator = GetOptionalIntAttribValue( _optRationalParam[name] + L"-numerator", attribs, 8, 1 );
+        SlotInfo::OptionalIntAttrib rationalDenominator = GetOptionalIntAttribValue( _optRationalParam[name] + L"-denominator", attribs, 8, 1 );
+        SlotInfo::OptionalStringAttrib alphaTransparency = GetOptionalStringAttribValue( L"alpha-transparency", attribs, 8, L"max" );
 
         aafRational_t optRational;
         optRational.numerator = rationalNumerator.first;
@@ -318,9 +387,9 @@ void InputParser::StartElement(const AxString& name, const char** attribs)
     {
         AxString essenceType = GetStringAttribValue( L"track-type", attribs, 10, L"none" );
         AxString effectType = GetStringAttribValue( L"operation-definition", attribs, 10, name );
-        OptionalIntAttrib length = GetOptionalIntAttribValue( L"length", attribs, 10, 0 );
-        OptionalIntAttrib startTime = GetOptionalIntAttribValue( L"start-time", attribs, 10, 0 );
-        OptionalIntAttrib position = GetOptionalIntAttribValue( L"position", attribs, 10, 0 );
+        SlotInfo::OptionalIntAttrib length = GetOptionalIntAttribValue( L"length", attribs, 10, 0 );
+        SlotInfo::OptionalIntAttrib startTime = GetOptionalIntAttribValue( L"start-time", attribs, 10, 0 );
+        SlotInfo::OptionalIntAttrib position = GetOptionalIntAttribValue( L"position", attribs, 10, 0 );
 
         //The default value of both startTime and position is 0.  Therefore we
         //will either get 0 (if neither is present) or the value of the
@@ -357,10 +426,10 @@ void InputParser::StartElement(const AxString& name, const char** attribs)
         aafRational_t editRate;
         editRate.numerator = GetIntAtribValue(L"edit-rate-numerator", attribs, 14, 1);
         editRate.denominator = GetIntAtribValue(L"edit-rate-denominator", attribs, 14, 1);
-        OptionalStringAttrib segName = GetOptionalStringAttribValue( L"name", attribs, 14, L"" );
-        OptionalIntAttrib physicalTrackNum = GetOptionalIntAttribValue( L"physical-track-number", attribs, 14, 1 );
-        OptionalIntAttrib markedInPoint = GetOptionalIntAttribValue( L"marked-in-point", attribs, 14, 0 );
-        OptionalIntAttrib markedOutPoint = GetOptionalIntAttribValue( L"marked-out-point", attribs, 14, 0 );
+        SlotInfo::OptionalStringAttrib segName = GetOptionalStringAttribValue( L"name", attribs, 14, L"" );
+        SlotInfo::OptionalIntAttrib physicalTrackNum = GetOptionalIntAttribValue( L"physical-track-number", attribs, 14, 1 );
+        SlotInfo::OptionalIntAttrib markedInPoint = GetOptionalIntAttribValue( L"marked-in-point", attribs, 14, 0 );
+        SlotInfo::OptionalIntAttrib markedOutPoint = GetOptionalIntAttribValue( L"marked-out-point", attribs, 14, 0 );
         int orgin = GetIntAtribValue( L"orgin", attribs, 14, 0 );
         _slotStack.push( SlotInfo( name, editRate, segName, physicalTrackNum, markedInPoint, markedOutPoint, orgin ) );
     }
@@ -512,18 +581,25 @@ const AxString InputParser::GetStringAttribValue( const AxString& attrib, const 
         wostringstream ss;
         AxString atrName;
 
-        ss << attribs[i];
-        atrName = ss.str().c_str();
-        if ( atrName == attrib )
-        {
-            ss.str( L"" );
-            ss << attribs[i+1];
-            return ss.str().c_str();
-        }
-        else if ( atrName.length() == 0 )
-        {
-            break;
-        }
+		if ( attribs[i] != NULL )
+		{
+            ss << attribs[i];
+            atrName = ss.str().c_str();
+            if ( atrName == attrib )
+            {
+                ss.str( L"" );
+                ss << attribs[i+1];
+                return ss.str().c_str();
+            }
+            else if ( atrName.length() == 0 )
+            {
+                break;
+            }
+		}
+		else
+		{
+		    break;
+		}
     }
 
     return default_val;
@@ -537,18 +613,25 @@ const int InputParser::GetIntAtribValue( const AxString& attrib, const char** at
         wostringstream wss;
         AxString atrName;
 
-        wss << attribs[i];
-        atrName = wss.str().c_str();
-        if ( atrName == attrib )
+        if ( attribs[i] != NULL )
         {
-            stringstream ss;
-            int retVal;
+            wss << attribs[i];
+            atrName = wss.str().c_str();
+            if ( atrName == attrib )
+            {
+                stringstream ss;
+                int retVal;
 
-            ss << attribs[i+1];
-            ss >> retVal;
-            return retVal;
+                ss << attribs[i+1];
+                ss >> retVal;
+                return retVal;
+            }
+            else if ( atrName.length() == 0 )
+            {
+                break;
+            }
         }
-        else if ( atrName.length() == 0 )
+        else
         {
             break;
         }
@@ -565,24 +648,31 @@ const int InputParser::GetBoolAtribValue( const AxString& attrib, const char** a
         wostringstream wss;
         AxString atrName;
 
-        wss << attribs[i];
-        atrName = wss.str().c_str();
-        if ( atrName == attrib )
+        if ( attribs[i] != NULL )
         {
-            wstringstream ss;
+            wss << attribs[i];
+            atrName = wss.str().c_str();
+            if ( atrName == attrib )
+            {
+                wstringstream ss;
 
-            ss << attribs[i+1];
-            AxString boolStr =  ss.str().c_str();
-            if ( boolStr == L"true" )
-            {
-                return true;
+                ss << attribs[i+1];
+                AxString boolStr =  ss.str().c_str();
+                if ( boolStr == L"true" )
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
-            else
+            else if ( atrName.length() == 0 )
             {
-                return false;
+                break;
             }
         }
-        else if ( atrName.length() == 0 )
+        else
         {
             break;
         }
@@ -591,7 +681,7 @@ const int InputParser::GetBoolAtribValue( const AxString& attrib, const char** a
     return default_val;
 }
 
-const InputParser::OptionalStringAttrib InputParser::GetOptionalStringAttribValue( const AxString& attrib, const char** attribs, const unsigned int size, const AxString& default_val ) const
+const SlotInfo::OptionalStringAttrib InputParser::GetOptionalStringAttribValue( const AxString& attrib, const char** attribs, const unsigned int size, const AxString& default_val ) const
 {
 
     for ( unsigned int i = 0; i < size; i += 2 )
@@ -599,24 +689,31 @@ const InputParser::OptionalStringAttrib InputParser::GetOptionalStringAttribValu
         wostringstream ss;
         AxString atrName;
 
-        ss << attribs[i];
-        atrName = ss.str().c_str();
-        if ( atrName == attrib )
+        if ( attribs[i] != NULL )
         {
-            ss.str( L"" );
-            ss << attribs[i+1];
-            return OptionalStringAttrib( ss.str().c_str(), true );
+            ss << attribs[i];
+            atrName = ss.str().c_str();
+            if ( atrName == attrib )
+            {
+                ss.str( L"" );
+                ss << attribs[i+1];
+                return SlotInfo::OptionalStringAttrib( ss.str().c_str(), true );
+            }
+            else if ( atrName.length() == 0 )
+            {
+                break;
+            }
         }
-        else if ( atrName.length() == 0 )
+        else
         {
             break;
         }
     }
 
-    return OptionalStringAttrib( default_val, false );
+    return SlotInfo::OptionalStringAttrib( default_val, false );
 }
 
-const InputParser::OptionalIntAttrib InputParser::GetOptionalIntAttribValue( const AxString& attrib, const char** attribs, const unsigned int size, const int default_val ) const
+const SlotInfo::OptionalIntAttrib InputParser::GetOptionalIntAttribValue( const AxString& attrib, const char** attribs, const unsigned int size, const int default_val ) const
 {
 
     for ( unsigned int i = 0; i < size; i += 2 )
@@ -624,24 +721,31 @@ const InputParser::OptionalIntAttrib InputParser::GetOptionalIntAttribValue( con
         wostringstream wss;
         AxString atrName;
 
-        wss << attribs[i];
-        atrName = wss.str().c_str();
-        if ( atrName == attrib )
+        if ( attribs[i] != NULL )
         {
-            stringstream ss;
-            int retVal;
+            wss << attribs[i];
+            atrName = wss.str().c_str();
+            if ( atrName == attrib )
+            {
+                stringstream ss;
+                int retVal;
 
-            ss << attribs[i+1];
-            ss >> retVal;
-            return OptionalIntAttrib( retVal, true );
+                ss << attribs[i+1];
+                ss >> retVal;
+                return SlotInfo::OptionalIntAttrib( retVal, true );
+            }
+            else if ( atrName.length() == 0 )
+            {
+                break;
+            }
         }
-        else if ( atrName.length() == 0 )
+        else
         {
             break;
         }
     }
 
-    return OptionalIntAttrib( default_val, false );
+    return SlotInfo::OptionalIntAttrib( default_val, false );
 }
 
 } // end of namespace diskstream
@@ -651,6 +755,7 @@ int main( int argc, char** argv )
 
     using namespace std;
 
+    AxInit initObj;
     AxCmdLineArgs args( argc, argv );
 
     //Input file is the second last argument.

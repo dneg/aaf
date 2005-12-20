@@ -247,7 +247,7 @@ public:
         return true;
       }
     }
-    catch ( const AxExHResult& ex )
+    catch ( const AxExHResult& )
     {
       successfulTransition = false;
       detailMsg = L"Source Clip does not have a Source Reference property.";

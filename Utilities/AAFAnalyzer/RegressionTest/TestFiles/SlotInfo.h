@@ -33,7 +33,10 @@ class SlotInfo
 
     public:
 
-        SlotInfo( const AxString& element, const aafRational_t editRate, InputParser::OptionalStringAttrib name, InputParser::OptionalIntAttrib physicalTrackNum, InputParser::OptionalIntAttrib markedInPoint, InputParser::OptionalIntAttrib markedOutPoint, aafPosition_t orgin )
+        typedef pair<const AxString, const bool> OptionalStringAttrib;
+        typedef pair<const int, const bool> OptionalIntAttrib;
+
+        SlotInfo( const AxString& element, const aafRational_t editRate, OptionalStringAttrib name, OptionalIntAttrib physicalTrackNum, OptionalIntAttrib markedInPoint, OptionalIntAttrib markedOutPoint, aafPosition_t orgin )
             : element( element ),
               editRate( editRate ),
               name( name ),
@@ -60,11 +63,11 @@ class SlotInfo
 
         AxString                            element;
         aafRational_t                       editRate;
-        InputParser::OptionalStringAttrib   name;
-        InputParser::OptionalIntAttrib      physicalTrackNum;
+        OptionalStringAttrib                name;
+        OptionalIntAttrib                   physicalTrackNum;
         aafUInt32                           componentsSinceSlot;
-        InputParser::OptionalIntAttrib      markedInPoint;
-        InputParser::OptionalIntAttrib      markedOutPoint;
+        OptionalIntAttrib                   markedInPoint;
+        OptionalIntAttrib                   markedOutPoint;
         aafPosition_t                       orgin;
 
     private:

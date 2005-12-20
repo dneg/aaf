@@ -24,6 +24,9 @@
 //Ax files
 #include <AxEx.h>
 
+namespace aafanalyzer 
+{
+
 class StateMachineException : public AxEx {
 
   public:
@@ -36,5 +39,7 @@ class StateMachineException : public AxEx {
     StateMachineException& operator=( const StateMachineException& );
     
 };
+
+} // end of namespace diskstream
 
 #endif /*__STATEMACHINEEXCEPTION_H_*/

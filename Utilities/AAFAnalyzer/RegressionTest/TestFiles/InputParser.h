@@ -23,6 +23,7 @@
 
 //Regression Test Files files
 #include "TestFileBuilder.h"
+#include "SlotInfo.h"
 
 //Ax files
 #include <AxTypes.h>
@@ -42,8 +43,6 @@ class AxSourceReference;
 
 namespace aafanalyzer {
 
-class SlotInfo;
-
 using namespace std;
 using namespace boost;
 
@@ -53,9 +52,6 @@ public:
 
     InputParser( const char* outFile );
     ~InputParser();
-
-    typedef pair<const AxString, const bool> OptionalStringAttrib;
-    typedef pair<const int, const bool> OptionalIntAttrib;
 
     static void __StartElement(void* userData, const char* name, const char** atts);
     static void __EndElement(void* userData, const char* name);
@@ -139,8 +135,23 @@ public:
     const AxString GetStringAttribValue( const AxString& attrib, const char** attribs, const unsigned int size, const AxString& default_val ) const;
     const int GetIntAtribValue( const AxString& attrib, const char** attribs, const unsigned int size, const int default_val ) const;
     const int GetBoolAtribValue( const AxString& attrib, const char** attribs, const unsigned int size, const int default_val ) const;
-    const OptionalStringAttrib GetOptionalStringAttribValue( const AxString& attrib, const char** attribs, const unsigned int size, const AxString& default_val ) const;
-    const OptionalIntAttrib GetOptionalIntAttribValue( const AxString& attrib, const char** attribs, const unsigned int size, const int default_val ) const;
+	const SlotInfo::OptionalStringAttrib GetOptionalStringAttribValue( const AxString& attrib, const char** attribs, const unsigned int size, const AxString& default_val ) const;
+    const SlotInfo::OptionalIntAttrib GetOptionalIntAttribValue( const AxString& attrib, const char** attribs, const unsigned int size, const int default_val ) const;
+
+	//These private functions are needed to compile under VC++.
+	void SetupDefinitionMap();
+	void SetupMaterialTypeMap();
+	void SetupCreateSegmentMap();
+	void SetupFillSegmentMap();
+	void SetupAttachSlotMap();
+	void SetupAttachParameterMap();
+	void SetupAnnotationMap();
+	void SetupAnnotationIDMap();
+	void SetupOptionalRationalParamMap();
+	void SetupEffectMap();
+	void SetupParameterTypeMap();
+	void SetupInterpolationTypeMap();
+	void SetupOperationalPatternMap();
 
 };
 

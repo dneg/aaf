@@ -23,7 +23,6 @@
 
 //Ax files
 #include <AxEx.h>
-#include <AxInit.h>
 #include <AxHeader.h>
 #include <AxDictionary.h>
 #include <AxDefObject.h>
@@ -79,7 +78,6 @@ TestFileBuilder::TestFileBuilder( const char* outFile)
     : _mobCount( 0 ),
       _useLegacyEffectDefinitions( false )
 {
-    AxInit initObj;
     wostringstream ssOutFile;
     ssOutFile << outFile;
     AxString filename( ssOutFile.str().c_str() );

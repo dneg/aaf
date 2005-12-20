@@ -112,8 +112,8 @@ shared_ptr<TestPhaseLevelTestResult> EPMobDepPhase::Execute()
   spPhaseResult->AppendSubtestResult( trackContentsTest->Execute() );
   
   // Seventh, run the locator test
-  shared_ptr<EPLocatorTest> locatorTest( new EPLocatorTest( _log, _spGraph ) );
 //TODO: Uncomment this line when the test is running properly.
+//  shared_ptr<EPLocatorTest> locatorTest( new EPLocatorTest( _log, _spGraph ) );
 //  spPhaseResult->AppendSubtestResult( locatorTest->Execute() );
 
   // Eighth, run the edit rate test
