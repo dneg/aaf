@@ -222,6 +222,9 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\AxDescriptiveFramework.cpp">
+			</File>
+			<File
 				RelativePath="AxDictionary.cpp">
 				<FileConfiguration
 					Name="Debug|Win32">
@@ -602,6 +605,9 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath=".\AxTaggedValue.cpp">
+			</File>
+			<File
 				RelativePath="AxTypes.cpp">
 				<FileConfiguration
 					Name="Debug|Win32">
@@ -661,6 +667,9 @@
 				RelativePath="AxDefObject.h">
 			</File>
 			<File
+				RelativePath=".\AxDescriptiveFramework.h">
+			</File>
+			<File
 				RelativePath="AxDictionary.h">
 			</File>
 			<File
@@ -716,6 +725,12 @@
 			</File>
 			<File
 				RelativePath="AxSmartPointer.h">
+			</File>
+			<File
+				RelativePath=".\AxStorageErrors.h">
+			</File>
+			<File
+				RelativePath=".\AxTaggedValue.h">
 			</File>
 			<File
 				RelativePath="AxTypes.h">
