@@ -8,7 +8,7 @@
     <requirement-set-name>Edit Protocol Compliance Requirement Set</requirement-set-name>
     <requirement-set-version>&VER_EP_1.0;</requirement-set-version>
 
-    <requirement type="app" category="compositional">
+    <requirement type="app" category="general">
         <id>REQ_EP_001</id>
         <name>Metadata Interchange</name>
         <desc>Interchange of the metadata specified in this document shall be performed in an accurate and predictable manner.</desc>
@@ -18,8 +18,8 @@
             <section>4.2.2</section>
         </ref>
     </requirement>
-    
-    <requirement type="app" category="compositional">
+
+    <requirement type="app" category="general">
         <id>REQ_EP_002</id>
         <name>Import Accuracy</name>
         <desc>Upon import, an Edit Protocol compliant application shall clearly report any alteration to the composition during the process according to fallback behaviours that are described in this document.</desc>
@@ -29,8 +29,8 @@
             <section>4.2.2</section>
         </ref>
     </requirement>
-    
-    <requirement type="app" category="compositional">
+
+    <requirement type="app" category="general">
         <id>REQ_EP_003</id>
         <name>Import Unsupported Metadata</name>
         <desc>In the Edit Protocol Import/Export model an application is not required to import, maintain and subsequently export metadata objects from the AAF file that it cannot understand.  Applications shall not however replace or represent a subsequent exported file as the originally imported AAF file.</desc>
@@ -40,8 +40,8 @@
             <section>4.2.3</section>
         </ref>
     </requirement>
-    
-    <requirement type="app" category="compositional">
+
+    <requirement type="app" category="general">
         <id>REQ_EP_004</id>
         <name>Immutability of Mobs</name>
         <desc>An application shall implement the rules regarding immutability of Mobs as described in the AAF Object Specification v1.1.  These rules specify how Mobs shall be identified when they are processed by an application.  Specifically, conditions are defined in which the identification of the Mob (MobID) must change, and in which the identification of the Mob must not change.</desc>
@@ -51,8 +51,8 @@
             <section>4.2.3</section>
         </ref>
     </requirement>
-    
-    <requirement type="app" category="compositional">
+
+    <requirement type="app" category="general">
         <id>REQ_EP_005</id>
         <name>Log Importing Fallback Behaviour</name>
         <desc>The AAF Edit Protocol does not remove the requirement that importing applications shall log fallback behaviour for the benefit of the user as defined in this document.</desc>
@@ -62,8 +62,8 @@
             <section>4.2.4</section>
         </ref>
     </requirement>
-    
-    <requirement type="app" category="compositional">
+
+    <requirement type="app" category="general">
         <id>REQ_EP_006</id>
         <name>Non Edit Protocol Objects</name>
         <desc>Inclusion of extraneous data (i.e. non-Edit Protocol Objects and/or Dark Metadata) shall not invalidata, obfuscate or change the meaning of the core Edit Protocol data.</desc>
@@ -73,8 +73,8 @@
             <section>4.2.5</section>
         </ref>
     </requirement>
-    
-    <requirement type="app" category="compositional">
+
+    <requirement type="app" category="general">
         <id>REQ_EP_007</id>
         <name>Legacy Features</name>
         <desc>Support for legacy features is not required for compliance with the AAF Edit Protocol</desc>
@@ -84,8 +84,8 @@
             <section>4.2.6</section>
         </ref>
     </requirement>
-    
-    <requirement type="app" category="compositional">
+
+    <requirement type="app" category="import-export">
         <id>REQ_EP_008</id>
         <name>Application Crash</name>
         <desc>An application shall not lock-up, crash or give-up on exporting or importing an AAF file.  When an action is likely to take a considerable amount of time, an indication of this should be provided.</desc>
@@ -95,8 +95,8 @@
             <section>5</section>
         </ref>
     </requirement>
-    
-    <requirement type="app" category="compositional">
+
+    <requirement type="app" category="import-export">
         <id>REQ_EP_009</id>
         <name>Import Fallback</name>
         <desc>Where the feature set of an application is insufficient to completely or accurately import the AAF file, an application shall observe the fallback behaviours specified throughout the AAF Edit Protocol.</desc>
@@ -106,8 +106,8 @@
             <section>5</section>
         </ref>
     </requirement>
-    
-    <requirement type="app" category="compositional">
+
+    <requirement type="app" category="import-export">
         <id>REQ_EP_010</id>
         <name>Diagnostic Log</name>
         <desc>An application shall provide a mechanism to log diagnostic information for each import or export operation.  The log may be temporary, but shall be avaliable to an expert user.</desc>
@@ -117,8 +117,8 @@
             <section>5</section>
         </ref>
     </requirement>
-    
-    <requirement type="app" category="compositional">
+
+    <requirement type="app" category="import-export">
         <id>REQ_EP_011</id>
         <name>Log Details</name>
         <desc>Certain fallback behaviours shall be logged, as defined in the AAF Edit Protocol.  Wherever appropriate, the diagnostic log should identify the Mob, Track and Position at which the fallback behaviour was required.</desc>
@@ -128,8 +128,8 @@
             <section>5</section>
         </ref>
     </requirement>
-    
-    <requirement type="app" category="compositional">
+
+    <requirement type="app" category="import-export">
         <id>REQ_EP_012</id>
         <name>Exporting Disallowed Metadata</name>
         <desc>Where the feature set of an exporting application supports program metadata that the Edit Protocol specifically disallows (e.g. a program consisting of different audio sample rates which is disallowed in Section 7.3), the application shall not export that metadata to an Edit Protocol AAF file.  The omission of any metadata on export in order to comply with the Edit Protocol should be logged.</desc>
@@ -139,7 +139,7 @@
             <section>5</section>
         </ref>
     </requirement>
-    
+
     <requirement type="file" category="compositional">
         <id>REQ_EP_013</id>
         <name>Export Clip Method</name>
@@ -150,7 +150,7 @@
             <section>6.1</section>
         </ref>
     </requirement>
-    
+
     <requirement type="file" category="compositional">
         <id>REQ_EP_014</id>
         <name>Import Clip Method</name>
@@ -161,7 +161,7 @@
             <section>6.1</section>
         </ref>
     </requirement>
-    
+
     <requirement type="app" category="compositional">
         <id>REQ_EP_015</id>
         <name>Import non-Exported Data</name>
@@ -172,7 +172,7 @@
             <section>6.1</section>
         </ref>
     </requirement>
-    
+
     <requirement type="app" category="compositional">
         <id>REQ_EP_016</id>
         <name>Export Mobs for Entire Derivation Chain</name>
@@ -183,7 +183,7 @@
             <section>6.2</section>
         </ref>
     </requirement>
-    
+
     <requirement type="file" category="compositional">
         <id>REQ_EP_017</id>
         <name>End of Derivation Chain</name>
@@ -194,7 +194,7 @@
             <section>6.2</section>
         </ref>
     </requirement>
-    
+
     <requirement type="file" category="compositional">
         <id>REQ_EP_018</id>
         <name>Include CompositionMob or MasterMob</name>
@@ -205,7 +205,7 @@
             <section>6.2</section>
         </ref>
     </requirement>
-    
+
     <requirement type="file" category="compositional">
         <id>REQ_EP_019</id>
         <name>Include SourceMob</name>
@@ -216,7 +216,7 @@
             <section>6.2</section>
         </ref>
     </requirement>
-    
+
     <requirement type="app" category="compositional">
         <id>REQ_EP_020</id>
         <name>Include SourceMobs Wherever Possible</name>
@@ -227,7 +227,7 @@
             <section>6.2</section>
         </ref>
     </requirement>
-    
+
     <requirement type="app" category="compositional">
         <id>REQ_EP_021</id>
         <name>Resolve Reference on Import</name>
@@ -238,7 +238,7 @@
             <section>6.2.1</section>
         </ref>
     </requirement>
-    
+
     <requirement type="app" category="compositional">
         <id>REQ_EP_022</id>
         <name>Importing Reference Outside of TimelineMobSlot</name>
@@ -249,7 +249,7 @@
             <section>6.2.1</section>
         </ref>
     </requirement>
-    
+
     <requirement type="file" category="compositional">
         <id>REQ_EP_023</id>
         <name>Valid Reference Outside of TimelineMobSlot</name>
@@ -260,7 +260,7 @@
             <section>6.2.1</section>
         </ref>
     </requirement>
-    
+
     <requirement type="app" category="compositional">
         <id>REQ_EP_024</id>
         <name>Search for Source</name>
@@ -271,7 +271,7 @@
             <section>6.2.1</section>
         </ref>
     </requirement>
-    
+
     <requirement type="file" category="compositional">
         <id>REQ_EP_025</id>
         <name>Top-level Composition Specification</name>
@@ -282,7 +282,7 @@
             <section>6.3</section>
         </ref>
     </requirement>
-    
+
     <requirement type="file" category="compositional">
         <id>REQ_EP_026</id>
         <name>Top-level Composition May Reference</name>
@@ -293,7 +293,7 @@
             <section>6.3</section>
         </ref>
     </requirement>
-    
+
     <requirement type="file" category="compositional">
         <id>REQ_EP_027</id>
         <name>Top-level Composition Name</name>
@@ -304,7 +304,7 @@
             <section>6.3</section>
         </ref>
     </requirement>
-    
+
     <requirement type="file" category="compositional">
         <id>REQ_EP_028</id>
         <name>Top-Level Composition Contents</name>
@@ -315,7 +315,7 @@
             <section>6.3</section>
         </ref>
     </requirement>
-    
+
     <requirement type="app" category="compositional">
         <id>REQ_EP_029</id>
         <name>Importing Top-Level Composition Fallback Behaviour</name>
@@ -326,7 +326,7 @@
             <section>6.3.1</section>
         </ref>
     </requirement>
-    
+
     <requirement type="file" category="compositional">
         <id>REQ_EP_030</id>
         <name>Lower_Level Composition Specification</name>
@@ -337,7 +337,7 @@
             <section>6.4</section>
         </ref>
     </requirement>
-    
+
     <requirement type="file" category="compositional">
         <id>REQ_EP_031</id>
         <name>Lower-level Composition May Reference</name>
@@ -348,7 +348,7 @@
             <section>6.4</section>
         </ref>
     </requirement>
-    
+
     <requirement type="file" category="compositional">
         <id>REQ_EP_032</id>
         <name>Lower-level Composition Name</name>
@@ -359,7 +359,7 @@
             <section>6.4</section>
         </ref>
     </requirement>
-    
+
     <requirement type="app" category="compositional">
         <id>REQ_EP_033</id>
         <name>Importing Lower-level Composition Fallback Behaviour</name>
@@ -370,7 +370,7 @@
             <section>6.4.1</section>
         </ref>
     </requirement>
-    
+
     <requirement type="definition" category="compositional">
         <id>DEF_EP_034</id>
         <name>Sub-clip Composition Specification</name>
@@ -381,7 +381,7 @@
             <section>6.5</section>
         </ref>
     </requirement>
-    
+
     <requirement type="app" category="compositional">
         <id>REQ_EP_035</id>
         <name>Sub-clip Legacy Representation</name>
@@ -392,7 +392,7 @@
             <section>6.5</section>
         </ref>
     </requirement>
-    
+
     <requirement type="file" category="compositional">
         <id>REQ_EP_036</id>
         <name>Sub-clip Composition May Reference</name>
@@ -403,7 +403,7 @@
             <section>6.5</section>
         </ref>
     </requirement>
-    
+
     <requirement type="file" category="compositional">
         <id>REQ_EP_037</id>
         <name>Sub-clip Composition Contents</name>
@@ -414,7 +414,7 @@
             <section>6.5</section>
         </ref>
     </requirement>
-    
+
     <requirement type="file" category="compositional">
         <id>REQ_EP_038</id>
         <name>Sub-clip Composition Identification</name>
@@ -436,7 +436,7 @@
             <section>6.5.1</section>
         </ref>
     </requirement>
-    
+
     <requirement type="app" category="compositional">
         <id>REQ_EP_040</id>
         <name>CompositionMob: Lower-level Classification</name>
@@ -447,7 +447,7 @@
             <section>6.5.1</section>
         </ref>
     </requirement>
-    
+
     <requirement type="app" category="compositional">
         <id>REQ_EP_041</id>
         <name>Classification of Sub-clips Not Meeting Export Restrictions</name>
@@ -458,7 +458,7 @@
             <section>6.5.1</section>
         </ref>
     </requirement>
-    
+
     <requirement type="app" category="compositional">
         <id>REQ_EP_042</id>
         <name>Importing Sub-clip Fallback Behaviour</name>
@@ -469,7 +469,7 @@
             <section>6.5.2</section>
         </ref>
     </requirement>
-    
+
     <requirement type="definition" category="compositional">
         <id>DEF_EP_043</id>
         <name>Adjusted-clip Composition Specification</name>
@@ -480,7 +480,7 @@
             <section>6.6</section>
         </ref>
     </requirement>
-    
+
     <requirement type="app" category="compositional">
         <id>REQ_EP_044</id>
         <name>Adjusted-clip Composition Legacy Representation</name>
@@ -491,7 +491,7 @@
             <section>6.6</section>
         </ref>
     </requirement>
-    
+
     <requirement type="file" category="compositional">
         <id>REQ_EP_045</id>
         <name>Adjusted-clip Composition May Reference</name>
@@ -502,7 +502,7 @@
             <section>6.6</section>
         </ref>
     </requirement>
-    
+
     <requirement type="file" category="compositional">
         <id>REQ_EP_046</id>
         <name>Adjusted-clip Composition Contents</name>
@@ -513,7 +513,7 @@
             <section>6.6</section>
         </ref>
     </requirement>
-    
+
     <requirement type="file" category="compositional">
         <id>REQ_EP_047</id>
         <name>Adjusted-clip Composition Name</name>
@@ -524,7 +524,7 @@
             <section>6.6</section>
         </ref>
     </requirement>
-    
+
     <requirement type="app" category="compositional">
         <id>REQ_EP_048</id>
         <name>Importing Adjusted-clip Fallback Behaviour</name>
@@ -535,7 +535,7 @@
             <section>6.6.1</section>
         </ref>
     </requirement>
-    
+
     <requirement type="definition" category="compositional">
         <id>DEF_EP_049</id>
         <name>Template Clip Specification</name>
@@ -546,7 +546,7 @@
             <section>6.7</section>
         </ref>
     </requirement>
-    
+
     <requirement type="file" category="compositional">
         <id>REQ_EP_050</id>
         <name>Template Clip Contents</name>
@@ -557,7 +557,7 @@
             <section>6.7</section>
         </ref>
     </requirement>
-    
+
     <requirement type="app" category="compositional">
         <id>REQ_EP_051</id>
         <name>Convert Template Clip to a Clip</name>
@@ -568,7 +568,7 @@
             <section>6.7</section>
         </ref>
     </requirement>
-    
+
     <requirement type="file" category="compositional">
         <id>REQ_EP_052</id>
         <name>Template Clip Name</name>
@@ -579,7 +579,7 @@
             <section>6.7</section>
         </ref>
     </requirement>
-    
+
     <requirement type="app" category="compositional">
         <id>REQ_EP_053</id>
         <name>Importing Template Clip Fallback Behaviour</name>
@@ -590,7 +590,7 @@
             <section>6.7.1</section>
         </ref>
     </requirement>
-    
+
     <requirement type="definition" category="compositional">
         <id>DEF_EP_054</id>
         <name>Clip Specification</name>
@@ -601,7 +601,7 @@
             <section>6.8</section>
         </ref>
     </requirement>
-    
+
     <requirement type="file" category="compositional">
         <id>REQ_EP_055</id>
         <name>Clip May Reference</name>
@@ -612,7 +612,7 @@
             <section>6.8</section>
         </ref>
     </requirement>
-    
+
     <requirement type="file" category="compositional">
         <id>REQ_EP_056</id>
         <name>Unique Clip Reference Type</name>
@@ -623,7 +623,7 @@
             <section>6.8</section>
         </ref>
     </requirement>
-    
+
     <requirement type="file" category="compositional">
         <id>REQ_EP_057</id>
         <name>Clip Name</name>
@@ -634,7 +634,7 @@
             <section>6.8</section>
         </ref>
     </requirement>
-    
+
     <requirement type="definition" category="compositional">
         <id>DEF_EP_058</id>
         <name>File Source Specification</name>
@@ -645,7 +645,7 @@
             <section>6.9</section>
         </ref>
     </requirement>
-    
+
     <requirement type="file" category="compositional">
         <id>REQ_EP_059</id>
         <name>File Source Must Have FileDescriptor::ContainerDefinition</name>
@@ -656,7 +656,7 @@
             <section>6.9</section>
         </ref>
     </requirement>
-    
+
     <requirement type="file" category="compositional">
         <id>REQ_EP_060</id>
         <name>Locator Should be Used for External Essence in File Source</name>
@@ -667,7 +667,7 @@
             <section>6.9</section>
         </ref>
     </requirement>
-    
+
     <requirement type="file" category="compositional">
         <id>REQ_EP_061</id>
         <name>Locator Contents for External Essence in File Source</name>
@@ -678,7 +678,7 @@
             <section>6.9</section>
         </ref>
     </requirement>
-    
+
     <requirement type="app" category="compositional">
         <id>REQ_EP_062</id>
         <name>Exporting File Source Containing Relative URIs</name>
@@ -689,7 +689,7 @@
             <section>6.9</section>
         </ref>
     </requirement>
-    
+
     <requirement type="app" category="compositional">
         <id>REQ_EP_063</id>
         <name>Include Source Mobs when Exporting File Source</name>
@@ -700,7 +700,7 @@
             <section>6.9</section>
         </ref>
     </requirement>
-    
+
     <requirement type="file" category="compositional">
         <id>REQ_EP_064</id>
         <name>File Source Must Refernce a Source</name>
@@ -711,7 +711,7 @@
             <section>6.9</section>
         </ref>
     </requirement>
-    
+
     <requirement type="app" category="compositional">
         <id>REQ_EP_065</id>
         <name>May Use EssenceData When Importing File Source</name>
@@ -722,7 +722,7 @@
             <section>6.9.1</section>
         </ref>
     </requirement>
-    
+
     <requirement type="app" category="compositional">
         <id>REQ_EP_066</id>
         <name>Verify File Source URIs on Import</name>
@@ -733,7 +733,7 @@
             <section>6.9.1</section>
         </ref>
     </requirement>
-    
+
     <requirement type="app" category="compositional">
         <id>REQ_EP_067</id>
         <name>Importing Without Proper File Source Support</name>
@@ -744,7 +744,7 @@
             <section>6.9.2</section>
         </ref>
     </requirement>
-    
+
     <requirement type="app" category="compositional">
         <id>REQ_EP_068</id>
         <name>File Source Essence Cannot be Found When Importing File Source</name>
@@ -755,7 +755,7 @@
             <section>6.9.2</section>
         </ref>
     </requirement>
-    
+
     <requirement type="app" category="compositional">
         <id>REQ_EP_069</id>
         <name>Import File Source Read Error Fallback Behaviour</name>
@@ -766,7 +766,7 @@
             <section>6.9.2</section>
         </ref>
     </requirement>
-    
+
     <requirement type="app" category="compositional">
         <id>REQ_EP_070</id>
         <name>Use of Recording Source</name>
@@ -777,7 +777,7 @@
             <section>6.10</section>
         </ref>
     </requirement>
-    
+
     <requirement type="definition" category="compositional">
         <id>DEF_EP_071</id>
         <name>Recording Source Specification</name>
@@ -788,7 +788,7 @@
             <section>6.10</section>
         </ref>
     </requirement>
-    
+
     <requirement type="file" category="compositional">
         <id>REQ_EP_072</id>
         <name>Recording Source Contents</name>
@@ -799,7 +799,7 @@
             <section>6.10</section>
         </ref>
     </requirement>
-    
+
     <requirement type="file" category="compositional">
         <id>REQ_EP_073</id>
         <name>Recording Source Name</name>
@@ -810,7 +810,7 @@
             <section>6.10</section>
         </ref>
     </requirement>
-    
+
     <requirement type="definition" category="compositional">
         <id>DEF_EP_074</id>
         <name>Import Source Specification</name>
@@ -821,7 +821,7 @@
             <section>6.11</section>
         </ref>
     </requirement>
-    
+
     <requirement type="file" category="compositional">
         <id>REQ_EP_075</id>
         <name>Import Source Locator</name>
@@ -832,7 +832,7 @@
             <section>6.11</section>
         </ref>
     </requirement>
-    
+
     <requirement type="app" category="compositional">
         <id>REQ_EP_076</id>
         <name>Include Sources When Importing Import Source </name>
@@ -843,7 +843,7 @@
             <section>6.11</section>
         </ref>
     </requirement>
-    
+
     <requirement type="app" category="compositional">
         <id>REQ_EP_077</id>
         <name>Importing Without Proper Import Source Support</name>
@@ -854,7 +854,7 @@
             <section>6.11.1</section>
         </ref>
     </requirement>
-    
+
     <requirement type="app" category="compositional">
         <id>REQ_EP_078</id>
         <name>File Source Essence Cannot be Found When Importing Import Source</name>
@@ -865,7 +865,7 @@
             <section>6.11.1</section>
         </ref>
     </requirement>
-    
+
     <requirement type="app" category="compositional">
         <id>REQ_EP_079</id>
         <name>Import Import Source Read Error Fallback Behaviour</name>
@@ -876,7 +876,7 @@
             <section>6.11.1</section>
         </ref>
     </requirement>
-    
+
     <requirement type="definition" category="compositional">
         <id>DEF_EP_080</id>
         <name>Tape Source Specification</name>
@@ -887,7 +887,7 @@
             <section>6.12</section>
         </ref>
     </requirement>
-    
+
     <requirement type="file" category="compositional">
         <id>REQ_EP_081</id>
         <name>Tape Source Name</name>
@@ -898,7 +898,7 @@
             <section>6.12</section>
         </ref>
     </requirement>
-    
+
     <requirement type="file" category="compositional">
         <id>REQ_EP_082</id>
         <name>Tape Source Timecode Tracks</name>
@@ -909,7 +909,7 @@
             <section>6.12</section>
         </ref>
     </requirement>
-    
+
     <requirement type="app" category="compositional">
         <id>REQ_EP_083</id>
         <name>Tape Source with Film Source</name>
@@ -920,7 +920,7 @@
             <section>6.12</section>
         </ref>
     </requirement>
-    
+
     <requirement type="app" category="compositional">
         <id>REQ_EP_084</id>
         <name>Importing Tape Source Fallback Behaviour</name>
@@ -931,7 +931,7 @@
             <section>6.12.1</section>
         </ref>
     </requirement>
-    
+
     <requirement type="definition" category="compositional">
         <id>DEF_EP_085</id>
         <name>Film Source Specification</name>
@@ -942,7 +942,7 @@
             <section>6.13</section>
         </ref>
     </requirement>
-    
+
     <requirement type="file" category="compositional">
         <id>REQ_EP_086</id>
         <name>Film Source Name</name>
@@ -953,7 +953,7 @@
             <section>6.13</section>
         </ref>
     </requirement>
-    
+
     <requirement type="file" category="compositional">
         <id>REQ_EP_087</id>
         <name>Film Source Edgecodes</name>
@@ -964,7 +964,7 @@
             <section>6.13</section>
         </ref>
     </requirement>
-    
+
     <requirement type="app" category="compositional">
         <id>REQ_EP_088</id>
         <name>Import Film Source Fallback Behaviour</name>
@@ -975,8 +975,8 @@
             <section>6.13.1</section>
         </ref>
     </requirement>
-    
-    <requirement type="app" category="compositional">
+
+    <requirement type="app" category="metadata">
         <id>REQ_EP_089</id>
         <name>Video Frame Edit Rate for Audio Track</name>
         <desc>If an application does not support sample-accurate audio edititng, then it may use video frame edit rates on audio tracks.</desc>
@@ -986,8 +986,8 @@
             <section>7.1</section>
         </ref>
     </requirement>
-    
-    <requirement type="app" category="compositional">
+
+    <requirement type="app" category="metadata">
         <id>REQ_EP_090</id>
         <name>Edit Rate Purpose</name>
         <desc>The edit rate should indicate the playback speed of the essence.</desc>
@@ -997,8 +997,8 @@
             <section>7.1</section>
         </ref>
     </requirement>
-    
-    <requirement type="file" category="compositional">
+
+    <requirement type="file" category="metadata">
         <id>REQ_EP_091</id>
         <name>Edit Rate Value</name>
         <desc>The edit rate value shall be equivalent to the values in the table in Section 7.1 of the AAF Edit Protocol.</desc>
@@ -1008,8 +1008,8 @@
             <section>7.1</section>
         </ref>
     </requirement>
-    
-    <requirement type="file" category="compositional">
+
+    <requirement type="file" category="metadata">
         <id>REQ_EP_092</id>
         <name>Edit Rate Restrictions</name>
         <desc>A rational with a zero or negative numerator or denominator shall not be used as an edit rate value.</desc>
@@ -1019,8 +1019,8 @@
             <section>7.1</section>
         </ref>
     </requirement>
-    
-    <requirement type="app" category="compositional">
+
+    <requirement type="app" category="metadata">
         <id>REQ_EP_093</id>
         <name>Edit Point Position</name>
         <desc>An edit point position may be at any edit unit boundary, as defined by the edit rate value.</desc>
@@ -1030,8 +1030,8 @@
             <section>7.1.1</section>
         </ref>
     </requirement>
-    
-    <requirement type="app" category="compositional">
+
+    <requirement type="app" category="metadata">
         <id>REQ_EP_094</id>
         <name>Acceptable Edit Rate Values</name>
         <desc>An importing application shall accept the edit rate values defined in Section 7.1 of the AAF Edit Protocol and the corresponding edit point positions.</desc>
@@ -1041,8 +1041,8 @@
             <section>7.1.2</section>
         </ref>
     </requirement>
-    
-    <requirement type="app" category="compositional">
+
+    <requirement type="app" category="metadata">
         <id>REQ_EP_095</id>
         <name>Importing Edit Rate Value Fallback Behaviour</name>
         <desc>If the importing application does not support edit points at the specified position, is shall round the position to the nearest position that can be supported.  Any rounding shall avoid introducing gaps where none existed before and minimize changes to the overall duration.  This fallback behaviour shall be logged.</desc>
@@ -1052,8 +1052,8 @@
             <section>7.1.3</section>
         </ref>
     </requirement>
-    
-    <requirement type="definition" category="compositional">
+
+    <requirement type="definition" category="metadata">
         <id>DEF_EP_096</id>
         <name>Pull Up/Down Specification</name>
         <desc>Pull up and pull down shall be specified using a Pulldown object.</desc>
@@ -1063,8 +1063,8 @@
             <section>7.2</section>
         </ref>
     </requirement>
-    
-    <requirement type="file" category="compositional">
+
+    <requirement type="file" category="metadata">
         <id>REQ_EP_097</id>
         <name>Context For Pulldown Use</name>
         <desc>A Pulldown may be used in the following contexts: 1. In a TimelineMobSlot of a file SourceMob, where the Pulldown object contains a SourceClip referencing a tape SourceMob; 2. In a TimelineMobSlot of a tape SourceMob, where the Pulldown object contains a SourceClip referencing a film SourceMob; 3. In a TimelineMobSlot of a tape SourceMob, where the Pulldown object contains a SourceClip referenceing a tape SourceMob.</desc>
@@ -1074,8 +1074,8 @@
             <section>7.2</section>
         </ref>
     </requirement>
-    
-    <requirement type="app" category="compositional">
+
+    <requirement type="app" category="metadata">
         <id>REQ_EP_098</id>
         <name>Importing Pulldown Objects</name>
         <desc>An importing application shall accept Pulldown objects in the contexts listed above.</desc>
@@ -1085,8 +1085,8 @@
             <section>7.2.1</section>
         </ref>
     </requirement>
-    
-    <requirement type="file" category="compositional">
+
+    <requirement type="file" category="metadata">
         <id>REQ_EP_099</id>
         <name>Audio Track Rates</name>
         <desc>All audio tracks within a file shall have the same edit rate and sample rate.</desc>
@@ -1096,8 +1096,8 @@
             <section>7.3</section>
         </ref>
     </requirement>
-    
-    <requirement type="file" category="compositional">
+
+    <requirement type="file" category="metadata">
         <id>REQ_EP_100</id>
         <name>Video Edit Rates</name>
         <desc>The video edit rate shall be less than or equal to the video sample rate.</desc>
@@ -1107,8 +1107,8 @@
             <section>7.4</section>
         </ref>
     </requirement>
-    
-    <requirement type="file" category="compositional">
+
+    <requirement type="file" category="metadata">
         <id>REQ_EP_101</id>
         <name>Essence Track Names</name>
         <desc>The MobSlot::Name property shall be a valid name identifying the essence track.  Where multiple essence tracks are exported, each shall have a different Name.</desc>
@@ -1118,8 +1118,8 @@
             <section>7.5</section>
         </ref>
     </requirement>
-    
-    <requirement type="app" category="compositional">
+
+    <requirement type="app" category="metadata">
         <id>REQ_EP_102</id>
         <name>Importing Essence Track Fallback Behaviour</name>
         <desc>If the importing application does not support the required number of essence tracks of a particular kind, a subset shall be imported into the application.  This fallback behaviour shall be logged.  The user should be able to select which essence tracks are imported from a list of their MobSlot::Names.</desc>
@@ -1129,8 +1129,8 @@
             <section>7.5.1</section>
         </ref>
     </requirement>
-    
-    <requirement type="file" category="compositional">
+
+    <requirement type="file" category="metadata">
         <id>REQ_EP_103</id>
         <name>Physical Track Number Specification</name>
         <desc>The MobSlot::PhysicalTrackNumber property shall be specified for essence MobSlots within the following kinds of Mobs: CompositionMob, MasterMob, recording SourceMob, import SourceMob, tape SourceMob, film SourceMob.</desc>
@@ -1140,8 +1140,8 @@
             <section>7.6</section>
         </ref>
     </requirement>
-    
-    <requirement type="app" category="compositional">
+
+    <requirement type="app" category="metadata">
         <id>REQ_EP_104</id>
         <name>Physical Track Number is Output Channel Number</name>
         <desc>In a CompositionMob or MasterMob, PhysicalTrackNumber is the output channel number that the MobSlot should be routed to when played.</desc>
@@ -1151,8 +1151,8 @@
             <section>7.6</section>
         </ref>
     </requirement>
-    
-    <requirement type="app" category="compositional">
+
+    <requirement type="app" category="metadata">
         <id>REQ_EP_105</id>
         <name>Stereo-Pair Audio Tracks</name>
         <desc>For audio tracks belonging to a stereo pair, PhysicalTrackNumber=1 shall mean left, PhysicalTrackNumber=2 shall mean right.</desc>
@@ -1162,8 +1162,8 @@
             <section>7.6</section>
         </ref>
     </requirement>
-    
-    <requirement type="app" category="compositional">
+
+    <requirement type="app" category="metadata">
         <id>REQ_EP_106</id>
         <name>Importing PhysicalTrackNumber Fallback Behaviour</name>
         <desc>If the importing application does not support the specified PhysicalTrackNumber on a track it is importing, then it shall fallback to a track number that can be supported.  This fallback shall be logged.  The user should be able to control the mapping of the PhysicalTrackNumber values in the AAF file into the application.</desc>
@@ -1173,8 +1173,8 @@
             <section>7.6.1</section>
         </ref>
     </requirement>
-    
-    <requirement type="app" category="compositional">
+
+    <requirement type="app" category="metadata">
         <id>REQ_EP_107</id>
         <name>Preserve Mark IN/OUT and Most Recent Points</name>
         <desc>In some applications, the most recentlyset Mark IN and Mark OUT points that were set by the user on a clip or composition may be preserved.  In addition, the position in the clip or composition that was most recently presented may be preserved.</desc>
@@ -1184,8 +1184,8 @@
             <section>7.7</section>
         </ref>
     </requirement>
-    
-    <requirement type="file" category="compositional">
+
+    <requirement type="file" category="metadata">
         <id>REQ_EP_108</id>
         <name>IN, OUT and User Position Point Specification</name>
         <desc>The marked IN and OUT points and user position shall be specified using the TimelineMobSlot::MarkIn, TimelineMobSlot::MarkOut and TimelineMobSlot::UserPos optional properties respectively.</desc>
@@ -1195,8 +1195,8 @@
             <section>7.7</section>
         </ref>
     </requirement>
-    
-    <requirement type="app" category="compositional">
+
+    <requirement type="app" category="metadata">
         <id>REQ_EP_109</id>
         <name>Importing Unspecified Mark Points</name>
         <desc>An importing application may assume that the mark points also apply to other tracks for which no marks are specified.</desc>
@@ -1206,8 +1206,8 @@
             <section>7.7.1</section>
         </ref>
     </requirement>
-    
-    <requirement type="file" category="compositional">
+
+    <requirement type="file" category="metadata">
         <id>REQ_EP_110</id>
         <name>Multi-Channel Audio Representation in CompositionMobs and MasterMobs</name>
         <desc>Within a CompositionMob or MasterMob, multi-channel audio shall be represented using multiple tracks with mono sound Data Definition.  Within a CompositionMob or MasterMob, a multi-channel sound Data Definition shall not be used.</desc>
@@ -1217,8 +1217,8 @@
             <section>7.8</section>
         </ref>
     </requirement>
-    
-    <requirement type="file" category="compositional">
+
+    <requirement type="file" category="metadata">
         <id>REQ_EP_111</id>
         <name>Intended Placement of Audio Tracks</name>
         <desc>The intended placement of each audio track when played shall be indicated using the MobSlot::PhysicalTrackNumber property.  The Physical Track Number shall be an integer in the range 1 to the total number of audio tracks in the program.  Six channel surround tracks shall be numbered in accordance with SMPTE 320M Standard Assignment B (1=Left; 2=Right; 3=Center; 4=Low Frequency Effects; 5=Left Surround; 6=Right Surround).</desc>
@@ -1228,8 +1228,8 @@
             <section>7.8</section>
         </ref>
     </requirement>
-    
-    <requirement type="file" category="compositional">
+
+    <requirement type="file" category="metadata">
         <id>REQ_EP_112</id>
         <name>Multi-Channel Audio Representation in a SourceMob</name>
         <desc>Within a SourceMob, multi-channel audio shall be represented in either of the following ways: a single track with a multi-channel sound Data Definition and a single audio EssenceDescriptor object of multiple channels; or multiple tracks with a mono sound Data Definition and a MultipleDescriptor containing the same number of mono audio EssenceDescriptors.</desc>
@@ -1239,8 +1239,8 @@
             <section>7.8</section>
         </ref>
     </requirement>
-    
-    <requirement type="file" category="compositional">
+
+    <requirement type="file" category="metadata">
         <id>REQ_EP_113</id>
         <name>Reference a Single Channel of a Multi-Channel Track</name>
         <desc>To reference a single channel of a multi-channel track from a mono track, the SourceReference::ChannelIDs property shall be used with a single element in the array.</desc>
@@ -1250,8 +1250,8 @@
             <section>7.8</section>
         </ref>
     </requirement>
-    
-    <requirement type="file" category="compositional">
+
+    <requirement type="file" category="metadata">
         <id>REQ_EP_114</id>
         <name>Reference Multiple Channels of a Multi-Channel Track</name>
         <desc>To reference multiple channels of a multi-channel track from a multi-channel track, the SourceReference::ChannelIDs property shall be used with multiple elements in the array.</desc>
@@ -1261,8 +1261,8 @@
             <section>7.8</section>
         </ref>
     </requirement>
-    
-    <requirement type="file" category="compositional">
+
+    <requirement type="file" category="metadata">
         <id>REQ_EP_115</id>
         <name>Reference Multiple Mono Tracks from a Multi-Channel Track</name>
         <desc>To reference multiple mono tracks from a multi-channel track, the SourceReference::MonoSourceSlotIDs shall be used with multiple elements in the array.</desc>
@@ -1272,8 +1272,8 @@
             <section>7.8</section>
         </ref>
     </requirement>
-    
-    <requirement type="file" category="compositional">
+
+    <requirement type="file" category="metadata">
         <id>REQ_EP_116</id>
         <name>Export Requiring Uncommon Codec</name>
         <desc>When exporting multi-channel essence as a single file SourceMob where the multi-channel essence requires a codec that is not widely avaliable, the exporting application should also export the individual channels as separate essence and file SourceMobs, linked into the Mob reference chain.</desc>
@@ -1283,8 +1283,8 @@
             <section>7.8.1</section>
         </ref>
     </requirement>
-    
-    <requirement type="app" category="compositional">
+
+    <requirement type="app" category="metadata">
         <id>REQ_EP_117</id>
         <name>Importing Multi-Channel Audio</name>
         <desc>The importing application shall accept multi-channel audio SourceMobs represented in either of the ways described in Section 7.7 of the AAF Edit Protocol.</desc>
@@ -1294,8 +1294,8 @@
             <section>7.8.2</section>
         </ref>
     </requirement>
-    
-    <requirement type="app" category="compositional">
+
+    <requirement type="app" category="metadata">
         <id>REQ_EP_118</id>
         <name>Accept Multi-Channel Audio Properties on SourceMobs</name>
         <desc>The application shall accept the SourceReference::ChannelIDs and SourceReference::MonoSourceSlotIDs properties in SourceMobs.</desc>
@@ -1305,8 +1305,8 @@
             <section>7.8.2</section>
         </ref>
     </requirement>
-    
-    <requirement type="app" category="compositional">
+
+    <requirement type="app" category="metadata">
         <id>REQ_EP_119</id>
         <name>Accept Multi-Channel Properties on MasterMobs</name>
         <desc>The application shall accept the SourceReference::ChannelIDs property (with a single element in the array) in a MasterMob.</desc>
@@ -1316,8 +1316,8 @@
             <section>7.8.2</section>
         </ref>
     </requirement>
-    
-    <requirement type="app" category="compositional">
+
+    <requirement type="app" category="metadata">
         <id>REQ_EP_120</id>
         <name>Importing Multi-Channel Audio Fallback Behaviour</name>
         <desc>If the importing application does not support multi-channel audio sources or the particular multi-channes audio file source format, it shall search along the source derivation chain to find a source it may support.  If no supported source is found, some placeholder essence shall be substituted.</desc>
@@ -1327,8 +1327,8 @@
             <section>7.8.3</section>
         </ref>
     </requirement>
-        
-    <requirement type="file" category="compositional">
+
+    <requirement type="file" category="metadata">
         <id>REQ_EP_121</id>
         <name>Specification of a Clip with Multiple File Source Choices</name>
         <desc>A clip with multiple file source choices shall be specified using an EssenceGroup object in a MasterMob.</desc>
@@ -1338,8 +1338,8 @@
             <section>7.9</section>
         </ref>
     </requirement>
-    
-    <requirement type="app" category="compositional">
+
+    <requirement type="app" category="metadata">
         <id>REQ_EP_122</id>
         <name>Importing EssenceGroup Objects</name>
         <desc>An importing application shall support EssenceGroup objects in a MasterMob.</desc>
@@ -1349,8 +1349,8 @@
             <section>7.9.1</section>
         </ref>
     </requirement>
-    
-    <requirement type="app" category="compositional">
+
+    <requirement type="app" category="metadata">
         <id>REQ_EP_123</id>
         <name>Criteria for Chosing How to Import an Essence Group</name>
         <desc>Importing applications should select one of the Choices in the EssenceGroup based upon a defined criterion.  The criterion may be any of the following: an application-defined essence type; an application-defined essence quality measure; a user-defined essence type; a user-defined essence quality measure; or a user selection.</desc>
@@ -1360,8 +1360,8 @@
             <section>7.9.1</section>
         </ref>
     </requirement>
-    
-    <requirement type="app" category="compositional">
+
+    <requirement type="app" category="metadata">
         <id>REQ_EP_124</id>
         <name>Importing EssenceGroup with Unsupported Criteria Fallback Behaviour</name>
         <desc>If an importing application cannot support application or user-defined criteria, it shall by default select the first entry in the Choices property.</desc>
@@ -1371,8 +1371,8 @@
             <section>7.9.2</section>
         </ref>
     </requirement>
-    
-    <requirement type="app" category="compositional">
+
+    <requirement type="app" category="metadata">
         <id>REQ_EP_125</id>
         <name>Importing EssenceGroup with Matching Choice Fallback Behavour</name>
         <desc>If an application finds no Choice which matches a defined criterion, it may select an acceptable alternative or substitute placeholder essence.  This fallback behaviour shall be logged.</desc>
@@ -1382,8 +1382,8 @@
             <section>7.9.2</section>
         </ref>
     </requirement>
-    
-    <requirement type="app" category="compositional">
+
+    <requirement type="app" category="metadata">
         <id>REQ_EP_126</id>
         <name>Use Filler for Gaps</name>
         <desc>A gap, where the output is unspecified for a defined duration, shall be specified using a Filler object.</desc>
@@ -1393,8 +1393,8 @@
             <section>7.10</section>
         </ref>
     </requirement>
-    
-    <requirement type="app" category="compositional">
+
+    <requirement type="app" category="metadata">
         <id>REQ_EP_127</id>
         <name>Importing Filler Objects</name>
         <desc>An importing application shall accept Filler objects.  If Filler is played, it shall be presented as a black picture and silent audio.</desc>
@@ -1404,8 +1404,8 @@
             <section>7.10.1</section>
         </ref>
     </requirement>
-    
-    <requirement type="definition" category="compositional">
+
+    <requirement type="definition" category="metadata">
         <id>DEF_EP_128</id>
         <name>Edgecode Specification</name>
         <desc>A track of edgecode shall be specified using one or more Edgecode objects.</desc>
@@ -1415,8 +1415,8 @@
             <section>7.11</section>
         </ref>
     </requirement>
-    
-    <requirement type="definition" category="compositional">
+
+    <requirement type="definition" category="metadata">
         <id>DEF_EP_129</id>
         <name>Timecode Specification</name>
         <desc>A track of timecode shall be specified using one or more Timecode objects or a TimecodeStream12M object.</desc>
@@ -1426,8 +1426,8 @@
             <section>7.11</section>
         </ref>
     </requirement>
-    
-    <requirement type="app" category="compositional">
+
+    <requirement type="app" category="metadata">
         <id>REQ_EP_130</id>
         <name>Discontinuity in Edgecode or Timecode</name>
         <desc>To specify a discontinuity in edgecode ore timecode, multiple Edgecode objects or Timecode objects shall be placed in a Sequence - the discontinuity occurs at the junction between Edgecode objects or Timecode objects.</desc>
@@ -1437,8 +1437,8 @@
             <section>7.11</section>
         </ref>
     </requirement>
-    
-    <requirement type="file" category="compositional">
+
+    <requirement type="file" category="metadata">
         <id>REQ_EP_131</id>
         <name>Primary Timecode Track</name>
         <desc>A Primary timecode track (see Section 6.3 of the AAF Edit Protocol) in a top-level or lower-level composition shall consist of a single Timecode object.</desc>
@@ -1448,8 +1448,8 @@
             <section>7.11</section>
         </ref>
     </requirement>
-    
-    <requirement type="app" category="compositional">
+
+    <requirement type="app" category="metadata">
         <id>REQ_EP_132</id>
         <name>Importing Timecodes and Edgecodes</name>
         <desc>An importing application shall accept Edgecode, Timecode and TimecodeStream12M objects and shall support discontinuities in Timecode objects and Edgecode objects within SourceMobs.</desc>
@@ -1459,8 +1459,8 @@
             <section>7.11.1</section>
         </ref>
     </requirement>
-    
-    <requirement type="app" category="compositional">
+
+    <requirement type="app" category="mixdown">
         <id>REQ_EP_133</id>
         <name>Composition Mixdown Clip Specification</name>
         <desc>A composition mixdown clip shall be specified as a clip (as specified in Section 6.8 of the AAF Edit Protocol) referencing file sources (as specified in Section 6.9 of the AAF Edit Protocol).</desc>
@@ -1470,8 +1470,8 @@
             <section>8</section>
         </ref>
     </requirement>
-    
-    <requirement type="app" category="compositional">
+
+    <requirement type="app" category="auxiliary-file">
         <id>REQ_EP_134</id>
         <name>Use of Auxiliary Files</name>
         <desc>In some applications, a user may need to reference and embed auxiliary files within an AAF Edit Protocol file.</desc>
@@ -1481,8 +1481,8 @@
             <section>9.1</section>
         </ref>
     </requirement>
-    
-    <requirement type="definition" category="compositional">
+
+    <requirement type="definition" category="auxiliary-file">
         <id>DEF_EP_135</id>
         <name>Specification of Auxiliary Data</name>
         <desc>Each auxiliary file EssenceData object shall be specified using a SourceMob with an AuxiliaryDescriptor.</desc>
@@ -1492,8 +1492,8 @@
             <section>9.1.1</section>
         </ref>
     </requirement>
-    
-    <requirement type="file" category="compositional">
+
+    <requirement type="file" category="auxiliary-file">
         <id>REQ_EP_136</id>
         <name>Auxiliary SourceMob Contents</name>
         <desc>An auxiliary SourceMob shall contain at least one Slot, which may be a TimelineMobSlot, EventMobSlot or StaticMobSlot as appropriate.  The Data Definition of the Segment within the Slot shall be DataDef_Auxiliary.</desc>
@@ -1503,8 +1503,8 @@
             <section>9.1.1</section>
         </ref>
     </requirement>
-    
-    <requirement type="file" category="compositional">
+
+    <requirement type="file" category="auxiliary-file">
         <id>REQ_EP_137</id>
         <name>Referencing Auxiliary SourceMobs</name>
         <desc>An AAF Mob (such as an AAF composition) may reference an auxiliary SourceMob using a SourceReference (or sub-class thereof) from a DataDef_Auxiliary Slot in the referencing Mob to the DataDef_Auxiliary Slot in the auxiliary SourceMob.</desc>
@@ -1514,8 +1514,8 @@
             <section>9.1.1</section>
         </ref>
     </requirement>
-    
-    <requirement type="file" category="compositional">
+
+    <requirement type="file" category="auxiliary-file">
         <id>REQ_EP_138</id>
         <name>Specifying Embedded Auxiliary File</name>
         <desc>An embedded auxiliary file shall be specified using an EssenceData object containing the auxiliary file data.  The EssenceData object is linked to the auxiliary SourceMob using a common MobID.</desc>
@@ -1525,8 +1525,8 @@
             <section>9.1.1</section>
         </ref>
     </requirement>
-    
-    <requirement type="app" category="compositional">
+
+    <requirement type="app" category="auxiliary-file">
         <id>REQ_EP_139</id>
         <name>Importing Auxiliary Data</name>
         <desc>The importing application may attempt to recognize the type of auxiliary data from the MIME type in the AuxiliaryDescriptor.</desc>
@@ -1536,8 +1536,8 @@
             <section>9.1.2</section>
         </ref>
     </requirement>
-    
-    <requirement type="app" category="compositional">
+
+    <requirement type="app" category="auxiliary-file">
         <id>REQ_EP_140</id>
         <name>Importing Auxiliary Data Fallback Behaviour</name>
         <desc>If the importing application does not support auxiliary data file references, or does not support the particular MIME type of auxiliary data file, then the auxiliary Slots may be ignored.</desc>
@@ -1547,8 +1547,8 @@
             <section>9.1.3</section>
         </ref>
     </requirement>
-    
-    <requirement type="app" category="compositional">
+
+    <requirement type="app" category="auxiliary-file">
         <id>REQ_EP_141</id>
         <name>Standard MIDI Files</name>
         <desc>A standard MIDI file may be referenced from a composition and embedded in an AAF file as an auxiliary file, as described in Section 9 of the AAF Edit Protocol.</desc>
@@ -1558,8 +1558,8 @@
             <section>9.2</section>
         </ref>
     </requirement>
-    
-    <requirement type="file" category="compositional">
+
+    <requirement type="file" category="auxiliary-file">
         <id>REQ_EP_142</id>
         <name>MIDI Reference Limit</name>
         <desc>No more than one MIDI auxiliary file shall be referenced from a given composition.</desc>
@@ -1569,8 +1569,8 @@
             <section>9.2</section>
         </ref>
     </requirement>
-    
-    <requirement type="file" category="compositional">
+
+    <requirement type="file" category="auxiliary-file">
         <id>REQ_EP_143</id>
         <name>MIDI Type</name>
         <desc>A referenced MIDI file shall conform to the standard MIDI specification version 1.</desc>
@@ -1580,8 +1580,8 @@
             <section>9.2</section>
         </ref>
     </requirement>
-    
-    <requirement type="definition" category="compositional">
+
+    <requirement type="definition" category="auxiliary-file">
         <id>DEF_EP_144</id>
         <name>MIDI Mime Type</name>
         <desc>The AuxiliaryDescriptor::MimeType property for a referenced MIDI file shall be "audio/midi".</desc>
@@ -1591,8 +1591,8 @@
             <section>9.2</section>
         </ref>
     </requirement>
-    
-    <requirement type="app" category="compositional">
+
+    <requirement type="app" category="auxiliary-file">
         <id>REQ_EP_145</id>
         <name>Importing MIDI Files</name>
         <desc>The importing application shall parse the MIDI file, including tempo maps, to determine synchronization at further points in the composition.</desc>
@@ -1602,8 +1602,8 @@
             <section>9.2</section>
         </ref>
     </requirement>
-    
-    <requirement type="app" category="compositional">
+
+    <requirement type="app" category="annotations">
         <id>REQ_EP_146</id>
         <name>Annotation Representation</name>
         <desc>Annotations may be represented using arrays of TaggedValues or KLVData in the following optional properties: Mob::UserComments, Mob::Attributes, Mob::KLVData, Component::UserComments, Component::Attributes, or Component:: KLVData.</desc>
@@ -1613,8 +1613,8 @@
             <section>10.1</section>
         </ref>
     </requirement>
-    
-    <requirement type="file" category="compositional">
+
+    <requirement type="file" category="annotations">
         <id>REQ_EP_147</id>
         <name>Use of Component::UserComments</name>
         <desc>Component::UserComments shall only be used on: the Segment of a MobSlot or a CommentMarker (or its subclasses).</desc>
@@ -1624,8 +1624,8 @@
             <section>10.1</section>
         </ref>
     </requirement>
-    
-    <requirement type="file" category="compositional">
+
+    <requirement type="file" category="annotations">
         <id>REQ_EP_148</id>
         <name>Non-Essence Tracks Containing Annotations</name>
         <desc>The Data Definition for non-essence tracks containing annotations shall be DataDef_DescriptiveMetadata.</desc>
@@ -1635,8 +1635,8 @@
             <section>10.1</section>
         </ref>
     </requirement>
-    
-    <requirement type="file" category="compositional">
+
+    <requirement type="file" category="annotations">
         <id>REQ_EP_149</id>
         <name>Use of CommentMarkers for Annotations</name>
         <desc>CommentMarkers may be used for annotations that are not associated with a specific essence track; otherwise DescriptiveMarkers (or its subclasses) shall be used.</desc>
@@ -1646,8 +1646,8 @@
             <section>10.1</section>
         </ref>
     </requirement>
-    
-    <requirement type="file" category="compositional">
+
+    <requirement type="file" category="annotations">
         <id>REQ_EP_150</id>
         <name>Comment Marker Placement</name>
         <desc>CommentMarkers shall be placed only in EventMobSlots.  DescriptiveMarkers may be placed in any kind of MobSlot (e.g. TimelineMobSlot, EventMobSlot, StaticMobSlot).</desc>
@@ -1657,8 +1657,8 @@
             <section>10.1</section>
         </ref>
     </requirement>
-    
-    <requirement type="file" category="compositional">
+
+    <requirement type="file" category="annotations">
         <id>REQ_EP_151</id>
         <name>Documenting TaggedValues</name>
         <desc>Exporting applications shall document all TaggedValues in use using TaggedValueDefinition objects in the Dictionary::TaggedValueDefinitions property.</desc>
@@ -1668,8 +1668,8 @@
             <section>10.1</section>
         </ref>
     </requirement>
-    
-    <requirement type="file" category="compositional">
+
+    <requirement type="file" category="annotations">
         <id>REQ_EP_152</id>
         <name>Documenting KLVData</name>
         <desc>Exporting applications shall document all KLVData in use in KLVDataDefinition objects in the Dictionary::KLVDefinitions property.</desc>
@@ -1679,8 +1679,8 @@
             <section>10.1</section>
         </ref>
     </requirement>
-    
-    <requirement type="app" category="compositional">
+
+    <requirement type="app" category="annotations">
         <id>REQ_EP_153</id>
         <name>Importing TaggedValues and KLVData</name>
         <desc>The importing application shall preserve declared TaggedValues and declared KLVData in the following properties for later export: Mob::UserComments, Mob::Attributes, Mob::KLVData, Component::UserComments, Component::Attributes, Component::KLVData.</desc>
@@ -1690,8 +1690,8 @@
             <section>10.1.1</section>
         </ref>
     </requirement>
-    
-    <requirement type="app" category="compositional">
+
+    <requirement type="app" category="annotations">
         <id>REQ_EP_154</id>
         <name>Importing TaggedValues or KLVData</name>
         <desc>It is optional for the importing application to preserve any TaggedValues or KLVData items not listed in section 10.1.1 of the AAF Edit Protocol which might be present in imported files.</desc>
@@ -1701,8 +1701,8 @@
             <section>10.1.1</section>
         </ref>
     </requirement>
-    
-    <requirement type="app" category="compositional">
+
+    <requirement type="app" category="annotations">
         <id>REQ_EP_155</id>
         <name>Importing Metadata</name>
         <desc>An importing application may preserve metadata not listed in Section 10.1.1 of the AAF Edit Protocol in accordance with the precepts.</desc>
@@ -1712,8 +1712,8 @@
             <section>10.1.1</section>
         </ref>
     </requirement>
-    
-    <requirement type="app" category="compositional">
+
+    <requirement type="app" category="annotations">
         <id>REQ_EP_156</id>
         <name>Importing Legacy Annotations</name>
         <desc>Importing applications should be aware that legacy files might contain CommentMarkers in tracks with unexpected DataDefinitions such as DataDef_LegacyPicture or DataDef_LegacySound or others.  The importing application may freely convert such DataDefinitions to DataDef_DescriptiveMetadata.</desc>
@@ -1723,8 +1723,8 @@
             <section>10.1.1</section>
         </ref>
     </requirement>
-    
-    <requirement type="app" category="compositional">
+
+    <requirement type="app" category="annotations">
         <id>REQ_EP_157</id>
         <name>Importing Annotation Fallback Behaviour</name>
         <desc>If an importing application cannot support particular properties of a DescriptiveMarker, it shall ignore them.  This fallback behaviour shall be logged.</desc>
@@ -1734,8 +1734,8 @@
             <section>10.1.2</section>
         </ref>
     </requirement>
-    
-    <requirement type="app" category="compositional">
+
+    <requirement type="app" category="annotations">
         <id>REQ_EP_158</id>
         <name>Export Support for DescriptiveMarker Class</name>
         <desc>The Edit Protocol requires exporting applications to support the DescriptiveMarker class, including the DescriptiveMarker::Description property.</desc>
@@ -1745,8 +1745,8 @@
             <section>10.2</section>
         </ref>
     </requirement>
-    
-    <requirement type="app" category="compositional">
+
+    <requirement type="app" category="annotations">
         <id>REQ_EP_159</id>
         <name>Import/Export Support for MXF DMS-1 Metadata</name>
         <desc>The Edit Protocol does not require either exporting or importing applications to explicitly support MXF DMS-1 metadata.</desc>
@@ -1756,8 +1756,8 @@
             <section>10.2</section>
         </ref>
     </requirement>
-    
-    <requirement type="app" category="compositional">
+
+    <requirement type="app" category="effect">
         <id>REQ_EP_160</id>
         <name>Effect Definitions</name>
         <desc>All effects in an AAF file shall be defined with OperationDefinition and ParameterDefinition objects in the Dictionary.</desc>
@@ -1767,8 +1767,8 @@
             <section>11.1</section>
         </ref>
     </requirement>
-    
-    <requirement type="file" category="compositional">
+
+    <requirement type="file" category="effect">
         <id>REQ_EP_161</id>
         <name>Definition Object Name</name>
         <desc>The DefinitionObject::Name property of all DefinitionObjects in the Dictionary shall be a valid, meaningful name.</desc>
@@ -1778,8 +1778,8 @@
             <section>11.1</section>
         </ref>
     </requirement>
-    
-    <requirement type="file" category="compositional">
+
+    <requirement type="file" category="effect">
         <id>REQ_EP_162</id>
         <name>OperationDefinition Data Definition Value</name>
         <desc>An OperationDefinition object in an AAF file shall have a data definition value consistent with the data definition of an OperationGroup object that references it.</desc>
@@ -1789,8 +1789,8 @@
             <section>11.1</section>
         </ref>
     </requirement>
-    
-    <requirement type="file" category="compositional">
+
+    <requirement type="file" category="effect">
         <id>REQ_EP_163</id>
         <name>Effect Data Definition Values</name>
         <desc>The effects defined in the Edit Protocol should be used with the AAF v1.1 data definition values of DataDef_Picture and DataDef_Sound.  The deprecated data definition values of DataDef_LegacyPicture and DataDef_LegacySound should only be used when working with legacy AAF v1.0 files.</desc>
@@ -1800,8 +1800,8 @@
             <section>11.1</section>
         </ref>
     </requirement>
-    
-    <requirement type="app" category="compositional">
+
+    <requirement type="app" category="effect">
         <id>REQ_EP_164</id>
         <name>Importing Effect Fallback Behaviour</name>
         <desc>If an importing application does not support an effect or parameter, it may be ignored.  This fallback behaviour shall be logged, including the DefinitionObject::Name and DefinitionObject::Description (if present) of the unsupported effect or parameter, to provide the user with an indication of the intended effect.</desc>
@@ -1811,8 +1811,8 @@
             <section>11.1.1</section>
         </ref>
     </requirement>
-    
-    <requirement type="definition" category="compositional">
+
+    <requirement type="definition" category="effect">
         <id>DEF_EP_165</id>
         <name>Effect Invokation Method</name>
         <desc>An effect shall be invoked using an OperationGroup object.</desc>
@@ -1822,8 +1822,8 @@
             <section>11.2</section>
         </ref>
     </requirement>
-    
-    <requirement type="app" category="compositional">
+
+    <requirement type="app" category="effect">
         <id>REQ_EP_166</id>
         <name>Effect Invokation Construction</name>
         <desc>Effects shall be invoked using the simplest construction of objects for a given scenario following the precepts of Section 4.2.1 of the AAF Edit Protocol.</desc>
@@ -1833,8 +1833,8 @@
             <section>11.2</section>
         </ref>
     </requirement>
-    
-    <requirement type="file" category="compositional">
+
+    <requirement type="file" category="effect">
         <id>REQ_EP_167</id>
         <name>Transition Effect Containment</name>
         <desc>The OperationGroup shall be contained in a Transition object between two Segments.</desc>
@@ -1844,8 +1844,8 @@
             <section>11.2.1</section>
         </ref>
     </requirement>
-    
-    <requirement type="file" category="compositional">
+
+    <requirement type="file" category="effect">
         <id>REQ_EP_168</id>
         <name>OperationGroup Containment</name>
         <desc>The OperationGroup shall not be contained in a Transition object.</desc>
@@ -1855,8 +1855,8 @@
             <section>11.2.2</section>
         </ref>
     </requirement>
-    
-    <requirement type="file" category="compositional">
+
+    <requirement type="file" category="effect">
         <id>REQ_EP_169</id>
         <name>Multiple Effects Sharing Common Material</name>
         <desc>Multiple effects sharing common material shall be constructed within a NestedScope object.  A continuous section of common material, used by severak effects, shall be represented as a single segment in the NestedScope.</desc>
@@ -1866,8 +1866,8 @@
             <section>11.2.3</section>
         </ref>
     </requirement>
-    
-    <requirement type="definition" category="compositional">
+
+    <requirement type="definition" category="effect">
         <id>DEF_EP_170</id>
         <name>Invoking Effects on Multiple Layers</name>
         <desc>Effects on multiple layers shall be constructed within a NestedScope object.  The layers shall be ordered background to foreground within the Slots of the NestedScope.</desc>
@@ -1877,8 +1877,8 @@
             <section>11.3</section>
         </ref>
     </requirement>
-    
-    <requirement type="app" category="compositional">
+
+    <requirement type="app" category="effect">
         <id>REQ_EP_171</id>
         <name>Importing Effects on Multiple Layers Fallback Behaviour</name>
         <desc>If the importing application does not support the required number of layers, a subset shall be imported into the application.  This fallback behaviour shall be logged.  The user should be able to select which layers are imported.</desc>
@@ -1888,8 +1888,8 @@
             <section>11.3.1</section>
         </ref>
     </requirement>
-    
-    <requirement type="file" category="compositional">
+
+    <requirement type="file" category="effect">
         <id>REQ_EP_172</id>
         <name>Nested Track Specification</name>
         <desc>A nested group of tracks within a Segment of a CompositionMob shall be specified using a NestedScope object.</desc>
@@ -1899,8 +1899,8 @@
             <section>11.4</section>
         </ref>
     </requirement>
-    
-    <requirement type="file" category="compositional">
+
+    <requirement type="file" category="effect">
         <id>REQ_EP_173</id>
         <name>ScopeReference Behaviour</name>
         <desc>A ScopeReference shall reference an existing MobSlot or NestedScope track.</desc>
@@ -1910,8 +1910,8 @@
             <section>11.4.2</section>
         </ref>
     </requirement>
-    
-    <requirement type="file" category="compositional">
+
+    <requirement type="file" category="effect">
         <id>REQ_EP_174</id>
         <name>Effect Parameter Specification</name>
         <desc>Effect parameters shall be specified using ConstantValue or VaryingValue objects.</desc>
@@ -1921,8 +1921,8 @@
             <section>11.5</section>
         </ref>
     </requirement>
-    
-    <requirement type="file" category="compositional">
+
+    <requirement type="file" category="effect">
         <id>REQ_EP_175</id>
         <name>Interpolation for Time-Varying Parameters</name>
         <desc>Interpolation between ControlPoints within VaryingValue objects shall be specified as one of the following: ConstantInterpolator, LinearInterpolator, LogInterpolator, PowerInterpolator, BSplineInterpolator.</desc>
@@ -1932,8 +1932,8 @@
             <section>11.5.1</section>
         </ref>
     </requirement>
-    
-    <requirement type="app" category="compositional">
+
+    <requirement type="app" category="effect">
         <id>REQ_EP_176</id>
         <name>Importing Effect Interpolation Fallback Behaviour</name>
         <desc>If the importing application does not support the required interpolation, it may fallback to linear interpolation.  This fallback behaviour shall be logged.</desc>
@@ -1943,8 +1943,8 @@
             <section>11.5.2</section>
         </ref>
     </requirement>
-    
-    <requirement type="app" category="compositional">
+
+    <requirement type="app" category="effect">
         <id>REQ_EP_177</id>
         <name>Importing Time-Varying Effect Parameter Fallback Behaviour</name>
         <desc>If the importing application does not support time-varrying parameters, it may fallback to applying an average of the ControlPoint values.  This fallback behaviour shall be logged.</desc>
@@ -1954,8 +1954,8 @@
             <section>11.5.2</section>
         </ref>
     </requirement>
-    
-    <requirement type="file" category="compositional">
+
+    <requirement type="file" category="effect">
         <id>REQ_EP_178</id>
         <name>2D Effect Parameter Normalization</name>
         <desc>Effects that take multiple video inputs shall have all of their parameters VH normalized to the first video input unless explicitly stated otherwise in the effect definition.</desc>
@@ -1965,8 +1965,8 @@
             <section>11.6</section>
         </ref>
     </requirement>
-    
-    <requirement type="app" category="compositional">
+
+    <requirement type="app" category="effect">
         <id>REQ_EP_179</id>
         <name>Video Dissolve Specification</name>
         <desc>A dissolve between overlapping video clips shall be specified using the Video Dissolve effect.</desc>
@@ -1976,8 +1976,8 @@
             <section>12.1</section>
         </ref>
     </requirement>
-    
-    <requirement type="file" category="compositional">
+
+    <requirement type="file" category="effect">
         <id>REQ_EP_180</id>
         <name>Video Dissolve Effect Use</name>
         <desc>The Video Dissolve effect shall only be used by an OperationGroup within a Transition object.</desc>
@@ -1987,8 +1987,8 @@
             <section>12.1</section>
         </ref>
     </requirement>
-    
-    <requirement type="app" category="compositional">
+
+    <requirement type="app" category="effect">
         <id>REQ_EP_181</id>
         <name>Importing Video Dissolve Effects</name>
         <desc>An importing application that supports video dissolves shall accept and present the Video Dissolve effect, following the precepts of Section 4.2.2 of the AAF Edit Protocol.</desc>
@@ -1998,8 +1998,8 @@
             <section>12.1.3</section>
         </ref>
     </requirement>
-    
-    <requirement type="app" category="compositional">
+
+    <requirement type="app" category="effect">
         <id>REQ_EP_182</id>
         <name>Video Wipe Specification</name>
         <desc>Video Wipe effects that are defined within SMPTE 258 shall be specified using the SMPTE Video Wipe effect.</desc>
@@ -2009,8 +2009,8 @@
             <section>12.2</section>
         </ref>
     </requirement>
-    
-    <requirement type="file" category="compositional">
+
+    <requirement type="file" category="effect">
         <id>REQ_EP_183</id>
         <name>Video Wipe Effect Use</name>
         <desc>The SMPTE Video Wipe effect shall only be used by an OperationGroup within a Transition object.</desc>
@@ -2020,8 +2020,8 @@
             <section>12.2</section>
         </ref>
     </requirement>
-    
-    <requirement type="app" category="compositional">
+
+    <requirement type="app" category="effect">
         <id>REQ_EP_184</id>
         <name>Importing Video Wipe Effects</name>
         <desc>An importing application that supports video wipes defined within SMPTE 258M shall accept and present the SMPTE Video Wipe effect, following the precepts of Section 4.2.4 of the AAF Edit Protocol.</desc>
@@ -2031,8 +2031,8 @@
             <section>12.2.5</section>
         </ref>
     </requirement>
-    
-    <requirement type="app" category="compositional">
+
+    <requirement type="app" category="effect">
         <id>REQ_EP_185</id>
         <name>Video Speed Control Effect Specification</name>
         <desc>A video speed control effect, describing alterations to the playback speed of a clip including forwards and backwards directions, shall be specified using a Video Speed Control effect.</desc>
@@ -2042,8 +2042,8 @@
             <section>12.3</section>
         </ref>
     </requirement>
-    
-    <requirement type="file" category="compositional">
+
+    <requirement type="file" category="effect">
         <id>REQ_EP_186</id>
         <name>Video Speed Control Effect Use</name>
         <desc>The Video Speed Control effect shall only be used by an OperationGroup not contained withing a Transition object.</desc>
@@ -2053,8 +2053,8 @@
             <section>12.3</section>
         </ref>
     </requirement>
-    
-    <requirement type="file" category="compositional">
+
+    <requirement type="file" category="effect">
         <id>REQ_EP_187</id>
         <name>Video Speed Control Effect - Speed Ratio Parameter Definition</name>
         <desc>A ratio value of 0 shall not be used for the Speed Ratio paremeter of a Video Speed Control effect.</desc>
@@ -2064,8 +2064,8 @@
             <section>12.3.2</section>
         </ref>
     </requirement>
-    
-    <requirement type="app" category="compositional">
+
+    <requirement type="app" category="effect">
         <id>REQ_EP_188</id>
         <name>Importing Video Speed Control Effects</name>
         <desc>An importing application that supports video speed control effects shall accept and present the Video Speed Control effect, following the precepts of Section 4.2.4 of the AAF Edit Protocol.</desc>
@@ -2075,8 +2075,8 @@
             <section>12.3.3</section>
         </ref>
     </requirement>
-    
-    <requirement type="app" category="compositional">
+
+    <requirement type="app" category="effect">
         <id>REQ_EP_189</id>
         <name>Video Repeat Effect Specification</name>
         <desc>A video frame repeat effect, describing a clip that has a single essence frame as their original source, shall be specified using a Video Repeat effect.</desc>
@@ -2086,8 +2086,8 @@
             <section>12.4</section>
         </ref>
     </requirement>
-    
-    <requirement type="file" category="compositional">
+
+    <requirement type="file" category="effect">
         <id>REQ_EP_190</id>
         <name>Video Repeat Effect Use</name>
         <desc>The Video Repeat effect shall only be used by an OperationGroup not contained within a Transition object.</desc>
@@ -2097,8 +2097,8 @@
             <section>12.4</section>
         </ref>
     </requirement>
-    
-    <requirement type="file" category="compositional">
+
+    <requirement type="file" category="effect">
         <id>REQ_EP_191</id>
         <name>Deprecated Video Repeat Effect Definition</name>
         <desc>The Edit Protocol deprecates the use of specifying a Video Repeat Effect by using a SourceClip in a TimelineMobSlot that references a still frame in a StaticMobSlot.  An exporting application shall not use this representation and an importing application need not accept it.</desc>
@@ -2108,8 +2108,8 @@
             <section>12.4.1</section>
         </ref>
     </requirement>
-    
-    <requirement type="app" category="compositional">
+
+    <requirement type="app" category="effect">
         <id>REQ_EP_192</id>
         <name>Importing Video Repeat Effects</name>
         <desc>An importing application that supports video repeat effects shall accept and present the Video Repeat effect, following the precepts of Section 4.2.2 of the AAF Edit Protocol.</desc>
@@ -2119,8 +2119,8 @@
             <section>12.4.2</section>
         </ref>
     </requirement>
-    
-    <requirement type="app" category="compositional">
+
+    <requirement type="app" category="effect">
         <id>REQ_EP_193</id>
         <name>Video Flip Effect Specification</name>
         <desc>A video flip effect shall be specified using the Video Flip effect.</desc>
@@ -2130,8 +2130,8 @@
             <section>12.5</section>
         </ref>
     </requirement>
-    
-    <requirement type="file" category="compositional">
+
+    <requirement type="file" category="effect">
         <id>REQ_EP_194</id>
         <name>Video Flip Effect Use</name>
         <desc>The Video Flip effect shall only be used by an OperationGroup not contained within a Transition object.</desc>
@@ -2141,8 +2141,8 @@
             <section>12.5</section>
         </ref>
     </requirement>
-    
-    <requirement type="app" category="compositional">
+
+    <requirement type="app" category="effect">
         <id>REQ_EP_195</id>
         <name>Importing Video Flip Effects</name>
         <desc>An importing application that supports video flip effects shall accept and present the Video Flip effect, following the precepts of Section 4.2.4 of the AAF Edit Protocol.</desc>
@@ -2152,8 +2152,8 @@
             <section>12.5.2</section>
         </ref>
     </requirement>
-    
-    <requirement type="app" category="compositional">
+
+    <requirement type="app" category="effect">
         <id>REQ_EP_196</id>
         <name>Video Flop Effect Specification</name>
         <desc>A video flop effect shall be specified using the Video Flop effect.</desc>
@@ -2163,8 +2163,8 @@
             <section>12.6</section>
         </ref>
     </requirement>
-    
-    <requirement type="file" category="compositional">
+
+    <requirement type="file" category="effect">
         <id>REQ_EP_197</id>
         <name>Video Flop Effect Use</name>
         <desc>The Video Flop effect shall only be used by an OperationGroup not contained within a Transition object.</desc>
@@ -2174,8 +2174,8 @@
             <section>12.6</section>
         </ref>
     </requirement>
-    
-    <requirement type="app" category="compositional">
+
+    <requirement type="app" category="effect">
         <id>REQ_EP_198</id>
         <name>Importing Video Flop Effects</name>
         <desc>An importing application that supports video flop effects shall accept and present the Video Flop effect, following the precepts of Section 4.2.4 of the AAF Edit Protocol.</desc>
@@ -2185,8 +2185,8 @@
             <section>12.6.2</section>
         </ref>
     </requirement>
-    
-    <requirement type="app" category="compositional">
+
+    <requirement type="app" category="effect">
         <id>REQ_EP_199</id>
         <name>Video Flip-Flop Effect Specification</name>
         <desc>A video flip-flop effect shall be specified using the Video Flip-Flop effect.</desc>
@@ -2196,8 +2196,8 @@
             <section>12.7</section>
         </ref>
     </requirement>
-    
-    <requirement type="file" category="compositional">
+
+    <requirement type="file" category="effect">
         <id>REQ_EP_200</id>
         <name>Video Flip-Flop Effect Use</name>
         <desc>The Video Flip-Flop effect shall only be used by an OperationGroup not contained within a Transition object.</desc>
@@ -2207,8 +2207,8 @@
             <section>12.7</section>
         </ref>
     </requirement>
-    
-    <requirement type="app" category="compositional">
+
+    <requirement type="app" category="effect">
         <id>REQ_EP_201</id>
         <name>Importing Video Flip-Flop Effects</name>
         <desc>An importing application that supports video flip-flop effects shall accept and present the Video Flip-Flop effect, following the precepts of Section 4.2.4 of the AAF Edit Protocol.</desc>
@@ -2218,8 +2218,8 @@
             <section>12.7.2</section>
         </ref>
     </requirement>
-    
-    <requirement type="app" category="compositional">
+
+    <requirement type="app" category="effect">
         <id>REQ_EP_202</id>
         <name>Image Move Specification</name>
         <desc>An image move shall be specified using the Video Position effect.</desc>
@@ -2229,8 +2229,8 @@
             <section>12.8</section>
         </ref>
     </requirement>
-    
-    <requirement type="file" category="compositional">
+
+    <requirement type="file" category="effect">
         <id>REQ_EP_203</id>
         <name>Video Position Effect Use</name>
         <desc>The Video Position effect shall only be used by an OperationGroup not contained within a Transition object.</desc>
@@ -2240,8 +2240,8 @@
             <section>12.8</section>
         </ref>
     </requirement>
-    
-    <requirement type="app" category="compositional">
+
+    <requirement type="app" category="effect">
         <id>REQ_EP_204</id>
         <name>Importing Image Positioning</name>
         <desc>An importing application that supports image positioning shall accept and present the Video Position effect, following the precepts of Section 4.2.4 of the AAF Edit Protocol.</desc>
@@ -2251,8 +2251,8 @@
             <section>12.8.4</section>
         </ref>
     </requirement>
-    
-    <requirement type="app" category="compositional">
+
+    <requirement type="app" category="effect">
         <id>REQ_EP_205</id>
         <name>Image Crop Specification</name>
         <desc>An image crop shall be specified using the Video Crop effect.</desc>
@@ -2262,8 +2262,8 @@
             <section>12.9</section>
         </ref>
     </requirement>
-    
-    <requirement type="file" category="compositional">
+
+    <requirement type="file" category="effect">
         <id>REQ_EP_206</id>
         <name>Video Crop Effect Use</name>
         <desc>The Video Crop Effect shall only be used by an OperationGroup not contained within a Transition object.</desc>
@@ -2273,8 +2273,8 @@
             <section>12.9</section>
         </ref>
     </requirement>
-    
-    <requirement type="app" category="compositional">
+
+    <requirement type="app" category="effect">
         <id>REQ_EP_207</id>
         <name>Importing Image Cropping</name>
         <desc>An importing application that supports image cropping shall accept and present the Video Crop effect, following the precepts of Section 4.2.4 of the AAF Edit Protocol.</desc>
@@ -2284,8 +2284,8 @@
             <section>12.9.6</section>
         </ref>
     </requirement>
-    
-    <requirement type="app" category="compositional">
+
+    <requirement type="app" category="effect">
         <id>REQ_EP_208</id>
         <name>Image Scaling Specification</name>
         <desc>Image scaling shall be specified using the Video Scale effect.</desc>
@@ -2295,8 +2295,8 @@
             <section>12.10</section>
         </ref>
     </requirement>
-    
-    <requirement type="file" category="compositional">
+
+    <requirement type="file" category="effect">
         <id>REQ_EP_209</id>
         <name>Video Scale Effect Use</name>
         <desc>The Video Scale effect shall only be used by an OperationGroup not contained within a Transition object.</desc>
@@ -2306,8 +2306,8 @@
             <section>12.10</section>
         </ref>
     </requirement>
-    
-    <requirement type="app" category="compositional">
+
+    <requirement type="app" category="effect">
         <id>REQ_EP_210</id>
         <name>Importing Image Scaling</name>
         <desc>An importing application that supports image scaling shall accept and present the Video Scale effect, following the precepts of Section 4.2.4 of the AAF Edit Protocol.</desc>
@@ -2317,8 +2317,8 @@
             <section>12.10.4</section>
         </ref>
     </requirement>
-    
-    <requirement type="app" category="compositional">
+
+    <requirement type="app" category="effect">
         <id>REQ_EP_211</id>
         <name>Image Rotation Specification</name>
         <desc>Image rotation shall be specified using the Video Rotate effect.</desc>
@@ -2328,8 +2328,8 @@
             <section>12.11</section>
         </ref>
     </requirement>
-    
-    <requirement type="file" category="compositional">
+
+    <requirement type="file" category="effect">
         <id>REQ_EP_212</id>
         <name>Video Rotate Effect Use</name>
         <desc>The Video Rotate effect shall only be used by an OperationGroup not contained within a Transition object.</desc>
@@ -2339,7 +2339,7 @@
             <section>12.11</section>
         </ref>
     </requirement>
-    
+
     <requirement type="app" category="compositional">
         <id>REQ_EP_213</id>
         <name>Importing Image Rotation</name>
@@ -2350,8 +2350,8 @@
             <section>12.11.3</section>
         </ref>
     </requirement>
-    
-    <requirement type="app" category="compositional">
+
+    <requirement type="app" category="effect">
         <id>REQ_EP_214</id>
         <name>Image Corner Pinning Specification</name>
         <desc>Image corner pinning shall be specified using the Video Corner Pinning effect.</desc>
@@ -2361,8 +2361,8 @@
             <section>12.12</section>
         </ref>
     </requirement>
-    
-    <requirement type="file" category="compositional">
+
+    <requirement type="file" category="effect">
         <id>REQ_EP_215</id>
         <name>Video Corner Pinning Effect Use</name>
         <desc>The Video Corner Pinning effect shall only be used by an OperationGroup not contained within a Transition object.</desc>
@@ -2372,8 +2372,8 @@
             <section>12.12</section>
         </ref>
     </requirement>
-    
-    <requirement type="app" category="compositional">
+
+    <requirement type="app" category="effect">
         <id>REQ_EP_216</id>
         <name>Importing Image Corner Pinning</name>
         <desc>An importing application that supports image corner pinning shall accept and present the Video Corner Pinning effect, following the precepts of Section 4.2.4 of the AAF Edit Protocol.</desc>
@@ -2383,8 +2383,8 @@
             <section>12.12.10</section>
         </ref>
     </requirement>
-    
-    <requirement type="app" category="compositional">
+
+    <requirement type="app" category="effect">
         <id>REQ_EP_217</id>
         <name>Alpha Key Effect - Alpha Channel Withing Foreground Specification</name>
         <desc>An alpha key effect in which the alpha channel is within the foreground video essence shall be specified using the Alpha With Video Key effect.</desc>
@@ -2394,8 +2394,8 @@
             <section>12.13</section>
         </ref>
     </requirement>
-    
-    <requirement type="file" category="compositional">
+
+    <requirement type="file" category="effect">
         <id>REQ_EP_218</id>
         <name>Alpha With Video Key Effect Specification</name>
         <desc>In an Alpha With Video Key effect the alpha channel shall be contained within a channel of the foreground video essence, using either RGBA or YUVA.  The essence descriptor shall be an RGBADescriptor object (or a sub-class) for RGBA, or a CDCIDescriptor object (or a sub-class) for CDCI.  The alpha channel shall be indicated by the essence descriptor.</desc>
@@ -2405,8 +2405,8 @@
             <section>12.13</section>
         </ref>
     </requirement>
-    
-    <requirement type="file" category="compositional">
+
+    <requirement type="file" category="effect">
         <id>REQ_EP_219</id>
         <name>Alpha With Video Key Effect Properties</name>
         <desc>In an Alpha With Video Key effect the DigitalImageDescriptor::AlphaTransparency property shall be present and specify whether the minimum Alpha value or the maximum Alpha value indicates complete transparency.  The ParameterDef_AlphaKeyInvertAlpha parameter indicates wheter the transparency indicated by the DigitalImageDescriptor::AlphaTransparency property should be inverted.</desc>
@@ -2416,8 +2416,8 @@
             <section>12.13</section>
         </ref>
     </requirement>
-    
-    <requirement type="file" category="compositional">
+
+    <requirement type="file" category="effect">
         <id>REQ_EP_220</id>
         <name>Alpha With Video Key Effect Use</name>
         <desc>The Alpha With Video Key effect shall only be used by an OperationGroup not contained within a Transition object.</desc>
@@ -2427,8 +2427,8 @@
             <section>12.13</section>
         </ref>
     </requirement>
-    
-    <requirement type="app" category="compositional">
+
+    <requirement type="app" category="effect">
         <id>REQ_EP_221</id>
         <name>Importing Alpha Keying - Alpha With Video Key</name>
         <desc>An importing application that supports alpha keying shall accept and present the Alpha With Video Key effect, following the precepts of Section 4.2.4 of the AAF Edit Protocol.</desc>
@@ -2438,8 +2438,8 @@
             <section>12.13.3</section>
         </ref>
     </requirement>
-    
-    <requirement type="app" category="compositional">
+
+    <requirement type="app" category="effect">
         <id>REQ_EP_222</id>
         <name>Alpha Key Effect - Alpha Channel Essence Separate</name>
         <desc>An alpha key effect in which the alpha channel essence is separate from the video foreground and background essence shall be specified using the Separate-Alpha Key effect.</desc>
@@ -2449,8 +2449,8 @@
             <section>12.14</section>
         </ref>
     </requirement>
-    
-    <requirement type="file" category="compositional">
+
+    <requirement type="file" category="effect">
         <id>REQ_EP_223</id>
         <name>Separate-Alpha Key Effect Specification</name>
         <desc>In a Separate-Alpha Key effect the alpha channel shall be contained within a channel of separate essence, using either RGBA or YUVA.  The essence descriptor shall be an RGBADescriptor object (or a sub-class) for RGBA, or a CDCIDescriptor object (or a sub-class) for CDCI.  Where the alpha channel is indicated by the essence descriptor, the channel shall be used as the alpha channel.  Where the alpha channel is not indicated by the essence descriptor, the luminance value of essence shall be used as the alpha channel.</desc>
@@ -2460,8 +2460,8 @@
             <section>12.14</section>
         </ref>
     </requirement>
-    
-    <requirement type="file" category="compositional">
+
+    <requirement type="file" category="effect">
         <id>REQ_EP_224</id>
         <name>Separate-Alpha Key Effect Properties</name>
         <desc>In a Separate-Alpha Key effect the DigitalImageDescriptor::AlphaTransparency property shall be present and specify whether the minimum Alpha value or the maximum Alpha value indicates complete transparency.  The ParameterDef_AlphaKeyInvertAlpha parameter indicates whether the transparency indicated by the DigitalImageDescriptor::AlphaTransparency property should be inverted.</desc>
@@ -2471,8 +2471,8 @@
             <section>12.14</section>
         </ref>
     </requirement>
-    
-    <requirement type="file" category="compositional">
+
+    <requirement type="file" category="effect">
         <id>REQ_EP_225</id>
         <name>Separate-Alpha Key Effect Use</name>
         <desc>The Separate Alpha Key effect shall only be used by an OperationGroup not contained within a Transition object.</desc>
@@ -2482,8 +2482,8 @@
             <section>12.14</section>
         </ref>
     </requirement>
-    
-    <requirement type="app" category="compositional">
+
+    <requirement type="app" category="effect">
         <id>REQ_EP_226</id>
         <name>Importing Alpha Keying - Separate-Alpha Key</name>
         <desc>An importing application that supports alpha keying shall accept and present the Separate Alpha Key effect, following the precepts of Section 4.2.4 of the AAF Edit Protocol.</desc>
@@ -2493,8 +2493,8 @@
             <section>12.14.3</section>
         </ref>
     </requirement>
-    
-    <requirement type="app" category="compositional">
+
+    <requirement type="app" category="effect">
         <id>REQ_EP_227</id>
         <name>Luminance Key Effect Specification</name>
         <desc>A luminance key effect shall be specified using the Luminance Key effect.  The luminance is determined from the Y or the RGB channels.</desc>
@@ -2504,8 +2504,8 @@
             <section>12.15</section>
         </ref>
     </requirement>
-    
-    <requirement type="file" category="compositional">
+
+    <requirement type="file" category="effect">
         <id>REQ_EP_228</id>
         <name>Luminance Key Effect Use</name>
         <desc>The Luminance Key effect shall only be used by an OperationGroup not contained within a Transition object.</desc>
@@ -2515,8 +2515,8 @@
             <section>12.15</section>
         </ref>
     </requirement>
-    
-    <requirement type="app" category="compositional">
+
+    <requirement type="app" category="effect">
         <id>REQ_EP_229</id>
         <name>Importing Luminance Keying</name>
         <desc>An importing application that supports luminance keying shall accept and present the Luminance Key effect, following the precepts of Section 4.2.4 of the AAF Edit Protocol.</desc>
@@ -2526,8 +2526,8 @@
             <section>12.15.4</section>
         </ref>
     </requirement>
-    
-    <requirement type="app" category="compositional">
+
+    <requirement type="app" category="effect">
         <id>REQ_EP_230</id>
         <name>Chroma Key Effect Specification</name>
         <desc>A chroma key effect shall be specified using the Chroma Key effect.</desc>
@@ -2537,8 +2537,8 @@
             <section>12.16</section>
         </ref>
     </requirement>
-    
-    <requirement type="file" category="compositional">
+
+    <requirement type="file" category="effect">
         <id>REQ_EP_231</id>
         <name>Chroma Key Effect Use</name>
         <desc>The Chroma Key effect shall only be used by an OperationGroup not contained within a Transition object.</desc>
@@ -2548,8 +2548,8 @@
             <section>12.16</section>
         </ref>
     </requirement>
-    
-    <requirement type="app" category="compositional">
+
+    <requirement type="app" category="effect">
         <id>REQ_EP_232</id>
         <name>Importing Chroma Keying</name>
         <desc>An importing application that supports chroma keying shall accept and present the Chroma Key effect, following the precepts of Section 4.2.4 of the AAF Edit Protocol.</desc>
@@ -2559,8 +2559,8 @@
             <section>12.16.1</section>
         </ref>
     </requirement>
-    
-    <requirement type="app" category="compositional">
+
+    <requirement type="app" category="effect">
         <id>REQ_EP_233</id>
         <name>Audio Gain Effect Specification</name>
         <desc>An audio gain effect, specifying how the level of an audio signal is amplified or attenuated over time, shall be specified using the Mono Audio Gain effect.</desc>
@@ -2570,8 +2570,8 @@
             <section>12.17</section>
         </ref>
     </requirement>
-    
-    <requirement type="file" category="compositional">
+
+    <requirement type="file" category="effect">
         <id>REQ_EP_234</id>
         <name>Mono Audio Gain Effect Use</name>
         <desc>The Mono Audio Gain effect shall only be used by an OperationGroup not contained within a Transition object.</desc>
@@ -2581,8 +2581,8 @@
             <section>12.17</section>
         </ref>
     </requirement>
-    
-    <requirement type="app" category="compositional">
+
+    <requirement type="app" category="effect">
         <id>REQ_EP_235</id>
         <name>Serializing Audio Gain</name>
         <desc>Both clip and track gain may apply to a clip.  The resulting gain shall be calculated as follows: 1. Multiply each audio sample by the clip gain amplitude multiplier (if any specified); 2. Multiply the resulting value by the track gain amplitude multiplier (if any is specified); 3. Apply the appropriate saturation (clipping) algorithm to the result computed in step 2.</desc>
@@ -2592,8 +2592,8 @@
             <section>12.17.4</section>
         </ref>
     </requirement>
-    
-    <requirement type="app" category="compositional">
+
+    <requirement type="app" category="effect">
         <id>REQ_EP_236</id>
         <name>Importing Audio Gain</name>
         <desc>An importing application that supports audio gain effects shall accept and present the Mono Audio Gain effect, following the precepts of Section 4.2.4 of the AAF Edit Protocol.</desc>
@@ -2603,8 +2603,8 @@
             <section>12.17.5</section>
         </ref>
     </requirement>
-    
-    <requirement type="app" category="compositional">
+
+    <requirement type="app" category="effect">
         <id>REQ_EP_237</id>
         <name>Audio Pan Effect Specification</name>
         <desc>An audio pan effect, specifying the left/right balance of mono audio sources in a streo sound field, shall be specified using the Mono Audio Pan effect.</desc>
@@ -2614,8 +2614,8 @@
             <section>12.18</section>
         </ref>
     </requirement>
-    
-    <requirement type="file" category="compositional">
+
+    <requirement type="file" category="effect">
         <id>REQ_EP_238</id>
         <name>Mono Audio Pan Effect Application</name>
         <desc>A Mono Audio Pan effect shall only be applied to audio tracks that refer to mono essence.</desc>
@@ -2625,8 +2625,8 @@
             <section>12.18</section>
         </ref>
     </requirement>
-    
-    <requirement type="file" category="compositional">
+
+    <requirement type="file" category="effect">
         <id>REQ_EP_239</id>
         <name>Audio Pan Effect Nesting</name>
         <desc>Audio pan effects shall not be nested.  The top-level pan value shall be applied.</desc>
@@ -2636,8 +2636,8 @@
             <section>12.18</section>
         </ref>
     </requirement>
-    
-    <requirement type="file" category="compositional">
+
+    <requirement type="file" category="effect">
         <id>REQ_EP_240</id>
         <name>Mono Audio Pan Effect Use</name>
         <desc>The Mono Audio Pan effect shall only be used by an OperationGroup not contained within a Transition object.</desc>
@@ -2647,8 +2647,8 @@
             <section>12.18</section>
         </ref>
     </requirement>
-    
-    <requirement type="app" category="compositional">
+
+    <requirement type="app" category="effect">
         <id>REQ_EP_241</id>
         <name>Track-Based Pan</name>
         <desc>Pan automation shall be track-based.  If an application has a differnt native representation, it shall convert to and from its native representation when exporting and importing the composition.</desc>
@@ -2658,8 +2658,8 @@
             <section>12.18.3</section>
         </ref>
     </requirement>
-    
-    <requirement type="app" category="compositional">
+
+    <requirement type="app" category="effect">
         <id>REQ_EP_242</id>
         <name>Importing Audio Pan Effects</name>
         <desc>An importing application that supports audio pan effects shall accept and present the Mono Audio Pan effect, following the precepts of Section 4.2.4 of the AAF Edit Protocol.</desc>
@@ -2669,8 +2669,8 @@
             <section>12.18.4</section>
         </ref>
     </requirement>
-    
-    <requirement type="app" category="compositional">
+
+    <requirement type="app" category="effect">
         <id>REQ_EP_243</id>
         <name>Single-Parameter Audio Dissolve Effect Specification</name>
         <desc>A dissolve between overlapping audio clips in which the fade out of the outgoing "A" segment is the mirror image in time of the fade in of the incoming "B" segment, shall be specified using the Single-Parameter Mono Audio Dissolve effect.</desc>
@@ -2680,8 +2680,8 @@
             <section>12.19</section>
         </ref>
     </requirement>
-    
-    <requirement type="file" category="compositional">
+
+    <requirement type="file" category="effect">
         <id>REQ_EP_244</id>
         <name>Single-Parameter Mono Audio Dissolve Effect Use</name>
         <desc>The Single-Parameter Mono Audio Dissolve effect shall only be used by an OperationGroup within a Transition object.</desc>
@@ -2691,8 +2691,8 @@
             <section>12.19</section>
         </ref>
     </requirement>
-    
-    <requirement type="app" category="compositional">
+
+    <requirement type="app" category="effect">
         <id>REQ_EP_245</id>
         <name>Importing Single-Parameter Audio Dissolve Effects</name>
         <desc>An importing application that supports audio dissolves, in which the fade out of the outgoing "A" segment is the mirror image in time of the fade in of the incoming "B" segment, shall accept and present the Single-Parameter Mono Audio Dissolve effect, following the precepts of Section 4.2.4 of the AAF Edit Protocol.</desc>
@@ -2702,8 +2702,8 @@
             <section>12.19.3</section>
         </ref>
     </requirement>
-    
-    <requirement type="app" category="compositional">
+
+    <requirement type="app" category="effect">
         <id>REQ_EP_246</id>
         <name>Two-Parameter Audio Dissolve Effect Specification</name>
         <desc>A dissolve between overlapping audio clips, in which the levels of incoming "B" segment and outgoing "A" segment are independently defined, shall be specified using the Two-Parameter Mono Audio Dissolve effect.</desc>
@@ -2713,8 +2713,8 @@
             <section>12.20</section>
         </ref>
     </requirement>
-    
-    <requirement type="file" category="compositional">
+
+    <requirement type="file" category="effect">
         <id>REQ_EP_247</id>
         <name>Two-Parameter Mono Audio Dissolve Use</name>
         <desc>The Two-Parameter Mono Audio Dissolve effect shall only be used by an OperationGroup within a Transition object.</desc>
@@ -2724,8 +2724,8 @@
             <section>12.20</section>
         </ref>
     </requirement>
-    
-    <requirement type="file" category="compositional">
+
+    <requirement type="file" category="effect">
         <id>REQ_EP_248</id>
         <name>Complete Specification of Incoming Segment Needed for Audio Dissolve</name>
         <desc>In a Two-Parameter Mono Audio Dissolve effect, although the incoming segment is first faded up only at a point X, the incoming segment must be specified from the begining of the Transition.</desc>
@@ -2735,8 +2735,8 @@
             <section>12.20.4</section>
         </ref>
     </requirement>
-    
-    <requirement type="file" category="compositional">
+
+    <requirement type="file" category="effect">
         <id>REQ_EP_249</id>
         <name>Complete Specification of Both Segments Needed for Audio Dissolve</name>
         <desc>In a Two-Parameter Mono Audio Dissolve effect, although the incomming segment is first faded up only at a point X, the incoming segment must be specified from the beginning of the Transition.  Similarily, although the outgoing segment is completely faded down at point Y, the outgoing segment must be specified to the end of the Transition.</desc>
@@ -2746,8 +2746,8 @@
             <section>12.20.4</section>
         </ref>
     </requirement>
-    
-    <requirement type="app" category="compositional">
+
+    <requirement type="app" category="effect">
         <id>REQ_EP_250</id>
         <name>Importing Two-Parameter Audio Dissolve with Non-Existant Reference</name>
         <desc>If the SourceClip objects in a Two-Parameter Audio Dissolve effect reference non-existant material, an importing application shall treat this as a reference to Filler, and present as black picture or silent audio.</desc>
@@ -2757,8 +2757,8 @@
             <section>12.20.5</section>
         </ref>
     </requirement>
-    
-    <requirement type="app" category="compositional">
+
+    <requirement type="app" category="effect">
         <id>REQ_EP_251</id>
         <name>Importing Two-Parameter Audio Dissolve Effects</name>
         <desc>An importing application that supports audio dissolves, in which the levels of the incoming "B" segment and outgoing "A" segment are independently specified, shall accept and present the Two-Parameter Mono Audio Dissolve effect, following the precepts of Section 4.2.4 of the AAF Edit Protocol.</desc>
@@ -2768,8 +2768,8 @@
             <section>12.20.5</section>
         </ref>
     </requirement>
-    
-    <requirement type="app" category="compositional">
+
+    <requirement type="app" category="effect">
         <id>REQ_EP_252</id>
         <name>Importing Two-Parameter Audio Dissolve Effect Fallback Behaviour</name>
         <desc>If the importing application does not support audio dissolves, in which the levels of the incoming "B" segment and the outgoing "A" segment are independently specified, then it shall fallback to a dissolve in which the level of the incoming "B" segment is the complement of the level of the outgoing "A" segment, following the precepts of Section 4.2.4 of the AAF Edit Protocol.  This fallback shall be logged.</desc>
@@ -2779,8 +2779,8 @@
             <section>12.20.6</section>
         </ref>
     </requirement>
-    
-    <requirement type="app" category="compositional">
+
+    <requirement type="app" category="optional-properties">
         <id>REQ_EP_253</id>
         <name>Exporting Optional Properties</name>
         <desc>When the value of an optional property is unknown, the exporting application shall omit that property.</desc>
@@ -2790,8 +2790,8 @@
             <section>13</section>
         </ref>
     </requirement>
-    
-    <requirement type="app" category="compositional">
+
+    <requirement type="app" category="structured-storage">
         <id>REQ_EP_254</id>
         <name>Structured Storage File Encoding</name>
         <desc>For Structured Storage encoding of the AAF file, the exporting application shall use a sector size of 4096 bytes.  An importing application shall accept sector sizes of 512 or 4096 bytes.</desc>
@@ -2801,8 +2801,8 @@
             <section>14</section>
         </ref>
     </requirement>
-    
-    <requirement type="file" category="compositional">
+
+    <requirement type="file" category="protocol">
         <id>REQ_EP_255</id>
         <name>Protocol Label</name>
         <desc>Header::OperationalPattern should be equal to OpEditProtocol.</desc>
@@ -2812,5 +2812,5 @@
             <section>15</section>
         </ref>
     </requirement>
-    
+
 </requirement-set>

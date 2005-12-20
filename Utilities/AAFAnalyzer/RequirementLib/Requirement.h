@@ -37,7 +37,10 @@ class Requirement
 {
 public:
     enum RequirementType {FILE, APP, DEFINITION};
-    enum Category        {COMPOSITIONAL, ANNOTATIONS, ADHOC};
+    enum Category        {GENERAL, IMPORT_EXPORT, COMPOSITIONAL, METADATA,
+                          MIXDOWN, AUXILIARY_FILE, ANNOTATIONS, EFFECT,
+                          OPTIONAL_PROPERTIES, STRUCTURED_STORAGE, PROTOCOL,
+                          ADHOC};
 
     Requirement(const wstring& id,
                 const RequirementType requirementType,
@@ -48,7 +51,7 @@ public:
                 const wstring& version,
                 const wstring& section);
     ~Requirement();
-    
+
     const wstring& GetId() const;
     const enum RequirementType GetRequirementType() const;
     const enum Category GetCategory() const;
@@ -57,7 +60,7 @@ public:
     const wstring& GetDocument() const;
     const wstring& GetVersion() const;
     const wstring& GetSection() const;
-    
+
     typedef map< const wstring, shared_ptr<const Requirement> > RequirementMap;
     typedef shared_ptr<RequirementMap> RequirementMapSP;
 

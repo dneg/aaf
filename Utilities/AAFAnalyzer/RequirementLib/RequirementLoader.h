@@ -26,6 +26,7 @@
 
 //STL files
 #include <string>
+#include <map>
 
 namespace aafanalyzer {
 
@@ -35,7 +36,7 @@ public:
 
     RequirementLoader();
     ~RequirementLoader();
-    
+
     static void __StartElement(void* userData, const char* name, const char** atts);
     static void __EndElement(void* userData, const char* name);
     static void __EndData(void* userData, const char* s, int len);
@@ -43,13 +44,13 @@ public:
     void StartElement(const wstring& name, const char** attribs);
     void EndElement(const wstring& name);
     void EndData(const wstring& contents);
-    
+
     void ParseXML( const char* filename ) const;
-    
+
  private:
- 
+
     wstring _currentData;
-    
+
     wstring _currentId;
     Requirement::RequirementType _currentType;
     Requirement::Category _currentCategory;
@@ -58,7 +59,9 @@ public:
     wstring _currentDocument;
     wstring _currentVersion;
     wstring _currentSection;
-    
+
+    map<wstring, Requirement::Category> _categoryMap;
+
     // prohibited
     RequirementLoader( const RequirementLoader& );
     RequirementLoader& operator=( const RequirementLoader& );

@@ -23,7 +23,7 @@
 #include "RequirementRegistry.h"
 #include "RequirementXMLException.h"
 
-/* On  Windows,  this  should  be  set  if  Expat is going to be linked 
+/* On  Windows,  this  should  be  set  if  Expat is going to be linked
    statically with the code that calls it; this is required to get all the
    right MSVC magic annotations correct. This is ignored on other platforms.
 */
@@ -50,29 +50,42 @@ using namespace aafanalyzer;
 //======================================================================
 //======================================================================
 
-namespace aafanalyzer 
+namespace aafanalyzer
 {
-    
+
 using namespace std;
 using namespace boost;
 
 RequirementLoader::RequirementLoader()
-{}
+{
+    _categoryMap[L"general"]             = Requirement::GENERAL;
+    _categoryMap[L"import-export"]       = Requirement::IMPORT_EXPORT;
+    _categoryMap[L"compositional"]       = Requirement::COMPOSITIONAL;
+    _categoryMap[L"metadata"]            = Requirement::METADATA;
+    _categoryMap[L"mixdown"]             = Requirement::MIXDOWN;
+    _categoryMap[L"auxiliary-file"]      = Requirement::AUXILIARY_FILE;
+    _categoryMap[L"annotations"]         = Requirement::ANNOTATIONS;
+    _categoryMap[L"effect"]              = Requirement::EFFECT;
+    _categoryMap[L"optional-properties"] = Requirement::OPTIONAL_PROPERTIES;
+    _categoryMap[L"structured-storage"]  = Requirement::STRUCTURED_STORAGE;
+    _categoryMap[L"protocol"]            = Requirement::PROTOCOL;
+    _categoryMap[L"ad-hoc"]              = Requirement::ADHOC;
+}
 
 RequirementLoader::~RequirementLoader()
 {}
 
 void RequirementLoader::ParseXML( const char* filename ) const
 {
-    
+
     //Variables needed to run the expat XML parser.
     const int BUF_SIZE = 256;
     int done;
     char buffer[BUF_SIZE] = "";
-    
+
     //Create the XML parser
     XML_Parser parser = XML_ParserCreate(NULL);
- 
+
     //Setup event handlers for the XML parser.
     try
     {
@@ -95,10 +108,10 @@ void RequirementLoader::ParseXML( const char* filename ) const
     //Parse the file using a buffer of the specified size.
     while ( !inp.eof() )
     {
-        
+
         inp.read(buffer, BUF_SIZE);
         const size_t len = inp.gcount();
-               
+
         done = len < sizeof(buffer);
 
         if ( !XML_Parse(parser, buffer, len, done) )
@@ -108,9 +121,9 @@ void RequirementLoader::ParseXML( const char* filename ) const
             throw RequirementXMLException(msg.str().c_str() );
         }
     }
-    
+
     XML_ParserFree(parser);
-    
+
 }
 
 //Called when an open tag is encountered.
@@ -144,18 +157,10 @@ void RequirementLoader::StartElement(const wstring& name, const char** attribs)
             msg << L"Unknown requirement type: " << type;
             throw RequirementXMLException(msg.str().c_str() );
         }
-        
-        if ( category == L"compositional" )
+
+        if ( _categoryMap.find( category ) != _categoryMap.end() )
         {
-            _currentCategory = Requirement::COMPOSITIONAL;
-        }
-        else if ( type == L"annotations" )
-        {
-            _currentCategory = Requirement::ANNOTATIONS;
-        }
-        else if ( type == L"ad-hoc" )
-        {
-            _currentCategory = Requirement::ADHOC;
+            _currentCategory = _categoryMap[category];
         }
         else
         {
@@ -163,7 +168,7 @@ void RequirementLoader::StartElement(const wstring& name, const char** attribs)
             msg << L"Unknown category: " << category;
             throw RequirementXMLException(msg.str().c_str() );
         }
-        
+
     }
     else if ( name == L"id" )
     {
@@ -211,7 +216,7 @@ void RequirementLoader::StartElement(const wstring& name, const char** attribs)
         msg << L"Unknown tag: " << name;
         throw RequirementXMLException(msg.str().c_str() );
     }
-    
+
 }
 
 //Called when a close tag is encountered.
@@ -270,7 +275,7 @@ void RequirementLoader::EndElement(const wstring& name)
         msg << L"Unknown tag: /" << name;
         throw RequirementXMLException(msg.str().c_str() );
     }
-    
+
 }
 
 //Called after a string of data (between tags) has been loaded.
@@ -288,9 +293,9 @@ void RequirementLoader::__StartElement(void *userData, const char *name, const c
     RequirementLoader* me = (RequirementLoader*) userData;
     wostringstream msg;
     msg << name;
-    
+
     //Note: The atts parameter is not changed to a shared pointer because
-    //      the memory management is done by the XML parser.    
+    //      the memory management is done by the XML parser.
     me->StartElement( msg.str().c_str(), atts );
 }
 
