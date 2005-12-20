@@ -1527,7 +1527,7 @@ Code W
 
   IAAFSomething* p = 0;            // 1
 
-  d->CreateInstance(..., &p);      // 2
+  d->CreateInstance(..., &amp;p);      // 2
 
   e->Set(p);                       // 3
 
@@ -1538,7 +1538,7 @@ Code R
 
   IAAFSomething* q = 0;            // 1
 
-  e->Get(&q);                      // 2
+  e->Get(&amp;q);                      // 2
 
   ... Use q ...                    // 3
 
