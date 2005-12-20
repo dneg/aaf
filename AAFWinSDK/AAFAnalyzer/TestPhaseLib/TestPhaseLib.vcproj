@@ -19,7 +19,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=".;../../../Utilities/AAFAnalyzer/AAFAnalyzerBase;../../../Utilities/AAFAnalyzer/TestPhaseLib;../../include;../../../examples2/axLib;&quot;$(BOOSTINC)&quot;"
+				AdditionalIncludeDirectories=".;../../../Utilities/AAFAnalyzer/AnalyzerBase;../../../Utilities/AAFAnalyzer/RequirementLib;../../../Utilities/AAFAnalyzer/TestPhaseLib;../../include;../../../examples2/axLib;&quot;$(BOOSTINC)&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB"
 				MinimalRebuild="TRUE"
 				BasicRuntimeChecks="3"
@@ -102,13 +102,43 @@
 			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx"
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}">
 			<File
+				RelativePath="..\..\..\Utilities\AAFAnalyzer\TestPhaseLib\DetailLevelTestResult.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\Utilities\AAFAnalyzer\TestPhaseLib\HighLevelTestResult.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\Utilities\AAFAnalyzer\TestPhaseLib\LowLevelTestResult.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\Utilities\AAFAnalyzer\TestPhaseLib\RequirementMismatchException.cpp">
+			</File>
+			<File
 				RelativePath="..\..\..\Utilities\AAFAnalyzer\TestPhaseLib\Test.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\Utilities\AAFAnalyzer\TestPhaseLib\TestInfo.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\Utilities\AAFAnalyzer\TestPhaseLib\TestLevelTestResult.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\Utilities\AAFAnalyzer\TestPhaseLib\TestPhase.cpp">
 			</File>
 			<File
+				RelativePath="..\..\..\Utilities\AAFAnalyzer\TestPhaseLib\TestPhaseLevelTestResult.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\Utilities\AAFAnalyzer\TestPhaseLib\TestRegistry.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\Utilities\AAFAnalyzer\TestPhaseLib\TestRegistryException.cpp">
+			</File>
+			<File
 				RelativePath="..\..\..\Utilities\AAFAnalyzer\TestPhaseLib\TestResult.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\Utilities\AAFAnalyzer\TestPhaseLib\TopLevelTestResult.cpp">
 			</File>
 		</Filter>
 		<Filter
@@ -116,13 +146,46 @@
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}">
 			<File
+				RelativePath="..\..\..\Utilities\AAFAnalyzer\TestPhaseLib\DetailLevelTestResult.h">
+			</File>
+			<File
+				RelativePath="..\..\..\Utilities\AAFAnalyzer\TestPhaseLib\HighLevelTestResult.h">
+			</File>
+			<File
+				RelativePath="..\..\..\Utilities\AAFAnalyzer\TestPhaseLib\LowLevelTestResult.h">
+			</File>
+			<File
+				RelativePath="..\..\..\Utilities\AAFAnalyzer\TestPhaseLib\RequirementMismatchException.h">
+			</File>
+			<File
 				RelativePath="..\..\..\Utilities\AAFAnalyzer\TestPhaseLib\Test.h">
+			</File>
+			<File
+				RelativePath="..\..\..\Utilities\AAFAnalyzer\TestPhaseLib\TestInfo.h">
+			</File>
+			<File
+				RelativePath="..\..\..\Utilities\AAFAnalyzer\TestPhaseLib\TestInfoRegistrar.h">
+			</File>
+			<File
+				RelativePath="..\..\..\Utilities\AAFAnalyzer\TestPhaseLib\TestLevelTestResult.h">
 			</File>
 			<File
 				RelativePath="..\..\..\Utilities\AAFAnalyzer\TestPhaseLib\TestPhase.h">
 			</File>
 			<File
+				RelativePath="..\..\..\Utilities\AAFAnalyzer\TestPhaseLib\TestPhaseLevelTestResult.h">
+			</File>
+			<File
+				RelativePath="..\..\..\Utilities\AAFAnalyzer\TestPhaseLib\TestRegistry.h">
+			</File>
+			<File
+				RelativePath="..\..\..\Utilities\AAFAnalyzer\TestPhaseLib\TestRegistryException.h">
+			</File>
+			<File
 				RelativePath="..\..\..\Utilities\AAFAnalyzer\TestPhaseLib\TestResult.h">
+			</File>
+			<File
+				RelativePath="..\..\..\Utilities\AAFAnalyzer\TestPhaseLib\TopLevelTestResult.h">
 			</File>
 		</Filter>
 		<Filter

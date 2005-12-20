@@ -19,7 +19,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=".,  ../../../Utilities/AAFAnalyzer/AAFAnalyzerBase,  ../../../Utilities/AAFAnalyzer/TestPhaseLib, ../../include, ../../../examples2/axLib, $(BOOSTINC),"
+				AdditionalIncludeDirectories=".;../../../Utilities/AAFAnalyzer/AnalyzerBase;../../../Utilities/AAFAnalyzer/RequirementLib;../../../Utilities/AAFAnalyzer/TestPhaseLib;../../../Utilities/AAFAnalyzer/AAFAnalyzerBase;../../../Utilities/AAFAnalyzer/BaseTestImpl;../../include;../../../examples2/axLib;&quot;$(BOOSTINC)&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB"
 				MinimalRebuild="TRUE"
 				BasicRuntimeChecks="3"
@@ -105,6 +105,9 @@
 				RelativePath="..\..\..\Utilities\AAFAnalyzer\BaseTestImpl\AcyclicAnalysis.cpp">
 			</File>
 			<File
+				RelativePath="..\..\..\Utilities\AAFAnalyzer\BaseTestImpl\AcyclicVisitor.cpp">
+			</File>
+			<File
 				RelativePath="..\..\..\Utilities\AAFAnalyzer\BaseTestImpl\DumpPhase.cpp">
 			</File>
 			<File
@@ -119,6 +122,12 @@
 			<File
 				RelativePath="..\..\..\Utilities\AAFAnalyzer\BaseTestImpl\RefResolver.cpp">
 			</File>
+			<File
+				RelativePath="..\..\..\Utilities\AAFAnalyzer\BaseTestImpl\ResolveRefVisitor.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\Utilities\AAFAnalyzer\BaseTestImpl\TestVisitor.cpp">
+			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -126,6 +135,9 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}">
 			<File
 				RelativePath="..\..\..\Utilities\AAFAnalyzer\BaseTestImpl\AcyclicAnalysis.h">
+			</File>
+			<File
+				RelativePath="..\..\..\Utilities\AAFAnalyzer\BaseTestImpl\AcyclicVisitor.h">
 			</File>
 			<File
 				RelativePath="..\..\..\Utilities\AAFAnalyzer\BaseTestImpl\DumpPhase.h">
@@ -141,6 +153,12 @@
 			</File>
 			<File
 				RelativePath="..\..\..\Utilities\AAFAnalyzer\BaseTestImpl\RefResolver.h">
+			</File>
+			<File
+				RelativePath="..\..\..\Utilities\AAFAnalyzer\BaseTestImpl\ResolveRefVisitor.h">
+			</File>
+			<File
+				RelativePath="..\..\..\Utilities\AAFAnalyzer\BaseTestImpl\TestVisitor.h">
 			</File>
 		</Filter>
 		<Filter

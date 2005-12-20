@@ -19,7 +19,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=".,  ../../../Utilities/AAFAnalyzer/AAFAnalyzerBase,  ../../../Utilities/AAFAnalyzer/TestPhaseLib, ../../include, ../../../examples2/axLib, $(BOOSTINC),"
+				AdditionalIncludeDirectories=".;../../../Utilities/AAFAnalyzer/AnalyzerBase;../../../Utilities/AAFAnalyzer/RequirementLib;../../../Utilities/AAFAnalyzer/TestPhaseLib;../../../Utilities/AAFAnalyzer/AAFAnalyzerBase;../../include;../../../examples2/axLib;&quot;$(BOOSTINC)&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB"
 				MinimalRebuild="TRUE"
 				BasicRuntimeChecks="3"
@@ -108,6 +108,9 @@
 				RelativePath="..\..\..\Utilities\AAFAnalyzer\AAFAnalyzerBase\AAFContainment.cpp">
 			</File>
 			<File
+				RelativePath="..\..\..\Utilities\AAFAnalyzer\AAFAnalyzerBase\AAFGraphInfo.cpp">
+			</File>
+			<File
 				RelativePath="..\..\..\Utilities\AAFAnalyzer\AAFAnalyzerBase\AAFMobReference.cpp">
 			</File>
 			<File
@@ -120,16 +123,10 @@
 				RelativePath="..\..\..\Utilities\AAFAnalyzer\AAFAnalyzerBase\AAFTypedObjNode.cpp">
 			</File>
 			<File
-				RelativePath="..\..\..\Utilities\AAFAnalyzer\AAFAnalyzerBase\AcyclicVisitor.cpp">
+				RelativePath="..\..\..\Utilities\AAFAnalyzer\AAFAnalyzerBase\AAFTypedObjNodeDecorator.cpp">
 			</File>
 			<File
-				RelativePath="..\..\..\Utilities\AAFAnalyzer\AAFAnalyzerBase\DepthFirstTraversal.cpp">
-			</File>
-			<File
-				RelativePath="..\..\..\Utilities\AAFAnalyzer\AAFAnalyzerBase\Edge.cpp">
-			</File>
-			<File
-				RelativePath="..\..\..\Utilities\AAFAnalyzer\AAFAnalyzerBase\EdgeMap.cpp">
+				RelativePath="..\..\..\Utilities\AAFAnalyzer\AAFAnalyzerBase\AAFTypedObjNodeImpl.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\Utilities\AAFAnalyzer\AAFAnalyzerBase\GraphBuilder.cpp">
@@ -138,28 +135,10 @@
 				RelativePath="..\..\..\Utilities\AAFAnalyzer\AAFAnalyzerBase\MobNodeMap.cpp">
 			</File>
 			<File
-				RelativePath="..\..\..\Utilities\AAFAnalyzer\AAFAnalyzerBase\Node.cpp">
-			</File>
-			<File
 				RelativePath="..\..\..\Utilities\AAFAnalyzer\AAFAnalyzerBase\NodeFactory.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\Utilities\AAFAnalyzer\AAFAnalyzerBase\NodeFactoryImpl.cpp">
-			</File>
-			<File
-				RelativePath="..\..\..\Utilities\AAFAnalyzer\AAFAnalyzerBase\NodeRefCountVisitor.cpp">
-			</File>
-			<File
-				RelativePath="..\..\..\Utilities\AAFAnalyzer\AAFAnalyzerBase\ResolveRefVisitor.cpp">
-			</File>
-			<File
-				RelativePath="..\..\..\Utilities\AAFAnalyzer\AAFAnalyzerBase\TempAllNodeMap.cpp">
-			</File>
-			<File
-				RelativePath="..\..\..\Utilities\AAFAnalyzer\AAFAnalyzerBase\TestGraph.cpp">
-			</File>
-			<File
-				RelativePath="..\..\..\Utilities\AAFAnalyzer\AAFAnalyzerBase\TestVisitor.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\Utilities\AAFAnalyzer\AAFAnalyzerBase\TypedNodeFactory.cpp">
@@ -173,9 +152,6 @@
 			<File
 				RelativePath="..\..\..\Utilities\AAFAnalyzer\AAFAnalyzerBase\TypedVisitor.cpp">
 			</File>
-			<File
-				RelativePath="..\..\..\Utilities\AAFAnalyzer\AAFAnalyzerBase\Visitor.cpp">
-			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -186,6 +162,9 @@
 			</File>
 			<File
 				RelativePath="..\..\..\Utilities\AAFAnalyzer\AAFAnalyzerBase\AAFContainment.h">
+			</File>
+			<File
+				RelativePath="..\..\..\Utilities\AAFAnalyzer\AAFAnalyzerBase\AAFGraphInfo.h">
 			</File>
 			<File
 				RelativePath="..\..\..\Utilities\AAFAnalyzer\AAFAnalyzerBase\AAFMobReference.h">
@@ -200,16 +179,10 @@
 				RelativePath="..\..\..\Utilities\AAFAnalyzer\AAFAnalyzerBase\AAFTypedObjNode.h">
 			</File>
 			<File
-				RelativePath="..\..\..\Utilities\AAFAnalyzer\AAFAnalyzerBase\AcyclicVisitor.h">
+				RelativePath="..\..\..\Utilities\AAFAnalyzer\AAFAnalyzerBase\AAFTypedObjNodeDecorator.h">
 			</File>
 			<File
-				RelativePath="..\..\..\Utilities\AAFAnalyzer\AAFAnalyzerBase\DepthFirstTraversal.h">
-			</File>
-			<File
-				RelativePath="..\..\..\Utilities\AAFAnalyzer\AAFAnalyzerBase\Edge.h">
-			</File>
-			<File
-				RelativePath="..\..\..\Utilities\AAFAnalyzer\AAFAnalyzerBase\EdgeMap.h">
+				RelativePath="..\..\..\Utilities\AAFAnalyzer\AAFAnalyzerBase\AAFTypedObjNodeImpl.h">
 			</File>
 			<File
 				RelativePath="..\..\..\Utilities\AAFAnalyzer\AAFAnalyzerBase\GraphBuilder.h">
@@ -218,28 +191,10 @@
 				RelativePath="..\..\..\Utilities\AAFAnalyzer\AAFAnalyzerBase\MobNodeMap.h">
 			</File>
 			<File
-				RelativePath="..\..\..\Utilities\AAFAnalyzer\AAFAnalyzerBase\Node.h">
-			</File>
-			<File
 				RelativePath="..\..\..\Utilities\AAFAnalyzer\AAFAnalyzerBase\NodeFactory.h">
 			</File>
 			<File
 				RelativePath="..\..\..\Utilities\AAFAnalyzer\AAFAnalyzerBase\NodeFactoryImpl.h">
-			</File>
-			<File
-				RelativePath="..\..\..\Utilities\AAFAnalyzer\AAFAnalyzerBase\NodeRefCountVisitor.h">
-			</File>
-			<File
-				RelativePath="..\..\..\Utilities\AAFAnalyzer\AAFAnalyzerBase\ResolveRefVisitor.h">
-			</File>
-			<File
-				RelativePath="..\..\..\Utilities\AAFAnalyzer\AAFAnalyzerBase\TempAllNodeMap.h">
-			</File>
-			<File
-				RelativePath="..\..\..\Utilities\AAFAnalyzer\AAFAnalyzerBase\TestGraph.h">
-			</File>
-			<File
-				RelativePath="..\..\..\Utilities\AAFAnalyzer\AAFAnalyzerBase\TestVisitor.h">
 			</File>
 			<File
 				RelativePath="..\..\..\Utilities\AAFAnalyzer\AAFAnalyzerBase\TypedNodeFactory.h">
@@ -252,9 +207,6 @@
 			</File>
 			<File
 				RelativePath="..\..\..\Utilities\AAFAnalyzer\AAFAnalyzerBase\TypedVisitor.h">
-			</File>
-			<File
-				RelativePath="..\..\..\Utilities\AAFAnalyzer\AAFAnalyzerBase\Visitor.h">
 			</File>
 		</Filter>
 	</Files>
