@@ -1411,26 +1411,6 @@
 
             Name:   Verify Mob Chain
             Desc:   Verify the structure of one mob chain.
-            Detail: Analyzing root composition mob "Missing EOC Import Source: Top-Level"
-            Result: Failed
-            Reason: Visitor Failed - See "MobChainVisitor" Visitor for details.
-            Passing Requirements: REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
-            Warning Requirements: None
-            Failing Requirements: REQ_EP_017
-
-                Name:   MobChainVisitor
-                Desc:   Visit mobs and verify derivation order.
-                Detail: OK   - Transition to Top-Level Composition: "Missing EOC Import Source: Top-Level"
-                Detail: OK   -   Transition to Clip: "Missing EOC Import Source: Clip"
-                Detail: OK   -     Transition to Import Source: "Missing EOC Import Source"
-                Result: Failed
-                Reason: End of derivation chain encountered without a zero-valued source clip or out of file reference at Source Mob: "Missing EOC Import Source"
-                Passing Requirements: REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
-                Warning Requirements: None
-                Failing Requirements: REQ_EP_017
-
-            Name:   Verify Mob Chain
-            Desc:   Verify the structure of one mob chain.
             Detail: Analyzing root composition mob "Missing EOC Adjusted Clip: Top-Level"
             Result: Failed
             Reason: Visitor Failed - See "MobChainVisitor" Visitor for details.
@@ -1585,6 +1565,26 @@
                 Passing Requirements: REQ_EP_017; REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_055
+
+            Name:   Verify Mob Chain
+            Desc:   Verify the structure of one mob chain.
+            Detail: Analyzing root composition mob "Missing EOC Import Source: Top-Level"
+            Result: Failed
+            Reason: Visitor Failed - See "MobChainVisitor" Visitor for details.
+            Passing Requirements: REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
+            Warning Requirements: None
+            Failing Requirements: REQ_EP_017
+
+                Name:   MobChainVisitor
+                Desc:   Visit mobs and verify derivation order.
+                Detail: OK   - Transition to Top-Level Composition: "Missing EOC Import Source: Top-Level"
+                Detail: OK   -   Transition to Clip: "Missing EOC Import Source: Clip"
+                Detail: OK   -     Transition to Import Source: "Missing EOC Import Source"
+                Result: Failed
+                Reason: End of derivation chain encountered without a zero-valued source clip or out of file reference at Source Mob: "Missing EOC Import Source"
+                Passing Requirements: REQ_EP_018; REQ_EP_019; REQ_EP_025; REQ_EP_026; REQ_EP_030; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_064; REQ_EP_072; REQ_EP_076; REQ_EP_083
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_017
 
             Name:   Verify Mob Chain
             Desc:   Verify the structure of one mob chain.

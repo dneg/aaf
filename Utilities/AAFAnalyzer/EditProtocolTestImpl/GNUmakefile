@@ -37,7 +37,7 @@ endif
 # Common definitions
 include $(AAFBASE)/build/common.mk
 
-INCLUDES = -I. -I$(AAFSDKINCLUDEDIR) -I$(AAFBASE)/examples2/axLib -I../AnalyzerBase -I../AAFAnalyzerBase -I../EPAnalyzerBase -I../RequirementLib -I../TestPhaseLib -I/usr/local/include/libURI
+INCLUDES = -I. -I$(AAFSDKINCLUDEDIR) -I$(AAFBASE)/examples2/axLib -I../AnalyzerBase -I../AAFAnalyzerBase -I../EPAnalyzerBase -I../RequirementLib -I../TestPhaseLib
 
 .PHONY : all
 all : EditProtocolTest
