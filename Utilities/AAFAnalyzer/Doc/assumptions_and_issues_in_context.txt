@@ -642,8 +642,9 @@ Fail Conditions:
     REQ_EP_092 - Fail if the edit rate of an essence track has a numerator or
                  denominator that is less than or equal to zero.
     REQ_EP_099 - Fail if all audio tracks in the AAF file do not have the same
-                 edit rate.  Also fail if this edit rate is not equivalent to
-                 the sample rate of all audio tracks in the file.
+                 edit rate.
+    REQ_EP_099 - Fail if all audio tracks in the AAF file do not have the same
+                 sample rate.
     REQ_EP_099 - Fail if a audio track is a static or unknown type of MobSlot.
     REQ_EP_100 - Fail if a video track has an edit rate that is less greater
                  than its sample rate.
