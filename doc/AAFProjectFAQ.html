@@ -1498,6 +1498,68 @@ implementation, see IAAFEndian.
 
 <hr>
 
+<p>Why does the AAF Toolkit leak objects ?</p>
+
+Given the following two code fragments - W and R.
+<br>
+First consider the case in which R is executed after W in the same
+program. The object referenced by q leaks because it is not released
+(R4). In this case, most leak detection tools will report a problem in
+the object creation code inside the AAF Toolkit, with W2 on the call
+stack, as this is where the leaking object was created. Without too much
+trouble one can trace from W2 to the cause of the leak - the Get() at R2
+without a corresponding Release().
+<br>
+Now consider the case in which after W the objects are saved to an AAF
+file, the file is closed and the program exits. Some time later, most
+likely on a different computer, the file is then opened and the
+objects in it are restored by the toolkit. Then the code fragment R is
+executed. There's still a leak caused by the missing Release at R4,
+however most leak detection tools will report a problem in the object
+restore code inside the AAF Toolkit (this is, after all, the place at
+which the leaking object was created). It is not immediately obvious
+that the actual cause of the leak is the Get() at R2 without a
+corresponding Release().
+<br>
+<br>
+<pre>
+Code W
+
+  IAAFSomething* p = 0;            // 1
+
+  d->CreateInstance(..., &p);      // 2
+
+  e->Set(p);                       // 3
+
+  p->Release();                    // 4
+
+
+Code R
+
+  IAAFSomething* q = 0;            // 1
+
+  e->Get(&q);                      // 2
+
+  ... Use q ...                    // 3
+
+  // q->Release();                 // 4
+</pre>
+<br>
+<br>
+The lesson here is that if your leak detection tool reports leaking
+objects and those objects were created in the object restore code of the
+AAF Toolkit then you should look for missing Release()s in your AAF
+Toolkit client code.
+<br>
+The AAF Toolkit is by no-means perfect and from time-to-time bugs are
+introduced. In general these are fixed promptly. Also, tools such as
+BoundsChecker, valgrind and the Microsoft CRT heap debugging routines
+are run fairly regularly on the AAF toolkit. However, in our experience,
+most reported AAF toolkit leaks turn out to be caused by missing
+Release()s in the client code.
+<br>
+<hr>
+
 <P> What's the deal with Unicode and wchar_t ?</P>
 
 <p>What are the portability issues ?</p>
