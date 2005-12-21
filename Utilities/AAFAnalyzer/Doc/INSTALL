@@ -1,0 +1,12 @@
+To install the AAFAnalyzer under Linux, complete the following steps:
+
+1. Download the Boost libraries from:
+   http://sourceforge.net/project/showfiles.php?group_id=7586.
+2. Install the Boost libraries to the default directory.
+3. Download the expat tar.gz file from:
+		http://sourceforge.net/project/showfiles.php?group_id=10127
+4. Install expat to the default directory.
+5. Run `make all` in this directory.
+
+To install the AAFAnalyzer under Windows, see the file:
+	AAF/AAFWinSDK/AAFAnalyzer/README.TXT
