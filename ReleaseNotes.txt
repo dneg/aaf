@@ -1,7 +1,7 @@
-AAF SDK v1.1.0
+AAF SDK v1.1.1
 ==============
 
-2005-04-13
+2005-12-20
 
 This SDK is the reference implementation of the Advanced Authoring
 Format (AAF) version 1.1. See doc/aafeditprotocol.pdf,
@@ -47,8 +47,68 @@ THAT MAY BE REQUIRED TO CREATE AND DISTRIBUTE AAF COMPLIANT PRODUCTS
 (HTTP://WWW.AAFASSOCIATION.ORG/POLICIES).
 
 
-Major Changes Since V1.0.2
---------------------------
+Major Changes from V1.1.0 to V1.1.1
+-----------------------------------
+
+This is a bug-fix release.  The following problems in V1.1.0 are fixed with
+this release:
+
+- Writing a file containing a Set or Array of Records using V1.1.0 might
+  result in a file that is unreadable.  Attempting to open such a file with a
+  debug version of the SDK library will result in an assertion failure.
+  Attempting to open such a file with a release version of the SDK library
+  has the potential to cause a heap corruption.
+
+
+- SourceForge Bug ID #1188299:
+  ImplAAFSourceReference::SetChannelIDs() does not work 
+  ImplAAFSourceReference::SetChannelIDs() passes its numberElements parameter
+  directly to _channelIDs.copyToBuffer(), which is expecting a byte count not
+  a number of elements. As a result, nothing is set if you call
+  IAAFSourceReference2::SetChannelIDs() with less than 4 channel IDs, etc.
+
+  The fix appears to be to pass (numberElements * sizeof(aafUInt32)) 
+  instead of numberElements
+
+  This also applied to IAAFSourceReference2.
+
+
+- SourceForge Bug ID #1188301:
+  ImplAAFSourceReference::GetChannelIDs() does not work 
+  As with ImplAAFSourceReference::SetChannelIDs(),
+  ImplAAFSourceReference::GetChannelIDs() passes the number of elements when
+  it should be passing a byte count. Specifically, it passes numberElements to
+  _channelIDs.copyToBuffer() instead of (numberElements *sizeof(aafUInt32)). 
+
+  This also applied to IAAFSourceReference2.
+
+
+- The 6 new IAAFSourceReference2 APIs were tested.
+
+
+- SourceForge Bug ID #1191791:
+  LastModified property of Header not set on AAFFile->Save() 
+  When Save() is called on an IAAFFile object, the LastModified property on
+  the Header is not updated and is written as 0000-00-00-00-00-00
+  (aafTimeStamp_t).
+  This occurred in version 1.1.0 and 1.0.2 of the AAF SDK. 
+
+
+- Add support for powerpc64-linux platform (Apple G5, IBM Power64, etc).
+  Tested using Gentoo Linux 2005.0 on Apple G5.
+
+
+- Added tests for: IAAFHeader, IAAFAuxiliaryDescriptor, IAAFComponent and
+  IAAFDictionary
+
+
+- doxygen formatting fixes for dodo files
+
+
+
+
+Major Changes From V1.0.2 to V1.1.0
+-----------------------------------
 
 Extended APIs:
   IAAFMob2, IAAFCDCIDescriptor2, IAAFComponent2, AAFCompositionMob2,
@@ -213,6 +273,16 @@ Known Issues
     make LIBGSF_PATH=/usr/local
 
 - The AxLib library (examples2/axLib) does not compile using gcc-4.0.0
+
+- The IAAFTypeDefRecord interface implementation does not result in 
+  correct property values when calls to SetValue() or
+  CreateValueFromValues() are mixed with calls to RegisterMembers().
+  This can happen regardless of the order of these calls.  
+  In addition, the GetValue() method should not be used following a call
+  to RegisterMembers() as it will result in incorrect results.
+  If you use RegisterMembers(), confine Record property creation to the use of
+  SetStruct() and CreateValueFromStruct() and Record property reading to the
+  use of GetStruct().
 
 
 SchemaSoft license agreement
