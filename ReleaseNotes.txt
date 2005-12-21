@@ -15,7 +15,6 @@ Supported platforms
 This release has been tested on the following platforms:
 
   MacOS 10.3 (gcc 3.3)
-  Windows 2000 SP4 (Microsoft Visual C++ 6 SP5)
   Windows 2000 SP4 (Microsoft Visual C++ 7.1)
   Windows XP SP1 (Microsoft Visual C++ 7.1)
   Solaris 9 (gcc 3.3.3)
