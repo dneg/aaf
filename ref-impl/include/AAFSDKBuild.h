@@ -38,7 +38,7 @@
 
 #define AAF_MAJOR_VERSION 1
 #define AAF_MINOR_VERSION 1
-#define AAF_MAINT_RELEASE 0
+#define AAF_MAINT_RELEASE 1
 
 #define AAF_RELEASE_STAGE kAAFVersionReleased
  
