@@ -51,7 +51,10 @@ class TypedVisitor : public Visitor
 #include "TypedVisitor.h.gen"
 
   private:
-  
+
+    virtual bool DefaultPreOrderBehaviour() { return true; }
+    virtual bool DefaultPostOrderBehaviour() { return true; }
+
     // prohibited
     TypedVisitor( const TypedVisitor& );
     TypedVisitor& operator=( const TypedVisitor& );

@@ -17,8 +17,8 @@ count=0
 for aafobj in $CLASSLIST
 do
     count=`expr $count + 1`
-    echo '    virtual bool PreOrderVisit( AAFTypedObjNode<'$aafobj'>& node) { return true; }' >&4
-    echo '    virtual bool PostOrderVisit( AAFTypedObjNode<'$aafobj'>& node){ return true; }' >&4
+    echo '    virtual bool PreOrderVisit( AAFTypedObjNode<'$aafobj'>& node) { return DefaultPreOrderBehaviour(); }' >&4
+    echo '    virtual bool PostOrderVisit( AAFTypedObjNode<'$aafobj'>& node){ return DefaultPostOrderBehaviour(); }' >&4
 done
 
 echo >&4
