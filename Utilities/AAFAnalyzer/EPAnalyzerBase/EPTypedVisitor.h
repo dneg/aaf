@@ -48,20 +48,20 @@ class EdgeMap;
 
 class EPTypedVisitor : public TypedVisitor
 {
-    
+
   //Allow ancestor PreOrderVisit and PostOrderVisit functions to be called.
   using TypedVisitor::PreOrderVisit;
   using TypedVisitor::PostOrderVisit;
-    
+
   public:
-  
-    typedef set<shared_ptr<AxMobSlot> > MobSlotSet;
-  
+
+    typedef set<shared_ptr<AAFObjNode> > MobSlotNodeSet;
+
     EPTypedVisitor();
     virtual ~EPTypedVisitor();
 
     #include <EPTypedVisitor.h.gen>
-     
+
   protected:
 
     //Functions commonly needed by EPTypedVisitors.  Put them in the base class
@@ -74,12 +74,12 @@ class EPTypedVisitor : public TypedVisitor
     //      not be needed by any other class and therefore can be pushed down
     //      to EPContainedTrackVisitor.  They are being left here for the time
     //      being in case any future tests require them.
-    shared_ptr<MobSlotSet> GetEssenceTracks( shared_ptr<EdgeMap> spEdgeMap, Node& node );
-    shared_ptr<MobSlotSet> GetAudioTracks( shared_ptr<EdgeMap> spEdgeMap, Node& node );
-    shared_ptr<MobSlotSet> GetVideoTracks( shared_ptr<EdgeMap> spEdgeMap, Node& node );
-    shared_ptr<MobSlotSet> GetTimecodeTracks( shared_ptr<EdgeMap> spEdgeMap, Node& node );
-    shared_ptr<MobSlotSet> GetEdgecodeTracks( shared_ptr<EdgeMap> spEdgeMap, Node& node );
-    
+    shared_ptr<MobSlotNodeSet> GetEssenceTracks( shared_ptr<EdgeMap> spEdgeMap, Node& node );
+    shared_ptr<MobSlotNodeSet> GetAudioTracks( shared_ptr<EdgeMap> spEdgeMap, Node& node );
+    shared_ptr<MobSlotNodeSet> GetVideoTracks( shared_ptr<EdgeMap> spEdgeMap, Node& node );
+    shared_ptr<MobSlotNodeSet> GetTimecodeTracks( shared_ptr<EdgeMap> spEdgeMap, Node& node );
+    shared_ptr<MobSlotNodeSet> GetEdgecodeTracks( shared_ptr<EdgeMap> spEdgeMap, Node& node );
+
   private:
 
     template <typename AAFObjectType, typename EPObjectType>
@@ -89,7 +89,7 @@ class EPTypedVisitor : public TypedVisitor
       shared_ptr<AAFTypedObjNode<AAFObjectType> > spBaseNode = dynamic_pointer_cast<AAFTypedObjNode<AAFObjectType> >(spNode);
       return this->PreOrderVisit( *spBaseNode );
     }
-    
+
     template <typename AAFObjectType, typename EPObjectType>
     bool ForwardPostOrderVisit( EPTypedObjNode<AAFObjectType, EPObjectType>& node )
     {
@@ -97,13 +97,13 @@ class EPTypedVisitor : public TypedVisitor
       shared_ptr<AAFTypedObjNode<AAFObjectType> > spBaseNode = dynamic_pointer_cast<AAFTypedObjNode<AAFObjectType> >(spNode);
       return this->PostOrderVisit( *spBaseNode );
     }
-  
+
     // prohibited
     EPTypedVisitor( const EPTypedVisitor& );
     EPTypedVisitor& operator=( const EPTypedVisitor& );
 
 };
-    
+
 } // end of namespace diskstream
 
 #endif/*__TEMPLATE_h__*/

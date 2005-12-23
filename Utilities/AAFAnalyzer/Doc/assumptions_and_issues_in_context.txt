@@ -923,19 +923,19 @@ Issues:
     Single Parameter Mono Audio Dissolve effects.
 
 77. For REQ_EP_218 it is assumed that the 2nd input to an OpetaionGroup for an
-    Alpha with Video Key Effect must be a Source References to a file SourceMob
-    with an    RGBADescriptor or a CDCIDescriptor.
+    Alpha with Video Key Effect must be a SourceReference to a file SourceMob
+    with a RGBADescriptor or a CDCIDescriptor.
 
 78. For REQ_EP_219 it is assumed that the 2nd input to an OpetaionGroup for an
-    Alpha with Video Key Effect must be a Source References to a file SourceMob
+    Alpha with Video Key Effect must be a SourceReference to a file SourceMob
     with a DigitalImageDescriptor.
 
 79. For REQ_EP_223 it is assumed that the 3rd input to an OpetaionGroup for a
     Separate-Alpha Key Effect must be a Source References to a file SourceMob
-    with an RGBADescriptor or a CDCIDescriptor.
+    with a RGBADescriptor or a CDCIDescriptor.
 
-80. For REQ_EP_223 it is assumed that the 3rd input to an OpetaionGroup for an
-    Separate=Alpha Key Effect must be a Source References to a file SourceMob
+80. For REQ_EP_224 it is assumed that the 3rd input to an OpetaionGroup for a
+    Separate Alpha Key Effect must be a SourceReference to a file SourceMob
     with a DigitalImageDescriptor.
 
 81. In REQ_EP_219, it is not known how to test if the alpha channel is indicated
@@ -943,7 +943,7 @@ Issues:
     be tested.
 
 82. In REQ_EP_223, it is not known how to test if the alpha channel is indicated
-    by the essence descriptor or how to find the luminance calue of the essence.
+    by the essence descriptor or how to find the luminance value of the essence.
     Until clarification is provided, this will not be tested.
 
 95. REQ_EP_163 and REQ_EP_164 are redundant as they only fail when more specific
@@ -1171,7 +1171,6 @@ Requirements:
         Effects on multiple layers shall be constructed within a NestedScope
         object.  The layers shall be ordered background to foreground within the
         Slots of the NestedScope.
-> What is an effect on multiple layers?
 Issue:
 16. Requirements REQ_EP_025, REQ_EP_030, DEF_EP_034, DEF_EP_043, DEF_EP_049,
     DEF_EP_054, DEF_EP_058, DEF_EP_071, DEF_EP_074, DEF_EP_080, DEF_EP_085,

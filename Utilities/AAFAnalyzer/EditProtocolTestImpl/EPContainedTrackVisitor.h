@@ -50,7 +50,7 @@ class EPContainedTrackVisitor : public EPTypedVisitor
   public:
 
     EPContainedTrackVisitor( wostream& log, shared_ptr<EdgeMap> spEdgeMap );
-    
+
     virtual ~EPContainedTrackVisitor();
 
     virtual bool PreOrderVisit( EPTypedObjNode<IAAFCompositionMob, EPTopLevelComposition>& node );
@@ -60,29 +60,29 @@ class EPContainedTrackVisitor : public EPTypedVisitor
     virtual bool PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPTapeSource>& node );
     virtual bool PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPFilmSource>& node );
     virtual bool PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPAuxiliarySource>& node );
-    
+
     shared_ptr<DetailLevelTestResult> GetResult();
-    
+
   private:
 
     typedef map<aafUInt32, aafUInt32> TrackNumberMap;
-     
+
     wostream& _log;
     shared_ptr<EdgeMap> _spEdgeMap;
     shared_ptr<DetailLevelTestResult> _spResult;
 
-    shared_ptr<TrackNumberMap> CountTrackCodes( shared_ptr<EPTypedVisitor::MobSlotSet> tracks, unsigned int& unnumberedTracks );
+    shared_ptr<TrackNumberMap> CountTrackCodes( shared_ptr<EPTypedVisitor::MobSlotNodeSet> tracks, unsigned int& unnumberedTracks );
 
     template<typename SegmentTypeSP>
-    unsigned int CountSegments( AxMobSlot& track );
+    bool CheckForSingleSegment( Node& mobSlotNode );
 
-    bool CheckPrimaryTimecodeTracks( shared_ptr<EPTypedVisitor::MobSlotSet> tracks, Node& node );
+    bool CheckPrimaryTimecodeTracks( shared_ptr<EPTypedVisitor::MobSlotNodeSet> tracks, Node& node );
 
     // prohibited
     EPContainedTrackVisitor();
     EPContainedTrackVisitor( const EPContainedTrackVisitor& );
     EPContainedTrackVisitor& operator=( const EPContainedTrackVisitor& );
-  
+
 };
 
 } // end of namespace diskstream

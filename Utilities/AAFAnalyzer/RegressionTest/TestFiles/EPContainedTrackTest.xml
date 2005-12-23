@@ -7,7 +7,7 @@
 
     <top-level name="One Primary">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="1">
-            <timecode length="0" track-type="timecode"/>
+			<timecode length="0" track-type="timecode"/>
         </timeline-mob-slot>
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
             <eoc length="0" track-type="none"/>
@@ -1553,6 +1553,42 @@
         </timeline-mob-slot>
     </sub-clip>
 
+    <sub-clip name="Sub-Clip - Sequence of 1 SourceClip">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+            <sequence track-type="audio">
+                <eoc track-type="audio" length="0"/>
+            </sequence>
+        </timeline-mob-slot>
+    </sub-clip>
+
+    <sub-clip name="Sub-Clip - Double Sequence of 1 SourceClip">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+            <sequence track-type="audio" length="0">
+                <sequence track-type="audio" length="0">
+                    <eoc track-type="audio" length="0"/>
+                </sequence>
+            </sequence>
+        </timeline-mob-slot>
+    </sub-clip>
+
+    <sub-clip name="Sub-Clip - Sequence of 2 SourceClips">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+            <sequence track-type="audio">
+                <eoc track-type="audio" length="0"/>
+                <eoc track-type="audio" length="0"/>
+            </sequence>
+        </timeline-mob-slot>
+    </sub-clip>
+
+    <sub-clip name="Sub-Clip - Sequence of SourceClip/OperationGroup">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+            <sequence track-type="audio">
+                <eoc track-type="audio" length="0"/>
+                <mono-audio-gain track-type="audio" length="0"/>
+            </sequence>
+        </timeline-mob-slot>
+    </sub-clip>
+
     <!-- Test Adjusted-Clip Compositions -->
 
     <adjusted-clip name="Adjusted Clip - Audio Timeline Source Clip">
@@ -1663,7 +1699,44 @@
         </timeline-mob-slot>
     </adjusted-clip>
 
+    <adjusted-clip name="Adjusted-Clip - Sequence of 1 OperationGroup">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+            <sequence track-type="audio">
+                <mono-audio-gain track-type="audio" length="0"/>
+            </sequence>
+        </timeline-mob-slot>
+    </adjusted-clip>
+
+    <adjusted-clip name="Adjusted-Clip - Double Sequence of 1 OperationGroup">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+            <sequence track-type="audio" length="0">
+                <sequence track-type="audio" length="0">
+                    <mono-audio-gain track-type="audio" length="0"/>
+                </sequence>
+            </sequence>
+        </timeline-mob-slot>
+    </adjusted-clip>
+
+    <adjusted-clip name="Adjusted-Clip - Sequence of 2 OperationGroups">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+            <sequence track-type="audio">
+                <mono-audio-gain track-type="audio" length="0"/>
+                <mono-audio-gain track-type="audio" length="0"/>
+            </sequence>
+        </timeline-mob-slot>
+    </adjusted-clip>
+
+    <adjusted-clip name="Adjusted-Clip - Sequence of SourceClip/OperationGroup">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+            <sequence track-type="audio">
+                <eoc track-type="audio" length="0"/>
+                <mono-audio-gain track-type="audio" length="0"/>
+            </sequence>
+        </timeline-mob-slot>
+    </adjusted-clip>
+
     <!-- Check the contents of primarty timecode tracks -->
+
     <top-level name="Top Level - Correct Primary Timecode">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="1">
             <timecode length="0" track-type="timecode"/>
@@ -1673,6 +1746,42 @@
     <top-level name="Top Level - Incorrect Primary Timecode">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="1">
             <timecode-stream-12m length="0" track-type="timecode"/>
+        </timeline-mob-slot>
+    </top-level>
+
+    <top-level name="Top-Level - Sequence of 1 Timecode">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="1">
+            <sequence track-type="timecode">
+                <timecode track-type="timecode" length="0"/>
+            </sequence>
+        </timeline-mob-slot>
+    </top-level>
+
+    <top-level name="Top-Level - Double Sequence of 1 Timecode">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="1">
+            <sequence track-type="timecode" length="0">
+                <sequence track-type="timecode" length="0">
+                    <timecode track-type="timecode" length="0"/>
+                </sequence>
+            </sequence>
+        </timeline-mob-slot>
+    </top-level>
+
+    <top-level name="Top-Level - Sequence of 2 Timecodes">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="1">
+            <sequence track-type="timecode">
+                <timecode track-type="timecode" length="0"/>
+                <timecode track-type="timecode" length="0"/>
+            </sequence>
+        </timeline-mob-slot>
+    </top-level>
+
+    <top-level name="Top-Level - Sequence of Timecode/TimecodeStream">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="1">
+            <sequence track-type="timecode">
+                <timecode track-type="timecode" length="0"/>
+                <timecode-stream-12m track-type="timecode" length="0"/>
+            </sequence>
         </timeline-mob-slot>
     </top-level>
 
@@ -1688,7 +1797,44 @@
         </timeline-mob-slot>
     </lower-level>
 
+    <lower-level name="Lower-Level - Sequence of 1 Timecode">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="1">
+            <sequence track-type="timecode">
+                <timecode track-type="timecode" length="0"/>
+            </sequence>
+        </timeline-mob-slot>
+    </lower-level>
+
+    <lower-level name="Lower-Level - Double Sequence of 1 Timecode">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="1">
+            <sequence track-type="timecode" length="0">
+                <sequence track-type="timecode" length="0">
+                    <timecode track-type="timecode" length="0"/>
+                </sequence>
+            </sequence>
+        </timeline-mob-slot>
+    </lower-level>
+
+    <lower-level name="Lower-Level - Sequence of 2 Timecodes">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="1">
+            <sequence track-type="timecode">
+                <timecode track-type="timecode" length="0"/>
+                <timecode track-type="timecode" length="0"/>
+            </sequence>
+        </timeline-mob-slot>
+    </lower-level>
+
+    <lower-level name="Lower-Level - Sequence of Timecode/TimecodeStream">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" physical-track-number="1">
+            <sequence track-type="timecode">
+                <timecode track-type="timecode" length="0"/>
+                <timecode-stream-12m track-type="timecode" length="0"/>
+            </sequence>
+        </timeline-mob-slot>
+    </lower-level>
+
     <!-- Test Auxiliary Sources -->
+
     <auxiliary-source name="Aux. Source No Mob Slot">
         <bad-eoc/>
     </auxiliary-source>

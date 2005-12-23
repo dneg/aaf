@@ -385,6 +385,22 @@
                 Name:   Edit Protocol Contained Track Visitor
                 Desc:   -
                 Result: Failed
+                Reason: Slot with ID 1 in Sub-Clip Composition: "Sub-Clip - Sequence of 2 SourceClips" does not have exactly one SourceClip.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_037
+
+                Name:   Edit Protocol Contained Track Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Slot with ID 1 in Sub-Clip Composition: "Sub-Clip - Sequence of SourceClip/OperationGroup" does not have exactly one SourceClip.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_037
+
+                Name:   Edit Protocol Contained Track Visitor
+                Desc:   -
+                Result: Failed
                 Reason: Slot with ID 1 in Adjusted-Clip Composition: "Adjusted Clip - Audio Timeline Source Clip" does not have exactly one OperationGroup.
                 Passing Requirements: None
                 Warning Requirements: None
@@ -417,6 +433,22 @@
                 Name:   Edit Protocol Contained Track Visitor
                 Desc:   -
                 Result: Failed
+                Reason: Slot with ID 1 in Adjusted-Clip Composition: "Adjusted-Clip - Sequence of 2 OperationGroups" does not have exactly one OperationGroup.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_046
+
+                Name:   Edit Protocol Contained Track Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Slot with ID 1 in Adjusted-Clip Composition: "Adjusted-Clip - Sequence of SourceClip/OperationGroup" does not have exactly one OperationGroup.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_046
+
+                Name:   Edit Protocol Contained Track Visitor
+                Desc:   -
+                Result: Failed
                 Reason: Mob slot with ID = 1 of Top-Level Composition: "Top Level - Incorrect Primary Timecode" is a timecode track that does not consist of a single Timecode object.
                 Passing Requirements: None
                 Warning Requirements: None
@@ -425,7 +457,39 @@
                 Name:   Edit Protocol Contained Track Visitor
                 Desc:   -
                 Result: Failed
+                Reason: Mob slot with ID = 1 of Top-Level Composition: "Top-Level - Sequence of 2 Timecodes" is a timecode track that does not consist of a single Timecode object.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_131
+
+                Name:   Edit Protocol Contained Track Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Mob slot with ID = 1 of Top-Level Composition: "Top-Level - Sequence of Timecode/TimecodeStream" is a timecode track that does not consist of a single Timecode object.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_131
+
+                Name:   Edit Protocol Contained Track Visitor
+                Desc:   -
+                Result: Failed
                 Reason: Mob slot with ID = 1 of Lower-Level Composition: "Lower Level - Incorrect Primary Timecode" is a timecode track that does not consist of a single Timecode object.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_131
+
+                Name:   Edit Protocol Contained Track Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Mob slot with ID = 1 of Lower-Level Composition: "Lower-Level - Sequence of 2 Timecodes" is a timecode track that does not consist of a single Timecode object.
+                Passing Requirements: None
+                Warning Requirements: None
+                Failing Requirements: REQ_EP_131
+
+                Name:   Edit Protocol Contained Track Visitor
+                Desc:   -
+                Result: Failed
+                Reason: Mob slot with ID = 1 of Lower-Level Composition: "Lower-Level - Sequence of Timecode/TimecodeStream" is a timecode track that does not consist of a single Timecode object.
                 Passing Requirements: None
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_131
