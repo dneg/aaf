@@ -32,6 +32,7 @@ include ../../aafanalyzer.mk
 .PHONY : check
 check : $(AAFSDKBINDIR)/BuildTestFile$(EXE)
 	rm -f *.aaf *.temp *.results
+	env LD_LIBRARY_PATH=$(AAFSDKBINDIR) $(AAFSDKBINDIR)/BuildTestFile$(EXE) EPAcyclicTest.xml EPAcyclicTest3.aaf
 	env LD_LIBRARY_PATH=$(AAFSDKBINDIR) $(AAFSDKBINDIR)/BuildTestFile$(EXE) EPDerivationTest.xml EPDerivationTest.aaf
 	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/AAFAnalyzer$(EXE) -verbose -regressiontest EPDerivationTest.aaf ../../Requirements/AAFRequirements.xml >> EPDerivationTest.temp
 	grep -A `expr \`expr \\\`grep -n "Name:   Edit Protocol Naming Test" EPDerivationTest.temp | sed 's_\([0-9]*\).*_\1_' \\\`\` - \`expr \\\`grep -n "Name:   Mob Derivation Test" EPDerivationTest.temp | sed 's_\([0-9]*\).*_\1_'\\\`\` - 1` "Name:   Mob Derivation Test" EPDerivationTest.temp >> EPDerivationTest.results

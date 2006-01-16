@@ -40,7 +40,8 @@ class AcyclicVisitor : public Visitor
 {
  public:
 
-  typedef vector<Node::LID> Vector;
+  //typedef vector<Node::LID> Vector;
+  typedef vector<shared_ptr<Node> > Vector;
 
   AcyclicVisitor(wostream& os);
   virtual ~AcyclicVisitor();

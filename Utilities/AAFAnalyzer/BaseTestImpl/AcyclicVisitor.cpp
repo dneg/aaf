@@ -25,12 +25,22 @@
 //Test/Result files
 #include <DetailLevelTestResult.h>
 #include <TestRegistry.h>
-
+#include <AnalyzerException.h>
 //Requirement files
 #include <Requirement.h>
 
 //Analyzer Base files
 #include <Node.h>
+
+//AAF Analyzer Base files
+#include <AAFObjNode.h>
+
+//Axlib files
+#include <AxObject.h>
+#include <AxMob.h>
+#include <AxUtil.h>
+#include <AxMobSlot.h>
+#include <AxComponent.h>
 
 //STL files
 #include <ostream>
@@ -90,22 +100,57 @@ bool AcyclicVisitor::PreOrderVisit(Node& node)
     }
     
     //add node into the vector since it was visited on this sub-branch's traversal
-    _Vector.push_back(lid);
+    _Vector.push_back(node.GetSharedPointerToNode());
     this->RecordVisit( lid );
     return true;
   }
- 
-  // a cycle was detected
-  _spResult->SetExplanation(L"Cycle detected.!");
-  _spResult->SetResult(TestResult::FAIL);
 
-  //TODO: Dump something more useful than the vector of LIDs.
-  _os << "Nodes of the cycle:" << endl;
+  // a cycle was detected
+  
+  AxStringUtil au;
+  wstring newl=wstring(L"\n");
+  wstring cycle=wstring(L"Nodes of the cycle:") + newl ;
+
+  _Vector.push_back(node.GetSharedPointerToNode());
+  
   for(unsigned int i = 0; i < _Vector.size(); i++)
   {
-    _os << _Vector.at(i) << endl;
+  	cycle+=wstring(L"Node: ") + wstring(au.int2Str(_Vector.at(i)->GetLID())) + wstring(L"  Object - ") + wstring( _Vector.at(i)->GetName()) +newl;
+    //_os <<"Node: "<< _Vector.at(i)->GetLID() <<"  Object - "<< _Vector.at(i)->GetName()<<endl;
+  	AAFObjNode& a=static_cast<AAFObjNode&>(*(_Vector.at(i)));
+  	AxObject axObj( a.GetAAFObject() );
+  	
+	IAAFMobSP spMob;
+	IAAFMobSlotSP spMobS;
+	IAAFSourceReferenceSP spSR;
+	
+	if (AxIsA(axObj, spMobS)){
+		AxMobSlot axMobS(spMobS);
+		cycle+= wstring(L"         SlotID - ") + wstring(au.int2Str(axMobS.GetSlotID())) + newl;
+		//_os<<"         SlotID - "<<axMobS.GetSlotID()<<endl;
+	}
+  	else if(AxIsA(axObj, spMob)){
+    	AxMob axMob(spMob);
+    	cycle += wstring( L"           Name - ") + wstring(axMob.GetName()) + newl;
+    	cycle +=wstring( L"          MobID - " + au.mobid2Str(axMob.GetMobID())) + newl;
+    	//_os<<"           Name - "<<axMob.GetName()<<endl;
+    	//_os<<"          MobID - "<<au.mobid2Str(axMob.GetMobID())<<endl;
+  	}
+  	else if (AxIsA(axObj,spSR)){
+  		AxSourceReference axSR(spSR);
+  		cycle+= wstring(L"       SourceID - " + au.mobid2Str(axSR.GetSourceID())) +newl;
+  		//_os<<"       SourceID - "<<au.mobid2Str(axSR.GetSourceID())<<endl;
+	}
+  
   }
-  _os << lid << endl;
+  cycle+=newl;
+  //_os<<endl;
+  
+  _spResult->SetExplanation(L"Cycle detected!" +newl +cycle);
+  _spResult->SetResult(TestResult::FAIL);
+  _Vector.pop_back();
+  
+  throw AnalyzerException(L"Graph not acyclic.");
 
   return false;
 }
