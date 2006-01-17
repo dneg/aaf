@@ -25,7 +25,7 @@
 //Test/Result files
 #include <DetailLevelTestResult.h>
 #include <TestRegistry.h>
-#include <AnalyzerException.h>
+
 //Requirement files
 #include <Requirement.h>
 
@@ -150,7 +150,6 @@ bool AcyclicVisitor::PreOrderVisit(Node& node)
   _spResult->SetResult(TestResult::FAIL);
   _Vector.pop_back();
   
-  throw AnalyzerException(L"Graph not acyclic.");
 
   return false;
 }

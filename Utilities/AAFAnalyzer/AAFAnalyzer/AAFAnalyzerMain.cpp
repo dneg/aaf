@@ -405,7 +405,11 @@ int main( int argc, char** argv )
     LoadPhase load( wcout, fileName );
     shared_ptr<const TestPhaseLevelTestResult> spSubResult( load.Execute() );
     spResult->AppendSubtestResult(spSubResult);
-
+	if (spSubResult->GetResult()==TestResult::FAIL){
+		OutputVerboseResultMsgs(spResult, 0);
+		throw AnalyzerException(L"Load phase failed.  Further tests aborted.");
+	}
+    
     //Store the test graph info so the AAF file is not inadvertantley closed.
     shared_ptr<const AAFGraphInfo> graphInfo = load.GetTestGraphInfo();
 
