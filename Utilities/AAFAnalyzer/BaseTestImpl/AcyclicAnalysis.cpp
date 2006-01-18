@@ -77,6 +77,7 @@ shared_ptr<TestLevelTestResult> AcyclicAnalysis::Execute()
   shared_ptr<TestLevelTestResult> spResult(new TestLevelTestResult(me, spMyReqs ));
   spResult->SetName(GetName());
   spResult->SetDescription(GetDescription());
+  spResult->SetExplanation(L"Test Failed - See \"AcyclicVisitor\" for details");
 
   dfs.TraverseDown(spVisitor, GetTestGraph()->GetRootNode()); 
   
@@ -105,7 +106,7 @@ const TestInfo AcyclicAnalysis::GetTestInfo()
 {
     shared_ptr<vector<AxString> > spReqIds(new vector<AxString>);
     //TODO: Push actual requirements.
-//    spReqIds->push_back(L"Requirement Id");
+    spReqIds->push_back(L"REQ_EP_256");  // Acyclic graph requirement
     return TestInfo(L"AcyclicAnalysis", spReqIds);
 }
 

@@ -2812,5 +2812,11 @@
             <section>15</section>
         </ref>
     </requirement>
+    
+    <requirement type="file" category="ad-hoc">
+        <id>REQ_EP_256</id>
+        <name>Acyclic Derivation Chain</name>
+        <desc>The AAF derivation chain of the AAF file shall not contain any cycles.</desc>
+    </requirement>
 
 </requirement-set>

@@ -143,11 +143,13 @@ bool AcyclicVisitor::PreOrderVisit(Node& node)
 	}
   
   }
-  cycle+=newl;
-  //_os<<endl;
   
-  _spResult->SetExplanation(L"Cycle detected!" +newl +cycle);
+  _spResult->SetExplanation(L"Cycle(s) detected!");
   _spResult->SetResult(TestResult::FAIL);
+  _spResult->AddInformationResult(
+            L"REQ_EP_256",
+            cycle,
+            TestResult::FAIL );
   _Vector.pop_back();
   
 
