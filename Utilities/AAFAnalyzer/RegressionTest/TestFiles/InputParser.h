@@ -86,7 +86,7 @@ public:
 
     //Type B (One Mob Referenced)
     //SourceReference, SourceClip
-    typedef void(TestFileBuilder::*ptrToFillFunctionB) ( shared_ptr<AxSourceReference> parent, AxMob& child );
+    typedef void(TestFileBuilder::*ptrToFillFunctionB) ( shared_ptr<AxSourceReference> parent, AxMob& child, const AxString& source );
     //NOTE: SourceReference is an abstract class.  Although the general create
     //      function will be sufficient to create new descendant classes, a
     //      specialized fill function will be needed.  In many cases, that

@@ -332,7 +332,6 @@ void InputParser::ParseXML( const char* filename ) const
 //Called when an open tag is encountered.
 void InputParser::StartElement(const AxString& name, const char** attribs)
 {
-
     /*
      * On average elements in the material type map will occur in an XML file
      * more often so search it first.  The next most often used elements will
@@ -345,18 +344,17 @@ void InputParser::StartElement(const AxString& name, const char** attribs)
     {
         wostringstream ss;
         AxString atrName;
-
         //Find the mob name.
         SlotInfo::OptionalStringAttrib mobName = GetOptionalStringAttribValue( L"name", attribs, 8, L"" );
-
         SlotInfo::OptionalIntAttrib rationalNumerator = GetOptionalIntAttribValue( _optRationalParam[name] + L"-numerator", attribs, 8, 1 );
         SlotInfo::OptionalIntAttrib rationalDenominator = GetOptionalIntAttribValue( _optRationalParam[name] + L"-denominator", attribs, 8, 1 );
         SlotInfo::OptionalStringAttrib alphaTransparency = GetOptionalStringAttribValue( L"alpha-transparency", attribs, 8, L"max" );
-
+        SlotInfo::OptionalStringAttrib sourceId = GetOptionalStringAttribValue( L"parent-src-id", attribs, 8, L"" );
         aafRational_t optRational;
         optRational.numerator = rationalNumerator.first;
         optRational.denominator = rationalDenominator.first;
 
+		
         //Note: This logic will have to change a bit if another type of mob
         //requires an optional aafUInt32 parameter.
         aafAlphaTransparency_t transType;
@@ -368,20 +366,19 @@ void InputParser::StartElement(const AxString& name, const char** attribs)
         {
             transType = kAAFMinValueTransparent;
         }
-
+		//wcout<<"SUp3 "<<"ID: "<<sourceId.first<<" mobname: "<<mobName.first<<" ISNAMED: "<<mobName.second<<endl;
         //Call the appropriate add function.
         shared_ptr<AxMob> spMob = (_testFile.*_materialTypeMap[name])( mobName.first, mobName.second, optRational, transType, alphaTransparency.second );
-
         if ( !_componentStack.empty() )
         {
             //Call the appropriate initialize/add function.
             shared_ptr<AxSourceReference> axSrcRef = dynamic_pointer_cast<AxSourceReference>( _componentStack.top().second );
-            (_testFile.*_fillSegmentMapB[_componentStack.top().first])( axSrcRef, *spMob );
+            (_testFile.*_fillSegmentMapB[_componentStack.top().first])( axSrcRef, *spMob, sourceId.first );
         }
-
+		
         //Push the new mob onto the stack.
         _mobStack.push( spMob );
-
+		
     }
     else if ( _createSegmentMap.find( name ) != _createSegmentMap.end() )
     {
@@ -406,7 +403,7 @@ void InputParser::StartElement(const AxString& name, const char** attribs)
             if ( _slotStack.top().componentsSinceSlot != 0 )
             {
                 if ( _fillSegmentMapC.find( _componentStack.top().first ) != _fillSegmentMapC.end() )
-                {
+                {	
                     (_testFile.*_fillSegmentMapC[_componentStack.top().first])( _componentStack.top().second, *spComponent );
                 }
                 else if ( _fillSegmentMapD.find( _componentStack.top().first ) != _fillSegmentMapD.end() )

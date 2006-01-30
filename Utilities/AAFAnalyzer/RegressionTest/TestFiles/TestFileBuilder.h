@@ -110,7 +110,7 @@ class TestFileBuilder
 
         //Fill Components:
         //Type B:
-        void InitializeSourceClip( shared_ptr<AxSourceReference> parent, AxMob& child );
+        void InitializeSourceClip( shared_ptr<AxSourceReference> parent, AxMob& child, const AxString& source );
 
         //Type C:
         void AddToTransition( shared_ptr<AxComponent> parent, AxComponent& child );
@@ -147,13 +147,13 @@ class TestFileBuilder
         map<AxString, aafUID_t> _namedAUIDs;
         bool _useLegacyEffectDefinitions;
 
-        const aafMobID_t GenerateMobId();
+        const aafMobID_t GenerateMobId(AxString mobName);
         const aafUID_t GenerateAUID();
         void AddDataDef( AxComponent& axComponent, TrackType essenceType );
         shared_ptr<AxOperationDef> GetOperationDef( const AxString& opDef, AxDictionary& axDictionary );
         shared_ptr<AxParameterDef> GetParameterDef( const aafUID_t& paramDefId, AxDictionary& axDictionary );
         shared_ptr<AxInterpolationDef> GetInterpolationDef( const aafUID_t& interpolationDefId, AxDictionary& axDictionary );
-
+		map<AxString, aafMobID_t> mobIdMap;
 };
 
 } // end of namespace diskstream

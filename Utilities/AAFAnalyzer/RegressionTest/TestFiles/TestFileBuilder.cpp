@@ -136,7 +136,8 @@ void TestFileBuilder::CreateKLVDataDefinition( const AxString& name, const AxStr
 }
 
 void TestFileBuilder::CreateTaggedValueDefinition( const AxString& name, const AxString& description )
-{
+{	
+	
     AxHeader axHeader( _axFile.getHeader() );
     AxDictionary axDictionary( axHeader.GetDictionary() );
 
@@ -150,7 +151,7 @@ void TestFileBuilder::CreateTaggedValueDefinition( const AxString& name, const A
 }
 
 void TestFileBuilder::CreateOperationDefinition( const AxString& name, const AxString& description )
-{
+{	
     AxHeader axHeader( _axFile.getHeader() );
     AxDictionary axDictionary( axHeader.GetDictionary() );
 
@@ -180,7 +181,7 @@ shared_ptr<AxMob> TestFileBuilder::AddTopLevel( const AxString& name, bool isNam
         spAxCompMob->SetName( name );
     }
     spAxCompMob->SetUsageCode(kAAFUsage_TopLevel);
-    spAxCompMob->SetMobID( this->GenerateMobId() );
+    spAxCompMob->SetMobID( this->GenerateMobId(name) );
 
     axHeader.AddMob( *spAxCompMob );
 
@@ -198,7 +199,7 @@ shared_ptr<AxMob> TestFileBuilder::AddLowerLevel( const AxString& name, bool isN
         spAxCompMob->SetName( name );
     }
     spAxCompMob->SetUsageCode(kAAFUsage_LowerLevel);
-    spAxCompMob->SetMobID( this->GenerateMobId() );
+    spAxCompMob->SetMobID( this->GenerateMobId(name) );
 
     axHeader.AddMob( *spAxCompMob );
 
@@ -216,7 +217,7 @@ shared_ptr<AxMob> TestFileBuilder::AddSubClip( const AxString& name, bool isName
         spAxCompMob->SetName( name );
     }
     spAxCompMob->SetUsageCode(kAAFUsage_SubClip);
-    spAxCompMob->SetMobID( this->GenerateMobId() );
+    spAxCompMob->SetMobID( this->GenerateMobId(name) );
 
     axHeader.AddMob( *spAxCompMob );
 
@@ -234,7 +235,7 @@ shared_ptr<AxMob> TestFileBuilder::AddAdjustedClip( const AxString& name, bool i
         spAxCompMob->SetName( name );
     }
     spAxCompMob->SetUsageCode(kAAFUsage_AdjustedClip);
-    spAxCompMob->SetMobID( this->GenerateMobId() );
+    spAxCompMob->SetMobID( this->GenerateMobId(name) );
 
     axHeader.AddMob( *spAxCompMob );
 
@@ -253,7 +254,7 @@ shared_ptr<AxMob> TestFileBuilder::AddTemplateClip( const AxString& name, bool i
         spAxMasterMob->SetName( name );
     }
     spAxMasterMob->SetUsageCode( kAAFUsage_Template );
-    spAxMasterMob->SetMobID( this->GenerateMobId() );
+    spAxMasterMob->SetMobID( this->GenerateMobId(name) );
 
     axHeader.AddMob( *spAxMasterMob );
 
@@ -271,7 +272,7 @@ shared_ptr<AxMob> TestFileBuilder::AddClip( const AxString& name, bool isNamed, 
     {
         spAxMasterMob->SetName( name );
     }
-    spAxMasterMob->SetMobID( this->GenerateMobId() );
+    spAxMasterMob->SetMobID( this->GenerateMobId(name) );
 
     axHeader.AddMob( *spAxMasterMob );
 
@@ -280,16 +281,17 @@ shared_ptr<AxMob> TestFileBuilder::AddClip( const AxString& name, bool isNamed, 
 
 shared_ptr<AxMob> TestFileBuilder::AddFileSource( const AxString& name, bool isNamed, aafRational_t sampleRate, aafUInt32 intNothing, bool boolNothing )
 {
+	
     AxHeader axHeader( _axFile.getHeader() );
     AxDictionary axDictionary( axHeader.GetDictionary() );
-
+	
     shared_ptr<AxSourceMob> spAxSrcMob( new AxSourceMob( AxCreateInstance<IAAFSourceMob>( axDictionary ) ) );
     if ( isNamed )
     {
         spAxSrcMob->SetName( name );
     }
 
-
+	
     AxWAVEDescriptor axFileDes( AxCreateInstance<IAAFWAVEDescriptor>( axDictionary ) );
 
     //Fake a wave header.  It would be nice if we didn't need to do this, but
@@ -302,8 +304,7 @@ shared_ptr<AxMob> TestFileBuilder::AddFileSource( const AxString& name, bool isN
 
     axFileDes.SetSampleRate( sampleRate );
     spAxSrcMob->SetEssenceDescriptor( axFileDes );
-    spAxSrcMob->SetMobID( this->GenerateMobId() );
-
+    spAxSrcMob->SetMobID( this->GenerateMobId(name) );
     axHeader.AddMob( *spAxSrcMob );
 
     return spAxSrcMob;
@@ -324,7 +325,7 @@ shared_ptr<AxMob> TestFileBuilder::AddMonoAudioFileSource( const AxString& name,
     axSoundDes.SetSampleRate( sampleRate );
     axSoundDes.SetChannelCount( 1 );
     spAxSrcMob->SetEssenceDescriptor( axSoundDes );
-    spAxSrcMob->SetMobID( this->GenerateMobId() );
+    spAxSrcMob->SetMobID( this->GenerateMobId(name) );
 
     axHeader.AddMob( *spAxSrcMob );
 
@@ -346,7 +347,7 @@ shared_ptr<AxMob> TestFileBuilder::AddMultiChannelAudioFileSource( const AxStrin
     axSoundDes.SetSampleRate( sampleRate );
     axSoundDes.SetChannelCount( 2 );
     spAxSrcMob->SetEssenceDescriptor( axSoundDes );
-    spAxSrcMob->SetMobID( this->GenerateMobId() );
+    spAxSrcMob->SetMobID( this->GenerateMobId(name) );
 
     axHeader.AddMob( *spAxSrcMob );
 
@@ -372,7 +373,7 @@ shared_ptr<AxMob> TestFileBuilder::AddRGBAFileSource( const AxString& name, bool
     }
 
     spAxSrcMob->SetEssenceDescriptor( axRGBADes );
-    spAxSrcMob->SetMobID( this->GenerateMobId() );
+    spAxSrcMob->SetMobID( this->GenerateMobId(name) );
 
     axHeader.AddMob( *spAxSrcMob );
 
@@ -398,7 +399,7 @@ shared_ptr<AxMob> TestFileBuilder::AddCDCIFileSource( const AxString& name, bool
     }
 
     spAxSrcMob->SetEssenceDescriptor( axCDCIDes );
-    spAxSrcMob->SetMobID( this->GenerateMobId() );
+    spAxSrcMob->SetMobID( this->GenerateMobId(name) );
 
     axHeader.AddMob( *spAxSrcMob );
 
@@ -419,7 +420,7 @@ shared_ptr<AxMob> TestFileBuilder::AddRecordingSource( const AxString& name, boo
     AxRecordingDescriptor axRecording( AxCreateInstance<IAAFRecordingDescriptor>( axDictionary ) );
     axRecording.Initialize();
     spAxSrcMob->SetEssenceDescriptor( axRecording );
-    spAxSrcMob->SetMobID( this->GenerateMobId() );
+    spAxSrcMob->SetMobID( this->GenerateMobId(name) );
 
     axHeader.AddMob( *spAxSrcMob );
 
@@ -440,7 +441,7 @@ shared_ptr<AxMob> TestFileBuilder::AddImportSource( const AxString& name, bool i
     AxImportDescriptor axImport( AxCreateInstance<IAAFImportDescriptor>( axDictionary ) );
     axImport.Initialize();
     spAxSrcMob->SetEssenceDescriptor( axImport );
-    spAxSrcMob->SetMobID( this->GenerateMobId() );
+    spAxSrcMob->SetMobID( this->GenerateMobId(name) );
 
     axHeader.AddMob( *spAxSrcMob );
 
@@ -461,7 +462,7 @@ shared_ptr<AxMob> TestFileBuilder::AddTapeSource( const AxString& name, bool isN
     AxTapeDescriptor axTape( AxCreateInstance<IAAFTapeDescriptor>( axDictionary ) );
     axTape.Initialize();
     spAxSrcMob->SetEssenceDescriptor( axTape );
-    spAxSrcMob->SetMobID( this->GenerateMobId() );
+    spAxSrcMob->SetMobID( this->GenerateMobId(name) );
 
     axHeader.AddMob( *spAxSrcMob );
 
@@ -481,7 +482,7 @@ shared_ptr<AxMob> TestFileBuilder::AddFilmSource( const AxString& name, bool isN
 
     AxFilmDescriptor axFilm( AxCreateInstance<IAAFFilmDescriptor>( axDictionary ) );
     spAxSrcMob->SetEssenceDescriptor( axFilm );
-    spAxSrcMob->SetMobID( this->GenerateMobId() );
+    spAxSrcMob->SetMobID( this->GenerateMobId(name) );
 
     axHeader.AddMob( *spAxSrcMob );
 
@@ -499,7 +500,7 @@ shared_ptr<AxMob> TestFileBuilder::AddAuxiliarySource( const AxString& name, boo
     AxAuxiliaryDescriptor axAux( AxCreateInstance<IAAFAuxiliaryDescriptor>( axDictionary ) );
     axAux.SetMimeType( L"audio/midi" );
     spAxSrcMob->SetEssenceDescriptor( axAux );
-    spAxSrcMob->SetMobID( this->GenerateMobId() );
+    spAxSrcMob->SetMobID( this->GenerateMobId(name) );
 
     axHeader.AddMob( *spAxSrcMob );
 
@@ -612,7 +613,7 @@ shared_ptr<AxComponent> TestFileBuilder::CreateOOF( TrackType essenceType, const
     shared_ptr<AxSourceClip> axSrcClip( new AxSourceClip( AxCreateInstance<IAAFSourceClip>( axDictionary ) ) );
 
     aafSourceRef_t srcRef;
-    srcRef.sourceID     = this->GenerateMobId();
+    srcRef.sourceID     = this->GenerateMobId(L"OOF");
     srcRef.sourceSlotID = 1;
     if ( hasStartTime )
     {
@@ -629,7 +630,7 @@ shared_ptr<AxComponent> TestFileBuilder::CreateOOF( TrackType essenceType, const
     return axSrcClip;
 }
 
-shared_ptr<AxComponent> TestFileBuilder::CreateSourceClip( TrackType essenceType, const AxString& strNothing, aafLength_t length, bool hasLength, int startTime, bool hasStartTime )
+shared_ptr<AxComponent> TestFileBuilder::CreateSourceClip( TrackType essenceType, const AxString& strNothing, aafLength_t length, bool hasLength, int startTime, bool hasStartTime)
 {
     AxHeader axHeader( _axFile.getHeader() );
     AxDictionary axDictionary( axHeader.GetDictionary() );
@@ -748,18 +749,28 @@ shared_ptr<AxComponent> TestFileBuilder::CreateOperationGroup( TrackType essence
  *
  */
 
-void TestFileBuilder::InitializeSourceClip( shared_ptr<AxSourceReference> parent, AxMob& child )
+void TestFileBuilder::InitializeSourceClip( shared_ptr<AxSourceReference> parent, AxMob& child, const AxString& source )
 {
 
     shared_ptr<AxSourceClip> axSrcClip = dynamic_pointer_cast<AxSourceClip>( parent );
 
     aafSourceRef_t srcRef = axSrcClip->GetSourceReference();
+    if (mobIdMap.find(source)!=mobIdMap.end() && source!=L"")
+    {
+    	srcRef.sourceID = mobIdMap[source];
+    	
+    }
+    else 
+    {
     srcRef.sourceID     = child.GetMobID();
+    }
+    
     srcRef.sourceSlotID = 1;
 
     axSrcClip->SetSourceReference( srcRef );
 
 }
+
 
 void TestFileBuilder::AddToTransition( shared_ptr<AxComponent> parent, AxComponent& child )
 {
@@ -986,7 +997,7 @@ void TestFileBuilder::UseLegacyEffectDefinitions()
  */
 
 //Return a mob ID that is unique within this file.
-const aafMobID_t TestFileBuilder::GenerateMobId()
+const aafMobID_t TestFileBuilder::GenerateMobId(AxString mobName)
 {
     _mobCount++;
     aafMobID_t id;
@@ -1017,6 +1028,12 @@ const aafMobID_t TestFileBuilder::GenerateMobId()
     id.material.Data4[5] = _mobCount % 254;
     id.material.Data4[6] = _mobCount % 255;
     id.material.Data4[7] = _mobCount % 256;
+    
+    if (mobIdMap.find(mobName)==mobIdMap.end())
+    {
+    	mobIdMap[mobName]=id;
+    }
+    
     return id;
 }
 
@@ -1026,7 +1043,7 @@ const aafMobID_t TestFileBuilder::GenerateMobId()
 const aafUID_t TestFileBuilder::GenerateAUID()
 {
     //Get a Mob ID and use the material portion as the AUID.
-    aafMobID_t mobId = GenerateMobId();
+    aafMobID_t mobId = GenerateMobId(L"AUID");
     return mobId.material;
 }
 
