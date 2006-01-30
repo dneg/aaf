@@ -42,6 +42,9 @@ INCLUDES = -I. -I$(AAFSDKINCLUDEDIR) -I$(AAFBASE)/examples2/axLib -I../AnalyzerB
 .PHONY : all
 all : BaseTest
 
+.PHONY : gcov
+gcov : CFLAGS+= -fprofile-arcs -ftest-coverage
+gcov :	BaseTest
 
 .PHONY : BaseTest
 BaseTest : $(OBJDIR) $(LIBDIR) $(LIBDIR)/libBaseTest$(LIB)

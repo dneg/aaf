@@ -42,6 +42,9 @@ INCLUDES = -I. -I$(AAFSDKINCLUDEDIR)
 .PHONY : all
 all : AnalyzerBase
 
+.PHONY : gcov
+gcov : CFLAGS+= -fprofile-arcs -ftest-coverage
+gcov :	AnalyzerBase
 
 .PHONY : AnalyzerBase
 AnalyzerBase : $(OBJDIR) $(LIBDIR) $(LIBDIR)/libAnalyzerBase$(LIB)

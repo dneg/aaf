@@ -27,6 +27,11 @@ AAFBASE ?= ../../..
 all:
 	cd TestFiles && $(MAKE)
 	cd TestStructure && $(MAKE)
+
+.PHONY : gcov
+gcov :	
+	cd TestFiles && $(MAKE) gcov
+	cd TestStructure && $(MAKE) gcov
 	
 .PHONY : RegressionTestStructure
 RegressionTestStructure :
@@ -35,7 +40,7 @@ RegressionTestStructure :
 .PHONY : RegressionTestFiles
 RegressionTestFiles :
 	cd TestFiles && $(MAKE)
-	
+
 .PHONY : check
 check :
 	cd TestFiles && $(MAKE) $@

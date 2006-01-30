@@ -42,6 +42,9 @@ INCLUDES = -I. -I$(AAFSDKINCLUDEDIR) -I$(AAFBASE)/examples2/axLib -I../AnalyzerB
 .PHONY : all
 all : EditProtocolTest
 
+.PHONY : gcov
+gcov : CFLAGS+= -fprofile-arcs -ftest-coverage
+gcov :	EditProtocolTest
 
 .PHONY : EditProtocolTest
 EditProtocolTest : $(OBJDIR) $(LIBDIR) $(LIBDIR)/libEditProtocolTest$(LIB)

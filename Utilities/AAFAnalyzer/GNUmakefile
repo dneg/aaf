@@ -33,54 +33,60 @@ ALL = AnalyzerBase \
       AAFAnalyzer \
       RegressionTestFiles
 
+GCOV =
+
 all: $(ALL)
+
+.PHONY: gcov
+gcov: GCOV = gcov
+gcov: $(ALL)
 
 .PHONY: RegressionTest
 RegressionTest: RegressionTestStructure RegressionTestFiles
 
 .PHONY: AnalyzerBase
 AnalyzerBase:
-	cd AnalyzerBase && $(MAKE)
+	cd AnalyzerBase && $(MAKE) $(GCOV)
 
 .PHONY: AAFAnalyzerBase
 AAFAnalyzerBase: AnalyzerBase
-	cd AAFAnalyzerBase && $(MAKE)
+	cd AAFAnalyzerBase && $(MAKE) $(GCOV)
 
 .PHONY: EPAnalyzerBase
 EPAnalyzerBase: AnalyzerBase AAFAnalyzerBase
-	cd EPAnalyzerBase && $(MAKE)
+	cd EPAnalyzerBase && $(MAKE) $(GCOV)
 
 .PHONY: RequirementLib
 RequirementLib: AnalyzerBase
-	cd RequirementLib && $(MAKE)	
+	cd RequirementLib && $(MAKE) $(GCOV)	
 
 .PHONY: TestPhaseLib
 TestPhaseLib: AnalyzerBase RequirementLib
-	cd TestPhaseLib && $(MAKE)
+	cd TestPhaseLib && $(MAKE) $(GCOV)
 
 .PHONY: BaseTestImpl
 BaseTestImpl: AnalyzerBase AAFAnalyzerBase RequirementLib TestPhaseLib
-	cd BaseTestImpl && $(MAKE)
+	cd BaseTestImpl && $(MAKE) $(GCOV)
 
 .PHONY: RegressionTestStructure
 RegressionTestStructure: AnalyzerBase AAFAnalyzerBase RequirementLib TestPhaseLib BaseTestImpl
-	cd RegressionTest && $(MAKE) $@
+	cd RegressionTest && $(MAKE) $(GCOV) $@
 
 .PHONY: EditProtocolTestImpl
 EditProtocolTestImpl: AnalyzerBase AAFAnalyzerBase EPAnalyzerBase RequirementLib TestPhaseLib
-	cd EditProtocolTestImpl && $(MAKE)
+	cd EditProtocolTestImpl && $(MAKE) $(GCOV)
 
 .PHONY: AAFAnalyzer
 AAFAnalyzer: AAFAnalyzerBase RequirementLib TestPhaseLib BaseTestImpl EditProtocolTestImpl
-	cd AAFAnalyzer && $(MAKE)
+	cd AAFAnalyzer && $(MAKE) $(GCOV)
 	
 .PHONY: RegressionTestFiles
 RegressionTestFiles: AAFAnalyzerBase RequirementLib TestPhaseLib BaseTestImpl EditProtocolTestImpl AAFAnalyzer
-	cd RegressionTest && $(MAKE) $@
+	cd RegressionTest && $(MAKE) $(GCOV) $@
 
 .PHONY : check
 check : RegressionTestStructure RegressionTestFiles AAFAnalyzer
-	cd RegressionTest && $(MAKE) $@
+	cd RegressionTest && $(MAKE) $(GCOV) $@
 
 .PHONY: clean
 clean:
