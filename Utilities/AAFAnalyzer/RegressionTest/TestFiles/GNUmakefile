@@ -32,6 +32,12 @@ include ../../aafanalyzer.mk
 .PHONY : check
 check : $(AAFSDKBINDIR)/BuildTestFile$(EXE)
 	rm -f *.aaf *.temp *.results
+	env LD_LIBRARY_PATH=$(AAFSDKBINDIR) $(AAFSDKBINDIR)/BuildTestFile$(EXE) EPAcyclicTest.xml EPAcyclicTest.aaf
+	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/AAFAnalyzer$(EXE) -verbose -regressiontest EPAcyclicTest.aaf ../../Requirements/AAFRequirements.xml >> EPAcyclicTest.temp
+	grep -A `expr \`expr \\\`grep -n "Error: Load phase failed.  Further tests aborted." EPAcyclicTest.temp | sed 's_\([0-9]*\).*_\1_' \\\`\` - \`expr \\\`grep -n "Name:   Acyclic Analysis Test" EPAcyclicTest.temp | sed 's_\([0-9]*\).*_\1_'\\\`\` - 1` "Name:   Acyclic Analysis Test" EPAcyclicTest.temp >> EPAcyclicTest.results
+	@echo "Comparing EPAcyclicTest Expected Results (EPAcyclicTest.expected) to Actual Results (EPAcyclicTest.results)"
+	diff EPAcyclicTest.expected EPAcyclicTest.results
+	@echo "End of Test"
 	env LD_LIBRARY_PATH=$(AAFSDKBINDIR) $(AAFSDKBINDIR)/BuildTestFile$(EXE) EPDerivationTest.xml EPDerivationTest.aaf
 	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/AAFAnalyzer$(EXE) -verbose -regressiontest EPDerivationTest.aaf ../../Requirements/AAFRequirements.xml >> EPDerivationTest.temp
 	grep -A `expr \`expr \\\`grep -n "Name:   Edit Protocol Naming Test" EPDerivationTest.temp | sed 's_\([0-9]*\).*_\1_' \\\`\` - \`expr \\\`grep -n "Name:   Mob Derivation Test" EPDerivationTest.temp | sed 's_\([0-9]*\).*_\1_'\\\`\` - 1` "Name:   Mob Derivation Test" EPDerivationTest.temp >> EPDerivationTest.results

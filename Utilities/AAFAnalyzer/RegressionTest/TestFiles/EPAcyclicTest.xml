@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE aaf-file SYSTEM "EPAcyclicTest.dtd">
+
+<aaf-file>
+
+    			<clip name="MasterMob1">
+        			<static-mob-slot>
+            			<source-clip length="0" track-type="audio">
+		                	<file-source name="File Source 1" sample-rate-denominator="24" sample-rate-numerator="600">
+			                    <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+			                        <source-clip length="2" track-type="video">
+			                			<file-source name="File Source 2" sample-rate-denominator="24" sample-rate-numerator="600" parent-src-id="MasterMob1">
+			                    			<timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+			                        			 <eoc length="0" track-type="none"/>
+			            					</timeline-mob-slot>
+			                			</file-source>
+			            			</source-clip>
+			                    </timeline-mob-slot>
+			                </file-source>
+			            </source-clip>
+		        	</static-mob-slot>
+    			</clip>
+   
+</aaf-file>
