@@ -42,6 +42,9 @@ INCLUDES = -I. -I$(AAFSDKINCLUDEDIR) -I$(AAFBASE)/examples2/axLib -I../AnalyzerB
 .PHONY : all
 all : Requirement
 
+.PHONY : gcov
+gcov : CFLAGS+= -fprofile-arcs -ftest-coverage
+gcov :	Requirement
 
 .PHONY : Requirement
 Requirement : $(OBJDIR) $(LIBDIR) $(LIBDIR)/libRequirement$(LIB)
