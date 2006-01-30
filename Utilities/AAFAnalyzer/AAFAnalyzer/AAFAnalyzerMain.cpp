@@ -406,7 +406,14 @@ int main( int argc, char** argv )
     shared_ptr<const TestPhaseLevelTestResult> spSubResult( load.Execute() );
     spResult->AppendSubtestResult(spSubResult);
 	if (spSubResult->GetResult()==TestResult::FAIL){
-		OutputVerboseResultMsgs(spResult, 0);
+		if ( verboseOutput.first )
+    	{
+        	OutputVerboseResultMsgs(spResult, 0);
+    	}
+    	else
+    	{
+        	OutputSimpleResultMsgs( spResult );
+    	}
 		throw AnalyzerException(L"Load phase failed.  Further tests aborted.");
 	}
     
