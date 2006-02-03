@@ -66,6 +66,10 @@ case "${MACHINE}:${OS}" in
 	echo PPCDarwin
 	exit 0;;
 
+	*86:Darwin)
+	echo ${MACHINE}Darwin
+	exit 0;;
+
 	# FreeBSD and OpenBSD
 	*86:FreeBSD|*86:OpenBSD)
 	echo ${MACHINE}${OS}
