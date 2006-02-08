@@ -1287,8 +1287,12 @@ void AAFObjectModel::SortPropertyDefinitions(void)
   for (i = 0; i < countPropertyDefinitions(); ++i)
   {
     currentPid = sPropertyDefinitionsByPid[i]->pid();
-    assert (currentPid != previousPid);
-    previousPid = currentPid;
+    // Only check non-zero pids, we may have several zero-valued pids
+    // which are dynamic-pids that haven't yet been assigned a value.
+    if (currentPid != 0) {
+      assert (currentPid != previousPid);
+      previousPid = currentPid;
+    }
   }
 #endif
 
