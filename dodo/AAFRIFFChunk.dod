@@ -1,0 +1,398 @@
+#c *********************************************************************
+#c
+#c $Id$ $Name$
+#c
+#c The contents of this file are subject to the AAF SDK Public
+#c Source License Agreement (the "License"); You may not use this file
+#c except in compliance with the License.  The License is available in
+#c AAFSDKPSL.TXT, or you may obtain a copy of the License from the AAF
+#c Association or its successor.
+#c
+#c Software distributed under the License is distributed on an "AS IS"
+#c basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.  See
+#c the License for the specific language governing rights and limitations
+#c under the License.
+#c
+#c The Original Code of this file is Copyright 1998-2004, Licensor of the
+#c AAF Association.
+#c
+#c The Initial Developer of the Original Code of this file and the
+#c Licensor of the AAF Association is Avid Technology.
+#c All rights reserved.
+#c
+#c *********************************************************************
+#startm .this-module 0
+AAFRIFFChunk\
+#endm
+#c
+#startm .parent-module 0
+AAFObject\
+#endm
+#c
+#c #import ./AAFObject.exp
+AD_HEAD
+AD_IDL(///
+///
+/// In addition to the specific error results listed for each method\,
+/// all methods in this interface may also return one of the following
+/// values:
+/// 
+/// AAFRESULT_NOMEMORY
+///   - insufficient system memory is available to perform the
+///     operation.
+///)
+
+
+AD_CLASS_UUID(b41d3fee, ed70, 401b, a8, fd, 93, a1, 35, 02, a5, 5e)
+
+AD_DEFAULT_UUID(49b6de18, f562, 434e, bf, ab, a4, 6d, 14, 4e, f2, 2a)
+
+AD_XCLASS_BEGIN(Concrete, StoredObject)
+AD_XMETHOD4(Initialize,
+					[in], 
+					objPass,
+					aafUInt32, 
+					chunkID, 
+					ChunkID value,
+					
+					[in], 
+					objPass,
+					aafUInt32, 
+					chunkLength, 
+					ChunkLength value,	
+					
+					[in],
+					objPass,
+					aafUInt32,
+					bytes,
+					Write this many bytes,
+				   	
+				   	[out\, size_is\(bytes\)],
+					objPass,
+					aafDataBuffer_t,
+					buffer,
+					Data to write,
+		
+				
+			Initializes a newly allocated\, empty
+  /// IAAFRIFFChunk-supporting object.  This method must be
+  /// called after allocation\, and before any other method can be
+  /// called.
+  ///
+  /// Succeeds if:
+  /// - Initialize\(\) has not yet been called on this object.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_ALREADY_INITIALIZED
+  ///   - Initialize\(\) has already been called on this object.)
+
+
+AD_XMETHOD1(SetChunkID,
+                   [in],
+                        objPass,
+                        aafUInt32,
+                        chunkID,
+                        ChunkID to set,
+                        Sets the ChunkID property.
+                        
+  ///
+  /// Succeeds if all of the following are true:
+  ///
+  /// If this method fails\, the ChunkID property will not be
+  /// changed.
+  ///
+  /// This method will return the following codes:
+  ///
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\))
+
+AD_XMETHOD1(GetChunkID,
+                        [out],
+                                objPass,
+                                aafUInt32 *,
+                                pChunkID,
+                                Retrieved ChunkID,
+                        Gets the ChunkID property.
+                        
+  ///
+  /// Succeeds if all of the following are true:
+  /// - pChunkID is a valid pointer
+  /// - the property is present.
+  ///
+  /// If this method fails\, pChunkID will not be changed.
+  ///
+  /// This method will return the following codes:
+  ///
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pChunkID is NULL.
+  ///
+  /// AAFRESULT_PROP_NOT_PRESENT
+  ///   - the property is not present.)
+
+
+AD_XMETHOD1(SetChunkLength,
+                   [in],
+                        objPass,
+                        aafUInt32,
+                        chunkLength,
+                        Length to set,
+                        Sets the ChunkLength property
+                   
+  ///
+  /// Succeeds if all of the following are true:
+  ///
+  /// If this method fails\, the ChunkLength property will not be
+  /// changed.
+  ///
+  /// This method will return the following codes:
+  ///
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\))
+
+AD_XMETHOD1(GetChunkLength,
+                        [out],
+                                objPass,
+                                aafUInt32 *,
+                                pChunkLength,
+                                Retrieved ChuckLength,
+                        Gets the ChunkLength property
+                      
+  ///
+  /// Succeeds if all of the following are true:
+  /// - pMChunkLength is a valid pointer
+  /// - the property is present.
+  ///
+  /// If this method fails\, pChunkLength will not be changed.
+  ///
+  /// This method will return the following codes:
+  ///
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pChunkLength is NULL.
+  ///
+  /// AAFRESULT_PROP_NOT_PRESENT
+  ///   - the property is not present.)
+
+
+AD_XMETHOD3(WriteChunkData,
+                   	[in],
+						objPass,
+						aafUInt32,
+						bytes,
+						Write this many bytes,
+
+					[out\, size_is\(bytes\)],
+						objPass,
+						aafDataBuffer_t,
+						buffer,
+						Data to write,
+
+					[out\,ref],
+						objPass,
+						aafUInt32 *,
+						pBytesWritten,
+						Number of bytes actually written,
+
+ Write the specified bytes to the chunk data stream.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the number of bytes to write is non-zero.
+  /// - the buffer pointer is valid.
+  /// - the pBytesWritten pointer is valid.
+  /// - the object is initialized.
+  /// - the object is persistent \(attached to a file\).
+  /// 
+  /// If this method fails the ChunkData property will
+  /// not be changed.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_INVALID_PARAM
+  ///   - bytes arg is larger than zero.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - buffer arg is NULL.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pBytesWritten arg is NULL.
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - the object is not initialized.
+  ///
+  /// AAFRESULT_OBJECT_NOT_PERSISTENT
+  ///   - the object is not persistent.
+  ///
+  /// AAFRESULT_CONTAINERWRITE
+  ///   - writing failed.)
+
+
+AD_XMETHOD3(ReadChunkData,
+			[in],
+				objPass,
+				aafUInt32,
+				bytes,
+			Read this many bytes,
+
+			[out\, size_is\(bytes\)],
+				objPass,
+				aafDataBuffer_t,
+				buffer,
+			Buffer to read the data to,
+
+			[out\,ref],
+				objPass,
+				aafUInt32 *,
+				pBytesRead,
+			Number of bytes actually read,
+
+     Read the specified number of bytes from the chunk data
+  /// stream into buffer.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the object is initialized.
+  /// - the number of bytes to read is non-zero.
+  /// - the buffer pointer is valid.
+  /// - the pBytesRead pointer is valid.
+  /// - the ChunkData property is present.
+  /// - the object is persistent \(attached to a file\).
+  /// - not yet reached the end of the data stream.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  /// 
+  /// AAFRESULT_END_OF_DATA
+  ///   - trying to read beyond the end of the data stream.
+  /// 
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - the object is not initialized.
+  /// 
+  /// AAFRESULT_INVALID_PARAM
+  ///   - bytes arg is larger than zero.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - buffer arg is NULL.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pBytesRead arg is NULL.
+  ///
+  /// AAFRESULT_PROP_NOT_PRESENT
+  ///   - the ChunkData property is not present.
+  ///
+  /// AAFRESULT_OBJECT_NOT_PERSISTENT
+  ///   - the object is not persistent.)
+
+
+AD_XMETHOD1(SetChunkDataPosition,
+			[in],
+				objPass,
+				aafPosition_t,
+				position,
+			Offset from the beginning of chunk data.,
+
+     Sets the offset from the beginning of chunk data.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the object is initialized.
+  /// - the object is persistent \(attached to a file\).
+  /// 
+  /// If this method fails the position will not be changed.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - the object is not initialized.
+  ///
+  /// AAFRESULT_OBJECT_NOT_PERSISTENT
+  ///   - the object is not persistent.)
+
+
+AD_XMETHOD1(GetChunkDataPosition,
+			[out],
+				objPass,
+				aafPosition_t *,
+				pPosition,
+			Offset from the beginning of chunk data.,
+
+     Gets the offset from the beginning of chunk data.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the object is initialized.
+  /// - the pPosition pointer is valid.
+  /// - the object is persistent \(attached to a file\).
+  /// 
+  /// If this method fails nothing will be written to *pPosition.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - the object is not initialized.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pPosition arg is NULL.
+  ///
+  /// AAFRESULT_PROP_NOT_PRESENT
+  ///   - the ChunkData property is not present.
+  ///
+  /// AAFRESULT_OBJECT_NOT_PERSISTENT
+  ///   - the object is not persistent.)
+
+
+AD_XMETHOD1(GetChunkDataSize,
+			[out],
+				objPass,
+				aafLength_t *,
+				pSize,
+			The size of chunk data.,
+
+     Gets the size of chunk data.
+  /// ChunkData is optional property.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the object is initialized.
+  /// - the pSize pointer is valid.
+  /// - the ChunkData property is present.
+  /// - the object is persistent \(attached to a file\).
+  /// 
+  /// If this method fails nothing will be written to *pSize.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - the object is not initialized.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pSize arg is NULL.
+  ///
+  /// AAFRESULT_PROP_NOT_PRESENT
+  ///   - the ChunkData property is not present.
+  ///
+  /// AAFRESULT_OBJECT_NOT_PERSISTENT
+  ///   - the object is not persistent.)
+
+
+AD_XCLASS_END(Concrete, StoredObject)

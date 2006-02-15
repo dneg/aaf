@@ -193,6 +193,19 @@ bool Is_aafCompressEnable_t_Valid(aafCompressEnable_t param)
   }
 }
 
+bool Is_aafContentScanningType_t_Valid(aafContentScanningType_t param)
+{
+  switch (param) {
+    case kAAFContentScanning_NotKnown:
+    case kAAFContentScanning_Progressive:
+    case kAAFContentScanning_Interlace:
+    case kAAFContentScanning_Mixed:
+      return true;
+    default:
+      return false;
+  }
+}
+
 bool Is_aafCriteriaType_t_Valid(aafCriteriaType_t param)
 {
   switch (param) {

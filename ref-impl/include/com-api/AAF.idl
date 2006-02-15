@@ -44,6 +44,7 @@ import "AAFTypes.idl";
 interface IAAFAES3PCMDescriptor;
 interface IAAFAIFCDescriptor;
 interface IAAFAuxiliaryDescriptor;
+interface IAAFBWFImportDescriptor;
 interface IAAFCDCIDescriptor;
 interface IAAFCachePageAllocator;
 interface IAAFClassDef;
@@ -59,6 +60,7 @@ interface IAAFDataDef;
 interface IAAFDefObject;
 interface IAAFDescriptiveFramework;
 interface IAAFDescriptiveMarker;
+interface IAAFDescriptiveObject;
 interface IAAFDictionary;
 interface IAAFDigitalImageDescriptor;
 interface IAAFEdgecode;
@@ -88,6 +90,7 @@ interface IAAFMasterMob;
 interface IAAFMetaDefinition;
 interface IAAFMob;
 interface IAAFMobSlot;
+interface IAAFMPEGVideoDescriptor;
 interface IAAFMultipleDescriptor;
 interface IAAFNestedScope;
 interface IAAFNetworkLocator;
@@ -108,6 +111,7 @@ interface IAAFRGBADescriptor;
 interface IAAFRandomFile;
 interface IAAFRandomRawStorage;
 interface IAAFRawStorage;
+interface IAAFRIFFChunk;
 interface IAAFRecordingDescriptor;
 interface IAAFScopeReference;
 interface IAAFSegment;
@@ -173,6 +177,7 @@ interface IEnumAAFPluginLocators;
 interface IEnumAAFProperties;
 interface IEnumAAFPropertyDefs;
 interface IEnumAAFPropertyValues;
+interface IEnumAAFRIFFChunk;
 interface IEnumAAFSegments;
 interface IEnumAAFTaggedValueDefs;
 interface IEnumAAFTaggedValues;
@@ -674,6 +679,1130 @@ interface IAAFAuxiliaryDescriptor : IUnknown
   /// @param pBufSize [out] size of required buffer, in bytes
   ///
   HRESULT GetCharSetBufLen (
+    [out] aafUInt32 *  pBufSize);
+
+}
+
+
+
+// ************************
+//
+// Interface IAAFBWFImportDescriptor
+//
+// ************************
+///
+///
+/// In addition to the specific error results listed for each method,
+/// all methods in this interface may also return one of the following
+/// values:
+/// 
+/// AAFRESULT_NOMEMORY
+///   - insufficient system memory is available to perform the
+///     operation.
+///
+///
+/// Objects that implement IAAFBWFImportDescriptor also implement the following interfaces:
+///  - IAAFImportDescriptor
+///  - IAAFPhysicalDescriptor
+///  - IAAFEssenceDescriptor
+///  - IAAFObject
+[
+    object,
+    uuid(480b4328-da10-44d4-bb50-1bafbfbaf86a),
+    helpstring("IAAFBWFImportDescriptor Interface"),
+    pointer_default(unique)
+]
+
+interface IAAFBWFImportDescriptor : IUnknown
+{
+
+  //***********************************************************
+  //
+  // Initialize()
+  //
+  /// Initializes a newly allocated, empty
+  /// IAAFBWFImportDescriptor-supporting object.  This method must be
+  /// called after allocation, and before any other method can be
+  /// called.
+  ///
+  /// Succeeds if:
+  /// - Initialize() has not yet been called on this object.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_ALREADY_INITIALIZED
+  ///   - Initialize() has already been called on this object.
+  /// 
+  HRESULT Initialize ();
+
+
+  //***********************************************************
+  //
+  // SetFileSecurityReport()
+  //
+  /// the FileSecurityReport property will not be changed.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.
+  ///
+  /// 
+  /// @param fileSecurityReport [in] Sets the fileSecurityReport property.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// -
+  /// If this method fails
+  ///
+  HRESULT SetFileSecurityReport (
+    [in] aafUInt32  fileSecurityReport);
+
+
+  //***********************************************************
+  //
+  // GetFileSecurityReport()
+  //
+  /// Gets the FileSecurityReport property.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - pFileSecurityReport is a valid pointer
+  /// - the property is present.
+  ///
+  /// If this method fails, pFileSecurityReport will not be changed.
+  ///
+  /// This method will return the following codes:
+  ///
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pFileSecurityReport is NULL.
+  ///
+  /// AAFRESULT_PROP_NOT_PRESENT
+  ///   - the property is not present.
+  /// 
+  /// @param pFileSecurityReport [out] Optional.
+  ///
+  HRESULT GetFileSecurityReport (
+    [out] aafUInt32 *  pFileSecurityReport);
+
+
+  //***********************************************************
+  //
+  // SetFileSecurityWave()
+  //
+  /// the FileSecurityWave property will not be changed.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.
+  ///
+  /// 
+  /// @param fileSecurityWave [in] Sets the FileSecurityWave property.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// -
+  /// If this method fails
+  ///
+  HRESULT SetFileSecurityWave (
+    [in] aafUInt32  fileSecurityWave);
+
+
+  //***********************************************************
+  //
+  // GetFileSecurityWave()
+  //
+  /// Gets the FileSecurityWave property.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - pFileSecurityWave is a valid pointer
+  /// - the property is present.
+  ///
+  /// If this method fails, pFileSecurityWave will not be changed.
+  ///
+  /// This method will return the following codes:
+  ///
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pQltyFileSecurityWave is NULL.
+  ///
+  /// AAFRESULT_PROP_NOT_PRESENT
+  ///   - the property is not present.
+  /// 
+  /// @param pFileSecurityWave [out] Optional.
+  ///
+  HRESULT GetFileSecurityWave (
+    [out] aafUInt32 *  pFileSecurityWave);
+
+
+  //***********************************************************
+  //
+  // AppendUnknownBWFChunks()
+  //
+  /// Appends a pre-existing RIFFChunk object to the specified
+  /// BWFImportDescriptor.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pData pointer is valid.
+  /// 
+  /// If this method fails no state will be changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - the pData arg is NULL.
+  /// 
+  /// @param pData [in] RIFFChunk object
+  ///
+  HRESULT AppendUnknownBWFChunks (
+    [in] IAAFRIFFChunk * pData);
+
+
+  //***********************************************************
+  //
+  // CountUnknownBWFChunks()
+  //
+  /// Return total number of RIFFChunk objects attached to this component.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pNumData pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *pNumComments.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pNumData arg is NULL.
+  /// 
+  /// @param pNumData [out] Number  of RIFFChunk objects
+  ///
+  HRESULT CountUnknownBWFChunks (
+    [out] aafUInt32 *  pNumData);
+
+
+  //***********************************************************
+  //
+  // GetUnknownBWFChunks()
+  //
+  /// Return the enumeration for all RIFFChunk objects on this component.  The returned
+  /// enumerator is AddRef()ed before it is returned.  The enumerator
+  /// is implemented as a EnumAAFRIFFChunk.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the ppEnum pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *ppEnum.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - ppEnum is null.
+  /// 
+  /// @param ppEnum [out] RIFFChunk objects
+  ///
+  HRESULT GetUnknownBWFChunks (
+    [out] IEnumAAFRIFFChunk ** ppEnum);
+
+
+  //***********************************************************
+  //
+  // RemoveUnknownBWFChunks()
+  //
+  /// Removes the given RIFFChunk object from this component.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pData pointer is valid.
+  /// - the given RIFFChunk object is present in the component.
+  /// 
+  /// If this method fails no state will be changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pData is null.
+  ///
+  /// AAFRESULT_OBJECT_NOT_FOUND
+  ///   - the given RIFFChunk object is not in this component.
+  /// 
+  /// @param pData [in] RIFFChunk object to remove
+  ///
+  HRESULT RemoveUnknownBWFChunks (
+    [in] IAAFRIFFChunk * pData);
+
+  //***********************************************************
+  //
+  // SetBextCodingHistory()
+  //
+  /// Sets the BextCodingHistory string property.
+  ///
+  /// Set the BextCodingHistory property to the value specified in
+  /// pBextCodingHistory.  A copy is made of the data so the caller
+  /// retains ownership of the *pBextCodingHistory buffer and is
+  /// responsible for de-allocating it.  There is no pre-set limit to
+  /// the length of the name, other than available system memory or
+  /// disk space.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pBextCodingHistory pointer is valid.
+  /// 
+  /// If this method fails the BextCodingHistory property will not be
+  /// changed.
+  /// 
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pBextCodingHistory arg is NULL.
+  /// 
+  /// @param pBextCodingHistory [in, string] buffer from which BextCodingHistory is to be read
+  ///
+  HRESULT SetBextCodingHistory (
+    [in, string] aafCharacter_constptr  pBextCodingHistory);
+
+
+  //***********************************************************
+  //
+  // GetBextCodingHistory()
+  //
+  /// Gets the BextCodingHistory string property.
+  /// 
+  /// Writes the BextCodingHistory property, with a trailing null
+  /// character, into the pBextCodingHistory buffer.  The
+  /// buffer is allocated by the caller.  The size of the buffer is
+  /// given by bufSize.  If the BextCodingHistory property has not yet
+  /// been set, a zero-length string will be written (that is,
+  /// only the trailing null character). 
+  /// 
+  /// Caller may call GetBextCodingHistoryBufLen() to determine the
+  /// required buffer size.
+  /// 
+  /// If this method fails nothing will be written to
+  /// *pBextCodingHistory.
+  /// 
+  /// Succeeds if:
+  /// - The pBextCodingHistory pointer is valid.
+  /// - bufSize indicates that the buffer is large enough to hold
+  ///   BextCodingHistory.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pBextCodingHistory arg is NULL.
+  ///
+  /// AAFRESULT_SMALL_BUF
+  ///   - bufSize indicates that the allocated buffer is not large
+  ///     enough to hold BextCodingHistory.
+  /// 
+  /// @param pBextCodingHistory [out, string, size_is(bufSize)] buffer into which BextCodingHistory is to be written
+  /// @param bufSize [in] size of *pBextCodingHistory buffer in bytes
+  ///
+  HRESULT GetBextCodingHistory (
+    [out, string, size_is(bufSize)] aafCharacter *  pBextCodingHistory,
+    [in] aafUInt32  bufSize);
+
+
+  //***********************************************************
+  //
+  // GetBextCodingHistoryBufLen()
+  //
+  /// Returns size of buffer (in bytes) required for GetBextCodingHistory().
+  /// 
+  /// Succeeds if:
+  /// - The pBufSize pointer is valid.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pBufSize arg is NULL.
+  /// 
+  /// @param pBufSize [out] size of required buffer, in bytes
+  ///
+  HRESULT GetBextCodingHistoryBufLen (
+    [out] aafUInt32 *  pBufSize);
+     
+  //***********************************************************
+  //
+  // SetQltyBasicData()
+  //
+  /// Sets the QltyBasicData string property.
+  ///
+  /// Set the QltyBasicData property to the value specified in
+  /// pQltyBasicData.  A copy is made of the data so the caller
+  /// retains ownership of the *pQltyBasicData buffer and is
+  /// responsible for de-allocating it.  There is no pre-set limit to
+  /// the length of the name, other than available system memory or
+  /// disk space.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pQltyBasicData pointer is valid.
+  /// 
+  /// If this method fails the QltyBasicData property will not be
+  /// changed.
+  /// 
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pQltyBasicData arg is NULL.
+  /// 
+  /// @param pQltyBasicData [in, string] buffer from which QltyBasicData is to be read
+  ///
+  HRESULT SetQltyBasicData (
+    [in, string] aafCharacter_constptr  pQltyBasicData);
+
+
+  //***********************************************************
+  //
+  // GetQltyBasicData()
+  //
+  /// Gets the QltyBasicData string property.
+  /// 
+  /// Writes the QltyBasicData property, with a trailing null
+  /// character, into the pQltyBasicData buffer.  The
+  /// buffer is allocated by the caller.  The size of the buffer is
+  /// given by bufSize.  If the QltyBasicData property has not yet
+  /// been set, a zero-length string will be written (that is,
+  /// only the trailing null character). 
+  /// 
+  /// Caller may call GetQltyBasicDataBufLen() to determine the
+  /// required buffer size.
+  /// 
+  /// If this method fails nothing will be written to
+  /// *pQltyBasicData.
+  /// 
+  /// Succeeds if:
+  /// - The pQltyBasicData pointer is valid.
+  /// - bufSize indicates that the buffer is large enough to hold
+  ///   QltyBasicData.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pQltyBasicData arg is NULL.
+  ///
+  /// AAFRESULT_SMALL_BUF
+  ///   - bufSize indicates that the allocated buffer is not large
+  ///     enough to hold QltyBasicData.
+  /// 
+  /// @param pQltyBasicData [out, string, size_is(bufSize)] buffer into which QltyBasicData is to be written
+  /// @param bufSize [in] size of *pQltyBasicData buffer in bytes
+  ///
+  HRESULT GetQltyBasicData (
+    [out, string, size_is(bufSize)] aafCharacter *  pQltyBasicData,
+    [in] aafUInt32  bufSize);
+
+
+  //***********************************************************
+  //
+  // GetQltyBasicDataBufLen()
+  //
+  /// Returns size of buffer (in bytes) required for GetQltyBasicData().
+  /// 
+  /// Succeeds if:
+  /// - The pBufSize pointer is valid.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pBufSize arg is NULL.
+  /// 
+  /// @param pBufSize [out] size of required buffer, in bytes
+  ///
+  HRESULT GetQltyBasicDataBufLen (
+    [out] aafUInt32 *  pBufSize);
+
+  //***********************************************************
+  //
+  // SetQltyStartOfModulation()
+  //
+  /// Sets the QltyStartOfModulation string property.
+  ///
+  /// Set the QltyStartOfModulation property to the value specified in
+  /// pQltyStartOfModulation.  A copy is made of the data so the caller
+  /// retains ownership of the *pQltyStartOfModulation buffer and is
+  /// responsible for de-allocating it.  There is no pre-set limit to
+  /// the length of the name, other than available system memory or
+  /// disk space.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pQltyStartOfModulation pointer is valid.
+  /// 
+  /// If this method fails the QltyStartOfModulation property will not be
+  /// changed.
+  /// 
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pQltyStartOfModulation arg is NULL.
+  /// 
+  /// @param pQltyStartOfModulation [in, string] buffer from which QltyStartOfModulation is to be read
+  ///
+  HRESULT SetQltyStartOfModulation (
+    [in, string] aafCharacter_constptr  pQltyStartOfModulation);
+
+
+  //***********************************************************
+  //
+  // GetQltyStartOfModulation()
+  //
+  /// Gets the QltyStartOfModulation string property.
+  /// 
+  /// Writes the QltyStartOfModulation property, with a trailing null
+  /// character, into the pQltyStartOfModulation buffer.  The
+  /// buffer is allocated by the caller.  The size of the buffer is
+  /// given by bufSize.  If the QltyStartOfModulation property has not yet
+  /// been set, a zero-length string will be written (that is,
+  /// only the trailing null character). 
+  /// 
+  /// Caller may call GetQltyStartOfModulationBufLen() to determine the
+  /// required buffer size.
+  /// 
+  /// If this method fails nothing will be written to
+  /// *pQltyStartOfModulation.
+  /// 
+  /// Succeeds if:
+  /// - The pQltyStartOfModulation pointer is valid.
+  /// - bufSize indicates that the buffer is large enough to hold
+  ///   QltyStartOfModulation.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pQltyStartOfModulation arg is NULL.
+  ///
+  /// AAFRESULT_SMALL_BUF
+  ///   - bufSize indicates that the allocated buffer is not large
+  ///     enough to hold QltyStartOfModulation.
+  /// 
+  /// @param pQltyStartOfModulation [out, string, size_is(bufSize)] buffer into which QltyStartOfModulation is to be written
+  /// @param bufSize [in] size of *pQltyStartOfModulation buffer in bytes
+  ///
+  HRESULT GetQltyStartOfModulation (
+    [out, string, size_is(bufSize)] aafCharacter *  pQltyStartOfModulation,
+    [in] aafUInt32  bufSize);
+
+
+  //***********************************************************
+  //
+  // GetQltyStartOfModulationBufLen()
+  //
+  /// Returns size of buffer (in bytes) required for GetQltyStartOfModulation().
+  /// 
+  /// Succeeds if:
+  /// - The pBufSize pointer is valid.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pBufSize arg is NULL.
+  /// 
+  /// @param pBufSize [out] size of required buffer, in bytes
+  ///
+  HRESULT GetQltyStartOfModulationBufLen (
+    [out] aafUInt32 *  pBufSize);
+     
+  //***********************************************************
+  //
+  // SetQltyQualityEvent()
+  //
+  /// Sets the QltyQualityEvent string property.
+  ///
+  /// Set the QltyQualityEvent property to the value specified in
+  /// pQltyQualityEvent.  A copy is made of the data so the caller
+  /// retains ownership of the *pQltyQualityEvent buffer and is
+  /// responsible for de-allocating it.  There is no pre-set limit to
+  /// the length of the name, other than available system memory or
+  /// disk space.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pQltyQualityEvent pointer is valid.
+  /// 
+  /// If this method fails the QltyQualityEvent property will not be
+  /// changed.
+  /// 
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pQltyQualityEvent arg is NULL.
+  /// 
+  /// @param pQltyQualityEvent [in, string] buffer from which QltyQualityEvent is to be read
+  ///
+  HRESULT SetQltyQualityEvent (
+    [in, string] aafCharacter_constptr  pQltyQualityEvent);
+
+
+  //***********************************************************
+  //
+  // GetQltyQualityEvent()
+  //
+  /// Gets the QltyQualityEvent string property.
+  /// 
+  /// Writes the QltyQualityEvent property, with a trailing null
+  /// character, into the pQltyQualityEvent buffer.  The
+  /// buffer is allocated by the caller.  The size of the buffer is
+  /// given by bufSize.  If the QltyQualityEvent property has not yet
+  /// been set, a zero-length string will be written (that is,
+  /// only the trailing null character). 
+  /// 
+  /// Caller may call GetQltyQualityEventBufLen() to determine the
+  /// required buffer size.
+  /// 
+  /// If this method fails nothing will be written to
+  /// *pQltyQualityEvent.
+  /// 
+  /// Succeeds if:
+  /// - The pQltyQualityEvent pointer is valid.
+  /// - bufSize indicates that the buffer is large enough to hold
+  ///   QltyQualityEvent.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pQltyQualityEvent arg is NULL.
+  ///
+  /// AAFRESULT_SMALL_BUF
+  ///   - bufSize indicates that the allocated buffer is not large
+  ///     enough to hold QltyQualityEvent.
+  /// 
+  /// @param pQltyQualityEvent [out, string, size_is(bufSize)] buffer into which QltyQualityEvent is to be written
+  /// @param bufSize [in] size of *pQltyQualityEvent buffer in bytes
+  ///
+  HRESULT GetQltyQualityEvent (
+    [out, string, size_is(bufSize)] aafCharacter *  pQltyQualityEvent,
+    [in] aafUInt32  bufSize);
+
+
+  //***********************************************************
+  //
+  // GetQltyQualityEventBufLen()
+  //
+  /// Returns size of buffer (in bytes) required for GetQltyQualityEvent().
+  /// 
+  /// Succeeds if:
+  /// - The pBufSize pointer is valid.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pBufSize arg is NULL.
+  /// 
+  /// @param pBufSize [out] size of required buffer, in bytes
+  ///
+  HRESULT GetQltyQualityEventBufLen (
+    [out] aafUInt32 *  pBufSize);
+
+  //***********************************************************
+  //
+  // SetQltyEndOfModulation()
+  //
+  /// Sets the QltyEndOfModulation string property.
+  ///
+  /// Set the QltyEndOfModulation property to the value specified in
+  /// pQltyEndOfModulation.  A copy is made of the data so the caller
+  /// retains ownership of the *pQltyEndOfModulation buffer and is
+  /// responsible for de-allocating it.  There is no pre-set limit to
+  /// the length of the name, other than available system memory or
+  /// disk space.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pQltyEndOfModulation pointer is valid.
+  /// 
+  /// If this method fails the QltyEndOfModulation property will not be
+  /// changed.
+  /// 
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pQltyEndOfModulation arg is NULL.
+  /// 
+  /// @param pQltyEndOfModulation [in, string] buffer from which QltyEndOfModulation is to be read
+  ///
+  HRESULT SetQltyEndOfModulation (
+    [in, string] aafCharacter_constptr  pQltyEndOfModulation);
+
+
+  //***********************************************************
+  //
+  // GetQltyEndOfModulation()
+  //
+  /// Gets the QltyEndOfModulation string property.
+  /// 
+  /// Writes the QltyEndOfModulation property, with a trailing null
+  /// character, into the pQltyEndOfModulation buffer.  The
+  /// buffer is allocated by the caller.  The size of the buffer is
+  /// given by bufSize.  If the QltyEndOfModulation property has not yet
+  /// been set, a zero-length string will be written (that is,
+  /// only the trailing null character). 
+  /// 
+  /// Caller may call GetQltyEndOfModulationBufLen() to determine the
+  /// required buffer size.
+  /// 
+  /// If this method fails nothing will be written to
+  /// *pQltyEndOfModulation.
+  /// 
+  /// Succeeds if:
+  /// - The pQltyEndOfModulation pointer is valid.
+  /// - bufSize indicates that the buffer is large enough to hold
+  ///   QltyEndOfModulation.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pQltyEndOfModulation arg is NULL.
+  ///
+  /// AAFRESULT_SMALL_BUF
+  ///   - bufSize indicates that the allocated buffer is not large
+  ///     enough to hold QltyEndOfModulation.
+  /// 
+  /// @param pQltyEndOfModulation [out, string, size_is(bufSize)] buffer into which QltyEndOfModulation is to be written
+  /// @param bufSize [in] size of *pQltyEndOfModulation buffer in bytes
+  ///
+  HRESULT GetQltyEndOfModulation (
+    [out, string, size_is(bufSize)] aafCharacter *  pQltyEndOfModulation,
+    [in] aafUInt32  bufSize);
+
+
+  //***********************************************************
+  //
+  // GetQltyEndOfModulationBufLen()
+  //
+  /// Returns size of buffer (in bytes) required for GetQltyEndOfModulation().
+  /// 
+  /// Succeeds if:
+  /// - The pBufSize pointer is valid.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pBufSize arg is NULL.
+  /// 
+  /// @param pBufSize [out] size of required buffer, in bytes
+  ///
+  HRESULT GetQltyEndOfModulationBufLen (
+    [out] aafUInt32 *  pBufSize);
+     
+  //***********************************************************
+  //
+  // SetQltyQualityParameter()
+  //
+  /// Sets the QltyQualityParameter string property.
+  ///
+  /// Set the QltyQualityParameter property to the value specified in
+  /// pQltyQualityParameter.  A copy is made of the data so the caller
+  /// retains ownership of the *pQltyQualityParameter buffer and is
+  /// responsible for de-allocating it.  There is no pre-set limit to
+  /// the length of the name, other than available system memory or
+  /// disk space.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pQltyQualityParameter pointer is valid.
+  /// 
+  /// If this method fails the QltyQualityParameter property will not be
+  /// changed.
+  /// 
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pQltyQualityParameter arg is NULL.
+  /// 
+  /// @param pQltyQualityParameter [in, string] buffer from which QltyQualityParameter is to be read
+  ///
+  HRESULT SetQltyQualityParameter (
+    [in, string] aafCharacter_constptr  pQltyQualityParameter);
+
+
+  //***********************************************************
+  //
+  // GetQltyQualityParameter()
+  //
+  /// Gets the QltyQualityParameter string property.
+  /// 
+  /// Writes the QltyQualityParameter property, with a trailing null
+  /// character, into the pQltyQualityParameter buffer.  The
+  /// buffer is allocated by the caller.  The size of the buffer is
+  /// given by bufSize.  If the QltyQualityParameter property has not yet
+  /// been set, a zero-length string will be written (that is,
+  /// only the trailing null character). 
+  /// 
+  /// Caller may call GetQltyQualityParameterBufLen() to determine the
+  /// required buffer size.
+  /// 
+  /// If this method fails nothing will be written to
+  /// *pQltyQualityParameter.
+  /// 
+  /// Succeeds if:
+  /// - The pQltyQualityParameter pointer is valid.
+  /// - bufSize indicates that the buffer is large enough to hold
+  ///   QltyQualityParameter.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pQltyQualityParameter arg is NULL.
+  ///
+  /// AAFRESULT_SMALL_BUF
+  ///   - bufSize indicates that the allocated buffer is not large
+  ///     enough to hold QltyQualityParameter.
+  /// 
+  /// @param pQltyQualityParameter [out, string, size_is(bufSize)] buffer into which QltyQualityParameter is to be written
+  /// @param bufSize [in] size of *pQltyQualityParameter buffer in bytes
+  ///
+  HRESULT GetQltyQualityParameter (
+    [out, string, size_is(bufSize)] aafCharacter *  pQltyQualityParameter,
+    [in] aafUInt32  bufSize);
+
+
+  //***********************************************************
+  //
+  // GetQltyQualityParameterBufLen()
+  //
+  /// Returns size of buffer (in bytes) required for GetQltyQualityParameter().
+  /// 
+  /// Succeeds if:
+  /// - The pBufSize pointer is valid.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pBufSize arg is NULL.
+  /// 
+  /// @param pBufSize [out] size of required buffer, in bytes
+  ///
+  HRESULT GetQltyQualityParameterBufLen (
+    [out] aafUInt32 *  pBufSize);
+     
+  //***********************************************************
+  //
+  // SetQltyOperatorComment()
+  //
+  /// Sets the QltyOperatorComment string property.
+  ///
+  /// Set the QltyOperatorComment property to the value specified in
+  /// pQltyOperatorComment.  A copy is made of the data so the caller
+  /// retains ownership of the *pQltyOperatorComment buffer and is
+  /// responsible for de-allocating it.  There is no pre-set limit to
+  /// the length of the name, other than available system memory or
+  /// disk space.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pQltyOperatorComment pointer is valid.
+  /// 
+  /// If this method fails the QltyOperatorComment property will not be
+  /// changed.
+  /// 
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pQltyOperatorComment arg is NULL.
+  /// 
+  /// @param pQltyOperatorComment [in, string] buffer from which QltyOperatorComment is to be read
+  ///
+  HRESULT SetQltyOperatorComment (
+    [in, string] aafCharacter_constptr  pQltyOperatorComment);
+
+
+  //***********************************************************
+  //
+  // GetQltyOperatorComment()
+  //
+  /// Gets the QltyOperatorComment string property.
+  /// 
+  /// Writes the QltyOperatorComment property, with a trailing null
+  /// character, into the pQltyOperatorComment buffer.  The
+  /// buffer is allocated by the caller.  The size of the buffer is
+  /// given by bufSize.  If the QltyOperatorComment property has not yet
+  /// been set, a zero-length string will be written (that is,
+  /// only the trailing null character). 
+  /// 
+  /// Caller may call GetQltyOperatorCommentBufLen() to determine the
+  /// required buffer size.
+  /// 
+  /// If this method fails nothing will be written to
+  /// *pQltyOperatorComment.
+  /// 
+  /// Succeeds if:
+  /// - The pQltyOperatorComment pointer is valid.
+  /// - bufSize indicates that the buffer is large enough to hold
+  ///   QltyOperatorComment.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pQltyOperatorComment arg is NULL.
+  ///
+  /// AAFRESULT_SMALL_BUF
+  ///   - bufSize indicates that the allocated buffer is not large
+  ///     enough to hold QltyOperatorComment.
+  /// 
+  /// @param pQltyOperatorComment [out, string, size_is(bufSize)] buffer into which QltyOperatorComment is to be written
+  /// @param bufSize [in] size of *pQltyOperatorComment buffer in bytes
+  ///
+  HRESULT GetQltyOperatorComment (
+    [out, string, size_is(bufSize)] aafCharacter *  pQltyOperatorComment,
+    [in] aafUInt32  bufSize);
+
+
+  //***********************************************************
+  //
+  // GetQltyOperatorCommentBufLen()
+  //
+  /// Returns size of buffer (in bytes) required for GetQltyOperatorComment().
+  /// 
+  /// Succeeds if:
+  /// - The pBufSize pointer is valid.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pBufSize arg is NULL.
+  /// 
+  /// @param pBufSize [out] size of required buffer, in bytes
+  ///
+  HRESULT GetQltyOperatorCommentBufLen (
+    [out] aafUInt32 *  pBufSize);
+     
+  //***********************************************************
+  //
+  // SetQltyCueSheet()
+  //
+  /// Sets the QltyCueSheet string property.
+  ///
+  /// Set the QltyCueSheet property to the value specified in
+  /// pQltyCueSheet.  A copy is made of the data so the caller
+  /// retains ownership of the *pQltyCueSheet buffer and is
+  /// responsible for de-allocating it.  There is no pre-set limit to
+  /// the length of the name, other than available system memory or
+  /// disk space.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pQltyCueSheet pointer is valid.
+  /// 
+  /// If this method fails the QltyCueSheet property will not be
+  /// changed.
+  /// 
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pQltyCueSheet arg is NULL.
+  /// 
+  /// @param pQltyCueSheet [in, string] buffer from which QltyCueSheet is to be read
+  ///
+  HRESULT SetQltyCueSheet (
+    [in, string] aafCharacter_constptr  pQltyCueSheet);
+
+
+  //***********************************************************
+  //
+  // GetQltyCueSheet()
+  //
+  /// Gets the QltyCueSheet string property.
+  /// 
+  /// Writes the QltyCueSheet property, with a trailing null
+  /// character, into the pQltyCueSheet buffer.  The
+  /// buffer is allocated by the caller.  The size of the buffer is
+  /// given by bufSize.  If the QltyCueSheet property has not yet
+  /// been set, a zero-length string will be written (that is,
+  /// only the trailing null character). 
+  /// 
+  /// Caller may call GetQltyCueSheetBufLen() to determine the
+  /// required buffer size.
+  /// 
+  /// If this method fails nothing will be written to
+  /// *pQltyCueSheet.
+  /// 
+  /// Succeeds if:
+  /// - The pQltyCueSheet pointer is valid.
+  /// - bufSize indicates that the buffer is large enough to hold
+  ///   QltyCueSheet.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pQltyCueSheet arg is NULL.
+  ///
+  /// AAFRESULT_SMALL_BUF
+  ///   - bufSize indicates that the allocated buffer is not large
+  ///     enough to hold QltyCueSheet.
+  /// 
+  /// @param pQltyCueSheet [out, string, size_is(bufSize)] buffer into which QltyCueSheet is to be written
+  /// @param bufSize [in] size of *pQltyCueSheet buffer in bytes
+  ///
+  HRESULT GetQltyCueSheet (
+    [out, string, size_is(bufSize)] aafCharacter *  pQltyCueSheet,
+    [in] aafUInt32  bufSize);
+
+
+  //***********************************************************
+  //
+  // GetQltyCueSheetBufLen()
+  //
+  /// Returns size of buffer (in bytes) required for GetQltyCueSheet().
+  /// 
+  /// Succeeds if:
+  /// - The pBufSize pointer is valid.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pBufSize arg is NULL.
+  /// 
+  /// @param pBufSize [out] size of required buffer, in bytes
+  ///
+  HRESULT GetQltyCueSheetBufLen (
     [out] aafUInt32 *  pBufSize);
 
 }
@@ -4370,6 +5499,43 @@ interface IAAFDescriptiveMarker : IUnknown
   ///
   HRESULT GetDescriptiveFramework (
     [out,retval] IAAFDescriptiveFramework ** ppDescriptiveFramework);
+
+}
+
+
+
+// ************************
+//
+// Interface IAAFDescriptiveObject
+//
+// ************************
+
+///
+
+/// The IAAFDescriptiveObject interface is implemented by objects
+/// that represent descriptive metadata.
+///
+/// In addition to the specific error results listed for each method,
+/// all methods in this interface may also return one of the following
+/// values:
+/// 
+/// AAFRESULT_NOMEMORY
+///   - insufficient system memory is available to perform the
+///     operation.
+///
+///
+/// Objects that implement IAAFDescriptiveObject also implement the following interfaces:
+///  - IAAFObject
+[
+    object,
+    uuid(08a98e21-8995-4bb9-98d4-166f24a5ac66),
+    helpstring("IAAFDescriptiveObject Interface"),
+    pointer_default(unique)
+]
+
+interface IAAFDescriptiveObject : IUnknown
+{
+
 
 }
 
@@ -13578,6 +14744,577 @@ interface IAAFMobSlot : IUnknown
 
 // ************************
 //
+// Interface IAAFMPEGVideoDescriptor
+//
+// ************************
+///
+///
+/// In addition to the specific error results listed for each method,
+/// all methods in this interface may also return one of the following
+/// values:
+/// 
+/// AAFRESULT_NOMEMORY
+///   - insufficient system memory is available to perform the
+///     operation.
+///
+///
+/// Objects that implement IAAFMPEGVideoDescriptor also implement the following interfaces:
+///  - IAAFCDCIDescriptor
+///  - IAAFCDCIDescriptor2
+///  - IAAFDigitalImageDescriptor
+///  - IAAFDigitalImageDescriptor2
+///  - IAAFFileDescriptor
+///  - IAAFEssenceDescriptor
+///  - IAAFObject
+[
+    object,
+    uuid(f2768aac-ed68-4ace-a8a3-3304e94c799f),
+    helpstring("IAAFMPEGVideoDescriptor Interface"),
+    pointer_default(unique)
+]
+interface IAAFMPEGVideoDescriptor : IUnknown
+{
+
+  //***********************************************************
+  //
+  // Initialize()
+  //
+  /// Initializes a newly allocated, empty
+  /// IAAFMPEGVideoDescriptor-supporting object.  This method must be
+  /// called after allocation, and before any other method can be
+  /// called.
+  ///
+  /// Succeeds if:
+  /// - Initialize() has not yet been called on this object.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_ALREADY_INITIALIZED
+  ///   - Initialize() has already been called on this object.
+  /// 
+  HRESULT Initialize ();
+
+
+  //***********************************************************
+  //
+  // SetSingleSequence()
+  //
+  /// the SingleSequence property will not be changed.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.
+  ///
+  /// 
+  /// @param singleSequence [in] Sets the SingleSequence property.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// -
+  /// If this method fails
+  ///
+  HRESULT SetSingleSequence (
+    [in] aafBoolean_t  singleSequence);
+
+
+  //***********************************************************
+  //
+  // GetSingleSequence()
+  //
+  /// Gets the SingleSequence property.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - pSingleSequence is a valid pointer
+  /// - the property is present.
+  ///
+  /// If this method fails, pSingleSequence will not be changed.
+  ///
+  /// This method will return the following codes:
+  ///
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pSingleSequence is NULL.
+  ///
+  /// AAFRESULT_PROP_NOT_PRESENT
+  ///   - the property is not present.
+  /// 
+  /// @param pSingleSequence [out] Optional.
+  ///
+  HRESULT GetSingleSequence (
+    [out] aafBoolean_t *  pSingleSequence);
+
+
+  //***********************************************************
+  //
+  // SetConstantBPictureCount()
+  //
+  /// the ConstantBPictureCount property will not be changed.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.
+  ///
+  /// 
+  /// @param constantBPictureCount [in] Sets the ConstantBPictureCount property.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// -
+  /// If this method fails
+  ///
+  HRESULT SetConstantBPictureCount (
+    [in] aafBoolean_t  constantBPictureCount);
+
+
+  //***********************************************************
+  //
+  // GetConstantBPictureCount()
+  //
+  /// Gets the ConstantBPictureCount property.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - pConstantBPictureCount is a valid pointer
+  /// - the property is present.
+  ///
+  /// If this method fails, pConstantBPictureCount will not be changed.
+  ///
+  /// This method will return the following codes:
+  ///
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pSingleSequence is NULL.
+  ///
+  /// AAFRESULT_PROP_NOT_PRESENT
+  ///   - the property is not present.
+  /// 
+  /// @param pConstantBPictureCount [out] Optional.
+  ///
+  HRESULT GetConstantBPictureCount (
+    [out] aafBoolean_t *  pConstantBPictureCount);
+
+
+  //***********************************************************
+  //
+  // SetCodedContentScanning()
+  //
+  /// Sets the CodedContentScanning property.  This property is optional.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - codedContentDirection is a valid value.
+  /// 
+  /// If this method fails, the CodedContentScanning property will not be
+  /// changed.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_AAFRESULT_INVALID_ENUM_VALUE
+  ///   - codedContentDirection is not a valid value.
+  /// 
+  /// @param codedContentScanning [in] Coded Content Scanning value.
+  ///
+  HRESULT SetCodedContentScanning (
+    [in] aafContentScanningType_t  codedContentScanning);
+
+
+  //***********************************************************
+  //
+  // GetCodedContentScanning()
+  //
+  /// Gets the CodedContentScanning property.  This property is optional.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - pContentScanning is a valid pointer
+  /// - the property is present.
+  /// 
+  /// If this method fails, pSContentScanning not be changed.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pContentScanning is NULL.
+  ///
+  /// AAFRESULT_PROP_NOT_PRESENT
+  ///   - the property is not present.
+  /// 
+  /// @param pContentScanning [out] Coded content scanning value.
+  ///
+  HRESULT GetCodedContentScanning (
+    [out] aafContentScanningType_t *  pContentScanning);
+
+
+  //***********************************************************
+  //
+  // SetLowDelay()
+  //
+  /// the LowDelay property will not be changed.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.
+  ///
+  /// 
+  /// @param lowDelay [in] Sets the LowDelay property.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// -
+  /// If this method fails
+  ///
+  HRESULT SetLowDelay (
+    [in] aafBoolean_t  lowDelay);
+
+
+  //***********************************************************
+  //
+  // GetLowDelay()
+  //
+  /// Gets the LowDelay property.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - pLowDelay is a valid pointer
+  /// - the property is present.
+  ///
+  /// If this method fails, pLowDelay will not be changed.
+  ///
+  /// This method will return the following codes:
+  ///
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pLowDelay is NULL.
+  ///
+  /// AAFRESULT_PROP_NOT_PRESENT
+  ///   - the property is not present.
+  /// 
+  /// @param pLowDelay [out] Optional.
+  ///
+  HRESULT GetLowDelay (
+    [out] aafBoolean_t *  pLowDelay);
+
+
+  //***********************************************************
+  //
+  // SetClosedGOP()
+  //
+  /// the ClosedGOP property will not be changed.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.
+  ///
+  /// 
+  /// @param closedGOP [in] Sets the ClosedGOP property.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// -
+  /// If this method fails
+  ///
+  HRESULT SetClosedGOP (
+    [in] aafBoolean_t  closedGOP);
+
+
+  //***********************************************************
+  //
+  // GetClosedGOP()
+  //
+  /// Gets the ClosedGOP property.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - pClosedGOP is a valid pointer
+  /// - the property is present.
+  ///
+  /// If this method fails, pClosedGOP will not be changed.
+  ///
+  /// This method will return the following codes:
+  ///
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pClosedGOP is NULL.
+  ///
+  /// AAFRESULT_PROP_NOT_PRESENT
+  ///   - the property is not present.
+  /// 
+  /// @param pClosedGOP [out] Optional.
+  ///
+  HRESULT GetClosedGOP (
+    [out] aafBoolean_t *  pClosedGOP);
+
+
+  //***********************************************************
+  //
+  // SetIdenticalGOP()
+  //
+  /// the IdenticalGOP property will not be changed.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.
+  ///
+  /// 
+  /// @param identicalGOP [in] Sets the IdenticalGOP property.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// -
+  /// If this method fails
+  ///
+  HRESULT SetIdenticalGOP (
+    [in] aafBoolean_t  identicalGOP);
+
+
+  //***********************************************************
+  //
+  // GetIdenticalGOP()
+  //
+  /// Gets the IdenticalGOP property.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - pIdenticalGOP is a valid pointer
+  /// - the property is present.
+  ///
+  /// If this method fails, pIdenticalGOP will not be changed.
+  ///
+  /// This method will return the following codes:
+  ///
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pIdenticalGOP is NULL.
+  ///
+  /// AAFRESULT_PROP_NOT_PRESENT
+  ///   - the property is not present.
+  /// 
+  /// @param pIdenticalGOP [out] Optional.
+  ///
+  HRESULT GetIdenticalGOP (
+    [out] aafBoolean_t *  pIdenticalGOP);
+
+
+  //***********************************************************
+  //
+  // SetMaxGOP()
+  //
+  /// Sets the MaxGOP property.
+  ///
+  /// Succeeds if all of the following are true:
+  ///
+  /// If this method fails, the MaxGOP property will not be
+  /// changed.
+  ///
+  /// This method will return the following codes:
+  ///
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  /// 
+  /// @param maxGOP [in] Optional.
+  ///
+  HRESULT SetMaxGOP (
+    [in] aafUInt16  maxGOP);
+
+  //***********************************************************
+  //
+  // GetMaxGOP()
+  //
+  /// Gets the MaxGOP property.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - pMaxGOP is a valid pointer
+  /// - the property is present.
+  ///
+  /// If this method fails, pMaxGOP will not be changed.
+  ///
+  /// This method will return the following codes:
+  ///
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pMaxGOP is NULL.
+  ///
+  /// AAFRESULT_PROP_NOT_PRESENT
+  ///   - the property is not present.
+  /// 
+  /// @param pMaxGOP [out] Optional.
+  ///
+  HRESULT GetMaxGOP (
+    [out] aafUInt16 *  pMaxGOP);
+
+
+  //***********************************************************
+  //
+  // SetMaxBPictureCount()
+  //
+  /// Sets the MaxBPictureCount property.
+  ///
+  /// Succeeds if all of the following are true:
+  ///
+  /// If this method fails, the MaxBPictureCount property will not be
+  /// changed.
+  ///
+  /// This method will return the following codes:
+  ///
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  /// 
+  /// @param maxBPictureCount [in] Optional.
+  ///
+  HRESULT SetMaxBPictureCount (
+    [in] aafUInt16  maxBPictureCount);
+
+  //***********************************************************
+  //
+  // GetMaxBPictureCount()
+  //
+  /// Gets the MaxBPictureCount property.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - pMaxBPictureCount is a valid pointer
+  /// - the property is present.
+  ///
+  /// If this method fails, pMaxBPictureCount will not be changed.
+  ///
+  /// This method will return the following codes:
+  ///
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pMaxBPictureCount is NULL.
+  ///
+  /// AAFRESULT_PROP_NOT_PRESENT
+  ///   - the property is not present.
+  /// 
+  /// @param pMaxBPictureCount [out] Optional.
+  ///
+  HRESULT GetMaxBPictureCount (
+    [out] aafUInt16 *  pMaxBPictureCount);
+
+
+  //***********************************************************
+  //
+  // SetBitRate()
+  //
+  /// Sets the BitRate property.
+  ///
+  /// Succeeds if all of the following are true:
+  ///
+  /// If this method fails, the BitRate property will not be
+  /// changed.
+  ///
+  /// This method will return the following codes:
+  ///
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  /// 
+  /// @param bitRate [in] Optional.
+  ///
+  HRESULT SetBitRate (
+    [in] aafUInt32  bitRate);
+
+  //***********************************************************
+  //
+  // GetBitRate()
+  //
+  /// Gets the BitRate property.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - pBitRate is a valid pointer
+  /// - the property is present.
+  ///
+  /// If this method fails, pBitRate will not be changed.
+  ///
+  /// This method will return the following codes:
+  ///
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pBitRate is NULL.
+  ///
+  /// AAFRESULT_PROP_NOT_PRESENT
+  ///   - the property is not present.
+  /// 
+  /// @param pBitRate [out] Optional.
+  ///
+  HRESULT GetBitRate (
+    [out] aafUInt32 *  pBitRate);
+
+
+  //***********************************************************
+  //
+  // SetProfileAndLevel()
+  //
+  /// Sets the ProfileAndLevel property.
+  ///
+  /// Succeeds if all of the following are true:
+  ///
+  /// If this method fails, the ProfileAndLevel property will not be
+  /// changed.
+  ///
+  /// This method will return the following codes:
+  ///
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  /// 
+  /// @param profileAndLevel [in] Optional.
+  ///
+  HRESULT SetProfileAndLevel (
+    [in] aafUInt8  profileAndLevel);
+
+  //***********************************************************
+  //
+  // GetProfileAndLevel()
+  //
+  /// Gets the ProfileAndLevele property.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - pProfileAndLevel is a valid pointer
+  /// - the property is present.
+  ///
+  /// If this method fails, pProfileAndLevel will not be changed.
+  ///
+  /// This method will return the following codes:
+  ///
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pProfileAndLevel is NULL.
+  ///
+  /// AAFRESULT_PROP_NOT_PRESENT
+  ///   - the property is not present.
+  /// 
+  /// @param pProfileAndLevel [out] Optional.
+  ///
+  HRESULT GetProfileAndLevel (
+    [out] aafUInt8 *  pProfileAndLevel);
+
+}
+
+
+
+// ************************
+//
 // Interface IAAFMultipleDescriptor
 //
 // ************************
@@ -20557,6 +22294,380 @@ interface IAAFRawStorage : IUnknown
   ///   - succeeded.  (This is the only code indicating success.)
   /// 
   HRESULT Synchronize ();
+}
+
+
+
+// ************************
+//
+// Interface IAAFRIFFChunk
+//
+// ************************
+///
+///
+/// In addition to the specific error results listed for each method,
+/// all methods in this interface may also return one of the following
+/// values:
+/// 
+/// AAFRESULT_NOMEMORY
+///   - insufficient system memory is available to perform the
+///     operation.
+///
+///
+/// Objects that implement IAAFRIFFChunk also implement the following interfaces:
+///  - IAAFObject
+[
+    object,
+    uuid(49b6de18-f562-434e-bfab-a46d144ef22a),
+    helpstring("IAAFRIFFChunk Interface"),
+    pointer_default(unique)
+]
+
+interface IAAFRIFFChunk : IUnknown
+{
+
+  //***********************************************************
+  //
+  // Initialize()
+  //
+  /// Initializes a newly allocated, empty
+  /// IAAFRIFFChunk-supporting object.  This method must be
+  /// called after allocation, and before any other method can be
+  /// called.
+  ///
+  /// Succeeds if:
+  /// - Initialize() has not yet been called on this object.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_ALREADY_INITIALIZED
+  ///   - Initialize() has already been called on this object.
+  /// 
+  /// @param chunkID [in] ChunkID value
+  /// @param chunkLength [in] ChunkLength value
+  /// @param bytes [in] Write this many bytes
+  /// @param buffer [out, size_is(bytes)] Data to write
+  ///
+  HRESULT Initialize (
+    [in] aafUInt32  chunkID,
+    [in] aafUInt32  chunkLength,
+    [in] aafUInt32  bytes,
+    [out, size_is(bytes)] aafDataBuffer_t  buffer);
+
+
+  //***********************************************************
+  //
+  // SetChunkID()
+  //
+  /// Sets the ChunkID property.
+                        
+  ///
+  /// Succeeds if all of the following are true:
+  ///
+  /// If this method fails, the ChunkID property will not be
+  /// changed.
+  ///
+  /// This method will return the following codes:
+  ///
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  /// 
+  /// @param chunkID [in] ChunkID to set
+  ///
+  HRESULT SetChunkID (
+    [in] aafUInt32  chunkID);
+
+  //***********************************************************
+  //
+  // GetChunkID()
+  //
+  /// Gets the ChunkID property.
+                        
+  ///
+  /// Succeeds if all of the following are true:
+  /// - pChunkID is a valid pointer
+  /// - the property is present.
+  ///
+  /// If this method fails, pChunkID will not be changed.
+  ///
+  /// This method will return the following codes:
+  ///
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pChunkID is NULL.
+  ///
+  /// AAFRESULT_PROP_NOT_PRESENT
+  ///   - the property is not present.
+  /// 
+  /// @param pChunkID [out] Retrieved ChunkID
+  ///
+  HRESULT GetChunkID (
+    [out] aafUInt32 *  pChunkID);
+
+
+  //***********************************************************
+  //
+  // SetChunkLength()
+  //
+  /// Sets the ChunkLength property
+                   
+  ///
+  /// Succeeds if all of the following are true:
+  ///
+  /// If this method fails, the ChunkLength property will not be
+  /// changed.
+  ///
+  /// This method will return the following codes:
+  ///
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  /// 
+  /// @param chunkLength [in] Length to set
+  ///
+  HRESULT SetChunkLength (
+    [in] aafUInt32  chunkLength);
+
+  //***********************************************************
+  //
+  // GetChunkLength()
+  //
+  /// Gets the ChunkLength property
+                      
+  ///
+  /// Succeeds if all of the following are true:
+  /// - pMChunkLength is a valid pointer
+  /// - the property is present.
+  ///
+  /// If this method fails, pChunkLength will not be changed.
+  ///
+  /// This method will return the following codes:
+  ///
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pChunkLength is NULL.
+  ///
+  /// AAFRESULT_PROP_NOT_PRESENT
+  ///   - the property is not present.
+  /// 
+  /// @param pChunkLength [out] Retrieved ChuckLength
+  ///
+  HRESULT GetChunkLength (
+    [out] aafUInt32 *  pChunkLength);
+
+
+  //***********************************************************
+  //
+  // WriteChunkData()
+  //
+  /// Write the specified bytes to the chunk data stream.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the number of bytes to write is non-zero.
+  /// - the buffer pointer is valid.
+  /// - the pBytesWritten pointer is valid.
+  /// - the object is initialized.
+  /// - the object is persistent (attached to a file).
+  /// 
+  /// If this method fails the ChunkData property will
+  /// not be changed.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_INVALID_PARAM
+  ///   - bytes arg is larger than zero.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - buffer arg is NULL.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pBytesWritten arg is NULL.
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - the object is not initialized.
+  ///
+  /// AAFRESULT_OBJECT_NOT_PERSISTENT
+  ///   - the object is not persistent.
+  ///
+  /// AAFRESULT_CONTAINERWRITE
+  ///   - writing failed.
+  /// 
+  /// @param bytes [in] Write this many bytes
+  /// @param buffer [out, size_is(bytes)] Data to write
+  /// @param pBytesWritten [out,ref] Number of bytes actually written
+  ///
+  HRESULT WriteChunkData (
+    [in] aafUInt32  bytes,
+    [out, size_is(bytes)] aafDataBuffer_t  buffer,
+    [out,ref] aafUInt32 *  pBytesWritten);
+
+
+  //***********************************************************
+  //
+  // ReadChunkData()
+  //
+  /// Read the specified number of bytes from the chunk data
+  /// stream into buffer.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the object is initialized.
+  /// - the number of bytes to read is non-zero.
+  /// - the buffer pointer is valid.
+  /// - the pBytesRead pointer is valid.
+  /// - the ChunkData property is present.
+  /// - the object is persistent (attached to a file).
+  /// - not yet reached the end of the data stream.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  /// 
+  /// AAFRESULT_END_OF_DATA
+  ///   - trying to read beyond the end of the data stream.
+  /// 
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - the object is not initialized.
+  /// 
+  /// AAFRESULT_INVALID_PARAM
+  ///   - bytes arg is larger than zero.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - buffer arg is NULL.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pBytesRead arg is NULL.
+  ///
+  /// AAFRESULT_PROP_NOT_PRESENT
+  ///   - the ChunkData property is not present.
+  ///
+  /// AAFRESULT_OBJECT_NOT_PERSISTENT
+  ///   - the object is not persistent.
+  /// 
+  /// @param bytes [in] Read this many bytes
+  /// @param buffer [out, size_is(bytes)] Buffer to read the data to
+  /// @param pBytesRead [out,ref] Number of bytes actually read
+  ///
+  HRESULT ReadChunkData (
+    [in] aafUInt32  bytes,
+    [out, size_is(bytes)] aafDataBuffer_t  buffer,
+    [out,ref] aafUInt32 *  pBytesRead);
+
+
+  //***********************************************************
+  //
+  // SetChunkDataPosition()
+  //
+  /// Sets the offset from the beginning of chunk data.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the object is initialized.
+  /// - the object is persistent (attached to a file).
+  /// 
+  /// If this method fails the position will not be changed.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - the object is not initialized.
+  ///
+  /// AAFRESULT_OBJECT_NOT_PERSISTENT
+  ///   - the object is not persistent.
+  /// 
+  /// @param position [in] Offset from the beginning of chunk data.
+  ///
+  HRESULT SetChunkDataPosition (
+    [in] aafPosition_t  position);
+
+
+  //***********************************************************
+  //
+  // GetChunkDataPosition()
+  //
+  /// Gets the offset from the beginning of chunk data.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the object is initialized.
+  /// - the pPosition pointer is valid.
+  /// - the object is persistent (attached to a file).
+  /// 
+  /// If this method fails nothing will be written to *pPosition.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - the object is not initialized.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pPosition arg is NULL.
+  ///
+  /// AAFRESULT_PROP_NOT_PRESENT
+  ///   - the ChunkData property is not present.
+  ///
+  /// AAFRESULT_OBJECT_NOT_PERSISTENT
+  ///   - the object is not persistent.
+  /// 
+  /// @param pPosition [out] Offset from the beginning of chunk data.
+  ///
+  HRESULT GetChunkDataPosition (
+    [out] aafPosition_t *  pPosition);
+
+
+  //***********************************************************
+  //
+  // GetChunkDataSize()
+  //
+  /// Gets the size of chunk data.
+  /// ChunkData is optional property.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the object is initialized.
+  /// - the pSize pointer is valid.
+  /// - the ChunkData property is present.
+  /// - the object is persistent (attached to a file).
+  /// 
+  /// If this method fails nothing will be written to *pSize.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - the object is not initialized.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pSize arg is NULL.
+  ///
+  /// AAFRESULT_PROP_NOT_PRESENT
+  ///   - the ChunkData property is not present.
+  ///
+  /// AAFRESULT_OBJECT_NOT_PERSISTENT
+  ///   - the object is not persistent.
+  /// 
+  /// @param pSize [out] The size of chunk data.
+  ///
+  HRESULT GetChunkDataSize (
+    [out] aafLength_t *  pSize);
+
+
 }
 
 
@@ -35133,6 +37244,115 @@ interface IEnumAAFPropertyValues : IUnknown
   ///
   HRESULT Clone (
     [out,retval] IEnumAAFPropertyValues ** ppEnum);
+}
+
+
+
+// ************************
+//
+// Interface IEnumAAFRIFFChunk
+//
+// ************************
+///
+/// The IEnumAAFRIFFChunk interface is used enumerate all of the
+/// AAFRIFFChunk objects in a file.  The AAFRIFFChunk objects
+/// contain the actual riffchunk data (ex. WAVE) when it is contained
+/// within an AAF file.  Normally the client application would access the
+/// riffchunk through the IAAFEssenceAccess interface, which handles the work
+/// of finding and (de)compressing the data.  However, in rare cases
+/// direct access to the data is required, so this interface is exposed.
+///
+/// In addition to the specific error results listed for each method,
+/// all methods in this interface may also return one of the following
+/// values:
+///
+/// AAFRESULT_NULL_PARAM
+///   - One of the passed in pointers is NULL.
+///
+/// AAFRESULT_NOMEMORY
+///   - insufficient system memory is available to perform the
+///     operation.
+///
+[
+    object,
+    uuid(54716785-ae2a-4e4b-864d-c8831a7f3c61),
+    helpstring("IEnumAAFRIFFChunk Interface"),
+    pointer_default(unique)
+]
+interface IEnumAAFRIFFChunk : IUnknown
+{
+
+
+  //***********************************************************
+  //
+  // NextOne()
+  //
+  /// Enumerates to the next element in the enumerators list. The caller is responsible for 
+  /// properly releasing the returned pointer when it is no longer needed.
+  /// @comm This is a just simplified version of the Next method. 
+  /// 
+  /// @param ppRIFFChunk [out,retval] The Next RIFFChunk
+  ///
+  HRESULT NextOne (
+    [out,retval] IAAFRIFFChunk ** ppRIFFChunk);
+
+  //***********************************************************
+  //
+  // Next()
+  //
+  /// Enumerates the next count elements (AAFRIFFChunk pointers) in 
+  /// the enumerator's list, returning them in the given array along with the actual 
+  /// number of enumerated elements in pcFetched. The caller is responsible for 
+  /// properly releasing the returned pointers.
+  /// 
+  /// @param count [in] number of riffchunk data requested
+  /// @param ppRIFFChunk [out, size_is(count), length_is(*pFetched)] array to receive RIFFChunk
+  /// @param pFetched [out,ref] number of actual RIFFChunk fetched into ppRIFFChunk array
+  ///
+  HRESULT Next (
+    [in] aafUInt32  count,
+    [out, size_is(count), length_is(*pFetched)] IAAFRIFFChunk ** ppRIFFChunk,
+    [out,ref] aafUInt32 *  pFetched);
+
+  //***********************************************************
+  //
+  // Skip()
+  //
+  /// Instructs the enumerator to skip the next count elements in the enumeration so that 
+  /// the next call to EnumAAFRIFFChunk::Next will not return 
+  /// those elements.
+  /// 
+  /// @param count [in] Number of elements to skip
+  ///
+  HRESULT Skip (
+    [in] aafUInt32  count);
+
+  //***********************************************************
+  //
+  // Reset()
+  //
+  /// Instructs the enumerator to position itself at the beginning of the list of elements. 
+  /// @comm There is no guarantee that the same set of elements will be enumerated on 
+  /// each pass through the list, nor will the elements necessarily be enumerated in 
+  /// the same order. The exact behavior depends on the collection being enumerated.
+  /// 
+  HRESULT Reset ();
+
+  //***********************************************************
+  //
+  // Clone()
+  //
+  /// Creates another riffchunk data enumerator with the same state as the current 
+  /// enumerator to iterate over the same list. This method makes it possible to 
+  /// record a point in the enumeration sequence in order to return to that point 
+  /// at a later time.
+  /// @comm The caller must release this new enumerator separately from the first enumerator.
+  /// 
+  /// @param ppEnum [out,retval] new enumeration
+  ///
+  HRESULT Clone (
+    [out,retval] IEnumAAFRIFFChunk ** ppEnum);
+
 }
 
 

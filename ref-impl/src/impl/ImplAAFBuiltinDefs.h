@@ -173,6 +173,7 @@ public:
   //
   CLASS_DEF_METHOD(AIFCDescriptor);
   CLASS_DEF_METHOD(AuxiliaryDescriptor);
+  CLASS_DEF_METHOD(BWFImportDescriptor);
   CLASS_DEF_METHOD(CDCIDescriptor);
   CLASS_DEF_METHOD(ClassDef);
   CLASS_DEF_METHOD(CodecDef);
@@ -186,6 +187,7 @@ public:
   CLASS_DEF_METHOD(DataDef);
   CLASS_DEF_METHOD(DescriptiveFramework);
   CLASS_DEF_METHOD(DescriptiveMarker);
+  CLASS_DEF_METHOD(DescriptiveObject);
   CLASS_DEF_METHOD(Dictionary);
   CLASS_DEF_METHOD(DigitalImageDescriptor);
   CLASS_DEF_METHOD(Edgecode);
@@ -209,6 +211,7 @@ public:
   CLASS_DEF_METHOD(MasterMob);
   CLASS_DEF_METHOD(Mob);
   CLASS_DEF_METHOD(MobSlot);
+  CLASS_DEF_METHOD(MPEGVideoDescriptor);
   CLASS_DEF_METHOD(NestedScope);
   CLASS_DEF_METHOD(NetworkLocator);
   CLASS_DEF_METHOD(OperationDef);
@@ -222,6 +225,7 @@ public:
   CLASS_DEF_METHOD(Pulldown);
   CLASS_DEF_METHOD(RecordingDescriptor);
   CLASS_DEF_METHOD(RGBADescriptor);
+  CLASS_DEF_METHOD(RIFFChunk);
   CLASS_DEF_METHOD(ScopeReference);
   CLASS_DEF_METHOD(Selector);
   CLASS_DEF_METHOD(Sequence);

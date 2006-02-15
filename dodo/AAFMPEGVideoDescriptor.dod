@@ -1,0 +1,514 @@
+#c *********************************************************************
+#c
+#c $Id$ $Name$
+#c
+#c The contents of this file are subject to the AAF SDK Public
+#c Source License Agreement (the "License"); You may not use this file
+#c except in compliance with the License.  The License is available in
+#c AAFSDKPSL.TXT, or you may obtain a copy of the License from the AAF
+#c Association or its successor.
+#c
+#c Software distributed under the License is distributed on an "AS IS"
+#c basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.  See
+#c the License for the specific language governing rights and limitations
+#c under the License.
+#c
+#c The Original Code of this file is Copyright 1998-2004, Licensor of the
+#c AAF Association.
+#c
+#c The Initial Developer of the Original Code of this file and the
+#c Licensor of the AAF Association is Avid Technology.
+#c All rights reserved.
+#c
+#c *********************************************************************
+#startm .this-module 0
+AAFMPEGVideoDescriptor\
+#endm
+#c
+#startm .parent-module 0
+AAFCDCIDescriptor\
+#endm
+#c
+#c #import ./AAFCDCIDescriptor.exp
+AD_HEAD
+AD_IDL(///
+///
+/// In addition to the specific error results listed for each method\,
+/// all methods in this interface may also return one of the following
+/// values:
+/// 
+/// AAFRESULT_NOMEMORY
+///   - insufficient system memory is available to perform the
+///     operation.
+///)
+
+
+AD_CLASS_UUID(55ac409e, e903, 4c6c, 9d, e0, 7a, 66, 04, 33, 9f, 30)
+
+AD_DEFAULT_UUID(f2768aac, ed68, 4ace, a8, a3, 33, 04, e9, 4c, 79, 9f)
+AD_XCLASS_BEGIN(Concrete, StoredObject)
+AD_METHOD0(Initialize,
+		   Initializes a newly allocated\, empty
+  /// IAAFMPEGVideoDescriptor-supporting object.  This method must be
+  /// called after allocation\, and before any other method can be
+  /// called.
+  ///
+  /// Succeeds if:
+  /// - Initialize\(\) has not yet been called on this object.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_ALREADY_INITIALIZED
+  ///   - Initialize\(\) has already been called on this object.)
+
+
+AD_XMETHOD1(SetSingleSequence,
+			[in],
+				objPass,
+				aafBoolean_t,
+				singleSequence,
+				Sets the SingleSequence property.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// -
+  /// If this method fails, the SingleSequence property will not be changed.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.
+  ///)
+
+
+AD_XMETHOD1(GetSingleSequence,
+                        [out],
+                                objPass,
+                                aafBoolean_t *,
+                                pSingleSequence,
+                                Optional.,
+                        Gets the SingleSequence property.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - pSingleSequence is a valid pointer
+  /// - the property is present.
+  ///
+  /// If this method fails\, pSingleSequence will not be changed.
+  ///
+  /// This method will return the following codes:
+  ///
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pSingleSequence is NULL.
+  ///
+  /// AAFRESULT_PROP_NOT_PRESENT
+  ///   - the property is not present.)
+
+
+AD_XMETHOD1(SetConstantBPictureCount,
+			[in],
+				objPass,
+				aafBoolean_t,
+				constantBPictureCount,
+				Sets the ConstantBPictureCount property.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// -
+  /// If this method fails, the ConstantBPictureCount property will not be changed.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.
+  ///)
+
+
+AD_XMETHOD1(GetConstantBPictureCount,
+                        [out],
+                                objPass,
+                                aafBoolean_t *,
+                                pConstantBPictureCount,
+                                Optional.,
+                        Gets the ConstantBPictureCount property.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - pConstantBPictureCount is a valid pointer
+  /// - the property is present.
+  ///
+  /// If this method fails\, pConstantBPictureCount will not be changed.
+  ///
+  /// This method will return the following codes:
+  ///
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pSingleSequence is NULL.
+  ///
+  /// AAFRESULT_PROP_NOT_PRESENT
+  ///   - the property is not present.)
+
+
+AD_XMETHOD1(SetCodedContentScanning,
+			[in],
+				enumIn,
+				aafContentScanningType_t,
+				codedContentScanning,
+				Coded Content Scanning value.,
+			Sets the CodedContentScanning property.  This property is optional.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - codedContentDirection is a valid value.
+  /// 
+  /// If this method fails\, the CodedContentScanning property will not be
+  /// changed.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_AAFRESULT_INVALID_ENUM_VALUE
+  ///   - codedContentDirection is not a valid value.)
+
+
+AD_XMETHOD1(GetCodedContentScanning,
+			[out],
+				objPass,
+				aafContentScanningType_t *,
+				pContentScanning,
+				Coded content scanning value.,
+			Gets the CodedContentScanning property.  This property is optional.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - pContentScanning is a valid pointer
+  /// - the property is present.
+  /// 
+  /// If this method fails\, pSContentScanning not be changed.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pContentScanning is NULL.
+  ///
+  /// AAFRESULT_PROP_NOT_PRESENT
+  ///   - the property is not present.)
+
+
+AD_XMETHOD1(SetLowDelay,
+			[in],
+				objPass,
+				aafBoolean_t,
+				lowDelay,
+				Sets the LowDelay property.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// -
+  /// If this method fails, the LowDelay property will not be changed.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.
+  ///)
+
+
+AD_XMETHOD1(GetLowDelay,
+                        [out],
+                                objPass,
+                                aafBoolean_t *,
+                                pLowDelay,
+                                Optional.,
+                        Gets the LowDelay property.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - pLowDelay is a valid pointer
+  /// - the property is present.
+  ///
+  /// If this method fails\, pLowDelay will not be changed.
+  ///
+  /// This method will return the following codes:
+  ///
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pLowDelay is NULL.
+  ///
+  /// AAFRESULT_PROP_NOT_PRESENT
+  ///   - the property is not present.)
+
+
+AD_XMETHOD1(SetClosedGOP,
+			[in],
+				objPass,
+				aafBoolean_t,
+				closedGOP,
+				Sets the ClosedGOP property.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// -
+  /// If this method fails, the ClosedGOP property will not be changed.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.
+  ///)
+
+
+AD_XMETHOD1(GetClosedGOP,
+                        [out],
+                                objPass,
+                                aafBoolean_t *,
+                                pClosedGOP,
+                                Optional.,
+                        Gets the ClosedGOP property.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - pClosedGOP is a valid pointer
+  /// - the property is present.
+  ///
+  /// If this method fails\, pClosedGOP will not be changed.
+  ///
+  /// This method will return the following codes:
+  ///
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pClosedGOP is NULL.
+  ///
+  /// AAFRESULT_PROP_NOT_PRESENT
+  ///   - the property is not present.)
+
+
+AD_XMETHOD1(SetIdenticalGOP,
+			[in],
+				objPass,
+				aafBoolean_t,
+				identicalGOP,
+				Sets the IdenticalGOP property.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// -
+  /// If this method fails, the IdenticalGOP property will not be changed.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.
+  ///)
+
+
+AD_XMETHOD1(GetIdenticalGOP,
+                        [out],
+                                objPass,
+                                aafBoolean_t *,
+                                pIdenticalGOP,
+                                Optional.,
+                        Gets the IdenticalGOP property.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - pIdenticalGOP is a valid pointer
+  /// - the property is present.
+  ///
+  /// If this method fails\, pIdenticalGOP will not be changed.
+  ///
+  /// This method will return the following codes:
+  ///
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pIdenticalGOP is NULL.
+  ///
+  /// AAFRESULT_PROP_NOT_PRESENT
+  ///   - the property is not present.)
+
+
+AD_XMETHOD1(SetMaxGOP,
+                   [in],
+                        objPass,
+                        aafUInt16,
+                        maxGOP,
+                        Optional.,
+                        Sets the MaxGOP property.
+  ///
+  /// Succeeds if all of the following are true:
+  ///
+  /// If this method fails\, the MaxGOP property will not be
+  /// changed.
+  ///
+  /// This method will return the following codes:
+  ///
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\))
+
+AD_XMETHOD1(GetMaxGOP,
+                        [out],
+                                objPass,
+                                aafUInt16 *,
+                                pMaxGOP,
+                                Optional.,
+                        Gets the MaxGOP property.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - pMaxGOP is a valid pointer
+  /// - the property is present.
+  ///
+  /// If this method fails\, pMaxGOP will not be changed.
+  ///
+  /// This method will return the following codes:
+  ///
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pMaxGOP is NULL.
+  ///
+  /// AAFRESULT_PROP_NOT_PRESENT
+  ///   - the property is not present.)
+
+
+AD_XMETHOD1(SetMaxBPictureCount,
+                   [in],
+                        objPass,
+                        aafUInt16,
+                        maxBPictureCount,
+                        Optional.,
+                        Sets the MaxBPictureCount property.
+  ///
+  /// Succeeds if all of the following are true:
+  ///
+  /// If this method fails\, the MaxBPictureCount property will not be
+  /// changed.
+  ///
+  /// This method will return the following codes:
+  ///
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\))
+
+AD_XMETHOD1(GetMaxBPictureCount,
+                        [out],
+                                objPass,
+                                aafUInt16 *,
+                                pMaxBPictureCount,
+                                Optional.,
+                        Gets the MaxBPictureCount property.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - pMaxBPictureCount is a valid pointer
+  /// - the property is present.
+  ///
+  /// If this method fails\, pMaxBPictureCount will not be changed.
+  ///
+  /// This method will return the following codes:
+  ///
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pMaxBPictureCount is NULL.
+  ///
+  /// AAFRESULT_PROP_NOT_PRESENT
+  ///   - the property is not present.)
+
+
+AD_XMETHOD1(SetBitRate,
+                   [in],
+                        objPass,
+                        aafUInt32,
+                        bitRate,
+                        Optional.,
+                        Sets the BitRate property.
+  ///
+  /// Succeeds if all of the following are true:
+  ///
+  /// If this method fails\, the BitRate property will not be
+  /// changed.
+  ///
+  /// This method will return the following codes:
+  ///
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\))
+
+AD_XMETHOD1(GetBitRate,
+                        [out],
+                                objPass,
+                                aafUInt32 *,
+                                pBitRate,
+                                Optional.,
+                        Gets the BitRate property.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - pBitRate is a valid pointer
+  /// - the property is present.
+  ///
+  /// If this method fails\, pBitRate will not be changed.
+  ///
+  /// This method will return the following codes:
+  ///
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pBitRate is NULL.
+  ///
+  /// AAFRESULT_PROP_NOT_PRESENT
+  ///   - the property is not present.)
+
+
+AD_XMETHOD1(SetProfileAndLevel,
+                   [in],
+                        objPass,
+                        aafUInt8,
+                        profileAndLevel,
+                        Optional.,
+                        Sets the ProfileAndLevel property.
+  ///
+  /// Succeeds if all of the following are true:
+  ///
+  /// If this method fails\, the ProfileAndLevel property will not be
+  /// changed.
+  ///
+  /// This method will return the following codes:
+  ///
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\))
+
+AD_XMETHOD1(GetProfileAndLevel,
+                        [out],
+                                objPass,
+                                aafUInt8 *,
+                                pProfileAndLevel,
+                                Optional.,
+                        Gets the ProfileAndLevele property.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - pProfileAndLevel is a valid pointer
+  /// - the property is present.
+  ///
+  /// If this method fails\, pProfileAndLevel will not be changed.
+  ///
+  /// This method will return the following codes:
+  ///
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pProfileAndLevel is NULL.
+  ///
+  /// AAFRESULT_PROP_NOT_PRESENT
+  ///   - the property is not present.)
+
+AD_XCLASS_END(Concrete, StoredObject)

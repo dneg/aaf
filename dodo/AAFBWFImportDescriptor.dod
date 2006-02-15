@@ -1,0 +1,284 @@
+#c *********************************************************************
+#c
+#c $Id$ $Name$
+#c
+#c The contents of this file are subject to the AAF SDK Public
+#c Source License Agreement (the "License"); You may not use this file
+#c except in compliance with the License.  The License is available in
+#c AAFSDKPSL.TXT, or you may obtain a copy of the License from the AAF
+#c Association or its successor.
+#c
+#c Software distributed under the License is distributed on an "AS IS"
+#c basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.  See
+#c the License for the specific language governing rights and limitations
+#c under the License.
+#c
+#c The Original Code of this file is Copyright 1998-2004, Licensor of the
+#c AAF Association.
+#c
+#c The Initial Developer of the Original Code of this file and the
+#c Licensor of the AAF Association is Avid Technology.
+#c All rights reserved.
+#c
+#c *********************************************************************
+#startm .this-module 0
+AAFBWFImportDescriptor\
+#endm
+#c
+#startm .parent-module 0
+AAFImportDescriptor\
+#endm
+#c
+#c #import ./AAFImportDescriptor.exp
+AD_HEAD
+AD_IDL(///
+///
+/// In addition to the specific error results listed for each method\,
+/// all methods in this interface may also return one of the following
+/// values:
+/// 
+/// AAFRESULT_NOMEMORY
+///   - insufficient system memory is available to perform the
+///     operation.
+///)
+
+AD_CLASS_UUID(dc86b358, 86a6, 4d2d, 8b, 09, ef, f3, ce, 3e, 66, db)
+
+AD_DEFAULT_UUID(480b4328, da10, 44d4, bb, 50, 1b, af, bf, ba, f8, 6a)
+
+AD_XCLASS_BEGIN(Concrete, StoredObject)
+AD_METHOD0(Initialize,
+		   Initializes a newly allocated\, empty
+  /// IAAFBWFImportDescriptor-supporting object.  This method must be
+  /// called after allocation\, and before any other method can be
+  /// called.
+  ///
+  /// Succeeds if:
+  /// - Initialize\(\) has not yet been called on this object.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_ALREADY_INITIALIZED
+  ///   - Initialize\(\) has already been called on this object.)
+
+
+AD_XMETHOD1(SetFileSecurityReport,
+			[in],
+				objPass,
+				aafUInt32,
+				fileSecurityReport,
+				Sets the fileSecurityReport property.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// -
+  /// If this method fails, the FileSecurityReport property will not be changed.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.
+  ///)
+
+
+AD_XMETHOD1(GetFileSecurityReport,
+                        [out],
+                                objPass,
+                                aafUInt32 *,
+                                pFileSecurityReport,
+                                Optional.,
+                        Gets the FileSecurityReport property.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - pFileSecurityReport is a valid pointer
+  /// - the property is present.
+  ///
+  /// If this method fails\, pFileSecurityReport will not be changed.
+  ///
+  /// This method will return the following codes:
+  ///
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pFileSecurityReport is NULL.
+  ///
+  /// AAFRESULT_PROP_NOT_PRESENT
+  ///   - the property is not present.)
+
+
+AD_XMETHOD1(SetFileSecurityWave,
+			[in],
+				objPass,
+				aafUInt32,
+				fileSecurityWave,
+				Sets the FileSecurityWave property.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// -
+  /// If this method fails, the FileSecurityWave property will not be changed.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.
+  ///)
+
+
+AD_XMETHOD1(GetFileSecurityWave,
+                        [out],
+                                objPass,
+                                aafUInt32 *,
+                                pFileSecurityWave,
+                                Optional.,
+                        Gets the FileSecurityWave property.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - pFileSecurityWave is a valid pointer
+  /// - the property is present.
+  ///
+  /// If this method fails\, pFileSecurityWave will not be changed.
+  ///
+  /// This method will return the following codes:
+  ///
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pQltyFileSecurityWave is NULL.
+  ///
+  /// AAFRESULT_PROP_NOT_PRESENT
+  ///   - the property is not present.)
+
+
+AD_XMETHOD1(AppendUnknownBWFChunks,
+			[in],
+			objIn,
+			AAFRIFFChunk,
+			pData,
+			RIFFChunk object,
+			Appends a pre-existing RIFFChunk object to the specified
+  /// BWFImportDescriptor.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pData pointer is valid.
+  /// 
+  /// If this method fails no state will be changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - the pData arg is NULL.)
+
+
+AD_XMETHOD1(CountUnknownBWFChunks,
+			[out],
+			objPass,
+			aafUInt32 *,
+			pNumData,
+			Number  of RIFFChunk objects,
+			Return total number of RIFFChunk objects attached to this component.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pNumData pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *pNumComments.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pNumData arg is NULL.)
+
+
+AD_XMETHOD1(GetUnknownBWFChunks,
+			[out],
+			objOut,
+			EnumAAFRIFFChunk,
+			ppEnum,
+			RIFFChunk objects,
+			Return the enumeration for all RIFFChunk objects on this component.  The returned
+  /// enumerator is AddRef\(\)ed before it is returned.  The enumerator
+  /// is implemented as a EnumAAFRIFFChunk.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the ppEnum pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *ppEnum.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - ppEnum is null.)
+
+
+AD_XMETHOD1(RemoveUnknownBWFChunks,
+			[in],
+			objIn,
+			AAFRIFFChunk,
+			pData,
+			RIFFChunk object to remove,
+			Removes the given RIFFChunk object from this component.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pData pointer is valid.
+  /// - the given RIFFChunk object is present in the component.
+  /// 
+  /// If this method fails no state will be changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pData is null.
+  ///
+  /// AAFRESULT_OBJECT_NOT_FOUND
+  ///   - the given RIFFChunk object is not in this component.)
+
+AD_STD_METHOD_STRING_MULTI_SET_GET_SIZE(BextCodingHistory,
+     the BextCodingHistory string property.)
+     
+AD_STD_METHOD_STRING_MULTI_SET_GET_SIZE(QltyBasicData,
+     the QltyBasicData string property.)
+
+AD_STD_METHOD_STRING_MULTI_SET_GET_SIZE(QltyStartOfModulation,
+     the QltyStartOfModulation string property.)
+     
+AD_STD_METHOD_STRING_MULTI_SET_GET_SIZE(QltyQualityEvent,
+     the QltyQualityEvent string property.)
+
+AD_STD_METHOD_STRING_MULTI_SET_GET_SIZE(QltyEndOfModulation,
+     the QltyEndOfModulation string property.)
+     
+AD_STD_METHOD_STRING_MULTI_SET_GET_SIZE(QltyQualityParameter,
+     the QltyQualityParameter string property.)
+     
+AD_STD_METHOD_STRING_MULTI_SET_GET_SIZE(QltyOperatorComment,
+     the QltyOperatorComment string property.)
+     
+AD_STD_METHOD_STRING_MULTI_SET_GET_SIZE(QltyCueSheet,
+     the QltyCueSheet string property.)
+
+AD_XCLASS_END(Concrete, StoredObject)

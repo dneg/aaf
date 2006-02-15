@@ -48,6 +48,7 @@ bool Is_aafCheckWarnings_t_Valid(aafCheckWarnings_t param);
 bool Is_aafColorSiting_t_Valid(aafColorSiting_t param);
 bool Is_aafColorSpace_t_Valid(aafColorSpace_t param);
 bool Is_aafCompressEnable_t_Valid(aafCompressEnable_t param);
+bool Is_aafContentScanningType_t_Valid(aafContentScanningType_t param);
 bool Is_aafCriteriaType_t_Valid(aafCriteriaType_t param);
 bool Is_aafDefinitionCritType_t_Valid(aafDefinitionCritType_t param);
 bool Is_aafDefinitionKind_t_Valid(aafDefinitionKind_t param);

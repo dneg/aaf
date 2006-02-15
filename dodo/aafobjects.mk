@@ -61,6 +61,7 @@ HUMAN_TYPED_IMPL="\
 	AAFAES3PCMDescriptor \
 	AAFAIFCDescriptor \
 	AAFAuxiliaryDescriptor \
+	AAFBWFImportDescriptor \
 	AAFCDCIDescriptor \
 	AAFCachePageAllocator \
 	AAFClassDef \
@@ -76,6 +77,7 @@ HUMAN_TYPED_IMPL="\
 	AAFDefObject \
 	AAFDescriptiveFramework \
 	AAFDescriptiveMarker \
+	AAFDescriptiveObject \
 	AAFDictionary \
 	AAFDigitalImageDescriptor \
 	AAFEdgecode \
@@ -105,6 +107,7 @@ HUMAN_TYPED_IMPL="\
 	AAFMetaDefinition \
 	AAFMob  \
 	AAFMobSlot \
+	AAFMPEGVideoDescriptor \
 	AAFMultipleDescriptor \
 	AAFNestedScope\
 	AAFNetworkLocator \
@@ -125,6 +128,7 @@ HUMAN_TYPED_IMPL="\
 	AAFRandomFile \
 	AAFRandomRawStorage \
 	AAFRawStorage \
+	AAFRIFFChunk \
 	AAFRecordingDescriptor \
 	AAFScopeReference \
 	AAFSegment \
@@ -190,6 +194,7 @@ HUMAN_TYPED_IMPL="\
 	EnumAAFProperties \
 	EnumAAFPropertyDefs \
 	EnumAAFPropertyValues \
+	EnumAAFRIFFChunk \
 	EnumAAFSegments \
 	EnumAAFTaggedValueDefs \
 	EnumAAFTaggedValues \

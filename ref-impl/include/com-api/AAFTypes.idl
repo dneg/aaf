@@ -378,6 +378,16 @@ typedef enum _aafScanningDirection_e
 	kAAFScanningDirection_BottomToTopLeftToRight = 6,
 	kAAFScanningDirection_BottomToTopRightToLeft = 7
 } aafScanningDirection_e;
+
+typedef aafInt32 aafContentScanningType_t;
+typedef enum _aafContentScanningType_e
+{
+	kAAFContentScanning_NotKnown = 0,
+	kAAFContentScanning_Progressive = 1,
+	kAAFContentScanning_Interlace = 2,
+	kAAFContentScanning_Mixed = 3
+
+} aafContentScanningType_e;
 	
 typedef aafInt32 aafColorSiting_t;
 typedef enum _aafColorSiting_e
