@@ -178,7 +178,7 @@ AAFSDKLIBDIR      = $(AAFSDK)/lib/$(AAFTARGETDIR)
 # CFLAGS components are defined in platform-specific 
 # definitions file pdefs-$(AAFPLATFORM).mk
 #----------------------------------------------------------
-CFLAGS = $(DBG_FLAGS) $(ADD_CFLAGS) $(PLATFORM_CFLAGS) $(BYTE_ORDER)
+CFLAGS = $(DBG_FLAGS) $(ADD_CFLAGS) $(PLATFORM_CFLAGS)
 
 # U_OPTS should be defined as whether use_unicode or 
 # no_unicode in platform-specific .def file

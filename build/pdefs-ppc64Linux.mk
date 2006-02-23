@@ -37,7 +37,7 @@
 #
 # Sets:
 #	MIPS_ABI, COMPILER, PLATFORM_CFLAGS, RPATH_OPT, 
-#	LD, LD_STAT_LIB, LD_DYN_LIB, U_OPTS, OBJ, EXE, LIB, DLL, BYTE_ORDER
+#	LD, LD_STAT_LIB, LD_DYN_LIB, U_OPTS, OBJ, EXE, LIB, DLL,
 #
 #------------------------------------------------------------------------------
 
@@ -140,9 +140,3 @@ LIB ?= .a
 DLL ?= .so
 
 
-#------------------------------------------------------------------------------
-# Intel machines are Little Endian (lower byte first)
-# Mac, HP, SUN, etc. are Big Endian (higher byte first)
-# BYTE_ORDER = -DBIGENDIAN=1
-#------------------------------------------------------------------------------
-BYTE_ORDER = -DBIGENDIAN=1
