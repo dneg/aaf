@@ -24,6 +24,7 @@
 
 //Test/Result files
 #include <TestLevelTestResult.h>
+#include <DetailLevelTestResult.h>
 
 //AAF Analyzer Base files
 #include <TestGraph.h>
@@ -86,7 +87,19 @@ shared_ptr<TestLevelTestResult> AcyclicAnalysis::Execute()
   //Store sub results.
   spResult->AppendSubtestResult(spVisitorResult);
   spResult->SetResult( spResult->GetAggregateResult() );
-
+  
+  //Update the requirement status based upon the status of the requirements in
+  //the visitor.
+  for (int reqLevel = TestResult::PASS; reqLevel <= TestResult::FAIL; reqLevel++)
+  {
+    Requirement::RequirementMap childReqs = spVisitor->GetTestResult()->GetRequirements( (TestResult::Result)reqLevel );
+    Requirement::RequirementMap::const_iterator iter;
+    for( iter = childReqs.begin(); iter != childReqs.end(); ++iter )
+    {
+      spResult->SetRequirementStatus( (TestResult::Result)reqLevel, iter->second );
+    }
+  }
+  
   return spResult;
 }
 
