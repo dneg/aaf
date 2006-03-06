@@ -2,9 +2,9 @@
         Desc:   Verify that source references are not cyclic.
         Result: Failed
         Reason: Test Failed - See "AcyclicVisitor" for details
-        Passing Requirements: REQ_EP_256
+        Passing Requirements: None
         Warning Requirements: None
-        Failing Requirements: None
+        Failing Requirements: REQ_EP_256
 
             Name:   AcyclicVisitor
             Desc:   Detects cycles in an AAF object graph.
