@@ -47,6 +47,7 @@ const aafUID_t kAAFPropID_CDCIOffsetToFrameIndexes = { 0x9d15fca3, 0x54c5, 0x11d
 const aafUID_t kAAFPropID_DIDFrameIndexByteOrder = { 0xb57e925d, 0x170d, 0x11d4, { 0xa0, 0x8f, 0x0, 0x60, 0x94, 0xeb, 0x75, 0xcb } };
 const aafUID_t kAAFPropID_DIDResolutionID = { 0xce2aca4d, 0x51ab, 0x11d3, { 0xa0, 0x24, 0x0, 0x60, 0x94, 0xeb, 0x75, 0xcb } };
 const aafUID_t kAAFPropID_DIDFirstFrameOffset = { 0xce2aca4e, 0x51ab, 0x11d3, { 0xa0, 0x24, 0x0, 0x60, 0x94, 0xeb, 0x75, 0xcb } };
+const aafUID_t kAAFPropID_DIDImageSize = { 0xce2aca4f, 0x51ab, 0x11d3, { 0xa0, 0x24, 0x0, 0x60, 0x94, 0xeb, 0x75, 0xcb } };
 const aafUID_t kAAFPropID_DIDFrameSampleSize = { 0xce2aca50, 0x51ab, 0x11d3, { 0xa0, 0x24, 0x0, 0x60, 0x94, 0xeb, 0x75, 0xcb } };
 
 // The minimum number of elements added to the current sample index
@@ -60,7 +61,7 @@ const aafUInt32 kSupportedDefinitions = 1;
 const aafUInt32 kSupportedCodeFlavours = 1;
 
 const wchar_t kDisplayName[] = L"AAF JPEG Codec";
-const wchar_t kDescription[] = L"Handles Standard JFIF/JPEG";
+const wchar_t kDescription[] = L"Supports a constrained form of ISO/IEC 10918-1 JPEG images which are compatible with Avid implementations";
 
 const aafProductVersion_t kAAFPluginVersion = {1, 0, 0, 1, kAAFVersionBeta};
 const aafRational_t		kDefaultRate = { 30000, 1001 };
@@ -180,6 +181,7 @@ CAAFJPEGCodec::CAAFJPEGCodec (IUnknown * pControllingUnknown)
 	_rawSampleImageBuffer = NULL; // ultimate buffer for _sampleImage.
 	_rawSampleImageBufferSize = 0;
 	_resolutionID = 0;
+	_imageSize = -1;			// size of compressed data "on disk"
 }
 
 
@@ -359,6 +361,17 @@ void CAAFJPEGCodec::CreateLegacyPropDefs(IAAFDictionary *p_dict)
 		checkResult(p_dict->LookupTypeDef(kAAFTypeID_Int32, &pTypeDef));
 		checkResult(p_did_classdef->RegisterOptionalPropertyDef (kAAFPropID_DIDFirstFrameOffset,
 			L"FirstFrameOffset",
+			pTypeDef, &pPropertyDef));
+		pTypeDef->Release();
+		pTypeDef = NULL;
+		pPropertyDef->Release();
+		pPropertyDef = NULL;
+	}		
+	if(p_did_classdef->LookupPropertyDef(kAAFPropID_DIDImageSize, &pPropertyDef) != AAFRESULT_SUCCESS)
+	{
+		checkResult(p_dict->LookupTypeDef(kAAFTypeID_Int32, &pTypeDef));
+		checkResult(p_did_classdef->RegisterOptionalPropertyDef (kAAFPropID_DIDImageSize,
+			L"ImageSize",
 			pTypeDef, &pPropertyDef));
 		pTypeDef->Release();
 		pTypeDef = NULL;
@@ -755,7 +768,7 @@ HRESULT STDMETHODCALLTYPE
 		}
 
 
-		// JPEG/JFIF is always in big-endian byte order...
+		// JPEG is always in big-endian byte order...
 		if (INTEL_ORDER == _nativeByteOrder)
 			pSelectInfo->isNative = kAAFFalse;
 		else
@@ -879,7 +892,6 @@ CAAFJPEGCodec::Create (IAAFSourceMob *unk,
 {
 	HRESULT hr = S_OK;
 
-	
 	if (NULL == unk || NULL == stream )
 		return AAFRESULT_NULL_PARAM;
   else if (kAAFTrue != EqualAUID(&kAAFNilCodecFlavour, &flavour))
@@ -932,7 +944,9 @@ CAAFJPEGCodec::Create (IAAFSourceMob *unk,
 		checkResult(_stream->Write(kStartPadding, padBuf, &bytesWritten));
 		delete [] padBuf;
 		checkResult(AddSampleIndexEntry(kStartPadding));
-		// setupStream()
+
+		// Reset _imageSize to indicate no compressed frames written yet
+		_imageSize = -1;
 	}
 	catch (HRESULT& rhr)
 	{
@@ -1067,8 +1081,8 @@ HRESULT STDMETHODCALLTYPE
 
 
 		checkResult(_descriptorHelper.GetHorizontalSubsampling(&_horizontalSubsampling));
-//		checkResult(_descriptorHelper.GetVerticalSubsampling(&_verticalSubsampling));
-		checkResult(_descriptorHelper.GetPaddingBits(&_paddingBits));
+		if (AAFRESULT_FAILED( _descriptorHelper.GetPaddingBits(&_paddingBits)))
+			_paddingBits = 0;					// use spec default if opt prop not present
 
 
 		hr = _descriptorHelper.GetColorSiting(&_colorSiting);
@@ -1287,8 +1301,23 @@ HRESULT STDMETHODCALLTYPE
 				param.whiteReferenceLevel = _whiteReferenceLevel;
 				param.colorRange = _colorRange;
 				
-				// Default quality (until we have support for custom tables.)
-				param.quality = _compression_IJG_Quality; 
+				// Set quality depending upon resolution ID.
+				// Measurements made using Media Composer JPEG images and ImageMagick's identify -verbose
+				switch (_resolutionID)
+				{
+					case 76:	param.quality = 98;	// 2:1 (orig 97, tuned to 98 for best results)
+								break;
+					case 77:	param.quality = 90;	// 3:1
+								break;
+					case 75:	param.quality = 69;	// 10:1
+								break;
+					case 78:	param.quality = 55;	// 15:1 single field
+								break;
+					case 82:	param.quality = 28;	// 20:1
+								break;
+					default:	param.quality = _compression_IJG_Quality;
+								break;
+				}
 				
 				// Compute the number of bytes in a single row of pixel data.
 				if (1 == _horizontalSubsampling)
@@ -1309,26 +1338,24 @@ HRESULT STDMETHODCALLTYPE
 				// uncompressed pixel data.
 				checkExpression(param.bufferSize <= buflen, AAFRESULT_SMALLBUF);
 				
-				// Adjust the parameters for separate fields...
-				if (kAAFSeparateFields == _frameLayout)
-				{
-					param.imageHeight /= 2;
-					param.bufferSize = param.rowBytes * param.imageHeight;
-				}
-				
-				
-				
+				// For 15:1 single-field FrameLayout is kAAFOneField,
+				// for all others, FrameLayout is kAAFSeparateFields.
+
 				for (n = 0; n < nSamples; n++)
 				{
-					/* Step 2: specify data destination (eg, an IAAFEssenceStream) */
-					/* Note: steps 2 and 3 can be done in either order. */
-					jpeg_essencestream_dest(&cinfo, _stream);
+					/* Step 2: specify data destination (i.e. an IAAFEssenceStream) */
+					jpeg_essencestream_dest(&cinfo, _resolutionID, _imageWidth, _imageHeight, _stream);
 					
-					
+					// save current stream pos for ImageSize calculation later
+					aafPosition_t pos = 0;
+					checkResult(_stream->GetPosition(&pos));
+
+					// Compress the video (calls jpeg_write_raw_data with YUV data)
 					param.buffer = &buffer[bytesXfered];
 					checkResult(CompressImage(param, cinfo));
 					bytesXfered += param.bufferSize;
 					
+					// For frames with of more than one field, compress the second field
 					if (kAAFSeparateFields == _frameLayout)
 					{
 						// Compress the second field right after the first field.
@@ -1349,6 +1376,11 @@ HRESULT STDMETHODCALLTYPE
 						for (i = 0; i < alignmentBytes; ++i)
 							checkResult(_stream->Write(1, &ch, &tmp));
 					}
+					
+					// Record the ImageSize value which is last stream position
+					aafPosition_t streampos = 0;
+					checkResult(_stream->GetPosition(&streampos));
+					_imageSize = streampos;
 					
 					// Update the return values.
 					samplesXfered++;
@@ -1538,7 +1570,7 @@ HRESULT STDMETHODCALLTYPE
 			{
 				/* Step 2: specify data destination (eg, an IAAFEssenceStream) */
 				/* Note: steps 2 and 3 can be done in either order. */
-				jpeg_essencestream_dest(&cinfo, _stream);
+				jpeg_essencestream_dest(&cinfo, _resolutionID, _imageWidth, _imageHeight, _stream);
 
 				
 				param.buffer = &xferBlock[0].buffer[resultBlock[0].bytesXfered];
@@ -1690,13 +1722,10 @@ HRESULT STDMETHODCALLTYPE
 			param.whiteReferenceLevel = _whiteReferenceLevel;
 			param.colorRange = _colorRange;
 
-			// Default quality (until we have support for custom tables.)
-			param.quality = _compression_IJG_Quality; // ignored for input.
-
 			// Compute the number of bytes in a single row of pixel data.
 			param.rowBytes = (buflen / nSamples) / _imageHeight;
 
-			// Calculate the size of the image data to be compressed.
+			// Calculate the size of the image data to be decompressed.
 			param.bufferSize = param.rowBytes * param.imageHeight;
 
 			for (n = 0; n < nSamples; n++)
@@ -1706,14 +1735,13 @@ HRESULT STDMETHODCALLTYPE
 				sampleSize = GetSampleSizeFromIndex(_currentIndex);
 				jpeg_essencestream_src(&cinfo, _stream, sampleSize);
 
-
 				param.buffer = &buffer[*bytesRead];
 				checkResult(DecompressImage(param, cinfo));
 				*bytesRead += param.bufferSize;
 
 				if (kAAFSeparateFields == _frameLayout)
 				{
-					// Compress the second field right after the first field.
+					// Decompress the second field right after the first field.
 					param.buffer = &buffer[*bytesRead];
 					checkResult(DecompressImage(param, cinfo));
 					*bytesRead += param.bufferSize;
@@ -1844,9 +1872,6 @@ HRESULT STDMETHODCALLTYPE
 			param.blackReferenceLevel = _blackReferenceLevel;
 			param.whiteReferenceLevel = _whiteReferenceLevel;
 			param.colorRange = _colorRange;
-
-			// Default quality (until we have support for custom tables.)
-			param.quality = _compression_IJG_Quality; // ignored for input.
 
 			// Compute the number of bytes in a single row of pixel data.
 			param.rowBytes = (xferBlock[0].buflen / xferBlock[0].numSamples) / _imageHeight;
@@ -1984,7 +2009,15 @@ void CAAFJPEGCodec::UpdateDescriptor (CAAFJPEGDescriptorHelper& descriptorHelper
 	{
 	    checkResult( descriptorHelper.SetResolutionID( _resolutionID ) );
 	    checkResult( descriptorHelper.SetFrameSampleSize( 0 ) );
-	    checkResult( descriptorHelper.SetFirstFrameOffset( 0 ) );
+		// In CAAFJPEGCodec::Create() we created 1024 bytes of an empty JPEG picture
+		// to start off the index table
+	    checkResult( descriptorHelper.SetFirstFrameOffset( 1024 ) );
+
+		// ImageSize only needs to be set when there is one frame
+		if (_numberOfSamples == 1)
+		{
+	    	checkResult( descriptorHelper.SetImageSize( _imageSize ) );
+		}
 	}
 }
 
@@ -3240,7 +3273,9 @@ static void SetupFor422(aafUInt32 imageWidth, aafUInt32 comp_pos[], aafUInt32 co
 	comp_width[0] = imageWidth;
 	comp_width[2] = comp_width[1] = (imageWidth / 2);
 
-	comp_height[0] = DCTSIZE * 2;
+	// Strip height: for 4:2:2, Y is not subsampled so max height is DCTSIZE
+	// (for 4:2:0 height of strip would be DCTSIZE * 2)
+	comp_height[0] = DCTSIZE;
 	comp_height[2] = comp_height[1] = comp_height[0];
 }
 
@@ -3299,7 +3334,8 @@ void CAAFJPEGCodec::DumpSampleImage(
 }
 
 
-
+// Copies rows of UYVY video from param.buffer and writes them to rawSampleImage
+// reaaranged into planes of Y, U and V
 aafUInt32 CAAFJPEGCodec::CopyDataToSampleImage(
 	const aafCompressionParams& param, 
 	aafUInt32 startingOffset,
@@ -3340,7 +3376,8 @@ aafUInt32 CAAFJPEGCodec::CopyDataToSampleImage(
 
 	DumpSampleImage(param, rawSampleImage);
 
-	return (startingOffset + _rawSampleImageBufferSize);
+	// increment offset by size of one field (i.e. _rawSampleImageBufferSize / 2)
+	return (startingOffset + _rawSampleImageBufferSize / 2);
 }
 
 aafUInt32 CAAFJPEGCodec::CopyDataFromSampleImage(
@@ -3384,7 +3421,8 @@ aafUInt32 CAAFJPEGCodec::CopyDataFromSampleImage(
 		}
 	}
 
-	return (startingOffset + _rawSampleImageBufferSize);
+	// increment offset by size of one field (i.e. _rawSampleImageBufferSize / 2)
+	return (startingOffset + _rawSampleImageBufferSize / 2);
 }
 
 
@@ -3414,9 +3452,6 @@ HRESULT CAAFJPEGCodec::CompressImage(
 		// The stream must have already be created or opened.
 		checkAssertion(NULL != _stream);
 
-		// This version only supports compression of RGB data
-//		checkExpression(1 == param.horizontalSubsampling, AAFRESULT_BADPIXFORM);
-
 		// This should already have been calculated.
 		checkAssertion(0 < param.rowBytes);
 
@@ -3428,7 +3463,6 @@ HRESULT CAAFJPEGCodec::CompressImage(
 		cinfo.image_width = param.imageWidth; 	/* image width and height, in pixels */
 		cinfo.image_height = param.imageHeight;
 		cinfo.input_components = 3;		/* # of color components per pixel */
-		cinfo.in_color_space = JCS_RGB; 	
 
 		/* colorspace of input image */
 		switch (param.colorSpace)
@@ -3441,7 +3475,6 @@ HRESULT CAAFJPEGCodec::CompressImage(
 			default:
 				cinfo.in_color_space = JCS_RGB;
 		}
-
 
 
 		/* Now use the library's routine to set default compression parameters.
@@ -3457,20 +3490,21 @@ HRESULT CAAFJPEGCodec::CompressImage(
 		jpeg_set_quality(&cinfo, param.quality, TRUE /* limit to baseline-JPEG values */);
 
 
-
 		if (JCS_YCbCr == cinfo.in_color_space && 
 			  (1 != param.horizontalSubsampling || 1 != param.verticalSubsampling) )
 		{
 			// Notify the library that we are supplying raw YCbCr data.
 			cinfo.raw_data_in = TRUE; // this was set to FALSE by jpeg_set_defaults.
 
-			// Ensure that the sampling factors are correct.
+			// Ensure that the sampling factors are correct for YUV 4:2:2 (Rec 601)
+			// which is compressed as "2x1, 1x1, 1x1" in libjpeg terminology.
+			// Avid only supports JPEG images with 2x1,1x1,1x1 sampling.
 			cinfo.comp_info[0].h_samp_factor = 2;
-			cinfo.comp_info[0].v_samp_factor = 2;
+			cinfo.comp_info[0].v_samp_factor = 1;
 			cinfo.comp_info[1].h_samp_factor = 1;
-			cinfo.comp_info[1].v_samp_factor = 2;
+			cinfo.comp_info[1].v_samp_factor = 1;
 			cinfo.comp_info[2].h_samp_factor = 1;
-			cinfo.comp_info[2].v_samp_factor = 2;
+			cinfo.comp_info[2].v_samp_factor = 1;
 
 
 			// Get the raw image buffer (allocate one if necessary).
@@ -3501,7 +3535,6 @@ HRESULT CAAFJPEGCodec::CompressImage(
 				// Now map the input interleaved image data into the rawImage buffer.
 				// NOTE: The interleaved format is 601 4-2-2 (SMPTE 259).
 				offset_to_next_iMCU_row = CopyDataToSampleImage(param, offset_to_next_iMCU_row, rawImage);
-
 				num_MCU_rows += jpeg_write_raw_data(&cinfo, rawImage, lines_per_iMCU_row);
 			}
 		} 
@@ -3618,19 +3651,11 @@ HRESULT CAAFJPEGCodec::DecompressImage(
 		 * jpeg_read_header(), so we do nothing here.
 		 */
 
-
-
 		if (JCS_YCbCr == cinfo.out_color_space && 
 			  (1 != param.horizontalSubsampling || 1 != param.verticalSubsampling) )
 		{
 			// Notify the library that we are requresting raw YCbCr data.
 			cinfo.raw_data_out = TRUE; // this was set to FALSE by jpeg_set_defaults.
-
-			// Ensure that the sampling factors are correct.
-//			cinfo.comp_info[1].h_samp_factor = param.horizontalSubsampling;
-//			cinfo.comp_info[1].v_samp_factor = param.verticalSubsampling;
-//			cinfo.comp_info[2].h_samp_factor = param.horizontalSubsampling;
-//			cinfo.comp_info[2].v_samp_factor = param.verticalSubsampling;
 
 
 			/* Step 5: Start decompressor */

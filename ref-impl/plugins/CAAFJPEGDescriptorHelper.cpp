@@ -40,6 +40,7 @@ const aafUID_t kAAFPropID_CDCIOffsetToFrameIndexes = { 0x9d15fca3, 0x54c5, 0x11d
 const aafUID_t kAAFPropID_DIDFrameIndexByteOrder = { 0xb57e925d, 0x170d, 0x11d4, { 0xa0, 0x8f, 0x0, 0x60, 0x94, 0xeb, 0x75, 0xcb } };
 const aafUID_t kAAFPropID_DIDResolutionID = { 0xce2aca4d, 0x51ab, 0x11d3, { 0xa0, 0x24, 0x0, 0x60, 0x94, 0xeb, 0x75, 0xcb } };
 const aafUID_t kAAFPropID_DIDFirstFrameOffset = { 0xce2aca4e, 0x51ab, 0x11d3, { 0xa0, 0x24, 0x0, 0x60, 0x94, 0xeb, 0x75, 0xcb } };
+const aafUID_t kAAFPropID_DIDImageSize = { 0xce2aca4f, 0x51ab, 0x11d3, { 0xa0, 0x24, 0x0, 0x60, 0x94, 0xeb, 0x75, 0xcb } };
 const aafUID_t kAAFPropID_DIDFrameSampleSize = { 0xce2aca50, 0x51ab, 0x11d3, { 0xa0, 0x24, 0x0, 0x60, 0x94, 0xeb, 0x75, 0xcb } };
 
 
@@ -1020,6 +1021,93 @@ HRESULT STDMETHODCALLTYPE
 		checkResult( p_typedef_int->SetInteger( 
 		    p_propval, reinterpret_cast<aafMemPtr_t>(&firstFrameOffset), 
 		    sizeof(firstFrameOffset) ) );
+	    }
+
+	    checkResult( p_obj->SetPropertyValue( p_propdef, p_propval ) );
+	}
+	catch (HRESULT& rhr)
+	{
+		hr = rhr; // return thrown error code.
+	}
+	catch (...)
+	{
+		// We CANNOT throw an exception out of a COM interface method!
+		// Return a reasonable exception code.
+		hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+	}
+
+
+	// Cleanup
+	if( p_obj != NULL )
+	    p_obj->Release();
+	if( p_classdef != NULL )
+	    p_classdef->Release();
+	if( p_propdef != NULL )
+	    p_propdef->Release();
+	if( p_propval != NULL )
+	    p_propval->Release();
+	if( p_typedef != NULL )
+	    p_typedef->Release();
+	if( p_typedef_int != NULL )
+	    p_typedef_int->Release();
+
+
+	return hr;
+}
+
+
+HRESULT STDMETHODCALLTYPE
+    CAAFJPEGDescriptorHelper::SetImageSize( aafInt32  imageSize )
+{
+	HRESULT			hr = S_OK;
+	IAAFObject		*p_obj = NULL;
+	IAAFClassDef		*p_classdef = NULL;
+	IAAFPropertyDef		*p_propdef = NULL;
+	IAAFPropertyValue	*p_propval = NULL;
+	IAAFTypeDef		*p_typedef = NULL;
+	IAAFTypeDefInt		*p_typedef_int = NULL;
+
+
+	checkAssertion(NULL != _dides);
+
+	try
+	{
+	    checkResult( _dides->QueryInterface( IID_IAAFObject, 
+		(void**)&p_obj ) );
+
+	    checkResult( p_obj->GetDefinition( &p_classdef ) );
+
+	    checkResult( p_classdef->LookupPropertyDef( 
+		kAAFPropID_DIDImageSize, &p_propdef));
+
+	    checkResult( p_propdef->GetTypeDef( &p_typedef ) );
+
+	    checkResult( p_typedef->QueryInterface( IID_IAAFTypeDefInt, 
+		(void**)&p_typedef_int ) );
+
+	    // Try to get prop value. If it doesn't exist, create it.
+	    hr = p_obj->GetPropertyValue( p_propdef, &p_propval );
+	    if( hr != AAFRESULT_SUCCESS )
+	    {
+		if( hr == AAFRESULT_PROP_NOT_PRESENT )
+		{
+		    checkResult( p_typedef_int->CreateValue( 
+			reinterpret_cast<aafMemPtr_t>(&imageSize), 
+			sizeof(imageSize), &p_propval ) );
+
+		    // At this point hr equals AAFRESULT_PROP_NOT_PRESENT.
+		    // Reset it.
+		    hr = AAFRESULT_SUCCESS;
+		}
+		else
+		    throw hr;
+	    }
+	    else
+	    {
+		// Property value exists, modify it.
+		checkResult( p_typedef_int->SetInteger( 
+		    p_propval, reinterpret_cast<aafMemPtr_t>(&imageSize), 
+		    sizeof(imageSize) ) );
 	    }
 
 	    checkResult( p_obj->SetPropertyValue( p_propdef, p_propval ) );

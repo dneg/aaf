@@ -119,6 +119,7 @@ public:
 	STDMETHOD (GetResolutionID) ( aafInt32 *p_resid );
 	STDMETHOD (SetResolutionID) ( aafInt32  resolutionID );
 	STDMETHOD (SetFirstFrameOffset) ( aafInt32  firstFrameOffset );
+	STDMETHOD (SetImageSize) ( aafInt32  imageSize );
 	STDMETHOD (SetFrameSampleSize) ( aafInt32 frameSampleSize );
 
 private:

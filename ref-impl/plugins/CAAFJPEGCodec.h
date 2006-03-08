@@ -445,6 +445,7 @@ private:
 	aafUInt16 _padBytesPerRow;
 	aafUInt32 _compression_IJG_Quality;
 	aafInt32 _resolutionID;
+	aafInt32 _imageSize;
 
 
 	// Data do define and hold the sample image buffer used for raw sub-sampled
