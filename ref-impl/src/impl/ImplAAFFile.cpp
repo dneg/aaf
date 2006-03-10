@@ -173,7 +173,7 @@ const aafUID_t *mapStructuredStorageFileKind_DefaultToActual(const aafUID_t *fk_
 #if defined(OM_USE_WINDOWS_SS) || defined(OM_USE_MACINTOSH_SS) || defined(OM_USE_MACINTOSH_WRAPPED_SS) || defined(OM_USE_REFERENCE_SS)
 		return &kAAFFileKind_AafM4KBinary;
 #elif defined(OM_USE_SCHEMASOFT_SS)
-		return &kAAFFileKind_AafS512Binary;
+		return &kAAFFileKind_AafS4KBinary;
 #elif defined(OM_USE_GSF_SS)
 		return &kAAFFileKind_AafG4KBinary;
 #endif
