@@ -26,7 +26,7 @@
 all: ComCutsOnlyTest ComEssenceDataTest ComExtension ComPropDirectAccess \
 	ComPropDirectDump ExportAudioExample ExportSimpleComposition \
 	ImportAudioExample InfoDumper MetadataExample comClientTest \
-	ExportDV ImportDV ExportPCM ImportPCM
+	ExportDV ImportDV ExportJPEG ImportJPEG ExportPCM ImportPCM
 
 .PHONY : ComCutsOnlyTest
 ComCutsOnlyTest:
@@ -80,6 +80,14 @@ ExportDV :
 ImportDV :
 	cd ImportDV && $(MAKE)
 
+.PHONY : ExportJPEG
+ExportJPEG :
+	cd ExportJPEG && $(MAKE)
+
+.PHONY : ImportJPEG
+ImportJPEG :
+	cd ImportJPEG && $(MAKE)
+
 .PHONY : ExportPCM
 ExportPCM :
 	cd ExportPCM && $(MAKE)
@@ -87,6 +95,11 @@ ExportPCM :
 .PHONY : ImportPCM
 ImportPCM :
 	cd ImportPCM && $(MAKE)
+
+.PHONY : check
+check :
+	cd ExportJPEG && $(MAKE) $@
+	cd ImportJPEG && $(MAKE) $@
 
 .PHONY : clean
 clean :
@@ -103,6 +116,8 @@ clean :
 	cd comClientTest && $(MAKE) GENDEPS=0 $@
 	cd ExportDV && $(MAKE) GENDEPS=0 $@
 	cd ImportDV && $(MAKE) GENDEPS=0 $@
+	cd ExportJPEG && $(MAKE) GENDEPS=0 $@
+	cd ImportJPEG && $(MAKE) GENDEPS=0 $@
 	cd ExportPCM && $(MAKE) GENDEPS=0 $@
 	cd ImportPCM && $(MAKE) GENDEPS=0 $@
 
@@ -121,5 +136,7 @@ realclean :
 	cd comClientTest && $(MAKE) GENDEPS=0 $@
 	cd ExportDV && $(MAKE) GENDEPS=0 $@
 	cd ImportDV && $(MAKE) GENDEPS=0 $@
+	cd ExportJPEG && $(MAKE) GENDEPS=0 $@
+	cd ImportJPEG && $(MAKE) GENDEPS=0 $@
 	cd ExportPCM && $(MAKE) GENDEPS=0 $@
 	cd ImportPCM && $(MAKE) GENDEPS=0 $@

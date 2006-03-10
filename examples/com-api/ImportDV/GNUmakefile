@@ -21,6 +21,11 @@
 ###############################################################################
 
 
-EXAMPLE = ImportDV
+EXAMPLE = ImportJPEG
 
 include ../comexamplerules.mk
+
+TEST_CMD = env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/ImportJPEG$(EXE)
+.PHONY : check
+check : $(AAFSDKBINDIR)/ImportJPEG$(EXE)
+	for f in sdlake_uyvy_20:1.aaf sdlake_uyvy_15:1.aaf sdlake_uyvy_ntsc_20:1.aaf sdlake_uyvy_ntsc_15:1.aaf ; do if [ -r ../ExportJPEG/$$f ] ; then $(TEST_CMD) -d ../ExportJPEG/$$f || exit $$? ; $(TEST_CMD)  ../ExportJPEG/$$f || exit $$? ; fi ; done
