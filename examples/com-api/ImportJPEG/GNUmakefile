@@ -30,4 +30,7 @@ include ../comexamplerules.mk
 TEST_CMD = env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/ImportJPEG$(EXE)
 .PHONY : check
 check : $(AAFSDKBINDIR)/ImportJPEG$(EXE)
-	for f in sdlake_uyvy_20:1.aaf sdlake_uyvy_15:1.aaf sdlake_uyvy_ntsc_20:1.aaf sdlake_uyvy_ntsc_15:1.aaf ; do if [ -r ../ExportJPEG/$$f ] ; then $(TEST_CMD) -d ../ExportJPEG/$$f || exit $$? ; $(TEST_CMD)  ../ExportJPEG/$$f || exit $$? ; fi ; done
+	@for f in 2:1 3:1 10:1 20:1 15:1 ; do if [ -r ../ExportJPEG/sdlake_uyvy_$$f.aaf ] ; then $(TEST_CMD) -d ../ExportJPEG/sdlake_uyvy_$$f.aaf || exit $$? ; $(TEST_CMD) ../ExportJPEG/sdlake_uyvy_$$f.aaf || exit $$? ; fi ; done
+	@for f in 2:1 3:1 10:1 20:1 15:1 ; do if [ -r ../ExportJPEG/sdlake_uyvy_ntsc_$$f.aaf ] ; then $(TEST_CMD) -d ../ExportJPEG/sdlake_uyvy_ntsc_$$f.aaf || exit $$? ; $(TEST_CMD) ../ExportJPEG/sdlake_uyvy_ntsc_$$f.aaf || exit $$? ; fi ; done
+	@for f in 2:1 3:1 10:1 20:1 15:1 ; do if [ -r ../ExportJPEG/colorbars_$$f.aaf ] ; then $(TEST_CMD) -d ../ExportJPEG/colorbars_$$f.aaf || exit $$? ; $(TEST_CMD) ../ExportJPEG/colorbars_$$f.aaf || exit $$? ; fi ; done
+	@for f in 2:1 3:1 10:1 20:1 15:1 ; do if [ -r ../ExportJPEG/colorbars_ntsc_$$f.aaf ] ; then $(TEST_CMD) -d ../ExportJPEG/colorbars_ntsc_$$f.aaf || exit $$? ; $(TEST_CMD) ../ExportJPEG/colorbars_ntsc_$$f.aaf || exit $$? ; fi ; done
