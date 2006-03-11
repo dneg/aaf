@@ -1723,10 +1723,22 @@ HRESULT STDMETHODCALLTYPE
 			param.colorRange = _colorRange;
 
 			// Compute the number of bytes in a single row of pixel data.
-			param.rowBytes = (buflen / nSamples) / _imageHeight;
+			if (1 == _horizontalSubsampling)
+			{
+				param.rowBytes = (_imageWidth * param.components) + _padBytesPerRow;
+			}
+			else if (2 == _horizontalSubsampling)
+			{	// Add an extra byte if with is odd. NOTE: This will never
+				// happen with full 601 frame.
+				param.rowBytes = (_imageWidth * (param.components - 1)) + (_imageWidth % 2) + _padBytesPerRow;
+			}
 
 			// Calculate the size of the image data to be decompressed.
 			param.bufferSize = param.rowBytes * param.imageHeight;
+
+			// Make sure the given buffer is really large enough for the complete
+			// uncompressed pixel data.
+			checkExpression(param.bufferSize <= buflen, AAFRESULT_SMALLBUF);
 
 			for (n = 0; n < nSamples; n++)
 			{
