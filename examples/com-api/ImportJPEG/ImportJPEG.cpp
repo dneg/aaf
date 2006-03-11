@@ -116,7 +116,6 @@ extern void recombine_fields(const aafUInt8 *src, aafUInt8 *dest, int width, int
 	const aafUInt8	*buf_top_field = src;
 	const aafUInt8	*buf_bottom_field = src + field_height * width*2;
 	int o_line = 0;
-	printf("field_height = %d, width = %d\n", field_height, width);
 	for (int i = 0; i < field_height*2; i += 2)
 	{
 		memcpy(&dest[i * width*2], &buf_top_field[o_line * width*2], width * 2);
@@ -232,6 +231,8 @@ static HRESULT OpenAAFFile(aafWChar * pFileName, bool comp_enable)
 			// Then get a Master Mob interface
 			check(pMob->QueryInterface(IID_IAAFMasterMob, (void **)&pMasterMob));
 			
+			printf("    Opening slot %d with %s\n", MobSlotID, comp_enable ? "CompressionEnable" : "CompressionDisable");
+
 			// Open the Essence Data
 			check(pMasterMob->OpenEssence(MobSlotID,
 									 	  NULL,	
@@ -300,7 +301,7 @@ static HRESULT OpenAAFFile(aafWChar * pFileName, bool comp_enable)
 			printf("\t\tFrameLayout=%s CountSamples=%"AAFFMT64"d\n", frameLayoutStr, sampleCount);
 
 			// Buffer to receive samples from ReadSamples
-			aafUInt8 *dataBuff = new aafUInt8[maxSampleSize];
+			aafUInt8 *dataBuf = new aafUInt8[maxSampleSize];
 
 			// Buffer to recombine separated fields into interleaved fields
 			aafUInt8 *recombined_buf = new aafUInt8[maxSampleSize];
@@ -312,7 +313,7 @@ static HRESULT OpenAAFFile(aafWChar * pFileName, bool comp_enable)
 				hr = (pEssenceAccess->ReadSamples(
 								1, 					// number of samples to read
 								maxSampleSize,		// maximum buffer size
-								dataBuff,			// output buffer for audio data
+								dataBuf,			// output buffer for audio data
 								&samplesRead,		// number of samples read
 								&actualBytesRead));	// number of bytes read
 				if (hr == AAFRESULT_EOF)
@@ -320,26 +321,29 @@ static HRESULT OpenAAFFile(aafWChar * pFileName, bool comp_enable)
 				else
 					check(hr);
 
-				if (actualBytesRead != 0)
+				aaf_assert(actualBytesRead != 0, "actualBytesRead != 0");
+
+				total_samples += samplesRead;
+
+				aafUInt8* saveBuf = dataBuf;
+				if (comp_enable && frameLayout == kAAFSeparateFields) {
+					// recombine fields into uncompressed frame when decompressing
+					recombine_fields(dataBuf, recombined_buf, storedRect.xSize, storedRect.ySize);
+					saveBuf = recombined_buf;
+				}
+
+				// Write out video
+				if ( fwrite(saveBuf, maxSampleSize, 1, output) != 1 )
 				{
-					total_samples += samplesRead;
-
-					memset(recombined_buf, 0x80, maxSampleSize);
-					recombine_fields(dataBuff, recombined_buf, storedRect.xSize, storedRect.ySize);
-
-					// Write out video
-					if ( fwrite(recombined_buf, maxSampleSize, 1, output) != 1 )
-					{
-						perror(output_file);
-						return 1;
-					}
-				} 
+					perror(output_file);
+					return 1;
+				}
 			}
-			printf("\tTotal samples = %u (written to %s)\n", total_samples, output_file);
+			printf("\tTotal samples=%u - written to %s\n", total_samples, output_file);
 			
-			delete [] dataBuff;
-			dataBuff = NULL;
-			
+			delete [] dataBuf;
+			delete [] recombined_buf;
+
 			pEssenceAccess->Release();
 			pEssenceAccess = NULL;
 			pMasterMob->Release();
