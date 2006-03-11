@@ -113,18 +113,18 @@ empty_output_buffer (j_compress_ptr cinfo)
 }
 
 // Big-endian integer storage routines
-static void storeUInt16_BE(uint8_t *p, uint16_t value)
+static void storeUInt16_BE(aafUInt8 *p, aafUInt16 value)
 {
-    p[0] = (uint8_t)((value & 0x0000ff00) >> 8);
-    p[1] = (uint8_t)((value & 0x000000ff) >> 0);
+    p[0] = (aafUInt8)((value & 0x0000ff00) >> 8);
+    p[1] = (aafUInt8)((value & 0x000000ff) >> 0);
 }
 
-static void storeUInt32_BE(uint8_t *p, uint32_t value)
+static void storeUInt32_BE(aafUInt8 *p, aafUInt32 value)
 {
-    p[0] = (uint8_t)((value & 0xff000000) >> 24);
-    p[1] = (uint8_t)((value & 0x00ff0000) >> 16);
-    p[2] = (uint8_t)((value & 0x0000ff00) >> 8);
-    p[3] = (uint8_t)((value & 0x000000ff) >> 0);
+    p[0] = (aafUInt8)((value & 0xff000000) >> 24);
+    p[1] = (aafUInt8)((value & 0x00ff0000) >> 16);
+    p[2] = (aafUInt8)((value & 0x0000ff00) >> 8);
+    p[3] = (aafUInt8)((value & 0x000000ff) >> 0);
 }
 
 // Rearrange JPEG markers into the fashion needed by Avid:
@@ -173,7 +173,7 @@ static int rearrange_jpeg(JOCTET *p_in, aafInt32 resID, int size, int last_size,
 	*p++ = 0x00;
 	*p++ = 0x10;
 	unsigned char app0_buf[14] = "AVI1";
-	uint8_t *pos_app_data = p + 6;				// use pointer to update data later
+	aafUInt8 *pos_app_data = p + 6;				// use pointer to update data later
 	memcpy(p, app0_buf, sizeof(app0_buf));
 	p += sizeof(app0_buf);
 
@@ -183,7 +183,7 @@ static int rearrange_jpeg(JOCTET *p_in, aafInt32 resID, int size, int last_size,
 	*p++ = 0x00;
 	*p++ = 0x3D;
 	unsigned char com_buf[59] = "AVID\x11";
-	com_buf[11] = resID;						// ResolutionID 0x4C=2:1, 0x4E=15:1
+	com_buf[11] = static_cast<unsigned char>(resID);						// ResolutionID 0x4C=2:1, 0x4E=15:1
 	com_buf[12] = 0x02;							// Always 2
 	storeUInt32_BE(&com_buf[7], last_size);		// store last size
 	memcpy(p, com_buf, sizeof(com_buf));
@@ -200,16 +200,16 @@ static int rearrange_jpeg(JOCTET *p_in, aafInt32 resID, int size, int last_size,
 	// Copy DQT tables all as single segment
 	*p++ = 0xFF;
 	*p++ = 0xDB;
-	uint8_t *pos_dqt_len = p;		// use this to update length later
+	aafUInt8 *pos_dqt_len = p;		// use this to update length later
 	*p++ = 0x00;
 	*p++ = 0x00;
 	// Find DQT markers, copy contents to destination
-	uint16_t dqt_len = 2;
+	aafUInt16 dqt_len = 2;
 	for (i = 0; i < end_of_header - 1; i++) {
 		// search for DQT marker
 		if (p_in[i] == 0xFF && p_in[i+1] == 0xDB) {
 			// length is 16bit big-endian and includes storage of length (2 bytes)
-			uint16_t length = (p_in[i+2] << 8) + p_in[i+3];
+			aafUInt16 length = (p_in[i+2] << 8) + p_in[i+3];
 			length -= 2;			// compute length of table contents
 
 			// copy contents of this table
@@ -225,18 +225,18 @@ static int rearrange_jpeg(JOCTET *p_in, aafInt32 resID, int size, int last_size,
 	// TODO: test whether Avid can handle different order of tables
 	*p++ = 0xFF;
 	*p++ = 0xC4;
-	uint8_t *pos_dht_len = p;		// use this to update length later
+	aafUInt8 *pos_dht_len = p;		// use this to update length later
 	*p++ = 0x00;
 	*p++ = 0x00;
 	// Find DHT markers, copy contents to destination
-	uint16_t dht_len = 2;
-	uint8_t dht_table[2][2][512];
+	aafUInt16 dht_len = 2;
+	aafUInt8 dht_table[2][2][512];
 	int		dht_length[2][2];
 	for (i = 0; i < end_of_header - 1; i++) {
 		// search for DHT marker
 		if (p_in[i] == 0xFF && p_in[i+1] == 0xC4) {
 			// length is 16bit big-endian and includes storage of length (2 bytes)
-			uint16_t length = (p_in[i+2] << 8) + p_in[i+3];
+			aafUInt16 length = (p_in[i+2] << 8) + p_in[i+3];
 			length -= 2;			// compute length of table contents
 
 			// Table class Tc and Table destination idenitifier Th follow length
@@ -271,7 +271,7 @@ static int rearrange_jpeg(JOCTET *p_in, aafInt32 resID, int size, int last_size,
 		// search for SOF0 marker
 		if (p_in[i] == 0xFF && p_in[i+1] == 0xC0) {
 			// length is 16bit big-endian and includes storage of length (2 bytes)
-			uint16_t length = (p_in[i+2] << 8) + p_in[i+3];
+			aafUInt16 length = (p_in[i+2] << 8) + p_in[i+3];
 			memcpy(p, &p_in[i+2], length);
 			p += length;
 			break;
