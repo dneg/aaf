@@ -29,6 +29,9 @@ all: com-examples
 com-examples:
 	cd com-api; $(MAKE)
 
+.PHONY : check
+check :
+	cd com-api && $(MAKE) $@
 
 clean:
 	cd com-api; $(MAKE) GENDEPS=0 $@
@@ -37,5 +40,3 @@ clean:
 .PHONY : realclean
 realclean :
 	cd com-api; $(MAKE) GENDEPS=0 $@
-
-

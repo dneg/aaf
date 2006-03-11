@@ -77,6 +77,7 @@ test : install
 .PHONY : check
 check : test
 	cd test && $(MAKE) $@
+	cd examples && $(MAKE) $@
 
 #
 # Binary distributions

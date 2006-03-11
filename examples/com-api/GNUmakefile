@@ -96,10 +96,12 @@ ExportPCM :
 ImportPCM :
 	cd ImportPCM && $(MAKE)
 
+# Run InfoDumper check last since all generated AAF files will be available to test
 .PHONY : check
-check :
+check : all
 	cd ExportJPEG && $(MAKE) $@
 	cd ImportJPEG && $(MAKE) $@
+	cd InfoDumper && $(MAKE) $@
 
 .PHONY : clean
 clean :

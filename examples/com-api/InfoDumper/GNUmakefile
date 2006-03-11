@@ -26,3 +26,8 @@
 EXAMPLE = InfoDumper
 
 include ../comexamplerules.mk
+
+TEST_CMD = env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/InfoDumper$(EXE)
+.PHONY : check
+check : $(AAFSDKBINDIR)/InfoDumper$(EXE)
+	for f in ../*/*.aaf ../../../test/com/*/*.aaf; do echo InfoDumper $$f; $(TEST_CMD) $$f > /dev/null || exit $$?; done
