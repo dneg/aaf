@@ -1380,7 +1380,7 @@ HRESULT STDMETHODCALLTYPE
 					// Record the ImageSize value which is last stream position
 					aafPosition_t streampos = 0;
 					checkResult(_stream->GetPosition(&streampos));
-					_imageSize = streampos;
+					_imageSize = static_cast<aafInt32>(streampos);
 					
 					// Update the return values.
 					samplesXfered++;
