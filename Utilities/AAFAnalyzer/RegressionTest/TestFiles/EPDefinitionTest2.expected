@@ -177,7 +177,7 @@
                 Name:   Edit Protocol Definition Visitor
                 Desc:   -
                 Result: Failed
-                Reason: OperationDefinition "Alpha With Video Key effect" has DataDefinition = DataDef_LegacyPicture. in an AAF Version 1.1 file.
+                Reason: OperationDefinition "Alpha With Video Key effect" has DataDefinition = DataDef_LegacyPicture. in an AAF Version 1.2 file.
                 Passing Requirements: None
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_163
@@ -185,7 +185,7 @@
                 Name:   Edit Protocol Definition Visitor
                 Desc:   -
                 Result: Failed
-                Reason: OperationDefinition "Chroma Key" has DataDefinition = DataDef_LegacyPicture. in an AAF Version 1.1 file.
+                Reason: OperationDefinition "Chroma Key" has DataDefinition = DataDef_LegacyPicture. in an AAF Version 1.2 file.
                 Passing Requirements: None
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_163
@@ -193,7 +193,7 @@
                 Name:   Edit Protocol Definition Visitor
                 Desc:   -
                 Result: Failed
-                Reason: OperationDefinition "Luminance Key" has DataDefinition = DataDef_LegacyPicture. in an AAF Version 1.1 file.
+                Reason: OperationDefinition "Luminance Key" has DataDefinition = DataDef_LegacyPicture. in an AAF Version 1.2 file.
                 Passing Requirements: None
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_163
@@ -201,7 +201,7 @@
                 Name:   Edit Protocol Definition Visitor
                 Desc:   -
                 Result: Failed
-                Reason: OperationDefinition "Mono Audio Dissolve" has DataDefinition = DataDef_LegacySound. in an AAF Version 1.1 file.
+                Reason: OperationDefinition "Mono Audio Dissolve" has DataDefinition = DataDef_LegacySound. in an AAF Version 1.2 file.
                 Passing Requirements: None
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_163
@@ -209,7 +209,7 @@
                 Name:   Edit Protocol Definition Visitor
                 Desc:   -
                 Result: Failed
-                Reason: OperationDefinition "Mono Audio Gain" has DataDefinition = DataDef_LegacySound. in an AAF Version 1.1 file.
+                Reason: OperationDefinition "Mono Audio Gain" has DataDefinition = DataDef_LegacySound. in an AAF Version 1.2 file.
                 Passing Requirements: None
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_163
@@ -217,7 +217,7 @@
                 Name:   Edit Protocol Definition Visitor
                 Desc:   -
                 Result: Failed
-                Reason: OperationDefinition "Mono Audio Pan" has DataDefinition = DataDef_LegacySound. in an AAF Version 1.1 file.
+                Reason: OperationDefinition "Mono Audio Pan" has DataDefinition = DataDef_LegacySound. in an AAF Version 1.2 file.
                 Passing Requirements: None
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_163
@@ -225,7 +225,7 @@
                 Name:   Edit Protocol Definition Visitor
                 Desc:   -
                 Result: Failed
-                Reason: OperationDefinition "SMPTE Video Wipe" has DataDefinition = DataDef_LegacyPicture. in an AAF Version 1.1 file.
+                Reason: OperationDefinition "SMPTE Video Wipe" has DataDefinition = DataDef_LegacyPicture. in an AAF Version 1.2 file.
                 Passing Requirements: None
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_163
@@ -233,7 +233,7 @@
                 Name:   Edit Protocol Definition Visitor
                 Desc:   -
                 Result: Failed
-                Reason: OperationDefinition "Separate Alpha Key effect" has DataDefinition = DataDef_LegacyPicture. in an AAF Version 1.1 file.
+                Reason: OperationDefinition "Separate Alpha Key effect" has DataDefinition = DataDef_LegacyPicture. in an AAF Version 1.2 file.
                 Passing Requirements: None
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_163
@@ -241,7 +241,7 @@
                 Name:   Edit Protocol Definition Visitor
                 Desc:   -
                 Result: Failed
-                Reason: OperationDefinition "Two-Parameter Mono Audio Dissolve" has DataDefinition = DataDef_LegacySound. in an AAF Version 1.1 file.
+                Reason: OperationDefinition "Two-Parameter Mono Audio Dissolve" has DataDefinition = DataDef_LegacySound. in an AAF Version 1.2 file.
                 Passing Requirements: None
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_163
@@ -249,7 +249,7 @@
                 Name:   Edit Protocol Definition Visitor
                 Desc:   -
                 Result: Failed
-                Reason: OperationDefinition "Video Corner Pinning" has DataDefinition = DataDef_LegacyPicture. in an AAF Version 1.1 file.
+                Reason: OperationDefinition "Video Corner Pinning" has DataDefinition = DataDef_LegacyPicture. in an AAF Version 1.2 file.
                 Passing Requirements: None
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_163
@@ -257,7 +257,7 @@
                 Name:   Edit Protocol Definition Visitor
                 Desc:   -
                 Result: Failed
-                Reason: OperationDefinition "Video Crop" has DataDefinition = DataDef_LegacyPicture. in an AAF Version 1.1 file.
+                Reason: OperationDefinition "Video Crop" has DataDefinition = DataDef_LegacyPicture. in an AAF Version 1.2 file.
                 Passing Requirements: None
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_163
@@ -265,7 +265,7 @@
                 Name:   Edit Protocol Definition Visitor
                 Desc:   -
                 Result: Failed
-                Reason: OperationDefinition "Video Dissolve" has DataDefinition = DataDef_LegacyPicture. in an AAF Version 1.1 file.
+                Reason: OperationDefinition "Video Dissolve" has DataDefinition = DataDef_LegacyPicture. in an AAF Version 1.2 file.
                 Passing Requirements: None
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_163
@@ -273,7 +273,7 @@
                 Name:   Edit Protocol Definition Visitor
                 Desc:   -
                 Result: Failed
-                Reason: OperationDefinition "Video Flip Flop" has DataDefinition = DataDef_LegacyPicture. in an AAF Version 1.1 file.
+                Reason: OperationDefinition "Video Flip Flop" has DataDefinition = DataDef_LegacyPicture. in an AAF Version 1.2 file.
                 Passing Requirements: None
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_163
@@ -281,7 +281,7 @@
                 Name:   Edit Protocol Definition Visitor
                 Desc:   -
                 Result: Failed
-                Reason: OperationDefinition "Video Flip" has DataDefinition = DataDef_LegacyPicture. in an AAF Version 1.1 file.
+                Reason: OperationDefinition "Video Flip" has DataDefinition = DataDef_LegacyPicture. in an AAF Version 1.2 file.
                 Passing Requirements: None
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_163
@@ -289,7 +289,7 @@
                 Name:   Edit Protocol Definition Visitor
                 Desc:   -
                 Result: Failed
-                Reason: OperationDefinition "Video Flop" has DataDefinition = DataDef_LegacyPicture. in an AAF Version 1.1 file.
+                Reason: OperationDefinition "Video Flop" has DataDefinition = DataDef_LegacyPicture. in an AAF Version 1.2 file.
                 Passing Requirements: None
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_163
@@ -297,7 +297,7 @@
                 Name:   Edit Protocol Definition Visitor
                 Desc:   -
                 Result: Failed
-                Reason: OperationDefinition "Video Position" has DataDefinition = DataDef_LegacyPicture. in an AAF Version 1.1 file.
+                Reason: OperationDefinition "Video Position" has DataDefinition = DataDef_LegacyPicture. in an AAF Version 1.2 file.
                 Passing Requirements: None
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_163
@@ -305,7 +305,7 @@
                 Name:   Edit Protocol Definition Visitor
                 Desc:   -
                 Result: Failed
-                Reason: OperationDefinition "Video Repeat" has DataDefinition = DataDef_LegacyPicture. in an AAF Version 1.1 file.
+                Reason: OperationDefinition "Video Repeat" has DataDefinition = DataDef_LegacyPicture. in an AAF Version 1.2 file.
                 Passing Requirements: None
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_163
@@ -313,7 +313,7 @@
                 Name:   Edit Protocol Definition Visitor
                 Desc:   -
                 Result: Failed
-                Reason: OperationDefinition "Video Rotate" has DataDefinition = DataDef_LegacyPicture. in an AAF Version 1.1 file.
+                Reason: OperationDefinition "Video Rotate" has DataDefinition = DataDef_LegacyPicture. in an AAF Version 1.2 file.
                 Passing Requirements: None
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_163
@@ -321,7 +321,7 @@
                 Name:   Edit Protocol Definition Visitor
                 Desc:   -
                 Result: Failed
-                Reason: OperationDefinition "Video Scale" has DataDefinition = DataDef_LegacyPicture. in an AAF Version 1.1 file.
+                Reason: OperationDefinition "Video Scale" has DataDefinition = DataDef_LegacyPicture. in an AAF Version 1.2 file.
                 Passing Requirements: None
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_163
@@ -329,7 +329,7 @@
                 Name:   Edit Protocol Definition Visitor
                 Desc:   -
                 Result: Failed
-                Reason: OperationDefinition "Video Speed Control" has DataDefinition = DataDef_LegacyPicture. in an AAF Version 1.1 file.
+                Reason: OperationDefinition "Video Speed Control" has DataDefinition = DataDef_LegacyPicture. in an AAF Version 1.2 file.
                 Passing Requirements: None
                 Warning Requirements: None
                 Failing Requirements: REQ_EP_163
