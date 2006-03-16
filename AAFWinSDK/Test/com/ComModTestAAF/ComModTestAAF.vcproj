@@ -197,7 +197,10 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFCDCIDescriptorTest.cpp">
+				RelativePath="..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFBWFImportDescriptorTest.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFCachePageAllocatorTest.cpp">
 				<FileConfiguration
 					Name="Release|Win32">
 					<Tool
@@ -218,7 +221,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFCachePageAllocatorTest.cpp">
+				RelativePath="..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFCDCIDescriptorTest.cpp">
 				<FileConfiguration
 					Name="Release|Win32">
 					<Tool
@@ -510,6 +513,9 @@
 						PreprocessorDefinitions=""
 						ForcedIncludeFiles=""/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFDescriptiveObjectTest.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFDictionaryTest.cpp">
@@ -1163,6 +1169,9 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFMPEGVideoDescriptorTest.cpp">
+			</File>
+			<File
 				RelativePath="..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFMultipleDescriptorTest.cpp">
 			</File>
 			<File
@@ -1584,6 +1593,9 @@
 						PreprocessorDefinitions=""
 						ForcedIncludeFiles=""/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFRIFFChunkTest.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFScopeReferenceTest.cpp">
@@ -2928,6 +2940,9 @@
 						PreprocessorDefinitions=""
 						ForcedIncludeFiles=""/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\..\test\com\ComModTestAAF\ModuleTests\CEnumAAFRIFFChunkTest.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\..\test\com\ComModTestAAF\ModuleTests\CEnumAAFSegmentsTest.cpp">

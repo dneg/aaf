@@ -286,7 +286,10 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\..\ref-impl\src\com-api\CAAFCDCIDescriptor.cpp">
+			RelativePath="..\..\..\ref-impl\src\com-api\CAAFBWFImportDescriptor.cpp">
+		</File>
+		<File
+			RelativePath="..\..\..\ref-impl\src\com-api\CAAFCachePageAllocator.cpp">
 			<FileConfiguration
 				Name="Release|Win32">
 				<Tool
@@ -307,7 +310,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\..\ref-impl\src\com-api\CAAFCachePageAllocator.cpp">
+			RelativePath="..\..\..\ref-impl\src\com-api\CAAFCDCIDescriptor.cpp">
 			<FileConfiguration
 				Name="Release|Win32">
 				<Tool
@@ -620,6 +623,9 @@
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\..\..\ref-impl\src\com-api\CAAFDescriptiveObject.cpp">
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFDictionary.cpp">
@@ -1357,6 +1363,9 @@
 			</FileConfiguration>
 		</File>
 		<File
+			RelativePath="..\..\..\ref-impl\src\com-api\CAAFMPEGVideoDescriptor.cpp">
+		</File>
+		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFMultipleDescriptor.cpp">
 			<FileConfiguration
 				Name="Release|Win32">
@@ -1817,6 +1826,9 @@
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\..\..\ref-impl\src\com-api\CAAFRIFFChunk.cpp">
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFRoot.cpp">
@@ -3392,6 +3404,9 @@
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\..\..\ref-impl\src\com-api\CEnumAAFRIFFChunk.cpp">
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CEnumAAFSegments.cpp">
