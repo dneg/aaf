@@ -93,6 +93,12 @@ TEST_LIB_NAME = libcom-api.so
 ifeq ($(AAFPLATFORM),PPCDarwin)
 TEST_LIB_NAME = libcom-api.dylib
 endif
+ifeq ($(AAFPLATFORM),i386Darwin)
+TEST_LIB_NAME = libcom-api.dylib
+endif
+ifeq ($(AAFPLATFORM),UniversalDarwin)
+TEST_LIB_NAME = libcom-api.dylib
+endif
 
 .PHONY : check
 check : $(AAFSDKBINDIR)/MultiGenTest$(EXE)
