@@ -163,6 +163,8 @@ public:
   CLASS_DEF_METHOD(ContentStorage);
   CLASS_DEF_METHOD(ControlPoint);
   CLASS_DEF_METHOD(DataDef);
+  CLASS_DEF_METHOD(DataEssenceDescriptor);
+  CLASS_DEF_METHOD(DescriptiveClip);
   CLASS_DEF_METHOD(DescriptiveFramework);
   CLASS_DEF_METHOD(DescriptiveMarker);
   CLASS_DEF_METHOD(DescriptiveObject);
@@ -213,6 +215,7 @@ public:
   CLASS_DEF_METHOD(SourceMob);
   CLASS_DEF_METHOD(SourceReference);
   CLASS_DEF_METHOD(StaticMobSlot);
+  CLASS_DEF_METHOD(SubDescriptor);
   CLASS_DEF_METHOD(TIFFDescriptor);
   CLASS_DEF_METHOD(TaggedValue);
   CLASS_DEF_METHOD(TaggedValueDefinition);
