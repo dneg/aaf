@@ -74,7 +74,9 @@ HUMAN_TYPED_IMPL="\
 	AAFContentStorage \
 	AAFControlPoint \
 	AAFDataDef \
+	AAFDataEssenceDescriptor \
 	AAFDefObject \
+	AAFDescriptiveClip \
 	AAFDescriptiveFramework \
 	AAFDescriptiveMarker \
 	AAFDescriptiveObject \
@@ -140,6 +142,7 @@ HUMAN_TYPED_IMPL="\
 	AAFSourceMob \
 	AAFSourceReference \
 	AAFStaticMobSlot \
+	AAFSubDescriptor \
 	AAFTIFFDescriptor \
 	AAFTaggedValue \
 	AAFTaggedValueDefinition \
@@ -194,8 +197,9 @@ HUMAN_TYPED_IMPL="\
 	EnumAAFProperties \
 	EnumAAFPropertyDefs \
 	EnumAAFPropertyValues \
-	EnumAAFRIFFChunk \
+	EnumAAFRIFFChunks \
 	EnumAAFSegments \
+	EnumAAFSubDescriptors \
 	EnumAAFTaggedValueDefs \
 	EnumAAFTaggedValues \
 	EnumAAFTypeDefs "

@@ -1,0 +1,166 @@
+#c *********************************************************************
+#c
+#c $Id$ $Name$
+#c
+#c The contents of this file are subject to the AAF SDK Public
+#c Source License Agreement (the "License"); You may not use this file
+#c except in compliance with the License.  The License is available in
+#c AAFSDKPSL.TXT, or you may obtain a copy of the License from the AAF
+#c Association or its successor.
+#c
+#c Software distributed under the License is distributed on an "AS IS"
+#c basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.  See
+#c the License for the specific language governing rights and limitations
+#c under the License.
+#c
+#c The Original Code of this file is Copyright 1998-2005, Licensor of the
+#c AAF Association.
+#c
+#c The Initial Developer of the Original Code of this file and the
+#c Licensor of the AAF Association is Avid Technology.
+#c All rights reserved.
+#c
+#c *********************************************************************
+#startm .this-module 0
+AAFDescriptiveClip\
+#endm
+#c
+#startm .parent-module 0
+AAFSourceClip\
+#endm
+#c
+#c #import ./AAFSourceClip.exp
+AD_HEAD
+AD_IDL(///
+
+/// In addition to the specific error results listed for each method\,
+/// all methods in this interface may also return one of the following
+/// values:
+/// 
+/// AAFRESULT_NOMEMORY
+///   - insufficient system memory is available to perform the
+///     operation.
+///
+/// AAFRESULT_NOT_INITIALIZED
+///   - This object has not yet had Initialize\(\) called on it through
+///     this object's primary interface.  Note that IAAFMobSlot is a
+///     primary interface for an abstract class\, so it is not
+///     appropriate for the Initialize\(\) method to exist in this
+///     interface.  The Initialize\(\) method is available through the
+///     concrete object's primary interface.
+/// 
+///)
+
+AD_CLASS_UUID(fcc3639d, 7ee5, 4fe4, 8b, b3, b8, 10, c0, e9, e6, 00)
+
+AD_DEFAULT_UUID(2e777356, b7e4, 43ba, bf, d4, f9, 64, d9, 0b, c5, e3)
+
+AD_XCLASS_BEGIN(Concrete, StoredObject)
+
+AD_XMETHOD3(Initialize,
+			[in],
+				objIn,
+				AAFDataDef,
+				pDataDef,
+				Data Definition object,
+			[in],
+				objPass,
+				aafLength_constref,
+				length,
+				Length property value,
+			[in],
+				objPass,
+				aafSourceRef_t,
+				sourceRef,
+				Source Reference,
+			This method initializes a source clip object with
+  /// the given properties.  Only required properties are set.
+  /// Optional properties are added with separate functions.
+  ///
+  /// Succeds if:
+  /// - This object has not already been Initialize\(\)d.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_ALREADY_INITIALIZED
+  ///   - Initialize\(\) has already been called on this object.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pDataDef argument is NULL.)
+
+
+AD_XMETHOD2(SetSourceTrackIDs,
+		[in],
+		objPass,
+		aafUInt32,
+		numberElements,
+		Number of elements in the pSourceTrackIDs array,
+		[in],
+		objPass,
+		aafUInt32*,
+		pSourceTrackIDs,
+		Array of source track IDs,
+		Specifies the Source Track IDs in the Mob.
+  /// 
+  /// Return codes:
+  ///
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pSourceTrackIDs is null 
+  ///
+  /// This interface is not currently implemented.)
+
+
+AD_XMETHOD2(GetSourceTrackIDs,
+		[in],
+		objPass,
+		aafUInt32,
+		numberElements,
+		Number of elements in the pSourceTrackIDs array,
+		[in],
+		objPass,
+		aafUInt32*,
+		pSourceTrackIDs,
+		Array of channel IDs,
+		Get the source track IDs that are referenced by this object. 
+  ///
+  /// Return codes:
+  ///
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pSourceTrackIDs is null
+  ///
+  /// AAFRESULT_PROP_NOT_PRESENT
+  ///   - the property is not present
+  ///
+  /// AAFRESULT_SMALLBUF
+  ///   - pSourceTrackIDs is too small
+  ///
+  /// This interface is not currently implemented.)
+
+AD_XMETHOD1(GetSourceTrackIDsSize,
+		[out],
+		objPass,
+		aafUInt32 *,
+		numberElements,
+		Number of elements in the pSourceTrackIDs array,
+		Get the number of source track IDs stored by this DescriptiveClip.
+  ///
+  /// Return codes:
+  ///
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pSourceTrackIDs is null )
+
+AD_XCLASS_END(Concrete, StoredObject)

@@ -269,4 +269,217 @@ AD_XMETHOD1(GetLocators,
   ///
   /// AAFRESULT_NULL_PARAM
   ///   - ppEnum is null.)
+
+
+AD_XMETHOD1(CountSubDescriptors,
+			[out],
+			objPass,
+			aafUInt32 *,
+			pResult,
+			Returns the number of subdescriptors,
+
+			Return the number of subdescriptors attached to this essence
+  /// descriptor.  The number of subdescriptors may be zero if the essence is
+  /// in the current file.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pCount pointer is valid.
+  /// 
+  /// If this method fails nothing is written to *pCount.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pCount is null.)
+
+
+AD_XMETHOD1(AppendSubDescriptor,
+			[in],
+			objIn,
+			AAFSubDescriptor,
+			pSubDescriptors,
+			SubDescriptor to append,
+
+			Append another subdescriptor to this essence descriptor.  Use this
+  /// function to add a subdescriptor to be scanned last when searching for
+  /// the essence \(a secondary location for the essence\).
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pSubDescriptor pointer is valid.
+  /// 
+  /// If this method fails no state will be changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pSubDescriptor is null.)
+
+
+AD_XMETHOD1(PrependSubDescriptor,
+			[in],
+			objIn,
+			AAFSubDescriptor,
+			pSubDescriptor,
+			SubDescriptor to append,
+
+			Prepend another subdescriptor to this essence descriptor.  Use this
+  /// function to add a subdescriptor to be scanned first when searching for
+  /// the essence \(a new primary location for the essence\).
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pSubDescriptor pointer is valid.
+  /// 
+  /// If this method fails no state will be changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pSubDescriptor is null.)
+
+
+AD_XMETHOD2(InsertSubDescriptorAt,
+
+			[in],
+			objPass,
+			aafUInt32,
+			index,
+			index at which subdescriptor is to be inserted,
+
+			[in],
+			objIn,
+			AAFSubDescriptor,
+			pSubDescriptor,
+			SubDescriptor to append,
+
+     Inserts the given subdescriptor at the given index.  SubDescriptors already
+  /// existing at the given and higher indices will be moved to the
+  /// next higher index to accommodate.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pSubDescriptor pointer is valid.
+  /// - index is less than or equal to the value returned by
+  ///   CountSubDescriptors\(\).
+  /// 
+  /// If this method fails no state will be changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pSubDescriptor is null.
+  ///
+  /// AAFRESULT_BADINDEX
+  ///   - index is greater than the value returned by
+  ///     CountSubDescriptors\(\).)
+
+
+AD_XMETHOD2(GetSubDescriptorAt,
+
+			[in],
+			objPass,
+			aafUInt32,
+			index,
+			index of subdescriptor to retrieve,
+
+			[out\, retval],
+			objOut,
+			AAFSubDescriptor,
+			ppSubDescriptor,
+			returned subdescriptor,
+
+     Retrieves the subdescriptor at the given index.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pSubDescriptor pointer is valid.
+  /// - index is less than the value returned by CountSubDescriptors\(\).
+  /// 
+  /// If this method fails no state will be changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pSubDescriptor is null.
+  ///
+  /// AAFRESULT_BADINDEX
+  ///   - index is greater than or equal to the value returned by
+  ///     CountSubDescriptors\(\).)
+
+
+AD_XMETHOD1(RemoveSubDescriptorAt,
+
+			[in],
+			objPass,
+			aafUInt32,
+			index,
+			index of subdescriptor to remove,
+
+     Removes the subdescriptor at the given index.  SubDescriptors already
+  /// existing at indices higher than the given index will be moved to
+  /// the next lower index to accommodate.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - index is less than the value returned by CountSubDescriptors\(\).
+  /// 
+  /// If this method fails no state will be changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_BADINDEX
+  ///   - index is greater than or equal to the value returned by
+  ///     CountSubDescriptors\(\).)
+
+
+AD_XMETHOD1(GetSubDescriptors,
+			[out],
+			objOut,
+			EnumAAFSubDescriptors,
+			ppEnum,
+			An enumerator to the subdescriptors on this essence descriptor,
+
+			Returns an enumerator to the subdescriptors.  The number of subdescriptors
+  /// may be zero if the essence is in the current file.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the ppEnum pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *ppEnum.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - ppEnum is null.)
 AD_XCLASS_END(Abstract, StoredObject)

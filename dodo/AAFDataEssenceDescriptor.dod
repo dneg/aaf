@@ -1,0 +1,97 @@
+#c *********************************************************************
+#c
+#c $Id$ $Name$
+#c
+#c The contents of this file are subject to the AAF SDK Public
+#c Source License Agreement (the "License"); You may not use this file
+#c except in compliance with the License.  The License is available in
+#c AAFSDKPSL.TXT, or you may obtain a copy of the License from the AAF
+#c Association or its successor.
+#c
+#c Software distributed under the License is distributed on an "AS IS"
+#c basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.  See
+#c the License for the specific language governing rights and limitations
+#c under the License.
+#c
+#c The Original Code of this file is Copyright 1998-2005, Licensor of the
+#c AAF Association.
+#c
+#c The Initial Developer of the Original Code of this file and the
+#c Licensor of the AAF Association is Avid Technology.
+#c All rights reserved.
+#c
+#c *********************************************************************
+#startm .this-module 0
+AAFDataEssenceDescriptor\
+#endm
+#c
+#startm .parent-module 0
+AAFFileDescriptor\
+#endm
+#c
+#c #import ./AAFFileDescriptor.exp
+AD_HEAD
+AD_IDL(///
+
+/// AAFRESULT_NOMEMORY
+///   - insufficient system memory is available to perform the
+///     operation.
+///
+/// AAFRESULT_NOT_INITIALIZED
+///   - This object has not yet had Initialize\(\) called on it through
+///     this object's primary interface.  Note that
+///     IAAFDigitalImageDescriptor is a primary interface for an
+///     abstract class\, so it is not appropriate for the
+///     Initialize\(\) method to exist in this interface.  The
+///     Initialize\(\) method is available through the concrete
+///     object's primary interface.
+///)
+
+AD_CLASS_UUID(0bcccb62, d720, 45e6, 80, 00, 3c, 21, 4f, 63, d8, 99)
+
+AD_DEFAULT_UUID(28aef97c, 5127, 4435, 98, c8, ba, f9, 06, b5, a6, a9)
+
+AD_XCLASS_BEGIN(Abstract, StoredObject)
+
+AD_XMETHOD1(SetDataEssenceCoding,
+			[in],
+				objPass,
+				aafUID_constref,
+				dataEssenceCoding,
+				Optional.,
+			Sets the DataEssenceCoding property
+  /// This property is optional.  
+  /// 
+  /// If this method fails the Data Definition property will not be
+  /// changed.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\))
+
+
+AD_XMETHOD1(GetDataEssenceCoding,
+			[out],
+				objPass,
+				aafUID_t *,
+				pDataEssenceCoding,
+				Optional.,
+			Gets the DataEssenceCoding property
+  /// information of the video essence data.  This property is
+  /// optional.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pDataEssenceCoding pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *pDataEssenceCoding.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pDataEssenceCoding arg is NULL.)
+
+AD_XCLASS_END(Abstract, StoredObject)
