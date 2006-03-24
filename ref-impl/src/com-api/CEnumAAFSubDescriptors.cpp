@@ -26,8 +26,8 @@
 
 
 
-#include "CEnumAAFRIFFChunk.h"
-#include "ImplEnumAAFRIFFChunk.h"
+#include "CEnumAAFSubDescriptors.h"
+#include "ImplEnumAAFSubDescriptors.h"
 #include "AAFResult.h"
 #include "CAAFEnumValidation.h"
 
@@ -38,64 +38,62 @@
 #include <string.h>
 
 
+#include "CAAFSubDescriptor.h"
+#include "ImplAAFSubDescriptor.h"
 
-#include "CAAFRIFFChunk.h"
-#include "ImplAAFRIFFChunk.h"
 
-
-// CLSID for EnumAAFRIFFChunk 
-// {ac3a788e-7814-43a6-8826-f3491e2489cf}
-EXTERN_C const CLSID CLSID_EnumAAFRIFFChunk = { 0xac3a788e, 0x7814, 0x43a6, { 0x88, 0x26, 0xf3, 0x49, 0x1e, 0x24, 0x89, 0xcf } };
-
+// CLSID for EnumAAFSubDescriptors 
+// {08406d65-14d9-4681-8346-8a342c9b8ba6}
+EXTERN_C const CLSID CLSID_EnumAAFSubDescriptors = { 0x08406d65, 0x14d9, 0x4681, { 0x83, 0x46, 0x8a, 0x34, 0x2c, 0x9b, 0x8b, 0xa6 } };
 
 
 
 
-CEnumAAFRIFFChunk::CEnumAAFRIFFChunk (IUnknown * pControllingUnknown, aafBool doInit)
+
+CEnumAAFSubDescriptors::CEnumAAFSubDescriptors (IUnknown * pControllingUnknown, aafBool doInit)
   : CAAFRoot (pControllingUnknown, kAAFFalse)
 {
   if (doInit)
     {
-      ImplEnumAAFRIFFChunk * newRep;
-      newRep = new ImplEnumAAFRIFFChunk;
+      ImplEnumAAFSubDescriptors * newRep;
+      newRep = new ImplEnumAAFSubDescriptors;
       assert (newRep);
       InitRep (newRep);
     }
 }
 
 
-CEnumAAFRIFFChunk::~CEnumAAFRIFFChunk ()
+CEnumAAFSubDescriptors::~CEnumAAFSubDescriptors ()
 {
 }
 
 
-
 HRESULT STDMETHODCALLTYPE
-    CEnumAAFRIFFChunk::NextOne (IAAFRIFFChunk ** ppRIFFChunk)
+    CEnumAAFSubDescriptors::NextOne (IAAFSubDescriptor ** ppSubDescriptor)
 {
   HRESULT hr;
 
-  ImplEnumAAFRIFFChunk * ptr;
+  ImplEnumAAFSubDescriptors * ptr;
   ImplAAFRoot * pO;
   pO = GetRepObject ();
   assert (pO);
-  ptr = static_cast<ImplEnumAAFRIFFChunk*> (pO);
+  ptr = static_cast<ImplEnumAAFSubDescriptors*> (pO);
   assert (ptr);
 
   //
-  // set up for ppRIFFChunk
+  // set up for ppSubDescriptor
   //
-  ImplAAFRIFFChunk * internalppRIFFChunk = NULL;
-  ImplAAFRIFFChunk ** pinternalppRIFFChunk = NULL;
-  if (ppRIFFChunk)
+  ImplAAFSubDescriptor * internalppSubDescriptor = NULL;
+  ImplAAFSubDescriptor ** pinternalppSubDescriptor = NULL;
+  if (ppSubDescriptor)
     {
-      pinternalppRIFFChunk = &internalppRIFFChunk;
+      pinternalppSubDescriptor = &internalppSubDescriptor;
     }
 
   try
     {
       hr = ptr->NextOne
-       (pinternalppRIFFChunk);
+       (pinternalppSubDescriptor);
     }
   catch (OMException& e)
     {
@@ -127,59 +125,60 @@ HRESULT STDMETHODCALLTYPE
     }
 
   //
-  // cleanup for ppRIFFChunk
+  // cleanup for ppSubDescriptor
   //
   if (SUCCEEDED(hr))
     {
       IUnknown *pUnknown;
       HRESULT hStat;
 
-      if (internalppRIFFChunk)
+      if (internalppSubDescriptor)
         {
-          pUnknown = static_cast<IUnknown *> (internalppRIFFChunk->GetContainer());
-          hStat = pUnknown->QueryInterface(IID_IAAFRIFFChunk, (void **)ppRIFFChunk);
+          pUnknown = static_cast<IUnknown *> (internalppSubDescriptor->GetContainer());
+          hStat = pUnknown->QueryInterface(IID_IAAFSubDescriptor, (void **)ppSubDescriptor);
           assert (SUCCEEDED (hStat));
           //pUnknown->Release();
-          internalppRIFFChunk->ReleaseReference(); // We are through with this pointer.
+          internalppSubDescriptor->ReleaseReference(); // We are through with this pointer.
         }
     }
   return hr;
 }
 
 
+
 HRESULT STDMETHODCALLTYPE
-    CEnumAAFRIFFChunk::Next (aafUInt32  count,
-        IAAFRIFFChunk ** ppRIFFChunk,
+    CEnumAAFSubDescriptors::Next (aafUInt32  count,
+        IAAFSubDescriptor ** ppSubDescriptors,
         aafUInt32 *  pFetched)
 {
   HRESULT hr;
 
-  ImplEnumAAFRIFFChunk * ptr;
+  ImplEnumAAFSubDescriptors * ptr;
   ImplAAFRoot * pO;
   pO = GetRepObject ();
   assert (pO);
-  ptr = static_cast<ImplEnumAAFRIFFChunk*> (pO);
+  ptr = static_cast<ImplEnumAAFSubDescriptors*> (pO);
   assert (ptr);
 
   //
-  // set up for ppRIFFChunk
+  // set up for ppSubDescriptors
   //
-  ImplAAFRIFFChunk ** internalppRIFFChunk = NULL;
+  ImplAAFSubDescriptor ** internalppSubDescriptors = NULL;
   assert (count >= 0);
-  internalppRIFFChunk = new ImplAAFRIFFChunk*[count];
-  assert (internalppRIFFChunk);
+  internalppSubDescriptors = new ImplAAFSubDescriptor*[count];
+  assert (internalppSubDescriptors);
 
-  ImplAAFRIFFChunk ** pinternalppRIFFChunk = NULL;
-  if (ppRIFFChunk)
+  ImplAAFSubDescriptor ** pinternalppSubDescriptors = NULL;
+  if (ppSubDescriptors)
     {
-      pinternalppRIFFChunk = internalppRIFFChunk;
+      pinternalppSubDescriptors = internalppSubDescriptors;
     }
 
   try
     {
       hr = ptr->Next
        (count,
-        pinternalppRIFFChunk,
+        pinternalppSubDescriptors,
         pFetched);
     }
   catch (OMException& e)
@@ -212,7 +211,7 @@ HRESULT STDMETHODCALLTYPE
     }
 
   //
-  // cleanup for ppRIFFChunk
+  // cleanup for ppSubDescriptors
   //
   if (SUCCEEDED(hr)||hr==AAFRESULT_NO_MORE_OBJECTS)
     {
@@ -222,29 +221,30 @@ HRESULT STDMETHODCALLTYPE
 	  assert (count >= 0);
 	  for (localIdx = 0; localIdx < *pFetched; localIdx++)
 		{
-		  pUnknown = static_cast<IUnknown *> (internalppRIFFChunk[localIdx]->GetContainer());
-		  hStat = pUnknown->QueryInterface(IID_IAAFRIFFChunk, (void **)(ppRIFFChunk+localIdx));
+		  pUnknown = static_cast<IUnknown *> (internalppSubDescriptors[localIdx]->GetContainer());
+		  hStat = pUnknown->QueryInterface(IID_IAAFSubDescriptor, (void **)(ppSubDescriptors+localIdx));
 		  assert (SUCCEEDED (hStat));
 		  //pUnknown->Release();
-		  internalppRIFFChunk[localIdx]->ReleaseReference(); // We are through with this pointer.
+		  internalppSubDescriptors[localIdx]->ReleaseReference(); // We are through with this pointer.
 		}
     }
-  delete[] internalppRIFFChunk;
-  internalppRIFFChunk = 0;
+  delete[] internalppSubDescriptors;
+  internalppSubDescriptors = 0;
   return hr;
 }
 
 
+
 HRESULT STDMETHODCALLTYPE
-    CEnumAAFRIFFChunk::Skip (aafUInt32  count)
+    CEnumAAFSubDescriptors::Skip (aafUInt32  count)
 {
   HRESULT hr;
 
-  ImplEnumAAFRIFFChunk * ptr;
+  ImplEnumAAFSubDescriptors * ptr;
   ImplAAFRoot * pO;
   pO = GetRepObject ();
   assert (pO);
-  ptr = static_cast<ImplEnumAAFRIFFChunk*> (pO);
+  ptr = static_cast<ImplEnumAAFSubDescriptors*> (pO);
   assert (ptr);
 
 
@@ -286,14 +286,15 @@ HRESULT STDMETHODCALLTYPE
 }
 
 
+
 HRESULT STDMETHODCALLTYPE
-    CEnumAAFRIFFChunk::Reset ()
+    CEnumAAFSubDescriptors::Reset ()
 {
-  ImplEnumAAFRIFFChunk * ptr;
+  ImplEnumAAFSubDescriptors * ptr;
   ImplAAFRoot * pO;
   pO = GetRepObject ();
   assert (pO);
-  ptr = static_cast<ImplEnumAAFRIFFChunk*> (pO);
+  ptr = static_cast<ImplEnumAAFSubDescriptors*> (pO);
   assert (ptr);
   HRESULT hr;
 
@@ -334,23 +335,24 @@ HRESULT STDMETHODCALLTYPE
 }
 
 
+
 HRESULT STDMETHODCALLTYPE
-    CEnumAAFRIFFChunk::Clone (IEnumAAFRIFFChunk ** ppEnum)
+    CEnumAAFSubDescriptors::Clone (IEnumAAFSubDescriptors ** ppEnum)
 {
   HRESULT hr;
 
-  ImplEnumAAFRIFFChunk * ptr;
+  ImplEnumAAFSubDescriptors * ptr;
   ImplAAFRoot * pO;
   pO = GetRepObject ();
   assert (pO);
-  ptr = static_cast<ImplEnumAAFRIFFChunk*> (pO);
+  ptr = static_cast<ImplEnumAAFSubDescriptors*> (pO);
   assert (ptr);
 
   //
   // set up for ppEnum
   //
-  ImplEnumAAFRIFFChunk * internalppEnum = NULL;
-  ImplEnumAAFRIFFChunk ** pinternalppEnum = NULL;
+  ImplEnumAAFSubDescriptors * internalppEnum = NULL;
+  ImplEnumAAFSubDescriptors ** pinternalppEnum = NULL;
   if (ppEnum)
     {
       pinternalppEnum = &internalppEnum;
@@ -401,7 +403,7 @@ HRESULT STDMETHODCALLTYPE
       if (internalppEnum)
         {
           pUnknown = static_cast<IUnknown *> (internalppEnum->GetContainer());
-          hStat = pUnknown->QueryInterface(IID_IEnumAAFRIFFChunk, (void **)ppEnum);
+          hStat = pUnknown->QueryInterface(IID_IEnumAAFSubDescriptors, (void **)ppEnum);
           assert (SUCCEEDED (hStat));
           //pUnknown->Release();
           internalppEnum->ReleaseReference(); // We are through with this pointer.
@@ -410,7 +412,6 @@ HRESULT STDMETHODCALLTYPE
   return hr;
 }
 
-
 //
 // 
 // 
@@ -418,7 +419,7 @@ inline int EQUAL_UID(const GUID & a, const GUID & b)
 {
   return (0 == memcmp((&a), (&b), sizeof (aafUID_t)));
 }
-HRESULT CEnumAAFRIFFChunk::InternalQueryInterface
+HRESULT CEnumAAFSubDescriptors::InternalQueryInterface
 (
     REFIID riid,
     void **ppvObj)
@@ -427,9 +428,9 @@ HRESULT CEnumAAFRIFFChunk::InternalQueryInterface
         return E_INVALIDARG;
 
     // We only support the IClassFactory interface 
-    if (EQUAL_UID(riid,IID_IEnumAAFRIFFChunk)) 
+    if (EQUAL_UID(riid,IID_IEnumAAFSubDescriptors)) 
     { 
-        *ppvObj = (IEnumAAFRIFFChunk *)this; 
+        *ppvObj = (IEnumAAFSubDescriptors *)this; 
         ((IUnknown *)*ppvObj)->AddRef();
         return S_OK;
     }
@@ -441,5 +442,5 @@ HRESULT CEnumAAFRIFFChunk::InternalQueryInterface
 //
 // Define the contrete object support implementation.
 // 
-AAF_DEFINE_FACTORY(EnumAAFRIFFChunk)
+AAF_DEFINE_FACTORY(EnumAAFSubDescriptors)
 

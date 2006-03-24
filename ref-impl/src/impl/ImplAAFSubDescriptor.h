@@ -1,7 +1,7 @@
 //@doc
-//@class    EnumAAFRIFFChunk | Implementation class for EnumAAFRIFFChunk
-#ifndef __ImplEnumAAFRIFFChunk_h__
-#define __ImplEnumAAFRIFFChunk_h__
+//@class    AAFSubDescriptor | Implementation class for AAFSubDescriptor
+#ifndef __ImplAAFSubDescriptor_h__
+#define __ImplAAFSubDescriptor_h__
 
 //=---------------------------------------------------------------------=
 //
@@ -30,12 +30,35 @@
 
 
 
-#include "ImplAAFEnumerator.h"
 
-#include "ImplAAFRIFFChunk.h"
 
-typedef ImplAAFEnumerator<ImplAAFRIFFChunk> ImplEnumAAFRIFFChunk;
 
-#endif // ! __ImplEnumAAFRIFFChunk_h__
+
+
+
+
+
+#ifndef __ImplAAFObject_h__
+#include "ImplAAFObject.h"
+#endif
+
+
+class ImplAAFSubDescriptor : public ImplAAFObject
+{
+public:
+  //
+  // Constructor/destructor
+  //
+  //********
+  ImplAAFSubDescriptor ();
+
+protected:
+  virtual ~ImplAAFSubDescriptor ();
+
+
+
+};
+
+#endif // ! __ImplAAFSubDescriptor_h__
 
 

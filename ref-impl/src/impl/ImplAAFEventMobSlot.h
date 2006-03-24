@@ -66,6 +66,22 @@ public:
         (aafRational_t *  pEditRate);
 
 
+  //****************
+  // GetEventSlotOrigin()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetEventSlotOrigin
+        // @parm [out,retval] EventSlotOrigin property value
+        (aafPosition_t *  result);
+
+  //****************
+  // SetEventSlotOrigin()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    SetEventSlotOrigin
+        // @parm [in] EventSlotOrigin property value
+        (aafPosition_t  value);
+
 
 
 
@@ -75,6 +91,7 @@ public:
 
 protected:
   OMFixedSizeProperty<aafRational_t>	_editRate;
+  OMFixedSizeProperty<aafPosition_t>	_eventSlotOrigin;
 };
 
 #endif // ! __ImplAAFEventMobSlot_h__

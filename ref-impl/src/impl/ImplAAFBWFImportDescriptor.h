@@ -28,7 +28,7 @@
 //=---------------------------------------------------------------------=
 
 
-#include "ImplEnumAAFRIFFChunk.h"
+#include "ImplEnumAAFRIFFChunks.h"
 #include "ImplAAFRIFFChunk.h"
 
 #include "OMStrongRefVectorProperty.h"
@@ -144,7 +144,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     GetUnknownBWFChunks
         // @parm [out] RIFFChunk objects
-        (ImplEnumAAFRIFFChunk ** ppEnum);
+        (ImplEnumAAFRIFFChunks ** ppEnum);
 
 
   //****************

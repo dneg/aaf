@@ -126,7 +126,25 @@ public:
     GetContainerFormat
 		// @parm [out] Identifies the file format
         (ImplAAFContainerDef **ppDef);
+  
+  
+  //****************
+  // SetLinkedSlotID()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    SetLinkedSlotID
+		// @parm [in] Integer value.
+        (aafUInt32  linkedSlotID);
 
+
+  //****************
+  // GetLinkedSlotID()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetLinkedSlotID
+		// @parm [out] Address to store the integer value.
+        (aafUInt32 *  pLinkedSlotID);
+        
 public:
 	// Functions internal to the toolkit
 	virtual AAFRESULT STDMETHODCALLTYPE
@@ -137,6 +155,7 @@ private:
 	OMFixedSizeProperty<aafLength_t>	_length;
 	OMWeakReferenceProperty<ImplAAFCodecDef> _codecDef;
 	OMWeakReferenceProperty<ImplAAFContainerDef> _containerFmt;
+	OMFixedSizeProperty<aafUInt32>			_linkedSlotID;
 };
 
 #endif // ! __ImplAAFFileDescriptor_h__

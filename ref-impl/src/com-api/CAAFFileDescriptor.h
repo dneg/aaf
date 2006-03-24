@@ -247,6 +247,60 @@ public:
     // Optional 
     /*[out]*/ IAAFContainerDef ** pFormat);
 
+
+  //***********************************************************
+  //
+  // SetLinkedSlotID()
+  //
+  // Sets the LinkedSlotID property.  
+  ///
+  ///
+  /// This property is optional.  The default value is 0.
+  ///
+  /// If this method fails, the LinkedSlotID property will not
+  /// be changed.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
+  //
+  STDMETHOD (SetLinkedSlotID) (
+    // Integer value. 
+    /*[in]*/ aafUInt32  LinkedSlotID);
+
+
+  //***********************************************************
+  //
+  // GetLinkedSlotID()
+  //
+  // Gets the LinkedSlotID property. 
+  ///
+  ///
+  /// Succeeds if all of the following are true:
+  /// - pLinkedSlotID is a valid pointer.
+  /// 
+  /// If this method fails, *pLinkedSlotID will not be changed.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pLinkedSlotID arg is NULL.
+  //
+  STDMETHOD (GetLinkedSlotID) (
+    // Address to store the integer value. 
+    /*[out]*/ aafUInt32 *  pLinkedSlotID);
+
+
 protected:
   // 
   // Declare the QI that implements for the interfaces

@@ -114,6 +114,53 @@ public:
     // Edit rate property value 
     /*[in]*/ aafRational_t *  pEditRate);
 
+  //***********************************************************
+  //
+  // GetEventSlotOrigin()
+  //
+  // This method will return the EventSlotOrigin of this mob slot.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pEventSlotOrigin pointer is valid.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pEventSlotOrigin arg is NULL.
+  //
+  STDMETHOD (GetEventSlotOrigin) (
+    // EventSlotOrigin property value 
+    /*[out,retval]*/ aafPosition_t *  pEventSlotOrigin);
+
+
+  //***********************************************************
+  //
+  // SetEventSlotOrigin()
+  //
+  // This method will set the EventSlotOrigin of this mob slot.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.).
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
+  //
+  STDMETHOD (SetEventSlotOrigin) (
+    // EventSlotOrigin property value 
+    /*[in]*/ aafPosition_t  eventSlotOrigin);
+
 
 
 

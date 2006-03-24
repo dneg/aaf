@@ -84,6 +84,7 @@ private:
 
   // EventMobSlot static data
   static const aafRational_t _editRate;
+  static const aafPosition_t _eventSlotOrigin;
   // Event static data
   static const aafPosition_t _position;
   static const wchar_t* _slotName;
@@ -160,6 +161,7 @@ extern "C" HRESULT CAAFEventMobSlot_test(testMode_t mode)
 
 // Test edit rate for the event mob slot.
 const aafRational_t EventMobSlotTest::_editRate = { 2997, 100 };
+const aafPosition_t EventMobSlotTest::_eventSlotOrigin = 0;
 const aafPosition_t EventMobSlotTest::_position = 0;
 const wchar_t *_eventComment = L"Event::Comment:This is a test event";
 
@@ -359,6 +361,7 @@ void EventMobSlotTest::CreateEventMobSlot()
 				CreateInstance(IID_IAAFEventMobSlot, 
 							   (IUnknown **)&pEventMobSlot));
     checkResult(pEventMobSlot->SetEditRate(const_cast<aafRational_t *>(&_editRate)));
+    checkResult(pEventMobSlot->SetEventSlotOrigin(_eventSlotOrigin));
 
     // Get the mob slot interface so that we can add the event segment.
     checkResult(pEventMobSlot->QueryInterface(IID_IAAFMobSlot, (void **)&pMobSlot));
@@ -439,6 +442,7 @@ void EventMobSlotTest::OpenEventMobSlot()
   IAAFMobSlot *pMobSlot = NULL;
   IAAFEventMobSlot *pEventMobSlot = NULL;
   aafRational_t editRate = {0};
+  aafPosition_t eventSlotOrigin;
   IAAFSegment *pSegment = NULL;
   IAAFEvent *pEvent = NULL;
 
@@ -454,6 +458,8 @@ void EventMobSlotTest::OpenEventMobSlot()
     checkResult(pMobSlot->QueryInterface(IID_IAAFEventMobSlot, (void **)&pEventMobSlot));
     checkResult(pEventMobSlot->GetEditRate(&editRate));
     checkExpression(0 == memcmp(&editRate, &_editRate, sizeof(editRate)), AAFRESULT_TEST_FAILED);
+    checkResult(pEventMobSlot->GetEventSlotOrigin(&eventSlotOrigin));
+    checkExpression(0 == memcmp(&eventSlotOrigin, &_eventSlotOrigin, sizeof(eventSlotOrigin)), AAFRESULT_TEST_FAILED);
 
     // Get the event slot's segment and check that it is an event.
     checkResult(pMobSlot->GetSegment(&pSegment));
@@ -579,6 +585,7 @@ void EventMobSlotTest::CreateEventSequenceMobSlot()
 				CreateInstance(IID_IAAFEventMobSlot, 
 							   (IUnknown **)&pEventMobSlot));
     checkResult(pEventMobSlot->SetEditRate(const_cast<aafRational_t *>(&_editRate)));
+    checkResult(pEventMobSlot->SetEventSlotOrigin(_eventSlotOrigin));
 
     // Get the mob slot interface so that we can add the event segment.
     checkResult(pEventMobSlot->QueryInterface(IID_IAAFMobSlot, (void **)&pMobSlot));
@@ -671,6 +678,7 @@ void EventMobSlotTest::OpenEventSequenceMobSlot()
   IAAFMobSlot *pMobSlot = NULL;
   IAAFEventMobSlot *pEventMobSlot = NULL;
   aafRational_t editRate = {0};
+  aafPosition_t eventSlotOrigin;
   IAAFSegment *pSegment = NULL;
   IAAFSequence *pSequence = NULL;
 
@@ -686,6 +694,8 @@ void EventMobSlotTest::OpenEventSequenceMobSlot()
     checkResult(pMobSlot->QueryInterface(IID_IAAFEventMobSlot, (void **)&pEventMobSlot));
     checkResult(pEventMobSlot->GetEditRate(&editRate));
     checkExpression(0 == memcmp(&editRate, &_editRate, sizeof(editRate)), AAFRESULT_TEST_FAILED);
+    checkResult(pEventMobSlot->GetEventSlotOrigin(&eventSlotOrigin));
+    checkExpression(0 == memcmp(&eventSlotOrigin, &_eventSlotOrigin, sizeof(eventSlotOrigin)), AAFRESULT_TEST_FAILED);
 
     // Get the event slot's segment and check that it is an event.
     checkResult(pMobSlot->GetSegment(&pSegment));

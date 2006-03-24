@@ -26,8 +26,8 @@
 
 
 
-#include "CAAFEventMobSlot.h"
-#include "ImplAAFEventMobSlot.h"
+#include "CAAFDescriptiveClip.h"
+#include "ImplAAFDescriptiveClip.h"
 #include "AAFResult.h"
 #include "CAAFEnumValidation.h"
 
@@ -39,49 +39,130 @@
 
 
 
-// CLSID for AAFEventMobSlot 
-// {e684d765-b935-11d2-bf9d-00104bc9156d}
-EXTERN_C const CLSID CLSID_AAFEventMobSlot = { 0xe684d765, 0xb935, 0x11d2, { 0xbf, 0x9d, 0x00, 0x10, 0x4b, 0xc9, 0x15, 0x6d } };
+// CLSID for AAFDescriptiveClip 
+// {fcc3639d-7ee5-4fe4-8bb3-b810c0e9e600}
+EXTERN_C const CLSID CLSID_AAFDescriptiveClip = { 0xfcc3639d, 0x7ee5, 0x4fe4, { 0x8b, 0xb3, 0xb8, 0x10, 0xc0, 0xe9, 0xe6, 0x00 } };
 
 
 
 
 
-CAAFEventMobSlot::CAAFEventMobSlot (IUnknown * pControllingUnknown, aafBool doInit)
-  : CAAFMobSlot (pControllingUnknown, kAAFFalse)
+
+CAAFDescriptiveClip::CAAFDescriptiveClip (IUnknown * pControllingUnknown, aafBool doInit)
+  : CAAFSourceClip (pControllingUnknown, kAAFFalse)
 {
   if (doInit)
     {
-      ImplAAFEventMobSlot * newRep;
-      newRep = new ImplAAFEventMobSlot;
+      ImplAAFDescriptiveClip * newRep;
+      newRep = new ImplAAFDescriptiveClip;
       assert (newRep);
       InitRep (newRep);
     }
 }
 
 
-CAAFEventMobSlot::~CAAFEventMobSlot ()
+CAAFDescriptiveClip::~CAAFDescriptiveClip ()
 {
 }
 
 
+
 HRESULT STDMETHODCALLTYPE
-    CAAFEventMobSlot::GetEditRate (aafRational_t *  pEditRate)
+    CAAFDescriptiveClip::Initialize (IAAFDataDef * pDataDef,
+        aafLength_constref  length,
+        aafSourceRef_t  sourceRef)
 {
   HRESULT hr;
 
-  ImplAAFEventMobSlot * ptr;
+  ImplAAFDescriptiveClip * ptr;
   ImplAAFRoot * pO;
   pO = GetRepObject ();
   assert (pO);
-  ptr = static_cast<ImplAAFEventMobSlot*> (pO);
+  ptr = static_cast<ImplAAFDescriptiveClip*> (pO);
+  assert (ptr);
+
+  //
+  // set up for pDataDef
+  //
+  ImplAAFDataDef * internalpDataDef = NULL;
+  if (pDataDef)
+    {
+      HRESULT hStat;
+      IAAFRoot * iObj;
+      ImplAAFRoot *arg;
+      hStat = pDataDef->QueryInterface (IID_IAAFRoot, (void **)&iObj);
+      assert (SUCCEEDED (hStat));
+      assert (iObj);
+      hStat = iObj->GetImplRep((void **)&arg);
+      assert (SUCCEEDED (hStat));
+      iObj->Release(); // we are through with this interface pointer.
+      internalpDataDef = static_cast<ImplAAFDataDef*>(arg);
+      assert (internalpDataDef);
+    }
+
+  try
+    {
+      hr = ptr->Initialize
+       (internalpDataDef,
+        length,
+        sourceRef);
+    }
+  catch (OMException& e)
+    {
+      // OMExceptions should be handled by the impl code. However, if an
+      // unhandled OMException occurs, control reaches here. We must not
+      // allow the unhandled exception to reach the client code, so we
+      // turn it into a failure status code.
+      //
+      // If the OMException contains an HRESULT, it is returned to the
+      // client, if not, AAFRESULT_UNEXPECTED_EXCEPTION is returned.
+      //
+      hr = OMExceptionToResult(e, AAFRESULT_UNEXPECTED_EXCEPTION);
+    }
+  catch (OMAssertionViolation &)
+    {
+      // Control reaches here if there is a programming error in the
+      // impl code that was detected by an assertion violation.
+      // We must not allow the assertion to reach the client code so
+      // here we turn it into a failure status code.
+      //
+      hr = AAFRESULT_ASSERTION_VIOLATION;
+    }
+  catch (...)
+    {
+      // We CANNOT throw an exception out of a COM interface method!
+      // Return a reasonable exception code.
+      //
+      hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+    }
+
+  //
+  // no cleanup necessary for pDataDef
+  //
+  return hr;
+}
+
+
+
+HRESULT STDMETHODCALLTYPE
+    CAAFDescriptiveClip::SetSourceTrackIDs (aafUInt32  numberElements,
+        aafUInt32*  pSourceTrackIDs)
+{
+  HRESULT hr;
+
+  ImplAAFDescriptiveClip * ptr;
+  ImplAAFRoot * pO;
+  pO = GetRepObject ();
+  assert (pO);
+  ptr = static_cast<ImplAAFDescriptiveClip*> (pO);
   assert (ptr);
 
 
   try
     {
-      hr = ptr->GetEditRate
-       (pEditRate);
+      hr = ptr->SetSourceTrackIDs
+       (numberElements,
+        pSourceTrackIDs);
     }
   catch (OMException& e)
     {
@@ -118,22 +199,24 @@ HRESULT STDMETHODCALLTYPE
 
 
 HRESULT STDMETHODCALLTYPE
-    CAAFEventMobSlot::SetEditRate (aafRational_t *  pEditRate)
+    CAAFDescriptiveClip::GetSourceTrackIDs (aafUInt32  numberElements,
+        aafUInt32*  pSourceTrackIDs)
 {
   HRESULT hr;
 
-  ImplAAFEventMobSlot * ptr;
+  ImplAAFDescriptiveClip * ptr;
   ImplAAFRoot * pO;
   pO = GetRepObject ();
   assert (pO);
-  ptr = static_cast<ImplAAFEventMobSlot*> (pO);
+  ptr = static_cast<ImplAAFDescriptiveClip*> (pO);
   assert (ptr);
 
 
   try
     {
-      hr = ptr->SetEditRate
-       (pEditRate);
+      hr = ptr->GetSourceTrackIDs
+       (numberElements,
+        pSourceTrackIDs);
     }
   catch (OMException& e)
     {
@@ -169,22 +252,22 @@ HRESULT STDMETHODCALLTYPE
 
 
 HRESULT STDMETHODCALLTYPE
-    CAAFEventMobSlot::GetEventSlotOrigin (aafPosition_t *  pEventSlotOrigin)
+    CAAFDescriptiveClip::GetSourceTrackIDsSize (aafUInt32 *  numberElements)
 {
   HRESULT hr;
 
-  ImplAAFEventMobSlot * ptr;
+  ImplAAFDescriptiveClip * ptr;
   ImplAAFRoot * pO;
   pO = GetRepObject ();
   assert (pO);
-  ptr = static_cast<ImplAAFEventMobSlot*> (pO);
+  ptr = static_cast<ImplAAFDescriptiveClip*> (pO);
   assert (ptr);
 
 
   try
     {
-      hr = ptr->GetEventSlotOrigin
-       (pEventSlotOrigin);
+      hr = ptr->GetSourceTrackIDsSize
+       (numberElements);
     }
   catch (OMException& e)
     {
@@ -217,60 +300,6 @@ HRESULT STDMETHODCALLTYPE
 
   return hr;
 }
-
-
-
-HRESULT STDMETHODCALLTYPE
-    CAAFEventMobSlot::SetEventSlotOrigin (aafPosition_t  eventSlotOrigin)
-{
-  HRESULT hr;
-
-  ImplAAFEventMobSlot * ptr;
-  ImplAAFRoot * pO;
-  pO = GetRepObject ();
-  assert (pO);
-  ptr = static_cast<ImplAAFEventMobSlot*> (pO);
-  assert (ptr);
-
-
-  try
-    {
-      hr = ptr->SetEventSlotOrigin
-       (eventSlotOrigin);
-    }
-  catch (OMException& e)
-    {
-      // OMExceptions should be handled by the impl code. However, if an
-      // unhandled OMException occurs, control reaches here. We must not
-      // allow the unhandled exception to reach the client code, so we
-      // turn it into a failure status code.
-      //
-      // If the OMException contains an HRESULT, it is returned to the
-      // client, if not, AAFRESULT_UNEXPECTED_EXCEPTION is returned.
-      //
-      hr = OMExceptionToResult(e, AAFRESULT_UNEXPECTED_EXCEPTION);
-    }
-  catch (OMAssertionViolation &)
-    {
-      // Control reaches here if there is a programming error in the
-      // impl code that was detected by an assertion violation.
-      // We must not allow the assertion to reach the client code so
-      // here we turn it into a failure status code.
-      //
-      hr = AAFRESULT_ASSERTION_VIOLATION;
-    }
-  catch (...)
-    {
-      // We CANNOT throw an exception out of a COM interface method!
-      // Return a reasonable exception code.
-      //
-      hr = AAFRESULT_UNEXPECTED_EXCEPTION;
-    }
-
-  return hr;
-}
-
-
 
 
 //
@@ -280,7 +309,7 @@ inline int EQUAL_UID(const GUID & a, const GUID & b)
 {
   return (0 == memcmp((&a), (&b), sizeof (aafUID_t)));
 }
-HRESULT CAAFEventMobSlot::InternalQueryInterface
+HRESULT CAAFDescriptiveClip::InternalQueryInterface
 (
     REFIID riid,
     void **ppvObj)
@@ -289,19 +318,19 @@ HRESULT CAAFEventMobSlot::InternalQueryInterface
         return E_INVALIDARG;
 
     // We only support the IClassFactory interface 
-    if (EQUAL_UID(riid,IID_IAAFEventMobSlot)) 
+    if (EQUAL_UID(riid,IID_IAAFDescriptiveClip)) 
     { 
-        *ppvObj = (IAAFEventMobSlot *)this; 
+        *ppvObj = (IAAFDescriptiveClip *)this; 
         ((IUnknown *)*ppvObj)->AddRef();
         return S_OK;
     }
 
     // Always delegate back to base implementation.
-    return CAAFMobSlot::InternalQueryInterface(riid, ppvObj);
+    return CAAFSourceClip::InternalQueryInterface(riid, ppvObj);
 }
 
 //
 // Define the contrete object support implementation.
 // 
-AAF_DEFINE_FACTORY(AAFEventMobSlot)
+AAF_DEFINE_FACTORY(AAFDescriptiveClip)
 

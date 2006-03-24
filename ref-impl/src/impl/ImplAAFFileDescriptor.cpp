@@ -43,12 +43,14 @@ ImplAAFFileDescriptor::ImplAAFFileDescriptor ()
 : _sampleRate(			PID_FileDescriptor_SampleRate,		L"SampleRate"),
  _length(				PID_FileDescriptor_Length,			L"Length"),
  _codecDef(				PID_FileDescriptor_CodecDefinition,		L"CodecDefinition", L"/Header/Dictionary/CodecDefinitions", PID_DefinitionObject_Identification),
- _containerFmt(         PID_FileDescriptor_ContainerFormat,	L"ContainerFormat", L"/Header/Dictionary/ContainerDefinitions", PID_DefinitionObject_Identification)
+ _containerFmt(         PID_FileDescriptor_ContainerFormat,	L"ContainerFormat", L"/Header/Dictionary/ContainerDefinitions", PID_DefinitionObject_Identification),
+ _linkedSlotID(				PID_FileDescriptor_LinkedSlotID,			L"LinkedSlotID")
 {
   _persistentProperties.put(_sampleRate.address());
   _persistentProperties.put(_length.address());
   _persistentProperties.put(_codecDef.address());
   _persistentProperties.put(_containerFmt.address());
+  _persistentProperties.put(_linkedSlotID.address());
 }
 
 
@@ -171,4 +173,24 @@ AAFRESULT STDMETHODCALLTYPE
 	return(AAFRESULT_SUCCESS);
 }
 
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFFileDescriptor::SetLinkedSlotID (aafUInt32 linkedSlotID)
+{
+	_linkedSlotID = linkedSlotID;
 
+	return AAFRESULT_SUCCESS;
+}
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFFileDescriptor::GetLinkedSlotID (aafUInt32* pLinkedSlotID)
+{
+	if (pLinkedSlotID == NULL)
+		return AAFRESULT_NULL_PARAM;
+
+	if(!_linkedSlotID.isPresent())
+		return AAFRESULT_PROP_NOT_PRESENT;
+
+	*pLinkedSlotID = _linkedSlotID;
+
+	return AAFRESULT_SUCCESS;
+}

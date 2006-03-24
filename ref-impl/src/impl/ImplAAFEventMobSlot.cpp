@@ -51,9 +51,11 @@ typedef ImplAAFSmartPointer<ImplAAFDataDef> ImplAAFDataDefSP;
 
 
 ImplAAFEventMobSlot::ImplAAFEventMobSlot ():
-  _editRate(PID_EventMobSlot_EditRate,	L"EditRate")
+  _editRate(PID_EventMobSlot_EditRate,	L"EditRate"),
+  _eventSlotOrigin(PID_EventMobSlot_EventSlotOrigin,	L"EventSlotOrigin")
 {
   _persistentProperties.put(_editRate.address());
+  _persistentProperties.put(_eventSlotOrigin.address());
 }
 
 
@@ -85,6 +87,26 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFEventMobSlot::GetEventSlotOrigin (aafPosition_t *pEventSlotOrigin)
+{
+	if ( pEventSlotOrigin == NULL )
+		return AAFRESULT_NULL_PARAM;
+
+	if ( !_eventSlotOrigin.isPresent() )
+		return AAFRESULT_PROP_NOT_PRESENT;
+
+	*pEventSlotOrigin = _eventSlotOrigin;
+	return AAFRESULT_SUCCESS;
+}
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFEventMobSlot::SetEventSlotOrigin (aafPosition_t eventSlotOrigin)
+{
+	_eventSlotOrigin = eventSlotOrigin;
+
+	return AAFRESULT_SUCCESS;
+}
 
 
 

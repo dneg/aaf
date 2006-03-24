@@ -47,6 +47,7 @@ static const 	aafMobID_t	TEST_MobID =
 static aafRational_t	checkSampleRate = { 2997, 100 };
 static aafUID_t			checkContainer = ContainerFile;
 static aafLength_t		checkLength = 42;
+static aafUInt32			checkLinkedSlotID = 5;
 
 // convenient error handlers.
 inline void checkResult(HRESULT r)
@@ -146,6 +147,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		pContainer = NULL;
 
 		checkResult(pFileDesc->SetLength (checkLength));
+		checkResult(pFileDesc->SetLinkedSlotID (checkLinkedSlotID));
 //		checkResult(pFileDesc->SetIsInContainer (kAAFTrue));
 		
 		checkResult(pSourceMob->SetEssenceDescriptor (edesc));
@@ -208,6 +210,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	aafRational_t				testSampleRate;
 	aafUID_t					testContainer;
 	aafLength_t					testLength;
+	aafUInt32					testLinkedSlotID;
 //	aafBool						testBool;
 	
 	
@@ -269,6 +272,8 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 			checkExpression(memcmp(&testContainer, &checkContainer, sizeof(testContainer)) == 0, AAFRESULT_TEST_FAILED);
 			checkResult(pFileDesc->GetLength (&testLength));
 			checkExpression(checkLength == testLength, AAFRESULT_TEST_FAILED);
+			checkResult(pFileDesc->GetLinkedSlotID (&testLinkedSlotID));
+			checkExpression(checkLinkedSlotID == testLinkedSlotID, AAFRESULT_TEST_FAILED);
 //			checkResult(pFileDesc->GetIsInContainer (&testBool));
 //			checkExpression(testBool == kAAFTrue, AAFRESULT_TEST_FAILED);
 			

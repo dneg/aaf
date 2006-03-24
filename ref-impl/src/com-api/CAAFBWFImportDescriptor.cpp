@@ -449,7 +449,7 @@ HRESULT STDMETHODCALLTYPE
 
 
 HRESULT STDMETHODCALLTYPE
-    CAAFBWFImportDescriptor::GetUnknownBWFChunks (IEnumAAFRIFFChunk ** ppEnum)
+    CAAFBWFImportDescriptor::GetUnknownBWFChunks (IEnumAAFRIFFChunks ** ppEnum)
 {
   HRESULT hr;
 
@@ -463,8 +463,8 @@ HRESULT STDMETHODCALLTYPE
   //
   // set up for ppEnum
   //
-  ImplEnumAAFRIFFChunk * internalppEnum = NULL;
-  ImplEnumAAFRIFFChunk ** pinternalppEnum = NULL;
+  ImplEnumAAFRIFFChunks * internalppEnum = NULL;
+  ImplEnumAAFRIFFChunks ** pinternalppEnum = NULL;
   if (ppEnum)
     {
       pinternalppEnum = &internalppEnum;
@@ -515,7 +515,7 @@ HRESULT STDMETHODCALLTYPE
       if (internalppEnum)
         {
           pUnknown = static_cast<IUnknown *> (internalppEnum->GetContainer());
-          hStat = pUnknown->QueryInterface(IID_IEnumAAFRIFFChunk, (void **)ppEnum);
+          hStat = pUnknown->QueryInterface(IID_IEnumAAFRIFFChunks, (void **)ppEnum);
           assert (SUCCEEDED (hStat));
           //pUnknown->Release();
           internalppEnum->ReleaseReference(); // We are through with this pointer.

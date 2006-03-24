@@ -272,6 +272,217 @@ public:
     // An enumerator to the locators on this essence descriptor 
     /*[out]*/ IEnumAAFLocators ** ppEnum);
 
+
+  //***********************************************************
+  //
+  // CountSubDescriptors()
+  //
+  // Return the number of subdescriptors attached to this essence
+  /// descriptor.  The number of subdescriptors may be zero if the essence is
+  /// in the current file.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pCount pointer is valid.
+  /// 
+  /// If this method fails nothing is written to *pCount.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pCount is null.
+  //
+  STDMETHOD (CountSubDescriptors) (
+    // Returns the number of subdescriptors 
+    /*[out]*/ aafUInt32 *  pResult);
+
+
+  //***********************************************************
+  //
+  // AppendSubDescriptor()
+  //
+  // Append another subdescriptor to this essence descriptor.  Use this
+  /// function to add a subdescriptor to be scanned last when searching for
+  /// the essence (a secondary location for the essence).
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pSubDescriptor pointer is valid.
+  /// 
+  /// If this method fails no state will be changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pSubDescriptor is null.
+  //
+  STDMETHOD (AppendSubDescriptor) (
+    // SubDescriptor to append 
+    /*[in]*/ IAAFSubDescriptor * pSubDescriptors);
+
+
+  //***********************************************************
+  //
+  // PrependSubDescriptor()
+  //
+  // Prepend another subdescriptor to this essence descriptor.  Use this
+  /// function to add a subdescriptor to be scanned first when searching for
+  /// the essence (a new primary location for the essence).
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pSubDescriptor pointer is valid.
+  /// 
+  /// If this method fails no state will be changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pSubDescriptor is null.
+  //
+  STDMETHOD (PrependSubDescriptor) (
+    // SubDescriptor to append 
+    /*[in]*/ IAAFSubDescriptor * pSubDescriptor);
+
+
+  //***********************************************************
+  //
+  // InsertSubDescriptorAt()
+  //
+  // Inserts the given subdescriptor at the given index.  SubDescriptors already
+  /// existing at the given and higher indices will be moved to the
+  /// next higher index to accommodate.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pSubDescriptor pointer is valid.
+  /// - index is less than or equal to the value returned by
+  ///   CountSubDescriptors().
+  /// 
+  /// If this method fails no state will be changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pSubDescriptor is null.
+  ///
+  /// AAFRESULT_BADINDEX
+  ///   - index is greater than the value returned by
+  ///     CountSubDescriptors().
+  //
+  STDMETHOD (InsertSubDescriptorAt) (
+    // index at which subdescriptor is to be inserted
+    /*[in]*/ aafUInt32  index,
+
+    // SubDescriptor to append
+    /*[in]*/ IAAFSubDescriptor * pSubDescriptor);
+
+
+  //***********************************************************
+  //
+  // GetSubDescriptorAt()
+  //
+  // Retrieves the subdescriptor at the given index.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pSubDescriptor pointer is valid.
+  /// - index is less than the value returned by CountSubDescriptors().
+  /// 
+  /// If this method fails no state will be changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pSubDescriptor is null.
+  ///
+  /// AAFRESULT_BADINDEX
+  ///   - index is greater than or equal to the value returned by
+  ///     CountSubDescriptors().
+  //
+  STDMETHOD (GetSubDescriptorAt) (
+    // index of subdescriptor to retrieve
+    /*[in]*/ aafUInt32  index,
+
+    // returned subdescriptor
+    /*[out, retval]*/ IAAFSubDescriptor ** ppSubDescriptor);
+
+
+  //***********************************************************
+  //
+  // RemoveSubDescriptorAt()
+  //
+  // Removes the subdescriptor at the given index.  SubDescriptors already
+  /// existing at indices higher than the given index will be moved to
+  /// the next lower index to accommodate.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - index is less than the value returned by CountSubDescriptors().
+  /// 
+  /// If this method fails no state will be changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_BADINDEX
+  ///   - index is greater than or equal to the value returned by
+  ///     CountSubDescriptors().
+  //
+  STDMETHOD (RemoveSubDescriptorAt) (
+    // index of subdescriptor to remove 
+    /*[in]*/ aafUInt32  index);
+
+
+  //***********************************************************
+  //
+  // GetSubDescriptors()
+  //
+  // Returns an enumerator to the subdescriptors.  The number of subdescriptors
+  /// may be zero if the essence is in the current file.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the ppEnum pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *ppEnum.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - ppEnum is null.
+  //
+  STDMETHOD (GetSubDescriptors) (
+    // An enumerator to the subdescriptors on this essence descriptor 
+    /*[out]*/ IEnumAAFSubDescriptors ** ppEnum);
+
 protected:
   // 
   // Declare the QI that implements for the interfaces

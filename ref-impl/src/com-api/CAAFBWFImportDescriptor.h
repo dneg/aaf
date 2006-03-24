@@ -246,7 +246,7 @@ public:
   //
   // Return the enumeration for all RIFFChunk objects on this component.  The returned
   /// enumerator is AddRef()ed before it is returned.  The enumerator
-  /// is implemented as a EnumAAFRIFFChunk.
+  /// is implemented as a EnumAAFRIFFChunks.
   /// 
   /// Succeeds if all of the following are true:
   /// - the ppEnum pointer is valid.
@@ -265,7 +265,7 @@ public:
   //
   STDMETHOD (GetUnknownBWFChunks) (
     // RIFFChunk objects 
-    /*[out]*/ IEnumAAFRIFFChunk ** ppEnum);
+    /*[out]*/ IEnumAAFRIFFChunks ** ppEnum);
 
 
   //***********************************************************

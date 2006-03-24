@@ -26,8 +26,8 @@
 
 
 
-#include "CAAFEventMobSlot.h"
-#include "ImplAAFEventMobSlot.h"
+#include "CAAFDataEssenceDescriptor.h"
+#include "ImplAAFDataEssenceDescriptor.h"
 #include "AAFResult.h"
 #include "CAAFEnumValidation.h"
 
@@ -39,49 +39,51 @@
 
 
 
-// CLSID for AAFEventMobSlot 
-// {e684d765-b935-11d2-bf9d-00104bc9156d}
-EXTERN_C const CLSID CLSID_AAFEventMobSlot = { 0xe684d765, 0xb935, 0x11d2, { 0xbf, 0x9d, 0x00, 0x10, 0x4b, 0xc9, 0x15, 0x6d } };
+// CLSID for AAFDataEssenceDescriptor 
+// {0bcccb62-d720-45e6-8000-3c214f63d899}
+EXTERN_C const CLSID CLSID_AAFDataEssenceDescriptor = { 0x0bcccb62, 0xd720, 0x45e6, { 0x80, 0x00, 0x3c, 0x21, 0x4f, 0x63, 0xd8, 0x99 } };
 
 
 
 
 
-CAAFEventMobSlot::CAAFEventMobSlot (IUnknown * pControllingUnknown, aafBool doInit)
-  : CAAFMobSlot (pControllingUnknown, kAAFFalse)
+
+CAAFDataEssenceDescriptor::CAAFDataEssenceDescriptor (IUnknown * pControllingUnknown, aafBool doInit)
+  : CAAFFileDescriptor (pControllingUnknown, kAAFFalse)
 {
   if (doInit)
     {
-      ImplAAFEventMobSlot * newRep;
-      newRep = new ImplAAFEventMobSlot;
+      ImplAAFDataEssenceDescriptor * newRep;
+      newRep = new ImplAAFDataEssenceDescriptor;
       assert (newRep);
       InitRep (newRep);
     }
 }
 
 
-CAAFEventMobSlot::~CAAFEventMobSlot ()
+CAAFDataEssenceDescriptor::~CAAFDataEssenceDescriptor ()
 {
 }
 
 
+
 HRESULT STDMETHODCALLTYPE
-    CAAFEventMobSlot::GetEditRate (aafRational_t *  pEditRate)
+    CAAFDataEssenceDescriptor::SetDataEssenceCoding (aafUID_constref  dataEssenceCoding)
 {
   HRESULT hr;
 
-  ImplAAFEventMobSlot * ptr;
+  ImplAAFDataEssenceDescriptor * ptr;
   ImplAAFRoot * pO;
   pO = GetRepObject ();
   assert (pO);
-  ptr = static_cast<ImplAAFEventMobSlot*> (pO);
+  ptr = static_cast<ImplAAFDataEssenceDescriptor*> (pO);
   assert (ptr);
 
 
   try
     {
-      hr = ptr->GetEditRate
-       (pEditRate);
+      hr = ptr->SetDataEssenceCoding
+       (dataEssenceCoding);
     }
   catch (OMException& e)
     {
@@ -118,22 +120,22 @@ HRESULT STDMETHODCALLTYPE
 
 
 HRESULT STDMETHODCALLTYPE
-    CAAFEventMobSlot::SetEditRate (aafRational_t *  pEditRate)
+    CAAFDataEssenceDescriptor::GetDataEssenceCoding (aafUID_t *  pDataEssenceCoding)
 {
   HRESULT hr;
 
-  ImplAAFEventMobSlot * ptr;
+  ImplAAFDataEssenceDescriptor * ptr;
   ImplAAFRoot * pO;
   pO = GetRepObject ();
   assert (pO);
-  ptr = static_cast<ImplAAFEventMobSlot*> (pO);
+  ptr = static_cast<ImplAAFDataEssenceDescriptor*> (pO);
   assert (ptr);
 
 
   try
     {
-      hr = ptr->SetEditRate
-       (pEditRate);
+      hr = ptr->GetDataEssenceCoding
+       (pDataEssenceCoding);
     }
   catch (OMException& e)
     {
@@ -166,111 +168,6 @@ HRESULT STDMETHODCALLTYPE
 
   return hr;
 }
-
-
-HRESULT STDMETHODCALLTYPE
-    CAAFEventMobSlot::GetEventSlotOrigin (aafPosition_t *  pEventSlotOrigin)
-{
-  HRESULT hr;
-
-  ImplAAFEventMobSlot * ptr;
-  ImplAAFRoot * pO;
-  pO = GetRepObject ();
-  assert (pO);
-  ptr = static_cast<ImplAAFEventMobSlot*> (pO);
-  assert (ptr);
-
-
-  try
-    {
-      hr = ptr->GetEventSlotOrigin
-       (pEventSlotOrigin);
-    }
-  catch (OMException& e)
-    {
-      // OMExceptions should be handled by the impl code. However, if an
-      // unhandled OMException occurs, control reaches here. We must not
-      // allow the unhandled exception to reach the client code, so we
-      // turn it into a failure status code.
-      //
-      // If the OMException contains an HRESULT, it is returned to the
-      // client, if not, AAFRESULT_UNEXPECTED_EXCEPTION is returned.
-      //
-      hr = OMExceptionToResult(e, AAFRESULT_UNEXPECTED_EXCEPTION);
-    }
-  catch (OMAssertionViolation &)
-    {
-      // Control reaches here if there is a programming error in the
-      // impl code that was detected by an assertion violation.
-      // We must not allow the assertion to reach the client code so
-      // here we turn it into a failure status code.
-      //
-      hr = AAFRESULT_ASSERTION_VIOLATION;
-    }
-  catch (...)
-    {
-      // We CANNOT throw an exception out of a COM interface method!
-      // Return a reasonable exception code.
-      //
-      hr = AAFRESULT_UNEXPECTED_EXCEPTION;
-    }
-
-  return hr;
-}
-
-
-
-HRESULT STDMETHODCALLTYPE
-    CAAFEventMobSlot::SetEventSlotOrigin (aafPosition_t  eventSlotOrigin)
-{
-  HRESULT hr;
-
-  ImplAAFEventMobSlot * ptr;
-  ImplAAFRoot * pO;
-  pO = GetRepObject ();
-  assert (pO);
-  ptr = static_cast<ImplAAFEventMobSlot*> (pO);
-  assert (ptr);
-
-
-  try
-    {
-      hr = ptr->SetEventSlotOrigin
-       (eventSlotOrigin);
-    }
-  catch (OMException& e)
-    {
-      // OMExceptions should be handled by the impl code. However, if an
-      // unhandled OMException occurs, control reaches here. We must not
-      // allow the unhandled exception to reach the client code, so we
-      // turn it into a failure status code.
-      //
-      // If the OMException contains an HRESULT, it is returned to the
-      // client, if not, AAFRESULT_UNEXPECTED_EXCEPTION is returned.
-      //
-      hr = OMExceptionToResult(e, AAFRESULT_UNEXPECTED_EXCEPTION);
-    }
-  catch (OMAssertionViolation &)
-    {
-      // Control reaches here if there is a programming error in the
-      // impl code that was detected by an assertion violation.
-      // We must not allow the assertion to reach the client code so
-      // here we turn it into a failure status code.
-      //
-      hr = AAFRESULT_ASSERTION_VIOLATION;
-    }
-  catch (...)
-    {
-      // We CANNOT throw an exception out of a COM interface method!
-      // Return a reasonable exception code.
-      //
-      hr = AAFRESULT_UNEXPECTED_EXCEPTION;
-    }
-
-  return hr;
-}
-
-
 
 
 //
@@ -280,7 +177,7 @@ inline int EQUAL_UID(const GUID & a, const GUID & b)
 {
   return (0 == memcmp((&a), (&b), sizeof (aafUID_t)));
 }
-HRESULT CAAFEventMobSlot::InternalQueryInterface
+HRESULT CAAFDataEssenceDescriptor::InternalQueryInterface
 (
     REFIID riid,
     void **ppvObj)
@@ -289,19 +186,18 @@ HRESULT CAAFEventMobSlot::InternalQueryInterface
         return E_INVALIDARG;
 
     // We only support the IClassFactory interface 
-    if (EQUAL_UID(riid,IID_IAAFEventMobSlot)) 
+    if (EQUAL_UID(riid,IID_IAAFDataEssenceDescriptor)) 
     { 
-        *ppvObj = (IAAFEventMobSlot *)this; 
+        *ppvObj = (IAAFDataEssenceDescriptor *)this; 
         ((IUnknown *)*ppvObj)->AddRef();
         return S_OK;
     }
 
     // Always delegate back to base implementation.
-    return CAAFMobSlot::InternalQueryInterface(riid, ppvObj);
+    return CAAFFileDescriptor::InternalQueryInterface(riid, ppvObj);
 }
 
 //
 // Define the contrete object support implementation.
 // 
-AAF_DEFINE_FACTORY(AAFEventMobSlot)
-
+AAF_DEFINE_FACTORY(AAFDataEssenceDescriptor)
