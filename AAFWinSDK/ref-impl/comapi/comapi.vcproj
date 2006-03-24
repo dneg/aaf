@@ -161,6 +161,9 @@
 	</References>
 	<Files>
 		<File
+			RelativePath="..\..\..\ref-impl\src\com-api\AAFCLSIDs.h">
+		</File>
+		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\com-dll\AAFCOM.cpp">
 			<FileConfiguration
 				Name="Release|Win32">
@@ -307,7 +310,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\..\ref-impl\src\com-api\CAAFCDCIDescriptor.cpp">
+			RelativePath="..\..\..\ref-impl\src\com-api\CAAFCachePageAllocator.cpp">
 			<FileConfiguration
 				Name="Release|Win32">
 				<Tool
@@ -328,7 +331,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\..\ref-impl\src\com-api\CAAFCachePageAllocator.cpp">
+			RelativePath="..\..\..\ref-impl\src\com-api\CAAFCDCIDescriptor.cpp">
 			<FileConfiguration
 				Name="Release|Win32">
 				<Tool
@@ -580,6 +583,9 @@
 			</FileConfiguration>
 		</File>
 		<File
+			RelativePath="..\..\..\ref-impl\src\com-api\CAAFDataEssenceDescriptor.cpp">
+		</File>
+		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFDefObject.cpp">
 			<FileConfiguration
 				Name="Release|Win32">
@@ -599,6 +605,9 @@
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\..\..\ref-impl\src\com-api\CAAFDescriptiveClip.cpp">
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFDescriptiveFramework.cpp">
@@ -2239,6 +2248,9 @@
 			</FileConfiguration>
 		</File>
 		<File
+			RelativePath="..\..\..\ref-impl\src\com-api\CAAFSubDescriptor.cpp">
+		</File>
+		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFTaggedValue.cpp">
 			<FileConfiguration
 				Name="Release|Win32">
@@ -3478,25 +3490,7 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\..\ref-impl\src\com-api\CEnumAAFRIFFChunk.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
-					ForcedIncludeFiles=""/>
-			</FileConfiguration>
+			RelativePath="..\..\..\ref-impl\src\com-api\CEnumAAFRIFFChunks.cpp">
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CEnumAAFSegments.cpp">
@@ -3539,6 +3533,9 @@
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\..\..\ref-impl\src\com-api\CEnumAAFSubDescriptors.cpp">
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CEnumAAFTaggedValueDefs.cpp">

@@ -218,7 +218,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFCDCIDescriptorTest.cpp">
+				RelativePath="..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFCachePageAllocatorTest.cpp">
 				<FileConfiguration
 					Name="Release|Win32">
 					<Tool
@@ -239,7 +239,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFCachePageAllocatorTest.cpp">
+				RelativePath="..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFCDCIDescriptorTest.cpp">
 				<FileConfiguration
 					Name="Release|Win32">
 					<Tool
@@ -470,6 +470,9 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFDataEssenceDescriptorTest.cpp">
+			</File>
+			<File
 				RelativePath="..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFDefObjectTest.cpp">
 				<FileConfiguration
 					Name="Release|Win32">
@@ -489,6 +492,9 @@
 						PreprocessorDefinitions=""
 						ForcedIncludeFiles=""/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFDescriptiveClipTest.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFDescriptiveFrameworkTest.cpp">
@@ -1880,6 +1886,9 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFSubDescriptorTest.cpp">
+			</File>
+			<File
 				RelativePath="..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFTaggedValueDefinitionTest.cpp">
 				<FileConfiguration
 					Name="Release|Win32">
@@ -3014,25 +3023,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\..\test\com\ComModTestAAF\ModuleTests\CEnumAAFRIFFChunkTest.cpp">
-				<FileConfiguration
-					Name="Release|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="2"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-						ForcedIncludeFiles=""/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						Optimization="0"
-						AdditionalIncludeDirectories=""
-						PreprocessorDefinitions=""
-						ForcedIncludeFiles=""/>
-				</FileConfiguration>
+				RelativePath="..\..\..\..\test\com\ComModTestAAF\ModuleTests\CEnumAAFRIFFChunksTest.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\..\test\com\ComModTestAAF\ModuleTests\CEnumAAFSegmentsTest.cpp">
@@ -3054,6 +3045,9 @@
 						PreprocessorDefinitions=""
 						ForcedIncludeFiles=""/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\..\test\com\ComModTestAAF\ModuleTests\CEnumAAFSubDescriptorsTest.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\..\test\com\ComModTestAAF\ModuleTests\CEnumAAFTaggedValueDefsTest.cpp">

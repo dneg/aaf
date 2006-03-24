@@ -124,6 +124,9 @@
 	</References>
 	<Files>
 		<File
+			RelativePath="..\..\..\ref-impl\src\impl\AAFClassIDs.h">
+		</File>
+		<File
 			RelativePath="..\..\..\ref-impl\src\impl\aafErr.cpp">
 			<FileConfiguration
 				Name="Debug|Win32">
@@ -248,6 +251,9 @@
 					PreprocessorDefinitions=""
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
+		</File>
+		<File
+			RelativePath=".\Impl.rc">
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFAES3PCMDescriptor.cpp">
@@ -691,6 +697,9 @@
 			</FileConfiguration>
 		</File>
 		<File
+			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFDataEssenceDescriptor.cpp">
+		</File>
+		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFDefObject.cpp">
 			<FileConfiguration
 				Name="Debug|Win32">
@@ -710,6 +719,9 @@
 					PreprocessorDefinitions=""
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFDescriptiveClip.cpp">
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFDescriptiveFramework.cpp">
@@ -2455,6 +2467,9 @@
 			</FileConfiguration>
 		</File>
 		<File
+			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFSubDescriptor.cpp">
+		</File>
+		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFTaggedValue.cpp">
 			<FileConfiguration
 				Name="Debug|Win32">
@@ -3818,6 +3833,9 @@
 					PreprocessorDefinitions=""
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
+		</File>
+		<File
+			RelativePath=".\resource.h">
 		</File>
 		<File
 			RelativePath="stdafx.cpp">
