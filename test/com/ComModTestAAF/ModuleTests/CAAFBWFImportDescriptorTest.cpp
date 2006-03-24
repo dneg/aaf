@@ -251,7 +251,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	IAAFMob*					pMob = NULL;
 	IAAFEssenceDescriptor*		pEssDesc = NULL;
 	IAAFBWFImportDescriptor*	pBWFImportDesc = NULL;
-	IEnumAAFRIFFChunk*			pEnum = NULL;
+	IEnumAAFRIFFChunks*			pEnum = NULL;
 	IAAFRIFFChunk*				pRIFFChunk = NULL;
 	IAAFRIFFChunk*				pRIFFChunkTest = NULL;
 	IEnumAAFMobs*				pMobIter = NULL;
