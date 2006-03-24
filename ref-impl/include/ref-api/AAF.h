@@ -56,7 +56,9 @@ interface IAAFContainerDef;
 interface IAAFContentStorage;
 interface IAAFControlPoint;
 interface IAAFDataDef;
+interface IAAFDataEssenceDescriptor;
 interface IAAFDefObject;
+interface IAAFDescriptiveClip;
 interface IAAFDescriptiveFramework;
 interface IAAFDescriptiveMarker;
 interface IAAFDescriptiveObject;
@@ -122,6 +124,7 @@ interface IAAFSourceClip;
 interface IAAFSourceMob;
 interface IAAFSourceReference;
 interface IAAFStaticMobSlot;
+interface IAAFSubDescriptor;
 interface IAAFTIFFDescriptor;
 interface IAAFTaggedValue;
 interface IAAFTaggedValueDefinition;
@@ -176,8 +179,9 @@ interface IEnumAAFPluginLocators;
 interface IEnumAAFProperties;
 interface IEnumAAFPropertyDefs;
 interface IEnumAAFPropertyValues;
-interface IEnumAAFRIFFChunk;
+interface IEnumAAFRIFFChunks;
 interface IEnumAAFSegments;
+interface IEnumAAFSubDescriptors;
 interface IEnumAAFTaggedValueDefs;
 interface IEnumAAFTaggedValues;
 interface IEnumAAFTypeDefs;
@@ -220,7 +224,9 @@ typedef interface IAAFContainerDef IAAFContainerDef;
 typedef interface IAAFContentStorage IAAFContentStorage;
 typedef interface IAAFControlPoint IAAFControlPoint;
 typedef interface IAAFDataDef IAAFDataDef;
+typedef interface IAAFDataEssenceDescriptor IAAFDataEssenceDescriptor;
 typedef interface IAAFDefObject IAAFDefObject;
+typedef interface IAAFDescriptiveClip IAAFDescriptiveClip;
 typedef interface IAAFDescriptiveFramework IAAFDescriptiveFramework;
 typedef interface IAAFDescriptiveMarker IAAFDescriptiveMarker;
 typedef interface IAAFDescriptiveObject IAAFDescriptiveObject;
@@ -286,6 +292,7 @@ typedef interface IAAFSourceClip IAAFSourceClip;
 typedef interface IAAFSourceMob IAAFSourceMob;
 typedef interface IAAFSourceReference IAAFSourceReference;
 typedef interface IAAFStaticMobSlot IAAFStaticMobSlot;
+typedef interface IAAFSubDescriptor IAAFSubDescriptor;
 typedef interface IAAFTIFFDescriptor IAAFTIFFDescriptor;
 typedef interface IAAFTaggedValue IAAFTaggedValue;
 typedef interface IAAFTaggedValueDefinition IAAFTaggedValueDefinition;
@@ -340,8 +347,9 @@ typedef interface IEnumAAFPluginLocators IEnumAAFPluginLocators;
 typedef interface IEnumAAFProperties IEnumAAFProperties;
 typedef interface IEnumAAFPropertyDefs IEnumAAFPropertyDefs;
 typedef interface IEnumAAFPropertyValues IEnumAAFPropertyValues;
-typedef interface IEnumAAFRIFFChunk IEnumAAFRIFFChunk;
+typedef interface IEnumAAFRIFFChunks IEnumAAFRIFFChunks;
 typedef interface IEnumAAFSegments IEnumAAFSegments;
+typedef interface IEnumAAFSubDescriptors IEnumAAFSubDescriptors;
 typedef interface IEnumAAFTaggedValueDefs IEnumAAFTaggedValueDefs;
 typedef interface IEnumAAFTaggedValues IEnumAAFTaggedValues;
 typedef interface IEnumAAFTypeDefs IEnumAAFTypeDefs;
@@ -1064,7 +1072,7 @@ DECLARE_INTERFACE_(IAAFBWFImportDescriptor, IUnknown)
   //
   /// Return the enumeration for all RIFFChunk objects on this component.  The returned
   /// enumerator is AddRef()ed before it is returned.  The enumerator
-  /// is implemented as a EnumAAFRIFFChunk.
+  /// is implemented as a EnumAAFRIFFChunks.
   /// 
   /// Succeeds if all of the following are true:
   /// - the ppEnum pointer is valid.
@@ -1084,7 +1092,7 @@ DECLARE_INTERFACE_(IAAFBWFImportDescriptor, IUnknown)
   /// @param ppEnum [out] RIFFChunk objects
   ///
   STDMETHOD(GetUnknownBWFChunks) (THIS_
-    IEnumAAFRIFFChunk ** ppEnum) PURE;
+    IEnumAAFRIFFChunks ** ppEnum) PURE;
 
 
   //***********************************************************
@@ -5159,6 +5167,91 @@ DECLARE_INTERFACE_(IAAFDataDef, IUnknown)
 #endif // __IAAFDataDef_INTERFACE_DEFINED__
 
 
+// IAAFDataEssenceDescriptor
+
+// ************************
+//
+// Interface IAAFDataEssenceDescriptor
+//
+// ************************
+
+
+
+
+#ifndef __IAAFDataEssenceDescriptor_INTERFACE_DEFINED__
+#define __IAAFDataEssenceDescriptor_INTERFACE_DEFINED__
+
+EXTERN_C const IID IID_IAAFDataEssenceDescriptor;
+
+
+#undef  INTERFACE
+#define INTERFACE   IAAFDataEssenceDescriptor
+
+DECLARE_INTERFACE_(IAAFDataEssenceDescriptor, IUnknown)
+{
+  BEGIN_INTERFACE
+
+  /* *** IUnknown methods *** */
+  STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppvObj) PURE;
+  STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
+  STDMETHOD_(ULONG,Release) (THIS) PURE;
+
+  /* *** IAAFDataEssenceDescriptor methods *** */
+
+
+  //***********************************************************
+  //
+  // SetDataEssenceCoding()
+  //
+  /// Sets the DataEssenceCoding property
+  /// This property is optional.  
+  /// 
+  /// If this method fails the Data Definition property will not be
+  /// changed.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// @param dataEssenceCoding [in] Optional.
+  ///
+  STDMETHOD(SetDataEssenceCoding) (THIS_
+    aafUID_constref  dataEssenceCoding) PURE;
+
+
+  //***********************************************************
+  //
+  // GetDataEssenceCoding()
+  //
+  /// Gets the DataEssenceCoding property
+  /// information of the video essence data.  This property is
+  /// optional.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pDataEssenceCoding pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *pDataEssenceCoding.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pDataEssenceCoding arg is NULL.
+  ///
+  /// @param pDataEssenceCoding [out] Optional.
+  ///
+  STDMETHOD(GetDataEssenceCoding) (THIS_
+    aafUID_t *  pDataEssenceCoding) PURE;
+
+
+  END_INTERFACE
+};
+#endif // __IAAFDataEssenceDescriptor_INTERFACE_DEFINED__
+
+
 // IAAFDefObject
 
 // ************************
@@ -5432,6 +5525,151 @@ DECLARE_INTERFACE_(IAAFDefObject, IUnknown)
   END_INTERFACE
 };
 #endif // __IAAFDefObject_INTERFACE_DEFINED__
+
+
+
+// IAAFDescriptiveClip
+
+// ************************
+//
+// Interface IAAFDescriptiveClip
+//
+// ************************
+
+
+
+
+#ifndef __IAAFDescriptiveClip_INTERFACE_DEFINED__
+#define __IAAFDescriptiveClip_INTERFACE_DEFINED__
+
+EXTERN_C const IID IID_IAAFDescriptiveClip;
+
+
+#undef  INTERFACE
+#define INTERFACE   IAAFDescriptiveClip
+
+DECLARE_INTERFACE_(IAAFDescriptiveClip, IUnknown)
+{
+  BEGIN_INTERFACE
+
+  /* *** IUnknown methods *** */
+  STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppvObj) PURE;
+  STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
+  STDMETHOD_(ULONG,Release) (THIS) PURE;
+
+  /* *** IAAFDescriptiveClip methods *** */
+
+
+  //***********************************************************
+  //
+  // Initialize()
+  //
+  /// This method initializes a source clip object with
+  /// the given properties.  Only required properties are set.
+  /// Optional properties are added with separate functions.
+  ///
+  /// Succeds if:
+  /// - This object has not already been Initialize()d.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_ALREADY_INITIALIZED
+  ///   - Initialize() has already been called on this object.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pDataDef argument is NULL.
+  ///
+  /// @param pDataDef [in] Data Definition object
+  /// @param length [in] Length property value
+  /// @param sourceRef [in] Source Reference
+  ///
+  STDMETHOD(Initialize) (THIS_
+    IAAFDataDef * pDataDef,
+    aafLength_constref  length,
+    aafSourceRef_t  sourceRef) PURE;
+
+
+  //***********************************************************
+  //
+  // SetSourceTrackIDs()
+  //
+  /// Specifies the Source Track IDs in the Mob.
+  /// 
+  /// Return codes:
+  ///
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pSourceTrackIDs is null 
+  ///
+  /// This interface is not currently implemented.
+  ///
+  /// @param numberElements [in] Number of elements in the pSourceTrackIDs array
+  /// @param pSourceTrackIDs [in] Array of source track IDs
+  ///
+  STDMETHOD(SetSourceTrackIDs) (THIS_
+    aafUInt32  numberElements,
+    aafUInt32*  pSourceTrackIDs) PURE;
+
+
+  //***********************************************************
+  //
+  // GetSourceTrackIDs()
+  //
+  /// Get the source track IDs that are referenced by this object. 
+  ///
+  /// Return codes:
+  ///
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pSourceTrackIDs is null
+  ///
+  /// AAFRESULT_PROP_NOT_PRESENT
+  ///   - the property is not present
+  ///
+  /// AAFRESULT_SMALLBUF
+  ///   - pSourceTrackIDs is too small
+  ///
+  /// This interface is not currently implemented.
+  ///
+  /// @param numberElements [in] Number of elements in the pSourceTrackIDs array
+  /// @param pSourceTrackIDs [in] Array of channel IDs
+  ///
+  STDMETHOD(GetSourceTrackIDs) (THIS_
+    aafUInt32  numberElements,
+    aafUInt32*  pSourceTrackIDs) PURE;
+
+  //***********************************************************
+  //
+  // GetSourceTrackIDsSize()
+  //
+  /// Get the number of source track IDs stored by this DescriptiveClip.
+  ///
+  /// Return codes:
+  ///
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pSourceTrackIDs is null 
+  ///
+  /// @param numberElements [out] Number of elements in the pSourceTrackIDs array
+  ///
+  STDMETHOD(GetSourceTrackIDsSize) (THIS_
+    aafUInt32 *  numberElements) PURE;
+
+
+  END_INTERFACE
+};
+#endif // __IAAFDescriptiveClip_INTERFACE_DEFINED__
 
 
 
@@ -8289,6 +8527,222 @@ DECLARE_INTERFACE_(IAAFEssenceDescriptor, IUnknown)
   STDMETHOD(GetLocators) (THIS_
     IEnumAAFLocators ** ppEnum) PURE;
 
+
+  //***********************************************************
+  //
+  // CountSubDescriptors()
+  //
+  /// Return the number of subdescriptors attached to this essence
+  /// descriptor.  The number of subdescriptors may be zero if the essence is
+  /// in the current file.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pCount pointer is valid.
+  /// 
+  /// If this method fails nothing is written to *pCount.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pCount is null.
+  ///
+  /// @param pResult [out] Returns the number of subdescriptors
+  ///
+  STDMETHOD(CountSubDescriptors) (THIS_
+    aafUInt32 *  pResult) PURE;
+
+
+  //***********************************************************
+  //
+  // AppendSubDescriptor()
+  //
+  /// Append another subdescriptor to this essence descriptor.  Use this
+  /// function to add a subdescriptor to be scanned last when searching for
+  /// the essence (a secondary location for the essence).
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pSubDescriptor pointer is valid.
+  /// 
+  /// If this method fails no state will be changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pSubDescriptor is null.
+  ///
+  /// @param pSubDescriptors [in] SubDescriptor to append
+  ///
+  STDMETHOD(AppendSubDescriptor) (THIS_
+    IAAFSubDescriptor * pSubDescriptors) PURE;
+
+
+  //***********************************************************
+  //
+  // PrependSubDescriptor()
+  //
+  /// Prepend another subdescriptor to this essence descriptor.  Use this
+  /// function to add a subdescriptor to be scanned first when searching for
+  /// the essence (a new primary location for the essence).
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pSubDescriptor pointer is valid.
+  /// 
+  /// If this method fails no state will be changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pSubDescriptor is null.
+  ///
+  /// @param pSubDescriptor [in] SubDescriptor to append
+  ///
+  STDMETHOD(PrependSubDescriptor) (THIS_
+    IAAFSubDescriptor * pSubDescriptor) PURE;
+
+
+  //***********************************************************
+  //
+  // InsertSubDescriptorAt()
+  //
+  /// Inserts the given subdescriptor at the given index.  SubDescriptors already
+  /// existing at the given and higher indices will be moved to the
+  /// next higher index to accommodate.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pSubDescriptor pointer is valid.
+  /// - index is less than or equal to the value returned by
+  ///   CountSubDescriptors().
+  /// 
+  /// If this method fails no state will be changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pSubDescriptor is null.
+  ///
+  /// AAFRESULT_BADINDEX
+  ///   - index is greater than the value returned by
+  ///     CountSubDescriptors().
+  ///
+  /// @param index [in] index at which subdescriptor is to be inserted
+  /// @param pSubDescriptor [in] SubDescriptor to append
+  ///
+  STDMETHOD(InsertSubDescriptorAt) (THIS_
+    aafUInt32  index,
+    IAAFSubDescriptor * pSubDescriptor) PURE;
+
+
+  //***********************************************************
+  //
+  // GetSubDescriptorAt()
+  //
+  /// Retrieves the subdescriptor at the given index.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pSubDescriptor pointer is valid.
+  /// - index is less than the value returned by CountSubDescriptors().
+  /// 
+  /// If this method fails no state will be changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pSubDescriptor is null.
+  ///
+  /// AAFRESULT_BADINDEX
+  ///   - index is greater than or equal to the value returned by
+  ///     CountSubDescriptors().
+  ///
+  /// @param index [in] index of subdescriptor to retrieve
+  /// @param ppSubDescriptor [out, retval] returned subdescriptor
+  ///
+  STDMETHOD(GetSubDescriptorAt) (THIS_
+    aafUInt32  index,
+    IAAFSubDescriptor ** ppSubDescriptor) PURE;
+
+
+  //***********************************************************
+  //
+  // RemoveSubDescriptorAt()
+  //
+  /// Removes the subdescriptor at the given index.  SubDescriptors already
+  /// existing at indices higher than the given index will be moved to
+  /// the next lower index to accommodate.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - index is less than the value returned by CountSubDescriptors().
+  /// 
+  /// If this method fails no state will be changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_BADINDEX
+  ///   - index is greater than or equal to the value returned by
+  ///     CountSubDescriptors().
+  ///
+  /// @param index [in] index of subdescriptor to remove
+  ///
+  STDMETHOD(RemoveSubDescriptorAt) (THIS_
+    aafUInt32  index) PURE;
+
+
+  //***********************************************************
+  //
+  // GetSubDescriptors()
+  //
+  /// Returns an enumerator to the subdescriptors.  The number of subdescriptors
+  /// may be zero if the essence is in the current file.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the ppEnum pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *ppEnum.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - ppEnum is null.
+  ///
+  /// @param ppEnum [out] An enumerator to the subdescriptors on this essence descriptor
+  ///
+  STDMETHOD(GetSubDescriptors) (THIS_
+    IEnumAAFSubDescriptors ** ppEnum) PURE;
+
   END_INTERFACE
 };
 #endif // __IAAFEssenceDescriptor_INTERFACE_DEFINED__
@@ -8958,6 +9412,55 @@ DECLARE_INTERFACE_(IAAFEventMobSlot, IUnknown)
   STDMETHOD(SetEditRate) (THIS_
     aafRational_t *  pEditRate) PURE;
 
+  //***********************************************************
+  //
+  // GetEventSlotOrigin()
+  //
+  /// This method will return the EventSlotOrigin of this mob slot.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pEventSlotOrigin pointer is valid.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pEventSlotOrigin arg is NULL.
+  ///
+  /// @param pEventSlotOrigin [out,retval] EventSlotOrigin property value
+  ///
+  STDMETHOD(GetEventSlotOrigin) (THIS_
+    aafPosition_t *  pEventSlotOrigin) PURE;
+
+
+  //***********************************************************
+  //
+  // SetEventSlotOrigin()
+  //
+  /// This method will set the EventSlotOrigin of this mob slot.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.).
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
+  ///
+  /// @param eventSlotOrigin [in] EventSlotOrigin property value
+  ///
+  STDMETHOD(SetEventSlotOrigin) (THIS_
+    aafPosition_t  eventSlotOrigin) PURE;
+
 
 
 
@@ -9447,6 +9950,62 @@ DECLARE_INTERFACE_(IAAFFileDescriptor, IUnknown)
   ///
   STDMETHOD(GetContainerFormat) (THIS_
     IAAFContainerDef ** pFormat) PURE;
+
+
+  //***********************************************************
+  //
+  // SetLinkedSlotID()
+  //
+  /// Sets the LinkedSlotID property.  
+  ///
+  ///
+  /// This property is optional.  The default value is 0.
+  ///
+  /// If this method fails, the LinkedSlotID property will not
+  /// be changed.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
+  ///
+  /// @param LinkedSlotID [in] Integer value.
+  ///
+  STDMETHOD(SetLinkedSlotID) (THIS_
+    aafUInt32  LinkedSlotID) PURE;
+
+
+  //***********************************************************
+  //
+  // GetLinkedSlotID()
+  //
+  /// Gets the LinkedSlotID property. 
+  ///
+  ///
+  /// Succeeds if all of the following are true:
+  /// - pLinkedSlotID is a valid pointer.
+  /// 
+  /// If this method fails, *pLinkedSlotID will not be changed.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pLinkedSlotID arg is NULL.
+  ///
+  /// @param pLinkedSlotID [out] Address to store the integer value.
+  ///
+  STDMETHOD(GetLinkedSlotID) (THIS_
+    aafUInt32 *  pLinkedSlotID) PURE;
+
 
   END_INTERFACE
 };
@@ -25189,6 +25748,43 @@ DECLARE_INTERFACE_(IAAFStaticMobSlot, IUnknown)
 
 
 
+// IAAFSubDescriptor
+
+// ************************
+//
+// Interface IAAFSubDescriptor
+//
+// ************************
+
+
+
+
+#ifndef __IAAFSubDescriptor_INTERFACE_DEFINED__
+#define __IAAFSubDescriptor_INTERFACE_DEFINED__
+
+EXTERN_C const IID IID_IAAFSubDescriptor;
+
+#undef  INTERFACE
+#define INTERFACE   IAAFSubDescriptor
+
+DECLARE_INTERFACE_(IAAFSubDescriptor, IUnknown)
+{
+  BEGIN_INTERFACE
+
+  /* *** IUnknown methods *** */
+  STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppvObj) PURE;
+  STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
+  STDMETHOD_(ULONG,Release) (THIS) PURE;
+
+  /* *** IAAFSubDescriptor methods *** */
+
+
+  END_INTERFACE
+};
+#endif // __IAAFSubDescriptor_INTERFACE_DEFINED__
+
+
+
 // IAAFTIFFDescriptor
 
 // ************************
@@ -37542,11 +38138,11 @@ DECLARE_INTERFACE_(IEnumAAFPropertyValues, IUnknown)
 
 
 
-// IEnumAAFRIFFChunk
+// IEnumAAFRIFFChunks
 
 // ************************
 //
-// Interface IEnumAAFRIFFChunk
+// Interface IEnumAAFRIFFChunks
 //
 // ************************
 
@@ -37555,15 +38151,15 @@ DECLARE_INTERFACE_(IEnumAAFPropertyValues, IUnknown)
 
 
 
-#ifndef __IEnumAAFRIFFChunk_INTERFACE_DEFINED__
-#define __IEnumAAFRIFFChunk_INTERFACE_DEFINED__
+#ifndef __IEnumAAFRIFFChunks_INTERFACE_DEFINED__
+#define __IEnumAAFRIFFChunks_INTERFACE_DEFINED__
 
-EXTERN_C const IID IID_IEnumAAFRIFFChunk;
+EXTERN_C const IID IID_IEnumAAFRIFFChunks;
 
 #undef  INTERFACE
-#define INTERFACE   IEnumAAFRIFFChunk
+#define INTERFACE   IEnumAAFRIFFChunks
 
-DECLARE_INTERFACE_(IEnumAAFRIFFChunk, IUnknown)
+DECLARE_INTERFACE_(IEnumAAFRIFFChunks, IUnknown)
 {
   BEGIN_INTERFACE
 
@@ -37572,7 +38168,7 @@ DECLARE_INTERFACE_(IEnumAAFRIFFChunk, IUnknown)
   STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
   STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-  /* *** IEnumAAFRIFFChunk methods *** */
+  /* *** IEnumAAFRIFFChunks methods *** */
 
 
   //***********************************************************
@@ -37611,7 +38207,7 @@ DECLARE_INTERFACE_(IEnumAAFRIFFChunk, IUnknown)
   // Skip()
   //
   /// Instructs the enumerator to skip the next count elements in the enumeration so that 
-  /// the next call to EnumAAFRIFFChunk::Next will not return 
+  /// the next call to EnumAAFRIFFChunks::Next will not return 
   /// those elements.
   ///
   /// @param count [in] Number of elements to skip
@@ -37642,12 +38238,12 @@ DECLARE_INTERFACE_(IEnumAAFRIFFChunk, IUnknown)
   /// @param ppEnum [out,retval] new enumeration
   ///
   STDMETHOD(Clone) (THIS_
-    IEnumAAFRIFFChunk ** ppEnum) PURE;
+    IEnumAAFRIFFChunks ** ppEnum) PURE;
 
 
   END_INTERFACE
 };
-#endif // __IEnumAAFRIFFChunk_INTERFACE_DEFINED__
+#endif // __IEnumAAFRIFFChunks_INTERFACE_DEFINED__
 
 
 
@@ -37827,6 +38423,185 @@ DECLARE_INTERFACE_(IEnumAAFSegments, IUnknown)
   END_INTERFACE
 };
 #endif // __IEnumAAFSegments_INTERFACE_DEFINED__
+
+
+
+// IEnumAAFSubDescriptors
+
+// ************************
+//
+// Interface IEnumAAFSubDescriptors
+//
+// ************************
+
+
+
+
+
+#ifndef __IEnumAAFSubDescriptors_INTERFACE_DEFINED__
+#define __IEnumAAFSubDescriptors_INTERFACE_DEFINED__
+
+EXTERN_C const IID IID_IEnumAAFSubDescriptors;
+
+#undef  INTERFACE
+#define INTERFACE   IEnumAAFSubDescriptors
+
+DECLARE_INTERFACE_(IEnumAAFSubDescriptors, IUnknown)
+{
+  BEGIN_INTERFACE
+
+  /* *** IUnknown methods *** */
+  STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppvObj) PURE;
+  STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
+  STDMETHOD_(ULONG,Release) (THIS) PURE;
+
+  /* *** IEnumAAFSubDescriptors methods *** */
+
+  //***********************************************************
+  //
+  // NextOne()
+  //
+  /// Enumerates to the next element in the enumerators list. The
+  /// caller is responsible for properly releasing the returned pointer
+  /// when it is no longer needed.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the ppSubDescriptor pointer is valid.
+  /// - there are SubDescriptor objects remaining to be returned.
+  /// 
+  /// If this method fails nothing is written to *ppSubDescriptor.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - ppSubDescriptor is null.
+  ///
+  /// AAFRESULT_NO_MORE_OBJECTS
+  ///   - no SubDescriptors remaining to be returned.
+  ///
+  /// @param ppSubDescriptor [out,retval] The Next SubDescriptor
+  ///
+  STDMETHOD(NextOne) (THIS_
+    IAAFSubDescriptor ** ppSubDescriptor) PURE;
+
+
+  //***********************************************************
+  //
+  // Next()
+  //
+  /// Enumerates the next count elements (AAFSubDescriptor pointers) in 
+  /// the enumerator's list, returning them in the given array along
+  /// with the actual number of enumerated elements in pcFetched. The
+  /// caller is responsible for properly releasing the returned pointers.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - The ppSubDescriptors pointer is valid.
+  /// - The pNumFetched pointer is valid. If count is 1, pNumFetched can be NULL.
+  /// - There are SubDescriptor objects remaining to be returned.
+  /// 
+  /// If this method fails nothing is written to *ppSubDescriptors or
+  /// pNumFetched.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - either ppSubDescriptors or pNumFetched is null.
+  ///
+  /// @param count [in] number of subdescriptors requested
+  /// @param ppSubDescriptors [out, size_is(count), length_is(*pFetched)] array to receive subdescriptors
+  /// @param pFetched [out,ref] number of actual SubDescriptors fetched into ppSubDescriptors array
+  ///
+  STDMETHOD(Next) (THIS_
+    aafUInt32  count,
+    IAAFSubDescriptor ** ppSubDescriptors,
+    aafUInt32 *  pFetched) PURE;
+
+
+  //***********************************************************
+  //
+  // Skip()
+  //
+  /// Instructs the enumerator to skip the next count elements in the
+  /// enumeration so that the next call to EnumAAFSubDescriptors::Next will
+  /// not return those elements.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - count is less than or equal to the number of remaining objects.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  ///
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.
+  ///
+  /// AAFRESULT_NO_MORE_OBJECTS
+  ///   - count exceeded number of remaining objects.
+  ///
+  /// @param count [in] Number of elements to skip
+  ///
+  STDMETHOD(Skip) (THIS_
+    aafUInt32  count) PURE;
+
+
+  //***********************************************************
+  //
+  // Reset()
+  //
+  /// Instructs the enumerator to position itself at the beginning of
+  /// the list of elements.
+  /// 
+  /// Always succeeds.
+  /// 
+  /// This method will return the following code:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  STDMETHOD(Reset) (THIS) PURE;
+
+
+  //***********************************************************
+  //
+  // Clone()
+  //
+  /// Creates another subdescriptor enumerator with the same state as the
+  /// current enumerator to iterate over the same list. This method
+  /// makes it possible to record a point in the enumeration sequence
+  /// in order to return to that point at a later time.
+  /// Note: The caller must release this new enumerator separately from
+  /// the first enumerator.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the ppEnum pointer is valid.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - ppEnum is null.
+  ///
+  /// @param ppEnum [out,retval] new enumeration
+  ///
+  STDMETHOD(Clone) (THIS_
+    IEnumAAFSubDescriptors ** ppEnum) PURE;
+
+  END_INTERFACE
+};
+#endif // __IEnumAAFSubDescriptors_INTERFACE_DEFINED__
 
 
 
