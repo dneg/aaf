@@ -207,12 +207,12 @@ AD_XMETHOD1(CountUnknownBWFChunks,
 AD_XMETHOD1(GetUnknownBWFChunks,
 			[out],
 			objOut,
-			EnumAAFRIFFChunk,
+			EnumAAFRIFFChunks,
 			ppEnum,
 			RIFFChunk objects,
 			Return the enumeration for all RIFFChunk objects on this component.  The returned
   /// enumerator is AddRef\(\)ed before it is returned.  The enumerator
-  /// is implemented as a EnumAAFRIFFChunk.
+  /// is implemented as a EnumAAFRIFFChunks.
   /// 
   /// Succeeds if all of the following are true:
   /// - the ppEnum pointer is valid.
