@@ -253,9 +253,6 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath=".\Impl.rc">
-		</File>
-		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFAES3PCMDescriptor.cpp">
 			<FileConfiguration
 				Name="Debug|Win32">
