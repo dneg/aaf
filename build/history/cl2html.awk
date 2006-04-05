@@ -104,7 +104,6 @@ function printHeader() {
   printf("<title>%s</title>\n", TITLE);
   printf("</head>\n");
   printf("<body>\n");
-  printKey();
   printf("<h1 align=center>%s</h1>\n", TITLE);
   printf("\
 <table>\n\
@@ -141,6 +140,8 @@ function printValidatesIcon() {
 
 function printTrailer() {
   printf("</table>\n");
+
+  printKey();
 
   printValidatesIcon();
 
