@@ -149,6 +149,7 @@ public:
   //
   // Class Def 'get' methods
   //
+  CLASS_DEF_METHOD(AES3PCMDescriptor);
   CLASS_DEF_METHOD(AIFCDescriptor);
   CLASS_DEF_METHOD(AuxiliaryDescriptor);
   CLASS_DEF_METHOD(BWFImportDescriptor);
