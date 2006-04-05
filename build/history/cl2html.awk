@@ -143,6 +143,8 @@ function printTrailer() {
 
   printKey();
 
+  printf("<a href=\"Changes-index.html\"> index </a>\n");
+
   printValidatesIcon();
 
   printf("</body>\n");
