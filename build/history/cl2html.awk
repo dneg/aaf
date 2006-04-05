@@ -282,15 +282,15 @@ function entry(entrytext) {
     dir = fields[1];
     files = trim(fields[2], 1);
     gsub(" ", "", files);
-    n = split(files, names, ",");
+    n = split(files, fnames, ",");
 #    printf("<!--[%d]-->\n", n);
 #    for (i = 1; i <= n; i++) {
-#      printf("<!--[%d : \"%s\"]-->\n", i, names[i]);
+#      printf("<!--[%d : \"%s\"]-->\n", i, fnames[i]);
 #    }
     /* Insert directory names */
-    files = dir names[1];
+    files = dir fnames[1];
     for (i = 2; i <= n; i++) {
-      files = files ", " dir names[i];
+      files = files ", " dir fnames[i];
     }
     cs = 3; /* Start of comment */
   } else {
