@@ -102,6 +102,38 @@ void AxParameterDef::Initialize( const aafUID_t& uid,
   CHECK_HRESULT( _spIaafParameterDef->Initialize( uid, name.c_str(), desc.c_str(), spIaafTypeDef ) );
 }
 
+IAAFTypeDefSP AxParameterDef::GetTypeDefinition ()
+{
+  IAAFTypeDefSP spIaafTypeDef;
+
+  CHECK_HRESULT( _spIaafParameterDef->GetTypeDefinition( &spIaafTypeDef ) );
+
+  return spIaafTypeDef;
+}
+
+void AxParameterDef::SetDisplayUnits ( const AxString& displayUnits )
+{
+  CHECK_HRESULT( _spIaafParameterDef->SetDisplayUnits( displayUnits.c_str() ) );
+}
+
+AxString AxParameterDef::GetDisplayUnits ()
+{
+  wchar_t checkName[256];
+
+  CHECK_HRESULT( _spIaafParameterDef->GetDisplayUnits( checkName, sizeof(checkName) ) );
+
+  return AxString(checkName);
+}
+
+aafUInt32 AxParameterDef::GetDisplayUnitsBufLen ()
+{
+  aafUInt32 bufSize;
+
+  CHECK_HRESULT( _spIaafParameterDef->GetDisplayUnitsBufLen( &bufSize ) );
+
+  return bufSize;
+}
+
 //=---------------------------------------------------------------------=
 
 AxPluginDef::AxPluginDef( IAAFPluginDefSP spIaafPluginDef )

@@ -97,6 +97,11 @@ public:
 			 const AxString& desc,
 			 IAAFTypeDefSP spIaafTypeDef );
 
+	IAAFTypeDefSP GetTypeDefinition ();
+	void SetDisplayUnits ( const AxString& displayUnits );
+	AxString GetDisplayUnits ();
+	aafUInt32 GetDisplayUnitsBufLen ();
+
 	inline operator IAAFParameterDefSP ()
 	{ return _spIaafParameterDef; }
 
