@@ -74,6 +74,11 @@ class AxConstantValue : public AxParameter {
     }
   }
 
+  aafUInt32 GetValueBufLen();
+
+  IAAFTypeDefSP GetTypeDefinition();
+
+  void SetValue( aafUInt32 valueSize, aafDataBuffer_t pValue );
 
   inline operator IAAFConstantValueSP ()
     { return _spIaafConstantValue; }
@@ -128,6 +133,34 @@ class AxVaryingValue : public AxParameter {
   AxVaryingValue& operator=( const AxVaryingValue& );
 
   IAAFVaryingValueSP _spIaafVaryingValue;
+};
+
+//=---------------------------------------------------------------------=
+
+class AxControlPoint : public AxObject {
+ public:
+  AxControlPoint( IAAFControlPointSP spIaafControlPoint );
+  virtual ~AxControlPoint();
+
+  void Initialize( IAAFVaryingValueSP spIaafVaryingValue, aafRational_constref time, aafUInt32 valueSize, aafDataBuffer_t buffer );
+  aafRational_t GetTime();
+  aafEditHint_t GetEditHint();
+  aafUInt32 GetValueBufLen();
+  aafUInt32 GetValue( aafUInt32 valueSize, aafDataBuffer_t buffer );
+  void SetTime( aafRational_t time );
+  void SetEditHint( aafEditHint_t editHint );
+  IAAFTypeDefSP GetTypeDefinition();
+  void SetValue( aafUInt32 valueSize, aafDataBuffer_t buffer );
+  
+  inline operator IAAFControlPointSP ()
+    { return _spIaafControlPoint; }
+
+ private:
+  AxControlPoint();
+  AxControlPoint( const AxControlPoint& );
+  AxControlPoint& operator=( const AxControlPoint& );
+
+  IAAFControlPointSP _spIaafControlPoint;
 };
 
 #endif
