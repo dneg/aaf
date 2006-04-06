@@ -161,6 +161,12 @@ typedef AxIterator< IAAFSmartPointer2<IAAFPropertyDef>,             IEnumAAFProp
 
 typedef AxIterator< IAAFSmartPointer2<IAAFLocator>,                 IEnumAAFLocators,           AddrOfSmartPointer2<IAAFLocator> >
         AxLocatorIter;
+
+typedef AxIterator< IAAFSmartPointer2<IAAFParameter>,               IEnumAAFParameters,         AddrOfSmartPointer2<IAAFParameter> >
+        AxParameterIter;
+
+typedef AxIterator< IAAFSmartPointer2<IAAFControlPoint>,            IEnumAAFControlPoints,      AddrOfSmartPointer2<IAAFControlPoint> >
+        AxControlPointIter;
 #if 0
 // the old ones
 typedef AxIterator< IAAFSmartPointer<IAAFProperty>,      IEnumAAFProperties >	  AxPropertyIter;
@@ -177,6 +183,8 @@ typedef AxIterator< IAAFSmartPointer<IAAFClassDef>,      IEnumAAFClassDefs >    
 typedef AxIterator< IAAFSmartPointer<IAAFTypeDef>,       IEnumAAFTypeDefs >       AxTypeDefIter;
 typedef AxIterator< IAAFSmartPointer<IAAFPropertyDef>,   IEnumAAFPropertyDefs >   AxPropertyDefIter;
 typedef AxIterator< IAAFSmartPointer<IAAFLocator>,       IEnumAAFLocators >       AxLocatorIter;
+typedef AxIterator< IAAFSmartPointer<IAAFParameter>,     IEnumAAFParameters >     AxParameterIter;
+typedef AxIterator< IAAFSmartPointer<IAAFControlPoint>,  IEnumAAFControlPoints >  AxControlPointIter;
 #endif
 
 // Records contain a set of named values that must be iterated over as well,

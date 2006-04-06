@@ -268,6 +268,8 @@ template class AxIterator< IAAFSmartPointer2<IAAFClassDef>,                 IEnu
 template class AxIterator< IAAFSmartPointer2<IAAFTypeDef>,                  IEnumAAFTypeDefs,           AddrOfSmartPointer2<IAAFTypeDef> >;
 template class AxIterator< IAAFSmartPointer2<IAAFPropertyDef>,              IEnumAAFPropertyDefs,       AddrOfSmartPointer2<IAAFPropertyDef> >;
 template class AxIterator< IAAFSmartPointer2<IAAFLocator>,                  IEnumAAFLocators,           AddrOfSmartPointer2<IAAFLocator> >;
+template class AxIterator< IAAFSmartPointer2<IAAFParameter>,                IEnumAAFParameters,         AddrOfSmartPointer2<IAAFParameter> >;
+template class AxIterator< IAAFSmartPointer2<IAAFControlPoint>,             IEnumAAFControlPoints,      AddrOfSmartPointer2<IAAFControlPoint> >;
 
 
 template class AxArrayIterator< IAAFTypeDefFixedArray >;
