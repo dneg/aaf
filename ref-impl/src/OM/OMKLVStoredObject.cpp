@@ -1514,7 +1514,7 @@ void OMKLVStoredObject::flatSave(const OMPropertySet& properties) const
         // persist them as such. In AAF they'll eventually become a new kind
         // of reference. tjb 11/14/05
         //
-        if ((id == 0x0201) || (id == 0x3004) || (id == 0x3005)){
+        if ((id == 0x0201) || (id == 0x3004) || (id == 0x3005) || (id == 0x0b01) || (id == 0x4e01)){
           OMUniqueObjectIdentification k = r.identification();
           _storage->write(id, _reorderBytes);
           OMPropertySize s = sizeof(OMKLVKey);
