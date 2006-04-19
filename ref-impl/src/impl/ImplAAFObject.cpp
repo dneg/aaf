@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2005, Licensor of the
+// The Original Code of this file is Copyright 1998-2006, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -1249,6 +1249,14 @@ OMProperty * ImplAAFObject::InitOMProperty(ImplAAFPropertyDef * pPropertyDef, OM
 		/* && (defPid != PID_InterchangeObject_Generation)
 		 && (defPid != PID_PropertyDefinition_DefaultValue) */)
 	{
+      // tjb - This code is intended for the case
+      // of an extended property. However, this code will also
+      // get executed for properties that are predefined
+      // (in AAFMetaDictionary.h) but that are erroneously omitted
+      // from the property set defined by the impl code. The predefined
+      // properties are supposed to be declared in the impl header
+      // and initialized in the impl constructor. 
+
 	  // Defined property wasn't found in OM property set.
 	  // We'll have to install one.
 	  pProp = pPropertyDef->CreateOMProperty ();
