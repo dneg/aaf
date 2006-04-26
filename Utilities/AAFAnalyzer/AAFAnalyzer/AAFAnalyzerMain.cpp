@@ -57,6 +57,7 @@
 //STL files
 #include <string>
 #include <algorithm>
+#include <fstream>
 
 //Boost files
 #include <boost/shared_ptr.hpp>
@@ -168,6 +169,193 @@ void OutputVerboseResultMsgs(shared_ptr<const TestResult> res, unsigned int leve
  
 }
 
+
+void OutputPythonErrors(shared_ptr<const TestResult> res, int level, int breadth)
+{
+	wstring s;
+  	if(res->GetResult()==TestResult::PASS)
+  	{
+  	}
+	else
+  	{			
+  		wcerr<< "\terr" <<level<<breadth<<"= parse.Error('"<<res->GetName() <<"')"<< endl;
+  		wcerr<< "\terr" <<level<<breadth<<".set_description('"<<res->GetDescription() <<"')"<< endl;
+  		//wcout<< "Test Name:   " << res->GetName() << endl;
+  		//wcout<< "Desc:   " << res->GetDescription() << endl;
+  
+  		
+		const vector<AxString>& details = res->GetDetails();
+		for (unsigned int i = 0; i<details.size(); i++ )
+    	{
+    		wcerr<< "\terr" <<level<<breadth<<".set_detail('"<<details.at(i) <<"')"<< endl;
+    	}
+		
+		// Making sure 'reason' will be written on one line in the python file
+			wstring reason=res->GetExplanation();
+			wstring s=reason;
+			while (s.rfind(L"\n")!=wstring::npos)
+			{	
+				int index=s.rfind(L"\n");
+				reason.replace(index, 2, L"");
+				reason.insert(index, L"\\n");
+				s=s.substr(0, index);
+			}
+		//wcout  << "Result: ";
+		if(res->GetResult() == TestResult::WARN)
+		{
+			wcerr<< "\terr" <<level<<breadth<<".set_result('Passed, but with warnings')"<< endl;
+			
+			wstring reason=res->GetExplanation();
+			wstring s=reason;
+			
+			wcerr<< "\terr" <<level<<breadth<<".set_reason('"<<reason <<"')"<< endl;
+			const Requirement::RequirementMap& reqs = res->GetRequirements(TestResult::WARN);
+			if (reqs.size() == 0)
+  			{
+   				 wcerr<< "\terr" <<level<<breadth<<".set_warn('None')"<< endl;
+  			}
+  			else
+  			{
+    			Requirement::RequirementMap::const_iterator iter;
+    			iter = reqs.begin();
+    			while ( true ) 
+    			{
+    				wcerr<< "\terr" <<level<<breadth<<".set_warn('"<<iter->first <<"')"<< endl;
+        			iter++;
+        			if (iter == reqs.end() )
+        			{
+          				break;
+        			}
+    			}
+  			
+   			}
+			//wcout << L"Passed, but with warnings." << endl;
+			//ListRequirements( L"Warning Requirements", res->GetRequirements(TestResult::WARN), 0);
+		    //wcout << "Reason: " << res->GetExplanation() << endl;
+		}
+		
+		else if(res->GetResult() == TestResult::FAIL)
+		{
+			//wcout << L"Failed" << endl;
+			wcerr<< "\terr" <<level<<breadth<<".set_result('Failed')"<< endl;
+			wcerr<< "\terr" <<level<<breadth<<".set_reason('"<<reason <<"')" << endl;
+			
+			const Requirement::RequirementMap& failreqs = res->GetRequirements(TestResult::FAIL);
+			if (failreqs.size() == 0)
+  			{
+   				 wcerr<< "\terr" <<level<<breadth<<".set_fail('None')"<< endl;
+  			}
+  			else
+  			{
+    			Requirement::RequirementMap::const_iterator iter;
+    			iter = failreqs.begin();
+    			while ( true ) 
+    			{
+    				wcerr<< "\terr" <<level<<breadth<<".set_fail('"<<iter->first <<"')"<< endl;
+        			iter++;
+        			if (iter == failreqs.end() )
+        			{
+          				break;
+        			}
+    			}
+  			
+   			}
+			
+			const Requirement::RequirementMap& warnreqs = res->GetRequirements(TestResult::WARN);
+			if (warnreqs.size() == 0)
+  			{
+   				 wcerr<< "\terr" <<level<<breadth<<".set_warn('None')"<< endl;
+  			}
+  			else
+  			{
+    			Requirement::RequirementMap::const_iterator iter;
+    			iter = warnreqs.begin();
+    			while ( true ) 
+    			{
+    				wcerr<< "\terr" <<level<<breadth<<".set_warn('"<<iter->first <<"')"<< endl;
+        			iter++;
+        			if (iter == warnreqs.end() )
+        			{
+          				break;
+        			}
+    			}
+  			
+   			}
+			
+		}
+		else
+		{
+			assert(0);
+		}
+		
+	
+	}
+	
+	if ( res->ContainsSubtests() )
+  	{
+    	TestResult::SubtestResultVector subResults = res->GetSubtestResults();
+    	for (unsigned int i = 0; i < subResults.size(); i++) {
+    		if (subResults.at(i)->GetResult()==TestResult::FAIL || subResults.at(i)->GetResult()==TestResult::WARN)
+    		{	
+    			OutputPythonErrors(subResults.at(i), level+1, i);
+    			wcerr<< "\terr" <<level<<breadth<<".set_suberror(err"<<level+1<<i <<")"<< endl;
+    		}
+    	}
+  	}
+ 
+}
+
+void WritePythonErrors(shared_ptr<const TestResult> res)
+{			
+			
+			//freopen(fileName,"w",stdout);
+    		OutputPythonErrors( res, 0, 0 );
+    		wcerr<<"\terrors.append(err00)"<<endl<<endl;
+    		//fclose (stdout);
+}
+
+void OutputFileCoverage(shared_ptr<const TestResult> res, const basic_string<wchar_t> fileName, unsigned int level)
+{
+  wcout  << "File Name: " << fileName << endl; 
+  wcout  << "Name:      " << res->GetName() << endl;
+  wcout  << "Desc:      " << res->GetDescription() << endl;
+  
+  const vector<AxString>& details = res->GetDetails();
+  if ( !details.empty() )
+  {
+    for_each( details.begin(), details.end(), OutputDetail( level ) );
+  }
+
+  wcout  << "Result:    ";
+  if(res->GetResult() == TestResult::PASS) {
+    wcout << L"Passed" << endl;
+  }
+
+  else if(res->GetResult() == TestResult::WARN)
+  {
+    wcout << L"Passed, but with warnings." << endl;
+    wcout << "Reason:    " << res->GetExplanation() << endl;
+  }
+
+  else if(res->GetResult() == TestResult::FAIL)
+  {
+    wcout << L"Failed" << endl;
+    wcout << "Reason:    " << res->GetExplanation() << endl;
+  }
+  else
+  {
+    assert(0);
+  }
+  
+  ListRequirements( L"Passing Requirements", res->GetRequirements(TestResult::PASS), level);
+  ListRequirements( L"Warning Requirements", res->GetRequirements(TestResult::WARN), level);
+  ListRequirements( L"Failing Requirements", res->GetRequirements(TestResult::FAIL), level);
+
+  wcout << endl;
+ 
+}
+
+
 void OutputSimpleResultMsgs( shared_ptr<const TestResult> res )
 {
 
@@ -228,14 +416,33 @@ void RegisterTests()
 void PrintRequirement( pair<const AxString, shared_ptr<const Requirement> > entry )
 {
     wcout << entry.first << L": " << entry.second->GetName() << endl;
+
+}
+void PrintRequirementDetails( pair<const AxString, shared_ptr<const Requirement> > entry )
+{
+    wcout <<L"ID:          "<<entry.first << endl;
+    wcout <<L"Name:        "<< entry.second->GetName() << endl;
+    wcout <<L"Type:        "<< entry.second->GetRequirementType() << endl;
+    wcout <<L"Category:    "<< entry.second->GetCategory() << endl;
+	wcout <<L"Description: "<<entry.second->GetDescription()<<endl;
+	wcout <<L"Document:    "<<entry.second->GetDocument()<<endl;
+	wcout <<L"Version:     "<<entry.second->GetVersion()<<endl;
+	wcout <<L"Section:     "<<entry.second->GetSection()<<endl<<endl;
 }
 
-void OutputRequirements( const AxString& title, const Requirement::RequirementMap& reqs)
+void OutputRequirements( const AxString& title, const Requirement::RequirementMap& reqs, bool details)
 {
   wcout << endl << title << endl;
   if ( !reqs.empty() )
   {
-    for_each( reqs.begin(), reqs.end(), PrintRequirement );
+  	if (details)
+  	{
+    	for_each( reqs.begin(), reqs.end(), PrintRequirementDetails );
+  	}
+  	else
+  	{
+  		for_each( reqs.begin(), reqs.end(), PrintRequirement ); 
+  	}
   }
   else 
   {
@@ -292,8 +499,17 @@ int main( int argc, char** argv )
     // List All Requirements option
     pair<bool, int> allReqsArg = args.get( "-allreqs" );
     
+    // List All Requirements option
+    pair<bool, int> allDetReqsArg = args.get( "-alldetailedreqs" );
+    
     // List All Covered Requirements option
     pair<bool, int> coverageArg = args.get( "-coverage" );
+    
+    // Print file coverage
+    pair<bool, int> fileCoverageArg = args.get( "-filecoverage" );
+    
+    // Output Python code consisting of TestResult errors in a Python data structure
+    pair<bool, int> pythonDataArg = args.get( "-python" );
     
     // Allow test to register with unregistered requirements
     pair<bool, int> unsafeRegistryArg = args.get ( "-uncheckedrequirements" );
@@ -308,16 +524,17 @@ int main( int argc, char** argv )
     {
         regressionTestModifier = 0;
     }
-
+	
+	
     // Filename is the second last argument.
     pair<bool,const char*> fileNameArg = args.get( argc-2, 1 );
     
     // Requirements Filename is last argument.
     pair<bool, const char*> requirementsFile = args.get( argc-1, 2 );
     
-    int numFlags = dumpArg.first + allReqsArg.first + coverageArg.first + 
+    int numFlags = dumpArg.first + allReqsArg.first + allDetReqsArg.first + coverageArg.first + 
                    unsafeRegistryArg.first + verboseOutput.first + 
-                   regressionTest.first;
+                   regressionTest.first + fileCoverageArg.first + pythonDataArg.first;
     
     bool runTests;
     
@@ -337,11 +554,13 @@ int main( int argc, char** argv )
     {
       runTests = false;
     }
-    
+
+   
     if ( runTests && numFlags != argc - 3 )
     {
+    	
       //If tests are being run, there should be 3 more arguments than flags:
-      //AAFAnalyzer, the AAF file and the XML file.
+      //AAFAnalyzer, the AAF file and the XML file 
       throw Usage();
     }
     else if ( !runTests && numFlags != argc - 2 )
@@ -359,7 +578,17 @@ int main( int argc, char** argv )
     
     if ( allReqsArg.first )
     {
-      OutputRequirements(L"All Loaded Requirements", RequirementRegistry::GetInstance().GetAllRequirements());
+      OutputRequirements(L"All Loaded Requirements", RequirementRegistry::GetInstance().GetAllRequirements(), false);
+      if ( !runTests && !coverageArg.first )
+      {
+        //No tests were run so report a success.
+        return 0;
+      }
+    }
+    
+    if ( allDetReqsArg.first )
+    {
+      OutputRequirements(L"All Loaded Requirements", RequirementRegistry::GetInstance().GetAllRequirements(), true);
       if ( !runTests && !coverageArg.first )
       {
         //No tests were run so report a success.
@@ -380,7 +609,7 @@ int main( int argc, char** argv )
     
     if ( coverageArg.first )
     {
-      OutputRequirements(L"Requirements Covered By Tests", TestRegistry::GetInstance().GetRequirementCoverage());
+      OutputRequirements(L"Requirements Covered By Tests", TestRegistry::GetInstance().GetRequirementCoverage(), false);
       if ( !runTests )
       {
         //No tests were run so report a success.
@@ -410,6 +639,17 @@ int main( int argc, char** argv )
     	{
         	OutputVerboseResultMsgs(spResult, 0);
     	}
+    	else if (fileCoverageArg.first && pythonDataArg.first)
+    	{
+    		OutputFileCoverage(spResult, fileName, 0);
+    		WritePythonErrors(spResult);
+
+    	}
+    	else if (fileCoverageArg.first && !pythonDataArg.first)
+    	{
+    		OutputFileCoverage(spResult, fileName, 0);
+
+    	}
     	else
     	{
         	OutputSimpleResultMsgs( spResult );
@@ -438,6 +678,15 @@ int main( int argc, char** argv )
     if ( verboseOutput.first )
     {
         OutputVerboseResultMsgs(spResult, 0);
+    }
+    else if (fileCoverageArg.first && pythonDataArg.first)
+    {
+    	OutputFileCoverage(spResult, fileName, 0);
+    	WritePythonErrors(spResult);
+    }
+    else if (fileCoverageArg.first && !pythonDataArg.first)
+    {
+    	OutputFileCoverage(spResult, fileName, 0);
     }
     else
     {
