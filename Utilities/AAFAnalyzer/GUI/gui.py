@@ -26,8 +26,7 @@ class App:
 
         	
         	self.bottomleft.columnconfigure(0, weight=1)
-        	self.bottomleft.rowconfigure(0, weight=1)
-        	        	
+        	self.bottomleft.rowconfigure(0, weight=1)	
         	
         	self.topframe.columnconfigure(1, weight=1)
         	self.topframe.rowconfigure(0, weight=1)
@@ -57,24 +56,16 @@ class App:
 		sb.configure(command=self.lb.yview)
 		
 		# class variables
-		self.requirements={}
-		self.files=[]
-		self.numfiles=0
-		self.errors=[]
-		self.data=[]
-		self.var=None
-		self.results=None
-		self.error_details=None
-		self.current_node=None
-		
-		#TAKE OUT AFTER TESTING:
-		self.lb.insert(END, '/home/jlow/workspace/AAF/Utilities/AAFAnalyzer/RegressionTest/TestFiles/EPAcyclicTest.aaf')
-		self.lb.insert(END, '/home/jlow/workspace/AAF/Utilities/AAFAnalyzer/RegressionTest/TestFiles/EPEditRateTest5.aaf')
-		self.lb.insert(END, '/blah')
-		self.lb.insert(END, '/home/jlow/workspace/AAF/Utilities/AAFAnalyzer/RegressionTest/TestFiles/EPNameTest.aaf')
-		self.lb.insert(END, '/home/jlow/workspace/AAF/Utilities/AAFAnalyzer/RegressionTest/TestFiles/EPTrackContentsTest.aaf')
-		
-		
+		self.requirements={}		# dictionary of Requirement objects
+		self.files=[]				# list of filenames to be processed (will include File Set)
+		self.numfiles=0			# number of files to be processed
+		self.errors=[]				# list of Error objects for each file
+		self.data=[]				# coverage and requirement data in the table (will be a 2D list)
+		self.var=None				# tktable member representing the table data
+		self.results=None			# tktable instance
+		self.error_details=None		# tk message box for error details
+		self.current_node=None		# current selected node in the error browser tree
+				
 		
  	# tree widget event method (called on tree node expand/collapse)
  	def get_contents(self, node):
@@ -197,6 +188,7 @@ class App:
 		sx.grid(row=1, column=0, sticky='ew')
 		self.results.grid(row=0, column=0, sticky='news')
 	
+	# populates the tables data, specifically its array (self.var) data structure
 	def populate_table(self, data):
 		
 		reqs=self.requirements.values()
@@ -263,7 +255,7 @@ class App:
 		for index in rem:
 			self.lb.delete(int(index))
 	
-	
+	# 'Write to HTML' Button widget event method
 	def call_html(self):
 		
 		if self.results==None:
@@ -275,7 +267,7 @@ class App:
 			return
 		parse.write_html(filename,self.data)
 	
-	# GUI main run method
+	# GUI run method called by either new_file or open_file below
 	def run(self, filename, openfile):
 		execpath=''
 		reqspath=''
@@ -323,12 +315,12 @@ class App:
 			
 		self.files=[]
 		if self.lb.size()==0:
-			tkMessageBox.showwarning("No Files Added", "Must add at least one file to run Analyer.")
+			tkMessageBox.showwarning("No Files Added", "Must add at least one file to run the Analyzer.")
 			return
-		# PUT LINE BACK IN AFTER TESTING:
-		#filename=tkFileDialog.asksaveasfilename(title='Save coverage data as', initialdir=os.getcwd())
+			
+		filename=tkFileDialog.asksaveasfilename(title='Save coverage data as', initialdir=os.getcwd())
 		
-		self.files=self.files+analyzer.analyze('test.txt',execpath, list(self.lb.get(0, END)), reqspath)
+		self.files=self.files+analyzer.analyze(filename, execpath, list(self.lb.get(0, END)), reqspath)
 		
 		for i in range(0, len(self.files)):
 			if sys.platform == 'win32':
@@ -368,7 +360,8 @@ class App:
 		self.numfiles=len(self.files)
 		self.run(filename, 1)
 	
-			
+
+# Extended Tree class to customize navigation in the tree (specifically keyboard movement)
 class MyTree (Tree.Tree):
 
 	def set_app(self, a):
@@ -394,14 +387,14 @@ class MyTree (Tree.Tree):
 		app.callback(event)	
 	
 	
-
+# Extended Node class to attach Error objects to nodes
 class MyNode (Tree.Node):
 	
 	def set_error(self, error):
 		self.error=error
-		
+
+# 'main' method	
 root = Tk()
 app = App(root)
-
 
 root.mainloop()

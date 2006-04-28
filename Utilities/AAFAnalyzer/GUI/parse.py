@@ -1,7 +1,11 @@
 import sys
+
 # Method parses requirement data from Analyzer
 def parse_requirements(pipe, pipe2):
+	# pipe = All AAF Requirement details (output of ./AAFAnalyzer -alldetailedreqs AAFRequirements.xml)
 	unparsedreqs=pipe.stdout.readlines()
+	
+	# pipe2 = All AAF Requirements covered by the AAFAnalyzer (output of ./AAFAnalyzer -coverage AAFRequirements.xml)
 	testsuitecov=''.join(pipe2.stdout.readlines())
 
 	reqnum=0
@@ -14,6 +18,7 @@ def parse_requirements(pipe, pipe2):
 			reqid=unparsedreqs[i].strip("ID:").strip()
 			req=Requirement(reqid)
 			reqs[reqid]=req
+			# If the requirement appears in the list of the AAFAnalyzer's covered requirements set as covered
 			if reqid in testsuitecov:
 				req.set_is_covered('Y')
 		elif unparsedreqs[i].count('Name:')>0:
@@ -34,7 +39,7 @@ def parse_requirements(pipe, pipe2):
 			req.set_section(unparsedreqs[i].strip("Section:").strip())
 	return (reqs, filereqs)
 	
-# Method parses requirement coverage data from file created by python analyzer 
+# Method parses requirement coverage data from file created by the analyzer.py script
 def parse_file_coverage(filename, requirements):
 	
 	try:
@@ -49,9 +54,10 @@ def parse_file_coverage(filename, requirements):
 						filen=line.strip('File Name: ').strip().split('\\')[-1]
 					else:
 						filen=line.strip('File Name: ').strip().split('/')[-1]
-				
+			
+			# Update the Pass/Fail/Warn status on each requirement for each file via a dictionary stored in the Requirement object	
 			elif 'Passing Requirements:' in line and 'None' not in line:
-				for req in line.strip().replace('Passing Requirements: ','').split('; '):
+				for req in line.strip().replace('Passing Requirements: ','').split('; ')
 					requirements[req].set_file_coverage(filen,'Passed')
 	
 			elif 'Warning Requirements:' in line and 'None' not in line: 
@@ -68,7 +74,7 @@ def parse_file_coverage(filename, requirements):
 
 	cfile.close()		
 
-
+# dumps all the data (requirement, coverage) into a tabular form
 def get_data(files, requirements):
 	data=[]
 	data.append(['All Requirements'])
@@ -121,7 +127,6 @@ def get_data(files, requirements):
 					data[row].append('-')
 	
 	# Write Summary row
-	
 	data[1][0]='SUMMARY'
 	s=''
 	keys=categories.keys()
@@ -133,7 +138,8 @@ def get_data(files, requirements):
 		data[1][2+j]= str(passes[j])+' passed\n' + str(warns[j])+' warned\n' + str(fails[j])+' failed\n'
 	
 	return data
-	
+
+# Writes out the table data to an HTML file
 def write_html(filename, array):
 	
 	try:
@@ -221,7 +227,7 @@ def parse_errors():
 	
 	return None
 	
-# Helper class
+# Class to manage AAF Requirement data
 class Requirement:
 		
 	cats=['general', 'import-export', 'compositional', 'metadata',
@@ -315,7 +321,7 @@ class Requirement:
 	def set_file_coverage(self,filen, cov):
 		self.filecov[filen]=cov
 
-# Helper class
+# Class to manage specific TestResult (AAF Analyzer c++ class) data
 class Error:
 	
 	def __init__(self, n):
