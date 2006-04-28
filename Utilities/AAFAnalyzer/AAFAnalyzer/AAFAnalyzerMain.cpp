@@ -460,13 +460,15 @@ ostream& operator<<( ostream& os, const Usage& )
   os << "Valid usages are: " << endl;
   os << "AAFAnalyzer [options] filename.aaf requirement_filename.xml" << endl;
   os << "AAFAnalyzer [requirement output] requirement_filename.xml" << endl;
-  os << "[options] = -dump | -uncheckedrequirements | -verbose | [requirement output]" << endl;
-  os << "[requirement output] = -allreqs | -coverage" << endl;
+  os << "[options] = -dump | -uncheckedrequirements | -verbose | -filecoverage | [requirement output]" << endl;
+  os << "[requirement output] = -allreqs | -alldetailedreqs | -coverage" << endl;
   os << endl;
   os << "-dump: Output graph of AAF file" << endl;
+  os << "-filecoverage: Output the file's requirement coverage data." << endl;
   os << "-uncheckedrequirements: Allow tests to use unloaded requirements and test" << endl;
   os << "                        results to use unassociated requirements" << endl;
   os << "-allreqs: Output all loaded requirements" << endl;
+  os << "-alldetailedreqs: Output all loaded requirements with details" << endl;
   os << "-coverage: Output all requirements covered by the test suite." << endl;
   os << "-verbose: Output details of how warnings and failures were discovered." << endl;
   return os;
