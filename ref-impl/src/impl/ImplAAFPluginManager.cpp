@@ -992,7 +992,7 @@ AAFRESULT
 		key = *((aafUID_t*)iter->key);
 		found = memcmp((char *)&pdata.category, (char*)(&category), sizeof(aafUID_t)) == 0;
 		if(!found)
-			found = memcmp((char *)&pdata.category, (char*)(&noCat), sizeof(aafUID_t)) == 0;		
+			found = memcmp((char *)&category, (char*)(&noCat), sizeof(aafUID_t)) == 0;		
 		firstTimeThru = false;
 	} while(!found);
 
@@ -1024,7 +1024,7 @@ AAFRESULT
 		key = *((aafUID_t*)iter->key);
 		found = memcmp((char *)&pdata.category, (char*)(&category), sizeof(aafUID_t)) == 0;
 		if(!found)
-			found = memcmp((char *)&pdata.category, (&noCat), sizeof(aafUID_t)) == 0;		
+			found = memcmp((char *)&category, (&noCat), sizeof(aafUID_t)) == 0;		
 	} while(!found);
 
 	if(found)
