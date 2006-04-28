@@ -57,7 +57,7 @@ def parse_file_coverage(filename, requirements):
 			
 			# Update the Pass/Fail/Warn status on each requirement for each file via a dictionary stored in the Requirement object	
 			elif 'Passing Requirements:' in line and 'None' not in line:
-				for req in line.strip().replace('Passing Requirements: ','').split('; ')
+				for req in line.strip().replace('Passing Requirements: ','').split('; '):
 					requirements[req].set_file_coverage(filen,'Passed')
 	
 			elif 'Warning Requirements:' in line and 'None' not in line: 
@@ -183,7 +183,7 @@ def write_html(filename, array):
 				
 					cfile.write('</TD>')
 				cfile.write('</TR>\n')
-			htmlrow=htmlrow+1
+				htmlrow=htmlrow+1
 		
 		cfile.write('<FONT COLOR="grey">')
 		for row in uncovered:
