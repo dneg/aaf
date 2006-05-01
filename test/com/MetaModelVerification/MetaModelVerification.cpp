@@ -36,6 +36,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdarg.h>
 
 
 // Include our header file
@@ -861,7 +862,7 @@ HRESULT RegisterType(IAAFDictionary *Dict, const aafUID_t &kNewTypeID, const aaf
 		}
 		else
 		{
-			throw(0, "Don't know how to initialize type " + AUIDtoString(kTypeToDefine));
+			throw HRError(0, "Don't know how to initialize type " + AUIDtoString(kTypeToDefine));
 		}
 
 		// Register this new type
@@ -1089,7 +1090,7 @@ HRESULT RegisterType(IAAFDictionary *Dict, const aafUID_t &kNewTypeID, const aaf
 		}
 		else
 		{
-			throw(0, "Don't know how to initialize type " + AUIDtoString(kTypeToDefine));
+			throw HRError(0, "Don't know how to initialize type " + AUIDtoString(kTypeToDefine));
 		}
 
 		// Query the generic TypeDef interface
@@ -2965,7 +2966,7 @@ HRESULT VerifyProperty(IAAFPropertyDef *pd_Property, IAAFPropertyValue *pv_Value
 HRESULT RegisterRequiredItems(IAAFDictionary *Dict)
 {
 	// Ensure one-time only initialization
-	static Inited = false;
+	static bool Inited = false;
 	if(Inited) return S_OK;
 	Inited = true;
 
@@ -3735,7 +3736,7 @@ const IID ClassInfo::GetInterfaceID(const aafUID_t &kTypeID)
 		if(Array[i].ClassID == kTypeID) return Array[i].InterfaceID;
 	}
 
-	throw(0, std::string("No known interface for type ") + AUIDtoString(kTypeID));
+	throw HRError(0, std::string("No known interface for type ") + AUIDtoString(kTypeID));
 }
 
 
@@ -3748,7 +3749,7 @@ const aafUID_t ClassInfo::GetInstanceID(const aafUID_t &kTypeID)
 		if(Array[i].ClassID == kTypeID) return Array[i].InstanceID;
 	}
 
-	throw(0, std::string("No known instance of type ") + AUIDtoString(kTypeID));
+	throw HRError(0, std::string("No known instance of type ") + AUIDtoString(kTypeID));
 }
 
 
