@@ -2714,6 +2714,14 @@ static bool dumpFile (aafCharacter * pwFileName,
 		   << endl;
 	      return false;
 	    }
+	  else if (hr==AAFRESULT_NOT_READABLE)
+	    {
+		  // The file cannot be opened for read, it may or may not exist
+	      cerr << "File " << name
+		   << " cannot be opened for read"
+		   << endl;
+	      return false;
+	    }
 	  else if (hr==AAFRESULT_FILEREV_DIFF)
 	  {
 		  // The file cannot be read by this version of the DLL
