@@ -121,7 +121,8 @@ AAFRDLIRESULT AAFFindSymbol(
    *pSymbol = ::dlsym(libHandle, symbolName );
    
    if (NULL == *pSymbol) {
-#if defined(_DEBUG)
+#if defined(DLSYM_DEBUG)
+     // This is expected if we loaded an older library and are looking for a newer symbol
       fprintf(stderr, "dlsym(\"%s\") failed <%s>.\n", symbolName, dlerror());
 #endif
       return -2; // Need an AAFRESULT
