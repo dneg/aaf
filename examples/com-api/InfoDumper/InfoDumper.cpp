@@ -70,6 +70,7 @@ typedef struct _dumpFlags
   bool lazyLoad;
   aafUInt64 maxCount;
   char *showOnlyClasses;
+  bool showLibInfo;
   bool useOMCache;
 } dumpFlags_t;
 
@@ -2603,6 +2604,41 @@ HRESULT dumpRawStreamPropertyValue
 	return streamResult;
 }
 
+static void dumpLibInfo(ostream & os)
+{
+	// print library path name
+	aafUInt32 bufSize;
+	HRESULT hr = AAFGetLibraryPathNameBufLen(&bufSize);
+	if (hr != AAFRESULT_DLL_SYMBOL_NOT_FOUND)
+	{
+		if (AAFRESULT_SUCCEEDED(hr))
+		{
+			aafCharacter* buffer = (aafCharacter*)new aafUInt8[bufSize];
+			hr = AAFGetLibraryPathName (buffer, bufSize);
+			if (AAFRESULT_SUCCEEDED(hr))
+			{
+				os << "AAF DLL path name: ";
+				printAAFString(buffer, os);
+				os << endl;
+			}
+			delete [] buffer;
+		}
+	}
+	
+	// print library version
+	aafProductVersion_t vers;
+	hr = AAFGetLibraryVersion(&vers);
+	if (hr != AAFRESULT_DLL_SYMBOL_NOT_FOUND)
+	{
+		if (AAFRESULT_SUCCEEDED(hr))
+		{
+			os << "AAF DLL version  : "
+				<< vers.major << "."
+				<< vers.minor << "."
+				<< vers.tertiary << " (" << vers.patchLevel << ")" << endl;
+		}
+	}
+}
 
 //
 // Dumps the given file.  Returns true if successful; returns false if
@@ -2678,6 +2714,15 @@ static bool dumpFile (aafCharacter * pwFileName,
 		   << endl;
 	      return false;
 	    }
+	  else if (hr==AAFRESULT_FILEREV_DIFF)
+	  {
+		  // The file cannot be read by this version of the DLL
+		  cerr << "File " << name
+			  << " cannot be opened (a more recent version of the AAF DLL is required)."
+			  << endl;
+		  dumpLibInfo(cerr);
+		  return false;
+	  }
 	  else
 	    {
 	      cerr << "Other error opening file " << name
@@ -2805,7 +2850,7 @@ static void usage (const char * progname)
 	cerr << "  [-identifybyname         ]      Identifies references by name, when available (default)" << endl;
 	cerr << "  [-max nnnn               ]      Displays maximum number bytes for streams (default=79, set to 0 for no maximum)" << endl;
 	cerr << "  [-only <classID:>...     ]      Displays properties for only the listed classes" << endl;
-
+	cerr << "  [-libinfo                ]      Displays information about the AAF Library in use" << endl;
 	
 }
 
@@ -2831,7 +2876,8 @@ int main(int argc, char* argv[])
 	dumpFlags.showSMPTE=false;
 	dumpFlags.showEssence=true;
 	dumpFlags.maxCount=79;
-	dumpFlags.showOnlyClasses=NULL; 
+	dumpFlags.showOnlyClasses=NULL;
+	dumpFlags.showLibInfo=false;
 	dumpFlags.identifybyname=true;
 	dumpFlags.lazyLoad=false;
 	dumpFlags.useOMCache=false;
@@ -2916,6 +2962,9 @@ int main(int argc, char* argv[])
 #else
 			dumpFlags.maxCount = strtoll(argv[++comArg], NULL, 0);
 #endif
+		} else if (!strcmp("-libinfo", argv[comArg]))
+		{
+			dumpFlags.showLibInfo=true;
 		} else if (!strcmp("-h", argv[comArg]))
 		{
 		  usage (argv[0]);
@@ -2968,6 +3017,10 @@ int main(int argc, char* argv[])
 		exit(hr);
 	  }
 
+	if (dumpFlags.showLibInfo)
+	{
+	  dumpLibInfo(*os);
+	}
 	// Last argument should be input aaf filename
 	infilename = argv[argc-1];
 	aafCharacter pwFileName[FILENAME_MAX];
