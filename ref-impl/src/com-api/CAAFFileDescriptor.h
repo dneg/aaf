@@ -46,6 +46,7 @@
 
 class CAAFFileDescriptor
   : public IAAFFileDescriptor,
+    public IAAFFileDescriptor2,
     public CAAFEssenceDescriptor
 {
 protected:
@@ -58,7 +59,6 @@ protected:
   virtual ~CAAFFileDescriptor ();
 
 public:
-
 
   //***********************************************************
   //
@@ -249,9 +249,10 @@ public:
 
 
   //***********************************************************
+  // METHOD NAME: SetLinkedSlotID()
   //
-  // SetLinkedSlotID()
-  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFFileDescriptor2 | SetLinkedSlotID |
   // Sets the LinkedSlotID property.  
   ///
   ///
@@ -267,16 +268,19 @@ public:
   ///
   /// AAFRESULT_NOT_INITIALIZED
   ///   - This object has not yet had Initialize() called on it.
-  //
-  STDMETHOD (SetLinkedSlotID) (
-    // Integer value. 
-    /*[in]*/ aafUInt32  LinkedSlotID);
-
+  // @end
+  // 
+  STDMETHOD (SetLinkedSlotID)
+   (
+    // @parm [in] aafUInt32 | LinkedSlotID | Integer value.
+    aafUInt32  LinkedSlotID
+  );
 
   //***********************************************************
+  // METHOD NAME: GetLinkedSlotID()
   //
-  // GetLinkedSlotID()
-  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFFileDescriptor2 | GetLinkedSlotID |
   // Gets the LinkedSlotID property. 
   ///
   ///
@@ -295,10 +299,14 @@ public:
   ///
   /// AAFRESULT_NULL_PARAM
   ///   - pLinkedSlotID arg is NULL.
-  //
-  STDMETHOD (GetLinkedSlotID) (
-    // Address to store the integer value. 
-    /*[out]*/ aafUInt32 *  pLinkedSlotID);
+  // @end
+  // 
+  STDMETHOD (GetLinkedSlotID)
+   (
+    // @parm [out] aafUInt32 * | pLinkedSlotID | Address to store the integer value.
+    aafUInt32 *  pLinkedSlotID
+  );
+
 
 
 protected:
@@ -321,5 +329,4 @@ public:
 };
 
 #endif // ! __CAAFFileDescriptor_h__
-
 

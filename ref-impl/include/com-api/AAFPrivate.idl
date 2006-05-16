@@ -343,7 +343,9 @@ interface IAAFHTMLClip : IUnknown
 ///
 /// Objects that implement IAAFHTMLDescriptor also implement the following interfaces:
 ///  - IAAFFileDescriptor
+///  - IAAFFileDescriptor2
 ///  - IAAFEssenceDescriptor
+///  - IAAFEssenceDescriptor2
 ///  - IAAFObject
 [
     object,

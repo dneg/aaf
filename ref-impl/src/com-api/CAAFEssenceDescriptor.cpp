@@ -69,7 +69,6 @@ CAAFEssenceDescriptor::~CAAFEssenceDescriptor ()
 {
 }
 
-
 HRESULT STDMETHODCALLTYPE
     CAAFEssenceDescriptor::CountLocators (aafUInt32 *  pResult)
 {
@@ -568,8 +567,7 @@ HRESULT STDMETHODCALLTYPE
 
   try
     {
-      hr = ptr->CountSubDescriptors
-       (pResult);
+      hr = ptr->CountSubDescriptors (pResult);
     }
   catch (OMException& e)
     {
@@ -600,10 +598,9 @@ HRESULT STDMETHODCALLTYPE
       hr = AAFRESULT_UNEXPECTED_EXCEPTION;
     }
 
+
   return hr;
 }
-
-
 
 HRESULT STDMETHODCALLTYPE
     CAAFEssenceDescriptor::AppendSubDescriptor (IAAFSubDescriptor * pSubDescriptors)
@@ -638,8 +635,7 @@ HRESULT STDMETHODCALLTYPE
 
   try
     {
-      hr = ptr->AppendSubDescriptor
-       (internalpSubDescriptors);
+      hr = ptr->AppendSubDescriptor (internalpSubDescriptors);
     }
   catch (OMException& e)
     {
@@ -673,10 +669,9 @@ HRESULT STDMETHODCALLTYPE
   //
   // no cleanup necessary for pSubDescriptors
   //
+
   return hr;
 }
-
-
 
 HRESULT STDMETHODCALLTYPE
     CAAFEssenceDescriptor::PrependSubDescriptor (IAAFSubDescriptor * pSubDescriptor)
@@ -711,8 +706,7 @@ HRESULT STDMETHODCALLTYPE
 
   try
     {
-      hr = ptr->PrependSubDescriptor
-       (internalpSubDescriptor);
+      hr = ptr->PrependSubDescriptor (internalpSubDescriptor);
     }
   catch (OMException& e)
     {
@@ -746,10 +740,9 @@ HRESULT STDMETHODCALLTYPE
   //
   // no cleanup necessary for pSubDescriptor
   //
+
   return hr;
 }
-
-
 
 HRESULT STDMETHODCALLTYPE
     CAAFEssenceDescriptor::InsertSubDescriptorAt (aafUInt32  index,
@@ -763,6 +756,7 @@ HRESULT STDMETHODCALLTYPE
   assert (pO);
   ptr = static_cast<ImplAAFEssenceDescriptor*> (pO);
   assert (ptr);
+
 
   //
   // set up for pSubDescriptor
@@ -785,9 +779,8 @@ HRESULT STDMETHODCALLTYPE
 
   try
     {
-      hr = ptr->InsertSubDescriptorAt
-       (index,
-        internalpSubDescriptor);
+      hr = ptr->InsertSubDescriptorAt (index,
+    internalpSubDescriptor);
     }
   catch (OMException& e)
     {
@@ -818,12 +811,13 @@ HRESULT STDMETHODCALLTYPE
       hr = AAFRESULT_UNEXPECTED_EXCEPTION;
     }
 
+
   //
   // no cleanup necessary for pSubDescriptor
   //
+
   return hr;
 }
-
 
 
 HRESULT STDMETHODCALLTYPE
@@ -839,6 +833,7 @@ HRESULT STDMETHODCALLTYPE
   ptr = static_cast<ImplAAFEssenceDescriptor*> (pO);
   assert (ptr);
 
+
   //
   // set up for ppSubDescriptor
   //
@@ -851,9 +846,8 @@ HRESULT STDMETHODCALLTYPE
 
   try
     {
-      hr = ptr->GetSubDescriptorAt
-       (index,
-        pinternalppSubDescriptor);
+      hr = ptr->GetSubDescriptorAt (index,
+    pinternalppSubDescriptor);
     }
   catch (OMException& e)
     {
@@ -883,6 +877,7 @@ HRESULT STDMETHODCALLTYPE
       //
       hr = AAFRESULT_UNEXPECTED_EXCEPTION;
     }
+
 
   //
   // cleanup for ppSubDescriptor
@@ -901,9 +896,9 @@ HRESULT STDMETHODCALLTYPE
           internalppSubDescriptor->ReleaseReference(); // We are through with this pointer.
         }
     }
+
   return hr;
 }
-
 
 
 HRESULT STDMETHODCALLTYPE
@@ -921,8 +916,7 @@ HRESULT STDMETHODCALLTYPE
 
   try
     {
-      hr = ptr->RemoveSubDescriptorAt
-       (index);
+      hr = ptr->RemoveSubDescriptorAt (index);
     }
   catch (OMException& e)
     {
@@ -953,10 +947,9 @@ HRESULT STDMETHODCALLTYPE
       hr = AAFRESULT_UNEXPECTED_EXCEPTION;
     }
 
+
   return hr;
 }
-
-
 
 HRESULT STDMETHODCALLTYPE
     CAAFEssenceDescriptor::GetSubDescriptors (IEnumAAFSubDescriptors ** ppEnum)
@@ -982,8 +975,7 @@ HRESULT STDMETHODCALLTYPE
 
   try
     {
-      hr = ptr->GetSubDescriptors
-       (pinternalppEnum);
+      hr = ptr->GetSubDescriptors (pinternalppEnum);
     }
   catch (OMException& e)
     {
@@ -1031,8 +1023,11 @@ HRESULT STDMETHODCALLTYPE
           internalppEnum->ReleaseReference(); // We are through with this pointer.
         }
     }
+
   return hr;
 }
+
+
 
 //
 // 
@@ -1057,6 +1052,13 @@ HRESULT CAAFEssenceDescriptor::InternalQueryInterface
         return S_OK;
     }
 
+    if (EQUAL_UID(riid,IID_IAAFEssenceDescriptor2)) 
+    { 
+        *ppvObj = (IAAFEssenceDescriptor2 *)this; 
+        ((IUnknown *)*ppvObj)->AddRef();
+        return S_OK;
+    }
+
     // Always delegate back to base implementation.
     return CAAFObject::InternalQueryInterface(riid, ppvObj);
 }
@@ -1065,4 +1067,3 @@ HRESULT CAAFEssenceDescriptor::InternalQueryInterface
 // Define the contrete object support implementation.
 // 
 AAF_DEFINE_FACTORY(AAFEssenceDescriptor)
-

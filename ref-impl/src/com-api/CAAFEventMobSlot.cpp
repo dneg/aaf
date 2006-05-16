@@ -64,7 +64,6 @@ CAAFEventMobSlot::~CAAFEventMobSlot ()
 {
 }
 
-
 HRESULT STDMETHODCALLTYPE
     CAAFEventMobSlot::GetEditRate (aafRational_t *  pEditRate)
 {
@@ -168,6 +167,10 @@ HRESULT STDMETHODCALLTYPE
 }
 
 
+
+
+
+
 HRESULT STDMETHODCALLTYPE
     CAAFEventMobSlot::GetEventSlotOrigin (aafPosition_t *  pEventSlotOrigin)
 {
@@ -183,8 +186,7 @@ HRESULT STDMETHODCALLTYPE
 
   try
     {
-      hr = ptr->GetEventSlotOrigin
-       (pEventSlotOrigin);
+      hr = ptr->GetEventSlotOrigin (pEventSlotOrigin);
     }
   catch (OMException& e)
     {
@@ -215,10 +217,9 @@ HRESULT STDMETHODCALLTYPE
       hr = AAFRESULT_UNEXPECTED_EXCEPTION;
     }
 
+
   return hr;
 }
-
-
 
 HRESULT STDMETHODCALLTYPE
     CAAFEventMobSlot::SetEventSlotOrigin (aafPosition_t  eventSlotOrigin)
@@ -235,8 +236,7 @@ HRESULT STDMETHODCALLTYPE
 
   try
     {
-      hr = ptr->SetEventSlotOrigin
-       (eventSlotOrigin);
+      hr = ptr->SetEventSlotOrigin (eventSlotOrigin);
     }
   catch (OMException& e)
     {
@@ -267,10 +267,9 @@ HRESULT STDMETHODCALLTYPE
       hr = AAFRESULT_UNEXPECTED_EXCEPTION;
     }
 
+
   return hr;
 }
-
-
 
 
 //
@@ -296,6 +295,13 @@ HRESULT CAAFEventMobSlot::InternalQueryInterface
         return S_OK;
     }
 
+    if (EQUAL_UID(riid,IID_IAAFEventMobSlot2)) 
+    { 
+        *ppvObj = (IAAFEventMobSlot2 *)this; 
+        ((IUnknown *)*ppvObj)->AddRef();
+        return S_OK;
+    }
+
     // Always delegate back to base implementation.
     return CAAFMobSlot::InternalQueryInterface(riid, ppvObj);
 }
@@ -304,4 +310,3 @@ HRESULT CAAFEventMobSlot::InternalQueryInterface
 // Define the contrete object support implementation.
 // 
 AAF_DEFINE_FACTORY(AAFEventMobSlot)
-

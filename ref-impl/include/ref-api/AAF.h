@@ -194,7 +194,10 @@ interface IAAFDictionary2;
 interface IAAFDigitalImageDescriptor2;
 interface IAAFEndian;
 interface IAAFEssenceDataEx;
+interface IAAFEssenceDescriptor2;
 interface IAAFEssenceMultiAccess;
+interface IAAFEventMobSlot2;
+interface IAAFFileDescriptor2;
 interface IAAFHeader2;
 interface IAAFMasterMob2;
 interface IAAFMasterMobEx;
@@ -362,7 +365,10 @@ typedef interface IAAFDictionary2 IAAFDictionary2;
 typedef interface IAAFDigitalImageDescriptor2 IAAFDigitalImageDescriptor2;
 typedef interface IAAFEndian IAAFEndian;
 typedef interface IAAFEssenceDataEx IAAFEssenceDataEx;
+typedef interface IAAFEssenceDescriptor2 IAAFEssenceDescriptor2;
 typedef interface IAAFEssenceMultiAccess IAAFEssenceMultiAccess;
+typedef interface IAAFEventMobSlot2 IAAFEventMobSlot2;
+typedef interface IAAFFileDescriptor2 IAAFFileDescriptor2;
 typedef interface IAAFHeader2 IAAFHeader2;
 typedef interface IAAFMasterMob2 IAAFMasterMob2;
 typedef interface IAAFMasterMobEx IAAFMasterMobEx;
@@ -8311,7 +8317,6 @@ DECLARE_INTERFACE_(IAAFEssenceDescriptor, IUnknown)
   STDMETHOD_(ULONG,Release) (THIS) PURE;
 
   /* *** IAAFEssenceDescriptor methods *** */
-
   //***********************************************************
   //
   // CountLocators()
@@ -8528,225 +8533,19 @@ DECLARE_INTERFACE_(IAAFEssenceDescriptor, IUnknown)
     IEnumAAFLocators ** ppEnum) PURE;
 
 
-  //***********************************************************
-  //
-  // CountSubDescriptors()
-  //
-  /// Return the number of subdescriptors attached to this essence
-  /// descriptor.  The number of subdescriptors may be zero if the essence is
-  /// in the current file.
-  /// 
-  /// Succeeds if all of the following are true:
-  /// - the pCount pointer is valid.
-  /// 
-  /// If this method fails nothing is written to *pCount.
-  /// 
-  /// This method will return the following codes.  If more than one of
-  /// the listed errors is in effect, it will return the first one
-  /// encountered in the order given below:
-  /// 
-  /// AAFRESULT_SUCCESS
-  ///   - succeeded.  (This is the only code indicating success.)
-  ///
-  /// AAFRESULT_NULL_PARAM
-  ///   - pCount is null.
-  ///
-  /// @param pResult [out] Returns the number of subdescriptors
-  ///
-  STDMETHOD(CountSubDescriptors) (THIS_
-    aafUInt32 *  pResult) PURE;
 
 
-  //***********************************************************
-  //
-  // AppendSubDescriptor()
-  //
-  /// Append another subdescriptor to this essence descriptor.  Use this
-  /// function to add a subdescriptor to be scanned last when searching for
-  /// the essence (a secondary location for the essence).
-  /// 
-  /// Succeeds if all of the following are true:
-  /// - the pSubDescriptor pointer is valid.
-  /// 
-  /// If this method fails no state will be changed.
-  /// 
-  /// This method will return the following codes.  If more than one of
-  /// the listed errors is in effect, it will return the first one
-  /// encountered in the order given below:
-  /// 
-  /// AAFRESULT_SUCCESS
-  ///   - succeeded.  (This is the only code indicating success.)
-  ///
-  /// AAFRESULT_NULL_PARAM
-  ///   - pSubDescriptor is null.
-  ///
-  /// @param pSubDescriptors [in] SubDescriptor to append
-  ///
-  STDMETHOD(AppendSubDescriptor) (THIS_
-    IAAFSubDescriptor * pSubDescriptors) PURE;
 
 
-  //***********************************************************
-  //
-  // PrependSubDescriptor()
-  //
-  /// Prepend another subdescriptor to this essence descriptor.  Use this
-  /// function to add a subdescriptor to be scanned first when searching for
-  /// the essence (a new primary location for the essence).
-  /// 
-  /// Succeeds if all of the following are true:
-  /// - the pSubDescriptor pointer is valid.
-  /// 
-  /// If this method fails no state will be changed.
-  /// 
-  /// This method will return the following codes.  If more than one of
-  /// the listed errors is in effect, it will return the first one
-  /// encountered in the order given below:
-  /// 
-  /// AAFRESULT_SUCCESS
-  ///   - succeeded.  (This is the only code indicating success.)
-  ///
-  /// AAFRESULT_NULL_PARAM
-  ///   - pSubDescriptor is null.
-  ///
-  /// @param pSubDescriptor [in] SubDescriptor to append
-  ///
-  STDMETHOD(PrependSubDescriptor) (THIS_
-    IAAFSubDescriptor * pSubDescriptor) PURE;
 
 
-  //***********************************************************
-  //
-  // InsertSubDescriptorAt()
-  //
-  /// Inserts the given subdescriptor at the given index.  SubDescriptors already
-  /// existing at the given and higher indices will be moved to the
-  /// next higher index to accommodate.
-  /// 
-  /// Succeeds if all of the following are true:
-  /// - the pSubDescriptor pointer is valid.
-  /// - index is less than or equal to the value returned by
-  ///   CountSubDescriptors().
-  /// 
-  /// If this method fails no state will be changed.
-  /// 
-  /// This method will return the following codes.  If more than one of
-  /// the listed errors is in effect, it will return the first one
-  /// encountered in the order given below:
-  /// 
-  /// AAFRESULT_SUCCESS
-  ///   - succeeded.  (This is the only code indicating success.)
-  ///
-  /// AAFRESULT_NULL_PARAM
-  ///   - pSubDescriptor is null.
-  ///
-  /// AAFRESULT_BADINDEX
-  ///   - index is greater than the value returned by
-  ///     CountSubDescriptors().
-  ///
-  /// @param index [in] index at which subdescriptor is to be inserted
-  /// @param pSubDescriptor [in] SubDescriptor to append
-  ///
-  STDMETHOD(InsertSubDescriptorAt) (THIS_
-    aafUInt32  index,
-    IAAFSubDescriptor * pSubDescriptor) PURE;
 
 
-  //***********************************************************
-  //
-  // GetSubDescriptorAt()
-  //
-  /// Retrieves the subdescriptor at the given index.
-  /// 
-  /// Succeeds if all of the following are true:
-  /// - the pSubDescriptor pointer is valid.
-  /// - index is less than the value returned by CountSubDescriptors().
-  /// 
-  /// If this method fails no state will be changed.
-  /// 
-  /// This method will return the following codes.  If more than one of
-  /// the listed errors is in effect, it will return the first one
-  /// encountered in the order given below:
-  /// 
-  /// AAFRESULT_SUCCESS
-  ///   - succeeded.  (This is the only code indicating success.)
-  ///
-  /// AAFRESULT_NULL_PARAM
-  ///   - pSubDescriptor is null.
-  ///
-  /// AAFRESULT_BADINDEX
-  ///   - index is greater than or equal to the value returned by
-  ///     CountSubDescriptors().
-  ///
-  /// @param index [in] index of subdescriptor to retrieve
-  /// @param ppSubDescriptor [out, retval] returned subdescriptor
-  ///
-  STDMETHOD(GetSubDescriptorAt) (THIS_
-    aafUInt32  index,
-    IAAFSubDescriptor ** ppSubDescriptor) PURE;
 
-
-  //***********************************************************
-  //
-  // RemoveSubDescriptorAt()
-  //
-  /// Removes the subdescriptor at the given index.  SubDescriptors already
-  /// existing at indices higher than the given index will be moved to
-  /// the next lower index to accommodate.
-  /// 
-  /// Succeeds if all of the following are true:
-  /// - index is less than the value returned by CountSubDescriptors().
-  /// 
-  /// If this method fails no state will be changed.
-  /// 
-  /// This method will return the following codes.  If more than one of
-  /// the listed errors is in effect, it will return the first one
-  /// encountered in the order given below:
-  /// 
-  /// AAFRESULT_SUCCESS
-  ///   - succeeded.  (This is the only code indicating success.)
-  ///
-  /// AAFRESULT_BADINDEX
-  ///   - index is greater than or equal to the value returned by
-  ///     CountSubDescriptors().
-  ///
-  /// @param index [in] index of subdescriptor to remove
-  ///
-  STDMETHOD(RemoveSubDescriptorAt) (THIS_
-    aafUInt32  index) PURE;
-
-
-  //***********************************************************
-  //
-  // GetSubDescriptors()
-  //
-  /// Returns an enumerator to the subdescriptors.  The number of subdescriptors
-  /// may be zero if the essence is in the current file.
-  /// 
-  /// Succeeds if all of the following are true:
-  /// - the ppEnum pointer is valid.
-  /// 
-  /// If this method fails nothing will be written to *ppEnum.
-  /// 
-  /// This method will return the following codes.  If more than one of
-  /// the listed errors is in effect, it will return the first one
-  /// encountered in the order given below:
-  /// 
-  /// AAFRESULT_SUCCESS
-  ///   - succeeded.  (This is the only code indicating success.)
-  ///
-  /// AAFRESULT_NULL_PARAM
-  ///   - ppEnum is null.
-  ///
-  /// @param ppEnum [out] An enumerator to the subdescriptors on this essence descriptor
-  ///
-  STDMETHOD(GetSubDescriptors) (THIS_
-    IEnumAAFSubDescriptors ** ppEnum) PURE;
 
   END_INTERFACE
 };
 #endif // __IAAFEssenceDescriptor_INTERFACE_DEFINED__
-
 
 
 // IAAFEssenceFormat
@@ -9356,7 +9155,6 @@ DECLARE_INTERFACE_(IAAFEventMobSlot, IUnknown)
   STDMETHOD_(ULONG,Release) (THIS) PURE;
 
   /* *** IAAFEventMobSlot methods *** */
-
   //***********************************************************
   //
   // GetEditRate()
@@ -9412,54 +9210,10 @@ DECLARE_INTERFACE_(IAAFEventMobSlot, IUnknown)
   STDMETHOD(SetEditRate) (THIS_
     aafRational_t *  pEditRate) PURE;
 
-  //***********************************************************
-  //
-  // GetEventSlotOrigin()
-  //
-  /// This method will return the EventSlotOrigin of this mob slot.
-  /// 
-  /// Succeeds if all of the following are true:
-  /// - the pEventSlotOrigin pointer is valid.
-  /// 
-  /// This method will return the following codes.  If more than one of
-  /// the listed errors is in effect, it will return the first one
-  /// encountered in the order given below:
-  /// 
-  /// AAFRESULT_SUCCESS
-  ///   - succeeded.  (This is the only code indicating success.)
-  ///
-  /// AAFRESULT_NOT_INITIALIZED
-  ///   - This object has not yet had Initialize() called on it.
-  ///
-  /// AAFRESULT_NULL_PARAM
-  ///   - pEventSlotOrigin arg is NULL.
-  ///
-  /// @param pEventSlotOrigin [out,retval] EventSlotOrigin property value
-  ///
-  STDMETHOD(GetEventSlotOrigin) (THIS_
-    aafPosition_t *  pEventSlotOrigin) PURE;
 
 
-  //***********************************************************
-  //
-  // SetEventSlotOrigin()
-  //
-  /// This method will set the EventSlotOrigin of this mob slot.
-  /// 
-  /// This method will return the following codes.  If more than one of
-  /// the listed errors is in effect, it will return the first one
-  /// encountered in the order given below:
-  /// 
-  /// AAFRESULT_SUCCESS
-  ///   - succeeded.  (This is the only code indicating success.).
-  ///
-  /// AAFRESULT_NOT_INITIALIZED
-  ///   - This object has not yet had Initialize() called on it.
-  ///
-  /// @param eventSlotOrigin [in] EventSlotOrigin property value
-  ///
-  STDMETHOD(SetEventSlotOrigin) (THIS_
-    aafPosition_t  eventSlotOrigin) PURE;
+
+
 
 
 
@@ -9467,7 +9221,6 @@ DECLARE_INTERFACE_(IAAFEventMobSlot, IUnknown)
   END_INTERFACE
 };
 #endif // __IAAFEventMobSlot_INTERFACE_DEFINED__
-
 
 
 // IAAFFile
@@ -9755,7 +9508,6 @@ DECLARE_INTERFACE_(IAAFFileDescriptor, IUnknown)
   STDMETHOD_(ULONG,Release) (THIS) PURE;
 
   /* *** IAAFFileDescriptor methods *** */
-
   //***********************************************************
   //
   // SetLength()
@@ -9952,65 +9704,13 @@ DECLARE_INTERFACE_(IAAFFileDescriptor, IUnknown)
     IAAFContainerDef ** pFormat) PURE;
 
 
-  //***********************************************************
-  //
-  // SetLinkedSlotID()
-  //
-  /// Sets the LinkedSlotID property.  
-  ///
-  ///
-  /// This property is optional.  The default value is 0.
-  ///
-  /// If this method fails, the LinkedSlotID property will not
-  /// be changed.
-  /// 
-  /// This method will return the following codes:
-  /// 
-  /// AAFRESULT_SUCCESS
-  ///   - succeeded.  (This is the only code indicating success.)
-  ///
-  /// AAFRESULT_NOT_INITIALIZED
-  ///   - This object has not yet had Initialize() called on it.
-  ///
-  /// @param LinkedSlotID [in] Integer value.
-  ///
-  STDMETHOD(SetLinkedSlotID) (THIS_
-    aafUInt32  LinkedSlotID) PURE;
 
 
-  //***********************************************************
-  //
-  // GetLinkedSlotID()
-  //
-  /// Gets the LinkedSlotID property. 
-  ///
-  ///
-  /// Succeeds if all of the following are true:
-  /// - pLinkedSlotID is a valid pointer.
-  /// 
-  /// If this method fails, *pLinkedSlotID will not be changed.
-  /// 
-  /// This method will return the following codes:
-  /// 
-  /// AAFRESULT_SUCCESS
-  ///   - succeeded.  (This is the only code indicating success.)
-  ///
-  /// AAFRESULT_NOT_INITIALIZED
-  ///   - This object has not yet had Initialize() called on it.
-  ///
-  /// AAFRESULT_NULL_PARAM
-  ///   - pLinkedSlotID arg is NULL.
-  ///
-  /// @param pLinkedSlotID [out] Address to store the integer value.
-  ///
-  STDMETHOD(GetLinkedSlotID) (THIS_
-    aafUInt32 *  pLinkedSlotID) PURE;
 
 
   END_INTERFACE
 };
 #endif // __IAAFFileDescriptor_INTERFACE_DEFINED__
-
 
 
 // IAAFFileEncoding
@@ -43782,6 +43482,474 @@ DECLARE_INTERFACE_(IAAFEssenceDataEx, IUnknown)
 
 
 
+// IAAFEssenceDescriptor2
+
+// ************************
+//
+// Interface IAAFEssenceDescriptor2
+//
+// ************************
+
+
+
+
+
+#ifndef __IAAFEssenceDescriptor2_INTERFACE_DEFINED__
+#define __IAAFEssenceDescriptor2_INTERFACE_DEFINED__
+
+EXTERN_C const IID IID_IAAFEssenceDescriptor2;
+
+#undef  INTERFACE
+#define INTERFACE   IAAFEssenceDescriptor2
+
+DECLARE_INTERFACE_(IAAFEssenceDescriptor2, IUnknown)
+{
+  BEGIN_INTERFACE
+
+  /* *** IUnknown methods *** */
+  STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppvObj) PURE;
+  STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
+  STDMETHOD_(ULONG,Release) (THIS) PURE;
+
+  /* *** IAAFEssenceDescriptor2 methods *** */
+
+  //***********************************************************
+  //
+  // CountLocators()
+  //
+  /// Return the number of locators attached to this essence
+  /// descriptor.  The number of locators may be zero if the essence is
+  /// in the current file.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pCount pointer is valid.
+  /// 
+  /// If this method fails nothing is written to *pCount.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pCount is null.
+  ///
+  /// @param pResult [out] Returns the number of locators
+  ///
+  STDMETHOD(CountLocators) (THIS_
+    aafUInt32 *  pResult) PURE;
+
+
+  //***********************************************************
+  //
+  // AppendLocator()
+  //
+  /// Append another locator to this essence descriptor.  Use this
+  /// function to add a locator to be scanned last when searching for
+  /// the essence (a secondary location for the essence).
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pLocator pointer is valid.
+  /// 
+  /// If this method fails no state will be changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pLocator is null.
+  ///
+  /// @param pLocator [in] Locator to append
+  ///
+  STDMETHOD(AppendLocator) (THIS_
+    IAAFLocator * pLocator) PURE;
+
+
+  //***********************************************************
+  //
+  // PrependLocator()
+  //
+  /// Prepend another locator to this essence descriptor.  Use this
+  /// function to add a locator to be scanned first when searching for
+  /// the essence (a new primary location for the essence).
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pLocator pointer is valid.
+  /// 
+  /// If this method fails no state will be changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pLocator is null.
+  ///
+  /// @param pLocator [in] Locator to append
+  ///
+  STDMETHOD(PrependLocator) (THIS_
+    IAAFLocator * pLocator) PURE;
+
+
+  //***********************************************************
+  //
+  // InsertLocatorAt()
+  //
+  /// Inserts the given locator at the given index.  Locators already
+  /// existing at the given and higher indices will be moved to the
+  /// next higher index to accommodate.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pLocator pointer is valid.
+  /// - index is less than or equal to the value returned by
+  ///   CountLocators().
+  /// 
+  /// If this method fails no state will be changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pLocator is null.
+  ///
+  /// AAFRESULT_BADINDEX
+  ///   - index is greater than the value returned by
+  ///     CountLocators().
+  ///
+  /// @param index [in] index at which locator is to be inserted
+  /// @param pLocator [in] Locator to append
+  ///
+  STDMETHOD(InsertLocatorAt) (THIS_
+    aafUInt32  index,
+    IAAFLocator * pLocator) PURE;
+
+
+  //***********************************************************
+  //
+  // GetLocatorAt()
+  //
+  /// Retrieves the locator at the given index.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pLocator pointer is valid.
+  /// - index is less than the value returned by CountLocators().
+  /// 
+  /// If this method fails no state will be changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pLocator is null.
+  ///
+  /// AAFRESULT_BADINDEX
+  ///   - index is greater than or equal to the value returned by
+  ///     CountLocators().
+  ///
+  /// @param index [in] index of locator to retrieve
+  /// @param ppLocator [out, retval] returned locator
+  ///
+  STDMETHOD(GetLocatorAt) (THIS_
+    aafUInt32  index,
+    IAAFLocator ** ppLocator) PURE;
+
+
+  //***********************************************************
+  //
+  // RemoveLocatorAt()
+  //
+  /// Removes the locator at the given index.  Locators already
+  /// existing at indices higher than the given index will be moved to
+  /// the next lower index to accommodate.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - index is less than the value returned by CountLocators().
+  /// 
+  /// If this method fails no state will be changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_BADINDEX
+  ///   - index is greater than or equal to the value returned by
+  ///     CountLocators().
+  ///
+  /// @param index [in] index of locator to remove
+  ///
+  STDMETHOD(RemoveLocatorAt) (THIS_
+    aafUInt32  index) PURE;
+
+
+  //***********************************************************
+  //
+  // GetLocators()
+  //
+  /// Returns an enumerator to the locators.  The number of locators
+  /// may be zero if the essence is in the current file.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the ppEnum pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *ppEnum.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - ppEnum is null.
+  ///
+  /// @param ppEnum [out] An enumerator to the locators on this essence descriptor
+  ///
+  STDMETHOD(GetLocators) (THIS_
+    IEnumAAFLocators ** ppEnum) PURE;
+
+
+  //***********************************************************
+  //
+  // CountSubDescriptors()
+  //
+  /// Return the number of subdescriptors attached to this essence
+  /// descriptor.  The number of subdescriptors may be zero if the essence is
+  /// in the current file.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pCount pointer is valid.
+  /// 
+  /// If this method fails nothing is written to *pCount.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pCount is null.
+  ///
+  /// @param pResult [out] Returns the number of subdescriptors
+  ///
+  STDMETHOD(CountSubDescriptors) (THIS_
+    aafUInt32 *  pResult) PURE;
+
+
+  //***********************************************************
+  //
+  // AppendSubDescriptor()
+  //
+  /// Append another subdescriptor to this essence descriptor.  Use this
+  /// function to add a subdescriptor to be scanned last when searching for
+  /// the essence (a secondary location for the essence).
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pSubDescriptor pointer is valid.
+  /// 
+  /// If this method fails no state will be changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pSubDescriptor is null.
+  ///
+  /// @param pSubDescriptors [in] SubDescriptor to append
+  ///
+  STDMETHOD(AppendSubDescriptor) (THIS_
+    IAAFSubDescriptor * pSubDescriptors) PURE;
+
+
+  //***********************************************************
+  //
+  // PrependSubDescriptor()
+  //
+  /// Prepend another subdescriptor to this essence descriptor.  Use this
+  /// function to add a subdescriptor to be scanned first when searching for
+  /// the essence (a new primary location for the essence).
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pSubDescriptor pointer is valid.
+  /// 
+  /// If this method fails no state will be changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pSubDescriptor is null.
+  ///
+  /// @param pSubDescriptor [in] SubDescriptor to append
+  ///
+  STDMETHOD(PrependSubDescriptor) (THIS_
+    IAAFSubDescriptor * pSubDescriptor) PURE;
+
+
+  //***********************************************************
+  //
+  // InsertSubDescriptorAt()
+  //
+  /// Inserts the given subdescriptor at the given index.  SubDescriptors already
+  /// existing at the given and higher indices will be moved to the
+  /// next higher index to accommodate.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pSubDescriptor pointer is valid.
+  /// - index is less than or equal to the value returned by
+  ///   CountSubDescriptors().
+  /// 
+  /// If this method fails no state will be changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pSubDescriptor is null.
+  ///
+  /// AAFRESULT_BADINDEX
+  ///   - index is greater than the value returned by
+  ///     CountSubDescriptors().
+  ///
+  /// @param index [in] index at which subdescriptor is to be inserted
+  /// @param pSubDescriptor [in] SubDescriptor to append
+  ///
+  STDMETHOD(InsertSubDescriptorAt) (THIS_
+    aafUInt32  index,
+    IAAFSubDescriptor * pSubDescriptor) PURE;
+
+
+  //***********************************************************
+  //
+  // GetSubDescriptorAt()
+  //
+  /// Retrieves the subdescriptor at the given index.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pSubDescriptor pointer is valid.
+  /// - index is less than the value returned by CountSubDescriptors().
+  /// 
+  /// If this method fails no state will be changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pSubDescriptor is null.
+  ///
+  /// AAFRESULT_BADINDEX
+  ///   - index is greater than or equal to the value returned by
+  ///     CountSubDescriptors().
+  ///
+  /// @param index [in] index of subdescriptor to retrieve
+  /// @param ppSubDescriptor [out, retval] returned subdescriptor
+  ///
+  STDMETHOD(GetSubDescriptorAt) (THIS_
+    aafUInt32  index,
+    IAAFSubDescriptor ** ppSubDescriptor) PURE;
+
+
+  //***********************************************************
+  //
+  // RemoveSubDescriptorAt()
+  //
+  /// Removes the subdescriptor at the given index.  SubDescriptors already
+  /// existing at indices higher than the given index will be moved to
+  /// the next lower index to accommodate.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - index is less than the value returned by CountSubDescriptors().
+  /// 
+  /// If this method fails no state will be changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_BADINDEX
+  ///   - index is greater than or equal to the value returned by
+  ///     CountSubDescriptors().
+  ///
+  /// @param index [in] index of subdescriptor to remove
+  ///
+  STDMETHOD(RemoveSubDescriptorAt) (THIS_
+    aafUInt32  index) PURE;
+
+
+  //***********************************************************
+  //
+  // GetSubDescriptors()
+  //
+  /// Returns an enumerator to the subdescriptors.  The number of subdescriptors
+  /// may be zero if the essence is in the current file.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the ppEnum pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *ppEnum.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - ppEnum is null.
+  ///
+  /// @param ppEnum [out] An enumerator to the subdescriptors on this essence descriptor
+  ///
+  STDMETHOD(GetSubDescriptors) (THIS_
+    IEnumAAFSubDescriptors ** ppEnum) PURE;
+
+  END_INTERFACE
+};
+#endif // __IAAFEssenceDescriptor2_INTERFACE_DEFINED__
+
+
+
 // IAAFEssenceMultiAccess
 
 // ************************
@@ -43891,6 +44059,435 @@ DECLARE_INTERFACE_(IAAFEssenceMultiAccess, IUnknown)
   END_INTERFACE
 };
 #endif // __IAAFEssenceMultiAccess_INTERFACE_DEFINED__
+
+
+
+// IAAFEventMobSlot2
+
+// ************************
+//
+// Interface IAAFEventMobSlot2
+//
+// ************************
+
+
+
+
+#ifndef __IAAFEventMobSlot2_INTERFACE_DEFINED__
+#define __IAAFEventMobSlot2_INTERFACE_DEFINED__
+
+EXTERN_C const IID IID_IAAFEventMobSlot2;
+
+#undef  INTERFACE
+#define INTERFACE   IAAFEventMobSlot2
+
+DECLARE_INTERFACE_(IAAFEventMobSlot2, IUnknown)
+{
+  BEGIN_INTERFACE
+
+  /* *** IUnknown methods *** */
+  STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppvObj) PURE;
+  STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
+  STDMETHOD_(ULONG,Release) (THIS) PURE;
+
+  /* *** IAAFEventMobSlot2 methods *** */
+
+  //***********************************************************
+  //
+  // GetEditRate()
+  //
+  /// This method will get the edit rate for this mob slot.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pEditRate pointer is valid.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pEditRate arg is NULL.
+  ///
+  /// @param pEditRate [out,retval] Edit rate property value
+  ///
+  STDMETHOD(GetEditRate) (THIS_
+    aafRational_t *  pEditRate) PURE;
+
+
+  //***********************************************************
+  //
+  // SetEditRate()
+  //
+  /// This method will get set edit rate for this mob slot.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pEditRate pointer is valid.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pEditRate arg is NULL.
+  ///
+  /// @param pEditRate [in] Edit rate property value
+  ///
+  STDMETHOD(SetEditRate) (THIS_
+    aafRational_t *  pEditRate) PURE;
+
+  //***********************************************************
+  //
+  // GetEventSlotOrigin()
+  //
+  /// This method will return the EventSlotOrigin of this mob slot.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pEventSlotOrigin pointer is valid.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pEventSlotOrigin arg is NULL.
+  ///
+  /// @param pEventSlotOrigin [out,retval] EventSlotOrigin property value
+  ///
+  STDMETHOD(GetEventSlotOrigin) (THIS_
+    aafPosition_t *  pEventSlotOrigin) PURE;
+
+
+  //***********************************************************
+  //
+  // SetEventSlotOrigin()
+  //
+  /// This method will set the EventSlotOrigin of this mob slot.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.).
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
+  ///
+  /// @param eventSlotOrigin [in] EventSlotOrigin property value
+  ///
+  STDMETHOD(SetEventSlotOrigin) (THIS_
+    aafPosition_t  eventSlotOrigin) PURE;
+
+
+
+
+  END_INTERFACE
+};
+#endif // __IAAFEventMobSlot2_INTERFACE_DEFINED__
+
+
+
+// IAAFFileDescriptor2
+
+// ************************
+//
+// Interface IAAFFileDescriptor2
+//
+// ************************
+
+
+
+#ifndef __IAAFFileDescriptor2_INTERFACE_DEFINED__
+#define __IAAFFileDescriptor2_INTERFACE_DEFINED__
+
+EXTERN_C const IID IID_IAAFFileDescriptor2;
+
+#undef  INTERFACE
+#define INTERFACE   IAAFFileDescriptor2
+
+DECLARE_INTERFACE_(IAAFFileDescriptor2, IUnknown)
+{
+  BEGIN_INTERFACE
+
+  /* *** IUnknown methods *** */
+  STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppvObj) PURE;
+  STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
+  STDMETHOD_(ULONG,Release) (THIS) PURE;
+
+  /* *** IAAFFileDescriptor2 methods *** */
+
+  //***********************************************************
+  //
+  // SetLength()
+  //
+  /// Sets the length of the essence in samples [not edit units].
+  /// 
+  /// Always succeeds.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// @param length [in] length of the essence in samples
+  ///
+  STDMETHOD(SetLength) (THIS_
+    aafLength_t  length) PURE;
+
+
+  //***********************************************************
+  //
+  // GetLength()
+  //
+  /// Gets the length of the essence in samples [not edit units].
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pLength pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *pLength.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pLength arg is NULL.
+  ///
+  /// @param pLength [out] returns length of the essence in samples
+  ///
+  STDMETHOD(GetLength) (THIS_
+    aafLength_t *  pLength) PURE;
+
+
+  //***********************************************************
+  //
+  // SetCodecDef()
+  //
+  /// Set to the exact codec which was used as a hint.
+  /// 
+  /// Always succeeds.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// @param codecDef [in] Which codec was used
+  ///
+  STDMETHOD(SetCodecDef) (THIS_
+    IAAFCodecDef * codecDef) PURE;
+
+
+  //***********************************************************
+  //
+  // GetCodecDef()
+  //
+  /// Get to the exact codec which was used as a hint.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pCodecDef pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *pCodecDef.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pCodecDef arg is NULL.
+  ///
+  /// @param pCodecDef [out] Which codec was used
+  ///
+  STDMETHOD(GetCodecDef) (THIS_
+    IAAFCodecDef ** pCodecDef) PURE;
+
+
+  //***********************************************************
+  //
+  // SetSampleRate()
+  //
+  /// Sets sample rate of the essence as opposed to the edit rate.
+  /// 
+  /// If this method fails the sample rate property will not be
+  /// changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// @param rate [in] sample rate of the essence
+  ///
+  STDMETHOD(SetSampleRate) (THIS_
+    aafRational_constref  rate) PURE;
+
+
+  //***********************************************************
+  //
+  // GetSampleRate()
+  //
+  /// Gets sample rate of the essence as opposed to the edit rate. and
+  /// writes it into the *pRate argument.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pRate pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *pRate.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pRate arg is NULL.
+  ///
+  /// @param pRate [out] sample rate of the essence
+  ///
+  STDMETHOD(GetSampleRate) (THIS_
+    aafRational_t*  pRate) PURE;
+
+
+  //***********************************************************
+  //
+  // SetContainerFormat()
+  //
+  /// Identifies the file format.  The container format is an optional
+  /// property.
+  /// 
+  /// If this method fails the container format property will not be
+  /// changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// @param format [in] file format
+  ///
+  STDMETHOD(SetContainerFormat) (THIS_
+    IAAFContainerDef * format) PURE;
+
+
+  //***********************************************************
+  //
+  // GetContainerFormat()
+  //
+  /// Identifies the file format.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pFormat pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *pFormat.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pFormat arg is NULL.
+  ///
+  /// @param pFormat [out] Optional
+  ///
+  STDMETHOD(GetContainerFormat) (THIS_
+    IAAFContainerDef ** pFormat) PURE;
+
+
+  //***********************************************************
+  //
+  // SetLinkedSlotID()
+  //
+  /// Sets the LinkedSlotID property.  
+  ///
+  ///
+  /// This property is optional.  The default value is 0.
+  ///
+  /// If this method fails, the LinkedSlotID property will not
+  /// be changed.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
+  ///
+  /// @param LinkedSlotID [in] Integer value.
+  ///
+  STDMETHOD(SetLinkedSlotID) (THIS_
+    aafUInt32  LinkedSlotID) PURE;
+
+
+  //***********************************************************
+  //
+  // GetLinkedSlotID()
+  //
+  /// Gets the LinkedSlotID property. 
+  ///
+  ///
+  /// Succeeds if all of the following are true:
+  /// - pLinkedSlotID is a valid pointer.
+  /// 
+  /// If this method fails, *pLinkedSlotID will not be changed.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pLinkedSlotID arg is NULL.
+  ///
+  /// @param pLinkedSlotID [out] Address to store the integer value.
+  ///
+  STDMETHOD(GetLinkedSlotID) (THIS_
+    aafUInt32 *  pLinkedSlotID) PURE;
+
+
+  END_INTERFACE
+};
+#endif // __IAAFFileDescriptor2_INTERFACE_DEFINED__
 
 
 

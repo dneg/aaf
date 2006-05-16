@@ -63,7 +63,6 @@ CAAFFileDescriptor::~CAAFFileDescriptor ()
 {
 }
 
-
 HRESULT STDMETHODCALLTYPE
     CAAFFileDescriptor::SetLength (aafLength_t  length)
 {
@@ -589,8 +588,7 @@ HRESULT STDMETHODCALLTYPE
 
   try
     {
-      hr = ptr->SetLinkedSlotID
-       (LinkedSlotID);
+      hr = ptr->SetLinkedSlotID (LinkedSlotID);
     }
   catch (OMException& e)
     {
@@ -621,10 +619,9 @@ HRESULT STDMETHODCALLTYPE
       hr = AAFRESULT_UNEXPECTED_EXCEPTION;
     }
 
+
   return hr;
 }
-
-
 
 HRESULT STDMETHODCALLTYPE
     CAAFFileDescriptor::GetLinkedSlotID (aafUInt32 *  pLinkedSlotID)
@@ -641,8 +638,7 @@ HRESULT STDMETHODCALLTYPE
 
   try
     {
-      hr = ptr->GetLinkedSlotID
-       (pLinkedSlotID);
+      hr = ptr->GetLinkedSlotID (pLinkedSlotID);
     }
   catch (OMException& e)
     {
@@ -672,6 +668,7 @@ HRESULT STDMETHODCALLTYPE
       //
       hr = AAFRESULT_UNEXPECTED_EXCEPTION;
     }
+
 
   return hr;
 }
@@ -700,6 +697,13 @@ HRESULT CAAFFileDescriptor::InternalQueryInterface
         return S_OK;
     }
 
+    if (EQUAL_UID(riid,IID_IAAFFileDescriptor2)) 
+    { 
+        *ppvObj = (IAAFFileDescriptor2 *)this; 
+        ((IUnknown *)*ppvObj)->AddRef();
+        return S_OK;
+    }
+
     // Always delegate back to base implementation.
     return CAAFEssenceDescriptor::InternalQueryInterface(riid, ppvObj);
 }
@@ -708,4 +712,3 @@ HRESULT CAAFFileDescriptor::InternalQueryInterface
 // Define the contrete object support implementation.
 // 
 AAF_DEFINE_FACTORY(AAFFileDescriptor)
-
