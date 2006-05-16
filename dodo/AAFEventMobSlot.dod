@@ -101,4 +101,4 @@ AD_OVERRIDE(.method-SetSegment)
 AD_COM_METH(.method-GetEventSlotOrigin)
 AD_COM_METH(.method-SetEventSlotOrigin)
 
-AD_COM_EXT_CLASS_END(IAAFEventMobSlot2)
+AD_COM_EXT_CLASS_END(AAFEventMobSlot2)

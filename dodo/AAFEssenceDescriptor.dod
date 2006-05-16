@@ -285,4 +285,4 @@ AD_COM_METH(.method-RemoveSubDescriptorAt)
 AD_COM_METH(.method-GetSubDescriptors)
 
 
-AD_COM_EXT_CLASS_END(IAAFEssenceDescriptor2)
+AD_COM_EXT_CLASS_END(AAFEssenceDescriptor2)

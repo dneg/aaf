@@ -236,4 +236,4 @@ AD_XMETHOD1(GetContainerFormat,
 AD_COM_METH(.method-SetLinkedSlotID)
 AD_COM_METH(.method-GetLinkedSlotID)
 
-AD_COM_EXT_CLASS_END(IAAFFileDescriptor2)
+AD_COM_EXT_CLASS_END(AAFFileDescriptor2)
