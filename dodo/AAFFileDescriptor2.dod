@@ -22,7 +22,7 @@
 #c
 #c *********************************************************************
 #startm .this-module 0
-AAFFileDescriptor\
+AAFFileDescriptor2\
 #endm
 #c
 #startm .parent-module 0
@@ -30,12 +30,9 @@ AAFEssenceDescriptor\
 #endm
 #c
 #c #import ./AAFEssenceDescriptor.exp
-#import ./AAFFileDescriptor2.exp
 AD_HEAD
 AD_IDL(///
-/// IAAFFileDescriptor is DEPRECATED\, please use IAAFFileDescriptor2
-///
-/// The IAAFFileDescriptor interface is implemented by objects which
+/// The IAAFFileDescriptor2 interface is implemented by objects which
 /// describe the format of the content data associated with a File
 /// Source mob or the media associated with a Physical Source mob.
 ///
@@ -49,16 +46,16 @@ AD_IDL(///
 ///
 /// AAFRESULT_NOT_INITIALIZED
 ///   - This object has not yet had Initialize\(\) called on it through
-///     this object's primary interface.  Note that IAAFFileDescriptor
+///     this object's primary interface.  Note that IAAFFileDescriptor2
 ///     is a primary interface for an abstract class\, so it is not
 ///     appropriate for the Initialize\(\) method to exist in this
 ///     interface.  The Initialize\(\) method is available through the
 ///     concrete object's primary interface.
 ///)
-AD_CLASS_UUID(e58a8562, 2a3e, 11D2, bf, a4, 00, 60, 97, 11, 62, 12)
+AD_CLASS_UUID(38c1088c, f0f2, 47c7, 94, 13, 36, 12, 62, ae, 9f, 07)
 
-AD_DEFAULT_UUID(e58a8561, 2a3e, 11D2, bf, a4, 00, 60, 97, 11, 62, 12)
-AD_COM_EXT_CLASS_BEGIN(public IAAFFileDescriptor2)
+AD_DEFAULT_UUID(38c1088b, f0f2, 47c7, 94, 13, 36, 12, 62, ae, 9f, 07)
+AD_XCLASS_BEGIN(Abstract, StoredObject)
 AD_XMETHOD1(SetLength,
 			[in],
 			  objPass,
@@ -230,10 +227,53 @@ AD_XMETHOD1(GetContainerFormat,
   /// AAFRESULT_NULL_PARAM
   ///   - pFormat arg is NULL.)
 
-#c AAFFileDescriptor2 methods
-#c
 
-AD_COM_METH(.method-SetLinkedSlotID)
-AD_COM_METH(.method-GetLinkedSlotID)
+AD_XMETHOD1(SetLinkedSlotID,
+			[in],
+				objPass,
+				aafUInt32,
+				LinkedSlotID,
+				Integer value.,
+			Sets the LinkedSlotID property.  
+  ///
+  ///
+  /// This property is optional.  The default value is 0.
+  ///
+  /// If this method fails\, the LinkedSlotID property will not
+  /// be changed.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize\(\) called on it.)
 
-AD_COM_EXT_CLASS_END(IAAFFileDescriptor2)
+
+AD_XMETHOD1(GetLinkedSlotID,
+			[out],
+				objPass,
+				aafUInt32 *,
+				pLinkedSlotID,
+				Address to store the integer value.,
+			Gets the LinkedSlotID property. 
+  ///
+  ///
+  /// Succeeds if all of the following are true:
+  /// - pLinkedSlotID is a valid pointer.
+  /// 
+  /// If this method fails\, *pLinkedSlotID will not be changed.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize\(\) called on it.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pLinkedSlotID arg is NULL.)
+
+AD_XCLASS_END(Abstract, StoredObject)
