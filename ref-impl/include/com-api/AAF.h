@@ -3,10 +3,10 @@
 /* this ALWAYS GENERATED file contains the definitions for the interfaces */
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* at Fri Mar 24 17:08:17 2006
+/* File created by MIDL compiler version 6.00.0361 */
+/* at TIMESTAMP REMOVED
  */
-/* Compiler settings for C:\cygwin\home\jesse\SDK\AAF\ref-impl\include\com-api\AAF.idl:
+/* Compiler settings for ../ref-impl/include/com-api/AAF.idl:
     Oicf, W1, Zp8, env=Win32 (32b run)
     protocol : dce , ms_ext, c_ext, robust
     error checks: allocation ref bounds_check enum stub_data 
@@ -969,10 +969,28 @@ typedef interface IAAFEssenceDataEx IAAFEssenceDataEx;
 #endif 	/* __IAAFEssenceDataEx_FWD_DEFINED__ */
 
 
+#ifndef __IAAFEssenceDescriptor2_FWD_DEFINED__
+#define __IAAFEssenceDescriptor2_FWD_DEFINED__
+typedef interface IAAFEssenceDescriptor2 IAAFEssenceDescriptor2;
+#endif 	/* __IAAFEssenceDescriptor2_FWD_DEFINED__ */
+
+
 #ifndef __IAAFEssenceMultiAccess_FWD_DEFINED__
 #define __IAAFEssenceMultiAccess_FWD_DEFINED__
 typedef interface IAAFEssenceMultiAccess IAAFEssenceMultiAccess;
 #endif 	/* __IAAFEssenceMultiAccess_FWD_DEFINED__ */
+
+
+#ifndef __IAAFEventMobSlot2_FWD_DEFINED__
+#define __IAAFEventMobSlot2_FWD_DEFINED__
+typedef interface IAAFEventMobSlot2 IAAFEventMobSlot2;
+#endif 	/* __IAAFEventMobSlot2_FWD_DEFINED__ */
+
+
+#ifndef __IAAFFileDescriptor2_FWD_DEFINED__
+#define __IAAFFileDescriptor2_FWD_DEFINED__
+typedef interface IAAFFileDescriptor2 IAAFFileDescriptor2;
+#endif 	/* __IAAFFileDescriptor2_FWD_DEFINED__ */
 
 
 #ifndef __IAAFHeader2_FWD_DEFINED__
@@ -1091,6 +1109,9 @@ void __RPC_USER MIDL_user_free( void * );
 // AAF Interfaces.
 //=--------------------------------------------------------------------------=
 //
+
+
+
 
 
 
@@ -8964,29 +8985,6 @@ EXTERN_C const IID IID_IAAFEssenceDescriptor;
         virtual HRESULT STDMETHODCALLTYPE GetLocators( 
             /* [out] */ IEnumAAFLocators **ppEnum) = 0;
         
-        virtual HRESULT STDMETHODCALLTYPE CountSubDescriptors( 
-            /* [out] */ aafUInt32 *pResult) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE AppendSubDescriptor( 
-            /* [in] */ IAAFSubDescriptor *pSubDescriptors) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE PrependSubDescriptor( 
-            /* [in] */ IAAFSubDescriptor *pSubDescriptor) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE InsertSubDescriptorAt( 
-            /* [in] */ aafUInt32 index,
-            /* [in] */ IAAFSubDescriptor *pSubDescriptor) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetSubDescriptorAt( 
-            /* [in] */ aafUInt32 index,
-            /* [retval][out] */ IAAFSubDescriptor **ppSubDescriptor) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE RemoveSubDescriptorAt( 
-            /* [in] */ aafUInt32 index) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetSubDescriptors( 
-            /* [out] */ IEnumAAFSubDescriptors **ppEnum) = 0;
-        
     };
     
 #else 	/* C style interface */
@@ -9036,36 +9034,6 @@ EXTERN_C const IID IID_IAAFEssenceDescriptor;
             IAAFEssenceDescriptor * This,
             /* [out] */ IEnumAAFLocators **ppEnum);
         
-        HRESULT ( STDMETHODCALLTYPE *CountSubDescriptors )( 
-            IAAFEssenceDescriptor * This,
-            /* [out] */ aafUInt32 *pResult);
-        
-        HRESULT ( STDMETHODCALLTYPE *AppendSubDescriptor )( 
-            IAAFEssenceDescriptor * This,
-            /* [in] */ IAAFSubDescriptor *pSubDescriptors);
-        
-        HRESULT ( STDMETHODCALLTYPE *PrependSubDescriptor )( 
-            IAAFEssenceDescriptor * This,
-            /* [in] */ IAAFSubDescriptor *pSubDescriptor);
-        
-        HRESULT ( STDMETHODCALLTYPE *InsertSubDescriptorAt )( 
-            IAAFEssenceDescriptor * This,
-            /* [in] */ aafUInt32 index,
-            /* [in] */ IAAFSubDescriptor *pSubDescriptor);
-        
-        HRESULT ( STDMETHODCALLTYPE *GetSubDescriptorAt )( 
-            IAAFEssenceDescriptor * This,
-            /* [in] */ aafUInt32 index,
-            /* [retval][out] */ IAAFSubDescriptor **ppSubDescriptor);
-        
-        HRESULT ( STDMETHODCALLTYPE *RemoveSubDescriptorAt )( 
-            IAAFEssenceDescriptor * This,
-            /* [in] */ aafUInt32 index);
-        
-        HRESULT ( STDMETHODCALLTYPE *GetSubDescriptors )( 
-            IAAFEssenceDescriptor * This,
-            /* [out] */ IEnumAAFSubDescriptors **ppEnum);
-        
         END_INTERFACE
     } IAAFEssenceDescriptorVtbl;
 
@@ -9109,27 +9077,6 @@ EXTERN_C const IID IID_IAAFEssenceDescriptor;
 
 #define IAAFEssenceDescriptor_GetLocators(This,ppEnum)	\
     (This)->lpVtbl -> GetLocators(This,ppEnum)
-
-#define IAAFEssenceDescriptor_CountSubDescriptors(This,pResult)	\
-    (This)->lpVtbl -> CountSubDescriptors(This,pResult)
-
-#define IAAFEssenceDescriptor_AppendSubDescriptor(This,pSubDescriptors)	\
-    (This)->lpVtbl -> AppendSubDescriptor(This,pSubDescriptors)
-
-#define IAAFEssenceDescriptor_PrependSubDescriptor(This,pSubDescriptor)	\
-    (This)->lpVtbl -> PrependSubDescriptor(This,pSubDescriptor)
-
-#define IAAFEssenceDescriptor_InsertSubDescriptorAt(This,index,pSubDescriptor)	\
-    (This)->lpVtbl -> InsertSubDescriptorAt(This,index,pSubDescriptor)
-
-#define IAAFEssenceDescriptor_GetSubDescriptorAt(This,index,ppSubDescriptor)	\
-    (This)->lpVtbl -> GetSubDescriptorAt(This,index,ppSubDescriptor)
-
-#define IAAFEssenceDescriptor_RemoveSubDescriptorAt(This,index)	\
-    (This)->lpVtbl -> RemoveSubDescriptorAt(This,index)
-
-#define IAAFEssenceDescriptor_GetSubDescriptors(This,ppEnum)	\
-    (This)->lpVtbl -> GetSubDescriptors(This,ppEnum)
 
 #endif /* COBJMACROS */
 
@@ -9218,92 +9165,6 @@ HRESULT STDMETHODCALLTYPE IAAFEssenceDescriptor_GetLocators_Proxy(
 
 
 void __RPC_STUB IAAFEssenceDescriptor_GetLocators_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFEssenceDescriptor_CountSubDescriptors_Proxy( 
-    IAAFEssenceDescriptor * This,
-    /* [out] */ aafUInt32 *pResult);
-
-
-void __RPC_STUB IAAFEssenceDescriptor_CountSubDescriptors_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFEssenceDescriptor_AppendSubDescriptor_Proxy( 
-    IAAFEssenceDescriptor * This,
-    /* [in] */ IAAFSubDescriptor *pSubDescriptors);
-
-
-void __RPC_STUB IAAFEssenceDescriptor_AppendSubDescriptor_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFEssenceDescriptor_PrependSubDescriptor_Proxy( 
-    IAAFEssenceDescriptor * This,
-    /* [in] */ IAAFSubDescriptor *pSubDescriptor);
-
-
-void __RPC_STUB IAAFEssenceDescriptor_PrependSubDescriptor_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFEssenceDescriptor_InsertSubDescriptorAt_Proxy( 
-    IAAFEssenceDescriptor * This,
-    /* [in] */ aafUInt32 index,
-    /* [in] */ IAAFSubDescriptor *pSubDescriptor);
-
-
-void __RPC_STUB IAAFEssenceDescriptor_InsertSubDescriptorAt_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFEssenceDescriptor_GetSubDescriptorAt_Proxy( 
-    IAAFEssenceDescriptor * This,
-    /* [in] */ aafUInt32 index,
-    /* [retval][out] */ IAAFSubDescriptor **ppSubDescriptor);
-
-
-void __RPC_STUB IAAFEssenceDescriptor_GetSubDescriptorAt_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFEssenceDescriptor_RemoveSubDescriptorAt_Proxy( 
-    IAAFEssenceDescriptor * This,
-    /* [in] */ aafUInt32 index);
-
-
-void __RPC_STUB IAAFEssenceDescriptor_RemoveSubDescriptorAt_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFEssenceDescriptor_GetSubDescriptors_Proxy( 
-    IAAFEssenceDescriptor * This,
-    /* [out] */ IEnumAAFSubDescriptors **ppEnum);
-
-
-void __RPC_STUB IAAFEssenceDescriptor_GetSubDescriptors_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
@@ -9949,12 +9810,6 @@ EXTERN_C const IID IID_IAAFEventMobSlot;
         virtual HRESULT STDMETHODCALLTYPE SetEditRate( 
             /* [in] */ aafRational_t *pEditRate) = 0;
         
-        virtual HRESULT STDMETHODCALLTYPE GetEventSlotOrigin( 
-            /* [retval][out] */ aafPosition_t *pEventSlotOrigin) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE SetEventSlotOrigin( 
-            /* [in] */ aafPosition_t eventSlotOrigin) = 0;
-        
     };
     
 #else 	/* C style interface */
@@ -9981,14 +9836,6 @@ EXTERN_C const IID IID_IAAFEventMobSlot;
         HRESULT ( STDMETHODCALLTYPE *SetEditRate )( 
             IAAFEventMobSlot * This,
             /* [in] */ aafRational_t *pEditRate);
-        
-        HRESULT ( STDMETHODCALLTYPE *GetEventSlotOrigin )( 
-            IAAFEventMobSlot * This,
-            /* [retval][out] */ aafPosition_t *pEventSlotOrigin);
-        
-        HRESULT ( STDMETHODCALLTYPE *SetEventSlotOrigin )( 
-            IAAFEventMobSlot * This,
-            /* [in] */ aafPosition_t eventSlotOrigin);
         
         END_INTERFACE
     } IAAFEventMobSlotVtbl;
@@ -10019,12 +9866,6 @@ EXTERN_C const IID IID_IAAFEventMobSlot;
 #define IAAFEventMobSlot_SetEditRate(This,pEditRate)	\
     (This)->lpVtbl -> SetEditRate(This,pEditRate)
 
-#define IAAFEventMobSlot_GetEventSlotOrigin(This,pEventSlotOrigin)	\
-    (This)->lpVtbl -> GetEventSlotOrigin(This,pEventSlotOrigin)
-
-#define IAAFEventMobSlot_SetEventSlotOrigin(This,eventSlotOrigin)	\
-    (This)->lpVtbl -> SetEventSlotOrigin(This,eventSlotOrigin)
-
 #endif /* COBJMACROS */
 
 
@@ -10050,30 +9891,6 @@ HRESULT STDMETHODCALLTYPE IAAFEventMobSlot_SetEditRate_Proxy(
 
 
 void __RPC_STUB IAAFEventMobSlot_SetEditRate_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFEventMobSlot_GetEventSlotOrigin_Proxy( 
-    IAAFEventMobSlot * This,
-    /* [retval][out] */ aafPosition_t *pEventSlotOrigin);
-
-
-void __RPC_STUB IAAFEventMobSlot_GetEventSlotOrigin_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFEventMobSlot_SetEventSlotOrigin_Proxy( 
-    IAAFEventMobSlot * This,
-    /* [in] */ aafPosition_t eventSlotOrigin);
-
-
-void __RPC_STUB IAAFEventMobSlot_SetEventSlotOrigin_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
@@ -10336,12 +10153,6 @@ EXTERN_C const IID IID_IAAFFileDescriptor;
         virtual HRESULT STDMETHODCALLTYPE GetContainerFormat( 
             /* [out] */ IAAFContainerDef **pFormat) = 0;
         
-        virtual HRESULT STDMETHODCALLTYPE SetLinkedSlotID( 
-            /* [in] */ aafUInt32 LinkedSlotID) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetLinkedSlotID( 
-            /* [out] */ aafUInt32 *pLinkedSlotID) = 0;
-        
     };
     
 #else 	/* C style interface */
@@ -10393,14 +10204,6 @@ EXTERN_C const IID IID_IAAFFileDescriptor;
             IAAFFileDescriptor * This,
             /* [out] */ IAAFContainerDef **pFormat);
         
-        HRESULT ( STDMETHODCALLTYPE *SetLinkedSlotID )( 
-            IAAFFileDescriptor * This,
-            /* [in] */ aafUInt32 LinkedSlotID);
-        
-        HRESULT ( STDMETHODCALLTYPE *GetLinkedSlotID )( 
-            IAAFFileDescriptor * This,
-            /* [out] */ aafUInt32 *pLinkedSlotID);
-        
         END_INTERFACE
     } IAAFFileDescriptorVtbl;
 
@@ -10447,12 +10250,6 @@ EXTERN_C const IID IID_IAAFFileDescriptor;
 
 #define IAAFFileDescriptor_GetContainerFormat(This,pFormat)	\
     (This)->lpVtbl -> GetContainerFormat(This,pFormat)
-
-#define IAAFFileDescriptor_SetLinkedSlotID(This,LinkedSlotID)	\
-    (This)->lpVtbl -> SetLinkedSlotID(This,LinkedSlotID)
-
-#define IAAFFileDescriptor_GetLinkedSlotID(This,pLinkedSlotID)	\
-    (This)->lpVtbl -> GetLinkedSlotID(This,pLinkedSlotID)
 
 #endif /* COBJMACROS */
 
@@ -10551,30 +10348,6 @@ HRESULT STDMETHODCALLTYPE IAAFFileDescriptor_GetContainerFormat_Proxy(
 
 
 void __RPC_STUB IAAFFileDescriptor_GetContainerFormat_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFFileDescriptor_SetLinkedSlotID_Proxy( 
-    IAAFFileDescriptor * This,
-    /* [in] */ aafUInt32 LinkedSlotID);
-
-
-void __RPC_STUB IAAFFileDescriptor_SetLinkedSlotID_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFFileDescriptor_GetLinkedSlotID_Proxy( 
-    IAAFFileDescriptor * This,
-    /* [out] */ aafUInt32 *pLinkedSlotID);
-
-
-void __RPC_STUB IAAFFileDescriptor_GetLinkedSlotID_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
@@ -41856,6 +41629,394 @@ void __RPC_STUB IAAFEssenceDataEx_GetFileMobID_Stub(
 #endif 	/* __IAAFEssenceDataEx_INTERFACE_DEFINED__ */
 
 
+#ifndef __IAAFEssenceDescriptor2_INTERFACE_DEFINED__
+#define __IAAFEssenceDescriptor2_INTERFACE_DEFINED__
+
+/* interface IAAFEssenceDescriptor2 */
+/* [unique][helpstring][uuid][object] */ 
+
+
+EXTERN_C const IID IID_IAAFEssenceDescriptor2;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("3ec92568-730d-45d7-805f-d8629aa10910")
+    IAAFEssenceDescriptor2 : public IUnknown
+    {
+    public:
+        virtual HRESULT STDMETHODCALLTYPE CountLocators( 
+            /* [out] */ aafUInt32 *pResult) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE AppendLocator( 
+            /* [in] */ IAAFLocator *pLocator) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE PrependLocator( 
+            /* [in] */ IAAFLocator *pLocator) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE InsertLocatorAt( 
+            /* [in] */ aafUInt32 index,
+            /* [in] */ IAAFLocator *pLocator) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetLocatorAt( 
+            /* [in] */ aafUInt32 index,
+            /* [retval][out] */ IAAFLocator **ppLocator) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE RemoveLocatorAt( 
+            /* [in] */ aafUInt32 index) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetLocators( 
+            /* [out] */ IEnumAAFLocators **ppEnum) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE CountSubDescriptors( 
+            /* [out] */ aafUInt32 *pResult) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE AppendSubDescriptor( 
+            /* [in] */ IAAFSubDescriptor *pSubDescriptors) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE PrependSubDescriptor( 
+            /* [in] */ IAAFSubDescriptor *pSubDescriptor) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE InsertSubDescriptorAt( 
+            /* [in] */ aafUInt32 index,
+            /* [in] */ IAAFSubDescriptor *pSubDescriptor) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetSubDescriptorAt( 
+            /* [in] */ aafUInt32 index,
+            /* [retval][out] */ IAAFSubDescriptor **ppSubDescriptor) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE RemoveSubDescriptorAt( 
+            /* [in] */ aafUInt32 index) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetSubDescriptors( 
+            /* [out] */ IEnumAAFSubDescriptors **ppEnum) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IAAFEssenceDescriptor2Vtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IAAFEssenceDescriptor2 * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IAAFEssenceDescriptor2 * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IAAFEssenceDescriptor2 * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *CountLocators )( 
+            IAAFEssenceDescriptor2 * This,
+            /* [out] */ aafUInt32 *pResult);
+        
+        HRESULT ( STDMETHODCALLTYPE *AppendLocator )( 
+            IAAFEssenceDescriptor2 * This,
+            /* [in] */ IAAFLocator *pLocator);
+        
+        HRESULT ( STDMETHODCALLTYPE *PrependLocator )( 
+            IAAFEssenceDescriptor2 * This,
+            /* [in] */ IAAFLocator *pLocator);
+        
+        HRESULT ( STDMETHODCALLTYPE *InsertLocatorAt )( 
+            IAAFEssenceDescriptor2 * This,
+            /* [in] */ aafUInt32 index,
+            /* [in] */ IAAFLocator *pLocator);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetLocatorAt )( 
+            IAAFEssenceDescriptor2 * This,
+            /* [in] */ aafUInt32 index,
+            /* [retval][out] */ IAAFLocator **ppLocator);
+        
+        HRESULT ( STDMETHODCALLTYPE *RemoveLocatorAt )( 
+            IAAFEssenceDescriptor2 * This,
+            /* [in] */ aafUInt32 index);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetLocators )( 
+            IAAFEssenceDescriptor2 * This,
+            /* [out] */ IEnumAAFLocators **ppEnum);
+        
+        HRESULT ( STDMETHODCALLTYPE *CountSubDescriptors )( 
+            IAAFEssenceDescriptor2 * This,
+            /* [out] */ aafUInt32 *pResult);
+        
+        HRESULT ( STDMETHODCALLTYPE *AppendSubDescriptor )( 
+            IAAFEssenceDescriptor2 * This,
+            /* [in] */ IAAFSubDescriptor *pSubDescriptors);
+        
+        HRESULT ( STDMETHODCALLTYPE *PrependSubDescriptor )( 
+            IAAFEssenceDescriptor2 * This,
+            /* [in] */ IAAFSubDescriptor *pSubDescriptor);
+        
+        HRESULT ( STDMETHODCALLTYPE *InsertSubDescriptorAt )( 
+            IAAFEssenceDescriptor2 * This,
+            /* [in] */ aafUInt32 index,
+            /* [in] */ IAAFSubDescriptor *pSubDescriptor);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetSubDescriptorAt )( 
+            IAAFEssenceDescriptor2 * This,
+            /* [in] */ aafUInt32 index,
+            /* [retval][out] */ IAAFSubDescriptor **ppSubDescriptor);
+        
+        HRESULT ( STDMETHODCALLTYPE *RemoveSubDescriptorAt )( 
+            IAAFEssenceDescriptor2 * This,
+            /* [in] */ aafUInt32 index);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetSubDescriptors )( 
+            IAAFEssenceDescriptor2 * This,
+            /* [out] */ IEnumAAFSubDescriptors **ppEnum);
+        
+        END_INTERFACE
+    } IAAFEssenceDescriptor2Vtbl;
+
+    interface IAAFEssenceDescriptor2
+    {
+        CONST_VTBL struct IAAFEssenceDescriptor2Vtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IAAFEssenceDescriptor2_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IAAFEssenceDescriptor2_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IAAFEssenceDescriptor2_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IAAFEssenceDescriptor2_CountLocators(This,pResult)	\
+    (This)->lpVtbl -> CountLocators(This,pResult)
+
+#define IAAFEssenceDescriptor2_AppendLocator(This,pLocator)	\
+    (This)->lpVtbl -> AppendLocator(This,pLocator)
+
+#define IAAFEssenceDescriptor2_PrependLocator(This,pLocator)	\
+    (This)->lpVtbl -> PrependLocator(This,pLocator)
+
+#define IAAFEssenceDescriptor2_InsertLocatorAt(This,index,pLocator)	\
+    (This)->lpVtbl -> InsertLocatorAt(This,index,pLocator)
+
+#define IAAFEssenceDescriptor2_GetLocatorAt(This,index,ppLocator)	\
+    (This)->lpVtbl -> GetLocatorAt(This,index,ppLocator)
+
+#define IAAFEssenceDescriptor2_RemoveLocatorAt(This,index)	\
+    (This)->lpVtbl -> RemoveLocatorAt(This,index)
+
+#define IAAFEssenceDescriptor2_GetLocators(This,ppEnum)	\
+    (This)->lpVtbl -> GetLocators(This,ppEnum)
+
+#define IAAFEssenceDescriptor2_CountSubDescriptors(This,pResult)	\
+    (This)->lpVtbl -> CountSubDescriptors(This,pResult)
+
+#define IAAFEssenceDescriptor2_AppendSubDescriptor(This,pSubDescriptors)	\
+    (This)->lpVtbl -> AppendSubDescriptor(This,pSubDescriptors)
+
+#define IAAFEssenceDescriptor2_PrependSubDescriptor(This,pSubDescriptor)	\
+    (This)->lpVtbl -> PrependSubDescriptor(This,pSubDescriptor)
+
+#define IAAFEssenceDescriptor2_InsertSubDescriptorAt(This,index,pSubDescriptor)	\
+    (This)->lpVtbl -> InsertSubDescriptorAt(This,index,pSubDescriptor)
+
+#define IAAFEssenceDescriptor2_GetSubDescriptorAt(This,index,ppSubDescriptor)	\
+    (This)->lpVtbl -> GetSubDescriptorAt(This,index,ppSubDescriptor)
+
+#define IAAFEssenceDescriptor2_RemoveSubDescriptorAt(This,index)	\
+    (This)->lpVtbl -> RemoveSubDescriptorAt(This,index)
+
+#define IAAFEssenceDescriptor2_GetSubDescriptors(This,ppEnum)	\
+    (This)->lpVtbl -> GetSubDescriptors(This,ppEnum)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+HRESULT STDMETHODCALLTYPE IAAFEssenceDescriptor2_CountLocators_Proxy( 
+    IAAFEssenceDescriptor2 * This,
+    /* [out] */ aafUInt32 *pResult);
+
+
+void __RPC_STUB IAAFEssenceDescriptor2_CountLocators_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFEssenceDescriptor2_AppendLocator_Proxy( 
+    IAAFEssenceDescriptor2 * This,
+    /* [in] */ IAAFLocator *pLocator);
+
+
+void __RPC_STUB IAAFEssenceDescriptor2_AppendLocator_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFEssenceDescriptor2_PrependLocator_Proxy( 
+    IAAFEssenceDescriptor2 * This,
+    /* [in] */ IAAFLocator *pLocator);
+
+
+void __RPC_STUB IAAFEssenceDescriptor2_PrependLocator_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFEssenceDescriptor2_InsertLocatorAt_Proxy( 
+    IAAFEssenceDescriptor2 * This,
+    /* [in] */ aafUInt32 index,
+    /* [in] */ IAAFLocator *pLocator);
+
+
+void __RPC_STUB IAAFEssenceDescriptor2_InsertLocatorAt_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFEssenceDescriptor2_GetLocatorAt_Proxy( 
+    IAAFEssenceDescriptor2 * This,
+    /* [in] */ aafUInt32 index,
+    /* [retval][out] */ IAAFLocator **ppLocator);
+
+
+void __RPC_STUB IAAFEssenceDescriptor2_GetLocatorAt_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFEssenceDescriptor2_RemoveLocatorAt_Proxy( 
+    IAAFEssenceDescriptor2 * This,
+    /* [in] */ aafUInt32 index);
+
+
+void __RPC_STUB IAAFEssenceDescriptor2_RemoveLocatorAt_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFEssenceDescriptor2_GetLocators_Proxy( 
+    IAAFEssenceDescriptor2 * This,
+    /* [out] */ IEnumAAFLocators **ppEnum);
+
+
+void __RPC_STUB IAAFEssenceDescriptor2_GetLocators_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFEssenceDescriptor2_CountSubDescriptors_Proxy( 
+    IAAFEssenceDescriptor2 * This,
+    /* [out] */ aafUInt32 *pResult);
+
+
+void __RPC_STUB IAAFEssenceDescriptor2_CountSubDescriptors_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFEssenceDescriptor2_AppendSubDescriptor_Proxy( 
+    IAAFEssenceDescriptor2 * This,
+    /* [in] */ IAAFSubDescriptor *pSubDescriptors);
+
+
+void __RPC_STUB IAAFEssenceDescriptor2_AppendSubDescriptor_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFEssenceDescriptor2_PrependSubDescriptor_Proxy( 
+    IAAFEssenceDescriptor2 * This,
+    /* [in] */ IAAFSubDescriptor *pSubDescriptor);
+
+
+void __RPC_STUB IAAFEssenceDescriptor2_PrependSubDescriptor_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFEssenceDescriptor2_InsertSubDescriptorAt_Proxy( 
+    IAAFEssenceDescriptor2 * This,
+    /* [in] */ aafUInt32 index,
+    /* [in] */ IAAFSubDescriptor *pSubDescriptor);
+
+
+void __RPC_STUB IAAFEssenceDescriptor2_InsertSubDescriptorAt_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFEssenceDescriptor2_GetSubDescriptorAt_Proxy( 
+    IAAFEssenceDescriptor2 * This,
+    /* [in] */ aafUInt32 index,
+    /* [retval][out] */ IAAFSubDescriptor **ppSubDescriptor);
+
+
+void __RPC_STUB IAAFEssenceDescriptor2_GetSubDescriptorAt_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFEssenceDescriptor2_RemoveSubDescriptorAt_Proxy( 
+    IAAFEssenceDescriptor2 * This,
+    /* [in] */ aafUInt32 index);
+
+
+void __RPC_STUB IAAFEssenceDescriptor2_RemoveSubDescriptorAt_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFEssenceDescriptor2_GetSubDescriptors_Proxy( 
+    IAAFEssenceDescriptor2 * This,
+    /* [out] */ IEnumAAFSubDescriptors **ppEnum);
+
+
+void __RPC_STUB IAAFEssenceDescriptor2_GetSubDescriptors_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __IAAFEssenceDescriptor2_INTERFACE_DEFINED__ */
+
+
 #ifndef __IAAFEssenceMultiAccess_INTERFACE_DEFINED__
 #define __IAAFEssenceMultiAccess_INTERFACE_DEFINED__
 
@@ -41978,6 +42139,450 @@ void __RPC_STUB IAAFEssenceMultiAccess_ReadMultiSamples_Stub(
 
 
 #endif 	/* __IAAFEssenceMultiAccess_INTERFACE_DEFINED__ */
+
+
+#ifndef __IAAFEventMobSlot2_INTERFACE_DEFINED__
+#define __IAAFEventMobSlot2_INTERFACE_DEFINED__
+
+/* interface IAAFEventMobSlot2 */
+/* [unique][helpstring][uuid][object] */ 
+
+
+EXTERN_C const IID IID_IAAFEventMobSlot2;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("15375122-ce6c-464d-8ac5-228862e61d08")
+    IAAFEventMobSlot2 : public IUnknown
+    {
+    public:
+        virtual HRESULT STDMETHODCALLTYPE GetEditRate( 
+            /* [retval][out] */ aafRational_t *pEditRate) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetEditRate( 
+            /* [in] */ aafRational_t *pEditRate) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetEventSlotOrigin( 
+            /* [retval][out] */ aafPosition_t *pEventSlotOrigin) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetEventSlotOrigin( 
+            /* [in] */ aafPosition_t eventSlotOrigin) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IAAFEventMobSlot2Vtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IAAFEventMobSlot2 * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IAAFEventMobSlot2 * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IAAFEventMobSlot2 * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetEditRate )( 
+            IAAFEventMobSlot2 * This,
+            /* [retval][out] */ aafRational_t *pEditRate);
+        
+        HRESULT ( STDMETHODCALLTYPE *SetEditRate )( 
+            IAAFEventMobSlot2 * This,
+            /* [in] */ aafRational_t *pEditRate);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetEventSlotOrigin )( 
+            IAAFEventMobSlot2 * This,
+            /* [retval][out] */ aafPosition_t *pEventSlotOrigin);
+        
+        HRESULT ( STDMETHODCALLTYPE *SetEventSlotOrigin )( 
+            IAAFEventMobSlot2 * This,
+            /* [in] */ aafPosition_t eventSlotOrigin);
+        
+        END_INTERFACE
+    } IAAFEventMobSlot2Vtbl;
+
+    interface IAAFEventMobSlot2
+    {
+        CONST_VTBL struct IAAFEventMobSlot2Vtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IAAFEventMobSlot2_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IAAFEventMobSlot2_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IAAFEventMobSlot2_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IAAFEventMobSlot2_GetEditRate(This,pEditRate)	\
+    (This)->lpVtbl -> GetEditRate(This,pEditRate)
+
+#define IAAFEventMobSlot2_SetEditRate(This,pEditRate)	\
+    (This)->lpVtbl -> SetEditRate(This,pEditRate)
+
+#define IAAFEventMobSlot2_GetEventSlotOrigin(This,pEventSlotOrigin)	\
+    (This)->lpVtbl -> GetEventSlotOrigin(This,pEventSlotOrigin)
+
+#define IAAFEventMobSlot2_SetEventSlotOrigin(This,eventSlotOrigin)	\
+    (This)->lpVtbl -> SetEventSlotOrigin(This,eventSlotOrigin)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+HRESULT STDMETHODCALLTYPE IAAFEventMobSlot2_GetEditRate_Proxy( 
+    IAAFEventMobSlot2 * This,
+    /* [retval][out] */ aafRational_t *pEditRate);
+
+
+void __RPC_STUB IAAFEventMobSlot2_GetEditRate_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFEventMobSlot2_SetEditRate_Proxy( 
+    IAAFEventMobSlot2 * This,
+    /* [in] */ aafRational_t *pEditRate);
+
+
+void __RPC_STUB IAAFEventMobSlot2_SetEditRate_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFEventMobSlot2_GetEventSlotOrigin_Proxy( 
+    IAAFEventMobSlot2 * This,
+    /* [retval][out] */ aafPosition_t *pEventSlotOrigin);
+
+
+void __RPC_STUB IAAFEventMobSlot2_GetEventSlotOrigin_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFEventMobSlot2_SetEventSlotOrigin_Proxy( 
+    IAAFEventMobSlot2 * This,
+    /* [in] */ aafPosition_t eventSlotOrigin);
+
+
+void __RPC_STUB IAAFEventMobSlot2_SetEventSlotOrigin_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __IAAFEventMobSlot2_INTERFACE_DEFINED__ */
+
+
+#ifndef __IAAFFileDescriptor2_INTERFACE_DEFINED__
+#define __IAAFFileDescriptor2_INTERFACE_DEFINED__
+
+/* interface IAAFFileDescriptor2 */
+/* [unique][helpstring][uuid][object] */ 
+
+
+EXTERN_C const IID IID_IAAFFileDescriptor2;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("38c1088b-f0f2-47c7-9413-361262ae9f07")
+    IAAFFileDescriptor2 : public IUnknown
+    {
+    public:
+        virtual HRESULT STDMETHODCALLTYPE SetLength( 
+            /* [in] */ aafLength_t length) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetLength( 
+            /* [out] */ aafLength_t *pLength) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetCodecDef( 
+            /* [in] */ IAAFCodecDef *codecDef) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetCodecDef( 
+            /* [out] */ IAAFCodecDef **pCodecDef) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetSampleRate( 
+            /* [in] */ aafRational_constref rate) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetSampleRate( 
+            /* [out] */ aafRational_t *pRate) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetContainerFormat( 
+            /* [in] */ IAAFContainerDef *format) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetContainerFormat( 
+            /* [out] */ IAAFContainerDef **pFormat) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetLinkedSlotID( 
+            /* [in] */ aafUInt32 LinkedSlotID) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetLinkedSlotID( 
+            /* [out] */ aafUInt32 *pLinkedSlotID) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IAAFFileDescriptor2Vtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IAAFFileDescriptor2 * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IAAFFileDescriptor2 * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IAAFFileDescriptor2 * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *SetLength )( 
+            IAAFFileDescriptor2 * This,
+            /* [in] */ aafLength_t length);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetLength )( 
+            IAAFFileDescriptor2 * This,
+            /* [out] */ aafLength_t *pLength);
+        
+        HRESULT ( STDMETHODCALLTYPE *SetCodecDef )( 
+            IAAFFileDescriptor2 * This,
+            /* [in] */ IAAFCodecDef *codecDef);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetCodecDef )( 
+            IAAFFileDescriptor2 * This,
+            /* [out] */ IAAFCodecDef **pCodecDef);
+        
+        HRESULT ( STDMETHODCALLTYPE *SetSampleRate )( 
+            IAAFFileDescriptor2 * This,
+            /* [in] */ aafRational_constref rate);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetSampleRate )( 
+            IAAFFileDescriptor2 * This,
+            /* [out] */ aafRational_t *pRate);
+        
+        HRESULT ( STDMETHODCALLTYPE *SetContainerFormat )( 
+            IAAFFileDescriptor2 * This,
+            /* [in] */ IAAFContainerDef *format);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetContainerFormat )( 
+            IAAFFileDescriptor2 * This,
+            /* [out] */ IAAFContainerDef **pFormat);
+        
+        HRESULT ( STDMETHODCALLTYPE *SetLinkedSlotID )( 
+            IAAFFileDescriptor2 * This,
+            /* [in] */ aafUInt32 LinkedSlotID);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetLinkedSlotID )( 
+            IAAFFileDescriptor2 * This,
+            /* [out] */ aafUInt32 *pLinkedSlotID);
+        
+        END_INTERFACE
+    } IAAFFileDescriptor2Vtbl;
+
+    interface IAAFFileDescriptor2
+    {
+        CONST_VTBL struct IAAFFileDescriptor2Vtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IAAFFileDescriptor2_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IAAFFileDescriptor2_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IAAFFileDescriptor2_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IAAFFileDescriptor2_SetLength(This,length)	\
+    (This)->lpVtbl -> SetLength(This,length)
+
+#define IAAFFileDescriptor2_GetLength(This,pLength)	\
+    (This)->lpVtbl -> GetLength(This,pLength)
+
+#define IAAFFileDescriptor2_SetCodecDef(This,codecDef)	\
+    (This)->lpVtbl -> SetCodecDef(This,codecDef)
+
+#define IAAFFileDescriptor2_GetCodecDef(This,pCodecDef)	\
+    (This)->lpVtbl -> GetCodecDef(This,pCodecDef)
+
+#define IAAFFileDescriptor2_SetSampleRate(This,rate)	\
+    (This)->lpVtbl -> SetSampleRate(This,rate)
+
+#define IAAFFileDescriptor2_GetSampleRate(This,pRate)	\
+    (This)->lpVtbl -> GetSampleRate(This,pRate)
+
+#define IAAFFileDescriptor2_SetContainerFormat(This,format)	\
+    (This)->lpVtbl -> SetContainerFormat(This,format)
+
+#define IAAFFileDescriptor2_GetContainerFormat(This,pFormat)	\
+    (This)->lpVtbl -> GetContainerFormat(This,pFormat)
+
+#define IAAFFileDescriptor2_SetLinkedSlotID(This,LinkedSlotID)	\
+    (This)->lpVtbl -> SetLinkedSlotID(This,LinkedSlotID)
+
+#define IAAFFileDescriptor2_GetLinkedSlotID(This,pLinkedSlotID)	\
+    (This)->lpVtbl -> GetLinkedSlotID(This,pLinkedSlotID)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+HRESULT STDMETHODCALLTYPE IAAFFileDescriptor2_SetLength_Proxy( 
+    IAAFFileDescriptor2 * This,
+    /* [in] */ aafLength_t length);
+
+
+void __RPC_STUB IAAFFileDescriptor2_SetLength_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFFileDescriptor2_GetLength_Proxy( 
+    IAAFFileDescriptor2 * This,
+    /* [out] */ aafLength_t *pLength);
+
+
+void __RPC_STUB IAAFFileDescriptor2_GetLength_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFFileDescriptor2_SetCodecDef_Proxy( 
+    IAAFFileDescriptor2 * This,
+    /* [in] */ IAAFCodecDef *codecDef);
+
+
+void __RPC_STUB IAAFFileDescriptor2_SetCodecDef_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFFileDescriptor2_GetCodecDef_Proxy( 
+    IAAFFileDescriptor2 * This,
+    /* [out] */ IAAFCodecDef **pCodecDef);
+
+
+void __RPC_STUB IAAFFileDescriptor2_GetCodecDef_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFFileDescriptor2_SetSampleRate_Proxy( 
+    IAAFFileDescriptor2 * This,
+    /* [in] */ aafRational_constref rate);
+
+
+void __RPC_STUB IAAFFileDescriptor2_SetSampleRate_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFFileDescriptor2_GetSampleRate_Proxy( 
+    IAAFFileDescriptor2 * This,
+    /* [out] */ aafRational_t *pRate);
+
+
+void __RPC_STUB IAAFFileDescriptor2_GetSampleRate_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFFileDescriptor2_SetContainerFormat_Proxy( 
+    IAAFFileDescriptor2 * This,
+    /* [in] */ IAAFContainerDef *format);
+
+
+void __RPC_STUB IAAFFileDescriptor2_SetContainerFormat_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFFileDescriptor2_GetContainerFormat_Proxy( 
+    IAAFFileDescriptor2 * This,
+    /* [out] */ IAAFContainerDef **pFormat);
+
+
+void __RPC_STUB IAAFFileDescriptor2_GetContainerFormat_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFFileDescriptor2_SetLinkedSlotID_Proxy( 
+    IAAFFileDescriptor2 * This,
+    /* [in] */ aafUInt32 LinkedSlotID);
+
+
+void __RPC_STUB IAAFFileDescriptor2_SetLinkedSlotID_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFFileDescriptor2_GetLinkedSlotID_Proxy( 
+    IAAFFileDescriptor2 * This,
+    /* [out] */ aafUInt32 *pLinkedSlotID);
+
+
+void __RPC_STUB IAAFFileDescriptor2_GetLinkedSlotID_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __IAAFFileDescriptor2_INTERFACE_DEFINED__ */
 
 
 #ifndef __IAAFHeader2_INTERFACE_DEFINED__
@@ -46336,7 +46941,7 @@ void __RPC_STUB IAAFTypeDefVariableArrayEx_InsertElement_Stub(
 #endif 	/* __IAAFTypeDefVariableArrayEx_INTERFACE_DEFINED__ */
 
 
-/* interface __MIDL_itf_AAF_0263 */
+/* interface __MIDL_itf_AAF_0266 */
 /* [local] */ 
 
   ///***********************************************************
@@ -46458,8 +47063,8 @@ STDAPI AAFGetLibraryPathName (
 
 
 
-extern RPC_IF_HANDLE __MIDL_itf_AAF_0263_v0_0_c_ifspec;
-extern RPC_IF_HANDLE __MIDL_itf_AAF_0263_v0_0_s_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_AAF_0266_v0_0_c_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_AAF_0266_v0_0_s_ifspec;
 
 /* Additional Prototypes for ALL interfaces */
 
