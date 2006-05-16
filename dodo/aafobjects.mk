@@ -39,7 +39,10 @@ AAFCOMINTERFACESONLY="\
 	AAFDigitalImageDescriptor2 \
 	AAFEndian \
 	AAFEssenceDataEx \
+	AAFEssenceDescriptor2 \
 	AAFEssenceMultiAccess \
+	AAFEventMobSlot2 \
+	AAFFileDescriptor2 \
 	AAFHeader2 \
 	AAFMasterMob2 \
 	AAFMasterMobEx \
