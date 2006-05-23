@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2006, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -75,6 +75,7 @@ public:
     // @cmember Restore this <c OMObjectReference>.
   virtual void restore(void) = 0;
 
+    // tjb - deprecated
     // @cmember Get the value of this <c OMObjectReference>.
     //          The value is a pointer to the referenced <c OMStorable>.
   virtual OMStorable* getValue(void) const = 0;
@@ -91,7 +92,7 @@ protected:
   // @access Protected members.
 
     // @cmember The containing property.
-  OMProperty* _property;
+  OMProperty* _property; // tjb - deprecated
 
     // @cmember A pointer to the actual object.
   OMStorable* _pointer;
@@ -259,8 +260,8 @@ private:
   OMStrongReferenceSet* set(void) const;
 
   OMUniqueObjectIdentification _identification;
-  OMPropertyTag _targetTag;
-  OMStrongReferenceSet* _targetSet;
+  OMPropertyTag _targetTag;         // tjb - deprecated
+  OMStrongReferenceSet* _targetSet; // tjb - deprecated
 
 };
 
