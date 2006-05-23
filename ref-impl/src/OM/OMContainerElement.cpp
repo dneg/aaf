@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2006, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -409,7 +409,7 @@ OMUInt32 OMStrongReferenceSetElement::_initialReferenceCount = sticky;
 
   // @mfunc Constructor.
 OMWeakReferenceVectorElement::OMWeakReferenceVectorElement(void)
-: OMContainerElement<OMWeakObjectReference>()
+: OMContainerElement<OMWeakObjectReference<OMUniqueObjectIdentification> >()
 {
   TRACE("OMWeakReferenceVectorElement::OMWeakReferenceVectorElement");
 }
@@ -424,8 +424,10 @@ OMWeakReferenceVectorElement::OMWeakReferenceVectorElement(
                                    OMProperty* property,
                                    OMUniqueObjectIdentification identification,
                                    OMPropertyTag targetTag)
-: OMContainerElement<OMWeakObjectReference>(
-  OMWeakObjectReference(property, identification, targetTag))
+: OMContainerElement<OMWeakObjectReference<OMUniqueObjectIdentification> >(
+  OMWeakObjectReference<OMUniqueObjectIdentification>(property,
+                                                      identification,
+                                                      targetTag))
 {
   TRACE("OMWeakReferenceVectorElement::OMWeakReferenceVectorElement");
 }
@@ -434,7 +436,7 @@ OMWeakReferenceVectorElement::OMWeakReferenceVectorElement(
   //   @parm The <c OMWeakReferenceVectorElement> to copy.
 OMWeakReferenceVectorElement::OMWeakReferenceVectorElement(
                                        const OMWeakReferenceVectorElement& rhs)
-: OMContainerElement<OMWeakObjectReference>(rhs)
+: OMContainerElement<OMWeakObjectReference<OMUniqueObjectIdentification> >(rhs)
 {
   TRACE("OMWeakReferenceVectorElement::OMWeakReferenceVectorElement");
 }
@@ -461,7 +463,9 @@ OMWeakReferenceVectorElement::operator= (
     return *this; // early return !
   }
 
-  OMContainerElement<OMWeakObjectReference>::operator=(rhs);
+  OMContainerElement<
+    OMWeakObjectReference<
+      OMUniqueObjectIdentification> >::operator=(rhs);
   return *this;
 }
 
@@ -475,7 +479,9 @@ bool OMWeakReferenceVectorElement::operator== (
 {
   TRACE("OMWeakReferenceVectorElement::operator==");
 
-  bool result = OMContainerElement<OMWeakObjectReference>::operator==(rhs);
+  bool result = OMContainerElement<
+                  OMWeakObjectReference<
+                    OMUniqueObjectIdentification> >::operator==(rhs);
 
   return result;
 }
@@ -510,7 +516,7 @@ OMWeakReferenceVectorElement::identification(void) const
 
   // @mfunc Constructor.
 OMWeakReferenceSetElement::OMWeakReferenceSetElement(void)
-: OMContainerElement<OMWeakObjectReference>()
+: OMContainerElement<OMWeakObjectReference<OMUniqueObjectIdentification> >()
 {
   TRACE("OMWeakReferenceSetElement::OMWeakReferenceSetElement");
 }
@@ -525,8 +531,10 @@ OMWeakReferenceSetElement::OMWeakReferenceSetElement(
                                    OMProperty* property,
                                    OMUniqueObjectIdentification identification,
                                    OMPropertyTag targetTag)
-: OMContainerElement<OMWeakObjectReference>(
-  OMWeakObjectReference(property, identification, targetTag))
+: OMContainerElement<OMWeakObjectReference<OMUniqueObjectIdentification> >(
+  OMWeakObjectReference<OMUniqueObjectIdentification>(property,
+                                                      identification,
+                                                      targetTag))
 {
   TRACE("OMWeakReferenceSetElement::OMWeakReferenceSetElement");
 }
@@ -535,7 +543,7 @@ OMWeakReferenceSetElement::OMWeakReferenceSetElement(
   //   @parm The <c OMWeakReferenceSetElement> to copy.
 OMWeakReferenceSetElement::OMWeakReferenceSetElement(
                                           const OMWeakReferenceSetElement& rhs)
-: OMContainerElement<OMWeakObjectReference>(rhs)
+: OMContainerElement<OMWeakObjectReference<OMUniqueObjectIdentification> >(rhs)
 {
   TRACE("OMWeakReferenceSetElement::OMWeakReferenceSetElement");
 }
@@ -561,7 +569,9 @@ OMWeakReferenceSetElement::operator= (const OMWeakReferenceSetElement& rhs)
     return *this; // early return !
   }
 
-  OMContainerElement<OMWeakObjectReference>::operator=(rhs);
+  OMContainerElement<
+    OMWeakObjectReference<
+      OMUniqueObjectIdentification> >::operator=(rhs);
   return *this;
 }
 
@@ -575,7 +585,9 @@ bool OMWeakReferenceSetElement::operator== (
 {
   TRACE("OMWeakReferenceSetElement::operator==");
 
-  bool result = OMContainerElement<OMWeakObjectReference>::operator==(rhs);
+  bool result = OMContainerElement<
+                  OMWeakObjectReference<
+                    OMUniqueObjectIdentification> >::operator==(rhs);
 
   return result;
 }

@@ -18,7 +18,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2006, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -161,7 +161,7 @@ public:
 
 private:
 	DataDefWeakRefArrayProp_t			_dataDefs;
-	OMWeakReferenceProperty<ImplAAFClassDef> _fileDescClass;
+	OMWeakReferenceProperty<OMUniqueObjectIdentification, ImplAAFClassDef> _fileDescClass;
 };
 
 #endif // ! __ImplAAFCodecDef_h__

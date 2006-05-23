@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2006, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -149,7 +149,7 @@ class ImplAAFCloneResolver {
   ~ImplAAFCloneResolver();
 
   template <class Type>
-  void ResolveWeakReference( const OMWeakReferenceProperty<Type>& weakRef )
+    void ResolveWeakReference( const OMWeakReferenceProperty<OMUniqueObjectIdentification, Type>& weakRef )
   {
 #ifndef DISABLE_CLONE_RESOLVER
 	if ( !weakRef.isOptional() || weakRef.isPresent() ) {

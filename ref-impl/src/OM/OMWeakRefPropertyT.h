@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2006, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -41,8 +41,8 @@
   //         <c OMWeakReferenceProperty> resides.
   //   @parm The id of the property by which the <p ReferencedObject>
   //         is uniquely identified (the key).
-template <typename ReferencedObject>
-OMWeakReferenceProperty<ReferencedObject>::OMWeakReferenceProperty(
+template <typename Key, typename ReferencedObject>
+OMWeakReferenceProperty<Key, ReferencedObject>::OMWeakReferenceProperty(
                                               const OMPropertyId propertyId,
                                               const wchar_t* name,
                                               const wchar_t* targetName,
@@ -55,9 +55,10 @@ OMWeakReferenceProperty<ReferencedObject>::OMWeakReferenceProperty(
   _keyPropertyId(keyPropertyId),
   _targetSet(0)
 {
-  TRACE("OMWeakReferenceProperty<ReferencedObject>::OMWeakReferenceProperty");
+  TRACE("OMWeakReferenceProperty<Key, ReferencedObject>::"
+                                                    "OMWeakReferenceProperty");
 
-  _reference = OMWeakObjectReference(this);
+  _reference = OMWeakObjectReference<OMUniqueObjectIdentification>(this);
 }
 
   // @mfunc Constructor.
@@ -68,8 +69,8 @@ OMWeakReferenceProperty<ReferencedObject>::OMWeakReferenceProperty(
   //   @parm The name (as a list of pids) of the the <c OMProperty> instance
   //         (a set property) in which the object referenced by this
   //         <c OMWeakReferenceProperty> resides.
-template <typename ReferencedObject>
-OMWeakReferenceProperty<ReferencedObject>::OMWeakReferenceProperty(
+template <typename Key, typename ReferencedObject>
+OMWeakReferenceProperty<Key, ReferencedObject>::OMWeakReferenceProperty(
                                         const OMPropertyId propertyId,
                                         const wchar_t* name,
                                         const OMPropertyId keyPropertyId,
@@ -82,16 +83,18 @@ OMWeakReferenceProperty<ReferencedObject>::OMWeakReferenceProperty(
   _keyPropertyId(keyPropertyId),
   _targetSet(0)
 {
-  TRACE("OMWeakReferenceProperty<ReferencedObject>::OMWeakReferenceProperty");
+  TRACE("OMWeakReferenceProperty<Key, ReferencedObject>::"
+                                                    "OMWeakReferenceProperty");
 
-  _reference = OMWeakObjectReference(this);
+  _reference = OMWeakObjectReference<OMUniqueObjectIdentification>(this);
   _targetPropertyPath = savePropertyPath(targetPropertyPath);
 }
 
-template <typename ReferencedObject>
-OMWeakReferenceProperty<ReferencedObject>::~OMWeakReferenceProperty(void)
+template <typename Key, typename ReferencedObject>
+OMWeakReferenceProperty<Key, ReferencedObject>::~OMWeakReferenceProperty(void)
 {
-  TRACE("OMWeakReferenceProperty<ReferencedObject>::~OMWeakReferenceProperty");
+  TRACE("OMWeakReferenceProperty<Key, ReferencedObject>::"
+                                                   "~OMWeakReferenceProperty");
 
   delete [] _targetPropertyPath;
 }
@@ -102,11 +105,11 @@ OMWeakReferenceProperty<ReferencedObject>::~OMWeakReferenceProperty(void)
   //          <c OMStorable>.
   //   @parm A pointer to a <p ReferencedObject> by reference.
   //   @this const
-template <typename ReferencedObject>
-void OMWeakReferenceProperty<ReferencedObject>::getValue(
+template <typename Key, typename ReferencedObject>
+void OMWeakReferenceProperty<Key, ReferencedObject>::getValue(
                                                ReferencedObject*& object) const
 {
-  TRACE("OMWeakReferenceProperty<ReferencedObject>::getValue");
+  TRACE("OMWeakReferenceProperty<Key, ReferencedObject>::getValue");
   PRECONDITION("Optional property is present",
                                            IMPLIES(isOptional(), isPresent()));
 
@@ -128,11 +131,11 @@ void OMWeakReferenceProperty<ReferencedObject>::getValue(
   //   @rdesc A pointer to the old <p ReferencedObject>. If lazy
   //          loading is enabled and the referenced object was never
   //          loaded the value returned is 0.
-template <typename ReferencedObject>
-ReferencedObject* OMWeakReferenceProperty<ReferencedObject>::setValue(
+template <typename Key, typename ReferencedObject>
+ReferencedObject* OMWeakReferenceProperty<Key, ReferencedObject>::setValue(
                                                const ReferencedObject* object)
 {
-  TRACE("OMWeakReferenceProperty<ReferencedObject>::setValue");
+  TRACE("OMWeakReferenceProperty<Key, ReferencedObject>::setValue");
 
   PRECONDITION("Valid object", object != 0);
 #if defined(OM_VALIDATE_WEAK_REFERENCES)
@@ -164,10 +167,11 @@ ReferencedObject* OMWeakReferenceProperty<ReferencedObject>::setValue(
   //   @rdesc A pointer to the old <p ReferencedObject>. If lazy
   //          loading is enabled and the referenced object was never
   //          loaded the value returned is 0.
-template <typename ReferencedObject>
-ReferencedObject* OMWeakReferenceProperty<ReferencedObject>::clearValue(void)
+template <typename Key, typename ReferencedObject>
+ReferencedObject*
+OMWeakReferenceProperty<Key, ReferencedObject>::clearValue(void)
 {
-  TRACE("OMWeakReferenceProperty<ReferencedObject>::clearValue");
+  TRACE("OMWeakReferenceProperty<Key, ReferencedObject>::clearValue");
 
   OMStorable* p = _reference.setValue(nullOMUniqueObjectIdentification, 0);
   ReferencedObject* result = 0;
@@ -186,12 +190,12 @@ ReferencedObject* OMWeakReferenceProperty<ReferencedObject>::clearValue(void)
   //          <c OMStorable>.
   //   @rdesc The result of the assignment.
   //   @parm A pointer to a <p ReferencedObject> by value.
-template <typename ReferencedObject>
-OMWeakReferenceProperty<ReferencedObject>&
-OMWeakReferenceProperty<ReferencedObject>::operator = (
+template <typename Key, typename ReferencedObject>
+  OMWeakReferenceProperty<Key, ReferencedObject>&
+OMWeakReferenceProperty<Key, ReferencedObject>::operator = (
                                                  const ReferencedObject* value)
 {
-  TRACE("OMWeakReferenceProperty<ReferencedObject>::operator =");
+  TRACE("OMWeakReferenceProperty<Key, ReferencedObject>::operator =");
 
   setValue(value);
   return *this;
@@ -202,20 +206,20 @@ OMWeakReferenceProperty<ReferencedObject>::operator = (
   //          (contained) object. This type must be a descendant of
   //          <c OMStorable>
   //   @rdesc A pointer to a <p ReferencedObject> by value.
-template <typename ReferencedObject>
+template <typename Key, typename ReferencedObject>
 ReferencedObject*
-OMWeakReferenceProperty<ReferencedObject>::operator -> (void)
+OMWeakReferenceProperty<Key, ReferencedObject>::operator -> (void)
 {
-  TRACE("OMWeakReferenceProperty<ReferencedObject>::operator ->");
+  TRACE("OMWeakReferenceProperty<Key, ReferencedObject>::operator ->");
 
   return _reference.getValue();
 }
 
-template <typename ReferencedObject>
+template <typename Key, typename ReferencedObject>
 const ReferencedObject*
-OMWeakReferenceProperty<ReferencedObject>::operator -> (void) const
+OMWeakReferenceProperty<Key, ReferencedObject>::operator -> (void) const
 {
-  TRACE("OMWeakReferenceProperty<ReferencedObject>::operator ->");
+  TRACE("OMWeakReferenceProperty<Key, ReferencedObject>::operator ->");
 
   return _reference.getValue();
 }
@@ -226,11 +230,12 @@ OMWeakReferenceProperty<ReferencedObject>::operator -> (void) const
   //   @rdesc The result of the conversion as a value of type
   //          pointer to <p ReferencedObject>.
   //   @this const
-template <typename ReferencedObject>
-OMWeakReferenceProperty<ReferencedObject>::operator ReferencedObject* () const
+template <typename Key, typename ReferencedObject>
+OMWeakReferenceProperty<Key, ReferencedObject>::operator
+ReferencedObject* () const
 {
-  TRACE(
-      "OMWeakReferenceProperty<ReferencedObject>::operator ReferencedObject*");
+  TRACE("OMWeakReferenceProperty<Key, ReferencedObject>::"
+                                                 "operator ReferencedObject*");
 
   ReferencedObject* result;
   getValue(result);
@@ -242,10 +247,10 @@ OMWeakReferenceProperty<ReferencedObject>::operator ReferencedObject* () const
   //          (pointed to) object. This type must be a descendant of
   //          <c OMStorable>.
   //   @this const
-template <typename ReferencedObject>
-void OMWeakReferenceProperty<ReferencedObject>::save(void) const
+template <typename Key, typename ReferencedObject>
+void OMWeakReferenceProperty<Key, ReferencedObject>::save(void) const
 {
-  TRACE("OMWeakReferenceProperty<ReferencedObject>::save");
+  TRACE("OMWeakReferenceProperty<Key, ReferencedObject>::save");
 
   PRECONDITION("Non-void weak reference", !_reference.isVoid());
 
@@ -256,20 +261,21 @@ void OMWeakReferenceProperty<ReferencedObject>::save(void) const
   //   @tcarg class | ReferencedObject | The type of the referenced
   //          (contained) object. This type must be a descendant of
   //          <c OMStorable>.
-template <typename ReferencedObject>
-void OMWeakReferenceProperty<ReferencedObject>::close(void)
+template <typename Key, typename ReferencedObject>
+void OMWeakReferenceProperty<Key, ReferencedObject>::close(void)
 {
-  TRACE("OMWeakReferenceProperty<ReferencedObject>::close");
+  TRACE("OMWeakReferenceProperty<Key, ReferencedObject>::close");
   // tjb
 }
 
   // @mfunc The number of objects contained within this
   //        <c OMWeakReferenceProperty> if any.
   //   @rdesc The number of objects.
-template <typename ReferencedObject>
-OMUInt64 OMWeakReferenceProperty<ReferencedObject>::objectCount(void) const
+template <typename Key, typename ReferencedObject>
+OMUInt64
+OMWeakReferenceProperty<Key, ReferencedObject>::objectCount(void) const
 {
-  TRACE("OMWeakReferenceProperty<ReferencedObject>::objectCount");
+  TRACE("OMWeakReferenceProperty<Key, ReferencedObject>::objectCount");
   // OMWeakReferenceProperty doesn't contain objects.
   return 0;
 }
@@ -281,10 +287,11 @@ OMUInt64 OMWeakReferenceProperty<ReferencedObject>::objectCount(void) const
   //          (pointed to) object. This type must be a descendant of
   //          <c OMStorable>.
   //   @parm The external (persisted) size of the <c OMWeakReferenceProperty>.
-template <typename ReferencedObject>
-void OMWeakReferenceProperty<ReferencedObject>::restore(size_t externalSize)
+template <typename Key, typename ReferencedObject>
+void
+OMWeakReferenceProperty<Key, ReferencedObject>::restore(size_t externalSize)
 {
-  TRACE("OMWeakReferenceProperty<ReferencedObject>::restore");
+  TRACE("OMWeakReferenceProperty<Key, ReferencedObject>::restore");
 
   store()->restore(*this, externalSize);
   setPresent();
@@ -297,10 +304,10 @@ void OMWeakReferenceProperty<ReferencedObject>::restore(size_t externalSize)
   //   @rdesc True if this <c OMWeakReferenceProperty> is void, false
   //          otherwise
   //   @this const
-template <typename ReferencedObject>
-bool OMWeakReferenceProperty<ReferencedObject>::isVoid(void) const
+template <typename Key, typename ReferencedObject>
+bool OMWeakReferenceProperty<Key, ReferencedObject>::isVoid(void) const
 {
-  TRACE("OMWeakReferenceProperty<ReferencedObject>::isVoid");
+  TRACE("OMWeakReferenceProperty<Key, ReferencedObject>::isVoid");
 
   bool result;
   const OMUniqueObjectIdentification& key = _reference.identification();
@@ -321,12 +328,12 @@ bool OMWeakReferenceProperty<ReferencedObject>::isVoid(void) const
   //   @parm The address of the buffer into which the raw bits are copied.
   //   @parm The size of the buffer.
   //   @this const
-template <typename ReferencedObject>
-void OMWeakReferenceProperty<ReferencedObject>::getBits(
+template <typename Key, typename ReferencedObject>
+void OMWeakReferenceProperty<Key, ReferencedObject>::getBits(
                                                       OMByte* bits,
                                                       size_t ANAME(size)) const
 {
-  TRACE("OMWeakReferenceProperty<ReferencedObject>::getBits");
+  TRACE("OMWeakReferenceProperty<Key, ReferencedObject>::getBits");
   OBSOLETE("methods on class OMReferenceProperty");
 
   PRECONDITION("Optional property is present",
@@ -347,11 +354,11 @@ void OMWeakReferenceProperty<ReferencedObject>::getBits(
   //          object. This type must be a descendant of <c OMStorable>.
   //   @parm The address of the buffer into which the raw bits are copied.
   //   @parm The size of the buffer.
-template <typename ReferencedObject>
-void OMWeakReferenceProperty<ReferencedObject>::setBits(const OMByte* bits,
+template <typename Key, typename ReferencedObject>
+void OMWeakReferenceProperty<Key, ReferencedObject>::setBits(const OMByte* bits,
                                                         size_t ANAME(size))
 {
-  TRACE("OMWeakReferenceProperty<ReferencedObject>::getBits");
+  TRACE("OMWeakReferenceProperty<Key, ReferencedObject>::getBits");
   OBSOLETE("methods on class OMReferenceProperty");
 
   PRECONDITION("Valid bits", bits != 0);
@@ -367,11 +374,11 @@ void OMWeakReferenceProperty<ReferencedObject>::setBits(const OMByte* bits,
   //          <c OMStorable>.
   //   @rdesc A pointer to an <c OMObject>.
   //   @this const
-template <typename ReferencedObject>
+template <typename Key, typename ReferencedObject>
 OMObject*
-OMWeakReferenceProperty<ReferencedObject>::getObject(void) const
+OMWeakReferenceProperty<Key, ReferencedObject>::getObject(void) const
 {
-  TRACE("OMWeakReferenceProperty<ReferencedObject>::getObject");
+  TRACE("OMWeakReferenceProperty<Key, ReferencedObject>::getObject");
 
   ReferencedObject* p = 0;
   getValue(p);
@@ -388,11 +395,11 @@ OMWeakReferenceProperty<ReferencedObject>::getObject(void) const
   //   @rdesc A pointer to the old <c OMObject>. If lazy
   //          loading is enabled and the referenced object was never
   //          loaded the value returned is 0.
-template <typename ReferencedObject>
-OMObject* OMWeakReferenceProperty<ReferencedObject>::setObject(
+template <typename Key, typename ReferencedObject>
+OMObject* OMWeakReferenceProperty<Key, ReferencedObject>::setObject(
                                                         const OMObject* object)
 {
-  TRACE("OMWeakReferenceProperty<ReferencedObject>::setObject");
+  TRACE("OMWeakReferenceProperty<Key, ReferencedObject>::setObject");
 
   PRECONDITION("Valid object", object != 0);
 
@@ -409,75 +416,77 @@ OMObject* OMWeakReferenceProperty<ReferencedObject>::setObject(
   //   @rdesc A pointer to the old <c OMObject>. If lazy
   //          loading is enabled and the referenced object was never
   //          loaded the value returned is 0.
-template <typename ReferencedObject>
-OMObject* OMWeakReferenceProperty<ReferencedObject>::clearObject(void)
+template <typename Key, typename ReferencedObject>
+OMObject* OMWeakReferenceProperty<Key, ReferencedObject>::clearObject(void)
 {
-  TRACE("OMWeakReferenceProperty<ReferencedObject>::clearObject");
+  TRACE("OMWeakReferenceProperty<Key, ReferencedObject>::clearObject");
 
   return clearValue();
 }
 
-template <typename ReferencedObject>
-const OMUniqueObjectIdentification&
-OMWeakReferenceProperty<ReferencedObject>::identification(void) const
+template <typename Key, typename ReferencedObject>
+const Key&
+OMWeakReferenceProperty<Key, ReferencedObject>::identification(void) const
 {
-  TRACE("OMWeakReferenceProperty<ReferencedObject>::identification");
+  TRACE("OMWeakReferenceProperty<Key, ReferencedObject>::identification");
 
   return reference().identification();
 }
 
-template <typename ReferencedObject>
-OMWeakObjectReference&
-OMWeakReferenceProperty<ReferencedObject>::reference(void) const
+template <typename Key, typename ReferencedObject>
+OMWeakObjectReference<OMUniqueObjectIdentification>&
+OMWeakReferenceProperty<Key, ReferencedObject>::reference(void) const
 {
-  TRACE("OMWeakReferenceProperty<ReferencedObject>::reference");
+  TRACE("OMWeakReferenceProperty<Key, ReferencedObject>::reference");
 
-  return const_cast<OMWeakObjectReference&>(_reference);
+  return const_cast<OMWeakObjectReference<Key>&>(_reference);
 }
 
 
-template <typename ReferencedObject>
+template <typename Key, typename ReferencedObject>
 OMStrongReferenceSet*
-OMWeakReferenceProperty<ReferencedObject>::targetSet(void) const
+OMWeakReferenceProperty<Key, ReferencedObject>::targetSet(void) const
 {
-  TRACE("OMWeakReferenceProperty<ReferencedObject>::targetSet");
-  OMWeakReferenceProperty<ReferencedObject>* nonConstThis =
-                  const_cast<OMWeakReferenceProperty<ReferencedObject>*>(this);
+  TRACE("OMWeakReferenceProperty<Key, ReferencedObject>::targetSet");
+  OMWeakReferenceProperty<Key, ReferencedObject>* nonConstThis =
+             const_cast<OMWeakReferenceProperty<Key, ReferencedObject>*>(this);
   if (_targetSet == 0) {
-    nonConstThis->_targetSet = OMWeakObjectReference::targetSet(this,
-                                                                targetTag());
+    nonConstThis->_targetSet = OMWeakObjectReference<Key>::targetSet(
+                                                                  this,
+                                                                  targetTag());
   }
   POSTCONDITION("Valid result", _targetSet != 0);
   return _targetSet;
 }
 
-template <typename ReferencedObject>
+template <typename Key, typename ReferencedObject>
 OMPropertyId
-OMWeakReferenceProperty<ReferencedObject>::keyPropertyId(void) const
+OMWeakReferenceProperty<Key, ReferencedObject>::keyPropertyId(void) const
 {
-  TRACE("OMWeakReferenceProperty<ReferencedObject>::keyPropertyId");
+  TRACE("OMWeakReferenceProperty<Key, ReferencedObject>::keyPropertyId");
 
   return _keyPropertyId;
 }
 
-template <typename ReferencedObject>
-void OMWeakReferenceProperty<ReferencedObject>::setTargetTag(
+template <typename Key, typename ReferencedObject>
+void OMWeakReferenceProperty<Key, ReferencedObject>::setTargetTag(
                                                        OMPropertyTag targetTag)
 {
-  TRACE("OMWeakReferenceProperty<ReferencedObject>::setTargetTag");
+  TRACE("OMWeakReferenceProperty<Key, ReferencedObject>::setTargetTag");
 
   _targetTag = targetTag;
 }
 
-template <typename ReferencedObject>
-OMPropertyTag OMWeakReferenceProperty<ReferencedObject>::targetTag(void) const
+template <typename Key, typename ReferencedObject>
+OMPropertyTag
+OMWeakReferenceProperty<Key, ReferencedObject>::targetTag(void) const
 {
-  TRACE("OMWeakReferenceProperty<ReferencedObject>::targetTag");
+  TRACE("OMWeakReferenceProperty<Key, ReferencedObject>::targetTag");
 
   PRECONDITION("Property is attached to file", container()->inFile());
 
-  OMWeakReferenceProperty<ReferencedObject>* nonConstThis =
-                  const_cast<OMWeakReferenceProperty<ReferencedObject>*>(this);
+  OMWeakReferenceProperty<Key, ReferencedObject>* nonConstThis =
+             const_cast<OMWeakReferenceProperty<Key, ReferencedObject>*>(this);
   if (_targetTag == nullOMPropertyTag) {
     nonConstThis->_targetTag =
                   file()->referencedProperties()->insert(targetPropertyPath());
@@ -486,51 +495,51 @@ OMPropertyTag OMWeakReferenceProperty<ReferencedObject>::targetTag(void) const
   return _targetTag;
 }
 
-template <typename ReferencedObject>
+template <typename Key, typename ReferencedObject>
 OMPropertyId*
-OMWeakReferenceProperty<ReferencedObject>::targetPropertyPath(void) const
+OMWeakReferenceProperty<Key, ReferencedObject>::targetPropertyPath(void) const
 {
-  TRACE("OMWeakReferenceProperty<ReferencedObject>::targetPropertyPath");
+  TRACE("OMWeakReferenceProperty<Key, ReferencedObject>::targetPropertyPath");
 
   if (_targetPropertyPath == 0) {
 
     ASSERT("Valid target name", validWideString(_targetName));
 
-    OMWeakReferenceProperty<ReferencedObject>* nonConstThis =
-                  const_cast<OMWeakReferenceProperty<ReferencedObject>*>(this);
+    OMWeakReferenceProperty<Key, ReferencedObject>* nonConstThis =
+             const_cast<OMWeakReferenceProperty<Key, ReferencedObject>*>(this);
     nonConstThis->_targetPropertyPath = file()->path(_targetName);
   }
   POSTCONDITION("Valid result", _targetPropertyPath != 0);
   return _targetPropertyPath;
 }
 
-template <typename ReferencedObject>
+template <typename Key, typename ReferencedObject>
 void
-OMWeakReferenceProperty<ReferencedObject>::clearTargetTag(void) const
+OMWeakReferenceProperty<Key, ReferencedObject>::clearTargetTag(void) const
 {
-  TRACE("OMWeakReferenceProperty<ReferencedObject>::clearTargetTag");
+  TRACE("OMWeakReferenceProperty<Key, ReferencedObject>::clearTargetTag");
 
-  OMWeakReferenceProperty<ReferencedObject>* nonConstThis =
-                  const_cast<OMWeakReferenceProperty<ReferencedObject>*>(this);
+  OMWeakReferenceProperty<Key, ReferencedObject>* nonConstThis =
+             const_cast<OMWeakReferenceProperty<Key, ReferencedObject>*>(this);
 
   nonConstThis->_targetTag = nullOMPropertyTag;
   delete [] nonConstThis->_targetPropertyPath;
   nonConstThis->_targetPropertyPath = 0;
 }
 
-template <typename ReferencedObject>
+template <typename Key, typename ReferencedObject>
 const wchar_t*
-OMWeakReferenceProperty<ReferencedObject>::targetName(void) const
+OMWeakReferenceProperty<Key, ReferencedObject>::targetName(void) const
 {
-  TRACE("OMWeakReferenceProperty<ReferencedObject>::targetName");
+  TRACE("OMWeakReferenceProperty<Key, ReferencedObject>::targetName");
 
   return _targetName;
 }
 
-template <typename ReferencedObject>
-bool OMWeakReferenceProperty<ReferencedObject>::isResolved(void) const
+template <typename Key, typename ReferencedObject>
+bool OMWeakReferenceProperty<Key, ReferencedObject>::isResolved(void) const
 {
-  TRACE("OMWeakReferenceProperty<ReferencedObject>::isResolved");
+  TRACE("OMWeakReferenceProperty<Key, ReferencedObject>::isResolved");
 
   bool result;
   if (_reference.pointer() != 0) {
@@ -541,10 +550,10 @@ bool OMWeakReferenceProperty<ReferencedObject>::isResolved(void) const
   return result;
 }
 
-template <typename ReferencedObject>
-bool OMWeakReferenceProperty<ReferencedObject>::isResolvable(void) const
+template <typename Key, typename ReferencedObject>
+bool OMWeakReferenceProperty<Key, ReferencedObject>::isResolvable(void) const
 {
-  TRACE("OMWeakReferenceProperty<ReferencedObject>::isResolvable");
+  TRACE("OMWeakReferenceProperty<Key, ReferencedObject>::isResolvable");
 
   bool result;
   OMFile* file = propertySet()->container()->file();
@@ -563,11 +572,11 @@ bool OMWeakReferenceProperty<ReferencedObject>::isResolvable(void) const
   return result;
 }
 
-template <typename ReferencedObject>
-void OMWeakReferenceProperty<ReferencedObject>::shallowCopyTo(
+template <typename Key, typename ReferencedObject>
+void OMWeakReferenceProperty<Key, ReferencedObject>::shallowCopyTo(
                                                  OMProperty* destination) const
 {
-  TRACE("OMWeakReferenceProperty<ReferencedObject>::shallowCopyTo");
+  TRACE("OMWeakReferenceProperty<Key, ReferencedObject>::shallowCopyTo");
   PRECONDITION("Valid destination", destination != 0);
 
   typedef OMWeakReferenceProperty Property;
@@ -576,9 +585,7 @@ void OMWeakReferenceProperty<ReferencedObject>::shallowCopyTo(
   ASSERT("Valid destination", dest != this);
   ASSERT("Valid source", (_targetName != 0) || (_targetPropertyPath != 0));
 
-  dest->_reference = OMWeakObjectReference(dest,
-                                           _reference.identification(),
-                                           nullOMPropertyTag);
+  dest->_reference = _reference;
   dest->_targetTag = nullOMPropertyTag;
   dest->_targetName = _targetName;
   delete [] dest->_targetPropertyPath;
@@ -596,12 +603,12 @@ void OMWeakReferenceProperty<ReferencedObject>::shallowCopyTo(
   dest->setPresent();
 }
 
-template <typename ReferencedObject>
-void OMWeakReferenceProperty<ReferencedObject>::deepCopyTo(
+template <typename Key, typename ReferencedObject>
+void OMWeakReferenceProperty<Key, ReferencedObject>::deepCopyTo(
                                                      OMProperty* destination,
                                                      void* clientContext) const
 {
-  TRACE("OMWeakReferenceProperty<ReferencedObject>::deepCopyTo");
+  TRACE("OMWeakReferenceProperty<Key, ReferencedObject>::deepCopyTo");
   PRECONDITION( "Valid destination", destination != 0 );
 
   OMStorable* source = _reference.getValue();
@@ -609,7 +616,7 @@ void OMWeakReferenceProperty<ReferencedObject>::deepCopyTo(
     // There's a referenced object, copy it
     OMUniqueObjectIdentification id = reference().identification();
 
-    typedef OMWeakReferenceProperty<ReferencedObject> Property;
+    typedef OMWeakReferenceProperty<Key, ReferencedObject> Property;
     Property* wp = dynamic_cast<Property*>(destination);
     ASSERT("Correct property type", wp != 0);
 

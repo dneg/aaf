@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2006, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -1087,8 +1087,10 @@ OMWeakReferenceVectorProperty<ReferencedObject>::targetSet(void) const
   OMWeakReferenceVectorProperty<ReferencedObject>* nonConstThis =
             const_cast<OMWeakReferenceVectorProperty<ReferencedObject>*>(this);
   if (_targetSet == 0) {
-    nonConstThis->_targetSet = OMWeakObjectReference::targetSet(this,
-                                                                targetTag());
+    nonConstThis->_targetSet = OMWeakObjectReference<
+                                  OMUniqueObjectIdentification>::targetSet(
+                                                                  this,
+                                                                  targetTag());
   }
   POSTCONDITION("Valid result", _targetSet != 0);
   return _targetSet;

@@ -19,7 +19,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2006, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -167,7 +167,7 @@ public:
 	// SDK-private methods
 
 private:
-	OMWeakReferenceProperty<ImplAAFInterpolationDef>		_interpolation;
+	OMWeakReferenceProperty<OMUniqueObjectIdentification, ImplAAFInterpolationDef>		_interpolation;
   OMStrongReferenceVectorProperty<ImplAAFControlPoint> _controlPoints;
 
   ImplAAFTypeDef * _cachedTypeDef; // NOT REFERENCE COUNTED!

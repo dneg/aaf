@@ -191,6 +191,7 @@ class OMStrongReferenceSet;
   // @class Persistent weak references to persistent objects.
   //   @base public | <c OMObjectReference>
   //   @cauthor Tim Bingham | tjb | Avid Technology, Inc.
+template <typename Key>
 class OMWeakObjectReference : public OMObjectReference {
 public:
   // @access Public members.
@@ -204,7 +205,7 @@ public:
     // @cmember Constructor.
   OMWeakObjectReference(
                     OMProperty* property,
-                    OMUniqueObjectIdentification identification,
+                    Key identification,
                     OMPropertyTag targetTag);
 
     // @cmember Copy constructor.
@@ -245,7 +246,7 @@ public:
     // @cmember Set the value of this <c OMWeakObjectReference>.
     //          The value is a pointer to the referenced <c OMStorable>.
   virtual OMStorable* setValue(
-                            const OMUniqueObjectIdentification& identification,
+                            const Key& identification,
                             const OMStorable* value);
 
   void setTargetTag(OMPropertyTag targetTag);
@@ -253,17 +254,19 @@ public:
   static OMStrongReferenceSet* targetSet(const OMProperty* property,
                                          OMPropertyTag targetTag);
 
-  const OMUniqueObjectIdentification& identification(void) const;
+  const Key& identification(void) const;
 
 private:
 
   OMStrongReferenceSet* set(void) const;
 
-  OMUniqueObjectIdentification _identification;
+  Key _identification;
   OMPropertyTag _targetTag;         // tjb - deprecated
   OMStrongReferenceSet* _targetSet; // tjb - deprecated
 
 };
+
+#include "OMObjectReferenceT.h"
 
 #endif
 

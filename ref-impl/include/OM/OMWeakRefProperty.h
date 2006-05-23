@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2006, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -38,7 +38,7 @@
   //          <c OMStorable>.
   //   @base public | <c OMWeakReference>
   //   @cauthor Tim Bingham | tjb | Avid Technology, Inc.
-template <typename ReferencedObject>
+template <typename Key, typename ReferencedObject>
 class OMWeakReferenceProperty : public OMWeakReference {
 public:
   // @access Public members.
@@ -68,7 +68,7 @@ public:
   virtual ReferencedObject* clearValue(void);
 
     // @cmember Assignment operator.
-  OMWeakReferenceProperty<ReferencedObject>& operator =
+  OMWeakReferenceProperty<Key, ReferencedObject>& operator =
                                               (const ReferencedObject* value);
 
     // @cmember Dereference operator.
@@ -119,9 +119,11 @@ public:
     // @cmember Clear the value of this <c OMWeakReferenceProperty>.
   virtual OMObject* clearObject(void);
 
-  const OMUniqueObjectIdentification& identification(void) const;
+  const Key& identification(void) const;
 
-  virtual OMWeakObjectReference& reference(void) const;
+    // tjb - deprecated
+  virtual OMWeakObjectReference<OMUniqueObjectIdentification>&
+                                                         reference(void) const;
 
     // @cmember The <c OMStrongReferenceSet> in which the object
     //          referenced by this <c OMWeakReferenceProperty>
@@ -153,7 +155,7 @@ private:
 
   OMPropertyId* targetPropertyPath(void) const;
 
-  OMWeakObjectReference _reference;
+  OMWeakObjectReference<Key> _reference;
   OMPropertyTag _targetTag;
   const wchar_t* _targetName;
   OMPropertyId* _targetPropertyPath;

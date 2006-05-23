@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2006, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -755,11 +755,11 @@ OMProperty * ImplAAFTypeDefWeakObjRef::pvtCreateOMProperty
   switch (_uniqueIdentifierPid)
   {
     case PID_MetaDefinition_Identification:
-      result = new OMWeakReferenceProperty<ImplAAFMetaDefinition>(pid, name, _uniqueIdentifierPid, _targetPids);
+      result = new OMWeakReferenceProperty<OMUniqueObjectIdentification, ImplAAFMetaDefinition>(pid, name, _uniqueIdentifierPid, _targetPids);
       break;
       
     case PID_DefinitionObject_Identification:
-      result = new OMWeakReferenceProperty<ImplAAFDefObject>(pid, name, _uniqueIdentifierPid, _targetPids);
+      result = new OMWeakReferenceProperty<OMUniqueObjectIdentification, ImplAAFDefObject>(pid, name, _uniqueIdentifierPid, _targetPids);
       break;
     
     default:
