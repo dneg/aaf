@@ -457,6 +457,9 @@ private:
   OMFixedSizeProperty<aafUID_t>                    _operationalPattern;
   OMSetProperty<aafUID_t>                          _essenceContainers;
   OMSetProperty<aafUID_t>                          _descriptiveSchemes;
+#if 0 // tjb - not yet
+  OMWeakReferenceProperty<OMMaterialIdentification, ImplAAFMob*> _primaryMob;
+#endif
 };
 
 //
