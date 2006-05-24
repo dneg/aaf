@@ -48,7 +48,7 @@
 #include "AAFTypeDefUIDs.h"
 
 
-#include <assert.h>
+#include "OMAssertions.h"
 #include <string.h>
 
 
@@ -160,7 +160,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 	  hr = GetDictionary(&pDict);
 	  if (AAFRESULT_FAILED (hr)) return hr;
-	  assert (pDict);
+	  ASSERTU (pDict);
 
 	  ImplAAFPropertyDef * pNonConstThis =
 		  (ImplAAFPropertyDef *) this;
@@ -171,7 +171,7 @@ AAFRESULT STDMETHODCALLTYPE
 	  hr = pDict->LookupTypeDef (typeId, &tmp);
 	  if (AAFRESULT_FAILED (hr))
 		return hr;
-	  assert (tmp);
+	  ASSERTU (tmp);
 	  // If lookup caused this to already be put into the cache, just
 	  // throw away the current copy (in tmp)
 	  if (! pNonConstThis->_cachedType)
@@ -179,9 +179,9 @@ AAFRESULT STDMETHODCALLTYPE
 	  tmp->ReleaseReference ();
 	  tmp = 0;
 	}
-  assert (ppTypeDef);
+  ASSERTU (ppTypeDef);
   *ppTypeDef = _cachedType;
-  assert (*ppTypeDef);
+  ASSERTU (*ppTypeDef);
   (*ppTypeDef)->AcquireReference ();
 
   return AAFRESULT_SUCCESS;
@@ -235,20 +235,20 @@ const OMType* ImplAAFPropertyDef::type(void) const
   ImplAAFTypeDef * ptd = 0;
 
   hr = GetTypeDef (&ptd);
-  assert (AAFRESULT_SUCCEEDED (hr));
-  assert (ptd);
+  ASSERTU (AAFRESULT_SUCCEEDED (hr));
+  ASSERTU (ptd);
   // Don't reference count these!
   aafUInt32 refCount;
   refCount = ptd->ReleaseReference ();
   // make sure our assumption (dict owns a ref) is correct
-  assert (refCount > 0);
+  ASSERTU (refCount > 0);
   return ptd;
 }
 
 const OMUniqueObjectIdentification&
 ImplAAFPropertyDef::uniqueIdentification(void) const
 {
-  assert( sizeof(OMUniqueObjectIdentification) == sizeof(aafUID_t) );
+  ASSERTU( sizeof(OMUniqueObjectIdentification) == sizeof(aafUID_t) );
   static aafUID_t auid;
   HRESULT hr = GetAUID( &auid );
 
@@ -269,14 +269,14 @@ const wchar_t* ImplAAFPropertyDef::name(void) const
 	  ImplAAFPropertyDef * pNonConstThis =
 		(ImplAAFPropertyDef *) this;
 	  hr = pNonConstThis->GetNameBufLen (&nameLen);
-	  assert (AAFRESULT_SUCCEEDED (hr));
+	  ASSERTU (AAFRESULT_SUCCEEDED (hr));
 	  pNonConstThis->_wname = (aafCharacter*) new aafUInt8[nameLen];
-	  assert (_wname);
+	  ASSERTU (_wname);
 
 	  hr = pNonConstThis->GetName (_wname, nameLen);
-	  assert (AAFRESULT_SUCCEEDED (hr));
+	  ASSERTU (AAFRESULT_SUCCEEDED (hr));
 	}
-  assert (_wname);
+  ASSERTU (_wname);
   return _wname;
 }
 
@@ -308,8 +308,8 @@ OMProperty * ImplAAFPropertyDef::CreateOMProperty () const
 	  // to the type def.
 	  ImplAAFTypeDefSP ptd;
 	  AAFRESULT hr = GetTypeDef (&ptd);
-	  assert (AAFRESULT_SUCCEEDED (hr));
-	  assert (ptd);
+	  ASSERTU (AAFRESULT_SUCCEEDED (hr));
+	  ASSERTU (ptd);
 	  result = ptd->pvtCreateOMProperty (_pid, name());
 	}
 
@@ -320,7 +320,7 @@ OMProperty * ImplAAFPropertyDef::CreateOMProperty () const
 void ImplAAFPropertyDef::SetOMPropCreateFunc
 (ImplAAFOMPropertyCreateFunc_t pFunc)
 {
-  assert (pFunc);
+  ASSERTU (pFunc);
   _OMPropCreateFunc = pFunc;
 }
 
@@ -446,7 +446,7 @@ HRESULT ImplAAFPropertyDef::CompleteClassRegistration(void)
 
 AAFRESULT ImplAAFPropertyDef::MergeTo( ImplAAFClassDef* pDestClassDef )
 {
-    assert( pDestClassDef );
+    ASSERTU( pDestClassDef );
 
     AAFRESULT hr = AAFRESULT_SUCCESS;
 
@@ -475,7 +475,7 @@ AAFRESULT ImplAAFPropertyDef::MergeTo( ImplAAFClassDef* pDestClassDef )
 
         ImplAAFTypeDef* pDestTypeDef = NULL;
         pDestDictionary->LookupTypeDef( typeID, &pDestTypeDef );
-        assert( pDestTypeDef != NULL );
+        ASSERTU( pDestTypeDef != NULL );
 
         // Register the property definition.
         // The property registering method to use depends on whether
@@ -488,7 +488,7 @@ AAFRESULT ImplAAFPropertyDef::MergeTo( ImplAAFClassDef* pDestClassDef )
         {
             // This class definition is in the dictionary - only
             // optional properties can be registered.
-            assert( _IsOptional == kAAFTrue );
+            ASSERTU( _IsOptional == kAAFTrue );
 
             hr = pDestClassDef->RegisterOptionalPropertyDef( propertyID,
                                                              (aafCharacter*)pName,

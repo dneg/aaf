@@ -50,7 +50,6 @@ typedef ImplAAFEnumerator<ImplAAFProperty> ImplEnumAAFProperties;
 #include "ImplAAFStorable.h"
 
 #ifndef __ImplAAFSmartPointer_h__
-// caution! includes assert.h
 #include "ImplAAFSmartPointer.h"
 #endif
 

@@ -26,7 +26,7 @@
 #include "ImplAAFSetFileBits.h"
 #endif
 
-#include <assert.h>
+#include "OMAssertions.h"
 #include <string.h>
 
 
@@ -41,8 +41,8 @@ ImplAAFSetFileBits::~ImplAAFSetFileBits ()
 void ImplAAFSetFileBits::Initialize
         (OMRawStorage * prs)
 {
-  assert (prs);
-  assert (!_rep);
+  ASSERTU (prs);
+  ASSERTU (!_rep);
   _rep = prs;
 }
 

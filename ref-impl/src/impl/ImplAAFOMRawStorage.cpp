@@ -25,7 +25,7 @@
 #include "AAF.h"
 #include "AAFResult.h"
 
-#include <assert.h>
+#include "OMAssertions.h"
 
 #include "ImplAAFOMRawStorage.h"
 
@@ -36,7 +36,7 @@ ImplAAFOMRawStorage::ImplAAFOMRawStorage (IAAFRawStorage * rep)
     _randRep (0),
     _position(0)
 {
-  assert (rep);
+  ASSERTU (rep);
   _rep->AddRef ();
 
   AAFRESULT hr;
@@ -48,7 +48,7 @@ ImplAAFOMRawStorage::ImplAAFOMRawStorage (IAAFRawStorage * rep)
 
 ImplAAFOMRawStorage::~ImplAAFOMRawStorage ()
 {
-  assert (_rep);
+  ASSERTU (_rep);
   _rep->Release ();
   _rep = 0;
 
@@ -62,11 +62,11 @@ ImplAAFOMRawStorage::~ImplAAFOMRawStorage ()
 
 bool ImplAAFOMRawStorage::isReadable(void) const
 {
-  assert (_rep);
+  ASSERTU (_rep);
   aafBoolean_t r;
   AAFRESULT hr;
   hr = _rep->IsReadable (&r);
-  assert (AAFRESULT_SUCCEEDED (hr));
+  ASSERTU (AAFRESULT_SUCCEEDED (hr));
   return r ? true : false;
 }
 
@@ -75,7 +75,7 @@ void ImplAAFOMRawStorage::read(OMByte* bytes,
 							   OMUInt32 byteCount,
 							   OMUInt32& bytesRead) const
 {
-  assert (_rep);
+  ASSERTU (_rep);
   AAFRESULT hr;
 
   // If raw storage is positionable (is IAAFRandomRawStorage) read bytes
@@ -90,7 +90,7 @@ void ImplAAFOMRawStorage::read(OMByte* bytes,
   {
     hr = _rep->Read (bytes, byteCount, &bytesRead);
   }
-  assert (AAFRESULT_SUCCEEDED (hr));
+  ASSERTU (AAFRESULT_SUCCEEDED (hr));
 
   ImplAAFOMRawStorage* nonConstThis = const_cast<ImplAAFOMRawStorage*>(this);
   nonConstThis->_position += bytesRead;
@@ -102,11 +102,11 @@ void ImplAAFOMRawStorage::readAt(OMUInt64 position,
 								 OMUInt32 byteCount,
 								 OMUInt32& bytesRead) const
 {
-  assert (bytes);
-  assert (_randRep);
+  ASSERTU (bytes);
+  ASSERTU (_randRep);
   AAFRESULT hr;
   hr = _randRep->ReadAt (position, bytes, byteCount, &bytesRead);
-  assert (AAFRESULT_SUCCEEDED (hr));
+  ASSERTU (AAFRESULT_SUCCEEDED (hr));
 
   ImplAAFOMRawStorage* nonConstThis = const_cast<ImplAAFOMRawStorage*>(this);
   nonConstThis->_position = position + bytesRead;
@@ -115,11 +115,11 @@ void ImplAAFOMRawStorage::readAt(OMUInt64 position,
 
 bool ImplAAFOMRawStorage::isWritable(void) const
 {
-  assert (_rep);
+  ASSERTU (_rep);
   aafBoolean_t r;
   AAFRESULT hr;
   hr = _rep->IsWriteable (&r);
-  assert (AAFRESULT_SUCCEEDED (hr));
+  ASSERTU (AAFRESULT_SUCCEEDED (hr));
   return r ? true : false;
 }
 
@@ -128,7 +128,7 @@ void ImplAAFOMRawStorage::write(const OMByte* bytes,
 								OMUInt32 byteCount,
 								OMUInt32& bytesWritten)
 {
-  assert (_rep);
+  ASSERTU (_rep);
   AAFRESULT hr;
 
   // If raw storage is positionable (is IAAFRandomRawStorage) write bytes
@@ -143,7 +143,7 @@ void ImplAAFOMRawStorage::write(const OMByte* bytes,
   {
     hr = _rep->Write (bytes, byteCount, &bytesWritten);
   }
-  assert (AAFRESULT_SUCCEEDED (hr));
+  ASSERTU (AAFRESULT_SUCCEEDED (hr));
   _position += bytesWritten;
 }
 
@@ -153,18 +153,18 @@ void ImplAAFOMRawStorage::writeAt(OMUInt64 position,
 								  OMUInt32 byteCount,
 								  OMUInt32& bytesWritten)
 {
-  assert (bytes);
-  assert (_randRep);
+  ASSERTU (bytes);
+  ASSERTU (_randRep);
   AAFRESULT hr;
   hr = _randRep->WriteAt (position, bytes, byteCount, &bytesWritten);
-  assert (AAFRESULT_SUCCEEDED (hr));
+  ASSERTU (AAFRESULT_SUCCEEDED (hr));
   _position = position + bytesWritten;
 }
 
 
 bool ImplAAFOMRawStorage::isExtendible(void) const
 {
-  assert (_rep);
+  ASSERTU (_rep);
 
   // If not an AAFRandomRawStorage, it's definitely not extendible.
   if (! _randRep)
@@ -173,45 +173,45 @@ bool ImplAAFOMRawStorage::isExtendible(void) const
   AAFRESULT hr;
   aafBoolean_t r;
   hr = _randRep->IsExtendable (&r);
-  assert (AAFRESULT_SUCCEEDED (hr));
+  ASSERTU (AAFRESULT_SUCCEEDED (hr));
   return r ? true : false;
 }
 
 
 OMUInt64 ImplAAFOMRawStorage::extent(void) const
 {
-  assert (_randRep);
+  ASSERTU (_randRep);
   AAFRESULT hr;
   aafUInt64 result;
   hr = _randRep->GetExtent (&result);
-  assert (AAFRESULT_SUCCEEDED (hr));
+  ASSERTU (AAFRESULT_SUCCEEDED (hr));
   return result;
 }
 
 
 void ImplAAFOMRawStorage::extend(OMUInt64 newSize)
 {
-  assert (_randRep);
+  ASSERTU (_randRep);
   AAFRESULT hr;
   hr = _randRep->SetExtent (newSize);
-  assert (AAFRESULT_SUCCEEDED (hr));
+  ASSERTU (AAFRESULT_SUCCEEDED (hr));
 }
 
 
 OMUInt64 ImplAAFOMRawStorage::size(void) const
 {
-  assert (_randRep);
+  ASSERTU (_randRep);
   AAFRESULT hr;
   OMUInt64 result;
   hr = _randRep->GetSize (&result);
-  assert (AAFRESULT_SUCCEEDED (hr));
+  ASSERTU (AAFRESULT_SUCCEEDED (hr));
   return result;
 }
 
 
 bool ImplAAFOMRawStorage::isPositionable(void) const
 {
-  assert (_rep);
+  ASSERTU (_rep);
   // If not an AAFRandomRawStorage, it's not positionable.
   if (_randRep)
 	return true;
@@ -222,14 +222,14 @@ bool ImplAAFOMRawStorage::isPositionable(void) const
 
 OMUInt64 ImplAAFOMRawStorage::position(void) const
 {
-  assert (_rep);
+  ASSERTU (_rep);
   return _position;
 }
 
 
 void ImplAAFOMRawStorage::setPosition(OMUInt64 newPosition) const
 {
-  assert (_randRep);
+  ASSERTU (_randRep);
 
   // The _position value is used by read() and write() methods to
   // adjust the storage current position before reading or writing.
@@ -240,10 +240,10 @@ void ImplAAFOMRawStorage::setPosition(OMUInt64 newPosition) const
 
 void ImplAAFOMRawStorage::synchronize(void)
 {
-  assert (_rep);
+  ASSERTU (_rep);
   AAFRESULT hr;
   hr = _rep->Synchronize ();
-  assert (AAFRESULT_SUCCEEDED (hr));
+  ASSERTU (AAFRESULT_SUCCEEDED (hr));
 }
 
 // ImplAAFOMCachedRawStorage methods
@@ -256,7 +256,7 @@ ImplAAFOMCachedRawStorage::ImplAAFOMCachedRawStorage(IAAFRawStorage* rep,
   _rep(rep),
   _randRep(0)
 {
-  assert (rep);
+  ASSERTU (rep);
   _rep->AddRef ();
 
   AAFRESULT hr;
@@ -267,7 +267,7 @@ ImplAAFOMCachedRawStorage::ImplAAFOMCachedRawStorage(IAAFRawStorage* rep,
 
 ImplAAFOMCachedRawStorage::~ImplAAFOMCachedRawStorage()
 {
-  assert (_rep);
+  ASSERTU (_rep);
   _rep->Release ();
   _rep = 0;
 
@@ -280,7 +280,7 @@ ImplAAFOMCachedRawStorage::~ImplAAFOMCachedRawStorage()
 
 bool ImplAAFOMCachedRawStorage::isReadable(void) const
 {
-  assert (_rep);
+  ASSERTU (_rep);
   aafBoolean_t r;
   AAFRESULT hr;
   hr = _rep->IsReadable (&r);
@@ -290,7 +290,7 @@ bool ImplAAFOMCachedRawStorage::isReadable(void) const
 
 bool ImplAAFOMCachedRawStorage::isWritable(void) const
 {
-  assert (_rep);
+  ASSERTU (_rep);
   aafBoolean_t r;
   AAFRESULT hr;
   hr = _rep->IsWriteable (&r);
@@ -300,7 +300,7 @@ bool ImplAAFOMCachedRawStorage::isWritable(void) const
 
 bool ImplAAFOMCachedRawStorage::isExtendible(void) const
 {
-  assert (_rep);
+  ASSERTU (_rep);
 
   // If not an AAFRandomRawStorage, it's definitely not extendible.
   if (! _randRep)
@@ -315,7 +315,7 @@ bool ImplAAFOMCachedRawStorage::isExtendible(void) const
 
 bool ImplAAFOMCachedRawStorage::isPositionable(void) const
 {
-  assert (_rep);
+  ASSERTU (_rep);
   // If not an AAFRandomRawStorage, it's not positionable.
   if (_randRep)
 	return true;
@@ -328,7 +328,7 @@ void ImplAAFOMCachedRawStorage::synchronize(void)
   if (isWritable()) {
     flush();
   }
-  assert (_rep);
+  ASSERTU (_rep);
   AAFRESULT hr;
   hr = _rep->Synchronize ();
   if (AAFRESULT_FAILED (hr)) throw OMException(hr);
@@ -338,8 +338,8 @@ void ImplAAFOMCachedRawStorage::rawReadAt(OMUInt64 position,
                                           OMUInt32 byteCount,
                                           OMByte* destination)
 {
-  assert(_randRep);
-  assert(byteCount != 0);
+  ASSERTU(_randRep);
+  ASSERTU(byteCount != 0);
 
   OMUInt32 bytesRead = 0;
   AAFRESULT hr = _randRep->ReadAt(position, destination, byteCount, &bytesRead);
@@ -353,8 +353,8 @@ void ImplAAFOMCachedRawStorage::rawWriteAt(OMUInt64 position,
                                            OMUInt32 byteCount,
                                            const OMByte* source)
 {
-  assert(_randRep);
-  assert(byteCount != 0);
+  ASSERTU(_randRep);
+  ASSERTU(byteCount != 0);
 
   OMUInt32 bytesWritten = 0;
   AAFRESULT hr = _randRep->WriteAt(position, source, byteCount, &bytesWritten);
@@ -367,7 +367,7 @@ void ImplAAFOMCachedRawStorage::rawWriteAt(OMUInt64 position,
 /*static*/ aafUInt64 ImplAAFOMCachedRawStorage::getRawStorageSize(
     IAAFRawStorage* pRawStorage )
 {
-  assert (pRawStorage);
+  ASSERTU (pRawStorage);
 
   aafUInt64 rawStorageSize = 0;
 

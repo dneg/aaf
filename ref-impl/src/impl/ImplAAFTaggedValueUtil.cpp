@@ -32,7 +32,7 @@
 #include "AAFResult.h"
 
 #include <wchar.h>
-#include <assert.h>
+#include "OMAssertions.h"
 
 extern "C" const aafClassID_t CLSID_EnumAAFTaggedValues;
 
@@ -57,7 +57,7 @@ AAFRESULT ImplAAFTaggedValueUtil::AppendNameValuePair(
     // Get a type def for the tagged value.  GetBuiltinDefs passes an
     // unowned pointer.  Don't release it (hence, a bare pointer).
     ImplAAFTypeDef* pTaggedValType = spDict->GetBuiltinDefs()->tdString();
-    assert( pTaggedValType );
+    ASSERTU( pTaggedValType );
 
 
     // The TaggedValueDef returned by GetBuildinDefs is not reference
@@ -73,7 +73,7 @@ AAFRESULT ImplAAFTaggedValueUtil::AppendNameValuePair(
 
     // Create the tagged value.
     CHECK( pTaggedValDef->CreateInstance( reinterpret_cast<ImplAAFObject**>(&pTaggedVal) ) );
-    assert( pTaggedVal );
+    ASSERTU( pTaggedVal );
 
     // Init the tagged value.
     CHECK( pTaggedVal->Initialize( pName,

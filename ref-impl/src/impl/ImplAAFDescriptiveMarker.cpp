@@ -36,7 +36,6 @@
 
 #include "AAFPropertyIDs.h"
 
-#include <assert.h>
 #include <string.h>
 
 ImplAAFDescriptiveMarker::ImplAAFDescriptiveMarker ()

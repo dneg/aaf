@@ -34,7 +34,7 @@
 #include "ImplAAFObjectCreation.h"
 #include "ImplEnumAAFMobSlots.h"
 #include "ImplAAFEssenceAccess.h"
-#include <assert.h>
+#include "OMAssertions.h"
 #include "AAFResult.h"
 #include "AAFUtils.h"
 
@@ -989,7 +989,7 @@ AAFRESULT STDMETHODCALLTYPE
     // Return a IAAFEssenceMultiAccess interface to the new EssenceAccess
     // object.
 	  iUnk = static_cast<IUnknown *> (access->GetContainer());
-    assert(NULL != iUnk);
+    ASSERTU(NULL != iUnk);
 	  CHECK(iUnk->QueryInterface(IID_IAAFEssenceMultiAccess, (void **)&pMultiAccess));
 	  if(destination != NULL)
 		{
@@ -1107,7 +1107,7 @@ ImplAAFMasterMob::ExtendMultiEssence(aafUID_t codecID,
     // Return a IAAFEssenceMultiAccess interface to the new EssenceAccess
     // object.
 	  iUnk = static_cast<IUnknown *> (access->GetContainer());
-    assert(NULL != iUnk);
+    ASSERTU(NULL != iUnk);
 	  CHECK(iUnk->QueryInterface(IID_IAAFEssenceMultiAccess, (void **)&pMultiAccess));
 	  if(destination != NULL)
 		{

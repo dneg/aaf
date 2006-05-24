@@ -53,7 +53,7 @@
 #include "ImplAAFDictionary.h"
 
 
-#include <assert.h>
+#include "OMAssertions.h"
 #include <string.h>
 
 
@@ -163,23 +163,23 @@ AAFRESULT STDMETHODCALLTYPE
   AAFRESULT hr;
   ImplAAFPropValDataSP pvd;
   pvd = dynamic_cast<ImplAAFPropValData*>(pPropVal);
-  assert (pvd);
+  ASSERTU (pvd);
 
   hr = pvd->AllocateBits (sizeof (OMStorable*), (aafMemPtr_t*) &ppStorable);
   if (AAFRESULT_FAILED(hr)) return hr;
-  assert (ppStorable);
+  ASSERTU (ppStorable);
   if (*ppStorable)
 	{
 	  // An object was already here.  Release it before we trash the
 	  // reference to it.
 	  ImplAAFObject * tmp = dynamic_cast<ImplAAFObject*>(*ppStorable);
-	  assert (tmp);
+	  ASSERTU (tmp);
 	  tmp->ReleaseReference ();
 	  tmp = 0;
 	  *ppStorable = 0;
 	}
 
-  assert (! *ppStorable);
+  ASSERTU (! *ppStorable);
   *ppStorable = pObject;
   pObject->AcquireReference ();
 
@@ -214,18 +214,18 @@ ImplAAFTypeDefStrongObjRef::GetObject (ImplAAFPropertyValue * pPropVal,
   aafUInt32 bitsSize = 0;
   ImplAAFPropValDataSP pvd;
   pvd = dynamic_cast<ImplAAFPropValData*>(pPropVal);
-  assert (pvd);
+  ASSERTU (pvd);
 
   hr = pvd->GetBitsSize (&bitsSize);
   if (AAFRESULT_FAILED(hr)) return hr;
-  assert (bitsSize >= sizeof (ImplAAFRoot*));
+  ASSERTU (bitsSize >= sizeof (ImplAAFRoot*));
   hr = pvd->GetBits ((aafMemPtr_t*) &ppStorable);
   if (AAFRESULT_FAILED(hr)) return hr;
-  assert (*ppStorable);
-  assert (ppObject);
+  ASSERTU (*ppStorable);
+  ASSERTU (ppObject);
   ImplAAFRoot * pObj;
   pObj = dynamic_cast<ImplAAFRoot*>(*ppStorable);
-  assert (pObj);
+  ASSERTU (pObj);
   *ppObject = pObj;
   (*ppObject)->AcquireReference ();
 
@@ -246,7 +246,7 @@ AAFRESULT STDMETHODCALLTYPE
   ImplAAFClassDef *pClassDef = bootstrapClassWeakReference(_referencedType);
 
   *ppObjType = pClassDef;
-  assert (*ppObjType);
+  ASSERTU (*ppObjType);
   (*ppObjType)->AcquireReference ();
   return AAFRESULT_SUCCESS;
 
@@ -314,9 +314,9 @@ AAFRESULT STDMETHODCALLTYPE
   hr = SetObject (spPvd, pObj);
   if (AAFRESULT_FAILED (hr))
 	return hr;
-  assert (ppPropVal);
+  ASSERTU (ppPropVal);
   *ppPropVal = spPvd;
-  assert (*ppPropVal);
+  ASSERTU (*ppPropVal);
   (*ppPropVal)->AcquireReference ();
   return AAFRESULT_SUCCESS;
   
@@ -344,13 +344,13 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFPropertyValue ** ppPropertyValue ) const
 {
   AAFRESULT result = AAFRESULT_SUCCESS;
-  assert (property && ppPropertyValue);
+  ASSERTU (property && ppPropertyValue);
   if (NULL == property || NULL == ppPropertyValue)
     return AAFRESULT_NULL_PARAM;
   *ppPropertyValue = NULL; // initialize out parameter
   
   OMReferenceProperty* refProperty = dynamic_cast<OMReferenceProperty*>(property);
-  assert(NULL != refProperty);
+  ASSERTU(NULL != refProperty);
   if (NULL == refProperty)
     return AAFRESULT_INVALID_PARAM;
  
@@ -382,7 +382,7 @@ AAFRESULT STDMETHODCALLTYPE
 		  pObject = ImplAAFRefValue::ConvertOMObjectToRoot(object);
 		}
 #else
-      assert (NULL != object);
+      ASSERTU (NULL != object);
       ImplAAFStorable* pObject = ImplAAFRefValue::ConvertOMObjectToRoot(object);
 #endif
       result = pStrongRefValue->SetObject(pObject);
@@ -430,10 +430,10 @@ OMProperty * ImplAAFTypeDefStrongObjRef::pvtCreateOMProperty
   (OMPropertyId pid,
    const wchar_t * name) const
 {
-  assert (name);
+  ASSERTU (name);
 
   OMProperty * result = new OMStrongReferenceProperty<ImplAAFObject> (pid, name);
-  assert (result);
+  ASSERTU (result);
   return result;
 }
 

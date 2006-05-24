@@ -46,7 +46,7 @@
 #include "AAFStoredObjectIDs.h"
 #include "AAFPropertyIDs.h"
 
-#include <assert.h>
+#include "OMAssertions.h"
 #include <wchar.h>
 #include "AAFResult.h"
 #include "aafErr.h"

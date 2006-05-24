@@ -46,7 +46,7 @@
 #include "OMReferenceContainerIter.h"
 
 
-#include <assert.h>
+#include "OMAssertions.h"
 #include <string.h>
 
 extern "C" const aafClassID_t CLSID_EnumAAFStorablePropVals;
@@ -85,7 +85,7 @@ AAFRESULT STDMETHODCALLTYPE
   if (NULL == containerValue || NULL == containerIterator)
     return AAFRESULT_NULL_PARAM;
     
-  assert(!isInitialized());
+  ASSERTU(!isInitialized());
   if (isInitialized())
     return AAFRESULT_ALREADY_INITIALIZED;
   
@@ -113,7 +113,7 @@ AAFRESULT STDMETHODCALLTYPE
       ImplAAFPropertyValue ** ppPropertyValue)
 {
   AAFRESULT result = AAFRESULT_SUCCESS;
-  assert(isInitialized());
+  ASSERTU(isInitialized());
   if (!isInitialized())
     return AAFRESULT_NOT_INITIALIZED;
   
@@ -127,7 +127,7 @@ AAFRESULT STDMETHODCALLTYPE
     {
       OMObject* object = _containerIterator->currentObject();
       ImplAAFStorable* obj = dynamic_cast<ImplAAFStorable*>(object);
-      assert(NULL != obj);
+      ASSERTU(NULL != obj);
       if (NULL == obj)
         return AAFRESULT_INVALID_OBJ;
       
@@ -157,7 +157,7 @@ AAFRESULT STDMETHODCALLTYPE
       aafUInt32 *  pFetched)
 {
   AAFRESULT result = AAFRESULT_SUCCESS;
-  assert(isInitialized());
+  ASSERTU(isInitialized());
   if (!isInitialized())
     return AAFRESULT_NOT_INITIALIZED;
 
@@ -187,7 +187,7 @@ AAFRESULT STDMETHODCALLTYPE
       aafUInt32  count)
 {
   AAFRESULT result = AAFRESULT_SUCCESS;
-  assert(isInitialized());
+  ASSERTU(isInitialized());
   if (!isInitialized())
     return AAFRESULT_NOT_INITIALIZED;
 
@@ -222,7 +222,7 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplEnumAAFStorablePropVals::Reset ()
 {
-  assert(isInitialized());
+  ASSERTU(isInitialized());
   if (!isInitialized())
     return AAFRESULT_NOT_INITIALIZED;
     
@@ -242,7 +242,7 @@ AAFRESULT STDMETHODCALLTYPE
     return AAFRESULT_NULL_PARAM;
   *ppEnum = NULL;
 
-  assert(isInitialized());
+  ASSERTU(isInitialized());
   if (!isInitialized())
     return AAFRESULT_NOT_INITIALIZED;
 

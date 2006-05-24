@@ -34,7 +34,6 @@
 #include "AAFStoredObjectIDs.h"
 #include "AAFPropertyIDs.h"
 
-#include <assert.h>
 #include "AAFResult.h"
 
 ImplAAFCompositionMob::ImplAAFCompositionMob ():

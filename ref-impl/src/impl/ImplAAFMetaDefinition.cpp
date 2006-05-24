@@ -61,7 +61,7 @@ typedef ImplAAFSmartPointer<ImplEnumAAFPropertyDefs> ImplEnumAAFPropertyDefsSP;
 //#include "AAFStoredObjectIDs.h"
 #include "AAFPropertyIDs.h"
 
-#include <assert.h>
+#include "OMAssertions.h"
 #include <string.h>
 #include <wchar.h>
 
@@ -265,7 +265,7 @@ ImplAAFMetaDefinition::GetDictionary(ImplAAFDictionary **ppDictionary) const
     }
   }  
   
-  assert(NULL != *ppDictionary);
+  ASSERTU(NULL != *ppDictionary);
   if (NULL == *ppDictionary)
     return AAFRESULT_INVALID_OBJ;
   
@@ -288,15 +288,15 @@ ImplAAFMetaDefinition::bootstrapTypeWeakReference(
 
     ImplAAFDictionary* pDictionary = 0;
     HRESULT h = GetDictionary(&pDictionary);
-    assert(h == 0);
+    ASSERTU(h == 0);
     h = pDictionary->LookupTypeDef(id, &result);
-    assert(h == 0);
+    ASSERTU(h == 0);
     pDictionary->ReleaseReference();
 
     // The return value is not reference-counted.
     result->ReleaseReference();
   }
-  assert(result);
+  ASSERTU(result);
   return result;
 }
 
@@ -313,15 +313,15 @@ ImplAAFMetaDefinition::bootstrapTypeWeakReferenceVectorElement(
 
     ImplAAFDictionary* pDictionary = 0;
     HRESULT h = GetDictionary(&pDictionary);
-    assert(h == 0);
+    ASSERTU(h == 0);
     h = pDictionary->LookupTypeDef(id, &result);
-    assert(h == 0);
+    ASSERTU(h == 0);
     pDictionary->ReleaseReference();
 
     // The return value is not reference-counted.
     result->ReleaseReference();
   }
-  assert(result);
+  ASSERTU(result);
   return result;
 }
 
@@ -337,15 +337,15 @@ ImplAAFMetaDefinition::bootstrapClassWeakReference(
 
     ImplAAFDictionary* pDictionary = 0;
     HRESULT h = GetDictionary(&pDictionary);
-    assert(h == 0);
+    ASSERTU(h == 0);
     h = pDictionary->LookupClassDef(id, &result);
-    assert(h == 0);
+    ASSERTU(h == 0);
     pDictionary->ReleaseReference();
 
     // The return value is not reference-counted.
     result->ReleaseReference();
   }
-  assert(result);
+  ASSERTU(result);
   return result;
 }
 
@@ -354,7 +354,7 @@ ImplAAFMetaDefinition::bootstrapClassWeakReference(
 // for the parent class of the given class until current class is a "root" class.
 void ImplAAFMetaDefinition::InitOMProperties (ImplAAFClassDef * pClassDef)
 {
-  assert (pClassDef);
+  ASSERTU (pClassDef);
   AAFRESULT hr;
 
   //
@@ -363,10 +363,10 @@ void ImplAAFMetaDefinition::InitOMProperties (ImplAAFClassDef * pClassDef)
   ImplAAFClassDefSP parentSP;
   hr = pClassDef->GetParent (&parentSP);
   // check that only a "root" will have no parent class definition.
-  assert (AAFRESULT_SUCCEEDED(hr) || (AAFRESULT_FAILED(hr) && AAFRESULT_IS_ROOT_CLASS == hr));
+  ASSERTU (AAFRESULT_SUCCEEDED(hr) || (AAFRESULT_FAILED(hr) && AAFRESULT_IS_ROOT_CLASS == hr));
   if(AAFRESULT_SUCCEEDED(hr))
   {
-    assert (parentSP);
+    ASSERTU (parentSP);
     InitOMProperties (parentSP);
   }
 
@@ -374,18 +374,18 @@ void ImplAAFMetaDefinition::InitOMProperties (ImplAAFClassDef * pClassDef)
   // def.
   //
   OMPropertySet * ps = propertySet();
-  assert (ps);
+  ASSERTU (ps);
 
   // Loop through properties of this class
   ImplEnumAAFPropertyDefsSP pdEnumSP;
   hr = pClassDef->GetPropertyDefs (&pdEnumSP);
-  assert (AAFRESULT_SUCCEEDED (hr));
+  ASSERTU (AAFRESULT_SUCCEEDED (hr));
 
   ImplAAFPropertyDefSP propDefSP;
   while (AAFRESULT_SUCCEEDED (pdEnumSP->NextOne (&propDefSP)))
   {
     OMPropertyId defPid = propDefSP->OmPid ();
-    // assert (ps->isAllowed (defPid));
+    // ASSERTU (ps->isAllowed (defPid));
     OMProperty * pProp = 0;
     if (ps->isPresent (defPid))
     {
@@ -397,7 +397,7 @@ void ImplAAFMetaDefinition::InitOMProperties (ImplAAFClassDef * pClassDef)
     else if(defPid != PID_InterchangeObject_ObjClass
       && (defPid != PID_InterchangeObject_Generation))
     {
-      assert (0);
+      ASSERTU (0);
     }
     
   if(defPid != PID_InterchangeObject_ObjClass
@@ -407,9 +407,9 @@ void ImplAAFMetaDefinition::InitOMProperties (ImplAAFClassDef * pClassDef)
         (ImplAAFPropertyDef*) propDefSP;
       OMPropertyDefinition * pOMPropDef =
         dynamic_cast<OMPropertyDefinition*>(pPropDef);
-      assert (pOMPropDef);
+      ASSERTU (pOMPropDef);
       
-      assert (pProp);
+      ASSERTU (pProp);
       pProp->initialize (pOMPropDef);
       
       pPropDef = 0;

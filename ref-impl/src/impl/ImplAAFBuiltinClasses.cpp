@@ -50,7 +50,7 @@
 #include "ImplAAFBuiltinDefs.h"
 #include "AAFObjectModel.h"
 
-#include <assert.h>
+#include "OMAssertions.h"
 
 
 
@@ -81,7 +81,7 @@ ImplAAFBuiltinClasses::NewBuiltinClassDef (const aafUID_t & rClassID,
 	
 	
 
-  assert (! _createStack.isPresent (rClassID));
+  ASSERTU (! _createStack.isPresent (rClassID));
 
   _createStack.push (rClassID);
   
@@ -90,23 +90,23 @@ ImplAAFBuiltinClasses::NewBuiltinClassDef (const aafUID_t & rClassID,
 	const ClassDefinition * classDefinition = objectModel->findClassDefinition(&rClassID);
 	if (classDefinition && !classDefinition->isNil())
 	{
-		assert(!classDefinition->axiomatic()); // axiomatic classes should have already been created.
+		ASSERTU(!classDefinition->axiomatic()); // axiomatic classes should have already been created.
 		
 	  // We've found the desired class in our table.
 	  ImplAAFClassDef * pcd = (ImplAAFClassDef*)(_dictionary->metaDictionary())->pvtCreateMetaDefinition(AUID_AAFClassDef);
-	  assert (pcd);
+	  ASSERTU (pcd);
     pcd->InitializeOMStorable(_dictionary->GetBuiltinDefs()->cdClassDef());
 
 	  status = InitBuiltinClassDef (rClassID, classDefinition, pcd);
 	  if (AAFRESULT_SUCCEEDED (status))
 		{
-		  assert (ppResult);
+		  ASSERTU (ppResult);
 		  *ppResult = pcd;
 		}
 	}
 
   popped = _createStack.pop ();
-  assert (popped == rClassID);
+  ASSERTU (popped == rClassID);
   return status;
 }
 
@@ -117,14 +117,14 @@ ImplAAFBuiltinClasses::InitBuiltinClassDef (const aafUID_t & rClassID,
 											const ClassDefinition * classDefinition, 
 											ImplAAFClassDef * pClass)
 {
-  assert (classDefinition && !classDefinition->isNil());
-	assert(!classDefinition->axiomatic()); // axiomatic classes should have already been created.
-	assert (pClass);
+  ASSERTU (classDefinition && !classDefinition->isNil());
+	ASSERTU(!classDefinition->axiomatic()); // axiomatic classes should have already been created.
+	ASSERTU (pClass);
 	AAFRESULT status = AAFRESULT_NO_MORE_OBJECTS;
 	ImplAAFUID popped;
 	ImplAAFClassDefSP parent;
 	
-	assert (! _initStack.isPresent (rClassID));
+	ASSERTU (! _initStack.isPresent (rClassID));
 	
 	_initStack.push (rClassID);
 	
@@ -135,7 +135,7 @@ ImplAAFBuiltinClasses::InitBuiltinClassDef (const aafUID_t & rClassID,
 		// call to InitBuiltinClassDef for the parent class.  Since we have a moderately
 		// shallow tree with no loops, this shouldn't be a problem.
 		status = _dictionary->LookupClassDef(*classDefinition->parentId(), &parent);
-		assert (AAFRESULT_SUCCEEDED (status));
+		ASSERTU (AAFRESULT_SUCCEEDED (status));
 	}
 	else
 	{
@@ -155,7 +155,7 @@ ImplAAFBuiltinClasses::InitBuiltinClassDef (const aafUID_t & rClassID,
   RegisterBuiltinProperties (classDefinition, pClass);
 
 	popped = _initStack.pop ();
-	assert (popped == rClassID);
+	ASSERTU (popped == rClassID);
 	return status;
 }
 
@@ -183,7 +183,7 @@ AAFRESULT ImplAAFBuiltinClasses::LookupOmPid
 ImplAAFClassDef * ImplAAFBuiltinClasses::LookupAxiomaticClass
 (const aafUID_t & classId)
 {
-  assert (_dictionary);
+  ASSERTU (_dictionary);
 
   ImplAAFClassDef * result = 0;
 
@@ -199,7 +199,7 @@ ImplAAFClassDef * ImplAAFBuiltinClasses::LookupAxiomaticClass
 bool ImplAAFBuiltinClasses::IsAxiomaticClass
 (const aafUID_t & classId) const
 {
-  assert (_dictionary);
+  ASSERTU (_dictionary);
 
   bool result = false;
 
@@ -220,15 +220,15 @@ void ImplAAFBuiltinClasses::RegisterBuiltinProperties
  ImplAAFClassDef * pClassDef
 ) const
 {
-  assert (classDefinition && !classDefinition->isNil());
-  assert (pClassDef);
-  assert(!classDefinition->axiomatic()); // axiomatic classes should have already been created.
+  ASSERTU (classDefinition && !classDefinition->isNil());
+  ASSERTU (pClassDef);
+  ASSERTU(!classDefinition->axiomatic()); // axiomatic classes should have already been created.
 
   // Get auid for given class def.
   aafUID_t classAuid;
   AAFRESULT hr;
   hr = pClassDef->GetAUID (&classAuid);
-  assert (AAFRESULT_SUCCEEDED (hr));
+  ASSERTU (AAFRESULT_SUCCEEDED (hr));
 
   // Look through all known builtin properties.  Identify which ones
   // belong to this class.  For each one, instantiate it and add it to
@@ -247,9 +247,9 @@ void ImplAAFBuiltinClasses::RegisterBuiltinProperties
 						propertyDefinition->required() ? kAAFFalse : kAAFTrue,
 						propertyDefinition->uid() ? kAAFTrue : kAAFFalse,
 						&pd);
-		assert (AAFRESULT_SUCCEEDED (hr));
+		ASSERTU (AAFRESULT_SUCCEEDED (hr));
 
 		// Don't need these anymore
-		assert (pd);
+		ASSERTU (pd);
 	}
 }

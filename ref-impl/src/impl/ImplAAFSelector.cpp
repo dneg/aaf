@@ -39,7 +39,7 @@
 #include "ImplAAFSelector.h"
 #endif
 
-#include <assert.h>
+#include "OMAssertions.h"
 #include <string.h>
 #include "AAFResult.h"
 #include "AAFUtils.h"
@@ -402,7 +402,7 @@ AAFRESULT ImplAAFSelector::ChangeContainedReferences(aafMobID_constref from,
 
 void ImplAAFSelector::Accept(AAFComponentVisitor& visitor)
 {
-	assert(_selected);
+	ASSERTU(_selected);
 	_selected->Accept(visitor);
 
 	aafInt32 count = 0;

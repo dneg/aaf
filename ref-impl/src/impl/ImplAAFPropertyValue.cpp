@@ -36,7 +36,7 @@
 
 
 
-#include <assert.h>
+#include "OMAssertions.h"
 #include <string.h>
 
 
@@ -74,11 +74,11 @@ AAFRESULT ImplAAFPropertyValue::Initialize (
     return AAFRESULT_NULL_PARAM;
     
   // make sure we haven't been init'd yet
-  assert (!isInitialized());
+  ASSERTU (!isInitialized());
   if (isInitialized())
     return AAFRESULT_ALREADY_INITIALIZED;
   
-  assert (! _pType);
+  ASSERTU (! _pType);
 
   _pType = propertyType;
   // BobT: type is not to be reference counted.
@@ -91,26 +91,26 @@ AAFRESULT ImplAAFPropertyValue::Initialize (
   const ImplAAFTypeDef *propertyType,    
   OMProperty *property)
 {
-  assert (!isInitialized());
+  ASSERTU (!isInitialized());
   if (isInitialized())
     return AAFRESULT_ALREADY_INITIALIZED;
-  assert (property);
+  ASSERTU (property);
   if (NULL == propertyType || NULL == property)
     return AAFRESULT_NULL_PARAM;
 
   // Get the type definition. This must be a stream type.
-  assert (property->definition());
+  ASSERTU (property->definition());
   if (NULL == property->definition())
     return AAFRESULT_INVALID_PARAM;
   const OMType *type = property->definition()->type();
-  assert (type);
+  ASSERTU (type);
 
   // Get the storable container for this property. Since this is a "direct 
   // access" interface we need to hold onto a reference so tha the container
   // is not deleted.
   ImplAAFRoot * propertyContainer = dynamic_cast<ImplAAFRoot *>
                                       (property->propertySet()->container());
-  assert (propertyContainer);
+  ASSERTU (propertyContainer);
   if (NULL == propertyContainer)
     return AAFRESULT_INVALID_PARAM;
   
@@ -163,7 +163,7 @@ AAFRESULT STDMETHODCALLTYPE
 	  return AAFRESULT_NULL_PARAM;
 	}
   *ppTypeDef = const_cast<ImplAAFTypeDef *>(type());
-  assert (*ppTypeDef);
+  ASSERTU (*ppTypeDef);
   (*ppTypeDef)->AcquireReference ();
   return AAFRESULT_SUCCESS;
 }
@@ -191,6 +191,6 @@ AAFRESULT STDMETHODCALLTYPE ImplAAFPropertyValue::WriteTo(
       OMProperty* /* pOmProp */)
 {
   // This method should be pure virtual but dodo won't allow it
-  assert(false);
+  ASSERTU(false);
   return AAFRESULT_SUCCESS;
 }

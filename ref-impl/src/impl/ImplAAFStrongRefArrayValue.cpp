@@ -45,7 +45,7 @@
 
 #include "OMProperty.h"
 
-#include <assert.h>
+#include "OMAssertions.h"
 #include <string.h>
 
 
@@ -124,15 +124,15 @@ ImplAAFTypeDefObjectRef * ImplAAFStrongRefArrayValue::GetElementType(void) const
   ImplAAFTypeDefSP pType, pElementType;
   
   result = GetType(&pType);
-  assert(AAFRESULT_SUCCEEDED(result));
+  ASSERTU(AAFRESULT_SUCCEEDED(result));
   if (AAFRESULT_SUCCEEDED(result))
   {
     pContainerType = dynamic_cast<ImplAAFTypeDefArray *>((ImplAAFTypeDef *)pType); // extract obj from smartptr
-    assert(NULL != pContainerType);
+    ASSERTU(NULL != pContainerType);
     if (NULL != pContainerType)
     {
       result = pContainerType->GetType(&pElementType);
-      assert(AAFRESULT_SUCCEEDED(result));
+      ASSERTU(AAFRESULT_SUCCEEDED(result));
       if (AAFRESULT_SUCCEEDED(result))
       {
         pContainerElementType = dynamic_cast<ImplAAFTypeDefStrongObjRef *>((ImplAAFTypeDef *)pElementType); // extract obj from smartptr
@@ -140,7 +140,7 @@ ImplAAFTypeDefObjectRef * ImplAAFStrongRefArrayValue::GetElementType(void) const
     }
   }
   
-  assert(pContainerElementType);
+  ASSERTU(pContainerElementType);
   return pContainerElementType;
 }
 
@@ -149,7 +149,7 @@ ImplAAFTypeDefObjectRef * ImplAAFStrongRefArrayValue::GetElementType(void) const
 // to a container.
 AAFRESULT ImplAAFStrongRefArrayValue::ValidateNewObject(ImplAAFStorable *pNewObject) const
 {
-  assert(NULL != pNewObject);
+  ASSERTU(NULL != pNewObject);
   if (pNewObject->attached())
     return AAFRESULT_OBJECT_ALREADY_ATTACHED;
   else

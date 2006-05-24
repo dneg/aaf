@@ -48,7 +48,7 @@
 #include "OMProperty.h"
 #include "OMRefSetProperty.h" // TBD: include header for class for singleton strong references.
 
-#include <assert.h>
+#include "OMAssertions.h"
 #include <string.h>
 
 
@@ -81,7 +81,7 @@ AAFRESULT ImplAAFRefSetValue::Initialize (
   AAFRESULT result = AAFRESULT_SUCCESS;
   // Concrete class' Initialize method should have already
   // validated the parameters.
-  assert (NULL != containerType && NULL != property);
+  ASSERTU (NULL != containerType && NULL != property);
   
   if (NULL == dynamic_cast<OMReferenceSetProperty *>(property))
     return AAFRESULT_INVALID_PARAM;
@@ -94,7 +94,7 @@ AAFRESULT ImplAAFRefSetValue::Initialize (
   // Cache the type definition for the unique identifier type
   // for the set.
   ImplAAFTypeDefObjectRef *pElementType = GetElementType();
-  assert(NULL != pElementType);
+  ASSERTU(NULL != pElementType);
   if (NULL == pElementType)
     return AAFRESULT_INVALID_OBJ;
 
@@ -108,7 +108,7 @@ AAFRESULT ImplAAFRefSetValue::Initialize (
   // Allocate key buffer used for extracting a key value from a property
   // valud for a key.
   _keyBufferSize = _uidType->NativeSize();
-  assert(0 < _keyBufferSize);
+  ASSERTU(0 < _keyBufferSize);
   _keyBuffer = new aafUInt8[_keyBufferSize];
   if (NULL == _keyBuffer)
     return AAFRESULT_NOMEMORY;
@@ -143,12 +143,12 @@ AAFRESULT STDMETHODCALLTYPE
   if (NULL == identification)
     return AAFRESULT_NULL_PARAM;
 
-  assert (isInitialized());
+  ASSERTU (isInitialized());
   if (!isInitialized())
     return AAFRESULT_NOT_INITIALIZED;
 
   OMReferenceSetProperty* pReferenceSetProperty = referenceSetProperty();
-  assert(NULL != pReferenceSetProperty);
+  ASSERTU(NULL != pReferenceSetProperty);
   // Satisfy the om precondition that the given identifier must exist
   // in the set for remove to succeed.
   if (!pReferenceSetProperty->contains(identification))
@@ -176,12 +176,12 @@ AAFRESULT STDMETHODCALLTYPE
     return AAFRESULT_NULL_PARAM;
   *pResult = kAAFFalse;
 
-  assert (isInitialized());
+  ASSERTU (isInitialized());
   if (!isInitialized())
     return AAFRESULT_NOT_INITIALIZED;
   
   OMReferenceSetProperty* pReferenceSetProperty = referenceSetProperty();
-  assert(NULL != pReferenceSetProperty);
+  ASSERTU(NULL != pReferenceSetProperty);
   if (pReferenceSetProperty->contains(identification))
   {
     *pResult = kAAFTrue;
@@ -210,19 +210,19 @@ AAFRESULT STDMETHODCALLTYPE
   *ppObject = NULL;
   *pResult = kAAFFalse;
 
-  assert (isInitialized());
+  ASSERTU (isInitialized());
   if (!isInitialized())
     return AAFRESULT_NOT_INITIALIZED;
 
   OMReferenceSetProperty* pReferenceSetProperty = referenceSetProperty();
-  assert(NULL != pReferenceSetProperty);
+  ASSERTU(NULL != pReferenceSetProperty);
     
   OMObject *object = NULL;
   if (!pReferenceSetProperty->findObject(identification, object))
     return AAFRESULT_OBJECT_NOT_FOUND;
   
   *ppObject = ImplAAFRefValue::ConvertOMObjectToRoot(object);
-  assert(NULL != *ppObject);
+  ASSERTU(NULL != *ppObject);
   if (NULL == *ppObject)
     return AAFRESULT_INVALID_OBJ;
   
@@ -237,14 +237,14 @@ AAFRESULT STDMETHODCALLTYPE
 void ImplAAFRefSetValue::LoadKey(ImplAAFPropertyValue * pKey, AAFRESULT& result)
 {
 
-  assert (isInitialized());
+  ASSERTU (isInitialized());
   if (!isInitialized())
   {
     result = AAFRESULT_NOT_INITIALIZED;
     return;
   }
 
-  assert(NULL != pKey);
+  ASSERTU(NULL != pKey);
   ImplAAFTypeDefSP pKeyType;
   result = pKey->GetType(&pKeyType);
   if (AAFRESULT_FAILED(result))
@@ -285,7 +285,7 @@ AAFRESULT STDMETHODCALLTYPE
     return result;
 
   ImplAAFTypeDefObjectRef *pElementType = GetElementType();
-  assert(NULL != pElementType);
+  ASSERTU(NULL != pElementType);
   if (NULL == pElementType)
     return AAFRESULT_INVALID_OBJ;
 

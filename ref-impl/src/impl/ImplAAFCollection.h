@@ -156,7 +156,7 @@ ImplAAFCollectionData<T>::ImplAAFCollectionData<T>
   : _pData (pData),
 	_numElems (numElems)
 {
-  assert (pData);
+  ASSERTU (pData);
 }
 
 
@@ -211,7 +211,7 @@ ImplAAFCollectionOMVector<T, PropElemType>::ImplAAFCollectionOMVector<T, PropEle
 )
   : _pProp (pProp)
 {
-  assert (pProp);
+  ASSERTU (pProp);
 }
 
 

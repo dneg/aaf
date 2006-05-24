@@ -43,7 +43,6 @@
 #include "aafErr.h"
 #include "AAFUtils.h"
 
-#include <assert.h>
 #include <string.h>
 
 #include "ImplAAFSmartPointer.h"

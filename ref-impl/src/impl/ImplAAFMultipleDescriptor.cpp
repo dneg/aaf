@@ -36,7 +36,7 @@
 #include "ImplAAFMultipleDescriptor.h"
 #endif
 
-#include <assert.h>
+#include "OMAssertions.h"
 #include "AAFResult.h"
 #include "aafErr.h"
 #include "ImplAAFObjectCreation.h"
@@ -203,7 +203,7 @@ AAFRESULT
 		return AAFRESULT_NO_MORE_OBJECTS; // AAFRESULT_BADINDEX ???
 
 	_Descriptors.getValueAt(*ppDescriptor, index);
-  assert(*ppDescriptor); // Descriptor should never be NULL.
+  ASSERTU(*ppDescriptor); // Descriptor should never be NULL.
 	(*ppDescriptor)->AcquireReference();
 
 	return AAFRESULT_SUCCESS;

@@ -55,7 +55,7 @@
 #include "OMProperty.h"
 #include "OMRefProperty.h" // Include header for base class for singleton references.
 
-#include <assert.h>
+#include "OMAssertions.h"
 #include <string.h>
 
 
@@ -75,7 +75,7 @@ AAFRESULT ImplAAFStrongRefValue::Initialize (
 {
   AAFRESULT result = AAFRESULT_SUCCESS;
   
-  assert (!isInitialized());
+  ASSERTU (!isInitialized());
   if (isInitialized())
     return AAFRESULT_ALREADY_INITIALIZED;
     
@@ -95,7 +95,7 @@ AAFRESULT ImplAAFStrongRefValue::Initialize (
 {
   AAFRESULT result = AAFRESULT_SUCCESS;
   
-  assert (!isInitialized());
+  ASSERTU (!isInitialized());
   if (isInitialized())
     return AAFRESULT_ALREADY_INITIALIZED;
     
@@ -120,7 +120,7 @@ AAFRESULT STDMETHODCALLTYPE ImplAAFStrongRefValue::GetObject(ImplAAFStorable **p
   
   *ppObject = NULL;
 
-  assert (isInitialized());
+  ASSERTU (isInitialized());
   if (!isInitialized())
     return AAFRESULT_NOT_INITIALIZED;
 
@@ -133,7 +133,7 @@ AAFRESULT STDMETHODCALLTYPE ImplAAFStrongRefValue::GetObject(ImplAAFStorable **p
       if (NULL == object)
         return AAFRESULT_NULLOBJECT;
       pObject = ConvertOMObjectToRoot(object); 
-      assert (NULL != pObject);
+      ASSERTU (NULL != pObject);
       if (NULL == pObject)
         return AAFRESULT_INVALID_OBJ; // ???
     }
@@ -149,7 +149,7 @@ AAFRESULT STDMETHODCALLTYPE ImplAAFStrongRefValue::GetObject(ImplAAFStorable **p
     // If there was not associated reference property then there MUST
     // be a local object pointer assigned to this instance.
     pObject = GetLocalObject();
-    assert (NULL != pObject);
+    ASSERTU (NULL != pObject);
   }
   
   *ppObject = pObject;
@@ -162,7 +162,7 @@ static AAFRESULT SetNewObjectReference(
   OMReferenceProperty* refProperty,
   ImplAAFStorable* pNewObject)
 {   
-  assert (NULL != pNewObject);
+  ASSERTU (NULL != pNewObject);
   if (NULL == pNewObject)
     return AAFRESULT_INVALID_OBJ; // ???
   OMObject *object = refProperty->setObject(pNewObject);
@@ -175,7 +175,7 @@ static AAFRESULT SetNewObjectReference(
   if (NULL != object)
   {    
     ImplAAFStorable *pOldObject = ImplAAFRefValue::ConvertOMObjectToRoot(object); 
-    assert (NULL != pOldObject);
+    ASSERTU (NULL != pOldObject);
     if (NULL == pOldObject)
       return AAFRESULT_INVALID_OBJ; // ???
     
@@ -193,7 +193,7 @@ AAFRESULT STDMETHODCALLTYPE ImplAAFStrongRefValue::SetObject(ImplAAFStorable *pO
   if (NULL == pObject)
     return AAFRESULT_NULL_PARAM;
 
-  assert (isInitialized());
+  ASSERTU (isInitialized());
   if (!isInitialized())
     return AAFRESULT_NOT_INITIALIZED;
 
@@ -222,7 +222,7 @@ AAFRESULT STDMETHODCALLTYPE ImplAAFStrongRefValue::SetObject(ImplAAFStorable *pO
 AAFRESULT STDMETHODCALLTYPE ImplAAFStrongRefValue::WriteTo(
   OMProperty* pOmProp)
 {
-  assert (isInitialized());
+  ASSERTU (isInitialized());
   if (!isInitialized())
     return AAFRESULT_NOT_INITIALIZED;
 
@@ -235,7 +235,7 @@ AAFRESULT STDMETHODCALLTYPE ImplAAFStrongRefValue::WriteTo(
     if (NULL == referenceProperty())
     {
       OMReferenceProperty* refProperty = dynamic_cast<OMReferenceProperty *>(pOmProp);
-      assert(refProperty);
+      ASSERTU(refProperty);
       if (NULL == refProperty)
         return AAFRESULT_INVALID_OBJ; // ???
 

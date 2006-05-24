@@ -37,7 +37,6 @@
 #include "ImplAAFParameter.h"
 #endif
 
-#include <assert.h>
 #include <string.h>
 #include "AAFResult.h"
 #include "aafErr.h"

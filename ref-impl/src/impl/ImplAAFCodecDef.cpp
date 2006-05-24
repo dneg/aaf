@@ -45,7 +45,6 @@
 #include "ImplAAFPluginManager.h"
 #include "ImplAAFDictionary.h"
 
-#include <assert.h>
 #include <string.h>
 #include "aafErr.h"
 #include "AAFUtils.h"

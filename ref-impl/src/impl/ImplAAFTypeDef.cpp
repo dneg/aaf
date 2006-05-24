@@ -35,7 +35,7 @@
 
 #include "ImplAAFObjectCreation.h"
 
-#include <assert.h>
+#include "OMAssertions.h"
 #include <string.h>
 
 #include <wchar.h>
@@ -82,7 +82,7 @@ void ImplAAFTypeDef::reorder(OMByte* /*bytes*/,
 							 size_t /*bytesSize*/) const
 {
   // Should be implemented in derived class.
-  assert (0);
+  ASSERTU (0);
 }
 
 
@@ -90,7 +90,7 @@ size_t ImplAAFTypeDef::externalSize(const OMByte* /*internalBytes*/,
 									size_t /*internalBytesSize*/) const
 {
   // Should be implemented in derived class.
-  assert (0);
+  ASSERTU (0);
   return 0; // Not reached!
 }
 
@@ -106,7 +106,7 @@ void ImplAAFTypeDef::externalize(const OMByte* /*internalBytes*/,
 								 OMByteOrder /*byteOrder*/) const
 {
   // Should be implemented in derived class.
-  assert (0);
+  ASSERTU (0);
 }
 
 
@@ -114,7 +114,7 @@ size_t ImplAAFTypeDef::internalSize(const OMByte* /*externalBytes*/,
 									size_t /*externalSize*/) const
 {
   // Should be implemented in derived class.
-  assert (0);
+  ASSERTU (0);
   return 0; // Not reached!
 }
 
@@ -130,7 +130,7 @@ void ImplAAFTypeDef::internalize(const OMByte* /*externalBytes*/,
 								 OMByteOrder /*byteOrder*/) const
 {
   // Should be implemented in derived class.
-  assert (0);
+  ASSERTU (0);
 }
 
 const OMUniqueObjectIdentification& ImplAAFTypeDef::uniqueIdentification(void) const
@@ -141,7 +141,7 @@ const OMUniqueObjectIdentification& ImplAAFTypeDef::uniqueIdentification(void) c
 aafBool ImplAAFTypeDef::IsFixedSize (void) const
 {
   // Should be implemented in derived class.
-  assert (0);
+  ASSERTU (0);
   return kAAFFalse; // not reached!
 }
 
@@ -149,7 +149,7 @@ aafBool ImplAAFTypeDef::IsFixedSize (void) const
 size_t ImplAAFTypeDef::PropValSize (void) const
 {
   // Should be implemented in derived class.
-  assert (0);
+  ASSERTU (0);
   return 0; // not reached!
 }
 
@@ -157,7 +157,7 @@ size_t ImplAAFTypeDef::PropValSize (void) const
 aafBool ImplAAFTypeDef::IsRegistered (void) const
 {
   // Should be implemented in derived class.
-  assert (0);
+  ASSERTU (0);
   return kAAFFalse; // not reached!
 }
 
@@ -170,7 +170,7 @@ void ImplAAFTypeDef::AttemptBuiltinRegistration (void)
 size_t ImplAAFTypeDef::NativeSize (void) const
 {
   // Should be implemented in derived class.
-  assert (0);
+  ASSERTU (0);
   return 0; // not reached!
 }
 
@@ -186,7 +186,7 @@ size_t ImplAAFTypeDef::ActualSize (void) const
 
 AAFRESULT ImplAAFTypeDef::MergeTo( ImplAAFDictionary* pDstDictionary )
 {
-  assert( pDstDictionary );
+  ASSERTU( pDstDictionary );
 
 
   AAFRESULT hr = AAFRESULT_SUCCESS;
@@ -202,7 +202,7 @@ AAFRESULT ImplAAFTypeDef::MergeTo( ImplAAFDictionary* pDstDictionary )
     OMStorable* pDstStorable = shallowCopy( pDstFactory );
     ImplAAFTypeDef* pDstTypeDef =
         dynamic_cast<ImplAAFTypeDef*>( pDstStorable );
-    assert( pDstTypeDef );
+    ASSERTU( pDstTypeDef );
 
     hr = pDstDictionary->RegisterTypeDef( pDstTypeDef );
     if( AAFRESULT_SUCCEEDED(hr) )
@@ -227,7 +227,7 @@ OMProperty * ImplAAFTypeDef::pvtCreateOMProperty
    const wchar_t * /*name*/) const
 {
   // Should be implemented in derived class.
-  assert (0);
+  ASSERTU (0);
   return 0; // not reached!
 }
 
@@ -242,18 +242,18 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFPropertyValue ** ppPropertyValue ) const
 {
   AAFRESULT result = AAFRESULT_SUCCESS;
-  assert (property && ppPropertyValue);
+  ASSERTU (property && ppPropertyValue);
   if (NULL == property || NULL == ppPropertyValue)
     return AAFRESULT_NULL_PARAM;
   *ppPropertyValue = NULL; // initialize out parameter
-  assert (property->definition());
+  ASSERTU (property->definition());
   if (NULL == property->definition())
     return AAFRESULT_INVALID_PARAM;
   const OMType *type = property->definition()->type();
-  assert (type);
+  ASSERTU (type);
   ImplAAFTypeDef *ptd = const_cast<ImplAAFTypeDef *>
                           (dynamic_cast<const ImplAAFTypeDef *>(type));
-  assert (ptd);
+  ASSERTU (ptd);
   if (NULL == ptd)
     return AAFRESULT_INVALID_PARAM;
  
@@ -267,7 +267,7 @@ AAFRESULT STDMETHODCALLTYPE
   {
     // set the storage in the prop value
     size_t bitsSize;
-    assert (property);
+    ASSERTU (property);
     bitsSize = property->bitsSize ();
     aafMemPtr_t pBits = NULL;
     // Bobt hack! This should be removed once we have proper
@@ -279,7 +279,7 @@ AAFRESULT STDMETHODCALLTYPE
       {
 	if (bitsSize)
         {
-          assert (pBits);
+          ASSERTU (pBits);
           property->getBits (pBits, bitsSize);
         }
       }
@@ -317,19 +317,19 @@ AAFRESULT STDMETHODCALLTYPE
 // These all should be pure virtual, but if we allow client extension
 // of behavior, clients may have to instantiate these.
 bool ImplAAFTypeDef::IsAggregatable () const
-{ assert (0); return false; }
+{ ASSERTU (0); return false; }
 
 bool ImplAAFTypeDef::IsStreamable () const
-{ assert (0); return false; }
+{ ASSERTU (0); return false; }
 
 bool ImplAAFTypeDef::IsFixedArrayable () const
-{ assert (0); return false; }
+{ ASSERTU (0); return false; }
 
 bool ImplAAFTypeDef::IsVariableArrayable () const
-{ assert (0); return false; }
+{ ASSERTU (0); return false; }
 
 bool ImplAAFTypeDef::IsStringable () const
-{ assert (0); return false; }
+{ ASSERTU (0); return false; }
 
 
 

@@ -42,7 +42,6 @@
 
 #include "AAFStoredObjectIDs.h"
 
-#include <assert.h>
 #include <string.h>
 
 extern "C" const aafClassID_t CLSID_EnumAAFPropertyDefs;

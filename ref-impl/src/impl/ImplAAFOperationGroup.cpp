@@ -65,7 +65,7 @@
 #include "ImplAAFDictionary.h"
 #include "ImplEnumAAFParameters.h"
 
-#include <assert.h>
+#include "OMAssertions.h"
 #include <string.h>
 
 #include "AAFTypes.h"
@@ -178,7 +178,7 @@ AAFRESULT STDMETHODCALLTYPE
 		return AAFRESULT_OBJECT_NOT_FOUND;
 
   *OperationDef = pOpDef;
-  assert (*OperationDef);
+  ASSERTU (*OperationDef);
   (*OperationDef)->AcquireReference ();
 
   return AAFRESULT_SUCCESS;
@@ -463,7 +463,7 @@ AAFRESULT STDMETHODCALLTYPE
 	if (_parameters.find((*reinterpret_cast<const OMObjectIdentification *>(&argID)),
                              *ppParameter))
 	{
-		assert(NULL != *ppParameter);
+		ASSERTU(NULL != *ppParameter);
 		(*ppParameter)->AcquireReference();
 	}
 	else

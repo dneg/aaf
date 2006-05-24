@@ -42,7 +42,6 @@
 #include "ImplAAFScopeReference.h"
 #endif
 
-#include <assert.h>
 #include <string.h>
 #include "AAFResult.h"
 

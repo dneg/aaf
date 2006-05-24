@@ -64,7 +64,7 @@ typedef ImplAAFSmartPointer<ImplEnumAAFPropertyDefs> ImplEnumAAFPropertyDefsSP;
 #include "ImplAAFBuiltinDefs.h"
 #include "AAFUtils.h"
 
-#include <assert.h>
+#include "OMAssertions.h"
 #include <string.h>
 
 extern "C" const aafClassID_t CLSID_EnumAAFPropertyDefs;
@@ -90,7 +90,7 @@ extern "C" const aafClassID_t CLSID_AAFObject;
 /* Note!  Will modify argument... */
 #define release_and_zero(pIfc)   \
 {                                \
-  assert (pIfc);                 \
+  ASSERTU (pIfc);                 \
   pIfc->ReleaseReference ();     \
   pIfc = 0;                      \
 }
@@ -217,7 +217,7 @@ AAFRESULT STDMETHODCALLTYPE
 {
   if (! pCount) return AAFRESULT_NULL_PARAM;
 
-  assert (pCount);
+  ASSERTU (pCount);
   if (!_Properties.isPresent())
 	*pCount = 0;
 
@@ -252,7 +252,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 	  // get our class ID
 	  hr = GetAUID (&thisClassID);
-	  assert (AAFRESULT_SUCCEEDED (hr));
+	  ASSERTU (AAFRESULT_SUCCEEDED (hr));
 
 	  if (pDict->PvtIsClassPresent(thisClassID))
 		{
@@ -321,11 +321,11 @@ AAFRESULT STDMETHODCALLTYPE
 
   ImplAAFDictionarySP pDict;
   hr = GetDictionary (&pDict);
-  assert (AAFRESULT_SUCCEEDED (hr));
+  ASSERTU (AAFRESULT_SUCCEEDED (hr));
 
   aafUID_t myAuid;
   hr = GetAUID (&myAuid);
-  assert (AAFRESULT_SUCCEEDED (hr));
+  ASSERTU (AAFRESULT_SUCCEEDED (hr));
 
   // Test to see if this class is axiomatic; if so, then we can't
   // augment it.
@@ -401,7 +401,7 @@ AAFRESULT
 	if (_Properties.find((*reinterpret_cast<const OMObjectIdentification *>(&propId)),
                              *ppPropDef))
 	{
-		assert(NULL != *ppPropDef);
+		ASSERTU(NULL != *ppPropDef);
     (*ppPropDef)->AcquireReference();
 	}
 	else
@@ -437,22 +437,22 @@ AAFRESULT /*STDMETHODCALLTYPE*/
   ImplAAFPropertyDefSP pPropDef;
 
   check_result (GetPropertyDefs (&pPropEnum));
-  assert (pPropEnum);
+  ASSERTU (pPropEnum);
 
   aafUInt32 count;
   check_result (CountPropertyDefs (&count));
   aafUInt32 i;
   for (i = 0; i < count; i++)
 	{
-	  assert (pPropEnum);
+	  ASSERTU (pPropEnum);
 	  check_result (pPropEnum->NextOne (&pPropDef));
-	  assert (pPropDef);
+	  ASSERTU (pPropDef);
 	  if (propId.DoesMatch (pPropDef))
 		{
 		  // Yup, this is the one.
-		  assert (ppPropDef);
+		  ASSERTU (ppPropDef);
 		  *ppPropDef = pPropDef;
-		  assert (*ppPropDef);
+		  ASSERTU (*ppPropDef);
 		  (*ppPropDef)->AcquireReference ();
 
 		  // Get us outta the loop
@@ -521,7 +521,7 @@ AAFRESULT STDMETHODCALLTYPE
 		return AAFRESULT_IS_ROOT_CLASS;
 
 	*ppClassDef = bootstrapClassWeakReference(_ParentClass);
-	assert(*ppClassDef != NULL);
+	ASSERTU(*ppClassDef != NULL);
 	if(*ppClassDef != NULL)
 		(*ppClassDef)->AcquireReference ();
 	
@@ -607,7 +607,7 @@ const OMPropertyDefinition* ImplAAFClassDef::propertyDefinition(
   aafUID_t  aafID = *(aafUID_t*)&id;
   ImplAAFPropertyDef* pDef = 0;
   LookupPropertyDef( aafID, &pDef);
-  assert( pDef );
+  ASSERTU( pDef );
 
   // This method does not increment the reference count
   // of the returned property definition.
@@ -697,7 +697,7 @@ const OMPropertyDefinition* ImplAAFClassDef::propertyDefinition(
     // Get the destination type def.
     ImplAAFSmartPointer<ImplAAFTypeDef> spDstTypeDef;
     hr = spDstDict->LookupTypeDef(srcTypeId, &spDstTypeDef);
-    assert( AAFRESULT_SUCCESS == hr );
+    ASSERTU( AAFRESULT_SUCCESS == hr );
     
     hr = RegisterOptionalPropertyDef( auid, srcName, spDstTypeDef, &pDstPropertyDef );
     if ( AAFRESULT_SUCCESS != hr ) {
@@ -808,10 +808,10 @@ AAFRESULT STDMETHODCALLTYPE
   hr = GetDictionary (&pDict);
   if (AAFRESULT_FAILED (hr))
 	return hr;
-  assert (pDict);
+  ASSERTU (pDict);
   ImplAAFObject * pObj =
 	pDict->CreateAndInit (this);
-  assert (pObj);
+  ASSERTU (pObj);
   *ppObject = pObj;
   // don't bother with *ppObject->addref() and pObj->ReleaseRef();
   // consider the ref count to be transferred from pObj to *ppObject.
@@ -835,7 +835,7 @@ AAFRESULT STDMETHODCALLTYPE
   ImplAAFPropertyDefSP pd;
 
   check_result (GetDictionary (&pDict));
-  assert (pDict);
+  ASSERTU (pDict);
   OMPropertyId omPid;
   check_result (pDict->GenerateOmPid (id, omPid));
 
@@ -889,7 +889,7 @@ aafBool ImplAAFClassDef::pvtPropertyIdentifierOMPid:: DoesMatch
   (const ImplAAFPropertyDef * pTestPropDef) const
 {
   OMPropertyId testPid;
-  assert (pTestPropDef);
+  ASSERTU (pTestPropDef);
   testPid = pTestPropDef->OmPid ();
   return (_id == testPid) ? kAAFTrue : kAAFFalse;
 }
@@ -898,9 +898,9 @@ aafBool ImplAAFClassDef::pvtPropertyIdentifierAUID::DoesMatch
   (const ImplAAFPropertyDef * pTestPropDef) const
 {
   aafUID_t testUID;
-  assert (pTestPropDef);
+  ASSERTU (pTestPropDef);
   AAFRESULT hr = pTestPropDef->GetAUID (&testUID);
-  assert (AAFRESULT_SUCCEEDED (hr));
+  ASSERTU (AAFRESULT_SUCCEEDED (hr));
   return (EqualAUID (&_id, &testUID) ? kAAFTrue : kAAFFalse);
 }
 
@@ -914,13 +914,13 @@ void ImplAAFClassDef::AssurePropertyTypesLoaded ()
 	  AAFRESULT hr;
 	  ImplAAFClassDefSP spDef;
 	  spDef	= this;
-	  assert (spDef);
+	  ASSERTU (spDef);
 	  while (1)
 		{
 		  // Loop through this class and all its parents
 		  ImplEnumAAFPropertyDefsSP pdEnumSP;
 		  hr = spDef->GetPropertyDefs (&pdEnumSP);
-		  assert (AAFRESULT_SUCCEEDED (hr));
+		  ASSERTU (AAFRESULT_SUCCEEDED (hr));
 
 		  ImplAAFPropertyDefSP propDefSP;
 
@@ -936,11 +936,11 @@ void ImplAAFClassDef::AssurePropertyTypesLoaded ()
 		  aafBool	isRoot;
 
 		  hr = spDef->IsRoot(&isRoot);
-		  assert (AAFRESULT_SUCCEEDED (hr));
+		  ASSERTU (AAFRESULT_SUCCEEDED (hr));
 		  if (isRoot)
 			break;
 		  hr = spDef->GetParent (&parentSP);
-		  assert (AAFRESULT_SUCCEEDED (hr));
+		  ASSERTU (AAFRESULT_SUCCEEDED (hr));
 //!!!		  if (parentSP == NULL)
 //		  {
 //			 ImplAAFDictionary *pDict;
@@ -948,16 +948,16 @@ void ImplAAFClassDef::AssurePropertyTypesLoaded ()
 //			aafUID_t	uid;
 //
 //			hr = spDef->GetAUID (&uid);
-//		    assert (AAFRESULT_SUCCEEDED (hr));
+//		    ASSERTU (AAFRESULT_SUCCEEDED (hr));
 //			hr = spDef->GetDictionary(&pDict);
-//		    assert (AAFRESULT_SUCCEEDED (hr));
+//		    ASSERTU (AAFRESULT_SUCCEEDED (hr));
 //			hr = pDict->LookupClassDef (uid, &curClass);
-//		    assert (AAFRESULT_SUCCEEDED (hr));
+//		    ASSERTU (AAFRESULT_SUCCEEDED (hr));
 //			hr = curClass->GetParent(&parentSP);
-//		    assert (AAFRESULT_SUCCEEDED (hr));
+//		    ASSERTU (AAFRESULT_SUCCEEDED (hr));
 //		  }
 
-		  assert (parentSP != NULL);
+		  ASSERTU (parentSP != NULL);
 		  spDef = parentSP;
 		}
 	}
@@ -999,7 +999,7 @@ HRESULT ImplAAFClassDef::CompleteClassRegistration(void)
 	while(++propertyDefinitions && AAFRESULT_SUCCEEDED(result))
 	{
 		pProperty = propertyDefinitions.value();
-		assert(pProperty); // there should never be a NULL object in a set!
+		ASSERTU(pProperty); // there should never be a NULL object in a set!
 		if (pProperty)
 		{
 		  result = pProperty->CompleteClassRegistration();
@@ -1012,7 +1012,7 @@ HRESULT ImplAAFClassDef::CompleteClassRegistration(void)
 AAFRESULT ImplAAFClassDef::MergeTo(
     ImplAAFDictionary* pDestDictionary )
 {
-    assert( pDestDictionary );
+    ASSERTU( pDestDictionary );
 
     AAFRESULT hr = AAFRESULT_SUCCESS;
 
@@ -1062,7 +1062,7 @@ AAFRESULT ImplAAFClassDef::MergeTo(
             if( AAFRESULT_SUCCEEDED( hr ) )
             {
                 pDestClassDef = dynamic_cast<ImplAAFClassDef*>(pMetaDefinition);
-                assert( pDestClassDef );
+                ASSERTU( pDestClassDef );
                 pDestClassDef->AcquireReference();
 
                 hr = pDestClassDef->Initialize( classID,
@@ -1113,11 +1113,11 @@ AAFRESULT ImplAAFClassDef::MergeTo(
 AAFRESULT ImplAAFClassDef::MergePropertyDefsTo(
     ImplAAFClassDef* pDestClassDef )
 {
-    assert( pDestClassDef );
+    ASSERTU( pDestClassDef );
 
     ImplEnumAAFPropertyDefs* pEnumSourcePropertyDefs = NULL;
     GetPropertyDefs( &pEnumSourcePropertyDefs );
-    assert( pEnumSourcePropertyDefs );
+    ASSERTU( pEnumSourcePropertyDefs );
 
     ImplAAFPropertyDef* pSourcePropertyDef = NULL;
     while( AAFRESULT_SUCCEEDED(

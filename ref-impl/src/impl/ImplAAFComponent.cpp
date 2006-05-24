@@ -41,7 +41,7 @@
 #include "ImplAAFDictionary.h"
 #include "ImplAAFTaggedValueUtil.h"
 
-#include <assert.h>
+#include "OMAssertions.h"
 #include "AAFResult.h"
 #include "aafErr.h"
 #include "ImplAAFSmartPointer.h"
@@ -155,7 +155,7 @@ AAFRESULT STDMETHODCALLTYPE
   ImplAAFDataDef *pDataDef = _dataDef;
 
   *ppDataDef = pDataDef;
-  assert (*ppDataDef);
+  ASSERTU (*ppDataDef);
   (*ppDataDef)->AcquireReference ();
   return AAFRESULT_SUCCESS;
 }

@@ -41,7 +41,6 @@
 #include "ImplAAFRIFFChunk.h"
 #endif
 
-#include <assert.h>
 #include <string.h>
 
 

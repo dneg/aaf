@@ -45,7 +45,7 @@
 #include "OMRefVectorProperty.h"
 #include "OMReferenceVector.h"
 
-#include <assert.h>
+#include "OMAssertions.h"
 #include <string.h>
 
 
@@ -96,7 +96,7 @@ AAFRESULT ImplAAFRefArrayValue::Initialize (
 {
   // Concrete class' Initialize method should have already
   // validated the parameters.
-  assert (NULL != containerType && NULL != property);
+  ASSERTU (NULL != containerType && NULL != property);
   
   if (NULL == dynamic_cast<OMReferenceVectorProperty *>(property))
     return AAFRESULT_INVALID_PARAM;
@@ -109,7 +109,7 @@ AAFRESULT ImplAAFRefArrayValue::Initialize (
 // Retrieve the property or temporary reference vector as an OMReferenceContainer.
 OMReferenceContainer* ImplAAFRefArrayValue::referenceContainer(void) const
 {
-  assert (isInitialized());
+  ASSERTU (isInitialized());
   OMReferenceContainer* result = NULL;
   OMProperty* p = property();
   
@@ -126,7 +126,7 @@ OMReferenceContainer* ImplAAFRefArrayValue::referenceContainer(void) const
 		result = (const_cast<ImplAAFRefArrayValue *>(this)->_tempStorableVector);
   }
   
-  assert(result != 0);
+  ASSERTU(result != 0);
   return result;
 }
 
@@ -147,7 +147,7 @@ OMObjectVector * ImplAAFRefArrayValue::referenceVector(void) const
 		result = (const_cast<ImplAAFRefArrayValue *>(this)->_tempStorableVector);
  	}
   
-  assert(result != 0);
+  ASSERTU(result != 0);
   return result;
 }
 
@@ -197,7 +197,7 @@ AAFRESULT STDMETHODCALLTYPE ImplAAFRefArrayValue::WriteTo(
         {
           object = tempIterator->currentObject();
           obj = dynamic_cast<ImplAAFStorable*>(object);
-          assert(NULL != obj);
+          ASSERTU(NULL != obj);
           if (NULL == obj)
           {
             result = AAFRESULT_INVALID_OBJ;
@@ -247,7 +247,7 @@ AAFRESULT STDMETHODCALLTYPE ImplAAFRefArrayValue::InsertObject(
   ImplAAFStorable* pObject)
 {
   // Cannot change size of a fixed array.
-  assert(!fixedSize());
+  ASSERTU(!fixedSize());
   if (fixedSize())
     return AAFRESULT_INVALID_OBJ;    
   return ImplAAFRefContainerValue::InsertObject(pObject);
@@ -259,7 +259,7 @@ AAFRESULT STDMETHODCALLTYPE ImplAAFRefArrayValue::RemoveObject(
   ImplAAFStorable* pObject)
 {
   // Cannot change size of a fixed array.
-  assert(!fixedSize());
+  ASSERTU(!fixedSize());
   if (fixedSize())
     return AAFRESULT_INVALID_OBJ;    
   return ImplAAFRefContainerValue::RemoveObject(pObject);
@@ -283,13 +283,13 @@ AAFRESULT STDMETHODCALLTYPE ImplAAFRefArrayValue::SetObjectAt(
     return AAFRESULT_NULL_PARAM;
   
   ImplAAFStorable* newStorable = ImplAAFRefValue::ConvertRootToOMStorable(pObject);
-  assert(NULL != newStorable);
+  ASSERTU(NULL != newStorable);
   if (NULL == newStorable)
     return AAFRESULT_INVALID_OBJ;
   
   // Validate the index...  
   OMObjectVector * pReferenceVector = referenceVector();
-  assert (NULL != pReferenceVector);
+  ASSERTU (NULL != pReferenceVector);
   aafUInt32 elementCount = pReferenceVector->count();
   if (index >= elementCount)
     return AAFRESULT_BADINDEX;
@@ -319,18 +319,18 @@ AAFRESULT STDMETHODCALLTYPE ImplAAFRefArrayValue::GetObjectAt(
   
   // Validate the index...  
   OMObjectVector * pReferenceVector = referenceVector();
-  assert (NULL != pReferenceVector);
+  ASSERTU (NULL != pReferenceVector);
   aafUInt32 elementCount = pReferenceVector->count();
   if (index >= elementCount)
     return AAFRESULT_BADINDEX;
     
   OMObject *object = pReferenceVector->getObjectAt(index);
-  assert(NULL != object);
+  ASSERTU(NULL != object);
   if (NULL == object)
     return AAFRESULT_INVALID_OBJ;
   
   *ppObject = ImplAAFRefValue::ConvertOMObjectToRoot(object);
-  assert(NULL != *ppObject);
+  ASSERTU(NULL != *ppObject);
   if (NULL == *ppObject)
     return AAFRESULT_INVALID_OBJ;
   
@@ -349,7 +349,7 @@ AAFRESULT STDMETHODCALLTYPE ImplAAFRefArrayValue::AppendObject(
   AAFRESULT result = AAFRESULT_SUCCESS;
 
   // Cannot change size of a fixed array.
-  assert(!fixedSize());
+  ASSERTU(!fixedSize());
   if (fixedSize())
     return AAFRESULT_INVALID_OBJ;    
 
@@ -361,7 +361,7 @@ AAFRESULT STDMETHODCALLTYPE ImplAAFRefArrayValue::AppendObject(
     result = AAFRESULT_INVALID_OBJ; 
     
   OMObjectVector * pReferenceVector = referenceVector();
-  assert (NULL != pReferenceVector);
+  ASSERTU (NULL != pReferenceVector);
   pReferenceVector->appendObject(storable);
 
   if (usesReferenceCounting())
@@ -382,7 +382,7 @@ AAFRESULT STDMETHODCALLTYPE ImplAAFRefArrayValue::PrependObject(
     return AAFRESULT_NULL_PARAM;
 
   // Cannot change size of a fixed array.
-  assert(!fixedSize());
+  ASSERTU(!fixedSize());
   if (fixedSize())
     return AAFRESULT_INVALID_OBJ;    
 
@@ -391,7 +391,7 @@ AAFRESULT STDMETHODCALLTYPE ImplAAFRefArrayValue::PrependObject(
     result = AAFRESULT_INVALID_OBJ; 
     
   OMObjectVector * pReferenceVector = referenceVector();
-  assert (NULL != pReferenceVector);
+  ASSERTU (NULL != pReferenceVector);
   pReferenceVector->prependObject(storable);
 
   if (usesReferenceCounting())
@@ -412,13 +412,13 @@ AAFRESULT STDMETHODCALLTYPE ImplAAFRefArrayValue::RemoveObjectAt(
   AAFRESULT result = AAFRESULT_SUCCESS;
 
   // Cannot change size of a fixed array.
-  assert(!fixedSize());
+  ASSERTU(!fixedSize());
   if (fixedSize())
     return AAFRESULT_INVALID_OBJ;    
   
   // Validate the index...  
   OMObjectVector * pReferenceVector = referenceVector();
-  assert (NULL != pReferenceVector);
+  ASSERTU (NULL != pReferenceVector);
   aafUInt32 elementCount = pReferenceVector->count();
   if (index >= elementCount)
     return AAFRESULT_BADINDEX;
@@ -445,13 +445,13 @@ AAFRESULT STDMETHODCALLTYPE ImplAAFRefArrayValue::InsertObjectAt(
     return AAFRESULT_NULL_PARAM;
 
   // Cannot change size of a fixed array.
-  assert(!fixedSize());
+  ASSERTU(!fixedSize());
   if (fixedSize())
     return AAFRESULT_INVALID_OBJ;    
   
   // Validate the index...  
   OMObjectVector * pReferenceVector = referenceVector();
-  assert (NULL != pReferenceVector);
+  ASSERTU (NULL != pReferenceVector);
   aafUInt32 elementCount = pReferenceVector->count();
   if (index > elementCount) // it is valid to insert after the last element
     return AAFRESULT_BADINDEX;
@@ -503,7 +503,7 @@ AAFRESULT STDMETHODCALLTYPE ImplAAFRefArrayValue::GetElementAt(
     return result;
 
   ImplAAFTypeDefObjectRef *pElementType = GetElementType();
-  assert(NULL != pElementType);
+  ASSERTU(NULL != pElementType);
   if (NULL == pElementType)
     return AAFRESULT_INVALID_OBJ;
     

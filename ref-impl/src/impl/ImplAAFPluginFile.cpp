@@ -29,7 +29,6 @@
 
 #include "AAFTypes.h"
 #include "AAFResult.h"
-#include <assert.h>
 #include <string.h>
 
 #if defined( OS_WINDOWS )

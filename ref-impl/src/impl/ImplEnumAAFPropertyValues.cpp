@@ -35,7 +35,7 @@
 #include "ImplAAFTypeDefFixedArray.h"
 #include "ImplAAFTypeDefVariableArray.h"
 
-#include <assert.h>
+#include "OMAssertions.h"
 #include <string.h>
 
 extern "C" const aafClassID_t CLSID_EnumAAFPropertyValues;
@@ -50,9 +50,9 @@ AAFRESULT GetElementValueFromSet( ImplAAFPropertyValue* pVal,
 				  ImplAAFTypeDefSet* pDefSet,
 				  ImplAAFPropertyValue** ppItemVal )
 {
-  assert( pVal );
-  assert( pDefSet );
-  assert( ppItemVal );
+  ASSERTU( pVal );
+  ASSERTU( pDefSet );
+  ASSERTU( ppItemVal );
 
   AAFRESULT hr;
 
@@ -66,7 +66,7 @@ AAFRESULT GetElementValueFromSet( ImplAAFPropertyValue* pVal,
 
   // Get the element's size, and compute offset of "current" element
   // in the propVal's buffer.
-  assert( pElemTypeDef->IsFixedSize() );
+  ASSERTU( pElemTypeDef->IsFixedSize() );
   aafUInt32 elemSize = pElemTypeDef->PropValSize();
   aafUInt32 byteOffset = current * elemSize;
 
@@ -121,7 +121,7 @@ ImplEnumAAFPropertyValues::~ImplEnumAAFPropertyValues ()
 AAFRESULT ImplEnumAAFPropertyValues::Initialize( ImplAAFTypeDefArray* pDef,
 						 ImplAAFPropertyValue* pVal )
 {
-  assert( !_initialized );
+  ASSERTU( !_initialized );
 
   if ( !pDef ) {
     return AAFRESULT_NULL_PARAM;
@@ -167,7 +167,7 @@ AAFRESULT ImplEnumAAFPropertyValues::Initialize( ImplAAFTypeDefArray* pDef,
 AAFRESULT ImplEnumAAFPropertyValues::Initialize( ImplAAFTypeDefSet* pDefSet,
 						 ImplAAFPropertyValue* pVal )
 {
-  assert( !_initialized );
+  ASSERTU( !_initialized );
 
   if ( !pDefSet ) {
     return AAFRESULT_NULL_PARAM;
@@ -212,14 +212,14 @@ AAFRESULT STDMETHODCALLTYPE
   }
 
   // _current should never exceed _count if the implementation is correct
-  assert( _current < _count );
+  ASSERTU( _current < _count );
 
   HRESULT hr;
   if ( _pDefSet ) {
     hr = GetElementValueFromSet( _pVal, _current, _pDefSet, ppPropertyValue ); 
   }
   else {
-    assert( _pDef );
+    ASSERTU( _pDef );
     hr = _pDef->GetElementValue( _pVal, _current, ppPropertyValue );
   }
 
@@ -320,7 +320,7 @@ AAFRESULT STDMETHODCALLTYPE
     hr = pEnum->Initialize( _pDefSet, _pVal );
   }
   else {
-    assert( _pDef );
+    ASSERTU( _pDef );
     hr = pEnum->Initialize( _pDef, _pVal );
   }
 

@@ -44,7 +44,6 @@
 #include "ImplAAFHeader.h"
 #include "ImplAAFTypeDefIndirect.h"
 
-#include <assert.h>
 #include <string.h>
 #include "aafErr.h"
 

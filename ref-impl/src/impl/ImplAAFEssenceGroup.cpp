@@ -38,7 +38,7 @@
 #include "ImplAAFEssenceGroup.h"
 #endif
 
-#include <assert.h>
+#include "OMAssertions.h"
 #include <string.h>
 #include "ImplAAFSourceClip.h"
 #include "aafErr.h"

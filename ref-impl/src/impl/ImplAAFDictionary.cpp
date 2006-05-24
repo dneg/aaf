@@ -55,7 +55,7 @@
 #include "AAFContainerDefs.h"
 #include "AAFClassDefUIDs.h"
 
-#include <assert.h>
+#include "OMAssertions.h"
 #include <string.h>
 #include "aafErr.h"
 #include "AAFUtils.h"
@@ -223,7 +223,7 @@ ImplAAFMetaDictionary *ImplAAFDictionary::metaDictionary(void) const
 {
   // Return the dictionary for creating meta objects, classes, types and 
   // properties.
-  assert(NULL != _metaDictionary);
+  ASSERTU(NULL != _metaDictionary);
   return (_metaDictionary);
 }
 
@@ -233,7 +233,7 @@ ImplAAFMetaDictionary *ImplAAFDictionary::metaDictionary(void) const
 // can only be called once.
 void ImplAAFDictionary::setMetaDictionary(ImplAAFMetaDictionary *metaDictionary)
 {
-  assert(!_metaDictionary);
+  ASSERTU(!_metaDictionary);
   // do not reference count this pointer.
   _metaDictionary = metaDictionary;
 }
@@ -255,7 +255,7 @@ ImplAAFDictionary::pvtCreateBaseClassInstance(const aafUID_t & auid)
   if (NULL == impl)
   { // This is a serious programming error. A stored object id was found in the file
 	  // with a known base class id but no base object could be created.
-    assert(NULL != impl);
+    ASSERTU(NULL != impl);
     return NULL;
   }
 
@@ -266,7 +266,7 @@ ImplAAFDictionary::pvtCreateBaseClassInstance(const aafUID_t & auid)
   { // Not a valid object. Release the pointer so we don't leak memory.
     impl->ReleaseReference();
     impl = 0;
-    assert(NULL != object);
+    ASSERTU(NULL != object);
 	  return NULL;
   }
 
@@ -282,7 +282,7 @@ ImplAAFDictionary *ImplAAFDictionary::CreateDictionary(void)
   
   
   pDictionary = static_cast<ImplAAFDictionary *>(pvtCreateBaseClassInstance(AUID_AAFDictionary));
-  assert(NULL != pDictionary);
+  ASSERTU(NULL != pDictionary);
   if (NULL != pDictionary)
   {
     // If we created a dictionary then give it a reference to a factory
@@ -327,12 +327,12 @@ OMStorable* ImplAAFDictionary::create(const OMClassId& classId) const
     // by the API client to create objects.
     ImplAAFObject *pObject = NULL;
     hr = pNonConstThis->CreateInstance(*auid, &pObject);
-    assert (AAFRESULT_SUCCEEDED (hr));
+    ASSERTU (AAFRESULT_SUCCEEDED (hr));
     return pObject;
   }
   // ImplAAFClassDefSP pcd;
   // hr = pNonConstThis->LookupClassDef(*auid, &pcd);
-  // assert (AAFRESULT_SUCCEEDED (hr));
+  // ASSERTU (AAFRESULT_SUCCEEDED (hr));
   //
   // return CreateAndInit (pcd);
 }
@@ -340,18 +340,18 @@ OMStorable* ImplAAFDictionary::create(const OMClassId& classId) const
 void ImplAAFDictionary::destroy(OMStorable* victim) const
 {
   ImplAAFObject* v = dynamic_cast<ImplAAFObject*>(victim);
-  assert(v != 0);
+  ASSERTU(v != 0);
   v->ReleaseReference();
 }
 
 ImplAAFObject *
 ImplAAFDictionary::CreateAndInit(ImplAAFClassDef * pClassDef) const
 {
-  assert (pClassDef);
+  ASSERTU (pClassDef);
   AAFRESULT hr;
   aafUID_t auid;
   hr = pClassDef->GetAUID(&auid);
-  assert (AAFRESULT_SUCCEEDED (hr));
+  ASSERTU (AAFRESULT_SUCCEEDED (hr));
 
   ImplAAFObject * pNewObject = 0;
   pNewObject = pvtInstantiate (auid);
@@ -417,7 +417,7 @@ ImplAAFObject* ImplAAFDictionary::pvtInstantiate(const aafUID_t & auid) const
 	    {
 	      // AUID does not correspond to any class in the
 	      // dictionary; bail out with NULL result
-	      assert (0 == result);
+	      ASSERTU (0 == result);
 	      break;
 	    }
 
@@ -430,7 +430,7 @@ ImplAAFObject* ImplAAFDictionary::pvtInstantiate(const aafUID_t & auid) const
 	      // The only exception is AAFObject, which would have
 	      // been found by the earlier
 	      // pvtCreateBaseClassInstance() call.
-	      assert (0);
+	      ASSERTU (0);
 	    }
 
 	    hr = pcd->GetParent (&parent);
@@ -581,7 +581,7 @@ AAFRESULT STDMETHODCALLTYPE
 
   if (pvtLookupAxiomaticClassDef (classID, ppClassDef))
   {
-	  assert (*ppClassDef);
+	  ASSERTU (*ppClassDef);
 
 	  // Yes, this is an axiomatic class.  classDef should be filled
 	  // in.  Assure that it's in the dictionary, and return it.
@@ -624,7 +624,7 @@ AAFRESULT STDMETHODCALLTYPE
 				  }
 				  (*ppClassDef)->SetBootstrapParent(NULL);
 				  status = PvtRegisterClassDef(*ppClassDef);
-				  assert (AAFRESULT_SUCCEEDED (status));
+				  ASSERTU (AAFRESULT_SUCCEEDED (status));
 			  }
 		  }
 	  }
@@ -662,7 +662,7 @@ AAFRESULT STDMETHODCALLTYPE
 	}
 
   // Yup, found it in builtins.  Register it.
-  assert (*ppClassDef);
+  ASSERTU (*ppClassDef);
   status = PvtRegisterClassDef (*ppClassDef);
   if (AAFRESULT_FAILED (status))
 	return status;
@@ -698,7 +698,7 @@ AAFRESULT STDMETHODCALLTYPE
 // to the set in the dictionary.
 AAFRESULT ImplAAFDictionary::PvtRegisterClassDef(ImplAAFClassDef * pClassDef)
 {
-  assert (_defRegistrationAllowed);
+  ASSERTU (_defRegistrationAllowed);
   // Defer to the meta dictionary.
   return (metaDictionary()->PvtRegisterClassDef(pClassDef));
 }
@@ -707,7 +707,7 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFDictionary::RegisterClassDef (
       ImplAAFClassDef * pClassDef)
 {
-  assert (_defRegistrationAllowed);
+  ASSERTU (_defRegistrationAllowed);
   // Defer to the meta dictionary.
   return (metaDictionary()->RegisterClassDef(pClassDef));
 }
@@ -737,7 +737,7 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFDictionary::RegisterTypeDef (
       ImplAAFTypeDef * pTypeDef)
 {
-  assert (_defRegistrationAllowed);
+  ASSERTU (_defRegistrationAllowed);
 
   // Defer to the meta dictionary.
   return(metaDictionary()->RegisterTypeDef(pTypeDef));
@@ -801,12 +801,12 @@ AAFRESULT STDMETHODCALLTYPE
 	  if(_defRegistrationAllowed && !PvtIsTypePresent(typeID))
 	  {
 		  status = RegisterTypeDef(typeDef);
-		  assert (AAFRESULT_SUCCEEDED (status));
+		  ASSERTU (AAFRESULT_SUCCEEDED (status));
 	  }
 	  
-	  assert (ppTypeDef);
+	  ASSERTU (ppTypeDef);
 	  *ppTypeDef = typeDef;
-	  assert (*ppTypeDef);
+	  ASSERTU (*ppTypeDef);
 	  (*ppTypeDef)->AcquireReference ();
 	  return AAFRESULT_SUCCESS;
   }
@@ -828,7 +828,7 @@ AAFRESULT STDMETHODCALLTYPE
 	}
 
   // If we're here, it was not found in dict.  Try it in builtins.
-  assert (0 == (ImplAAFTypeDef*) typeDef);
+  ASSERTU (0 == (ImplAAFTypeDef*) typeDef);
   status = _pBuiltinTypes->NewBuiltinTypeDef (typeID, &typeDef);
   if (AAFRESULT_FAILED (status))
 	{
@@ -838,15 +838,15 @@ AAFRESULT STDMETHODCALLTYPE
   // Yup, found it in builtins.  Register it.
   if(_defRegistrationAllowed)
 	 {
-	  assert (typeDef);
+	  ASSERTU (typeDef);
 	 status = RegisterTypeDef (typeDef);
 	 if (AAFRESULT_FAILED (status))
 		return status;
   }
 		  
-  assert (ppTypeDef);
+  ASSERTU (ppTypeDef);
   *ppTypeDef = typeDef;
-  assert (*ppTypeDef);
+  ASSERTU (*ppTypeDef);
   (*ppTypeDef)->AcquireReference ();
 	
   return(AAFRESULT_SUCCESS);
@@ -938,7 +938,7 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFDictionary::RegisterDataDef (
       ImplAAFDataDef *pDataDef)
 {
-  assert (_defRegistrationAllowed);
+  ASSERTU (_defRegistrationAllowed);
 
   if (NULL == pDataDef)
 	return AAFRESULT_NULL_PARAM;
@@ -995,7 +995,7 @@ AAFRESULT STDMETHODCALLTYPE
 	if (_dataDefinitions.find((*reinterpret_cast<const OMObjectIdentification *>(&dataDefinitionID)),
                              *ppDataDef))
 	{
-		assert(NULL != *ppDataDef);
+		ASSERTU(NULL != *ppDataDef);
 		(*ppDataDef)->AcquireReference();
 	}
 	else
@@ -1058,7 +1058,7 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFDictionary::RegisterOperationDef (
       ImplAAFOperationDef *pOperationDef)
 {
-  assert (_defRegistrationAllowed);
+  ASSERTU (_defRegistrationAllowed);
 
 	if (NULL == pOperationDef)
 		return AAFRESULT_NULL_PARAM;
@@ -1089,7 +1089,7 @@ AAFRESULT STDMETHODCALLTYPE
 	if (_operationDefinitions.find((*reinterpret_cast<const OMObjectIdentification *>(&effectID)),
                              *ppOperationDef))
 	{
-		assert(NULL != *ppOperationDef);
+		ASSERTU(NULL != *ppOperationDef);
 		(*ppOperationDef)->AcquireReference();
 	}
 	else
@@ -1150,7 +1150,7 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFDictionary::RegisterParameterDef (
       ImplAAFParameterDef *pParameterDef)
 {
-  assert (_defRegistrationAllowed);
+  ASSERTU (_defRegistrationAllowed);
 
 	if (NULL == pParameterDef)
 		return AAFRESULT_NULL_PARAM;
@@ -1181,7 +1181,7 @@ AAFRESULT STDMETHODCALLTYPE
 	if (_parameterDefinitions.find((*reinterpret_cast<const OMObjectIdentification *>(&parameterID)),
                              *ppParameterDef))
 	{
-		assert(NULL != *ppParameterDef);
+		ASSERTU(NULL != *ppParameterDef);
 		(*ppParameterDef)->AcquireReference();
 	}
 	else
@@ -1242,7 +1242,7 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFDictionary::RegisterCodecDef (
       ImplAAFCodecDef *pPlugDef)
 {
-  assert (_defRegistrationAllowed);
+  ASSERTU (_defRegistrationAllowed);
 
 	if (NULL == pPlugDef)
 		return AAFRESULT_NULL_PARAM;
@@ -1286,7 +1286,7 @@ AAFRESULT ImplAAFDictionary::LookupCodecDef
 	if (_codecDefinitions.find((*reinterpret_cast<const OMObjectIdentification *>(&defID)),
                              *ppResult))
 	{
-		assert(NULL != *ppResult);
+		ASSERTU(NULL != *ppResult);
 		(*ppResult)->AcquireReference();
 	}
 	else
@@ -1348,7 +1348,7 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFDictionary::RegisterContainerDef (
       ImplAAFContainerDef *pPlugDef)
 {
-  assert (_defRegistrationAllowed);
+  ASSERTU (_defRegistrationAllowed);
 
 	if (NULL == pPlugDef)
 		return AAFRESULT_NULL_PARAM;
@@ -1378,7 +1378,7 @@ AAFRESULT STDMETHODCALLTYPE
 	if (_containerDefinitions.find((*reinterpret_cast<const OMObjectIdentification *>(&defID)),
                              *ppResult))
 	{
-		assert(NULL != *ppResult);
+		ASSERTU(NULL != *ppResult);
 		(*ppResult)->AcquireReference();
 	}
 	else
@@ -1530,7 +1530,7 @@ void ImplAAFDictionary::InitBuiltins()
 /* Note!  Will modify argument... */
 #define release_and_zero(pIfc)   \
 {                                \
-  assert (pIfc);                 \
+  ASSERTU (pIfc);                 \
   pIfc->ReleaseReference ();     \
   pIfc = 0;                      \
 }
@@ -1540,7 +1540,7 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFDictionary::RegisterInterpolationDef (
       ImplAAFInterpolationDef *pInterpolationDef)
 {
-  assert (_defRegistrationAllowed);
+  ASSERTU (_defRegistrationAllowed);
 
 	if (NULL == pInterpolationDef)
 		return AAFRESULT_NULL_PARAM;
@@ -1571,7 +1571,7 @@ AAFRESULT STDMETHODCALLTYPE
 	if (_interpolationDefinitions.find((*reinterpret_cast<const OMObjectIdentification *>(&interpolationID)),
                              *ppInterpolationDef))
 	{
-		assert(NULL != *ppInterpolationDef);
+		ASSERTU(NULL != *ppInterpolationDef);
 		(*ppInterpolationDef)->AcquireReference();
 	}
 	else
@@ -1632,7 +1632,7 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFDictionary::RegisterPluginDef (		//!!! Bring this out through the IDL
       ImplAAFPluginDef *pDesc)
 {
-  assert (_defRegistrationAllowed);
+  ASSERTU (_defRegistrationAllowed);
 
 	if (NULL == pDesc)
 		return AAFRESULT_NULL_PARAM;
@@ -1663,7 +1663,7 @@ AAFRESULT STDMETHODCALLTYPE
 	if (_pluginDefinitions.find((*reinterpret_cast<const OMObjectIdentification *>(&interpolationID)),
                              *ppPluginDesc))
 	{
-		assert(NULL != *ppPluginDesc);
+		ASSERTU(NULL != *ppPluginDesc);
 		(*ppPluginDesc)->AcquireReference();
 	}
 	else
@@ -1722,7 +1722,7 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFDictionary::RegisterKLVDataDef (ImplAAFKLVDataDefinition* pDef )
 {
-  assert (_defRegistrationAllowed);
+  ASSERTU (_defRegistrationAllowed);
 
   if ( NULL == pDef ) {
     return AAFRESULT_NULL_PARAM;
@@ -1750,7 +1750,7 @@ AAFRESULT STDMETHODCALLTYPE
   
   if ( _klvDataDefinitions.find( *reinterpret_cast<const OMObjectIdentification*>(&id),
 				 *ppDef) ) {
-    assert( *ppDef );
+    ASSERTU( *ppDef );
     (*ppDef)->AcquireReference();
   }
   else {
@@ -1808,7 +1808,7 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFDictionary::RegisterTaggedValueDef (ImplAAFTaggedValueDefinition* pDef)
 {
-  assert (_defRegistrationAllowed);
+  ASSERTU (_defRegistrationAllowed);
 
   if ( NULL == pDef ) {
     return AAFRESULT_NULL_PARAM;
@@ -1836,7 +1836,7 @@ AAFRESULT STDMETHODCALLTYPE
   
   if ( _taggedValueDefinitions.find( *reinterpret_cast<const OMObjectIdentification*>(&id),
 				     *ppDef) ) {
-    assert( *ppDef );
+    ASSERTU( *ppDef );
     (*ppDef)->AcquireReference();
   }
   else {
@@ -1900,8 +1900,8 @@ AAFRESULT STDMETHODCALLTYPE
   if (!ppDataDef) return AAFRESULT_NULL_PARAM;
 
   AAFRESULT hr = LookupDataDef( kAAFDataDef_Auxiliary, ppDataDef );
-  assert(AAFRESULT_SUCCEEDED (hr));
-  assert(NULL != *ppDataDef);
+  ASSERTU(AAFRESULT_SUCCEEDED (hr));
+  ASSERTU(NULL != *ppDataDef);
 
   return AAFRESULT_SUCCESS;
 }
@@ -1915,8 +1915,8 @@ AAFRESULT STDMETHODCALLTYPE
   if (!ppDataDef) return AAFRESULT_NULL_PARAM;
 
   AAFRESULT hr = LookupDataDef( kAAFDataDef_DescriptiveMetadata, ppDataDef );
-  assert(AAFRESULT_SUCCEEDED (hr));
-  assert(NULL != *ppDataDef);
+  ASSERTU(AAFRESULT_SUCCEEDED (hr));
+  ASSERTU(NULL != *ppDataDef);
 
   return AAFRESULT_SUCCESS;
 }
@@ -1930,8 +1930,8 @@ AAFRESULT STDMETHODCALLTYPE
   if (!ppDataDef) return AAFRESULT_NULL_PARAM;
 
   AAFRESULT hr = LookupDataDef( kAAFDataDef_Edgecode, ppDataDef );
-  assert(AAFRESULT_SUCCEEDED (hr));
-  assert(NULL != *ppDataDef);
+  ASSERTU(AAFRESULT_SUCCEEDED (hr));
+  ASSERTU(NULL != *ppDataDef);
 
   return AAFRESULT_SUCCESS;
 }
@@ -1945,8 +1945,8 @@ AAFRESULT STDMETHODCALLTYPE
   if (!ppDataDef) return AAFRESULT_NULL_PARAM;
 
   AAFRESULT hr = LookupDataDef( kAAFDataDef_LegacyPicture, ppDataDef );
-  assert(AAFRESULT_SUCCEEDED (hr));
-  assert(NULL != *ppDataDef);
+  ASSERTU(AAFRESULT_SUCCEEDED (hr));
+  ASSERTU(NULL != *ppDataDef);
 
   return AAFRESULT_SUCCESS;
 }
@@ -1960,8 +1960,8 @@ AAFRESULT STDMETHODCALLTYPE
   if (!ppDataDef) return AAFRESULT_NULL_PARAM;
 
   AAFRESULT hr = LookupDataDef( kAAFDataDef_LegacySound, ppDataDef );
-  assert(AAFRESULT_SUCCEEDED (hr));
-  assert(NULL != *ppDataDef);
+  ASSERTU(AAFRESULT_SUCCEEDED (hr));
+  ASSERTU(NULL != *ppDataDef);
 
   return AAFRESULT_SUCCESS;
 }
@@ -1975,8 +1975,8 @@ AAFRESULT STDMETHODCALLTYPE
   if (!ppDataDef) return AAFRESULT_NULL_PARAM;
 
   AAFRESULT hr = LookupDataDef( kAAFDataDef_LegacyTimecode, ppDataDef );
-  assert(AAFRESULT_SUCCEEDED (hr));
-  assert(NULL != *ppDataDef);
+  ASSERTU(AAFRESULT_SUCCEEDED (hr));
+  ASSERTU(NULL != *ppDataDef);
 
   return AAFRESULT_SUCCESS;
 }
@@ -1990,8 +1990,8 @@ AAFRESULT STDMETHODCALLTYPE
   if (!ppDataDef) return AAFRESULT_NULL_PARAM;
 
   AAFRESULT hr = LookupDataDef( kAAFDataDef_Matte, ppDataDef );
-  assert(AAFRESULT_SUCCEEDED (hr));
-  assert(NULL != *ppDataDef);
+  ASSERTU(AAFRESULT_SUCCEEDED (hr));
+  ASSERTU(NULL != *ppDataDef);
 
   return AAFRESULT_SUCCESS;
 }
@@ -2005,8 +2005,8 @@ AAFRESULT STDMETHODCALLTYPE
   if (!ppDataDef) return AAFRESULT_NULL_PARAM;
 
   AAFRESULT hr = LookupDataDef( kAAFDataDef_Picture, ppDataDef );
-  assert(AAFRESULT_SUCCEEDED (hr));
-  assert(NULL != *ppDataDef);
+  ASSERTU(AAFRESULT_SUCCEEDED (hr));
+  ASSERTU(NULL != *ppDataDef);
 
   return AAFRESULT_SUCCESS;
 }
@@ -2020,8 +2020,8 @@ AAFRESULT STDMETHODCALLTYPE
   if (!ppDataDef) return AAFRESULT_NULL_PARAM;
 
   AAFRESULT hr = LookupDataDef( kAAFDataDef_PictureWithMatte, ppDataDef );
-  assert(AAFRESULT_SUCCEEDED (hr));
-  assert(NULL != *ppDataDef);
+  ASSERTU(AAFRESULT_SUCCEEDED (hr));
+  ASSERTU(NULL != *ppDataDef);
 
   return AAFRESULT_SUCCESS;
 }
@@ -2035,8 +2035,8 @@ AAFRESULT STDMETHODCALLTYPE
   if (!ppDataDef) return AAFRESULT_NULL_PARAM;
 
   AAFRESULT hr = LookupDataDef( kAAFDataDef_Sound, ppDataDef );
-  assert(AAFRESULT_SUCCEEDED (hr));
-  assert(NULL != *ppDataDef);
+  ASSERTU(AAFRESULT_SUCCEEDED (hr));
+  ASSERTU(NULL != *ppDataDef);
 
   return AAFRESULT_SUCCESS;
 }
@@ -2050,8 +2050,8 @@ AAFRESULT STDMETHODCALLTYPE
   if (!ppDataDef) return AAFRESULT_NULL_PARAM;
 
   AAFRESULT hr = LookupDataDef( kAAFDataDef_Timecode, ppDataDef );
-  assert(AAFRESULT_SUCCEEDED (hr));
-  assert(NULL != *ppDataDef);
+  ASSERTU(AAFRESULT_SUCCEEDED (hr));
+  ASSERTU(NULL != *ppDataDef);
 
   return AAFRESULT_SUCCESS;
 }
@@ -2119,7 +2119,7 @@ AAFRESULT ImplAAFDictionary::GenerateOmPid
   OMPropertyId result;
   AAFRESULT hr;
 
-  assert (_pBuiltinClasses);
+  ASSERTU (_pBuiltinClasses);
   hr = _pBuiltinClasses->LookupOmPid (rAuid, result);
   if (AAFRESULT_SUCCEEDED (hr))
 	{
@@ -2150,17 +2150,17 @@ AAFRESULT ImplAAFDictionary::GenerateOmPid
 	  //
 
 	  // _lastGeneratedPid cannot be positive!
-	  assert (0 >= _lastGeneratedPid);
+	  ASSERTU (0 >= _lastGeneratedPid);
 
 	  if (!_lastGeneratedPid)
 		{
 		  // We haven't yet cached the user pids used in this file.  Do it now!
-		  assert (! _lastGeneratedPid);
+		  ASSERTU (! _lastGeneratedPid);
 
 		  // must be signed!
 		  aafInt16 tmpUserPid = 0;
 		  // Make sure we aren't cheating ourselves
-		  assert (sizeof (OMPropertyId) == sizeof (aafInt16));
+		  ASSERTU (sizeof (OMPropertyId) == sizeof (aafInt16));
 
 		  // Need to determine which user PIDs have already been used.
 		  ImplEnumAAFClassDefsSP enumClassDefs;
@@ -2186,12 +2186,12 @@ AAFRESULT ImplAAFDictionary::GenerateOmPid
 					tmpUserPid = tmpPid;
 				}
 			}
-		  assert (tmpUserPid <= 0);
+		  ASSERTU (tmpUserPid <= 0);
 		  _lastGeneratedPid = tmpUserPid;
 		}
 
 	  result = (OMPropertyId) --_lastGeneratedPid;
-	  assert (((aafInt16) result) < 0);
+	  ASSERTU (((aafInt16) result) < 0);
 	  rOutPid = result;
 	}
   return AAFRESULT_SUCCESS;
@@ -2212,7 +2212,7 @@ void ImplAAFDictionary::pvtAttemptBuiltinSizeRegistration
 
 void ImplAAFDictionary::AssurePropertyTypes (ImplAAFClassDef * pcd)
 {
-  assert (pcd);
+  ASSERTU (pcd);
 // All axiomatic definitions have already been loaded all other 
 // property and types can be loaded "lazily" if necessary.
 // Why do we need this stuff??? transdel 2000-DEC-20
@@ -2232,13 +2232,13 @@ void ImplAAFDictionary::AssureClassPropertyTypes ()
   _OKToAssurePropTypes = true;
 
   hr = GetClassDefs (&enumClassDefs);
-  assert (AAFRESULT_SUCCEEDED (hr));
+  ASSERTU (AAFRESULT_SUCCEEDED (hr));
 
   // do registered (normal) classes
   while (AAFRESULT_SUCCEEDED
 		 (enumClassDefs->NextOne (&classDef)))
 	{
-	  assert (classDef);
+	  ASSERTU (classDef);
 	  classDef->AssurePropertyTypesLoaded ();
 	  classDef = 0;
 	}
@@ -2259,7 +2259,7 @@ ImplAAFBuiltinDefs * ImplAAFDictionary::GetBuiltinDefs ()
 	{
 	  _pBuiltinDefs = new ImplAAFBuiltinDefs (this);
 	}
-  assert (_pBuiltinDefs);
+  ASSERTU (_pBuiltinDefs);
   return _pBuiltinDefs;
 }
 
@@ -2278,11 +2278,11 @@ void ImplAAFDictionary::InitializeMetaDefinitions(void)
 
     if (!_pBuiltinTypes)
       _pBuiltinTypes   = new ImplAAFBuiltinTypes (this);
-    assert (_pBuiltinTypes);
+    ASSERTU (_pBuiltinTypes);
 
     if (!_pBuiltinClasses)
       _pBuiltinClasses = new ImplAAFBuiltinClasses (this);
-    assert (_pBuiltinClasses);
+    ASSERTU (_pBuiltinClasses);
 
   }
 }
@@ -2290,7 +2290,7 @@ void ImplAAFDictionary::InitializeMetaDefinitions(void)
 
 AAFRESULT ImplAAFDictionary::MergeTo( ImplAAFDictionary* pDestDictionary )
 {
-    assert( pDestDictionary );
+    ASSERTU( pDestDictionary );
 
 
     ImplEnumAAFClassDefs* pEnumSrcClassDefs = NULL;
@@ -2332,8 +2332,8 @@ aafBoolean_t aafLookupTypeDef(
     ImplAAFObject	*p_holder,
     ImplAAFTypeDef		*p_typedef )
 {
-    assert( p_holder );
-    assert( p_typedef );
+    ASSERTU( p_holder );
+    ASSERTU( p_typedef );
 
     AAFRESULT		hr = AAFRESULT_TYPE_NOT_FOUND; // Important init.
     aafUID_t		typedef_id;
@@ -2378,8 +2378,8 @@ aafBoolean_t aafLookupOperationDef(
     ImplAAFObject	*p_holder,
     ImplAAFOperationDef		*p_operdef )
 {
-    assert( p_holder );
-    assert( p_operdef );
+    ASSERTU( p_holder );
+    ASSERTU( p_operdef );
 
     AAFRESULT		hr = AAFRESULT_OBJECT_NOT_FOUND; // Important init.
     aafUID_t		operdef_id;
@@ -2424,8 +2424,8 @@ aafBoolean_t aafLookupParameterDef(
     ImplAAFObject	*p_holder,
     ImplAAFParameterDef		*p_paramdef )
 {
-    assert( p_holder );
-    assert( p_paramdef );
+    ASSERTU( p_holder );
+    ASSERTU( p_paramdef );
 
     AAFRESULT		hr = AAFRESULT_OBJECT_NOT_FOUND; // Important init.
     aafUID_t		paramdef_id;
@@ -2470,8 +2470,8 @@ aafBoolean_t aafLookupClassDef(
     ImplAAFObject	*p_holder,
     ImplAAFClassDef		*p_classdef )
 {
-    assert( p_holder );
-    assert( p_classdef );
+    ASSERTU( p_holder );
+    ASSERTU( p_classdef );
 
     AAFRESULT		hr = AAFRESULT_OBJECT_NOT_FOUND; // Important init.
     aafUID_t		classdef_id;
@@ -2516,8 +2516,8 @@ aafBoolean_t aafLookupDataDef(
     ImplAAFObject	*p_holder,
     ImplAAFDataDef		*p_datadef )
 {
-    assert( p_holder );
-    assert( p_datadef );
+    ASSERTU( p_holder );
+    ASSERTU( p_datadef );
 
     AAFRESULT		hr = AAFRESULT_OBJECT_NOT_FOUND; // Important init.
     aafUID_t		datadef_id;
@@ -2562,8 +2562,8 @@ aafBoolean_t aafLookupCodecDef(
     ImplAAFObject	*p_holder,
     ImplAAFCodecDef		*p_codecdef )
 {
-    assert( p_holder );
-    assert( p_codecdef );
+    ASSERTU( p_holder );
+    ASSERTU( p_codecdef );
 
     AAFRESULT		hr = AAFRESULT_OBJECT_NOT_FOUND; // Important init.
     aafUID_t		codecdef_id;
@@ -2608,8 +2608,8 @@ aafBoolean_t aafLookupContainerDef(
     ImplAAFObject	*p_holder,
     ImplAAFContainerDef		*p_containerdef )
 {
-    assert( p_holder );
-    assert( p_containerdef );
+    ASSERTU( p_holder );
+    ASSERTU( p_containerdef );
 
     AAFRESULT		hr = AAFRESULT_OBJECT_NOT_FOUND; // Important init.
     aafUID_t		containerdef_id;
@@ -2654,8 +2654,8 @@ aafBoolean_t aafLookupInterpolationDef(
     ImplAAFObject	*p_holder,
     ImplAAFInterpolationDef		*p_interpoldef )
 {
-    assert( p_holder );
-    assert( p_interpoldef );
+    ASSERTU( p_holder );
+    ASSERTU( p_interpoldef );
 
     AAFRESULT		hr = AAFRESULT_OBJECT_NOT_FOUND; // Important init.
     aafUID_t		interpoldef_id;
@@ -2701,8 +2701,8 @@ aafBoolean_t aafLookupTypeDef(
     ImplAAFMetaDefinition	*p_holder,
     ImplAAFTypeDef		*p_typedef )
 {
-    assert( p_holder );
-    assert( p_typedef );
+    ASSERTU( p_holder );
+    ASSERTU( p_typedef );
 
     AAFRESULT		hr = AAFRESULT_TYPE_NOT_FOUND; // Important init.
     aafUID_t		typedef_id;
@@ -2747,8 +2747,8 @@ aafBoolean_t aafLookupOperationDef(
     ImplAAFMetaDefinition	*p_holder,
     ImplAAFOperationDef		*p_operdef )
 {
-    assert( p_holder );
-    assert( p_operdef );
+    ASSERTU( p_holder );
+    ASSERTU( p_operdef );
 
     AAFRESULT		hr = AAFRESULT_OBJECT_NOT_FOUND; // Important init.
     aafUID_t		operdef_id;
@@ -2793,8 +2793,8 @@ aafBoolean_t aafLookupParameterDef(
     ImplAAFMetaDefinition	*p_holder,
     ImplAAFParameterDef		*p_paramdef )
 {
-    assert( p_holder );
-    assert( p_paramdef );
+    ASSERTU( p_holder );
+    ASSERTU( p_paramdef );
 
     AAFRESULT		hr = AAFRESULT_OBJECT_NOT_FOUND; // Important init.
     aafUID_t		paramdef_id;
@@ -2839,8 +2839,8 @@ aafBoolean_t aafLookupClassDef(
     ImplAAFMetaDefinition	*p_holder,
     ImplAAFClassDef		*p_classdef )
 {
-    assert( p_holder );
-    assert( p_classdef );
+    ASSERTU( p_holder );
+    ASSERTU( p_classdef );
 
     AAFRESULT		hr = AAFRESULT_OBJECT_NOT_FOUND; // Important init.
     aafUID_t		classdef_id;
@@ -2885,8 +2885,8 @@ aafBoolean_t aafLookupDataDef(
     ImplAAFMetaDefinition	*p_holder,
     ImplAAFDataDef		*p_datadef )
 {
-    assert( p_holder );
-    assert( p_datadef );
+    ASSERTU( p_holder );
+    ASSERTU( p_datadef );
 
     AAFRESULT		hr = AAFRESULT_OBJECT_NOT_FOUND; // Important init.
     aafUID_t		datadef_id;
@@ -2931,8 +2931,8 @@ aafBoolean_t aafLookupCodecDef(
     ImplAAFMetaDefinition	*p_holder,
     ImplAAFCodecDef		*p_codecdef )
 {
-    assert( p_holder );
-    assert( p_codecdef );
+    ASSERTU( p_holder );
+    ASSERTU( p_codecdef );
 
     AAFRESULT		hr = AAFRESULT_OBJECT_NOT_FOUND; // Important init.
     aafUID_t		codecdef_id;
@@ -2977,8 +2977,8 @@ aafBoolean_t aafLookupContainerDef(
     ImplAAFMetaDefinition	*p_holder,
     ImplAAFContainerDef		*p_containerdef )
 {
-    assert( p_holder );
-    assert( p_containerdef );
+    ASSERTU( p_holder );
+    ASSERTU( p_containerdef );
 
     AAFRESULT		hr = AAFRESULT_OBJECT_NOT_FOUND; // Important init.
     aafUID_t		containerdef_id;
@@ -3023,8 +3023,8 @@ aafBoolean_t aafLookupInterpolationDef(
     ImplAAFMetaDefinition	*p_holder,
     ImplAAFInterpolationDef		*p_interpoldef )
 {
-    assert( p_holder );
-    assert( p_interpoldef );
+    ASSERTU( p_holder );
+    ASSERTU( p_interpoldef );
 
     AAFRESULT		hr = AAFRESULT_OBJECT_NOT_FOUND; // Important init.
     aafUID_t		interpoldef_id;

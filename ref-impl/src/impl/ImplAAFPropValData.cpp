@@ -31,7 +31,7 @@
 #include "ImplAAFPropValData.h"
 #endif
 
-#include <assert.h>
+#include "OMAssertions.h"
 #include <string.h>
 
 
@@ -60,7 +60,7 @@ ImplAAFPropValData::~ImplAAFPropValData ()
 AAFRESULT ImplAAFPropValData::Initialize (
       ImplAAFTypeDef * pTD)
 {
-  assert (! pvtGetType ());
+  ASSERTU (! pvtGetType ());
   return SetType (pTD);
 }
 
@@ -72,8 +72,8 @@ AAFRESULT ImplAAFPropValData::AllocateFromPropVal (
 	  aafMemPtr_t * ppBits)
 {
   if (! pNewOwner) return AAFRESULT_NULL_PARAM;
-  assert (pNewOwner->_pBits);
-  assert ((byteOffset + size) <= pNewOwner->_bitsSize);
+  ASSERTU (pNewOwner->_pBits);
+  ASSERTU ((byteOffset + size) <= pNewOwner->_bitsSize);
 
   if (_ownerPropVal)
 	{
@@ -160,13 +160,13 @@ AAFRESULT STDMETHODCALLTYPE ImplAAFPropValData::WriteTo(
   aafUInt32 bitsSize;
   HRESULT hr = GetBits (&bits);
   if (AAFRESULT_FAILED (hr)) return hr;
-//  assert (bits);
+//  ASSERTU (bits);
 
   hr = GetBitsSize (&bitsSize);
   if (AAFRESULT_FAILED (hr)) return hr;
 
   // OMSimpleProperty * pSimpleProp = dynamic_cast <OMSimpleProperty*>(pOmProp);
-  // assert (pSimpleProp);
+  // ASSERTU (pSimpleProp);
   // pSimpleProp->setBits (bits, bitsSize);
   
   if (bits) 

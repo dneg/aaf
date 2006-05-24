@@ -64,7 +64,7 @@
 #include "OMUtilities.h"
 
 
-#include <assert.h>
+#include "OMAssertions.h"
 #include <string.h>
 
 
@@ -141,7 +141,7 @@ static AAFRESULT GetPropertyInfo (
 	if (0 < actualValueSize)
 	{
 	    aafUInt32	valueOverhead = pIndirectType->GetIndirectValueOverhead ();
-	    assert (actualValueSize >= valueOverhead);
+	    ASSERTU (actualValueSize >= valueOverhead);
 	    if (actualValueSize < valueOverhead)
 		return (AAFRESULT_INVALID_OBJ);
 	    actualValueSize -= valueOverhead;
@@ -480,7 +480,7 @@ AAFRESULT
 // from the DM.
 aafUInt32 ImplAAFTypeDefIndirect::GetIndirectValueOverhead (void) const
 {
-  assert (_initialized);
+  ASSERTU (_initialized);
   if (_initialized)
     return (_externalIndirectSize);
   else
@@ -591,8 +591,8 @@ AAFRESULT ImplAAFTypeDefIndirect::LookupActualType (
   aafUID_constref actualTypeID, 
   ImplAAFTypeDef ** ppActualType) const
 {
-  assert (NULL != _dictionary);
-  assert (NULL != ppActualType);
+  ASSERTU (NULL != _dictionary);
+  ASSERTU (NULL != ppActualType);
 
   AAFRESULT result = _dictionary->LookupTypeDef (actualTypeID, ppActualType);
   if (AAFRESULT_FAILED(result))
@@ -1338,7 +1338,7 @@ aafBool ImplAAFTypeDefIndirect::IsFixedSize (void) const
 
 size_t ImplAAFTypeDefIndirect::PropValSize (void) const
 {
-  assert (0);
+  ASSERTU (0);
   return 0; // not reached!
 }
 
@@ -1352,7 +1352,7 @@ aafBool ImplAAFTypeDefIndirect::IsRegistered (void) const
 
 size_t ImplAAFTypeDefIndirect::NativeSize (void) const
 {
-  assert (0);
+  ASSERTU (0);
   return 0; // not reached!
 }
 
@@ -1361,7 +1361,7 @@ OMProperty * ImplAAFTypeDefIndirect::pvtCreateOMProperty
   (OMPropertyId pid,
    const wchar_t * name) const
 {
-  assert (name);
+  ASSERTU (name);
 
   OMProperty * result = 0;
 
@@ -1370,7 +1370,7 @@ OMProperty * ImplAAFTypeDefIndirect::pvtCreateOMProperty
   // sized array of unsigned bytes.
 	result = new OMVariableSizeProperty<aafUInt8> (pid, name);
 
-  assert (result); // need better error handling!
+  ASSERTU (result); // need better error handling!
   return result;
 }
 

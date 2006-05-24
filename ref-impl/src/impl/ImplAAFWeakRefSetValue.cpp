@@ -45,7 +45,7 @@
 
 #include "OMProperty.h"
 
-#include <assert.h>
+#include "OMAssertions.h"
 #include <string.h>
 
 
@@ -106,15 +106,15 @@ ImplAAFTypeDefObjectRef * ImplAAFWeakRefSetValue::GetElementType(void) const // 
   ImplAAFTypeDefSP pType, pElementType;
   
   result = GetType(&pType);
-  assert(AAFRESULT_SUCCEEDED(result));
+  ASSERTU(AAFRESULT_SUCCEEDED(result));
   if (AAFRESULT_SUCCEEDED(result))
   {
     pContainerType = dynamic_cast<ImplAAFTypeDefSet *>((ImplAAFTypeDef *)pType); // extract obj from smartptr
-    assert(NULL != pContainerType);
+    ASSERTU(NULL != pContainerType);
     if (NULL != pContainerType)
     {
       result = pContainerType->GetElementType(&pElementType);
-      assert(AAFRESULT_SUCCEEDED(result));
+      ASSERTU(AAFRESULT_SUCCEEDED(result));
       if (AAFRESULT_SUCCEEDED(result))
       {
         pContainerElementType = dynamic_cast<ImplAAFTypeDefWeakObjRef *>((ImplAAFTypeDef *)pElementType); // extract obj from smartptr
@@ -122,7 +122,7 @@ ImplAAFTypeDefObjectRef * ImplAAFWeakRefSetValue::GetElementType(void) const // 
     }
   }
   
-  assert(pContainerElementType);
+  ASSERTU(pContainerElementType);
   return pContainerElementType;
 }
 
@@ -131,11 +131,11 @@ ImplAAFTypeDefObjectRef * ImplAAFWeakRefSetValue::GetElementType(void) const // 
 // to a container.
 AAFRESULT ImplAAFWeakRefSetValue::ValidateNewObject(ImplAAFStorable *pNewObject) const
 {
-  assert (isInitialized());
+  ASSERTU (isInitialized());
   if (!isInitialized())
     return AAFRESULT_NOT_INITIALIZED;
 
-  assert(NULL != pNewObject);
+  ASSERTU(NULL != pNewObject);
   if (!pNewObject->attached())
   {
     return AAFRESULT_OBJECT_NOT_ATTACHED;

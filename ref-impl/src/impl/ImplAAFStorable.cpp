@@ -39,7 +39,7 @@
 #include "ImplAAFClassDef.h"
 #include "ImplAAFContext.h"
 #include "ImplAAFModule.h"
-#include "assert.h"
+#include "OMAssertions.h"
 
 ImplAAFStorable::ImplAAFStorable ()
 {
@@ -54,7 +54,7 @@ ImplAAFStorable::~ImplAAFStorable ()
 // Associate OMClassDefinition and OMPropertyDefinitions with this object.
 void ImplAAFStorable::InitializeOMStorable(ImplAAFClassDef * pClassDef)
 {
-  assert (NULL != pClassDef);
+  ASSERTU (NULL != pClassDef);
   
   // Install the class definition for this storable.
   setDefinition(pClassDef);
@@ -72,7 +72,7 @@ AAFRESULT ImplAAFStorable::GetDefinition(ImplAAFClassDef ** ppClassDef)
   
   OMClassDefinition * classDefinition = const_cast<OMClassDefinition *>(definition());
   ImplAAFClassDef * pClassDef = dynamic_cast<ImplAAFClassDef *>(classDefinition);
-  assert (NULL != pClassDef);
+  ASSERTU (NULL != pClassDef);
   if (!pClassDef)
     return AAFRESULT_NOT_INITIALIZED;
   
@@ -85,7 +85,7 @@ AAFRESULT ImplAAFStorable::GetDefinition(ImplAAFClassDef ** ppClassDef)
 void ImplAAFStorable::Progress(void) const
 {
   ImplAAFContext* context = ImplAAFContext::GetInstance();
-  assert(context);
+  ASSERTU(context);
   IAAFProgress* progress = NULL;
   context->GetProgressCallback(&progress);
   if(progress != NULL)

@@ -35,7 +35,6 @@
 #include "ImplAAFTimecodeStream.h"
 #endif
 
-#include <assert.h>
 #include <string.h>
 #include "aafErr.h"
 

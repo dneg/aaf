@@ -51,7 +51,7 @@
 #include "ImplAAFDictionary.h"
 #include "ImplAAFDataDef.h"
 
-#include <assert.h>
+#include "OMAssertions.h"
 #include <string.h>
 #include "AAFResult.h"
 #include "aafErr.h"
@@ -113,7 +113,7 @@ AAFRESULT STDMETHODCALLTYPE
   ImplAAFDataDef *pDataDef = _dataDef;
 
   *ppDataDef = pDataDef;
-  assert (*ppDataDef);
+  ASSERTU (*ppDataDef);
   (*ppDataDef)->AcquireReference ();
 
 	return AAFRESULT_SUCCESS;
@@ -419,7 +419,7 @@ AAFRESULT STDMETHODCALLTYPE
 	if (_paramDefined.find((*reinterpret_cast<const OMObjectIdentification *>(&parameterDefId)),
                              *ppParameterDef))
 	{
-		assert(NULL != *ppParameterDef);
+		ASSERTU(NULL != *ppParameterDef);
 		(*ppParameterDef)->AcquireReference();
 	}
 	else

@@ -60,7 +60,7 @@
 #include "ImplAAFSmartPointer.h"
 typedef ImplAAFSmartPointer<ImplAAFDataDef> ImplAAFDataDefSP;
 
-#include <assert.h>
+#include "OMAssertions.h"
 #include <string.h>
 
 #ifndef __AAFPrivate_h__
@@ -3092,7 +3092,7 @@ AAFRESULT STDMETHODCALLTYPE
 		CHECK(iResultFormat->QueryInterface (IID_IAAFRoot, (void **)&iObj));
 		iResultFormat->Release();
 		iResultFormat = NULL;
-		assert (iObj);
+		ASSERTU (iObj);
 		CHECK(iObj->GetImplRep((void **)&arg));
 		*opsResult = static_cast<ImplAAFEssenceFormat*>(arg);
 	}
@@ -3138,7 +3138,7 @@ AAFRESULT STDMETHODCALLTYPE
 		CHECK(iResultFormat->QueryInterface (IID_IAAFRoot, (void **)&iObj));
 		iResultFormat->Release();
 		iResultFormat = NULL;
-		assert (iObj);
+		ASSERTU (iObj);
 		CHECK(iObj->GetImplRep((void **)&arg));
 		*opsResult = static_cast<ImplAAFEssenceFormat*>(arg);
 	}

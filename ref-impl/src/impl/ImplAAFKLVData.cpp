@@ -41,7 +41,7 @@
 #include "ImplAAFObjectCreation.h"
 #include "ImplAAFBuiltinDefs.h"
 
-#include <assert.h>
+#include "OMAssertions.h"
 #include <string.h>
 #include "AAFResult.h"
 #include "aafErr.h"
@@ -86,7 +86,7 @@ AAFRESULT STDMETHODCALLTYPE
     pDef->ReleaseReference(); // This object is owned by the dictionary!
 
     _cachedRenameTypeDef = dynamic_cast<ImplAAFTypeDefRename*>(pDef);
-		assert(_cachedRenameTypeDef);
+		ASSERTU(_cachedRenameTypeDef);
     if (NULL == _cachedRenameTypeDef)
       RAISE(AAFRESULT_INVALID_OBJ);
 

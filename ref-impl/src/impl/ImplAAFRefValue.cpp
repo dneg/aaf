@@ -49,7 +49,7 @@
 #include "OMRefProperty.h" // Include header for base class for singleton references.
 #include "OMPropertyDefinition.h"
 
-#include <assert.h>
+#include "OMAssertions.h"
 #include <string.h>
 
 #ifndef USE_IMPLSTORABLE
@@ -79,7 +79,7 @@
   }
 #endif  
   // A strong reference MUST be either an ImplAAFObject or an ImplAAFMetaDefintion!!!
-  assert (NULL != result);
+  ASSERTU (NULL != result);
   return result;
 }
 
@@ -106,7 +106,7 @@
 #endif  
   
   // A strong reference MUST be either an ImplAAFObject or an ImplAAFMetaDefintion!!!
-  assert (NULL != result);
+  ASSERTU (NULL != result);
   return result;
 }
 

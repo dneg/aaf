@@ -36,7 +36,7 @@
 #include "OMPropertyDefinition.h"
 #include "OMDataStreamProperty.h"
 
-#include <assert.h>
+#include "OMAssertions.h"
 #include <string.h>
 
 
@@ -160,7 +160,7 @@ AAFRESULT STDMETHODCALLTYPE
   if (0 < dataSize && 0 == *bytesRead)
     return AAFRESULT_END_OF_DATA;
   
-  assert(dataSize == *bytesRead);  
+  ASSERTU(dataSize == *bytesRead);  
   return AAFRESULT_SUCCESS;
 }
 
@@ -185,7 +185,7 @@ AAFRESULT STDMETHODCALLTYPE
   if (0 < dataSize && 0 == bytesWritten)
     return AAFRESULT_END_OF_DATA;
   
-  assert(dataSize == bytesWritten);  
+  ASSERTU(dataSize == bytesWritten);  
   return AAFRESULT_SUCCESS;
 }
 
@@ -213,7 +213,7 @@ AAFRESULT STDMETHODCALLTYPE
   if (0 < dataSize && 0 == bytesWritten)
     return AAFRESULT_END_OF_DATA;
   
-  assert(dataSize == bytesWritten);  
+  ASSERTU(dataSize == bytesWritten);  
   return AAFRESULT_SUCCESS;
 }
 
@@ -314,7 +314,7 @@ AAFRESULT STDMETHODCALLTYPE
     return AAFRESULT_NOT_REGISTERED;
   
   OMUInt32 internalElementSize = pElementType->NativeSize();
-  assert (0 < internalElementSize);
+  ASSERTU (0 < internalElementSize);
   if (0 == internalElementSize)
      return AAFRESULT_INVALID_PARAM; 
 
@@ -325,7 +325,7 @@ AAFRESULT STDMETHODCALLTYPE
   
   // Get the external size of an element from the type.  
   OMUInt32 externalElementSize = pElementType->PropValSize();
-  assert (0 < externalElementSize);
+  ASSERTU (0 < externalElementSize);
   if (0 == externalElementSize)
      return AAFRESULT_INVALID_PARAM; 
 
@@ -345,7 +345,7 @@ AAFRESULT STDMETHODCALLTYPE
   if (0 < dataSize && 0 == *bytesRead)
     return AAFRESULT_END_OF_DATA;
   
-  assert(elementCount == elementsRead);  
+  ASSERTU(elementCount == elementsRead);  
   return AAFRESULT_SUCCESS;
 }
 
@@ -371,7 +371,7 @@ AAFRESULT STDMETHODCALLTYPE
     return AAFRESULT_NOT_REGISTERED;
   
   OMUInt32 internalElementSize = pElementType->NativeSize(); 
-  assert (0 < internalElementSize);
+  ASSERTU (0 < internalElementSize);
   if (0 == internalElementSize)
      return AAFRESULT_INVALID_PARAM; 
 
@@ -391,7 +391,7 @@ AAFRESULT STDMETHODCALLTYPE
   if (0 < dataSize && 0 == elementsWritten)
     return AAFRESULT_CONTAINERWRITE; 
     
-  assert(elementCount == elementsWritten); 
+  ASSERTU(elementCount == elementsWritten); 
   return AAFRESULT_SUCCESS;
 }
 
@@ -438,7 +438,7 @@ AAFRESULT STDMETHODCALLTYPE
   if (0 < dataSize && 0 == elementsWritten)
     return AAFRESULT_CONTAINERWRITE; 
     
-  assert(elementCount == elementsWritten); 
+  ASSERTU(elementCount == elementsWritten); 
   return AAFRESULT_SUCCESS;
 }
 
@@ -452,33 +452,33 @@ AAFRESULT ImplAAFStreamPropertyValue::Initialize (
 {
   AAFRESULT result = AAFRESULT_SUCCESS;
   
-  assert (!isInitialized());
+  ASSERTU (!isInitialized());
   if (isInitialized())
     return AAFRESULT_ALREADY_INITIALIZED;
-  assert (property);
+  ASSERTU (property);
   if (NULL == streamType || NULL == property)
     return AAFRESULT_NULL_PARAM;
 
   // Get the type definition. This must be a stream type.
-  assert (property->definition());
+  ASSERTU (property->definition());
   if (NULL == property->definition())
     return AAFRESULT_INVALID_PARAM;
   const OMType *type = property->definition()->type();
-  assert (type);
+  ASSERTU (type);
   
   // The given property must be an OM stream property.  
   OMDataStreamProperty *streamProperty = dynamic_cast<OMDataStreamProperty *>(property);
-  assert (streamProperty);
+  ASSERTU (streamProperty);
   if (NULL == streamProperty)
     return AAFRESULT_INVALID_PARAM;
   
   // Make sure the stream is valid and attached to a persisted storable.
   const OMPropertySet *propertySet = streamProperty->propertySet();
-  assert(propertySet);
+  ASSERTU(propertySet);
   if (!propertySet)
     return AAFRESULT_INVALID_PARAM;
   OMStorable * container = propertySet->container();
-  assert(container);
+  ASSERTU(container);
   if (!container)
     return AAFRESULT_INVALID_PARAM;
 

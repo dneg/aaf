@@ -28,7 +28,7 @@
 
 #include "AAF.h"
 #include "AAFResult.h"
-#include <assert.h>
+#include "OMAssertions.h"
 
 #include <new>
 
@@ -39,13 +39,13 @@ ImplAAFOMCachePageAllocator::ImplAAFOMCachePageAllocator(
 : OMCachePageAllocator(pageCount, pageSize),
   _pAllocator(pAllocator)
 {
-  assert(_pAllocator != 0);
+  ASSERTU(_pAllocator != 0);
   _pAllocator->AddRef();
 }
 
 ImplAAFOMCachePageAllocator::~ImplAAFOMCachePageAllocator()
 {
-  assert(_pAllocator != 0);
+  ASSERTU(_pAllocator != 0);
   _pAllocator->Release();
   _pAllocator = 0;
 }

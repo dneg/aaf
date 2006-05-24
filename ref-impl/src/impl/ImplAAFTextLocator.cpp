@@ -30,7 +30,6 @@
 #include "AAFPropertyIDs.h"
 
 #include "AAFResult.h"
-#include <assert.h>
 #include <string.h>
 #include <wchar.h>
 

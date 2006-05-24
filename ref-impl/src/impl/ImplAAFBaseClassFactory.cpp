@@ -35,9 +35,6 @@
 #include "ImplAAFObjectCreation.h"
 
 
-#include <assert.h>
-
-
 //
 // Initialize the AUID's.
 #define INIT_AUID

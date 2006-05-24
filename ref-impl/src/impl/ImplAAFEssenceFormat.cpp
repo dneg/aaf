@@ -30,7 +30,6 @@
 #include "ImplAAFEssenceFormat.h"
 #endif
 
-#include <assert.h>
 #include <string.h>
 
 #include "AAFUtils.h"

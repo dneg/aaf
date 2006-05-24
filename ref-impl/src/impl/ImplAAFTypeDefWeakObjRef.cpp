@@ -72,7 +72,7 @@
 #include "AAFPropertyDefs.h"
 #include "AAFPropertyIDs.h"
 
-#include <assert.h>
+#include "OMAssertions.h"
 #include <string.h>
 
 
@@ -332,7 +332,7 @@ AAFRESULT STDMETHODCALLTYPE
   ImplAAFClassDef *pClassDef = bootstrapClassWeakReference(_referencedType);
 
   *ppObjType = pClassDef;
-  assert (*ppObjType);
+  ASSERTU (*ppObjType);
   (*ppObjType)->AcquireReference ();
   return AAFRESULT_SUCCESS;
 }
@@ -357,13 +357,13 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFPropertyValue ** ppPropertyValue ) const
 {
   AAFRESULT result = AAFRESULT_SUCCESS;
-  assert (property && ppPropertyValue);
+  ASSERTU (property && ppPropertyValue);
   if (NULL == property || NULL == ppPropertyValue)
     return AAFRESULT_NULL_PARAM;
   *ppPropertyValue = NULL; // initialize out parameter
   
   OMReferenceProperty* refProperty = dynamic_cast<OMReferenceProperty*>(property);
-  assert(NULL != refProperty);
+  ASSERTU(NULL != refProperty);
   if (NULL == refProperty)
     return AAFRESULT_INVALID_PARAM;
  
@@ -385,7 +385,7 @@ AAFRESULT STDMETHODCALLTYPE
     {
       // set the storage in the prop value
       OMObject* object = refProperty->getObject();
-      assert (NULL != object);
+      ASSERTU (NULL != object);
       ImplAAFStorable* pObject = ImplAAFRefValue::ConvertOMObjectToRoot(object);
       result = pWeakRefValue->SetObject(pObject);
     }
@@ -419,7 +419,7 @@ static bool findPropertyDefinition(
   {
     ImplAAFPropertyDefSP pPropertyDef;
     result = pClassDef->LookupPropertyDef(propertyID, ppPropertyDef);
-    assert(AAFRESULT_SUCCEEDED(result) || AAFRESULT_NO_MORE_OBJECTS == result || AAFRESULT_PROPERTY_NOT_FOUND == result);
+    ASSERTU(AAFRESULT_SUCCEEDED(result) || AAFRESULT_NO_MORE_OBJECTS == result || AAFRESULT_PROPERTY_NOT_FOUND == result);
     if (AAFRESULT_SUCCEEDED(result))
       return true;
   }
@@ -427,7 +427,7 @@ static bool findPropertyDefinition(
   // Now recursively look in the parent...
   ImplAAFClassDefSP pParent;
   result = pClassDef->GetParent(&pParent);
-  assert(AAFRESULT_SUCCEEDED(result) || AAFRESULT_IS_ROOT_CLASS == result);
+  ASSERTU(AAFRESULT_SUCCEEDED(result) || AAFRESULT_IS_ROOT_CLASS == result);
   if (AAFRESULT_SUCCEEDED(result))
     return findPropertyDefinition(pParent, propertyID, ppPropertyDef);
   else
@@ -449,7 +449,7 @@ static bool findReferencedClassDefintion(
       case kAAFTypeCatRename:
       {
         ImplAAFTypeDefRename * pRenameType = dynamic_cast<ImplAAFTypeDefRename *>(pTypeDef);
-        assert(pRenameType);
+        ASSERTU(pRenameType);
         if (!pRenameType)
           return false;
           
@@ -474,7 +474,7 @@ static bool findReferencedClassDefintion(
           return false;
           
         ImplAAFTypeDefVariableArray * pArrayType = dynamic_cast<ImplAAFTypeDefVariableArray *>(pTypeDef);
-        assert(pArrayType);
+        ASSERTU(pArrayType);
         if (!pArrayType)
           return false;
           
@@ -499,7 +499,7 @@ static bool findReferencedClassDefintion(
           return false;
 
         ImplAAFTypeDefSet * pSetType = dynamic_cast<ImplAAFTypeDefSet *>(pTypeDef);
-        assert(pSetType);
+        ASSERTU(pSetType);
         if (!pSetType)
           return false;
           
@@ -523,7 +523,7 @@ static bool findReferencedClassDefintion(
           return false;
           
         ImplAAFTypeDefStrongObjRef * pReferenceType = dynamic_cast<ImplAAFTypeDefStrongObjRef *>(pTypeDef);
-        assert(pReferenceType);
+        ASSERTU(pReferenceType);
         if (!pReferenceType)
           return false;
           
@@ -577,7 +577,7 @@ static bool findReferencedClassDefintion(
   ImplAAFTypeDefSP pPropertyType, pFundementalType;
   
   result = pPropertyDef->GetTypeDef(&pPropertyType);
-  assert(AAFRESULT_SUCCEEDED(result));
+  ASSERTU(AAFRESULT_SUCCEEDED(result));
   if (AAFRESULT_FAILED(result))
     return false;
   
@@ -589,10 +589,10 @@ static bool findReferencedClassDefintion(
 AAFRESULT ImplAAFTypeDefWeakObjRef::SyncTargetPidsFromTargetSet(void)
 {
   AAFRESULT result = AAFRESULT_SUCCESS;
-  assert (NULL == _targetPids); // this method should only be called once!
+  ASSERTU (NULL == _targetPids); // this method should only be called once!
   
   // We need to have some guids to convert!
-  assert(0 !=  _targetSet.count());
+  ASSERTU(0 !=  _targetSet.count());
   if (0 == _targetSet.count())
     return AAFRESULT_NOT_INITIALIZED;
   
@@ -613,7 +613,7 @@ AAFRESULT ImplAAFTypeDefWeakObjRef::SyncTargetPidsFromTargetSet(void)
   if (AAFRESULT_SUCCEEDED(result))
   {
     targetPidCount = _targetSet.count();
-    assert (0 != targetPidCount);
+    ASSERTU (0 != targetPidCount);
     
     // pid array for OM must be 0 terminated.
     targetPids = new OMPropertyId[targetPidCount + 1];
@@ -729,7 +729,7 @@ OMProperty * ImplAAFTypeDefWeakObjRef::pvtCreateOMProperty
   (OMPropertyId pid,
    const wchar_t * name) const
 {
-  assert (name);
+  ASSERTU (name);
   
 #if defined(USE_SIMPLEPROPERTY)
 
@@ -750,7 +750,7 @@ OMProperty * ImplAAFTypeDefWeakObjRef::pvtCreateOMProperty
     if (AAFRESULT_FAILED(rc))
       return NULL;
   }
-  assert (_targetPids);
+  ASSERTU (_targetPids);
   
   switch (_uniqueIdentifierPid)
   {
@@ -764,13 +764,13 @@ OMProperty * ImplAAFTypeDefWeakObjRef::pvtCreateOMProperty
     
     default:
       // No support for other "key properties"
-      assert (0);
+      ASSERTU (0);
       break;
   }
 
 #endif // #else // #if defined(USE_SIMPLEPROPERTY)
 
-  assert (result);
+  ASSERTU (result);
   return result;
 }
 
@@ -806,7 +806,7 @@ HRESULT ImplAAFTypeDefWeakObjRef::CompleteClassRegistration(void)
   {
     rc = SyncTargetPidsFromTargetSet();
   }
-  assert (_targetPids);
+  ASSERTU (_targetPids);
 
   return rc;
 }

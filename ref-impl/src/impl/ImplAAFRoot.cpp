@@ -37,7 +37,7 @@
 // Include the declaration for the reference counting container callback function.
 #include "ImplAAFObjectCreation.h"
 
-#include <assert.h>
+#include "OMAssertions.h"
 
 
 ImplAAFRoot::ImplAAFRoot ()
@@ -78,16 +78,16 @@ aafUInt32 ImplAAFRoot::ReferenceCount() const
 
 void ImplAAFRoot::InitContainer (void * pContainer)
 {
-  assert (! _pContainer);
+  ASSERTU (! _pContainer);
   _pContainer = pContainer;
-  assert (_pContainer);
+  ASSERTU (_pContainer);
 }
 
 
 
 void * ImplAAFRoot::GetContainer ()
 {
-  assert (_pContainer);
+  ASSERTU (_pContainer);
   return _pContainer;
 }
 
@@ -101,7 +101,7 @@ bool ImplAAFRoot::isInitialized () const
 void ImplAAFRoot::setInitialized ()
 {
   _isInitialized = true;
-  assert (isInitialized());
+  ASSERTU (isInitialized());
 }
 
 

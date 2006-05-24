@@ -46,7 +46,7 @@
 #include "AAF.h"
 #include "AAFUtils.h"
 
-#include <assert.h>
+#include "OMAssertions.h"
 #include <string.h>
 
 
@@ -387,7 +387,7 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFPropertyValue ** ppPropertyValue ) const
 {
   AAFRESULT result = AAFRESULT_SUCCESS;
-  assert (property && ppPropertyValue);
+  ASSERTU (property && ppPropertyValue);
   if (NULL == property || NULL == ppPropertyValue)
     return AAFRESULT_NULL_PARAM;
   *ppPropertyValue = NULL; // initialize out parameter
@@ -448,7 +448,7 @@ aafBool ImplAAFTypeDefStream::IsFixedSize (void) const
 
 size_t ImplAAFTypeDefStream::PropValSize (void) const
 {
-  assert (0);
+  ASSERTU (0);
   return 0; // not reached!
 }
 
@@ -462,7 +462,7 @@ aafBool ImplAAFTypeDefStream::IsRegistered (void) const
 
 size_t ImplAAFTypeDefStream::NativeSize (void) const
 {
-  assert (0);
+  ASSERTU (0);
   return 0; // not reached!
 }
 

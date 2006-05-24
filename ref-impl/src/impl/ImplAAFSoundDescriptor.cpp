@@ -23,7 +23,7 @@
 //=---------------------------------------------------------------------=
 
 
-#include <assert.h>
+#include "OMAssertions.h"
 
 #include "ImplAAFSoundDescriptor.h"
 #include "AAFPropertyIDs.h"
@@ -82,7 +82,7 @@ AAFRESULT STDMETHODCALLTYPE ImplAAFSoundDescriptor::Initialize()
 	// class, this Initialize() method is provided.
 	// It doesn't do anything beyond that done in the constructor.
 
-    assert( !isInitialized() );
+    ASSERTU( !isInitialized() );
 
 
     // Initialize required properties

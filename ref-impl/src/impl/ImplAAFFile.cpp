@@ -69,7 +69,7 @@ typedef ImplAAFSmartPointer<ImplAAFIdentification>
 typedef ImplAAFSmartPointer<ImplAAFRandomRawStorage>
   ImplAAFRandomRawStorageSP;
 
-#include <assert.h>
+#include "OMAssertions.h"
 
 // For IAAFRawStorage
 #include "AAF.h"
@@ -221,11 +221,11 @@ ImplAAFFile::Initialize ()
 	// This must be done before another other definitions or data objects
 	// can be created.
 	AAFRESULT result = _metafactory->InstantiateAxiomaticDefinitions();
-	assert(AAFRESULT_SUCCEEDED(result));
+	ASSERTU(AAFRESULT_SUCCEEDED(result));
 #else
     // Initialize only the non-persistent parts of the meta dictionary
 	AAFRESULT result = _metafactory->Initialize();
-	assert(AAFRESULT_SUCCEEDED(result));
+	ASSERTU(AAFRESULT_SUCCEEDED(result));
 #endif
 
 	_initialized = kAAFTrue;
@@ -288,11 +288,11 @@ ImplAAFFile::OpenExistingRead (const aafCharacter * pFileName,
 		// Restore the meta dictionary, it should be the same object
 		// as _metafactory
 		OMDictionary* mf = _file->dictionary();
-		assert(mf == _metafactory);
+		ASSERTU(mf == _metafactory);
 
 		// Make sure all definitions are present in the meta dictionary
 		ImplAAFMetaDictionary* d = dynamic_cast<ImplAAFMetaDictionary*>(mf);
-		assert(d);
+		ASSERTU(d);
 		checkResult( d->InstantiateAxiomaticDefinitions() );
 
 		// Make sure properties that exist in builtin class
@@ -437,11 +437,11 @@ ImplAAFFile::OpenExistingModify (const aafCharacter * pFileName,
 		// Restore the meta dictionary, it should be the same object
 		// as _metafactory
 		OMDictionary* mf = _file->dictionary();
-		assert(mf == _metafactory);
+		ASSERTU(mf == _metafactory);
 
 		// Make sure all definitions are present in the meta dictionary
 		ImplAAFMetaDictionary* d = dynamic_cast<ImplAAFMetaDictionary*>(mf);
-		assert(d);
+		ASSERTU(d);
 		checkResult( d->InstantiateAxiomaticDefinitions() );
 
 		// Make sure properties that exist in builtin class
@@ -634,11 +634,11 @@ ImplAAFFile::OpenNewModify (const aafCharacter * pFileName,
 		// Restore the meta dictionary, it should be the same object
 		// as _metafactory
 		OMDictionary* mf = _file->dictionary();
-		assert(mf == _metafactory);
+		ASSERTU(mf == _metafactory);
 
 		// Make sure all definitions are present in the meta dictionary
 		ImplAAFMetaDictionary* d = dynamic_cast<ImplAAFMetaDictionary*>(mf);
-		assert(d);
+		ASSERTU(d);
 		checkResult( d->InstantiateAxiomaticDefinitions() );
 
 		// Make sure properties that exist in builtin class
@@ -902,7 +902,7 @@ ImplAAFFile::CreateAAFFileOnRawStorage
 	  // Create the OM storage...
 	  OMRawStorage * pOMStg =
 		new ImplAAFOMRawStorage (pRawStorage);
-	  assert (pOMStg);
+	  ASSERTU (pOMStg);
 
 	  if (kAAFFileExistence_new == existence) // new
 		{
@@ -1091,11 +1091,11 @@ ImplAAFFile::Open ()
 		// Restore the meta dictionary, it should be the same object
 		// as _metafactory
 		OMDictionary* mf = _file->dictionary();
-		assert(mf == _metafactory);
+		ASSERTU(mf == _metafactory);
 
 		// Make sure all definitions are present in the meta dictionary
 		ImplAAFMetaDictionary* d = dynamic_cast<ImplAAFMetaDictionary*>(mf);
-		assert(d);
+		ASSERTU(d);
 		checkResult( d->InstantiateAxiomaticDefinitions() );
 
 		// Make sure properties that exist in builtin class
@@ -1168,7 +1168,7 @@ ImplAAFFile::Open ()
 		}
 	  else
 		{
-		  assert (0);
+		  ASSERTU (0);
 		}
 
 	  restoreMirroredMetadata();
@@ -1344,7 +1344,7 @@ ImplAAFFile::Revert ()
 	if (!IsOpen())
 		return AAFRESULT_NOT_OPEN;
 
-        assert(_file);
+        ASSERTU(_file);
         _file->revert();
 
 	return AAFRESULT_SUCCESS;
@@ -1400,10 +1400,10 @@ void ImplAAFFile::InternalReleaseObjects()
 
 void ImplAAFFile::saveMirroredMetadata(void)
 {
-  assert(_file != 0);
+  ASSERTU(_file != 0);
   if (OMKLVStoredObject::hasMxfStorage(_file)) {
     OMMXFStorage*  p_storage = OMKLVStoredObject::mxfStorage( _file );
-    assert( p_storage != 0 );
+    ASSERTU( p_storage != 0 );
 
     // Operational pattern
     //
@@ -1590,8 +1590,8 @@ AAFRESULT STDMETHODCALLTYPE
 
 OMFile * ImplAAFFile::omFile (void)
 {
-  assert (IsOpen());
-  assert (_file);
+  ASSERTU (IsOpen());
+  ASSERTU (_file);
   return _file;
 }
 
@@ -1602,13 +1602,13 @@ void ImplAAFFile::removeFactories(void)
 
 bool ImplAAFFile::IsReadable () const
 {
-  assert (_file);
+  ASSERTU (_file);
   return _file->isReadable();
 }
 
 bool ImplAAFFile::IsWriteable () const
 {
-  assert (_file);
+  ASSERTU (_file);
   return _file->isWritable();
 }
 
@@ -1616,7 +1616,7 @@ bool ImplAAFFile::IsOpen () const
 {
   if (!_file)
 	return false;
-  assert (_file);
+  ASSERTU (_file);
   return _file->isOpen();
 }
 
@@ -1624,16 +1624,16 @@ bool ImplAAFFile::IsClosed () const
 {
   if (!_file)
 	return false;
-  assert (_file);
+  ASSERTU (_file);
   return _file->isClosed();
 }
 
 OMRawStorage * ImplAAFFile::RawStorage ()
 {
   OMRawStorage * r = 0;
-  assert (_file);
+  ASSERTU (_file);
   r = _file->rawStorage ();
-  assert (r);
+  ASSERTU (r);
   return r;
 }
 

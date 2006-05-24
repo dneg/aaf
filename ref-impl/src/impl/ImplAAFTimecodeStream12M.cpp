@@ -88,7 +88,6 @@ const unsigned int TC_ARRAY_SIZE = 10;
 #include "ImplAAFTimecodeStream12M.h"
 #endif
 
-#include <assert.h>
 #include <string.h>
 #include "aafErr.h"
 #include "AAFUtils.h"

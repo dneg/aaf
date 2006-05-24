@@ -28,7 +28,7 @@
 
 #include "OMRawStorage.h"
 
-#include <assert.h>
+#include "OMAssertions.h"
 #include <string.h>
 
 
@@ -160,8 +160,8 @@ void ImplAAFRawStorage::Initialize
   (OMRawStorage * prs,
    aafFileAccess_t access)
 {
-  assert (! _rep);
-  assert(prs);
+  ASSERTU (! _rep);
+  ASSERTU(prs);
   _rep = prs;
   _access = access;
 }

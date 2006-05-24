@@ -26,7 +26,7 @@
 #include "ImplAAFGetFileBits.h"
 #endif
 
-#include <assert.h>
+#include "OMAssertions.h"
 #include <string.h>
 
 
@@ -41,8 +41,8 @@ ImplAAFGetFileBits::~ImplAAFGetFileBits ()
 void ImplAAFGetFileBits::Initialize
         (OMRawStorage * prs)
 {
-  assert (prs);
-  assert (!_rep);
+  ASSERTU (prs);
+  ASSERTU (!_rep);
   _rep = prs;
 }
 
@@ -64,7 +64,7 @@ AAFRESULT STDMETHODCALLTYPE
 
   aafUInt32 bytesRead;
   _rep->readAt (position, buf, bufSize, bytesRead);
-  assert (bytesRead == bufSize);
+  ASSERTU (bytesRead == bufSize);
 
   return AAFRESULT_SUCCESS;
 }

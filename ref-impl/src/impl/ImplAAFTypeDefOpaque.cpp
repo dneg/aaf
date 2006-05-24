@@ -44,7 +44,7 @@
 #include "ImplAAFObjectCreation.h"
 
 
-#include <assert.h>
+#include "OMAssertions.h"
 #include <string.h>
 
 
@@ -254,7 +254,7 @@ AAFRESULT ImplAAFTypeDefOpaque::GetHandle (
 
   // Get the private value data interface so that we can access the bits.
   ImplAAFPropValData* pOpaqueValueData = dynamic_cast<ImplAAFPropValData*>(pOpaquePropertyValue);
-  assert (NULL != pOpaqueValueData);
+  ASSERTU (NULL != pOpaqueValueData);
   if (NULL == pOpaqueValueData)
     return AAFRESULT_INTERNAL_ERROR; // AAFRESULT_INVALID_OBJ?
 

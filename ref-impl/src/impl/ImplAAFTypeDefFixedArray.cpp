@@ -50,7 +50,7 @@
 #include "ImplAAFObjectCreation.h"
 #include "AAFClassIDs.h"
 
-#include <assert.h>
+#include "OMAssertions.h"
 #include <string.h>
 
 extern "C" const aafClassID_t CLSID_AAFPropertyValue;
@@ -85,7 +85,7 @@ AAFRESULT STDMETHODCALLTYPE
   ImplAAFTypeDef* pTypeDef = bootstrapTypeWeakReference(_ElementType);
 
   *ppTypeDef = pTypeDef;
-  assert (*ppTypeDef);
+  ASSERTU (*ppTypeDef);
   (*ppTypeDef)->AcquireReference ();
   return AAFRESULT_SUCCESS;
 }
@@ -100,7 +100,7 @@ AAFRESULT STDMETHODCALLTYPE
 {
   if (! pTypeDef)  return AAFRESULT_NULL_PARAM;
 
-  assert (pTypeDef);
+  ASSERTU (pTypeDef);
   if (! pTypeDef->IsFixedArrayable())
 	return AAFRESULT_BAD_TYPE;
 
@@ -198,8 +198,8 @@ ImplAAFTypeDefSP ImplAAFTypeDefFixedArray::BaseType (void) const
 {
   ImplAAFTypeDefSP result;
   AAFRESULT hr = GetType (&result);
-  assert (AAFRESULT_SUCCEEDED (hr));
-  assert (result);
+  ASSERTU (AAFRESULT_SUCCEEDED (hr));
+  ASSERTU (result);
   return result;
 }
 
@@ -219,7 +219,7 @@ void ImplAAFTypeDefFixedArray::reorder(OMByte* externalBytes,
 	  ptd->reorder (externalBytes, elemSize);
 	  externalBytes += elemSize;
 	  numBytesLeft -= elemSize;
-	  assert (numBytesLeft >= 0);
+	  ASSERTU (numBytesLeft >= 0);
 	}
 }
 
@@ -228,7 +228,7 @@ size_t ImplAAFTypeDefFixedArray::externalSize(const OMByte* /*internalBytes*/,
 											  size_t /*internalBytesSize*/) const
 {
   ImplAAFTypeDefSP ptd = BaseType ();
-  assert (ptd->IsFixedSize ());
+  ASSERTU (ptd->IsFixedSize ());
   // size_t result = _ElementCount * ptd->externalSize (0, 0);
   size_t result = _ElementCount * ptd->PropValSize ();
   return result;
@@ -272,8 +272,8 @@ void ImplAAFTypeDefFixedArray::externalize(const OMByte* internalBytes,
 		  externalBytes += externalSize;
 		  internalBytesLeft -= internalSize;
 		  externalBytesLeft -= externalSize;
-		  assert (internalBytesLeft >= 0);
-		  assert (externalBytesLeft >= 0);
+		  ASSERTU (internalBytesLeft >= 0);
+		  ASSERTU (externalBytesLeft >= 0);
 		}
 	}
 }
@@ -283,7 +283,7 @@ size_t ImplAAFTypeDefFixedArray::internalSize(const OMByte* /*externalBytes*/,
 											  size_t /*externalBytesSize*/) const
 {
   ImplAAFTypeDefSP ptd = BaseType ();
-  assert (ptd->IsFixedSize ());
+  ASSERTU (ptd->IsFixedSize ());
   // size_t result = _ElementCount * ptd->internalSize (0, 0);
   size_t result = _ElementCount * ptd->ActualSize ();
   return result;
@@ -300,7 +300,7 @@ void ImplAAFTypeDefFixedArray::internalize(const OMByte* externalBytes,
   aafUInt32 elem = 0;
 
   ImplAAFTypeDefSP ptd = BaseType ();
-  assert (ptd->IsFixedSize ());
+  ASSERTU (ptd->IsFixedSize ());
   aafUInt32 internalElemSize = ptd->ActualSize ();
   aafUInt32 externalElemSize = ptd->PropValSize ();
   if (internalElemSize == externalElemSize)
@@ -328,8 +328,8 @@ void ImplAAFTypeDefFixedArray::internalize(const OMByte* externalBytes,
 		  externalBytes += externalElemSize;
 		  internalBytesLeft -= internalElemSize;
 		  externalBytesLeft -= externalElemSize;
-		  assert (internalBytesLeft >= 0);
-		  assert (externalBytesLeft >= 0);
+		  ASSERTU (internalBytesLeft >= 0);
+		  ASSERTU (externalBytesLeft >= 0);
 		}
 	}
 }
@@ -338,7 +338,7 @@ OMType* ImplAAFTypeDefFixedArray::elementType(void) const
 {
   ImplAAFTypeDef* result = 0;
   AAFRESULT hr = GetType(&result);
-  assert(hr == 0);
+  ASSERTU(hr == 0);
   result->ReleaseReference();
   return result;
 }
@@ -363,12 +363,12 @@ aafBool ImplAAFTypeDefFixedArray::IsRegistered (void) const
 size_t ImplAAFTypeDefFixedArray::NativeSize (void) const
 {
   ((ImplAAFTypeDefFixedArray*)this)->AttemptBuiltinRegistration ();
-  assert (IsRegistered());
+  ASSERTU (IsRegistered());
 
   size_t result;
   ImplAAFTypeDefSP elemType;
   elemType = BaseType ();
-  assert (elemType);
+  ASSERTU (elemType);
   result = elemType->NativeSize() * _ElementCount;
   return result;
 }
@@ -378,10 +378,10 @@ OMProperty * ImplAAFTypeDefFixedArray::pvtCreateOMProperty
   (OMPropertyId pid,
    const wchar_t * name) const
 {
-  assert (name);
+  ASSERTU (name);
 
   ImplAAFTypeDefSP ptd = BaseType ();
-  assert (ptd);
+  ASSERTU (ptd);
 
   OMProperty * result = 0;
 
@@ -400,7 +400,7 @@ OMProperty * ImplAAFTypeDefFixedArray::pvtCreateOMProperty
   else
 	{
 	  // We don't support variable arrays of variably-sized properties.
-	  assert (IsFixedSize());
+	  ASSERTU (IsFixedSize());
 	  aafUInt32 arraySize = NativeSize ();
 
 	  // But even though elems are fixed size, the variable array is
@@ -408,7 +408,7 @@ OMProperty * ImplAAFTypeDefFixedArray::pvtCreateOMProperty
 	  result = new OMSimpleProperty (pid, name, arraySize);
 	}
 
-  assert (result);
+  ASSERTU (result);
   return result;
 }
 

@@ -41,7 +41,7 @@
 #include "ImplAAFPluginManager.h"
 #include "AAFPlugin.h"
 
-#include <assert.h>
+#include "OMAssertions.h"
 #include <string.h>
 #include "aafErr.h"
 #include "AAFStoredObjectIDs.h"
@@ -198,7 +198,7 @@ AAFRESULT STDMETHODCALLTYPE
   ImplAAFControlPoint *pPoint;
   _controlPoints.getValueAt(pPoint,index);
 
-  assert(pPoint);
+  ASSERTU(pPoint);
   pPoint->AcquireReference();
   (*ppControlPoint)=pPoint;
 

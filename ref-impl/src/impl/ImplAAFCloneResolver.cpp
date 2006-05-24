@@ -28,7 +28,7 @@
 #include "AAFStoredObjectIDs.h"
 #include "AAFResult.h"
 
-#include <assert.h>
+#include "OMAssertions.h"
 
 //=---------------------------------------------------------------------=
 
@@ -120,7 +120,7 @@ void ImplAAFCloneResolver::CloneClassDef( const OMClassId& id,
     _AAFCLONE_CHECK_HRESULT( AAFRESULT_BAD_TYPE );
   }
 
-  assert( sizeof(aafUID_t) == sizeof(id) );
+  ASSERTU( sizeof(aafUID_t) == sizeof(id) );
 
   ImplAAFSmartPointer<ImplAAFClassDef> spClassDef;
   _AAFCLONE_CHECK_HRESULT( pSrcDict->LookupClassDef( reinterpret_cast<const aafUID_t&>(id), &spClassDef) );

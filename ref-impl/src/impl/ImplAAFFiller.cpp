@@ -35,7 +35,6 @@
 #include "ImplAAFFiller.h"
 #endif
 
-#include <assert.h>
 #include "AAFResult.h"
 
 

@@ -44,7 +44,7 @@
 #include "ImplAAFFileDescriptor.h"
 #include "ImplAAFSourceMob.h"
 
-#include <assert.h>
+#include "OMAssertions.h"
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
@@ -254,14 +254,14 @@ AAFTestLibraryProcData::AAFTestLibraryProcData(ImplAAFPluginManager *pluginMgr, 
   pluginPrefixSize(0)
 {
 	currentLibraryPath = AAFGetLibraryPath();
-	assert(NULL != currentLibraryPath);
+	ASSERTU(NULL != currentLibraryPath);
 
 	pluginDirectory = AAFGetLibrarySharedDirectoryName();
-	assert(NULL != pluginDirectory);
+	ASSERTU(NULL != pluginDirectory);
 	pluginDirectorySize = strlen(pluginDirectory);
 	
 	pluginPrefix = AAFGetLibraryPluginPrefix();
-	assert(NULL != pluginPrefix);
+	ASSERTU(NULL != pluginPrefix);
 	pluginPrefixSize = strlen(pluginPrefix);
 }
 
@@ -295,7 +295,7 @@ static bool prefixtest(const char *filename, AAFTestLibraryProcData *pData)
 static AAFRDLIRESULT testPluginProc(const char *path, const char* name, char isDirectory, void * userData)
 {
 	AAFTestLibraryProcData *pData = (AAFTestLibraryProcData *)userData;
-	assert(pData && pData->plugins && pData->pluginFiles && pData->currentLibraryPath && pData->pluginPrefix && pData->pluginPrefixSize);
+	ASSERTU(pData && pData->plugins && pData->pluginFiles && pData->currentLibraryPath && pData->pluginPrefix && pData->pluginPrefixSize);
 
   //
   // If the current name is not a directory and not equal to the 
@@ -321,7 +321,7 @@ static AAFRDLIRESULT registerSharedPluginsProc(const char* path, const char* nam
 {
   AAFRESULT rc = AAFRESULT_SUCCESS;
   AAFTestLibraryProcData *pData = (AAFTestLibraryProcData *)userData;
-  assert(pData && pData->plugins && pData->pluginFiles && pData->currentLibraryPath && pData->pluginDirectory);
+  ASSERTU(pData && pData->plugins && pData->pluginFiles && pData->currentLibraryPath && pData->pluginDirectory);
 
   //
   // Current name is our aaf plugin directory then search for and attempt
@@ -432,7 +432,7 @@ AAFRESULT ImplAAFPluginManager::ForEachPluginWithDefinitionDo(
     result = ::TableFirstEntryMatching(_plugins, &iter, (void *)&defID, &found);
     while (AAFRESULT_SUCCESS == result && found)
     {
-      assert(NULL != iter.valuePtr);
+      ASSERTU(NULL != iter.valuePtr);
 
       pdata = *((pluginData_t *)iter.valuePtr);
 	  REFCLSID clsid = pdata.itsClass;
@@ -571,7 +571,7 @@ AAFRESULT ImplAAFPluginManager::RegisterSharedPlugins(void)
   // the loaded and running AAF dll as the "installation directory".
   // This may change in a future version to some other directory.
   const char* libraryDirectory = AAFGetLibraryDirectory();
-  assert(NULL != libraryDirectory);
+  ASSERTU(NULL != libraryDirectory);
 
   // Setup common data needed by registerSharedPluginsProc callback.
   AAFTestLibraryProcData testLibraryData(this, _pluginFiles);
@@ -607,7 +607,7 @@ static char * NewStringFromAAFString(aafCharacter_constptr wName)
       delete [] name;
       name = NULL;
     }
-    assert (status != (size_t)-1);
+    ASSERTU (status != (size_t)-1);
   }
 
   return name;
@@ -1124,7 +1124,7 @@ AAFPluginFileEntry::~AAFPluginFileEntry()
 // member access operators (non-const and const)
 ImplAAFPluginFile * AAFPluginFileEntry::GetPluginFile()
 {
-  assert(_pPluginFile);
+  ASSERTU(_pPluginFile);
   _pPluginFile->AcquireReference();
   return _pPluginFile;
 }
@@ -1149,7 +1149,7 @@ AAFPluginFactoryEntry::~AAFPluginFactoryEntry()
 // member access operators (non-const and const)
 IClassFactory *AAFPluginFactoryEntry::GetPluginFactory()
 {
-  assert(_pPluginFactory);
+  ASSERTU(_pPluginFactory);
   _pPluginFactory->AddRef();
   return _pPluginFactory;
 }

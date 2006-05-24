@@ -59,7 +59,7 @@
 #include "OMStrongRefProperty.h"
 #include "OMStrongRefVectorProperty.h"
 
-#include <assert.h>
+#include "OMAssertions.h"
 
 
 
@@ -81,7 +81,7 @@ static bool CreateClassDefinition(
   {
     // Attempt to create the assoication instance.
     pClass = static_cast<ImplAAFClassDef *>(metaDictionary->pvtCreateMetaDefinition(AUID_AAFClassDef));
-    assert (pClass);
+    ASSERTU (pClass);
     if (!pClass)
       throw AAFRESULT_NOMEMORY;
 
@@ -120,29 +120,29 @@ static bool InitializeClassDefinition(
   if (classDefinition->axiomatic())
   {
     pClass = metaDictionary->findAxiomaticClassDefinition(*classDefinition->id());
-    assert (pClass);
+    ASSERTU (pClass);
     if (!pClass)
       return false;
 
     result = pClass->SetName(classDefinition->name());
-    assert (AAFRESULT_SUCCEEDED(result));
+    ASSERTU (AAFRESULT_SUCCEEDED(result));
 
     // Find and set the parent class definition. (This must also be axiomatic.)
     if (!classDefinition->isRoot())
     {
       pParentClass = metaDictionary->findAxiomaticClassDefinition(*classDefinition->parentId());
-      assert (pParentClass);
+      ASSERTU (pParentClass);
       result = pClass->SetBootstrapParent(pParentClass);
-      assert (AAFRESULT_SUCCEEDED(result));
+      ASSERTU (AAFRESULT_SUCCEEDED(result));
       result = pClass->SetParent(pParentClass);
-      assert (AAFRESULT_SUCCEEDED(result));
+      ASSERTU (AAFRESULT_SUCCEEDED(result));
     }
     else
     {
       result = pClass->SetBootstrapParent(pClass);
-      assert (AAFRESULT_SUCCEEDED(result));
+      ASSERTU (AAFRESULT_SUCCEEDED(result));
       result = pClass->SetParent(pClass);
-      assert (AAFRESULT_SUCCEEDED(result));
+      ASSERTU (AAFRESULT_SUCCEEDED(result));
     }
     if (AAFRESULT_FAILED(result))
       return false;
@@ -173,7 +173,7 @@ static bool CreatePropertyDefinition(
   {
     // Attempt to create the assoication instance.
     pProperty = static_cast<ImplAAFPropertyDef *>(metaDictionary->pvtCreateMetaDefinition(AUID_AAFPropertyDef));
-    assert (pProperty);
+    ASSERTU (pProperty);
     if (!pProperty)
       throw AAFRESULT_NOMEMORY;
 
@@ -213,11 +213,11 @@ static bool InitializePropertyDefinition(
   if (propertyDefinition->axiomatic())
   {
     pProperty = metaDictionary->findAxiomaticPropertyDefinition(*propertyDefinition->id());
-    assert (pProperty);
+    ASSERTU (pProperty);
 
     typeDefinition = propertyDefinition->typeDefinition();
     pType = metaDictionary->findAxiomaticTypeDefinition(*typeDefinition->id());
-    assert (pType);
+    ASSERTU (pType);
 
     result = pProperty->pvtInitialize (
       *propertyDefinition->id(),
@@ -226,7 +226,7 @@ static bool InitializePropertyDefinition(
       pType,
       (propertyDefinition->required()) ? kAAFFalse : kAAFTrue,
       (propertyDefinition->uid()) ? kAAFTrue : kAAFFalse);
-    assert (AAFRESULT_SUCCEEDED(result));
+    ASSERTU (AAFRESULT_SUCCEEDED(result));
     if (AAFRESULT_FAILED(result))
       throw result;
 
@@ -259,7 +259,7 @@ static bool CreateTypeDefinition(
     // Attempt to create the assoication type definition instance.
     classDefinition = typeDefinition->classDefinition();
     pType = static_cast<ImplAAFTypeDef *>(metaDictionary->pvtCreateMetaDefinition(*classDefinition->id()));
-    assert (pType);
+    ASSERTU (pType);
     if (!pType)
       throw AAFRESULT_NOMEMORY;
 
@@ -316,7 +316,7 @@ static bool InitializeTypeDefinitionInteger(
   if (typeDefinitionInteger->axiomatic())
   {
     pType = dynamic_cast<ImplAAFTypeDefInt *>(metaDictionary->findAxiomaticTypeDefinition(*typeDefinitionInteger->id()));
-    assert (pType);
+    ASSERTU (pType);
     if (!pType)
       throw AAFRESULT_TYPE_NOT_FOUND;
 
@@ -324,7 +324,7 @@ static bool InitializeTypeDefinitionInteger(
                                typeDefinitionInteger->size(), 
                                (typeDefinitionInteger->signedNumber()) ? kAAFTrue : kAAFFalse,
                                typeDefinitionInteger->name());
-    assert (AAFRESULT_SUCCEEDED(result));
+    ASSERTU (AAFRESULT_SUCCEEDED(result));
     if (AAFRESULT_FAILED(result))
       throw result;
 
@@ -376,14 +376,14 @@ static bool InitializeTypeDefinitionEnumeration(
   if (typeDefinitionEnumeration->axiomatic())
   {
     pType = dynamic_cast<ImplAAFTypeDefEnum *>(metaDictionary->findAxiomaticTypeDefinition(*typeDefinitionEnumeration->id()));
-    assert (pType);
+    ASSERTU (pType);
     if (!pType)
       throw AAFRESULT_TYPE_NOT_FOUND;
 
     // Find element type.
     const TypeDefinitionInteger *typeDefinitionInteger = typeDefinitionEnumeration->typeDefinition();
     pElementType = dynamic_cast<ImplAAFTypeDefInt *>(metaDictionary->findAxiomaticTypeDefinition(*typeDefinitionInteger->id()));
-    assert (pElementType);
+    ASSERTU (pElementType);
     if (!pElementType)
       throw AAFRESULT_TYPE_NOT_FOUND;
 
@@ -413,7 +413,7 @@ static bool InitializeTypeDefinitionEnumeration(
         const_cast<aafCharacter **>(memberNames), // THIS CAST SHOULD NOT BE NECESSARY!
         typeDefinitionEnumeration->memberCount(),
         typeDefinitionEnumeration->name());
-    assert (AAFRESULT_SUCCEEDED(result));
+    ASSERTU (AAFRESULT_SUCCEEDED(result));
     if (AAFRESULT_FAILED(result))
     {
       InitializeTypeDefinitionEnumeration_cleanup(memberValues, memberNames);
@@ -423,7 +423,7 @@ static bool InitializeTypeDefinitionEnumeration(
 
     // Register the enumeration size.
     result = pType->RegisterSize(typeDefinitionInteger->size());
-    assert (AAFRESULT_SUCCEEDED(result));
+    ASSERTU (AAFRESULT_SUCCEEDED(result));
     if (AAFRESULT_FAILED(result))
     {
       InitializeTypeDefinitionEnumeration_cleanup(memberValues, memberNames);
@@ -469,19 +469,19 @@ static bool InitializeTypeDefinitionVariableArray(
   if (typeDefinitionVariableArray->axiomatic())
   {
     pType = dynamic_cast<ImplAAFTypeDefVariableArray *>(metaDictionary->findAxiomaticTypeDefinition(*typeDefinitionVariableArray->id()));
-    assert (pType);
+    ASSERTU (pType);
     if (!pType)
       throw AAFRESULT_TYPE_NOT_FOUND;
 
     pElementType = metaDictionary->findAxiomaticTypeDefinition(*typeDefinitionVariableArray->elementTypeId());
-    assert (pElementType);
+    ASSERTU (pElementType);
     if (!pElementType)
       throw AAFRESULT_TYPE_NOT_FOUND;
 
     result = pType->pvtInitialize(*typeDefinitionVariableArray->id(),
                                   pElementType,
                                   typeDefinitionVariableArray->name());
-    assert (AAFRESULT_SUCCEEDED(result));
+    ASSERTU (AAFRESULT_SUCCEEDED(result));
     if (AAFRESULT_FAILED(result))
       throw result;
 
@@ -523,12 +523,12 @@ static bool InitializeTypeDefinitionFixedArray(
   if (typeDefinitionFixedArray->axiomatic())
   {
     pType = dynamic_cast<ImplAAFTypeDefFixedArray *>(metaDictionary->findAxiomaticTypeDefinition(*typeDefinitionFixedArray->id()));
-    assert (pType);
+    ASSERTU (pType);
     if (!pType)
       throw AAFRESULT_TYPE_NOT_FOUND;
 
     pElementType = metaDictionary->findAxiomaticTypeDefinition(*typeDefinitionFixedArray->elementTypeId());
-    assert (pElementType);
+    ASSERTU (pElementType);
     if (!pElementType)
       throw AAFRESULT_TYPE_NOT_FOUND;
 
@@ -536,7 +536,7 @@ static bool InitializeTypeDefinitionFixedArray(
                                   pElementType,
                                   typeDefinitionFixedArray->elementCount(),
                                   typeDefinitionFixedArray->name());
-    assert (AAFRESULT_SUCCEEDED(result));
+    ASSERTU (AAFRESULT_SUCCEEDED(result));
     if (AAFRESULT_FAILED(result))
       throw result;
 
@@ -600,18 +600,18 @@ static bool InitializeTypeDefinitionRecord(
   if (typeDefinitionRecord->axiomatic())
   {
     pType = dynamic_cast<ImplAAFTypeDefRecord *>(metaDictionary->findAxiomaticTypeDefinition(*typeDefinitionRecord->id()));
-    assert (pType);
+    ASSERTU (pType);
     if (!pType)
       throw AAFRESULT_TYPE_NOT_FOUND;
 
     // allocate arrays to hold memberTypes, memberNames, and memberOffsets.
     memberTypes = new ImplAAFTypeDef * [typeDefinitionRecord->fieldCount()];
-    assert (memberTypes);
+    ASSERTU (memberTypes);
     if (!memberTypes)
       throw AAFRESULT_NOMEMORY;
 
     memberNames = new aafCharacter_constptr[typeDefinitionRecord->fieldCount()];
-    assert (memberNames);
+    ASSERTU (memberNames);
     if (!memberNames)
     {
       InitializeTypeDefinitionRecord_cleanup(memberTypes, memberNames, memberOffsets);
@@ -619,7 +619,7 @@ static bool InitializeTypeDefinitionRecord(
     }
 
     memberOffsets = new aafUInt32[typeDefinitionRecord->fieldCount()];
-    assert (memberOffsets);
+    ASSERTU (memberOffsets);
     if (!memberOffsets)
     {
       InitializeTypeDefinitionRecord_cleanup(memberTypes, memberNames, memberOffsets);
@@ -632,7 +632,7 @@ static bool InitializeTypeDefinitionRecord(
       memberNames[fieldIndex] = field->name();
       memberOffsets[fieldIndex] = field->fieldOffset();
       memberTypes[fieldIndex] = metaDictionary->findAxiomaticTypeDefinition(*field->typeId());
-      assert(memberTypes[fieldIndex]);
+      ASSERTU(memberTypes[fieldIndex]);
       if (!memberTypes[fieldIndex])
         throw AAFRESULT_TYPE_NOT_FOUND;
     }
@@ -643,7 +643,7 @@ static bool InitializeTypeDefinitionRecord(
         const_cast<aafCharacter **>(memberNames), // THIS CAST SHOULD NOT BE NECESSARY!
                                 typeDefinitionRecord->fieldCount(),
                                 typeDefinitionRecord->name());
-    assert (AAFRESULT_SUCCEEDED(result));
+    ASSERTU (AAFRESULT_SUCCEEDED(result));
     if (AAFRESULT_FAILED(result))
     {
       InitializeTypeDefinitionRecord_cleanup(memberTypes, memberNames, memberOffsets);
@@ -653,7 +653,7 @@ static bool InitializeTypeDefinitionRecord(
     result = pType->RegisterMembers (memberOffsets,
                                      typeDefinitionRecord->fieldCount(),
                                      typeDefinitionRecord->recordSize());
-    assert (AAFRESULT_SUCCEEDED (result));
+    ASSERTU (AAFRESULT_SUCCEEDED (result));
     if (AAFRESULT_FAILED(result))
     {
       InitializeTypeDefinitionRecord_cleanup(memberTypes, memberNames, memberOffsets);
@@ -701,19 +701,19 @@ static bool InitializeTypeDefinitionRename(
   if (typeDefinitionRename->axiomatic())
   {
     pType = dynamic_cast<ImplAAFTypeDefRename *>(metaDictionary->findAxiomaticTypeDefinition(*typeDefinitionRename->id()));
-    assert (pType);
+    ASSERTU (pType);
     if (!pType)
       throw AAFRESULT_TYPE_NOT_FOUND;
 
     pBaseType = metaDictionary->findAxiomaticTypeDefinition(*typeDefinitionRename->renamedTypeId());
-    assert (pBaseType);
+    ASSERTU (pBaseType);
     if (!pBaseType)
       throw AAFRESULT_TYPE_NOT_FOUND;
 
     result = pType->Initialize(*typeDefinitionRename->id(),
                                pBaseType,
                                typeDefinitionRename->name());
-    assert (AAFRESULT_SUCCEEDED(result));
+    ASSERTU (AAFRESULT_SUCCEEDED(result));
     if (AAFRESULT_FAILED(result))
       throw result;
 
@@ -754,12 +754,12 @@ static bool InitializeTypeDefinitionCharacter(
   if (typeDefinitionCharacter->axiomatic())
   {
     pType = dynamic_cast<ImplAAFTypeDefCharacter *>(metaDictionary->findAxiomaticTypeDefinition(*typeDefinitionCharacter->id()));
-    assert (pType);
+    ASSERTU (pType);
     if (!pType)
       throw AAFRESULT_TYPE_NOT_FOUND;
 
     result = pType->pvtInitialize(*typeDefinitionCharacter->id(), typeDefinitionCharacter->name());
-    assert (AAFRESULT_SUCCEEDED(result));
+    ASSERTU (AAFRESULT_SUCCEEDED(result));
     if (AAFRESULT_FAILED(result))
       throw result;
 
@@ -801,19 +801,19 @@ static bool InitializeTypeDefinitionString(
   if (typeDefinitionString->axiomatic())
   {
     pType = dynamic_cast<ImplAAFTypeDefString *>(metaDictionary->findAxiomaticTypeDefinition(*typeDefinitionString->id()));
-    assert (pType);
+    ASSERTU (pType);
     if (!pType)
       throw AAFRESULT_TYPE_NOT_FOUND;
 
     pElementType = metaDictionary->findAxiomaticTypeDefinition(*typeDefinitionString->stringTypeId());
-    assert (pElementType);
+    ASSERTU (pElementType);
     if (!pElementType)
       throw AAFRESULT_TYPE_NOT_FOUND;
 
     result = pType->pvtInitialize(*typeDefinitionString->id(),
                                   pElementType,
                                   typeDefinitionString->name());
-    assert (AAFRESULT_SUCCEEDED(result));
+    ASSERTU (AAFRESULT_SUCCEEDED(result));
     if (AAFRESULT_FAILED(result))
       throw result;
 
@@ -853,7 +853,7 @@ static bool InitializeTypeDefinitionExtendibleEnumeration(
     // There are currently no aximatic extendible enumerators 2000-MAY-06.
     // We will have to implement this method if this changes in the 
     // future.
-    assert (0);
+    ASSERTU (0);
     return false;
   }
   else
@@ -894,19 +894,19 @@ static bool InitializeTypeDefinitionValueSet(
   {
     pType = dynamic_cast<ImplAAFTypeDefSet *>
             (metaDictionary->findAxiomaticTypeDefinition(*typeDefinitionValueSet->id()));
-    assert (pType);
+    ASSERTU (pType);
     if (!pType)
       throw AAFRESULT_TYPE_NOT_FOUND;
 
     pElementType = metaDictionary->findAxiomaticTypeDefinition(*typeDefinitionValueSet->elementTypeId());
-    assert (pElementType);
+    ASSERTU (pElementType);
     if (!pElementType)
       throw AAFRESULT_TYPE_NOT_FOUND;
 
     result = pType->pvtInitialize(*typeDefinitionValueSet->id(),
                                   pElementType,
                                   typeDefinitionValueSet->name());
-    assert (AAFRESULT_SUCCEEDED(result));
+    ASSERTU (AAFRESULT_SUCCEEDED(result));
     if (AAFRESULT_FAILED(result))
       throw result;
 
@@ -949,19 +949,19 @@ static bool InitializeTypeDefinitionStrongReference(
   {
     pType = dynamic_cast<ImplAAFTypeDefStrongObjRef *>
             (metaDictionary->findAxiomaticTypeDefinition(*typeDefinitionStrongReference->id()));
-    assert (pType);
+    ASSERTU (pType);
     if (!pType)
       throw AAFRESULT_TYPE_NOT_FOUND;
 
     pTarget = metaDictionary->findAxiomaticClassDefinition(*typeDefinitionStrongReference->targetId());
-    assert (pTarget);
+    ASSERTU (pTarget);
     if (!pTarget)
       throw AAFRESULT_TYPE_NOT_FOUND;
 
     result = pType->pvtInitialize(*typeDefinitionStrongReference->id(),
                                   pTarget,
                                   typeDefinitionStrongReference->name());
-    assert (AAFRESULT_SUCCEEDED(result));
+    ASSERTU (AAFRESULT_SUCCEEDED(result));
     if (AAFRESULT_FAILED(result))
       throw result;
 
@@ -1009,20 +1009,20 @@ static bool InitializeTypeDefinitionStrongReferenceSet(
   {
     pType = dynamic_cast<ImplAAFTypeDefSet *>
             (metaDictionary->findAxiomaticTypeDefinition(*typeDefinitionStrongReferenceSet->id()));
-    assert (pType);
+    ASSERTU (pType);
     if (!pType)
       throw AAFRESULT_TYPE_NOT_FOUND;
 
     pElementType = dynamic_cast<ImplAAFTypeDefStrongObjRef *>
                    (metaDictionary->findAxiomaticTypeDefinition(*typeDefinitionStrongReferenceSet->elementTypeId()));
-    assert (pElementType);
+    ASSERTU (pElementType);
     if (!pElementType)
       throw AAFRESULT_TYPE_NOT_FOUND;
 
     result = pType->pvtInitialize(*typeDefinitionStrongReferenceSet->id(),
                                   pElementType,
                                   typeDefinitionStrongReferenceSet->name());
-    assert (AAFRESULT_SUCCEEDED(result));
+    ASSERTU (AAFRESULT_SUCCEEDED(result));
     if (AAFRESULT_FAILED(result))
       throw result;
 
@@ -1101,12 +1101,12 @@ static bool InitializeTypeDefinitionWeakReference(
   {
     pType = dynamic_cast<ImplAAFTypeDefWeakObjRef *>
             (metaDictionary->findAxiomaticTypeDefinition(*typeDefinitionWeakReference->id()));
-    assert (pType);
+    ASSERTU (pType);
     if (!pType)
       throw AAFRESULT_TYPE_NOT_FOUND;
 
     pTarget = metaDictionary->findAxiomaticClassDefinition(*typeDefinitionWeakReference->targetId());
-    assert (pTarget);
+    ASSERTU (pTarget);
     if (!pTarget)
       throw AAFRESULT_TYPE_NOT_FOUND;
 
@@ -1136,24 +1136,24 @@ static bool InitializeTypeDefinitionWeakReference(
     {
       targetPids[0] = 2;
     }
-    assert (1 == targetPids[0] || 2 == targetPids[0]);
+    ASSERTU (1 == targetPids[0] || 2 == targetPids[0]);
     
     const PropertyDefinition * propertyDefinition = NULL;  
     for (i = 1; i < typeDefinitionWeakReference->targetSetCount(); i++)
     {
       propertyDefinition = objectModel->findPropertyDefinition(&targetSet[i]);
-      assert (propertyDefinition && !propertyDefinition->isNil() && propertyDefinition->axiomatic());
+      ASSERTU (propertyDefinition && !propertyDefinition->isNil() && propertyDefinition->axiomatic());
       targetPids[i] = propertyDefinition->pid();
     }
     targetPids[i] = 0; // null terminal the array.
     
     // The target of a weak reference must have a unique identifier.
     const ClassDefinition * classDefinition = objectModel->findClassDefinition(typeDefinitionWeakReference->targetId());
-    assert (classDefinition && ClassDefinition::null() != classDefinition && classDefinition->axiomatic());
+    ASSERTU (classDefinition && ClassDefinition::null() != classDefinition && classDefinition->axiomatic());
     propertyDefinition = classDefinition->uniqueIdentifierProperty();
-    assert (propertyDefinition && !propertyDefinition->isNil() && propertyDefinition->axiomatic() && propertyDefinition->uid());
+    ASSERTU (propertyDefinition && !propertyDefinition->isNil() && propertyDefinition->axiomatic() && propertyDefinition->uid());
     OMPropertyId uniqueIdentifier = propertyDefinition->pid();
-    assert(0 != uniqueIdentifier);
+    ASSERTU(0 != uniqueIdentifier);
     
     result = pType->pvtInitialize(*typeDefinitionWeakReference->id(),
                                   pTarget,
@@ -1164,7 +1164,7 @@ static bool InitializeTypeDefinitionWeakReference(
                                   uniqueIdentifier);
     delete [] targetPids;
     delete [] targetSet;
-    assert (AAFRESULT_SUCCEEDED(result));
+    ASSERTU (AAFRESULT_SUCCEEDED(result));
     if (AAFRESULT_FAILED(result))
       throw result;
 
@@ -1208,20 +1208,20 @@ static bool InitializeTypeDefinitionWeakReferenceSet(
   {
     pType = dynamic_cast<ImplAAFTypeDefSet *>
             (metaDictionary->findAxiomaticTypeDefinition(*typeDefinitionWeakReferenceSet->id()));
-    assert (pType);
+    ASSERTU (pType);
     if (!pType)
       throw AAFRESULT_TYPE_NOT_FOUND;
 
     pElementType = dynamic_cast<ImplAAFTypeDefWeakObjRef *>
                    (metaDictionary->findAxiomaticTypeDefinition(*typeDefinitionWeakReferenceSet->elementTypeId()));
-    assert (pElementType);
+    ASSERTU (pElementType);
     if (!pElementType)
       throw AAFRESULT_TYPE_NOT_FOUND;
 
     result = pType->pvtInitialize(*typeDefinitionWeakReferenceSet->id(),
                                   pElementType,
                                   typeDefinitionWeakReferenceSet->name());
-    assert (AAFRESULT_SUCCEEDED(result));
+    ASSERTU (AAFRESULT_SUCCEEDED(result));
     if (AAFRESULT_FAILED(result))
       throw result;
 
@@ -1298,17 +1298,17 @@ static bool InitializeTypeDefinitionStream(
   {
     pType = dynamic_cast<ImplAAFTypeDefStream *>
             (metaDictionary->findAxiomaticTypeDefinition(*typeDefinitionStream->id()));
-    assert (pType);
+    ASSERTU (pType);
     if (!pType)
       throw AAFRESULT_TYPE_NOT_FOUND;
 
     pElementType = metaDictionary->findAxiomaticTypeDefinition(*typeDefinitionStream->elementTypeId());
-    assert (pElementType);
+    ASSERTU (pElementType);
     if (!pElementType)
       throw AAFRESULT_TYPE_NOT_FOUND;
 
     result = pType->pvtInitialize(*typeDefinitionStream->id(), typeDefinitionStream->name());
-    assert (AAFRESULT_SUCCEEDED(result));
+    ASSERTU (AAFRESULT_SUCCEEDED(result));
     if (AAFRESULT_FAILED(result))
       throw result;
 
@@ -1350,12 +1350,12 @@ static bool InitializeTypeDefinitionIndirect(
   if (typeDefinitionIndirect->axiomatic())
   {
     pType = dynamic_cast<ImplAAFTypeDefIndirect *>(metaDictionary->findAxiomaticTypeDefinition(*typeDefinitionIndirect->id()));
-    assert (pType);
+    ASSERTU (pType);
     if (!pType)
       throw AAFRESULT_TYPE_NOT_FOUND;
 
     pTypeDefAUID = metaDictionary->findAxiomaticTypeDefinition(kAAFTypeID_AUID);
-    assert (pTypeDefAUID);
+    ASSERTU (pTypeDefAUID);
     if (!pTypeDefAUID)
       throw AAFRESULT_TYPE_NOT_FOUND;
 
@@ -1363,7 +1363,7 @@ static bool InitializeTypeDefinitionIndirect(
                                   typeDefinitionIndirect->name(), 
                                   pTypeDefAUID, 
                                   metaDictionary->dataDictionary());
-    assert (AAFRESULT_SUCCEEDED(result));
+    ASSERTU (AAFRESULT_SUCCEEDED(result));
     if (AAFRESULT_FAILED(result))
       throw result;
 
@@ -1405,12 +1405,12 @@ static bool InitializeTypeDefinitionOpaque(
   if (typeDefinitionOpaque->axiomatic())
   {
     pType = dynamic_cast<ImplAAFTypeDefOpaque *>(metaDictionary->findAxiomaticTypeDefinition(*typeDefinitionOpaque->id()));
-    assert (pType);
+    ASSERTU (pType);
     if (!pType)
       throw AAFRESULT_TYPE_NOT_FOUND;
 
     pTypeDefAUID = metaDictionary->findAxiomaticTypeDefinition(kAAFTypeID_AUID);
-    assert (pTypeDefAUID);
+    ASSERTU (pTypeDefAUID);
     if (!pTypeDefAUID)
       throw AAFRESULT_TYPE_NOT_FOUND;
 
@@ -1418,7 +1418,7 @@ static bool InitializeTypeDefinitionOpaque(
                                   typeDefinitionOpaque->name(), 
                                   pTypeDefAUID, 
                                   metaDictionary->dataDictionary());
-    assert (AAFRESULT_SUCCEEDED(result));
+    ASSERTU (AAFRESULT_SUCCEEDED(result));
     if (AAFRESULT_FAILED(result))
       throw result;
 
@@ -1554,7 +1554,7 @@ void InstallAAFObjectModelProcs(void)
       }
       else
       {
-        assert (dynamic_cast<const TypeDefinitionStrongReferenceSet*>(typeDefinition) ||
+        ASSERTU (dynamic_cast<const TypeDefinitionStrongReferenceSet*>(typeDefinition) ||
                 dynamic_cast<const TypeDefinitionWeakReferenceSet*>(typeDefinition) ||
                 dynamic_cast<const TypeDefinitionValueSet*>(typeDefinition));
       }
@@ -1595,7 +1595,7 @@ void InstallAAFObjectModelProcs(void)
 
     default:
       // Unknown type!
-      assert (0);
+      ASSERTU (0);
       break;
     }
   }

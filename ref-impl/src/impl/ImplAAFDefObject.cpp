@@ -48,7 +48,6 @@
 #include "ImplAAFDictionary.h"
 #endif
 
-#include <assert.h>
 #include <string.h>
 #include <wchar.h>
 #include "ImplAAFObjectCreation.h"

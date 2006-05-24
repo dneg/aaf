@@ -57,7 +57,7 @@
 #include "OMPropertyDefinition.h"
 #include "OMObject.h"
 
-#include <assert.h>
+#include "OMAssertions.h"
 #include <string.h>
 
 extern "C" const aafClassID_t CLSID_EnumAAFStorablePropVals;
@@ -88,7 +88,7 @@ AAFRESULT ImplAAFRefContainerValue::Initialize (
 {
   // Concrete class' Initialize method should have already
   // validated the parameters.
-  assert (NULL != containerType && NULL != property);
+  ASSERTU (NULL != containerType && NULL != property);
   
   if (NULL == dynamic_cast<OMContainerProperty *>(property))
     return AAFRESULT_INVALID_PARAM;
@@ -101,12 +101,12 @@ AAFRESULT ImplAAFRefContainerValue::Initialize (
 // Retrieve the property as an OMReferenceContainer.
 OMReferenceContainer* ImplAAFRefContainerValue::referenceContainer(void) const
 {
-  assert (isInitialized());
+  ASSERTU (isInitialized());
   OMProperty* p = property();
   OMContainerProperty* cp = dynamic_cast<OMContainerProperty*>(p);
-  assert(cp != 0);
+  ASSERTU(cp != 0);
   OMReferenceContainer* result = cp->referenceContainer();
-  assert(result != 0);
+  ASSERTU(result != 0);
   return result;
 }
 
@@ -117,7 +117,7 @@ OMReferenceContainer* ImplAAFRefContainerValue::referenceContainer(void) const
 AAFRESULT STDMETHODCALLTYPE ImplAAFRefContainerValue::WriteTo(
   OMProperty* pOmProp)
 {
-  assert (isInitialized());
+  ASSERTU (isInitialized());
   if (!isInitialized())
     return AAFRESULT_NOT_INITIALIZED;
 
@@ -140,7 +140,7 @@ AAFRESULT STDMETHODCALLTYPE ImplAAFRefContainerValue::WriteTo(
   AAFRESULT & result)
 {
   result = AAFRESULT_SUCCESS;
-  assert(NULL != pPropertyValue);
+  ASSERTU(NULL != pPropertyValue);
   
   ImplAAFStorable* storable = NULL; // initialize the returned parameter
   
@@ -169,7 +169,7 @@ AAFRESULT STDMETHODCALLTYPE ImplAAFRefContainerValue::WriteTo(
   pObject->ReleaseReference();
 
   storable = ImplAAFRefValue::ConvertRootToOMStorable(pObject);
-  assert(NULL != storable);
+  ASSERTU(NULL != storable);
   if (NULL == storable)
     result = AAFRESULT_INVALID_OBJ; 
 
@@ -179,9 +179,9 @@ AAFRESULT STDMETHODCALLTYPE ImplAAFRefContainerValue::WriteTo(
 
 void ImplAAFRefContainerValue::ReleaseOldObject(OMObject *object)
 {
-  assert(object && usesReferenceCounting());
+  ASSERTU(object && usesReferenceCounting());
   ImplAAFStorable *pOldObject = ImplAAFRefValue::ConvertOMObjectToRoot(object);
-  assert(NULL != pOldObject);
+  ASSERTU(NULL != pOldObject);
   if (NULL == pOldObject)
     throw AAFRESULT_INVALID_OBJ; // ???
   pOldObject->ReleaseReference();
@@ -191,7 +191,7 @@ void ImplAAFRefContainerValue::ReleaseOldObject(OMObject *object)
 // Utility to release all old OMObjects from the given container.
 AAFRESULT ImplAAFRefContainerValue::ReleaseAllObjects(OMReferenceContainer *pContainerProperty)
 {
-  assert(pContainerProperty && usesReferenceCounting());
+  ASSERTU(pContainerProperty && usesReferenceCounting());
 
   OMReferenceContainerIterator* containerIter = pContainerProperty->createIterator();
   if (NULL == containerIter)
@@ -204,7 +204,7 @@ AAFRESULT ImplAAFRefContainerValue::ReleaseAllObjects(OMReferenceContainer *pCon
     {
       OMObject *object = containerIter->currentObject();
       ImplAAFStorable *obj = dynamic_cast<ImplAAFStorable*>(object);
-      assert(NULL != obj);
+      ASSERTU(NULL != obj);
       if (NULL == obj)
       {
         result = AAFRESULT_INVALID_OBJ;
@@ -235,7 +235,7 @@ AAFRESULT STDMETHODCALLTYPE ImplAAFRefContainerValue::InsertObject(
 	if (AAFRESULT_FAILED(result))
 		return result;
 
-  assert (isInitialized());
+  ASSERTU (isInitialized());
   if (!isInitialized())
     return AAFRESULT_NOT_INITIALIZED;
  
@@ -269,7 +269,7 @@ AAFRESULT STDMETHODCALLTYPE ImplAAFRefContainerValue::ContainsObject(
   
   *pResult = kAAFFalse;  
 
-  assert (isInitialized());
+  ASSERTU (isInitialized());
   if (!isInitialized())
     return AAFRESULT_NOT_INITIALIZED;
  
@@ -292,7 +292,7 @@ AAFRESULT STDMETHODCALLTYPE ImplAAFRefContainerValue::RemoveObject(
   if (NULL == pObject)
     return AAFRESULT_NULL_PARAM;
 
-  assert (isInitialized());
+  ASSERTU (isInitialized());
   if (!isInitialized())
     return AAFRESULT_NOT_INITIALIZED;
  
@@ -389,7 +389,7 @@ AAFRESULT STDMETHODCALLTYPE ImplAAFRefContainerValue::GetElements(
   
   *ppEnum = NULL; // initialize the return parameter.
 
-  assert (isInitialized());
+  ASSERTU (isInitialized());
   if (!isInitialized())
     return AAFRESULT_NOT_INITIALIZED;
 

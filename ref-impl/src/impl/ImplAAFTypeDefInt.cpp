@@ -40,7 +40,7 @@
 #include "AAFTypeDefUIDs.h"
 #endif
 
-#include <assert.h>
+#include "OMAssertions.h"
 #include <string.h>
 
 extern "C" const aafClassID_t CLSID_AAFPropValData;
@@ -62,14 +62,14 @@ static void pvtSignExtend (const aafMemPtr_t inVal,
 {
   aafInt32 localValue = 0;	// only 4 bytes; see below for why it's OK.
 
-  assert (inVal);
-  assert (outVal);
-  assert (inValSize <= outValSize);
-  assert ((1 == inValSize) ||
+  ASSERTU (inVal);
+  ASSERTU (outVal);
+  ASSERTU (inValSize <= outValSize);
+  ASSERTU ((1 == inValSize) ||
 		  (2 == inValSize) ||
 		  (4 == inValSize) ||
 		  (8 == inValSize));
-  assert ((1 == outValSize) ||
+  ASSERTU ((1 == outValSize) ||
 		  (2 == outValSize) ||
 		  (4 == outValSize) ||
 		  (8 == outValSize));
@@ -95,16 +95,16 @@ static void pvtSignExtend (const aafMemPtr_t inVal,
 		  break;
 		case 8:
 		  // inval can't be 8 bytes
-		  assert (0);
+		  ASSERTU (0);
 		default:
-		  assert (0);
+		  ASSERTU (0);
 		}
 
 	  switch (outValSize)
 		{
 		case 1:
 		  // inval can't be 1 byte
-		  assert (0);
+		  ASSERTU (0);
 		case 2:
 		  *((aafInt16*) outVal) = (aafInt16) localValue;
 		  break;
@@ -115,7 +115,7 @@ static void pvtSignExtend (const aafMemPtr_t inVal,
 		  *((aafInt64*) outVal) = localValue;
 		  break;
 		default:
-		  assert (0);
+		  ASSERTU (0);
 		}
 	}
 }
@@ -135,14 +135,14 @@ static void pvtZeroFill (const aafMemPtr_t inVal,
 {
   aafUInt32 localValue = 0;	// only 4 bytes; see below for why it's OK.
 
-  assert (inVal);
-  assert (outVal);
-  assert (inValSize <= outValSize);
-  assert ((1 == inValSize) ||
+  ASSERTU (inVal);
+  ASSERTU (outVal);
+  ASSERTU (inValSize <= outValSize);
+  ASSERTU ((1 == inValSize) ||
 		  (2 == inValSize) ||
 		  (4 == inValSize) ||
 		  (8 == inValSize));
-  assert ((1 == outValSize) ||
+  ASSERTU ((1 == outValSize) ||
 		  (2 == outValSize) ||
 		  (4 == outValSize) ||
 		  (8 == outValSize));
@@ -168,16 +168,16 @@ static void pvtZeroFill (const aafMemPtr_t inVal,
 		  break;
 		case 8:
 		  // inval can't be 8 bytes
-		  assert (0);
+		  ASSERTU (0);
 		default:
-		  assert (0);
+		  ASSERTU (0);
 		}
 
 	  switch (outValSize)
 		{
 		case 1:
 		  // inval can't be 1 byte
-		  assert (0);
+		  ASSERTU (0);
 		case 2:
 		  *((aafUInt16*) outVal) = (aafUInt16) localValue;
 		  break;
@@ -191,7 +191,7 @@ static void pvtZeroFill (const aafMemPtr_t inVal,
 		  *((aafInt64*) outVal) = localValue;
 		  break;
 		default:
-		  assert (0);
+		  ASSERTU (0);
 		}
 	}
 }
@@ -217,8 +217,8 @@ AAFRESULT STDMETHODCALLTYPE
       aafBool  isSigned,
       const aafCharacter * pTypeName)
 {
-  assert (intSize > 0);
-  assert (pTypeName);
+  ASSERTU (intSize > 0);
+  ASSERTU (pTypeName);
 
   if ((1 != intSize) &&
 	  (2 != intSize) &&
@@ -284,7 +284,7 @@ AAFRESULT STDMETHODCALLTYPE
 
   // sign-extend or zero-fill the value.
   aafUInt8 valBuf[8];
-  assert (static_cast<size_t>(_size) <= sizeof (valBuf));
+  ASSERTU (static_cast<size_t>(_size) <= sizeof (valBuf));
   if (_isSigned != 0)
 	{
 	  pvtSignExtend (pVal, valSize, valBuf, _size);
@@ -317,7 +317,7 @@ AAFRESULT STDMETHODCALLTYPE
   if (! AAFRESULT_SUCCEEDED (hr))
 	return hr;
 
-  assert (pBits);
+  ASSERTU (pBits);
   memcpy (pBits, valBuf, _size);
 
   *ppPropVal = pv;
@@ -358,7 +358,7 @@ AAFRESULT STDMETHODCALLTYPE
 	{
 	  return hr;
 	}
-  assert (pPropType);
+  ASSERTU (pPropType);
 
   // determine if the property value's embedded type is compatible
   // with this one for reading.  For now, we'll only allow integral
@@ -391,15 +391,15 @@ AAFRESULT STDMETHODCALLTYPE
 	  return AAFRESULT_BAD_TYPE;
 	}
 
-  assert ((1 == bitsSize) ||
+  ASSERTU ((1 == bitsSize) ||
 		  (2 == bitsSize) ||
 		  (4 == bitsSize) ||
 		  (8 == bitsSize));
-  assert (bitsSize <= sizeof (valBuf));  // I know, redundant test...
+  ASSERTU (bitsSize <= sizeof (valBuf));  // I know, redundant test...
   aafMemPtr_t pBits = NULL;
   hr = pvd->GetBits (&pBits);
   if (AAFRESULT_FAILED(hr)) return hr;
-  assert (pBits);
+  ASSERTU (pBits);
 
   memcpy (valBuf, pBits, bitsSize);
 
@@ -448,7 +448,7 @@ AAFRESULT STDMETHODCALLTYPE
 	{
 	  return hr;
 	}
-  assert (pPropType);
+  ASSERTU (pPropType);
 
   // determine if the property value's embedded type is compatible
   // with this one for reading.  For now, we'll only allow integral
@@ -470,7 +470,7 @@ AAFRESULT STDMETHODCALLTYPE
 
   // sign-extend or zero-fill the value.
   aafUInt8 valBuf[8];
-  assert (static_cast<size_t>(_size) <= sizeof (valBuf));
+  ASSERTU (static_cast<size_t>(_size) <= sizeof (valBuf));
   if (_isSigned != 0)
 	{
 	  pvtSignExtend (pVal, valSize, valBuf, _size);
@@ -486,7 +486,7 @@ AAFRESULT STDMETHODCALLTYPE
 	{
 	  return hr;
 	}
-  assert (pBits);
+  ASSERTU (pBits);
   memcpy (pBits, valBuf, _size);
 
   if (! AAFRESULT_SUCCEEDED (hr))
@@ -529,9 +529,9 @@ void ImplAAFTypeDefInt::reorder(OMByte* bytes,
 								size_t bytesSize) const
 
 {
-  assert (IsFixedSize());
-  assert (PropValSize() == bytesSize);
-  assert (bytes);
+  ASSERTU (IsFixedSize());
+  ASSERTU (PropValSize() == bytesSize);
+  ASSERTU (bytes);
   if (bytesSize > 1)
 	reorderInteger (bytes, bytesSize);
 }
@@ -540,7 +540,7 @@ void ImplAAFTypeDefInt::reorder(OMByte* bytes,
 size_t ImplAAFTypeDefInt::externalSize(const OMByte* /*internalBytes*/,
 									   size_t /*internalBytesSize*/) const
 {
-  assert (IsFixedSize());
+  ASSERTU (IsFixedSize());
   return PropValSize();
 }
 
@@ -551,11 +551,11 @@ void ImplAAFTypeDefInt::externalize(const OMByte* internalBytes,
 									size_t externalBytesSize,
 									OMByteOrder byteOrder) const
 {
-  assert (internalBytes);
-  assert (externalBytes);
-  // assert (internalBytesSize == externalBytesSize);
+  ASSERTU (internalBytes);
+  ASSERTU (externalBytes);
+  // ASSERTU (internalBytesSize == externalBytesSize);
   const size_t thisPropValSize = PropValSize ();
-  assert (externalBytesSize == thisPropValSize);
+  ASSERTU (externalBytesSize == thisPropValSize);
 
   if (internalBytesSize > externalBytesSize)
 	{
@@ -600,11 +600,11 @@ void ImplAAFTypeDefInt::internalize(const OMByte* externalBytes,
 									size_t internalBytesSize,
 									OMByteOrder byteOrder) const
 {
-  assert (externalBytes);
-  assert (internalBytes);
-  // assert (internalBytesSize == externalBytesSize);
+  ASSERTU (externalBytes);
+  ASSERTU (internalBytes);
+  // ASSERTU (internalBytesSize == externalBytesSize);
   // const size_t thisNativeSize = NativeSize ();
-  // assert (internalBytesSize == thisNativeSize);
+  // ASSERTU (internalBytesSize == thisNativeSize);
 
   if (externalBytesSize > internalBytesSize)
 	{
@@ -666,10 +666,10 @@ OMProperty * ImplAAFTypeDefInt::pvtCreateOMProperty
   (OMPropertyId pid,
    const wchar_t * name) const
 {
-  assert (name);
+  ASSERTU (name);
   size_t elemSize = PropValSize ();
   OMProperty * result = new OMSimpleProperty (pid, name, elemSize);
-  assert (result);
+  ASSERTU (result);
   return result;
 }
 

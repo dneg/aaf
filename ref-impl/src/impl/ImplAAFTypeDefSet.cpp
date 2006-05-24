@@ -99,7 +99,7 @@
 #include "ImplAAFObjectCreation.h"
 #include "ImplAAFPropValData.h"
 
-#include <assert.h>
+#include "OMAssertions.h"
 #include <string.h>
 
 extern "C" const aafClassID_t CLSID_AAFStrongRefSetValue;
@@ -111,9 +111,9 @@ AAFRESULT GetSetElementCount( ImplAAFPropertyValue* pVal,
 			      ImplAAFTypeDefSet* pDefSet,
 			      aafUInt32* pRetVal )
 {
-  assert( pVal );
-  assert( pDefSet );
-  assert( pRetVal );
+  ASSERTU( pVal );
+  ASSERTU( pDefSet );
+  ASSERTU( pRetVal );
 
   AAFRESULT hr;
 
@@ -125,7 +125,7 @@ AAFRESULT GetSetElementCount( ImplAAFPropertyValue* pVal,
   }
 
   // Get the element's size.
-  assert( pElemTypeDef->IsFixedSize() );
+  ASSERTU( pElemTypeDef->IsFixedSize() );
   aafUInt32 elemSize = pElemTypeDef->PropValSize();
 
   // Get the set size.
@@ -170,7 +170,7 @@ ImplAAFTypeDefSet::Initialize (
   if (! pTypeDef)
     return AAFRESULT_NULL_PARAM;
 
-  assert (!isInitialized());
+  ASSERTU (!isInitialized());
   if (isInitialized())
     return AAFRESULT_ALREADY_INITIALIZED;
     
@@ -217,7 +217,7 @@ OMType* ImplAAFTypeDefSet::elementType(void) const
 {
   ImplAAFTypeDef* result = 0;
   AAFRESULT hr = GetElementType(&result);
-  assert(hr == 0);
+  ASSERTU(hr == 0);
   result->ReleaseReference();
   return result;
 }
@@ -332,7 +332,7 @@ ImplAAFTypeDefSet::GetElementType (
   if (! ppTypeDef)
     return AAFRESULT_NULL_PARAM;
 
-  assert (isInitialized());
+  ASSERTU (isInitialized());
   if (!isInitialized())
     return AAFRESULT_NOT_INITIALIZED;
   
@@ -341,7 +341,7 @@ ImplAAFTypeDefSet::GetElementType (
   
   *ppTypeDef = bootstrapTypeWeakReference(_ElementType);
 
-  assert (*ppTypeDef);
+  ASSERTU (*ppTypeDef);
   
   (*ppTypeDef)->AcquireReference ();
   
@@ -362,11 +362,11 @@ ImplAAFTypeDefSet::AddElement (
   ImplAAFTypeDefSP pInPropType;
   if( AAFRESULT_FAILED( pSetPropertyValue->GetType( &pInPropType ) ) )
 	return AAFRESULT_BAD_TYPE;
-  assert (pInPropType);
+  ASSERTU (pInPropType);
   if( (ImplAAFTypeDef *)pInPropType != this )
 	return AAFRESULT_BAD_TYPE;
 
-  assert (isInitialized());
+  ASSERTU (isInitialized());
   if (!isInitialized())
     return AAFRESULT_NOT_INITIALIZED;
   
@@ -396,11 +396,11 @@ ImplAAFTypeDefSet::RemoveElement(
   ImplAAFTypeDefSP pInPropType;
   if( AAFRESULT_FAILED( pSetPropertyValue->GetType( &pInPropType ) ) )
 	return AAFRESULT_BAD_TYPE;
-  assert (pInPropType);
+  ASSERTU (pInPropType);
   if( (ImplAAFTypeDef *)pInPropType != this )
 	return AAFRESULT_BAD_TYPE;
 
-  assert (isInitialized());
+  ASSERTU (isInitialized());
   if (!isInitialized())
     return AAFRESULT_NOT_INITIALIZED;
   
@@ -432,11 +432,11 @@ ImplAAFTypeDefSet::ContainsElement(
   ImplAAFTypeDefSP pInPropType;
   if( AAFRESULT_FAILED( pSetPropertyValue->GetType( &pInPropType ) ) )
 	return AAFRESULT_BAD_TYPE;
-  assert (pInPropType);
+  ASSERTU (pInPropType);
   if( (ImplAAFTypeDef *)pInPropType != this )
 	return AAFRESULT_BAD_TYPE;
 
-  assert (isInitialized());
+  ASSERTU (isInitialized());
   if (!isInitialized())
     return AAFRESULT_NOT_INITIALIZED;
   
@@ -466,11 +466,11 @@ ImplAAFTypeDefSet::GetCount (
   ImplAAFTypeDefSP pInPropType;
   if( AAFRESULT_FAILED( pSetPropertyValue->GetType( &pInPropType ) ) )
 	return AAFRESULT_BAD_TYPE;
-  assert (pInPropType);
+  ASSERTU (pInPropType);
   if( (ImplAAFTypeDef *)pInPropType != this )
 	return AAFRESULT_BAD_TYPE;
 
-  assert (isInitialized());
+  ASSERTU (isInitialized());
   if (!isInitialized())
     return AAFRESULT_NOT_INITIALIZED;
   
@@ -501,7 +501,7 @@ AAFRESULT ImplAAFTypeDefSet::CreateKey (
   if (0 == length)
     return AAFRESULT_INVALID_PARAM;
 
-  assert (isInitialized());
+  ASSERTU (isInitialized());
   if (!isInitialized())
     return AAFRESULT_NOT_INITIALIZED;
   
@@ -536,11 +536,11 @@ AAFRESULT ImplAAFTypeDefSet::LookupElement (
   ImplAAFTypeDefSP pInPropType;
   if( AAFRESULT_FAILED( pSetPropertyValue->GetType( &pInPropType ) ) )
 	return AAFRESULT_BAD_TYPE;
-  assert (pInPropType);
+  ASSERTU (pInPropType);
   if( (ImplAAFTypeDef *)pInPropType != this )
 	return AAFRESULT_BAD_TYPE;
 
-  assert (isInitialized());
+  ASSERTU (isInitialized());
   if (!isInitialized())
     return AAFRESULT_NOT_INITIALIZED;
   
@@ -571,11 +571,11 @@ AAFRESULT ImplAAFTypeDefSet::ContainsKey (
   ImplAAFTypeDefSP pInPropType;
   if( AAFRESULT_FAILED( pSetPropertyValue->GetType( &pInPropType ) ) )
 	return AAFRESULT_BAD_TYPE;
-  assert (pInPropType);
+  ASSERTU (pInPropType);
   if( (ImplAAFTypeDef *)pInPropType != this )
 	return AAFRESULT_BAD_TYPE;
 
-  assert (isInitialized());
+  ASSERTU (isInitialized());
   if (!isInitialized())
     return AAFRESULT_NOT_INITIALIZED;
   
@@ -604,11 +604,11 @@ ImplAAFTypeDefSet::GetElements (
   ImplAAFTypeDefSP pInPropType;
   if( AAFRESULT_FAILED( pSetPropertyValue->GetType( &pInPropType ) ) )
 	return AAFRESULT_BAD_TYPE;
-  assert (pInPropType);
+  ASSERTU (pInPropType);
   if( (ImplAAFTypeDef *)pInPropType != this )
 	return AAFRESULT_BAD_TYPE;
 
-  assert (isInitialized());
+  ASSERTU (isInitialized());
   if (!isInitialized())
     return AAFRESULT_NOT_INITIALIZED;
   
@@ -661,9 +661,9 @@ OMProperty * ImplAAFTypeDefSet::pvtCreateOMProperty
   (OMPropertyId pid,
    const wchar_t * name) const
 {
-  assert (name);
+  ASSERTU (name);
 
-  assert (isInitialized());
+  ASSERTU (isInitialized());
   if (!isInitialized())
     return NULL;
 
@@ -671,7 +671,7 @@ OMProperty * ImplAAFTypeDefSet::pvtCreateOMProperty
   AAFRESULT rc = (const_cast<ImplAAFTypeDefSet*>(this))->GetElementType(&ptd);
 	if (AAFRESULT_FAILED(rc))
 		return NULL;
-  assert (ptd);
+  ASSERTU (ptd);
 
   
 
@@ -693,7 +693,7 @@ OMProperty * ImplAAFTypeDefSet::pvtCreateOMProperty
 		GetUIDType(ptd, status);
 		if (AAFRESULT_FAILED(status))
 		  return NULL;
-		assert (_uidType && _uidProperty);
+		ASSERTU (_uidType && _uidProperty);
 	  }
 
 		// TEMPORARY???: There are only a few types of object reference sets supported
@@ -740,7 +740,7 @@ OMProperty * ImplAAFTypeDefSet::pvtCreateOMProperty
 
         default:
           // No support for other "key properties"
-          assert (0);
+          ASSERTU (0);
           break;
       }
     }
@@ -748,7 +748,7 @@ OMProperty * ImplAAFTypeDefSet::pvtCreateOMProperty
   }
   else
   {
-    assert (ptd->IsFixedSize());
+    ASSERTU (ptd->IsFixedSize());
 
     const aafUInt32 elemSize = ptd->NativeSize();
     switch (elemSize)
@@ -774,7 +774,7 @@ OMProperty * ImplAAFTypeDefSet::pvtCreateOMProperty
     }
   }
 
-  assert (result);
+  ASSERTU (result);
   return result;
 }
 
@@ -790,7 +790,7 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFPropertyValue ** ppPropertyValue ) const
 {
   AAFRESULT result = AAFRESULT_SUCCESS;
-  assert (property && ppPropertyValue);
+  ASSERTU (property && ppPropertyValue);
   if (NULL == property || NULL == ppPropertyValue)
     return AAFRESULT_NULL_PARAM;
   *ppPropertyValue = NULL; // initialize out parameter
@@ -798,13 +798,13 @@ AAFRESULT STDMETHODCALLTYPE
   OMReferenceSetProperty* pReferenceSetProperty = dynamic_cast<OMReferenceSetProperty*>(property);
   if (NULL != pReferenceSetProperty)
   {
-    assert (property->definition());
+    ASSERTU (property->definition());
     if (NULL == property->definition())
       return AAFRESULT_INVALID_PARAM;
     const OMType *type = property->definition()->type();
-    assert (type);
+    ASSERTU (type);
     ImplAAFTypeDefSet *ptd = const_cast<ImplAAFTypeDefSet *> (dynamic_cast<const ImplAAFTypeDefSet *>(type));
-    assert (ptd);
+    ASSERTU (ptd);
     if (NULL == ptd)
       return AAFRESULT_INVALID_PARAM;
       
@@ -849,7 +849,7 @@ AAFRESULT STDMETHODCALLTYPE
     }
     else
     { 
-      assert (NULL != *ppPropertyValue);     
+      ASSERTU (NULL != *ppPropertyValue);     
       return AAFRESULT_INVALID_PARAM;
 
       // TEMPORARY HACK!

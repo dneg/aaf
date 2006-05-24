@@ -32,7 +32,6 @@
 #include "ImplAAFBuiltinDefs.h"
 #include "ImplAAFDictionary.h"
 
-#include <assert.h>
 #include <string.h>
 
 #include "AAFTypes.h"

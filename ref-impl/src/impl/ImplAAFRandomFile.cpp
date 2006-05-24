@@ -28,7 +28,7 @@
 #include "ImplAAFObjectCreation.h"
 #include "OMFile.h"
 
-#include <assert.h>
+#include "OMAssertions.h"
 #include <string.h>
 
 extern "C" const aafClassID_t CLSID_AAFGetFileBits;
@@ -66,16 +66,16 @@ AAFRESULT STDMETHODCALLTYPE
   if (!IsWriteable ())
 	return AAFRESULT_NOT_WRITEABLE;
 
-  assert (IsClosed() && IsWriteable());
+  ASSERTU (IsClosed() && IsWriteable());
 
   OMRawStorage * os = RawStorage ();
-  assert (os);
+  ASSERTU (os);
 
   ImplAAFGetFileBits * pResult =
 	(ImplAAFGetFileBits*)CreateImpl (CLSID_AAFGetFileBits);
-  assert (pResult);
+  ASSERTU (pResult);
   pResult->Initialize (os);
-  assert (ppGetFileBits);
+  ASSERTU (ppGetFileBits);
   *ppGetFileBits = pResult;
   return AAFRESULT_SUCCESS;
 }
@@ -123,16 +123,16 @@ AAFRESULT STDMETHODCALLTYPE
   if (! IsReadable ())
 	return AAFRESULT_NOT_READABLE;
 
-  assert (!IsOpen() && !IsClosed() && IsReadable());
+  ASSERTU (!IsOpen() && !IsClosed() && IsReadable());
 
   OMRawStorage * os = RawStorage ();
-  assert (os);
+  ASSERTU (os);
 
   ImplAAFSetFileBits * pResult =
 	(ImplAAFSetFileBits*)CreateImpl (CLSID_AAFSetFileBits);
-  assert (pResult);
+  ASSERTU (pResult);
   pResult->Initialize (os);
-  assert (ppSetFileBits);
+  ASSERTU (ppSetFileBits);
   *ppSetFileBits = pResult;
   return AAFRESULT_SUCCESS;
 }

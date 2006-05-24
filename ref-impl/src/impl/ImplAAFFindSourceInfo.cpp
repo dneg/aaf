@@ -27,7 +27,6 @@
 #include "ImplAAFFindSourceInfo.h"
 #endif
 
-#include <assert.h>
 #include <string.h>
 #include "aafErr.h"
 #include "ImplAAFMob.h"

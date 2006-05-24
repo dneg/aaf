@@ -45,7 +45,7 @@
 #include "AAFStoredObjectIDs.h"
 #include "AAFPropertyIDs.h"
 
-#include <assert.h>
+#include "OMAssertions.h"
 #include <string.h>
 
 #include "AAFTypes.h"
@@ -59,7 +59,6 @@
 #include "ImplAAFTransition.h"
 #endif
 
-#include <assert.h>
 #include <string.h>
 
 
@@ -208,7 +207,7 @@ AAFRESULT ImplAAFTransition::ChangeContainedReferences(aafMobID_constref from,
 
 void ImplAAFTransition::Accept(AAFComponentVisitor& visitor)
 {
-	assert(_operationGroup);
+	ASSERTU(_operationGroup);
 	_operationGroup->Accept(visitor);
 
 	// TODO

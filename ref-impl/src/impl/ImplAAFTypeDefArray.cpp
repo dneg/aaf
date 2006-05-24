@@ -59,7 +59,7 @@
 #include "AAFPropertyIDs.h"
 #include "ImplAAFObjectCreation.h"
 
-#include <assert.h>
+#include "OMAssertions.h"
 #include <string.h>
 
 extern "C" const aafClassID_t CLSID_AAFPropValData;
@@ -226,7 +226,7 @@ ImplAAFTypeDefArray::CreateValue(ImplAAFPropertyValue ** ppPropVal,
 		;
 	
 	*ppPropVal = pvd;
-	assert (*ppPropVal);
+	ASSERTU (*ppPropVal);
 	(*ppPropVal)->AcquireReference ();
 	return AAFRESULT_SUCCESS;
 }//CreateValue()
@@ -253,7 +253,7 @@ ImplAAFTypeDefArray::CopyValuesIntoValue (
 	ImplAAFTypeDefSP	pIncomingType;
 	if( AAFRESULT_FAILED( (*ppPropVal)->GetType( &pIncomingType ) ) )
 		return AAFRESULT_BAD_TYPE;
-	assert (pIncomingType);
+	ASSERTU (pIncomingType);
 	if( (ImplAAFTypeDef *)pIncomingType != this )
 		return AAFRESULT_BAD_TYPE;
 
@@ -338,7 +338,7 @@ ImplAAFTypeDefArray::CreateValueFromValues (
     if (AAFRESULT_SUCCEEDED(hr))
     {
       ImplAAFRefArrayValue *pRefArray = dynamic_cast<ImplAAFRefArrayValue *>(pPropertyValue);
-      assert(NULL != pRefArray);
+      ASSERTU(NULL != pRefArray);
       if (NULL == pRefArray)
         hr = AAFRESULT_INVALID_OBJ;
       
@@ -421,7 +421,7 @@ ImplAAFTypeDefArray::CreateValueFromCArray (
 	aafUInt32 refCount;
 	refCount = tmp->ReleaseReference ();
 	// ...make sure it really does
-	assert (1 == refCount);
+	ASSERTU (1 == refCount);
 	
 	AAFRESULT hr;
 	hr = pvd->Initialize(this);
@@ -432,9 +432,9 @@ ImplAAFTypeDefArray::CreateValueFromCArray (
 	if (AAFRESULT_FAILED (hr))
 		return hr;
 	
-	assert (ppPropVal);
+	ASSERTU (ppPropVal);
 	*ppPropVal = pvd;
-	assert (*ppPropVal);
+	ASSERTU (*ppPropVal);
 	(*ppPropVal)->AcquireReference ();
 	return AAFRESULT_SUCCESS;
 }
@@ -455,7 +455,7 @@ ImplAAFTypeDefArray::GetElementValue (
 	ImplAAFTypeDefSP	pIncomingType;
 	if( AAFRESULT_FAILED( pInPropVal->GetType( &pIncomingType ) ) )
 		return AAFRESULT_BAD_TYPE;
-	assert (pIncomingType);
+	ASSERTU (pIncomingType);
 	if( (ImplAAFTypeDef *)pIncomingType != this )
 		return AAFRESULT_BAD_TYPE;
 
@@ -480,12 +480,12 @@ ImplAAFTypeDefArray::GetElementValue (
   // aafUInt32 elementSize = ptd->PropValSize();
 	aafUInt32 elementSize = ptd->ActualSize(); // okay for data not to be registered?
 	
-	assert (pInPropVal);
+	ASSERTU (pInPropVal);
 	pvd = dynamic_cast<ImplAAFPropValData*> (pInPropVal);
 	
 	hr = pvd->GetBitsSize (&inBitsSize);
 	if (! AAFRESULT_SUCCEEDED (hr)) return hr;
-	assert ((index+1) * elementSize <= inBitsSize);
+	ASSERTU ((index+1) * elementSize <= inBitsSize);
 	
 	pOutPVData = (ImplAAFPropValData *)CreateImpl(CLSID_AAFPropValData);
 	if (! pOutPVData) return AAFRESULT_NOMEMORY;
@@ -503,9 +503,9 @@ ImplAAFTypeDefArray::GetElementValue (
 		NULL);
 	if (AAFRESULT_FAILED(hr)) return hr;
 	
-	assert (ppOutPropVal);
+	ASSERTU (ppOutPropVal);
 	*ppOutPropVal = pOutPVData;
-	assert (*ppOutPropVal);
+	ASSERTU (*ppOutPropVal);
 	(*ppOutPropVal)->AcquireReference ();
 	
 	return AAFRESULT_SUCCESS;
@@ -532,16 +532,16 @@ ImplAAFTypeDefArray::GetCArray (
 	ImplAAFTypeDefSP	pIncomingType;
 	if( AAFRESULT_FAILED( pPropVal->GetType( &pIncomingType ) ) )
 		return AAFRESULT_BAD_TYPE;
-	assert (pIncomingType);
+	ASSERTU (pIncomingType);
 	if( (ImplAAFTypeDef *)pIncomingType != this )
 		return AAFRESULT_BAD_TYPE;
 
 	ImplAAFTypeDefSP pBaseType;
 	HRESULT hr = GetType (&pBaseType);
 	
-	assert (pBaseType->IsFixedSize ());
+	ASSERTU (pBaseType->IsFixedSize ());
 	pBaseType->AttemptBuiltinRegistration ();
-	assert (pBaseType->IsRegistered ());
+	ASSERTU (pBaseType->IsRegistered ());
 
 	
   ImplAAFRefArrayValue* pRefArray = dynamic_cast<ImplAAFRefArrayValue*>(pPropVal);
@@ -563,21 +563,21 @@ ImplAAFTypeDefArray::GetCArray (
 		return AAFRESULT_BAD_SIZE;
 	
 	ImplAAFPropValData * pvd = 0;
-	assert (pPropVal);
+	ASSERTU (pPropVal);
 	pvd = dynamic_cast<ImplAAFPropValData*> (pPropVal);
-	assert (pvd);
+	ASSERTU (pvd);
 	
 	aafUInt32 bitsSize;
 	hr = pvd->GetBitsSize (&bitsSize);
 	if (AAFRESULT_FAILED (hr))
 		return hr;
-	assert (bitsSize >= propSize);
+	ASSERTU (bitsSize >= propSize);
 	
 	aafMemPtr_t pBits = 0;
 	hr = pvd->GetBits (&pBits);
 	if (AAFRESULT_FAILED (hr))
 		return hr;
-	assert (pBits);
+	ASSERTU (pBits);
 	
 	memcpy (pData, pBits, propSize);
 	return AAFRESULT_SUCCESS;
@@ -601,7 +601,7 @@ ImplAAFTypeDefArray::SetElementValue (
 	ImplAAFTypeDefSP	pIncomingType;
 	if( AAFRESULT_FAILED( pPropVal->GetType( &pIncomingType ) ) )
 		return AAFRESULT_BAD_TYPE;
-	assert (pIncomingType);
+	ASSERTU (pIncomingType);
 	if( (ImplAAFTypeDef *)pIncomingType != this )
 		return AAFRESULT_BAD_TYPE;
 
@@ -649,37 +649,37 @@ ImplAAFTypeDefArray::SetElementValue (
 	
 	//get  Source Data
 	ImplAAFPropValData * pvd_Source = dynamic_cast<ImplAAFPropValData*> (pMemberPropVal);
-	assert (pvd_Source);
+	ASSERTU (pvd_Source);
 	
 	aafUInt32 source_bitsSize;
 	hr = pvd_Source->GetBitsSize (&source_bitsSize);
 	if (AAFRESULT_FAILED (hr))
 		return hr;
-	assert (source_bitsSize);
-	assert ( targetElemSize == source_bitsSize);
+	ASSERTU (source_bitsSize);
+	ASSERTU ( targetElemSize == source_bitsSize);
 	
 	aafMemPtr_t pSourceData = 0;
 	hr = pvd_Source->GetBits (&pSourceData);
 	if (AAFRESULT_FAILED (hr))
 		return hr;
-	assert (pSourceData);
+	ASSERTU (pSourceData);
 	
 	
 	//get  Target  Data
 	ImplAAFPropValData * pvd_Target = dynamic_cast<ImplAAFPropValData*> (pPropVal);
-    assert (pvd_Target);
+    ASSERTU (pvd_Target);
 	
 	aafUInt32 target_bitsSize;
 	hr = pvd_Target->GetBitsSize (&target_bitsSize);
 	if (AAFRESULT_FAILED (hr))
 		return hr;
-	assert ( target_bitsSize >= ((index+1) * targetElemSize)  );
+	ASSERTU ( target_bitsSize >= ((index+1) * targetElemSize)  );
 	
 	aafMemPtr_t pTargetData = 0;
 	hr = pvd_Target->GetBits (&pTargetData); //gets the 0th index location
 	if (AAFRESULT_FAILED (hr))
 		return hr;
-	assert (pTargetData);
+	ASSERTU (pTargetData);
 	
 	//make target point to the right element
 	pTargetData += (index * targetElemSize);
@@ -711,7 +711,7 @@ ImplAAFTypeDefArray::SetCArray (
 	ImplAAFTypeDefSP	pIncomingType;
 	if( AAFRESULT_FAILED( pPropVal->GetType( &pIncomingType ) ) )
 		return AAFRESULT_BAD_TYPE;
-	assert (pIncomingType);
+	ASSERTU (pIncomingType);
 	if( (ImplAAFTypeDef *)pIncomingType != this )
 		return AAFRESULT_BAD_TYPE;
 
@@ -719,9 +719,9 @@ ImplAAFTypeDefArray::SetCArray (
 	ImplAAFTypeDefSP pBaseType;
 	hr = GetType (&pBaseType);
 	
-	assert (pBaseType->IsFixedSize ());
+	ASSERTU (pBaseType->IsFixedSize ());
 	pBaseType->AttemptBuiltinRegistration ();
-	assert (pBaseType->IsRegistered ());
+	ASSERTU (pBaseType->IsRegistered ());
 	
   ImplAAFRefArrayValue* pRefArray = dynamic_cast<ImplAAFRefArrayValue*>(pPropVal);
   if (NULL != pRefArray)
@@ -757,15 +757,15 @@ ImplAAFTypeDefArray::SetCArray (
 	}
 	
 	ImplAAFPropValData * pvd = 0;
-	assert (pPropVal);
+	ASSERTU (pPropVal);
 	pvd = dynamic_cast<ImplAAFPropValData*> (pPropVal);
-	assert (pvd);
+	ASSERTU (pvd);
 	
 	aafMemPtr_t pBits = 0;
 	hr = pvd->AllocateBits (propSize, &pBits);
 	if (AAFRESULT_FAILED (hr))
 		return hr;
-	assert (pBits);
+	ASSERTU (pBits);
 	
 	memcpy (pBits, pData, propSize);
 	return AAFRESULT_SUCCESS;

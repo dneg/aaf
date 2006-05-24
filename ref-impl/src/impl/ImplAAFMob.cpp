@@ -87,7 +87,7 @@
 #include "ImplEnumAAFComponents.h"
 #include "ImplAAFTaggedValueUtil.h"
 
-#include <assert.h>
+#include "OMAssertions.h"
 #include <string.h>
 #include <wchar.h>
 #include "AAFResult.h"
@@ -267,7 +267,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 	if (_slots.find (index, *ppSlot))
   {
-    assert (*ppSlot); // It is an internal DM programming error if this assertion fails!
+    ASSERTU (*ppSlot); // It is an internal DM programming error if this assertion fails!
     (*ppSlot)->AcquireReference ();
   }
   else
@@ -861,9 +861,9 @@ AAFRESULT STDMETHODCALLTYPE
 		CHECK(GetDictionary(&pDictionary));
     // Do not reference count the following type and class definitions...
     ImplAAFTypeDef *pTaggedValueType = pDictionary->GetBuiltinDefs()->tdString();
-    assert (pTaggedValueType); // this is supposed to be a builtin type.
+    ASSERTU (pTaggedValueType); // this is supposed to be a builtin type.
  		ImplAAFClassDef *pTaggedValueClass = pDictionary->GetBuiltinDefs()->cdTaggedValue();
-    assert (pTaggedValueClass); // this is supposed to be a builtin type.
+    ASSERTU (pTaggedValueClass); // this is supposed to be a builtin type.
 
 		if (commentFound)
 		{
@@ -1604,7 +1604,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 					OMStorable* pNewStorable = spEssenceData->shallowCopy(spDstDict);
 					ImplAAFEssenceData* pNewEssenceData = dynamic_cast<ImplAAFEssenceData*>(pNewStorable);
-					assert( pNewEssenceData );
+					ASSERTU( pNewEssenceData );
 					
 					ImplAAFSmartPointer<ImplAAFHeader> spDstHeader;
 					CHECK( destFile->GetHeader(&spDstHeader) );
@@ -1651,7 +1651,7 @@ AAFRESULT STDMETHODCALLTYPE
 			OMStorable* pNewStorable = shallowCopy(spDstDict);
 		
 			ImplAAFMob* pNewMob = dynamic_cast<ImplAAFMob*>(pNewStorable);
-			assert( pNewMob );
+			ASSERTU( pNewMob );
 
 			ImplAAFSmartPointer<ImplAAFHeader> spDstHeader;
 			CHECK( destFile->GetHeader(&spDstHeader) );
@@ -2328,7 +2328,7 @@ HRESULT ImplAAFMob::IsClassIDEqual( const aafClassID_t* classId, bool& result ) 
     return hr;
   }
 
-  assert( sizeof(aafUID_t) == sizeof(aafClassID_t) );
+  ASSERTU( sizeof(aafUID_t) == sizeof(aafClassID_t) );
 
   if ( ::memcmp( classId, &thisClassId, sizeof(aafUID_t) ) == 0 ) {
     result = true;
@@ -2378,7 +2378,7 @@ class AAFMobCollectingComponentVisitor : public AAFComponentVisitor
 void AAFMobCollectingComponentVisitor::VisitSourceClip(
     ImplAAFSourceClip* pSourceClip)
 {
-    assert(pSourceClip);
+    ASSERTU(pSourceClip);
 
     aafMobID_t mobID;
     pSourceClip->GetSourceID(&mobID);
@@ -2400,7 +2400,7 @@ AAFRESULT ImplAAFMob::CloneDependencies(
     aafIncMedia_t  includeMedia,
     ImplAAFFile * destFile)
 {
-  assert(destFile);
+  ASSERTU(destFile);
 
 
   HRESULT hr = AAFRESULT_SUCCESS;

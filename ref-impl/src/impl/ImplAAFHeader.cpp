@@ -73,7 +73,7 @@ typedef ImplAAFSmartPointer<ImplAAFIdentification>
 typedef ImplAAFSmartPointer<ImplEnumAAFIdentifications>
     ImplEnumAAFIdentificationsSP;
 
-#include <assert.h>
+#include "OMAssertions.h"
 #include <wchar.h>
 
 #include "ImplAAFObjectCreation.h"
@@ -487,9 +487,9 @@ AAFRESULT STDMETHODCALLTYPE
 	  if (AAFRESULT_FAILED (hr)) return hr;
 	  if (EqualAUID (&testGen, &generation))
 		{
-		  assert (ppIdentification);
+		  ASSERTU (ppIdentification);
 		  *ppIdentification = pTestId;
-		  assert (*ppIdentification);
+		  ASSERTU (*ppIdentification);
 		  (*ppIdentification)->AcquireReference ();
 		  return AAFRESULT_SUCCESS;
 		}
@@ -558,10 +558,10 @@ ImplAAFHeader::GetIdentificationAt
 
   ImplAAFIdentification * pId = 0;
   _identificationList.getValueAt(pId, index);
-  assert (pId);
+  ASSERTU (pId);
   pId->AcquireReference ();
 
-  assert (ppIdentification);
+  ASSERTU (ppIdentification);
   *ppIdentification = pId;
   // Let the ref count pass from pId to *ppIdentification.
   return AAFRESULT_SUCCESS;
@@ -758,13 +758,13 @@ ImplAAFDictionary *ImplAAFHeader::GetDictionary() const
   if (! result)
 	{
 	  AAFRESULT hr = ImplAAFObject::GetDictionary(&result);
-	  assert (AAFRESULT_SUCCEEDED (hr));
-	  assert (result);
+	  ASSERTU (AAFRESULT_SUCCEEDED (hr));
+	  ASSERTU (result);
 	  // clients of GetDictionary(void) expect the dictionary to *not*
 	  // be reference-counted.
 	  aafUInt32 refcnt = result->ReleaseReference ();
 	  // make sure at least one reference remains.
-	  assert (refcnt > 0);
+	  ASSERTU (refcnt > 0);
 	}
   return(result);
 }
@@ -778,7 +778,7 @@ bool ImplAAFHeader::IsObjectModelVersionPresent () const
 
 aafUInt32 ImplAAFHeader::GetObjectModelVersion () const
 {
-  assert (IsObjectModelVersionPresent());
+  ASSERTU (IsObjectModelVersionPresent());
   return _objectModelVersion;
 }
 
@@ -786,7 +786,7 @@ aafUInt32 ImplAAFHeader::GetObjectModelVersion () const
 void ImplAAFHeader::SetObjectModelVersion (aafUInt32 version)
 {
   _objectModelVersion = version;
-  assert (IsObjectModelVersionPresent());
+  ASSERTU (IsObjectModelVersionPresent());
 }
 
 
@@ -906,7 +906,7 @@ AAFRESULT STDMETHODCALLTYPE
     while (AAFRESULT_SUCCEEDED (pSourceMobs->NextOne (&pMob)))
     {
       ImplAAFSourceMob*  pSourceMob = dynamic_cast<ImplAAFSourceMob*>(pMob);
-      assert(pSourceMob);
+      ASSERTU(pSourceMob);
 
       ImplAAFEssenceDescriptor*  pDescriptor = 0;
       pSourceMob->GetEssenceDescriptor( &pDescriptor );

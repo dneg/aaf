@@ -39,7 +39,7 @@
 
 #include "ImplAAFDictionary.h"
 
-#include <assert.h>
+#include "OMAssertions.h"
 #include <string.h>
 
 extern "C" const aafClassID_t CLSID_AAFPropValData;
@@ -95,7 +95,7 @@ AAFRESULT STDMETHODCALLTYPE
   ImplAAFTypeDef *pTypeDef = bootstrapTypeWeakReference(_RenamedType);
 
   *ppBaseType = pTypeDef;
-  assert (*ppBaseType);
+  ASSERTU (*ppBaseType);
   (*ppBaseType)->AcquireReference ();
   return AAFRESULT_SUCCESS;
 }
@@ -113,7 +113,7 @@ AAFRESULT STDMETHODCALLTYPE
   ImplAAFTypeDefSP pInPropType;
   if( AAFRESULT_FAILED( pInPropVal->GetType( &pInPropType ) ) )
 	return AAFRESULT_BAD_TYPE;
-  assert (pInPropType);
+  ASSERTU (pInPropType);
   if( (ImplAAFTypeDef *)pInPropType != this )
 	return AAFRESULT_BAD_TYPE;
 
@@ -125,12 +125,12 @@ AAFRESULT STDMETHODCALLTYPE
   AAFRESULT hr;
   hr = GetBaseType (&ptd);
   if (AAFRESULT_FAILED (hr)) return hr;
-  assert (ptd);
+  ASSERTU (ptd);
 //  aafUInt32 elementSize = ptd->PropValSize();
 
-  assert (pInPropVal);
+  ASSERTU (pInPropVal);
   pvd = dynamic_cast<ImplAAFPropValData*> (pInPropVal);
-  assert (pvd);
+  ASSERTU (pvd);
 
   hr = pvd->GetBitsSize (&inBitsSize);
   if (! AAFRESULT_SUCCEEDED (hr)) return hr;
@@ -143,7 +143,7 @@ AAFRESULT STDMETHODCALLTYPE
   // many.  Put us back to normal.
   pOutPVData->ReleaseReference ();
 
-  assert (ptd);
+  ASSERTU (ptd);
   hr = pOutPVData->Initialize (ptd);
   if (AAFRESULT_FAILED(hr)) return hr;
 
@@ -153,10 +153,10 @@ AAFRESULT STDMETHODCALLTYPE
 										NULL);
   if (AAFRESULT_FAILED(hr)) return hr;
 
-  assert (ppOutPropVal);
+  ASSERTU (ppOutPropVal);
   *ppOutPropVal = pOutPVData;
   (*ppOutPropVal)->AcquireReference ();
-  assert (*ppOutPropVal);
+  ASSERTU (*ppOutPropVal);
   return AAFRESULT_SUCCESS;
 }
 
@@ -173,9 +173,9 @@ AAFRESULT STDMETHODCALLTYPE
   ImplAAFPropValDataSP pvd;
   AAFRESULT hr;
 
-  assert (pInPropVal);
+  ASSERTU (pInPropVal);
   pvd = dynamic_cast<ImplAAFPropValData*> (pInPropVal);
-  assert (pvd);
+  ASSERTU (pvd);
 
   hr = pvd->GetBitsSize (&inBitsSize);
   if (! AAFRESULT_SUCCEEDED (hr)) return hr;
@@ -196,10 +196,10 @@ AAFRESULT STDMETHODCALLTYPE
 										NULL);
   if (AAFRESULT_FAILED(hr)) return hr;
 
-  assert (ppOutPropVal);
+  ASSERTU (ppOutPropVal);
   *ppOutPropVal = pOutPVData;
   (*ppOutPropVal)->AcquireReference ();
-  assert (*ppOutPropVal);
+  ASSERTU (*ppOutPropVal);
   return AAFRESULT_SUCCESS;
 }
 
@@ -207,8 +207,8 @@ ImplAAFTypeDefSP ImplAAFTypeDefRename::BaseType () const
 {
   ImplAAFTypeDefSP result;
   AAFRESULT hr = GetBaseType (&result);
-  assert (AAFRESULT_SUCCEEDED (hr));
-  assert (result);
+  ASSERTU (AAFRESULT_SUCCEEDED (hr));
+  ASSERTU (result);
   return result;
 }
 

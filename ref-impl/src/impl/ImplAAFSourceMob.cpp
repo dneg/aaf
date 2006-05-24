@@ -52,7 +52,7 @@
 
 #include "ImplAAFDictionary.h"
 
-#include <assert.h>
+#include "OMAssertions.h"
 #include "ImplAAFEssenceDescriptor.h"
 #include "ImplAAFSourceClip.h"
 #include "aafErr.h"

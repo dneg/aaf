@@ -29,7 +29,7 @@
 #include "ImplAAFFilmDescriptor.h"
 #endif
 
-#include <assert.h>
+#include "OMAssertions.h"
 #include <string.h>
 #include <wchar.h>
 #include "aafErr.h"

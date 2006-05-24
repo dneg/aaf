@@ -40,7 +40,6 @@
 #include "ImplEnumAAFLoadedPlugins.h"
 #endif
 
-#include <assert.h>
 #include <string.h>
 #include "aafTable.h"
 #include "ImplAAFPluginManager.h"

@@ -28,7 +28,6 @@
 #include "ImplAAFContainerDef.h"
 #endif
 
-#include <assert.h>
 #include <string.h>
 #include "AAFPropertyIDs.h"
 

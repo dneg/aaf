@@ -32,7 +32,7 @@
 
 #include "ImplAAFDictionary.h"
 
-#include <assert.h>
+#include "OMAssertions.h"
 #include <string.h>
 #include <wchar.h>
 #include "aafErr.h"
@@ -88,7 +88,7 @@ AAFRESULT STDMETHODCALLTYPE
   ImplAAFTypeDef *pTypeDef = _typeDef;
 
   *ppTypeDef = pTypeDef;
-  assert (*ppTypeDef);
+  ASSERTU (*ppTypeDef);
   (*ppTypeDef)->AcquireReference ();
   return AAFRESULT_SUCCESS;
 }

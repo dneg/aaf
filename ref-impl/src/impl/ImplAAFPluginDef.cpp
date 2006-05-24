@@ -41,7 +41,7 @@
 #include "ImplAAFPluginDef.h"
 #endif
 
-#include <assert.h>
+#include "OMAssertions.h"
 #include <string.h>
 #include <wchar.h>
 #include "aafErr.h"
@@ -804,7 +804,7 @@ AAFRESULT STDMETHODCALLTYPE
 	ImplAAFLocator *pLocator;
 	_locators.getValueAt(pLocator,index);
 
-	assert(pLocator);
+	ASSERTU(pLocator);
 	pLocator->AcquireReference();
 	(*ppLocator)=pLocator;
 

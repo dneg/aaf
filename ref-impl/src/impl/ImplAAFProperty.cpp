@@ -41,7 +41,7 @@
 
 #include "ImplAAFObjectCreation.h"
 
-#include <assert.h>
+#include "OMAssertions.h"
 #include <string.h>
 
 extern "C" const aafClassID_t CLSID_AAFPropValData;
@@ -82,7 +82,7 @@ AAFRESULT ImplAAFProperty::Initialize
   if (!pOmProp)
 	return AAFRESULT_NULL_PARAM;
 
-  assert (!isInitialized());
+  ASSERTU (!isInitialized());
   if (isInitialized())
     return AAFRESULT_ALREADY_INITIALIZED;
 
@@ -95,7 +95,7 @@ AAFRESULT ImplAAFProperty::Initialize
 	  AAFRESULT hr;
 	  hr = pPropDef->GetTypeDef (&ptd);
 	  if (AAFRESULT_FAILED(hr)) throw hr;
-	  assert (ptd);
+	  ASSERTU (ptd);
 	  // Let the type definition create the correct subclass of property value.
 	  hr = ptd->CreatePropertyValue(pOmProp, &_pPropVal);
 
@@ -128,7 +128,7 @@ AAFRESULT STDMETHODCALLTYPE
   if (!ppPropDef)
 	return AAFRESULT_NULL_PARAM;
 
-  assert (_pPropDef);
+  ASSERTU (_pPropDef);
   *ppPropDef = _pPropDef;
   (*ppPropDef)->AcquireReference ();
   return AAFRESULT_SUCCESS;
@@ -143,7 +143,7 @@ AAFRESULT STDMETHODCALLTYPE
   if (!ppValue)
 	return AAFRESULT_NULL_PARAM;
 
-  assert (_pPropVal);
+  ASSERTU (_pPropVal);
   *ppValue = _pPropVal;
   (*ppValue)->AcquireReference ();
   return AAFRESULT_SUCCESS;

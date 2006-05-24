@@ -36,7 +36,7 @@
 
 #include "AAFResult.h"
 
-#include <assert.h>
+#include "OMAssertions.h"
 #include "ImplAAFPluginManager.h"
 
 #include "OMObjectManager.h"
@@ -57,7 +57,7 @@ extern "C" const aafClassID_t CLSID_AAFPluginManager;
   if (! _singleton)
   {
     _singleton = new ImplAAFContext;
-    assert(_singleton);
+    ASSERTU(_singleton);
     if (_singleton)
       _singleton->InitPluginManager(); 
   }
@@ -73,7 +73,7 @@ extern "C" const aafClassID_t CLSID_AAFPluginManager;
 ImplAAFContext::ImplAAFContext ()
 {
   // There Can Be Only One!
-  assert(NULL == _singleton);
+  ASSERTU(NULL == _singleton);
 
   _plugins = NULL;
   _progressCallback = 0;
@@ -103,7 +103,7 @@ void ImplAAFContext::InitPluginManager (void)
   if(_plugins == NULL)
   {
     _plugins = (ImplAAFPluginManager *)CreateImpl(CLSID_AAFPluginManager);
-    assert(NULL != _plugins);
+    ASSERTU(NULL != _plugins);
     if (_plugins)
       _plugins->Init();
   }

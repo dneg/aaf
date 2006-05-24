@@ -26,7 +26,6 @@
 #include "ImplEnumAAFCodecFlavours.h"
 #endif
 
-#include <assert.h>
 #include <string.h>
 #include "aafErr.h"
 #include "ImplAAFObjectCreation.h"

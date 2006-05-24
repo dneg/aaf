@@ -47,7 +47,7 @@
 
 #include "AAFUtils.h"
 
-#include <assert.h>
+#include "OMAssertions.h"
 #include <string.h>
 #include <wchar.h>
 
@@ -120,7 +120,7 @@ ImplAAFTypeDefExtEnum::GetElementValue (
 	
 	aafUID_t val;
 	_ElementValues.getValueAt (&val, index);
-	assert (pOutValue);
+	ASSERTU (pOutValue);
 	*pOutValue = val;
 	
 	return AAFRESULT_SUCCESS;
@@ -225,10 +225,10 @@ ImplAAFTypeDefExtEnum::CreateValueFromName (
 	ImplAAFTypeDefRecordSP ptdAuid;
 	
 	ptd = BaseType ();
-	assert (ptd);
+	ASSERTU (ptd);
 	
 	ptdAuid = dynamic_cast<ImplAAFTypeDefRecord*> ((ImplAAFTypeDef*) ptd);
-	assert (ptdAuid);
+	ASSERTU (ptdAuid);
 	
 	HRESULT hr = ptdAuid->CreateValueFromStruct ((aafMemPtr_t) &the_value, sizeof (aafUID_t),
 		ppPropVal);
@@ -362,7 +362,7 @@ ImplAAFTypeDefExtEnum::GetNameBufLenFromAUID (
 			hr = GetElementNameBufLen(i, &len);
 			if (AAFRESULT_FAILED(hr))
 				return hr;
-			assert (pLen);
+			ASSERTU (pLen);
 			*pLen = len;
 			return AAFRESULT_SUCCESS;
 		}
@@ -391,7 +391,7 @@ ImplAAFTypeDefExtEnum::GetAUIDValue (
 	ImplAAFTypeDefSP	spPropType;
 	if( AAFRESULT_FAILED( pPropValIn->GetType( &spPropType ) ) )
 		return AAFRESULT_BAD_TYPE;
-	assert (spPropType);
+	ASSERTU (spPropType);
 	if( (ImplAAFTypeDef *)spPropType != this )
 		return AAFRESULT_BAD_TYPE;
 
@@ -399,16 +399,16 @@ ImplAAFTypeDefExtEnum::GetAUIDValue (
 	aafUID_t retval;
 	
 	ptd = BaseType ();
-	assert (ptd);
+	ASSERTU (ptd);
 	
 	ptAuid = dynamic_cast<ImplAAFTypeDefRecord*> ((ImplAAFTypeDef*) ptd);
-	assert (ptAuid);
+	ASSERTU (ptAuid);
 	
 	hr = ptAuid->GetStruct (pPropValIn, (aafMemPtr_t) &retval, sizeof (retval));
 	if (AAFRESULT_FAILED(hr))
 		return hr;
 	
-	assert (pValueOut);
+	ASSERTU (pValueOut);
 	*pValueOut = retval;
 	
 	return AAFRESULT_SUCCESS;
@@ -432,7 +432,7 @@ ImplAAFTypeDefExtEnum::SetAUIDValue (
 	ImplAAFTypeDefSP	spPropType;
 	if( AAFRESULT_FAILED( pPropValToSet->GetType( &spPropType ) ) )
 		return AAFRESULT_BAD_TYPE;
-	assert (spPropType);
+	ASSERTU (spPropType);
 	if( (ImplAAFTypeDef *)spPropType != this )
 		return AAFRESULT_BAD_TYPE;
 
@@ -446,10 +446,10 @@ ImplAAFTypeDefExtEnum::SetAUIDValue (
 		return hr;
 	
 	ptd = BaseType ();
-	assert (ptd);
+	ASSERTU (ptd);
 	
 	ptAuid = dynamic_cast<ImplAAFTypeDefRecord*> ((ImplAAFTypeDef*) ptd);
-	assert (ptAuid);
+	ASSERTU (ptAuid);
 	
 	hr = ptAuid->SetStruct (pPropValToSet, (aafMemPtr_t) &valueIn, sizeof (aafUID_t));
 	if (AAFRESULT_FAILED(hr))
@@ -489,7 +489,7 @@ ImplAAFTypeDefExtEnum::AppendElement (
 		
 		// _ElementNames.count() includes final trailing null
 		origNameCharCount = _ElementNames.count();
-		assert (pName);
+		ASSERTU (pName);
 		
 		// Add length for name to be appended.  Don't forget to add one
 		// character for new name's trailing null
@@ -549,7 +549,7 @@ ImplAAFTypeDefExtEnum::GetTypeCategory (/*[out]*/ eAAFTypeCategory_t * pTid)
 	if (! pTid)
 		return AAFRESULT_NULL_PARAM;
 	
-	assert (pTid);
+	ASSERTU (pTid);
 	*pTid = kAAFTypeCatExtEnum;
 	return AAFRESULT_SUCCESS;
 }
@@ -592,7 +592,7 @@ ImplAAFTypeDefExtEnum::GetElementName (
 				// We'll increment the indexIntoProp to the start of the
 				// string and break out of the loop, but first make sure
 				// there's more string there to index into.
-				assert (i < numChars);
+				ASSERTU (i < numChars);
 				currentIndex++;
 				if (index == currentIndex)
 					break;
@@ -600,7 +600,7 @@ ImplAAFTypeDefExtEnum::GetElementName (
 		}
 		// Make sure we didn't terminate the loop by dropping out before
 		// the correct index was found.
-		assert (indexIntoProp < numChars);
+		ASSERTU (indexIntoProp < numChars);
 	}
 	
 	// indexIntoProp now indicates the starting char we want.  Copy it
@@ -656,7 +656,7 @@ ImplAAFTypeDefExtEnum::GetElementNameBufLen (
 				// We'll increment the indexIntoProp to the start of the
 				// string and break out of the loop, but first make sure
 				// there's more string there to index into.
-				assert (i < numChars);
+				ASSERTU (i < numChars);
 				currentIndex++;
 				if (index == currentIndex)
 					break;
@@ -664,7 +664,7 @@ ImplAAFTypeDefExtEnum::GetElementNameBufLen (
 		}
 		// Make sure we didn't terminate the loop by dropping out before
 		// the correct index was found.
-		assert (indexIntoProp < numChars);
+		ASSERTU (indexIntoProp < numChars);
 	}
 	
 	// indexIntoProp now indicates the starting char we want.  Start
@@ -680,7 +680,7 @@ ImplAAFTypeDefExtEnum::GetElementNameBufLen (
 	// increment once more for trailing null
 	nameLength += sizeof (wchar_t);
 	
-	assert (pLen);
+	ASSERTU (pLen);
 	*pLen = nameLength;
 	return AAFRESULT_SUCCESS;
 }
@@ -693,12 +693,12 @@ ImplAAFTypeDefSP ImplAAFTypeDefExtEnum::BaseType () const
 		AAFRESULT hr;
 		ImplAAFDictionarySP pDict;
 		hr = GetDictionary (&pDict);
-		assert (AAFRESULT_SUCCEEDED(hr));
-		assert (pDict);
+		ASSERTU (AAFRESULT_SUCCEEDED(hr));
+		ASSERTU (pDict);
 		
 		hr = pDict->LookupTypeDef (kAAFTypeID_AUID, &((ImplAAFTypeDefExtEnum*)this)->_cachedBaseType);
-		assert (AAFRESULT_SUCCEEDED(hr));
-		assert (_cachedBaseType);
+		ASSERTU (AAFRESULT_SUCCEEDED(hr));
+		ASSERTU (_cachedBaseType);
 	}
 	return _cachedBaseType;
 }
@@ -781,10 +781,10 @@ OMProperty * ImplAAFTypeDefExtEnum::pvtCreateOMProperty
 (OMPropertyId pid,
  const wchar_t * name) const
 {
-	assert (name);
+	ASSERTU (name);
 	size_t elemSize = PropValSize ();
 	OMProperty * result = new OMSimpleProperty (pid, name, elemSize);
-	assert (result);
+	ASSERTU (result);
 	return result;
 }
 

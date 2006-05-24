@@ -52,7 +52,7 @@
 #include "ImplAAFNestedScope.h"
 #endif
 
-#include <assert.h>
+#include "OMAssertions.h"
 #include <string.h>
 #include "AAFResult.h"
 #include "aafErr.h"
@@ -174,7 +174,7 @@ AAFRESULT STDMETHODCALLTYPE
 
   _slots.getValueAt(*ppSegment,index);
 
-  assert(*ppSegment);
+  ASSERTU(*ppSegment);
   (*ppSegment)->AcquireReference();
 
   return AAFRESULT_SUCCESS;

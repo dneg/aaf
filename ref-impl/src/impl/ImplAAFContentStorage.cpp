@@ -54,7 +54,7 @@
 
 #include "ImplAAFObjectCreation.h"
 
-#include <assert.h>
+#include "OMAssertions.h"
 
 #define DEFAULT_NUM_MOBS				1000
 #define DEFAULT_NUM_DATAOBJ			200
@@ -117,7 +117,7 @@ AAFRESULT STDMETHODCALLTYPE
 	if (_mobs.find((*reinterpret_cast<const OMMaterialIdentification *>(&mobID)),
                              *ppMob))
 	{
-		assert(NULL != *ppMob);
+		ASSERTU(NULL != *ppMob);
 		(*ppMob)->AcquireReference();
 	}
 	else
@@ -159,7 +159,7 @@ AAFRESULT STDMETHODCALLTYPE
 			if(hr == AAFRESULT_SUCCESS)
 			{
 			  siz++;
-			  assert (aMob);
+			  ASSERTU (aMob);
 			  aMob->ReleaseReference();
 			  aMob = NULL;
 			}
@@ -312,7 +312,7 @@ AAFRESULT
 	if (_essenceData.find((*reinterpret_cast<const OMMaterialIdentification *>(&fileMobID)),
                              *ppEssence))
 	{
-		assert(NULL != *ppEssence);
+		ASSERTU(NULL != *ppEssence);
 		(*ppEssence)->AcquireReference();
 	}
 	else

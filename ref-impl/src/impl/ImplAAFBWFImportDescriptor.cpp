@@ -33,7 +33,7 @@
 #endif
 
 extern "C" const aafClassID_t CLSID_EnumAAFRIFFChunks;
-#include <assert.h>
+
 #include <string.h>
 #include <wchar.h>
 #include "aafErr.h"

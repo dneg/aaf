@@ -45,7 +45,7 @@
 #include "AAFTypeDefUIDs.h"
 #endif
 
-#include <assert.h>
+#include "OMAssertions.h"
 #include <string.h>
 #include <wchar.h>
 
@@ -93,7 +93,7 @@ ImplAAFTypeDefEnum::Initialize (
 		return AAFRESULT_NULL_PARAM;
 	
 	eAAFTypeCategory_t baseTypeCat;  
-	assert (pType);
+	ASSERTU (pType);
 	AAFRESULT hr = pType->GetTypeCategory(&baseTypeCat);
 	if (AAFRESULT_FAILED(hr))
 		return hr;
@@ -154,10 +154,10 @@ ImplAAFTypeDefEnum::pvtInitialize (
 	*namesBuf = 0;
 	wchar_t * tmpNamePtr = namesBuf;
 	
-	assert (0 == _ElementValues.count());
+	ASSERTU (0 == _ElementValues.count());
 	for (i = 0; i < numElements; i++)
 	{
-		assert (pElementNames[i]);
+		ASSERTU (pElementNames[i]);
 		wcscpy(tmpNamePtr, pElementNames[i]);
 		// +1 to go past embedded null
 		tmpNamePtr += wcslen (pElementNames[i]) + 1;
@@ -168,7 +168,7 @@ ImplAAFTypeDefEnum::pvtInitialize (
 	_ElementNames.setValue (namesBuf, totalNameSize * sizeof(wchar_t));
 	delete[] namesBuf;
 	_ElementValues.setValue (pElementValues, numElements*sizeof(aafInt64));
-	assert (numElements == _ElementValues.count());
+	ASSERTU (numElements == _ElementValues.count());
 
 	//Register the size
 
@@ -176,11 +176,11 @@ ImplAAFTypeDefEnum::pvtInitialize (
 	// This cast should succeed since only int's are allowed
 	pTDInt = dynamic_cast<ImplAAFTypeDefInt*>((ImplAAFTypeDef *)_ElementType);
 	
-	assert (pTDInt);
+	ASSERTU (pTDInt);
 	
 	aafUInt32 elem_size;
 	check_hr ( pTDInt->GetSize(&elem_size) );
-	assert(elem_size);
+	ASSERTU(elem_size);
 	
 	//finally, call the Register function
 	RegisterSize(elem_size);   
@@ -205,14 +205,14 @@ static void pvtZeroFill (const aafMemPtr_t inVal,
 {
   aafUInt32 localValue = 0;	// only 4 bytes; see below for why it's OK.
 
-  assert (inVal);
-  assert (outVal);
-  assert (inValSize <= outValSize);
-  assert ((1 == inValSize) ||
+  ASSERTU (inVal);
+  ASSERTU (outVal);
+  ASSERTU (inValSize <= outValSize);
+  ASSERTU ((1 == inValSize) ||
 		  (2 == inValSize) ||
 		  (4 == inValSize) ||
 		  (8 == inValSize));
-  assert ((1 == outValSize) ||
+  ASSERTU ((1 == outValSize) ||
 		  (2 == outValSize) ||
 		  (4 == outValSize) ||
 		  (8 == outValSize));
@@ -238,16 +238,16 @@ static void pvtZeroFill (const aafMemPtr_t inVal,
 		  break;
 		case 8:
 		  // inval can't be 8 bytes
-		  assert (0);
+		  ASSERTU (0);
 		default:
-		  assert (0);
+		  ASSERTU (0);
 		}
 
 	  switch (outValSize)
 		{
 		case 1:
 		  // inval can't be 1 byte
-		  assert (0);
+		  ASSERTU (0);
 		case 2:
 		  *((aafUInt16*) outVal) = (aafUInt16) localValue;
 		  break;
@@ -261,7 +261,7 @@ static void pvtZeroFill (const aafMemPtr_t inVal,
 		  *((aafInt64*) outVal) = localValue;
 		  break;
 		default:
-		  assert (0);
+		  ASSERTU (0);
 		}
 	}
 }
@@ -316,7 +316,7 @@ AAFRESULT STDMETHODCALLTYPE
   if (! AAFRESULT_SUCCEEDED (hr))
 	return hr;
 
-  assert (pBits);
+  ASSERTU (pBits);
   memcpy (pBits, valBuf, localIntSize);
 
   *ppPropVal = pv;
@@ -338,7 +338,7 @@ ImplAAFTypeDefEnum::GetElementType (
 	ImplAAFTypeDef *pTypeDef = bootstrapTypeWeakReference(_ElementType);
 	
 	*ppTypeDef = pTypeDef;
-	assert (*ppTypeDef);
+	ASSERTU (*ppTypeDef);
 	(*ppTypeDef)->AcquireReference ();
 	return AAFRESULT_SUCCESS;
 }
@@ -374,7 +374,7 @@ ImplAAFTypeDefEnum::GetElementValue (
 	
 	aafInt64 val;
 	_ElementValues.getValueAt (&val, index);
-	assert (pOutValue);
+	ASSERTU (pOutValue);
 	*pOutValue = val;
 	
 	return AAFRESULT_SUCCESS;
@@ -638,7 +638,7 @@ ImplAAFTypeDefEnum::GetNameBufLenFromInteger (
 			aafUInt32 len;
 			hr = GetElementNameBufLen(i, &len);
 			if (AAFRESULT_FAILED(hr)) return hr;
-			assert (pLen);
+			ASSERTU (pLen);
 			*pLen = len;
 			return AAFRESULT_SUCCESS;
 		}
@@ -665,7 +665,7 @@ ImplAAFTypeDefEnum::GetIntegerValue (
 	ImplAAFTypeDefSP	spPropType;
 	if( AAFRESULT_FAILED( pPropValIn->GetType( &spPropType ) ) )
 		return AAFRESULT_BAD_TYPE;
-	assert (spPropType);
+	ASSERTU (spPropType);
 	if( (ImplAAFTypeDef *)spPropType != this )
 		return AAFRESULT_BAD_TYPE;
 
@@ -679,12 +679,12 @@ ImplAAFTypeDefEnum::GetIntegerValue (
 	eAAFTypeCategory_t baseTypeCat;
 	hr = pBaseType->GetTypeCategory(&baseTypeCat);
 	if (AAFRESULT_FAILED(hr)) return hr;
-	assert(kAAFTypeCatInt == baseTypeCat);
+	ASSERTU(kAAFTypeCatInt == baseTypeCat);
 	ImplAAFTypeDefIntSP ptdi;
 	// This cast should succeed since we've already checked the type
 	// category
 	ptdi = dynamic_cast<ImplAAFTypeDefInt*>((ImplAAFTypeDef*)pBaseType);
-	assert (ptdi);
+	ASSERTU (ptdi);
 	
 	// Get the size of the base integer type
 	aafUInt32 localIntSize;
@@ -698,7 +698,7 @@ ImplAAFTypeDefEnum::GetIntegerValue (
 	
 	ImplAAFDictionarySP pDict;
 	hr = GetDictionary(&pDict);
-	assert (AAFRESULT_SUCCEEDED (hr));
+	ASSERTU (AAFRESULT_SUCCEEDED (hr));
 	
 	// Use a locally-looked-up type def to represent the local
 	// underlying integer type.  This might be different than the
@@ -708,27 +708,27 @@ ImplAAFTypeDefEnum::GetIntegerValue (
 	{
 	case 1:
 		hr = pDict->LookupTypeDef (kAAFTypeID_Int8, &ptd);
-		assert (AAFRESULT_SUCCEEDED (hr));
+		ASSERTU (AAFRESULT_SUCCEEDED (hr));
 		break;
 	case 2:
 		hr = pDict->LookupTypeDef (kAAFTypeID_Int16, &ptd);
-		assert (AAFRESULT_SUCCEEDED (hr));
+		ASSERTU (AAFRESULT_SUCCEEDED (hr));
 		break;
 	case 4:
 		hr = pDict->LookupTypeDef (kAAFTypeID_Int32, &ptd);
-		assert (AAFRESULT_SUCCEEDED (hr));
+		ASSERTU (AAFRESULT_SUCCEEDED (hr));
 		break;
 	case 8:
 		hr = pDict->LookupTypeDef (kAAFTypeID_Int64, &ptd);
-		assert (AAFRESULT_SUCCEEDED (hr));
+		ASSERTU (AAFRESULT_SUCCEEDED (hr));
 		break;
 	}
-	assert (ptd);
+	ASSERTU (ptd);
 	ImplAAFTypeDefInt * pLocalTd =
 		dynamic_cast<ImplAAFTypeDefInt*>((ImplAAFTypeDef*) ptd);
-	assert (pLocalTd);
+	ASSERTU (pLocalTd);
 
-	assert (pPropValIn);
+	ASSERTU (pPropValIn);
 	aafInt64 retval = 0;
 	switch (localIntSize)
 	{
@@ -769,10 +769,10 @@ ImplAAFTypeDefEnum::GetIntegerValue (
 		break;
 		
 	default:
-		assert (0);
+		ASSERTU (0);
 	}
 	
-	assert (pValueOut);
+	ASSERTU (pValueOut);
 	*pValueOut = retval;
 	
 	return AAFRESULT_SUCCESS;
@@ -793,7 +793,7 @@ ImplAAFTypeDefEnum::SetIntegerValue (
 	ImplAAFTypeDefSP	spPropType;
 	if( AAFRESULT_FAILED( pPropValToSet->GetType( &spPropType ) ) )
 		return AAFRESULT_BAD_TYPE;
-	assert (spPropType);
+	ASSERTU (spPropType);
 	if( (ImplAAFTypeDef *)spPropType != this )
 		return AAFRESULT_BAD_TYPE;
 
@@ -815,12 +815,12 @@ ImplAAFTypeDefEnum::SetIntegerValue (
 	eAAFTypeCategory_t baseTypeCat;
 	hr = pBaseType->GetTypeCategory(&baseTypeCat);
 	if (AAFRESULT_FAILED(hr)) return hr;
-	assert(kAAFTypeCatInt == baseTypeCat);
+	ASSERTU(kAAFTypeCatInt == baseTypeCat);
 	ImplAAFTypeDefIntSP ptdi;
 	// This cast should succeed since we've already checked the type
 	// category
 	ptdi = dynamic_cast<ImplAAFTypeDefInt*>((ImplAAFTypeDef*)pBaseType);
-	assert (ptdi);
+	ASSERTU (ptdi);
 	
 	// Get the size of the base integer type
 	aafUInt32 localIntSize;
@@ -834,7 +834,7 @@ ImplAAFTypeDefEnum::SetIntegerValue (
 	
 	ImplAAFDictionarySP pDict;
 	hr = GetDictionary(&pDict);
-	assert (AAFRESULT_SUCCEEDED (hr));
+	ASSERTU (AAFRESULT_SUCCEEDED (hr));
 	
 	// Use a locally-looked-up type def to represent the local
 	// underlying integer type.  This might be different than the
@@ -844,27 +844,27 @@ ImplAAFTypeDefEnum::SetIntegerValue (
 	{
 	case 1:
 		hr = pDict->LookupTypeDef (kAAFTypeID_Int8, &ptd);
-		assert (AAFRESULT_SUCCEEDED (hr));
+		ASSERTU (AAFRESULT_SUCCEEDED (hr));
 		break;
 	case 2:
 		hr = pDict->LookupTypeDef (kAAFTypeID_Int16, &ptd);
-		assert (AAFRESULT_SUCCEEDED (hr));
+		ASSERTU (AAFRESULT_SUCCEEDED (hr));
 		break;
 	case 4:
 		hr = pDict->LookupTypeDef (kAAFTypeID_Int32, &ptd);
-		assert (AAFRESULT_SUCCEEDED (hr));
+		ASSERTU (AAFRESULT_SUCCEEDED (hr));
 		break;
 	case 8:
 		hr = pDict->LookupTypeDef (kAAFTypeID_Int64, &ptd);
-		assert (AAFRESULT_SUCCEEDED (hr));
+		ASSERTU (AAFRESULT_SUCCEEDED (hr));
 		break;
 	}
-	assert (ptd);
+	ASSERTU (ptd);
 	ImplAAFTypeDefInt * pLocalTd =
 		dynamic_cast<ImplAAFTypeDefInt*>((ImplAAFTypeDef*) ptd);
-	assert (pLocalTd);
+	ASSERTU (pLocalTd);
 	
-	assert (pPropValToSet);
+	ASSERTU (pPropValToSet);
 	switch (localIntSize)
 	{
 	case 1:
@@ -904,7 +904,7 @@ ImplAAFTypeDefEnum::SetIntegerValue (
 		break;
 		
 	default:
-		assert (0);
+		ASSERTU (0);
 	}
 	
 	return AAFRESULT_SUCCESS;
@@ -928,7 +928,7 @@ ImplAAFTypeDefEnum::GetTypeCategory (eAAFTypeCategory_t * pTid)
 	if (! pTid)
 		return AAFRESULT_NULL_PARAM;
 	
-	assert (pTid);
+	ASSERTU (pTid);
 	*pTid = kAAFTypeCatEnum;
 	return AAFRESULT_SUCCESS;
 }
@@ -971,7 +971,7 @@ ImplAAFTypeDefEnum::GetElementName (
 				// We'll increment the indexIntoProp to the start of the
 				// string and break out of the loop, but first make sure
 				// there's more string there to index into.
-				assert (i < numChars);
+				ASSERTU (i < numChars);
 				currentIndex++;
 				if (index == currentIndex)
 					break;
@@ -979,7 +979,7 @@ ImplAAFTypeDefEnum::GetElementName (
 		}
 		// Make sure we didn't terminate the loop by dropping out before
 		// the correct index was found.
-		assert (indexIntoProp < numChars);
+		ASSERTU (indexIntoProp < numChars);
 	}
 	
 	// indexIntoProp now indicates the starting char we want.  Copy it
@@ -1035,7 +1035,7 @@ ImplAAFTypeDefEnum::GetElementNameBufLen (
 				// We'll increment the indexIntoProp to the start of the
 				// string and break out of the loop, but first make sure
 				// there's more string there to index into.
-				assert (i < numChars);
+				ASSERTU (i < numChars);
 				currentIndex++;
 				if (index == currentIndex)
 					break;
@@ -1043,7 +1043,7 @@ ImplAAFTypeDefEnum::GetElementNameBufLen (
 		}
 		// Make sure we didn't terminate the loop by dropping out before
 		// the correct index was found.
-		assert (indexIntoProp < numChars);
+		ASSERTU (indexIntoProp < numChars);
 	}
 	
 	// indexIntoProp now indicates the starting char we want.  Start
@@ -1059,7 +1059,7 @@ ImplAAFTypeDefEnum::GetElementNameBufLen (
 	// increment once more for trailing null
 	nameLength += sizeof (wchar_t);
 	
-	assert (pLen);
+	ASSERTU (pLen);
 	*pLen = nameLength;
 	return AAFRESULT_SUCCESS;
 }
@@ -1069,8 +1069,8 @@ ImplAAFTypeDefSP ImplAAFTypeDefEnum::BaseType () const
 {
 	ImplAAFTypeDefSP result;
 	AAFRESULT hr = GetElementType (&result);
-	assert (AAFRESULT_SUCCEEDED (hr));
-	assert (result);
+	ASSERTU (AAFRESULT_SUCCEEDED (hr));
+	ASSERTU (result);
 	return result;
 }
 
@@ -1145,7 +1145,7 @@ void ImplAAFTypeDefEnum::AttemptBuiltinRegistration (void)
 	{
 		ImplAAFDictionarySP pDict;
 		AAFRESULT hr = GetDictionary(&pDict);
-		assert (AAFRESULT_SUCCEEDED (hr));
+		ASSERTU (AAFRESULT_SUCCEEDED (hr));
 		pDict->pvtAttemptBuiltinSizeRegistration (this);
 		_registrationAttempted = kAAFTrue;
 	}
@@ -1162,16 +1162,16 @@ size_t ImplAAFTypeDefEnum::NativeSize (void) const
 {
 	if  (!IsRegistered())
 	{
-		//assert(0);  //hmmmm ... drastic
+		//ASSERTU(0);  //hmmmm ... drastic
 
 		//instead ... look to the _ElementType to get the size ...
 		ImplAAFTypeDefInt *pTDInt;
 		pTDInt = dynamic_cast<ImplAAFTypeDefInt*>((ImplAAFTypeDef *)_ElementType);
-		assert (pTDInt);
+		ASSERTU (pTDInt);
 		
 		aafUInt32 elem_size = 0;
 		pTDInt->GetSize(&elem_size);
-		assert(elem_size);
+		ASSERTU(elem_size);
 		return elem_size;
 
 	}
@@ -1183,13 +1183,13 @@ static OMProperty * pvtMakeProperty (OMPropertyId pid,
 									 const wchar_t * name,
 									 size_t size)
 {
-	if (0 == size) { assert (0); return 0; }
+	if (0 == size) { ASSERTU (0); return 0; }
 	else if (1 == size) { return new OMFixedSizeProperty<aafUInt8>(pid, name); }
 	else if (2 == size) { return new OMFixedSizeProperty<aafUInt16>(pid, name); }
 	else if (4 == size) { return new OMFixedSizeProperty<aafUInt32>(pid, name); }
 	else if (8 == size) { return new OMFixedSizeProperty<aafInt64>(pid, name); }
 	else if (sizeof(aafUID_t) == size) { return new OMFixedSizeProperty<aafUID_t>(pid, name); }
-	else { assert (0); return 0; }
+	else { ASSERTU (0); return 0; }
 }
 
 
@@ -1197,7 +1197,7 @@ OMProperty * ImplAAFTypeDefEnum::pvtCreateOMProperty
 (OMPropertyId pid,
  const wchar_t * name) const
 {
-	assert (name);
+	ASSERTU (name);
 	size_t elemSize; // = NativeSize ();
 	
 	if (_isRegistered)
@@ -1207,12 +1207,12 @@ OMProperty * ImplAAFTypeDefEnum::pvtCreateOMProperty
 		ImplAAFTypeDefInt *pTDInt;
 		//look to the _ElementType to get the size ...
 		pTDInt = dynamic_cast<ImplAAFTypeDefInt*>(bootstrapTypeWeakReference(_ElementType));
-		assert (pTDInt);
+		ASSERTU (pTDInt);
 		
 		aafUInt32 elem_size = 0;
 		pTDInt->GetSize(&elem_size);
 		elemSize = (size_t) elem_size;
-		assert(elemSize);
+		ASSERTU(elemSize);
 
 		//mark as REGISTERED .... Can't do this: l-value's are const!!!
 		//_registeredSize = elemSize;
@@ -1220,7 +1220,7 @@ OMProperty * ImplAAFTypeDefEnum::pvtCreateOMProperty
 	}
 	
 	OMProperty * result = pvtMakeProperty (pid, name, elemSize);
-	assert (result);
+	ASSERTU (result);
 	return result;
 }
 

@@ -28,7 +28,7 @@
 #include "ImplAAFPulldown.h"
 #endif
 
-#include <assert.h>
+#include "OMAssertions.h"
 #include <stdlib.h>
 #include <string.h>
 #include "aafErr.h"
@@ -529,7 +529,7 @@ AAFRESULT ImplAAFPulldown::ChangeContainedReferences(aafMobID_constref from,
 
 void ImplAAFPulldown::Accept(AAFComponentVisitor& visitor)
 {
-	assert(_inputSegment);
+	ASSERTU(_inputSegment);
 
 	_inputSegment->Accept(visitor);
 

@@ -38,7 +38,6 @@
 #include "ImplAAFDataDef.h"
 #include "ImplAAFTypeDefIndirect.h"
 
-#include <assert.h>
 #include <string.h>
 #include <wchar.h>
 #include "AAFResult.h"

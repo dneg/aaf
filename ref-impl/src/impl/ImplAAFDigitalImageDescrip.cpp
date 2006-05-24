@@ -31,7 +31,6 @@
 #include "AAFDefUIDs.h"
 #include "AAFCodecDefs.h"
 
-#include <assert.h>
 #include <string.h>
 
 ImplAAFDigitalImageDescriptor::ImplAAFDigitalImageDescriptor ()

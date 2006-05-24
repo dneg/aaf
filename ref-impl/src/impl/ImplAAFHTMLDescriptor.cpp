@@ -34,7 +34,6 @@
 #include "ImplAAFHTMLDescriptor.h"
 #endif
 
-#include <assert.h>
 #include <string.h>
 
 

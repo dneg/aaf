@@ -46,7 +46,7 @@
 #include "AAFStoredObjectIDs.h"
 #include "AAFPropertyIDs.h"
 
-#include <assert.h>
+#include "OMAssertions.h"
 #include <string.h>
 
 extern "C" const aafClassID_t CLSID_EnumAAFPropertyDefs;
@@ -136,7 +136,7 @@ AAFRESULT STDMETHODCALLTYPE
   }
 
   *ppTypeDef = _klvDataTypeDef;
-  assert( *ppTypeDef );
+  ASSERTU( *ppTypeDef );
   
   (*ppTypeDef)->AcquireReference();
 

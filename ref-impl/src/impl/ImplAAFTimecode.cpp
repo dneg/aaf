@@ -32,7 +32,6 @@
 #include "AAFStoredObjectIDs.h"
 #include "AAFPropertyIDs.h"
 
-#include <assert.h>
 #include "AAFTypes.h"
 #include "AAFResult.h"
 #include "aafErr.h"

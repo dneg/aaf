@@ -33,7 +33,7 @@
 #include "ImplAAFDataDef.h"
 #endif
 
-#include <assert.h>
+#include "OMAssertions.h"
 #include <string.h>
 #include "AAFDataDefs.h"
 #include "AAFUtils.h"
@@ -330,11 +330,11 @@ ImplAAFDictionary * ImplAAFDataDef::GetDict()
   if (! _pCachedDict)
 	{
 	  AAFRESULT hr = GetDictionary (&_pCachedDict);
-	  assert (AAFRESULT_SUCCEEDED (hr));
+	  ASSERTU (AAFRESULT_SUCCEEDED (hr));
 	  // _pCachedDict is *NOT* reference counted here, so release the
 	  // newly-added reference.
 	  _pCachedDict->ReleaseReference();
 	}
-  assert (_pCachedDict);
+  ASSERTU (_pCachedDict);
   return _pCachedDict;
 }

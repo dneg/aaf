@@ -34,7 +34,6 @@
 
 #include "AAFResult.h"
 
-#include <assert.h>
 #include <wchar.h>
 
 

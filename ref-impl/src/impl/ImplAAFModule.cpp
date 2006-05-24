@@ -74,7 +74,7 @@ extern "C" const aafClassID_t CLSID_AAFRandomRawStorage;
 extern "C" const aafClassID_t CLSID_EnumAAFFileEncodings;
 extern "C" const aafClassID_t CLSID_AAFCachePageAllocator;
 
-#include <assert.h>
+#include "OMAssertions.h"
 
 
 // Define this to 1 to use raw storage implementations of the
@@ -208,8 +208,8 @@ STDAPI ImplAAFFileOpenExistingRead (
 		 ppFile);
 	  if (AAFRESULT_SUCCEEDED (hr))
 		{
-		  assert (ppFile);
-		  assert (*ppFile);
+		  ASSERTU (ppFile);
+		  ASSERTU (*ppFile);
 		  hr = (*ppFile)->Open ();
 		}
 	}
@@ -383,8 +383,8 @@ STDAPI ImplAAFFileOpenExistingModify (
 		 ppFile);
 	  if (AAFRESULT_SUCCEEDED (hr))
 		{
-		  assert (ppFile);
-		  assert (*ppFile);
+		  ASSERTU (ppFile);
+		  ASSERTU (*ppFile);
 		  hr = (*ppFile)->Open ();
 		}
 	}
@@ -542,8 +542,8 @@ STDAPI ImplAAFFileOpenNewModify (
 		 ppFile);
 	  if (AAFRESULT_SUCCEEDED (hr))
 		{
-		  assert (ppFile);
-		  assert (*ppFile);
+		  ASSERTU (ppFile);
+		  ASSERTU (*ppFile);
 		  hr = (*ppFile)->Open ();
 		}
 	}
@@ -652,8 +652,8 @@ STDAPI ImplAAFFileOpenNewModifyEx (
 	 ppFile);
       if (AAFRESULT_SUCCEEDED (hr))
 	{
-	  assert (ppFile);
-	  assert (*ppFile);
+	  ASSERTU (ppFile);
+	  ASSERTU (*ppFile);
 	  hr = (*ppFile)->Open ();
 	}
     }
@@ -728,8 +728,8 @@ STDAPI ImplAAFFileOpenTransient (
 		 ppFile);
 	  if (AAFRESULT_SUCCEEDED (hr))
 		{
-		  assert (ppFile);
-		  assert (*ppFile);
+		  ASSERTU (ppFile);
+		  ASSERTU (*ppFile);
 		  hr = (*ppFile)->Open ();
 		}
 	}
@@ -944,21 +944,21 @@ STDAPI ImplAAFRawStorageIsAAFFileKind (
   IAAFRoot* p_root_object = 0;
   hr = pRawStorage->QueryInterface( IID_IAAFRoot,
                                reinterpret_cast<void**>(&p_root_object));
-  assert(p_root_object != 0);
+  ASSERTU(p_root_object != 0);
 
   ImplAAFRoot* p_impl_root_object = 0;
   p_root_object->GetImplRep( reinterpret_cast<void**>(&p_impl_root_object) );
-  assert(p_impl_root_object != 0);
+  ASSERTU(p_impl_root_object != 0);
 
   p_root_object->Release();
   p_root_object = 0;
 
   ImplAAFRawStorage* p_impl_raw_storage =
                         dynamic_cast<ImplAAFRawStorage*>(p_impl_root_object);
-  assert(p_impl_raw_storage != 0);
+  ASSERTU(p_impl_raw_storage != 0);
 
   OMRawStorage*  p_om_raw_storage = p_impl_raw_storage->GetOMStorage();
-  assert(p_om_raw_storage != 0);
+  ASSERTU(p_om_raw_storage != 0);
 
 
   const OMStoredObjectEncoding* p_om_encoding =
@@ -1048,7 +1048,7 @@ ImplAAFCreateRawStorageMemory
   OMRawStorage * stg = 0;
   stg = OMMemoryRawStorage::openNewModify ();
 
-  assert (stg);
+  ASSERTU (stg);
   ImplAAFRawStorage * prs = 0;
   if (stg->isPositionable ())
 	prs = static_cast<ImplAAFRawStorage *>
@@ -1065,7 +1065,7 @@ ImplAAFCreateRawStorageMemory
 
   prs->Initialize (stg, access);
 
-  assert (ppNewRawStorage);
+  ASSERTU (ppNewRawStorage);
   *ppNewRawStorage = prs;
   return AAFRESULT_SUCCESS;
 }
@@ -1121,7 +1121,7 @@ ImplAAFCreateRawStorageDisk
 	  return AAFRESULT_WRONG_OPENMODE;
 	}
 
-  assert (stg);
+  ASSERTU (stg);
   ImplAAFRawStorage * prs = 0;
   if (stg->isPositionable ())
 	prs = static_cast<ImplAAFRawStorage *>
@@ -1138,7 +1138,7 @@ ImplAAFCreateRawStorageDisk
 
   prs->Initialize (stg, access);
 
-  assert (ppNewRawStorage);
+  ASSERTU (ppNewRawStorage);
   *ppNewRawStorage = prs;
   return AAFRESULT_SUCCESS;
 }
@@ -1195,7 +1195,7 @@ ImplAAFCreateRawStorageCachedDisk
 	  return AAFRESULT_WRONG_OPENMODE;
 	}
 
-  assert (stg);
+  ASSERTU (stg);
   ImplAAFRawStorage * prs = 0;
   if (stg->isPositionable ())
 	prs = static_cast<ImplAAFRawStorage *>
@@ -1212,7 +1212,7 @@ ImplAAFCreateRawStorageCachedDisk
 
   prs->Initialize (stg, access);
 
-  assert (ppNewRawStorage);
+  ASSERTU (ppNewRawStorage);
   *ppNewRawStorage = prs;
   return AAFRESULT_SUCCESS;
 }
@@ -1243,10 +1243,10 @@ AAFCreateBuiltinCachePageAllocator
     return hr;
 
   IUnknown *pUnknown = static_cast<IUnknown *>(pImplAllocator->GetContainer());
-  assert(pUnknown);
+  ASSERTU(pUnknown);
   IAAFCachePageAllocator* pNewAllocator = 0;
   hr = pUnknown->QueryInterface(IID_IAAFCachePageAllocator, (void **)&pNewAllocator);
-  assert (SUCCEEDED (hr));
+  ASSERTU (SUCCEEDED (hr));
   pImplAllocator->ReleaseReference();
   *ppCachePageAllocator = pNewAllocator;
   return AAFRESULT_SUCCESS;
@@ -1315,12 +1315,12 @@ ImplAAFCreateRawStorageCached2
   if (FAILED(hr)) return hr;
 
   OMCachePageAllocator* pAllocator = new ImplAAFOMCachePageAllocator(pCachePageAllocator, pageCount, pageSize);
-  assert(pAllocator);
+  ASSERTU(pAllocator);
   ImplAAFOMCachedRawStorage* pStg = new ImplAAFOMCachedRawStorage(pRawStorage,
                                                                   pageCount,
                                                                   pageSize,
                                                                   pAllocator);
-  assert(pStg);
+  ASSERTU(pStg);
 
 
   ImplAAFRawStorage * prs = static_cast<ImplAAFRawStorage *>
@@ -1409,7 +1409,7 @@ ImplAAFSetProgressCallback
   CHECK_CLIENT_IMPLEMENTED_QI(pProgress, IID_IAAFProgress);
 
   ImplAAFContext	*context = ImplAAFContext::GetInstance();
-  assert(context != 0);
+  ASSERTU(context != 0);
   hr = context->SetProgressCallback(pProgress);
   return hr;
 }
@@ -1472,7 +1472,7 @@ extern "C" const char * AAFGetLibraryPath();
 // terminated and converted to aafCharacters.
 static size_t bufferByteSize(const char* s)
 {
-  assert(s != 0);
+  ASSERTU(s != 0);
   size_t result = strlen(s) + 1; // characters needed
   result = result * sizeof(aafCharacter); // bytes needed
   return result;
@@ -1485,7 +1485,7 @@ STDAPI ImplAAFGetLibraryPathNameBufLen
 	return AAFRESULT_NULL_PARAM;
 
   const char* path = AAFGetLibraryPath();
-  assert(path != 0);
+  ASSERTU(path != 0);
   *pBufSize = bufferByteSize(path);
   return AAFRESULT_SUCCESS;
 }
@@ -1498,7 +1498,7 @@ STDAPI ImplAAFGetLibraryPathName
 	return AAFRESULT_NULL_PARAM;
 
   const char* path = AAFGetLibraryPath();
-  assert(path != 0);
+  ASSERTU(path != 0);
   if (bufferByteSize(path) > bufSize)
 	return AAFRESULT_SMALLBUF;
 

@@ -29,7 +29,7 @@
 #include "AAFPropertyDefs.h"
 #include "AAFTypeDefUIDs.h"
 
-#include <assert.h>
+#include "OMAssertions.h"
 #include <stdlib.h>
 #include <stddef.h>
 #include <string.h>
@@ -1221,10 +1221,10 @@ void AAFObjectModel::SortClassDefinitions(void)
   for (i = 0; i < countClassDefinitions(); ++i)
   {
     const ClassDefinition *currentClass = classDefinitionAt(i);
-    assert (0 != currentClass);
+    ASSERTU (0 != currentClass);
     const ClassDefinition *foundClass = findClassDefinition(currentClass->id());
-    assert (0 != foundClass);
-    assert (foundClass == currentClass);
+    ASSERTU (0 != foundClass);
+    ASSERTU (foundClass == currentClass);
   }
 #endif
 }
@@ -1273,10 +1273,10 @@ void AAFObjectModel::SortPropertyDefinitions(void)
   for (i = 0; i < countPropertyDefinitions(); ++i)
   {
     const PropertyDefinition *currentProperty = propertyDefinitionAt(i);
-    assert (0 != currentProperty);
+    ASSERTU (0 != currentProperty);
     const PropertyDefinition *foundProperty = findPropertyDefinition(currentProperty->id());
-    assert (0 != foundProperty);
-    assert (foundProperty == currentProperty);
+    ASSERTU (0 != foundProperty);
+    ASSERTU (foundProperty == currentProperty);
   }
 
   //
@@ -1290,7 +1290,7 @@ void AAFObjectModel::SortPropertyDefinitions(void)
     // Only check non-zero pids, we may have several zero-valued pids
     // which are dynamic-pids that haven't yet been assigned a value.
     if (currentPid != 0) {
-      assert (currentPid != previousPid);
+      ASSERTU (currentPid != previousPid);
       previousPid = currentPid;
     }
   }
@@ -1436,7 +1436,7 @@ void AAFObjectModel::SortTypeDefinitions(void)
   //
   // Validate that we have created the correct number of type definitions.
   //
-  assert (countTypeDefinitions() == actualTypeCount);
+  ASSERTU (countTypeDefinitions() == actualTypeCount);
 
 
   // Initialize the sorted array of class definitions by id
@@ -1457,10 +1457,10 @@ void AAFObjectModel::SortTypeDefinitions(void)
   for (i = 0; i < countTypeDefinitions(); ++i)
   {
     const TypeDefinition *currentType = typeDefinitionAt(i);
-    assert (0 != currentType);
+    ASSERTU (0 != currentType);
     const TypeDefinition *foundType = findTypeDefinition(currentType->id());
-    assert (0 != foundType);
-    assert (foundType == currentType);
+    ASSERTU (0 != foundType);
+    ASSERTU (foundType == currentType);
   }
 #endif
 
@@ -1491,7 +1491,7 @@ void AAFObjectModel::SortDefinitions(void)
   //
   // Validate that we have created the correct number of definitions.
   //
-  assert(actualDefinitionCount == countDefinitions());
+  ASSERTU(actualDefinitionCount == countDefinitions());
 
   // Sort the array of pointers...
   qsort(sDefinitionsById,
@@ -1507,10 +1507,10 @@ void AAFObjectModel::SortDefinitions(void)
   for (i = 0; i < countDefinitions(); ++i)
   {
     const Definition *currentDefinition = sDefinitionsById[i];
-    assert (0 != currentDefinition);
+    ASSERTU (0 != currentDefinition);
     const Definition *foundDefinition = findDefinition(currentDefinition->id());
-    assert (0 != foundDefinition);
-    assert (foundDefinition == currentDefinition);
+    ASSERTU (0 != foundDefinition);
+    ASSERTU (foundDefinition == currentDefinition);
   }
 #endif
 
@@ -1524,7 +1524,7 @@ void AAFObjectModel::InitializeTypeDefinitions(void)
   for (aafUInt32 i = 0; i < countTypeDefinitions(); ++i)
   {
     typeDefinition = sTypeDefinitions[i];
-    assert (typeDefinition);
+    ASSERTU (typeDefinition);
     typeDefinition->Initialize();
   }
 }
@@ -1714,7 +1714,7 @@ aafUInt32 AAFObjectModel::countClassDefinitions(void) const
 const ClassDefinition * 
   AAFObjectModel::classDefinitionAt (aafUInt32 index) const
 {
-  assert (index < countClassDefinitions());
+  ASSERTU (index < countClassDefinitions());
   return &sClassDefinitions[index];
 }
 
@@ -1729,7 +1729,7 @@ aafUInt32 AAFObjectModel::countPropertyDefinitions(void) const
 const PropertyDefinition * 
   AAFObjectModel::propertyDefinitionAt (aafUInt32 index) const
 {
-  assert (index < countPropertyDefinitions());
+  ASSERTU (index < countPropertyDefinitions());
   return &sPropertyDefinitions[index];
 }
 
@@ -1743,7 +1743,7 @@ aafUInt32 AAFObjectModel::countTypeDefinitions(void) const
 const TypeDefinition * 
   AAFObjectModel::typeDefinitionAt (aafUInt32 index) const
 {
-  assert (index < countTypeDefinitions());
+  ASSERTU (index < countTypeDefinitions());
   return sTypeDefinitions[index];
 }
 
@@ -2031,7 +2031,7 @@ bool Definition::initializeDefinition(void *userData) const
 // the current definition before any dependent definitions.
 bool Definition::visitPreOrder(VisitDefinitionProcType f, void *userData) const
 {
-  assert(NULL != f);
+  ASSERTU(NULL != f);
 
   // Call the visit proc for this type definition.
   // Assume there are no dependents. Derived classes that have dependents should
@@ -2044,7 +2044,7 @@ bool Definition::visitPreOrder(VisitDefinitionProcType f, void *userData) const
 // the current definition after any dependent definitions.
 bool Definition::visitPostOrder(VisitDefinitionProcType f, void *userData) const
 {
-  assert(NULL != f);
+  ASSERTU(NULL != f);
 
   // Call the visit proc for this definition.
   // Assume there are no dependents. Derived classes that have dependents should
@@ -2062,13 +2062,13 @@ bool Definition::visitPostOrder(VisitDefinitionProcType f, void *userData) const
 void ClassDefinition::Initialize (void)
 {
   // PRECONDITION: we should only initialize once.
-  assert (!_parentClass);
+  ASSERTU (!_parentClass);
 
   // Lookup the parent class...
   _parentClass = objectModel()->findClassDefinition (parentId ());
 
   // POSTCONDITION
-  assert (_parentClass || 
+  ASSERTU (_parentClass || 
        (!_parentClass && 0 == memcmp(parentId(), &NULL3_AUID, sizeof(NULL3_AUID))));
 }
 
@@ -2137,7 +2137,7 @@ bool ClassDefinition::isNil(void) const
 bool ClassDefinition::isRoot() const
 {
   // The root object does not have a valid "parent" class.
-  assert (_parentClass);
+  ASSERTU (_parentClass);
   return parentClass()->isNil();
 }
 
@@ -2183,7 +2183,7 @@ const PropertyDefinition *ClassDefinition::uniqueIdentifierProperty(void) const
 // NOTE: This method does NOT visit parent the parent class definition.
 bool ClassDefinition::visitPreOrder(VisitDefinitionProcType f, void *userData) const
 {
-  assert(NULL != f);
+  ASSERTU(NULL != f);
   bool bContinue = false;
 
   // Call the visit proc for this definition.
@@ -2205,7 +2205,7 @@ bool ClassDefinition::visitPreOrder(VisitDefinitionProcType f, void *userData) c
 // NOTE: This method does NOT visit parent the parent class definition.
 bool ClassDefinition::visitPostOrder(VisitDefinitionProcType f, void *userData) const
 {
-  assert(NULL != f);
+  ASSERTU(NULL != f);
   bool bContinue = false;
 
   // Call the visit proc for each property definition.
@@ -2232,8 +2232,8 @@ bool ClassDefinition::visitPostOrder(VisitDefinitionProcType f, void *userData) 
 const PropertyDefinition * 
 ClassDefinition::propertyDefinitionAt (aafUInt32 index) const
 {
-  assert (index < propertyCount());
-  assert (NULL != _propertyDefinitions[index]);
+  ASSERTU (index < propertyCount());
+  ASSERTU (NULL != _propertyDefinitions[index]);
   return _propertyDefinitions[index];
 }
 
@@ -2246,7 +2246,7 @@ const PropertyDefinition *
   for (aafUInt32 i = 0; i < propertyCount(); ++i)
   {
     propertyDefinition = propertyDefinitionAt(i);
-    assert (NULL != propertyDefinition);
+    ASSERTU (NULL != propertyDefinition);
     if (id == propertyDefinition->id())
     {
       result = propertyDefinition;
@@ -2268,7 +2268,7 @@ const PropertyDefinition *
   for (aafUInt32 i = 0; i < propertyCount(); ++i)
   {
     propertyDefinition = propertyDefinitionAt(i);
-    assert (NULL != propertyDefinition);
+    ASSERTU (NULL != propertyDefinition);
     if (pid == propertyDefinition->pid())
     {
       result = propertyDefinition;
@@ -2292,7 +2292,7 @@ const PropertyDefinition *
 void PropertyDefinition::Initialize (void)
 {
   // PRECONDITION: we should only initialize once.
-  assert (!_container);
+  ASSERTU (!_container);
 
   // Lookup the container class...
   _container = objectModel()->findClassDefinition (classId ());
@@ -2302,8 +2302,8 @@ void PropertyDefinition::Initialize (void)
 
   // POSTCONDITION: if the class and type definitions do not exist then
   // the meta dictionary is invalid.
-  assert (_typeDefinition && TypeDefinition::null() != _typeDefinition);
-  assert (_container && ClassDefinition::null() != _container);
+  ASSERTU (_typeDefinition && TypeDefinition::null() != _typeDefinition);
+  ASSERTU (_container && ClassDefinition::null() != _container);
 }
 
 void PropertyDefinition::makeAxiomatic (void) const
@@ -2341,7 +2341,7 @@ bool PropertyDefinition::isNil(void) const
 // the current definition before any dependent definitions.
 bool PropertyDefinition::visitPreOrder(VisitDefinitionProcType f, void *userData) const
 {
-  assert(NULL != f);
+  ASSERTU(NULL != f);
   bool bContinue = false;
 
   // Call the visit proc for this property definition.
@@ -2359,7 +2359,7 @@ bool PropertyDefinition::visitPreOrder(VisitDefinitionProcType f, void *userData
 // the current definition after any dependent definitions.
 bool PropertyDefinition::visitPostOrder(VisitDefinitionProcType f, void *userData) const
 {
-  assert(NULL != f);
+  ASSERTU(NULL != f);
   bool bContinue = false;
 
   // Call the visit proc for this property's type definition.
@@ -2409,7 +2409,7 @@ bool TypeDefinition::isNil(void) const
 void TypeDefinitionInteger::Initialize (void)
 {
   // Just validate that the given size is supported.
-  assert ((size() == 1) || 
+  ASSERTU ((size() == 1) || 
           (size() == 2) ||
           (size() == 4) ||
           (size() == 8));
@@ -2430,7 +2430,7 @@ const ClassDefinition *
 void TypeDefinitionEnumeration::Initialize (void)
 {
   // PRECONDITION: we should only initialize once.
-  assert (!_typeDefinition);
+  ASSERTU (!_typeDefinition);
 
   // Lookup the type definition; it must be one of the integer types.
   const TypeDefinition *type;
@@ -2440,7 +2440,7 @@ void TypeDefinitionEnumeration::Initialize (void)
   // POSTCONDITION: if the type definition does not exist then either
   // the meta dictionary is invalid or the sort/search mechnism is 
   // broken.
-  assert (_typeDefinition && TypeDefinition::null() != _typeDefinition);
+  ASSERTU (_typeDefinition && TypeDefinition::null() != _typeDefinition);
 }
 
 const ClassDefinition *
@@ -2453,7 +2453,7 @@ const ClassDefinition *
 const DefinitionEnumerationMember * 
   TypeDefinitionEnumeration::memberAt(aafUInt32 index) const
 {
-  assert(index < memberCount());
+  ASSERTU(index < memberCount());
   return _members[index];
 }
 
@@ -2478,7 +2478,7 @@ void TypeDefinitionEnumeration::makeAxiomatic (void) const
 // the current definition before any dependent definitions.
 bool TypeDefinitionEnumeration::visitPreOrder(VisitDefinitionProcType f, void *userData) const
 {
-  assert(NULL != f);
+  ASSERTU(NULL != f);
   bool bContinue = false;
 
   // Call the visit proc for this type definition.
@@ -2496,7 +2496,7 @@ bool TypeDefinitionEnumeration::visitPreOrder(VisitDefinitionProcType f, void *u
 // the current definition after any dependent definitions.
 bool TypeDefinitionEnumeration::visitPostOrder(VisitDefinitionProcType f, void *userData) const
 {
-  assert(NULL != f);
+  ASSERTU(NULL != f);
   bool bContinue = false;
 
   // Call the visit proc for this type's element type definition.
@@ -2513,7 +2513,7 @@ bool TypeDefinitionEnumeration::visitPostOrder(VisitDefinitionProcType f, void *
 void TypeDefinitionVariableArray::Initialize(void)
 {
   // PRECONDITION: we should only initialize once.
-  assert (!_elementType);
+  ASSERTU (!_elementType);
 
   // Lookup the type definition; it must be one of the integer types.
   _elementType = objectModel()->findTypeDefinition (elementTypeId ());
@@ -2521,7 +2521,7 @@ void TypeDefinitionVariableArray::Initialize(void)
   // POSTCONDITION: if the type definition does not exist then either
   // the meta dictionary is invalid or the sort/search mechnism is 
   // broken.
-  assert (_elementType && TypeDefinition::null() != _elementType);
+  ASSERTU (_elementType && TypeDefinition::null() != _elementType);
 }
 
 void TypeDefinitionVariableArray::makeAxiomatic (void) const
@@ -2555,7 +2555,7 @@ const ClassDefinition *
 // the current definition before any dependent definitions.
 bool TypeDefinitionVariableArray::visitPreOrder(VisitDefinitionProcType f, void *userData) const
 {
-  assert(NULL != f);
+  ASSERTU(NULL != f);
   bool bContinue = false;
 
   // Call the visit proc for this type definition.
@@ -2573,7 +2573,7 @@ bool TypeDefinitionVariableArray::visitPreOrder(VisitDefinitionProcType f, void 
 // the current definition after any dependent definitions.
 bool TypeDefinitionVariableArray::visitPostOrder(VisitDefinitionProcType f, void *userData) const
 {
-  assert(NULL != f);
+  ASSERTU(NULL != f);
   bool bContinue = false;
 
   // Call the visit proc for this type's element type definition.
@@ -2593,7 +2593,7 @@ void TypeDefinitionRecord::Initialize(void)
   // Make all of the record field type definitions axiomatic.
   for (aafUInt32 i = 0; i < fieldCount(); ++i)
   { 
-    assert(NULL != _fields[i]);
+    ASSERTU(NULL != _fields[i]);
     _fields[i]->Initialize();
   }
 }
@@ -2623,7 +2623,7 @@ const ClassDefinition *
 // the current definition before any dependent definitions.
 bool TypeDefinitionRecord::visitPreOrder(VisitDefinitionProcType f, void *userData) const
 {
-  assert(NULL != f);
+  ASSERTU(NULL != f);
   bool bContinue = false;
 
   // Call the visit proc for this type definition.
@@ -2644,7 +2644,7 @@ bool TypeDefinitionRecord::visitPreOrder(VisitDefinitionProcType f, void *userDa
 // the current definition after any dependent definitions.
 bool TypeDefinitionRecord::visitPostOrder(VisitDefinitionProcType f, void *userData) const
 {
-  assert(NULL != f);
+  ASSERTU(NULL != f);
   bool bContinue = false;
 
   // Call the visit proc for this record's field type definitions.
@@ -2665,14 +2665,14 @@ bool TypeDefinitionRecord::visitPostOrder(VisitDefinitionProcType f, void *userD
 const DefinitionRecordField * 
   TypeDefinitionRecord::fieldAt(aafUInt32 index) const
 {
-  assert(index < fieldCount());
+  ASSERTU(index < fieldCount());
   return _fields[index];
 }
 
 void DefinitionRecordField::Initialize()
 {
   // PRECONDITION: we should only initialize once.
-  assert (!_typeDefinition);
+  ASSERTU (!_typeDefinition);
 
   // Lookup the type definition; it must be one of the integer types.
   _typeDefinition = AAFObjectModel::singleton()->findTypeDefinition (typeId());
@@ -2680,20 +2680,20 @@ void DefinitionRecordField::Initialize()
   // POSTCONDITION: if the type definition does not exist then either
   // the meta dictionary is invalid or the sort/search mechnism is 
   // broken.
-  assert (_typeDefinition && TypeDefinition::null() != _typeDefinition);
+  ASSERTU (_typeDefinition && TypeDefinition::null() != _typeDefinition);
 }
 
 void TypeDefinitionRename::Initialize()
 {
   // PRECONDITION: we should only initialize once.
-  assert (!_renamedType);
+  ASSERTU (!_renamedType);
 
   // Lookup the type definition; it must be one of the integer types.
   _renamedType = objectModel()->findTypeDefinition (renamedTypeId());
 
   // POSTCONDITION: if the type definition does not exist then
   // the meta dictionary is invalid
-  assert (_renamedType && TypeDefinition::null() != _renamedType);
+  ASSERTU (_renamedType && TypeDefinition::null() != _renamedType);
 }
 
 void TypeDefinitionRename::makeAxiomatic (void) const
@@ -2719,7 +2719,7 @@ const ClassDefinition *
 // the current definition before any dependent definitions.
 bool TypeDefinitionRename::visitPreOrder(VisitDefinitionProcType f, void *userData) const
 {
-  assert(NULL != f);
+  ASSERTU(NULL != f);
   bool bContinue = false;
 
   // Call the visit proc for this type definition.
@@ -2737,7 +2737,7 @@ bool TypeDefinitionRename::visitPreOrder(VisitDefinitionProcType f, void *userDa
 // the current definition after any dependent definitions.
 bool TypeDefinitionRename::visitPostOrder(VisitDefinitionProcType f, void *userData) const
 {
-  assert(NULL != f);
+  ASSERTU(NULL != f);
   bool bContinue = false;
 
   // Call the visit proc for this type's element type definition.
@@ -2755,7 +2755,7 @@ bool TypeDefinitionRename::visitPostOrder(VisitDefinitionProcType f, void *userD
 void TypeDefinitionString::Initialize()
 {
   // PRECONDITION: we should only initialize once.
-  assert (!_stringType);
+  ASSERTU (!_stringType);
 
   // Lookup the type definition; it must be one of the character types.
   _stringType = dynamic_cast<const TypeDefinitionCharacter *>
@@ -2763,7 +2763,7 @@ void TypeDefinitionString::Initialize()
 
   // POSTCONDITION: if the type definition does not exist then
   // the meta dictionary is invalid
-  assert (_stringType && TypeDefinition::null() != _stringType);
+  ASSERTU (_stringType && TypeDefinition::null() != _stringType);
 }
 
 void TypeDefinitionString::makeAxiomatic (void) const
@@ -2789,7 +2789,7 @@ const ClassDefinition *
 // the current definition before any dependent definitions.
 bool TypeDefinitionString::visitPreOrder(VisitDefinitionProcType f, void *userData) const
 {
-  assert(NULL != f);
+  ASSERTU(NULL != f);
   bool bContinue = false;
 
   // Call the visit proc for this type definition.
@@ -2807,7 +2807,7 @@ bool TypeDefinitionString::visitPreOrder(VisitDefinitionProcType f, void *userDa
 // the current definition after any dependent definitions.
 bool TypeDefinitionString::visitPostOrder(VisitDefinitionProcType f, void *userData) const
 {
-  assert(NULL != f);
+  ASSERTU(NULL != f);
   bool bContinue = false;
 
   // Call the visit proc for this type's element type definition.
@@ -2842,7 +2842,7 @@ void TypeDefinitionCharacter::Initialize()
   // We really only should persist 2 byte UNICODE...but for some
   // reason the we can specify and persist 1, and 4 byte characters.
   // (transdel 2000-MAR-17)
-//  assert((size() == 1) ||
+//  ASSERTU((size() == 1) ||
 //         (size() == 2) ||
 //         (size() == 4));
 }
@@ -2857,14 +2857,14 @@ const ClassDefinition *
 void TypeDefinitionSet::Initialize()
 {
   // PRECONDITION: we should only initialize once.
-  assert (!_elementType);
+  ASSERTU (!_elementType);
 
   // Lookup the type definition.
   _elementType = objectModel()->findTypeDefinition (elementTypeId());
 
   // POSTCONDITION: if the type definition does not exist then
   // the meta dictionary is invalid
-  assert (_elementType && TypeDefinition::null() != _elementType);
+  ASSERTU (_elementType && TypeDefinition::null() != _elementType);
 }
 
 void TypeDefinitionSet::makeAxiomatic (void) const
@@ -2890,7 +2890,7 @@ const ClassDefinition *
 // the current definition before any dependent definitions.
 bool TypeDefinitionSet::visitPreOrder(VisitDefinitionProcType f, void *userData) const
 {
-  assert(NULL != f);
+  ASSERTU(NULL != f);
   bool bContinue = false;
 
   // Call the visit proc for this type definition.
@@ -2908,7 +2908,7 @@ bool TypeDefinitionSet::visitPreOrder(VisitDefinitionProcType f, void *userData)
 // the current definition after any dependent definitions.
 bool TypeDefinitionSet::visitPostOrder(VisitDefinitionProcType f, void *userData) const
 {
-  assert(NULL != f);
+  ASSERTU(NULL != f);
   bool bContinue = false;
 
   // Call the visit proc for this set's element type definition.
@@ -2925,14 +2925,14 @@ bool TypeDefinitionSet::visitPostOrder(VisitDefinitionProcType f, void *userData
 void TypeDefinitionObjectReference::Initialize()
 {
   // PRECONDITION: we should only initialize once.
-  assert (!_target);
+  ASSERTU (!_target);
 
   // Lookup the class definition of the target object.
   _target = objectModel()->findClassDefinition (targetId());
 
   // POSTCONDITION: if the type definition does not exist then
   // the meta dictionary is invalid
-  assert (_target && ClassDefinition::null() != _target);
+  ASSERTU (_target && ClassDefinition::null() != _target);
 }
 
 void TypeDefinitionObjectReference::makeAxiomatic (void) const
@@ -2952,7 +2952,7 @@ void TypeDefinitionObjectReference::makeAxiomatic (void) const
 // the current definition before any dependent definitions.
 bool TypeDefinitionObjectReference::visitPreOrder(VisitDefinitionProcType f, void *userData) const
 {
-  assert(NULL != f);
+  ASSERTU(NULL != f);
   bool bContinue = false;
 
   // Call the visit proc for this type definition.
@@ -2970,7 +2970,7 @@ bool TypeDefinitionObjectReference::visitPreOrder(VisitDefinitionProcType f, voi
 // the current definition after any dependent definitions.
 bool TypeDefinitionObjectReference::visitPostOrder(VisitDefinitionProcType f, void *userData) const
 {
-  assert(NULL != f);
+  ASSERTU(NULL != f);
   bool bContinue = false;
 
   // Call the visit proc for this object reference's target definition.
@@ -3009,7 +3009,7 @@ void TypeDefinitionStrongReferenceVector::Initialize()
 
   // POSTCONDITION: if the type definition does not exist then
   // the meta dictionary is invalid
-  assert (type && TypeDefinition::null() != type);
+  ASSERTU (type && TypeDefinition::null() != type);
 }
 
 const ClassDefinition *
@@ -3024,13 +3024,13 @@ void TypeDefinitionWeakReference::Initialize(void)
 {
 	TypeDefinitionObjectReference::Initialize();
 
-	assert (targetSetCount() > 1);
+	ASSERTU (targetSetCount() > 1);
 
   // NOTE: The first property in array since it it special
   // and connot be found in the global list of properties (this
   // property is private to the OM). It NUST be one of the
   // "two-roots" of the file.
-	assert((0 == memcmp(_targetSet[0], &kAAFPropID_Root_MetaDictionary, sizeof(aafUID_t))) ||
+	ASSERTU((0 == memcmp(_targetSet[0], &kAAFPropID_Root_MetaDictionary, sizeof(aafUID_t))) ||
 	       (0 == memcmp(_targetSet[0], &kAAFPropID_Root_Header, sizeof(aafUID_t))));
 
 	// Make sure all of the other properties are in the dictionary.
@@ -3038,7 +3038,7 @@ void TypeDefinitionWeakReference::Initialize(void)
 	for (aafUInt32 i = 1; i < targetSetCount(); i++)
 	{
     propertyDefinition = objectModel()->findPropertyDefinition(_targetSet[i]);
-    assert (propertyDefinition && PropertyDefinition::null() != propertyDefinition);
+    ASSERTU (propertyDefinition && PropertyDefinition::null() != propertyDefinition);
 	}
 }
 
@@ -3066,7 +3066,7 @@ void TypeDefinitionWeakReference::makeAxiomatic (void) const
 aafUID_constptr
   TypeDefinitionWeakReference::targetAt(aafUInt32 index) const
 {
-	assert (targetSetCount() > index);
+	ASSERTU (targetSetCount() > index);
 	return _targetSet[index];
 }
 
@@ -3093,7 +3093,7 @@ void TypeDefinitionWeakReferenceVector::Initialize()
 
   // POSTCONDITION: if the type definition does not exist then
   // the meta dictionary is invalid
-  assert (type && TypeDefinition::null() != type);
+  ASSERTU (type && TypeDefinition::null() != type);
 }
 
 const ClassDefinition *
@@ -3108,14 +3108,14 @@ const ClassDefinition *
 void TypeDefinitionStream::Initialize()
 {
   // PRECONDITION: we should only initialize once.
-  assert (!_elementType);
+  ASSERTU (!_elementType);
 
   // Lookup the type definition; it must be one of the object reference types.
   _elementType = objectModel()->findTypeDefinition (elementTypeId());
 
   // POSTCONDITION: if the type definition does not exist then
   // the meta dictionary is invalid
-  assert (_elementType && TypeDefinition::null() != _elementType);
+  ASSERTU (_elementType && TypeDefinition::null() != _elementType);
 }
 
 void TypeDefinitionStream::makeAxiomatic (void) const
@@ -3141,7 +3141,7 @@ const ClassDefinition *
 // the current definition before any dependent definitions.
 bool TypeDefinitionStream::visitPreOrder(VisitDefinitionProcType f, void *userData) const
 {
-  assert(NULL != f);
+  ASSERTU(NULL != f);
   bool bContinue = false;
 
   // Call the visit proc for this type definition.
@@ -3159,7 +3159,7 @@ bool TypeDefinitionStream::visitPreOrder(VisitDefinitionProcType f, void *userDa
 // the current definition after any dependent definitions.
 bool TypeDefinitionStream::visitPostOrder(VisitDefinitionProcType f, void *userData) const
 {
-  assert(NULL != f);
+  ASSERTU(NULL != f);
   bool bContinue = false;
 
   // Call the visit proc for this set's element type definition.

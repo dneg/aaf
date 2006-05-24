@@ -27,7 +27,6 @@
 #include "ImplAAFSegment.h"
 #endif
 
-#include <assert.h>
 #include "aafErr.h"
 #include "AAFResult.h"
 
