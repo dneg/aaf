@@ -88,6 +88,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFSourceMob	*pSourceMob = NULL;
 	IAAFMob			*pMob = NULL;
 	IAAFEssenceDescriptor *edesc = NULL;
+	IAAFEssenceDescriptor2 *edesc2 = NULL;
 	aafProductIdentification_t	ProductInfo;
 	aafUInt32					numSubDescriptors;
 	HRESULT						hr = AAFRESULT_SUCCESS;
@@ -148,7 +149,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
  		checkResult(pSourceMob->SetEssenceDescriptor (edesc));
 
 			// Verify that there are no subdescriptors
-		checkResult(edesc->CountSubDescriptors(&numSubDescriptors));
+                checkResult(edesc->QueryInterface(IID_IAAFEssenceDescriptor2, (void **)&edesc2));
+		checkResult(edesc2->CountSubDescriptors(&numSubDescriptors));
 		checkExpression(0 == numSubDescriptors, AAFRESULT_TEST_FAILED);
 		
 		RegisterSubDescriptorTest( pDictionary );
@@ -158,12 +160,12 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 							   IID_IAAFSubDescriptor,
 							   (IUnknown**)&pSubDescriptor ) );		
 
-		checkResult(edesc->AppendSubDescriptor(pSubDescriptor));
+		checkResult(edesc2->AppendSubDescriptor(pSubDescriptor));
 		pSubDescriptor->Release();
 		pSubDescriptor = NULL;
 
 		// Verify that there is now one subdescriptor
-		checkResult(edesc->CountSubDescriptors(&numSubDescriptors));
+		checkResult(edesc2->CountSubDescriptors(&numSubDescriptors));
 		checkExpression(1 == numSubDescriptors, AAFRESULT_TEST_FAILED);
 
 		// Make a second subdescriptor, and attach it to the EssenceDescriptor
@@ -171,7 +173,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 							   IID_IAAFSubDescriptor,
 							   (IUnknown**)&pSubDescriptor ) );		
 	
-		checkResult(edesc->AppendSubDescriptor(pSubDescriptor));
+		checkResult(edesc2->AppendSubDescriptor(pSubDescriptor));
 		pSubDescriptor->Release();
 		pSubDescriptor = NULL;
 
@@ -191,6 +193,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 	if (edesc)
 		edesc->Release();
+
+	if (edesc2)
+		edesc2->Release();
 
 	if (pMob)
 		pMob->Release();
@@ -225,6 +230,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	IEnumAAFMobs *mobIter = NULL;
 	IAAFMob			*aMob = NULL;
 	IAAFEssenceDescriptor		*pEdesc = NULL;
+	IAAFEssenceDescriptor2		*pEdesc2 = NULL;
 	IAAFSourceMob				*pSourceMob = NULL;
 	IEnumAAFSubDescriptors *			pEnum = NULL;
 	IEnumAAFSubDescriptors *			pCloneEnum = NULL;
@@ -262,12 +268,13 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 
 			checkResult(aMob->QueryInterface (IID_IAAFSourceMob, (void **)&pSourceMob));
 			checkResult(pSourceMob->GetEssenceDescriptor (&pEdesc));
+			checkResult(pEdesc->QueryInterface(IID_IAAFEssenceDescriptor2, (void **)&pEdesc2));
 
 			// Verify that there is now two subdescriptors
-			checkResult(pEdesc->CountSubDescriptors(&numSubDescriptors));
+			checkResult(pEdesc2->CountSubDescriptors(&numSubDescriptors));
 		  checkExpression(2 == numSubDescriptors, AAFRESULT_TEST_FAILED);
 		
-			checkResult(pEdesc->GetSubDescriptors(&pEnum));
+			checkResult(pEdesc2->GetSubDescriptors(&pEnum));
 
 			/* Read and check the first element */
 			checkResult(pEnum->NextOne(&pSubDescriptor));
@@ -321,6 +328,9 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 			pEdesc->Release();
 			pEdesc = NULL;
 
+			pEdesc2->Release();
+			pEdesc2 = NULL;
+
 			pSourceMob->Release();
 			pSourceMob = NULL;
 
@@ -345,6 +355,9 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 
 	if (pEdesc)
 		pEdesc->Release();
+
+	if (pEdesc2)
+		pEdesc2->Release();
 
 	if (pSourceMob)
 		pSourceMob->Release();

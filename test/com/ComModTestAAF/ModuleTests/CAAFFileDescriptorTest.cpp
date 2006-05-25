@@ -74,6 +74,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFMob			*pMob = NULL;
 	IAAFEssenceDescriptor *edesc = NULL;
 	IAAFFileDescriptor *pFileDesc = NULL;
+	IAAFFileDescriptor2 *pFileDesc2 = NULL;
 	
 	aafProductIdentification_t	ProductInfo;
 	HRESULT						hr = S_OK;
@@ -147,7 +148,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		pContainer = NULL;
 
 		checkResult(pFileDesc->SetLength (checkLength));
-		checkResult(pFileDesc->SetLinkedSlotID (checkLinkedSlotID));
+		checkResult(pFileDesc->QueryInterface(IID_IAAFFileDescriptor2, (void **)&pFileDesc2));
+		checkResult(pFileDesc2->SetLinkedSlotID (checkLinkedSlotID));
 //		checkResult(pFileDesc->SetIsInContainer (kAAFTrue));
 		
 		checkResult(pSourceMob->SetEssenceDescriptor (edesc));
@@ -162,6 +164,10 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	
 	if (pFileDesc)
 		pFileDesc->Release();
+
+	if (pFileDesc2)
+		pFileDesc2->Release();
+
 	if (edesc)
 		edesc->Release();
 	
@@ -205,6 +211,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	IEnumAAFMobSlots	*slotIter = NULL;
 	IAAFMobSlot		*slot = NULL;
 	IAAFFileDescriptor *pFileDesc = NULL;
+	IAAFFileDescriptor2 *pFileDesc2 = NULL;
 	aafNumSlots_t	numMobs, n, s;
 	HRESULT						hr = S_OK;
 	aafRational_t				testSampleRate;
@@ -272,7 +279,8 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 			checkExpression(memcmp(&testContainer, &checkContainer, sizeof(testContainer)) == 0, AAFRESULT_TEST_FAILED);
 			checkResult(pFileDesc->GetLength (&testLength));
 			checkExpression(checkLength == testLength, AAFRESULT_TEST_FAILED);
-			checkResult(pFileDesc->GetLinkedSlotID (&testLinkedSlotID));
+			checkResult(pFileDesc->QueryInterface(IID_IAAFFileDescriptor2, (void **)&pFileDesc2));
+			checkResult(pFileDesc2->GetLinkedSlotID (&testLinkedSlotID));
 			checkExpression(checkLinkedSlotID == testLinkedSlotID, AAFRESULT_TEST_FAILED);
 //			checkResult(pFileDesc->GetIsInContainer (&testBool));
 //			checkExpression(testBool == kAAFTrue, AAFRESULT_TEST_FAILED);
@@ -281,6 +289,8 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 			pEdesc = NULL;
 			pFileDesc->Release();
 			pFileDesc = NULL;
+			pFileDesc2->Release();
+			pFileDesc2 = NULL;
 			pSourceMob->Release();
 			pSourceMob = NULL;
 			
@@ -300,6 +310,9 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	
 	if (pFileDesc)
 		pFileDesc->Release();
+			
+	if (pFileDesc2)
+		pFileDesc2->Release();
 			
 	if (slotIter)
 		slotIter->Release();

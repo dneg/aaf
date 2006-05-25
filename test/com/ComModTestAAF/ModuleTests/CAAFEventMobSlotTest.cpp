@@ -339,6 +339,7 @@ void EventMobSlotTest::CreateEventMobSlot()
   IAAFEvent *pEvent = NULL;
   IAAFSegment *pSegment = NULL;
   IAAFEventMobSlot *pEventMobSlot = NULL;
+  IAAFEventMobSlot2 *pEventMobSlot2 = NULL;
   IAAFMobSlot *pMobSlot = NULL;
   IAAFMob *pMob = NULL;
 
@@ -361,7 +362,12 @@ void EventMobSlotTest::CreateEventMobSlot()
 				CreateInstance(IID_IAAFEventMobSlot, 
 							   (IUnknown **)&pEventMobSlot));
     checkResult(pEventMobSlot->SetEditRate(const_cast<aafRational_t *>(&_editRate)));
-    checkResult(pEventMobSlot->SetEventSlotOrigin(_eventSlotOrigin));
+
+    // Check MobSlot2 functionality
+    checkResult(pEventMobSlot->QueryInterface(IID_IAAFEventMobSlot2, (void **)&pEventMobSlot2));
+    checkResult(pEventMobSlot2->SetEventSlotOrigin(_eventSlotOrigin));
+    pEventMobSlot2->Release();
+    pEventMobSlot2 = NULL;
 
     // Get the mob slot interface so that we can add the event segment.
     checkResult(pEventMobSlot->QueryInterface(IID_IAAFMobSlot, (void **)&pMobSlot));
@@ -415,6 +421,12 @@ void EventMobSlotTest::CreateEventMobSlot()
       pEventMobSlot = NULL;
     }
 
+    if (pEventMobSlot2)
+    {
+      pEventMobSlot2->Release();
+      pEventMobSlot2 = NULL;
+    }
+
     if (pSegment)
     {
       pSegment->Release();
@@ -441,6 +453,7 @@ void EventMobSlotTest::OpenEventMobSlot()
   IEnumAAFMobSlots *pEnumSlots = NULL;
   IAAFMobSlot *pMobSlot = NULL;
   IAAFEventMobSlot *pEventMobSlot = NULL;
+  IAAFEventMobSlot2 *pEventMobSlot2 = NULL;
   aafRational_t editRate = {0};
   aafPosition_t eventSlotOrigin;
   IAAFSegment *pSegment = NULL;
@@ -458,7 +471,8 @@ void EventMobSlotTest::OpenEventMobSlot()
     checkResult(pMobSlot->QueryInterface(IID_IAAFEventMobSlot, (void **)&pEventMobSlot));
     checkResult(pEventMobSlot->GetEditRate(&editRate));
     checkExpression(0 == memcmp(&editRate, &_editRate, sizeof(editRate)), AAFRESULT_TEST_FAILED);
-    checkResult(pEventMobSlot->GetEventSlotOrigin(&eventSlotOrigin));
+    checkResult(pEventMobSlot->QueryInterface(IID_IAAFEventMobSlot2, (void **)&pEventMobSlot2));
+    checkResult(pEventMobSlot2->GetEventSlotOrigin(&eventSlotOrigin));
     checkExpression(0 == memcmp(&eventSlotOrigin, &_eventSlotOrigin, sizeof(eventSlotOrigin)), AAFRESULT_TEST_FAILED);
 
     // Get the event slot's segment and check that it is an event.
@@ -471,6 +485,8 @@ void EventMobSlotTest::OpenEventMobSlot()
     pSegment = NULL;
     pEventMobSlot->Release();
     pEventMobSlot = NULL;
+    pEventMobSlot2->Release();
+    pEventMobSlot2 = NULL;
     pMobSlot->Release();
     pMobSlot = NULL;
     pEnumSlots->Release();
@@ -497,6 +513,12 @@ void EventMobSlotTest::OpenEventMobSlot()
     {
       pEventMobSlot->Release();
       pEventMobSlot = NULL;
+    }
+
+    if (pEventMobSlot2)
+    {
+      pEventMobSlot2->Release();
+      pEventMobSlot2 = NULL;
     }
 
     if (pMobSlot)
@@ -533,6 +555,7 @@ void EventMobSlotTest::CreateEventSequenceMobSlot()
   IAAFComponent *pComponent = NULL;
   IAAFSegment *pSegment = NULL;
   IAAFEventMobSlot *pEventMobSlot = NULL;
+  IAAFEventMobSlot2 *pEventMobSlot2 = NULL;
   IAAFMobSlot *pMobSlot = NULL;
   IAAFMob *pMob = NULL;
 
@@ -585,7 +608,10 @@ void EventMobSlotTest::CreateEventSequenceMobSlot()
 				CreateInstance(IID_IAAFEventMobSlot, 
 							   (IUnknown **)&pEventMobSlot));
     checkResult(pEventMobSlot->SetEditRate(const_cast<aafRational_t *>(&_editRate)));
-    checkResult(pEventMobSlot->SetEventSlotOrigin(_eventSlotOrigin));
+    checkResult(pEventMobSlot->QueryInterface(IID_IAAFEventMobSlot2, (void **)&pEventMobSlot2));
+    checkResult(pEventMobSlot2->SetEventSlotOrigin(_eventSlotOrigin));
+    pEventMobSlot2->Release();
+    pEventMobSlot2 = NULL;
 
     // Get the mob slot interface so that we can add the event segment.
     checkResult(pEventMobSlot->QueryInterface(IID_IAAFMobSlot, (void **)&pMobSlot));
@@ -639,6 +665,12 @@ void EventMobSlotTest::CreateEventSequenceMobSlot()
       pEventMobSlot = NULL;
     }
 
+    if (pEventMobSlot2)
+    {
+      pEventMobSlot2->Release();
+      pEventMobSlot2 = NULL;
+    }
+
     if (pSegment)
     {
       pSegment->Release();
@@ -677,6 +709,7 @@ void EventMobSlotTest::OpenEventSequenceMobSlot()
   IEnumAAFMobSlots *pEnumSlots = NULL;
   IAAFMobSlot *pMobSlot = NULL;
   IAAFEventMobSlot *pEventMobSlot = NULL;
+  IAAFEventMobSlot2 *pEventMobSlot2 = NULL;
   aafRational_t editRate = {0};
   aafPosition_t eventSlotOrigin;
   IAAFSegment *pSegment = NULL;
@@ -694,7 +727,8 @@ void EventMobSlotTest::OpenEventSequenceMobSlot()
     checkResult(pMobSlot->QueryInterface(IID_IAAFEventMobSlot, (void **)&pEventMobSlot));
     checkResult(pEventMobSlot->GetEditRate(&editRate));
     checkExpression(0 == memcmp(&editRate, &_editRate, sizeof(editRate)), AAFRESULT_TEST_FAILED);
-    checkResult(pEventMobSlot->GetEventSlotOrigin(&eventSlotOrigin));
+    checkResult(pEventMobSlot->QueryInterface(IID_IAAFEventMobSlot2, (void **)&pEventMobSlot2));
+    checkResult(pEventMobSlot2->GetEventSlotOrigin(&eventSlotOrigin));
     checkExpression(0 == memcmp(&eventSlotOrigin, &_eventSlotOrigin, sizeof(eventSlotOrigin)), AAFRESULT_TEST_FAILED);
 
     // Get the event slot's segment and check that it is an event.
@@ -708,6 +742,8 @@ void EventMobSlotTest::OpenEventSequenceMobSlot()
     pSegment = NULL;
     pEventMobSlot->Release();
     pEventMobSlot = NULL;
+    pEventMobSlot2->Release();
+    pEventMobSlot2 = NULL;
     pMobSlot->Release();
     pMobSlot = NULL;
     pEnumSlots->Release();
@@ -734,6 +770,12 @@ void EventMobSlotTest::OpenEventSequenceMobSlot()
     {
       pEventMobSlot->Release();
       pEventMobSlot = NULL;
+    }
+
+    if (pEventMobSlot2)
+    {
+      pEventMobSlot2->Release();
+      pEventMobSlot2 = NULL;
     }
 
     if (pMobSlot)
