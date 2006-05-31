@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2005, Licensor of the
+// The Original Code of this file is Copyright 1998-2006, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -44,7 +44,7 @@ OMXMLStoredStream::~OMXMLStoredStream(void)
   PRECONDITION("Stream not open", _store == 0);
 }
 
-void OMXMLStoredStream::read(void* data, size_t size) const
+void OMXMLStoredStream::read(void* data, OMUInt32 size) const
 {
   TRACE("OMXMLStoredStream::read");
   PRECONDITION("Valid store", _store != 0);
@@ -72,7 +72,7 @@ void OMXMLStoredStream::read(OMByte* data,
   nonConstThis->_position = _position + bytesRead;
 }
 
-void OMXMLStoredStream::write(void* data, size_t size)
+void OMXMLStoredStream::write(void* data, OMUInt32 size)
 {
   TRACE("OMXMLStoredStream::write");
   PRECONDITION("Valid store", _store != 0);

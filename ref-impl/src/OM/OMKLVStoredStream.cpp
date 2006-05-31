@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2005, Licensor of the
+// The Original Code of this file is Copyright 1998-2006, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -47,7 +47,7 @@ OMKLVStoredStream::~OMKLVStoredStream(void)
   PRECONDITION("Stream not open", _store == 0);
 }
 
-void OMKLVStoredStream::read(void* ANAME(data), size_t ANAME(size)) const
+void OMKLVStoredStream::read(void* ANAME(data), OMUInt32 ANAME(size)) const
 {
   TRACE("OMKLVStoredStream::read");
   PRECONDITION("Valid store", _store != 0);
@@ -71,7 +71,7 @@ void OMKLVStoredStream::read(OMByte* data,
   nonConstThis->_position = _position + bytesRead;
 }
 
-void OMKLVStoredStream::write(void* ANAME(data), size_t ANAME(size))
+void OMKLVStoredStream::write(void* ANAME(data), OMUInt32 ANAME(size))
 {
   TRACE("OMKLVStoredStream::write");
   PRECONDITION("Valid store", _store != 0);

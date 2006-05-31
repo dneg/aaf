@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2006, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -45,7 +45,7 @@ public:
 
     // @cmember Read <p size> bytes from this <c OMStoredStream>
     //          into the buffer at address <p data>.
-  virtual void read(void* data, size_t size) const;
+  virtual void read(void* data, OMUInt32 size) const;
 
     // @cmember Attempt to read <p bytes> bytes from this
     //          <c OMStoredStream> into the buffer at address <p data>.
@@ -56,7 +56,7 @@ public:
 
     // @cmember Write <p size> bytes from the buffer at address
     //          <p data> to this <c OMStoredStream>.
-  virtual void write(void* data, size_t size);
+  virtual void write(void* data, OMUInt32 size);
 
     // @cmember Attempt to write <p bytes> bytes from the buffer at
     //          address <p data> to this <c OMStoredStream>. The actual
