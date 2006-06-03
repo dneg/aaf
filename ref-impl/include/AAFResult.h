@@ -350,7 +350,7 @@
 #define AAF_RESULT_USE_MULTI_CREATE AAFRESULT_USE_MULTI_CREATE
 
 /* Non-AAF codes */
-#define AAFRESULT_NOT_IMPLEMENTED                           ((HRESULT)0x80004001L)
-#define HRESULT_NOT_IMPLEMENTED                             ((HRESULT)0x80004001L)
+#define HRESULT_NOT_IMPLEMENTED                  ((HRESULT)0x80004001L)
+#define AAFRESULT_NOT_IMPLEMENTED                HRESULT_NOT_IMPLEMENTED
 
 #endif // ! __AAFResult_h__
