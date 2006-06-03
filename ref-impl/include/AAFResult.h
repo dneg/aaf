@@ -321,9 +321,6 @@
 /* Testing Error Codes */
 #define AAFRESULT_TEST_FAILED               MAKE_AAFHRESULT(0x01F4)
 #define AAFRESULT_TEST_PARTIAL_SUCCESS      MAKE_AAFHRESULT(0x01F5)
-#define AAFRESULT_NOT_IMPLEMENTED                           ((HRESULT)0x80004001L)
-#define HRESULT_NOT_IMPLEMENTED                             ((HRESULT)0x80004001L)
-
 
 /* Property access error codes */
 #define AAFRESULT_BAD_SIZE                       MAKE_AAFHRESULT(0x0200)
@@ -351,5 +348,9 @@
 
 /* For compatibility */
 #define AAF_RESULT_USE_MULTI_CREATE AAFRESULT_USE_MULTI_CREATE
+
+/* Non-AAF codes */
+#define AAFRESULT_NOT_IMPLEMENTED                           ((HRESULT)0x80004001L)
+#define HRESULT_NOT_IMPLEMENTED                             ((HRESULT)0x80004001L)
 
 #endif // ! __AAFResult_h__
