@@ -52,7 +52,7 @@ static char    *localErrorStrings[300];
 char *aafGetErrorString(
 		aafErr_t code)
 {
-	if (code < AAFRESULT_MAXCODE && code >= 0 && localErrorStrings[0] != '\0')
+	if (code < 300 && code >= 0 && localErrorStrings[0] != '\0')
 		return (localErrorStrings[code]);
 	else
 		return ("AAF_ERR: Unknown error code");

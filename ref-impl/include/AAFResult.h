@@ -344,8 +344,6 @@
     /* Expected symbol not exported from DLL. Need newer DLL. */
 
 
-#define AAFRESULT_MAXCODE                   MAKE_AAFHRESULT(0x0401)
-
 /* For compatibility */
 #define AAF_RESULT_USE_MULTI_CREATE AAFRESULT_USE_MULTI_CREATE
 
