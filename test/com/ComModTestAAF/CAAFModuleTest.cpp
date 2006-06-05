@@ -321,7 +321,7 @@ HRESULT CAAFModuleTest::Test
 			index = findObjectTestInfo(pClassName[i]);
 			if (index!=static_cast<aafUInt32>(-1)) {
 				testResults[index] = AAFObjectMap[index].CallTestProc(mode, fileKind, rawStorageType);
-				if (testResults[index]!=AAFRESULT_SUCCESS) {
+				if (testResults[index]!=AAFRESULT_SUCCESS && testResults[index]!=-1/* Skipped */) {
 					printNotSuccess(testResults[index]);
 					if (hr==AAFRESULT_SUCCESS) {
 						hr=testResults[index];
@@ -391,69 +391,34 @@ HRESULT CAAFModuleTest::Test
 
 		passCount = 0;
 		for ( index = 0; index < MAX_TEST_COUNT; index++ ) {
-			if ( AAFRESULT_SUCCESS == testResults[index] )
-			{
-				++passCount;
-				std::wcout << std::left << std::setw(3) << ++totalTestCount;
+			switch (testResults[index]) {
+				case AAFRESULT_SUCCESS:
+					++passCount;
+					break;
+				case AAFRESULT_NOT_IN_CURRENT_VERSION:
+					++notInCurrentCount;
+					break;
+				case AAFRESULT_TEST_PARTIAL_SUCCESS:
+					++partialSuccessCount;
+					break;
+				case AAFRESULT_NOT_IMPLEMENTED:
+					++nImplCount;
+					break;
+				case -1:
+					++skippedCount;
+					break;
+				default:
+					++failCount;
+					break;
+			}
+			++totalTestCount;
+
+			if (testResults[index] != -1) {
 				printName(AAFObjectMap[index].pClassName);
 				printResult(mode, testResults[index]);
 			}
 		}
 
-		for ( index = 0; index < MAX_TEST_COUNT; index++ ) {
-			if ( AAFRESULT_NOT_IN_CURRENT_VERSION == testResults[index] )
-			{
-				++notInCurrentCount;
-				std::wcout << std::left << std::setw(3) << ++totalTestCount;
-				printName( AAFObjectMap[index].pClassName);
-				printResult(mode, testResults[index]);
-			}
-		}
-
-		for ( index = 0; index < MAX_TEST_COUNT; index++ ) {
-			if ( AAFRESULT_TEST_PARTIAL_SUCCESS == testResults[index] )
-			{
-				++partialSuccessCount;    
-				std::wcout << std::left << std::setw(3) << ++totalTestCount;
-				printName(AAFObjectMap[index].pClassName);
-				printResult(mode, testResults[index]);
-			}
-		}
-
-		for ( index = 0; index < MAX_TEST_COUNT; index++ ) {
-			if (AAFRESULT_SUCCESS != testResults[index]
-				&& AAFRESULT_NOT_IMPLEMENTED != testResults[index]
-				&& AAFRESULT_NOT_IN_CURRENT_VERSION != testResults[index]
-				&& AAFRESULT_TEST_PARTIAL_SUCCESS != testResults[index]
-				&& -1 !=  testResults[index])
-			{
-				++failCount;
-				std::wcout << std::left << std::setw(3) << ++totalTestCount;
-				printName(AAFObjectMap[index].pClassName);
-				printResult(mode, testResults[index]);
-			}
-		}
-
-		for ( index = 0; index < MAX_TEST_COUNT; index++ ) {
-			if ( AAFRESULT_NOT_IMPLEMENTED == testResults[index])
-			{
-				++nImplCount;
-				std::wcout << std::left << std::setw(3) << ++totalTestCount;
-				printName(AAFObjectMap[index].pClassName);
-				printResult(mode, testResults[index]);
-			}
-		}
-
-		for ( index = 0; index < MAX_TEST_COUNT; index++ )
-		{
-			if ( -1  == testResults[index])
-			{
-				++skippedCount;
-				std::wcout << std::left << std::setw(3) << ++totalTestCount;
-				printName(AAFObjectMap[index].pClassName);
-				printResult(mode, testResults[index]);
-			}
-		}
 
 		std::wcout << std::endl << std::endl
 			<< std::left << std::setw(20) << L"  Tests Run:"<< testCount << std::endl
