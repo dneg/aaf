@@ -91,9 +91,6 @@ $(DYN_LIBTARGET) : $(CXXOBJS) $(CXXOBJS2) \
 				$(AAFBUILDDIR)/ref-impl/$(AAFTARGETDIR)/libimpl$(LIB) \
 				$(AAFBUILDDIR)/OM/$(AAFTARGETDIR)/libom$(LIB) $(STORAGE_LIBS)
 
-ifeq ($(AAFPLATFORM),PPCDarwin)
-	ranlib -s $(STORAGE_LIBS)
-endif
 	$(LD_DYN_LIB) $(CXXOBJS) $(CXXOBJS2) -o $@ \
 	$(AAFBUILDDIR)/ref-impl/$(AAFTARGETDIR)/libimpl$(LIB) \
 	$(AAFBUILDDIR)/OM/$(AAFTARGETDIR)/libom$(LIB) \
