@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2005, Licensor of the
+// The Original Code of this file is Copyright 1998-2006, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -114,7 +114,7 @@ const char* prefix = "kAAFTypeID_";
 #define AAF_REFERENCE_TYPE(type, target)      AAF_TYPE(target##type)
 #define AAF_REFERENCE_TYPE_NAME(type, target) AAF_TYPE(target##type)
 
-struct {
+struct typesTag {
   char* name;
   uid identifier;
 } types [] = {

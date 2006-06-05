@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2005, Licensor of the
+// The Original Code of this file is Copyright 1998-2006, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -39,7 +39,7 @@ const char* prefix = "kAAFClassID_";
 #define AAF_ALIAS_SEPARATOR() ,
 #define AAF_ALIAS_TABLE_END()   };
 
-struct {
+struct aliasTag {
   char* name;
   char* alias;
 } aliases [] =
@@ -50,7 +50,7 @@ struct {
 #define AAF_CLASS_SEPARATOR() ,
 #define AAF_TABLE_END()   };
 
-struct {
+struct classesTag {
   char* name;
   uid identifier;
 } classes [] =
