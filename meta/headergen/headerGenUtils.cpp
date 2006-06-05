@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2005, Licensor of the
+// The Original Code of this file is Copyright 1998-2006, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -70,7 +70,7 @@ void printCopyright (const char* originator, ostream & s)
 "// the License for the specific language governing rights and limitations\n"
 "// under the License.\n"
 "//\n"
-"// The Original Code of this file is Copyright 1998-2005, Licensor of the\n"
+"// The Original Code of this file is Copyright 1998-2006, Licensor of the\n"
 "// AAF Association.\n"
 "//\n"
 "// The Initial Developer of the Original Code of this file and the\n"
