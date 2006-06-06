@@ -32,6 +32,9 @@
 #define MAKE_AAFHRESULT( code ) \
     ((HRESULT) (((aafUInt32)(SEVERITY_ERROR)<<31) | ((aafUInt32)(_FACILITY_AAF)<<16) | ((aafUInt32)(code))) )
 
+/* Legacy non-AAF codes */
+#define AAFRESULT_NOT_IMPLEMENTED                 ((HRESULT)0x80004001L)
+
 /* Success codes */
 #define AAFRESULT_SUCCESS                                   0
 
@@ -345,10 +348,7 @@
 /* For compatibility */
 #define AAF_RESULT_USE_MULTI_CREATE               AAFRESULT_USE_MULTI_CREATE
 #define AAFRESULT_INCONSISTANCY                   AAFRESULT_INCONSISTENCY
+#define HRESULT_NOT_IMPLEMENTED                   AAFRESULT_NOT_IMPLEMENTED
 #define HRESULT_SUCCESS                           AAFRESULT_SUCCESS
-
-/* Non-AAF codes */
-#define HRESULT_NOT_IMPLEMENTED                   ((HRESULT)0x80004001L)
-#define AAFRESULT_NOT_IMPLEMENTED                 HRESULT_NOT_IMPLEMENTED
 
 #endif // ! __AAFResult_h__
