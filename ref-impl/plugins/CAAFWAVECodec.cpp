@@ -335,7 +335,7 @@ HRESULT STDMETHODCALLTYPE
   if (! pDataDefID)
 	return AAFRESULT_NOT_IMPLEMENTED;
 
-  return HRESULT_NOT_IMPLEMENTED;
+  return AAFRESULT_NOT_IMPLEMENTED;
 }
 
 //!!!Need a way to convert between CLSID and aafUID_t
@@ -459,7 +459,7 @@ HRESULT STDMETHODCALLTYPE
 		wchar_t *   /*pName*/,
         aafUInt32  * /*bytesWritten*/)
 {
-	return HRESULT_NOT_IMPLEMENTED;
+	return AAFRESULT_NOT_IMPLEMENTED;
 }
 
 		

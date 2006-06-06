@@ -339,7 +339,7 @@ HRESULT STDMETHODCALLTYPE
         aafMobID_constptr /* pMobID */,
         IAAFEssenceStream ** /* ppEssenceStream */)
 {
-  return HRESULT_NOT_IMPLEMENTED;
+  return AAFRESULT_NOT_IMPLEMENTED;
 }
 
 

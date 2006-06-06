@@ -339,7 +339,7 @@ CAAFAIFCCodec::GetIndexedDataDefinition (aafUInt32  /*index*/,
 	if (! pDataDefID)
 		return AAFRESULT_NOT_IMPLEMENTED;
 	
-	return HRESULT_NOT_IMPLEMENTED;
+	return AAFRESULT_NOT_IMPLEMENTED;
 }
 
 //!!!Need a way to convert between CLSID and aafUID_t
@@ -463,7 +463,7 @@ CAAFAIFCCodec::ValidateEssence (IAAFSourceMob * /*fileMob*/,
 								wchar_t *   /*pName*/,
 								aafUInt32  * /*bytesWritten*/)
 {
-	return HRESULT_NOT_IMPLEMENTED;
+	return AAFRESULT_NOT_IMPLEMENTED;
 }
 
 

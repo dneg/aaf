@@ -371,7 +371,7 @@ HRESULT STDMETHODCALLTYPE
 {
 	plugin_trace("CAAFEssenceRIFFWAVEContainer::CreateEssenceStreamWriteOnly()\n");
 
-  return HRESULT_NOT_IMPLEMENTED;
+  return AAFRESULT_NOT_IMPLEMENTED;
 }
 
 
