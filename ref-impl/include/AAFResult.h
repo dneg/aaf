@@ -34,7 +34,6 @@
 
 /* Success codes */
 #define AAFRESULT_SUCCESS                                   0
-#define HRESULT_SUCCESS                                     0
 
 /* SESSION/FILE Error Codes */
 #define AAFRESULT_BAD_SESSION                     MAKE_AAFHRESULT(0x0010)
@@ -346,6 +345,7 @@
 /* For compatibility */
 #define AAF_RESULT_USE_MULTI_CREATE               AAFRESULT_USE_MULTI_CREATE
 #define AAFRESULT_INCONSISTANCY                   AAFRESULT_INCONSISTENCY
+#define HRESULT_SUCCESS                           AAFRESULT_SUCCESS
 
 /* Non-AAF codes */
 #define HRESULT_NOT_IMPLEMENTED                   ((HRESULT)0x80004001L)
