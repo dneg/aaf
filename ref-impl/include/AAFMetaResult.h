@@ -284,7 +284,7 @@ AAF_DEFINE_ERROR(PROPID_MATCH,                   0x01C8, "")
 AAF_DEFINE_ERROR(INTERNAL_DIVIDE,                0x01C9, "")
 AAF_DEFINE_ERROR(ABSTRACT_CLASS,                 0x01CA, "")
 AAF_DEFINE_ERROR(WRONG_SIZE,                     0x01CB, "")
-AAF_DEFINE_ERROR(INCONSISTANCY,                  0x01CC, "")
+AAF_DEFINE_ERROR(INCONSISTENCY,                  0x01CC, "")
 
 AAF_ERROR_SECTION("INTERNAL Error Codes - programming errors")
 AAF_DEFINE_ERROR(ASSERTION_VIOLATION,            0x01D0,
