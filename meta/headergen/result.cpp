@@ -2,13 +2,25 @@
 #include <string>
 using namespace std;
 
+void comment(const char* s)
+{
+  cout << "/* ";
+  cout << s;
+  cout << " */";
+}
+
+void section(const char* s)
+{
+  cout << endl;
+  comment(s);
+  cout << endl;
+}
+
 void genCode(const char* name, unsigned long int val, const char* desc)
 {
   if (strlen(desc) != 0) {
     cout << "        ";
-    cout << "/* ";
-    cout << desc;
-    cout << " */";
+    comment(desc);
     cout << endl;
   }
   cout << "#define AAFRESULT_" << name;
@@ -28,7 +40,7 @@ void genCode(const char* name, unsigned long int val, const char* desc)
 
 int main()
 {
-#define COMMENT(s)
+#define AAF_ERROR_SECTION(s) section(s);
 #define AAF_DEFINE_ERROR(name, val, desc) genCode(#name, val, desc);
 #include "AAFErrorDefs.h"
 }
