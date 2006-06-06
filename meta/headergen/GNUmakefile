@@ -115,7 +115,7 @@ genDefInstances$(OBJ) : genDefInstances.cpp headerGenUtils.h ../AAFMetaDictionar
 result$(EXE) : headerGenUtils$(OBJ) result$(OBJ)
 	$(LINK) $^ -o $@
 
-result$(OBJ) : result.cpp headerGenUtils.h ../AAFMetaDictionary.h
+result$(OBJ) : result.cpp headerGenUtils.h ../../ref-impl/include/AAFMetaResult.h
 	$(COMPILE) $(COMPILEFLAGS) -c $< -o $@
 
 
