@@ -108,7 +108,7 @@ static void doFile(const char* moduleName)
 
   cout << "#define MAKE_AAFHRESULT( code ) \\";
   cout << endl;
-  cout << "    ((HRESULT) (((aafUInt32)(SEVERITY_ERROR)<<31) | \\";
+  cout << "    ((HRESULT) (((aafUInt32)(1)             <<31) | \\";
   cout << endl;
   cout << "                ((aafUInt32)(_FACILITY_AAF) <<16) | \\";
   cout << endl;
