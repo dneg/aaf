@@ -283,8 +283,10 @@ AAF_DEFINE_ERROR(WRONG_SIZE,                     0x01CB, "")
 AAF_DEFINE_ERROR(INCONSISTANCY,                  0x01CC, "")
 
 AAF_ERROR_SECTION("INTERNAL Error Codes - programming errors")
-AAF_DEFINE_ERROR(ASSERTION_VIOLATION,            0x01D0, "Assertion violation")
-AAF_DEFINE_ERROR(UNEXPECTED_EXCEPTION,           0x01D1, "Unexpected C++ exception")
+AAF_DEFINE_ERROR(ASSERTION_VIOLATION,            0x01D0,
+    "Assertion violation")
+AAF_DEFINE_ERROR(UNEXPECTED_EXCEPTION,           0x01D1,
+    "Unexpected C++ exception")
 
 AAF_ERROR_SECTION("Testing Error Codes")
 AAF_DEFINE_ERROR(TEST_FAILED,                    0x01F4, "")
@@ -306,8 +308,10 @@ AAF_DEFINE_ERROR(PLUGIN_CIRCULAR_REFERENCE,      0x0304, "")
 AAF_DEFINE_ERROR(PLUGIN_INVALID_REFERENCE_COUNT, 0x0305, "")
 
 AAF_ERROR_SECTION("DLL/Shared Library runtime error codes")
-AAF_DEFINE_ERROR(DLL_LOAD_FAILED,                0x0400, "Either the DLL or a dependent DLL could not be found and loaded")
-AAF_DEFINE_ERROR(DLL_SYMBOL_NOT_FOUND,           0x0401, "Expected symbol not exported from DLL. Need newer DLL")
+AAF_DEFINE_ERROR(DLL_LOAD_FAILED,                0x0400,
+    "Either the DLL or a dependent DLL could not be found and loaded")
+AAF_DEFINE_ERROR(DLL_SYMBOL_NOT_FOUND,           0x0401,
+    "Expected symbol not exported from DLL. Need newer DLL")
 
 #undef AAF_DEFINE_ERROR
 #undef AAF_ERROR_SECTION
