@@ -96,6 +96,32 @@ static void doFile(const char* moduleName)
   printBeginGuard(moduleName, cout);
   printCopyright(cout);
 
+  cout << "#define AAFRESULT_FAILED(Status) ((AAFRESULT)(Status)<0)";
+  cout << endl;
+  cout << "#define AAFRESULT_SUCCEEDED(Status) (!(AAFRESULT_FAILED(Status)))";
+  cout << endl;
+
+  cout << endl;
+
+  cout << "#define _FACILITY_AAF 0x12";
+  cout << endl;
+
+  cout << "#define MAKE_AAFHRESULT( code ) \\";
+  cout << endl;
+  cout << "    ((HRESULT) (((aafUInt32)(SEVERITY_ERROR)<<31) | \\";
+  cout << endl;
+  cout << "                ((aafUInt32)(_FACILITY_AAF) <<16) | \\";
+  cout << endl;
+  cout << "                ((aafUInt32)(code))) )";
+  cout << endl;
+
+  cout << endl;
+
+  cout << "/* Non-AAF codes */";
+  cout << endl;
+  cout << "#define AAFRESULT_NOT_IMPLEMENTED                 ((HRESULT)0x80004001L)";
+  cout << endl;
+
 #define AAF_ERROR_SECTION(s) section(s);
 #define AAF_DEFINE_ERROR(name, val, desc) genCode(#name, val, desc);
 #define AAF_DEFINE_SUCCESS(name, code) success("AAFRESULT_"#name, code);
