@@ -29,6 +29,6 @@ void genCode(const char* name, unsigned long int val, const char* desc)
 int main()
 {
 #define COMMENT(s)
-#define ERROR(name, val, desc) genCode(#name, val, desc);
+#define AAF_DEFINE_ERROR(name, val, desc) genCode(#name, val, desc);
 #include "AAFErrorDefs.h"
 }
