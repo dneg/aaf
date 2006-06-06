@@ -24,6 +24,8 @@
 
 // Author : Tim Bingham (Tim_Bingham@avid.com)
 
+#include "headerGenUtils.h"
+
 #include <iostream>
 #include <string>
 using namespace std;
@@ -80,10 +82,26 @@ void alias(const char* fullOldName, const char* name)
   cout << "AAFRESULT_" << name << endl;
 }
 
-int main()
+static void doFile(const char* moduleName)
 {
+  assert(moduleName);
+  printBeginGuard(moduleName, cout);
+  printCopyright(cout);
+
 #define AAF_ERROR_SECTION(s) section(s);
 #define AAF_DEFINE_ERROR(name, val, desc) genCode(#name, val, desc);
 #define AAF_DEFINE_ERROR_ALIAS(fullOldName, name) alias(#fullOldName, #name);
-#include "AAFErrorDefs.h"
+#include "AAFMetaResult.h"
+
+  printEndGuard(moduleName, cout);
 }
+
+int main(int argc, char** argv)
+{
+  char* moduleName = 0;
+  validateArgs(argc, argv, moduleName);
+  assert(moduleName);
+  doFile(moduleName);
+  return 0;
+}
+
