@@ -30,7 +30,9 @@
 
 #define _FACILITY_AAF 0x12
 #define MAKE_AAFHRESULT( code ) \
-    ((HRESULT) (((aafUInt32)(SEVERITY_ERROR)<<31) | ((aafUInt32)(_FACILITY_AAF)<<16) | ((aafUInt32)(code))) )
+    ((HRESULT) (((aafUInt32)(SEVERITY_ERROR)<<31) | \
+                ((aafUInt32)(_FACILITY_AAF) <<16) | \
+                ((aafUInt32)(code))) )
 
 /* Non-AAF codes */
 #define AAFRESULT_NOT_IMPLEMENTED                 ((HRESULT)0x80004001L)
