@@ -38,7 +38,8 @@ PROGS=classDefUid$(EXE) \
 	propertyId$(EXE) \
 	storedObjectUid$(EXE) \
 	typeDefUid$(EXE) \
-	genDefInstances$(EXE)
+	genDefInstances$(EXE) \
+	result$(EXE)
 
 HEADERS=AAFClassDefUIDs.h \
 	AAFExtEnum.h \
@@ -56,7 +57,8 @@ HEADERS=AAFClassDefUIDs.h \
 	AAFTaggedValueDefs.h \
 	AAFPluginDefs.h \
 	AAFCodecDefs.h \
-	AAFCompressionDefs.h
+	AAFCompressionDefs.h \
+	AAFResult.h
 
 # main build target
 all : $(PROGS) \
@@ -108,6 +110,12 @@ genDefInstances$(EXE) : headerGenUtils$(OBJ) genDefInstances$(OBJ)
 	$(LINK) $^ -o $@
 
 genDefInstances$(OBJ) : genDefInstances.cpp headerGenUtils.h ../AAFMetaDictionary.h
+	$(COMPILE) $(COMPILEFLAGS) -c $< -o $@
+
+result$(EXE) : headerGenUtils$(OBJ) result$(OBJ)
+	$(LINK) $^ -o $@
+
+result$(OBJ) : result.cpp headerGenUtils.h ../AAFMetaDictionary.h
 	$(COMPILE) $(COMPILEFLAGS) -c $< -o $@
 
 
@@ -170,6 +178,9 @@ $(GEN_H_DIR)/AAFCodecDefs.h : genDefInstances$(EXE)
 $(GEN_H_DIR)/AAFCompressionDefs.h : genDefInstances$(EXE)
 	./genDefInstances CompressionDefinition kAAF > $(GEN_H_DIR)/AAFCompressionDefs.h
 
+$(GEN_H_DIR)/AAFResult.h : result$(EXE)
+	./result AAFResult > $(GEN_H_DIR)/AAFResult.h
+
 # install targets
 
 $(INSTALL_H_DIR)/AAFClassDefUIDs.h : $(GEN_H_DIR)/AAFClassDefUIDs.h
@@ -224,6 +235,9 @@ $(INSTALL_H_DIR)/AAFCodecDefs.h : $(GEN_H_DIR)/AAFCodecDefs.h
 
 $(INSTALL_H_DIR)/AAFCompressionDefs.h : $(GEN_H_DIR)/AAFCompressionDefs.h
 	$(CP) $(GEN_H_DIR)/AAFCompressionDefs.h $(INSTALL_H_DIR)/AAFCompressionDefs.h
+
+$(INSTALL_H_DIR)/AAFResult.h : $(GEN_H_DIR)/AAFResult.h
+	$(CP) $(GEN_H_DIR)/AAFResult.h $(INSTALL_H_DIR)/AAFResult.h
 
 # other targets
 
