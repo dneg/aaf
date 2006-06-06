@@ -38,9 +38,26 @@ void genCode(const char* name, unsigned long int val, const char* desc)
   cout << endl;
 }
 
+void alias(const char* fullOldName, const char* name)
+{
+  cout << "#define " << fullOldName;
+  size_t len = strlen(fullOldName);
+  const size_t codeAlign = 32 + strlen("AAFRESULT_");
+  if (len < codeAlign) {
+    size_t spaces = codeAlign - len;
+    for (size_t i = 0; i < spaces; i++) {
+      cout << " ";
+    }
+  } else {
+    cout << " ";
+  }
+  cout << "AAFRESULT_" << name << endl;
+}
+
 int main()
 {
 #define AAF_ERROR_SECTION(s) section(s);
 #define AAF_DEFINE_ERROR(name, val, desc) genCode(#name, val, desc);
+#define AAF_DEFINE_ERROR_ALIAS(fullOldName, name) alias(#fullOldName, #name);
 #include "AAFErrorDefs.h"
 }
