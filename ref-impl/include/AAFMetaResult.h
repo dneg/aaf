@@ -3,6 +3,10 @@
 #define AAF_DEFINE_ERROR(name, code, description)
 #endif
 
+#if !defined(AAF_DEFINE_SUCCESS)
+#define AAF_DEFINE_SUCCESS(name, code)
+#endif
+
 #if !defined(AAF_ERROR_SECTION)
 #define AAF_ERROR_SECTION(description)
 #endif
@@ -10,6 +14,9 @@
 #if !defined(AAF_DEFINE_ERROR_ALIAS)
 #define AAF_DEFINE_ERROR_ALIAS(fullOldName, name)
 #endif
+
+AAF_ERROR_SECTION("Success codes")
+AAF_DEFINE_SUCCESS(SUCCESS, 0)
 
 AAF_ERROR_SECTION("SESSION/FILE Error Codes")
 AAF_DEFINE_ERROR(BAD_SESSION,                    0x0010, "")
@@ -324,5 +331,6 @@ AAF_DEFINE_ERROR_ALIAS(HRESULT_NOT_IMPLEMENTED, NOT_IMPLEMENTED)
 AAF_DEFINE_ERROR_ALIAS(HRESULT_SUCCESS, SUCCESS)
 
 #undef AAF_DEFINE_ERROR
+#undef AAF_DEFINE_SUCCESS
 #undef AAF_ERROR_SECTION
 #undef AAF_DEFINE_ERROR_ALIAS
