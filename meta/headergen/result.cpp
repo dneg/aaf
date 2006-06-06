@@ -13,11 +13,14 @@ void genCode(const char* name, unsigned long int val, const char* desc)
   }
   cout << "#define AAFRESULT_" << name;
   size_t len = strlen(name);
-  if (len < 32) {
-    size_t spaces = 32 - len;
+  const size_t codeAlign = 32;
+  if (len < codeAlign) {
+    size_t spaces = codeAlign - len;
     for (size_t i = 0; i < spaces; i++) {
       cout << " ";
     }
+  } else {
+    cout << " ";
   }
   cout << "0x" << hex << val + 0x80000000 + 0x120000;
   cout << endl;
