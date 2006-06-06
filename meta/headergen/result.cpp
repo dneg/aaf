@@ -62,7 +62,7 @@ void genCode(const char* name, unsigned long int val, const char* desc)
   } else {
     cout << " ";
   }
-  cout << "0x" << hex << val + 0x80000000 + 0x120000;
+  cout << "((HRESULT)0x" << hex << val + 0x80000000 + 0x120000 <<")";
   cout << endl;
 }
 
