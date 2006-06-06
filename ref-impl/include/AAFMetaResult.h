@@ -288,9 +288,9 @@ AAF_DEFINE_ERROR(INCONSISTENCY,                  0x01CC, "")
 
 AAF_ERROR_SECTION("INTERNAL Error Codes - programming errors")
 AAF_DEFINE_ERROR(ASSERTION_VIOLATION,            0x01D0,
-    "Assertion violation")
+    "Reference implementation assertion violation (programming error).")
 AAF_DEFINE_ERROR(UNEXPECTED_EXCEPTION,           0x01D1,
-    "Unexpected C++ exception")
+    "Reference implementation unexpected C++ exception (programming error)")
 
 AAF_ERROR_SECTION("Testing Error Codes")
 AAF_DEFINE_ERROR(TEST_FAILED,                    0x01F4, "")
