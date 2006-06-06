@@ -178,7 +178,7 @@ HRESULT CAAFPCMCodec::write_BWF_header(void)
 	_stream->GetPosition(&currentPos);
 	_dataChunkOffset = (aafUInt32)currentPos;
 
-	return HRESULT_SUCCESS;
+	return AAFRESULT_SUCCESS;
 }
 
 HRESULT CAAFPCMCodec::find_data_chunk_offset(void)
@@ -220,7 +220,7 @@ HRESULT CAAFPCMCodec::find_data_chunk_offset(void)
 		}
 	}
 
-	return HRESULT_SUCCESS;
+	return AAFRESULT_SUCCESS;
 }
 
 //
@@ -1201,7 +1201,7 @@ HRESULT STDMETHODCALLTYPE
 	}
 	XEND;
 
-	return HRESULT_SUCCESS;
+	return AAFRESULT_SUCCESS;
 }		
 
 
@@ -1241,7 +1241,7 @@ HRESULT STDMETHODCALLTYPE
 	XEXCEPT
 	XEND
 
-	return HRESULT_SUCCESS;
+	return AAFRESULT_SUCCESS;
 }
 
 
@@ -1608,7 +1608,7 @@ AAFRESULT CAAFPCMCodec::SetCompressionEnabled (aafCompressEnable_t /*compEnable*
 {
 	plugin_trace("CAAFPCMCodec::SetCompressionEnabled()\n");
 
-  return HRESULT_SUCCESS;
+  return AAFRESULT_SUCCESS;
 }
 
 /************************

@@ -1038,7 +1038,7 @@ CAAFAIFCCodec::CompleteWrite (IAAFSourceMob *fileMob)
 	}
 	XEND;
 	
-	return HRESULT_SUCCESS;
+	return AAFRESULT_SUCCESS;
 }		
 
 
@@ -1078,7 +1078,7 @@ CAAFAIFCCodec::ReadRawData (aafUInt32 nSamples,
 	XEXCEPT
 		XEND
 		
-		return HRESULT_SUCCESS;
+		return AAFRESULT_SUCCESS;
 }
 
 
@@ -1415,7 +1415,7 @@ CAAFAIFCCodec::MultiOpen (IAAFSourceMob *unk,
 
 AAFRESULT CAAFAIFCCodec::SetCompressionEnabled (aafCompressEnable_t /*compEnable*/)
 {
-	return HRESULT_SUCCESS;
+	return AAFRESULT_SUCCESS;
 }
 
 /************************

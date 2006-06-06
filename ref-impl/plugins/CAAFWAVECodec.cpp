@@ -1039,7 +1039,7 @@ HRESULT STDMETHODCALLTYPE
 	}
 	XEND;
 
-	return HRESULT_SUCCESS;
+	return AAFRESULT_SUCCESS;
 }		
 
 
@@ -1080,7 +1080,7 @@ HRESULT STDMETHODCALLTYPE
 	XEXCEPT
 	XEND
 
-	return HRESULT_SUCCESS;
+	return AAFRESULT_SUCCESS;
 }
 
 
@@ -1402,7 +1402,7 @@ HRESULT STDMETHODCALLTYPE
 
 AAFRESULT CAAFWaveCodec::SetCompressionEnabled (aafCompressEnable_t /*compEnable*/)
 {
-  return HRESULT_SUCCESS;
+  return AAFRESULT_SUCCESS;
 }
 
 /************************
