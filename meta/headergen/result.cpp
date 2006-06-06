@@ -29,6 +29,7 @@
 #include <iostream>
 #include <string>
 using namespace std;
+#include <assert.h>
 
 void comment(const char* s)
 {
