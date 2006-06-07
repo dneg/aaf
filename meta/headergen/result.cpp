@@ -45,6 +45,11 @@ void section(const char* s)
   cout << endl;
 }
 
+void printCode(unsigned long int code, ostream& s) 
+{
+  s << "((HRESULT)0x" << hex << code + 0x80000000 + 0x120000 <<")";
+}
+
 void genCode(const char* name, unsigned long int val, const char* desc)
 {
   if (strlen(desc) != 0) {
@@ -54,7 +59,7 @@ void genCode(const char* name, unsigned long int val, const char* desc)
   }
   cout << "#define ";
   printName(name, 42, cout);
-  cout << "((HRESULT)0x" << hex << val + 0x80000000 + 0x120000 <<")";
+  printCode(val, cout);
   cout << endl;
 }
 
