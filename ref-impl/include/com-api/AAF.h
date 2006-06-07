@@ -47055,6 +47055,8 @@ STDAPI AAFGetFileEncodings (IEnumAAFFileEncodings ** ppFileEncodings);
 
 STDAPI AAFGetLibraryVersion (aafProductVersion_t *  pVersion);
 
+STDAPI AAFGetStaticLibraryVersion (aafProductVersion_t *  pVersion);
+
 STDAPI AAFGetLibraryPathNameBufLen (aafUInt32 *  pBufSize);
 
 STDAPI AAFGetLibraryPathName (
