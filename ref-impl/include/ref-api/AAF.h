@@ -50243,6 +50243,36 @@ DECLARE_INTERFACE_(IAAFTypeDefVariableArrayEx, IUnknown)
 
   //***********************************************************
   //
+  // AAFGetStaticLibraryVersion()
+  //
+  /// Return the version of the static (aaflib) library
+  /// linked against the calling appplication. This version may be the same as
+  /// or different from the version of the (dynamically linked) AAF Library
+  /// containing the implementation of the various interfaces.  The version
+  /// of the AAF Library may be obtained by calling AAFGetLibraryVersion().
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pVersion pointer is valid.
+  /// 
+  /// If this method fails nothing is written to *pVersion.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pVersion is null.
+  ///
+  /// @param pVersion [out, retval] The static library version
+  /// 
+  STDAPI AAFGetStaticLibraryVersion (
+    aafProductVersion_t *  pVersion);
+
+  //***********************************************************
+  //
   // AAFGetLibraryPathNameBufLen()
   //
   /// Returns size of buffer (in bytes) required for AAFGetLibraryPathName().

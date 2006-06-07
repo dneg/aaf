@@ -1466,6 +1466,14 @@ ImplAAFGetLibraryVersion
   return hr;
 }
 
+
+STDAPI
+ImplAAFGetStaticLibraryVersion
+  (aafProductVersion_t *  pVersion)
+{
+  return ImplAAFGetLibraryVersion(pVersion);
+}
+
 extern "C" const char * AAFGetLibraryPath();
 
 // The size of a buffer, in bytes, needed to hold s when properly

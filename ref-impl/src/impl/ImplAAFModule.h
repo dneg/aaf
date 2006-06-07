@@ -505,6 +505,18 @@ ImplAAFGetLibraryVersion
 
 extern const aafProductVersion_t AAFReferenceImplementationVersion;
 
+// The real AAFGetStaticLibraryVersion is implemented in aaflib.
+// This function is here for two reasons:
+// 1.  The dodo machinery requires it
+// 2.  If someone were to link directly to the AAF DLL (rather than load
+//        via aaflib's functionality), then they have the corresponding 
+//        function.
+// Thus, this function is implemented with the second case in mind.  
+// Since there is no separate static library to version against, this function
+// returns the same as calling ImplAAFGetLibraryVersion.
+STDAPI ImplAAFGetStaticLibraryVersion
+  (aafProductVersion_t *  pVersion);
+
 STDAPI ImplAAFGetLibraryPathNameBufLen
   (aafUInt32 *  pBufSize);
 
