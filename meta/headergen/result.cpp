@@ -90,38 +90,43 @@ void alias(const char* fullOldName, const char* name)
   cout << "AAFRESULT_" << name << endl;
 }
 
+void printBoilerPlate(ostream& s)
+{
+  s << "#define AAFRESULT_FAILED(Status) ((AAFRESULT)(Status)<0)";
+  s << endl;
+  s << "#define AAFRESULT_SUCCEEDED(Status) (!(AAFRESULT_FAILED(Status)))";
+  s << endl;
+
+  s << endl;
+
+  s << "#define _FACILITY_AAF 0x12";
+  s << endl;
+
+  s << "#define MAKE_AAFHRESULT( code ) \\";
+  s << endl;
+  s << "    ((HRESULT) (((aafUInt32)(1)             <<31) | \\";
+  s << endl;
+  s << "                ((aafUInt32)(_FACILITY_AAF) <<16) | \\";
+  s << endl;
+  s << "                ((aafUInt32)(code))) )";
+  s << endl;
+
+  s << endl;
+
+  s << "/* Non-AAF codes */";
+  s << endl;
+  s << "#define AAFRESULT_NOT_IMPLEMENTED                 ";
+  s << "((HRESULT)0x80004001L)";
+  s << endl;
+}
+
 static void doFile(const char* moduleName)
 {
   assert(moduleName);
   printBeginGuard(moduleName, cout);
   printCopyright(cout);
 
-  cout << "#define AAFRESULT_FAILED(Status) ((AAFRESULT)(Status)<0)";
-  cout << endl;
-  cout << "#define AAFRESULT_SUCCEEDED(Status) (!(AAFRESULT_FAILED(Status)))";
-  cout << endl;
-
-  cout << endl;
-
-  cout << "#define _FACILITY_AAF 0x12";
-  cout << endl;
-
-  cout << "#define MAKE_AAFHRESULT( code ) \\";
-  cout << endl;
-  cout << "    ((HRESULT) (((aafUInt32)(1)             <<31) | \\";
-  cout << endl;
-  cout << "                ((aafUInt32)(_FACILITY_AAF) <<16) | \\";
-  cout << endl;
-  cout << "                ((aafUInt32)(code))) )";
-  cout << endl;
-
-  cout << endl;
-
-  cout << "/* Non-AAF codes */";
-  cout << endl;
-  cout << "#define AAFRESULT_NOT_IMPLEMENTED                 ";
-  cout << "((HRESULT)0x80004001L)";
-  cout << endl;
+  printBoilerPlate(cout);
 
 #define AAF_ERROR_SECTION(s) section(s);
 #define AAF_DEFINE_ERROR(name, val, desc) genCode(#name, val, desc);
