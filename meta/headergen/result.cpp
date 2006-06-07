@@ -119,7 +119,8 @@ static void doFile(const char* moduleName)
 
   cout << "/* Non-AAF codes */";
   cout << endl;
-  cout << "#define AAFRESULT_NOT_IMPLEMENTED                 ((HRESULT)0x80004001L)";
+  cout << "#define AAFRESULT_NOT_IMPLEMENTED                 ";
+  cout << "((HRESULT)0x80004001L)";
   cout << endl;
 
 #define AAF_ERROR_SECTION(s) section(s);
