@@ -47,6 +47,7 @@ void section(const char* s)
 
 void printCode(unsigned long int code, ostream& s) 
 {
+  s.setf(ios::uppercase);
   s << "((HRESULT)0x" << hex << code + 0x80000000 + 0x120000 <<")";
 }
 
