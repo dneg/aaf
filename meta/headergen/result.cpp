@@ -52,17 +52,8 @@ void genCode(const char* name, unsigned long int val, const char* desc)
     comment(desc);
     cout << endl;
   }
-  cout << "#define AAFRESULT_" << name;
-  size_t len = strlen(name);
-  const size_t codeAlign = 32;
-  if (len < codeAlign) {
-    size_t spaces = codeAlign - len;
-    for (size_t i = 0; i < spaces; i++) {
-      cout << " ";
-    }
-  } else {
-    cout << " ";
-  }
+  cout << "#define ";
+  printName(name, 42, cout);
   cout << "((HRESULT)0x" << hex << val + 0x80000000 + 0x120000 <<")";
   cout << endl;
 }
@@ -129,7 +120,8 @@ static void doFile(const char* moduleName)
   printBoilerPlate(cout);
 
 #define AAF_ERROR_SECTION(s) section(s);
-#define AAF_DEFINE_ERROR(name, val, desc) genCode(#name, val, desc);
+#define AAF_DEFINE_ERROR(name, val, desc) \
+        genCode("AAFRESULT_"#name, val, desc);
 #define AAF_DEFINE_SUCCESS(name, code) success("AAFRESULT_"#name, code);
 #define AAF_DEFINE_ERROR_ALIAS(fullOldName, name) alias(#fullOldName, #name);
 #include "AAFMetaResult.h"
