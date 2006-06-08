@@ -54,6 +54,9 @@
 #elif defined(__GNUC__) && defined(__ppc__) && defined(__APPLE__)
 #define MXF_COMPILER_GCC_PPC_MACOSX
 #define MXF_OS_MACOSX
+#elif defined(__GNUC__) && defined(__powerpc__) && defined(__linux__)
+#define MXF_COMPILER_GCC_PPC_LINUX
+#define MXF_OS_UNIX
 #elif defined(mips) && defined(sgi)
 #define MXF_COMPILER_SGICC_MIPS_SGI
 #define MXF_OS_UNIX
@@ -146,6 +149,20 @@ typedef unsigned long long int mxfUInt64;
 #define MXFPRIx32 "lx"
 #define MXFPRIx64 "llx"
 #elif defined(MXF_COMPILER_GCC_PPC_MACOSX)
+typedef unsigned char          mxfUInt08;
+typedef unsigned short int     mxfUInt16;
+typedef unsigned long int      mxfUInt32;
+typedef unsigned long long int mxfUInt64;
+
+#define MXFPRIu08 "u"
+#define MXFPRIu16 "hu"
+#define MXFPRIu32 "lu"
+#define MXFPRIu64 "llu"
+#define MXFPRIx08 "x"
+#define MXFPRIx16 "hx"
+#define MXFPRIx32 "lx"
+#define MXFPRIx64 "llx"
+#elif defined(MXF_COMPILER_GCC_PPC_LINUX)
 typedef unsigned char          mxfUInt08;
 typedef unsigned short int     mxfUInt16;
 typedef unsigned long int      mxfUInt32;

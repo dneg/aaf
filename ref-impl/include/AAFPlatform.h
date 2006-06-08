@@ -105,6 +105,18 @@
 
 /*
  *  Compiler:   GNU C++
+ *  Processor:  ppc
+ *  OS:         Linux
+ */
+#elif defined(__GNUC__) && defined(__powerpc__) && defined(__linux__)
+#define CPU_POWERPC
+#define OS_LINUX
+#define OS_UNIX
+#define COMPILER_GCC
+#define PLATFORM_GCC_POWERPC_LINUX
+
+/*
+ *  Compiler:   GNU C++
  *  Processor:  ppc64 (Apple G5 and IBM Power64)
  *  OS:         Linux
  */
@@ -276,6 +288,7 @@ typedef wchar_t			aafCharacter;
  */
 #elif defined(PLATFORM_GCC_INTEL_LINUX) \
 	|| defined(PLATFORM_GCC_X86_64_LINUX) \
+	|| defined(PLATFORM_GCC_POWERPC_LINUX) \
 	|| defined(PLATFORM_GCC_POWERPC64_LINUX) \
 	|| defined(PLATFORM_GCC_POWERPC_DARWIN) \
 	|| defined(PLATFORM_GCC_INTEL_DARWIN) \
