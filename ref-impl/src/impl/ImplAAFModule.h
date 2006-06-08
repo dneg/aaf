@@ -512,8 +512,8 @@ extern const aafProductVersion_t AAFReferenceImplementationVersion;
 //        via aaflib's functionality), then they have the corresponding 
 //        function.
 // Thus, this function is implemented with the second case in mind.  
-// Since there is no separate static library to version against, this function
-// returns the same as calling ImplAAFGetLibraryVersion.
+// However, this function has no meaning in that context, thus NOT_IMPLEMENTED
+// is always returned.
 STDAPI ImplAAFGetStaticLibraryVersion
   (aafProductVersion_t *  pVersion);
 

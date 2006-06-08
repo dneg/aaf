@@ -1471,7 +1471,7 @@ STDAPI
 ImplAAFGetStaticLibraryVersion
   (aafProductVersion_t *  pVersion)
 {
-  return ImplAAFGetLibraryVersion(pVersion);
+  return AAFRESULT_NOT_IMPLEMENTED;
 }
 
 extern "C" const char * AAFGetLibraryPath();
