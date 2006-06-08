@@ -42,6 +42,16 @@ typedef AAFRESULT aafErr_t;
  * Externally visible routines
  *
  *************************************************************/
+
+AAFRESULT ResultToTextBufLen (
+    AAFRESULT  result,
+    aafUInt32 *   pResultTextSize);
+
+AAFRESULT ResultToText (
+    AAFRESULT  result,
+    aafCharacter *  pResultText,
+    aafUInt32  resultTextSize);
+
 char    *aafGetErrorString(aafErr_t code);
 char		*aafGetExpandedErrorString(AAFFile * file,
 											aafErr_t code,

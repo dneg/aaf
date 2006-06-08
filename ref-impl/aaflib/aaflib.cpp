@@ -916,18 +916,63 @@ STDAPI AAFGetLibraryPathName
 }
 
 STDAPI AAFResultToTextBufLen (
-    AAFRESULT  /* result */,
-    aafUInt32 *   /* pResultTextSize */)
+    AAFRESULT  result,
+    aafUInt32 *   pResultTextSize)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+  HRESULT hr = S_OK;
+  AAFDLL *pAAFDLL = NULL;
+
+  // Get the dll wrapper
+  hr = LoadIfNecessary(&pAAFDLL);
+  if (FAILED(hr))
+    return hr;
+  
+  try
+  {
+    // Attempt to call the dll's exported function...
+    hr = pAAFDLL->ResultToTextBufLen
+	  (result,
+           pResultTextSize);
+  }
+  catch (...)
+  {
+    // Return a reasonable exception code.
+    //
+    hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+  }
+
+  return hr;
 }
 
 STDAPI AAFResultToText (
-    AAFRESULT  /* result */,
-    aafCharacter *  /* pResultText */,
-    aafUInt32  /* resultTextSize */)
+    AAFRESULT  result,
+    aafCharacter *  pResultText,
+    aafUInt32  resultTextSize)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+  HRESULT hr = S_OK;
+  AAFDLL *pAAFDLL = NULL;
+
+  // Get the dll wrapper
+  hr = LoadIfNecessary(&pAAFDLL);
+  if (FAILED(hr))
+    return hr;
+  
+  try
+  {
+    // Attempt to call the dll's exported function...
+    hr = pAAFDLL->ResultToText
+	  (result,
+           pResultText,
+           resultTextSize);
+  }
+  catch (...)
+  {
+    // Return a reasonable exception code.
+    //
+    hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+  }
+
+  return hr;
 }
 
 //***********************************************************
@@ -1098,6 +1143,13 @@ HRESULT AAFDLL::Load(const char *dllname)
 					   "AAFGetLibraryPathName",
   					   (AAFSymbolAddr *)&_pfnGetLibraryPathName);
 
+  rc = ::AAFFindSymbol(_libHandle,
+					   "AAFResultToTextBufLen",
+  					   (AAFSymbolAddr *)&_pfnResultToTextBufLen);
+  rc = ::AAFFindSymbol(_libHandle,
+					   "AAFResultToText",
+  					   (AAFSymbolAddr *)&_pfnResultToText);
+
   return AAFRESULT_SUCCESS;
 }
 
@@ -1152,6 +1204,8 @@ void AAFDLL::ClearEntrypoints()
   _pfnGetLibraryVersion = 0;
   _pfnGetLibraryPathNameBufLen = 0;
   _pfnGetLibraryPathName = 0;
+  _pfnResultToTextBufLen = 0;
+  _pfnResultToText = 0;
 }
 
 
@@ -1440,6 +1494,34 @@ HRESULT AAFDLL::GetLibraryPathName
   return _pfnGetLibraryPathName
 	(pLibraryPathName,
      bufSize);
+}
+
+HRESULT AAFDLL::ResultToTextBufLen (
+    AAFRESULT  result,
+    aafUInt32 *   pResultTextSize)
+{
+  printf("AAFDLL::ResultToTextBufLen\n");
+
+  // This function did not exist earlier toolkits.
+  if (NULL == _pfnResultToTextBufLen)
+    return AAFRESULT_DLL_SYMBOL_NOT_FOUND;
+
+
+  return _pfnResultToTextBufLen(result, pResultTextSize);
+}
+
+HRESULT AAFDLL::ResultToText (
+    AAFRESULT  result,
+    aafCharacter *  pResultText,
+    aafUInt32  resultTextSize)
+{
+  printf("AAFDLL::ResultToText\n");
+
+  // This function did not exist earlier toolkits.
+  if (NULL == _pfnResultToText)
+    return AAFRESULT_DLL_SYMBOL_NOT_FOUND;
+    
+  return _pfnResultToText(result, pResultText, resultTextSize);
 }
 
 #else

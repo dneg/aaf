@@ -24,9 +24,22 @@
 
 
 #include <string.h>
-
 #include "aafErr.h"
-//#include "omPvt.h"
+
+AAFRESULT ResultToTextBufLen (
+    AAFRESULT  /* result */,
+    aafUInt32 *   /* pResultTextSize */)
+{
+  return AAFRESULT_NOT_IMPLEMENTED;
+}
+
+AAFRESULT ResultToText (
+    AAFRESULT  /* result */,
+    aafCharacter *  /* pResultText */,
+    aafUInt32  /* resultTextSize */)
+{
+  return AAFRESULT_NOT_IMPLEMENTED;
+}
 
 static char    *localErrorStrings[300];
 /* A 75-column ruler

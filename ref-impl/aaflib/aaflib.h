@@ -149,6 +149,15 @@ typedef STDAPICALLTYPE HRESULT (* LPFNAAFGETLIBRARYPATHNAME)(
     aafCharacter *  pLibraryPathName,
     aafUInt32  bufSize);
 
+typedef STDAPICALLTYPE HRESULT (* LPAAFRESULTTOTEXTBUFLEN) (
+    AAFRESULT  result,
+    aafUInt32 *   pResultTextSize);
+
+typedef STDAPICALLTYPE HRESULT (* LPAAFRESULTTOTEXT) (
+    AAFRESULT  result,
+    aafCharacter *  pResultText,
+    aafUInt32  resultTextSize);
+
 #else
 //
 // MS Visual C++ compiler
@@ -414,6 +423,15 @@ public:
     aafCharacter *  pLibraryPathName,
     aafUInt32  bufSize);
 
+  HRESULT ResultToTextBufLen (
+    AAFRESULT  result,
+    aafUInt32 *   pResultTextSize);
+
+  HRESULT ResultToText (
+    AAFRESULT  result,
+    aafCharacter *  pResultText,
+    aafUInt32  resultTextSize);
+
 protected:
   //
   // The single instance of the dll wrapper.
@@ -450,6 +468,8 @@ protected:
   LPFNAAFGETLIBRARYVERSION         _pfnGetLibraryVersion;
   LPFNAAFGETLIBRARYPATHNAMEBUFLEN  _pfnGetLibraryPathNameBufLen;
   LPFNAAFGETLIBRARYPATHNAME        _pfnGetLibraryPathName;
+  LPAAFRESULTTOTEXTBUFLEN          _pfnResultToTextBufLen;
+  LPAAFRESULTTOTEXT                _pfnResultToText;
 };
 
 #endif /* __aaflib_h__ */

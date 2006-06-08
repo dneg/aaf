@@ -64,6 +64,7 @@
 
 #include "ImplAAFSmartPointer.h"
 #include "AAFUtils.h"
+#include "aafErr.h"
 
 typedef ImplAAFSmartPointer<ImplAAFFile> ImplAAFFileSP;
 
@@ -1515,16 +1516,22 @@ STDAPI ImplAAFGetLibraryPathName
 }
 
 STDAPI ImplAAFResultToTextBufLen (
-    AAFRESULT  /* result */,
-    aafUInt32 *   /* pResultTextSize */)
+    AAFRESULT  result,
+    aafUInt32 *   pResultTextSize)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+  if (pResultTextSize == 0)
+    return  AAFRESULT_NULL_PARAM;
+
+  return ResultToTextBufLen(result, pResultTextSize);
 }
 
 STDAPI ImplAAFResultToText (
-    AAFRESULT  /* result */,
-    aafCharacter *  /* pResultText */,
-    aafUInt32  /* resultTextSize */)
+    AAFRESULT  result,
+    aafCharacter *  pResultText,
+    aafUInt32  resultTextSize)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+  if (pResultText == 0)
+    return  AAFRESULT_NULL_PARAM;
+
+  return ResultToText(result, pResultText, resultTextSize);
 }
