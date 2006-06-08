@@ -915,7 +915,20 @@ STDAPI AAFGetLibraryPathName
   return hr;
 }
 
+STDAPI AAFResultToTextBufLen (
+    AAFRESULT  /* result */,
+    aafUInt32 *   /* pResultTextSize */)
+{
+  return AAFRESULT_NOT_IMPLEMENTED;
+}
 
+STDAPI AAFResultToText (
+    AAFRESULT  /* result */,
+    aafCharacter *  /* pResultText */,
+    aafUInt32  /* resultTextSize */)
+{
+  return AAFRESULT_NOT_IMPLEMENTED;
+}
 
 //***********************************************************
 //

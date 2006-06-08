@@ -523,3 +523,12 @@ STDAPI ImplAAFGetLibraryPathNameBufLen
 STDAPI ImplAAFGetLibraryPathName
    (aafCharacter *  pLibraryPathName,
     aafUInt32  bufSize);
+
+STDAPI ImplAAFResultToTextBufLen (
+    AAFRESULT  result,
+    aafUInt32 *   pResultTextSize);
+
+STDAPI ImplAAFResultToText (
+    AAFRESULT  result,
+    aafCharacter *  pResultText,
+    aafUInt32  resultTextSize);

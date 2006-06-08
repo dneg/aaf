@@ -977,4 +977,82 @@ AD_XFUNCTION2(AAFGetLibraryPathName,
   /// AAFRESULT_SMALLBUF
   ///   - bufSize indicates that the allocated buffer is not large
   ///     enough to hold LibraryPathName.)
+
+AD_XFUNCTION2(AAFResultToTextBufLen,
+    [in],
+    objPass,
+    AAFRESULT,
+    result,
+    The result,
+    [out],
+    objPass,
+    aafUInt32 * ,
+    pResultTextSize,
+    The size of the required buffer\, in bytes.,
+  Returns the size of the buffer\, in bytes\, required for the AAFResultToText\(\) function.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pResultTextSize pointer is valid.
+  /// - the result is an AAFRESULT.
+  /// - the result is a recognized AAFRESULT.
+  ///
+  /// If this method fails nothing will be written to *pResultTextSize.
+  ///
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pResultTextSize arg is NULL.
+  ///
+  /// AAFRESULT_RESULT_NOT_AAF
+  ///   - result is not an AAFRESULT.
+  ///
+  /// AAFRESULT_RESULT_NOT_RECOGNIZED
+  ///   - result is not a recognized AAFRESULT.)
+
+
+AD_XFUNCTION3(AAFResultToText,
+    [in],
+    objPass,
+    AAFRESULT,
+    result,
+    The result,
+    [out\, string\, size_is\(resultTextSize\)],
+    objPass,
+    aafCharacter *,
+    pResultText,
+    The text representation of the result,
+    [in],
+    objPass,
+    aafUInt32,
+    resultTextSize,
+    The size\, in bytes\, of pResultText,
+  /// Returns the text representation of an AAFRESULT.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pResultText pointer is valid.
+  /// - the result is an AAFRESULT.
+  /// - the result is a recognized AAFRESULT.
+  /// - the buffer is large enough to hold the result text.
+  ///
+  /// If this method fails nothing will be written to resultText.
+  ///
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pResultText arg is NULL.
+  ///
+  /// AAFRESULT_RESULT_NOT_AAF
+  ///   - result is not an AAFRESULT.
+  ///
+  /// AAFRESULT_RESULT_NOT_RECOGNIZED
+  ///   - result is not a recognized AAFRESULT.
+  ///
+  /// AAFRESULT_SMALLBUF
+  ///   - pResultText is too small to hold the result text.)
 AD_MODULE_END

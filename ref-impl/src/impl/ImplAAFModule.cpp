@@ -1513,3 +1513,18 @@ STDAPI ImplAAFGetLibraryPathName
   convertStringToWideString(pLibraryPathName, path, bufSize / sizeof(aafCharacter));
   return AAFRESULT_SUCCESS;
 }
+
+STDAPI ImplAAFResultToTextBufLen (
+    AAFRESULT  /* result */,
+    aafUInt32 *   /* pResultTextSize */)
+{
+  return AAFRESULT_NOT_IMPLEMENTED;
+}
+
+STDAPI ImplAAFResultToText (
+    AAFRESULT  /* result */,
+    aafCharacter *  /* pResultText */,
+    aafUInt32  /* resultTextSize */)
+{
+  return AAFRESULT_NOT_IMPLEMENTED;
+}
