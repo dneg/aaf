@@ -1500,8 +1500,6 @@ HRESULT AAFDLL::ResultToTextBufLen (
     AAFRESULT  result,
     aafUInt32 *   pResultTextSize)
 {
-  printf("AAFDLL::ResultToTextBufLen\n");
-
   // This function did not exist earlier toolkits.
   if (NULL == _pfnResultToTextBufLen)
     return AAFRESULT_DLL_SYMBOL_NOT_FOUND;
@@ -1515,8 +1513,6 @@ HRESULT AAFDLL::ResultToText (
     aafCharacter *  pResultText,
     aafUInt32  resultTextSize)
 {
-  printf("AAFDLL::ResultToText\n");
-
   // This function did not exist earlier toolkits.
   if (NULL == _pfnResultToText)
     return AAFRESULT_DLL_SYMBOL_NOT_FOUND;
