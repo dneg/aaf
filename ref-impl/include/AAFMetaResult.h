@@ -351,6 +351,12 @@ AAF_DEFINE_ERROR(DLL_LOAD_FAILED,                0x0400,
 AAF_DEFINE_ERROR(DLL_SYMBOL_NOT_FOUND,           0x0401,
     "Expected symbol not exported from DLL. Need newer DLL")
 
+AAF_ERROR_SECTION("Result code -> text error codes")
+AAF_DEFINE_ERROR(RESULT_NOT_AAF,                 0x0500,
+    "The specified result code is not an AAF result code")
+AAF_DEFINE_ERROR(RESULT_NOT_RECOGNIZED,          0x0501,
+    "The specified AAF result code is not recognized")
+
 AAF_ERROR_SECTION("For compatibility")
 AAF_DEFINE_ERROR_ALIAS(AAF_RESULT_USE_MULTI_CREATE, USE_MULTI_CREATE)
 AAF_DEFINE_ERROR_ALIAS(AAFRESULT_INCONSISTANCY, INCONSISTENCY)

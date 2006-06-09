@@ -352,6 +352,12 @@
         /* Expected symbol not exported from DLL. Need newer DLL */
 #define AAFRESULT_DLL_SYMBOL_NOT_FOUND            ((HRESULT)0x80120401)
 
+/* Result code -> text error codes */
+        /* The specified result code is not an AAF result code */
+#define AAFRESULT_RESULT_NOT_AAF                  ((HRESULT)0x80120500)
+        /* The specified AAF result code is not recognized */
+#define AAFRESULT_RESULT_NOT_RECOGNIZED           ((HRESULT)0x80120501)
+
 /* For compatibility */
 #define AAF_RESULT_USE_MULTI_CREATE               AAFRESULT_USE_MULTI_CREATE
 #define AAFRESULT_INCONSISTANCY                   AAFRESULT_INCONSISTENCY
