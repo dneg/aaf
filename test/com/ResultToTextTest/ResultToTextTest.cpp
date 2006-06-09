@@ -363,7 +363,29 @@ void positiveTests()
   testCode(AAFRESULT_DLL_SYMBOL_NOT_FOUND);
 }
 
+void negativeTests()
+{
+  AAFRESULT x = AAFRESULT_BADOPEN;
+  HRESULT y;
+  y = AAFResultToTextBufLen(x, 0);
+  if (y != AAFRESULT_NULL_PARAM) {
+    std::wcout << "*** Fail." << std::endl;
+  }
+  y = AAFResultToText(x, 0, 99);
+  if (y != AAFRESULT_NULL_PARAM) {
+    std::wcout << "*** Fail." << std::endl;
+  }
+  wchar_t tooSmall[1];
+  aafUInt32 len = sizeof(tooSmall) * sizeof(wchar_t);
+  y = AAFResultToText(x, tooSmall, len);
+  if (y != AAFRESULT_SMALLBUF) {
+    std::wcout << "*** Fail." << std::endl;
+  }
+}
+
 int main()
 {
   positiveTests();
+
+  negativeTests();
 }
