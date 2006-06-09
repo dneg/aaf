@@ -94,6 +94,8 @@ void positiveTests()
   testCode(AAFRESULT_NOT_REVERTABLE);
   testCode(AAFRESULT_MEDIA_NOT_REVERTABLE);
   testCode(AAFRESULT_OPERATION_NOT_PERMITTED);
+
+  /* Errors returned from raw storage interfaces*/
   testCode(AAFRESULT_READ_FAILURE);
   testCode(AAFRESULT_WRITE_FAILURE);
   testCode(AAFRESULT_SYNCHRONIZE_FAILURE);
@@ -103,6 +105,8 @@ void positiveTests()
   testCode(AAFRESULT_GETSIZE_FAILURE);
   testCode(AAFRESULT_GETEXTENT_FAILURE);
   testCode(AAFRESULT_SETEXTENT_FAILURE);
+
+  /* Read-while-modify errors */
   testCode(AAFRESULT_FILE_BEING_MODIFIED);
 
   /* MEDIA Error Codes */
@@ -361,6 +365,11 @@ void positiveTests()
 /* DLL/Shared Library runtime error codes */
   testCode(AAFRESULT_DLL_LOAD_FAILED);
   testCode(AAFRESULT_DLL_SYMBOL_NOT_FOUND);
+
+  /* Result code -> text error codes */
+  testCode(AAFRESULT_RESULT_NOT_AAF);
+  testCode(AAFRESULT_RESULT_NOT_RECOGNIZED);
+
 }
 
 void negativeTests()
