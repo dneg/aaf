@@ -46941,7 +46941,7 @@ void __RPC_STUB IAAFTypeDefVariableArrayEx_InsertElement_Stub(
 #endif 	/* __IAAFTypeDefVariableArrayEx_INTERFACE_DEFINED__ */
 
 
-/* interface __MIDL_itf_AAF_0266 */
+/* interface __MIDL_itf_AAF_0247 */
 /* [local] */ 
 
   ///***********************************************************
@@ -47063,10 +47063,19 @@ STDAPI AAFGetLibraryPathName (
           aafCharacter *  pLibraryPathName,
           aafUInt32  bufSize);
 
+STDAPI AAFResultToTextBufLen (
+          AAFRESULT  result,
+          aafUInt32 *   pResultTextSize);
+
+STDAPI AAFResultToText (
+          AAFRESULT  result,
+          aafCharacter *  pResultText,
+          aafUInt32  resultTextSize);
 
 
-extern RPC_IF_HANDLE __MIDL_itf_AAF_0266_v0_0_c_ifspec;
-extern RPC_IF_HANDLE __MIDL_itf_AAF_0266_v0_0_s_ifspec;
+
+extern RPC_IF_HANDLE __MIDL_itf_AAF_0247_v0_0_c_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_AAF_0247_v0_0_s_ifspec;
 
 /* Additional Prototypes for ALL interfaces */
 
