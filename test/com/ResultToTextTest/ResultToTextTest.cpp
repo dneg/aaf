@@ -60,7 +60,7 @@ void testCode(AAFRESULT code)
 
 void positiveTests()
 {
-/* SESSION/FILE Error Codes */
+  /* SESSION/FILE Error Codes */
   testCode(AAFRESULT_BAD_SESSION);
   testCode(AAFRESULT_BADSESSIONOPEN);
   testCode(AAFRESULT_BADSESSIONMETA);
@@ -362,14 +362,13 @@ void positiveTests()
   testCode(AAFRESULT_PLUGIN_CIRCULAR_REFERENCE);
   testCode(AAFRESULT_PLUGIN_INVALID_REFERENCE_COUNT);
 
-/* DLL/Shared Library runtime error codes */
+  /* DLL/Shared Library runtime error codes */
   testCode(AAFRESULT_DLL_LOAD_FAILED);
   testCode(AAFRESULT_DLL_SYMBOL_NOT_FOUND);
 
   /* Result code -> text error codes */
   testCode(AAFRESULT_RESULT_NOT_AAF);
   testCode(AAFRESULT_RESULT_NOT_RECOGNIZED);
-
 }
 
 void negativeTests()
