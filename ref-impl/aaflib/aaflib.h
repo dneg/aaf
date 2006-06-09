@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2005, Licensor of the
+// The Original Code of this file is Copyright 1998-2006, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -269,6 +269,15 @@ typedef HRESULT (STDAPICALLTYPE * LPFNAAFGETLIBRARYPATHNAMEBUFLEN)(
 typedef HRESULT (STDAPICALLTYPE * LPFNAAFGETLIBRARYPATHNAME)(
     aafCharacter *  pLibraryPathName,
     aafUInt32  bufSize);
+
+typedef HRESULT (STDAPICALLTYPE * LPAAFRESULTTOTEXTBUFLEN) (
+    AAFRESULT  result,
+    aafUInt32 *   pResultTextSize);
+
+typedef HRESULT (STDAPICALLTYPE * LPAAFRESULTTOTEXT) (
+    AAFRESULT  result,
+    aafCharacter *  pResultText,
+    aafUInt32  resultTextSize);
 
 #endif
 
