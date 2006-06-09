@@ -55,3 +55,5 @@ EXPORTS		AAFGetFileEncodings
 EXPORTS		AAFGetLibraryVersion
 EXPORTS		AAFGetLibraryPathNameBufLen
 EXPORTS		AAFGetLibraryPathName
+EXPORTS		AAFResultToTextBufLen
+EXPORTS		AAFResultToText
