@@ -76,6 +76,8 @@
 #define AAFRESULT_NOT_REVERTABLE                  ((HRESULT)0x8012002E)
 #define AAFRESULT_MEDIA_NOT_REVERTABLE            ((HRESULT)0x8012002F)
 #define AAFRESULT_OPERATION_NOT_PERMITTED         ((HRESULT)0x80120030)
+
+/* Errors returned from raw storage interfaces */
 #define AAFRESULT_READ_FAILURE                    ((HRESULT)0x80120031)
 #define AAFRESULT_WRITE_FAILURE                   ((HRESULT)0x80120032)
 #define AAFRESULT_SYNCHRONIZE_FAILURE             ((HRESULT)0x80120033)
@@ -85,6 +87,8 @@
 #define AAFRESULT_GETSIZE_FAILURE                 ((HRESULT)0x80120037)
 #define AAFRESULT_GETEXTENT_FAILURE               ((HRESULT)0x80120038)
 #define AAFRESULT_SETEXTENT_FAILURE               ((HRESULT)0x80120039)
+
+/* Read-while-modify errors */
 #define AAFRESULT_FILE_BEING_MODIFIED             ((HRESULT)0x8012003A)
 
 /* MEDIA Error Codes */
