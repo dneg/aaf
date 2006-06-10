@@ -76,18 +76,15 @@ size_t length(size_t index)
   return result;
 }
 
-AAFRESULT ResultToTextBufLen (
-    AAFRESULT  result,
-    aafUInt32 *   pResultTextSize)
+
+HRESULT findEntry(AAFRESULT result, size_t& index)
 {
   HRESULT hr;
 
   if (isAAFError(result)) {
     aafUInt16 x = (aafUInt16)result;
-    size_t i;
 
-    if (findEntry(i, x)) {
-      *pResultTextSize = length(i);
+    if (findEntry(index, x)) {
       hr = AAFRESULT_SUCCESS;
     } else {
       hr = AAFRESULT_RESULT_NOT_RECOGNIZED;
@@ -98,36 +95,40 @@ AAFRESULT ResultToTextBufLen (
   return hr;
 }
 
+AAFRESULT ResultToTextBufLen (
+    AAFRESULT  result,
+    aafUInt32 *   pResultTextSize)
+{
+  size_t i;
+  HRESULT hr = findEntry(result, i);
+
+  if (AAFRESULT_SUCCEEDED(hr)) {
+    *pResultTextSize = length(i);
+  }
+  return hr;
+}
+
 AAFRESULT ResultToText (
     AAFRESULT  result,
     aafCharacter *  pResultText,
     aafUInt32  resultTextSize)
 {
-  HRESULT hr;
+  size_t i;
+  HRESULT hr = findEntry(result, i);
 
-  if (isAAFError(result)) {
-    aafUInt16 x = (aafUInt16)result;
-    size_t i;
-
-    if (findEntry(i, x)) {
-      size_t len = length(i);
-      if (resultTextSize >= len) {
-        if (wcscmp(errorTable[i]._desc, L"") == 0) {
-          wcscpy(pResultText, errorTable[i]._name);
-        } else {
-          wcscpy(pResultText, errorTable[i]._name);
-          wcscat(pResultText, L" - ");
-          wcscat(pResultText, errorTable[i]._desc);
-        }
-        hr = AAFRESULT_SUCCESS;
+  if (AAFRESULT_SUCCEEDED(hr)) {
+    size_t len = length(i);
+    if (resultTextSize >= len) {
+      if (wcscmp(errorTable[i]._desc, L"") == 0) {
+        wcscpy(pResultText, errorTable[i]._name);
       } else {
-        hr = AAFRESULT_SMALLBUF;
+        wcscpy(pResultText, errorTable[i]._name);
+        wcscat(pResultText, L" - ");
+        wcscat(pResultText, errorTable[i]._desc);
       }
     } else {
-      hr = AAFRESULT_RESULT_NOT_RECOGNIZED;
+      hr = AAFRESULT_SMALLBUF;
     }
-  } else {
-    hr = AAFRESULT_RESULT_NOT_AAF;
   }
   return hr;
 }
