@@ -33,7 +33,7 @@ struct errorTableTag {
   wchar_t* _desc;
 } errorTable[] = {
 #define AAF_DEFINE_ERROR(name, val, desc) \
-  {val, L"AAFRESULT_"#name, L ## desc},
+  {val, L ## "AAFRESULT_" L ## #name, L ## desc},
 #include "AAFMetaResult.h"
 };
 
