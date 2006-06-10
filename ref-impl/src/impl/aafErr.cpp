@@ -43,7 +43,7 @@ static bool isAAFError(AAFRESULT code)
 {
   bool result = false;
 
-  aafUInt16 facility = ((code >> 16) & 0x1fff);
+  aafUInt16 facility = (aafUInt16)((code >> 16) & 0x1fff);
   if (facility == 0x0012) {
     result = true;
   }
@@ -83,7 +83,7 @@ AAFRESULT ResultToTextBufLen (
   HRESULT hr;
 
   if (isAAFError(result)) {
-    aafUInt16 x = result;
+    aafUInt16 x = (aafUInt16)result;
     size_t i;
 
     if (findEntry(i, x)) {
@@ -106,7 +106,7 @@ AAFRESULT ResultToText (
   HRESULT hr;
 
   if (isAAFError(result)) {
-    aafUInt16 x = result;
+    aafUInt16 x = (aafUInt16)result;
     size_t i;
 
     if (findEntry(i, x)) {
