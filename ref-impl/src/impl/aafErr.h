@@ -57,7 +57,6 @@ char		*aafGetExpandedErrorString(AAFFile * file,
 											aafErr_t code,
 											aafInt16 buflen,
 											char *buffer);
-void     aafErrorInit(void);
 void     aafRegErr(aafErr_t msgcode);
 void     aafReregErrDebug(aafErr_t ec, 
 								 char *filename, 

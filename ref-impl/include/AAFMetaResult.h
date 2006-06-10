@@ -367,3 +367,644 @@ AAF_DEFINE_ERROR_ALIAS(HRESULT_SUCCESS, SUCCESS)
 #undef AAF_DEFINE_SUCCESS
 #undef AAF_ERROR_SECTION
 #undef AAF_DEFINE_ERROR_ALIAS
+
+//localErrorStrings[BADOBJ] =
+//"AAF_ERR: Null AAF object";
+
+//localErrorStrings[INULLMOBIDPTR] =
+//"AAF_ERR(Import): NULL Mob ID pointer in GetNthMediaDesc/SetMediaDesc";
+
+//localErrorStrings[INULLMTPTR] =
+//"AAF_ERR(Import): NULL omfMediaType_t pointer in GetNthMediaDesc";
+
+//localErrorStrings[INULLDESCPTR] =
+//"AAF_ERR(Import): NULL descriptor pointer in GetNthMediaDesc";
+
+//localErrorStrings[IBADMEDIAINDEX] =
+//"AAF_ERR(Import): Input AAF file does not have enough media objects";
+
+//localErrorStrings[LRC_DISABLED] =
+//"AAF_ERR: LRC codec disabled";
+
+//localErrorStrings[LRC_BADSAMPLESIZE] =
+//"AAF_ERR: Only 16 bit samples supported for LRC";
+
+//localErrorStrings[LRC_MONOONLY] =
+//   "AAF_ERR: Only one channel audio supported for LRC";
+
+//localErrorStrings[BADSAMPLEOFFSET] =
+//"AAF_ERR: Sample Index offset out of range";
+
+
+/*** SESSION/FILE Error Codes ***/
+/* Session Error Codes */
+//localErrorStrings[BAD_SESSION] =
+//"AAF_ERR: Bad Session Handle";
+
+//localErrorStrings[BADSESSIONOPEN] =
+//"AAF_ERR: Container Session open failed";
+
+//localErrorStrings[BADSESSIONMETA] =
+//"AAF_ERR: Container Session meta-handler operation failed";
+
+//localErrorStrings[BADSESSIONCLOSE] =
+//"AAF_ERR: Container Session close failed";
+
+/* File Error Codes */
+//localErrorStrings[FILEREV_NOT_SUPP] =
+//"AAF_ERR: AAF File Revision > 2.0 not supported";
+
+//localErrorStrings[FILEREV_DIFF] = 
+//"AAF_ERR: Files must have same file revisions";
+
+//localErrorStrings[BADOPEN] =
+//"AAF_ERR: Cannot open file";
+
+//localErrorStrings[BADCLOSE] =
+//"AAF_ERR: Cannot close file";
+
+//localErrorStrings[BAD_FHDL] =
+//"AAF_ERR: Bad File Handle";
+
+//localErrorStrings[BADHEAD] =
+//"AAF_ERR: Invalid AAF HEAD object";
+
+//localErrorStrings[NOBYTEORDER] =
+//"AAF_ERR: No File Byte Order Specified";
+
+//localErrorStrings[INVALID_BYTEORDER] =
+//"AAF_ERR: Invalid byte order";
+
+//localErrorStrings[NOTAAFFILE] =
+//"AAF_ERR: Invalid AAF file";
+
+//localErrorStrings[WRONG_FILETYPE] =
+//"AAF_ERR: Invalid file type (Raw vs. AAF)";
+
+//localErrorStrings[WRONG_OPENMODE] =
+//"AAF_ERR: File opened in wrong mode (readonly vs. readwrite)";
+
+//localErrorStrings[CONTAINERWRITE] = 
+//"AAF_ERR: Error writing to container media (Possibly media is full).";
+
+//localErrorStrings[FILE_NOT_FOUND] = 
+//"AAF_ERR: File not found.";
+
+/* Class Dictionary Error Codes */
+//localErrorStrings[CANNOT_SAVE_CLSD] = 
+//"AAF_ERR: Error updating the class dictionary in the AAF file";
+
+//localErrorStrings[CANNOT_LOAD_CLSD] = 
+//"AAF_ERR: Error loading the class dictionary from the file";
+
+//localErrorStrings[FILE_REV_200] = 
+//"AAF_ERR: Please use toolkit revision 2.0.1 or later to write 2.x compliant files";
+
+//localErrorStrings[NEED_PRODUCT_IDENT] = 
+//"AAF_ERR: You must supply a product identification struct when creating or updating files";
+
+
+/*** MEDIA Error Codes ***/
+/* General Media Error Codes */
+//localErrorStrings[DESCSAMPRATE] =
+//"AAF_ERR: Error getting sample rate from file descriptor";
+
+//localErrorStrings[SOURCEMOBLIST] =
+//"AAF_ERR: Error processing source mob list";
+
+//localErrorStrings[DESCLENGTH] =
+//"AAF_ERR: Error getting length from file descriptor";
+
+//localErrorStrings[INTERNAL_MDO] =
+//"AAF_ERR: Internal Media Data system not initialized";
+
+//localErrorStrings[3COMPONENT] =
+//"AAF_ERR: Only 3-component video allowed in AAF files";
+
+//localErrorStrings[INTERNAL_CORRUPTVINFO] =
+//"AAF_INTERNAL_ERR: Corrupt Video Info Structure";
+
+//localErrorStrings[BADSAMPLEOFFSET] =
+//"AAF_ERR: Sample Index offset out of range";
+
+//localErrorStrings[ONESAMPLEREAD] =
+//"AAF_ERR: Only one sample allowed for reading compressed data";
+
+//localErrorStrings[ONESAMPLEWRITE] =
+//"AAF_ERR: Only one sample allowed for writing compressed data";
+
+//localErrorStrings[DECOMPRESS] =
+//"AAF_ERR: Software Decompression Failed";
+
+//localErrorStrings[NODATA] =
+//"AAF_ERR: No data read";
+
+//localErrorStrings[SMALLBUF] =
+//"AAF_ERR: Sample too large to fit in given buffer";
+
+//localErrorStrings[INTERN_TOO_SMALL] =
+//"AAF_ERR: Buffer is not large enough to hold data";
+
+//localErrorStrings[INTERNAL_UNKNOWN_LOC] =
+//"AAF_ERR: Unknown locator type";
+
+//localErrorStrings[TRANSLATE] =
+//"AAF_ERR: Can't translate to expected memory format";
+
+//localErrorStrings[EOF] =
+//"AAF_ERR: End of file";
+
+//localErrorStrings[BADCOMPR] =
+//"AAF_ERR: Unrecognized compression type in AAF file";
+
+//localErrorStrings[BADPIXFORM] =
+//"AAF_ERR: Unrecognized pixel format in AAF file";
+
+//localErrorStrings[BADLAYOUT] =
+//"AAF_ERR: Unrecognized frame layout in AAF file";
+
+//localErrorStrings[COMPRLINESWR] =
+//"AAF_ERR: omfWriteLines not allowed with compression";
+
+//localErrorStrings[COMPRLINESRD] =
+//"AAF_ERR: omfReadLines not allowed with compression";
+
+//localErrorStrings[BADMEDIATYPE] =
+//"AAF_ERR: Unrecognized Media Type";
+
+//localErrorStrings[BADDATAADDRESS] =
+//"AAF_ERR: Null data address for transfer operation";
+
+//localErrorStrings[BAD_MDHDL] =
+//"AAF_ERR: Bad Media Handle";
+
+//localErrorStrings[MEDIA_NOT_FOUND] =
+//"AAF_ERR: Cannot locate media data";
+
+//localErrorStrings[ILLEGAL_MEMFMT] =
+//"AAF_ERR: Illegal memory format code";
+
+//localErrorStrings[ILLEGAL_FILEFMT] =
+//"AAF_ERR: Illegal file format code";
+
+//localErrorStrings[SWABBUFSIZE] =
+//"AAF_ERR: Invalid swab buffer size";
+
+//localErrorStrings[MISSING_SWAP_PROC] =
+//"AAF_ERR: Missing stream swap proc";
+
+//localErrorStrings[NULL_STREAMPROC] = 
+//"AAF_ERR: A Stream Callback is NULL";
+
+//localErrorStrings[NULLBUF] =
+//"AAF_ERR: Null transfer buffer";
+
+//localErrorStrings[SWAP_SETUP] =
+//"AAF_ERR: Need to set up file & memory format before calling this function";
+
+//localErrorStrings[INVALID_FILE_MOB] =
+//"AAF_ERR: Invalid file mob reference";
+
+//localErrorStrings[SINGLE_CHANNEL_OP] =
+//"AAF_ERR: Operation not valid on multi-channel media streams";
+
+//localErrorStrings[INVALID_CACHE_SIZE] = 
+//"AAF_ERR: Stream cache size must be positive or zero";
+
+//localErrorStrings[NOT_FILEMOB] = 
+//"AAF_ERR: Operation requires a file mob";
+
+//localErrorStrings[TRANSLATE_SAMPLE_SIZE] = 
+//"AAF_ERR: Codec can't translate to/from that sample size";
+
+//localErrorStrings[TRANSLATE_NON_INTEGRAL_RATE] =
+//"AAF_ERR: Codec can't translate to/from rates which are not multiples";
+
+//localErrorStrings[MISSING_MEDIA_REP] =
+//"AAF_ERR: Media representation not present in the mob";
+
+//localErrorStrings[NOT_LONGWORD] = 
+//"AAF_ERR: Buffer must be longword aligned for this translation";
+
+//localErrorStrings[XFER_DUPCH] = 
+//"AAF_ERR: Cannot specify the same channel twice in multi-xfers";
+
+//localErrorStrings[MEDIA_NOT_INIT] = 
+//"AAF_ERR: omfmInit() must be called before making this call";
+
+//localErrorStrings[BLOCKING_SIZE] = 
+//"AAF_ERR: Blocking size must be >= 0 bytes";
+
+//localErrorStrings[WRONG_MEDIATYPE] = 
+//"AAF_ERR: Incorrect media type for this operation";
+
+//localErrorStrings[MULTI_WRITELEN] = 
+//"AAF_ERR: Writelengths in a writeMultiple must be uniform";
+
+//localErrorStrings[STREAM_REOPEN] = 
+//"AAF_ERROR: Stream reopened without being closed";
+
+//localErrorStrings[TOO_MANY_FMT_OPS] = 
+//"AAF_ERROR: Too many format specifiers for this codec";
+
+//localErrorStrings[MEDIASTREAM_NOTALLOWED] =
+//"AAF_ERR: An object with a media stream datakind is not allowed";
+
+//localErrorStrings[STILLFRAME_BADLENGTH] =
+//"AAF_ERR: Length of a still frame in a media group must be 1";
+
+//localErrorStrings[DATA_NONCONTIG] = 
+//"AAF_ERR: Calling this function now will produce non-contiguous media data";
+   
+//localErrorStrings[OPLIST_OVERFLOW] =
+//   "AAF_ERR: Operation list overflow";
+   
+//localErrorStrings[STREAM_CLOSED] = 
+//"AAF_ERR: Stream must be open for this operation";
+
+//localErrorStrings[USE_MULTI_CREATE] = 
+//"AAF_ERR: Use multiCreate to create this many interleaved channels";
+
+//localErrorStrings[MEDIA_OPENMODE] =
+//"AAF_ERR: Media object opened in wrong mode (readonly vs. readwrite)";
+
+//localErrorStrings[MEDIA_CANNOT_CLOSE] =
+//"AAF_ERR: No proc to close media";
+
+//localErrorStrings[XFER_NOT_BYTES] =
+//"AAF_ERR: Sample transfers must be an integral number of bytes";
+
+//localErrorStrings[ZERO_SAMPLESIZE] =
+//"AAF_ERR: Sample size of zero not allowed";
+
+//localErrorStrings[ZERO_PIXELSIZE] =
+//"AAF_ERR: Pixel size of zero not allowed";
+
+/* Codec Error Codes */
+//localErrorStrings[CODEC_INVALID] =
+//"CODEC invalid or not loaded";
+
+//localErrorStrings[INVALID_OP_CODEC] =
+//"AAF_ERR: Operation not valid on this codec";
+
+//localErrorStrings[BAD_CODEC_REV] =
+//"AAF_ERR: Out of date codec";
+
+//localErrorStrings[CODEC_CHANNELS] =
+//"AAF_ERR: Channel out of range for codec";
+
+//localErrorStrings[BAD_VARIETY] = 
+//"AAF_ERR: Badly formed codec variety string";
+
+//localErrorStrings[CODEC_NAME_SIZE] = 
+//"AAF_ERR: Codec name string too large";
+
+/* Image Error Codes */
+//localErrorStrings[TIFFVERSION] =
+//"AAF_ERR: Error reading tiff version";
+
+//localErrorStrings[BADTIFFCOUNT] =
+//"AAF_ERR: Video: TIFF count less than 1";
+
+//localErrorStrings[24BITVIDEO] =
+//"AAF_ERR: 24 Bit (8-8-8) video only";
+
+//localErrorStrings[JPEGBASELINE] =
+//"AAF_ERR: Only baseline JPEG allowed in AAF files";
+
+//localErrorStrings[BADJPEGINFO] =
+//"AAF_ERR: JPEG TIFF fields not allowed without COMPRESSION == JPEG";
+
+//localErrorStrings[BADQTABLE] =
+//"AAF_ERR: Bad JPEG Quantization Table";
+
+//localErrorStrings[BADACTABLE] =
+//"AAF_ERR: Bad JPEG AC Huffman Table";
+
+//localErrorStrings[BADDCTABLE] =
+//"AAF_ERR: Bad JPEG DC Huffman Table";
+
+//localErrorStrings[NOFRAMEINDEX] =
+//"AAF_ERR: No JPEG Video Frame Index";
+
+//localErrorStrings[BADFRAMEOFFSET] =
+//"AAF_ERR: Frame Index offset out of range";
+
+//localErrorStrings[JPEGPCM] =
+//"AAF_ERR: OMJPEG.c: put_color_map called";
+
+//localErrorStrings[JPEGDISABLED] =
+//"AAF_ERR: JPEG codec disabled";
+
+//localErrorStrings[JPEGPROBLEM] =
+//"AAF_ERR: Unspecified JPEG codec problem";
+
+//localErrorStrings[BADEXPORTPIXFORM] =
+//"AAF_ERR: Unrecognized Pixel Format";
+
+//localErrorStrings[BADEXPORTLAYOUT] =
+//"AAF_ERR: Unrecognized Frame Layout";
+
+//localErrorStrings[BADRWLINES] =
+//"AAF_ERR: Read/Write Lines only enabled for common video format";
+
+/* Audio Error Codes */
+//localErrorStrings[BADAIFCDATA] =
+//"AAF_ERR: Error reading AIFC data";
+
+//localErrorStrings[BADWAVEDATA] =
+//"AAF_ERR: Error reading WAVE data";
+
+//localErrorStrings[NOAUDIOCONV] =
+//"AAF_ERR: Audio Read Samples: Can't convert to requested sample size";
+
+
+/*** OBJECT Error Codes ***/
+//localErrorStrings[NULLOBJECT] =
+//"AAF_ERR: Null Object not allowed";
+
+//localErrorStrings[BADINDEX] =
+//"AAF_ERR: Array Index Out of Range";
+
+//localErrorStrings[INVALID_LINKAGE] =
+//"AAF_ERR: Invalid object attached to property";
+
+//localErrorStrings[BAD_PROP] =
+//"AAF_ERR: Property code out of range";
+
+//localErrorStrings[BAD_TYPE] =
+//"AAF_ERR: Type code out of range";
+
+//localErrorStrings[SWAB] =
+//"AAF_ERR: Cannot swab that data size";
+
+//localErrorStrings[END_OF_DATA] =
+//"AAF_ERR: Read past end of data";
+
+//localErrorStrings[PROP_NOT_PRESENT] =
+//"AAF_ERR: Property missing from the file";
+
+//localErrorStrings[INVALID_DATAKIND] =
+//"AAF_ERR: Datakind invalid or nonexistant";
+
+//localErrorStrings[DATAKIND_EXIST] =
+//"AAF_ERR: A Datakind Definition with this ID already exists";
+
+//localErrorStrings[TOO_MANY_TYPES] =
+//"AAF_ERR: Too many types for a single property";
+
+/*** MOB Error Codes ***/
+/* General Segment Error Codes */
+//localErrorStrings[NOT_SOURCE_CLIP] =
+//"AAF_ERR: This property must be a Source Clip";
+
+//localErrorStrings[FILL_FOUND] =
+//"AAF_ERR: An unexpected fill property was found";
+
+//localErrorStrings[BAD_LENGTH] = 
+//"AAF_ERR: Segment has an illegal length";
+
+//localErrorStrings[BADRATE] = 
+//"AAF_ERR: Illegal value for edit rate";
+
+//localErrorStrings[INVALID_ROUNDING] = 
+//"AAF_ERR: Editrate rounding must be either Floor or Ceiling";
+
+//localErrorStrings[PULLDOWN_DIRECTION] = 
+//"AAF_ERR: Illegal pulldown direction";
+
+//localErrorStrings[PULLDOWN_FUNC] = 
+//"AAF_ERR: use AddPulldownRef() instead of AddPhysSourceRef() for pulldown";
+
+//localErrorStrings[NOT_COMPOSITION] =
+//"AAF_ERR: This property must be a Composition";
+
+/* Timecode Error Codes */
+//localErrorStrings[TIMECODE_NOT_FOUND] =
+//"AAF_ERR: Timecode was not found in the mob chain";
+
+//localErrorStrings[NO_TIMECODE] = 
+//"AAF_ERR: Cannot find timecode on given track";
+
+//localErrorStrings[INVALID_TIMECODE] = 
+//"AAF_ERR: Timecode value is invalid";
+
+/* Track Error Codes */
+//localErrorStrings[TRACK_NOT_FOUND] =
+//"AAF_ERR: Track not found";
+
+//localErrorStrings[BAD_SLOTLENGTH] =
+//"AAF_ERR: Bad Slot Length";
+
+//localErrorStrings[MISSING_TRACKID] =
+//"AAF_ERR: TrackID not present in the mob";
+
+//localErrorStrings[TRACK_EXISTS] =
+//"AAF_ERR: A Track with this trackID already exists";
+
+//localErrorStrings[NOT_A_TRACK] =
+//"AAF_ERR: This function requires a track, not a mob slot.";
+
+/* MOBJ Error Codes */
+//localErrorStrings[MOB_NOT_FOUND] =
+//"AAF_ERR: Mob does not exist in this file";
+
+//localErrorStrings[NO_MORE_MOBS] =
+//"AAF_ERR: The end of the mob chain has been reached";
+
+//localErrorStrings[DUPLICATE_MOBID] =
+//"AAF_ERR: MobID already exists in the file";
+
+//localErrorStrings[MISSING_MOBID] =
+//"AAF_ERR: MobID not present in the file";
+
+/* Effect Error Codes */
+//localErrorStrings[EFFECTDEF_EXIST] =
+//"AAF_ERR: An Effect Definition with this Effect ID already exists";
+
+//localErrorStrings[INVALID_EFFECTDEF] = 
+//"AAF_ERR: Effect Definition invalid or nonexistant";
+
+//localErrorStrings[INVALID_EFFECT] = 
+//"AAF_ERR: Effect is invalid or non-existent";
+
+//localErrorStrings[INVALID_EFFECTARG] =
+//"AAF_ERR: The given effect argument is not valid for this effect";
+
+//localErrorStrings[INVALID_CVAL] = 
+//"AAF_ERR: Constant value is invalid or nonexistent";
+
+//localErrorStrings[RENDER_NOT_FOUND] = 
+//"AAF_ERR: Effect Rendering does not exist";
+
+/* Iterator Error Codes */
+//localErrorStrings[BAD_ITHDL] =
+//"AAF_ERR: Bad Iterator handle";
+
+//localErrorStrings[NO_MORE_OBJECTS] =
+//"AAF_ERR: No More Objects";
+
+//localErrorStrings[ITER_WRONG_TYPE] =
+//"AAF_ERR: Wrong iterator type for this function";
+
+//localErrorStrings[INVALID_SEARCH_CRIT] =
+//"AAF_ERR: Invalid search criteria for this kind of iterator";
+
+//localErrorStrings[INTERNAL_ITERATOR] =
+//"AAF_INTERNAL_ERR: Internal error with iterator";
+
+//localErrorStrings[BAD_SRCH_ITER] =
+//"AAF_ERR: This iterator handle must be allocated by omfiMobOpenSearch()";
+
+/* Traversal Error Codes */
+//localErrorStrings[NULL_MATCHFUNC] = 
+//"AAF_ERR: Match function to traversal routine is null";
+
+//localErrorStrings[NULL_CALLBACKFUNC] = 
+//"AAF_ERR: Callback function to traversal routine is null";
+
+//localErrorStrings[TRAVERSAL_NOT_POSS] =
+//"AAF_ERR: Mob traversal failed";
+
+//localErrorStrings[PARSE_EFFECT_AMBIGUOUS] =
+//"AAF_ERR: Need more information to parse further through an effect";
+
+/* Transition Error Codes */
+//localErrorStrings[INVALID_TRAN_EFFECT] =
+//"AAF_ERR: Effect is not a transition effect";
+
+//localErrorStrings[ADJACENT_TRAN] =
+//"AAF_ERR: Adjacent transitions in a sequence are illegal";
+
+//localErrorStrings[LEADING_TRAN] =
+//"AAF_ERR: Beginning a sequence with a transition is illegal";
+
+//localErrorStrings[INSUFF_TRAN_MATERIAL] =
+//"AAF_ERR: Not enough material as input to transition";
+
+
+/*** SIMPLE COMPOSITION Error Codes ***/
+//localErrorStrings[BAD_STRACKHDL] =
+//"AAF_ERR: Bad Simple Track handle";
+
+//localErrorStrings[STRACK_APPEND_ILLEGAL] =
+//"AAF_ERR: This track does not contain a sequence, appending is illegal";
+
+
+/*** GENERIC Error Codes ***/
+//localErrorStrings[NOMEMORY] =
+//"AAF_ERR: Memory allocation failed, no more heap memory";
+
+//localErrorStrings[OFFSET_SIZE] =
+//"AAF_ERR: 64-bit truncation error";
+
+//localErrorStrings[INTERNAL_NEG64] =
+//"AAF_ERR: Negative 64-bit number";
+
+//localErrorStrings[OVERFLOW64] = 
+//"AAF_ERR: Overflow on a 64-bit operation";
+
+//localErrorStrings[NOT_IN_15] =
+//"AAF_ERR: Function not available in 1.x compatability mode";
+
+//localErrorStrings[NOT_IN_20] =
+//"AAF_ERR: Function not available in 2.x native mode";
+
+//localErrorStrings[NOT_IMPLEMENTED] =
+//"AAF_ERR: Not Implemented";
+
+//localErrorStrings[NULL_PARAM] =
+//"AAF_ERR: NULL Actual parameter to function call";
+
+//localErrorStrings[ZERO_DIVIDE] = 
+//"AAF_ERR: Divide by zero";
+
+/*** SEMANTIC CHECKING Error Codes ***/
+//localErrorStrings[REQUIRED_POSITIVE] =
+//"AAF_ERR: Value should be positive or zero";
+
+//localErrorStrings[INVALID_TRACKKIND] =
+//"AAF_ERR: Invalid Track Kind";
+
+//localErrorStrings[INVALID_EDGETYPE] =
+//"AAF_ERR: Invalid Edge Code Format Kind";
+
+//localErrorStrings[INVALID_FILMTYPE] =
+//"AAF_ERR: Invalid Film Type";
+
+//localErrorStrings[INVALID_TAPECASETYPE] =
+//"AAF_ERR: Invalid Tape Case Type";
+
+//localErrorStrings[INVALID_VIDEOSIGNALTYPE] =
+//"AAF_ERR: Invalid Video Signal Type";
+
+//localErrorStrings[INVALID_TAPEFORMATTYPE] =
+//"AAF_ERR: Invalid Tape Format Type";
+
+//localErrorStrings[INVALID_EDITHINT] =
+//"AAF_ERR: Invalid Effect Edit Hint";
+
+//localErrorStrings[INVALID_INTERPKIND] =
+//"AAF_ERR: Invalid Effect Interpolation Kind";
+
+//localErrorStrings[INVALID_MOBTYPE] =
+//"AAF_ERR: Invalid Mob Type";
+
+//localErrorStrings[INVALID_TRACK_REF] =
+//"AAF_ERR: Positive Relative Track Reference not allowed";
+
+//localErrorStrings[INVALID_OBJ] =
+//"AAF_ERR: Invalid object for this operation";
+
+//localErrorStrings[BAD_VIRTUAL_CREATE] =
+//"AAF_ERR: Creation of virtual objects not allowed";
+
+//localErrorStrings[INVALID_CLASS_ID] =
+//"AAF_ERR: Invalid Object Class ID";
+
+//localErrorStrings[OBJECT_SEMANTIC] =
+//"AAF_ERR: Failed a semantic check on an input obj";
+
+//localErrorStrings[DATA_IN_SEMANTIC] =
+//"AAF_ERR: Failed a semantic check on an input data";
+
+//localErrorStrings[DATA_OUT_SEMANTIC] =
+//"AAF_ERR: Failed a semantic check on an output data";
+
+//localErrorStrings[TYPE_SEMANTIC] = 
+//"AAF_ERR: Property and type do not match";
+
+//localErrorStrings[INVALID_ATTRIBUTEKIND] =
+//"AAF_ERR: Invalid Attribute Kind";
+
+//localErrorStrings[DATA_MDES_DISAGREE] =
+//"AAF_ERR: Media descriptor summary data does not agree with media";
+
+//localErrorStrings[CODEC_SEMANTIC_WARN] =
+//"AAF_ERR: A semantic check warning occured when checking media";
+
+//localErrorStrings[INVALID_BOOLTYPE] =
+//"AAF_ERR: Invalid Boolean Value";
+
+/*** INTERNAL Error Codes ***/
+//localErrorStrings[TABLE_DUP_KEY] =
+//"AAF_INTERNAL_ERR: Duplicate Key detected in internal table";
+
+//localErrorStrings[TABLE_MISSING_COMPARE] =
+//"AAF_INTERNAL_ERR: Missing compare function on table";
+
+//localErrorStrings[TABLE_BAD_HDL] =
+//"AAF_INTERNAL_ERR: Bad table handle";
+
+//localErrorStrings[TABLE_BAD_ITER] =
+//"AAF_INTERNAL_ERR: Bad table iterator handle";
+
+//localErrorStrings[PROPID_MATCH] =
+//"AAF_INTERNAL_ERR: Property ID code doesn't match between revs";
+
+//localErrorStrings[INTERNAL_DIVIDE] = 
+//"AAF_ERR: Internal division error";
+
+/*** Testing Error Codes ***/
+//localErrorStrings[TEST_FAILED] =
+//"AAF_TESTING_ERR: Test Failed";
