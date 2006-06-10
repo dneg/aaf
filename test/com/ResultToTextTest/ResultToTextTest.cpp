@@ -389,6 +389,17 @@ void negativeTests()
   if (y != AAFRESULT_SMALLBUF) {
     std::wcout << "*** Fail." << std::endl;
   }
+  /* AAFRESULT_NOT_IMPLEMENTED is not an AAF error code - it's a
+     redefinition of E_NOTIMPL from facility ITF */
+  y = AAFResultToTextBufLen(AAFRESULT_NOT_IMPLEMENTED, &len);
+  if (y != AAFRESULT_RESULT_NOT_AAF) {
+    std::wcout << "*** Fail." << std::endl;
+  }
+  /* 0x8012ffff is unallocated */
+  y = AAFResultToTextBufLen(0x8012ffff, &len);
+  if (y != AAFRESULT_RESULT_NOT_RECOGNIZED) {
+    std::wcout << "*** Fail." << std::endl;
+  }
 }
 
 int main()
