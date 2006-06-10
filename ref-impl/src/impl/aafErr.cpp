@@ -24,21 +24,112 @@
 
 
 #include <string.h>
+#include <wchar.h>
 #include "aafErr.h"
 
-AAFRESULT ResultToTextBufLen (
-    AAFRESULT  /* result */,
-    aafUInt32 *   /* pResultTextSize */)
+struct errorTableTag {
+  aafUInt16 _code;
+  wchar_t* _name;
+  wchar_t* _desc;
+} errorTable[] = {
+#define AAF_DEFINE_ERROR(name, val, desc) \
+  {val, L"AAFRESULT_"#name, L ## desc},
+#include "AAFMetaResult.h"
+};
+
+size_t errorTableEntryCount = sizeof(errorTable) / sizeof(errorTable[0]);
+
+static bool isAAFError(AAFRESULT code)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+  bool result = false;
+
+  aafUInt16 facility = ((code >> 16) & 0x1fff);
+  if (facility == 0x0012) {
+    result = true;
+  }
+  return result;
+}
+
+static bool findEntry(size_t& index, aafUInt16 code)
+{
+  bool result = false;
+  for (size_t i = 0; i < errorTableEntryCount; i++) {
+    if (errorTable[i]._code == code) {
+      index = i;
+      result = true;
+      break;
+    }
+  }
+  return result;
+}
+
+size_t length(size_t index)
+{
+  size_t result;
+  if (wcscmp(errorTable[index]._desc, L"") == 0) {
+    result  = (wcslen(errorTable[index]._name) + 1) * sizeof(wchar_t);
+  } else {
+    result  = (wcslen(errorTable[index]._name) +
+               wcslen(errorTable[index]._desc) + 
+               wcslen(L" - ") + 1) * sizeof(wchar_t);
+  }
+  return result;
+}
+
+AAFRESULT ResultToTextBufLen (
+    AAFRESULT  result,
+    aafUInt32 *   pResultTextSize)
+{
+  HRESULT hr;
+
+  if (isAAFError(result)) {
+    aafUInt16 x = result;
+    size_t i;
+
+    if (findEntry(i, x)) {
+      *pResultTextSize = length(i);
+      hr = AAFRESULT_SUCCESS;
+    } else {
+      hr = AAFRESULT_RESULT_NOT_RECOGNIZED;
+    }
+  } else {
+    hr = AAFRESULT_RESULT_NOT_AAF;
+  }
+  return hr;
 }
 
 AAFRESULT ResultToText (
-    AAFRESULT  /* result */,
-    aafCharacter *  /* pResultText */,
-    aafUInt32  /* resultTextSize */)
+    AAFRESULT  result,
+    aafCharacter *  pResultText,
+    aafUInt32  resultTextSize)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+  HRESULT hr;
+
+  if (isAAFError(result)) {
+    aafUInt16 x = result;
+    size_t i;
+
+    if (findEntry(i, x)) {
+      size_t len = length(i);
+      if (resultTextSize >= len) {
+        if (wcscmp(errorTable[i]._desc, L"") == 0) {
+          wcscpy(pResultText, errorTable[i]._name);
+        } else {
+          wcscpy(pResultText, errorTable[i]._name);
+          wcscat(pResultText, L" - ");
+          wcscat(pResultText, errorTable[i]._desc);
+        }
+        hr = AAFRESULT_SUCCESS;
+      } else {
+        hr = AAFRESULT_SMALLBUF;
+      }
+    } else {
+      hr = AAFRESULT_RESULT_NOT_RECOGNIZED;
+    }
+  } else {
+    hr = AAFRESULT_RESULT_NOT_AAF;
+  }
+  return hr;
 }
 
 static char    *localErrorStrings[300];
