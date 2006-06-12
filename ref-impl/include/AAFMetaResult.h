@@ -102,7 +102,8 @@ AAF_DEFINE_ERROR(ONESAMPLEREAD,                  0x006B, "")
 AAF_DEFINE_ERROR(ONESAMPLEWRITE,                 0x006C, "")
 AAF_DEFINE_ERROR(DECOMPRESS,                     0x006D, "")
 AAF_DEFINE_ERROR(NODATA,                         0x006E, "")
-AAF_DEFINE_ERROR(SMALLBUF,                       0x006F, "")
+AAF_DEFINE_ERROR(SMALLBUF,                       0x006F,
+    "Sample too large to fit in given buffer")
 AAF_DEFINE_ERROR(BADCOMPR,                       0x0070, "")
 AAF_DEFINE_ERROR(BADPIXFORM,                     0x0071, "")
 AAF_DEFINE_ERROR(BADLAYOUT,                      0x0072, "")
@@ -180,21 +181,29 @@ AAF_DEFINE_ERROR(UNKNOWN_CONTAINER,              0x00B9, "")
 AAF_DEFINE_ERROR(NO_MORE_FLAVOURS,               0x00BA, "")
 
 AAF_ERROR_SECTION("OBJECT Error Codes")
-AAF_DEFINE_ERROR(NULLOBJECT,                     0x00C8, "")
-AAF_DEFINE_ERROR(BADINDEX,                       0x00C9, "")
+AAF_DEFINE_ERROR(NULLOBJECT,                     0x00C8,
+    "NULL object not allowed")
+AAF_DEFINE_ERROR(BADINDEX,                       0x00C9,
+    "Array index out of range")
 AAF_DEFINE_ERROR(INVALID_LINKAGE,                0x00CA, "")
-AAF_DEFINE_ERROR(BAD_PROP,                       0x00CB, "")
-AAF_DEFINE_ERROR(BAD_TYPE,                       0x00CC, "")
+AAF_DEFINE_ERROR(BAD_PROP,                       0x00CB,
+    "Property code out of range")
+AAF_DEFINE_ERROR(BAD_TYPE,                       0x00CC,
+    "Type code out of range")
 AAF_DEFINE_ERROR(SWAB,                           0x00CD, "")
 AAF_DEFINE_ERROR(END_OF_DATA,                    0x00CE, "")
-AAF_DEFINE_ERROR(PROP_NOT_PRESENT,               0x00CF, "")
-AAF_DEFINE_ERROR(INVALID_DATADEF,                0x00D0, "")
+AAF_DEFINE_ERROR(PROP_NOT_PRESENT,               0x00CF,
+    "Property missing from the file")
+AAF_DEFINE_ERROR(INVALID_DATADEF,                0x00D0,
+    "Invalid data definition")
 AAF_DEFINE_ERROR(DATADEF_EXIST,                  0x00D1, "")
 AAF_DEFINE_ERROR(TOO_MANY_TYPES,                 0x00D2, "")
 AAF_DEFINE_ERROR(BAD_TYPE_CATEGORY,              0x00D5, "")
-AAF_DEFINE_ERROR(OBJECT_NOT_FOUND,               0x00D6, "")
+AAF_DEFINE_ERROR(OBJECT_NOT_FOUND,               0x00D6,
+    "Object not found")
 AAF_DEFINE_ERROR(IS_ROOT_CLASS,                  0x00D7, "")
-AAF_DEFINE_ERROR(TYPE_NOT_FOUND,                 0x00D8, "")
+AAF_DEFINE_ERROR(TYPE_NOT_FOUND,                 0x00D8,
+    "Type not found")
 AAF_DEFINE_ERROR(PROPERTY_NOT_FOUND,             0x00D9, "")
 AAF_DEFINE_ERROR(CLASS_NOT_FOUND,                0x00DA, "")
 AAF_DEFINE_ERROR(PROPERTY_DUPLICATE,             0x00DB, "")
@@ -226,13 +235,15 @@ AAF_DEFINE_ERROR(INVALID_EFFECTARG,              0x010D, "")
 AAF_DEFINE_ERROR(INVALID_CVAL,                   0x010E, "")
 AAF_DEFINE_ERROR(RENDER_NOT_FOUND,               0x010F, "")
 AAF_DEFINE_ERROR(BAD_ITHDL,                      0x0110, "")
-AAF_DEFINE_ERROR(NO_MORE_OBJECTS,                0x0111, "")
+AAF_DEFINE_ERROR(NO_MORE_OBJECTS,                0x0111,
+    "No More Objects")
 AAF_DEFINE_ERROR(ITER_WRONG_TYPE,                0x0112, "")
 AAF_DEFINE_ERROR(INVALID_SEARCH_CRIT,            0x0113, "")
 AAF_DEFINE_ERROR(INTERNAL_ITERATOR,              0x0114, "")
 AAF_DEFINE_ERROR(NULL_MATCHFUNC,                 0x0115, "")
 AAF_DEFINE_ERROR(NULL_CALLBACKFUNC,              0x0116, "")
-AAF_DEFINE_ERROR(TRAVERSAL_NOT_POSS,             0x0117, "")
+AAF_DEFINE_ERROR(TRAVERSAL_NOT_POSS,             0x0117,
+    "Mob traversal failed")
 AAF_DEFINE_ERROR(INVALID_TRAN_EFFECT,            0x0118, "")
 AAF_DEFINE_ERROR(ADJACENT_TRAN,                  0x0119, "")
 AAF_DEFINE_ERROR(LEADING_TRAN,                   0x011A, "")
@@ -260,29 +271,40 @@ AAF_DEFINE_ERROR(STRACK_APPEND_ILLEGAL,          0x012D, "")
 AAF_ERROR_SECTION("Object Management Related Error Codes")
 AAF_DEFINE_ERROR(OBJECT_ALREADY_IN_FILE,         0x0130, "")
 AAF_DEFINE_ERROR(OBJECT_NOT_IN_FILE,             0x0131, "")
-AAF_DEFINE_ERROR(OBJECT_ALREADY_ATTACHED,        0x0132, "")
-AAF_DEFINE_ERROR(OBJECT_NOT_ATTACHED,            0x0133, "")
+AAF_DEFINE_ERROR(OBJECT_ALREADY_ATTACHED,        0x0132,
+    "Object already attached")
+AAF_DEFINE_ERROR(OBJECT_NOT_ATTACHED,            0x0133,
+    "Object not attached")
 AAF_DEFINE_ERROR(OBJECT_ALREADY_PERSISTENT,      0x0134, "")
-AAF_DEFINE_ERROR(OBJECT_NOT_PERSISTENT,          0x0135, "")
+AAF_DEFINE_ERROR(OBJECT_NOT_PERSISTENT,          0x0135,
+    "Object not persistent")
 
 AAF_ERROR_SECTION("File kind/file encoding Error Codes")
 AAF_DEFINE_ERROR(FILEKIND_NOT_REGISTERED,        0x0140, "")
 
 AAF_ERROR_SECTION("GENERIC Error Codes")
-AAF_DEFINE_ERROR(NOMEMORY,                       0x015E, "")
+AAF_DEFINE_ERROR(NOMEMORY,                       0x015E,
+    "Memory allocation failed, no more heap memory")
 AAF_DEFINE_ERROR(OFFSET_SIZE,                    0x015F, "")
 AAF_DEFINE_ERROR(INTERNAL_NEG64,                 0x0160, "")
 AAF_DEFINE_ERROR(OVERFLOW64,                     0x0161, "")
-AAF_DEFINE_ERROR(NOT_IN_CURRENT_VERSION,         0x0162, "")
-AAF_DEFINE_ERROR(NULL_PARAM,                     0x0164, "")
+AAF_DEFINE_ERROR(NOT_IN_CURRENT_VERSION,         0x0162,
+    "Not implemented in the current version")
+AAF_DEFINE_ERROR(NULL_PARAM,                     0x0164,
+    "NULL actual parameter to function call")
 AAF_DEFINE_ERROR(ZERO_DIVIDE,                    0x0165, "")
-AAF_DEFINE_ERROR(ALREADY_INITIALIZED,            0x0166, "")
-AAF_DEFINE_ERROR(NOT_INITIALIZED,                0x0167, "")
-AAF_DEFINE_ERROR(INTERNAL_ERROR,                 0x0168, "")
+AAF_DEFINE_ERROR(ALREADY_INITIALIZED,            0x0166,
+    "Object already initialized")
+AAF_DEFINE_ERROR(NOT_INITIALIZED,                0x0167,
+    "Object not initialized")
+AAF_DEFINE_ERROR(INTERNAL_ERROR,                 0x0168,
+    "Internal error")
 AAF_DEFINE_ERROR(DATA_SIZE,                      0x0169, "")
-AAF_DEFINE_ERROR(ILLEGAL_VALUE,                  0x016A, "")
+AAF_DEFINE_ERROR(ILLEGAL_VALUE,                  0x016A,
+    "Illegal value")
 AAF_DEFINE_ERROR(INVALID_TRANSPARENCY,           0x016B, "")
-AAF_DEFINE_ERROR(INVALID_PARAM,                  0x016C, "")
+AAF_DEFINE_ERROR(INVALID_PARAM,                  0x016C,
+    "Invalid parameter")
 AAF_DEFINE_ERROR(INVALID_ENUM_VALUE,             0x016D, "")
 
 AAF_ERROR_SECTION("SEMANTIC CHECKING Error Codes")
@@ -297,7 +319,8 @@ AAF_DEFINE_ERROR(INVALID_TAPEFORMATTYPE,         0x0197, "")
 AAF_DEFINE_ERROR(INVALID_EDITHINT,               0x0198, "")
 AAF_DEFINE_ERROR(INVALID_INTERPKIND,             0x0199, "")
 AAF_DEFINE_ERROR(INVALID_TRACK_REF,              0x019A, "")
-AAF_DEFINE_ERROR(INVALID_OBJ,                    0x019B, "")
+AAF_DEFINE_ERROR(INVALID_OBJ,                    0x019B,
+    "Invalid object for this operation")
 AAF_DEFINE_ERROR(BAD_VIRTUAL_CREATE,             0x019C, "")
 AAF_DEFINE_ERROR(INVALID_CLASS_ID,               0x019D, "")
 AAF_DEFINE_ERROR(OBJECT_SEMANTIC,                0x019E, "")
@@ -312,11 +335,13 @@ AAF_DEFINE_ERROR(INVALID_BOOLTYPE,               0x01A5, "")
 AAF_ERROR_SECTION("INTERNAL Error Codes")
 AAF_DEFINE_ERROR(TABLE_DUP_KEY,                  0x01C2, "")
 AAF_DEFINE_ERROR(TABLE_MISSING_COMPARE,          0x01C3, "")
-AAF_DEFINE_ERROR(TABLE_BAD_HDL,                  0x01C4, "")
+AAF_DEFINE_ERROR(TABLE_BAD_HDL,                  0x01C4,
+    "Bad table handle")
 AAF_DEFINE_ERROR(TABLE_BAD_ITER,                 0x01C5, "")
 AAF_DEFINE_ERROR(PROPID_MATCH,                   0x01C8, "")
 AAF_DEFINE_ERROR(INTERNAL_DIVIDE,                0x01C9, "")
-AAF_DEFINE_ERROR(ABSTRACT_CLASS,                 0x01CA, "")
+AAF_DEFINE_ERROR(ABSTRACT_CLASS,                 0x01CA,
+    "Abstract class")
 AAF_DEFINE_ERROR(WRONG_SIZE,                     0x01CB, "")
 AAF_DEFINE_ERROR(INCONSISTENCY,                  0x01CC, "")
 
@@ -331,8 +356,10 @@ AAF_DEFINE_ERROR(TEST_FAILED,                    0x01F4, "")
 AAF_DEFINE_ERROR(TEST_PARTIAL_SUCCESS,           0x01F5, "")
 
 AAF_ERROR_SECTION("Property access error codes")
-AAF_DEFINE_ERROR(BAD_SIZE,                       0x0200, "")
-AAF_DEFINE_ERROR(NOT_REGISTERED,                 0x0201, "")
+AAF_DEFINE_ERROR(BAD_SIZE,                       0x0200,
+    "Bad size")
+AAF_DEFINE_ERROR(NOT_REGISTERED,                 0x0201,
+    "Not registered")
 AAF_DEFINE_ERROR(NOT_EXTENDABLE,                 0x0202, "")
 AAF_DEFINE_ERROR(ALREADY_UNIQUELY_IDENTIFIED,    0x0203, "")
 AAF_DEFINE_ERROR(DEFAULT_ALREADY_USED,           0x0204, "")
@@ -498,9 +525,6 @@ AAF_DEFINE_ERROR_ALIAS(HRESULT_SUCCESS, SUCCESS)
 
 //localErrorStrings[NODATA] =
 //"AAF_ERR: No data read";
-
-//localErrorStrings[SMALLBUF] =
-//"AAF_ERR: Sample too large to fit in given buffer";
 
 //localErrorStrings[INTERN_TOO_SMALL] =
 //"AAF_ERR: Buffer is not large enough to hold data";
@@ -720,32 +744,15 @@ AAF_DEFINE_ERROR_ALIAS(HRESULT_SUCCESS, SUCCESS)
 
 
 /*** OBJECT Error Codes ***/
-//localErrorStrings[NULLOBJECT] =
-//"AAF_ERR: Null Object not allowed";
-
-//localErrorStrings[BADINDEX] =
-//"AAF_ERR: Array Index Out of Range";
 
 //localErrorStrings[INVALID_LINKAGE] =
 //"AAF_ERR: Invalid object attached to property";
-
-//localErrorStrings[BAD_PROP] =
-//"AAF_ERR: Property code out of range";
-
-//localErrorStrings[BAD_TYPE] =
-//"AAF_ERR: Type code out of range";
 
 //localErrorStrings[SWAB] =
 //"AAF_ERR: Cannot swab that data size";
 
 //localErrorStrings[END_OF_DATA] =
 //"AAF_ERR: Read past end of data";
-
-//localErrorStrings[PROP_NOT_PRESENT] =
-//"AAF_ERR: Property missing from the file";
-
-//localErrorStrings[INVALID_DATAKIND] =
-//"AAF_ERR: Datakind invalid or nonexistant";
 
 //localErrorStrings[DATAKIND_EXIST] =
 //"AAF_ERR: A Datakind Definition with this ID already exists";
@@ -841,9 +848,6 @@ AAF_DEFINE_ERROR_ALIAS(HRESULT_SUCCESS, SUCCESS)
 //localErrorStrings[BAD_ITHDL] =
 //"AAF_ERR: Bad Iterator handle";
 
-//localErrorStrings[NO_MORE_OBJECTS] =
-//"AAF_ERR: No More Objects";
-
 //localErrorStrings[ITER_WRONG_TYPE] =
 //"AAF_ERR: Wrong iterator type for this function";
 
@@ -862,9 +866,6 @@ AAF_DEFINE_ERROR_ALIAS(HRESULT_SUCCESS, SUCCESS)
 
 //localErrorStrings[NULL_CALLBACKFUNC] = 
 //"AAF_ERR: Callback function to traversal routine is null";
-
-//localErrorStrings[TRAVERSAL_NOT_POSS] =
-//"AAF_ERR: Mob traversal failed";
 
 //localErrorStrings[PARSE_EFFECT_AMBIGUOUS] =
 //"AAF_ERR: Need more information to parse further through an effect";
@@ -892,9 +893,6 @@ AAF_DEFINE_ERROR_ALIAS(HRESULT_SUCCESS, SUCCESS)
 
 
 /*** GENERIC Error Codes ***/
-//localErrorStrings[NOMEMORY] =
-//"AAF_ERR: Memory allocation failed, no more heap memory";
-
 //localErrorStrings[OFFSET_SIZE] =
 //"AAF_ERR: 64-bit truncation error";
 
@@ -909,12 +907,6 @@ AAF_DEFINE_ERROR_ALIAS(HRESULT_SUCCESS, SUCCESS)
 
 //localErrorStrings[NOT_IN_20] =
 //"AAF_ERR: Function not available in 2.x native mode";
-
-//localErrorStrings[NOT_IMPLEMENTED] =
-//"AAF_ERR: Not Implemented";
-
-//localErrorStrings[NULL_PARAM] =
-//"AAF_ERR: NULL Actual parameter to function call";
 
 //localErrorStrings[ZERO_DIVIDE] = 
 //"AAF_ERR: Divide by zero";
@@ -953,9 +945,6 @@ AAF_DEFINE_ERROR_ALIAS(HRESULT_SUCCESS, SUCCESS)
 //localErrorStrings[INVALID_TRACK_REF] =
 //"AAF_ERR: Positive Relative Track Reference not allowed";
 
-//localErrorStrings[INVALID_OBJ] =
-//"AAF_ERR: Invalid object for this operation";
-
 //localErrorStrings[BAD_VIRTUAL_CREATE] =
 //"AAF_ERR: Creation of virtual objects not allowed";
 
@@ -992,9 +981,6 @@ AAF_DEFINE_ERROR_ALIAS(HRESULT_SUCCESS, SUCCESS)
 
 //localErrorStrings[TABLE_MISSING_COMPARE] =
 //"AAF_INTERNAL_ERR: Missing compare function on table";
-
-//localErrorStrings[TABLE_BAD_HDL] =
-//"AAF_INTERNAL_ERR: Bad table handle";
 
 //localErrorStrings[TABLE_BAD_ITER] =
 //"AAF_INTERNAL_ERR: Bad table iterator handle";

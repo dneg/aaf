@@ -103,6 +103,7 @@
 #define AAFRESULT_ONESAMPLEWRITE                  ((HRESULT)0x8012006C)
 #define AAFRESULT_DECOMPRESS                      ((HRESULT)0x8012006D)
 #define AAFRESULT_NODATA                          ((HRESULT)0x8012006E)
+        /* Sample too large to fit in given buffer */
 #define AAFRESULT_SMALLBUF                        ((HRESULT)0x8012006F)
 #define AAFRESULT_BADCOMPR                        ((HRESULT)0x80120070)
 #define AAFRESULT_BADPIXFORM                      ((HRESULT)0x80120071)
@@ -181,20 +182,28 @@
 #define AAFRESULT_NO_MORE_FLAVOURS                ((HRESULT)0x801200BA)
 
 /* OBJECT Error Codes */
+        /* NULL object not allowed */
 #define AAFRESULT_NULLOBJECT                      ((HRESULT)0x801200C8)
+        /* Array index out of range */
 #define AAFRESULT_BADINDEX                        ((HRESULT)0x801200C9)
 #define AAFRESULT_INVALID_LINKAGE                 ((HRESULT)0x801200CA)
+        /* Property code out of range */
 #define AAFRESULT_BAD_PROP                        ((HRESULT)0x801200CB)
+        /* Type code out of range */
 #define AAFRESULT_BAD_TYPE                        ((HRESULT)0x801200CC)
 #define AAFRESULT_SWAB                            ((HRESULT)0x801200CD)
 #define AAFRESULT_END_OF_DATA                     ((HRESULT)0x801200CE)
+        /* Property missing from the file */
 #define AAFRESULT_PROP_NOT_PRESENT                ((HRESULT)0x801200CF)
+        /* Invalid data definition */
 #define AAFRESULT_INVALID_DATADEF                 ((HRESULT)0x801200D0)
 #define AAFRESULT_DATADEF_EXIST                   ((HRESULT)0x801200D1)
 #define AAFRESULT_TOO_MANY_TYPES                  ((HRESULT)0x801200D2)
 #define AAFRESULT_BAD_TYPE_CATEGORY               ((HRESULT)0x801200D5)
+        /* Object not found */
 #define AAFRESULT_OBJECT_NOT_FOUND                ((HRESULT)0x801200D6)
 #define AAFRESULT_IS_ROOT_CLASS                   ((HRESULT)0x801200D7)
+        /* Type not found */
 #define AAFRESULT_TYPE_NOT_FOUND                  ((HRESULT)0x801200D8)
 #define AAFRESULT_PROPERTY_NOT_FOUND              ((HRESULT)0x801200D9)
 #define AAFRESULT_CLASS_NOT_FOUND                 ((HRESULT)0x801200DA)
@@ -227,12 +236,14 @@
 #define AAFRESULT_INVALID_CVAL                    ((HRESULT)0x8012010E)
 #define AAFRESULT_RENDER_NOT_FOUND                ((HRESULT)0x8012010F)
 #define AAFRESULT_BAD_ITHDL                       ((HRESULT)0x80120110)
+        /* No More Objects */
 #define AAFRESULT_NO_MORE_OBJECTS                 ((HRESULT)0x80120111)
 #define AAFRESULT_ITER_WRONG_TYPE                 ((HRESULT)0x80120112)
 #define AAFRESULT_INVALID_SEARCH_CRIT             ((HRESULT)0x80120113)
 #define AAFRESULT_INTERNAL_ITERATOR               ((HRESULT)0x80120114)
 #define AAFRESULT_NULL_MATCHFUNC                  ((HRESULT)0x80120115)
 #define AAFRESULT_NULL_CALLBACKFUNC               ((HRESULT)0x80120116)
+        /* Mob traversal failed */
 #define AAFRESULT_TRAVERSAL_NOT_POSS              ((HRESULT)0x80120117)
 #define AAFRESULT_INVALID_TRAN_EFFECT             ((HRESULT)0x80120118)
 #define AAFRESULT_ADJACENT_TRAN                   ((HRESULT)0x80120119)
@@ -261,28 +272,39 @@
 /* Object Management Related Error Codes */
 #define AAFRESULT_OBJECT_ALREADY_IN_FILE          ((HRESULT)0x80120130)
 #define AAFRESULT_OBJECT_NOT_IN_FILE              ((HRESULT)0x80120131)
+        /* Object already attached */
 #define AAFRESULT_OBJECT_ALREADY_ATTACHED         ((HRESULT)0x80120132)
+        /* Object not attached */
 #define AAFRESULT_OBJECT_NOT_ATTACHED             ((HRESULT)0x80120133)
 #define AAFRESULT_OBJECT_ALREADY_PERSISTENT       ((HRESULT)0x80120134)
+        /* Object not persistent */
 #define AAFRESULT_OBJECT_NOT_PERSISTENT           ((HRESULT)0x80120135)
 
 /* File kind/file encoding Error Codes */
 #define AAFRESULT_FILEKIND_NOT_REGISTERED         ((HRESULT)0x80120140)
 
 /* GENERIC Error Codes */
+        /* Memory allocation failed, no more heap memory */
 #define AAFRESULT_NOMEMORY                        ((HRESULT)0x8012015E)
 #define AAFRESULT_OFFSET_SIZE                     ((HRESULT)0x8012015F)
 #define AAFRESULT_INTERNAL_NEG64                  ((HRESULT)0x80120160)
 #define AAFRESULT_OVERFLOW64                      ((HRESULT)0x80120161)
+        /* Not implemented in the current version */
 #define AAFRESULT_NOT_IN_CURRENT_VERSION          ((HRESULT)0x80120162)
+        /* NULL actual parameter to function call */
 #define AAFRESULT_NULL_PARAM                      ((HRESULT)0x80120164)
 #define AAFRESULT_ZERO_DIVIDE                     ((HRESULT)0x80120165)
+        /* Object already initialized */
 #define AAFRESULT_ALREADY_INITIALIZED             ((HRESULT)0x80120166)
+        /* Object not initialized */
 #define AAFRESULT_NOT_INITIALIZED                 ((HRESULT)0x80120167)
+        /* Internal error */
 #define AAFRESULT_INTERNAL_ERROR                  ((HRESULT)0x80120168)
 #define AAFRESULT_DATA_SIZE                       ((HRESULT)0x80120169)
+        /* Illegal value */
 #define AAFRESULT_ILLEGAL_VALUE                   ((HRESULT)0x8012016A)
 #define AAFRESULT_INVALID_TRANSPARENCY            ((HRESULT)0x8012016B)
+        /* Invalid parameter */
 #define AAFRESULT_INVALID_PARAM                   ((HRESULT)0x8012016C)
 #define AAFRESULT_INVALID_ENUM_VALUE              ((HRESULT)0x8012016D)
 
@@ -298,6 +320,7 @@
 #define AAFRESULT_INVALID_EDITHINT                ((HRESULT)0x80120198)
 #define AAFRESULT_INVALID_INTERPKIND              ((HRESULT)0x80120199)
 #define AAFRESULT_INVALID_TRACK_REF               ((HRESULT)0x8012019A)
+        /* Invalid object for this operation */
 #define AAFRESULT_INVALID_OBJ                     ((HRESULT)0x8012019B)
 #define AAFRESULT_BAD_VIRTUAL_CREATE              ((HRESULT)0x8012019C)
 #define AAFRESULT_INVALID_CLASS_ID                ((HRESULT)0x8012019D)
@@ -313,10 +336,12 @@
 /* INTERNAL Error Codes */
 #define AAFRESULT_TABLE_DUP_KEY                   ((HRESULT)0x801201C2)
 #define AAFRESULT_TABLE_MISSING_COMPARE           ((HRESULT)0x801201C3)
+        /* Bad table handle */
 #define AAFRESULT_TABLE_BAD_HDL                   ((HRESULT)0x801201C4)
 #define AAFRESULT_TABLE_BAD_ITER                  ((HRESULT)0x801201C5)
 #define AAFRESULT_PROPID_MATCH                    ((HRESULT)0x801201C8)
 #define AAFRESULT_INTERNAL_DIVIDE                 ((HRESULT)0x801201C9)
+        /* Abstract class */
 #define AAFRESULT_ABSTRACT_CLASS                  ((HRESULT)0x801201CA)
 #define AAFRESULT_WRONG_SIZE                      ((HRESULT)0x801201CB)
 #define AAFRESULT_INCONSISTENCY                   ((HRESULT)0x801201CC)
@@ -332,7 +357,9 @@
 #define AAFRESULT_TEST_PARTIAL_SUCCESS            ((HRESULT)0x801201F5)
 
 /* Property access error codes */
+        /* Bad size */
 #define AAFRESULT_BAD_SIZE                        ((HRESULT)0x80120200)
+        /* Not registered */
 #define AAFRESULT_NOT_REGISTERED                  ((HRESULT)0x80120201)
 #define AAFRESULT_NOT_EXTENDABLE                  ((HRESULT)0x80120202)
 #define AAFRESULT_ALREADY_UNIQUELY_IDENTIFIED     ((HRESULT)0x80120203)
