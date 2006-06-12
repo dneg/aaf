@@ -27,6 +27,8 @@
 #include <wchar.h>
 #include "aafErr.h"
 
+#include "OMSet.h"
+
 struct errorTableTag {
   aafUInt16 _code;
   wchar_t* _name;
@@ -36,6 +38,9 @@ struct errorTableTag {
   {val, L ## "AAFRESULT_" L ## #name, L ## desc},
 #include "AAFMetaResult.h"
 };
+
+// Map low 16-bits of error code to table index
+OMSet<aafUInt16, aafUInt16> errors;
 
 size_t errorTableEntryCount = sizeof(errorTable) / sizeof(errorTable[0]);
 
@@ -52,13 +57,19 @@ static bool isAAFError(AAFRESULT code)
 
 static bool findEntry(size_t& index, aafUInt16 code)
 {
-  bool result = false;
-  for (size_t i = 0; i < errorTableEntryCount; i++) {
-    if (errorTable[i]._code == code) {
-      index = i;
-      result = true;
-      break;
+  if (errors.count() == 0) {
+    // map is empty - initialize it
+    for (aafUInt16 i = 0; i < errorTableEntryCount; i++) {
+      errors.insert(errorTable[i]._code, i);
     }
+  }
+
+  // lookup
+  bool result = false;
+  aafUInt16 k;
+  if (errors.find(code, k)) {
+    index = k;
+    result = true;
   }
   return result;
 }
