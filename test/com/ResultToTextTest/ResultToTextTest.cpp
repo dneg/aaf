@@ -400,6 +400,12 @@ void negativeTests()
   if (y != AAFRESULT_RESULT_NOT_RECOGNIZED) {
     std::wcout << "*** Fail." << std::endl;
   }
+  /* AAFRESULT_SUCCESS is not an AAF error code - it's a
+     redefinition of S_OK */
+  y = AAFResultToTextBufLen(AAFRESULT_SUCCESS, &len);
+  if (y != AAFRESULT_RESULT_NOT_AAF) {
+    std::wcout << "*** Fail." << std::endl;
+  }
 }
 
 int main()
