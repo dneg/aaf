@@ -351,6 +351,8 @@
 #define AAFRESULT_ASSERTION_VIOLATION             ((HRESULT)0x801201D0)
         /* Reference implementation unexpected C++ exception (programming error) */
 #define AAFRESULT_UNEXPECTED_EXCEPTION            ((HRESULT)0x801201D1)
+        /* Reference implementation unhandled exception (programming error) */
+#define AAFRESULT_UNHANDLED_EXCEPTION             ((HRESULT)0x801201D2)
 
 /* Testing Error Codes */
 #define AAFRESULT_TEST_FAILED                     ((HRESULT)0x801201F4)

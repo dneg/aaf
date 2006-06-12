@@ -342,6 +342,7 @@ void positiveTests()
   /* INTERNAL Error Codes - programming errors */
   testCode(AAFRESULT_ASSERTION_VIOLATION);
   testCode(AAFRESULT_UNEXPECTED_EXCEPTION);
+  testCode(AAFRESULT_UNHANDLED_EXCEPTION);
 
   /* Testing Error Codes */
   testCode(AAFRESULT_TEST_FAILED);

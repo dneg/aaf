@@ -350,6 +350,8 @@ AAF_DEFINE_ERROR(ASSERTION_VIOLATION,            0x01D0,
     "Reference implementation assertion violation (programming error).")
 AAF_DEFINE_ERROR(UNEXPECTED_EXCEPTION,           0x01D1,
     "Reference implementation unexpected C++ exception (programming error)")
+AAF_DEFINE_ERROR(UNHANDLED_EXCEPTION,            0x01D2,
+    "Reference implementation unhandled exception (programming error)")
 
 AAF_ERROR_SECTION("Testing Error Codes")
 AAF_DEFINE_ERROR(TEST_FAILED,                    0x01F4, "")
