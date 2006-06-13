@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2006, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -259,14 +259,14 @@ OMIOStream& OMIOStream::setw(int n)
   return *this;
 }
 
-OMIOStream& OMIOStream::write(const OMByte* bytes, size_t byteCount)
+OMIOStream& OMIOStream::write(const OMByte* bytes, OMUInt32 byteCount)
 {
   OMUInt32 actualByteCount;
   _store->write(bytes, byteCount, actualByteCount);
   return *this;
 }
 
-OMIOStream& OMIOStream::read(OMByte* bytes, size_t byteCount)
+OMIOStream& OMIOStream::read(OMByte* bytes, OMUInt32 byteCount)
 {
   OMUInt32 actualByteCount;
   _store->read(bytes, byteCount, actualByteCount);
@@ -275,8 +275,14 @@ OMIOStream& OMIOStream::read(OMByte* bytes, size_t byteCount)
 
 void OMIOStream::write(const char* string)
 {
-  OMUInt32 size;
-  _store->write(reinterpret_cast<const OMByte*>(string), strlen(string), size);
+  TRACE("OMIOStream::write");
+  OMUInt32 actualByteCount;
+  size_t length = strlen(string);
+  ASSERT("String not too long", length <= OMUINT32_MAX);
+  OMUInt32 byteCount = static_cast<OMUInt32>(length);
+  _store->write(reinterpret_cast<const OMByte*>(string),
+                byteCount,
+                actualByteCount);
 }
 
 OMIOStream& beginl(OMIOStream& s)
