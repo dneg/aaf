@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2006, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -33,6 +33,7 @@
 #endif
 
 #include <stddef.h>
+#include "OMDataTypes.h"
 
 template <typename Key, typename Value>
 class OMRedBlackTreeIterator;
@@ -91,7 +92,7 @@ public:
     // @cmember The number of items in this <c OMRedBlackTree>.
     //          <mf OMRedBlackTree::count> returns the actual number
     //          of items in the <c OMRedBlackTree>.
-  size_t count(void) const;
+  OMUInt32 count(void) const;
 
     // @cmember Traverse this <c OMRedBlackTree> in order, the
     //          function <p f> is called for each item in the tree.
@@ -163,7 +164,7 @@ private:
 
   Node* _root;
   Node* _nil; // sentinel
-  size_t _count;
+  OMUInt32 _count;
 
   struct Node {
 

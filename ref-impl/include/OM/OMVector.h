@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2006, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -26,9 +26,8 @@
 #ifndef OMVECTOR_H
 #define OMVECTOR_H
 
+#include "OMDataTypes.h"
 #include "OMContainer.h"
-
-#include <stddef.h>
 
   // @class Elastic sequential collections of elements accessible by
   //        index.  The order of elements is determined externally.
@@ -57,7 +56,7 @@ public:
     // @cmember The number of elements in this <c OMVector>.
     //          <mf OMVector::count> returns the actual number
     //          of elements in the <c OMVector>.
-  size_t count(void) const;
+  OMUInt32 count(void) const;
 
     // @cmember Remove <p value> from this <c OMVector>.
     //          In the case of duplicate values, the one with the lowest
@@ -67,17 +66,17 @@ public:
     // @cmember The capacity of this <c OMVector>.
     //          <mf OMVector::capacity> returns the potential
     //          number of elements in the <c OMVector>.
-  virtual size_t capacity(void) const;
+  virtual OMUInt32 capacity(void) const;
 
     // @cmember Increase the capacity of this <c OMVector> so that it
     //          can contain at least <p capacity> elements without
     //          having to be resized.
-  virtual void grow(size_t capacity);
+  virtual void grow(OMUInt32 capacity);
 
     // @cmember Free any unused capacity in this <c OMVector> while
     //          ensuring that it can contain at least <p capacity>
     //          elements.
-  virtual void shrink(size_t capacity);
+  virtual void shrink(OMUInt32 capacity);
 
     // @cmember Is this <c OMVector> full ?
   virtual bool full(void) const;
@@ -88,25 +87,25 @@ public:
     // @cmember Set the value of the <p Element> at
     //          position <p index> in this <c OMVector>.
     //          The existing <p Element> at <p index> is replaced.
-  void setAt(const Element value, const size_t index);
+  void setAt(const Element value, const OMUInt32 index);
 
     // @cmember Get the value of the <p Element> at
     //          position <p index> in this <c OMVector>.
-  void getAt(Element& value, const size_t index) const;
+  void getAt(Element& value, const OMUInt32 index) const;
 
     // @cmember Get the value of the <p Element> at
     //          position <p index> in this <c OMVector>.
-  Element& getAt(const size_t index) const;
+  Element& getAt(const OMUInt32 index) const;
 
     // @cmember The value of the <p Element> at
     //          position <p index> in this <c OMVector>.
-  Element& valueAt(const size_t index) const;
+  Element& valueAt(const OMUInt32 index) const;
 
     // @cmember Insert <p value> into this <c OMVector> at
     //          position <p index>. Existing values in this
     //          <c OMVector> at <p index> and higher are
     //          shifted up one index position.
-  virtual void insertAt(const Element value, const size_t index);
+  virtual void insertAt(const Element value, const OMUInt32 index);
 
     // @cmember Append the given <p Element> <p value> to
     //          this <c OMVector>. The new element is added after
@@ -124,7 +123,7 @@ public:
     //          position <p index>. Existing values in this
     //          <c OMVector> at <p index> + 1 and higher are
     //          shifted down on index position.
-  virtual void removeAt(const size_t index);
+  virtual void removeAt(const OMUInt32 index);
 
     // @cmember Remove the last (index == count() - 1) element
     //          from this <c OMVector>.
@@ -140,21 +139,21 @@ public:
 
     // @cmember The index of the element with value <p value>.
     //          In the case of duplicate values, lowest index is returned.
-  size_t indexOfValue(const Element value) const;
+  OMUInt32 indexOfValue(const Element value) const;
 
     // @cmember The number of elements with value <p value>.
-  size_t countValue(const Element value) const;
+  OMUInt32 countValue(const Element value) const;
 
 private:
   // @access Private members.
 
-  Element* _vector; // The representation of the vector
-  size_t _capacity; // Potential number of elements
-  size_t _count;    // Actual number of elements
+  Element* _vector;   // The representation of the vector
+  OMUInt32 _capacity; // Potential number of elements
+  OMUInt32 _count;    // Actual number of elements
 
     // @cmember Calculate the next valid capacity higher
     //          than <p capacity>.
-  static size_t nextHigherCapacity(size_t capacity);
+  static OMUInt32 nextHigherCapacity(OMUInt32 capacity);
 
 };
 

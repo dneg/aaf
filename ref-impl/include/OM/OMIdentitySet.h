@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2006, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -26,10 +26,9 @@
 #ifndef OMIDENTITYSET_H
 #define OMIDENTITYSET_H
 
+#include "OMDataTypes.h"
 #include "OMContainer.h"
 #include "OMRedBlackTree.h"
-
-#include <stddef.h>
 
 template <typename Element>
 class OMIdentitySetIterator;
@@ -64,7 +63,7 @@ public:
   virtual bool contains(const Element& element) const;
 
     // @cmember The number of elements in this <c OMIdentitySet>.
-  size_t count(void) const;
+  OMUInt32 count(void) const;
 
     // @cmember Remove the <p element> from this <c OMIdentitySet>.
     //          @precondition <f contains(element)>

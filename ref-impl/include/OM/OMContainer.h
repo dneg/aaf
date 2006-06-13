@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2006, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -26,7 +26,7 @@
 #ifndef OMCONTAINER_H
 #define OMCONTAINER_H
 
-#include <stddef.h>
+#include "OMDataTypes.h"
 
   // @class Abstract base class for collections of elements.
   //   @tcarg class | Element | The type of an <c OMContainer> element.
@@ -40,7 +40,7 @@ public:
     // @cmember The number of elements in this <c OMContainer>.
     //          <mf OMContainer::count> returns the actual number
     //          of elements in the <c OMContainer>.
-  virtual size_t count(void) const = 0;
+  virtual OMUInt32 count(void) const = 0;
 
     // @cmember Remove all elements from this <c OMContainer>.
   virtual void clear(void) = 0;

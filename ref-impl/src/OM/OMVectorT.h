@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2006, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -75,7 +75,7 @@ bool OMVector<Element>::containsValue(const Element value) const
 
   bool result = false;
 
-  for (size_t i = 0; i < _count; i++) {
+  for (OMUInt32 i = 0; i < _count; i++) {
     if (_vector[i] == value) {
       result = true;
       break;
@@ -92,7 +92,7 @@ bool OMVector<Element>::containsValue(const Element value) const
   //   @rdesc The number of elements in this <c OMVector>.
   //   @this const
 template <typename Element>
-size_t OMVector<Element>::count(void) const
+OMUInt32 OMVector<Element>::count(void) const
 {
   TRACE("OMVector<Element>::count");
 
@@ -112,7 +112,7 @@ void OMVector<Element>::removeValue(const Element value)
 
   PRECONDITION("Value is present", containsValue(value));
 
-  size_t index = indexOfValue(value);
+  OMUInt32 index = indexOfValue(value);
 
   removeAt(index);
 
@@ -126,7 +126,7 @@ void OMVector<Element>::removeValue(const Element value)
   //   @rdesc The capacity of this <c OMVector>.
   //   @this const
 template <typename Element>
-size_t OMVector<Element>::capacity(void) const
+OMUInt32 OMVector<Element>::capacity(void) const
 {
   TRACE("OMVector<Element>::capacity");
 
@@ -140,14 +140,14 @@ size_t OMVector<Element>::capacity(void) const
   //          This type must support operator = and operator ==.
   //   @parm The new capacity.
 template <typename Element>
-void OMVector<Element>::grow(size_t capacity)
+void OMVector<Element>::grow(OMUInt32 capacity)
 {
   TRACE("OMVector<Element>::grow");
   PRECONDITION("Valid capacity", capacity > 0);
 
   // Calculate the new capacity
   //
-  size_t newCapacity = nextHigherCapacity(capacity);
+  OMUInt32 newCapacity = nextHigherCapacity(capacity);
 
   if (newCapacity > _capacity) {
 
@@ -164,7 +164,7 @@ void OMVector<Element>::grow(size_t capacity)
 
     // Copy over all elements from the old array
     //
-    for (size_t i = 0; i < _count; i++) {
+    for (OMUInt32 i = 0; i < _count; i++) {
       _vector[i] = oldVector[i];
     }
 
@@ -182,13 +182,13 @@ void OMVector<Element>::grow(size_t capacity)
   //          This type must support operator = and operator ==.
   //   @parm The new capacity.
 template <typename Element>
-void OMVector<Element>::shrink(size_t capacity)
+void OMVector<Element>::shrink(OMUInt32 capacity)
 {
   TRACE("OMVector<Element>::shrink");
 
   // Calculate the new capacity
   //
-  size_t newCapacity = nextHigherCapacity(capacity);
+  OMUInt32 newCapacity = nextHigherCapacity(capacity);
 
   if (newCapacity < _capacity) {
 
@@ -207,7 +207,7 @@ void OMVector<Element>::shrink(size_t capacity)
 
       // Copy over all elements from the old array
       //
-      for (size_t i = 0; i < _count; i++) {
+      for (OMUInt32 i = 0; i < _count; i++) {
         _vector[i] = oldVector[i];
       }
 
@@ -268,7 +268,7 @@ bool OMVector<Element>::empty(void) const
   //   @parm The new value.
   //   @parm The index.
 template <typename Element>
-void OMVector<Element>::setAt(const Element value, const size_t index)
+void OMVector<Element>::setAt(const Element value, const OMUInt32 index)
 {
   TRACE("OMVector<Element>::setAt");
   PRECONDITION("Valid index", index <  _count);
@@ -286,7 +286,7 @@ void OMVector<Element>::setAt(const Element value, const size_t index)
   //   @parm The index.
   //   @this const
 template <typename Element>
-void OMVector<Element>::getAt(Element& value, const size_t index) const
+void OMVector<Element>::getAt(Element& value, const OMUInt32 index) const
 {
   TRACE("OMVector<Element>::getAt");
   PRECONDITION("Valid index", index < _count);
@@ -301,7 +301,7 @@ void OMVector<Element>::getAt(Element& value, const size_t index) const
   //   @parm The index.
   //   @this const
 template <typename Element>
-Element& OMVector<Element>::getAt(const size_t index) const
+Element& OMVector<Element>::getAt(const OMUInt32 index) const
 {
   TRACE("OMVector<Element>::getAt");
   PRECONDITION("Valid index", index < _count);
@@ -316,7 +316,7 @@ Element& OMVector<Element>::getAt(const size_t index) const
   //   @parm The index.
   //   @this const
 template <typename Element>
-Element& OMVector<Element>::valueAt(const size_t index) const
+Element& OMVector<Element>::valueAt(const OMUInt32 index) const
 {
   TRACE("OMVector<Element>::valueAt");
   PRECONDITION("Valid index", index < _count);
@@ -333,11 +333,11 @@ Element& OMVector<Element>::valueAt(const size_t index) const
   //   @parm The value to insert.
   //   @parm The index.
 template <typename Element>
-void OMVector<Element>::insertAt(const Element value, const size_t index)
+void OMVector<Element>::insertAt(const Element value, const OMUInt32 index)
 {
   TRACE("OMVector<Element>::insertAt");
   PRECONDITION("Valid index", index <= _count);
-  SAVE(_count, size_t);
+  SAVE(_count, OMUInt32);
 
   // Make space for at least one more element
   //
@@ -345,7 +345,7 @@ void OMVector<Element>::insertAt(const Element value, const size_t index)
 
   // Shuffle up existing elements, if any and if necessary
   //
-  for (size_t i = _count; i > index; i--) {
+  for (OMUInt32 i = _count; i > index; i--) {
     _vector[i] = _vector[i - 1];
   }
 
@@ -394,15 +394,15 @@ void OMVector<Element>::prepend(const Element value)
   //          This type must support operator = and operator ==.
   //   @parm The index of the value to be removed.
 template <typename Element>
-void OMVector<Element>::removeAt(const size_t index)
+void OMVector<Element>::removeAt(const OMUInt32 index)
 {
   TRACE("OMVector<Element>::removeAt");
   PRECONDITION("Valid index", index < _count);
-  SAVE(_count, size_t);
+  SAVE(_count, OMUInt32);
 
   // Shuffle down existing elements
   //
-  for (size_t i = index; i < _count - 1; i++) {
+  for (OMUInt32 i = index; i < _count - 1; i++) {
     _vector[i] = _vector[i + 1];
   }
 
@@ -452,8 +452,8 @@ void OMVector<Element>::clear(void)
 {
   TRACE("OMVector<Element>::clear");
 
-  size_t elementCount = count();
-  for (size_t i = 0; i < elementCount; i++) {
+  OMUInt32 elementCount = count();
+  for (OMUInt32 i = 0; i < elementCount; i++) {
     removeLast();
   }
   POSTCONDITION("All elements removed", count() == 0);
@@ -467,15 +467,15 @@ void OMVector<Element>::clear(void)
   //   @parm The value for which the index is to be found.
   //   @this const
 template <typename Element>
-size_t OMVector<Element>::indexOfValue(const Element value) const
+OMUInt32 OMVector<Element>::indexOfValue(const Element value) const
 {
   TRACE("OMVector<Element>::indexOfValue");
 
   PRECONDITION("Value is present", containsValue(value));
 
-  size_t result = 0;
+  OMUInt32 result = 0;
 
-  for (size_t i = 0; i < _count; i++) {
+  for (OMUInt32 i = 0; i < _count; i++) {
     if (_vector[i] == value) {
       result = i;
       break;
@@ -490,13 +490,13 @@ size_t OMVector<Element>::indexOfValue(const Element value) const
   //   @parm The value for which the index is to be found.
   //   @this const
 template <typename Element>
-size_t OMVector<Element>::countValue(const Element value) const
+OMUInt32 OMVector<Element>::countValue(const Element value) const
 {
   TRACE("OMVector<Element>::countValue");
 
-  size_t result = 0;
+  OMUInt32 result = 0;
 
-  for (size_t i = 0; i < _count; i++) {
+  for (OMUInt32 i = 0; i < _count; i++) {
     if (_vector[i] == value) {
       result = result + 1;
     }
@@ -509,14 +509,14 @@ size_t OMVector<Element>::countValue(const Element value) const
   //          This type must support operator = and operator ==.
   //   @parm The desired capaciy.
 template <typename Element>
-size_t OMVector<Element>::nextHigherCapacity(size_t capacity)
+OMUInt32 OMVector<Element>::nextHigherCapacity(OMUInt32 capacity)
 {
   TRACE("OMVector<Element>::nextHigherCapacity");
 
   // The existing capacity is doubled until doubling is not possible.
   // Once doubling is no longer possible the capacity is set to the
   // maximum index value.
-  // If size_t is, for example, 32 bits this allows a maximum capacity
+  // Since we're using 32 bits this allows a maximum capacity
   // of 4G vector elements. This is an architectural limit.
   // All vectors with less than 2G elements have a capacity that is an
   // even power of two.
@@ -524,18 +524,17 @@ size_t OMVector<Element>::nextHigherCapacity(size_t capacity)
   // common case of creating a vector from scratch using a sequence
   // of append operations.
   //
-  const size_t OMSIZE_T_MAX = ~(size_t)0;
-  const size_t OMSIZE_T_MASK = ~(OMSIZE_T_MAX >> 1); // set only the msb
+  const OMUInt32 OMUINT32_MASK = ~(OMUINT32_MAX >> 1); // set only the msb
 
-  size_t result;
+  OMUInt32 result;
   if (capacity == 0) {
     result = 0;
-  } else if (capacity < OMSIZE_T_MASK) {
+  } else if (capacity < OMUINT32_MASK) {
     ASSERT("Non-zero capacity", capacity > 0);
-    ASSERT("Capacity can be doubled", capacity < OMSIZE_T_MASK);
+    ASSERT("Capacity can be doubled", capacity < OMUINT32_MASK);
 
-    size_t mask = OMSIZE_T_MASK;
-    size_t oldMask;
+    OMUInt32 mask = OMUINT32_MASK;
+    OMUInt32 oldMask;
 
     do {
       oldMask = mask;
@@ -548,7 +547,7 @@ size_t OMVector<Element>::nextHigherCapacity(size_t capacity)
       result = oldMask; // next higher power
     }
   } else {
-    result = OMSIZE_T_MAX;
+    result = OMUINT32_MAX;
   }
   POSTCONDITION("Valid result", result >= capacity);
   return result;

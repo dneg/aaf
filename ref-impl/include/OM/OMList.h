@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2006, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -27,9 +27,8 @@
 #ifndef OMLIST_H
 #define OMLIST_H
 
+#include "OMDataTypes.h"
 #include "OMContainer.h"
-
-#include <stddef.h>
 
 template <typename Element>
 class OMListIterator;
@@ -67,7 +66,7 @@ public:
     // @cmember The number of elements in this <c OMList>.
     //          <mf OMList::count> returns the actual number
     //          of elements in the <c OMList>.
-  size_t count(void) const;
+  OMUInt32 count(void) const;
 
   OMListIterator<Element> findValue(const Element& value);
 
@@ -101,7 +100,7 @@ public:
   virtual void clear(void);
 
     // @cmember The number of elements with value <p value>.
-  size_t countValue(const Element value) const;
+  OMUInt32 countValue(const Element value) const;
 
   OMListIterator<Element> first(void) const;
 
@@ -112,7 +111,7 @@ private:
 
   struct Node;
   Node* _nil;
-  size_t _count;
+  OMUInt32 _count;
 
   struct Node {
     Node* _next;

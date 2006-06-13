@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2006, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -133,12 +133,12 @@ bool OMList<Element>::containsValue(const Element value) const
   //   @rdesc The number of elements in this <c OMList>.
   //   @this const
 template <typename Element>
-size_t OMList<Element>::count(void) const
+OMUInt32 OMList<Element>::count(void) const
 {
   TRACE("OMList<Element>::count");
 
 #if defined(OM_DEBUG)
-  size_t n = 0;
+  OMUInt32 n = 0;
   Node* p = _nil->_next;;
   while (p != _nil) {
     n = n + 1;
@@ -299,11 +299,11 @@ void OMList<Element>::clear(void)
   //   @parm The number of times the value occurs.
   //   @this const
 template <typename Element>
-size_t OMList<Element>::countValue(const Element value) const
+OMUInt32 OMList<Element>::countValue(const Element value) const
 {
   TRACE("OMList<Element>::countValue");
 
-  size_t result = 0;
+  OMUInt32 result = 0;
   Node* p = _nil->_next;
   while (p != _nil) {
     if (p->_value == value) {
