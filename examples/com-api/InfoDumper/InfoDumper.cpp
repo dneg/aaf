@@ -239,7 +239,7 @@ static void printTimeStamp (const aafTimeStamp_t & ts,
 		<< monthNameBuf << " "
 		<< (int) ts.date.day << ", "
 		<< (int) ts.date.year <<	" ";
-	char buf [12];
+	char buf [64];
 	sprintf (buf, "%d:%02d:%02d.%02d",
 		ts.time.hour,
 		ts.time.minute,
