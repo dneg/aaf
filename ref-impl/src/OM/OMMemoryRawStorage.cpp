@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2006, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -47,8 +47,8 @@ OMMemoryRawStorage::~OMMemoryRawStorage(void)
 {
   TRACE("OMMemoryRawStorage::~OMMemoryRawStorage");
 
-  size_t count = _pageVector.count();
-  for (size_t i = 0; i < count; i++) {
+  OMUInt32 count = _pageVector.count();
+  for (OMUInt32 i = 0; i < count; i++) {
     OMByte* page = _pageVector.valueAt(i);
     delete [] page;
   }
@@ -92,34 +92,34 @@ void OMMemoryRawStorage::read(OMByte* bytes,
     count = byteCount;
   } else {
     // Insufficient bytes to satify read request
-    ASSERT("Supported byte count", remainingBytes < ~(size_t)0);
-    count = static_cast<size_t>(remainingBytes);
+    ASSERT("Supported byte count", remainingBytes < ~(OMUInt32)0);
+    count = static_cast<OMUInt32>(remainingBytes);
   }
 
   OMUInt64 firstPage64 = (position() / _pageSize);
-  ASSERT("Supported first page", firstPage64 < ~(size_t)0);
-  size_t firstPage = static_cast<size_t>(firstPage64);
+  ASSERT("Supported first page", firstPage64 < ~(OMUInt32)0);
+  OMUInt32 firstPage = static_cast<OMUInt32>(firstPage64);
 
   OMUInt64 lastPage64 = (position() + count) / _pageSize;
-  ASSERT("Supported last page", lastPage64 < ~(size_t)0);
-  size_t lastPage = static_cast<size_t>(lastPage64);
+  ASSERT("Supported last page", lastPage64 < ~(OMUInt32)0);
+  OMUInt32 lastPage = static_cast<OMUInt32>(lastPage64);
 
   ASSERT("Proper page ordering", lastPage >= firstPage);
 
   // offset of first partial page
   OMUInt64 firstOffset64 = position() - (firstPage * _pageSize);
-  ASSERT("Supported offset", firstOffset64 < ~(size_t)0);
-  size_t firstOffset = static_cast<size_t>(firstOffset64);
+  ASSERT("Supported offset", firstOffset64 < ~(OMUInt32)0);
+  OMUInt32 firstOffset = static_cast<OMUInt32>(firstOffset64);
   // byte count of first partial page
-  size_t firstCount = 0;
+  OMUInt32 firstCount = 0;
   // byte count of last partial page
-  size_t lastCount = 0;
+  OMUInt32 lastCount = 0;
   if (lastPage > firstPage) {
     // One or more page boundaries
     firstCount = _pageSize - firstOffset;
     OMUInt64 lastCount64 = (position() + count) - (lastPage * _pageSize);
-    ASSERT("Supported count", lastCount64 < ~(size_t)0);
-    lastCount = static_cast<size_t>(lastCount64);
+    ASSERT("Supported count", lastCount64 < ~(OMUInt32)0);
+    lastCount = static_cast<OMUInt32>(lastCount64);
   } else {
     // No page boundaries
     firstCount = count;
@@ -133,7 +133,7 @@ void OMMemoryRawStorage::read(OMByte* bytes,
     dest = dest + firstCount;
   }
   // Read whole pages, if any
-  for (size_t i = firstPage + 1; i < lastPage; i++) {
+  for (OMUInt32 i = firstPage + 1; i < lastPage; i++) {
     read(i, 0, _pageSize, dest);
     dest = dest + _pageSize;
   }
@@ -211,29 +211,29 @@ void OMMemoryRawStorage::write(const OMByte* bytes,
   }
 
   OMUInt64 firstPage64 = (position() / _pageSize);
-  ASSERT("Supported first page", firstPage64 < ~(size_t)0);
-  size_t firstPage = static_cast<size_t>(firstPage64);
+  ASSERT("Supported first page", firstPage64 < ~(OMUInt32)0);
+  OMUInt32 firstPage = static_cast<OMUInt32>(firstPage64);
 
   OMUInt64 lastPage64 = (position() + byteCount) / _pageSize;
-  ASSERT("Supported last page", lastPage64 < ~(size_t)0);
-  size_t lastPage = static_cast<size_t>(lastPage64);
+  ASSERT("Supported last page", lastPage64 < ~(OMUInt32)0);
+  OMUInt32 lastPage = static_cast<OMUInt32>(lastPage64);
 
   ASSERT("Proper page ordering", lastPage >= firstPage);
 
   // offset of first partial page
   OMUInt64 firstOffset64 = position() - (firstPage * _pageSize);
-  ASSERT("Supported offset", firstOffset64 < ~(size_t)0);
-  size_t firstOffset = static_cast<size_t>(firstOffset64);
+  ASSERT("Supported offset", firstOffset64 < ~(OMUInt32)0);
+  OMUInt32 firstOffset = static_cast<OMUInt32>(firstOffset64);
   // byte count of first partial page
-  size_t firstCount = 0;
+  OMUInt32 firstCount = 0;
   // byte count of last partial page
-  size_t lastCount = 0;
+  OMUInt32 lastCount = 0;
   if (lastPage > firstPage) {
     // One or more page boundaries
     firstCount = _pageSize - firstOffset;
     OMUInt64 lastCount64 = (position() + byteCount) - (lastPage * _pageSize);
-    ASSERT("Supported count", lastCount64 < ~(size_t)0);
-    lastCount = static_cast<size_t>(lastCount64);
+    ASSERT("Supported count", lastCount64 < ~(OMUInt32)0);
+    lastCount = static_cast<OMUInt32>(lastCount64);
   } else {
     // No page boundaries
     firstCount = byteCount;
@@ -247,7 +247,7 @@ void OMMemoryRawStorage::write(const OMByte* bytes,
     source = source + firstCount;
   }
   // Write whole pages, if any
-  for (size_t i = firstPage + 1; i < lastPage; i++) {
+  for (OMUInt32 i = firstPage + 1; i < lastPage; i++) {
     write(i, 0, _pageSize, source);
     source = source + _pageSize;
   }
@@ -330,12 +330,12 @@ void OMMemoryRawStorage::extend(OMUInt64 newSize)
   if (newSize != _size) {
 
     // Calculate new page count
-    size_t oldPageCount = _pageVector.count();
-    size_t pageCount;
+    OMUInt32 oldPageCount = _pageVector.count();
+    OMUInt32 pageCount;
     if (newSize != 0) {
       OMUInt64 pageCount64 = ((newSize - 1) / _pageSize) + 1;
-      ASSERT("Supported page count", pageCount64 < ~(size_t)0);
-      pageCount = static_cast<size_t>(pageCount64);
+      ASSERT("Supported page count", pageCount64 < ~(OMUInt32)0);
+      pageCount = static_cast<OMUInt32>(pageCount64);
     } else {
       pageCount = 0;
     }
@@ -346,7 +346,7 @@ void OMMemoryRawStorage::extend(OMUInt64 newSize)
       _pageVector.grow(pageCount);
 
       // allocate new pages
-      for (size_t i = oldPageCount; i < pageCount; i++) {
+      for (OMUInt32 i = oldPageCount; i < pageCount; i++) {
         OMByte* page = new OMByte[_pageSize];
         ASSERT("Valid heap pointer", page != 0);
         _pageVector.insertAt(page, i);
@@ -354,7 +354,7 @@ void OMMemoryRawStorage::extend(OMUInt64 newSize)
     } else if (pageCount < oldPageCount) {
 
       // deallocate old pages
-      for (size_t i = oldPageCount - 1; i >= pageCount; --i) {
+      for (OMUInt32 i = oldPageCount - 1; i >= pageCount; --i) {
         OMByte* page = _pageVector.valueAt(i);
         delete [] page;
         _pageVector.removeAt(i);
@@ -450,9 +450,9 @@ void OMMemoryRawStorage::setPosition(OMUInt64 newPosition) const
   //   @parm The starting offset within the page.
   //   @parm the number of bytes to write.
   //   @parm The buffer from which the bytes are to be written.
-void OMMemoryRawStorage::write(size_t page,
-                               size_t offset,
-                               size_t byteCount,
+void OMMemoryRawStorage::write(OMUInt32 page,
+                               OMUInt32 offset,
+                               OMUInt32 byteCount,
                                const OMByte* source)
 {
   TRACE("OMMemoryRawStorage::write");
@@ -472,9 +472,9 @@ void OMMemoryRawStorage::write(size_t page,
   //   @parm The starting offset within the page.
   //   @parm the number of bytes to read.
   //   @parm The buffer into which the bytes are to be read.
-void OMMemoryRawStorage::read(size_t page,
-                              size_t offset,
-                              size_t byteCount,
+void OMMemoryRawStorage::read(OMUInt32 page,
+                              OMUInt32 offset,
+                              OMUInt32 byteCount,
                               OMByte* destination) const
 {
   TRACE("OMMemoryRawStorage::read");
