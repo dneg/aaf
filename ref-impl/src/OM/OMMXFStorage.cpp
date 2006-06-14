@@ -156,11 +156,11 @@ void OMMXFStorage::close(void)
 
   fixup();
 
-  size_t count = _partitions.count();
+  OMUInt32 count = _partitions.count();
   Partition* footerPartition = _partitions.valueAt(count - 1);
   OMUInt64 footer = footerPartition->_address;
   OMUInt64 previous = 0;
-  for (size_t i = 0; i < count; i++) {
+  for (OMUInt32 i = 0; i < count; i++) {
     Partition* p = _partitions.valueAt(i);
     OMUInt64 address = p->_address;
     fixupReference(address + sizeof(OMKLVKey) + 8 + 1 + 16, previous);
@@ -449,7 +449,7 @@ void OMMXFStorage::writeRandomIndex(void)
   OMUInt64 lengthPosition = reserveKLVLength();
 
   OMUInt32 count = _partitions.count();
-  for (size_t i = 0; i < count; i++) {
+  for (OMUInt32 i = 0; i < count; i++) {
     Partition* p = _partitions.valueAt(i);
     write(p->_bodySID, _reorderBytes);
     write(p->_address, _reorderBytes);
@@ -2250,8 +2250,8 @@ void OMMXFStorage::restoreStreams(void)
 
   // 3) Find essence and index within the partitions
   //
-  size_t count = _partitions.count();
-  for (size_t i = 0; i < count; i++) {
+  OMUInt32 count = _partitions.count();
+  for (OMUInt32 i = 0; i < count; i++) {
     p = _partitions.valueAt(i);
     bool needBody = false;
     if (p->_bodySID != 0) {
@@ -2915,8 +2915,8 @@ void OMMXFStorage::destroyPartitions(void)
 {
   TRACE("OMMXFStorage::destroyPartitions");
 
-  size_t count = _partitions.count();
-  for (size_t i = 0; i < count; i++) {
+  OMUInt32 count = _partitions.count();
+  for (OMUInt32 i = 0; i < count; i++) {
     Partition* p = _partitions.valueAt(i);
     delete p;
   }
