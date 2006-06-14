@@ -451,7 +451,7 @@ struct MinSS4KFile   {
 		// is 4 under solaris but MS lib does not work under Solaris
 		//now initialise root entry
 		wcscpy(Entry[0]._ab,(L"Root Entry"));
-		Entry[0]._cb=(wcslen(Entry[0]._ab)+1)*2;
+		Entry[0]._cb=(WORD)(wcslen(Entry[0]._ab)+1)*2;
 		Entry[0]._mse=5;
 		Entry[0]._sectStart=ENDOFCHAIN;
 	}
