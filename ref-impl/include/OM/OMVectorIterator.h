@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2006, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -26,9 +26,8 @@
 #ifndef OMVECTORITERATOR_H
 #define OMVECTORITERATOR_H
 
+#include "OMDataTypes.h"
 #include "OMContainerIterator.h"
-
-#include <stddef.h>
 
 template <typename Element>
 class OMVector;
@@ -85,7 +84,7 @@ public:
 
     // @cmember The number of <p Elements>s in the associated
     //          <c OMVector>.
-  virtual size_t count(void) const;
+  virtual OMUInt32 count(void) const;
 
     // @cmember Advance this <c OMVectorIterator> to the next <p Element>,
     //          if any.
@@ -125,12 +124,12 @@ public:
     // @cmember Return the index of the <p Element> in the
     //          associated <c OMVector> at the position
     //          currently designated by this <c OMVectorIterator>.
-  virtual size_t index(void) const;
+  virtual OMUInt32 index(void) const;
 
 private:
 
   const OMVector<Element>* _vector;
-  size_t _index;
+  OMUInt32 _index;
   enum OMVectorIteratorState {OMVectorIteratorBefore,
                               OMVectorIteratorValid,
                               OMVectorIteratorAfter};

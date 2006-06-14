@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2006, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -126,7 +126,7 @@ bool OMSetIterator<Key, Element>::after(void) const
   //   @rdesc The number of <p Elements>s
   //   @this const
 template <typename Key, typename Element>
-size_t OMSetIterator<Key, Element>::count(void) const
+OMUInt32 OMSetIterator<Key, Element>::count(void) const
 {
   TRACE("OMSetIterator<Key, Element>::count");
 
