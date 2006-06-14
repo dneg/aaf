@@ -116,7 +116,7 @@ static bool AAFIsValidFile(const char* name)
 
 	char fileExt[4];
 	int i;
-	char *pExt = strrchr(name, '.');
+	const char *pExt = strrchr(name, '.');
 
 	if (pExt && 4 == strlen(pExt))
 	{

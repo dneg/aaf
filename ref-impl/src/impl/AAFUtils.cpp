@@ -398,7 +398,8 @@ AAFRESULT aafMobIDNew(
     //
     // Get the time in seconds since the standard root date
     //
-    major = time(0);
+    time_t now = time(0);
+    major = static_cast<aafUInt32>(now);
 
 
     //
