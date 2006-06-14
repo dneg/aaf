@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2006, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -31,7 +31,7 @@
 
 #include "OMAssertions.h"
 
-OMBufferedStream::OMBufferedStream(size_t bufferSize)
+OMBufferedStream::OMBufferedStream(OMUInt32 bufferSize)
 : _buffer(0),
   _bufferSize(bufferSize),
   _bufferCount(0)
