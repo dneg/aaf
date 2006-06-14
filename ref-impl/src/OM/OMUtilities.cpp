@@ -332,12 +332,15 @@ size_t countWideCharacter(const wchar_t* string, wchar_t character)
 void copyCToPString(unsigned char* pString, size_t size, const char* string)
 {
   size_t maxLength = size - 1;
+  if (maxLength > 255) {
+    maxLength = 255;
+  }
   size_t length = strlen(string);
   if (length > maxLength) {
     length = maxLength;
   }
   memcpy(&pString[1], string, length);
-  pString[0] = length;
+  pString[0] = static_cast<unsigned char>(length);
 }
 
 void copyPToCString(char* string, size_t size, const unsigned char* pString)
