@@ -38,7 +38,8 @@
 // This allows new platforms to be added without disturbing the code
 // for existing platforms.
 //
-#if defined(OM_COMPILER_MSC_INTEL_WINDOWS)
+#if defined(OM_COMPILER_MSC_INTEL_WINDOWS) || \
+    defined(OM_COMPILER_MSC_X64_WINDOWS)
 typedef signed char            OMInt8;
 typedef short int              OMInt16;
 typedef long int               OMInt32;
