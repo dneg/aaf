@@ -50,7 +50,7 @@
 #define AAFRESULT_BADCONTAINER                    ((HRESULT)0x80120014)
 #define AAFRESULT_FILEREV_NOT_SUPP                ((HRESULT)0x80120015)
 #define AAFRESULT_FILEREV_DIFF                    ((HRESULT)0x80120016)
-#define AAFRESULT_BADOPEN                         ((HRESULT)0x80120017)
+#define AAFRESULT_OPEN_FAILURE                    ((HRESULT)0x80120017)
 #define AAFRESULT_BADCLOSE                        ((HRESULT)0x80120018)
 #define AAFRESULT_BAD_FHDL                        ((HRESULT)0x80120019)
 #define AAFRESULT_BADHEAD                         ((HRESULT)0x8012001A)
@@ -390,6 +390,7 @@
 /* For compatibility */
 #define AAF_RESULT_USE_MULTI_CREATE               AAFRESULT_USE_MULTI_CREATE
 #define AAFRESULT_INCONSISTANCY                   AAFRESULT_INCONSISTENCY
+#define AAFRESULT_BADOPEN                         AAFRESULT_OPEN_FAILURE
 #define HRESULT_NOT_IMPLEMENTED                   AAFRESULT_NOT_IMPLEMENTED
 #define HRESULT_SUCCESS                           AAFRESULT_SUCCESS
 
