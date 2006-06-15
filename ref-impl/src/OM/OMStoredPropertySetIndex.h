@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2006, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -28,8 +28,6 @@
 
 #include "OMDataTypes.h"
 
-#include <stddef.h>
-
   // @class The in-memory representation of the on-disk index for a
   //        stored property set.
   //   @cauthor Tim Bingham | tjb | Avid Technology, Inc.
@@ -38,7 +36,7 @@ public:
   // @access Public members.
 
     // @cmember Constructor.
-  OMStoredPropertySetIndex(size_t capacity);
+  OMStoredPropertySetIndex(OMUInt16 capacity);
 
     // @cmember Destructor.
   ~OMStoredPropertySetIndex(void);
@@ -53,11 +51,11 @@ public:
               OMPropertySize length);
 
     // @cmember The number of properties in this <c OMStoredPropertySetIndex>.
-  size_t entries(void) const;
+  OMUInt16 entries(void) const;
 
     // @cmember Iterate over the properties in this
     //          <c OMStoredPropertySetIndex>.
-  void iterate(size_t& context,
+  void iterate(OMUInt16& context,
                OMPropertyId& propertyId,
                OMStoredForm& storedForm,
                OMPropertyOffset& offset,
@@ -87,9 +85,9 @@ private:
     OMPropertySize _length;
   };
 
-  size_t _capacity;
+  OMUInt16 _capacity;
   IndexEntry* _index;
-  size_t _entries;
+  OMUInt16 _entries;
 };
 
 #endif

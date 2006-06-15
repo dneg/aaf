@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2006, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -26,6 +26,7 @@
 #ifndef OMVARIABLESIZEPROPERTY_H
 #define OMVARIABLESIZEPROPERTY_H
 
+#include "OMDataTypes.h"
 #include "OMProperty.h"
 
   // @class Variable size simple (data) persistent
@@ -46,29 +47,29 @@ public:
   virtual ~OMVariableSizeProperty(void);
 
     // @cmember Get the value of this <c OMVariableSizeProperty>.
-  void getValue(PropertyType* value, size_t valueSize) const;
+  void getValue(PropertyType* value, OMPropertySize valueSize) const;
 
     // @cmember Set the value of this <c OMVariableSizeProperty>. The
     //          value is set by copying <p valueSize> bytes from the
     //          address <p value> into the <c OMVariableSizeProperty>.
-  void setValue(const PropertyType* value, size_t valueSize);
+  void setValue(const PropertyType* value, OMPropertySize valueSize);
 
     // @cmember Set the value of this <c OMVariableSizeProperty>. The
     //          value is set by copying <p elementCount> elements from the
     //          address <p value> into the <c OMVariableSizeProperty>.
-  void setElementValues(const PropertyType* value, size_t elementCount);
+  void setElementValues(const PropertyType* value, OMUInt32 elementCount);
 
     // @cmember Get the value of the item at position <p index> in this
     //          <c OMVariableSizeProperty>. The value is obtained by copying
     //          a single item of type PropertyType from this
     //          <c OMVariableSizeProperty> at position <p index>.
-  void getValueAt(PropertyType* value, const size_t index) const;
+  void getValueAt(PropertyType* value, const OMUInt32 index) const;
 
     // @cmember Set the value of the item at position <p index> in this
     //          <c OMVariableSizeProperty>. The value is set by copying
     //          a single item of type PropertyType into this
     //          <c OMVariableSizeProperty> at position <p index>.
-  void setValueAt(const PropertyType* value, const size_t index);
+  void setValueAt(const PropertyType* value, const OMUInt32 index);
 
     // @cmember Set the value of the item at the last position in this
     //          <c OMVariableSizeProperty>. The <c OMVariableSizeProperty>
@@ -90,22 +91,22 @@ public:
     //          <c OMVariableSizeProperty>. The buffer is at address
     //          <p buffer> and is <p bufferSize> bytes in size.
     //          Copying only takes place if the buffer is large enough.
-  bool copyToBuffer(PropertyType* buffer, size_t bufferSize) const;
+  bool copyToBuffer(PropertyType* buffer, OMUInt32 bufferSize) const;
 
     // @cmember Get the value of this <c OMVariableSizeProperty>.  The
     //          value is obtained by copying the value from the
     //          <c OMVariableSizeProperty>. The buffer is at address
     //          <p buffer> and is <p elementCount> elements in size.
     //          Copying only takes place if the buffer is large enough.
-  bool copyElementsToBuffer(PropertyType* buffer, size_t elementCount) const;
+  bool copyElementsToBuffer(PropertyType* buffer, OMUInt32 elementCount) const;
 
     // @cmember Restore this <c OMVariableSizeProperty>, the external
     //          (persisted) size of the <c OMVariableSizeProperty> is
     //          <p externalSize>.
-  virtual void restore(size_t externalSize);
+  virtual void restore(OMPropertySize externalSize);
 
     // @cmember The number of items in this this <c OMVariableSizeProperty>.
-  size_t count(void) const;
+  OMUInt32 count(void) const;
 
 };
 

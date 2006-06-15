@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2006, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -49,7 +49,7 @@ void OMDataSet::save(void) const
   store()->save(*this);
 }
 
-void OMDataSet::restore(size_t externalSize)
+void OMDataSet::restore(OMPropertySize externalSize)
 {
   TRACE("OMDataSet::restore");
 

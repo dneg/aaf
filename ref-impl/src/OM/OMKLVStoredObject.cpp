@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2005, Licensor of the
+// The Original Code of this file is Copyright 1998-2006, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -484,13 +484,17 @@ void OMKLVStoredObject::save(const OMSimpleProperty& property)
 {
   TRACE("OMKLVStoredObject::save(OMSimpleProperty)");
 
-  OMPropertySize size = property.bitsSize();
+  OMUInt32 bs = property.bitsSize();
+  ASSERT("Property value not too big", bs <= OMPROPERTYSIZE_MAX);
+  OMPropertySize size = static_cast<OMPropertySize>(bs);
   OMByte* bits = property.bits();
   const OMType* propertyType = property.type();
   ASSERT("Valid property type", propertyType != 0);
 
   // Allocate buffer for property value
-  OMPropertySize externalBytesSize = propertyType->externalSize(bits, size);
+  OMUInt32 sz = propertyType->externalSize(bits, size);
+  ASSERT("Property not too big", sz <= OMPROPERTYSIZE_MAX);
+  OMPropertySize externalBytesSize = static_cast<OMPropertySize>(sz);
   OMByte* buffer = new OMByte[externalBytesSize];
   ASSERT("Valid heap pointer", buffer != 0);
 
@@ -957,7 +961,7 @@ void OMKLVStoredObject::restore(OMPropertySet& /* properties */)
   //   @parm The newly restored <c OMSimpleProperty>
   //   @parm The external size.
 void OMKLVStoredObject::restore(OMSimpleProperty& property,
-                                size_t externalSize)
+                                OMPropertySize externalSize)
 {
   TRACE("OMKLVStoredObject::restore(OMSimpleProperty)");
 
@@ -996,9 +1000,9 @@ void OMKLVStoredObject::restore(OMSimpleProperty& property,
     }
 
     // Internalize property value
-    size_t requiredBytesSize = propertyType->internalSize(buffer,
-                                                          externalSize);
-
+    OMUInt32 sz = propertyType->internalSize(buffer, externalSize);
+    ASSERT("Property not too big", sz <= OMPROPERTYSIZE_MAX);
+    OMPropertySize requiredBytesSize = static_cast<OMPropertySize>(sz);
     property.setSize(requiredBytesSize);
     ASSERT("Property value buffer large enough",
                                          property.size() >= requiredBytesSize);
@@ -1018,7 +1022,7 @@ void OMKLVStoredObject::restore(OMSimpleProperty& property,
   //   @parm The newly restored <c OMDataVector>
   //   @parm The external size.
 void OMKLVStoredObject::restore(OMDataVector& property,
-                                size_t externalSize)
+                                OMPropertySize externalSize)
 {
   TRACE("OMKLVStoredObject::restore(OMDataVector)");
 
@@ -1079,7 +1083,7 @@ void OMKLVStoredObject::restore(OMDataVector& property,
 }
 
 void OMKLVStoredObject::restore(OMDataSet& property,
-                                size_t externalSize)
+                                OMPropertySize externalSize)
 {
   TRACE("OMKLVStoredObject::restore(OMDataSet)");
 
@@ -1143,7 +1147,7 @@ void OMKLVStoredObject::restore(OMDataSet& property,
   //   @parm The newly restored <c OMStrongReference>.
   //   @parm The external size.
 void OMKLVStoredObject::restore(OMStrongReference& singleton ,
-                                size_t ANAME(externalSize))
+                                OMPropertySize ANAME(externalSize))
 {
   TRACE("OMKLVStoredObject::restore(OMStrongReference)");
 
@@ -1165,7 +1169,7 @@ void OMKLVStoredObject::restore(OMStrongReference& singleton ,
   //   @parm The newly restored <c OMStrongReferenceVector>.
   //   @parm The external size.
 void OMKLVStoredObject::restore(OMStrongReferenceVector& /* vector */,
-                                size_t /* externalSize */)
+                                OMPropertySize /* externalSize */)
 {
   TRACE("OMKLVStoredObject::restore(OMStrongReferenceVector)");
   ASSERT("Unimplemented code not reached", false); // tjb TBS
@@ -1176,7 +1180,7 @@ void OMKLVStoredObject::restore(OMStrongReferenceVector& /* vector */,
   //   @parm The newly restored <c OMStrongReferenceSet>.
   //   @parm The external size.
 void OMKLVStoredObject::restore(OMStrongReferenceSet& /* set */,
-                                size_t /* externalSize */)
+                                OMPropertySize /* externalSize */)
 {
   TRACE("OMKLVStoredObject::restore(OMStrongReferenceSet)");
   ASSERT("Unimplemented code not reached", false); // tjb TBS
@@ -1187,7 +1191,7 @@ void OMKLVStoredObject::restore(OMStrongReferenceSet& /* set */,
   //   @parm The newly restored <c OMWeakReference>.
   //   @parm The external size.
 void OMKLVStoredObject::restore(OMWeakReference& singleton,
-                                size_t ANAME(externalSize))
+                                OMPropertySize ANAME(externalSize))
 {
   TRACE("OMKLVStoredObject::restore(OMWeakReference)");
 
@@ -1207,7 +1211,7 @@ void OMKLVStoredObject::restore(OMWeakReference& singleton,
   //   @parm The newly restored <c OMWeakReferenceVector>.
   //   @parm The external size.
 void OMKLVStoredObject::restore(OMWeakReferenceVector& /* vector */,
-                                size_t /* externalSize */)
+                                OMPropertySize /* externalSize */)
 {
   TRACE("OMKLVStoredObject::restore(OMWeakReferenceVector)");
   ASSERT("Unimplemented code not reached", false); // tjb TBS
@@ -1218,7 +1222,7 @@ void OMKLVStoredObject::restore(OMWeakReferenceVector& /* vector */,
   //   @parm The newly restored <c OMWeakReferenceSet>.
   //   @parm The external size.
 void OMKLVStoredObject::restore(OMWeakReferenceSet& /* set */,
-                                size_t /* externalSize */)
+                                OMPropertySize /* externalSize */)
 {
   TRACE("OMKLVStoredObject::restore(OMWeakReferenceSet)");
   ASSERT("Unimplemented code not reached", false); // tjb TBS
@@ -1237,7 +1241,7 @@ void OMKLVStoredObject::restore(OMPropertyTable*& /* table */)
   //   @parm The newly restored <c OMDataStream>.
   //   @parm The external size.
 void OMKLVStoredObject::restore(OMDataStream& /* stream */,
-                                size_t /* externalSize */)
+                                OMPropertySize /* externalSize */)
 {
   TRACE("OMKLVStoredObject::restore(OMDataStream)");
 
@@ -1284,11 +1288,11 @@ void OMKLVStoredObject::write(const wchar_t* string)
   PRECONDITION("Valid string", string != 0); // L"" is OK
 
   // include terminating null
-  size_t characterCount = lengthOfWideString(string) + 1;
+  size_t count = lengthOfWideString(string) + 1;
+  ASSERT("String not too long", count <= OMUINT16_MAX);
+  OMUInt16 characterCount = static_cast<OMUInt16>(count);
   OMPropertySize externalBytesSize = characterCount * 2;
-  ASSERT("Valid length", externalBytesSize <= (size_t)OMINT16_MAX);
-  OMUInt16 len = characterCount;
-  _storage->write(len, _reorderBytes);
+  _storage->write(characterCount, _reorderBytes);
 
   OMCharacter* buffer = new OMCharacter[characterCount];
   ASSERT("Valid heap pointer", buffer != 0);
@@ -1723,7 +1727,8 @@ void OMKLVStoredObject::flatRestore(const OMPropertySet& properties)
       _storage->read(entryCount, _reorderBytes);
       OMUInt32 entrySize;
       _storage->read(entrySize, _reorderBytes);
-      size_t externalSize = length - (sizeof(OMUInt32) + sizeof(OMUInt32));
+      OMPropertySize externalSize = length -
+                                    (sizeof(OMUInt32) + sizeof(OMUInt32));
       ASSERT("Consistent size", externalSize == entryCount * entrySize);
       restore(*dv, externalSize);
       p->setPresent();
@@ -1737,7 +1742,8 @@ void OMKLVStoredObject::flatRestore(const OMPropertySet& properties)
       _storage->read(entryCount, _reorderBytes);
       OMUInt32 entrySize;
       _storage->read(entrySize, _reorderBytes);
-      size_t externalSize = length - (sizeof(OMUInt32) + sizeof(OMUInt32));
+      OMPropertySize externalSize = length -
+                                    (sizeof(OMUInt32) + sizeof(OMUInt32));
       ASSERT("Consistent size", externalSize == entryCount * entrySize);
       restore(*ds, externalSize);
       p->setPresent();

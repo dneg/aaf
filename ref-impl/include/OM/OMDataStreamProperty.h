@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2006, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -56,7 +56,7 @@ public:
 
     // @cmember Restore this <c OMDataStreamProperty>, the size of the
     //          <c OMDataStreamProperty> is <p externalSize>.
-  virtual void restore(size_t externalSize);
+  virtual void restore(OMPropertySize externalSize);
 
     // @cmember Close this  <c OMDataStreamProperty>.
   virtual void close(void);
@@ -103,7 +103,7 @@ public:
     //          at address <p elements>. The actual number of elements read
     //          is returned in <p elementsRead>.
   void readTypedElements(const OMType* elementType,
-                         size_t externalElementSize,
+                         OMUInt32 externalElementSize,
                          OMByte* elements,
                          OMUInt32 elementCount,
                          OMUInt32& elementsRead) const;
@@ -115,7 +115,7 @@ public:
     //          at address <p elements>. The actual number of elements written
     //          is returned in <p elementsWritten>.
   void writeTypedElements(const OMType* elementType,
-                          size_t internalElementSize,
+                          OMUInt32 internalElementSize,
                           const OMByte* elements,
                           OMUInt32 elementCount,
                           OMUInt32& elementsWritten);
@@ -124,17 +124,17 @@ public:
 
     // @cmember The size of the raw bits of this
     //          <c OMDataStreamProperty>. The size is given in bytes.
-  virtual size_t bitsSize(void) const;
+  virtual OMUInt32 bitsSize(void) const;
 
     // @cmember Get the raw bits of this <c OMDataStreamProperty>. The
     //          raw bits are copied to the buffer at address <p bits>
     //          which is <p size> bytes in size.
-  virtual void getBits(OMByte* bits, size_t size) const;
+  virtual void getBits(OMByte* bits, OMUInt32 size) const;
 
     // @cmember Set the raw bits of this <c OMDataStreamProperty>. The raw
     //          bits are copied from the buffer at address <p bits> which
     //          is <p size> bytes in size.
-  virtual void setBits(const OMByte* bits, size_t size);
+  virtual void setBits(const OMByte* bits, OMUInt32 size);
 
     // @cmember Is a byte order specifed for this stream ?
   virtual bool hasByteOrder(void) const;

@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2006, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -30,8 +30,6 @@
 #include "OMDataContainer.h"
 
 #include "OMDataTypes.h"
-
-#include <stddef.h>
 
   // @class Abstract base class for persistent properties representing
   //        sets of data items supported by the Object Manager.
@@ -56,14 +54,14 @@ public:
 
     // @cmember Restore this <c OMDataSet>, the external (persisted)
     //          size of the <c OMDataSet> is <p externalSize>.
-  virtual void restore(size_t externalSize);
+  virtual void restore(OMPropertySize externalSize);
 
     // @cmember The number of items in this this <c OMDataSet>.
-  virtual size_t count(void) const = 0;
+  virtual OMUInt32 count(void) const = 0;
 
   virtual void insert(void* value) = 0;
 
-  virtual size_t elementSize(void) const = 0;
+  virtual OMUInt32 elementSize(void) const = 0;
 
 private:
 

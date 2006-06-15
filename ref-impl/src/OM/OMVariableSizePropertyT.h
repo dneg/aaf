@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2006, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -54,8 +54,9 @@ OMVariableSizeProperty<PropertyType>::~OMVariableSizeProperty(void)
   //   @parm The size of the <p value>
   //   @this const
 template <typename PropertyType>
-void OMVariableSizeProperty<PropertyType>::getValue(PropertyType* value,
-                                                    size_t valueSize) const
+void OMVariableSizeProperty<PropertyType>::getValue(
+                                                PropertyType* value,
+                                                OMPropertySize valueSize) const
 {
   TRACE("OMVariableSizeProperty<PropertyType>::getValue");
   PRECONDITION("Valid size", valueSize >= size());
@@ -72,7 +73,7 @@ void OMVariableSizeProperty<PropertyType>::getValue(PropertyType* value,
   //   @parm The size of the array <p value> in bytes
 template <typename PropertyType>
 void OMVariableSizeProperty<PropertyType>::setValue(const PropertyType* value,
-                                                    size_t valueSize)
+                                                    OMPropertySize valueSize)
 {
   TRACE("OMVariableSizeProperty<PropertyType>::setValue");
 
@@ -89,13 +90,16 @@ void OMVariableSizeProperty<PropertyType>::setValue(const PropertyType* value,
 template <typename PropertyType>
 void OMVariableSizeProperty<PropertyType>::setElementValues(
                                                      const PropertyType* value,
-                                                     size_t elementCount)
+                                                     OMUInt32 elementCount)
 {
   TRACE("OMVariableSizeProperty<PropertyType>::setElementValues");
   PRECONDITION("Valid value", value != 0);
   PRECONDITION("Valid count", elementCount > 0);
 
-  setValue(value, elementCount * sizeof(PropertyType));
+  OMUInt32 sz = elementCount * sizeof(PropertyType);
+  ASSERT("Property value not too big", sz <= OMPROPERTYSIZE_MAX);
+  OMPropertySize size = static_cast<OMPropertySize>(sz);
+  setValue(value, size);
 
 }
 
@@ -110,8 +114,9 @@ void OMVariableSizeProperty<PropertyType>::setElementValues(
   //   @parm The index of the value to get.
   //   @this const
 template <typename PropertyType>
-void OMVariableSizeProperty<PropertyType>::getValueAt(PropertyType* value,
-                                                      const size_t index) const
+void OMVariableSizeProperty<PropertyType>::getValueAt(
+                                                    PropertyType* value,
+                                                    const OMUInt32 index) const
 {
   TRACE("OMVariableSizeProperty<PropertyType>::getValueAt");
   PRECONDITION("Valid index", index < count());
@@ -132,7 +137,7 @@ void OMVariableSizeProperty<PropertyType>::getValueAt(PropertyType* value,
 template <typename PropertyType>
 void OMVariableSizeProperty<PropertyType>::setValueAt(
                                                      const PropertyType* value,
-                                                     const size_t index)
+                                                     const OMUInt32 index)
 {
   TRACE("OMVariableSizeProperty<PropertyType>::setValueAt");
   PRECONDITION("Valid index", index < count());
@@ -157,8 +162,8 @@ void OMVariableSizeProperty<PropertyType>::appendValue(
   TRACE("OMVariableSizeProperty<PropertyType>::appendValue");
   PRECONDITION("Valid value", value != 0);
 
-  size_t oldCount = count();
-  size_t newCount = oldCount + 1;
+  OMUInt32 oldCount = count();
+  OMUInt32 newCount = oldCount + 1;
   PropertyType* buffer = new PropertyType[newCount];
   ASSERT("Valid heap pointer", buffer != 0);
   if (oldCount > 0) {
@@ -184,8 +189,8 @@ void OMVariableSizeProperty<PropertyType>::prependValue(
   TRACE("OMVariableSizeProperty<PropertyType>::prependValue");
   PRECONDITION("Valid value", value != 0);
 
-  size_t oldCount = count();
-  size_t newCount = oldCount + 1;
+  OMUInt32 oldCount = count();
+  OMUInt32 newCount = oldCount + 1;
   PropertyType* buffer = new PropertyType[newCount];
   ASSERT("Valid heap pointer", buffer != 0);
   if (oldCount > 0) {
@@ -210,16 +215,23 @@ void OMVariableSizeProperty<PropertyType>::prependValue(
   //   @this const
 template <typename PropertyType>
 bool OMVariableSizeProperty<PropertyType>::copyToBuffer(
-                                                       PropertyType* buffer,
-                                                       size_t bufferSize) const
+                                                     PropertyType* buffer,
+                                                     OMUInt32 bufferSize) const
 {
   TRACE("OMVariableSizeProperty<PropertyType>::copyToBuffer");
   PRECONDITION("Valid buffer", buffer != 0);
   PRECONDITION("Valid buffer size", bufferSize > 0);
 
   bool result;
-  if (bufferSize >= size()) {
-    getValue(buffer, bufferSize);
+  OMPropertySize sz;
+  if (bufferSize <= OMPROPERTYSIZE_MAX) {
+    sz = static_cast<OMPropertySize>(bufferSize);
+  } else {
+    sz = OMPROPERTYSIZE_MAX;
+  }
+
+  if (sz >= size()) {
+    getValue(buffer, sz);
     result = true;
   } else {
     result = false;
@@ -241,8 +253,8 @@ bool OMVariableSizeProperty<PropertyType>::copyToBuffer(
   //   @this const
 template <typename PropertyType>
 bool OMVariableSizeProperty<PropertyType>::copyElementsToBuffer(
-                                                     PropertyType* buffer,
-                                                     size_t elementCount) const
+                                                   PropertyType* buffer,
+                                                   OMUInt32 elementCount) const
 {
   TRACE("OMVariableSizeProperty<PropertyType>::copyElementsToBuffer");
   PRECONDITION("Valid buffer", buffer != 0);
@@ -258,7 +270,7 @@ bool OMVariableSizeProperty<PropertyType>::copyElementsToBuffer(
   //          can be any type.
   //   @parm The external (persisted) size of the <c OMVariableSizeProperty>.
 template <typename PropertyType>
-void OMVariableSizeProperty<PropertyType>::restore(size_t externalSize)
+void OMVariableSizeProperty<PropertyType>::restore(OMPropertySize externalSize)
 {
   TRACE("OMVariableSizeProperty<PropertyType>::restore");
 
@@ -275,7 +287,7 @@ void OMVariableSizeProperty<PropertyType>::restore(size_t externalSize)
   //   @rdesc The number of items in this <c OMVariableSizeProperty>.
   //   @this const
 template <typename PropertyType>
-size_t OMVariableSizeProperty<PropertyType>::count(void) const
+OMUInt32 OMVariableSizeProperty<PropertyType>::count(void) const
 {
   TRACE("OMVariableSizeProperty<PropertyType>::count");
   return size() / sizeof(PropertyType);

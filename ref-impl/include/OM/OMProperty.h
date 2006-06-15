@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2006, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -27,8 +27,6 @@
 #define OMPROPERTY_H
 
 #include "OMDataTypes.h"
-
-#include <stddef.h>
 
 // The following stored form values are used to denote the on-disk
 // representation of a given property.
@@ -84,7 +82,7 @@ public:
 
     // @cmember Restore this <c OMProperty>, the external (persisted)
     //          size of the <c OMProperty> is <p externalSize>.
-  virtual void restore(size_t externalSize) = 0;
+  virtual void restore(OMPropertySize externalSize) = 0;
 
     // @cmember The <c OMPropertyDefinition> defining this <c OMProperty>.
   const OMPropertyDefinition* definition(void) const;
@@ -130,17 +128,17 @@ public:
 
     // @cmember The size of the raw bits of this <c OMProperty>. The
     //          size is given in bytes.
-  virtual size_t bitsSize(void) const = 0;
+  virtual OMUInt32 bitsSize(void) const = 0;
 
     // @cmember Get the raw bits of this <c OMProperty>. The raw bits
     //          are copied to the buffer at address <p bits> which is
     //          <p size> bytes in size.
-  virtual void getBits(OMByte* bits, size_t size) const = 0;
+  virtual void getBits(OMByte* bits, OMUInt32 size) const = 0;
 
     // @cmember Set the raw bits of this <c OMProperty>. The raw
     //          bits are copied from the buffer at address <p bits> which
     //          is <p size> bytes in size.
-  virtual void setBits(const OMByte* bits, size_t size) = 0;
+  virtual void setBits(const OMByte* bits, OMUInt32 size) = 0;
 
     // @cmember The value of this <c OMProperty> as an <c OMStorable>.
     //          If this <c OMProperty> does not represent an <c OMStorable>
@@ -216,7 +214,7 @@ public:
     // @cmember Constructor.
   OMSimpleProperty(const OMPropertyId propertyId,
                    const wchar_t* name,
-                   size_t valueSize);
+                   OMPropertySize valueSize);
 
     // @cmember Constructor.
   OMSimpleProperty(const OMPropertyId propertyId, const wchar_t* name);
@@ -229,10 +227,10 @@ public:
 
     // @cmember Restore this <c OMSimpleProperty>, the external (persisted)
     //          size of the <c OMSimpleProperty> is <p externalSize>.
-  virtual void restore(size_t externalSize);
+  virtual void restore(OMPropertySize externalSize);
 
     // @cmember The size of this <c OMSimpleProperty>.
-  size_t size(void) const;
+  OMPropertySize size(void) const;
 
     // @cmember The number of objects contained within this
     //          <c OMSimpleProperty> if any.
@@ -242,7 +240,7 @@ public:
 
     // @cmember The size of the raw bits of this
     //          <c OMSimpleProperty>. The size is given in bytes.
-  virtual size_t bitsSize(void) const;
+  virtual OMUInt32 bitsSize(void) const;
 
     // @cmember The raw bits of this <c OMSimpleProperty>.
   virtual OMByte* bits(void) const;
@@ -250,15 +248,15 @@ public:
     // @cmember Get the raw bits of this <c OMSimpleProperty>. The raw
     //          bits are copied to the buffer at address <p bits> which
     //          is <p size> bytes in size.
-  virtual void getBits(OMByte* bits, size_t size) const;
+  virtual void getBits(OMByte* bits, OMUInt32 size) const;
 
     // @cmember Set the raw bits of this <c OMSimpleProperty>. The raw
     //          bits are copied from the buffer at address <p bits> which
     //          is <p size> bytes in size.
-  virtual void setBits(const OMByte* bits, size_t size);
+  virtual void setBits(const OMByte* bits, OMUInt32 size);
 
     // @cmember Set the size of this <c OMSimpleProperty> to <p newSize> bytes.
-  void setSize(size_t newSize);
+  void setSize(OMPropertySize newSize);
 
   // Copying.
 
@@ -271,12 +269,12 @@ protected:
   // @access Protected members.
 
     // @cmember Get the value of this <c OMSimpleProperty>.
-  void get(void* value, size_t valueSize) const;
+  void get(void* value, OMPropertySize valueSize) const;
 
     // @cmember Set the value of this <c OMSimpleProperty>.
-  void set(const void* value, size_t valueSize);
+  void set(const void* value, OMPropertySize valueSize);
 
-  size_t _size;
+  OMPropertySize _size;
   unsigned char* _bits;
 
 private:

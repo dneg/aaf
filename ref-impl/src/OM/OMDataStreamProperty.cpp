@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2006, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -106,7 +106,7 @@ OMUInt64 OMDataStreamProperty::objectCount(void) const
   // @mfunc Restore this <c OMDataStreamProperty>, the size of the
   //        <c OMDataStreamProperty> is <p externalSize>.
   //   @parm The size of the <c OMDataStreamProperty>.
-void OMDataStreamProperty::restore(size_t externalSize)
+void OMDataStreamProperty::restore(OMPropertySize externalSize)
 {
   TRACE("OMDataStreamProperty::restore");
 
@@ -271,7 +271,7 @@ void OMDataStreamProperty::write(const OMByte* buffer,
   //   @parm The actual number of elements that were read.
   //   @this const
 void OMDataStreamProperty::readTypedElements(const OMType* elementType,
-                                             size_t externalElementSize,
+                                             OMUInt32 externalElementSize,
                                              OMByte* elements,
                                              OMUInt32 elementCount,
                                              OMUInt32& elementsRead) const
@@ -308,7 +308,7 @@ void OMDataStreamProperty::readTypedElements(const OMType* elementType,
     // Allocate buffer for one element
     OMByte* buffer = new OMByte[externalElementSize];
 
-    for (size_t i = 0; i < readCount; i++) {
+    for (OMUInt32 i = 0; i < readCount; i++) {
 
       // Read an element of the property value
       OMUInt32 actualByteCount;
@@ -321,8 +321,9 @@ void OMDataStreamProperty::readTypedElements(const OMType* elementType,
       }
 
       // Internalize an element of the property value
-      size_t requiredBytesSize = elementType->internalSize(buffer,
-                                                         externalElementSize);
+      OMUInt32 requiredBytesSize = elementType->internalSize(
+                                                          buffer,
+                                                          externalElementSize);
 
       elementType->internalize(buffer,
                              externalElementSize,
@@ -348,7 +349,7 @@ void OMDataStreamProperty::readTypedElements(const OMType* elementType,
   //   @parm The number of elements to write.
   //   @parm The actual number of elements that were written.
 void OMDataStreamProperty::writeTypedElements(const OMType* elementType,
-                                              size_t internalElementSize,
+                                              OMUInt32 internalElementSize,
                                               const OMByte* elements,
                                               OMUInt32 elementCount,
                                               OMUInt32& elementsWritten)
@@ -367,13 +368,13 @@ void OMDataStreamProperty::writeTypedElements(const OMType* elementType,
   }
 
   // Allocate buffer for one element
-  size_t externalBytesSize = elementType->externalSize(
+  OMUInt32 externalBytesSize = elementType->externalSize(
                                                  const_cast<OMByte*>(elements),
                                                  internalElementSize);
 
   OMByte* buffer = new OMByte[externalBytesSize];
 
-  for (size_t i = 0; i < elementCount; i++) {
+  for (OMUInt32 i = 0; i < elementCount; i++) {
 
     // Externalize an element of the property value
     elementType->externalize(
@@ -403,7 +404,7 @@ void OMDataStreamProperty::writeTypedElements(const OMType* elementType,
   //   @rdesc The size of the raw bits of this
   //          <c OMDataStreamProperty> in bytes.
   //   @this const
-size_t OMDataStreamProperty::bitsSize(void) const
+OMUInt32 OMDataStreamProperty::bitsSize(void) const
 {
   TRACE("OMDataStreamProperty::bitsSize");
 
@@ -414,9 +415,9 @@ size_t OMDataStreamProperty::bitsSize(void) const
   //        The raw bits are copied to the buffer at address <p bits> which
   //        is <p size> bytes in size.
   //   @parm The address of the buffer into which the raw bits are copied.
-  //   @parm size_t | size | The size of the buffer.
+  //   @parm OMUInt32 | size | The size of the buffer.
   //   @this const
-void OMDataStreamProperty::getBits(OMByte* bits, size_t ANAME(size)) const
+void OMDataStreamProperty::getBits(OMByte* bits, OMUInt32 ANAME(size)) const
 {
   TRACE("OMDataStreamProperty::getBits");
   PRECONDITION("Valid bits", bits != 0);
@@ -430,9 +431,9 @@ void OMDataStreamProperty::getBits(OMByte* bits, size_t ANAME(size)) const
   //         is <p size> bytes in size.
   //   @parm const OMByte* | bits | The address of the buffer from which the
   //         raw bits are copied.
-  //   @parm size_t | size | The size of the buffer.
+  //   @parm OMUInt32 | size | The size of the buffer.
 void OMDataStreamProperty::setBits(const OMByte* ANAME(bits),
-                                   size_t ANAME(size))
+                                   OMUInt32 ANAME(size))
 {
   TRACE("OMDataStreamProperty::setBits");
   PRECONDITION("Valid bits", bits != 0);

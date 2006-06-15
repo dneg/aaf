@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2006, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -42,31 +42,31 @@ public:
   virtual bool isFixedSize(void) const;
 
   virtual void reorder(OMByte* externalBytes,
-                       size_t externalBytesSize) const;
+                       OMUInt32 externalBytesSize) const;
 
-  virtual size_t externalSize(const OMByte* internalBytes,
-                              size_t internalBytesSize) const;
+  virtual OMUInt32 externalSize(const OMByte* internalBytes,
+                                OMUInt32 internalBytesSize) const;
 
-  virtual size_t externalSize(void) const;
+  virtual OMUInt32 externalSize(void) const;
 
   virtual void externalize(const OMByte* internalBytes,
-                           size_t internalBytesSize,
+                           OMUInt32 internalBytesSize,
                            OMByte* externalBytes,
-                           size_t externalBytesSize,
+                           OMUInt32 externalBytesSize,
                            OMByteOrder byteOrder) const;
 
-  virtual size_t internalSize(const OMByte* externalBytes,
-                              size_t externalBytesSize) const;
+  virtual OMUInt32 internalSize(const OMByte* externalBytes,
+                                OMUInt32 externalBytesSize) const;
 
-  virtual size_t internalSize(void) const;
+  virtual OMUInt32 internalSize(void) const;
 
   virtual void internalize(const OMByte* externalBytes,
-                           size_t externalBytesSize,
+                           OMUInt32 externalBytesSize,
                            OMByte* internalBytes,
-                           size_t internalBytesSize,
+                           OMUInt32 internalBytesSize,
                            OMByteOrder byteOrder) const;
 
-  virtual size_t size(void) const = 0;
+  virtual OMUInt8 size(void) const = 0;
 
 };
 
@@ -81,7 +81,7 @@ public:
 
   virtual ~OMInteger08Type(void);
 
-  virtual size_t size(void) const;
+  virtual OMUInt8 size(void) const;
 
 };
 
@@ -96,7 +96,7 @@ public:
 
   virtual ~OMInteger16Type(void);
 
-  virtual size_t size(void) const;
+  virtual OMUInt8 size(void) const;
 
 };
 
@@ -111,7 +111,7 @@ public:
 
   virtual ~OMInteger32Type(void);
 
-  virtual size_t size(void) const;
+  virtual OMUInt8 size(void) const;
 
 };
 
@@ -126,7 +126,7 @@ public:
 
   virtual ~OMInteger64Type(void);
 
-  virtual size_t size(void) const;
+  virtual OMUInt8 size(void) const;
 
 };
 

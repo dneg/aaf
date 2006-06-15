@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2006, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -47,7 +47,7 @@ OMReferenceProperty::~OMReferenceProperty(void)
   //   @rdesc The size of the raw bits of this <c OMReferenceProperty>
   //          in bytes.
   //   @this const
-size_t OMReferenceProperty::bitsSize(void) const
+OMUInt32 OMReferenceProperty::bitsSize(void) const
 {
   TRACE("OMReferenceProperty::bitsSize");
   OBSOLETE("other methods on class OMReferenceProperty");

@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2006, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -27,8 +27,6 @@
 #define OMTYPE_H
 
 #include "OMDataTypes.h"
-
-#include <stddef.h>
 
   // @class Abstract base class describing the data types that may be
   //        assumed by persistent properties supported by the Object Manager.
@@ -53,7 +51,7 @@ public:
     //          provides static functions to aid in such an implementation.
     //          The bytes to be swapped are assumed to be in external form.
   virtual void reorder(OMByte* externalBytes,
-                       size_t externalBytesSize) const = 0;
+                       OMUInt32 externalBytesSize) const = 0;
 
     // @cmember The size, in bytes, of an entity described by
     //          <p internalBytes>, <p internalBytesSize>
@@ -62,15 +60,15 @@ public:
     //          implementation of this virtual function for the data
     //          type being described. This class provides static
     //          functions to aid in such an implementation.
-  virtual size_t externalSize(const OMByte* internalBytes,
-                              size_t internalBytesSize) const = 0;
+  virtual OMUInt32 externalSize(const OMByte* internalBytes,
+                                OMUInt32 internalBytesSize) const = 0;
 
     // @cmember The size, in bytes, of an entity of this <c OMType>
     //          when persisted. Object Manager clients must provide
     //          a suitable implementation of this virtual function
     //          for the data type being described.
     //          @precondition <f isFixedSize()>
-  virtual size_t externalSize(void) const = 0;
+  virtual OMUInt32 externalSize(void) const = 0;
 
     // @cmember Convert the given <p internalBytes> from internal
     //          (in memory) representation to external (persisted)
@@ -90,9 +88,9 @@ public:
     //          type being described. This class provides static
     //          functions to aid in such an implementation.
   virtual void externalize(const OMByte* internalBytes,
-                           size_t internalBytesSize,
+                           OMUInt32 internalBytesSize,
                            OMByte* externalBytes,
-                           size_t externalBytesSize,
+                           OMUInt32 externalBytesSize,
                            OMByteOrder byteOrder) const = 0;
 
 
@@ -103,15 +101,15 @@ public:
     //          implementation of this virtual function for the data
     //          type being described. This class provides static
     //          functions to aid in such an implementation.
-  virtual size_t internalSize(const OMByte* externalBytes,
-                              size_t externalSize) const = 0;
+  virtual OMUInt32 internalSize(const OMByte* externalBytes,
+                                OMUInt32 externalSize) const = 0;
 
     // @cmember The size, in bytes, of an entity of this <c OMType>
     //          when in memory. Object Manager clients must provide
     //          a suitable implementation of this virtual function
     //          for the data type being described.
     //          @precondition <f isFixedSize()>
-  virtual size_t internalSize(void) const = 0;
+  virtual OMUInt32 internalSize(void) const = 0;
 
     // @cmember Convert the given <p externalBytes> from external
     //          (persisted) representation to internal (in memory)
@@ -131,9 +129,9 @@ public:
     //          type being described. This class provides static
     //          functions to aid in such an implementation.
   virtual void internalize(const OMByte* externalBytes,
-                           size_t externalBytesSize,
+                           OMUInt32 externalBytesSize,
                            OMByte* internalBytes,
-                           size_t internalBytesSize,
+                           OMUInt32 internalBytesSize,
                            OMByteOrder byteOrder) const = 0;
 
   // @access Static members.
@@ -145,7 +143,7 @@ public:
     //          In particular, Object Manager clients may wish to use
     //          this function when implementing <mf OMType::reorder>.
   static void reorderInteger(OMByte* bytes,
-                             size_t bytesSize);
+                             OMUInt32 bytesSize);
 
     // @cmember Expand, by padding with leading zeros, the value decribed
     //          by <p inputBytes> and <p inputBytesSize> into the buffer
@@ -157,9 +155,9 @@ public:
     //          this function when implementing <mf OMType::internalize> and
     //          <mf OMType::externalize>.
   static void expand(const OMByte* inputBytes,
-                     size_t inputBytesSize,
+                     OMUInt32 inputBytesSize,
                      OMByte* outputBytes,
-                     size_t outputBytesSize,
+                     OMUInt32 outputBytesSize,
                      OMByteOrder byteOrder);
 
     // @cmember Contract, by discarding leading bytes, the value decribed
@@ -172,9 +170,9 @@ public:
     //          this function when implementing <mf OMType::internalize> and
     //          <mf OMType::externalize>.
   static void contract(const OMByte* inputBytes,
-                       size_t inputBytesSize,
+                       OMUInt32 inputBytesSize,
                        OMByte* outputBytes,
-                       size_t outputBytesSize,
+                       OMUInt32 outputBytesSize,
                        OMByteOrder byteOrder);
 
     // @cmember Copy the value decribed by <p inputBytes> and <p bytesSize>
@@ -187,7 +185,7 @@ public:
     //          <mf OMType::externalize>.
   static void copy(const OMByte* inputBytes,
                    OMByte* outputBytes,
-                   size_t bytesSize);
+                   OMUInt32 bytesSize);
 
   // tjb - temporary - should use "identification" inherited from OMDefinition
   virtual const OMUniqueObjectIdentification& uniqueIdentification(void) const;

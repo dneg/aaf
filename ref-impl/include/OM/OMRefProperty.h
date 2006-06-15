@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2006, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -26,6 +26,7 @@
 #ifndef OMREFERENCEPROPERTY_H
 #define OMREFERENCEPROPERTY_H
 
+#include "OMDataTypes.h"
 #include "OMProperty.h"
 
 class OMObject;
@@ -50,7 +51,7 @@ public:
 
     // @cmember The size of the raw bits of this
     //          <c OMReferenceProperty>. The size is given in bytes.
-  virtual size_t bitsSize(void) const;
+  virtual OMUInt32 bitsSize(void) const;
 
     // @cmember Get the value of this <c OMReferenceProperty>.
   virtual OMObject* getObject(void) const = 0;

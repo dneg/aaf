@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2006, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -26,12 +26,11 @@
 // @author Tim Bingham | tjb | Avid Technology, Inc. |
 //         OMStoredPropertySetIndex
 
-
 #include "OMStoredPropertySetIndex.h"
 
 #include "OMAssertions.h"
 
-OMStoredPropertySetIndex::OMStoredPropertySetIndex(size_t capacity)
+OMStoredPropertySetIndex::OMStoredPropertySetIndex(OMUInt16 capacity)
 : _capacity(capacity), _index(0), _entries(0)
 {
   TRACE("OMStoredPropertySetIndex::OMStoredPropertySetIndex");
@@ -40,7 +39,7 @@ OMStoredPropertySetIndex::OMStoredPropertySetIndex(size_t capacity)
   ASSERT("Valid heap pointer", _index != 0);
 
 #if defined(OM_DEBUG)
-  for (size_t i = 0; i < _capacity; i++) {
+  for (OMUInt16 i = 0; i < _capacity; i++) {
     _index[i]._propertyId = 0;
     _index[i]._storedForm = 0;
     _index[i]._length = 0;
@@ -85,7 +84,7 @@ void OMStoredPropertySetIndex::insert(OMPropertyId propertyId,
   // @mfunc The number of properties in this <c OMStoredPropertySetIndex>.
   //   @rdesc The number of properties.
   //   @this const
-size_t OMStoredPropertySetIndex::entries(void) const
+OMUInt16 OMStoredPropertySetIndex::entries(void) const
 {
   TRACE("OMStoredPropertySetIndex::entries");
 
@@ -100,7 +99,7 @@ size_t OMStoredPropertySetIndex::entries(void) const
   //   @parm The offset of the "current" property value in bytes.
   //   @parm The size of the "current" property value in bytes.
   //   @this const
-void OMStoredPropertySetIndex::iterate(size_t& context,
+void OMStoredPropertySetIndex::iterate(OMUInt16& context,
                                        OMPropertyId& propertyId,
                                        OMStoredForm& storedForm,
                                        OMPropertyOffset& offset,
@@ -162,12 +161,12 @@ bool OMStoredPropertySetIndex::isValid(OMPropertyOffset baseOffset) const
   // 4) There must be no gaps between entries
   // We may choose to relax 3 and 4 in the future
   bool result = true;
-  size_t entries = 0;
-  size_t currentOffset;
-  size_t currentLength;
-  size_t position = baseOffset;
+  OMUInt16 entries = 0;
+  OMUInt32 currentOffset;
+  OMUInt16 currentLength;
+  OMUInt32 position = baseOffset;
 
-  for (size_t i = 0; i < _capacity; i++) {
+  for (OMUInt16 i = 0; i < _capacity; i++) {
     entries++; // count valid entries
     currentOffset = _index[i]._offset;
     currentLength = _index[i]._length;
@@ -199,7 +198,7 @@ OMStoredPropertySetIndex::IndexEntry* OMStoredPropertySetIndex::find(
 
   OMStoredPropertySetIndex::IndexEntry* result = 0;
 
-  for (size_t i = 0; i < _capacity; i++) {
+  for (OMUInt16 i = 0; i < _capacity; i++) {
     if (_index[i]._propertyId == propertyId) {
       result = &_index[i];
       break;

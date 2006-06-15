@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2006, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -95,6 +95,7 @@ void OMPropertySet::put(OMProperty* property)
   PRECONDITION("Valid property", property != 0);
   PRECONDITION("Valid property id", property->propertyId() != 0);
   PRECONDITION("Property is not present", !isPresent(property->propertyId()));
+  PRECONDITION("Room in set", count() < OMUINT16_MAX);
 
   OMPropertyId propertyId = property->propertyId();
 
@@ -170,18 +171,19 @@ bool OMPropertySet::isRequired(const OMPropertyId propertyId) const
   //   @rdesc The number of <c OMProperty> objects in this
   //          <c OMPropertySet>.
   //   @this const
-size_t OMPropertySet::count(void) const
+OMUInt16 OMPropertySet::count(void) const
 {
   TRACE("OMPropertySet::count");
 
-  return _set.count();
+  OMUInt16 result = static_cast<OMUInt16>(_set.count());
+  return result;
 }
 
-size_t OMPropertySet::countPresent(void) const
+OMUInt16 OMPropertySet::countPresent(void) const
 {
   TRACE("OMPropertySet::countPresent");
 
-  size_t result = 0;
+  OMUInt16 result = 0;
   SetIterator iterator(_set, OMBefore);
   while (++iterator) {
     OMProperty* p = iterator.value();

@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2006, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -30,7 +30,7 @@
 
   // @mfunc Constructor.
   //   @parm The capacity of this <c OMStoredVectorIndex>.
-OMStoredVectorIndex::OMStoredVectorIndex(size_t capacity)
+OMStoredVectorIndex::OMStoredVectorIndex(OMUInt32 capacity)
 : _firstFreeKey(0), _lastFreeKey(~(OMUInt32)0),
   _capacity(capacity), _entries(0), _localKeys(0)
 {
@@ -107,7 +107,7 @@ void OMStoredVectorIndex::setLastFreeKey(OMUInt32 lastFreeKey)
   //        within the associated <c OMStrongReferenceVector>.
   //   @parm The position at which the new element should be inserted.
   //   @parm The local key assigned to the element.
-void OMStoredVectorIndex::insert(size_t position, OMUInt32 localKey)
+void OMStoredVectorIndex::insert(OMUInt32 position, OMUInt32 localKey)
 {
   TRACE("OMStoredVectorIndex::insert");
   PRECONDITION("Valid position", position < _capacity);
@@ -119,7 +119,7 @@ void OMStoredVectorIndex::insert(size_t position, OMUInt32 localKey)
   // @mfunc The number of elements in this <c OMStoredVectorIndex>.
   //   @rdesc The number of elements.
   //   @this const
-size_t OMStoredVectorIndex::entries(void) const
+OMUInt32 OMStoredVectorIndex::entries(void) const
 {
   TRACE("OMStoredVectorIndex::entries");
 
@@ -131,7 +131,7 @@ size_t OMStoredVectorIndex::entries(void) const
   //         "first" element.
   //   @parm The local key of the "current" element.
   //   @this const
-void OMStoredVectorIndex::iterate(size_t& context, OMUInt32& localKey) const
+void OMStoredVectorIndex::iterate(OMUInt32& context, OMUInt32& localKey) const
 {
   TRACE("OMStoredVectorIndex::iterate");
   PRECONDITION("Valid context", context < _capacity);

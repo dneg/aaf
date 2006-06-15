@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2006, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -40,7 +40,7 @@
   //   @parm The buffer containing the bytes to reorder.
   //   @parm The size of the buffer.
 void OMType::reorderInteger(OMByte* bytes,
-                            size_t bytesSize)
+                            OMUInt32 bytesSize)
 {
   TRACE("OMType::reorderInteger");
   PRECONDITION("Valid size", (bytesSize == 2) ||
@@ -48,8 +48,8 @@ void OMType::reorderInteger(OMByte* bytes,
                              (bytesSize == 8));
 
 
-  size_t bytesToSwap = bytesSize / 2;
-  for (size_t i = 0; i < bytesToSwap; i++) {
+  OMUInt32 bytesToSwap = bytesSize / 2;
+  for (OMUInt32 i = 0; i < bytesToSwap; i++) {
     OMByte temp = bytes[i];
     bytes[i] = bytes[bytesSize - i - 1];
     bytes[bytesSize - i - 1] = temp;
@@ -72,9 +72,9 @@ void OMType::reorderInteger(OMByte* bytes,
   //   @parm The size of the output buffer.
   //   @parm The byte order.
 void OMType::expand(const OMByte* inputBytes,
-                    size_t inputBytesSize,
+                    OMUInt32 inputBytesSize,
                     OMByte* outputBytes,
-                    size_t outputBytesSize,
+                    OMUInt32 outputBytesSize,
                     OMByteOrder byteOrder)
 {
   TRACE("OMType::expand");
@@ -85,7 +85,7 @@ void OMType::expand(const OMByte* inputBytes,
 
   const OMByte* ip = inputBytes;
   OMByte* op = outputBytes;
-  size_t padSize = outputBytesSize - inputBytesSize;
+  OMUInt32 padSize = outputBytesSize - inputBytesSize;
 
   if (byteOrder == littleEndian) {
     // copy valid bytes
@@ -117,9 +117,9 @@ void OMType::expand(const OMByte* inputBytes,
   //   @parm The size of the output buffer.
   //   @parm The byte order.
 void OMType::contract(const OMByte* inputBytes,
-                      size_t inputBytesSize,
+                      OMUInt32 inputBytesSize,
                       OMByte* outputBytes,
-                      size_t outputBytesSize,
+                      OMUInt32 outputBytesSize,
                       OMByteOrder byteOrder)
 {
   TRACE("OMType::contract");
@@ -130,7 +130,7 @@ void OMType::contract(const OMByte* inputBytes,
 
   const OMByte* ip = inputBytes;
   OMByte* op = outputBytes;
-  size_t trimSize = inputBytesSize - outputBytesSize;
+  OMUInt32 trimSize = inputBytesSize - outputBytesSize;
 
   if (byteOrder == littleEndian) {
     // copy valid bytes
@@ -157,7 +157,7 @@ void OMType::contract(const OMByte* inputBytes,
   //   @parm The size of the input and output buffers.
 void OMType::copy(const OMByte* inputBytes,
                   OMByte* outputBytes,
-                  size_t bytesSize)
+                  OMUInt32 bytesSize)
 {
   TRACE("OMType::copy");
   PRECONDITION("Valid input bytes", inputBytes != 0);

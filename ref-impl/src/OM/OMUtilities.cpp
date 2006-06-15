@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2006, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -761,14 +761,14 @@ bool validPropertyPath(const OMPropertyId* path)
   return result;
 }
 
-size_t lengthOfPropertyPath(const OMPropertyId* path)
+OMUInt32 lengthOfPropertyPath(const OMPropertyId* path)
 {
   TRACE("lengthOfPropertyPath");
   // PRECONDITION("Valid property path", validPropertyPath(path));
   PRECONDITION("Valid property path", path != 0);
 
   const OMPropertyId* p = path;
-  size_t result = 0;
+  OMUInt32 result = 0;
   while (*p != 0) {
     ++result;
     ++p;

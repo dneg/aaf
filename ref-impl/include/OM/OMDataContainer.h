@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2006, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -25,7 +25,7 @@
 #ifndef OMDATACONTAINER_H
 #define OMDATACONTAINER_H
 
-#include <stddef.h>
+#include "OMDataTypes.h"
 
 class OMDataContainerIterator;
 
@@ -34,7 +34,7 @@ class OMDataContainerIterator;
 class OMDataContainer {
 public:
 
-  virtual size_t count(void) const = 0;
+  virtual OMUInt32 count(void) const = 0;
 
   virtual void clear(void) = 0;
 

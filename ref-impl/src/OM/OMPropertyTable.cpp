@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2006, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -42,8 +42,8 @@ OMPropertyTable::~OMPropertyTable(void)
 {
   TRACE("OMPropertyTable::~OMPropertyTable");
 
-  size_t elements = _vector.count();
-  for (size_t i = 0; i < elements; i++) {
+  OMUInt16 elements = count();
+  for (OMUInt16 i = 0; i < elements; i++) {
     OMPropertyId* p = _vector.valueAt(i);
     delete [] p;
   }
@@ -60,11 +60,12 @@ OMPropertyTag OMPropertyTable::insert(const OMPropertyId* propertyPath)
   TRACE("OMPropertyTable::insert");
 
   PRECONDITION("Valid property path", validPropertyPath(propertyPath));
+  PRECONDITION("Room in table", count() < OMUINT16_MAX);
 
   OMPropertyTag result = nullOMPropertyTag;
   bool found = false;
-  size_t elements = _vector.count();
-  for (size_t i = 0; i < elements; i++) {
+  OMUInt16 elements = count();
+  for (OMUInt16 i = 0; i < elements; i++) {
     if (comparePropertyPath(_vector.valueAt(i), propertyPath) == 0) {
      result = i;
      found = true;
@@ -97,11 +98,12 @@ const OMPropertyId* OMPropertyTable::valueAt(OMPropertyTag tag) const
   // @mfunc The count of entries in the table.
   //   @rdesc The count of entries.
   //   @this const
-size_t OMPropertyTable::count(void) const
+OMUInt16 OMPropertyTable::count(void) const
 {
   TRACE("OMPropertyTable::count");
 
-  return _vector.count();
+  OMUInt16 result = static_cast<OMUInt16>(_vector.count());
+  return result;
 }
 
   // @mfunc Is <p tag> valid ?

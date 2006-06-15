@@ -310,13 +310,15 @@ void OMSSStoredObject::save(const OMPropertySet& properties)
   PRECONDITION("At start of value stream", streamPosition(_properties) == 0);
   PRECONDITION("At start of value stream", _offset == 0);
 
-  size_t count = properties.countPresent();
+  OMPropertyCount count = properties.countPresent();
   delete _index;
   _index = 0; // for BoundsChecker
   _index = new OMStoredPropertySetIndex(count);
   ASSERT("Valid heap pointer", _index != 0);
-  size_t countPresent = properties.countPresent();
-  size_t indexSize = indexHeaderSize + (countPresent * indexEntrySize);
+  OMPropertyCount countPresent = properties.countPresent();
+  size_t size = indexHeaderSize + (countPresent * indexEntrySize);
+  ASSERT("Property index not too big", size <= OMPROPERTYOFFSET_MAX );
+  OMPropertyOffset indexSize = static_cast<OMPropertyOffset>(size);
   streamSetPosition(_properties, indexSize);
   _offset = indexSize;
 
@@ -353,7 +355,9 @@ void OMSSStoredObject::save(const OMSimpleProperty& property)
 
   OMPropertyId propertyId = property.propertyId();
   OMStoredForm storedForm = property.storedForm();
-  size_t size = property.bitsSize();
+  OMUInt32 bs = property.bitsSize();
+  ASSERT("Property value not too big", bs <= OMPROPERTYSIZE_MAX);
+  OMPropertySize size = static_cast<OMPropertySize>(bs);
   OMByte* bits = property.bits();
   const OMType* propertyType = property.type();
 
@@ -362,7 +366,9 @@ void OMSSStoredObject::save(const OMSimpleProperty& property)
     ASSERT("Valid property type", propertyType != 0);
 
     // Allocate buffer for property value
-    size_t externalBytesSize = propertyType->externalSize(bits, size);
+    OMUInt32 sz = propertyType->externalSize(bits, size);
+    ASSERT("Property not too big", sz <= OMPROPERTYSIZE_MAX);
+    OMPropertySize externalBytesSize = static_cast<OMPropertySize>(sz);
     OMByte* buffer = new OMByte[externalBytesSize];
     ASSERT("Valid heap pointer", buffer != 0);
 
@@ -535,11 +541,11 @@ void OMSSStoredObject::save(const OMStrongReferenceVector& vector)
 
   // create a vector index
   //
-  size_t count = vector.count();
+  OMUInt32 count = vector.count();
   OMStoredVectorIndex* index = new OMStoredVectorIndex(count);
   ASSERT("Valid heap pointer", index != 0);
   index->setFirstFreeKey(vector.localKey());
-  size_t position = 0;
+  OMPropertyOffset position = 0;
 
   // Iterate over the vector saving each element
   //
@@ -593,7 +599,7 @@ void OMSSStoredObject::save(const OMStrongReferenceSet& set)
 
   // create a set index
   //
-  size_t count = 0;
+  OMUInt32 count = 0;
   OMContainerIterator<OMStrongReferenceSetElement>& iterator = *set.iterator();
   while (++iterator) {
     OMStrongReferenceSetElement& element = iterator.value();
@@ -609,7 +615,7 @@ void OMSSStoredObject::save(const OMStrongReferenceSet& set)
                                                  keySize);
   ASSERT("Valid heap pointer", index != 0);
   index->setFirstFreeKey(set.localKey());
-  size_t position = 0;
+  OMPropertyOffset position = 0;
 
   // Iterate over the set saving each element. The index entries
   // are written in order of their unique keys.
@@ -699,7 +705,7 @@ void OMSSStoredObject::save(const OMWeakReferenceVector& vector)
 
   // create a vector index
   //
-  size_t count = vector.count();
+  OMUInt32 count = vector.count();
   OMUniqueObjectIdentification* index = 0;
   if (count > 0) {
     index = new OMUniqueObjectIdentification[count];
@@ -753,7 +759,7 @@ void OMSSStoredObject::save(const OMWeakReferenceSet& set)
 
   // create a set index
   //
-  size_t count = set.count();
+  OMUInt32 count = set.count();
   OMUniqueObjectIdentification* index = 0;
   if (count > 0) {
     index = new OMUniqueObjectIdentification[count];
@@ -819,17 +825,17 @@ void OMSSStoredObject::save(const OMPropertyTable* table)
 
   // count of property ids
   OMUInt32 pidCount = 0;
-  for (size_t i = 0; i < count; i++) {
+  for (OMPropertyCount i = 0; i < count; i++) {
     OMUInt32 length = lengthOfPropertyPath(table->valueAt(i));
     pidCount = pidCount + length + 1;
   }
   writeUInt32ToStream(stream, pidCount, _reorderBytes);
 
   // sequence of null terminated pids
-  for (size_t j = 0; j < count; j++) {
+  for (OMPropertyCount j = 0; j < count; j++) {
     const OMPropertyId* internalName = table->valueAt(j);
-    size_t pidCount = lengthOfPropertyPath(internalName);
-    size_t byteCount = pidCount * sizeof(OMPropertyId);
+    OMUInt32 pidCount = lengthOfPropertyPath(internalName);
+    OMUInt32 byteCount = pidCount * sizeof(OMPropertyId);
     OMPropertyId* externalName = new OMPropertyId[pidCount];
     ASSERT("Valid heap pointer", externalName != 0);
     externalizeUInt16Array(internalName, externalName, pidCount);
@@ -951,8 +957,8 @@ void OMSSStoredObject::restore(OMPropertySet& properties)
   OMStoredForm type;
   OMUInt32 offset;
   OMPropertySize length;
-  size_t context = 0;
-  for (size_t i = 0; i < entries; i++) {
+  OMUInt16 context = 0;
+  for (OMUInt16 i = 0; i < entries; i++) {
     _index->iterate(context, propertyId, type, offset, length);
     OMProperty* p = properties.get(propertyId);
     ASSERT("Valid property", p != 0);
@@ -972,7 +978,7 @@ void OMSSStoredObject::restore(OMPropertySet& properties)
   //   @parm TBS
   //   @parm TBS
 void OMSSStoredObject::restore(OMSimpleProperty& property,
-                                 size_t externalSize)
+                                 OMPropertySize externalSize)
 {
   TRACE("OMSSStoredObject::restore");
 
@@ -998,8 +1004,9 @@ void OMSSStoredObject::restore(OMSimpleProperty& property,
     }
 
     // Internalize property value
-    size_t requiredBytesSize = propertyType->internalSize(buffer,
-                                                          externalSize);
+    OMUInt32 sz = propertyType->internalSize(buffer, externalSize);
+    ASSERT("Property not too big", sz <= OMPROPERTYSIZE_MAX);
+    OMPropertySize requiredBytesSize = static_cast<OMPropertySize>(sz);
     property.setSize(requiredBytesSize);
     ASSERT("Property value buffer large enough",
                                          property.size() >= requiredBytesSize);
@@ -1026,7 +1033,7 @@ void OMSSStoredObject::restore(OMSimpleProperty& property,
   //   @parm TBS
   //   @parm TBS
 void OMSSStoredObject::restore(OMDataVector& property,
-                                 size_t externalSize)
+                                 OMPropertySize externalSize)
 {
   TRACE("OMSSStoredObject::restore");
 
@@ -1072,7 +1079,7 @@ void OMSSStoredObject::restore(OMDataVector& property,
 }
 
 void OMSSStoredObject::restore(OMDataSet& property,
-                                size_t externalSize)
+                                OMPropertySize externalSize)
 {
   TRACE("OMSSStoredObject::restore(OMDataSet)");
 
@@ -1122,7 +1129,7 @@ void OMSSStoredObject::restore(OMDataSet& property,
   //   @parm TBS
   //   @parm TBS
 void OMSSStoredObject::restore(OMStrongReference& singleton,
-                                size_t externalSize)
+                                OMPropertySize externalSize)
 {
   TRACE("OMSSStoredObject::restore");
 
@@ -1139,7 +1146,7 @@ void OMSSStoredObject::restore(OMStrongReference& singleton,
   //   @parm TBS
   //   @parm TBS
 void OMSSStoredObject::restore(OMStrongReferenceVector& vector,
-                                size_t externalSize)
+                                OMPropertySize externalSize)
 {
   TRACE("OMSSStoredObject::restore");
 
@@ -1158,12 +1165,12 @@ void OMSSStoredObject::restore(OMStrongReferenceVector& vector,
 
   // Iterate over the index restoring the elements of the vector
   //
-  size_t entries = vectorIndex->entries();
+  OMUInt32 entries = vectorIndex->entries();
   if (entries > 0) {
     vector.grow(entries); // Set the vector size
-    size_t context = 0;
+    OMUInt32 context = 0;
     OMUInt32 localKey;
-    for (size_t i = 0; i < entries; i++) {
+    for (OMUInt32 i = 0; i < entries; i++) {
       vectorIndex->iterate(context, localKey);
       wchar_t* name = elementName(vectorName, vectorId, localKey);
       OMStrongReferenceVectorElement element(&vector, name, localKey);
@@ -1181,7 +1188,7 @@ void OMSSStoredObject::restore(OMStrongReferenceVector& vector,
   //   @parm TBS
   //   @parm TBS
 void OMSSStoredObject::restore(OMStrongReferenceSet& set,
-                                size_t externalSize)
+                                OMPropertySize externalSize)
 {
   TRACE("OMSSStoredObject::restore");
 
@@ -1209,15 +1216,15 @@ void OMSSStoredObject::restore(OMStrongReferenceSet& set,
   // then (recursively) all the keys below the middle key followed by
   // (recursively) all the keys above the middle key.
   //
-  size_t entries = setIndex->entries();
-  size_t context = 0;
+  OMUInt32 entries = setIndex->entries();
+  OMUInt32 context = 0;
   OMUInt32 localKey;
   OMUInt32 count;
   OMKeySize keySize = setIndex->keySize();
   OMByte* key = new OMByte[keySize];
   ASSERT("Valid heap pointer", key != 0);
 
-  for (size_t i = 0; i < entries; i++) {
+  for (OMUInt32 i = 0; i < entries; i++) {
     setIndex->iterate(context, localKey, count, key);
     // Restore the object only if it doesn't already exist in the set.
     // Since the object is uniquely identified by the key, the
@@ -1250,7 +1257,7 @@ void OMSSStoredObject::restore(OMStrongReferenceSet& set,
   //   @parm TBS
   //   @parm TBS
 void OMSSStoredObject::restore(OMWeakReference& singleton,
-                                size_t ANAME(externalSize))
+                                OMPropertySize ANAME(externalSize))
 {
   TRACE("OMSSStoredObject::restore");
 
@@ -1283,14 +1290,14 @@ void OMSSStoredObject::restore(OMWeakReference& singleton,
   //   @parm TBS
   //   @parm TBS
 void OMSSStoredObject::restore(OMWeakReferenceVector& vector,
-                                size_t externalSize)
+                                OMPropertySize externalSize)
 {
   TRACE("OMSSStoredObject::restore");
 
   // restore the index
   //
   OMUniqueObjectIdentification* vectorIndex = 0;
-  size_t entries;
+  OMUInt32 entries;
   OMPropertyTag tag;
   OMPropertyId keyPropertyId;
   wchar_t* name = collectionName(vector.name(), vector.propertyId());
@@ -1308,7 +1315,7 @@ void OMSSStoredObject::restore(OMWeakReferenceVector& vector,
   //
   if (entries > 0) {
     vector.grow(entries); // Set the vector size
-    for (size_t i = 0; i < entries; i++) {
+    for (OMUInt32 i = 0; i < entries; i++) {
       OMUniqueObjectIdentification key = vectorIndex[i];
       OMWeakReferenceVectorElement element(&vector, key, tag);
       element.restore();
@@ -1323,14 +1330,14 @@ void OMSSStoredObject::restore(OMWeakReferenceVector& vector,
   //   @parm TBS
   //   @parm TBS
 void OMSSStoredObject::restore(OMWeakReferenceSet& set,
-                                size_t externalSize)
+                                OMPropertySize externalSize)
 {
   TRACE("OMSSStoredObject::restore");
 
   // restore the index
   //
   OMUniqueObjectIdentification* setIndex = 0;
-  size_t entries;
+  OMUInt32 entries;
   OMPropertyTag tag;
   OMPropertyId keyPropertyId;
   wchar_t* name = collectionName(set.name(), set.propertyId());
@@ -1399,7 +1406,7 @@ void OMSSStoredObject::restore(OMPropertyTable*& table)
     OMUInt32 totalBytes = totalPids * sizeof(OMPropertyId);
     readFromStream(stream, buffer, totalBytes);
     OMPropertyId* externalName = buffer;
-    for (size_t i = 0; i < count; i++) {
+    for (OMUInt32 i = 0; i < count; i++) {
       size_t pidCount = lengthOfPropertyPath(externalName);
       OMPropertyId* internalName = new OMPropertyId[pidCount + 1];
       ASSERT("Valid heap pointer", internalName != 0);
@@ -1423,15 +1430,17 @@ void OMSSStoredObject::restore(OMPropertyTable*& table)
   //   @parm TBS
   //   @parm TBS
 void OMSSStoredObject::restore(OMDataStream& stream,
-                                size_t ANAME(externalSize))
+                                OMPropertySize ANAME(externalSize))
 {
   TRACE("OMSSStoredObject::restore");
 
   OMPropertyId propertyId = stream.propertyId();
   OMStoredForm storedForm = stream.storedForm();
   wchar_t* sName = streamName(stream.name(), propertyId);
-  size_t characterCount = lengthOfWideString(sName) + 1;
-  size_t size = (characterCount * sizeof(OMCharacter)) + 1;
+  size_t count = lengthOfWideString(sName) + 1;
+  ASSERT("String not too long", count <= OMUINT16_MAX);
+  OMUInt16 characterCount = static_cast<OMUInt16>(count);
+  OMPropertySize size = (characterCount * sizeof(OMCharacter)) + 1;
   ASSERT("Consistent property size", size == externalSize);
 
   wchar_t* name = 0;
@@ -1509,7 +1518,7 @@ void OMSSStoredObject::validate(
   OMStoredForm type;
   OMUInt32 offset;
   OMPropertySize length;
-  size_t context;
+  OMUInt16 context;
 
   // Check that all required properties are present.
   //
@@ -1583,9 +1592,9 @@ void OMSSStoredObject::save(const OMStoredVectorIndex* vector,
 
   // For each element write the element name.
   //
-  size_t context = 0;
+  OMUInt32 context = 0;
   OMUInt32 name;
-  for (size_t i = 0; i < entries; i++) {
+  for (OMUInt32 i = 0; i < entries; i++) {
     vector->iterate(context, name);
     writeUInt32ToStream(vectorIndexStream, name, _reorderBytes);
   }
@@ -1646,12 +1655,12 @@ void OMSSStoredObject::save(const OMStoredSetIndex* set,
 
   // For each element write the element name, reference count and key.
   //
-  size_t context = 0;
+  OMUInt32 context = 0;
   OMUInt32 name;
   OMUInt32 count;
   OMByte* key = new OMByte[keySize];
   ASSERT("Valid heap pointer", key != 0);
-  for (size_t i = 0; i < entries; i++) {
+  for (OMUInt32 i = 0; i < entries; i++) {
     set->iterate(context, name, count, key);
     writeUInt32ToStream(setIndexStream, name, _reorderBytes);
     writeUInt32ToStream(setIndexStream, count, _reorderBytes);
@@ -1721,7 +1730,7 @@ void OMSSStoredObject::save(OMPropertyId propertyId,
   //         identifier of objects in the target set.
 void OMSSStoredObject::save(const wchar_t* collectionName,
                              const OMUniqueObjectIdentification* index,
-                             size_t count,
+                             OMUInt32 count,
                              OMPropertyTag tag,
                              OMPropertyId keyPropertyId)
 {
@@ -1795,14 +1804,16 @@ void OMSSStoredObject::saveStream(OMPropertyId pid,
 
   // Name
   //
-  size_t characterCount = lengthOfWideString(name) + 1;
+  size_t count = lengthOfWideString(name) + 1;
+  ASSERT("String not too long", count <= OMUINT16_MAX);
+  OMUInt16 characterCount = static_cast<OMUInt16>(count);
   OMCharacter* buffer = new OMCharacter[characterCount];
   ASSERT("Valid heap pointer", buffer != 0);
   externalizeString(name, buffer, characterCount);
   if (_reorderBytes) {
     reorderString(buffer, characterCount);
   }
-  size_t byteCount = characterCount * sizeof(OMCharacter);
+  OMPropertySize byteCount = characterCount * sizeof(OMCharacter);
   writeToStream(_properties, buffer, byteCount);
   delete [] buffer;
 
@@ -1866,7 +1877,7 @@ void OMSSStoredObject::restore(OMStoredVectorIndex*& vector,
 
   // Read the element names, placing them in the index.
   //
-  for (size_t i = 0; i < entries; i++) {
+  for (OMUInt32 i = 0; i < entries; i++) {
     OMUInt32 name;
     readUInt32FromStream(vectorIndexStream, name, _reorderBytes);
     vectorIndex->insert(i, name);
@@ -1942,7 +1953,7 @@ void OMSSStoredObject::restore(OMStoredSetIndex*& set,
 
   // Read the element names, counts and keys, placing them in the index.
   //
-  for (size_t i = 0; i < entries; i++) {
+  for (OMUInt32 i = 0; i < entries; i++) {
     OMUInt32 name;
     readUInt32FromStream(setIndexStream, name, _reorderBytes);
     OMUInt32 count;
@@ -2020,7 +2031,7 @@ void OMSSStoredObject::restore(OMPropertyId propertyId,
   //         identifier of objects in the target set.
 void OMSSStoredObject::restore(const wchar_t* collectionName,
                                 OMUniqueObjectIdentification*& index,
-                                size_t &count,
+                                OMUInt32 &count,
                                 OMPropertyTag& tag,
                                 OMPropertyId& keyPropertyId)
 {
@@ -2086,7 +2097,7 @@ void OMSSStoredObject::restore(const wchar_t* collectionName,
 
 void OMSSStoredObject::restoreStream(OMPropertyId pid,
                                       OMStoredForm storedForm,
-                                      size_t size,
+                                      OMPropertySize size,
                                       wchar_t** name,
                                       OMByteOrder* byteOrder)
 {
@@ -2120,7 +2131,7 @@ void OMSSStoredObject::restoreStream(OMPropertyId pid,
 void OMSSStoredObject::write(OMPropertyId propertyId,
                               OMStoredForm storedForm,
                               void* start,
-                              size_t size)
+                              OMPropertySize size)
 {
   TRACE("OMSSStoredObject::write");
   PRECONDITION("Valid data", start != 0);
@@ -2142,11 +2153,11 @@ void OMSSStoredObject::write(OMPropertyId propertyId,
   //   @parm int | type | The property type.
   //   @parm void* | start | The start address of the buffer to hold the
   //         property value.
-  //   @parm size_t | size | The size of the buffer in bytes.
+  //   @parm OMUInt32 | size | The size of the buffer in bytes.
 void OMSSStoredObject::read(OMPropertyId ANAME(propertyId),
                              OMStoredForm ANAME(storedForm),
                              void* start,
-                             size_t size)
+                             OMPropertySize size)
 {
   TRACE("OMSSStoredObject::read");
   PRECONDITION("Valid data", start != 0);
@@ -2215,7 +2226,7 @@ IStream* OMSSStoredObject::createStream(const wchar_t* streamName)
   //   @parm The number of bytes to read.
 void OMSSStoredObject::readFromStream(IStream* stream,
                                        void* data,
-                                       size_t size)
+                                       OMUInt32 size)
 {
   TRACE("OMSSStoredObject::readFromStream");
   PRECONDITION("Valid stream", stream != 0);
@@ -2256,7 +2267,9 @@ void OMSSStoredObject::readFromStream(IStream* stream,
   //   @parm The stream on which to write.
   //   @parm The buffer to write.
   //   @parm The number of bytes to write.
-void OMSSStoredObject::writeToStream(IStream* stream, void* data, size_t size)
+void OMSSStoredObject::writeToStream(IStream* stream,
+                                     void* data,
+                                     OMUInt32 size)
 {
   TRACE("OMSSStoredObject::writeToStream");
   PRECONDITION("Valid stream", stream != 0);
@@ -2689,14 +2702,16 @@ void OMSSStoredObject::writeName(const wchar_t* name)
 {
   TRACE("OMSSStoredObject::writeName");
 
-  size_t characterCount = lengthOfWideString(name) + 1;
+  size_t count = lengthOfWideString(name) + 1;
+  ASSERT("String not too long", count <= OMUINT16_MAX);
+  OMUInt16 characterCount = static_cast<OMUInt16>(count);
   OMCharacter* buffer = new OMCharacter[characterCount];
   ASSERT("Valid heap pointer", buffer != 0);
   externalizeString(name, buffer, characterCount);
   if (_reorderBytes) {
     reorderString(buffer, characterCount);
   }
-  size_t byteCount = characterCount * sizeof(OMCharacter);
+  OMPropertySize byteCount = characterCount * sizeof(OMCharacter);
   writeToStream(_properties, buffer, byteCount);
   delete [] buffer;
 }
@@ -2723,7 +2738,7 @@ void OMSSStoredObject::saveName(const OMProperty& property,
   //   @parm The (expected) size of the property name.
 void OMSSStoredObject::restoreName(OMProperty& property,
                                     const wchar_t* ANAME(name),
-                                    size_t size)
+                                    OMPropertySize size)
 {
   TRACE("OMSSStoredObject::restoreName");
 
@@ -2744,21 +2759,23 @@ void OMSSStoredObject::writeName(OMPropertyId pid,
 {
   TRACE("OMSSStoredObject::writeName");
 
-  size_t characterCount = lengthOfWideString(name) + 1;
+  size_t count = lengthOfWideString(name) + 1;
+  ASSERT("String not too long", count <= OMUINT16_MAX);
+  OMUInt16 characterCount = static_cast<OMUInt16>(count);
   OMCharacter* buffer = new OMCharacter[characterCount];
   ASSERT("Valid heap pointer", buffer != 0);
   externalizeString(name, buffer, characterCount);
   if (_reorderBytes) {
     reorderString(buffer, characterCount);
   }
-  size_t byteCount = characterCount * sizeof(OMCharacter);
+  OMPropertySize byteCount = characterCount * sizeof(OMCharacter);
   write(pid, storedForm, buffer, byteCount);
   delete [] buffer;
 }
 
 wchar_t* OMSSStoredObject::readName(OMPropertyId pid,
                                      OMStoredForm storedForm,
-                                     size_t size)
+                                     OMPropertySize size)
 {
   TRACE("OMSSStoredObject::readName");
 
@@ -2913,8 +2930,8 @@ void OMSSStoredObject::save(OMStoredPropertySetIndex* index)
   OMStoredForm type;
   OMUInt32 offset;
   OMPropertySize length;
-  size_t context = 0;
-  for (size_t i = 0; i < entries; i++) {
+  OMUInt16 context = 0;
+  for (OMUInt16 i = 0; i < entries; i++) {
     index->iterate(context, propertyId, type, offset, length);
     writeUInt16ToStream(_properties, propertyId, _reorderBytes);
     writeUInt16ToStream(_properties, type, _reorderBytes);

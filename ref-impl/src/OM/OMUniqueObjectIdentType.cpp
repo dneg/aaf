@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2006, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -47,8 +47,8 @@ bool OMUniqueObjectIdentificationType::isFixedSize(void) const
 }
 
 void OMUniqueObjectIdentificationType::reorder(
-                                         OMByte* externalBytes,
-                                         size_t ANAME(externalBytesSize)) const
+                                       OMByte* externalBytes,
+                                       OMUInt32 ANAME(externalBytesSize)) const
 {
   TRACE("OMUniqueObjectIdentificationType::reorder");
 
@@ -63,14 +63,14 @@ void OMUniqueObjectIdentificationType::reorder(
   // no need to swap Data4
 }
 
-size_t OMUniqueObjectIdentificationType::externalSize(void) const
+OMUInt32 OMUniqueObjectIdentificationType::externalSize(void) const
 {
   return sizeof(OMUniqueObjectIdentification);
 }
 
-size_t OMUniqueObjectIdentificationType::externalSize(
-                                         const OMByte* NNAME(internalBytes),
-                                         size_t ANAME(internalBytesSize)) const
+OMUInt32 OMUniqueObjectIdentificationType::externalSize(
+                                       const OMByte* NNAME(internalBytes),
+                                       OMUInt32 ANAME(internalBytesSize)) const
 {
   TRACE("OMUniqueObjectIdentificationType::externalSize");
 
@@ -81,9 +81,9 @@ size_t OMUniqueObjectIdentificationType::externalSize(
 
 void OMUniqueObjectIdentificationType::externalize(
                                             const OMByte* internalBytes,
-                                            size_t internalBytesSize,
+                                            OMUInt32 internalBytesSize,
                                             OMByte* externalBytes,
-                                            size_t NNAME(externalBytesSize),
+                                            OMUInt32 NNAME(externalBytesSize),
                                             OMByteOrder NNAME(byteOrder)) const
 {
   TRACE("OMUniqueObjectIdentificationType::externalize");
@@ -93,9 +93,9 @@ void OMUniqueObjectIdentificationType::externalize(
   copy(internalBytes, externalBytes, internalBytesSize);
 }
 
-size_t OMUniqueObjectIdentificationType::internalSize(
-                                         const OMByte* NNAME(externalBytes),
-                                         size_t ANAME(externalBytesSize)) const
+OMUInt32 OMUniqueObjectIdentificationType::internalSize(
+                                       const OMByte* NNAME(externalBytes),
+                                       OMUInt32 ANAME(externalBytesSize)) const
 {
   TRACE("OMUniqueObjectIdentificationType::internalSize");
 
@@ -104,7 +104,7 @@ size_t OMUniqueObjectIdentificationType::internalSize(
   return sizeof(OMUniqueObjectIdentification);
 }
 
-size_t OMUniqueObjectIdentificationType::internalSize(void) const
+OMUInt32 OMUniqueObjectIdentificationType::internalSize(void) const
 {
   TRACE("OMUniqueObjectIdentificationType::internalSize");
   return sizeof(OMUniqueObjectIdentification);
@@ -112,9 +112,9 @@ size_t OMUniqueObjectIdentificationType::internalSize(void) const
 
 void OMUniqueObjectIdentificationType::internalize(
                                             const OMByte* externalBytes,
-                                            size_t externalBytesSize,
+                                            OMUInt32 externalBytesSize,
                                             OMByte* internalBytes,
-                                            size_t NNAME(internalBytesSize),
+                                            OMUInt32 NNAME(internalBytesSize),
                                             OMByteOrder NNAME(byteOrder)) const
 {
   TRACE("OMUniqueObjectIdentificationType::internalize");

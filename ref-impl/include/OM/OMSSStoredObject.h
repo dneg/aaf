@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2006, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -160,51 +160,51 @@ public:
     //   @devnote The externalSize argument to this member function doesn't
     //            make sense for all derived instances of <c OMStoredObject>.
   virtual void restore(OMSimpleProperty& property,
-                       size_t externalSize);
+                       OMPropertySize externalSize);
 
     // @cmember Restore the <c OMDataVector> <p property> into this
     //          <c OMSSStoredObject>.
     //   @devnote The externalSize argument to this member function doesn't
     //            make sense for all derived instances of <c OMStoredObject>.
   virtual void restore(OMDataVector& property,
-                       size_t externalSize);
+                       OMPropertySize externalSize);
 
     // @cmember Restore the <c OMDataSet> <p property> into this
     //          <c OMSSStoredObject>.
     //   @devnote The externalSize argument to this member function doesn't
     //            make sense for all derived instances of <c OMStoredObject>.
   virtual void restore(OMDataSet& property,
-                       size_t externalSize);
+                       OMPropertySize externalSize);
 
     // @cmember Restore the <c OMStrongReference> <p singleton> into this
     //          <c OMSSStoredObject>.
   virtual void restore(OMStrongReference& singleton,
-                       size_t externalSize);
+                       OMPropertySize externalSize);
 
     // @cmember Restore the <c OMStrongReferenceVector> <p vector> into this
     //          <c OMSSStoredObject>.
   virtual void restore(OMStrongReferenceVector& vector,
-                       size_t externalSize);
+                       OMPropertySize externalSize);
 
     // @cmember Restore the <c OMStrongReferenceSet> <p set> into this
     //          <c OMSSStoredObject>.
   virtual void restore(OMStrongReferenceSet& set,
-                       size_t externalSize);
+                       OMPropertySize externalSize);
 
     // @cmember Restore the <c OMWeakReference> <p singleton> into this
     //          <c OMSSStoredObject>.
   virtual void restore(OMWeakReference& singleton,
-                       size_t externalSize);
+                       OMPropertySize externalSize);
 
     // @cmember Restore the <c OMWeakReferenceVector> <p vector> into this
     //          <c OMSSStoredObject>.
   virtual void restore(OMWeakReferenceVector& vector,
-                       size_t externalSize);
+                       OMPropertySize externalSize);
 
     // @cmember Restore the <c OMWeakReferenceSet> <p set> into this
     //          <c OMSSStoredObject>.
   virtual void restore(OMWeakReferenceSet& set,
-                       size_t externalSize);
+                       OMPropertySize externalSize);
 
     // @cmember Restore the <c OMPropertyTable> in this <c OMSSStoredObject>.
     //   @devnote Does this member function make sense for all
@@ -214,7 +214,7 @@ public:
     // @cmember Restore the <c OMDataStream> <p stream> into this
     //          <c OMSSStoredObject>.
   virtual void restore(OMDataStream& stream,
-                       size_t externalSize);
+                       OMPropertySize externalSize);
 
   // Stream manipulation
 
@@ -256,7 +256,7 @@ protected:
     // @cmember Save a collection (vector/set) of weak references.
   void save(const wchar_t* collectionName,
             const OMUniqueObjectIdentification* index,
-            size_t count,
+            OMUInt32 count,
             OMPropertyTag tag,
             OMPropertyId keyPropertyId);
 
@@ -283,13 +283,13 @@ protected:
     // @cmember Restore a collection (vector/set) of weak references.
   void restore(const wchar_t* collectionName,
                OMUniqueObjectIdentification*& index,
-               size_t &count,
+               OMUInt32& count,
                OMPropertyTag& tag,
                OMPropertyId& keyPropertyId);
 
   void restoreStream(OMPropertyId pid,
                      OMStoredForm storedForm,
-                     size_t size,
+                     OMPropertySize size,
                      wchar_t** name,
                      OMByteOrder* byteOrder);
 
@@ -300,7 +300,7 @@ protected:
   void write(OMPropertyId propertyId,
              OMStoredForm storedForm,
              void* start,
-             size_t size);
+             OMPropertySize size);
 
     // @cmember Read a property value from this <c OMSSStoredObject>.
     //          The property value is read into a buffer which occupies
@@ -309,7 +309,7 @@ protected:
   void read(OMPropertyId propertyId,
             OMStoredForm storedForm,
             void* start,
-            size_t size);
+            OMPropertySize size);
 
     // @cmember Open a stream called <p streamName> contained within
     //          this <c OMSSStoredObject>.
@@ -321,7 +321,7 @@ protected:
 
     // @cmember Read <p size> bytes from <p stream> into the buffer at
     //          address <p data>.
-  void readFromStream(IStream* stream, void* data, size_t size);
+  void readFromStream(IStream* stream, void* data, OMUInt32 size);
 
     // @cmember Attempt to read <p bytes> bytes from <p stream> into
     //          the buffer at address <p data>. The actual number of
@@ -333,7 +333,7 @@ protected:
 
     // @cmember Write <p size> bytes from the buffer at address
     //          <p data> to <p stream>.
-  void writeToStream(IStream* stream, void* data, size_t size);
+  void writeToStream(IStream* stream, void* data, OMUInt32 size);
 
     // @cmember Attempt to write <p bytes> bytes from the buffer at
     //          address <p data> to <p stream>. The actual number of
@@ -449,7 +449,9 @@ protected:
 
     // @cmember The persisted value of <p property> is its name.
     //          Read (and check) the property name.
-  void restoreName(OMProperty& property, const wchar_t* name, size_t size);
+  void restoreName(OMProperty& property,
+                   const wchar_t* name,
+                   OMPropertySize size);
 
   void writeName(OMPropertyId pid,
                  OMStoredForm storedForm,
@@ -457,7 +459,7 @@ protected:
 
   wchar_t* readName(OMPropertyId pid,
                     OMStoredForm storedForm,
-                    size_t size);
+                    OMPropertySize size);
 
   static void reorderString(OMCharacter* string,
                             size_t characterCount);
@@ -513,7 +515,7 @@ private:
   IStorage* _storage;
   OMStoredPropertySetIndex* _index;
   IStream* _properties;
-  size_t _offset;
+  OMPropertyOffset _offset;
 
   bool _open;
   OMFile::OMAccessMode _mode;

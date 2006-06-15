@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2006, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -172,51 +172,51 @@ public:
     //   @devnote The externalSize argument to this member function doesn't
     //            make sense for all derived instances of <c OMStoredObject>.
   virtual void restore(OMSimpleProperty& property,
-                       size_t externalSize);
+                       OMPropertySize externalSize);
 
     // @cmember Restore the <c OMDataVector> <p property> into this
     //          <c OMXMLStoredObject>.
     //   @devnote The externalSize argument to this member function doesn't
     //            make sense for all derived instances of <c OMStoredObject>.
   virtual void restore(OMDataVector& property,
-                       size_t externalSize);
+                       OMPropertySize externalSize);
 
     // @cmember Restore the <c OMDataSet> <p property> into this
     //          <c OMXMLStoredObject>.
     //   @devnote The externalSize argument to this member function doesn't
     //            make sense for all derived instances of <c OMStoredObject>.
   virtual void restore(OMDataSet& property,
-                       size_t externalSize);
+                       OMPropertySize externalSize);
 
     // @cmember Restore the <c OMStrongReference> <p singleton> into this
     //          <c OMXMLStoredObject>.
   virtual void restore(OMStrongReference& singleton,
-                       size_t externalSize);
+                       OMPropertySize externalSize);
 
     // @cmember Restore the <c OMStrongReferenceVector> <p vector> into this
     //          <c OMXMLStoredObject>.
   virtual void restore(OMStrongReferenceVector& vector,
-                       size_t externalSize);
+                       OMPropertySize externalSize);
 
     // @cmember Restore the <c OMStrongReferenceSet> <p set> into this
     //          <c OMXMLStoredObject>.
   virtual void restore(OMStrongReferenceSet& set,
-                       size_t externalSize);
+                       OMPropertySize externalSize);
 
     // @cmember Restore the <c OMWeakReference> <p singleton> into this
     //          <c OMXMLStoredObject>.
   virtual void restore(OMWeakReference& singleton,
-                       size_t externalSize);
+                       OMPropertySize externalSize);
 
     // @cmember Restore the <c OMWeakReferenceVector> <p vector> into this
     //          <c OMXMLStoredObject>.
   virtual void restore(OMWeakReferenceVector& vector,
-                       size_t externalSize);
+                       OMPropertySize externalSize);
 
     // @cmember Restore the <c OMWeakReferenceSet> <p set> into this
     //          <c OMXMLStoredObject>.
   virtual void restore(OMWeakReferenceSet& set,
-                       size_t externalSize);
+                       OMPropertySize externalSize);
 
     // @cmember Restore the <c OMPropertyTable> in this <c OMXMLStoredObject>.
     //   @devnote Does this member function make sense for all
@@ -226,7 +226,7 @@ public:
     // @cmember Restore the <c OMDataStream> <p stream> into this
     //          <c OMXMLStoredObject>.
   virtual void restore(OMDataStream& stream,
-                       size_t externalSize);
+                       OMPropertySize externalSize);
 
   // Stream manipulation
 

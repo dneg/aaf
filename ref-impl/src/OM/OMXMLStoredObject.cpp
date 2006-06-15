@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2006, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -720,7 +720,7 @@ void OMXMLStoredObject::restore(OMPropertySet& /* properties */)
   //   @parm The newly restored <c OMSimpleProperty>
   //   @parm The external size.
 void OMXMLStoredObject::restore(OMSimpleProperty& /* property */,
-                                size_t /* externalSize */)
+                                OMPropertySize /* externalSize */)
 {
   TRACE("OMXMLStoredObject::restore(OMSimpleProperty)");
   ASSERT("Unimplemented code not reached", false); // tjb TBS
@@ -731,14 +731,14 @@ void OMXMLStoredObject::restore(OMSimpleProperty& /* property */,
   //   @parm The newly restored <c OMDataVector>
   //   @parm The external size.
 void OMXMLStoredObject::restore(OMDataVector& /* property */,
-                                size_t /* externalSize */)
+                                OMPropertySize /* externalSize */)
 {
   TRACE("OMXMLStoredObject::restore(OMDataVector)");
   ASSERT("Unimplemented code not reached", false); // tjb TBS
 }
 
 void OMXMLStoredObject::restore(OMDataSet& /* property */,
-                                size_t /* externalSize */)
+                                OMPropertySize /* externalSize */)
 {
   TRACE("OMXMLStoredObject::restore(OMDataSet)");
   ASSERT("Unimplemented code not reached", false); // tjb TBS
@@ -749,7 +749,7 @@ void OMXMLStoredObject::restore(OMDataSet& /* property */,
   //   @parm The newly restored <c OMStrongReference>.
   //   @parm The external size.
 void OMXMLStoredObject::restore(OMStrongReference& /* singleton */,
-                                size_t /* externalSize */)
+                                OMPropertySize /* externalSize */)
 {
   TRACE("OMXMLStoredObject::restore(OMStrongReference)");
   ASSERT("Unimplemented code not reached", false); // tjb TBS
@@ -760,7 +760,7 @@ void OMXMLStoredObject::restore(OMStrongReference& /* singleton */,
   //   @parm The newly restored <c OMStrongReferenceVector>.
   //   @parm The external size.
 void OMXMLStoredObject::restore(OMStrongReferenceVector& /* vector */,
-                                size_t /* externalSize */)
+                                OMPropertySize /* externalSize */)
 {
   TRACE("OMXMLStoredObject::restore(OMStrongReferenceVector)");
   ASSERT("Unimplemented code not reached", false); // tjb TBS
@@ -771,7 +771,7 @@ void OMXMLStoredObject::restore(OMStrongReferenceVector& /* vector */,
   //   @parm The newly restored <c OMStrongReferenceSet>.
   //   @parm The external size.
 void OMXMLStoredObject::restore(OMStrongReferenceSet& /* set */,
-                                size_t /* externalSize */)
+                                OMPropertySize /* externalSize */)
 {
   TRACE("OMXMLStoredObject::restore(OMStrongReferenceSet)");
   ASSERT("Unimplemented code not reached", false); // tjb TBS
@@ -782,7 +782,7 @@ void OMXMLStoredObject::restore(OMStrongReferenceSet& /* set */,
   //   @parm The newly restored <c OMWeakReference>.
   //   @parm The external size.
 void OMXMLStoredObject::restore(OMWeakReference& /* singleton */,
-                                size_t /* externalSize */)
+                                OMPropertySize /* externalSize */)
 {
   TRACE("OMXMLStoredObject::restore(OMWeakReference)");
   ASSERT("Unimplemented code not reached", false); // tjb TBS
@@ -793,7 +793,7 @@ void OMXMLStoredObject::restore(OMWeakReference& /* singleton */,
   //   @parm The newly restored <c OMWeakReferenceVector>.
   //   @parm The external size.
 void OMXMLStoredObject::restore(OMWeakReferenceVector& /* vector */,
-                                size_t /* externalSize */)
+                                OMPropertySize /* externalSize */)
 {
   TRACE("OMXMLStoredObject::restore(OMWeakReferenceVector)");
   ASSERT("Unimplemented code not reached", false); // tjb TBS
@@ -804,7 +804,7 @@ void OMXMLStoredObject::restore(OMWeakReferenceVector& /* vector */,
   //   @parm The newly restored <c OMWeakReferenceSet>.
   //   @parm The external size.
 void OMXMLStoredObject::restore(OMWeakReferenceSet& /* set */,
-                                size_t /* externalSize */)
+                                OMPropertySize /* externalSize */)
 {
   TRACE("OMXMLStoredObject::restore(OMWeakReferenceSet)");
   ASSERT("Unimplemented code not reached", false); // tjb TBS
@@ -823,7 +823,7 @@ void OMXMLStoredObject::restore(OMPropertyTable*& /* table */)
   //   @parm The newly restored <c OMDataStream>.
   //   @parm The external size.
 void OMXMLStoredObject::restore(OMDataStream& /* stream */,
-                                size_t /* externalSize */)
+                                OMPropertySize /* externalSize */)
 {
   TRACE("OMXMLStoredObject::restore(OMDataStream)");
   ASSERT("Unimplemented code not reached", false); // tjb TBS

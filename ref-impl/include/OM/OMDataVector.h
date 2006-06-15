@@ -31,8 +31,6 @@
 
 #include "OMDataTypes.h"
 
-#include <stddef.h>
-
   // @class Abstract base class for persistent properties representing
   //        vectors of data supported by the Object Manager.
   //   @base public | <c OMProperty>
@@ -55,13 +53,13 @@ public:
 
     // @cmember Restore this <c OMDataVector>, the external (persisted)
     //          size of the <c OMDataVector> is <p externalSize>.
-  virtual void restore(size_t externalSize);
+  virtual void restore(OMPropertySize externalSize);
 
-  virtual size_t count(void) const = 0;
+  virtual OMUInt32 count(void) const = 0;
 
   virtual void appendValue(void* value) = 0;
 
-  virtual size_t elementSize(void) const = 0;
+  virtual OMUInt32 elementSize(void) const = 0;
 
 private:
 

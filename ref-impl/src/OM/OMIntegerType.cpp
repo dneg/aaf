@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2006, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -36,7 +36,7 @@ bool OMIntegerType::isFixedSize(void) const
 }
 
 void OMIntegerType::reorder(OMByte* externalBytes,
-                            size_t ANAME(externalBytesSize)) const
+                            OMUInt32 ANAME(externalBytesSize)) const
 {
   TRACE("OMIntegerType::reorder");
 
@@ -46,8 +46,8 @@ void OMIntegerType::reorder(OMByte* externalBytes,
   }
 }
 
-size_t OMIntegerType::externalSize(const OMByte* ANAME(internalBytes),
-                                   size_t ANAME(internalBytesSize)) const
+OMUInt32 OMIntegerType::externalSize(const OMByte* ANAME(internalBytes),
+                                     OMUInt32 ANAME(internalBytesSize)) const
 {
   TRACE("OMIntegerType::externalSize");
 
@@ -57,15 +57,15 @@ size_t OMIntegerType::externalSize(const OMByte* ANAME(internalBytes),
   return size();
 }
 
-size_t OMIntegerType::externalSize(void) const
+OMUInt32 OMIntegerType::externalSize(void) const
 {
   return size();
 }
 
 void OMIntegerType::externalize(const OMByte* internalBytes,
-                                size_t ANAME(internalBytesSize),
+                                OMUInt32 ANAME(internalBytesSize),
                                 OMByte* externalBytes,
-                                size_t externalBytesSize,
+                                OMUInt32 externalBytesSize,
                                 OMByteOrder NNAME(byteOrder)) const
 {
   TRACE("OMIntegerType::externalize");
@@ -81,8 +81,8 @@ void OMIntegerType::externalize(const OMByte* internalBytes,
   copy(internalBytes, externalBytes, externalBytesSize);
 }
 
-size_t OMIntegerType::internalSize(const OMByte* ANAME(externalBytes),
-                                   size_t ANAME(externalBytesSize)) const
+OMUInt32 OMIntegerType::internalSize(const OMByte* ANAME(externalBytes),
+                                     OMUInt32 ANAME(externalBytesSize)) const
 {
   TRACE("OMIntegerType::internalSize");
 
@@ -92,16 +92,16 @@ size_t OMIntegerType::internalSize(const OMByte* ANAME(externalBytes),
   return size();
 }
 
-size_t OMIntegerType::internalSize(void) const
+OMUInt32 OMIntegerType::internalSize(void) const
 {
   TRACE("OMIntegerType::internalSize");
   return size();
 }
 
 void OMIntegerType::internalize(const OMByte* externalBytes,
-                                size_t ANAME(externalBytesSize),
+                                OMUInt32 ANAME(externalBytesSize),
                                 OMByte* internalBytes,
-                                size_t internalBytesSize,
+                                OMUInt32 internalBytesSize,
                                 OMByteOrder NNAME(byteOrder)) const
 {
   TRACE("OMIntegerType::internalize");
@@ -140,7 +140,7 @@ OMInteger08Type::~OMInteger08Type(void)
   TRACE("OMInteger08Type::~OMInteger08Type");
 }
 
-size_t OMInteger08Type::size(void) const
+OMUInt8 OMInteger08Type::size(void) const
 {
   TRACE("OMInteger08Type::size");
 
@@ -160,7 +160,7 @@ OMInteger16Type::~OMInteger16Type(void)
   TRACE("OMInteger16Type::~OMInteger16Type");
 }
 
-size_t OMInteger16Type::size(void) const
+OMUInt8 OMInteger16Type::size(void) const
 {
   TRACE("OMInteger16Type::size");
 
@@ -180,7 +180,7 @@ OMInteger32Type::~OMInteger32Type(void)
   TRACE("OMInteger32Type::~OMInteger32Type");
 }
 
-size_t OMInteger32Type::size(void) const
+OMUInt8 OMInteger32Type::size(void) const
 {
   TRACE("OMInteger32Type::size");
 
@@ -200,7 +200,7 @@ OMInteger64Type::~OMInteger64Type(void)
   TRACE("OMInteger64Type::~OMInteger64Type");
 }
 
-size_t OMInteger64Type::size(void) const
+OMUInt8 OMInteger64Type::size(void) const
 {
   TRACE("OMInteger64Type::size");
 

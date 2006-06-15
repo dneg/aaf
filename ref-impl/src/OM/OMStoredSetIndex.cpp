@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2006, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -30,7 +30,7 @@
 
   // @mfunc Constructor.
   //   @parm The capacity of this <c OMStoredSetIndex>.
-OMStoredSetIndex::OMStoredSetIndex(size_t capacity,
+OMStoredSetIndex::OMStoredSetIndex(OMUInt32 capacity,
                                    OMPropertyId keyPid,
                                    OMKeySize keySize)
 : _firstFreeKey(0), _lastFreeKey(~(OMUInt32)0),
@@ -109,7 +109,7 @@ void OMStoredSetIndex::setLastFreeKey(OMUInt32 lastFreeKey)
   _lastFreeKey = lastFreeKey;
 }
 
-size_t OMStoredSetIndex::keySize(void) const
+OMKeySize OMStoredSetIndex::keySize(void) const
 {
   return _keySize;
 }
@@ -134,7 +134,7 @@ OMPropertyId OMStoredSetIndex::keyPropertyId(void) const
   //   @parm The count of references to the element.
   //   @parm The unique key of the element.
 void OMStoredSetIndex::insert(
-                            size_t position,
+                            OMUInt32 position,
                             OMUInt32 localKey,
                             OMUInt32 referenceCount,
                             void* key)
@@ -151,7 +151,7 @@ void OMStoredSetIndex::insert(
   // @mfunc The number of elements in this <c OMStoredSetIndex>.
   //   @rdesc The number of elements.
   //   @this const
-size_t OMStoredSetIndex::entries(void) const
+OMUInt32 OMStoredSetIndex::entries(void) const
 {
   TRACE("OMStoredSetIndex::entries");
 
@@ -165,7 +165,7 @@ size_t OMStoredSetIndex::entries(void) const
   //   @parm The count of references to the "current" element.
   //   @parm The unique key of the "current" element.
   //   @this const
-void OMStoredSetIndex::iterate(size_t& context,
+void OMStoredSetIndex::iterate(OMUInt32& context,
                                OMUInt32& localKey,
                                OMUInt32& referenceCount,
                                void* key) const

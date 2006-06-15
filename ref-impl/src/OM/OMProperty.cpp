@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2006, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -274,13 +274,12 @@ OMSimpleProperty::OMSimpleProperty(const OMPropertyId propertyId,
   //   @parm The size of this <c OMSimpleProperty>.
 OMSimpleProperty::OMSimpleProperty(const OMPropertyId propertyId,
                                    const wchar_t* name,
-                                   size_t valueSize)
+                                   OMPropertySize valueSize)
 : OMProperty(propertyId, SF_DATA, name),
   _size(0),
   _bits(0)
 {
   TRACE("OMSimpleProperty::OMSimpleProperty");
-
   PRECONDITION("Valid size", (valueSize > 0));
 
   setSize(valueSize);
@@ -302,7 +301,7 @@ OMSimpleProperty::~OMSimpleProperty(void)
   // @mfunc The size of this <c OMSimpleProperty>.
   //   @rdesc The property size in bytes.
   //   @this const
-size_t OMSimpleProperty::size(void) const
+OMPropertySize OMSimpleProperty::size(void) const
 {
   TRACE("OMSimpleProperty::size");
 
@@ -321,7 +320,7 @@ OMUInt64 OMSimpleProperty::objectCount(void) const
 
   // @mfunc Set the size of this <c OMSimpleProperty> to <p newSize> bytes.
   //   @parm The new property size in bytes.
-void OMSimpleProperty::setSize(size_t newSize)
+void OMSimpleProperty::setSize(OMPropertySize newSize)
 {
   TRACE("OMSimpleProperty::setSize");
 
@@ -356,7 +355,7 @@ void OMSimpleProperty::shallowCopyTo(OMProperty* destination) const
   PRECONDITION("Valid destination", destination != 0);
 
   OMSimpleProperty* dest = dynamic_cast<OMSimpleProperty*>(destination);
-  ASSERT("Destination is corret type", dest != 0);
+  ASSERT("Destination is correct type", dest != 0);
   ASSERT("Valid destination", dest != this);
 
   dest->set(_bits, _size);
@@ -371,14 +370,15 @@ void OMSimpleProperty::deepCopyTo(OMProperty* /* destination */,
 
   // @mfunc Get the value of this <c OMSimpleProperty>.
   //   @parm The buffer to receive the property value.
-  //   @parm size_t | valueSize | The size of the buffer.
+  //   @parm OMPropertySize | valueSize | The size of the buffer.
   //   @this const
-void OMSimpleProperty::get(void* value, size_t ANAME(valueSize)) const
+void OMSimpleProperty::get(void* value, OMPropertySize ANAME(valueSize)) const
 {
   TRACE("OMSimpleProperty::get");
   PRECONDITION("Valid data buffer", value != 0);
   PRECONDITION("Valid size", valueSize >= _size);
-	PRECONDITION("Optional property is present",IMPLIES(isOptional(), isPresent()));
+  PRECONDITION("Optional property is present",
+                                           IMPLIES(isOptional(), isPresent()));
 
   memcpy(value, _bits, _size);
 }
@@ -387,7 +387,7 @@ void OMSimpleProperty::get(void* value, size_t ANAME(valueSize)) const
   //   @parm The address of the property value.
   //   @parm The size of the value.
   //   @this const
-void OMSimpleProperty::set(const void* value, size_t valueSize)
+void OMSimpleProperty::set(const void* value, OMPropertySize valueSize)
 {
   TRACE("OMSimpleProperty::set");
   PRECONDITION("Valid data buffer", value != 0);
@@ -412,7 +412,7 @@ void OMSimpleProperty::save(void) const
   // @mfunc Restore this <c OMSimpleProperty>, the external (persisted)
   //        size of the <c OMSimpleProperty> is <p externalSize>.
   //   @parm The size of the <c OMSimpleProperty>.
-void OMSimpleProperty::restore(size_t externalSize)
+void OMSimpleProperty::restore(OMPropertySize externalSize)
 {
   TRACE("OMSimpleProperty::restore");
   ASSERT("Sizes match", externalSize == _size);
@@ -486,7 +486,7 @@ OMStoredForm OMProperty::storedForm(void) const
   //   @rdesc The size of the raw bits of this
   //          <c OMSimpleProperty> in bytes.
   //   @this const
-size_t OMSimpleProperty::bitsSize(void) const
+OMUInt32 OMSimpleProperty::bitsSize(void) const
 {
   TRACE("OMSimpleProperty::bitsSize");
 
@@ -504,13 +504,14 @@ OMByte* OMSimpleProperty::bits(void) const
   //        The raw bits are copied to the buffer at address <p bits> which
   //        is <p size> bytes in size.
   //   @parm The address of the buffer into which the raw bits are copied.
-  //   @parm size_t | bitsSize | The size of the buffer.
+  //   @parm OMUInt32 | bitsSize | The size of the buffer.
   //   @this const
-void OMSimpleProperty::getBits(OMByte* bits, size_t ANAME(bitsSize)) const
+void OMSimpleProperty::getBits(OMByte* bits,
+                               OMUInt32 ANAME(bitsSize)) const
 {
   TRACE("OMSimpleProperty::getBits");
-
-	PRECONDITION("Optional property is present",IMPLIES(isOptional(), isPresent()));
+  PRECONDITION("Optional property is present",
+                                           IMPLIES(isOptional(), isPresent()));
   PRECONDITION("Valid bits", bits != 0);
   PRECONDITION("Valid size", bitsSize >= _size);
 
@@ -522,11 +523,13 @@ void OMSimpleProperty::getBits(OMByte* bits, size_t ANAME(bitsSize)) const
   //        is <p size> bytes in size.
   //   @parm The address of the buffer from which the raw bits are copied.
   //   @parm The size of the buffer.
-void OMSimpleProperty::setBits(const OMByte* bits, size_t size)
+void OMSimpleProperty::setBits(const OMByte* bits, OMUInt32 size)
 {
   TRACE("OMSimpleProperty::setBits");
   PRECONDITION("Valid bits", bits != 0);
   PRECONDITION("Valid size", size > 0);
 
-  set(bits, size);
+  ASSERT("Property value not too big", size <= OMPROPERTYSIZE_MAX);
+  set(bits, static_cast<OMPropertySize>(size));
 }
+

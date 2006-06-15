@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2006, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -70,6 +70,7 @@ template <typename CharacterType>
 void OMCharacterStringProperty<CharacterType>::assign(
                                           const CharacterType* characterString)
 {
+  TRACE("OMCharacterStringProperty<CharacterType>::assign");
   const CharacterType* source;
   const CharacterType empty = 0;
 
@@ -78,7 +79,10 @@ void OMCharacterStringProperty<CharacterType>::assign(
   } else {
     source = &empty;
   }
-  setValue(source, (stringLength(source) + 1) * sizeof(CharacterType));
+  ASSERT("String not too long",
+   ((stringLength(source) + 1) * sizeof(CharacterType)) <= OMPROPERTYSIZE_MAX);
+  setValue(source, static_cast<OMPropertySize>(
+                          (stringLength(source) + 1) * sizeof(CharacterType)));
 }
 
   // @mfunc The length of this <c OMCharacterStringProperty> in

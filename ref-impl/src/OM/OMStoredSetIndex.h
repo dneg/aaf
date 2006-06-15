@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2006, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -28,8 +28,6 @@
 
 #include "OMDataTypes.h"
 
-#include <stddef.h>
-
   // @class The in-memory representation of the on-disk index for a
   //        stored object set.
   //   @cauthor Tim Bingham | tjb | Avid Technology, Inc.
@@ -38,7 +36,7 @@ public:
   // @access Public members.
 
     // @cmember Constructor.
-  OMStoredSetIndex(size_t capacity, OMPropertyId keyPid, OMKeySize keySize);
+  OMStoredSetIndex(OMUInt32 capacity, OMPropertyId keyPid, OMKeySize keySize);
 
     // @cmember Destructor.
   ~OMStoredSetIndex(void);
@@ -59,7 +57,7 @@ public:
     //          this <c OMStoredSetIndex>.
   void setLastFreeKey(OMUInt32 lastFreeKey);
 
-  size_t keySize(void) const;
+  OMKeySize keySize(void) const;
 
   OMPropertyId keyPropertyId(void) const;
 
@@ -73,16 +71,16 @@ public:
     //          independent of the element's logical or physical position
     //          within the associated <c OMStrongReferenceSet>. The local
     //          key is also independent of the element's unique key.
-  void insert(size_t position,
+  void insert(OMUInt32 position,
               OMUInt32 localKey,
               OMUInt32 referenceCount,
               void* key);
 
     // @cmember The number of elements in this <c OMStoredSetIndex>.
-  size_t entries(void) const;
+  OMUInt32 entries(void) const;
 
     // @cmember Iterate over the elements in this <c OMStoredSetIndex>.
-  void iterate(size_t& context,
+  void iterate(OMUInt32& context,
                OMUInt32& localKey,
                OMUInt32& referenceCount,
                void* key) const;
@@ -94,8 +92,8 @@ private:
 
   OMUInt32 _firstFreeKey;
   OMUInt32 _lastFreeKey;
-  size_t _capacity;
-  size_t _entries;
+  OMUInt32 _capacity;
+  OMUInt32 _entries;
   OMPropertyId _keyPropertyId; // Id of property that is the key
   OMKeySize _keySize; // The size of a key
   OMUInt32* _localKeys;

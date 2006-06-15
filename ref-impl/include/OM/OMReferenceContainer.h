@@ -29,7 +29,7 @@
 class OMObject;
 class OMReferenceContainerIterator;
 
-#include <stddef.h>
+#include "OMDataTypes.h"
 
   // @class Abstract base class for object reference containers
   //        supported by the Object Manager.
@@ -45,7 +45,7 @@ public:
   virtual bool containsObject(const OMObject* object) const = 0;
 
     // @cmember The number of <p OMObject>s in this <c OMReferenceContainer>.
-  virtual size_t count(void) const = 0;
+  virtual OMUInt32 count(void) const = 0;
 
     // @cmember Remove <p object> from this <c OMReferenceContainer>.
   virtual void removeObject(const OMObject* object) = 0;

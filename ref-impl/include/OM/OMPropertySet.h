@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2006, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -28,8 +28,6 @@
 
 #include "OMDataTypes.h"
 #include "OMRedBlackTree.h"
-
-#include <stddef.h>
 
 class OMProperty;
 class OMStorable;
@@ -75,9 +73,9 @@ public:
 
     // @cmember The number of <c OMProperty> objects in this
     //          <c OMPropertySet>.
-  size_t count(void) const;
+  OMUInt16 count(void) const;
 
-  size_t countPresent(void) const;
+  OMUInt16 countPresent(void) const;
 
     // @cmember This <c OMPropertySet> is contained by the given
     //          <c OMStorable> object <p container>. The <c OMProperty>

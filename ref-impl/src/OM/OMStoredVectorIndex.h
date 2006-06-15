@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2006, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -28,8 +28,6 @@
 
 #include "OMDataTypes.h"
 
-#include <stddef.h>
-
   // @class The in-memory representation of the on-disk index for a
   //        stored object vector.
   //   @cauthor Tim Bingham | tjb | Avid Technology, Inc.
@@ -38,7 +36,7 @@ public:
   // @access Public members.
 
     // @cmember Constructor.
-  OMStoredVectorIndex(size_t capacity);
+  OMStoredVectorIndex(OMUInt32 capacity);
 
     // @cmember Destructor.
   ~OMStoredVectorIndex(void);
@@ -69,13 +67,13 @@ public:
     //          the associated <c OMStrongReferenceVector>. The local key is
     //          independent of the element's logical or physical position
     //          within the associated <c OMStrongReferenceVector>.
-  void insert(size_t position, OMUInt32 localKey);
+  void insert(OMUInt32 position, OMUInt32 localKey);
 
     // @cmember The number of elements in this <c OMStoredVectorIndex>.
-  size_t entries(void) const;
+  OMUInt32 entries(void) const;
 
     // @cmember Iterate over the elements in this <c OMStoredVectorIndex>.
-  void iterate(size_t& context, OMUInt32& localKey) const;
+  void iterate(OMUInt32& context, OMUInt32& localKey) const;
 
     // @cmember Is this <c OMStoredVectorIndex> valid ?
   bool isValid(void) const;
@@ -84,8 +82,8 @@ private:
 
   OMUInt32 _firstFreeKey;
   OMUInt32 _lastFreeKey;
-  size_t _capacity;
-  size_t _entries;
+  OMUInt32 _capacity;
+  OMUInt32 _entries;
   OMUInt32* _localKeys;
 };
 
