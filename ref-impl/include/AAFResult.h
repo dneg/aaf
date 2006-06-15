@@ -50,6 +50,7 @@
 #define AAFRESULT_BADCONTAINER                    ((HRESULT)0x80120014)
 #define AAFRESULT_FILEREV_NOT_SUPP                ((HRESULT)0x80120015)
 #define AAFRESULT_FILEREV_DIFF                    ((HRESULT)0x80120016)
+        /* Failed to open the file */
 #define AAFRESULT_OPEN_FAILURE                    ((HRESULT)0x80120017)
 #define AAFRESULT_BADCLOSE                        ((HRESULT)0x80120018)
 #define AAFRESULT_BAD_FHDL                        ((HRESULT)0x80120019)
