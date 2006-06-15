@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2006, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -44,7 +44,7 @@ OMSetProperty<Element>::~OMSetProperty(void)
 }
 
 template <typename Element>
-size_t OMSetProperty<Element>::count(void) const
+OMUInt32 OMSetProperty<Element>::count(void) const
 {
   TRACE("OMSetProperty<Element>::count");
   return _set.count();
@@ -132,16 +132,16 @@ OMUInt64 OMSetProperty<Element>::objectCount(void) const
 }
 
 template <typename Element>
-size_t OMSetProperty<Element>::bitsSize(void) const
+OMUInt32 OMSetProperty<Element>::bitsSize(void) const
 {
   TRACE("OMSetProperty<Element>::bitsSize");
 
-  size_t result = count() * elementSize();
+  OMUInt32 result = count() * elementSize();
   return result;
 }
 
 template <typename Element>
-void OMSetProperty<Element>::getBits(OMByte* bits, size_t ANAME(size)) const
+void OMSetProperty<Element>::getBits(OMByte* bits, OMUInt32 ANAME(size)) const
 {
   TRACE("OMSetProperty<Element>::getBits");
 
@@ -158,7 +158,7 @@ void OMSetProperty<Element>::getBits(OMByte* bits, size_t ANAME(size)) const
 
 template <typename Element>
 void OMSetProperty<Element>::setBits(const OMByte* /* bits */,
-                                     size_t /* size */)
+                                     OMUInt32 /* size */)
 {
   TRACE("OMSetProperty<Element>::setBits");
   ASSERT("Unimplemented code not reached", false);
@@ -198,7 +198,7 @@ void OMSetProperty<Element>::insert(void* value)
 }
 
 template <typename Element>
-size_t OMSetProperty<Element>::elementSize(void) const
+OMUInt32 OMSetProperty<Element>::elementSize(void) const
 {
   TRACE("OMSetProperty<Element>::elementSize");
 

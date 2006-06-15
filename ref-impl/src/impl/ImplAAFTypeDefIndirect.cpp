@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2006, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -1154,7 +1154,7 @@ AAFRESULT STDMETHODCALLTYPE
 //
 
 void ImplAAFTypeDefIndirect::reorder(OMByte* externalBytes,
-                       size_t ANAME(externalBytesSize)) const
+                       OMUInt32 ANAME(externalBytesSize)) const
 {
   TRACE("ImplAAFTypeDefIndirect::reorder");
   PRECONDITION("Object has been initialized", _initialized);
@@ -1178,8 +1178,8 @@ void ImplAAFTypeDefIndirect::reorder(OMByte* externalBytes,
   // 
 }
 
-size_t ImplAAFTypeDefIndirect::externalSize(const OMByte* internalBytes,
-                              size_t internalBytesSize) const
+OMUInt32 ImplAAFTypeDefIndirect::externalSize(const OMByte* internalBytes,
+                              OMUInt32 internalBytesSize) const
 {
   TRACE("ImplAAFTypeDefIndirect::externalSize");
   PRECONDITION("Object has been initialized", _initialized);
@@ -1207,9 +1207,9 @@ size_t ImplAAFTypeDefIndirect::externalSize(const OMByte* internalBytes,
 
 void ImplAAFTypeDefIndirect::externalize(
   const OMByte* internalBytes,
-  size_t ANAME(internalBytesSize),
+  OMUInt32 ANAME(internalBytesSize),
   OMByte* externalBytes,
-  size_t externalBytesSize,
+  OMUInt32 externalBytesSize,
   OMByteOrder NNAME(byteOrder)) const
 {
   TRACE("ImplAAFTypeDefIndirect::externalize");
@@ -1245,9 +1245,9 @@ void ImplAAFTypeDefIndirect::externalize(
 }
 
 
-size_t ImplAAFTypeDefIndirect::internalSize(
+OMUInt32 ImplAAFTypeDefIndirect::internalSize(
   const OMByte* externalBytes,
-  size_t externalSize) const
+  OMUInt32 externalSize) const
 {
   TRACE("ImplAAFTypeDefIndirect::internalSize");
   PRECONDITION("Object has been initialized", _initialized);
@@ -1275,9 +1275,9 @@ size_t ImplAAFTypeDefIndirect::internalSize(
 
 void ImplAAFTypeDefIndirect::internalize(
   const OMByte* externalBytes,
-  size_t externalBytesSize,
+  OMUInt32 externalBytesSize,
   OMByte* internalBytes,
-  size_t ANAME(internalBytesSize),
+  OMUInt32 ANAME(internalBytesSize),
   OMByteOrder ANAME(byteOrder)) const
 {
   TRACE("ImplAAFTypeDefIndirect::internalize");
@@ -1336,7 +1336,7 @@ aafBool ImplAAFTypeDefIndirect::IsFixedSize (void) const
 }
 
 
-size_t ImplAAFTypeDefIndirect::PropValSize (void) const
+OMUInt32 ImplAAFTypeDefIndirect::PropValSize (void) const
 {
   ASSERTU (0);
   return 0; // not reached!
@@ -1350,7 +1350,7 @@ aafBool ImplAAFTypeDefIndirect::IsRegistered (void) const
 }
 
 
-size_t ImplAAFTypeDefIndirect::NativeSize (void) const
+OMUInt32 ImplAAFTypeDefIndirect::NativeSize (void) const
 {
   ASSERTU (0);
   return 0; // not reached!

@@ -155,7 +155,7 @@ void OMWeakReferenceSetProperty<ReferencedObject>::detach(void)
   //         <c OMWeakReferenceSetProperty>.
 template <typename ReferencedObject>
 void OMWeakReferenceSetProperty<ReferencedObject>::restore(
-                                                           size_t externalSize)
+                                                   OMPropertySize externalSize)
 {
   TRACE("OMWeakReferenceSetProperty<ReferencedObject>::restore");
 
@@ -179,7 +179,7 @@ OMWeakReferenceSetProperty<ReferencedObject>::objectCount(void) const
   //        <c OMWeakReferenceSetProperty>.
   //   @this const
 template <typename ReferencedObject>
-size_t OMWeakReferenceSetProperty<ReferencedObject>::count(void) const
+OMUInt32 OMWeakReferenceSetProperty<ReferencedObject>::count(void) const
 {
   TRACE("OMWeakReferenceSetProperty<ReferencedObject>::count");
 
@@ -523,7 +523,7 @@ void OMWeakReferenceSetProperty<ReferencedObject>::removeProperty(void)
   //          <c OMWeakReferenceSetProperty> in bytes.
   //   @this const
 template <typename ReferencedObject>
-size_t OMWeakReferenceSetProperty<ReferencedObject>::bitsSize(void) const
+OMUInt32 OMWeakReferenceSetProperty<ReferencedObject>::bitsSize(void) const
 {
   TRACE("OMWeakReferenceSetProperty<ReferencedObject>::bitsSize");
   OBSOLETE("methods on class OMReferenceSetProperty");
@@ -542,8 +542,8 @@ size_t OMWeakReferenceSetProperty<ReferencedObject>::bitsSize(void) const
   //   @this const
 template <typename ReferencedObject>
 void OMWeakReferenceSetProperty<ReferencedObject>::getBits(
-                                                      OMByte* bits,
-                                                      size_t ANAME(size)) const
+                                                    OMByte* bits,
+                                                    OMUInt32 ANAME(size)) const
 {
   TRACE("OMWeakReferenceSetProperty<ReferencedObject>::getBits");
   OBSOLETE("methods on class OMReferenceSetProperty");
@@ -573,7 +573,7 @@ void OMWeakReferenceSetProperty<ReferencedObject>::getBits(
   //   @parm The size of the buffer.
 template <typename ReferencedObject>
 void OMWeakReferenceSetProperty<ReferencedObject>::setBits(const OMByte* bits,
-                                                           size_t size)
+                                                           OMUInt32 size)
 {
   TRACE("OMWeakReferenceSetProperty<ReferencedObject>::setBits");
   OBSOLETE("methods on class OMReferenceSetProperty");

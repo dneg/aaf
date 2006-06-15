@@ -14,7 +14,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2006, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -135,7 +135,7 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFContentStorage::CountMobs (aafMobKind_t mobKind,
                            aafNumSlots_t *pNumMobs)
 {
-	size_t				siz;
+	aafUInt32				siz;
 	ImplEnumAAFMobs		*mobEnum = NULL;
 	aafSearchCrit_t		criteria;
 	AAFRESULT			hr = AAFRESULT_SUCCESS;

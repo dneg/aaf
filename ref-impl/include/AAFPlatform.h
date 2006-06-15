@@ -56,6 +56,17 @@
 #define PLATFORM_MSC_INTEL_WINDOWS
     
 /*
+ *  Compiler:   Microsoft Visual C++
+ *  Processor:  x64
+ *  OS:         Windows NT
+ */
+#elif   defined(_MSC_VER) && defined(_M_X64) && defined(_WIN32)
+#define CPU_X64
+#define OS_WINDOWS
+#define COMPILER_MSC
+#define PLATFORM_MSC_X64_WINDOWS
+
+/*
  *  Compiler:   GNU C++
  *  Processor:  MIPS
  *  OS:         IRIX
@@ -267,7 +278,9 @@
 /*
  *  MS Windows
  */
-#if defined( PLATFORM_MSC_INTEL_WINDOWS )
+#if defined( PLATFORM_MSC_INTEL_WINDOWS ) || \
+    defined( PLATFORM_MSC_X64_WINDOWS )
+
 typedef signed char			aafInt8;
 typedef signed short int	aafInt16;
 typedef signed long int		aafInt32;

@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2005, Licensor of the
+// The Original Code of this file is Copyright 1998-2006, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -446,7 +446,7 @@ aafBool ImplAAFTypeDefStream::IsFixedSize (void) const
 }
 
 
-size_t ImplAAFTypeDefStream::PropValSize (void) const
+OMUInt32 ImplAAFTypeDefStream::PropValSize (void) const
 {
   ASSERTU (0);
   return 0; // not reached!
@@ -460,7 +460,7 @@ aafBool ImplAAFTypeDefStream::IsRegistered (void) const
 }
 
 
-size_t ImplAAFTypeDefStream::NativeSize (void) const
+OMUInt32 ImplAAFTypeDefStream::NativeSize (void) const
 {
   ASSERTU (0);
   return 0; // not reached!

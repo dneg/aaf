@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2006, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -57,8 +57,8 @@ ImplAAFSequence::ImplAAFSequence ()
 
 ImplAAFSequence::~ImplAAFSequence ()
 {
-	size_t count = _components.count();
-	for (size_t i = 0; i < count; i++) {
+	aafUInt32 count = _components.count();
+	for (aafUInt32 i = 0; i < count; i++) {
 		ImplAAFComponent *pComp = _components.clearValueAt(i);
 
 		if (pComp) {
@@ -389,7 +389,7 @@ AAFRESULT STDMETHODCALLTYPE
 {
   if (! pNumCpnts) return AAFRESULT_NULL_PARAM;
 
-	size_t	numCpnts = _components.count();
+	aafUInt32 numCpnts = _components.count();
 	*pNumCpnts = numCpnts;
 
 	return AAFRESULT_SUCCESS;
@@ -539,7 +539,6 @@ ImplAAFSequence::SegmentTCToOffset (aafTimecode_t*		pTimecode,
 									aafFrameOffset_t*	pOffset)
 {
 	aafTimecode_t		startTC;
-	size_t				index, numCpnts;
 	ImplAAFComponent*	pComponent;
 	ImplAAFSegment*		pSegment;
 	HRESULT				hr = AAFRESULT_SUCCESS;
@@ -556,8 +555,8 @@ ImplAAFSequence::SegmentTCToOffset (aafTimecode_t*		pTimecode,
 	segStart = 0;
 	junk = 0;
 
-	numCpnts = _components.count();
-	for (index=0; index < numCpnts; index++)
+	aafUInt32 numCpnts = _components.count();
+	for (aafUInt32 index=0; index < numCpnts; index++)
 	{
 		ImplAAFSegment*	pSubSegment;
 		aafBool			isMask;

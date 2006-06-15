@@ -107,33 +107,33 @@ public:
   //*************************************************************
 
   virtual void reorder(OMByte* externalBytes,
-                       size_t externalBytesSize) const;
+                       OMUInt32 externalBytesSize) const;
 
-  virtual size_t externalSize(const OMByte* internalBytes,
-							  size_t internalBytesSize) const;
+  virtual OMUInt32 externalSize(const OMByte* internalBytes,
+                                OMUInt32 internalBytesSize) const;
 
   virtual void externalize(const OMByte* internalBytes,
-                           size_t internalBytesSize,
+                           OMUInt32 internalBytesSize,
                            OMByte* externalBytes,
-                           size_t externalBytesSize,
+                           OMUInt32 externalBytesSize,
                            OMByteOrder byteOrder) const;
 
-  virtual size_t internalSize(const OMByte* externalBytes,
-							  size_t externalBytesSize) const;
+  virtual OMUInt32 internalSize(const OMByte* externalBytes,
+                                OMUInt32 externalBytesSize) const;
 
   virtual void internalize(const OMByte* externalBytes,
-                           size_t externalBytesSize,
+                           OMUInt32 externalBytesSize,
                            OMByte* internalBytes,
-                           size_t internalBytesSize,
+                           OMUInt32 internalBytesSize,
                            OMByteOrder byteOrder) const;
 
 
   // overrides from ImplAAFTypeDef
   //
   virtual aafBool IsFixedSize (void) const;
-  virtual size_t PropValSize (void) const;
+  virtual OMUInt32 PropValSize (void) const;
   aafBool IsRegistered (void) const;
-  size_t NativeSize (void) const;
+  OMUInt32 NativeSize (void) const;
 
   OMProperty * 
     pvtCreateOMProperty (OMPropertyId pid,

@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2006, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -65,8 +65,8 @@ ImplAAFSelector::~ImplAAFSelector ()
 	  selected = 0;
 	}
 
-	size_t count = _alternates.count();
-	for (size_t i = 0; i < count; i++)
+	aafUInt32 count = _alternates.count();
+	for (aafUInt32 i = 0; i < count; i++)
 	{
 		ImplAAFSegment* pSegment = _alternates.clearValueAt(i);
 		if (pSegment)
@@ -208,7 +208,7 @@ AAFRESULT STDMETHODCALLTYPE
 	}
 	else
 	{
-		size_t	numSegments = _alternates.count();
+		aafUInt32 numSegments = _alternates.count();
 		*pNumSegments = numSegments;
 	}
 

@@ -596,8 +596,8 @@ AAFRESULT ImplAAFPluginManager::RegisterPluginDirectory(const char *directoryNam
 static char * NewStringFromAAFString(aafCharacter_constptr wName)
 {
   char * name = NULL;
-  int wNameLength = wcslen(wName);
-  int nameLength = wcsu8slen(wName);
+  size_t wNameLength = wcslen(wName);
+  size_t nameLength = wcsu8slen(wName);
   name = new char[nameLength+1];
   if (NULL != name)
   {

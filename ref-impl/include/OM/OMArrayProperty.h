@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2006, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -44,38 +44,38 @@ public:
   virtual ~OMArrayProperty(void);
 
     // @cmember Get the value of this <c OMArrayProperty>.
-  void getValue(Element* value, size_t valueSize) const;
+  void getValue(Element* value, OMPropertySize valueSize) const;
 
     // @cmember Set the value of this <c OMArrayProperty>. The
     //          value is set by copying <p valueSize> bytes from the
     //          address <p value> into the <c OMArrayProperty>.
-  void setValue(const Element* value, size_t valueSize);
+  void setValue(const Element* value, OMPropertySize valueSize);
 
     // @cmember Set the value of this <c OMArrayProperty>. The
     //          value is set by copying <p elementCount> elements from the
     //          address <p value> into the <c OMArrayProperty>.
-  void setElementValues(const Element* value, size_t elementCount);
+  void setElementValues(const Element* value, OMUInt32 elementCount);
 
     // @cmember Get the value of the item at position <p index> in this
     //          <c OMArrayProperty>. The value is obtained by copying
     //          a single item of type Element from this
     //          <c OMArrayProperty> at position <p index>.
-  void getValueAt(Element* value, const size_t index) const;
+  void getValueAt(Element* value, const OMUInt32 index) const;
 
     // @cmember Get the value of the <p Element> at
     //          position <p index> in this <c OMArrayProperty>.
-  Element& getAt(const size_t index) const;
+  Element& getAt(const OMUInt32 index) const;
 
     // @cmember Set the value of the item at position <p index> in this
     //          <c OMArrayProperty>. The value is set by copying
     //          a single item of type Element into this
     //          <c OMArrayProperty> at position <p index>.
-  void setValueAt(const Element* value, const size_t index);
+  void setValueAt(const Element* value, const OMUInt32 index);
 
    // @cmember Set the value of the <p Element> at
     //          position <p index> in this <c OMArrayProperty>.
     //          The existing <p Element> at <p index> is replaced.
-  void setAt(const Element value, const size_t index);
+  void setAt(const Element value, const OMUInt32 index);
 
     // @cmember Set the value of the item at the last position in this
     //          <c OMArrayProperty>. The <c OMArrayProperty>
@@ -99,27 +99,27 @@ public:
     //          <c OMArrayProperty>. The buffer is at address
     //          <p buffer> and is <p bufferSize> bytes in size.
     //          Copying only takes place if the buffer is large enough.
-  bool copyToBuffer(Element* buffer, size_t bufferSize) const;
+  bool copyToBuffer(Element* buffer, OMUInt32 bufferSize) const;
 
     // @cmember Get the value of this <c OMArrayProperty>.  The
     //          value is obtained by copying the value from the
     //          <c OMArrayProperty>. The buffer is at address
     //          <p buffer> and is <p elementCount> elements in size.
     //          Copying only takes place if the buffer is large enough.
-  bool copyElementsToBuffer(Element* buffer, size_t elementCount) const;
+  bool copyElementsToBuffer(Element* buffer, OMUInt32 elementCount) const;
 
     // @cmember The number of items in this this <c OMArrayProperty>.
-  virtual size_t count(void) const;
+  virtual OMUInt32 count(void) const;
 
   virtual void appendValue(void* value);
 
   virtual void clear(void);
 
-  virtual size_t elementSize(void) const;
+  virtual OMUInt32 elementSize(void) const;
 
   virtual OMDataContainerIterator* createIterator(void) const;
 
-  virtual size_t size(void) const;
+  virtual OMUInt32 size(void) const;
 
     // @cmember The number of objects contained within this
     //          <c OMSetProperty> if any.
@@ -129,17 +129,17 @@ public:
 
     // @cmember The size of the raw bits of this <c OMSetProperty>. The
     //          size is given in bytes.
-  virtual size_t bitsSize(void) const;
+  virtual OMUInt32 bitsSize(void) const;
 
     // @cmember Get the raw bits of this <c OMSetProperty>. The raw bits
     //          are copied to the buffer at address <p bits> which is
     //          <p size> bytes in size.
-  virtual void getBits(OMByte* bits, size_t size) const;
+  virtual void getBits(OMByte* bits, OMUInt32 size) const;
 
     // @cmember Set the raw bits of this <c OMSetProperty>. The raw
     //          bits are copied from the buffer at address <p bits> which
     //          is <p size> bytes in size.
-  virtual void setBits(const OMByte* bits, size_t size);
+  virtual void setBits(const OMByte* bits, OMUInt32 size);
 
   // Copying.
 

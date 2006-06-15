@@ -199,7 +199,7 @@ HRESULT CAAFInProcServer::Init
 
 
   // Compute the size of the table.
-  size_t i = 0;
+  ULONG i = 0;
   while (pObjectInfo[i].pCLSID)
     ++i;
   _objectCount = i;
@@ -390,7 +390,7 @@ HRESULT AAFGetLibraryInfo(HINSTANCE hInstance, char **pServerPath, char **pServe
 {
 	HRESULT rc = S_OK;
 	char path[MAX_PATH];
-	int pathLen = 0;
+	size_t pathLen = 0;
 	char *pDirSeparator = 0;
 
 

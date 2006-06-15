@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2006, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -50,7 +50,7 @@ OMReferenceSet<UniqueIdentification, ReferencedObject>::~OMReferenceSet(void)
   // @mfunc The number of <p ReferencedObject>s in this <c OMReferenceSet>.
   //   @this const
 template <typename UniqueIdentification, typename ReferencedObject>
-size_t OMReferenceSet<UniqueIdentification,
+OMUInt32 OMReferenceSet<UniqueIdentification,
                       ReferencedObject>::count(void) const
 {
   TRACE("OMReferenceSet<UniqueIdentification, ReferencedObject>::count");

@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2006, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -526,7 +526,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 void ImplAAFTypeDefInt::reorder(OMByte* bytes,
-								size_t bytesSize) const
+								OMUInt32 bytesSize) const
 
 {
   ASSERTU (IsFixedSize());
@@ -537,8 +537,8 @@ void ImplAAFTypeDefInt::reorder(OMByte* bytes,
 }
 
 
-size_t ImplAAFTypeDefInt::externalSize(const OMByte* /*internalBytes*/,
-									   size_t /*internalBytesSize*/) const
+OMUInt32 ImplAAFTypeDefInt::externalSize(const OMByte* /*internalBytes*/,
+									   OMUInt32 /*internalBytesSize*/) const
 {
   ASSERTU (IsFixedSize());
   return PropValSize();
@@ -546,15 +546,15 @@ size_t ImplAAFTypeDefInt::externalSize(const OMByte* /*internalBytes*/,
 
 
 void ImplAAFTypeDefInt::externalize(const OMByte* internalBytes,
-									size_t internalBytesSize,
+									OMUInt32 internalBytesSize,
 									OMByte* externalBytes,
-									size_t externalBytesSize,
+									OMUInt32 externalBytesSize,
 									OMByteOrder byteOrder) const
 {
   ASSERTU (internalBytes);
   ASSERTU (externalBytes);
   // ASSERTU (internalBytesSize == externalBytesSize);
-  const size_t thisPropValSize = PropValSize ();
+  const OMUInt32 thisPropValSize = PropValSize ();
   ASSERTU (externalBytesSize == thisPropValSize);
 
   if (internalBytesSize > externalBytesSize)
@@ -587,23 +587,23 @@ void ImplAAFTypeDefInt::externalize(const OMByte* internalBytes,
 }
 
 
-size_t ImplAAFTypeDefInt::internalSize(const OMByte* /*externalBytes*/,
-									   size_t /*externalSize*/) const
+OMUInt32 ImplAAFTypeDefInt::internalSize(const OMByte* /*externalBytes*/,
+									   OMUInt32 /*externalSize*/) const
 {
   return NativeSize ();
 }
 
 
 void ImplAAFTypeDefInt::internalize(const OMByte* externalBytes,
-									size_t externalBytesSize,
+									OMUInt32 externalBytesSize,
 									OMByte* internalBytes,
-									size_t internalBytesSize,
+									OMUInt32 internalBytesSize,
 									OMByteOrder byteOrder) const
 {
   ASSERTU (externalBytes);
   ASSERTU (internalBytes);
   // ASSERTU (internalBytesSize == externalBytesSize);
-  // const size_t thisNativeSize = NativeSize ();
+  // const OMUInt32 thisNativeSize = NativeSize ();
   // ASSERTU (internalBytesSize == thisNativeSize);
 
   if (externalBytesSize > internalBytesSize)
@@ -642,7 +642,7 @@ aafBool ImplAAFTypeDefInt::IsFixedSize (void) const
 }
 
 
-size_t ImplAAFTypeDefInt::PropValSize (void) const
+OMUInt32 ImplAAFTypeDefInt::PropValSize (void) const
 {
   return _size;
 }
@@ -655,7 +655,7 @@ aafBool ImplAAFTypeDefInt::IsRegistered (void) const
 }
 
 
-size_t ImplAAFTypeDefInt::NativeSize (void) const
+OMUInt32 ImplAAFTypeDefInt::NativeSize (void) const
 {
   // same as property value size
   return PropValSize();
@@ -667,7 +667,9 @@ OMProperty * ImplAAFTypeDefInt::pvtCreateOMProperty
    const wchar_t * name) const
 {
   ASSERTU (name);
-  size_t elemSize = PropValSize ();
+  OMUInt32 es = PropValSize ();
+  ASSERTU(es <= OMPROPERTYSIZE_MAX);
+  OMPropertySize elemSize = static_cast<OMPropertySize>(es);
   OMProperty * result = new OMSimpleProperty (pid, name, elemSize);
   ASSERTU (result);
   return result;

@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2006, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -79,30 +79,30 @@ bool ImplAAFTypeDef::isFixedSize(void) const
 }
 
 void ImplAAFTypeDef::reorder(OMByte* /*bytes*/,
-							 size_t /*bytesSize*/) const
+							 OMUInt32 /*bytesSize*/) const
 {
   // Should be implemented in derived class.
   ASSERTU (0);
 }
 
 
-size_t ImplAAFTypeDef::externalSize(const OMByte* /*internalBytes*/,
-									size_t /*internalBytesSize*/) const
+OMUInt32 ImplAAFTypeDef::externalSize(const OMByte* /*internalBytes*/,
+									OMUInt32 /*internalBytesSize*/) const
 {
   // Should be implemented in derived class.
   ASSERTU (0);
   return 0; // Not reached!
 }
 
-size_t ImplAAFTypeDef::externalSize(void) const
+OMUInt32 ImplAAFTypeDef::externalSize(void) const
 {
   return PropValSize();
 }
 
 void ImplAAFTypeDef::externalize(const OMByte* /*internalBytes*/,
-								 size_t /*internalBytesSize*/,
+								 OMUInt32 /*internalBytesSize*/,
 								 OMByte* /*externalBytes*/,
-								 size_t /*externalBytesSize*/,
+								 OMUInt32 /*externalBytesSize*/,
 								 OMByteOrder /*byteOrder*/) const
 {
   // Should be implemented in derived class.
@@ -110,23 +110,23 @@ void ImplAAFTypeDef::externalize(const OMByte* /*internalBytes*/,
 }
 
 
-size_t ImplAAFTypeDef::internalSize(const OMByte* /*externalBytes*/,
-									size_t /*externalSize*/) const
+OMUInt32 ImplAAFTypeDef::internalSize(const OMByte* /*externalBytes*/,
+									OMUInt32 /*externalSize*/) const
 {
   // Should be implemented in derived class.
   ASSERTU (0);
   return 0; // Not reached!
 }
 
-size_t ImplAAFTypeDef::internalSize(void) const
+OMUInt32 ImplAAFTypeDef::internalSize(void) const
 {
   return NativeSize();
 }
 
 void ImplAAFTypeDef::internalize(const OMByte* /*externalBytes*/,
-								 size_t /*externalBytesSize*/,
+								 OMUInt32 /*externalBytesSize*/,
 								 OMByte* /*internalBytes*/,
-								 size_t /*internalBytesSize*/,
+								 OMUInt32 /*internalBytesSize*/,
 								 OMByteOrder /*byteOrder*/) const
 {
   // Should be implemented in derived class.
@@ -146,7 +146,7 @@ aafBool ImplAAFTypeDef::IsFixedSize (void) const
 }
 
 
-size_t ImplAAFTypeDef::PropValSize (void) const
+OMUInt32 ImplAAFTypeDef::PropValSize (void) const
 {
   // Should be implemented in derived class.
   ASSERTU (0);
@@ -167,7 +167,7 @@ void ImplAAFTypeDef::AttemptBuiltinRegistration (void)
 }
 
 
-size_t ImplAAFTypeDef::NativeSize (void) const
+OMUInt32 ImplAAFTypeDef::NativeSize (void) const
 {
   // Should be implemented in derived class.
   ASSERTU (0);
@@ -175,7 +175,7 @@ size_t ImplAAFTypeDef::NativeSize (void) const
 }
 
 
-size_t ImplAAFTypeDef::ActualSize (void) const
+OMUInt32 ImplAAFTypeDef::ActualSize (void) const
 {
   if (IsRegistered())
     return NativeSize();
@@ -266,7 +266,7 @@ AAFRESULT STDMETHODCALLTYPE
   if (AAFRESULT_SUCCEEDED(result))
   {
     // set the storage in the prop value
-    size_t bitsSize;
+    OMUInt32 bitsSize;
     ASSERTU (property);
     bitsSize = property->bitsSize ();
     aafMemPtr_t pBits = NULL;

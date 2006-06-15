@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2006, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -139,7 +139,7 @@ const PropertyType& OMFixedSizeProperty<PropertyType>::reference(void) const
   //          semantics.
   //   @parm The external (persisted) size of the <c OMFixedSizeProperty>.
 template <typename PropertyType>
-void OMFixedSizeProperty<PropertyType>::restore(size_t externalSize)
+void OMFixedSizeProperty<PropertyType>::restore(OMPropertySize externalSize)
 {
   TRACE("OMFixedSizeProperty<PropertyType>::restore");
 

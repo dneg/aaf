@@ -14,7 +14,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2006, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -138,8 +138,8 @@ ImplAAFMob::ImplAAFMob ()
 ImplAAFMob::~ImplAAFMob ()
 {
 	// Release all of the mob slot pointers.
-	size_t count = _slots.count();
-	for (size_t i = 0; i < count; i++)
+	aafUInt32 count = _slots.count();
+	for (aafUInt32 i = 0; i < count; i++)
 	{
 		ImplAAFMobSlot *pSlot = _slots.clearValueAt(i);
 		if (pSlot)
@@ -152,7 +152,7 @@ ImplAAFMob::~ImplAAFMob ()
 	if(_userComments.isPresent())
 	{
 		count = _userComments.count();
-		for (size_t j = 0; j < count; j++)
+		for (aafUInt32 j = 0; j < count; j++)
 		{
 			ImplAAFTaggedValue* pTaggedValue = _userComments.clearValueAt(j);
 			if (pTaggedValue)
@@ -163,7 +163,7 @@ ImplAAFMob::~ImplAAFMob ()
 	if(_KLVData.isPresent())
 	{
 		count = _KLVData.count();
-		for (size_t j = 0; j < count; j++)
+		for (aafUInt32 j = 0; j < count; j++)
 		{
 			ImplAAFKLVData* pKLVData = _KLVData.clearValueAt(j);
 			if (pKLVData)
@@ -301,7 +301,7 @@ AAFRESULT STDMETHODCALLTYPE
   if (!pSlot->attached ()) // slot could not possibly be in _slots container.
     return AAFRESULT_OBJECT_NOT_ATTACHED;
 
-  size_t index;
+  OMUInt32 index;
   if (_slots.findIndex (pSlot, index))
 	  return RemoveSlotAt (index);
   else
@@ -865,10 +865,15 @@ AAFRESULT STDMETHODCALLTYPE
  		ImplAAFClassDef *pTaggedValueClass = pDictionary->GetBuiltinDefs()->cdTaggedValue();
     ASSERTU (pTaggedValueClass); // this is supposed to be a builtin type.
 
+    size_t cc = wcslen(pComment)+1;
+    ASSERTU(cc <= OMUINT32_MAX);
+    OMUInt32 characterCount = static_cast<OMUInt32>(cc);
+    OMUInt32 byteCount = characterCount * sizeof(aafCharacter);
+
 		if (commentFound)
 		{
 			// Update existing comment
-			CHECK(pTaggedValue->SetValue((wcslen(pComment)+1)*sizeof(aafCharacter), (aafDataValue_t)pComment));
+			CHECK(pTaggedValue->SetValue(byteCount, (aafDataValue_t)pComment));
 			pTaggedValue->ReleaseReference();
 			pTaggedValue = 0;
 		}
@@ -878,7 +883,7 @@ AAFRESULT STDMETHODCALLTYPE
 			CHECK(pTaggedValueClass->CreateInstance ((ImplAAFObject**) &pTaggedValue));
 			CHECK(pTaggedValue->Initialize(pTagName,
 										   pTaggedValueType,
-                       ((wcslen(pComment)+1)*sizeof(aafCharacter)), 
+                       byteCount, 
                        (aafDataValue_t)pComment));
 			_userComments.appendValue(pTaggedValue);
 		}
@@ -914,7 +919,7 @@ AAFRESULT STDMETHODCALLTYPE
 	if(!_userComments.isPresent())
 		return AAFRESULT_PROP_NOT_PRESENT;
 	
-  size_t index;
+  OMUInt32 index;
   if (_userComments.findIndex (comment, index))
   {
 	  _userComments.removeAt(index);
@@ -1011,7 +1016,7 @@ AAFRESULT STDMETHODCALLTYPE
 	if(!_KLVData.isPresent())
 		return AAFRESULT_PROP_NOT_PRESENT;
 	
-  size_t index;
+  OMUInt32 index;
   if (_KLVData.findIndex (pData, index))
   {
 	  _KLVData.removeAt(index);

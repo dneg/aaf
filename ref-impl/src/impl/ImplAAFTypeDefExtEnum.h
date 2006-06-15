@@ -19,7 +19,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2006, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -194,9 +194,9 @@ public:
 	
 	// non-published overrides from AAFTypeDef
 	aafBool IsFixedSize (void) const;
-	size_t PropValSize (void) const;
+	OMUInt32 PropValSize (void) const;
 	aafBool IsRegistered (void) const;
-	size_t NativeSize (void) const;
+	OMUInt32 NativeSize (void) const;
 	
 	virtual OMProperty * 
 		pvtCreateOMProperty (OMPropertyId pid,
@@ -210,24 +210,24 @@ public:
 	//*************************************************************
 	
 	virtual void reorder(OMByte* bytes,
-		size_t bytesSize) const;
+		OMUInt32 bytesSize) const;
 	
-	virtual size_t externalSize(const OMByte* internalBytes,
-		size_t internalBytesSize) const;
+	virtual OMUInt32 externalSize(const OMByte* internalBytes,
+		OMUInt32 internalBytesSize) const;
 	
 	virtual void externalize(const OMByte* internalBytes,
-		size_t internalBytesSize,
+		OMUInt32 internalBytesSize,
 		OMByte* externalBytes,
-		size_t externalBytesSize,
+		OMUInt32 externalBytesSize,
 		OMByteOrder byteOrder) const;
 	
-	virtual size_t internalSize(const OMByte* externalBytes,
-		size_t externalBytesSize) const;
+	virtual OMUInt32 internalSize(const OMByte* externalBytes,
+		OMUInt32 externalBytesSize) const;
 	
 	virtual void internalize(const OMByte* externalBytes,
-		size_t externalBytesSize,
+		OMUInt32 externalBytesSize,
 		OMByte* internalBytes,
-		size_t internalBytesSize,
+		OMUInt32 internalBytesSize,
 		OMByteOrder byteOrder) const;
 	
 	AAFRESULT STDMETHODCALLTYPE

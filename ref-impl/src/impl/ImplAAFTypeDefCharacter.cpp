@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2006, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -225,7 +225,7 @@ AAFRESULT STDMETHODCALLTYPE
 // class ImplAAFTypeDefCharacter
 
 void ImplAAFTypeDefCharacter::reorder(OMByte* externalBytes,
-                             size_t ANAME(externalBytesSize)) const
+                             OMUInt32 ANAME(externalBytesSize)) const
 {
   TRACE("ImplAAFTypeDefCharacter::reorder");
   PRECONDITION("Valid external bytes", externalBytes != 0);
@@ -234,8 +234,8 @@ void ImplAAFTypeDefCharacter::reorder(OMByte* externalBytes,
   reorderInteger(externalBytes, kExternalCharacterSize);
 }
 
-size_t ImplAAFTypeDefCharacter::externalSize(const OMByte* ANAME(internalBytes),
-                                    size_t ANAME(internalBytesSize)) const
+OMUInt32 ImplAAFTypeDefCharacter::externalSize(const OMByte* ANAME(internalBytes),
+                                    OMUInt32 ANAME(internalBytesSize)) const
 {
   TRACE("ImplAAFTypeDefCharacter::externalSize");
 
@@ -246,9 +246,9 @@ size_t ImplAAFTypeDefCharacter::externalSize(const OMByte* ANAME(internalBytes),
 }
 
 void ImplAAFTypeDefCharacter::externalize(const OMByte* internalBytes,
-                                 size_t ANAME(internalBytesSize),
+                                 OMUInt32 ANAME(internalBytesSize),
                                  OMByte* externalBytes,
-                                 size_t externalBytesSize,
+                                 OMUInt32 externalBytesSize,
                                  OMByteOrder byteOrder) const
 {
   TRACE("ImplAAFTypeDefCharacter::externalize");
@@ -265,8 +265,8 @@ void ImplAAFTypeDefCharacter::externalize(const OMByte* internalBytes,
     contract(internalBytes, sizeof(aafCharacter), externalBytes, kExternalCharacterSize, byteOrder);
 }
 
-size_t ImplAAFTypeDefCharacter::internalSize(const OMByte* ANAME(externalBytes),
-                                    size_t ANAME(externalBytesSize)) const
+OMUInt32 ImplAAFTypeDefCharacter::internalSize(const OMByte* ANAME(externalBytes),
+                                    OMUInt32 ANAME(externalBytesSize)) const
 {
   TRACE("ImplAAFTypeDefCharacter::internalSize");
 
@@ -277,9 +277,9 @@ size_t ImplAAFTypeDefCharacter::internalSize(const OMByte* ANAME(externalBytes),
 }
 
 void ImplAAFTypeDefCharacter::internalize(const OMByte* externalBytes,
-                                 size_t ANAME(externalBytesSize),
+                                 OMUInt32 ANAME(externalBytesSize),
                                  OMByte* internalBytes,
-                                 size_t internalBytesSize,
+                                 OMUInt32 internalBytesSize,
                                  OMByteOrder byteOrder) const
 {
   TRACE("ImplAAFTypeDefCharacter::internalize");
@@ -315,7 +315,7 @@ aafBool ImplAAFTypeDefCharacter::IsFixedSize (void) const
 }
 
 
-size_t ImplAAFTypeDefCharacter::PropValSize (void) const
+OMUInt32 ImplAAFTypeDefCharacter::PropValSize (void) const
 {
   return kExternalCharacterSize; // We only support 2 byte unicode characters.
 }
@@ -328,7 +328,7 @@ aafBool ImplAAFTypeDefCharacter::IsRegistered (void) const
 }
 
 
-size_t ImplAAFTypeDefCharacter::NativeSize (void) const
+OMUInt32 ImplAAFTypeDefCharacter::NativeSize (void) const
 {
   TRACE("ImplAAFTypeDefCharacter::NativeSize");
   ASSERT("Valid character size", (2 == sizeof(aafCharacter)) || (4 == sizeof(aafCharacter)));

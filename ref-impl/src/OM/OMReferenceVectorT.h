@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2006, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -48,7 +48,7 @@ OMReferenceVector<ReferencedObject>::~OMReferenceVector(void)
   // @mfunc The number of <p ReferencedObject>s in this <c OMReferenceVector>.
   //   @this const
 template <typename ReferencedObject>
-size_t OMReferenceVector<ReferencedObject>::count(void) const
+OMUInt32 OMReferenceVector<ReferencedObject>::count(void) const
 {
   return _vector.count();
 }
@@ -62,7 +62,7 @@ size_t OMReferenceVector<ReferencedObject>::count(void) const
 template <typename ReferencedObject>
 ReferencedObject* OMReferenceVector<ReferencedObject>::setValueAt(
                                                 const ReferencedObject* object,
-                                                const size_t index)
+                                                const OMUInt32 index)
 {
   TRACE("OReferenceVector<ReferencedObject>::setValueAt");
   PRECONDITION("Valid index", index <= count());
@@ -90,7 +90,7 @@ ReferencedObject* OMReferenceVector<ReferencedObject>::setValueAt(
   //   @rdesc A pointer to the old <p ReferencedObject>.
 template <typename ReferencedObject>
 ReferencedObject*
-OMReferenceVector<ReferencedObject>::clearValueAt(const size_t index)
+OMReferenceVector<ReferencedObject>::clearValueAt(const OMUInt32 index)
 {
   TRACE("OReferenceVector<ReferencedObject>::clearValueAt");
   PRECONDITION("Valid index", index < count());
@@ -110,7 +110,7 @@ OMReferenceVector<ReferencedObject>::clearValueAt(const size_t index)
   //   @this const
 template <typename ReferencedObject>
 ReferencedObject* OMReferenceVector<ReferencedObject>::valueAt(
-                                                      const size_t index) const
+                                                    const OMUInt32 index) const
 {
   TRACE("OMReferenceVector<ReferencedObject>::valueAt");
   PRECONDITION("Valid index", index < count());
@@ -129,8 +129,8 @@ ReferencedObject* OMReferenceVector<ReferencedObject>::valueAt(
   //   @this const
 template <typename ReferencedObject>
 void OMReferenceVector<ReferencedObject>::getValueAt(
-                                                     ReferencedObject*& object,
-                                                     const size_t index) const
+                                                   ReferencedObject*& object,
+                                                   const OMUInt32 index) const
 {
   TRACE("OMReferenceVector<ReferencedObject>::getValueAt");
   OBSOLETE("OMReferenceVector<ReferencedObject>::valueAt");
@@ -152,7 +152,7 @@ void OMReferenceVector<ReferencedObject>::getValueAt(
   //   @this const
 template <typename ReferencedObject>
 bool OMReferenceVector<ReferencedObject>::find(
-                                               const size_t index,
+                                               const OMUInt32 index,
                                                ReferencedObject*& object) const
 {
   TRACE("OMReferenceVector<ReferencedObject>::find");
@@ -214,7 +214,8 @@ void OMReferenceVector<ReferencedObject>::insert(
   //   @parm The position at which to insert the <p ReferencedObject>.
 template <typename ReferencedObject>
 void OMReferenceVector<ReferencedObject>::insertAt(
-                            const ReferencedObject* object, const size_t index)
+                                                const ReferencedObject* object,
+                                                const OMUInt32 index)
 {
   TRACE("OMReferenceVector<ReferencedObject>::insertAt");
 
@@ -265,7 +266,7 @@ void OMReferenceVector<ReferencedObject>::removeValue(
   PRECONDITION("Valid object", object != 0);
   PRECONDITION("Object is present", containsValue(object));
 
-  size_t index = indexOfValue(object);
+  OMUInt32 index = indexOfValue(object);
   removeAt(index);
 }
 
@@ -279,7 +280,7 @@ void OMReferenceVector<ReferencedObject>::removeValue(
   //   @rdesc A pointer to the removed <p ReferencedObject>.
 template <typename ReferencedObject>
 ReferencedObject*
-OMReferenceVector<ReferencedObject>::removeAt(const size_t index)
+OMReferenceVector<ReferencedObject>::removeAt(const OMUInt32 index)
 {
   TRACE("OMReferenceVector<ReferencedObject>::removeAt");
   PRECONDITION("Valid index", index < count());
@@ -323,7 +324,7 @@ OMReferenceVector<ReferencedObject>::removeFirst(void)
   //   @rdesc The index.
   //   @this const
 template <typename ReferencedObject>
-size_t OMReferenceVector<ReferencedObject>::indexOfValue(
+OMUInt32 OMReferenceVector<ReferencedObject>::indexOfValue(
                                           const ReferencedObject* object) const
 {
   TRACE("OMReferenceVector<ReferencedObject>::indexOfValue");
@@ -331,7 +332,7 @@ size_t OMReferenceVector<ReferencedObject>::indexOfValue(
   PRECONDITION("Valid object", object != 0);
   PRECONDITION("Object is present", containsValue(object));
 
-  size_t result = 0;
+  OMUInt32 result = 0;
 
   VectorIterator iterator(_vector, OMBefore);
   while (++iterator) {
@@ -351,7 +352,7 @@ size_t OMReferenceVector<ReferencedObject>::indexOfValue(
   //   @rdesc The number of occurrences.
   //   @this const
 template <typename ReferencedObject>
-size_t OMReferenceVector<ReferencedObject>::countOfValue(
+OMUInt32 OMReferenceVector<ReferencedObject>::countOfValue(
                                           const ReferencedObject* object) const
 {
   TRACE("OMReferenceVector<ReferencedObject>::countOfValue");
@@ -378,7 +379,7 @@ size_t OMReferenceVector<ReferencedObject>::countOfValue(
   //   @this const
 template <typename ReferencedObject>
 bool OMReferenceVector<ReferencedObject>::containsIndex(
-                                                      const size_t index) const
+                                                    const OMUInt32 index) const
 {
   TRACE("OMReferenceVector<ReferencedObject>::containsIndex");
 
@@ -401,7 +402,8 @@ bool OMReferenceVector<ReferencedObject>::containsIndex(
   //   @this const
 template <typename ReferencedObject>
 bool OMReferenceVector<ReferencedObject>::findIndex(
-                           const ReferencedObject* object, size_t& index) const
+                                                const ReferencedObject* object,
+                                                OMUInt32& index) const
 {
   TRACE("OMReferenceVector<ReferencedObject>::findIndex");
   bool result = false;
@@ -424,7 +426,7 @@ bool OMReferenceVector<ReferencedObject>::findIndex(
   //   @tcarg class | ReferencedObject | The type of the referenced objects.
   //   @parm The desired capacity.
 template <typename ReferencedObject>
-void OMReferenceVector<ReferencedObject>::grow(const size_t capacity)
+void OMReferenceVector<ReferencedObject>::grow(const OMUInt32 capacity)
 {
   TRACE("OMReferenceVector<ReferencedObject>::grow");
   PRECONDITION("Valid capacity", capacity > count());
@@ -514,7 +516,7 @@ OMReferenceVector<ReferencedObject>::createIterator(void) const
 template <typename ReferencedObject>
 OMObject*
 OMReferenceVector<ReferencedObject>::setObjectAt(const OMObject* object,
-                                                 const size_t index)
+                                                 const OMUInt32 index)
 {
   TRACE("OMReferenceVector<ReferencedObject>::setObjectAt");
 
@@ -530,7 +532,7 @@ OMReferenceVector<ReferencedObject>::setObjectAt(const OMObject* object,
   //   @rdesc TBS
 template <typename ReferencedObject>
 OMObject*
-OMReferenceVector<ReferencedObject>::getObjectAt(const size_t index) const
+OMReferenceVector<ReferencedObject>::getObjectAt(const OMUInt32 index) const
 {
   TRACE("OMReferenceVector<ReferencedObject>::getObjectAt");
 
@@ -571,7 +573,7 @@ void OMReferenceVector<ReferencedObject>::prependObject(const OMObject* object)
   //   @rdesc TBS
 template <typename ReferencedObject>
 OMObject*
-OMReferenceVector<ReferencedObject>::removeObjectAt(const size_t index)
+OMReferenceVector<ReferencedObject>::removeObjectAt(const OMUInt32 index)
 {
   TRACE("OMReferenceVector<ReferencedObject>::removeObjectAt");
 
@@ -587,7 +589,7 @@ OMReferenceVector<ReferencedObject>::removeObjectAt(const size_t index)
 template <typename ReferencedObject>
 void
 OMReferenceVector<ReferencedObject>::insertObjectAt(const OMObject* object,
-                                                    const size_t index)
+                                                    const OMUInt32 index)
 {
   TRACE("OMReferenceVector<ReferencedObject>::insertObjectAt");
 

@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2006, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -124,8 +124,11 @@ ImplAAFTypeDefEnum::pvtInitialize (
 	if (!pTypeName)
 		return AAFRESULT_NULL_PARAM;
 	
-	if ((numElements*sizeof(aafInt64)) > OMPROPERTYSIZE_MAX)
+	aafUInt32 tvb = numElements*sizeof(aafInt64);
+	if (tvb > OMPROPERTYSIZE_MAX)
 		return(AAFRESULT_BAD_SIZE);
+
+	OMPropertySize totalValueBytes = static_cast<OMPropertySize>(tvb);
 
 	AAFRESULT hr;
 	
@@ -139,13 +142,18 @@ ImplAAFTypeDefEnum::pvtInitialize (
 	{
 		if ( !pElementNames[i])
 			return AAFRESULT_NULL_PARAM;
-		
-		totalNameSize += (wcslen (pElementNames[i]) + 1);
-	}
-	
-	if ((totalNameSize * sizeof(OMCharacter)) > OMPROPERTYSIZE_MAX)
-		return(AAFRESULT_BAD_SIZE);
 
+		size_t enl = wcslen (pElementNames[i]);
+		ASSERTU(enl <= OMUINT32_MAX);
+		OMUInt32 elementNameLength = static_cast<OMUInt32>(enl);
+		totalNameSize += (elementNameLength + 1);
+	}
+
+	aafUInt32 tnb = totalNameSize * sizeof(aafCharacter);
+	if (tnb > OMPROPERTYSIZE_MAX)
+	  return AAFRESULT_BAD_SIZE;
+
+	OMPropertySize totalNameBytes = static_cast<OMPropertySize>(tnb);
 
 	wchar_t * namesBuf = new wchar_t[totalNameSize];
 	if (!namesBuf)
@@ -165,9 +173,9 @@ ImplAAFTypeDefEnum::pvtInitialize (
 	
 	_ElementType = pType;
 	
-	_ElementNames.setValue (namesBuf, totalNameSize * sizeof(wchar_t));
+	_ElementNames.setValue (namesBuf, totalNameBytes);
 	delete[] namesBuf;
-	_ElementValues.setValue (pElementValues, numElements*sizeof(aafInt64));
+	_ElementValues.setValue (pElementValues, totalValueBytes);
 	ASSERTU (numElements == _ElementValues.count());
 
 	//Register the size
@@ -961,7 +969,7 @@ ImplAAFTypeDefEnum::GetElementName (
 	currentIndex = 0;
 	if (0 != index)
 	{
-		for (size_t i = 0; i < numChars; i++)
+		for (OMUInt32 i = 0; i < numChars; i++)
 		{
 			indexIntoProp++;
 			_ElementNames.getValueAt(&c, i);
@@ -1025,7 +1033,7 @@ ImplAAFTypeDefEnum::GetElementNameBufLen (
 	currentIndex = 0;
 	if (0 != index)
 	{
-		for (size_t i = 0; i < numChars; i++)
+		for (OMUInt32 i = 0; i < numChars; i++)
 		{
 			indexIntoProp++;
 			_ElementNames.getValueAt(&c, i);
@@ -1075,23 +1083,23 @@ ImplAAFTypeDefSP ImplAAFTypeDefEnum::BaseType () const
 }
 
 void ImplAAFTypeDefEnum::reorder(OMByte* externalBytes,
-								 size_t externalBytesSize) const
+								 OMUInt32 externalBytesSize) const
 {
 	BaseType()->reorder (externalBytes, externalBytesSize);
 }
 
 
-size_t ImplAAFTypeDefEnum::externalSize(const OMByte* /*internalBytes*/,
-										size_t /*internalBytesSize*/) const
+OMUInt32 ImplAAFTypeDefEnum::externalSize(const OMByte* /*internalBytes*/,
+										OMUInt32 /*internalBytesSize*/) const
 {
 	return PropValSize ();
 }
 
 
 void ImplAAFTypeDefEnum::externalize(const OMByte* internalBytes,
-									 size_t internalBytesSize,
+									 OMUInt32 internalBytesSize,
 									 OMByte* externalBytes,
-									 size_t externalBytesSize,
+									 OMUInt32 externalBytesSize,
 									 OMByteOrder byteOrder) const
 {
 	BaseType()->externalize (internalBytes,
@@ -1102,8 +1110,8 @@ void ImplAAFTypeDefEnum::externalize(const OMByte* internalBytes,
 }
 
 
-size_t ImplAAFTypeDefEnum::internalSize(const OMByte* /*externalBytes*/,
-										size_t /*externalBytesSize*/) const
+OMUInt32 ImplAAFTypeDefEnum::internalSize(const OMByte* /*externalBytes*/,
+										OMUInt32 /*externalBytesSize*/) const
 {
 	if (IsRegistered ())
 		return NativeSize ();
@@ -1113,9 +1121,9 @@ size_t ImplAAFTypeDefEnum::internalSize(const OMByte* /*externalBytes*/,
 
 
 void ImplAAFTypeDefEnum::internalize(const OMByte* externalBytes,
-									 size_t externalBytesSize,
+									 OMUInt32 externalBytesSize,
 									 OMByte* internalBytes,
-									 size_t internalBytesSize,
+									 OMUInt32 internalBytesSize,
 									 OMByteOrder byteOrder) const
 {
 	BaseType()->internalize (externalBytes,
@@ -1133,7 +1141,7 @@ aafBool ImplAAFTypeDefEnum::IsFixedSize (void) const
 }
 
 
-size_t ImplAAFTypeDefEnum::PropValSize (void) const
+OMUInt32 ImplAAFTypeDefEnum::PropValSize (void) const
 {
 	return BaseType()->PropValSize ();
 }
@@ -1158,7 +1166,7 @@ aafBool ImplAAFTypeDefEnum::IsRegistered (void) const
 }
 
 
-size_t ImplAAFTypeDefEnum::NativeSize (void) const
+OMUInt32 ImplAAFTypeDefEnum::NativeSize (void) const
 {
 	if  (!IsRegistered())
 	{

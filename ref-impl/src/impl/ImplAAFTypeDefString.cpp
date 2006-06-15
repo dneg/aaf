@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2006, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -479,7 +479,7 @@ ImplAAFTypeDefSP ImplAAFTypeDefString::BaseType() const
 
 
 void ImplAAFTypeDefString::reorder(OMByte* externalBytes,
-								   size_t externalBytesSize) const
+								   OMUInt32 externalBytesSize) const
 {
   ImplAAFTypeDefSP ptd = BaseType();
   ASSERTU (ptd);
@@ -499,8 +499,8 @@ void ImplAAFTypeDefString::reorder(OMByte* externalBytes,
 }
 
 
-size_t ImplAAFTypeDefString::externalSize(const OMByte* /*internalBytes*/,
-										  size_t internalBytesSize) const
+OMUInt32 ImplAAFTypeDefString::externalSize(const OMByte* /*internalBytes*/,
+										  OMUInt32 internalBytesSize) const
 {
   ImplAAFTypeDefSP ptd = BaseType();
   ASSERTU (ptd);
@@ -517,9 +517,9 @@ size_t ImplAAFTypeDefString::externalSize(const OMByte* /*internalBytes*/,
 
 
 void ImplAAFTypeDefString::externalize(const OMByte* internalBytes,
-									   size_t internalBytesSize,
+									   OMUInt32 internalBytesSize,
 									   OMByte* externalBytes,
-									   size_t externalBytesSize,
+									   OMUInt32 externalBytesSize,
 									   OMByteOrder byteOrder) const
 {
   ImplAAFTypeDefSP ptd = BaseType();
@@ -550,8 +550,8 @@ void ImplAAFTypeDefString::externalize(const OMByte* internalBytes,
 }
 
 
-size_t ImplAAFTypeDefString::internalSize(const OMByte* /*externalBytes*/,
-										  size_t externalBytesSize) const
+OMUInt32 ImplAAFTypeDefString::internalSize(const OMByte* /*externalBytes*/,
+										  OMUInt32 externalBytesSize) const
 {
   ImplAAFTypeDefSP ptd = BaseType();
   ASSERTU (ptd);
@@ -568,9 +568,9 @@ size_t ImplAAFTypeDefString::internalSize(const OMByte* /*externalBytes*/,
 
 
 void ImplAAFTypeDefString::internalize(const OMByte* externalBytes,
-									   size_t externalBytesSize,
+									   OMUInt32 externalBytesSize,
 									   OMByte* internalBytes,
-									   size_t internalBytesSize,
+									   OMUInt32 internalBytesSize,
 									   OMByteOrder byteOrder) const
 {
   ImplAAFTypeDefSP ptd = BaseType();
@@ -609,7 +609,7 @@ aafBool ImplAAFTypeDefString::IsFixedSize (void) const
 }
 
 
-size_t ImplAAFTypeDefString::PropValSize (void) const
+OMUInt32 ImplAAFTypeDefString::PropValSize (void) const
 {
   ASSERTU (0);
   return 0; // not reached!
@@ -623,7 +623,7 @@ aafBool ImplAAFTypeDefString::IsRegistered (void) const
 }
 
 
-size_t ImplAAFTypeDefString::NativeSize (void) const
+OMUInt32 ImplAAFTypeDefString::NativeSize (void) const
 {
   ASSERTU (0);
   return 0; // not reached!

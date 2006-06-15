@@ -491,12 +491,32 @@ ImplAAFTypeDefExtEnum::AppendElement (
 		origNameCharCount = _ElementNames.count();
 		ASSERTU (pName);
 		
+		aafUInt32 nvbc = (origNumElems+1)*sizeof (aafUID_t);
+		if (nvbc > OMPROPERTYSIZE_MAX)
+		  return AAFRESULT_BAD_SIZE;
+
+		OMPropertySize newValueByteCount = static_cast<OMPropertySize>(nvbc);
+
+		aafUInt32 ovbc = origNumElems*sizeof (aafUID_t);
+		OMPropertySize origValueByteCount = static_cast<OMPropertySize>(ovbc);
+
 		// Add length for name to be appended.  Don't forget to add one
 		// character for new name's trailing null
-		newNameCharCount = origNameCharCount + wcslen (pName) + 1;
+		size_t mnl = wcslen (pName);
+		ASSERTU(mnl <= OMUINT32_MAX);
+		OMUInt32 memberNameLength = static_cast<OMUInt32>(mnl);
+		newNameCharCount = origNameCharCount + memberNameLength + 1;
+
+		aafUInt32 nnbc = newNameCharCount * sizeof(aafWChar);
+		if (nnbc > OMPROPERTYSIZE_MAX)
+		  return AAFRESULT_BAD_SIZE;
+
+		OMPropertySize newNameByteCount = static_cast<OMPropertySize>(nnbc);
+		aafUInt32 onbc = origNameCharCount*sizeof(aafWChar);
+		OMPropertySize origNameByteCount = static_cast<OMPropertySize>(onbc);
 		namesBuf = new aafWChar[newNameCharCount];
 		if (origNameCharCount)
-			_ElementNames.getValue (namesBuf, origNameCharCount*sizeof(aafWChar));
+			_ElementNames.getValue (namesBuf, origNameByteCount);
 		
 		// Append new name to end of buffer.  Don't forget that original
 		// buffer may have embedded nulls, so start copying at desired
@@ -510,24 +530,13 @@ ImplAAFTypeDefExtEnum::AppendElement (
 		// add one for new element to be appended
 		valsBuf = new aafUID_t[origNumElems+1];
 		if (origNumElems)
-			_ElementValues.getValue (valsBuf, origNumElems*sizeof(aafUID_t));
+			_ElementValues.getValue (valsBuf, origValueByteCount);
 		valsBuf[origNumElems] = value;
 		
 		
-		// Copy newly-appended name and value buffers out.  Do these
-		// together, last so that if any errors occurred during the
-		// calculations we won't leave the property half-appended.
-		// Before appending make sure that the new values fit.
-		if ((newNameCharCount*sizeof(aafWChar)) <= OMPROPERTYSIZE_MAX &&
-                    ((origNumElems+1)*sizeof (aafUID_t)) <= OMPROPERTYSIZE_MAX)
-		{
-			_ElementNames.setValue (namesBuf, newNameCharCount*sizeof(aafWChar));
-			_ElementValues.setValue (valsBuf, (origNumElems+1)*sizeof (aafUID_t));
-		}
-		else
-		{
-			rReturned = AAFRESULT_BAD_SIZE;
-		}
+		// Copy newly-appended name and value buffers out.
+		_ElementNames.setValue (namesBuf, newNameByteCount);
+		_ElementValues.setValue (valsBuf, newValueByteCount);
 	}
 	catch (AAFRESULT &rCaught)
 	{
@@ -582,7 +591,7 @@ ImplAAFTypeDefExtEnum::GetElementName (
 	currentIndex = 0;
 	if (0 != index)
 	{
-		for (size_t i = 0; i < numChars; i++)
+		for (OMUInt32 i = 0; i < numChars; i++)
 		{
 			indexIntoProp++;
 			_ElementNames.getValueAt(&c, i);
@@ -646,7 +655,7 @@ ImplAAFTypeDefExtEnum::GetElementNameBufLen (
 	currentIndex = 0;
 	if (0 != index)
 	{
-		for (size_t i = 0; i < numChars; i++)
+		for (OMUInt32 i = 0; i < numChars; i++)
 		{
 			indexIntoProp++;
 			_ElementNames.getValueAt(&c, i);
@@ -705,23 +714,23 @@ ImplAAFTypeDefSP ImplAAFTypeDefExtEnum::BaseType () const
 
 
 void ImplAAFTypeDefExtEnum::reorder(OMByte* bytes,
-									size_t bytesSize) const
+									OMUInt32 bytesSize) const
 {
 	BaseType()->reorder (bytes, bytesSize);
 }
 
 
-size_t ImplAAFTypeDefExtEnum::externalSize(const OMByte* internalBytes,
-										   size_t internalBytesSize) const
+OMUInt32 ImplAAFTypeDefExtEnum::externalSize(const OMByte* internalBytes,
+										   OMUInt32 internalBytesSize) const
 {
 	return BaseType()->externalSize (internalBytes, internalBytesSize);
 }
 
 
 void ImplAAFTypeDefExtEnum::externalize(const OMByte* internalBytes,
-										size_t internalBytesSize,
+										OMUInt32 internalBytesSize,
 										OMByte* externalBytes,
-										size_t externalBytesSize,
+										OMUInt32 externalBytesSize,
 										OMByteOrder byteOrder) const
 {
 	BaseType()->externalize (internalBytes,
@@ -732,17 +741,17 @@ void ImplAAFTypeDefExtEnum::externalize(const OMByte* internalBytes,
 }
 
 
-size_t ImplAAFTypeDefExtEnum::internalSize(const OMByte* externalBytes,
-										   size_t externalBytesSize) const
+OMUInt32 ImplAAFTypeDefExtEnum::internalSize(const OMByte* externalBytes,
+										   OMUInt32 externalBytesSize) const
 {
 	return BaseType()->internalSize (externalBytes, externalBytesSize);
 }
 
 
 void ImplAAFTypeDefExtEnum::internalize(const OMByte* externalBytes,
-										size_t externalBytesSize,
+										OMUInt32 externalBytesSize,
 										OMByte* internalBytes,
-										size_t internalBytesSize,
+										OMUInt32 internalBytesSize,
 										OMByteOrder byteOrder) const
 {
 	BaseType()->internalize (externalBytes,
@@ -759,7 +768,7 @@ aafBool ImplAAFTypeDefExtEnum::IsFixedSize (void) const
 }
 
 
-size_t ImplAAFTypeDefExtEnum::PropValSize (void) const
+OMUInt32 ImplAAFTypeDefExtEnum::PropValSize (void) const
 {
 	return BaseType()->PropValSize ();
 }
@@ -771,7 +780,7 @@ aafBool ImplAAFTypeDefExtEnum::IsRegistered (void) const
 }
 
 
-size_t ImplAAFTypeDefExtEnum::NativeSize (void) const
+OMUInt32 ImplAAFTypeDefExtEnum::NativeSize (void) const
 {
 	return BaseType()->NativeSize ();
 }
@@ -782,7 +791,9 @@ OMProperty * ImplAAFTypeDefExtEnum::pvtCreateOMProperty
  const wchar_t * name) const
 {
 	ASSERTU (name);
-	size_t elemSize = PropValSize ();
+	OMUInt32 es = PropValSize ();
+	ASSERTU(es <= OMPROPERTYSIZE_MAX);
+	OMPropertySize elemSize = static_cast<OMPropertySize>(es);
 	OMProperty * result = new OMSimpleProperty (pid, name, elemSize);
 	ASSERTU (result);
 	return result;

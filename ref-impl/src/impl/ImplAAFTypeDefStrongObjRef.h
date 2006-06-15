@@ -104,9 +104,9 @@ public:
   // overrides from ImplAAFTypeDef
   //
   aafBool IsFixedSize (void) const;
-  size_t PropValSize (void) const;
+  OMUInt32 PropValSize (void) const;
   aafBool IsRegistered (void) const;
-  size_t NativeSize (void) const;
+  OMUInt32 NativeSize (void) const;
 
   virtual OMProperty * 
     pvtCreateOMProperty (OMPropertyId pid,

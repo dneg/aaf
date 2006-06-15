@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2006, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -67,8 +67,8 @@ ImplAAFEssenceGroup::ImplAAFEssenceGroup ()
 
 ImplAAFEssenceGroup::~ImplAAFEssenceGroup ()
 {
-	size_t count = _choices.count();
-	for (size_t i = 0; i < count; i++) {
+	aafUInt32 count = _choices.count();
+	for (aafUInt32 i = 0; i < count; i++) {
 		ImplAAFSegment *pClip = _choices.clearValueAt(i);
 
 		if (pClip) {
@@ -259,7 +259,7 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFEssenceGroup::CountChoices (
       aafUInt32  *result)
 {
-	size_t	numClips = _choices.count();
+	aafUInt32 numClips = _choices.count();
 	*result = numClips;
 
 	return AAFRESULT_SUCCESS;

@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2006, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -98,8 +98,8 @@ ImplAAFOperationGroup::ImplAAFOperationGroup ()
 ImplAAFOperationGroup::~ImplAAFOperationGroup ()
 {
 	// Release all of the mob slot pointers.
-	size_t count = _inputSegments.count();
-	for (size_t i = 0; i < count; i++)
+	aafUInt32 count = _inputSegments.count();
+	for (aafUInt32 i = 0; i < count; i++)
 	{
 		ImplAAFSegment *pSeg = _inputSegments.clearValueAt(i);
 		if (pSeg)
@@ -285,7 +285,7 @@ AAFRESULT STDMETHODCALLTYPE
 	if(pNumSources == NULL)
 		return AAFRESULT_NULL_PARAM;
 
-	size_t numSlots = _inputSegments.count();
+	aafUInt32 numSlots = _inputSegments.count();
 	
 	*pNumSources = numSlots;
 
@@ -298,7 +298,7 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFOperationGroup::CountParameters (aafUInt32 * pNumParameters)
 {
-   size_t numSlots;
+   aafUInt32 numSlots;
 
 	if(pNumParameters == NULL)
 		return AAFRESULT_NULL_PARAM;

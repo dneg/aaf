@@ -1479,11 +1479,12 @@ extern "C" const char * AAFGetLibraryPath();
 
 // The size of a buffer, in bytes, needed to hold s when properly
 // terminated and converted to aafCharacters.
-static size_t bufferByteSize(const char* s)
+static aafUInt32 bufferByteSize(const char* s)
 {
   ASSERTU(s != 0);
-  size_t result = strlen(s) + 1; // characters needed
-  result = result * sizeof(aafCharacter); // bytes needed
+  size_t cc = strlen(s) + 1; // characters needed
+  aafUInt32 characterCount = static_cast<aafUInt32>(cc);
+  aafUInt32 result = characterCount * sizeof(aafCharacter); // bytes needed
   return result;
 }
 

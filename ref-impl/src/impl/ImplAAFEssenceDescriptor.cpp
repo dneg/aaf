@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2006, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -69,8 +69,8 @@ ImplAAFEssenceDescriptor::ImplAAFEssenceDescriptor ()
 ImplAAFEssenceDescriptor::~ImplAAFEssenceDescriptor ()
 {
 	// Release all of the locator and subdescriptor pointers.
-	size_t count = _locators.count();
-	for (size_t i = 0; i < count; i++)
+	aafUInt32 count = _locators.count();
+	for (aafUInt32  i = 0; i < count; i++)
 	{
 		ImplAAFLocator *pLocator = _locators.clearValueAt(i);
 		if (pLocator)
@@ -79,8 +79,8 @@ ImplAAFEssenceDescriptor::~ImplAAFEssenceDescriptor ()
 		  pLocator = 0;
 		}
 	}
-	size_t count2 = _subdescriptors.count();
-	for (size_t i = 0; i < count2; i++)
+	aafUInt32 count2 = _subdescriptors.count();
+	for (aafUInt32 i = 0; i < count2; i++)
 	{
 		ImplAAFSubDescriptor *pSubDescriptor = _subdescriptors.clearValueAt(i);
 		if (pSubDescriptor)
@@ -207,7 +207,7 @@ AAFRESULT STDMETHODCALLTYPE
   if (!pLocator->attached ()) // locator could not possibly be in _locators container.
     return AAFRESULT_OBJECT_NOT_ATTACHED;
 
-  size_t index;
+  OMUInt32 index;
   if (_locators.findIndex (pLocator, index))
 	  return RemoveLocatorAt (index);
   else
@@ -360,7 +360,7 @@ AAFRESULT STDMETHODCALLTYPE
   if (!pSubDescriptor->attached ()) // subdescriptor could not possibly be in _subdescriptors container.
     return AAFRESULT_OBJECT_NOT_ATTACHED;
 
-  size_t index;
+  OMUInt32 index;
   if (_subdescriptors.findIndex (pSubDescriptor, index))
 	  return RemoveSubDescriptorAt (index);
   else

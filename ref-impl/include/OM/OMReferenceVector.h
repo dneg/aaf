@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2006, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -56,28 +56,28 @@ public:
 
     // @cmember The number of <p ReferencedObject>s in this
     //          <c OMReferenceVector>.
-  size_t count(void) const;
+  OMUInt32 count(void) const;
 
     // @cmember Set the value of this <c OMReferenceVector>
     //          at position <p index> to <p object>.
   ReferencedObject* setValueAt(const ReferencedObject* object,
-                               const size_t index);
+                               const OMUInt32 index);
 
     // @cmember Set the value of this <c OMReferenceVector>
     //          at position <p index> to 0.
-  ReferencedObject* clearValueAt(const size_t index);
+  ReferencedObject* clearValueAt(const OMUInt32 index);
 
     // @cmember The value of this <c OMReferenceVector> at position <p index>.
-  ReferencedObject* valueAt(const size_t index) const;
+  ReferencedObject* valueAt(const OMUInt32 index) const;
 
     // @cmember Get the value of this <c OMReferenceVector>
     //          at position <p index> into <p object>.
-  void getValueAt(ReferencedObject*& object, const size_t index) const;
+  void getValueAt(ReferencedObject*& object, const OMUInt32 index) const;
 
     // @cmember If <p index> is valid, get the value of this
     //          <c OMReferenceVector> at position <p index>
     //          into <p object> and return true, otherwise return false.
-  bool find(const size_t index, ReferencedObject*& object) const;
+  bool find(const OMUInt32 index, ReferencedObject*& object) const;
 
     // @cmember Append the given <p ReferencedObject> <p object> to
     //          this <c OMReferenceVector>.
@@ -93,7 +93,7 @@ public:
     // @cmember Insert <p object> into this <c OMReferenceVector>
     //          at position <p index>. Existing objects at <p index> and
     //          higher are shifted up one index position.
-  void insertAt(const ReferencedObject* object, const size_t index);
+  void insertAt(const ReferencedObject* object, const OMUInt32 index);
 
     // @cmember Does this <c OMReferenceVector> contain <p object> ?
   bool containsValue(const ReferencedObject* object) const;
@@ -106,7 +106,7 @@ public:
     //          Existing objects in this <c OMReferenceVector>
     //          at <p index> + 1 and higher are shifted down one index
     //          position.
-  ReferencedObject* removeAt(const size_t index);
+  ReferencedObject* removeAt(const OMUInt32 index);
 
     // @cmember Remove the last (index == count() - 1) object
     //          from this <c OMReferenceVector>.
@@ -119,26 +119,26 @@ public:
   ReferencedObject* removeFirst(void);
 
     // @cmember The index of the <p ReferencedObject*> <p object>.
-  size_t indexOfValue(const ReferencedObject* object) const;
+  OMUInt32 indexOfValue(const ReferencedObject* object) const;
 
     // @cmember The number of occurrences of <p object> in this
     //          <c OMReferenceVector>.
-  size_t countOfValue(const ReferencedObject* object) const;
+  OMUInt32 countOfValue(const ReferencedObject* object) const;
 
     // @cmember Does this <c OMReferenceVector> contain
     //          <p index> ? Is <p index> valid ?
-  bool containsIndex(const size_t index) const;
+  bool containsIndex(const OMUInt32 index) const;
 
     // @cmember If this <c OMStrongReferenceProperty> contains <p object>
     //          then place its index in <p index> and return true, otherwise
     //          return false.
-  bool findIndex(const ReferencedObject* object, size_t& index) const;
+  bool findIndex(const ReferencedObject* object, OMUInt32& index) const;
 
     // @cmember Increase the capacity of this
     //          <c OMReferenceVector> so that it
     //          can contain at least <p capacity> <p ReferencedObject>s
     //          without having to be resized.
-  void grow(const size_t capacity);
+  void grow(const OMUInt32 capacity);
 
     // @cmember Insert <p object> into this <c OMReferenceVector>.
   virtual void insertObject(const OMObject* object);
@@ -159,11 +159,11 @@ public:
     // @cmember Set the value of this <c OMReferenceVector>
     //          at position <p index> to <p object>.
   virtual OMObject* setObjectAt(const OMObject* object,
-                                const size_t index);
+                                const OMUInt32 index);
 
     // @cmember The value of this <c OMReferenceVector>
     //          at position <p index>.
-  virtual OMObject* getObjectAt(const size_t index) const;
+  virtual OMObject* getObjectAt(const OMUInt32 index) const;
 
     // @cmember Append the given <p OMObject> <p object> to
     //          this <c OMReferenceVector>.
@@ -178,12 +178,12 @@ public:
     //          Existing objects in this <c OMReferenceVector>
     //          at <p index> + 1 and higher are shifted down one index
     //          position.
-  virtual OMObject* removeObjectAt(const size_t index);
+  virtual OMObject* removeObjectAt(const OMUInt32 index);
 
     // @cmember Insert <p object> into this <c OMReferenceVector>
     //          at position <p index>. Existing objects at <p index> and
     //          higher are shifted up one index position.
-  virtual void insertObjectAt(const OMObject* object, const size_t index);
+  virtual void insertObjectAt(const OMObject* object, const OMUInt32 index);
 
 private:
 

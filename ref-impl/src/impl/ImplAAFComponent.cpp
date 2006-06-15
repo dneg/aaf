@@ -20,7 +20,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2006, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -74,8 +74,8 @@ ImplAAFComponent::~ImplAAFComponent ()
 {
 	if(_KLVData.isPresent())
 	{
-		size_t size = _KLVData.count();
-		for (size_t j = 0; j < size; j++)
+		aafUInt32 size = _KLVData.count();
+		for (aafUInt32 j = 0; j < size; j++)
 		{
 			ImplAAFKLVData* pKLVData = _KLVData.clearValueAt(j);
 			if (pKLVData)
@@ -187,7 +187,7 @@ AAFRESULT STDMETHODCALLTYPE
 	if(!_KLVData.isPresent())
 		return AAFRESULT_PROP_NOT_PRESENT;
 	
-  size_t index;
+  OMUInt32 index;
   if (_KLVData.findIndex (pData, index))
   {
 	  _KLVData.removeAt(index);

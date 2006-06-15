@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2006, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -107,8 +107,8 @@ ImplAAFPluginDef::~ImplAAFPluginDef ()
 	}
 
 	// Release all of the other locator pointers.
-	size_t count = _locators.count();
-	for (size_t i = 0; i < count; i++)
+	OMUInt32 count = _locators.count();
+	for (OMUInt32 i = 0; i < count; i++)
 	{
 		ImplAAFLocator *pLocator = _locators.clearValueAt(i);
 		if (pLocator)
@@ -715,7 +715,7 @@ AAFRESULT STDMETHODCALLTYPE
 		return AAFRESULT_NULL_PARAM;
 	}
 
-	size_t	siz = _locators.count();
+	aafUInt32 siz = _locators.count();
 	*pCount = siz;
 	return(AAFRESULT_SUCCESS);
 }

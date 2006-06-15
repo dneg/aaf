@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2006, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -41,11 +41,11 @@ public:
     // @cmember Set the value of this <c OMObjectVector>
     //          at position <p index> to <p object>.
   virtual OMObject* setObjectAt(const OMObject* object,
-                                const size_t index) = 0;
+                                const OMUInt32 index) = 0;
 
     // @cmember The value of this <c OMObjectVector>
     //          at position <p index>.
-  virtual OMObject* getObjectAt(const size_t index) const = 0;
+  virtual OMObject* getObjectAt(const OMUInt32 index) const = 0;
 
     // @cmember Append the given <p OMObject> <p object> to
     //          this <c OMObjectVector>.
@@ -60,12 +60,13 @@ public:
     //          Existing objects in this <c OMObjectVector>
     //          at <p index> + 1 and higher are shifted down one index
     //          position.
-  virtual OMObject* removeObjectAt(const size_t index) = 0;
+  virtual OMObject* removeObjectAt(const OMUInt32 index) = 0;
 
     // @cmember Insert <p object> into this <c OMObjectVector>
     //          at position <p index>. Existing objects at <p index> and
     //          higher are shifted up one index position.
-  virtual void insertObjectAt(const OMObject* object, const size_t index) = 0;
+  virtual void insertObjectAt(const OMObject* object,
+                              const OMUInt32 index) = 0;
 
 };
 

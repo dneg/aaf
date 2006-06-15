@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2006, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -48,7 +48,7 @@ public:
 
   virtual ~OMSetProperty(void);
 
-  virtual size_t count(void) const;
+  virtual OMUInt32 count(void) const;
 
   virtual void insert(const Element& element);
 
@@ -72,17 +72,17 @@ public:
 
     // @cmember The size of the raw bits of this <c OMSetProperty>. The
     //          size is given in bytes.
-  virtual size_t bitsSize(void) const;
+  virtual OMUInt32 bitsSize(void) const;
 
     // @cmember Get the raw bits of this <c OMSetProperty>. The raw bits
     //          are copied to the buffer at address <p bits> which is
     //          <p size> bytes in size.
-  virtual void getBits(OMByte* bits, size_t size) const;
+  virtual void getBits(OMByte* bits, OMUInt32 size) const;
 
     // @cmember Set the raw bits of this <c OMSetProperty>. The raw
     //          bits are copied from the buffer at address <p bits> which
     //          is <p size> bytes in size.
-  virtual void setBits(const OMByte* bits, size_t size);
+  virtual void setBits(const OMByte* bits, OMUInt32 size);
 
   // Copying.
 
@@ -93,7 +93,7 @@ public:
 
   virtual void insert(void* value);
 
-  virtual size_t elementSize(void) const;
+  virtual OMUInt32 elementSize(void) const;
 
 private:
 

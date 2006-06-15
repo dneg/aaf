@@ -95,7 +95,7 @@ public:
     // @cmember Restore this <c OMWeakReferenceProperty>, the external
     //          (persisted) size of the <c OMWeakReferenceProperty> is
     //          <p externalSize>.
-  virtual void restore(size_t externalSize);
+  virtual void restore(OMPropertySize externalSize);
 
     // @cmember Is this <c OMWeakReferenceProperty> void ?
   virtual bool isVoid(void) const;
@@ -103,12 +103,12 @@ public:
     // @cmember Get the raw bits of this <c OMWeakReferenceProperty>. The
     //          raw bits are copied to the buffer at address <p bits>
     //          which is <p size> bytes in size.
-  virtual void getBits(OMByte* bits, size_t size) const;
+  virtual void getBits(OMByte* bits, OMUInt32 size) const;
 
     // @cmember Set the raw bits of this <c OMWeakReferenceProperty>. The raw
     //          bits are copied from the buffer at address <p bits> which
     //          is <p size> bytes in size.
-  virtual void setBits(const OMByte* bits, size_t size);
+  virtual void setBits(const OMByte* bits, OMUInt32 size);
 
     // @cmember Get the value of this <c OMWeakReferenceProperty>.
   virtual OMObject* getObject(void) const;

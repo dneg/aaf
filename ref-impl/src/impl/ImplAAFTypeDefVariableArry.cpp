@@ -367,7 +367,7 @@ ImplAAFTypeDefSP ImplAAFTypeDefVariableArray::BaseType() const
 
 
 void ImplAAFTypeDefVariableArray::reorder(OMByte* externalBytes,
-										  size_t externalBytesSize) const
+										  OMUInt32 externalBytesSize) const
 {
 	ImplAAFTypeDefSP ptd = BaseType ();
 	ASSERTU (ptd);
@@ -388,8 +388,8 @@ void ImplAAFTypeDefVariableArray::reorder(OMByte* externalBytes,
 }
 
 
-size_t ImplAAFTypeDefVariableArray::externalSize(const OMByte* /*internalBytes*/,
-												 size_t internalBytesSize) const
+OMUInt32 ImplAAFTypeDefVariableArray::externalSize(const OMByte* /*internalBytes*/,
+												 OMUInt32 internalBytesSize) const
 {
 	ImplAAFTypeDefSP ptd = BaseType ();
 	ASSERTU (ptd);
@@ -407,9 +407,9 @@ size_t ImplAAFTypeDefVariableArray::externalSize(const OMByte* /*internalBytes*/
 
 
 void ImplAAFTypeDefVariableArray::externalize(const OMByte* internalBytes,
-											  size_t internalBytesSize,
+											  OMUInt32 internalBytesSize,
 											  OMByte* externalBytes,
-											  size_t externalBytesSize,
+											  OMUInt32 externalBytesSize,
 											  OMByteOrder byteOrder) const
 {
 	ImplAAFTypeDefSP ptd = BaseType ();
@@ -454,8 +454,8 @@ void ImplAAFTypeDefVariableArray::externalize(const OMByte* internalBytes,
 }
 
 
-size_t ImplAAFTypeDefVariableArray::internalSize(const OMByte* /*externalBytes*/,
-												 size_t externalBytesSize) const
+OMUInt32 ImplAAFTypeDefVariableArray::internalSize(const OMByte* /*externalBytes*/,
+												 OMUInt32 externalBytesSize) const
 {
 	ImplAAFTypeDefSP ptd = BaseType ();
 	ASSERTU (ptd);
@@ -473,9 +473,9 @@ size_t ImplAAFTypeDefVariableArray::internalSize(const OMByte* /*externalBytes*/
 
 
 void ImplAAFTypeDefVariableArray::internalize(const OMByte* externalBytes,
-											  size_t externalBytesSize,
+											  OMUInt32 externalBytesSize,
 											  OMByte* internalBytes,
-											  size_t internalBytesSize,
+											  OMUInt32 internalBytesSize,
 											  OMByteOrder byteOrder) const
 {
 	ImplAAFTypeDefSP ptd = BaseType ();
@@ -549,7 +549,7 @@ aafBool ImplAAFTypeDefVariableArray::IsFixedSize (void) const
 }
 
 
-size_t ImplAAFTypeDefVariableArray::PropValSize (void) const
+OMUInt32 ImplAAFTypeDefVariableArray::PropValSize (void) const
 {
 	ASSERTU (0);
 	return 0; // not reached!
@@ -563,7 +563,7 @@ aafBool ImplAAFTypeDefVariableArray::IsRegistered (void) const
 }
 
 
-size_t ImplAAFTypeDefVariableArray::NativeSize (void) const
+OMUInt32 ImplAAFTypeDefVariableArray::NativeSize (void) const
 {
 	ASSERTU (0);
 	return 0; // not reached!

@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2006, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -150,11 +150,17 @@ AAFRESULT STDMETHODCALLTYPE
 	  if( !aafLookupTypeDef( this, ppMemberTypes[i] ) )
 		return AAFRESULT_TYPE_NOT_FOUND;
 
-	  totalNameSize += (wcslen (pMemberNames[i]) + 1);
+	  size_t mnl = wcslen (pMemberNames[i]);
+	  ASSERTU(mnl <= OMUINT32_MAX);
+	  OMUInt32 memberNameLength = static_cast<OMUInt32>(mnl);
+	  totalNameSize += (memberNameLength + 1);
 	}
 
-  if ((totalNameSize * sizeof(aafCharacter)) > OMPROPERTYSIZE_MAX)
+  aafUInt32 tb = totalNameSize * sizeof(aafCharacter);
+  if (tb > OMPROPERTYSIZE_MAX)
 	return AAFRESULT_BAD_SIZE;
+
+  OMPropertySize totalBytes = static_cast<OMPropertySize>(tb);
 
   aafCharacter * namesBuf = new aafCharacter[totalNameSize];
   if (!namesBuf)
@@ -192,7 +198,7 @@ AAFRESULT STDMETHODCALLTYPE
 	}
 //  _memberTypes.setValue(buf, numMembers*sizeof(aafUID_t));
 //  delete[] buf;
-  _memberNames.setValue (namesBuf, totalNameSize * sizeof(aafCharacter));
+  _memberNames.setValue (namesBuf, totalBytes);
   delete[] namesBuf;
 
   setInitialized ();
@@ -230,8 +236,17 @@ AAFRESULT STDMETHODCALLTYPE
 	  if ( !pMemberTypes[i])
 		return AAFRESULT_NULL_PARAM;
 
-	  totalNameSize += (wcslen (pMemberNames[i]) + 1);
+	  size_t mnl = wcslen (pMemberNames[i]);
+	  ASSERTU(mnl <= OMUINT32_MAX);
+	  OMUInt32 memberNameLength = static_cast<OMUInt32>(mnl);
+	  totalNameSize += (memberNameLength + 1);
 	}
+
+  aafUInt32 tb = totalNameSize * sizeof(aafCharacter);
+  if (tb > OMPROPERTYSIZE_MAX)
+	return AAFRESULT_BAD_SIZE;
+
+  OMPropertySize totalBytes = static_cast<OMPropertySize>(tb);
 
   aafCharacter * namesBuf = new aafCharacter[totalNameSize];
   if (!namesBuf)
@@ -258,7 +273,7 @@ AAFRESULT STDMETHODCALLTYPE
 	}
 //  _memberTypes.setValue(buf, numMembers*sizeof(aafUID_t));
  // delete[] buf;
-  _memberNames.setValue (namesBuf, totalNameSize * sizeof(aafCharacter));
+  _memberNames.setValue (namesBuf, totalBytes);
   delete[] namesBuf;
 
   return AAFRESULT_SUCCESS;
@@ -349,7 +364,7 @@ AAFRESULT STDMETHODCALLTYPE
   currentIndex = 0;
   if (0 != index)
 	{
-	  for (size_t i = 0; i < numChars; i++)
+	  for (OMUInt32 i = 0; i < numChars; i++)
 		{
 		  indexIntoProp++;
 		  _memberNames.getValueAt(&c, i);
@@ -408,7 +423,7 @@ AAFRESULT STDMETHODCALLTYPE
   currentIndex = 0;
   if (0 != index)
 	{
-	  for (size_t i = 0; i < numChars; i++)
+	  for (OMUInt32 i = 0; i < numChars; i++)
 		{
 		  indexIntoProp++;
 		  _memberNames.getValueAt(&c, i);
@@ -1021,7 +1036,7 @@ ImplAAFTypeDefRecord::GetTypeCategory (eAAFTypeCategory_t *  pTid)
 
 
 void ImplAAFTypeDefRecord::reorder(OMByte* externalBytes,
-								   size_t externalBytesSize) const
+								   OMUInt32 externalBytesSize) const
 {
   AAFRESULT hr;
   aafUInt32 numMembers = 0;
@@ -1051,17 +1066,17 @@ void ImplAAFTypeDefRecord::reorder(OMByte* externalBytes,
 }
 
 
-size_t ImplAAFTypeDefRecord::externalSize(const OMByte* /*internalBytes*/,
-										  size_t /*internalBytesSize*/) const
+OMUInt32 ImplAAFTypeDefRecord::externalSize(const OMByte* /*internalBytes*/,
+										  OMUInt32 /*internalBytesSize*/) const
 {
   return PropValSize ();
 }
 
 
 void ImplAAFTypeDefRecord::externalize(const OMByte* internalBytes,
-									   size_t internalBytesSize,
+									   OMUInt32 internalBytesSize,
 									   OMByte* externalBytes,
-									   size_t externalBytesSize,
+									   OMUInt32 externalBytesSize,
 									   OMByteOrder byteOrder) const
 {
   AAFRESULT hr;
@@ -1112,7 +1127,7 @@ void ImplAAFTypeDefRecord::externalize(const OMByte* internalBytes,
 }
 
 
-size_t ImplAAFTypeDefRecord::internalSize(void) const
+OMUInt32 ImplAAFTypeDefRecord::internalSize(void) const
 {
   if (IsRegistered ())
 	return NativeSize ();
@@ -1120,8 +1135,8 @@ size_t ImplAAFTypeDefRecord::internalSize(void) const
 	return PropValSize ();
 }
 
-size_t ImplAAFTypeDefRecord::internalSize(const OMByte* /*externalBytes*/,
-										  size_t /*externalBytesSize*/) const
+OMUInt32 ImplAAFTypeDefRecord::internalSize(const OMByte* /*externalBytes*/,
+										  OMUInt32 /*externalBytesSize*/) const
 {
   if (IsRegistered ())
 	return NativeSize ();
@@ -1131,9 +1146,9 @@ size_t ImplAAFTypeDefRecord::internalSize(const OMByte* /*externalBytes*/,
 
 
 void ImplAAFTypeDefRecord::internalize(const OMByte* externalBytes,
-									   size_t externalBytesSize,
+									   OMUInt32 externalBytesSize,
 									   OMByte* internalBytes,
-									   size_t internalBytesSize,
+									   OMUInt32 internalBytesSize,
 									   OMByteOrder byteOrder) const
 {
   AAFRESULT hr;
@@ -1191,10 +1206,10 @@ aafBool ImplAAFTypeDefRecord::IsFixedSize (void) const
 }
 
 
-size_t ImplAAFTypeDefRecord::PropValSize (void) const
+OMUInt32 ImplAAFTypeDefRecord::PropValSize (void) const
 {
   aafUInt32 count;
-  size_t totalSize = 0;
+  OMUInt32 totalSize = 0;
   AAFRESULT hr;
 
   hr = GetCount (&count);
@@ -1238,7 +1253,7 @@ aafBool ImplAAFTypeDefRecord::IsRegistered (void) const
 }
 
 
-size_t ImplAAFTypeDefRecord::NativeSize (void) const
+OMUInt32 ImplAAFTypeDefRecord::NativeSize (void) const
 {
   ((ImplAAFTypeDefRecord*)this)->AttemptBuiltinRegistration ();
   ASSERTU (IsRegistered());
@@ -1251,7 +1266,9 @@ OMProperty * ImplAAFTypeDefRecord::pvtCreateOMProperty
    const wchar_t * name) const
 {
   ASSERTU (name);
-  size_t elemSize = PropValSize ();
+  OMUInt32 es = PropValSize ();
+  ASSERTU(es <= OMPROPERTYSIZE_MAX);
+  OMPropertySize elemSize = static_cast<OMPropertySize>(es);
   OMProperty * result = new OMSimpleProperty (pid, name, elemSize);
   ASSERTU (result);
   return result;

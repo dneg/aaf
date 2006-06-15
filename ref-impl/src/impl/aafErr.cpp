@@ -74,16 +74,17 @@ static bool findEntry(size_t& index, aafUInt16 code)
   return result;
 }
 
-size_t length(size_t index)
+OMUInt32 length(size_t index)
 {
-  size_t result;
+  size_t len;
   if (wcscmp(errorTable[index]._desc, L"") == 0) {
-    result  = (wcslen(errorTable[index]._name) + 1) * sizeof(wchar_t);
+    len = (wcslen(errorTable[index]._name) + 1) * sizeof(wchar_t);
   } else {
-    result  = (wcslen(errorTable[index]._name) +
-               wcslen(errorTable[index]._desc) + 
-               wcslen(L" - ") + 1) * sizeof(wchar_t);
+    len = (wcslen(errorTable[index]._name) +
+           wcslen(errorTable[index]._desc) + 
+           wcslen(L" - ") + 1) * sizeof(wchar_t);
   }
+  OMUInt32 result  = static_cast<OMUInt32>(len);
   return result;
 }
 

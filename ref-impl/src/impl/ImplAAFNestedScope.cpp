@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2006, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -70,8 +70,8 @@ ImplAAFNestedScope::ImplAAFNestedScope ()
 ImplAAFNestedScope::~ImplAAFNestedScope ()
 {
 	// Release all of the slot(segments) pointers in the slot list.
-	size_t count = _slots.count();
-	for (size_t i = 0; i < count; i++)
+	aafUInt32 count = _slots.count();
+	for (aafUInt32 i = 0; i < count; i++)
 	{
 		ImplAAFSegment* pSegment = _slots.clearValueAt(i);
 
@@ -149,7 +149,7 @@ AAFRESULT STDMETHODCALLTYPE
   if (NULL == pResult)
     return (AAFRESULT_NULL_PARAM);
 
-	size_t numSegments = _slots.count();
+	aafUInt32 numSegments = _slots.count();
 	
 	*pResult = numSegments;
 
@@ -239,8 +239,8 @@ AAFRESULT ImplAAFNestedScope::ChangeContainedReferences(aafMobID_constref from,
 	
 	XPROTECT()
 	{
-		size_t count = _slots.count();
-		for (size_t n = 0; n < count; n++)
+		aafUInt32 count = _slots.count();
+		for (aafUInt32 n = 0; n < count; n++)
 		{
 			ImplAAFSegment	*pSegment;
 			_slots.getValueAt(pSegment, n);

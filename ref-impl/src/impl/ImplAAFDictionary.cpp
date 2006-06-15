@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2005, Licensor of the
+// The Original Code of this file is Copyright 1998-2006, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -1262,7 +1262,7 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT
     ImplAAFDictionary::GetNumCodecDefs(aafUInt32 *  pNumCodecDefs)
 {
-  size_t siz;
+  aafUInt32 siz;
 
   if(pNumCodecDefs == NULL)
     return AAFRESULT_NULL_PARAM;
@@ -1393,7 +1393,7 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT
     ImplAAFDictionary::GetNumContainerDefs(aafUInt32 *  pNumContainerDefs)
 {
-  size_t siz;
+  aafUInt32 siz;
 
   if(pNumContainerDefs == NULL)
     return AAFRESULT_NULL_PARAM;

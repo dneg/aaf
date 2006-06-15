@@ -18,7 +18,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2006, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -81,7 +81,7 @@ public:
 
   // If this->IsFixedSize(), then will return the size of property
   // values of this type.  If not fixed size, will assert().
-  virtual size_t PropValSize (void) const;
+  virtual OMUInt32 PropValSize (void) const;
 
   // Returns true if offsets have been registered for this type def.
   virtual aafBool IsRegistered (void) const;
@@ -92,11 +92,11 @@ public:
 
   // If this->IsRegistered(), then will return the native in-memory
   // size of this type.  If not registered, will assert().
-  virtual size_t NativeSize (void) const;
+  virtual OMUInt32 NativeSize (void) const;
 
   // If this->IsRegistered(), then will return the native in-memory
   // size of this type.  If not registered, will PropValSize.
-  virtual size_t ActualSize (void) const;
+  virtual OMUInt32 ActualSize (void) const;
 
   // Create a copy of this type definition in the destination
   // dictionary.
@@ -111,28 +111,28 @@ public:
   virtual bool isFixedSize(void) const;
 
   virtual void reorder(OMByte* bytes,
-                       size_t bytesSize) const;
+                       OMUInt32 bytesSize) const;
 
-  virtual size_t externalSize(const OMByte* internalBytes,
-                              size_t internalBytesSize) const;
+  virtual OMUInt32 externalSize(const OMByte* internalBytes,
+                                OMUInt32 internalBytesSize) const;
 
-  virtual size_t externalSize(void) const;
+  virtual OMUInt32 externalSize(void) const;
 
   virtual void externalize(const OMByte* internalBytes,
-                           size_t internalBytesSize,
+                           OMUInt32 internalBytesSize,
                            OMByte* externalBytes,
-                           size_t externalBytesSize,
+                           OMUInt32 externalBytesSize,
                            OMByteOrder byteOrder) const;
 
-  virtual size_t internalSize(const OMByte* externalBytes,
-                              size_t externalSize) const;
+  virtual OMUInt32 internalSize(const OMByte* externalBytes,
+                                OMUInt32 externalSize) const;
 
-  virtual size_t internalSize(void) const;
+  virtual OMUInt32 internalSize(void) const;
 
   virtual void internalize(const OMByte* externalBytes,
-                           size_t externalBytesSize,
+                           OMUInt32 externalBytesSize,
                            OMByte* internalBytes,
-                           size_t internalBytesSize,
+                           OMUInt32 internalBytesSize,
                            OMByteOrder byteOrder) const;
 
   // tjb - temporary

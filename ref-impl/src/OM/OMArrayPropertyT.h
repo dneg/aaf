@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2006, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -50,13 +50,13 @@ OMArrayProperty<Element>::~OMArrayProperty(void)
   //   @this const
 template <typename Element>
 void OMArrayProperty<Element>::getValue(Element* value,
-                                        size_t valueSize) const
+                                        OMPropertySize valueSize) const
 {
   TRACE("OMArrayProperty<Element>::getValue");
   PRECONDITION("Buffer large enough", valueSize >= size());
 
-  size_t elementCount = valueSize / elementSize();
-  for (size_t i = 0; i < elementCount; i++) {
+  OMUInt32 elementCount = valueSize / elementSize();
+  for (OMUInt32 i = 0; i < elementCount; i++) {
     value[i] = getAt(i);
   }
 }
@@ -70,11 +70,11 @@ void OMArrayProperty<Element>::getValue(Element* value,
   //   @parm The size of the array <p value> in bytes
 template <typename Element>
 void OMArrayProperty<Element>::setValue(const Element* value,
-                                        size_t valueSize)
+                                        OMPropertySize valueSize)
 {
   TRACE("OMArrayProperty<Element>::setValue");
 
-  size_t elementCount = valueSize / elementSize();
+  OMUInt32 elementCount = valueSize / elementSize();
   if (elementCount > 0) {
     setElementValues(value, elementCount);
   }
@@ -86,7 +86,7 @@ void OMArrayProperty<Element>::setValue(const Element* value,
   //   @tcarg class | Element | The array element type.
 template <typename Element>
 void OMArrayProperty<Element>::setElementValues(const Element* value,
-                                                size_t elementCount)
+                                                OMUInt32 elementCount)
 {
   TRACE("OMArrayProperty<Element>::setElementValues");
   PRECONDITION("Valid data buffer", value != 0);
@@ -111,7 +111,7 @@ void OMArrayProperty<Element>::setElementValues(const Element* value,
   //   @this const
 template <typename Element>
 void OMArrayProperty<Element>::getValueAt(Element* value,
-                                          const size_t index) const
+                                          const OMUInt32 index) const
 {
   TRACE("OMArrayProperty<Element>::getValueAt");
   PRECONDITION("Valid value", value != 0);
@@ -120,7 +120,7 @@ void OMArrayProperty<Element>::getValueAt(Element* value,
 }
 
 template <typename Element>
-Element& OMArrayProperty<Element>::getAt(const size_t index) const
+Element& OMArrayProperty<Element>::getAt(const OMUInt32 index) const
 {
   TRACE("OMArrayProperty<Element>::getAt");
 
@@ -137,7 +137,7 @@ Element& OMArrayProperty<Element>::getAt(const size_t index) const
   //   @parm The index of the value to set.
 template <typename Element>
 void OMArrayProperty<Element>::setValueAt(const Element* value,
-                                          const size_t index)
+                                          const OMUInt32 index)
 {
   TRACE("OMArrayProperty<Element>::setValueAt");
   PRECONDITION("Valid value", value != 0);
@@ -147,7 +147,7 @@ void OMArrayProperty<Element>::setValueAt(const Element* value,
 
 template <typename Element>
 void OMArrayProperty<Element>::setAt(const Element value,
-                                     const size_t index)
+                                     const OMUInt32 index)
 {
   TRACE("OMArrayProperty<Element>::setAt");
 
@@ -215,7 +215,7 @@ void OMArrayProperty<Element>::prependValue(const Element* value)
   //   @this const
 template <typename Element>
 bool OMArrayProperty<Element>::copyToBuffer(Element* buffer,
-                                            size_t bufferSize) const
+                                            OMUInt32 bufferSize) const
 {
   TRACE("OMArrayProperty<Element>::copyToBuffer");
   PRECONDITION("Valid buffer", buffer != 0);
@@ -245,7 +245,7 @@ bool OMArrayProperty<Element>::copyToBuffer(Element* buffer,
 template <typename Element>
 bool
 OMArrayProperty<Element>::copyElementsToBuffer(Element* buffer,
-                                               size_t elementCount) const
+                                               OMUInt32 elementCount) const
 {
   TRACE("OMArrayProperty<Element>::copyElementsToBuffer");
 
@@ -260,7 +260,7 @@ OMArrayProperty<Element>::copyElementsToBuffer(Element* buffer,
   //   @rdesc The number of items in this <c OMArrayProperty>.
   //   @this const
 template <typename Element>
-size_t OMArrayProperty<Element>::count(void) const
+OMUInt32 OMArrayProperty<Element>::count(void) const
 {
   TRACE("OMArrayProperty<Element>::count");
 
@@ -285,7 +285,7 @@ void  OMArrayProperty<Element>::clear(void)
 }
 
 template <typename Element>
-size_t OMArrayProperty<Element>::elementSize(void) const
+OMUInt32 OMArrayProperty<Element>::elementSize(void) const
 {
   TRACE("OMArrayProperty<Element>::elementSize");
   return sizeof(Element);
@@ -305,11 +305,12 @@ OMArrayProperty<Element>::createIterator(void) const
 }
 
 template <typename Element>
-size_t OMArrayProperty<Element>::size(void) const
+OMUInt32 OMArrayProperty<Element>::size(void) const
 {
   TRACE("OMArrayProperty<Element>::size");
 
-  size_t result = count() * elementSize();
+  ASSERT("Array not too big", (count() * elementSize()) <= OMUINT32_MAX);
+  OMUInt32 result = static_cast<OMUInt32>(count() * elementSize());
   return result;
 }
 
@@ -322,16 +323,18 @@ OMUInt64 OMArrayProperty<Element>::objectCount(void) const
 }
 
 template <typename Element>
-size_t OMArrayProperty<Element>::bitsSize(void) const
+OMUInt32 OMArrayProperty<Element>::bitsSize(void) const
 {
   TRACE("OMArrayProperty<Element>::bitsSize");
 
-  size_t result = count() * elementSize();
+  ASSERT("Array not too big", (count() * elementSize()) <= OMUINT32_MAX);
+  OMUInt32 result = static_cast<OMUInt32>(count() * elementSize());
   return result;
 }
 
 template <typename Element>
-void OMArrayProperty<Element>::getBits(OMByte* bits, size_t ANAME(size)) const
+void OMArrayProperty<Element>::getBits(OMByte* bits,
+                                       OMUInt32 ANAME(size)) const
 {
   TRACE("OMArrayProperty<Element>::getBits");
 
@@ -348,12 +351,12 @@ void OMArrayProperty<Element>::getBits(OMByte* bits, size_t ANAME(size)) const
 
 template <typename Element>
 void OMArrayProperty<Element>::setBits(const OMByte* bits,
-                                       size_t size)
+                                       OMUInt32 size)
 {
   TRACE("OMArrayProperty<Element>::setBits");
   PRECONDITION("Valid bits", bits != 0);
 
-  size_t elementCount = size / elementSize();
+  OMUInt32 elementCount = size / elementSize();
   if (elementCount > 0) {
     setElementValues(reinterpret_cast<const Element*>(bits), elementCount);
   }

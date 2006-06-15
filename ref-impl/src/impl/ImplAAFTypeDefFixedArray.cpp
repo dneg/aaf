@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2006, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -205,7 +205,7 @@ ImplAAFTypeDefSP ImplAAFTypeDefFixedArray::BaseType (void) const
 
 
 void ImplAAFTypeDefFixedArray::reorder(OMByte* externalBytes,
-									   size_t externalBytesSize) const
+									   OMUInt32 externalBytesSize) const
 {
   aafUInt32 numElems = _ElementCount;
   aafUInt32 elem = 0;
@@ -224,21 +224,21 @@ void ImplAAFTypeDefFixedArray::reorder(OMByte* externalBytes,
 }
 
 
-size_t ImplAAFTypeDefFixedArray::externalSize(const OMByte* /*internalBytes*/,
-											  size_t /*internalBytesSize*/) const
+OMUInt32 ImplAAFTypeDefFixedArray::externalSize(const OMByte* /*internalBytes*/,
+											  OMUInt32 /*internalBytesSize*/) const
 {
   ImplAAFTypeDefSP ptd = BaseType ();
   ASSERTU (ptd->IsFixedSize ());
-  // size_t result = _ElementCount * ptd->externalSize (0, 0);
-  size_t result = _ElementCount * ptd->PropValSize ();
+  // OMUInt32 result = _ElementCount * ptd->externalSize (0, 0);
+  OMUInt32 result = _ElementCount * ptd->PropValSize ();
   return result;
 }
 
 
 void ImplAAFTypeDefFixedArray::externalize(const OMByte* internalBytes,
-										   size_t internalBytesSize,
+										   OMUInt32 internalBytesSize,
 										   OMByte* externalBytes,
-										   size_t externalBytesSize,
+										   OMUInt32 externalBytesSize,
 										   OMByteOrder byteOrder) const
 {
   aafUInt32 numElems = _ElementCount;
@@ -279,21 +279,21 @@ void ImplAAFTypeDefFixedArray::externalize(const OMByte* internalBytes,
 }
 
 
-size_t ImplAAFTypeDefFixedArray::internalSize(const OMByte* /*externalBytes*/,
-											  size_t /*externalBytesSize*/) const
+OMUInt32 ImplAAFTypeDefFixedArray::internalSize(const OMByte* /*externalBytes*/,
+											  OMUInt32 /*externalBytesSize*/) const
 {
   ImplAAFTypeDefSP ptd = BaseType ();
   ASSERTU (ptd->IsFixedSize ());
-  // size_t result = _ElementCount * ptd->internalSize (0, 0);
-  size_t result = _ElementCount * ptd->ActualSize ();
+  // OMUInt32 result = _ElementCount * ptd->internalSize (0, 0);
+  OMUInt32 result = _ElementCount * ptd->ActualSize ();
   return result;
 }
 
 
 void ImplAAFTypeDefFixedArray::internalize(const OMByte* externalBytes,
-										   size_t externalBytesSize,
+										   OMUInt32 externalBytesSize,
 										   OMByte* internalBytes,
-										   size_t internalBytesSize,
+										   OMUInt32 internalBytesSize,
 										   OMByteOrder byteOrder) const
 {
   aafUInt32 numElems = _ElementCount;
@@ -348,7 +348,7 @@ aafBool ImplAAFTypeDefFixedArray::IsFixedSize (void) const
   return BaseType()->IsFixedSize();
 }
 
-size_t ImplAAFTypeDefFixedArray::PropValSize (void) const
+OMUInt32 ImplAAFTypeDefFixedArray::PropValSize (void) const
 {
   return (BaseType()->PropValSize()) * _ElementCount;
 }
@@ -360,12 +360,12 @@ aafBool ImplAAFTypeDefFixedArray::IsRegistered (void) const
 }
 
 
-size_t ImplAAFTypeDefFixedArray::NativeSize (void) const
+OMUInt32 ImplAAFTypeDefFixedArray::NativeSize (void) const
 {
   ((ImplAAFTypeDefFixedArray*)this)->AttemptBuiltinRegistration ();
   ASSERTU (IsRegistered());
 
-  size_t result;
+  OMUInt32 result;
   ImplAAFTypeDefSP elemType;
   elemType = BaseType ();
   ASSERTU (elemType);
@@ -401,7 +401,9 @@ OMProperty * ImplAAFTypeDefFixedArray::pvtCreateOMProperty
 	{
 	  // We don't support variable arrays of variably-sized properties.
 	  ASSERTU (IsFixedSize());
-	  aafUInt32 arraySize = NativeSize ();
+	  aafUInt32 as = NativeSize ();
+	  ASSERTU(as <= OMPROPERTYSIZE_MAX);
+	  OMPropertySize arraySize = static_cast<OMPropertySize>(as);
 
 	  // But even though elems are fixed size, the variable array is
 	  // of variable size.  Specify a size of one element.

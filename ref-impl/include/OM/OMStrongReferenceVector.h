@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2006, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -52,14 +52,14 @@ public:
   virtual OMContainerIterator<OMStrongReferenceVectorElement>*
                                                       iterator(void) const = 0;
 
-  virtual void insert(const size_t index,
+  virtual void insert(const OMUInt32 index,
                       const OMStrongReferenceVectorElement& element) = 0;
 
     // @cmember Increase the capacity of this
     //          <c OMStrongReferenceVector> so that it
     //          can contain at least <p capacity> <p OMObject>s
     //          without having to be resized.
-  virtual void grow(const size_t capacity) = 0;
+  virtual void grow(const OMUInt32 capacity) = 0;
 
 };
 
