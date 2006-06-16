@@ -5207,6 +5207,29 @@ DECLARE_INTERFACE_(IAAFDataEssenceDescriptor, IUnknown)
 
   //***********************************************************
   //
+  // Initialize()
+  //
+  /// Initializes a newly allocated, empty IAAFDataEssenceDescriptor-supporting
+  /// object.  This method must be called after allocation, and before
+  /// any other method can be called.
+  ///
+  /// Succeeds if:
+  /// - Initialize() has not yet been called on this object.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_ALREADY_INITIALIZED
+  ///   - Initialize() has already been called on this object.
+  STDMETHOD(Initialize) (THIS) PURE;
+
+
+  //***********************************************************
+  //
   // SetDataEssenceCoding()
   //
   /// Sets the DataEssenceCoding property

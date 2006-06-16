@@ -50,6 +50,11 @@ ImplAAFDataEssenceDescriptor::ImplAAFDataEssenceDescriptor ()
 ImplAAFDataEssenceDescriptor::~ImplAAFDataEssenceDescriptor ()
 {}
 
+AAFRESULT STDMETHODCALLTYPE
+ImplAAFDataEssenceDescriptor::Initialize ()
+{
+  return AAFRESULT_SUCCESS;
+}
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFDataEssenceDescriptor::SetDataEssenceCoding (

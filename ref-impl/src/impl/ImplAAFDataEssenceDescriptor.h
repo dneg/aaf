@@ -55,6 +55,9 @@ public:
 
   virtual ~ImplAAFDataEssenceDescriptor ();
 
+  virtual AAFRESULT STDMETHODCALLTYPE
+	Initialize ();
+
 public:
 
 

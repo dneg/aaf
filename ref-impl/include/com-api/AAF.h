@@ -5576,6 +5576,8 @@ EXTERN_C const IID IID_IAAFDataEssenceDescriptor;
     IAAFDataEssenceDescriptor : public IUnknown
     {
     public:
+        virtual HRESULT STDMETHODCALLTYPE Initialize( void) = 0;
+        
         virtual HRESULT STDMETHODCALLTYPE SetDataEssenceCoding( 
             /* [in] */ aafUID_constref dataEssenceCoding) = 0;
         
@@ -5599,6 +5601,9 @@ EXTERN_C const IID IID_IAAFDataEssenceDescriptor;
             IAAFDataEssenceDescriptor * This);
         
         ULONG ( STDMETHODCALLTYPE *Release )( 
+            IAAFDataEssenceDescriptor * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *Initialize )( 
             IAAFDataEssenceDescriptor * This);
         
         HRESULT ( STDMETHODCALLTYPE *SetDataEssenceCoding )( 
@@ -5632,6 +5637,9 @@ EXTERN_C const IID IID_IAAFDataEssenceDescriptor;
     (This)->lpVtbl -> Release(This)
 
 
+#define IAAFDataEssenceDescriptor_Initialize(This)	\
+    (This)->lpVtbl -> Initialize(This)
+
 #define IAAFDataEssenceDescriptor_SetDataEssenceCoding(This,dataEssenceCoding)	\
     (This)->lpVtbl -> SetDataEssenceCoding(This,dataEssenceCoding)
 
@@ -5643,6 +5651,17 @@ EXTERN_C const IID IID_IAAFDataEssenceDescriptor;
 
 #endif 	/* C style interface */
 
+
+
+HRESULT STDMETHODCALLTYPE IAAFDataEssenceDescriptor_Initialize_Proxy( 
+    IAAFDataEssenceDescriptor * This);
+
+
+void __RPC_STUB IAAFDataEssenceDescriptor_Initialize_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
 
 
 HRESULT STDMETHODCALLTYPE IAAFDataEssenceDescriptor_SetDataEssenceCoding_Proxy( 
@@ -46941,7 +46960,7 @@ void __RPC_STUB IAAFTypeDefVariableArrayEx_InsertElement_Stub(
 #endif 	/* __IAAFTypeDefVariableArrayEx_INTERFACE_DEFINED__ */
 
 
-/* interface __MIDL_itf_AAF_0247 */
+/* interface __MIDL_itf_AAF_0266 */
 /* [local] */ 
 
   ///***********************************************************
@@ -47074,8 +47093,8 @@ STDAPI AAFResultToText (
 
 
 
-extern RPC_IF_HANDLE __MIDL_itf_AAF_0247_v0_0_c_ifspec;
-extern RPC_IF_HANDLE __MIDL_itf_AAF_0247_v0_0_s_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_AAF_0266_v0_0_c_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_AAF_0266_v0_0_s_ifspec;
 
 /* Additional Prototypes for ALL interfaces */
 
