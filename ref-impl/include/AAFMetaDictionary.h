@@ -48,8 +48,8 @@
 //
 // AAFMetaDict.csv 
 //
-// This file was generated on Wed Mar 29 09:47:38 EST 2006
-// by user jlow on system hawk.
+// This file was generated on Fri Jun 16 14:45:33 EST 2006
+// by user heydowns on system rain.
 //
 // Key to macros.
 //
@@ -4666,7 +4666,7 @@ AAF_CLASS(DataEssenceDescriptor,
     0x0101, 0x4300,
     0x06, 0x0E, 0x2B, 0x34, 0x02, 0x06, 0x01, 0x01),
   FileDescriptor,
-  false)
+  true)
   AAF_PROPERTY(DataEssenceCoding,
     // {04030302-0000-0000-060E-2B3401010103}
     // 06.0E.2B.34.01.01.01.03.04.03.03.02.00.00.00.00
@@ -4685,7 +4685,7 @@ AAF_CLASS_END(DataEssenceDescriptor,
     0x0101, 0x4300,
     0x06, 0x0E, 0x2B, 0x34, 0x02, 0x06, 0x01, 0x01),
   FileDescriptor,
-  false)
+  true)
 AAF_CLASS_SEPARATOR()
 
 // MultipleDescriptor
