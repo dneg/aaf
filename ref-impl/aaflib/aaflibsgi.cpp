@@ -89,7 +89,7 @@ AAFRDLIRESULT AAFLoadLibrary(
 #if defined(_DEBUG)
       fprintf(stderr, "dlopen() failed for %s: <%s>\n", name, dlerror() );
 #endif
-		return -1; // Need an AAFRESULT
+		return AAFRESULT_DLL_LOAD_FAILED;
    }
    else {
    }	
@@ -125,7 +125,7 @@ AAFRDLIRESULT AAFFindSymbol(
      // This is expected if we loaded an older library and are looking for a newer symbol
       fprintf(stderr, "dlsym(\"%s\") failed <%s>.\n", symbolName, dlerror());
 #endif
-      return -2; // Need an AAFRESULT
+      return AAFRESULT_DLL_SYMBOL_NOT_FOUND;
    }
  
    return AAFRESULT_SUCCESS;
