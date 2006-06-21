@@ -66,6 +66,7 @@ typedef ImplAAFSmartPointer<ImplEnumAAFProperties> ImplEnumAAFPropertiesSP;
 #include "AAFPropertyIDs.h"
 #include "OMPropertyDefinition.h"
 #include "AAFUtils.h"
+#include "AAFObjectModel.h"
 
 
 
@@ -1256,6 +1257,10 @@ OMProperty * ImplAAFObject::InitOMProperty(ImplAAFPropertyDef * pPropertyDef, OM
       // from the property set defined by the impl code. The predefined
       // properties are supposed to be declared in the impl header
       // and initialized in the impl constructor. 
+#if 0
+      // Assert that we're not trying to dynamically add a built-in 
+      ASSERTU(AAFObjectModel::singleton()->findPropertyDefinition (reinterpret_cast<const aafUID_t *>(&pPropertyDef->identification()))->isNil());
+#endif
 
 	  // Defined property wasn't found in OM property set.
 	  // We'll have to install one.
