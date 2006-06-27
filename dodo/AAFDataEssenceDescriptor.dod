@@ -38,20 +38,33 @@ AD_IDL(///
 ///     operation.
 ///
 /// AAFRESULT_NOT_INITIALIZED
-///   - This object has not yet had Initialize\(\) called on it through
-///     this object's primary interface.  Note that
-///     IAAFDigitalImageDescriptor is a primary interface for an
-///     abstract class\, so it is not appropriate for the
-///     Initialize\(\) method to exist in this interface.  The
-///     Initialize\(\) method is available through the concrete
-///     object's primary interface.
+///   - This object has not yet had Initialize\(\) called on it.
 ///)
 
 AD_CLASS_UUID(0bcccb62, d720, 45e6, 80, 00, 3c, 21, 4f, 63, d8, 99)
 
 AD_DEFAULT_UUID(28aef97c, 5127, 4435, 98, c8, ba, f9, 06, b5, a6, a9)
 
-AD_XCLASS_BEGIN(Abstract, StoredObject)
+AD_XCLASS_BEGIN(Concrete, StoredObject)
+
+
+AD_METHOD0(Initialize,
+     Initializes a newly allocated\, empty IAAFDataEssenceDescriptor-supporting
+  /// object.  This method must be called after allocation\, and before
+  /// any other method can be called.
+  ///
+  /// Succeeds if:
+  /// - Initialize\(\) has not yet been called on this object.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_ALREADY_INITIALIZED
+  ///   - Initialize\(\) has already been called on this object.)
 
 AD_XMETHOD1(SetDataEssenceCoding,
 			[in],
@@ -94,4 +107,4 @@ AD_XMETHOD1(GetDataEssenceCoding,
   /// AAFRESULT_NULL_PARAM
   ///   - pDataEssenceCoding arg is NULL.)
 
-AD_XCLASS_END(Abstract, StoredObject)
+AD_XCLASS_END(Concrete, StoredObject)
