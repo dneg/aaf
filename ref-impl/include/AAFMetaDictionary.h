@@ -48,7 +48,7 @@
 //
 // AAFMetaDict.csv 
 //
-// This file was generated on Fri Jun 16 14:45:33 EST 2006
+// This file was generated on Tue Jun 27 15:37:50 EST 2006
 // by user heydowns on system rain.
 //
 // Key to macros.
@@ -5226,7 +5226,7 @@ AAF_CLASS(BWFImportDescriptor,
     0x06, 0x0E, 0x2B, 0x34, 0x02, 0x06, 0x01, 0x01),
   ImportDescriptor,
   true)
-  AAF_PROPERTY(FileSecurityReport,
+  AAF_PROPERTY(QltyFileSecurityReport,
     // {04020302-0500-0000-060E-2B3401010105}
     // 06.0E.2B.34.01.01.01.05.04.02.03.02.05.00.00.00
     AAF_LITERAL_AUID(0x04020302,
@@ -5237,7 +5237,7 @@ AAF_CLASS(BWFImportDescriptor,
     false,
     false,
     BWFImportDescriptor)
-  AAF_PROPERTY(FileSecurityWave,
+  AAF_PROPERTY(QltyFileSecurityWave,
     // {04020302-0600-0000-060E-2B3401010105}
     // 06.0E.2B.34.01.01.01.05.04.02.03.02.06.00.00.00
     AAF_LITERAL_AUID(0x04020302,

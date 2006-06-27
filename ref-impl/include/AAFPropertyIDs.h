@@ -18,7 +18,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2005, Licensor of the
+// The Original Code of this file is Copyright 1998-2006, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -311,8 +311,8 @@ const int PID_AuxiliaryDescriptor_CharSet                        = 0x4E12;
 const int PID_RIFFChunk_ChunkID                                  = 0x4F01;
 const int PID_RIFFChunk_ChunkLength                              = 0x4F02;
 const int PID_RIFFChunk_ChunkData                                = 0x4F03;
-const int PID_BWFImportDescriptor_FileSecurityReport             = 0x3D15;
-const int PID_BWFImportDescriptor_FileSecurityWave               = 0x3D16;
+const int PID_BWFImportDescriptor_QltyFileSecurityReport         = 0x3D15;
+const int PID_BWFImportDescriptor_QltyFileSecurityWave           = 0x3D16;
 const int PID_BWFImportDescriptor_BextCodingHistory              = 0x3D21;
 const int PID_BWFImportDescriptor_QltyBasicData                  = 0x3D22;
 const int PID_BWFImportDescriptor_QltyStartOfModulation          = 0x3D23;

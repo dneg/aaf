@@ -18,7 +18,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2005, Licensor of the
+// The Original Code of this file is Copyright 1998-2006, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -1118,11 +1118,11 @@ const aafUID_t kAAFPropID_RIFFChunk_ChunkData =
 {0x04070400, 0x0000, 0x0000, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x08}};
 
 //{04020302-0500-0000-060e-2b3401010105}
-const aafUID_t kAAFPropID_BWFImportDescriptor_FileSecurityReport =
+const aafUID_t kAAFPropID_BWFImportDescriptor_QltyFileSecurityReport =
 {0x04020302, 0x0500, 0x0000, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x05}};
 
 //{04020302-0600-0000-060e-2b3401010105}
-const aafUID_t kAAFPropID_BWFImportDescriptor_FileSecurityWave =
+const aafUID_t kAAFPropID_BWFImportDescriptor_QltyFileSecurityWave =
 {0x04020302, 0x0600, 0x0000, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x05}};
 
 //{04020502-0101-0000-060e-2b3401010105}
