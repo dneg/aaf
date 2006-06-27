@@ -150,7 +150,7 @@ AD_XMETHOD1(GetFileSecurityWave,
   ///   - succeeded.  \(This is the only code indicating success.\)
   ///
   /// AAFRESULT_NULL_PARAM
-  ///   - pQltyFileSecurityWave is NULL.
+  ///   - pFileSecurityWave is NULL.
   ///
   /// AAFRESULT_PROP_NOT_PRESENT
   ///   - the property is not present.)
