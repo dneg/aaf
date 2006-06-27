@@ -215,8 +215,7 @@ AD_XMETHOD1(PrependUnknownBWFChunk,
 			objIn,
 			AAFRIFFChunk,
 			pData,
-			RIFFChunk object to append,
-
+			RIFFChunk object to prepend,
 			Prepends a pre-existing RIFFChunk object to the
   /// beginning of this BWFImportDescriptor\'s list of UnknownBWFChunks.
   /// 
