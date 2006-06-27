@@ -38,8 +38,11 @@ AD_IDL(///
 /// values:
 /// 
 /// AAFRESULT_NOMEMORY
-///   - insufficient system memory is available to perform the
+///   - Insufficient system memory is available to perform the
 ///     operation.
+///
+/// AAFRESULT_NOT_INITIALIZED
+///   - This object has not yet had Initialize\(\) called on it.
 ///)
 
 AD_CLASS_UUID(dc86b358, 86a6, 4d2d, 8b, 09, ef, f3, ce, 3e, 66, db)
@@ -72,11 +75,10 @@ AD_XMETHOD1(SetFileSecurityReport,
 				objPass,
 				aafUInt32,
 				fileSecurityReport,
-				Sets the fileSecurityReport property.
+				value to assign to the FileSecurityReport property,
+				Sets the fileSecurityReport property. This is an optional property.
   /// 
-  /// Succeeds if all of the following are true:
-  /// -
-  /// If this method fails, the FileSecurityReport property will not be changed.
+  /// If this method fails\, the FileSecurityReport property will not be changed.
   /// 
   /// This method will return the following codes:
   /// 
@@ -90,7 +92,7 @@ AD_XMETHOD1(GetFileSecurityReport,
                                 objPass,
                                 aafUInt32 *,
                                 pFileSecurityReport,
-                                Optional.,
+                                value of the FileSecurityReport property,
                         Gets the FileSecurityReport property.
   ///
   /// Succeeds if all of the following are true:
@@ -116,11 +118,10 @@ AD_XMETHOD1(SetFileSecurityWave,
 				objPass,
 				aafUInt32,
 				fileSecurityWave,
-				Sets the FileSecurityWave property.
+				value to assign to the FileSecurityWave property,
+				Sets the FileSecurityWave property. This is an optional property.
   /// 
-  /// Succeeds if all of the following are true:
-  /// -
-  /// If this method fails, the FileSecurityWave property will not be changed.
+  /// If this method fails\, the FileSecurityWave property will not be changed.
   /// 
   /// This method will return the following codes:
   /// 
@@ -134,7 +135,7 @@ AD_XMETHOD1(GetFileSecurityWave,
                                 objPass,
                                 aafUInt32 *,
                                 pFileSecurityWave,
-                                Optional.,
+                                value of the FileSecurityWave property,
                         Gets the FileSecurityWave property.
   ///
   /// Succeeds if all of the following are true:
@@ -153,31 +154,6 @@ AD_XMETHOD1(GetFileSecurityWave,
   ///
   /// AAFRESULT_PROP_NOT_PRESENT
   ///   - the property is not present.)
-
-
-AD_XMETHOD1(AppendUnknownBWFChunks,
-			[in],
-			objIn,
-			AAFRIFFChunk,
-			pData,
-			RIFFChunk object,
-			Appends a pre-existing RIFFChunk object to the specified
-  /// BWFImportDescriptor.
-  /// 
-  /// Succeeds if all of the following are true:
-  /// - the pData pointer is valid.
-  /// 
-  /// If this method fails no state will be changed.
-  /// 
-  /// This method will return the following codes.  If more than one of
-  /// the listed errors is in effect\, it will return the first one
-  /// encountered in the order given below:
-  /// 
-  /// AAFRESULT_SUCCESS
-  ///   - succeeded.  \(This is the only code indicating success.\)
-  ///
-  /// AAFRESULT_NULL_PARAM
-  ///   - the pData arg is NULL.)
 
 
 AD_XMETHOD1(CountUnknownBWFChunks,
@@ -203,6 +179,184 @@ AD_XMETHOD1(CountUnknownBWFChunks,
   /// AAFRESULT_NULL_PARAM
   ///   - pNumData arg is NULL.)
 
+AD_XMETHOD1(AppendUnknownBWFChunk,
+			[in],
+			objIn,
+			AAFRIFFChunk,
+			pData,
+			RIFFChunk object to append,
+			Appends a pre-existing RIFFChunk object to end of this
+  /// BWFImportDescriptor\'s list of UnknownBWFChunks.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pData pointer is valid.
+  /// - the pData pointer indicates an object which is not already
+  ///   owned by any object
+  /// 
+  /// If this method fails no state will be changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - the pData arg is NULL.
+  ///
+  /// AAFRESULT_OBJECT_ALREADY_ATTACHED
+  ///   - the object pointed to by pData is already owned by this
+  ///      or another object.)
+  
+
+AD_XMETHOD1(PrependUnknownBWFChunk,
+			[in],
+			objIn,
+			AAFRIFFChunk,
+			pData,
+			RIFFChunk object to append,
+
+			Prepends a pre-existing RIFFChunk object to the
+  /// beginning of this BWFImportDescriptor\'s list of UnknownBWFChunks.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pData pointer is valid.
+  /// - the pData pointer indicates an object which is not already
+  ///   owned by any object
+  /// 
+  /// If this method fails no state will be changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pData is null.
+  ///
+  /// AAFRESULT_OBJECT_ALREADY_ATTACHED
+  ///   - the object pointed to by pData is already owned by this
+  ///      or another object.)
+
+
+
+AD_XMETHOD2(InsertUnknownBWFChunkAt,
+
+			[in],
+			objPass,
+			aafUInt32,
+			index,
+			index at which chunk is to be inserted,
+
+			[in],
+			objIn,
+			AAFRIFFChunk,
+			pData,
+			RIFFChunk to append,
+
+     Inserts the given RIFFChunk at the given index in this 
+  /// BWFImportDescriptor\'s list of UnknownBWFChunks.  Chunks already
+  /// existing at the given and higher indices will be moved to the
+  /// next higher index to accommodate.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pData pointer is valid.
+  /// - the pData pointer indicates an object which is not already
+  ///   owned by any object
+  /// - index is less than or equal to the value returned by
+  ///   CountUnknownBWFChunks\(\).
+  /// 
+  /// If this method fails no state will be changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pData is null.
+  ///
+  /// AAFRESULT_OBJECT_ALREADY_ATTACHED
+  ///   - the object pointed to by pData is already owned by this
+  ///      or another object.
+  ///
+  /// AAFRESULT_BADINDEX
+  ///   - index is greater than the value returned by
+  ///     CountUnknownBWFChunks\(\).)
+
+
+AD_XMETHOD2(GetUnknownBWFChunkAt,
+
+			[in],
+			objPass,
+			aafUInt32,
+			index,
+			index of chunk to retrieve,
+
+			[out\, retval],
+			objOut,
+			AAFRIFFChunk,
+			ppData,
+			returned RIFFChunk,
+
+     Retrieves the RIFFChunk at the given index in this BWFImportDescriptor\'s
+  /// list of UnknownBWFChunks.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pData pointer is valid.
+  /// - index is less than the value returned by CountUnknownBWFChunks\(\).
+  /// 
+  /// If this method fails no state will be changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - ppData is null.
+  ///
+  /// AAFRESULT_BADINDEX
+  ///   - index is greater than or equal to the value returned by
+  ///     CountUnknownBWFChunks\(\).)
+
+
+AD_XMETHOD1(RemoveUnknownBWFChunkAt,
+
+			[in],
+			objPass,
+			aafUInt32,
+			index,
+			index of chunk to remove,
+
+     Removes the RIFFChunk at the given index in this BWFImportDescriptor\'s
+  /// list of UnknownBWFChunks.  Chunks already
+  /// existing at indices higher than the given index will be moved to
+  /// the next lower index to accommodate.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - index is less than the value returned by CountUnknownBWFChunks\(\).
+  /// 
+  /// If this method fails no state will be changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_BADINDEX
+  ///   - index is greater than or equal to the value returned by
+  ///     CountUnknownBWFChunks\(\).)
+
 
 AD_XMETHOD1(GetUnknownBWFChunks,
 			[out],
@@ -212,7 +366,7 @@ AD_XMETHOD1(GetUnknownBWFChunks,
 			RIFFChunk objects,
 			Return the enumeration for all RIFFChunk objects on this component.  The returned
   /// enumerator is AddRef\(\)ed before it is returned.  The enumerator
-  /// is implemented as a EnumAAFRIFFChunks.
+  /// is implemented as an EnumAAFRIFFChunks.
   /// 
   /// Succeeds if all of the following are true:
   /// - the ppEnum pointer is valid.
@@ -230,55 +384,28 @@ AD_XMETHOD1(GetUnknownBWFChunks,
   ///   - ppEnum is null.)
 
 
-AD_XMETHOD1(RemoveUnknownBWFChunks,
-			[in],
-			objIn,
-			AAFRIFFChunk,
-			pData,
-			RIFFChunk object to remove,
-			Removes the given RIFFChunk object from this component.
-  /// 
-  /// Succeeds if all of the following are true:
-  /// - the pData pointer is valid.
-  /// - the given RIFFChunk object is present in the component.
-  /// 
-  /// If this method fails no state will be changed.
-  /// 
-  /// This method will return the following codes.  If more than one of
-  /// the listed errors is in effect\, it will return the first one
-  /// encountered in the order given below:
-  /// 
-  /// AAFRESULT_SUCCESS
-  ///   - succeeded.  \(This is the only code indicating success.\)
-  ///
-  /// AAFRESULT_NULL_PARAM
-  ///   - pData is null.
-  ///
-  /// AAFRESULT_OBJECT_NOT_FOUND
-  ///   - the given RIFFChunk object is not in this component.)
+AD_STD_METHOD_STRING_MULTI_SET_GET_SIZE(CodingHistory,
+     the CodingHistory string property.)
+     
+AD_STD_METHOD_STRING_MULTI_SET_GET_SIZE(BasicData,
+     the BasicData string property.)
 
-AD_STD_METHOD_STRING_MULTI_SET_GET_SIZE(BextCodingHistory,
-     the BextCodingHistory string property.)
+AD_STD_METHOD_STRING_MULTI_SET_GET_SIZE(StartOfModulation,
+     the StartOfModulation string property.)
      
-AD_STD_METHOD_STRING_MULTI_SET_GET_SIZE(QltyBasicData,
-     the QltyBasicData string property.)
+AD_STD_METHOD_STRING_MULTI_SET_GET_SIZE(QualityEvent,
+     the QualityEvent string property.)
 
-AD_STD_METHOD_STRING_MULTI_SET_GET_SIZE(QltyStartOfModulation,
-     the QltyStartOfModulation string property.)
+AD_STD_METHOD_STRING_MULTI_SET_GET_SIZE(EndOfModulation,
+     the EndOfModulation string property.)
      
-AD_STD_METHOD_STRING_MULTI_SET_GET_SIZE(QltyQualityEvent,
-     the QltyQualityEvent string property.)
-
-AD_STD_METHOD_STRING_MULTI_SET_GET_SIZE(QltyEndOfModulation,
-     the QltyEndOfModulation string property.)
+AD_STD_METHOD_STRING_MULTI_SET_GET_SIZE(QualityParameter,
+     the QualityParameter string property.)
      
-AD_STD_METHOD_STRING_MULTI_SET_GET_SIZE(QltyQualityParameter,
-     the QltyQualityParameter string property.)
+AD_STD_METHOD_STRING_MULTI_SET_GET_SIZE(OperatorComment,
+     the OperatorComment string property.)
      
-AD_STD_METHOD_STRING_MULTI_SET_GET_SIZE(QltyOperatorComment,
-     the QltyOperatorComment string property.)
-     
-AD_STD_METHOD_STRING_MULTI_SET_GET_SIZE(QltyCueSheet,
-     the QltyCueSheet string property.)
+AD_STD_METHOD_STRING_MULTI_SET_GET_SIZE(CueSheet,
+     the CueSheet string property.)
 
 AD_XCLASS_END(Concrete, StoredObject)

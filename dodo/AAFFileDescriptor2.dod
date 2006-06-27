@@ -233,11 +233,11 @@ AD_XMETHOD1(SetLinkedSlotID,
 				objPass,
 				aafUInt32,
 				LinkedSlotID,
-				Integer value.,
+				the linked slot id,
 			Sets the LinkedSlotID property.  
   ///
   ///
-  /// This property is optional.  The default value is 0.
+  /// This property is optional.
   ///
   /// If this method fails\, the LinkedSlotID property will not
   /// be changed.
@@ -245,10 +245,7 @@ AD_XMETHOD1(SetLinkedSlotID,
   /// This method will return the following codes:
   /// 
   /// AAFRESULT_SUCCESS
-  ///   - succeeded.  \(This is the only code indicating success.\)
-  ///
-  /// AAFRESULT_NOT_INITIALIZED
-  ///   - This object has not yet had Initialize\(\) called on it.)
+  ///   - succeeded.  \(This is the only code indicating success.\))
 
 
 AD_XMETHOD1(GetLinkedSlotID,
@@ -256,7 +253,7 @@ AD_XMETHOD1(GetLinkedSlotID,
 				objPass,
 				aafUInt32 *,
 				pLinkedSlotID,
-				Address to store the integer value.,
+				The linked slot id,
 			Gets the LinkedSlotID property. 
   ///
   ///
@@ -270,10 +267,10 @@ AD_XMETHOD1(GetLinkedSlotID,
   /// AAFRESULT_SUCCESS
   ///   - succeeded.  \(This is the only code indicating success.\)
   ///
-  /// AAFRESULT_NOT_INITIALIZED
-  ///   - This object has not yet had Initialize\(\) called on it.
-  ///
   /// AAFRESULT_NULL_PARAM
-  ///   - pLinkedSlotID arg is NULL.)
+  ///   - pLinkedSlotID arg is NULL.
+  ///
+  /// AAFRESULT_PROP_NOT_PRESENT
+  ///   - the LinkedSlotID property is not present.)
 
 AD_XCLASS_END(Abstract, StoredObject)

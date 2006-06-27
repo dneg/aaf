@@ -95,9 +95,11 @@ AD_METHOD1(GetEventSlotOrigin,
 		   pEventSlotOrigin,
 		   EventSlotOrigin property value,
 		   This method will return the EventSlotOrigin of this mob slot.
+  /// The EventSlotOrigin is an optional property.
   /// 
   /// Succeeds if all of the following are true:
   /// - the pEventSlotOrigin pointer is valid.
+  /// - the EventSlotOrigin property is present.
   /// 
   /// This method will return the following codes.  If more than one of
   /// the listed errors is in effect\\\, it will return the first one
@@ -106,8 +108,8 @@ AD_METHOD1(GetEventSlotOrigin,
   /// AAFRESULT_SUCCESS
   ///   - succeeded.  \\\(This is the only code indicating success.\\\)
   ///
-  /// AAFRESULT_NOT_INITIALIZED
-  ///   - This object has not yet had Initialize\\\(\\\) called on it.
+  /// AAFRESULT_PROP_NOT_PRESENT
+  ///   - The EventSlotOrigin property is not present.
   ///
   /// AAFRESULT_NULL_PARAM
   ///   - pEventSlotOrigin arg is NULL.)
@@ -119,16 +121,14 @@ AD_METHOD1(SetEventSlotOrigin,
 		   eventSlotOrigin,
 		   EventSlotOrigin property value,
 		   This method will set the EventSlotOrigin of this mob slot.
+  /// EventSlotOrigin is an optional property.
   /// 
   /// This method will return the following codes.  If more than one of
   /// the listed errors is in effect\\\, it will return the first one
   /// encountered in the order given below:
   /// 
   /// AAFRESULT_SUCCESS
-  ///   - succeeded.  \\\(This is the only code indicating success.\\\).
-  ///
-  /// AAFRESULT_NOT_INITIALIZED
-  ///   - This object has not yet had Initialize\\\(\\\) called on it.)
+  ///   - succeeded.  \\\(This is the only code indicating success.\\\).)
 
 
 AD_OVERRIDE(.method-SetSegment)

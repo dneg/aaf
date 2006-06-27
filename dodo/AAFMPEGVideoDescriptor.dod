@@ -72,11 +72,10 @@ AD_XMETHOD1(SetSingleSequence,
 				objPass,
 				aafBoolean_t,
 				singleSequence,
-				Sets the SingleSequence property.
+				value to assign to the SingleSequence property,
+				Sets the SingleSequence property. This property is optional.
   /// 
-  /// Succeeds if all of the following are true:
-  /// -
-  /// If this method fails, the SingleSequence property will not be changed.
+  /// If this method fails\, the SingleSequence property will not be changed.
   /// 
   /// This method will return the following codes:
   /// 
@@ -90,7 +89,7 @@ AD_XMETHOD1(GetSingleSequence,
                                 objPass,
                                 aafBoolean_t *,
                                 pSingleSequence,
-                                Optional.,
+                                The value of the SingleSequence property,
                         Gets the SingleSequence property.
   ///
   /// Succeeds if all of the following are true:
@@ -116,11 +115,10 @@ AD_XMETHOD1(SetConstantBPictureCount,
 				objPass,
 				aafBoolean_t,
 				constantBPictureCount,
-				Sets the ConstantBPictureCount property.
+				value to assign to the ConstantBPictureCount property,
+				Sets the ConstantBPictureCount property. This property is optional.
   /// 
-  /// Succeeds if all of the following are true:
-  /// -
-  /// If this method fails, the ConstantBPictureCount property will not be changed.
+  /// If this method fails\, the ConstantBPictureCount property will not be changed.
   /// 
   /// This method will return the following codes:
   /// 
@@ -134,7 +132,7 @@ AD_XMETHOD1(GetConstantBPictureCount,
                                 objPass,
                                 aafBoolean_t *,
                                 pConstantBPictureCount,
-                                Optional.,
+                                value of the ConstantBPictureCount property,
                         Gets the ConstantBPictureCount property.
   ///
   /// Succeeds if all of the following are true:
@@ -209,11 +207,10 @@ AD_XMETHOD1(SetLowDelay,
 				objPass,
 				aafBoolean_t,
 				lowDelay,
-				Sets the LowDelay property.
-  /// 
-  /// Succeeds if all of the following are true:
-  /// -
-  /// If this method fails, the LowDelay property will not be changed.
+				value to assign to the LowDelay property,
+				Sets the LowDelay property.  This property is optional.
+  ///
+  /// If this method fails\, the LowDelay property will not be changed.
   /// 
   /// This method will return the following codes:
   /// 
@@ -227,7 +224,7 @@ AD_XMETHOD1(GetLowDelay,
                                 objPass,
                                 aafBoolean_t *,
                                 pLowDelay,
-                                Optional.,
+                                value of the LowDelay property,
                         Gets the LowDelay property.
   ///
   /// Succeeds if all of the following are true:
@@ -253,11 +250,10 @@ AD_XMETHOD1(SetClosedGOP,
 				objPass,
 				aafBoolean_t,
 				closedGOP,
-				Sets the ClosedGOP property.
+				value to assign to the ClosedGOP property,
+				Sets the ClosedGOP property. This property is optional.
   /// 
-  /// Succeeds if all of the following are true:
-  /// -
-  /// If this method fails, the ClosedGOP property will not be changed.
+  /// If this method fails\, the ClosedGOP property will not be changed.
   /// 
   /// This method will return the following codes:
   /// 
@@ -271,7 +267,7 @@ AD_XMETHOD1(GetClosedGOP,
                                 objPass,
                                 aafBoolean_t *,
                                 pClosedGOP,
-                                Optional.,
+                                value of the ClosedGOP property,
                         Gets the ClosedGOP property.
   ///
   /// Succeeds if all of the following are true:
@@ -297,11 +293,10 @@ AD_XMETHOD1(SetIdenticalGOP,
 				objPass,
 				aafBoolean_t,
 				identicalGOP,
-				Sets the IdenticalGOP property.
+				value to assign to the IdenticalGOP property,
+				Sets the IdenticalGOP property. This is an optional property.
   /// 
-  /// Succeeds if all of the following are true:
-  /// -
-  /// If this method fails, the IdenticalGOP property will not be changed.
+  /// If this method fails\, the IdenticalGOP property will not be changed.
   /// 
   /// This method will return the following codes:
   /// 
@@ -315,7 +310,7 @@ AD_XMETHOD1(GetIdenticalGOP,
                                 objPass,
                                 aafBoolean_t *,
                                 pIdenticalGOP,
-                                Optional.,
+                                value of the IdenticalGOP property,
                         Gets the IdenticalGOP property.
   ///
   /// Succeeds if all of the following are true:
@@ -341,10 +336,8 @@ AD_XMETHOD1(SetMaxGOP,
                         objPass,
                         aafUInt16,
                         maxGOP,
-                        Optional.,
-                        Sets the MaxGOP property.
-  ///
-  /// Succeeds if all of the following are true:
+                        value to assign to the MaxGOP property,
+                        Sets the MaxGOP property. This is an optional property.
   ///
   /// If this method fails\, the MaxGOP property will not be
   /// changed.
@@ -359,7 +352,7 @@ AD_XMETHOD1(GetMaxGOP,
                                 objPass,
                                 aafUInt16 *,
                                 pMaxGOP,
-                                Optional.,
+                                value of the MaxGOP property,
                         Gets the MaxGOP property.
   ///
   /// Succeeds if all of the following are true:
@@ -385,10 +378,8 @@ AD_XMETHOD1(SetMaxBPictureCount,
                         objPass,
                         aafUInt16,
                         maxBPictureCount,
-                        Optional.,
-                        Sets the MaxBPictureCount property.
-  ///
-  /// Succeeds if all of the following are true:
+                        value to assign to the MaxBPictureCount property,
+                        Sets the MaxBPictureCount property. This is an optional property.
   ///
   /// If this method fails\, the MaxBPictureCount property will not be
   /// changed.
@@ -403,7 +394,7 @@ AD_XMETHOD1(GetMaxBPictureCount,
                                 objPass,
                                 aafUInt16 *,
                                 pMaxBPictureCount,
-                                Optional.,
+                                valud of the MaxBPictureCount property,
                         Gets the MaxBPictureCount property.
   ///
   /// Succeeds if all of the following are true:
@@ -429,10 +420,8 @@ AD_XMETHOD1(SetBitRate,
                         objPass,
                         aafUInt32,
                         bitRate,
-                        Optional.,
-                        Sets the BitRate property.
-  ///
-  /// Succeeds if all of the following are true:
+                        value to assign to the BitRate property,
+                        Sets the BitRate property. This is an optional property.
   ///
   /// If this method fails\, the BitRate property will not be
   /// changed.
@@ -447,7 +436,7 @@ AD_XMETHOD1(GetBitRate,
                                 objPass,
                                 aafUInt32 *,
                                 pBitRate,
-                                Optional.,
+                                value of the BitRate property,
                         Gets the BitRate property.
   ///
   /// Succeeds if all of the following are true:
@@ -473,10 +462,8 @@ AD_XMETHOD1(SetProfileAndLevel,
                         objPass,
                         aafUInt8,
                         profileAndLevel,
-                        Optional.,
-                        Sets the ProfileAndLevel property.
-  ///
-  /// Succeeds if all of the following are true:
+                        value to assign to the ProfileAndLevel property,
+                        Sets the ProfileAndLevel property. This is an optional property.
   ///
   /// If this method fails\, the ProfileAndLevel property will not be
   /// changed.
@@ -491,7 +478,7 @@ AD_XMETHOD1(GetProfileAndLevel,
                                 objPass,
                                 aafUInt8 *,
                                 pProfileAndLevel,
-                                Optional.,
+                                value of the ProfileAndLevel property,
                         Gets the ProfileAndLevele property.
   ///
   /// Succeeds if all of the following are true:

@@ -276,10 +276,10 @@ AD_XMETHOD1(CountSubDescriptors,
 			objPass,
 			aafUInt32 *,
 			pResult,
-			Returns the number of subdescriptors,
+			Returns the number of SubDescriptors,
 
-			Return the number of subdescriptors attached to this essence
-  /// descriptor.  The number of subdescriptors may be zero if the essence is
+			Return the number of SubDescriptors attached to this essence
+  /// descriptor.  The number of SubDescriptors may be zero if the essence is
   /// in the current file.
   /// 
   /// Succeeds if all of the following are true:
@@ -305,12 +305,14 @@ AD_XMETHOD1(AppendSubDescriptor,
 			pSubDescriptors,
 			SubDescriptor to append,
 
-			Append another subdescriptor to this essence descriptor.  Use this
-  /// function to add a subdescriptor to be scanned last when searching for
+			Append another SubDescriptor to this essence descriptor.  Use this
+  /// function to add a SubDescriptor to be scanned last when searching for
   /// the essence \(a secondary location for the essence\).
   /// 
   /// Succeeds if all of the following are true:
   /// - the pSubDescriptor pointer is valid.
+  /// - the pSubDescriptor pointer indicates an object which is not already
+  ///   owned by any object
   /// 
   /// If this method fails no state will be changed.
   /// 
@@ -322,7 +324,11 @@ AD_XMETHOD1(AppendSubDescriptor,
   ///   - succeeded.  \(This is the only code indicating success.\)
   ///
   /// AAFRESULT_NULL_PARAM
-  ///   - pSubDescriptor is null.)
+  ///   - pSubDescriptor is null.
+  ///
+  /// AAFRESULT_OBJECT_ALREADY_ATTACHED
+  ///   - the object pointed to by pSubDescriptor is already owned by this or
+  ///     another object)
 
 
 AD_XMETHOD1(PrependSubDescriptor,
@@ -332,12 +338,14 @@ AD_XMETHOD1(PrependSubDescriptor,
 			pSubDescriptor,
 			SubDescriptor to append,
 
-			Prepend another subdescriptor to this essence descriptor.  Use this
-  /// function to add a subdescriptor to be scanned first when searching for
+			Prepend another SubDescriptor to this essence descriptor.  Use this
+  /// function to add a SubDescriptor to be scanned first when searching for
   /// the essence \(a new primary location for the essence\).
   /// 
   /// Succeeds if all of the following are true:
   /// - the pSubDescriptor pointer is valid.
+  /// - the pSubDescriptor pointer indicates an object which is not already
+  ///   owned by any object
   /// 
   /// If this method fails no state will be changed.
   /// 
@@ -349,7 +357,11 @@ AD_XMETHOD1(PrependSubDescriptor,
   ///   - succeeded.  \(This is the only code indicating success.\)
   ///
   /// AAFRESULT_NULL_PARAM
-  ///   - pSubDescriptor is null.)
+  ///   - pSubDescriptor is null.
+  ///
+  /// AAFRESULT_OBJECT_ALREADY_ATTACHED
+  ///   - the object pointed to by pSubDescriptor is already owned by this or
+  ///     another object)
 
 
 AD_XMETHOD2(InsertSubDescriptorAt,
@@ -358,7 +370,7 @@ AD_XMETHOD2(InsertSubDescriptorAt,
 			objPass,
 			aafUInt32,
 			index,
-			index at which subdescriptor is to be inserted,
+			index at which SubDescriptor is to be inserted,
 
 			[in],
 			objIn,
@@ -366,12 +378,14 @@ AD_XMETHOD2(InsertSubDescriptorAt,
 			pSubDescriptor,
 			SubDescriptor to append,
 
-     Inserts the given subdescriptor at the given index.  SubDescriptors already
+     Inserts the given SubDescriptor at the given index.  SubDescriptors already
   /// existing at the given and higher indices will be moved to the
   /// next higher index to accommodate.
   /// 
   /// Succeeds if all of the following are true:
   /// - the pSubDescriptor pointer is valid.
+  /// - the pSubDescriptor pointer indicates an object which is not already
+  ///   owned by any object
   /// - index is less than or equal to the value returned by
   ///   CountSubDescriptors\(\).
   /// 
@@ -387,6 +401,10 @@ AD_XMETHOD2(InsertSubDescriptorAt,
   /// AAFRESULT_NULL_PARAM
   ///   - pSubDescriptor is null.
   ///
+  /// AAFRESULT_OBJECT_ALREADY_ATTACHED
+  ///   - the object pointed to by pSubDescriptor is already owned by this or
+  ///     another object
+  ///
   /// AAFRESULT_BADINDEX
   ///   - index is greater than the value returned by
   ///     CountSubDescriptors\(\).)
@@ -398,15 +416,15 @@ AD_XMETHOD2(GetSubDescriptorAt,
 			objPass,
 			aafUInt32,
 			index,
-			index of subdescriptor to retrieve,
+			index of SubDescriptor to retrieve,
 
 			[out\, retval],
 			objOut,
 			AAFSubDescriptor,
 			ppSubDescriptor,
-			returned subdescriptor,
+			returned SubDescriptor,
 
-     Retrieves the subdescriptor at the given index.
+     Retrieves the SubDescriptor at the given index.
   /// 
   /// Succeeds if all of the following are true:
   /// - the pSubDescriptor pointer is valid.
@@ -435,9 +453,9 @@ AD_XMETHOD1(RemoveSubDescriptorAt,
 			objPass,
 			aafUInt32,
 			index,
-			index of subdescriptor to remove,
+			index of SubDescriptor to remove,
 
-     Removes the subdescriptor at the given index.  SubDescriptors already
+     Removes the SubDescriptor at the given index.  SubDescriptors already
   /// existing at indices higher than the given index will be moved to
   /// the next lower index to accommodate.
   /// 
@@ -463,9 +481,9 @@ AD_XMETHOD1(GetSubDescriptors,
 			objOut,
 			EnumAAFSubDescriptors,
 			ppEnum,
-			An enumerator to the subdescriptors on this essence descriptor,
+			An enumerator to the SubDescriptors on this essence descriptor,
 
-			Returns an enumerator to the subdescriptors.  The number of subdescriptors
+			Returns an enumerator to the SubDescriptors.  The number of SubDescriptors
   /// may be zero if the essence is in the current file.
   /// 
   /// Succeeds if all of the following are true:
