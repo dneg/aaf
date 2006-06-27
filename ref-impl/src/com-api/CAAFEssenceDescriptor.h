@@ -278,8 +278,8 @@ public:
   //
   // DESCRIPTION:
   // @mfunc AAFRESULT | AAFEssenceDescriptor2 | CountSubDescriptors |
-  // Return the number of subdescriptors attached to this essence
-  /// descriptor.  The number of subdescriptors may be zero if the essence is
+  // Return the number of SubDescriptors attached to this essence
+  /// descriptor.  The number of SubDescriptors may be zero if the essence is
   /// in the current file.
   /// 
   /// Succeeds if all of the following are true:
@@ -300,7 +300,7 @@ public:
   // 
   STDMETHOD (CountSubDescriptors)
    (
-    // @parm [out] aafUInt32 * | pResult | Returns the number of subdescriptors
+    // @parm [out] aafUInt32 * | pResult | Returns the number of SubDescriptors
     aafUInt32 *  pResult
   );
 
@@ -309,12 +309,14 @@ public:
   //
   // DESCRIPTION:
   // @mfunc AAFRESULT | AAFEssenceDescriptor2 | AppendSubDescriptor |
-  // Append another subdescriptor to this essence descriptor.  Use this
-  /// function to add a subdescriptor to be scanned last when searching for
+  // Append another SubDescriptor to this essence descriptor.  Use this
+  /// function to add a SubDescriptor to be scanned last when searching for
   /// the essence (a secondary location for the essence).
   /// 
   /// Succeeds if all of the following are true:
   /// - the pSubDescriptor pointer is valid.
+  /// - the pSubDescriptor pointer indicates an object which is not already
+  ///   owned by any object
   /// 
   /// If this method fails no state will be changed.
   /// 
@@ -327,6 +329,10 @@ public:
   ///
   /// AAFRESULT_NULL_PARAM
   ///   - pSubDescriptor is null.
+  ///
+  /// AAFRESULT_OBJECT_ALREADY_ATTACHED
+  ///   - the object pointed to by pSubDescriptor is already owned by this or
+  ///     another object
   // @end
   // 
   STDMETHOD (AppendSubDescriptor)
@@ -340,12 +346,14 @@ public:
   //
   // DESCRIPTION:
   // @mfunc AAFRESULT | AAFEssenceDescriptor2 | PrependSubDescriptor |
-  // Prepend another subdescriptor to this essence descriptor.  Use this
-  /// function to add a subdescriptor to be scanned first when searching for
+  // Prepend another SubDescriptor to this essence descriptor.  Use this
+  /// function to add a SubDescriptor to be scanned first when searching for
   /// the essence (a new primary location for the essence).
   /// 
   /// Succeeds if all of the following are true:
   /// - the pSubDescriptor pointer is valid.
+  /// - the pSubDescriptor pointer indicates an object which is not already
+  ///   owned by any object
   /// 
   /// If this method fails no state will be changed.
   /// 
@@ -358,6 +366,10 @@ public:
   ///
   /// AAFRESULT_NULL_PARAM
   ///   - pSubDescriptor is null.
+  ///
+  /// AAFRESULT_OBJECT_ALREADY_ATTACHED
+  ///   - the object pointed to by pSubDescriptor is already owned by this or
+  ///     another object
   // @end
   // 
   STDMETHOD (PrependSubDescriptor)
@@ -371,12 +383,14 @@ public:
   //
   // DESCRIPTION:
   // @mfunc AAFRESULT | AAFEssenceDescriptor2 | InsertSubDescriptorAt |
-  // Inserts the given subdescriptor at the given index.  SubDescriptors already
+  // Inserts the given SubDescriptor at the given index.  SubDescriptors already
   /// existing at the given and higher indices will be moved to the
   /// next higher index to accommodate.
   /// 
   /// Succeeds if all of the following are true:
   /// - the pSubDescriptor pointer is valid.
+  /// - the pSubDescriptor pointer indicates an object which is not already
+  ///   owned by any object
   /// - index is less than or equal to the value returned by
   ///   CountSubDescriptors().
   /// 
@@ -392,6 +406,10 @@ public:
   /// AAFRESULT_NULL_PARAM
   ///   - pSubDescriptor is null.
   ///
+  /// AAFRESULT_OBJECT_ALREADY_ATTACHED
+  ///   - the object pointed to by pSubDescriptor is already owned by this or
+  ///     another object
+  ///
   /// AAFRESULT_BADINDEX
   ///   - index is greater than the value returned by
   ///     CountSubDescriptors().
@@ -399,7 +417,7 @@ public:
   // 
   STDMETHOD (InsertSubDescriptorAt)
    (
-    // @parm [in] aafUInt32 | index | index at which subdescriptor is to be inserted
+    // @parm [in] aafUInt32 | index | index at which SubDescriptor is to be inserted
     aafUInt32  index,
 
     // @parm [in] AAFSubDescriptor | pSubDescriptor | SubDescriptor to append
@@ -411,7 +429,7 @@ public:
   //
   // DESCRIPTION:
   // @mfunc AAFRESULT | AAFEssenceDescriptor2 | GetSubDescriptorAt |
-  // Retrieves the subdescriptor at the given index.
+  // Retrieves the SubDescriptor at the given index.
   /// 
   /// Succeeds if all of the following are true:
   /// - the pSubDescriptor pointer is valid.
@@ -436,10 +454,10 @@ public:
   // 
   STDMETHOD (GetSubDescriptorAt)
    (
-    // @parm [in] aafUInt32 | index | index of subdescriptor to retrieve
+    // @parm [in] aafUInt32 | index | index of SubDescriptor to retrieve
     aafUInt32  index,
 
-    // @parm [out, retval] AAFSubDescriptor | ppSubDescriptor | returned subdescriptor
+    // @parm [out, retval] AAFSubDescriptor | ppSubDescriptor | returned SubDescriptor
     IAAFSubDescriptor ** ppSubDescriptor
   );
 
@@ -448,7 +466,7 @@ public:
   //
   // DESCRIPTION:
   // @mfunc AAFRESULT | AAFEssenceDescriptor2 | RemoveSubDescriptorAt |
-  // Removes the subdescriptor at the given index.  SubDescriptors already
+  // Removes the SubDescriptor at the given index.  SubDescriptors already
   /// existing at indices higher than the given index will be moved to
   /// the next lower index to accommodate.
   /// 
@@ -471,7 +489,7 @@ public:
   // 
   STDMETHOD (RemoveSubDescriptorAt)
    (
-    // @parm [in] aafUInt32 | index | index of subdescriptor to remove
+    // @parm [in] aafUInt32 | index | index of SubDescriptor to remove
     aafUInt32  index
   );
 
@@ -480,7 +498,7 @@ public:
   //
   // DESCRIPTION:
   // @mfunc AAFRESULT | AAFEssenceDescriptor2 | GetSubDescriptors |
-  // Returns an enumerator to the subdescriptors.  The number of subdescriptors
+  // Returns an enumerator to the SubDescriptors.  The number of SubDescriptors
   /// may be zero if the essence is in the current file.
   /// 
   /// Succeeds if all of the following are true:
@@ -501,7 +519,7 @@ public:
   // 
   STDMETHOD (GetSubDescriptors)
    (
-    // @parm [out] EnumAAFSubDescriptors | ppEnum | An enumerator to the subdescriptors on this essence descriptor
+    // @parm [out] EnumAAFSubDescriptors | ppEnum | An enumerator to the SubDescriptors on this essence descriptor
     IEnumAAFSubDescriptors ** ppEnum
   );
 

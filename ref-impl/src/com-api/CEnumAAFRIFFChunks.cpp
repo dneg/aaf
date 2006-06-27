@@ -71,7 +71,7 @@ CEnumAAFRIFFChunks::~CEnumAAFRIFFChunks ()
 
 
 HRESULT STDMETHODCALLTYPE
-    CEnumAAFRIFFChunks::NextOne (IAAFRIFFChunk ** ppRIFFChunk)
+    CEnumAAFRIFFChunks::NextOne (IAAFRIFFChunk ** ppRIFFChunks)
 {
   HRESULT hr;
 
@@ -83,19 +83,19 @@ HRESULT STDMETHODCALLTYPE
   assert (ptr);
 
   //
-  // set up for ppRIFFChunk
+  // set up for ppRIFFChunks
   //
-  ImplAAFRIFFChunk * internalppRIFFChunk = NULL;
-  ImplAAFRIFFChunk ** pinternalppRIFFChunk = NULL;
-  if (ppRIFFChunk)
+  ImplAAFRIFFChunk * internalppRIFFChunks = NULL;
+  ImplAAFRIFFChunk ** pinternalppRIFFChunks = NULL;
+  if (ppRIFFChunks)
     {
-      pinternalppRIFFChunk = &internalppRIFFChunk;
+      pinternalppRIFFChunks = &internalppRIFFChunks;
     }
 
   try
     {
       hr = ptr->NextOne
-       (pinternalppRIFFChunk);
+       (pinternalppRIFFChunks);
     }
   catch (OMException& e)
     {
@@ -127,30 +127,31 @@ HRESULT STDMETHODCALLTYPE
     }
 
   //
-  // cleanup for ppRIFFChunk
+  // cleanup for ppRIFFChunks
   //
   if (SUCCEEDED(hr))
     {
       IUnknown *pUnknown;
       HRESULT hStat;
 
-      if (internalppRIFFChunk)
+      if (internalppRIFFChunks)
         {
-          pUnknown = static_cast<IUnknown *> (internalppRIFFChunk->GetContainer());
-          hStat = pUnknown->QueryInterface(IID_IAAFRIFFChunk, (void **)ppRIFFChunk);
+          pUnknown = static_cast<IUnknown *> (internalppRIFFChunks->GetContainer());
+          hStat = pUnknown->QueryInterface(IID_IAAFRIFFChunk, (void **)ppRIFFChunks);
           assert (SUCCEEDED (hStat));
           //pUnknown->Release();
-          internalppRIFFChunk->ReleaseReference(); // We are through with this pointer.
+          internalppRIFFChunks->ReleaseReference(); // We are through with this pointer.
         }
     }
   return hr;
 }
 
 
+
 HRESULT STDMETHODCALLTYPE
     CEnumAAFRIFFChunks::Next (aafUInt32  count,
-        IAAFRIFFChunk ** ppRIFFChunk,
-        aafUInt32 *  pFetched)
+        IAAFRIFFChunk ** ppRIFFChunks,
+        aafUInt32 *  pNumFetched)
 {
   HRESULT hr;
 
@@ -162,25 +163,25 @@ HRESULT STDMETHODCALLTYPE
   assert (ptr);
 
   //
-  // set up for ppRIFFChunk
+  // set up for ppRIFFChunks
   //
-  ImplAAFRIFFChunk ** internalppRIFFChunk = NULL;
+  ImplAAFRIFFChunk ** internalppRIFFChunks = NULL;
   assert (count >= 0);
-  internalppRIFFChunk = new ImplAAFRIFFChunk*[count];
-  assert (internalppRIFFChunk);
+  internalppRIFFChunks = new ImplAAFRIFFChunk*[count];
+  assert (internalppRIFFChunks);
 
-  ImplAAFRIFFChunk ** pinternalppRIFFChunk = NULL;
-  if (ppRIFFChunk)
+  ImplAAFRIFFChunk ** pinternalppRIFFChunks = NULL;
+  if (ppRIFFChunks)
     {
-      pinternalppRIFFChunk = internalppRIFFChunk;
+      pinternalppRIFFChunks = internalppRIFFChunks;
     }
 
   try
     {
       hr = ptr->Next
        (count,
-        pinternalppRIFFChunk,
-        pFetched);
+        pinternalppRIFFChunks,
+        pNumFetched);
     }
   catch (OMException& e)
     {
@@ -212,7 +213,7 @@ HRESULT STDMETHODCALLTYPE
     }
 
   //
-  // cleanup for ppRIFFChunk
+  // cleanup for ppRIFFChunks
   //
   if (SUCCEEDED(hr)||hr==AAFRESULT_NO_MORE_OBJECTS)
     {
@@ -220,19 +221,20 @@ HRESULT STDMETHODCALLTYPE
       HRESULT hStat;
       aafUInt32 localIdx;
 	  assert (count >= 0);
-	  for (localIdx = 0; localIdx < *pFetched; localIdx++)
+	  for (localIdx = 0; localIdx < *pNumFetched; localIdx++)
 		{
-		  pUnknown = static_cast<IUnknown *> (internalppRIFFChunk[localIdx]->GetContainer());
-		  hStat = pUnknown->QueryInterface(IID_IAAFRIFFChunk, (void **)(ppRIFFChunk+localIdx));
+		  pUnknown = static_cast<IUnknown *> (internalppRIFFChunks[localIdx]->GetContainer());
+		  hStat = pUnknown->QueryInterface(IID_IAAFRIFFChunk, (void **)(ppRIFFChunks+localIdx));
 		  assert (SUCCEEDED (hStat));
 		  //pUnknown->Release();
-		  internalppRIFFChunk[localIdx]->ReleaseReference(); // We are through with this pointer.
+		  internalppRIFFChunks[localIdx]->ReleaseReference(); // We are through with this pointer.
 		}
     }
-  delete[] internalppRIFFChunk;
-  internalppRIFFChunk = 0;
+  delete[] internalppRIFFChunks;
+  internalppRIFFChunks = 0;
   return hr;
 }
+
 
 
 HRESULT STDMETHODCALLTYPE
@@ -286,6 +288,7 @@ HRESULT STDMETHODCALLTYPE
 }
 
 
+
 HRESULT STDMETHODCALLTYPE
     CEnumAAFRIFFChunks::Reset ()
 {
@@ -332,6 +335,7 @@ HRESULT STDMETHODCALLTYPE
 
   return hr;
 }
+
 
 
 HRESULT STDMETHODCALLTYPE

@@ -93,7 +93,9 @@ public:
   //
   // SetSingleSequence()
   //
-  // the SingleSequence property will not be changed.
+  // Sets the SingleSequence property. This property is optional.
+  /// 
+  /// If this method fails, the SingleSequence property will not be changed.
   /// 
   /// This method will return the following codes:
   /// 
@@ -102,11 +104,7 @@ public:
   ///
   //
   STDMETHOD (SetSingleSequence) (
-    // Sets the SingleSequence property.
-  /// 
-  /// Succeeds if all of the following are true:
-  /// -
-  /// If this method fails 
+    // value to assign to the SingleSequence property 
     /*[in]*/ aafBoolean_t  singleSequence);
 
 
@@ -134,7 +132,7 @@ public:
   ///   - the property is not present.
   //
   STDMETHOD (GetSingleSequence) (
-    // Optional. 
+    // The value of the SingleSequence property 
     /*[out]*/ aafBoolean_t *  pSingleSequence);
 
 
@@ -142,7 +140,9 @@ public:
   //
   // SetConstantBPictureCount()
   //
-  // the ConstantBPictureCount property will not be changed.
+  // Sets the ConstantBPictureCount property. This property is optional.
+  /// 
+  /// If this method fails, the ConstantBPictureCount property will not be changed.
   /// 
   /// This method will return the following codes:
   /// 
@@ -151,11 +151,7 @@ public:
   ///
   //
   STDMETHOD (SetConstantBPictureCount) (
-    // Sets the ConstantBPictureCount property.
-  /// 
-  /// Succeeds if all of the following are true:
-  /// -
-  /// If this method fails 
+    // value to assign to the ConstantBPictureCount property 
     /*[in]*/ aafBoolean_t  constantBPictureCount);
 
 
@@ -183,7 +179,7 @@ public:
   ///   - the property is not present.
   //
   STDMETHOD (GetConstantBPictureCount) (
-    // Optional. 
+    // value of the ConstantBPictureCount property 
     /*[out]*/ aafBoolean_t *  pConstantBPictureCount);
 
 
@@ -244,7 +240,9 @@ public:
   //
   // SetLowDelay()
   //
-  // the LowDelay property will not be changed.
+  // Sets the LowDelay property.  This property is optional.
+  ///
+  /// If this method fails, the LowDelay property will not be changed.
   /// 
   /// This method will return the following codes:
   /// 
@@ -253,11 +251,7 @@ public:
   ///
   //
   STDMETHOD (SetLowDelay) (
-    // Sets the LowDelay property.
-  /// 
-  /// Succeeds if all of the following are true:
-  /// -
-  /// If this method fails 
+    // value to assign to the LowDelay property 
     /*[in]*/ aafBoolean_t  lowDelay);
 
 
@@ -285,7 +279,7 @@ public:
   ///   - the property is not present.
   //
   STDMETHOD (GetLowDelay) (
-    // Optional. 
+    // value of the LowDelay property 
     /*[out]*/ aafBoolean_t *  pLowDelay);
 
 
@@ -293,7 +287,9 @@ public:
   //
   // SetClosedGOP()
   //
-  // the ClosedGOP property will not be changed.
+  // Sets the ClosedGOP property. This property is optional.
+  /// 
+  /// If this method fails, the ClosedGOP property will not be changed.
   /// 
   /// This method will return the following codes:
   /// 
@@ -302,11 +298,7 @@ public:
   ///
   //
   STDMETHOD (SetClosedGOP) (
-    // Sets the ClosedGOP property.
-  /// 
-  /// Succeeds if all of the following are true:
-  /// -
-  /// If this method fails 
+    // value to assign to the ClosedGOP property 
     /*[in]*/ aafBoolean_t  closedGOP);
 
 
@@ -334,7 +326,7 @@ public:
   ///   - the property is not present.
   //
   STDMETHOD (GetClosedGOP) (
-    // Optional. 
+    // value of the ClosedGOP property 
     /*[out]*/ aafBoolean_t *  pClosedGOP);
 
 
@@ -342,7 +334,9 @@ public:
   //
   // SetIdenticalGOP()
   //
-  // the IdenticalGOP property will not be changed.
+  // Sets the IdenticalGOP property. This is an optional property.
+  /// 
+  /// If this method fails, the IdenticalGOP property will not be changed.
   /// 
   /// This method will return the following codes:
   /// 
@@ -351,11 +345,7 @@ public:
   ///
   //
   STDMETHOD (SetIdenticalGOP) (
-    // Sets the IdenticalGOP property.
-  /// 
-  /// Succeeds if all of the following are true:
-  /// -
-  /// If this method fails 
+    // value to assign to the IdenticalGOP property 
     /*[in]*/ aafBoolean_t  identicalGOP);
 
 
@@ -383,7 +373,7 @@ public:
   ///   - the property is not present.
   //
   STDMETHOD (GetIdenticalGOP) (
-    // Optional. 
+    // value of the IdenticalGOP property 
     /*[out]*/ aafBoolean_t *  pIdenticalGOP);
 
 
@@ -391,9 +381,7 @@ public:
   //
   // SetMaxGOP()
   //
-  // Sets the MaxGOP property.
-  ///
-  /// Succeeds if all of the following are true:
+  // Sets the MaxGOP property. This is an optional property.
   ///
   /// If this method fails, the MaxGOP property will not be
   /// changed.
@@ -404,7 +392,7 @@ public:
   ///   - succeeded.  (This is the only code indicating success.)
   //
   STDMETHOD (SetMaxGOP) (
-    // Optional. 
+    // value to assign to the MaxGOP property 
     /*[in]*/ aafUInt16  maxGOP);
 
   //***********************************************************
@@ -431,7 +419,7 @@ public:
   ///   - the property is not present.
   //
   STDMETHOD (GetMaxGOP) (
-    // Optional. 
+    // value of the MaxGOP property 
     /*[out]*/ aafUInt16 *  pMaxGOP);
 
 
@@ -439,9 +427,7 @@ public:
   //
   // SetMaxBPictureCount()
   //
-  // Sets the MaxBPictureCount property.
-  ///
-  /// Succeeds if all of the following are true:
+  // Sets the MaxBPictureCount property. This is an optional property.
   ///
   /// If this method fails, the MaxBPictureCount property will not be
   /// changed.
@@ -452,7 +438,7 @@ public:
   ///   - succeeded.  (This is the only code indicating success.)
   //
   STDMETHOD (SetMaxBPictureCount) (
-    // Optional. 
+    // value to assign to the MaxBPictureCount property 
     /*[in]*/ aafUInt16  maxBPictureCount);
 
   //***********************************************************
@@ -479,7 +465,7 @@ public:
   ///   - the property is not present.
   //
   STDMETHOD (GetMaxBPictureCount) (
-    // Optional. 
+    // valud of the MaxBPictureCount property 
     /*[out]*/ aafUInt16 *  pMaxBPictureCount);
 
 
@@ -487,9 +473,7 @@ public:
   //
   // SetBitRate()
   //
-  // Sets the BitRate property.
-  ///
-  /// Succeeds if all of the following are true:
+  // Sets the BitRate property. This is an optional property.
   ///
   /// If this method fails, the BitRate property will not be
   /// changed.
@@ -500,7 +484,7 @@ public:
   ///   - succeeded.  (This is the only code indicating success.)
   //
   STDMETHOD (SetBitRate) (
-    // Optional. 
+    // value to assign to the BitRate property 
     /*[in]*/ aafUInt32  bitRate);
 
   //***********************************************************
@@ -527,7 +511,7 @@ public:
   ///   - the property is not present.
   //
   STDMETHOD (GetBitRate) (
-    // Optional. 
+    // value of the BitRate property 
     /*[out]*/ aafUInt32 *  pBitRate);
 
 
@@ -535,9 +519,7 @@ public:
   //
   // SetProfileAndLevel()
   //
-  // Sets the ProfileAndLevel property.
-  ///
-  /// Succeeds if all of the following are true:
+  // Sets the ProfileAndLevel property. This is an optional property.
   ///
   /// If this method fails, the ProfileAndLevel property will not be
   /// changed.
@@ -548,7 +530,7 @@ public:
   ///   - succeeded.  (This is the only code indicating success.)
   //
   STDMETHOD (SetProfileAndLevel) (
-    // Optional. 
+    // value to assign to the ProfileAndLevel property 
     /*[in]*/ aafUInt8  profileAndLevel);
 
   //***********************************************************
@@ -575,7 +557,7 @@ public:
   ///   - the property is not present.
   //
   STDMETHOD (GetProfileAndLevel) (
-    // Optional. 
+    // value of the ProfileAndLevel property 
     /*[out]*/ aafUInt8 *  pProfileAndLevel);
 
 

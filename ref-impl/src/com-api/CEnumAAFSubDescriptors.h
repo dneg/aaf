@@ -71,65 +71,66 @@ public:
   /// when it is no longer needed.
   /// 
   /// Succeeds if all of the following are true:
-  /// - the ppSubDescriptor pointer is valid.
+  /// - the ppSubDescriptors pointer is valid.
   /// - there are SubDescriptor objects remaining to be returned.
   /// 
-  /// If this method fails nothing is written to *ppSubDescriptor.
-  /// 
-  /// This method will return the following codes.  If more than one of
-  /// the listed errors is in effect, it will return the first one
-  /// encountered in the order given below:
-  /// 
-  /// AAFRESULT_SUCCESS
-  ///   - succeeded.  (This is the only code indicating success.)
-  ///
-  /// AAFRESULT_NULL_PARAM
-  ///   - ppSubDescriptor is null.
+  /// If this method fails nothing is written to *ppSubDescriptors.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - ppSubDescriptors arg is NULL.
   ///
   /// AAFRESULT_NO_MORE_OBJECTS
-  ///   - no SubDescriptors remaining to be returned.
+  ///   - no SubDescriptor objects remaining to be returned.
   //
   STDMETHOD (NextOne) (
     // The Next SubDescriptor 
-    /*[out,retval]*/ IAAFSubDescriptor ** ppSubDescriptor);
+    /*[out,retval]*/ IAAFSubDescriptor ** ppSubDescriptors);
 
 
   //***********************************************************
   //
   // Next()
   //
-  // Enumerates the next count elements (AAFSubDescriptor pointers) in 
-  /// the enumerator's list, returning them in the given array along
-  /// with the actual number of enumerated elements in pcFetched. The
-  /// caller is responsible for properly releasing the returned pointers.
+  // Enumerates the next count elements (AAFSubDescriptor pointers) in the
+  /// enumerator's list, returning them in the given array along with
+  /// the actual number of enumerated elements in pNumFetched. The caller
+  /// is responsible for properly releasing the returned pointers.
   /// 
   /// Succeeds if all of the following are true:
   /// - The ppSubDescriptors pointer is valid.
-  /// - The pNumFetched pointer is valid. If count is 1, pNumFetched can be NULL.
+  /// - The pNumFetched pointer is valid. If count is 1, pNumFetched
+  ///   can be NULL.
   /// - There are SubDescriptor objects remaining to be returned.
   /// 
   /// If this method fails nothing is written to *ppSubDescriptors or
   /// pNumFetched.
-  /// 
-  /// This method will return the following codes.  If more than one of
-  /// the listed errors is in effect, it will return the first one
-  /// encountered in the order given below:
-  /// 
-  /// AAFRESULT_SUCCESS
-  ///   - succeeded.  (This is the only code indicating success.)
-  ///
-  /// AAFRESULT_NULL_PARAM
-  ///   - either ppSubDescriptors or pNumFetched is null.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - Either ppSubDescriptors or pNumFetched arg is NULL.
   //
   STDMETHOD (Next) (
-    // number of subdescriptors requested
+    // number of SubDescriptors requested
     /*[in]*/ aafUInt32  count,
 
-    // array to receive subdescriptors
-    /*[out, size_is(count), length_is(*pFetched)]*/ IAAFSubDescriptor ** ppSubDescriptors,
+    // array to receive elements
+    /*[out, size_is(count), length_is(*pNumFetched)]*/ IAAFSubDescriptor ** ppSubDescriptors,
 
-    // number of actual SubDescriptors fetched into ppSubDescriptors array
-    /*[out,ref]*/ aafUInt32 *  pFetched);
+    // number of actual SubDescriptor objects fetched into ppSubDescriptors array
+    /*[out,ref]*/ aafUInt32 *  pNumFetched);
 
 
   //***********************************************************
@@ -137,18 +138,18 @@ public:
   // Skip()
   //
   // Instructs the enumerator to skip the next count elements in the
-  /// enumeration so that the next call to EnumAAFSubDescriptors::Next will
-  /// not return those elements.
+  /// enumeration so that the next call to Next will not return those
+  /// elements.
   /// 
   /// Succeeds if all of the following are true:
   /// - count is less than or equal to the number of remaining objects.
-  /// 
-  /// This method will return the following codes.  If more than one of
-  /// the listed errors is in effect, it will return the first one
-  /// encountered in the order given below:
-  ///
-  /// AAFRESULT_SUCCESS
-  ///   - succeeded.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
   ///
   /// AAFRESULT_NO_MORE_OBJECTS
   ///   - count exceeded number of remaining objects.
@@ -164,13 +165,13 @@ public:
   //
   // Instructs the enumerator to position itself at the beginning of
   /// the list of elements.
-  /// 
-  /// Always succeeds.
-  /// 
-  /// This method will return the following code:
-  /// 
-  /// AAFRESULT_SUCCESS
-  ///   - succeeded.  (This is the only code indicating success.)
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
   //
   STDMETHOD (Reset)
      ();
@@ -181,25 +182,26 @@ public:
   //
   // Clone()
   //
-  // Creates another subdescriptor enumerator with the same state as the
-  /// current enumerator to iterate over the same list. This method
-  /// makes it possible to record a point in the enumeration sequence
-  /// in order to return to that point at a later time.
+  // Creates another enumerator with the same state as the current
+  /// enumerator to iterate over the same list. This method makes it
+  /// possible to record a point in the enumeration sequence in order
+  /// to return to that point at a later time.
+  ///
   /// Note: The caller must release this new enumerator separately from
   /// the first enumerator.
   /// 
   /// Succeeds if all of the following are true:
   /// - the ppEnum pointer is valid.
-  /// 
-  /// This method will return the following codes.  If more than one of
-  /// the listed errors is in effect, it will return the first one
-  /// encountered in the order given below:
-  /// 
-  /// AAFRESULT_SUCCESS
-  ///   - succeeded.  (This is the only code indicating success.)
-  ///
-  /// AAFRESULT_NULL_PARAM
-  ///   - ppEnum is null.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - ppEnum arg is NULL.
   //
   STDMETHOD (Clone) (
     // new enumeration 

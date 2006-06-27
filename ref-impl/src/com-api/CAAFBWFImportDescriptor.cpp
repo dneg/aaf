@@ -324,7 +324,58 @@ HRESULT STDMETHODCALLTYPE
 
 
 HRESULT STDMETHODCALLTYPE
-    CAAFBWFImportDescriptor::AppendUnknownBWFChunks (IAAFRIFFChunk * pData)
+    CAAFBWFImportDescriptor::CountUnknownBWFChunks (aafUInt32 *  pNumData)
+{
+  HRESULT hr;
+
+  ImplAAFBWFImportDescriptor * ptr;
+  ImplAAFRoot * pO;
+  pO = GetRepObject ();
+  assert (pO);
+  ptr = static_cast<ImplAAFBWFImportDescriptor*> (pO);
+  assert (ptr);
+
+
+  try
+    {
+      hr = ptr->CountUnknownBWFChunks
+       (pNumData);
+    }
+  catch (OMException& e)
+    {
+      // OMExceptions should be handled by the impl code. However, if an
+      // unhandled OMException occurs, control reaches here. We must not
+      // allow the unhandled exception to reach the client code, so we
+      // turn it into a failure status code.
+      //
+      // If the OMException contains an HRESULT, it is returned to the
+      // client, if not, AAFRESULT_UNEXPECTED_EXCEPTION is returned.
+      //
+      hr = OMExceptionToResult(e, AAFRESULT_UNEXPECTED_EXCEPTION);
+    }
+  catch (OMAssertionViolation &)
+    {
+      // Control reaches here if there is a programming error in the
+      // impl code that was detected by an assertion violation.
+      // We must not allow the assertion to reach the client code so
+      // here we turn it into a failure status code.
+      //
+      hr = AAFRESULT_ASSERTION_VIOLATION;
+    }
+  catch (...)
+    {
+      // We CANNOT throw an exception out of a COM interface method!
+      // Return a reasonable exception code.
+      //
+      hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+    }
+
+  return hr;
+}
+
+
+HRESULT STDMETHODCALLTYPE
+    CAAFBWFImportDescriptor::AppendUnknownBWFChunk (IAAFRIFFChunk * pData)
 {
   HRESULT hr;
 
@@ -356,7 +407,80 @@ HRESULT STDMETHODCALLTYPE
 
   try
     {
-      hr = ptr->AppendUnknownBWFChunks
+      hr = ptr->AppendUnknownBWFChunk
+       (internalpData);
+    }
+  catch (OMException& e)
+    {
+      // OMExceptions should be handled by the impl code. However, if an
+      // unhandled OMException occurs, control reaches here. We must not
+      // allow the unhandled exception to reach the client code, so we
+      // turn it into a failure status code.
+      //
+      // If the OMException contains an HRESULT, it is returned to the
+      // client, if not, AAFRESULT_UNEXPECTED_EXCEPTION is returned.
+      //
+      hr = OMExceptionToResult(e, AAFRESULT_UNEXPECTED_EXCEPTION);
+    }
+  catch (OMAssertionViolation &)
+    {
+      // Control reaches here if there is a programming error in the
+      // impl code that was detected by an assertion violation.
+      // We must not allow the assertion to reach the client code so
+      // here we turn it into a failure status code.
+      //
+      hr = AAFRESULT_ASSERTION_VIOLATION;
+    }
+  catch (...)
+    {
+      // We CANNOT throw an exception out of a COM interface method!
+      // Return a reasonable exception code.
+      //
+      hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+    }
+
+  //
+  // no cleanup necessary for pData
+  //
+  return hr;
+}
+
+  
+
+HRESULT STDMETHODCALLTYPE
+    CAAFBWFImportDescriptor::PrependUnknownBWFChunk (IAAFRIFFChunk * pData)
+{
+  HRESULT hr;
+
+  ImplAAFBWFImportDescriptor * ptr;
+  ImplAAFRoot * pO;
+  pO = GetRepObject ();
+  assert (pO);
+  ptr = static_cast<ImplAAFBWFImportDescriptor*> (pO);
+  assert (ptr);
+
+  //
+  // set up for pData
+  //
+  ImplAAFRIFFChunk * internalpData = NULL;
+  if (pData)
+    {
+      HRESULT hStat;
+      IAAFRoot * iObj;
+      ImplAAFRoot *arg;
+      hStat = pData->QueryInterface (IID_IAAFRoot, (void **)&iObj);
+      assert (SUCCEEDED (hStat));
+      assert (iObj);
+      hStat = iObj->GetImplRep((void **)&arg);
+      assert (SUCCEEDED (hStat));
+      iObj->Release(); // we are through with this interface pointer.
+      internalpData = static_cast<ImplAAFRIFFChunk*>(arg);
+      assert (internalpData);
+    }
+
+  try
+    {
+      hr = ptr->PrependUnknownBWFChunk
        (internalpData);
     }
   catch (OMException& e)
@@ -396,8 +520,164 @@ HRESULT STDMETHODCALLTYPE
 
 
 
+
 HRESULT STDMETHODCALLTYPE
-    CAAFBWFImportDescriptor::CountUnknownBWFChunks (aafUInt32 *  pNumData)
+    CAAFBWFImportDescriptor::InsertUnknownBWFChunkAt (aafUInt32  index,
+        IAAFRIFFChunk * pData)
+{
+  HRESULT hr;
+
+  ImplAAFBWFImportDescriptor * ptr;
+  ImplAAFRoot * pO;
+  pO = GetRepObject ();
+  assert (pO);
+  ptr = static_cast<ImplAAFBWFImportDescriptor*> (pO);
+  assert (ptr);
+
+  //
+  // set up for pData
+  //
+  ImplAAFRIFFChunk * internalpData = NULL;
+  if (pData)
+    {
+      HRESULT hStat;
+      IAAFRoot * iObj;
+      ImplAAFRoot *arg;
+      hStat = pData->QueryInterface (IID_IAAFRoot, (void **)&iObj);
+      assert (SUCCEEDED (hStat));
+      assert (iObj);
+      hStat = iObj->GetImplRep((void **)&arg);
+      assert (SUCCEEDED (hStat));
+      iObj->Release(); // we are through with this interface pointer.
+      internalpData = static_cast<ImplAAFRIFFChunk*>(arg);
+      assert (internalpData);
+    }
+
+  try
+    {
+      hr = ptr->InsertUnknownBWFChunkAt
+       (index,
+        internalpData);
+    }
+  catch (OMException& e)
+    {
+      // OMExceptions should be handled by the impl code. However, if an
+      // unhandled OMException occurs, control reaches here. We must not
+      // allow the unhandled exception to reach the client code, so we
+      // turn it into a failure status code.
+      //
+      // If the OMException contains an HRESULT, it is returned to the
+      // client, if not, AAFRESULT_UNEXPECTED_EXCEPTION is returned.
+      //
+      hr = OMExceptionToResult(e, AAFRESULT_UNEXPECTED_EXCEPTION);
+    }
+  catch (OMAssertionViolation &)
+    {
+      // Control reaches here if there is a programming error in the
+      // impl code that was detected by an assertion violation.
+      // We must not allow the assertion to reach the client code so
+      // here we turn it into a failure status code.
+      //
+      hr = AAFRESULT_ASSERTION_VIOLATION;
+    }
+  catch (...)
+    {
+      // We CANNOT throw an exception out of a COM interface method!
+      // Return a reasonable exception code.
+      //
+      hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+    }
+
+  //
+  // no cleanup necessary for pData
+  //
+  return hr;
+}
+
+
+
+HRESULT STDMETHODCALLTYPE
+    CAAFBWFImportDescriptor::GetUnknownBWFChunkAt (aafUInt32  index,
+        IAAFRIFFChunk ** ppData)
+{
+  HRESULT hr;
+
+  ImplAAFBWFImportDescriptor * ptr;
+  ImplAAFRoot * pO;
+  pO = GetRepObject ();
+  assert (pO);
+  ptr = static_cast<ImplAAFBWFImportDescriptor*> (pO);
+  assert (ptr);
+
+  //
+  // set up for ppData
+  //
+  ImplAAFRIFFChunk * internalppData = NULL;
+  ImplAAFRIFFChunk ** pinternalppData = NULL;
+  if (ppData)
+    {
+      pinternalppData = &internalppData;
+    }
+
+  try
+    {
+      hr = ptr->GetUnknownBWFChunkAt
+       (index,
+        pinternalppData);
+    }
+  catch (OMException& e)
+    {
+      // OMExceptions should be handled by the impl code. However, if an
+      // unhandled OMException occurs, control reaches here. We must not
+      // allow the unhandled exception to reach the client code, so we
+      // turn it into a failure status code.
+      //
+      // If the OMException contains an HRESULT, it is returned to the
+      // client, if not, AAFRESULT_UNEXPECTED_EXCEPTION is returned.
+      //
+      hr = OMExceptionToResult(e, AAFRESULT_UNEXPECTED_EXCEPTION);
+    }
+  catch (OMAssertionViolation &)
+    {
+      // Control reaches here if there is a programming error in the
+      // impl code that was detected by an assertion violation.
+      // We must not allow the assertion to reach the client code so
+      // here we turn it into a failure status code.
+      //
+      hr = AAFRESULT_ASSERTION_VIOLATION;
+    }
+  catch (...)
+    {
+      // We CANNOT throw an exception out of a COM interface method!
+      // Return a reasonable exception code.
+      //
+      hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+    }
+
+  //
+  // cleanup for ppData
+  //
+  if (SUCCEEDED(hr))
+    {
+      IUnknown *pUnknown;
+      HRESULT hStat;
+
+      if (internalppData)
+        {
+          pUnknown = static_cast<IUnknown *> (internalppData->GetContainer());
+          hStat = pUnknown->QueryInterface(IID_IAAFRIFFChunk, (void **)ppData);
+          assert (SUCCEEDED (hStat));
+          //pUnknown->Release();
+          internalppData->ReleaseReference(); // We are through with this pointer.
+        }
+    }
+  return hr;
+}
+
+
+
+HRESULT STDMETHODCALLTYPE
+    CAAFBWFImportDescriptor::RemoveUnknownBWFChunkAt (aafUInt32  index)
 {
   HRESULT hr;
 
@@ -411,8 +691,8 @@ HRESULT STDMETHODCALLTYPE
 
   try
     {
-      hr = ptr->CountUnknownBWFChunks
-       (pNumData);
+      hr = ptr->RemoveUnknownBWFChunkAt
+       (index);
     }
   catch (OMException& e)
     {
@@ -527,79 +807,7 @@ HRESULT STDMETHODCALLTYPE
 
 
 HRESULT STDMETHODCALLTYPE
-    CAAFBWFImportDescriptor::RemoveUnknownBWFChunks (IAAFRIFFChunk * pData)
-{
-  HRESULT hr;
-
-  ImplAAFBWFImportDescriptor * ptr;
-  ImplAAFRoot * pO;
-  pO = GetRepObject ();
-  assert (pO);
-  ptr = static_cast<ImplAAFBWFImportDescriptor*> (pO);
-  assert (ptr);
-
-  //
-  // set up for pData
-  //
-  ImplAAFRIFFChunk * internalpData = NULL;
-  if (pData)
-    {
-      HRESULT hStat;
-      IAAFRoot * iObj;
-      ImplAAFRoot *arg;
-      hStat = pData->QueryInterface (IID_IAAFRoot, (void **)&iObj);
-      assert (SUCCEEDED (hStat));
-      assert (iObj);
-      hStat = iObj->GetImplRep((void **)&arg);
-      assert (SUCCEEDED (hStat));
-      iObj->Release(); // we are through with this interface pointer.
-      internalpData = static_cast<ImplAAFRIFFChunk*>(arg);
-      assert (internalpData);
-    }
-
-  try
-    {
-      hr = ptr->RemoveUnknownBWFChunks
-       (internalpData);
-    }
-  catch (OMException& e)
-    {
-      // OMExceptions should be handled by the impl code. However, if an
-      // unhandled OMException occurs, control reaches here. We must not
-      // allow the unhandled exception to reach the client code, so we
-      // turn it into a failure status code.
-      //
-      // If the OMException contains an HRESULT, it is returned to the
-      // client, if not, AAFRESULT_UNEXPECTED_EXCEPTION is returned.
-      //
-      hr = OMExceptionToResult(e, AAFRESULT_UNEXPECTED_EXCEPTION);
-    }
-  catch (OMAssertionViolation &)
-    {
-      // Control reaches here if there is a programming error in the
-      // impl code that was detected by an assertion violation.
-      // We must not allow the assertion to reach the client code so
-      // here we turn it into a failure status code.
-      //
-      hr = AAFRESULT_ASSERTION_VIOLATION;
-    }
-  catch (...)
-    {
-      // We CANNOT throw an exception out of a COM interface method!
-      // Return a reasonable exception code.
-      //
-      hr = AAFRESULT_UNEXPECTED_EXCEPTION;
-    }
-
-  //
-  // no cleanup necessary for pData
-  //
-  return hr;
-}
-
-
-HRESULT STDMETHODCALLTYPE
-    CAAFBWFImportDescriptor::SetBextCodingHistory (aafCharacter_constptr  pBextCodingHistory)
+    CAAFBWFImportDescriptor::SetCodingHistory (aafCharacter_constptr  pCodingHistory)
 {
   HRESULT hr;
 
@@ -613,8 +821,8 @@ HRESULT STDMETHODCALLTYPE
 
   try
     {
-      hr = ptr->SetBextCodingHistory
-       (pBextCodingHistory);
+      hr = ptr->SetCodingHistory
+       (pCodingHistory);
     }
   catch (OMException& e)
     {
@@ -651,7 +859,7 @@ HRESULT STDMETHODCALLTYPE
 
 
 HRESULT STDMETHODCALLTYPE
-    CAAFBWFImportDescriptor::GetBextCodingHistory (aafCharacter *  pBextCodingHistory,
+    CAAFBWFImportDescriptor::GetCodingHistory (aafCharacter *  pCodingHistory,
         aafUInt32  bufSize)
 {
   HRESULT hr;
@@ -666,8 +874,8 @@ HRESULT STDMETHODCALLTYPE
 
   try
     {
-      hr = ptr->GetBextCodingHistory
-       (pBextCodingHistory,
+      hr = ptr->GetCodingHistory
+       (pCodingHistory,
         bufSize);
     }
   catch (OMException& e)
@@ -705,7 +913,7 @@ HRESULT STDMETHODCALLTYPE
 
 
 HRESULT STDMETHODCALLTYPE
-    CAAFBWFImportDescriptor::GetBextCodingHistoryBufLen (aafUInt32 *  pBufSize)
+    CAAFBWFImportDescriptor::GetCodingHistoryBufLen (aafUInt32 *  pBufSize)
 {
   HRESULT hr;
 
@@ -719,7 +927,7 @@ HRESULT STDMETHODCALLTYPE
 
   try
     {
-      hr = ptr->GetBextCodingHistoryBufLen
+      hr = ptr->GetCodingHistoryBufLen
        (pBufSize);
     }
   catch (OMException& e)
@@ -756,7 +964,7 @@ HRESULT STDMETHODCALLTYPE
 
      
 HRESULT STDMETHODCALLTYPE
-    CAAFBWFImportDescriptor::SetQltyBasicData (aafCharacter_constptr  pQltyBasicData)
+    CAAFBWFImportDescriptor::SetBasicData (aafCharacter_constptr  pBasicData)
 {
   HRESULT hr;
 
@@ -770,8 +978,8 @@ HRESULT STDMETHODCALLTYPE
 
   try
     {
-      hr = ptr->SetQltyBasicData
-       (pQltyBasicData);
+      hr = ptr->SetBasicData
+       (pBasicData);
     }
   catch (OMException& e)
     {
@@ -808,7 +1016,7 @@ HRESULT STDMETHODCALLTYPE
 
 
 HRESULT STDMETHODCALLTYPE
-    CAAFBWFImportDescriptor::GetQltyBasicData (aafCharacter *  pQltyBasicData,
+    CAAFBWFImportDescriptor::GetBasicData (aafCharacter *  pBasicData,
         aafUInt32  bufSize)
 {
   HRESULT hr;
@@ -823,8 +1031,8 @@ HRESULT STDMETHODCALLTYPE
 
   try
     {
-      hr = ptr->GetQltyBasicData
-       (pQltyBasicData,
+      hr = ptr->GetBasicData
+       (pBasicData,
         bufSize);
     }
   catch (OMException& e)
@@ -862,7 +1070,7 @@ HRESULT STDMETHODCALLTYPE
 
 
 HRESULT STDMETHODCALLTYPE
-    CAAFBWFImportDescriptor::GetQltyBasicDataBufLen (aafUInt32 *  pBufSize)
+    CAAFBWFImportDescriptor::GetBasicDataBufLen (aafUInt32 *  pBufSize)
 {
   HRESULT hr;
 
@@ -876,7 +1084,7 @@ HRESULT STDMETHODCALLTYPE
 
   try
     {
-      hr = ptr->GetQltyBasicDataBufLen
+      hr = ptr->GetBasicDataBufLen
        (pBufSize);
     }
   catch (OMException& e)
@@ -913,7 +1121,7 @@ HRESULT STDMETHODCALLTYPE
 
 
 HRESULT STDMETHODCALLTYPE
-    CAAFBWFImportDescriptor::SetQltyStartOfModulation (aafCharacter_constptr  pQltyStartOfModulation)
+    CAAFBWFImportDescriptor::SetStartOfModulation (aafCharacter_constptr  pStartOfModulation)
 {
   HRESULT hr;
 
@@ -927,8 +1135,8 @@ HRESULT STDMETHODCALLTYPE
 
   try
     {
-      hr = ptr->SetQltyStartOfModulation
-       (pQltyStartOfModulation);
+      hr = ptr->SetStartOfModulation
+       (pStartOfModulation);
     }
   catch (OMException& e)
     {
@@ -965,7 +1173,7 @@ HRESULT STDMETHODCALLTYPE
 
 
 HRESULT STDMETHODCALLTYPE
-    CAAFBWFImportDescriptor::GetQltyStartOfModulation (aafCharacter *  pQltyStartOfModulation,
+    CAAFBWFImportDescriptor::GetStartOfModulation (aafCharacter *  pStartOfModulation,
         aafUInt32  bufSize)
 {
   HRESULT hr;
@@ -980,8 +1188,8 @@ HRESULT STDMETHODCALLTYPE
 
   try
     {
-      hr = ptr->GetQltyStartOfModulation
-       (pQltyStartOfModulation,
+      hr = ptr->GetStartOfModulation
+       (pStartOfModulation,
         bufSize);
     }
   catch (OMException& e)
@@ -1019,7 +1227,7 @@ HRESULT STDMETHODCALLTYPE
 
 
 HRESULT STDMETHODCALLTYPE
-    CAAFBWFImportDescriptor::GetQltyStartOfModulationBufLen (aafUInt32 *  pBufSize)
+    CAAFBWFImportDescriptor::GetStartOfModulationBufLen (aafUInt32 *  pBufSize)
 {
   HRESULT hr;
 
@@ -1033,321 +1241,7 @@ HRESULT STDMETHODCALLTYPE
 
   try
     {
-      hr = ptr->GetQltyStartOfModulationBufLen
-       (pBufSize);
-    }
-  catch (OMException& e)
-    {
-      // OMExceptions should be handled by the impl code. However, if an
-      // unhandled OMException occurs, control reaches here. We must not
-      // allow the unhandled exception to reach the client code, so we
-      // turn it into a failure status code.
-      //
-      // If the OMException contains an HRESULT, it is returned to the
-      // client, if not, AAFRESULT_UNEXPECTED_EXCEPTION is returned.
-      //
-      hr = OMExceptionToResult(e, AAFRESULT_UNEXPECTED_EXCEPTION);
-    }
-  catch (OMAssertionViolation &)
-    {
-      // Control reaches here if there is a programming error in the
-      // impl code that was detected by an assertion violation.
-      // We must not allow the assertion to reach the client code so
-      // here we turn it into a failure status code.
-      //
-      hr = AAFRESULT_ASSERTION_VIOLATION;
-    }
-  catch (...)
-    {
-      // We CANNOT throw an exception out of a COM interface method!
-      // Return a reasonable exception code.
-      //
-      hr = AAFRESULT_UNEXPECTED_EXCEPTION;
-    }
-
-  return hr;
-}
-
-     
-HRESULT STDMETHODCALLTYPE
-    CAAFBWFImportDescriptor::SetQltyQualityEvent (aafCharacter_constptr  pQltyQualityEvent)
-{
-  HRESULT hr;
-
-  ImplAAFBWFImportDescriptor * ptr;
-  ImplAAFRoot * pO;
-  pO = GetRepObject ();
-  assert (pO);
-  ptr = static_cast<ImplAAFBWFImportDescriptor*> (pO);
-  assert (ptr);
-
-
-  try
-    {
-      hr = ptr->SetQltyQualityEvent
-       (pQltyQualityEvent);
-    }
-  catch (OMException& e)
-    {
-      // OMExceptions should be handled by the impl code. However, if an
-      // unhandled OMException occurs, control reaches here. We must not
-      // allow the unhandled exception to reach the client code, so we
-      // turn it into a failure status code.
-      //
-      // If the OMException contains an HRESULT, it is returned to the
-      // client, if not, AAFRESULT_UNEXPECTED_EXCEPTION is returned.
-      //
-      hr = OMExceptionToResult(e, AAFRESULT_UNEXPECTED_EXCEPTION);
-    }
-  catch (OMAssertionViolation &)
-    {
-      // Control reaches here if there is a programming error in the
-      // impl code that was detected by an assertion violation.
-      // We must not allow the assertion to reach the client code so
-      // here we turn it into a failure status code.
-      //
-      hr = AAFRESULT_ASSERTION_VIOLATION;
-    }
-  catch (...)
-    {
-      // We CANNOT throw an exception out of a COM interface method!
-      // Return a reasonable exception code.
-      //
-      hr = AAFRESULT_UNEXPECTED_EXCEPTION;
-    }
-
-  return hr;
-}
-
-
-
-HRESULT STDMETHODCALLTYPE
-    CAAFBWFImportDescriptor::GetQltyQualityEvent (aafCharacter *  pQltyQualityEvent,
-        aafUInt32  bufSize)
-{
-  HRESULT hr;
-
-  ImplAAFBWFImportDescriptor * ptr;
-  ImplAAFRoot * pO;
-  pO = GetRepObject ();
-  assert (pO);
-  ptr = static_cast<ImplAAFBWFImportDescriptor*> (pO);
-  assert (ptr);
-
-
-  try
-    {
-      hr = ptr->GetQltyQualityEvent
-       (pQltyQualityEvent,
-        bufSize);
-    }
-  catch (OMException& e)
-    {
-      // OMExceptions should be handled by the impl code. However, if an
-      // unhandled OMException occurs, control reaches here. We must not
-      // allow the unhandled exception to reach the client code, so we
-      // turn it into a failure status code.
-      //
-      // If the OMException contains an HRESULT, it is returned to the
-      // client, if not, AAFRESULT_UNEXPECTED_EXCEPTION is returned.
-      //
-      hr = OMExceptionToResult(e, AAFRESULT_UNEXPECTED_EXCEPTION);
-    }
-  catch (OMAssertionViolation &)
-    {
-      // Control reaches here if there is a programming error in the
-      // impl code that was detected by an assertion violation.
-      // We must not allow the assertion to reach the client code so
-      // here we turn it into a failure status code.
-      //
-      hr = AAFRESULT_ASSERTION_VIOLATION;
-    }
-  catch (...)
-    {
-      // We CANNOT throw an exception out of a COM interface method!
-      // Return a reasonable exception code.
-      //
-      hr = AAFRESULT_UNEXPECTED_EXCEPTION;
-    }
-
-  return hr;
-}
-
-
-
-HRESULT STDMETHODCALLTYPE
-    CAAFBWFImportDescriptor::GetQltyQualityEventBufLen (aafUInt32 *  pBufSize)
-{
-  HRESULT hr;
-
-  ImplAAFBWFImportDescriptor * ptr;
-  ImplAAFRoot * pO;
-  pO = GetRepObject ();
-  assert (pO);
-  ptr = static_cast<ImplAAFBWFImportDescriptor*> (pO);
-  assert (ptr);
-
-
-  try
-    {
-      hr = ptr->GetQltyQualityEventBufLen
-       (pBufSize);
-    }
-  catch (OMException& e)
-    {
-      // OMExceptions should be handled by the impl code. However, if an
-      // unhandled OMException occurs, control reaches here. We must not
-      // allow the unhandled exception to reach the client code, so we
-      // turn it into a failure status code.
-      //
-      // If the OMException contains an HRESULT, it is returned to the
-      // client, if not, AAFRESULT_UNEXPECTED_EXCEPTION is returned.
-      //
-      hr = OMExceptionToResult(e, AAFRESULT_UNEXPECTED_EXCEPTION);
-    }
-  catch (OMAssertionViolation &)
-    {
-      // Control reaches here if there is a programming error in the
-      // impl code that was detected by an assertion violation.
-      // We must not allow the assertion to reach the client code so
-      // here we turn it into a failure status code.
-      //
-      hr = AAFRESULT_ASSERTION_VIOLATION;
-    }
-  catch (...)
-    {
-      // We CANNOT throw an exception out of a COM interface method!
-      // Return a reasonable exception code.
-      //
-      hr = AAFRESULT_UNEXPECTED_EXCEPTION;
-    }
-
-  return hr;
-}
-
-
-HRESULT STDMETHODCALLTYPE
-    CAAFBWFImportDescriptor::SetQltyEndOfModulation (aafCharacter_constptr  pQltyEndOfModulation)
-{
-  HRESULT hr;
-
-  ImplAAFBWFImportDescriptor * ptr;
-  ImplAAFRoot * pO;
-  pO = GetRepObject ();
-  assert (pO);
-  ptr = static_cast<ImplAAFBWFImportDescriptor*> (pO);
-  assert (ptr);
-
-
-  try
-    {
-      hr = ptr->SetQltyEndOfModulation
-       (pQltyEndOfModulation);
-    }
-  catch (OMException& e)
-    {
-      // OMExceptions should be handled by the impl code. However, if an
-      // unhandled OMException occurs, control reaches here. We must not
-      // allow the unhandled exception to reach the client code, so we
-      // turn it into a failure status code.
-      //
-      // If the OMException contains an HRESULT, it is returned to the
-      // client, if not, AAFRESULT_UNEXPECTED_EXCEPTION is returned.
-      //
-      hr = OMExceptionToResult(e, AAFRESULT_UNEXPECTED_EXCEPTION);
-    }
-  catch (OMAssertionViolation &)
-    {
-      // Control reaches here if there is a programming error in the
-      // impl code that was detected by an assertion violation.
-      // We must not allow the assertion to reach the client code so
-      // here we turn it into a failure status code.
-      //
-      hr = AAFRESULT_ASSERTION_VIOLATION;
-    }
-  catch (...)
-    {
-      // We CANNOT throw an exception out of a COM interface method!
-      // Return a reasonable exception code.
-      //
-      hr = AAFRESULT_UNEXPECTED_EXCEPTION;
-    }
-
-  return hr;
-}
-
-
-
-HRESULT STDMETHODCALLTYPE
-    CAAFBWFImportDescriptor::GetQltyEndOfModulation (aafCharacter *  pQltyEndOfModulation,
-        aafUInt32  bufSize)
-{
-  HRESULT hr;
-
-  ImplAAFBWFImportDescriptor * ptr;
-  ImplAAFRoot * pO;
-  pO = GetRepObject ();
-  assert (pO);
-  ptr = static_cast<ImplAAFBWFImportDescriptor*> (pO);
-  assert (ptr);
-
-
-  try
-    {
-      hr = ptr->GetQltyEndOfModulation
-       (pQltyEndOfModulation,
-        bufSize);
-    }
-  catch (OMException& e)
-    {
-      // OMExceptions should be handled by the impl code. However, if an
-      // unhandled OMException occurs, control reaches here. We must not
-      // allow the unhandled exception to reach the client code, so we
-      // turn it into a failure status code.
-      //
-      // If the OMException contains an HRESULT, it is returned to the
-      // client, if not, AAFRESULT_UNEXPECTED_EXCEPTION is returned.
-      //
-      hr = OMExceptionToResult(e, AAFRESULT_UNEXPECTED_EXCEPTION);
-    }
-  catch (OMAssertionViolation &)
-    {
-      // Control reaches here if there is a programming error in the
-      // impl code that was detected by an assertion violation.
-      // We must not allow the assertion to reach the client code so
-      // here we turn it into a failure status code.
-      //
-      hr = AAFRESULT_ASSERTION_VIOLATION;
-    }
-  catch (...)
-    {
-      // We CANNOT throw an exception out of a COM interface method!
-      // Return a reasonable exception code.
-      //
-      hr = AAFRESULT_UNEXPECTED_EXCEPTION;
-    }
-
-  return hr;
-}
-
-
-
-HRESULT STDMETHODCALLTYPE
-    CAAFBWFImportDescriptor::GetQltyEndOfModulationBufLen (aafUInt32 *  pBufSize)
-{
-  HRESULT hr;
-
-  ImplAAFBWFImportDescriptor * ptr;
-  ImplAAFRoot * pO;
-  pO = GetRepObject ();
-  assert (pO);
-  ptr = static_cast<ImplAAFBWFImportDescriptor*> (pO);
-  assert (ptr);
-
-
-  try
-    {
-      hr = ptr->GetQltyEndOfModulationBufLen
+      hr = ptr->GetStartOfModulationBufLen
        (pBufSize);
     }
   catch (OMException& e)
@@ -1384,7 +1278,7 @@ HRESULT STDMETHODCALLTYPE
 
      
 HRESULT STDMETHODCALLTYPE
-    CAAFBWFImportDescriptor::SetQltyQualityParameter (aafCharacter_constptr  pQltyQualityParameter)
+    CAAFBWFImportDescriptor::SetQualityEvent (aafCharacter_constptr  pQualityEvent)
 {
   HRESULT hr;
 
@@ -1398,8 +1292,8 @@ HRESULT STDMETHODCALLTYPE
 
   try
     {
-      hr = ptr->SetQltyQualityParameter
-       (pQltyQualityParameter);
+      hr = ptr->SetQualityEvent
+       (pQualityEvent);
     }
   catch (OMException& e)
     {
@@ -1436,7 +1330,7 @@ HRESULT STDMETHODCALLTYPE
 
 
 HRESULT STDMETHODCALLTYPE
-    CAAFBWFImportDescriptor::GetQltyQualityParameter (aafCharacter *  pQltyQualityParameter,
+    CAAFBWFImportDescriptor::GetQualityEvent (aafCharacter *  pQualityEvent,
         aafUInt32  bufSize)
 {
   HRESULT hr;
@@ -1451,8 +1345,8 @@ HRESULT STDMETHODCALLTYPE
 
   try
     {
-      hr = ptr->GetQltyQualityParameter
-       (pQltyQualityParameter,
+      hr = ptr->GetQualityEvent
+       (pQualityEvent,
         bufSize);
     }
   catch (OMException& e)
@@ -1490,7 +1384,7 @@ HRESULT STDMETHODCALLTYPE
 
 
 HRESULT STDMETHODCALLTYPE
-    CAAFBWFImportDescriptor::GetQltyQualityParameterBufLen (aafUInt32 *  pBufSize)
+    CAAFBWFImportDescriptor::GetQualityEventBufLen (aafUInt32 *  pBufSize)
 {
   HRESULT hr;
 
@@ -1504,7 +1398,164 @@ HRESULT STDMETHODCALLTYPE
 
   try
     {
-      hr = ptr->GetQltyQualityParameterBufLen
+      hr = ptr->GetQualityEventBufLen
+       (pBufSize);
+    }
+  catch (OMException& e)
+    {
+      // OMExceptions should be handled by the impl code. However, if an
+      // unhandled OMException occurs, control reaches here. We must not
+      // allow the unhandled exception to reach the client code, so we
+      // turn it into a failure status code.
+      //
+      // If the OMException contains an HRESULT, it is returned to the
+      // client, if not, AAFRESULT_UNEXPECTED_EXCEPTION is returned.
+      //
+      hr = OMExceptionToResult(e, AAFRESULT_UNEXPECTED_EXCEPTION);
+    }
+  catch (OMAssertionViolation &)
+    {
+      // Control reaches here if there is a programming error in the
+      // impl code that was detected by an assertion violation.
+      // We must not allow the assertion to reach the client code so
+      // here we turn it into a failure status code.
+      //
+      hr = AAFRESULT_ASSERTION_VIOLATION;
+    }
+  catch (...)
+    {
+      // We CANNOT throw an exception out of a COM interface method!
+      // Return a reasonable exception code.
+      //
+      hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+    }
+
+  return hr;
+}
+
+
+HRESULT STDMETHODCALLTYPE
+    CAAFBWFImportDescriptor::SetEndOfModulation (aafCharacter_constptr  pEndOfModulation)
+{
+  HRESULT hr;
+
+  ImplAAFBWFImportDescriptor * ptr;
+  ImplAAFRoot * pO;
+  pO = GetRepObject ();
+  assert (pO);
+  ptr = static_cast<ImplAAFBWFImportDescriptor*> (pO);
+  assert (ptr);
+
+
+  try
+    {
+      hr = ptr->SetEndOfModulation
+       (pEndOfModulation);
+    }
+  catch (OMException& e)
+    {
+      // OMExceptions should be handled by the impl code. However, if an
+      // unhandled OMException occurs, control reaches here. We must not
+      // allow the unhandled exception to reach the client code, so we
+      // turn it into a failure status code.
+      //
+      // If the OMException contains an HRESULT, it is returned to the
+      // client, if not, AAFRESULT_UNEXPECTED_EXCEPTION is returned.
+      //
+      hr = OMExceptionToResult(e, AAFRESULT_UNEXPECTED_EXCEPTION);
+    }
+  catch (OMAssertionViolation &)
+    {
+      // Control reaches here if there is a programming error in the
+      // impl code that was detected by an assertion violation.
+      // We must not allow the assertion to reach the client code so
+      // here we turn it into a failure status code.
+      //
+      hr = AAFRESULT_ASSERTION_VIOLATION;
+    }
+  catch (...)
+    {
+      // We CANNOT throw an exception out of a COM interface method!
+      // Return a reasonable exception code.
+      //
+      hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+    }
+
+  return hr;
+}
+
+
+
+HRESULT STDMETHODCALLTYPE
+    CAAFBWFImportDescriptor::GetEndOfModulation (aafCharacter *  pEndOfModulation,
+        aafUInt32  bufSize)
+{
+  HRESULT hr;
+
+  ImplAAFBWFImportDescriptor * ptr;
+  ImplAAFRoot * pO;
+  pO = GetRepObject ();
+  assert (pO);
+  ptr = static_cast<ImplAAFBWFImportDescriptor*> (pO);
+  assert (ptr);
+
+
+  try
+    {
+      hr = ptr->GetEndOfModulation
+       (pEndOfModulation,
+        bufSize);
+    }
+  catch (OMException& e)
+    {
+      // OMExceptions should be handled by the impl code. However, if an
+      // unhandled OMException occurs, control reaches here. We must not
+      // allow the unhandled exception to reach the client code, so we
+      // turn it into a failure status code.
+      //
+      // If the OMException contains an HRESULT, it is returned to the
+      // client, if not, AAFRESULT_UNEXPECTED_EXCEPTION is returned.
+      //
+      hr = OMExceptionToResult(e, AAFRESULT_UNEXPECTED_EXCEPTION);
+    }
+  catch (OMAssertionViolation &)
+    {
+      // Control reaches here if there is a programming error in the
+      // impl code that was detected by an assertion violation.
+      // We must not allow the assertion to reach the client code so
+      // here we turn it into a failure status code.
+      //
+      hr = AAFRESULT_ASSERTION_VIOLATION;
+    }
+  catch (...)
+    {
+      // We CANNOT throw an exception out of a COM interface method!
+      // Return a reasonable exception code.
+      //
+      hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+    }
+
+  return hr;
+}
+
+
+
+HRESULT STDMETHODCALLTYPE
+    CAAFBWFImportDescriptor::GetEndOfModulationBufLen (aafUInt32 *  pBufSize)
+{
+  HRESULT hr;
+
+  ImplAAFBWFImportDescriptor * ptr;
+  ImplAAFRoot * pO;
+  pO = GetRepObject ();
+  assert (pO);
+  ptr = static_cast<ImplAAFBWFImportDescriptor*> (pO);
+  assert (ptr);
+
+
+  try
+    {
+      hr = ptr->GetEndOfModulationBufLen
        (pBufSize);
     }
   catch (OMException& e)
@@ -1541,7 +1592,7 @@ HRESULT STDMETHODCALLTYPE
 
      
 HRESULT STDMETHODCALLTYPE
-    CAAFBWFImportDescriptor::SetQltyOperatorComment (aafCharacter_constptr  pQltyOperatorComment)
+    CAAFBWFImportDescriptor::SetQualityParameter (aafCharacter_constptr  pQualityParameter)
 {
   HRESULT hr;
 
@@ -1555,8 +1606,8 @@ HRESULT STDMETHODCALLTYPE
 
   try
     {
-      hr = ptr->SetQltyOperatorComment
-       (pQltyOperatorComment);
+      hr = ptr->SetQualityParameter
+       (pQualityParameter);
     }
   catch (OMException& e)
     {
@@ -1593,7 +1644,7 @@ HRESULT STDMETHODCALLTYPE
 
 
 HRESULT STDMETHODCALLTYPE
-    CAAFBWFImportDescriptor::GetQltyOperatorComment (aafCharacter *  pQltyOperatorComment,
+    CAAFBWFImportDescriptor::GetQualityParameter (aafCharacter *  pQualityParameter,
         aafUInt32  bufSize)
 {
   HRESULT hr;
@@ -1608,8 +1659,8 @@ HRESULT STDMETHODCALLTYPE
 
   try
     {
-      hr = ptr->GetQltyOperatorComment
-       (pQltyOperatorComment,
+      hr = ptr->GetQualityParameter
+       (pQualityParameter,
         bufSize);
     }
   catch (OMException& e)
@@ -1647,7 +1698,7 @@ HRESULT STDMETHODCALLTYPE
 
 
 HRESULT STDMETHODCALLTYPE
-    CAAFBWFImportDescriptor::GetQltyOperatorCommentBufLen (aafUInt32 *  pBufSize)
+    CAAFBWFImportDescriptor::GetQualityParameterBufLen (aafUInt32 *  pBufSize)
 {
   HRESULT hr;
 
@@ -1661,7 +1712,7 @@ HRESULT STDMETHODCALLTYPE
 
   try
     {
-      hr = ptr->GetQltyOperatorCommentBufLen
+      hr = ptr->GetQualityParameterBufLen
        (pBufSize);
     }
   catch (OMException& e)
@@ -1698,7 +1749,7 @@ HRESULT STDMETHODCALLTYPE
 
      
 HRESULT STDMETHODCALLTYPE
-    CAAFBWFImportDescriptor::SetQltyCueSheet (aafCharacter_constptr  pQltyCueSheet)
+    CAAFBWFImportDescriptor::SetOperatorComment (aafCharacter_constptr  pOperatorComment)
 {
   HRESULT hr;
 
@@ -1712,8 +1763,8 @@ HRESULT STDMETHODCALLTYPE
 
   try
     {
-      hr = ptr->SetQltyCueSheet
-       (pQltyCueSheet);
+      hr = ptr->SetOperatorComment
+       (pOperatorComment);
     }
   catch (OMException& e)
     {
@@ -1750,7 +1801,7 @@ HRESULT STDMETHODCALLTYPE
 
 
 HRESULT STDMETHODCALLTYPE
-    CAAFBWFImportDescriptor::GetQltyCueSheet (aafCharacter *  pQltyCueSheet,
+    CAAFBWFImportDescriptor::GetOperatorComment (aafCharacter *  pOperatorComment,
         aafUInt32  bufSize)
 {
   HRESULT hr;
@@ -1765,8 +1816,8 @@ HRESULT STDMETHODCALLTYPE
 
   try
     {
-      hr = ptr->GetQltyCueSheet
-       (pQltyCueSheet,
+      hr = ptr->GetOperatorComment
+       (pOperatorComment,
         bufSize);
     }
   catch (OMException& e)
@@ -1804,7 +1855,7 @@ HRESULT STDMETHODCALLTYPE
 
 
 HRESULT STDMETHODCALLTYPE
-    CAAFBWFImportDescriptor::GetQltyCueSheetBufLen (aafUInt32 *  pBufSize)
+    CAAFBWFImportDescriptor::GetOperatorCommentBufLen (aafUInt32 *  pBufSize)
 {
   HRESULT hr;
 
@@ -1818,7 +1869,164 @@ HRESULT STDMETHODCALLTYPE
 
   try
     {
-      hr = ptr->GetQltyCueSheetBufLen
+      hr = ptr->GetOperatorCommentBufLen
+       (pBufSize);
+    }
+  catch (OMException& e)
+    {
+      // OMExceptions should be handled by the impl code. However, if an
+      // unhandled OMException occurs, control reaches here. We must not
+      // allow the unhandled exception to reach the client code, so we
+      // turn it into a failure status code.
+      //
+      // If the OMException contains an HRESULT, it is returned to the
+      // client, if not, AAFRESULT_UNEXPECTED_EXCEPTION is returned.
+      //
+      hr = OMExceptionToResult(e, AAFRESULT_UNEXPECTED_EXCEPTION);
+    }
+  catch (OMAssertionViolation &)
+    {
+      // Control reaches here if there is a programming error in the
+      // impl code that was detected by an assertion violation.
+      // We must not allow the assertion to reach the client code so
+      // here we turn it into a failure status code.
+      //
+      hr = AAFRESULT_ASSERTION_VIOLATION;
+    }
+  catch (...)
+    {
+      // We CANNOT throw an exception out of a COM interface method!
+      // Return a reasonable exception code.
+      //
+      hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+    }
+
+  return hr;
+}
+
+     
+HRESULT STDMETHODCALLTYPE
+    CAAFBWFImportDescriptor::SetCueSheet (aafCharacter_constptr  pCueSheet)
+{
+  HRESULT hr;
+
+  ImplAAFBWFImportDescriptor * ptr;
+  ImplAAFRoot * pO;
+  pO = GetRepObject ();
+  assert (pO);
+  ptr = static_cast<ImplAAFBWFImportDescriptor*> (pO);
+  assert (ptr);
+
+
+  try
+    {
+      hr = ptr->SetCueSheet
+       (pCueSheet);
+    }
+  catch (OMException& e)
+    {
+      // OMExceptions should be handled by the impl code. However, if an
+      // unhandled OMException occurs, control reaches here. We must not
+      // allow the unhandled exception to reach the client code, so we
+      // turn it into a failure status code.
+      //
+      // If the OMException contains an HRESULT, it is returned to the
+      // client, if not, AAFRESULT_UNEXPECTED_EXCEPTION is returned.
+      //
+      hr = OMExceptionToResult(e, AAFRESULT_UNEXPECTED_EXCEPTION);
+    }
+  catch (OMAssertionViolation &)
+    {
+      // Control reaches here if there is a programming error in the
+      // impl code that was detected by an assertion violation.
+      // We must not allow the assertion to reach the client code so
+      // here we turn it into a failure status code.
+      //
+      hr = AAFRESULT_ASSERTION_VIOLATION;
+    }
+  catch (...)
+    {
+      // We CANNOT throw an exception out of a COM interface method!
+      // Return a reasonable exception code.
+      //
+      hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+    }
+
+  return hr;
+}
+
+
+
+HRESULT STDMETHODCALLTYPE
+    CAAFBWFImportDescriptor::GetCueSheet (aafCharacter *  pCueSheet,
+        aafUInt32  bufSize)
+{
+  HRESULT hr;
+
+  ImplAAFBWFImportDescriptor * ptr;
+  ImplAAFRoot * pO;
+  pO = GetRepObject ();
+  assert (pO);
+  ptr = static_cast<ImplAAFBWFImportDescriptor*> (pO);
+  assert (ptr);
+
+
+  try
+    {
+      hr = ptr->GetCueSheet
+       (pCueSheet,
+        bufSize);
+    }
+  catch (OMException& e)
+    {
+      // OMExceptions should be handled by the impl code. However, if an
+      // unhandled OMException occurs, control reaches here. We must not
+      // allow the unhandled exception to reach the client code, so we
+      // turn it into a failure status code.
+      //
+      // If the OMException contains an HRESULT, it is returned to the
+      // client, if not, AAFRESULT_UNEXPECTED_EXCEPTION is returned.
+      //
+      hr = OMExceptionToResult(e, AAFRESULT_UNEXPECTED_EXCEPTION);
+    }
+  catch (OMAssertionViolation &)
+    {
+      // Control reaches here if there is a programming error in the
+      // impl code that was detected by an assertion violation.
+      // We must not allow the assertion to reach the client code so
+      // here we turn it into a failure status code.
+      //
+      hr = AAFRESULT_ASSERTION_VIOLATION;
+    }
+  catch (...)
+    {
+      // We CANNOT throw an exception out of a COM interface method!
+      // Return a reasonable exception code.
+      //
+      hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+    }
+
+  return hr;
+}
+
+
+
+HRESULT STDMETHODCALLTYPE
+    CAAFBWFImportDescriptor::GetCueSheetBufLen (aafUInt32 *  pBufSize)
+{
+  HRESULT hr;
+
+  ImplAAFBWFImportDescriptor * ptr;
+  ImplAAFRoot * pO;
+  pO = GetRepObject ();
+  assert (pO);
+  ptr = static_cast<ImplAAFBWFImportDescriptor*> (pO);
+  assert (ptr);
+
+
+  try
+    {
+      hr = ptr->GetCueSheetBufLen
        (pBufSize);
     }
   catch (OMException& e)

@@ -69,7 +69,7 @@ CEnumAAFSubDescriptors::~CEnumAAFSubDescriptors ()
 
 
 HRESULT STDMETHODCALLTYPE
-    CEnumAAFSubDescriptors::NextOne (IAAFSubDescriptor ** ppSubDescriptor)
+    CEnumAAFSubDescriptors::NextOne (IAAFSubDescriptor ** ppSubDescriptors)
 {
   HRESULT hr;
 
@@ -81,19 +81,19 @@ HRESULT STDMETHODCALLTYPE
   assert (ptr);
 
   //
-  // set up for ppSubDescriptor
+  // set up for ppSubDescriptors
   //
-  ImplAAFSubDescriptor * internalppSubDescriptor = NULL;
-  ImplAAFSubDescriptor ** pinternalppSubDescriptor = NULL;
-  if (ppSubDescriptor)
+  ImplAAFSubDescriptor * internalppSubDescriptors = NULL;
+  ImplAAFSubDescriptor ** pinternalppSubDescriptors = NULL;
+  if (ppSubDescriptors)
     {
-      pinternalppSubDescriptor = &internalppSubDescriptor;
+      pinternalppSubDescriptors = &internalppSubDescriptors;
     }
 
   try
     {
       hr = ptr->NextOne
-       (pinternalppSubDescriptor);
+       (pinternalppSubDescriptors);
     }
   catch (OMException& e)
     {
@@ -125,20 +125,20 @@ HRESULT STDMETHODCALLTYPE
     }
 
   //
-  // cleanup for ppSubDescriptor
+  // cleanup for ppSubDescriptors
   //
   if (SUCCEEDED(hr))
     {
       IUnknown *pUnknown;
       HRESULT hStat;
 
-      if (internalppSubDescriptor)
+      if (internalppSubDescriptors)
         {
-          pUnknown = static_cast<IUnknown *> (internalppSubDescriptor->GetContainer());
-          hStat = pUnknown->QueryInterface(IID_IAAFSubDescriptor, (void **)ppSubDescriptor);
+          pUnknown = static_cast<IUnknown *> (internalppSubDescriptors->GetContainer());
+          hStat = pUnknown->QueryInterface(IID_IAAFSubDescriptor, (void **)ppSubDescriptors);
           assert (SUCCEEDED (hStat));
           //pUnknown->Release();
-          internalppSubDescriptor->ReleaseReference(); // We are through with this pointer.
+          internalppSubDescriptors->ReleaseReference(); // We are through with this pointer.
         }
     }
   return hr;
@@ -149,7 +149,7 @@ HRESULT STDMETHODCALLTYPE
 HRESULT STDMETHODCALLTYPE
     CEnumAAFSubDescriptors::Next (aafUInt32  count,
         IAAFSubDescriptor ** ppSubDescriptors,
-        aafUInt32 *  pFetched)
+        aafUInt32 *  pNumFetched)
 {
   HRESULT hr;
 
@@ -179,7 +179,7 @@ HRESULT STDMETHODCALLTYPE
       hr = ptr->Next
        (count,
         pinternalppSubDescriptors,
-        pFetched);
+        pNumFetched);
     }
   catch (OMException& e)
     {
@@ -219,7 +219,7 @@ HRESULT STDMETHODCALLTYPE
       HRESULT hStat;
       aafUInt32 localIdx;
 	  assert (count >= 0);
-	  for (localIdx = 0; localIdx < *pFetched; localIdx++)
+	  for (localIdx = 0; localIdx < *pNumFetched; localIdx++)
 		{
 		  pUnknown = static_cast<IUnknown *> (internalppSubDescriptors[localIdx]->GetContainer());
 		  hStat = pUnknown->QueryInterface(IID_IAAFSubDescriptor, (void **)(ppSubDescriptors+localIdx));

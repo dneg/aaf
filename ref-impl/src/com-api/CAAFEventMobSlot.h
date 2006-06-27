@@ -124,9 +124,11 @@ public:
   // DESCRIPTION:
   // @mfunc AAFRESULT | AAFEventMobSlot2 | GetEventSlotOrigin |
   // This method will return the EventSlotOrigin of this mob slot.
+  /// The EventSlotOrigin is an optional property.
   /// 
   /// Succeeds if all of the following are true:
   /// - the pEventSlotOrigin pointer is valid.
+  /// - the EventSlotOrigin property is present.
   /// 
   /// This method will return the following codes.  If more than one of
   /// the listed errors is in effect, it will return the first one
@@ -135,8 +137,8 @@ public:
   /// AAFRESULT_SUCCESS
   ///   - succeeded.  (This is the only code indicating success.)
   ///
-  /// AAFRESULT_NOT_INITIALIZED
-  ///   - This object has not yet had Initialize() called on it.
+  /// AAFRESULT_PROP_NOT_PRESENT
+  ///   - The EventSlotOrigin property is not present.
   ///
   /// AAFRESULT_NULL_PARAM
   ///   - pEventSlotOrigin arg is NULL.
@@ -154,6 +156,7 @@ public:
   // DESCRIPTION:
   // @mfunc AAFRESULT | AAFEventMobSlot2 | SetEventSlotOrigin |
   // This method will set the EventSlotOrigin of this mob slot.
+  /// EventSlotOrigin is an optional property.
   /// 
   /// This method will return the following codes.  If more than one of
   /// the listed errors is in effect, it will return the first one
@@ -161,9 +164,6 @@ public:
   /// 
   /// AAFRESULT_SUCCESS
   ///   - succeeded.  (This is the only code indicating success.).
-  ///
-  /// AAFRESULT_NOT_INITIALIZED
-  ///   - This object has not yet had Initialize() called on it.
   // @end
   // 
   STDMETHOD (SetEventSlotOrigin)
