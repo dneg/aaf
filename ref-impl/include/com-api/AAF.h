@@ -1784,96 +1784,107 @@ EXTERN_C const IID IID_IAAFBWFImportDescriptor;
         virtual HRESULT STDMETHODCALLTYPE GetFileSecurityWave( 
             /* [out] */ aafUInt32 *pFileSecurityWave) = 0;
         
-        virtual HRESULT STDMETHODCALLTYPE AppendUnknownBWFChunks( 
-            /* [in] */ IAAFRIFFChunk *pData) = 0;
-        
         virtual HRESULT STDMETHODCALLTYPE CountUnknownBWFChunks( 
             /* [out] */ aafUInt32 *pNumData) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE AppendUnknownBWFChunk( 
+            /* [in] */ IAAFRIFFChunk *pData) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE PrependUnknownBWFChunk( 
+            /* [in] */ IAAFRIFFChunk *pData) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE InsertUnknownBWFChunkAt( 
+            /* [in] */ aafUInt32 index,
+            /* [in] */ IAAFRIFFChunk *pData) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetUnknownBWFChunkAt( 
+            /* [in] */ aafUInt32 index,
+            /* [retval][out] */ IAAFRIFFChunk **ppData) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE RemoveUnknownBWFChunkAt( 
+            /* [in] */ aafUInt32 index) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetUnknownBWFChunks( 
             /* [out] */ IEnumAAFRIFFChunks **ppEnum) = 0;
         
-        virtual HRESULT STDMETHODCALLTYPE RemoveUnknownBWFChunks( 
-            /* [in] */ IAAFRIFFChunk *pData) = 0;
+        virtual HRESULT STDMETHODCALLTYPE SetCodingHistory( 
+            /* [string][in] */ aafCharacter_constptr pCodingHistory) = 0;
         
-        virtual HRESULT STDMETHODCALLTYPE SetBextCodingHistory( 
-            /* [string][in] */ aafCharacter_constptr pBextCodingHistory) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetBextCodingHistory( 
-            /* [size_is][string][out] */ aafCharacter *pBextCodingHistory,
+        virtual HRESULT STDMETHODCALLTYPE GetCodingHistory( 
+            /* [size_is][string][out] */ aafCharacter *pCodingHistory,
             /* [in] */ aafUInt32 bufSize) = 0;
         
-        virtual HRESULT STDMETHODCALLTYPE GetBextCodingHistoryBufLen( 
+        virtual HRESULT STDMETHODCALLTYPE GetCodingHistoryBufLen( 
             /* [out] */ aafUInt32 *pBufSize) = 0;
         
-        virtual HRESULT STDMETHODCALLTYPE SetQltyBasicData( 
-            /* [string][in] */ aafCharacter_constptr pQltyBasicData) = 0;
+        virtual HRESULT STDMETHODCALLTYPE SetBasicData( 
+            /* [string][in] */ aafCharacter_constptr pBasicData) = 0;
         
-        virtual HRESULT STDMETHODCALLTYPE GetQltyBasicData( 
-            /* [size_is][string][out] */ aafCharacter *pQltyBasicData,
+        virtual HRESULT STDMETHODCALLTYPE GetBasicData( 
+            /* [size_is][string][out] */ aafCharacter *pBasicData,
             /* [in] */ aafUInt32 bufSize) = 0;
         
-        virtual HRESULT STDMETHODCALLTYPE GetQltyBasicDataBufLen( 
+        virtual HRESULT STDMETHODCALLTYPE GetBasicDataBufLen( 
             /* [out] */ aafUInt32 *pBufSize) = 0;
         
-        virtual HRESULT STDMETHODCALLTYPE SetQltyStartOfModulation( 
-            /* [string][in] */ aafCharacter_constptr pQltyStartOfModulation) = 0;
+        virtual HRESULT STDMETHODCALLTYPE SetStartOfModulation( 
+            /* [string][in] */ aafCharacter_constptr pStartOfModulation) = 0;
         
-        virtual HRESULT STDMETHODCALLTYPE GetQltyStartOfModulation( 
-            /* [size_is][string][out] */ aafCharacter *pQltyStartOfModulation,
+        virtual HRESULT STDMETHODCALLTYPE GetStartOfModulation( 
+            /* [size_is][string][out] */ aafCharacter *pStartOfModulation,
             /* [in] */ aafUInt32 bufSize) = 0;
         
-        virtual HRESULT STDMETHODCALLTYPE GetQltyStartOfModulationBufLen( 
+        virtual HRESULT STDMETHODCALLTYPE GetStartOfModulationBufLen( 
             /* [out] */ aafUInt32 *pBufSize) = 0;
         
-        virtual HRESULT STDMETHODCALLTYPE SetQltyQualityEvent( 
-            /* [string][in] */ aafCharacter_constptr pQltyQualityEvent) = 0;
+        virtual HRESULT STDMETHODCALLTYPE SetQualityEvent( 
+            /* [string][in] */ aafCharacter_constptr pQualityEvent) = 0;
         
-        virtual HRESULT STDMETHODCALLTYPE GetQltyQualityEvent( 
-            /* [size_is][string][out] */ aafCharacter *pQltyQualityEvent,
+        virtual HRESULT STDMETHODCALLTYPE GetQualityEvent( 
+            /* [size_is][string][out] */ aafCharacter *pQualityEvent,
             /* [in] */ aafUInt32 bufSize) = 0;
         
-        virtual HRESULT STDMETHODCALLTYPE GetQltyQualityEventBufLen( 
+        virtual HRESULT STDMETHODCALLTYPE GetQualityEventBufLen( 
             /* [out] */ aafUInt32 *pBufSize) = 0;
         
-        virtual HRESULT STDMETHODCALLTYPE SetQltyEndOfModulation( 
-            /* [string][in] */ aafCharacter_constptr pQltyEndOfModulation) = 0;
+        virtual HRESULT STDMETHODCALLTYPE SetEndOfModulation( 
+            /* [string][in] */ aafCharacter_constptr pEndOfModulation) = 0;
         
-        virtual HRESULT STDMETHODCALLTYPE GetQltyEndOfModulation( 
-            /* [size_is][string][out] */ aafCharacter *pQltyEndOfModulation,
+        virtual HRESULT STDMETHODCALLTYPE GetEndOfModulation( 
+            /* [size_is][string][out] */ aafCharacter *pEndOfModulation,
             /* [in] */ aafUInt32 bufSize) = 0;
         
-        virtual HRESULT STDMETHODCALLTYPE GetQltyEndOfModulationBufLen( 
+        virtual HRESULT STDMETHODCALLTYPE GetEndOfModulationBufLen( 
             /* [out] */ aafUInt32 *pBufSize) = 0;
         
-        virtual HRESULT STDMETHODCALLTYPE SetQltyQualityParameter( 
-            /* [string][in] */ aafCharacter_constptr pQltyQualityParameter) = 0;
+        virtual HRESULT STDMETHODCALLTYPE SetQualityParameter( 
+            /* [string][in] */ aafCharacter_constptr pQualityParameter) = 0;
         
-        virtual HRESULT STDMETHODCALLTYPE GetQltyQualityParameter( 
-            /* [size_is][string][out] */ aafCharacter *pQltyQualityParameter,
+        virtual HRESULT STDMETHODCALLTYPE GetQualityParameter( 
+            /* [size_is][string][out] */ aafCharacter *pQualityParameter,
             /* [in] */ aafUInt32 bufSize) = 0;
         
-        virtual HRESULT STDMETHODCALLTYPE GetQltyQualityParameterBufLen( 
+        virtual HRESULT STDMETHODCALLTYPE GetQualityParameterBufLen( 
             /* [out] */ aafUInt32 *pBufSize) = 0;
         
-        virtual HRESULT STDMETHODCALLTYPE SetQltyOperatorComment( 
-            /* [string][in] */ aafCharacter_constptr pQltyOperatorComment) = 0;
+        virtual HRESULT STDMETHODCALLTYPE SetOperatorComment( 
+            /* [string][in] */ aafCharacter_constptr pOperatorComment) = 0;
         
-        virtual HRESULT STDMETHODCALLTYPE GetQltyOperatorComment( 
-            /* [size_is][string][out] */ aafCharacter *pQltyOperatorComment,
+        virtual HRESULT STDMETHODCALLTYPE GetOperatorComment( 
+            /* [size_is][string][out] */ aafCharacter *pOperatorComment,
             /* [in] */ aafUInt32 bufSize) = 0;
         
-        virtual HRESULT STDMETHODCALLTYPE GetQltyOperatorCommentBufLen( 
+        virtual HRESULT STDMETHODCALLTYPE GetOperatorCommentBufLen( 
             /* [out] */ aafUInt32 *pBufSize) = 0;
         
-        virtual HRESULT STDMETHODCALLTYPE SetQltyCueSheet( 
-            /* [string][in] */ aafCharacter_constptr pQltyCueSheet) = 0;
+        virtual HRESULT STDMETHODCALLTYPE SetCueSheet( 
+            /* [string][in] */ aafCharacter_constptr pCueSheet) = 0;
         
-        virtual HRESULT STDMETHODCALLTYPE GetQltyCueSheet( 
-            /* [size_is][string][out] */ aafCharacter *pQltyCueSheet,
+        virtual HRESULT STDMETHODCALLTYPE GetCueSheet( 
+            /* [size_is][string][out] */ aafCharacter *pCueSheet,
             /* [in] */ aafUInt32 bufSize) = 0;
         
-        virtual HRESULT STDMETHODCALLTYPE GetQltyCueSheetBufLen( 
+        virtual HRESULT STDMETHODCALLTYPE GetCueSheetBufLen( 
             /* [out] */ aafUInt32 *pBufSize) = 0;
         
     };
@@ -1914,123 +1925,137 @@ EXTERN_C const IID IID_IAAFBWFImportDescriptor;
             IAAFBWFImportDescriptor * This,
             /* [out] */ aafUInt32 *pFileSecurityWave);
         
-        HRESULT ( STDMETHODCALLTYPE *AppendUnknownBWFChunks )( 
-            IAAFBWFImportDescriptor * This,
-            /* [in] */ IAAFRIFFChunk *pData);
-        
         HRESULT ( STDMETHODCALLTYPE *CountUnknownBWFChunks )( 
             IAAFBWFImportDescriptor * This,
             /* [out] */ aafUInt32 *pNumData);
+        
+        HRESULT ( STDMETHODCALLTYPE *AppendUnknownBWFChunk )( 
+            IAAFBWFImportDescriptor * This,
+            /* [in] */ IAAFRIFFChunk *pData);
+        
+        HRESULT ( STDMETHODCALLTYPE *PrependUnknownBWFChunk )( 
+            IAAFBWFImportDescriptor * This,
+            /* [in] */ IAAFRIFFChunk *pData);
+        
+        HRESULT ( STDMETHODCALLTYPE *InsertUnknownBWFChunkAt )( 
+            IAAFBWFImportDescriptor * This,
+            /* [in] */ aafUInt32 index,
+            /* [in] */ IAAFRIFFChunk *pData);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetUnknownBWFChunkAt )( 
+            IAAFBWFImportDescriptor * This,
+            /* [in] */ aafUInt32 index,
+            /* [retval][out] */ IAAFRIFFChunk **ppData);
+        
+        HRESULT ( STDMETHODCALLTYPE *RemoveUnknownBWFChunkAt )( 
+            IAAFBWFImportDescriptor * This,
+            /* [in] */ aafUInt32 index);
         
         HRESULT ( STDMETHODCALLTYPE *GetUnknownBWFChunks )( 
             IAAFBWFImportDescriptor * This,
             /* [out] */ IEnumAAFRIFFChunks **ppEnum);
         
-        HRESULT ( STDMETHODCALLTYPE *RemoveUnknownBWFChunks )( 
+        HRESULT ( STDMETHODCALLTYPE *SetCodingHistory )( 
             IAAFBWFImportDescriptor * This,
-            /* [in] */ IAAFRIFFChunk *pData);
+            /* [string][in] */ aafCharacter_constptr pCodingHistory);
         
-        HRESULT ( STDMETHODCALLTYPE *SetBextCodingHistory )( 
+        HRESULT ( STDMETHODCALLTYPE *GetCodingHistory )( 
             IAAFBWFImportDescriptor * This,
-            /* [string][in] */ aafCharacter_constptr pBextCodingHistory);
-        
-        HRESULT ( STDMETHODCALLTYPE *GetBextCodingHistory )( 
-            IAAFBWFImportDescriptor * This,
-            /* [size_is][string][out] */ aafCharacter *pBextCodingHistory,
+            /* [size_is][string][out] */ aafCharacter *pCodingHistory,
             /* [in] */ aafUInt32 bufSize);
         
-        HRESULT ( STDMETHODCALLTYPE *GetBextCodingHistoryBufLen )( 
+        HRESULT ( STDMETHODCALLTYPE *GetCodingHistoryBufLen )( 
             IAAFBWFImportDescriptor * This,
             /* [out] */ aafUInt32 *pBufSize);
         
-        HRESULT ( STDMETHODCALLTYPE *SetQltyBasicData )( 
+        HRESULT ( STDMETHODCALLTYPE *SetBasicData )( 
             IAAFBWFImportDescriptor * This,
-            /* [string][in] */ aafCharacter_constptr pQltyBasicData);
+            /* [string][in] */ aafCharacter_constptr pBasicData);
         
-        HRESULT ( STDMETHODCALLTYPE *GetQltyBasicData )( 
+        HRESULT ( STDMETHODCALLTYPE *GetBasicData )( 
             IAAFBWFImportDescriptor * This,
-            /* [size_is][string][out] */ aafCharacter *pQltyBasicData,
+            /* [size_is][string][out] */ aafCharacter *pBasicData,
             /* [in] */ aafUInt32 bufSize);
         
-        HRESULT ( STDMETHODCALLTYPE *GetQltyBasicDataBufLen )( 
+        HRESULT ( STDMETHODCALLTYPE *GetBasicDataBufLen )( 
             IAAFBWFImportDescriptor * This,
             /* [out] */ aafUInt32 *pBufSize);
         
-        HRESULT ( STDMETHODCALLTYPE *SetQltyStartOfModulation )( 
+        HRESULT ( STDMETHODCALLTYPE *SetStartOfModulation )( 
             IAAFBWFImportDescriptor * This,
-            /* [string][in] */ aafCharacter_constptr pQltyStartOfModulation);
+            /* [string][in] */ aafCharacter_constptr pStartOfModulation);
         
-        HRESULT ( STDMETHODCALLTYPE *GetQltyStartOfModulation )( 
+        HRESULT ( STDMETHODCALLTYPE *GetStartOfModulation )( 
             IAAFBWFImportDescriptor * This,
-            /* [size_is][string][out] */ aafCharacter *pQltyStartOfModulation,
+            /* [size_is][string][out] */ aafCharacter *pStartOfModulation,
             /* [in] */ aafUInt32 bufSize);
         
-        HRESULT ( STDMETHODCALLTYPE *GetQltyStartOfModulationBufLen )( 
+        HRESULT ( STDMETHODCALLTYPE *GetStartOfModulationBufLen )( 
             IAAFBWFImportDescriptor * This,
             /* [out] */ aafUInt32 *pBufSize);
         
-        HRESULT ( STDMETHODCALLTYPE *SetQltyQualityEvent )( 
+        HRESULT ( STDMETHODCALLTYPE *SetQualityEvent )( 
             IAAFBWFImportDescriptor * This,
-            /* [string][in] */ aafCharacter_constptr pQltyQualityEvent);
+            /* [string][in] */ aafCharacter_constptr pQualityEvent);
         
-        HRESULT ( STDMETHODCALLTYPE *GetQltyQualityEvent )( 
+        HRESULT ( STDMETHODCALLTYPE *GetQualityEvent )( 
             IAAFBWFImportDescriptor * This,
-            /* [size_is][string][out] */ aafCharacter *pQltyQualityEvent,
+            /* [size_is][string][out] */ aafCharacter *pQualityEvent,
             /* [in] */ aafUInt32 bufSize);
         
-        HRESULT ( STDMETHODCALLTYPE *GetQltyQualityEventBufLen )( 
+        HRESULT ( STDMETHODCALLTYPE *GetQualityEventBufLen )( 
             IAAFBWFImportDescriptor * This,
             /* [out] */ aafUInt32 *pBufSize);
         
-        HRESULT ( STDMETHODCALLTYPE *SetQltyEndOfModulation )( 
+        HRESULT ( STDMETHODCALLTYPE *SetEndOfModulation )( 
             IAAFBWFImportDescriptor * This,
-            /* [string][in] */ aafCharacter_constptr pQltyEndOfModulation);
+            /* [string][in] */ aafCharacter_constptr pEndOfModulation);
         
-        HRESULT ( STDMETHODCALLTYPE *GetQltyEndOfModulation )( 
+        HRESULT ( STDMETHODCALLTYPE *GetEndOfModulation )( 
             IAAFBWFImportDescriptor * This,
-            /* [size_is][string][out] */ aafCharacter *pQltyEndOfModulation,
+            /* [size_is][string][out] */ aafCharacter *pEndOfModulation,
             /* [in] */ aafUInt32 bufSize);
         
-        HRESULT ( STDMETHODCALLTYPE *GetQltyEndOfModulationBufLen )( 
+        HRESULT ( STDMETHODCALLTYPE *GetEndOfModulationBufLen )( 
             IAAFBWFImportDescriptor * This,
             /* [out] */ aafUInt32 *pBufSize);
         
-        HRESULT ( STDMETHODCALLTYPE *SetQltyQualityParameter )( 
+        HRESULT ( STDMETHODCALLTYPE *SetQualityParameter )( 
             IAAFBWFImportDescriptor * This,
-            /* [string][in] */ aafCharacter_constptr pQltyQualityParameter);
+            /* [string][in] */ aafCharacter_constptr pQualityParameter);
         
-        HRESULT ( STDMETHODCALLTYPE *GetQltyQualityParameter )( 
+        HRESULT ( STDMETHODCALLTYPE *GetQualityParameter )( 
             IAAFBWFImportDescriptor * This,
-            /* [size_is][string][out] */ aafCharacter *pQltyQualityParameter,
+            /* [size_is][string][out] */ aafCharacter *pQualityParameter,
             /* [in] */ aafUInt32 bufSize);
         
-        HRESULT ( STDMETHODCALLTYPE *GetQltyQualityParameterBufLen )( 
+        HRESULT ( STDMETHODCALLTYPE *GetQualityParameterBufLen )( 
             IAAFBWFImportDescriptor * This,
             /* [out] */ aafUInt32 *pBufSize);
         
-        HRESULT ( STDMETHODCALLTYPE *SetQltyOperatorComment )( 
+        HRESULT ( STDMETHODCALLTYPE *SetOperatorComment )( 
             IAAFBWFImportDescriptor * This,
-            /* [string][in] */ aafCharacter_constptr pQltyOperatorComment);
+            /* [string][in] */ aafCharacter_constptr pOperatorComment);
         
-        HRESULT ( STDMETHODCALLTYPE *GetQltyOperatorComment )( 
+        HRESULT ( STDMETHODCALLTYPE *GetOperatorComment )( 
             IAAFBWFImportDescriptor * This,
-            /* [size_is][string][out] */ aafCharacter *pQltyOperatorComment,
+            /* [size_is][string][out] */ aafCharacter *pOperatorComment,
             /* [in] */ aafUInt32 bufSize);
         
-        HRESULT ( STDMETHODCALLTYPE *GetQltyOperatorCommentBufLen )( 
+        HRESULT ( STDMETHODCALLTYPE *GetOperatorCommentBufLen )( 
             IAAFBWFImportDescriptor * This,
             /* [out] */ aafUInt32 *pBufSize);
         
-        HRESULT ( STDMETHODCALLTYPE *SetQltyCueSheet )( 
+        HRESULT ( STDMETHODCALLTYPE *SetCueSheet )( 
             IAAFBWFImportDescriptor * This,
-            /* [string][in] */ aafCharacter_constptr pQltyCueSheet);
+            /* [string][in] */ aafCharacter_constptr pCueSheet);
         
-        HRESULT ( STDMETHODCALLTYPE *GetQltyCueSheet )( 
+        HRESULT ( STDMETHODCALLTYPE *GetCueSheet )( 
             IAAFBWFImportDescriptor * This,
-            /* [size_is][string][out] */ aafCharacter *pQltyCueSheet,
+            /* [size_is][string][out] */ aafCharacter *pCueSheet,
             /* [in] */ aafUInt32 bufSize);
         
-        HRESULT ( STDMETHODCALLTYPE *GetQltyCueSheetBufLen )( 
+        HRESULT ( STDMETHODCALLTYPE *GetCueSheetBufLen )( 
             IAAFBWFImportDescriptor * This,
             /* [out] */ aafUInt32 *pBufSize);
         
@@ -2072,89 +2097,98 @@ EXTERN_C const IID IID_IAAFBWFImportDescriptor;
 #define IAAFBWFImportDescriptor_GetFileSecurityWave(This,pFileSecurityWave)	\
     (This)->lpVtbl -> GetFileSecurityWave(This,pFileSecurityWave)
 
-#define IAAFBWFImportDescriptor_AppendUnknownBWFChunks(This,pData)	\
-    (This)->lpVtbl -> AppendUnknownBWFChunks(This,pData)
-
 #define IAAFBWFImportDescriptor_CountUnknownBWFChunks(This,pNumData)	\
     (This)->lpVtbl -> CountUnknownBWFChunks(This,pNumData)
+
+#define IAAFBWFImportDescriptor_AppendUnknownBWFChunk(This,pData)	\
+    (This)->lpVtbl -> AppendUnknownBWFChunk(This,pData)
+
+#define IAAFBWFImportDescriptor_PrependUnknownBWFChunk(This,pData)	\
+    (This)->lpVtbl -> PrependUnknownBWFChunk(This,pData)
+
+#define IAAFBWFImportDescriptor_InsertUnknownBWFChunkAt(This,index,pData)	\
+    (This)->lpVtbl -> InsertUnknownBWFChunkAt(This,index,pData)
+
+#define IAAFBWFImportDescriptor_GetUnknownBWFChunkAt(This,index,ppData)	\
+    (This)->lpVtbl -> GetUnknownBWFChunkAt(This,index,ppData)
+
+#define IAAFBWFImportDescriptor_RemoveUnknownBWFChunkAt(This,index)	\
+    (This)->lpVtbl -> RemoveUnknownBWFChunkAt(This,index)
 
 #define IAAFBWFImportDescriptor_GetUnknownBWFChunks(This,ppEnum)	\
     (This)->lpVtbl -> GetUnknownBWFChunks(This,ppEnum)
 
-#define IAAFBWFImportDescriptor_RemoveUnknownBWFChunks(This,pData)	\
-    (This)->lpVtbl -> RemoveUnknownBWFChunks(This,pData)
+#define IAAFBWFImportDescriptor_SetCodingHistory(This,pCodingHistory)	\
+    (This)->lpVtbl -> SetCodingHistory(This,pCodingHistory)
 
-#define IAAFBWFImportDescriptor_SetBextCodingHistory(This,pBextCodingHistory)	\
-    (This)->lpVtbl -> SetBextCodingHistory(This,pBextCodingHistory)
+#define IAAFBWFImportDescriptor_GetCodingHistory(This,pCodingHistory,bufSize)	\
+    (This)->lpVtbl -> GetCodingHistory(This,pCodingHistory,bufSize)
 
-#define IAAFBWFImportDescriptor_GetBextCodingHistory(This,pBextCodingHistory,bufSize)	\
-    (This)->lpVtbl -> GetBextCodingHistory(This,pBextCodingHistory,bufSize)
+#define IAAFBWFImportDescriptor_GetCodingHistoryBufLen(This,pBufSize)	\
+    (This)->lpVtbl -> GetCodingHistoryBufLen(This,pBufSize)
 
-#define IAAFBWFImportDescriptor_GetBextCodingHistoryBufLen(This,pBufSize)	\
-    (This)->lpVtbl -> GetBextCodingHistoryBufLen(This,pBufSize)
+#define IAAFBWFImportDescriptor_SetBasicData(This,pBasicData)	\
+    (This)->lpVtbl -> SetBasicData(This,pBasicData)
 
-#define IAAFBWFImportDescriptor_SetQltyBasicData(This,pQltyBasicData)	\
-    (This)->lpVtbl -> SetQltyBasicData(This,pQltyBasicData)
+#define IAAFBWFImportDescriptor_GetBasicData(This,pBasicData,bufSize)	\
+    (This)->lpVtbl -> GetBasicData(This,pBasicData,bufSize)
 
-#define IAAFBWFImportDescriptor_GetQltyBasicData(This,pQltyBasicData,bufSize)	\
-    (This)->lpVtbl -> GetQltyBasicData(This,pQltyBasicData,bufSize)
+#define IAAFBWFImportDescriptor_GetBasicDataBufLen(This,pBufSize)	\
+    (This)->lpVtbl -> GetBasicDataBufLen(This,pBufSize)
 
-#define IAAFBWFImportDescriptor_GetQltyBasicDataBufLen(This,pBufSize)	\
-    (This)->lpVtbl -> GetQltyBasicDataBufLen(This,pBufSize)
+#define IAAFBWFImportDescriptor_SetStartOfModulation(This,pStartOfModulation)	\
+    (This)->lpVtbl -> SetStartOfModulation(This,pStartOfModulation)
 
-#define IAAFBWFImportDescriptor_SetQltyStartOfModulation(This,pQltyStartOfModulation)	\
-    (This)->lpVtbl -> SetQltyStartOfModulation(This,pQltyStartOfModulation)
+#define IAAFBWFImportDescriptor_GetStartOfModulation(This,pStartOfModulation,bufSize)	\
+    (This)->lpVtbl -> GetStartOfModulation(This,pStartOfModulation,bufSize)
 
-#define IAAFBWFImportDescriptor_GetQltyStartOfModulation(This,pQltyStartOfModulation,bufSize)	\
-    (This)->lpVtbl -> GetQltyStartOfModulation(This,pQltyStartOfModulation,bufSize)
+#define IAAFBWFImportDescriptor_GetStartOfModulationBufLen(This,pBufSize)	\
+    (This)->lpVtbl -> GetStartOfModulationBufLen(This,pBufSize)
 
-#define IAAFBWFImportDescriptor_GetQltyStartOfModulationBufLen(This,pBufSize)	\
-    (This)->lpVtbl -> GetQltyStartOfModulationBufLen(This,pBufSize)
+#define IAAFBWFImportDescriptor_SetQualityEvent(This,pQualityEvent)	\
+    (This)->lpVtbl -> SetQualityEvent(This,pQualityEvent)
 
-#define IAAFBWFImportDescriptor_SetQltyQualityEvent(This,pQltyQualityEvent)	\
-    (This)->lpVtbl -> SetQltyQualityEvent(This,pQltyQualityEvent)
+#define IAAFBWFImportDescriptor_GetQualityEvent(This,pQualityEvent,bufSize)	\
+    (This)->lpVtbl -> GetQualityEvent(This,pQualityEvent,bufSize)
 
-#define IAAFBWFImportDescriptor_GetQltyQualityEvent(This,pQltyQualityEvent,bufSize)	\
-    (This)->lpVtbl -> GetQltyQualityEvent(This,pQltyQualityEvent,bufSize)
+#define IAAFBWFImportDescriptor_GetQualityEventBufLen(This,pBufSize)	\
+    (This)->lpVtbl -> GetQualityEventBufLen(This,pBufSize)
 
-#define IAAFBWFImportDescriptor_GetQltyQualityEventBufLen(This,pBufSize)	\
-    (This)->lpVtbl -> GetQltyQualityEventBufLen(This,pBufSize)
+#define IAAFBWFImportDescriptor_SetEndOfModulation(This,pEndOfModulation)	\
+    (This)->lpVtbl -> SetEndOfModulation(This,pEndOfModulation)
 
-#define IAAFBWFImportDescriptor_SetQltyEndOfModulation(This,pQltyEndOfModulation)	\
-    (This)->lpVtbl -> SetQltyEndOfModulation(This,pQltyEndOfModulation)
+#define IAAFBWFImportDescriptor_GetEndOfModulation(This,pEndOfModulation,bufSize)	\
+    (This)->lpVtbl -> GetEndOfModulation(This,pEndOfModulation,bufSize)
 
-#define IAAFBWFImportDescriptor_GetQltyEndOfModulation(This,pQltyEndOfModulation,bufSize)	\
-    (This)->lpVtbl -> GetQltyEndOfModulation(This,pQltyEndOfModulation,bufSize)
+#define IAAFBWFImportDescriptor_GetEndOfModulationBufLen(This,pBufSize)	\
+    (This)->lpVtbl -> GetEndOfModulationBufLen(This,pBufSize)
 
-#define IAAFBWFImportDescriptor_GetQltyEndOfModulationBufLen(This,pBufSize)	\
-    (This)->lpVtbl -> GetQltyEndOfModulationBufLen(This,pBufSize)
+#define IAAFBWFImportDescriptor_SetQualityParameter(This,pQualityParameter)	\
+    (This)->lpVtbl -> SetQualityParameter(This,pQualityParameter)
 
-#define IAAFBWFImportDescriptor_SetQltyQualityParameter(This,pQltyQualityParameter)	\
-    (This)->lpVtbl -> SetQltyQualityParameter(This,pQltyQualityParameter)
+#define IAAFBWFImportDescriptor_GetQualityParameter(This,pQualityParameter,bufSize)	\
+    (This)->lpVtbl -> GetQualityParameter(This,pQualityParameter,bufSize)
 
-#define IAAFBWFImportDescriptor_GetQltyQualityParameter(This,pQltyQualityParameter,bufSize)	\
-    (This)->lpVtbl -> GetQltyQualityParameter(This,pQltyQualityParameter,bufSize)
+#define IAAFBWFImportDescriptor_GetQualityParameterBufLen(This,pBufSize)	\
+    (This)->lpVtbl -> GetQualityParameterBufLen(This,pBufSize)
 
-#define IAAFBWFImportDescriptor_GetQltyQualityParameterBufLen(This,pBufSize)	\
-    (This)->lpVtbl -> GetQltyQualityParameterBufLen(This,pBufSize)
+#define IAAFBWFImportDescriptor_SetOperatorComment(This,pOperatorComment)	\
+    (This)->lpVtbl -> SetOperatorComment(This,pOperatorComment)
 
-#define IAAFBWFImportDescriptor_SetQltyOperatorComment(This,pQltyOperatorComment)	\
-    (This)->lpVtbl -> SetQltyOperatorComment(This,pQltyOperatorComment)
+#define IAAFBWFImportDescriptor_GetOperatorComment(This,pOperatorComment,bufSize)	\
+    (This)->lpVtbl -> GetOperatorComment(This,pOperatorComment,bufSize)
 
-#define IAAFBWFImportDescriptor_GetQltyOperatorComment(This,pQltyOperatorComment,bufSize)	\
-    (This)->lpVtbl -> GetQltyOperatorComment(This,pQltyOperatorComment,bufSize)
+#define IAAFBWFImportDescriptor_GetOperatorCommentBufLen(This,pBufSize)	\
+    (This)->lpVtbl -> GetOperatorCommentBufLen(This,pBufSize)
 
-#define IAAFBWFImportDescriptor_GetQltyOperatorCommentBufLen(This,pBufSize)	\
-    (This)->lpVtbl -> GetQltyOperatorCommentBufLen(This,pBufSize)
+#define IAAFBWFImportDescriptor_SetCueSheet(This,pCueSheet)	\
+    (This)->lpVtbl -> SetCueSheet(This,pCueSheet)
 
-#define IAAFBWFImportDescriptor_SetQltyCueSheet(This,pQltyCueSheet)	\
-    (This)->lpVtbl -> SetQltyCueSheet(This,pQltyCueSheet)
+#define IAAFBWFImportDescriptor_GetCueSheet(This,pCueSheet,bufSize)	\
+    (This)->lpVtbl -> GetCueSheet(This,pCueSheet,bufSize)
 
-#define IAAFBWFImportDescriptor_GetQltyCueSheet(This,pQltyCueSheet,bufSize)	\
-    (This)->lpVtbl -> GetQltyCueSheet(This,pQltyCueSheet,bufSize)
-
-#define IAAFBWFImportDescriptor_GetQltyCueSheetBufLen(This,pBufSize)	\
-    (This)->lpVtbl -> GetQltyCueSheetBufLen(This,pBufSize)
+#define IAAFBWFImportDescriptor_GetCueSheetBufLen(This,pBufSize)	\
+    (This)->lpVtbl -> GetCueSheetBufLen(This,pBufSize)
 
 #endif /* COBJMACROS */
 
@@ -2222,24 +2256,74 @@ void __RPC_STUB IAAFBWFImportDescriptor_GetFileSecurityWave_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IAAFBWFImportDescriptor_AppendUnknownBWFChunks_Proxy( 
-    IAAFBWFImportDescriptor * This,
-    /* [in] */ IAAFRIFFChunk *pData);
-
-
-void __RPC_STUB IAAFBWFImportDescriptor_AppendUnknownBWFChunks_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
 HRESULT STDMETHODCALLTYPE IAAFBWFImportDescriptor_CountUnknownBWFChunks_Proxy( 
     IAAFBWFImportDescriptor * This,
     /* [out] */ aafUInt32 *pNumData);
 
 
 void __RPC_STUB IAAFBWFImportDescriptor_CountUnknownBWFChunks_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFBWFImportDescriptor_AppendUnknownBWFChunk_Proxy( 
+    IAAFBWFImportDescriptor * This,
+    /* [in] */ IAAFRIFFChunk *pData);
+
+
+void __RPC_STUB IAAFBWFImportDescriptor_AppendUnknownBWFChunk_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFBWFImportDescriptor_PrependUnknownBWFChunk_Proxy( 
+    IAAFBWFImportDescriptor * This,
+    /* [in] */ IAAFRIFFChunk *pData);
+
+
+void __RPC_STUB IAAFBWFImportDescriptor_PrependUnknownBWFChunk_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFBWFImportDescriptor_InsertUnknownBWFChunkAt_Proxy( 
+    IAAFBWFImportDescriptor * This,
+    /* [in] */ aafUInt32 index,
+    /* [in] */ IAAFRIFFChunk *pData);
+
+
+void __RPC_STUB IAAFBWFImportDescriptor_InsertUnknownBWFChunkAt_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFBWFImportDescriptor_GetUnknownBWFChunkAt_Proxy( 
+    IAAFBWFImportDescriptor * This,
+    /* [in] */ aafUInt32 index,
+    /* [retval][out] */ IAAFRIFFChunk **ppData);
+
+
+void __RPC_STUB IAAFBWFImportDescriptor_GetUnknownBWFChunkAt_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFBWFImportDescriptor_RemoveUnknownBWFChunkAt_Proxy( 
+    IAAFBWFImportDescriptor * This,
+    /* [in] */ aafUInt32 index);
+
+
+void __RPC_STUB IAAFBWFImportDescriptor_RemoveUnknownBWFChunkAt_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
@@ -2258,308 +2342,296 @@ void __RPC_STUB IAAFBWFImportDescriptor_GetUnknownBWFChunks_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IAAFBWFImportDescriptor_RemoveUnknownBWFChunks_Proxy( 
+HRESULT STDMETHODCALLTYPE IAAFBWFImportDescriptor_SetCodingHistory_Proxy( 
     IAAFBWFImportDescriptor * This,
-    /* [in] */ IAAFRIFFChunk *pData);
+    /* [string][in] */ aafCharacter_constptr pCodingHistory);
 
 
-void __RPC_STUB IAAFBWFImportDescriptor_RemoveUnknownBWFChunks_Stub(
+void __RPC_STUB IAAFBWFImportDescriptor_SetCodingHistory_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IAAFBWFImportDescriptor_SetBextCodingHistory_Proxy( 
+HRESULT STDMETHODCALLTYPE IAAFBWFImportDescriptor_GetCodingHistory_Proxy( 
     IAAFBWFImportDescriptor * This,
-    /* [string][in] */ aafCharacter_constptr pBextCodingHistory);
-
-
-void __RPC_STUB IAAFBWFImportDescriptor_SetBextCodingHistory_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFBWFImportDescriptor_GetBextCodingHistory_Proxy( 
-    IAAFBWFImportDescriptor * This,
-    /* [size_is][string][out] */ aafCharacter *pBextCodingHistory,
+    /* [size_is][string][out] */ aafCharacter *pCodingHistory,
     /* [in] */ aafUInt32 bufSize);
 
 
-void __RPC_STUB IAAFBWFImportDescriptor_GetBextCodingHistory_Stub(
+void __RPC_STUB IAAFBWFImportDescriptor_GetCodingHistory_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IAAFBWFImportDescriptor_GetBextCodingHistoryBufLen_Proxy( 
+HRESULT STDMETHODCALLTYPE IAAFBWFImportDescriptor_GetCodingHistoryBufLen_Proxy( 
     IAAFBWFImportDescriptor * This,
     /* [out] */ aafUInt32 *pBufSize);
 
 
-void __RPC_STUB IAAFBWFImportDescriptor_GetBextCodingHistoryBufLen_Stub(
+void __RPC_STUB IAAFBWFImportDescriptor_GetCodingHistoryBufLen_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IAAFBWFImportDescriptor_SetQltyBasicData_Proxy( 
+HRESULT STDMETHODCALLTYPE IAAFBWFImportDescriptor_SetBasicData_Proxy( 
     IAAFBWFImportDescriptor * This,
-    /* [string][in] */ aafCharacter_constptr pQltyBasicData);
+    /* [string][in] */ aafCharacter_constptr pBasicData);
 
 
-void __RPC_STUB IAAFBWFImportDescriptor_SetQltyBasicData_Stub(
+void __RPC_STUB IAAFBWFImportDescriptor_SetBasicData_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IAAFBWFImportDescriptor_GetQltyBasicData_Proxy( 
+HRESULT STDMETHODCALLTYPE IAAFBWFImportDescriptor_GetBasicData_Proxy( 
     IAAFBWFImportDescriptor * This,
-    /* [size_is][string][out] */ aafCharacter *pQltyBasicData,
+    /* [size_is][string][out] */ aafCharacter *pBasicData,
     /* [in] */ aafUInt32 bufSize);
 
 
-void __RPC_STUB IAAFBWFImportDescriptor_GetQltyBasicData_Stub(
+void __RPC_STUB IAAFBWFImportDescriptor_GetBasicData_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IAAFBWFImportDescriptor_GetQltyBasicDataBufLen_Proxy( 
+HRESULT STDMETHODCALLTYPE IAAFBWFImportDescriptor_GetBasicDataBufLen_Proxy( 
     IAAFBWFImportDescriptor * This,
     /* [out] */ aafUInt32 *pBufSize);
 
 
-void __RPC_STUB IAAFBWFImportDescriptor_GetQltyBasicDataBufLen_Stub(
+void __RPC_STUB IAAFBWFImportDescriptor_GetBasicDataBufLen_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IAAFBWFImportDescriptor_SetQltyStartOfModulation_Proxy( 
+HRESULT STDMETHODCALLTYPE IAAFBWFImportDescriptor_SetStartOfModulation_Proxy( 
     IAAFBWFImportDescriptor * This,
-    /* [string][in] */ aafCharacter_constptr pQltyStartOfModulation);
+    /* [string][in] */ aafCharacter_constptr pStartOfModulation);
 
 
-void __RPC_STUB IAAFBWFImportDescriptor_SetQltyStartOfModulation_Stub(
+void __RPC_STUB IAAFBWFImportDescriptor_SetStartOfModulation_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IAAFBWFImportDescriptor_GetQltyStartOfModulation_Proxy( 
+HRESULT STDMETHODCALLTYPE IAAFBWFImportDescriptor_GetStartOfModulation_Proxy( 
     IAAFBWFImportDescriptor * This,
-    /* [size_is][string][out] */ aafCharacter *pQltyStartOfModulation,
+    /* [size_is][string][out] */ aafCharacter *pStartOfModulation,
     /* [in] */ aafUInt32 bufSize);
 
 
-void __RPC_STUB IAAFBWFImportDescriptor_GetQltyStartOfModulation_Stub(
+void __RPC_STUB IAAFBWFImportDescriptor_GetStartOfModulation_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IAAFBWFImportDescriptor_GetQltyStartOfModulationBufLen_Proxy( 
+HRESULT STDMETHODCALLTYPE IAAFBWFImportDescriptor_GetStartOfModulationBufLen_Proxy( 
     IAAFBWFImportDescriptor * This,
     /* [out] */ aafUInt32 *pBufSize);
 
 
-void __RPC_STUB IAAFBWFImportDescriptor_GetQltyStartOfModulationBufLen_Stub(
+void __RPC_STUB IAAFBWFImportDescriptor_GetStartOfModulationBufLen_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IAAFBWFImportDescriptor_SetQltyQualityEvent_Proxy( 
+HRESULT STDMETHODCALLTYPE IAAFBWFImportDescriptor_SetQualityEvent_Proxy( 
     IAAFBWFImportDescriptor * This,
-    /* [string][in] */ aafCharacter_constptr pQltyQualityEvent);
+    /* [string][in] */ aafCharacter_constptr pQualityEvent);
 
 
-void __RPC_STUB IAAFBWFImportDescriptor_SetQltyQualityEvent_Stub(
+void __RPC_STUB IAAFBWFImportDescriptor_SetQualityEvent_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IAAFBWFImportDescriptor_GetQltyQualityEvent_Proxy( 
+HRESULT STDMETHODCALLTYPE IAAFBWFImportDescriptor_GetQualityEvent_Proxy( 
     IAAFBWFImportDescriptor * This,
-    /* [size_is][string][out] */ aafCharacter *pQltyQualityEvent,
+    /* [size_is][string][out] */ aafCharacter *pQualityEvent,
     /* [in] */ aafUInt32 bufSize);
 
 
-void __RPC_STUB IAAFBWFImportDescriptor_GetQltyQualityEvent_Stub(
+void __RPC_STUB IAAFBWFImportDescriptor_GetQualityEvent_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IAAFBWFImportDescriptor_GetQltyQualityEventBufLen_Proxy( 
+HRESULT STDMETHODCALLTYPE IAAFBWFImportDescriptor_GetQualityEventBufLen_Proxy( 
     IAAFBWFImportDescriptor * This,
     /* [out] */ aafUInt32 *pBufSize);
 
 
-void __RPC_STUB IAAFBWFImportDescriptor_GetQltyQualityEventBufLen_Stub(
+void __RPC_STUB IAAFBWFImportDescriptor_GetQualityEventBufLen_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IAAFBWFImportDescriptor_SetQltyEndOfModulation_Proxy( 
+HRESULT STDMETHODCALLTYPE IAAFBWFImportDescriptor_SetEndOfModulation_Proxy( 
     IAAFBWFImportDescriptor * This,
-    /* [string][in] */ aafCharacter_constptr pQltyEndOfModulation);
+    /* [string][in] */ aafCharacter_constptr pEndOfModulation);
 
 
-void __RPC_STUB IAAFBWFImportDescriptor_SetQltyEndOfModulation_Stub(
+void __RPC_STUB IAAFBWFImportDescriptor_SetEndOfModulation_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IAAFBWFImportDescriptor_GetQltyEndOfModulation_Proxy( 
+HRESULT STDMETHODCALLTYPE IAAFBWFImportDescriptor_GetEndOfModulation_Proxy( 
     IAAFBWFImportDescriptor * This,
-    /* [size_is][string][out] */ aafCharacter *pQltyEndOfModulation,
+    /* [size_is][string][out] */ aafCharacter *pEndOfModulation,
     /* [in] */ aafUInt32 bufSize);
 
 
-void __RPC_STUB IAAFBWFImportDescriptor_GetQltyEndOfModulation_Stub(
+void __RPC_STUB IAAFBWFImportDescriptor_GetEndOfModulation_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IAAFBWFImportDescriptor_GetQltyEndOfModulationBufLen_Proxy( 
+HRESULT STDMETHODCALLTYPE IAAFBWFImportDescriptor_GetEndOfModulationBufLen_Proxy( 
     IAAFBWFImportDescriptor * This,
     /* [out] */ aafUInt32 *pBufSize);
 
 
-void __RPC_STUB IAAFBWFImportDescriptor_GetQltyEndOfModulationBufLen_Stub(
+void __RPC_STUB IAAFBWFImportDescriptor_GetEndOfModulationBufLen_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IAAFBWFImportDescriptor_SetQltyQualityParameter_Proxy( 
+HRESULT STDMETHODCALLTYPE IAAFBWFImportDescriptor_SetQualityParameter_Proxy( 
     IAAFBWFImportDescriptor * This,
-    /* [string][in] */ aafCharacter_constptr pQltyQualityParameter);
+    /* [string][in] */ aafCharacter_constptr pQualityParameter);
 
 
-void __RPC_STUB IAAFBWFImportDescriptor_SetQltyQualityParameter_Stub(
+void __RPC_STUB IAAFBWFImportDescriptor_SetQualityParameter_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IAAFBWFImportDescriptor_GetQltyQualityParameter_Proxy( 
+HRESULT STDMETHODCALLTYPE IAAFBWFImportDescriptor_GetQualityParameter_Proxy( 
     IAAFBWFImportDescriptor * This,
-    /* [size_is][string][out] */ aafCharacter *pQltyQualityParameter,
+    /* [size_is][string][out] */ aafCharacter *pQualityParameter,
     /* [in] */ aafUInt32 bufSize);
 
 
-void __RPC_STUB IAAFBWFImportDescriptor_GetQltyQualityParameter_Stub(
+void __RPC_STUB IAAFBWFImportDescriptor_GetQualityParameter_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IAAFBWFImportDescriptor_GetQltyQualityParameterBufLen_Proxy( 
+HRESULT STDMETHODCALLTYPE IAAFBWFImportDescriptor_GetQualityParameterBufLen_Proxy( 
     IAAFBWFImportDescriptor * This,
     /* [out] */ aafUInt32 *pBufSize);
 
 
-void __RPC_STUB IAAFBWFImportDescriptor_GetQltyQualityParameterBufLen_Stub(
+void __RPC_STUB IAAFBWFImportDescriptor_GetQualityParameterBufLen_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IAAFBWFImportDescriptor_SetQltyOperatorComment_Proxy( 
+HRESULT STDMETHODCALLTYPE IAAFBWFImportDescriptor_SetOperatorComment_Proxy( 
     IAAFBWFImportDescriptor * This,
-    /* [string][in] */ aafCharacter_constptr pQltyOperatorComment);
+    /* [string][in] */ aafCharacter_constptr pOperatorComment);
 
 
-void __RPC_STUB IAAFBWFImportDescriptor_SetQltyOperatorComment_Stub(
+void __RPC_STUB IAAFBWFImportDescriptor_SetOperatorComment_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IAAFBWFImportDescriptor_GetQltyOperatorComment_Proxy( 
+HRESULT STDMETHODCALLTYPE IAAFBWFImportDescriptor_GetOperatorComment_Proxy( 
     IAAFBWFImportDescriptor * This,
-    /* [size_is][string][out] */ aafCharacter *pQltyOperatorComment,
+    /* [size_is][string][out] */ aafCharacter *pOperatorComment,
     /* [in] */ aafUInt32 bufSize);
 
 
-void __RPC_STUB IAAFBWFImportDescriptor_GetQltyOperatorComment_Stub(
+void __RPC_STUB IAAFBWFImportDescriptor_GetOperatorComment_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IAAFBWFImportDescriptor_GetQltyOperatorCommentBufLen_Proxy( 
+HRESULT STDMETHODCALLTYPE IAAFBWFImportDescriptor_GetOperatorCommentBufLen_Proxy( 
     IAAFBWFImportDescriptor * This,
     /* [out] */ aafUInt32 *pBufSize);
 
 
-void __RPC_STUB IAAFBWFImportDescriptor_GetQltyOperatorCommentBufLen_Stub(
+void __RPC_STUB IAAFBWFImportDescriptor_GetOperatorCommentBufLen_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IAAFBWFImportDescriptor_SetQltyCueSheet_Proxy( 
+HRESULT STDMETHODCALLTYPE IAAFBWFImportDescriptor_SetCueSheet_Proxy( 
     IAAFBWFImportDescriptor * This,
-    /* [string][in] */ aafCharacter_constptr pQltyCueSheet);
+    /* [string][in] */ aafCharacter_constptr pCueSheet);
 
 
-void __RPC_STUB IAAFBWFImportDescriptor_SetQltyCueSheet_Stub(
+void __RPC_STUB IAAFBWFImportDescriptor_SetCueSheet_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IAAFBWFImportDescriptor_GetQltyCueSheet_Proxy( 
+HRESULT STDMETHODCALLTYPE IAAFBWFImportDescriptor_GetCueSheet_Proxy( 
     IAAFBWFImportDescriptor * This,
-    /* [size_is][string][out] */ aafCharacter *pQltyCueSheet,
+    /* [size_is][string][out] */ aafCharacter *pCueSheet,
     /* [in] */ aafUInt32 bufSize);
 
 
-void __RPC_STUB IAAFBWFImportDescriptor_GetQltyCueSheet_Stub(
+void __RPC_STUB IAAFBWFImportDescriptor_GetCueSheet_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IAAFBWFImportDescriptor_GetQltyCueSheetBufLen_Proxy( 
+HRESULT STDMETHODCALLTYPE IAAFBWFImportDescriptor_GetCueSheetBufLen_Proxy( 
     IAAFBWFImportDescriptor * This,
     /* [out] */ aafUInt32 *pBufSize);
 
 
-void __RPC_STUB IAAFBWFImportDescriptor_GetQltyCueSheetBufLen_Stub(
+void __RPC_STUB IAAFBWFImportDescriptor_GetCueSheetBufLen_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
@@ -35775,12 +35847,12 @@ EXTERN_C const IID IID_IEnumAAFRIFFChunks;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE NextOne( 
-            /* [retval][out] */ IAAFRIFFChunk **ppRIFFChunk) = 0;
+            /* [retval][out] */ IAAFRIFFChunk **ppRIFFChunks) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Next( 
             /* [in] */ aafUInt32 count,
-            /* [length_is][size_is][out] */ IAAFRIFFChunk **ppRIFFChunk,
-            /* [ref][out] */ aafUInt32 *pFetched) = 0;
+            /* [length_is][size_is][out] */ IAAFRIFFChunk **ppRIFFChunks,
+            /* [ref][out] */ aafUInt32 *pNumFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
             /* [in] */ aafUInt32 count) = 0;
@@ -35811,13 +35883,13 @@ EXTERN_C const IID IID_IEnumAAFRIFFChunks;
         
         HRESULT ( STDMETHODCALLTYPE *NextOne )( 
             IEnumAAFRIFFChunks * This,
-            /* [retval][out] */ IAAFRIFFChunk **ppRIFFChunk);
+            /* [retval][out] */ IAAFRIFFChunk **ppRIFFChunks);
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             IEnumAAFRIFFChunks * This,
             /* [in] */ aafUInt32 count,
-            /* [length_is][size_is][out] */ IAAFRIFFChunk **ppRIFFChunk,
-            /* [ref][out] */ aafUInt32 *pFetched);
+            /* [length_is][size_is][out] */ IAAFRIFFChunk **ppRIFFChunks,
+            /* [ref][out] */ aafUInt32 *pNumFetched);
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             IEnumAAFRIFFChunks * This,
@@ -35853,11 +35925,11 @@ EXTERN_C const IID IID_IEnumAAFRIFFChunks;
     (This)->lpVtbl -> Release(This)
 
 
-#define IEnumAAFRIFFChunks_NextOne(This,ppRIFFChunk)	\
-    (This)->lpVtbl -> NextOne(This,ppRIFFChunk)
+#define IEnumAAFRIFFChunks_NextOne(This,ppRIFFChunks)	\
+    (This)->lpVtbl -> NextOne(This,ppRIFFChunks)
 
-#define IEnumAAFRIFFChunks_Next(This,count,ppRIFFChunk,pFetched)	\
-    (This)->lpVtbl -> Next(This,count,ppRIFFChunk,pFetched)
+#define IEnumAAFRIFFChunks_Next(This,count,ppRIFFChunks,pNumFetched)	\
+    (This)->lpVtbl -> Next(This,count,ppRIFFChunks,pNumFetched)
 
 #define IEnumAAFRIFFChunks_Skip(This,count)	\
     (This)->lpVtbl -> Skip(This,count)
@@ -35877,7 +35949,7 @@ EXTERN_C const IID IID_IEnumAAFRIFFChunks;
 
 HRESULT STDMETHODCALLTYPE IEnumAAFRIFFChunks_NextOne_Proxy( 
     IEnumAAFRIFFChunks * This,
-    /* [retval][out] */ IAAFRIFFChunk **ppRIFFChunk);
+    /* [retval][out] */ IAAFRIFFChunk **ppRIFFChunks);
 
 
 void __RPC_STUB IEnumAAFRIFFChunks_NextOne_Stub(
@@ -35890,8 +35962,8 @@ void __RPC_STUB IEnumAAFRIFFChunks_NextOne_Stub(
 HRESULT STDMETHODCALLTYPE IEnumAAFRIFFChunks_Next_Proxy( 
     IEnumAAFRIFFChunks * This,
     /* [in] */ aafUInt32 count,
-    /* [length_is][size_is][out] */ IAAFRIFFChunk **ppRIFFChunk,
-    /* [ref][out] */ aafUInt32 *pFetched);
+    /* [length_is][size_is][out] */ IAAFRIFFChunk **ppRIFFChunks,
+    /* [ref][out] */ aafUInt32 *pNumFetched);
 
 
 void __RPC_STUB IEnumAAFRIFFChunks_Next_Stub(
@@ -36137,12 +36209,12 @@ EXTERN_C const IID IID_IEnumAAFSubDescriptors;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE NextOne( 
-            /* [retval][out] */ IAAFSubDescriptor **ppSubDescriptor) = 0;
+            /* [retval][out] */ IAAFSubDescriptor **ppSubDescriptors) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Next( 
             /* [in] */ aafUInt32 count,
             /* [length_is][size_is][out] */ IAAFSubDescriptor **ppSubDescriptors,
-            /* [ref][out] */ aafUInt32 *pFetched) = 0;
+            /* [ref][out] */ aafUInt32 *pNumFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
             /* [in] */ aafUInt32 count) = 0;
@@ -36173,13 +36245,13 @@ EXTERN_C const IID IID_IEnumAAFSubDescriptors;
         
         HRESULT ( STDMETHODCALLTYPE *NextOne )( 
             IEnumAAFSubDescriptors * This,
-            /* [retval][out] */ IAAFSubDescriptor **ppSubDescriptor);
+            /* [retval][out] */ IAAFSubDescriptor **ppSubDescriptors);
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             IEnumAAFSubDescriptors * This,
             /* [in] */ aafUInt32 count,
             /* [length_is][size_is][out] */ IAAFSubDescriptor **ppSubDescriptors,
-            /* [ref][out] */ aafUInt32 *pFetched);
+            /* [ref][out] */ aafUInt32 *pNumFetched);
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             IEnumAAFSubDescriptors * This,
@@ -36215,11 +36287,11 @@ EXTERN_C const IID IID_IEnumAAFSubDescriptors;
     (This)->lpVtbl -> Release(This)
 
 
-#define IEnumAAFSubDescriptors_NextOne(This,ppSubDescriptor)	\
-    (This)->lpVtbl -> NextOne(This,ppSubDescriptor)
+#define IEnumAAFSubDescriptors_NextOne(This,ppSubDescriptors)	\
+    (This)->lpVtbl -> NextOne(This,ppSubDescriptors)
 
-#define IEnumAAFSubDescriptors_Next(This,count,ppSubDescriptors,pFetched)	\
-    (This)->lpVtbl -> Next(This,count,ppSubDescriptors,pFetched)
+#define IEnumAAFSubDescriptors_Next(This,count,ppSubDescriptors,pNumFetched)	\
+    (This)->lpVtbl -> Next(This,count,ppSubDescriptors,pNumFetched)
 
 #define IEnumAAFSubDescriptors_Skip(This,count)	\
     (This)->lpVtbl -> Skip(This,count)
@@ -36239,7 +36311,7 @@ EXTERN_C const IID IID_IEnumAAFSubDescriptors;
 
 HRESULT STDMETHODCALLTYPE IEnumAAFSubDescriptors_NextOne_Proxy( 
     IEnumAAFSubDescriptors * This,
-    /* [retval][out] */ IAAFSubDescriptor **ppSubDescriptor);
+    /* [retval][out] */ IAAFSubDescriptor **ppSubDescriptors);
 
 
 void __RPC_STUB IEnumAAFSubDescriptors_NextOne_Stub(
@@ -36253,7 +36325,7 @@ HRESULT STDMETHODCALLTYPE IEnumAAFSubDescriptors_Next_Proxy(
     IEnumAAFSubDescriptors * This,
     /* [in] */ aafUInt32 count,
     /* [length_is][size_is][out] */ IAAFSubDescriptor **ppSubDescriptors,
-    /* [ref][out] */ aafUInt32 *pFetched);
+    /* [ref][out] */ aafUInt32 *pNumFetched);
 
 
 void __RPC_STUB IEnumAAFSubDescriptors_Next_Stub(
