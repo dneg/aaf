@@ -5152,13 +5152,7 @@ interface IAAFDataDef : IUnknown
 ///     operation.
 ///
 /// AAFRESULT_NOT_INITIALIZED
-///   - This object has not yet had Initialize() called on it through
-///     this object's primary interface.  Note that
-///     IAAFDigitalImageDescriptor is a primary interface for an
-///     abstract class, so it is not appropriate for the
-///     Initialize() method to exist in this interface.  The
-///     Initialize() method is available through the concrete
-///     object's primary interface.
+///   - This object has not yet had Initialize() called on it.
 ///
 ///
 /// Objects that implement IAAFDataEssenceDescriptor also implement the following interfaces:
@@ -5177,6 +5171,30 @@ interface IAAFDataDef : IUnknown
 interface IAAFDataEssenceDescriptor : IUnknown
 {
 
+
+
+  //***********************************************************
+  //
+  // Initialize()
+  //
+  /// Initializes a newly allocated, empty IAAFDataEssenceDescriptor-supporting
+  /// object.  This method must be called after allocation, and before
+  /// any other method can be called.
+  ///
+  /// Succeeds if:
+  /// - Initialize() has not yet been called on this object.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_ALREADY_INITIALIZED
+  ///   - Initialize() has already been called on this object.
+  /// 
+  HRESULT Initialize ();
 
   //***********************************************************
   //
@@ -5226,6 +5244,7 @@ interface IAAFDataEssenceDescriptor : IUnknown
     [out] aafUID_t *  pDataEssenceCoding);
 
 }
+
 
 
 // ************************
