@@ -89,22 +89,22 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFEventMobSlot::GetEventSlotOrigin (aafPosition_t *pEventSlotOrigin)
 {
-	if ( pEventSlotOrigin == NULL )
-		return AAFRESULT_NULL_PARAM;
+  if ( !_eventSlotOrigin.isPresent() )
+    return AAFRESULT_PROP_NOT_PRESENT;
 
-	if ( !_eventSlotOrigin.isPresent() )
-		return AAFRESULT_PROP_NOT_PRESENT;
+  if ( pEventSlotOrigin == NULL )
+    return AAFRESULT_NULL_PARAM;
 
-	*pEventSlotOrigin = _eventSlotOrigin;
-	return AAFRESULT_SUCCESS;
+  *pEventSlotOrigin = _eventSlotOrigin;
+  return AAFRESULT_SUCCESS;
 }
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFEventMobSlot::SetEventSlotOrigin (aafPosition_t eventSlotOrigin)
 {
-	_eventSlotOrigin = eventSlotOrigin;
+  _eventSlotOrigin = eventSlotOrigin;
 
-	return AAFRESULT_SUCCESS;
+  return AAFRESULT_SUCCESS;
 }
 
 
