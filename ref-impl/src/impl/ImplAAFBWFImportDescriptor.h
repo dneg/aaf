@@ -112,7 +112,7 @@ public:
 
 
   //****************
-  // GetQltyFileSecurityWave()
+  // GetFileSecurityWave()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     GetFileSecurityWave
@@ -121,12 +121,54 @@ public:
 
 
   //****************
-  // AppendUnknownBWFChunks()
+  // AppendUnknownBWFChunk()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    AppendUnknownBWFChunks
+    AppendUnknownBWFChunk
         // @parm [in] RIFFChunk object
         (ImplAAFRIFFChunk * pData);
+
+
+  //****************
+  // PrependUnknownBWFChunk()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    PrependUnknownBWFChunk
+        // @parm [in] RIFFChunk object
+        (ImplAAFRIFFChunk * pData);
+
+
+  //****************
+  // InsertUnknownBWFChunkAt()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    InsertUnknownBWFChunkAt
+        (// @parm [in] index at which to insert
+         aafUInt32 index,
+
+         // @parm [in] RIFFChunk object
+         ImplAAFRIFFChunk * pData);
+
+
+  //****************
+  // GetUnknownBWFChunkAt()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetUnknownBWFChunkAt
+        (// @parm [in] index of RIFFChunk object to return
+         aafUInt32 index,
+
+         // @parm [out] RIFFChunk object at the given index
+         ImplAAFRIFFChunk ** ppData);
+
+
+  //****************
+  // RemoveUnknownBWFChunkAt()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    RemoveUnknownBWFChunkAt
+        // @parm [in] index of RIFFChunk object to remove
+        (aafUInt32 index);
 
 
   //****************
@@ -148,242 +190,234 @@ public:
 
 
   //****************
-  // RemoveUnknownBWFChunks()
+  // SetCodingHistory()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    RemoveUnknownBWFChunks
-        // @parm [in] RIFFChunk object to remove
-        (ImplAAFRIFFChunk * pData);
-
-  //****************
-  // SetBextCodingHistory()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    SetBextCodingHistory
-        // @parm [in, string] buffer from which BextCodingHistory is to be read
-        (aafCharacter_constptr  pBextCodingHistory);
+    SetCodingHistory
+        // @parm [in, string] buffer from which CodingHistory is to be read
+        (aafCharacter_constptr  pCodingHistory);
 
 
   //****************
-  // GetBextCodingHistory()
+  // GetCodingHistory()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    GetBextCodingHistory
-        (// @parm [out, string, size_is(bufSize)] buffer into which BextCodingHistory is to be written
-         aafCharacter *  pBextCodingHistory,
+    GetCodingHistory
+        (// @parm [out, string, size_is(bufSize)] buffer into which CodingHistory is to be written
+         aafCharacter *  pCodingHistory,
 
-         // @parm [in] size of *pBextCodingHistory buffer in bytes
+         // @parm [in] size of *pCodingHistory buffer in bytes
          aafUInt32  bufSize);
 
 
   //****************
-  // GetBextCodingHistoryBufLen()
+  // GetCodingHistoryBufLen()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    GetBextCodingHistoryBufLen
+    GetCodingHistoryBufLen
         // @parm [out] size of required buffer, in bytes
         (aafUInt32 *  pBufSize);
      
   //****************
-  // SetQltyBasicData()
+  // SetBasicData()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    SetQltyBasicData
-        // @parm [in, string] buffer from which QltyBasicData is to be read
-        (aafCharacter_constptr  pQltyBasicData);
+    SetBasicData
+        // @parm [in, string] buffer from which BasicData is to be read
+        (aafCharacter_constptr  pBasicData);
 
 
   //****************
-  // GetQltyBasicData()
+  // GetBasicData()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    GetQltyBasicData
-        (// @parm [out, string, size_is(bufSize)] buffer into which QltyBasicData is to be written
-         aafCharacter *  pQltyBasicData,
+    GetBasicData
+        (// @parm [out, string, size_is(bufSize)] buffer into which BasicData is to be written
+         aafCharacter *  pBasicData,
 
-         // @parm [in] size of *pQltyBasicData buffer in bytes
+         // @parm [in] size of *pBasicData buffer in bytes
          aafUInt32  bufSize);
 
 
   //****************
-  // GetQltyBasicDataBufLen()
+  // GetBasicDataBufLen()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    GetQltyBasicDataBufLen
+    GetBasicDataBufLen
         // @parm [out] size of required buffer, in bytes
         (aafUInt32 *  pBufSize);
 
   //****************
-  // SetQltyStartOfModulation()
+  // SetStartOfModulation()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    SetQltyStartOfModulation
-        // @parm [in, string] buffer from which QltyStartOfModulation is to be read
-        (aafCharacter_constptr  pQltyStartOfModulation);
+    SetStartOfModulation
+        // @parm [in, string] buffer from which StartOfModulation is to be read
+        (aafCharacter_constptr  pStartOfModulation);
 
 
   //****************
-  // GetQltyStartOfModulation()
+  // GetStartOfModulation()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    GetQltyStartOfModulation
-        (// @parm [out, string, size_is(bufSize)] buffer into which QltyStartOfModulation is to be written
-         aafCharacter *  pQltyStartOfModulation,
+    GetStartOfModulation
+        (// @parm [out, string, size_is(bufSize)] buffer into which StartOfModulation is to be written
+         aafCharacter *  pStartOfModulation,
 
-         // @parm [in] size of *pQltyStartOfModulation buffer in bytes
+         // @parm [in] size of *pStartOfModulation buffer in bytes
          aafUInt32  bufSize);
 
 
   //****************
-  // GetQltyStartOfModulationBufLen()
+  // GetStartOfModulationBufLen()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    GetQltyStartOfModulationBufLen
-        // @parm [out] size of required buffer, in bytes
-        (aafUInt32 *  pBufSize);
-     
-  //****************
-  // SetQltyQualityEvent()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    SetQltyQualityEvent
-        // @parm [in, string] buffer from which QltyQualityEvent is to be read
-        (aafCharacter_constptr  pQltyQualityEvent);
-
-
-  //****************
-  // GetQltyQualityEvent()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    GetQltyQualityEvent
-        (// @parm [out, string, size_is(bufSize)] buffer into which QltyQualityEvent is to be written
-         aafCharacter *  pQltyQualityEvent,
-
-         // @parm [in] size of *pQltyQualityEvent buffer in bytes
-         aafUInt32  bufSize);
-
-
-  //****************
-  // GetQltyQualityEventBufLen()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    GetQltyQualityEventBufLen
-        // @parm [out] size of required buffer, in bytes
-        (aafUInt32 *  pBufSize);
-
-  //****************
-  // SetQltyEndOfModulation()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    SetQltyEndOfModulation
-        // @parm [in, string] buffer from which QltyEndOfModulation is to be read
-        (aafCharacter_constptr  pQltyEndOfModulation);
-
-
-  //****************
-  // GetQltyEndOfModulation()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    GetQltyEndOfModulation
-        (// @parm [out, string, size_is(bufSize)] buffer into which QltyEndOfModulation is to be written
-         aafCharacter *  pQltyEndOfModulation,
-
-         // @parm [in] size of *pQltyEndOfModulation buffer in bytes
-         aafUInt32  bufSize);
-
-
-  //****************
-  // GetQltyEndOfModulationBufLen()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    GetQltyEndOfModulationBufLen
+    GetStartOfModulationBufLen
         // @parm [out] size of required buffer, in bytes
         (aafUInt32 *  pBufSize);
      
   //****************
-  // SetQltyQualityParameter()
+  // SetQualityEvent()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    SetQltyQualityParameter
-        // @parm [in, string] buffer from which QltyQualityParameter is to be read
-        (aafCharacter_constptr  pQltyQualityParameter);
+    SetQualityEvent
+        // @parm [in, string] buffer from which QualityEvent is to be read
+        (aafCharacter_constptr  pQualityEvent);
 
 
   //****************
-  // GetQltyQualityParameter()
+  // GetQualityEvent()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    GetQltyQualityParameter
-        (// @parm [out, string, size_is(bufSize)] buffer into which QltyQualityParameter is to be written
-         aafCharacter *  pQltyQualityParameter,
+    GetQualityEvent
+        (// @parm [out, string, size_is(bufSize)] buffer into which QualityEvent is to be written
+         aafCharacter *  pQualityEvent,
 
-         // @parm [in] size of *pQltyQualityParameter buffer in bytes
+         // @parm [in] size of *pQualityEvent buffer in bytes
          aafUInt32  bufSize);
 
 
   //****************
-  // GetQltyQualityParameterBufLen()
+  // GetQualityEventBufLen()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    GetQltyQualityParameterBufLen
+    GetQualityEventBufLen
+        // @parm [out] size of required buffer, in bytes
+        (aafUInt32 *  pBufSize);
+
+  //****************
+  // SetEndOfModulation()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    SetEndOfModulation
+        // @parm [in, string] buffer from which EndOfModulation is to be read
+        (aafCharacter_constptr  pEndOfModulation);
+
+
+  //****************
+  // GetEndOfModulation()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetEndOfModulation
+        (// @parm [out, string, size_is(bufSize)] buffer into which EndOfModulation is to be written
+         aafCharacter *  pEndOfModulation,
+
+         // @parm [in] size of *pEndOfModulation buffer in bytes
+         aafUInt32  bufSize);
+
+
+  //****************
+  // GetEndOfModulationBufLen()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetEndOfModulationBufLen
         // @parm [out] size of required buffer, in bytes
         (aafUInt32 *  pBufSize);
      
   //****************
-  // SetQltyOperatorComment()
+  // SetQualityParameter()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    SetQltyOperatorComment
-        // @parm [in, string] buffer from which QltyOperatorComment is to be read
-        (aafCharacter_constptr  pQltyOperatorComment);
+    SetQualityParameter
+        // @parm [in, string] buffer from which QualityParameter is to be read
+        (aafCharacter_constptr  pQualityParameter);
 
 
   //****************
-  // GetQltyOperatorComment()
+  // GetQualityParameter()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    GetQltyOperatorComment
-        (// @parm [out, string, size_is(bufSize)] buffer into which QltyOperatorComment is to be written
-         aafCharacter *  pQltyOperatorComment,
+    GetQualityParameter
+        (// @parm [out, string, size_is(bufSize)] buffer into which QualityParameter is to be written
+         aafCharacter *  pQualityParameter,
 
-         // @parm [in] size of *pQltyOperatorComment buffer in bytes
+         // @parm [in] size of *pQualityParameter buffer in bytes
          aafUInt32  bufSize);
 
 
   //****************
-  // GetQltyOperatorCommentBufLen()
+  // GetQualityParameterBufLen()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    GetQltyOperatorCommentBufLen
+    GetQualityParameterBufLen
         // @parm [out] size of required buffer, in bytes
         (aafUInt32 *  pBufSize);
      
   //****************
-  // SetQltyCueSheet()
+  // SetOperatorComment()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    SetQltyCueSheet
-        // @parm [in, string] buffer from which QltyCueSheet is to be read
-        (aafCharacter_constptr  pQltyCueSheet);
+    SetOperatorComment
+        // @parm [in, string] buffer from which OperatorComment is to be read
+        (aafCharacter_constptr  pOperatorComment);
 
 
   //****************
-  // GetQltyCueSheet()
+  // GetOperatorComment()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    GetQltyCueSheet
-        (// @parm [out, string, size_is(bufSize)] buffer into which QltyCueSheet is to be written
-         aafCharacter *  pQltyCueSheet,
+    GetOperatorComment
+        (// @parm [out, string, size_is(bufSize)] buffer into which OperatorComment is to be written
+         aafCharacter *  pOperatorComment,
 
-         // @parm [in] size of *pQltyCueSheet buffer in bytes
+         // @parm [in] size of *pOperatorComment buffer in bytes
          aafUInt32  bufSize);
 
 
   //****************
-  // GetQltyCueSheetBufLen()
+  // GetOperatorCommentBufLen()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    GetQltyCueSheetBufLen
+    GetOperatorCommentBufLen
+        // @parm [out] size of required buffer, in bytes
+        (aafUInt32 *  pBufSize);
+     
+  //****************
+  // SetCueSheet()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    SetCueSheet
+        // @parm [in, string] buffer from which CueSheet is to be read
+        (aafCharacter_constptr  pCueSheet);
+
+
+  //****************
+  // GetCueSheet()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetCueSheet
+        (// @parm [out, string, size_is(bufSize)] buffer into which CueSheet is to be written
+         aafCharacter *  pCueSheet,
+
+         // @parm [in] size of *pCueSheet buffer in bytes
+         aafUInt32  bufSize);
+
+
+  //****************
+  // GetCueSheetBufLen()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetCueSheetBufLen
         // @parm [out] size of required buffer, in bytes
         (aafUInt32 *  pBufSize);
 

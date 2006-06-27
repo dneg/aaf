@@ -40,8 +40,8 @@ extern "C" const aafClassID_t CLSID_EnumAAFRIFFChunks;
 
 ImplAAFBWFImportDescriptor::ImplAAFBWFImportDescriptor ():
   
-  	_fileSecurityReport( PID_BWFImportDescriptor_FileSecurityReport, L"FileSecurityReport"),
-  	_fileSecurityWave( PID_BWFImportDescriptor_FileSecurityWave, L"FileSecurityWave"),
+  	_fileSecurityReport( PID_BWFImportDescriptor_QltyFileSecurityReport, L"QltyFileSecurityReport"),
+  	_fileSecurityWave( PID_BWFImportDescriptor_QltyFileSecurityWave, L"QltyFileSecurityWave"),
   	_bextCodingHistory( PID_BWFImportDescriptor_BextCodingHistory, L"BextCodingHistory"),
   	_qltyBasicData( PID_BWFImportDescriptor_QltyBasicData, L"QltyBasicData"),
   	_qltyStartOfModulation( PID_BWFImportDescriptor_QltyStartOfModulation, L"QltyStartOfModulation"),
@@ -51,8 +51,8 @@ ImplAAFBWFImportDescriptor::ImplAAFBWFImportDescriptor ():
   	_qltyOperatorComment( PID_BWFImportDescriptor_QltyOperatorComment, L"QltyOperatorComment"),
   	_qltyCueSheet( PID_BWFImportDescriptor_QltyCueSheet, L"QltyCueSheet"),
   	_unknownBWFChunks( PID_BWFImportDescriptor_UnknownBWFChunks, L"UnknownBWFChunks")
-  	
   
+
 {
 	_persistentProperties.put(_fileSecurityReport.address());
 	_persistentProperties.put(_fileSecurityWave.address());
@@ -145,13 +145,13 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFBWFImportDescriptor::AppendUnknownBWFChunks (
+    ImplAAFBWFImportDescriptor::AppendUnknownBWFChunk (
       ImplAAFRIFFChunk * pData)
 {
-  if (NULL == pData)
+	if (NULL == pData)
 		return AAFRESULT_NULL_PARAM;
-  if (pData->attached ())
-    return AAFRESULT_OBJECT_ALREADY_ATTACHED;
+	if (pData->attached ())
+		return AAFRESULT_OBJECT_ALREADY_ATTACHED;
 
 	_unknownBWFChunks.appendValue(pData);
 	pData->AcquireReference();
@@ -161,20 +161,79 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
+    ImplAAFBWFImportDescriptor::PrependUnknownBWFChunk (
+      ImplAAFRIFFChunk * pData)
+{
+	if (NULL == pData)
+		return AAFRESULT_NULL_PARAM;
+	if (pData->attached ())
+		return AAFRESULT_OBJECT_ALREADY_ATTACHED;
+
+	_unknownBWFChunks.prependValue(pData);
+	pData->AcquireReference();
+	return AAFRESULT_SUCCESS;
+}
+
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFBWFImportDescriptor::InsertUnknownBWFChunkAt (
+      aafUInt32 index, ImplAAFRIFFChunk * pData)
+{
+	if (NULL == pData)
+		return AAFRESULT_NULL_PARAM;
+	if (pData->attached ())
+		return AAFRESULT_OBJECT_ALREADY_ATTACHED;
+	if (index > _unknownBWFChunks.count())
+		return AAFRESULT_BADINDEX;
+
+	_unknownBWFChunks.insertAt(pData, index);
+	pData->AcquireReference();
+	return AAFRESULT_SUCCESS;
+}
+
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFBWFImportDescriptor::GetUnknownBWFChunkAt (
+      aafUInt32 index, ImplAAFRIFFChunk ** ppData)
+{
+	if (NULL == ppData)
+		return AAFRESULT_NULL_PARAM;
+	if (index >= _unknownBWFChunks.count())
+		return AAFRESULT_BADINDEX;
+
+	_unknownBWFChunks.getValueAt(*ppData, index);
+	ASSERTU(*ppData);
+	(*ppData)->AcquireReference();
+	return AAFRESULT_SUCCESS;
+}
+
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFBWFImportDescriptor::RemoveUnknownBWFChunkAt (
+      aafUInt32 index)
+{
+	if (index >= _unknownBWFChunks.count())
+		return AAFRESULT_BADINDEX;
+
+	ImplAAFRIFFChunk *pData = _unknownBWFChunks.removeAt(index);
+	if (pData)
+		pData->ReleaseReference();
+	return AAFRESULT_SUCCESS;
+}
+
+
+
+AAFRESULT STDMETHODCALLTYPE
     ImplAAFBWFImportDescriptor::CountUnknownBWFChunks (
       aafUInt32 *  pNumData)
 {
-  if (pNumData == NULL)
+	if (pNumData == NULL)
 		return AAFRESULT_NULL_PARAM;
 
-	if(!_unknownBWFChunks.isPresent())
-	{
-		*pNumData = 0; //return AAFRESULT_PROP_NOT_PRESENT;
-	}
-	else
-	{
-		*pNumData = _unknownBWFChunks.count();
-	}
+	*pNumData = _unknownBWFChunks.count();
 		
 	return(AAFRESULT_SUCCESS);
 }
@@ -216,45 +275,16 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFBWFImportDescriptor::RemoveUnknownBWFChunks (
-      ImplAAFRIFFChunk * pData)
+    ImplAAFBWFImportDescriptor::SetCodingHistory (
+      aafCharacter_constptr  pCodingHistory)
 {
-  if (! pData)
-		return AAFRESULT_NULL_PARAM;
-  if (!pData->attached ()) // object could not possibly be in container.
-    return AAFRESULT_OBJECT_NOT_ATTACHED;
-	if(!_unknownBWFChunks.isPresent())
-		return AAFRESULT_PROP_NOT_PRESENT;
-	
-  OMUInt32 index;
-  if (_unknownBWFChunks.findIndex (pData, index))
-  {
-	  _unknownBWFChunks.removeAt(index);
-    // We have removed an element from a "stong reference container" so we must
-    // decrement the objects reference count. This will not delete the object
-    // since the caller must have alread acquired a reference. (transdel 2000-MAR-10)
-    pData->ReleaseReference ();
-  }
-  else
-  {
-    return AAFRESULT_OBJECT_NOT_FOUND;
-  }
-
-	return(AAFRESULT_SUCCESS);
-}
-
-
-AAFRESULT STDMETHODCALLTYPE
-    ImplAAFBWFImportDescriptor::SetBextCodingHistory (
-      aafCharacter_constptr  pBextCodingHistory)
-{
-  if(pBextCodingHistory == NULL)
+  if(pCodingHistory == NULL)
 		return(AAFRESULT_NULL_PARAM);
 
-	if(wcslen(pBextCodingHistory)*sizeof(OMCharacter) >= OMPROPERTYSIZE_MAX)
+	if(wcslen(pCodingHistory)*sizeof(OMCharacter) >= OMPROPERTYSIZE_MAX)
 		return AAFRESULT_BAD_SIZE;
 
-	_bextCodingHistory = pBextCodingHistory;
+	_bextCodingHistory = pCodingHistory;
 
 	return(AAFRESULT_SUCCESS); 
 }
@@ -262,11 +292,11 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFBWFImportDescriptor::GetBextCodingHistory (
-      aafCharacter *  pBextCodingHistory,
+    ImplAAFBWFImportDescriptor::GetCodingHistory (
+      aafCharacter *  pCodingHistory,
       aafUInt32  bufSize)
 {
-  if(pBextCodingHistory == NULL)
+  if(pCodingHistory == NULL)
 		return(AAFRESULT_NULL_PARAM);
 
 	if(!_bextCodingHistory.isPresent())
@@ -274,7 +304,7 @@ AAFRESULT STDMETHODCALLTYPE
 	
 	bool stat;
 	
-	stat = _bextCodingHistory.copyToBuffer(pBextCodingHistory, bufSize);
+	stat = _bextCodingHistory.copyToBuffer(pCodingHistory, bufSize);
 	if (! stat)
 	{
 	  return AAFRESULT_SMALLBUF;	
@@ -287,7 +317,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFBWFImportDescriptor::GetBextCodingHistoryBufLen (
+    ImplAAFBWFImportDescriptor::GetCodingHistoryBufLen (
       aafUInt32 *  pBufSize)
 {
   if(pBufSize == NULL)
@@ -302,16 +332,16 @@ AAFRESULT STDMETHODCALLTYPE
 
      
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFBWFImportDescriptor::SetQltyBasicData (
-      aafCharacter_constptr  pQltyBasicData)
+    ImplAAFBWFImportDescriptor::SetBasicData (
+      aafCharacter_constptr  pBasicData)
 {
-  if(pQltyBasicData == NULL)
+  if(pBasicData == NULL)
 		return(AAFRESULT_NULL_PARAM);
 
-	if(wcslen(pQltyBasicData)*sizeof(OMCharacter) >= OMPROPERTYSIZE_MAX)
+	if(wcslen(pBasicData)*sizeof(OMCharacter) >= OMPROPERTYSIZE_MAX)
 		return AAFRESULT_BAD_SIZE;
 
-	_qltyBasicData = pQltyBasicData;
+	_qltyBasicData = pBasicData;
 
 	return(AAFRESULT_SUCCESS);
 }
@@ -319,11 +349,11 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFBWFImportDescriptor::GetQltyBasicData (
-      aafCharacter *  pQltyBasicData,
+    ImplAAFBWFImportDescriptor::GetBasicData (
+      aafCharacter *  pBasicData,
       aafUInt32  bufSize)
 {
-  if(pQltyBasicData == NULL)
+  if(pBasicData == NULL)
 		return(AAFRESULT_NULL_PARAM);
 
 	if(!_qltyBasicData.isPresent())
@@ -331,7 +361,7 @@ AAFRESULT STDMETHODCALLTYPE
 	
 	bool stat;
 	
-	stat = _qltyBasicData.copyToBuffer(pQltyBasicData, bufSize);
+	stat = _qltyBasicData.copyToBuffer(pBasicData, bufSize);
 	if (! stat)
 	{
 	  return AAFRESULT_SMALLBUF;	
@@ -343,7 +373,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFBWFImportDescriptor::GetQltyBasicDataBufLen (
+    ImplAAFBWFImportDescriptor::GetBasicDataBufLen (
       aafUInt32 *  pBufSize)
 {
   if(pBufSize == NULL)
@@ -358,16 +388,16 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFBWFImportDescriptor::SetQltyStartOfModulation (
-      aafCharacter_constptr  pQltyStartOfModulation)
+    ImplAAFBWFImportDescriptor::SetStartOfModulation (
+      aafCharacter_constptr  pStartOfModulation)
 {
-  if(pQltyStartOfModulation == NULL)
+  if(pStartOfModulation == NULL)
 		return(AAFRESULT_NULL_PARAM);
 
-	if(wcslen(pQltyStartOfModulation)*sizeof(OMCharacter) >= OMPROPERTYSIZE_MAX)
+	if(wcslen(pStartOfModulation)*sizeof(OMCharacter) >= OMPROPERTYSIZE_MAX)
 		return AAFRESULT_BAD_SIZE;
 
-	_qltyStartOfModulation = pQltyStartOfModulation;
+	_qltyStartOfModulation = pStartOfModulation;
 
 	return(AAFRESULT_SUCCESS);
 }
@@ -375,11 +405,11 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFBWFImportDescriptor::GetQltyStartOfModulation (
-      aafCharacter *  pQltyStartOfModulation,
+    ImplAAFBWFImportDescriptor::GetStartOfModulation (
+      aafCharacter *  pStartOfModulation,
       aafUInt32  bufSize)
 {
-  if(pQltyStartOfModulation == NULL)
+  if(pStartOfModulation == NULL)
 		return(AAFRESULT_NULL_PARAM);
 
 	if(!_qltyStartOfModulation.isPresent())
@@ -387,7 +417,7 @@ AAFRESULT STDMETHODCALLTYPE
 	
 	bool stat;
 	
-	stat = _qltyStartOfModulation.copyToBuffer(pQltyStartOfModulation, bufSize);
+	stat = _qltyStartOfModulation.copyToBuffer(pStartOfModulation, bufSize);
 	if (! stat)
 	{
 	  return AAFRESULT_SMALLBUF;	
@@ -399,7 +429,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFBWFImportDescriptor::GetQltyStartOfModulationBufLen (
+    ImplAAFBWFImportDescriptor::GetStartOfModulationBufLen (
       aafUInt32 *  pBufSize)
 {
   if(pBufSize == NULL)
@@ -414,16 +444,16 @@ AAFRESULT STDMETHODCALLTYPE
 
      
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFBWFImportDescriptor::SetQltyQualityEvent (
-      aafCharacter_constptr  pQltyQualityEvent)
+    ImplAAFBWFImportDescriptor::SetQualityEvent (
+      aafCharacter_constptr  pQualityEvent)
 {
-  if(pQltyQualityEvent == NULL)
+  if(pQualityEvent == NULL)
 		return(AAFRESULT_NULL_PARAM);
 
-	if(wcslen(pQltyQualityEvent)*sizeof(OMCharacter) >= OMPROPERTYSIZE_MAX)
+	if(wcslen(pQualityEvent)*sizeof(OMCharacter) >= OMPROPERTYSIZE_MAX)
 		return AAFRESULT_BAD_SIZE;
 
-	_qltyQualityEvent = pQltyQualityEvent;
+	_qltyQualityEvent = pQualityEvent;
 
 	return(AAFRESULT_SUCCESS);
 }
@@ -431,11 +461,11 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFBWFImportDescriptor::GetQltyQualityEvent (
-      aafCharacter *  pQltyQualityEvent,
+    ImplAAFBWFImportDescriptor::GetQualityEvent (
+      aafCharacter *  pQualityEvent,
       aafUInt32  bufSize)
 {
-  if(pQltyQualityEvent == NULL)
+  if(pQualityEvent == NULL)
 		return(AAFRESULT_NULL_PARAM);
 
 	if(!_qltyQualityEvent.isPresent())
@@ -443,7 +473,7 @@ AAFRESULT STDMETHODCALLTYPE
 	
 	bool stat;
 	
-	stat = _qltyQualityEvent.copyToBuffer(pQltyQualityEvent, bufSize);
+	stat = _qltyQualityEvent.copyToBuffer(pQualityEvent, bufSize);
 	if (! stat)
 	{
 	  return AAFRESULT_SMALLBUF;	
@@ -455,7 +485,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFBWFImportDescriptor::GetQltyQualityEventBufLen (
+    ImplAAFBWFImportDescriptor::GetQualityEventBufLen (
       aafUInt32 *  pBufSize)
 {
   if(pBufSize == NULL)
@@ -470,16 +500,16 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFBWFImportDescriptor::SetQltyEndOfModulation (
-      aafCharacter_constptr  pQltyEndOfModulation)
+    ImplAAFBWFImportDescriptor::SetEndOfModulation (
+      aafCharacter_constptr  pEndOfModulation)
 {
-  if(pQltyEndOfModulation == NULL)
+  if(pEndOfModulation == NULL)
 		return(AAFRESULT_NULL_PARAM);
 
-	if(wcslen(pQltyEndOfModulation)*sizeof(OMCharacter) >= OMPROPERTYSIZE_MAX)
+	if(wcslen(pEndOfModulation)*sizeof(OMCharacter) >= OMPROPERTYSIZE_MAX)
 		return AAFRESULT_BAD_SIZE;
 
-	_qltyEndOfModulation = pQltyEndOfModulation;
+	_qltyEndOfModulation = pEndOfModulation;
 
 	return(AAFRESULT_SUCCESS);
 }
@@ -487,11 +517,11 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFBWFImportDescriptor::GetQltyEndOfModulation (
-      aafCharacter *  pQltyEndOfModulation,
+    ImplAAFBWFImportDescriptor::GetEndOfModulation (
+      aafCharacter *  pEndOfModulation,
       aafUInt32  bufSize)
 {
-  if(pQltyEndOfModulation == NULL)
+  if(pEndOfModulation == NULL)
 		return(AAFRESULT_NULL_PARAM);
 
 	if(!_qltyEndOfModulation.isPresent())
@@ -499,7 +529,7 @@ AAFRESULT STDMETHODCALLTYPE
 	
 	bool stat;
 	
-	stat = _qltyEndOfModulation.copyToBuffer(pQltyEndOfModulation, bufSize);
+	stat = _qltyEndOfModulation.copyToBuffer(pEndOfModulation, bufSize);
 	if (! stat)
 	{
 	  return AAFRESULT_SMALLBUF;	
@@ -511,7 +541,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFBWFImportDescriptor::GetQltyEndOfModulationBufLen (
+    ImplAAFBWFImportDescriptor::GetEndOfModulationBufLen (
       aafUInt32 *  pBufSize)
 {
  if(pBufSize == NULL)
@@ -526,16 +556,16 @@ AAFRESULT STDMETHODCALLTYPE
 
      
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFBWFImportDescriptor::SetQltyQualityParameter (
-      aafCharacter_constptr  pQltyQualityParameter)
+    ImplAAFBWFImportDescriptor::SetQualityParameter (
+      aafCharacter_constptr  pQualityParameter)
 {
-  if(pQltyQualityParameter == NULL)
+  if(pQualityParameter == NULL)
 		return(AAFRESULT_NULL_PARAM);
 
-	if(wcslen(pQltyQualityParameter)*sizeof(OMCharacter) >= OMPROPERTYSIZE_MAX)
+	if(wcslen(pQualityParameter)*sizeof(OMCharacter) >= OMPROPERTYSIZE_MAX)
 		return AAFRESULT_BAD_SIZE;
 
-	_qltyQualityParameter = pQltyQualityParameter;
+	_qltyQualityParameter = pQualityParameter;
 
 	return(AAFRESULT_SUCCESS);
 }
@@ -543,11 +573,11 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFBWFImportDescriptor::GetQltyQualityParameter (
-      aafCharacter *  pQltyQualityParameter,
+    ImplAAFBWFImportDescriptor::GetQualityParameter (
+      aafCharacter *  pQualityParameter,
       aafUInt32  bufSize)
 {
-  if(pQltyQualityParameter == NULL)
+  if(pQualityParameter == NULL)
 		return(AAFRESULT_NULL_PARAM);
 
 	if(!_qltyQualityParameter.isPresent())
@@ -555,7 +585,7 @@ AAFRESULT STDMETHODCALLTYPE
 	
 	bool stat;
 	
-	stat = _qltyQualityParameter.copyToBuffer(pQltyQualityParameter, bufSize);
+	stat = _qltyQualityParameter.copyToBuffer(pQualityParameter, bufSize);
 	if (! stat)
 	{
 	  return AAFRESULT_SMALLBUF;	
@@ -567,7 +597,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFBWFImportDescriptor::GetQltyQualityParameterBufLen (
+    ImplAAFBWFImportDescriptor::GetQualityParameterBufLen (
       aafUInt32 *  pBufSize)
 {
   if(pBufSize == NULL)
@@ -582,16 +612,16 @@ AAFRESULT STDMETHODCALLTYPE
 
      
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFBWFImportDescriptor::SetQltyOperatorComment (
-      aafCharacter_constptr  pQltyOperatorComment)
+    ImplAAFBWFImportDescriptor::SetOperatorComment (
+      aafCharacter_constptr  pOperatorComment)
 {
-  if(pQltyOperatorComment == NULL)
+  if(pOperatorComment == NULL)
 		return(AAFRESULT_NULL_PARAM);
 
-	if(wcslen(pQltyOperatorComment)*sizeof(OMCharacter) >= OMPROPERTYSIZE_MAX)
+	if(wcslen(pOperatorComment)*sizeof(OMCharacter) >= OMPROPERTYSIZE_MAX)
 		return AAFRESULT_BAD_SIZE;
 
-	_qltyOperatorComment = pQltyOperatorComment;
+	_qltyOperatorComment = pOperatorComment;
 
 	return(AAFRESULT_SUCCESS);
 }
@@ -599,11 +629,11 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFBWFImportDescriptor::GetQltyOperatorComment (
-      aafCharacter *  pQltyOperatorComment,
+    ImplAAFBWFImportDescriptor::GetOperatorComment (
+      aafCharacter *  pOperatorComment,
       aafUInt32  bufSize)
 {
-  if(pQltyOperatorComment == NULL)
+  if(pOperatorComment == NULL)
 		return(AAFRESULT_NULL_PARAM);
 
 	if(!_qltyOperatorComment.isPresent())
@@ -611,7 +641,7 @@ AAFRESULT STDMETHODCALLTYPE
 	
 	bool stat;
 	
-	stat = _qltyOperatorComment.copyToBuffer(pQltyOperatorComment, bufSize);
+	stat = _qltyOperatorComment.copyToBuffer(pOperatorComment, bufSize);
 	if (! stat)
 	{
 	  return AAFRESULT_SMALLBUF;	
@@ -623,7 +653,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFBWFImportDescriptor::GetQltyOperatorCommentBufLen (
+    ImplAAFBWFImportDescriptor::GetOperatorCommentBufLen (
       aafUInt32 *  pBufSize)
 {
   if(pBufSize == NULL)
@@ -638,16 +668,16 @@ AAFRESULT STDMETHODCALLTYPE
 
      
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFBWFImportDescriptor::SetQltyCueSheet (
-      aafCharacter_constptr  pQltyCueSheet)
+    ImplAAFBWFImportDescriptor::SetCueSheet (
+      aafCharacter_constptr  pCueSheet)
 {
-  if(pQltyCueSheet == NULL)
+  if(pCueSheet == NULL)
 		return(AAFRESULT_NULL_PARAM);
 
-	if(wcslen(pQltyCueSheet)*sizeof(OMCharacter) >= OMPROPERTYSIZE_MAX)
+	if(wcslen(pCueSheet)*sizeof(OMCharacter) >= OMPROPERTYSIZE_MAX)
 		return AAFRESULT_BAD_SIZE;
 
-	_qltyCueSheet = pQltyCueSheet;
+	_qltyCueSheet = pCueSheet;
 
 	return(AAFRESULT_SUCCESS);
 }
@@ -655,11 +685,11 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFBWFImportDescriptor::GetQltyCueSheet (
-      aafCharacter *  pQltyCueSheet,
+    ImplAAFBWFImportDescriptor::GetCueSheet (
+      aafCharacter *  pCueSheet,
       aafUInt32  bufSize)
 {
-  if(pQltyCueSheet == NULL)
+  if(pCueSheet == NULL)
 		return(AAFRESULT_NULL_PARAM);
 
 	if(!_qltyCueSheet.isPresent())
@@ -667,7 +697,7 @@ AAFRESULT STDMETHODCALLTYPE
 	
 	bool stat;
 	
-	stat = _qltyCueSheet.copyToBuffer(pQltyCueSheet, bufSize);
+	stat = _qltyCueSheet.copyToBuffer(pCueSheet, bufSize);
 	if (! stat)
 	{
 	  return AAFRESULT_SMALLBUF;	
@@ -679,7 +709,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFBWFImportDescriptor::GetQltyCueSheetBufLen (
+    ImplAAFBWFImportDescriptor::GetCueSheetBufLen (
       aafUInt32 *  pBufSize)
 {
   if(pBufSize == NULL)
