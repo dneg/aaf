@@ -165,7 +165,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 		checkResult(defs.cdRIFFChunk()->CreateInstance(IID_IAAFRIFFChunk, 
 							 (IUnknown **)&pRIFFChunk));
-		checkResult(pBWFImportDesc->AppendUnknownBWFChunks(pRIFFChunk));
+		checkResult(pBWFImportDesc->AppendUnknownBWFChunk(pRIFFChunk));
 								 
 		checkResult( pBWFImportDesc->QueryInterface(IID_IAAFEssenceDescriptor, (void **)&pEssDesc));
 		checkResult(pSourceMob->SetEssenceDescriptor(pEssDesc));

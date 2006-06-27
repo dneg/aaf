@@ -59,14 +59,14 @@ static const 	aafMobID_t	TEST_referencedMobID =
 
 #define TEST_FileSecurityReport		256
 #define TEST_FileSecurityWave		128
-#define TEST_BextCodingHistory		L"CodingHistory test"
-#define TEST_QltyBasicData			L"BasicData test"
-#define TEST_QltyStartOfModulation	L"StartOfModulation test"
-#define TEST_QltyQualityEvent		L"QualityEvent test"
-#define TEST_QltyEndOfModulation	L"EndOfModulation test"
-#define TEST_QltyQualityParameter	L"QualityParameter test"
-#define TEST_QltyOperatorComment	L"OperatorComment test"
-#define TEST_QltyCueSheet			L"CueSheet test"
+#define TEST_CodingHistory		L"CodingHistory test"
+#define TEST_BasicData			L"BasicData test"
+#define TEST_StartOfModulation	L"StartOfModulation test"
+#define TEST_QualityEvent		L"QualityEvent test"
+#define TEST_EndOfModulation	L"EndOfModulation test"
+#define TEST_QualityParameter	L"QualityParameter test"
+#define TEST_OperatorComment	L"OperatorComment test"
+#define TEST_CueSheet			L"CueSheet test"
 
 
 static const char RIFFChunksmiley[] =        /* 16x16 smiley face */
@@ -184,19 +184,19 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(defs.cdRIFFChunk()->CreateInstance(IID_IAAFRIFFChunk, 
 							 (IUnknown **)&pRIFFChunk2));
 							 
-		checkResult(pBWFImportDesc->AppendUnknownBWFChunks(pRIFFChunk));
-		checkResult(pBWFImportDesc->AppendUnknownBWFChunks(pRIFFChunk2));
-		checkExpression(pBWFImportDesc->AppendUnknownBWFChunks(pRIFFChunk)==AAFRESULT_OBJECT_ALREADY_ATTACHED, AAFRESULT_TEST_FAILED);
+		checkResult(pBWFImportDesc->AppendUnknownBWFChunk(pRIFFChunk));
+		checkResult(pBWFImportDesc->AppendUnknownBWFChunk(pRIFFChunk2));
+		checkExpression(pBWFImportDesc->AppendUnknownBWFChunk(pRIFFChunk)==AAFRESULT_OBJECT_ALREADY_ATTACHED, AAFRESULT_TEST_FAILED);
 		checkResult(pBWFImportDesc->SetFileSecurityReport(TEST_FileSecurityReport));
 		checkResult(pBWFImportDesc->SetFileSecurityWave(TEST_FileSecurityWave));
-		checkResult(pBWFImportDesc->SetBextCodingHistory(TEST_BextCodingHistory));
-		checkResult(pBWFImportDesc->SetQltyBasicData(TEST_QltyBasicData));
-		checkResult(pBWFImportDesc->SetQltyStartOfModulation(TEST_QltyStartOfModulation));
-		checkResult(pBWFImportDesc->SetQltyQualityEvent(TEST_QltyQualityEvent));
-		checkResult(pBWFImportDesc->SetQltyEndOfModulation(TEST_QltyEndOfModulation));
-		checkResult(pBWFImportDesc->SetQltyQualityParameter(TEST_QltyQualityParameter));	
-		checkResult(pBWFImportDesc->SetQltyOperatorComment(TEST_QltyOperatorComment));
-		checkResult(pBWFImportDesc->SetQltyCueSheet(TEST_QltyCueSheet));
+		checkResult(pBWFImportDesc->SetCodingHistory(TEST_CodingHistory));
+		checkResult(pBWFImportDesc->SetBasicData(TEST_BasicData));
+		checkResult(pBWFImportDesc->SetStartOfModulation(TEST_StartOfModulation));
+		checkResult(pBWFImportDesc->SetQualityEvent(TEST_QualityEvent));
+		checkResult(pBWFImportDesc->SetEndOfModulation(TEST_EndOfModulation));
+		checkResult(pBWFImportDesc->SetQualityParameter(TEST_QualityParameter));	
+		checkResult(pBWFImportDesc->SetOperatorComment(TEST_OperatorComment));
+		checkResult(pBWFImportDesc->SetCueSheet(TEST_CueSheet));
 						 
 		checkResult( pBWFImportDesc->QueryInterface(IID_IAAFEssenceDescriptor, (void **)&pEssDesc));
 		checkResult(pSourceMob->SetEssenceDescriptor(pEssDesc));
@@ -287,22 +287,22 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 			checkExpression(testNum==TEST_FileSecurityReport, AAFRESULT_TEST_FAILED);
 			checkResult(pBWFImportDesc->GetFileSecurityWave(&testNum));
 			checkExpression(testNum==TEST_FileSecurityWave, AAFRESULT_TEST_FAILED);
-			checkResult(pBWFImportDesc->GetBextCodingHistory(testString, sizeof(testString)));
-			checkExpression(wcscmp(testString, TEST_BextCodingHistory) == 0, AAFRESULT_TEST_FAILED);
-			checkResult(pBWFImportDesc->GetQltyBasicData(testString, sizeof(testString)));
-			checkExpression(wcscmp(testString, TEST_QltyBasicData) == 0, AAFRESULT_TEST_FAILED);
-			checkResult(pBWFImportDesc->GetQltyStartOfModulation(testString, sizeof(testString)));
-			checkExpression(wcscmp(testString, TEST_QltyStartOfModulation) == 0, AAFRESULT_TEST_FAILED);
-			checkResult(pBWFImportDesc->GetQltyQualityEvent(testString, sizeof(testString)));
-			checkExpression(wcscmp(testString, TEST_QltyQualityEvent) == 0, AAFRESULT_TEST_FAILED);
-			checkResult(pBWFImportDesc->GetQltyEndOfModulation(testString, sizeof(testString)));
-			checkExpression(wcscmp(testString, TEST_QltyEndOfModulation) == 0, AAFRESULT_TEST_FAILED);
-			checkResult(pBWFImportDesc->GetQltyQualityParameter(testString, sizeof(testString)));	
-			checkExpression(wcscmp(testString, TEST_QltyQualityParameter) == 0, AAFRESULT_TEST_FAILED);
-			checkResult(pBWFImportDesc->GetQltyOperatorComment(testString, sizeof(testString)));
-			checkExpression(wcscmp(testString, TEST_QltyOperatorComment) == 0, AAFRESULT_TEST_FAILED);
-			checkResult(pBWFImportDesc->GetQltyCueSheet(testString, sizeof(testString)));
-			checkExpression(wcscmp(testString, TEST_QltyCueSheet) == 0, AAFRESULT_TEST_FAILED);
+			checkResult(pBWFImportDesc->GetCodingHistory(testString, sizeof(testString)));
+			checkExpression(wcscmp(testString, TEST_CodingHistory) == 0, AAFRESULT_TEST_FAILED);
+			checkResult(pBWFImportDesc->GetBasicData(testString, sizeof(testString)));
+			checkExpression(wcscmp(testString, TEST_BasicData) == 0, AAFRESULT_TEST_FAILED);
+			checkResult(pBWFImportDesc->GetStartOfModulation(testString, sizeof(testString)));
+			checkExpression(wcscmp(testString, TEST_StartOfModulation) == 0, AAFRESULT_TEST_FAILED);
+			checkResult(pBWFImportDesc->GetQualityEvent(testString, sizeof(testString)));
+			checkExpression(wcscmp(testString, TEST_QualityEvent) == 0, AAFRESULT_TEST_FAILED);
+			checkResult(pBWFImportDesc->GetEndOfModulation(testString, sizeof(testString)));
+			checkExpression(wcscmp(testString, TEST_EndOfModulation) == 0, AAFRESULT_TEST_FAILED);
+			checkResult(pBWFImportDesc->GetQualityParameter(testString, sizeof(testString)));	
+			checkExpression(wcscmp(testString, TEST_QualityParameter) == 0, AAFRESULT_TEST_FAILED);
+			checkResult(pBWFImportDesc->GetOperatorComment(testString, sizeof(testString)));
+			checkExpression(wcscmp(testString, TEST_OperatorComment) == 0, AAFRESULT_TEST_FAILED);
+			checkResult(pBWFImportDesc->GetCueSheet(testString, sizeof(testString)));
+			checkExpression(wcscmp(testString, TEST_CueSheet) == 0, AAFRESULT_TEST_FAILED);
 			
 			checkResult(pBWFImportDesc->CountUnknownBWFChunks(&numData));
 			checkExpression(2 == numData, AAFRESULT_TEST_FAILED);
@@ -332,8 +332,8 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 			}
 			checkResult(pEnum->Reset());
 		  	checkResult(pEnum->NextOne(&pRIFFChunk));
-			checkExpression((pBWFImportDesc->RemoveUnknownBWFChunks(pRIFFChunkTest))==AAFRESULT_OBJECT_NOT_ATTACHED, AAFRESULT_TEST_FAILED);
-			checkResult(pBWFImportDesc->RemoveUnknownBWFChunks(pRIFFChunk));
+			checkExpression((pBWFImportDesc->RemoveUnknownBWFChunkAt(2))==AAFRESULT_BADINDEX, AAFRESULT_TEST_FAILED);
+			checkResult(pBWFImportDesc->RemoveUnknownBWFChunkAt(0));
 			checkResult(pBWFImportDesc->CountUnknownBWFChunks(&numData));
 			checkExpression(1 == numData, AAFRESULT_TEST_FAILED);
 		
