@@ -115,9 +115,9 @@ HRESULT STDMETHODCALLTYPE
       // turn it into a failure status code.
       //
       // If the OMException contains an HRESULT, it is returned to the
-      // client, if not, AAFRESULT_UNEXPECTED_EXCEPTION is returned.
+      // client, if not, AAFRESULT_UHANDLED_EXCEPTION is returned.
       //
-      hr = OMExceptionToResult(e, AAFRESULT_UNEXPECTED_EXCEPTION);
+      hr = OMExceptionToResult(e, AAFRESULT_UNHANDLED_EXCEPTION);
     }
   catch (OMAssertionViolation &)
     {
@@ -179,9 +179,9 @@ HRESULT STDMETHODCALLTYPE
       // turn it into a failure status code.
       //
       // If the OMException contains an HRESULT, it is returned to the
-      // client, if not, AAFRESULT_UNEXPECTED_EXCEPTION is returned.
+      // client, if not, AAFRESULT_UHANDLED_EXCEPTION is returned.
       //
-      hr = OMExceptionToResult(e, AAFRESULT_UNEXPECTED_EXCEPTION);
+      hr = OMExceptionToResult(e, AAFRESULT_UNHANDLED_EXCEPTION);
     }
   catch (OMAssertionViolation &)
     {
@@ -268,9 +268,9 @@ HRESULT STDMETHODCALLTYPE
       // turn it into a failure status code.
       //
       // If the OMException contains an HRESULT, it is returned to the
-      // client, if not, AAFRESULT_UNEXPECTED_EXCEPTION is returned.
+      // client, if not, AAFRESULT_UHANDLED_EXCEPTION is returned.
       //
-      hr = OMExceptionToResult(e, AAFRESULT_UNEXPECTED_EXCEPTION);
+      hr = OMExceptionToResult(e, AAFRESULT_UNHANDLED_EXCEPTION);
     }
   catch (OMAssertionViolation &)
     {
@@ -336,9 +336,9 @@ HRESULT STDMETHODCALLTYPE
       // turn it into a failure status code.
       //
       // If the OMException contains an HRESULT, it is returned to the
-      // client, if not, AAFRESULT_UNEXPECTED_EXCEPTION is returned.
+      // client, if not, AAFRESULT_UHANDLED_EXCEPTION is returned.
       //
-      hr = OMExceptionToResult(e, AAFRESULT_UNEXPECTED_EXCEPTION);
+      hr = OMExceptionToResult(e, AAFRESULT_UNHANDLED_EXCEPTION);
     }
   catch (OMAssertionViolation &)
     {
@@ -427,9 +427,9 @@ HRESULT STDMETHODCALLTYPE
       // turn it into a failure status code.
       //
       // If the OMException contains an HRESULT, it is returned to the
-      // client, if not, AAFRESULT_UNEXPECTED_EXCEPTION is returned.
+      // client, if not, AAFRESULT_UHANDLED_EXCEPTION is returned.
       //
-      hr = OMExceptionToResult(e, AAFRESULT_UNEXPECTED_EXCEPTION);
+      hr = OMExceptionToResult(e, AAFRESULT_UNHANDLED_EXCEPTION);
     }
   catch (OMAssertionViolation &)
     {
@@ -502,9 +502,9 @@ HRESULT STDMETHODCALLTYPE
       // turn it into a failure status code.
       //
       // If the OMException contains an HRESULT, it is returned to the
-      // client, if not, AAFRESULT_UNEXPECTED_EXCEPTION is returned.
+      // client, if not, AAFRESULT_UHANDLED_EXCEPTION is returned.
       //
-      hr = OMExceptionToResult(e, AAFRESULT_UNEXPECTED_EXCEPTION);
+      hr = OMExceptionToResult(e, AAFRESULT_UNHANDLED_EXCEPTION);
     }
   catch (OMAssertionViolation &)
     {
@@ -579,9 +579,9 @@ HRESULT STDMETHODCALLTYPE
       // turn it into a failure status code.
       //
       // If the OMException contains an HRESULT, it is returned to the
-      // client, if not, AAFRESULT_UNEXPECTED_EXCEPTION is returned.
+      // client, if not, AAFRESULT_UHANDLED_EXCEPTION is returned.
       //
-      hr = OMExceptionToResult(e, AAFRESULT_UNEXPECTED_EXCEPTION);
+      hr = OMExceptionToResult(e, AAFRESULT_UNHANDLED_EXCEPTION);
     }
   catch (OMAssertionViolation &)
     {
