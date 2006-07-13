@@ -34,8 +34,7 @@ AD_HEAD
 AD_IDL(///
 /// The IAAFMultipleDescriptor interface is implemented by objects which
 /// describe the format of the content data associated with a File
-/// Source mob or of the media associated with a Physical Source mob
-/// when the File Source mob describes multiple types of interleaved essence.
+/// Source mob containing multiple tracks of essence.
 ///
 /// In addition to the specific error results listed for each method\,
 /// all methods in this interface may also return one of the following
