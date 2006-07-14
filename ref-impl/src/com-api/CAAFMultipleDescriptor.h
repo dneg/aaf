@@ -42,6 +42,7 @@
 
 
 
+
 #ifndef __CAAFFileDescriptor_h__
 #include "CAAFFileDescriptor.h"
 #endif
@@ -95,8 +96,7 @@ public:
   // CountFileDescriptors()
   //
   // Return the number of FileDescriptors attached to this essence
-  /// descriptor.  The number of FileDescriptors may be zero if the essence is
-  /// in the current file.
+  /// descriptor.
   /// 
   /// Succeeds if all of the following are true:
   /// - the pCount pointer is valid.
@@ -127,6 +127,8 @@ public:
   /// 
   /// Succeeds if all of the following are true:
   /// - the pFileDescriptor pointer is valid.
+  /// - the pFileDescriptor pointer indicates an object which is not already
+  ///   owned by any object
   /// 
   /// If this method fails no state will be changed.
   /// 
@@ -139,6 +141,10 @@ public:
   ///
   /// AAFRESULT_NULL_PARAM
   ///   - pFileDescriptor is null.
+  ///
+  /// AAFRESULT_OBJECT_ALREADY_ATTACHED
+  ///   - the object pointed to by pFileDescriptor is already owned by this
+  ///     or another object.
   //
   STDMETHOD (AppendFileDescriptor) (
     // FileDescriptor to append 
@@ -154,6 +160,8 @@ public:
   /// 
   /// Succeeds if all of the following are true:
   /// - the pFileDescriptor pointer is valid.
+  /// - the pFileDescriptor pointer indicates an object which is not already
+  ///   owned by any object
   /// 
   /// If this method fails no state will be changed.
   /// 
@@ -166,6 +174,10 @@ public:
   ///
   /// AAFRESULT_NULL_PARAM
   ///   - pFileDescriptor is null.
+  ///
+  /// AAFRESULT_OBJECT_ALREADY_ATTACHED
+  ///   - the object pointed to by pFileDescriptor is already owned by this
+  ///     or another object.
   //
   STDMETHOD (PrependFileDescriptor) (
     // FileDescriptor to append 
@@ -271,6 +283,32 @@ public:
     // index of FileDescriptor to remove 
     /*[in]*/ aafUInt32  index);
 
+
+  //***********************************************************
+  //
+  // GetFileDescriptors()
+  //
+  // Returns an enumerator of all the FileDescriptors in 
+  /// this MultipleDescriptor.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the ppEnum pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *ppEnum.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - ppEnum is null.
+  //
+  STDMETHOD (GetFileDescriptors) (
+    // An enumerator of the FileDescriptors in this MultipleDescriptor 
+    /*[out]*/ IEnumAAFFileDescriptors ** ppEnum);
 
 
 protected:

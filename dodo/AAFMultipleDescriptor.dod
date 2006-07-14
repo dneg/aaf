@@ -49,6 +49,7 @@ AD_IDL(///
 ///     this object's primary interface.
 ///)
 AD_FORWARD_DECLARATION(AAFFileDescriptor)
+AD_FORWARD_DECLARATION(EnumAAFFileDescriptors)
 
 AD_CLASS_UUID(33b9d30f, 9e63, 4e87, b5, 33, e3, f3, b1, b4, 89, f4)
 
@@ -82,8 +83,7 @@ AD_XMETHOD1(CountFileDescriptors,
 			  pResult,
 			  Returns the number of FileDescriptors,
 			Return the number of FileDescriptors attached to this essence
-  /// descriptor.  The number of FileDescriptors may be zero if the essence is
-  /// in the current file.
+  /// descriptor.
   /// 
   /// Succeeds if all of the following are true:
   /// - the pCount pointer is valid.
@@ -112,6 +112,8 @@ AD_XMETHOD1(AppendFileDescriptor,
   /// 
   /// Succeeds if all of the following are true:
   /// - the pFileDescriptor pointer is valid.
+  /// - the pFileDescriptor pointer indicates an object which is not already
+  ///   owned by any object
   /// 
   /// If this method fails no state will be changed.
   /// 
@@ -123,7 +125,11 @@ AD_XMETHOD1(AppendFileDescriptor,
   ///   - succeeded.  \(This is the only code indicating success.\)
   ///
   /// AAFRESULT_NULL_PARAM
-  ///   - pFileDescriptor is null.)
+  ///   - pFileDescriptor is null.
+  ///
+  /// AAFRESULT_OBJECT_ALREADY_ATTACHED
+  ///   - the object pointed to by pFileDescriptor is already owned by this
+  ///     or another object.)
 
 
 AD_XMETHOD1(PrependFileDescriptor,
@@ -137,6 +143,8 @@ AD_XMETHOD1(PrependFileDescriptor,
   /// 
   /// Succeeds if all of the following are true:
   /// - the pFileDescriptor pointer is valid.
+  /// - the pFileDescriptor pointer indicates an object which is not already
+  ///   owned by any object
   /// 
   /// If this method fails no state will be changed.
   /// 
@@ -148,7 +156,11 @@ AD_XMETHOD1(PrependFileDescriptor,
   ///   - succeeded.  \(This is the only code indicating success.\)
   ///
   /// AAFRESULT_NULL_PARAM
-  ///   - pFileDescriptor is null.)
+  ///   - pFileDescriptor is null.
+  ///
+  /// AAFRESULT_OBJECT_ALREADY_ATTACHED
+  ///   - the object pointed to by pFileDescriptor is already owned by this
+  ///     or another object.)
 
 
 AD_XMETHOD2(InsertFileDescriptorAt,
@@ -248,5 +260,30 @@ AD_XMETHOD1(RemoveFileDescriptorAt,
   ///   - index is greater than or equal to the value returned by
   ///     CountFileDescriptors\(\).)
 
+
+AD_XMETHOD1(GetFileDescriptors,
+			[out],
+			objOut,
+			EnumAAFFileDescriptors,
+			ppEnum,
+			An enumerator of the FileDescriptors in this MultipleDescriptor,
+
+			Returns an enumerator of all the FileDescriptors in 
+  /// this MultipleDescriptor.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the ppEnum pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *ppEnum.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - ppEnum is null.)
 
 AD_XCLASS_END(Concrete, StoredObject)

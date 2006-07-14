@@ -183,6 +183,7 @@ HUMAN_TYPED_IMPL="\
 	EnumAAFControlPoints \
 	EnumAAFDataDefs \
 	EnumAAFEssenceData \
+	EnumAAFFileDescriptors \
 	EnumAAFFileEncodings \
 	EnumAAFIdentifications \
 	EnumAAFInterpolationDefs \

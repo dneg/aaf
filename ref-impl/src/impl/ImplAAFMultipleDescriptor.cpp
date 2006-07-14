@@ -40,6 +40,7 @@
 #include "AAFResult.h"
 #include "aafErr.h"
 #include "ImplAAFObjectCreation.h"
+#include "AAFClassIDs.h"
 
 ImplAAFMultipleDescriptor::ImplAAFMultipleDescriptor ()
 : _Descriptors(         PID_MultipleDescriptor_FileDescriptors,          L"FileDescriptors")
@@ -176,20 +177,32 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFMultipleDescriptor::RemoveFileDescriptor (ImplAAFFileDescriptor *pDescriptor)
+    ImplAAFMultipleDescriptor::GetFileDescriptors (
+      ImplEnumAAFFileDescriptors **ppEnum)
 {
-	if (NULL == pDescriptor)
-		return AAFRESULT_NULL_PARAM;
-  if (!pDescriptor->attached ()) // Descriptor could not possibly be in _Descriptors container.
-    return AAFRESULT_OBJECT_NOT_ATTACHED;
+  if (ppEnum == NULL)
+    return AAFRESULT_NULL_PARAM;
 
-  OMUInt32 index;
-  if (_Descriptors.findIndex (pDescriptor, index))
-	  return RemoveFileDescriptorAt (index);
-  else
-    return AAFRESULT_OBJECT_NOT_FOUND;
-
-	// return AAFRESULT_SUCCESS;
+  ImplEnumAAFFileDescriptors *theEnum = (ImplEnumAAFFileDescriptors *)CreateImpl(CLSID_EnumAAFFileDescriptors);
+  
+  XPROTECT()
+  {
+    OMStrongReferenceVectorIterator<ImplAAFFileDescriptor> *iter =
+        new OMStrongReferenceVectorIterator<ImplAAFFileDescriptor>(_Descriptors);
+    if (iter == 0)
+        RAISE(AAFRESULT_NOMEMORY);
+    CHECK(theEnum->Initialize(&CLSID_EnumAAFFileDescriptors, this, iter));
+    *ppEnum = theEnum;
+  }
+  XEXCEPT
+  {
+    if (theEnum)
+      theEnum->ReleaseReference();
+    theEnum = 0;
+  }
+  XEND;
+  
+  return AAFRESULT_SUCCESS;
 }
 
 

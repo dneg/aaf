@@ -162,6 +162,7 @@ interface IEnumAAFContainerDefs;
 interface IEnumAAFControlPoints;
 interface IEnumAAFDataDefs;
 interface IEnumAAFEssenceData;
+interface IEnumAAFFileDescriptors;
 interface IEnumAAFFileEncodings;
 interface IEnumAAFIdentifications;
 interface IEnumAAFInterpolationDefs;
@@ -333,6 +334,7 @@ typedef interface IEnumAAFContainerDefs IEnumAAFContainerDefs;
 typedef interface IEnumAAFControlPoints IEnumAAFControlPoints;
 typedef interface IEnumAAFDataDefs IEnumAAFDataDefs;
 typedef interface IEnumAAFEssenceData IEnumAAFEssenceData;
+typedef interface IEnumAAFFileDescriptors IEnumAAFFileDescriptors;
 typedef interface IEnumAAFFileEncodings IEnumAAFFileEncodings;
 typedef interface IEnumAAFIdentifications IEnumAAFIdentifications;
 typedef interface IEnumAAFInterpolationDefs IEnumAAFInterpolationDefs;
@@ -15877,6 +15879,7 @@ DECLARE_INTERFACE_(IAAFMPEGVideoDescriptor, IUnknown)
 
 
 
+
 #ifndef __IAAFMultipleDescriptor_INTERFACE_DEFINED__
 #define __IAAFMultipleDescriptor_INTERFACE_DEFINED__
 
@@ -15926,8 +15929,7 @@ DECLARE_INTERFACE_(IAAFMultipleDescriptor, IUnknown)
   // CountFileDescriptors()
   //
   /// Return the number of FileDescriptors attached to this essence
-  /// descriptor.  The number of FileDescriptors may be zero if the essence is
-  /// in the current file.
+  /// descriptor.
   /// 
   /// Succeeds if all of the following are true:
   /// - the pCount pointer is valid.
@@ -15959,6 +15961,8 @@ DECLARE_INTERFACE_(IAAFMultipleDescriptor, IUnknown)
   /// 
   /// Succeeds if all of the following are true:
   /// - the pFileDescriptor pointer is valid.
+  /// - the pFileDescriptor pointer indicates an object which is not already
+  ///   owned by any object
   /// 
   /// If this method fails no state will be changed.
   /// 
@@ -15971,6 +15975,10 @@ DECLARE_INTERFACE_(IAAFMultipleDescriptor, IUnknown)
   ///
   /// AAFRESULT_NULL_PARAM
   ///   - pFileDescriptor is null.
+  ///
+  /// AAFRESULT_OBJECT_ALREADY_ATTACHED
+  ///   - the object pointed to by pFileDescriptor is already owned by this
+  ///     or another object.
   ///
   /// @param pFileDescriptor [in] FileDescriptor to append
   ///
@@ -15987,6 +15995,8 @@ DECLARE_INTERFACE_(IAAFMultipleDescriptor, IUnknown)
   /// 
   /// Succeeds if all of the following are true:
   /// - the pFileDescriptor pointer is valid.
+  /// - the pFileDescriptor pointer indicates an object which is not already
+  ///   owned by any object
   /// 
   /// If this method fails no state will be changed.
   /// 
@@ -15999,6 +16009,10 @@ DECLARE_INTERFACE_(IAAFMultipleDescriptor, IUnknown)
   ///
   /// AAFRESULT_NULL_PARAM
   ///   - pFileDescriptor is null.
+  ///
+  /// AAFRESULT_OBJECT_ALREADY_ATTACHED
+  ///   - the object pointed to by pFileDescriptor is already owned by this
+  ///     or another object.
   ///
   /// @param pFileDescriptor [in] FileDescriptor to append
   ///
@@ -16106,6 +16120,33 @@ DECLARE_INTERFACE_(IAAFMultipleDescriptor, IUnknown)
   STDMETHOD(RemoveFileDescriptorAt) (THIS_
     aafUInt32  index) PURE;
 
+
+  //***********************************************************
+  //
+  // GetFileDescriptors()
+  //
+  /// Returns an enumerator of all the FileDescriptors in 
+  /// this MultipleDescriptor.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the ppEnum pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *ppEnum.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - ppEnum is null.
+  ///
+  /// @param ppEnum [out] An enumerator of the FileDescriptors in this MultipleDescriptor
+  ///
+  STDMETHOD(GetFileDescriptors) (THIS_
+    IEnumAAFFileDescriptors ** ppEnum) PURE;
 
 
   END_INTERFACE
@@ -35127,6 +35168,186 @@ DECLARE_INTERFACE_(IEnumAAFEssenceData, IUnknown)
   END_INTERFACE
 };
 #endif // __IEnumAAFEssenceData_INTERFACE_DEFINED__
+
+
+
+// IEnumAAFFileDescriptors
+
+// ************************
+//
+// Interface IEnumAAFFileDescriptors
+//
+// ************************
+
+
+
+
+#ifndef __IEnumAAFFileDescriptors_INTERFACE_DEFINED__
+#define __IEnumAAFFileDescriptors_INTERFACE_DEFINED__
+
+EXTERN_C const IID IID_IEnumAAFFileDescriptors;
+
+#undef  INTERFACE
+#define INTERFACE   IEnumAAFFileDescriptors
+
+DECLARE_INTERFACE_(IEnumAAFFileDescriptors, IUnknown)
+{
+  BEGIN_INTERFACE
+
+  /* *** IUnknown methods *** */
+  STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppvObj) PURE;
+  STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
+  STDMETHOD_(ULONG,Release) (THIS) PURE;
+
+  /* *** IEnumAAFFileDescriptors methods *** */
+
+  //***********************************************************
+  //
+  // NextOne()
+  //
+  /// Enumerates to the next element in the enumerators list. The
+  /// caller is responsible for properly releasing the returned pointer
+  /// when it is no longer needed.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the ppFileDescriptors pointer is valid.
+  /// - there are FileDescriptor objects remaining to be returned.
+  /// 
+  /// If this method fails nothing is written to *ppFileDescriptors.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - ppFileDescriptors arg is NULL.
+  ///
+  /// AAFRESULT_NO_MORE_OBJECTS
+  ///   - no FileDescriptor objects remaining to be returned.
+  ///
+  /// @param ppFileDescriptors [out,retval] The Next FileDescriptor
+  ///
+  STDMETHOD(NextOne) (THIS_
+    IAAFFileDescriptor ** ppFileDescriptors) PURE;
+
+
+  //***********************************************************
+  //
+  // Next()
+  //
+  /// Enumerates the next count elements (AAFFileDescriptor pointers) in the
+  /// enumerator's list, returning them in the given array along with
+  /// the actual number of enumerated elements in pNumFetched. The caller
+  /// is responsible for properly releasing the returned pointers.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - The ppFileDescriptors pointer is valid.
+  /// - The pNumFetched pointer is valid. If count is 1, pNumFetched
+  ///   can be NULL.
+  /// - There are FileDescriptor objects remaining to be returned.
+  /// 
+  /// If this method fails nothing is written to *ppFileDescriptors or
+  /// pNumFetched.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - Either ppFileDescriptors or pNumFetched arg is NULL.
+  ///
+  /// @param count [in] number of FileDescriptors requested
+  /// @param ppFileDescriptors [out, size_is(count), length_is(*pNumFetched)] array to receive elements
+  /// @param pNumFetched [out,ref] number of actual FileDescriptor objects fetched into ppFileDescriptors array
+  ///
+  STDMETHOD(Next) (THIS_
+    aafUInt32  count,
+    IAAFFileDescriptor ** ppFileDescriptors,
+    aafUInt32 *  pNumFetched) PURE;
+
+
+  //***********************************************************
+  //
+  // Skip()
+  //
+  /// Instructs the enumerator to skip the next count elements in the
+  /// enumeration so that the next call to Next will not return those
+  /// elements.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - count is less than or equal to the number of remaining objects.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NO_MORE_OBJECTS
+  ///   - count exceeded number of remaining objects.
+  ///
+  /// @param count [in] Number of elements to skip
+  ///
+  STDMETHOD(Skip) (THIS_
+    aafUInt32  count) PURE;
+
+
+  //***********************************************************
+  //
+  // Reset()
+  //
+  /// Instructs the enumerator to position itself at the beginning of
+  /// the list of elements.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  STDMETHOD(Reset) (THIS) PURE;
+
+
+  //***********************************************************
+  //
+  // Clone()
+  //
+  /// Creates another enumerator with the same state as the current
+  /// enumerator to iterate over the same list. This method makes it
+  /// possible to record a point in the enumeration sequence in order
+  /// to return to that point at a later time.
+  ///
+  /// Note: The caller must release this new enumerator separately from
+  /// the first enumerator.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the ppEnum pointer is valid.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - ppEnum arg is NULL.
+  ///
+  /// @param ppEnum [out,retval] new enumeration
+  ///
+  STDMETHOD(Clone) (THIS_
+    IEnumAAFFileDescriptors ** ppEnum) PURE;
+
+  END_INTERFACE
+};
+#endif // __IEnumAAFFileDescriptors_INTERFACE_DEFINED__
 
 
 

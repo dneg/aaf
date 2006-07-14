@@ -172,6 +172,7 @@ extern "C" const aafClassID_t CLSID_EnumAAFContainerDefs;
 extern "C" const aafClassID_t CLSID_EnumAAFControlPoints;
 extern "C" const aafClassID_t CLSID_EnumAAFDataDefs;
 extern "C" const aafClassID_t CLSID_EnumAAFEssenceData;
+extern "C" const aafClassID_t CLSID_EnumAAFFileDescriptors;
 extern "C" const aafClassID_t CLSID_EnumAAFFileEncodings;
 extern "C" const aafClassID_t CLSID_EnumAAFIdentifications;
 extern "C" const aafClassID_t CLSID_EnumAAFInterpolationDefs;

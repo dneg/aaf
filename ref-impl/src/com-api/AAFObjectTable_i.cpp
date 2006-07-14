@@ -168,6 +168,7 @@
 #include "CEnumAAFControlPoints.h"
 #include "CEnumAAFDataDefs.h"
 #include "CEnumAAFEssenceData.h"
+#include "CEnumAAFFileDescriptors.h"
 #include "CEnumAAFFileEncodings.h"
 #include "CEnumAAFIdentifications.h"
 #include "CEnumAAFInterpolationDefs.h"

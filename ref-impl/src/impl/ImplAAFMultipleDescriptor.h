@@ -39,8 +39,8 @@ typedef ImplAAFEnumerator<ImplAAFFileDescriptor> ImplEnumAAFDescriptors;
 #include "ImplAAFFileDescriptor.h"
 #endif
 
+#include "ImplEnumAAFFileDescriptors.h"
 #include "OMStrongRefVectorProperty.h"
-
 
 class ImplAAFMultipleDescriptor : public ImplAAFFileDescriptor
 {
@@ -123,12 +123,12 @@ public:
 
 
   //****************
-  // RemoveFileDescriptor()
+  // GetFileDescriptors()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    RemoveFileDescriptor
-		// @parm [in] Descriptor to remove
-        (ImplAAFFileDescriptor * pDescriptor);
+    GetFileDescriptors
+        // @parm [out] An enumerator of the FileDescriptors in this MultipleDescriptor
+        (ImplEnumAAFFileDescriptors ** ppEnum);
 
 public:
 	virtual AAFRESULT

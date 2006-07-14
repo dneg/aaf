@@ -171,6 +171,7 @@ EXTERN_C const CLSID CLSID_EnumAAFContainerDefs;
 EXTERN_C const CLSID CLSID_EnumAAFControlPoints;
 EXTERN_C const CLSID CLSID_EnumAAFDataDefs;
 EXTERN_C const CLSID CLSID_EnumAAFEssenceData;
+EXTERN_C const CLSID CLSID_EnumAAFFileDescriptors;
 EXTERN_C const CLSID CLSID_EnumAAFFileEncodings;
 EXTERN_C const CLSID CLSID_EnumAAFIdentifications;
 EXTERN_C const CLSID CLSID_EnumAAFInterpolationDefs;
