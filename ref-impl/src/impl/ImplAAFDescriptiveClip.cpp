@@ -41,7 +41,7 @@
 ImplAAFDescriptiveClip::ImplAAFDescriptiveClip ()
 : _sourceTrackIDs( PID_DescriptiveClip_SourceTrackIDs, L"SourceTrackIDs" )
 {
-	_persistentProperties.put( _sourceTrackIDs.address() );
+    _persistentProperties.put( _sourceTrackIDs.address() );
 }
 
 
@@ -73,71 +73,107 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 
-
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFDescriptiveClip::SetSourceTrackIDs (
-      aafUInt32  numberElements,
-      aafUInt32*  pSourceTrackIDs)
+    ImplAAFDescriptiveClip::CountSourceTrackIDs (
+      aafUInt32*  pCount)
 {
-  if (!pSourceTrackIDs) {
-    return AAFRESULT_NULL_PARAM;
-  }
+    if (NULL == pCount) {
+        return AAFRESULT_NULL_PARAM;
+    }
 
-  _sourceTrackIDs.clear();
-  unsigned int i;
-  for ( i = 0; i < numberElements; ++i ) {
-    _sourceTrackIDs.insert( pSourceTrackIDs[i] );
-  }
+    if (!_sourceTrackIDs.isPresent()) {
+        return AAFRESULT_PROP_NOT_PRESENT;
+    }
 
-  return AAFRESULT_SUCCESS;
+    *pCount = _sourceTrackIDs.count();
+
+    return AAFRESULT_SUCCESS;
 }
 
 
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFDescriptiveClip::GetSourceTrackIDs (
-      aafUInt32  numberElements,
-      aafUInt32*  pSourceTrackIDs)
+      aafUInt32  maxSourceTrackIDCount,
+      aafUInt32 *  pSourceTrackIDs)
 {
-  if ( !pSourceTrackIDs ) {
-    return AAFRESULT_NULL_PARAM;
-  }
+    if (!pSourceTrackIDs) {
+        return AAFRESULT_NULL_PARAM;
+    }
 
-  if ( !_sourceTrackIDs.isPresent() ) {
-    return AAFRESULT_PROP_NOT_PRESENT;
-  }
+    if (_sourceTrackIDs.count() > maxSourceTrackIDCount) {
+        return AAFRESULT_SMALLBUF;
+    }
 
-  if ( _sourceTrackIDs.count() > numberElements ) {
-    return AAFRESULT_SMALLBUF;
-  }
-	
-  aafUInt32* pNextSourceTrackID = pSourceTrackIDs;
-  OMSetPropertyIterator<aafUInt32> iter( _sourceTrackIDs, OMBefore );
-  while( ++iter ) {
-    *pNextSourceTrackID = iter.value();
-    pNextSourceTrackID++;
-  }
+    if (!_sourceTrackIDs.isPresent()) {
+        return AAFRESULT_PROP_NOT_PRESENT;
+    }
 
-  return AAFRESULT_SUCCESS;
+    aafUInt32* pNextSourceTrackID = pSourceTrackIDs;
+    OMSetPropertyIterator<aafUInt32> iter( _sourceTrackIDs, OMBefore );
+    while (++iter) {
+        *pNextSourceTrackID = iter.value();
+        pNextSourceTrackID++;
+    }
+
+    return AAFRESULT_SUCCESS;
 }
+
+
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFDescriptiveClip::GetSourceTrackIDsSize (
-      aafUInt32 *  numberElements)
+    ImplAAFDescriptiveClip::IsSourceTrackIDPresent (
+      aafUInt32  sourceTrackID,
+      aafBoolean_t*  pIsPresent)
 {
-  if ( NULL == numberElements ) {
-    return AAFRESULT_NULL_PARAM;
-  }
+    if (NULL == pIsPresent) {
+        return AAFRESULT_NULL_PARAM;
+    }
 
-  if ( !_sourceTrackIDs.isPresent() ) {
-    return AAFRESULT_PROP_NOT_PRESENT;
-  }
+    if (!_sourceTrackIDs.isPresent()) {
+        return AAFRESULT_PROP_NOT_PRESENT;
+    }
+    
+    *pIsPresent = _sourceTrackIDs.contains(sourceTrackID) ? kAAFTrue :
+                                                            kAAFFalse;
 
-  *numberElements = _sourceTrackIDs.count();
-
-  return AAFRESULT_SUCCESS;
+    return AAFRESULT_SUCCESS;
 }
 
 
 
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFDescriptiveClip::AddSourceTrackID (
+      aafUInt32  sourceTrackID)
+{
+    if (_sourceTrackIDs.isPresent()) {
+        if (_sourceTrackIDs.contains(sourceTrackID))
+            return AAFRESULT_INVALID_PARAM;
+    }
+    
+    _sourceTrackIDs.insert(sourceTrackID);
+    
+    return AAFRESULT_SUCCESS;
+}
+
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFDescriptiveClip::RemoveSourceTrackID (
+      aafUInt32  sourceTrackID)
+{
+    if (!_sourceTrackIDs.isPresent())
+        return AAFRESULT_PROP_NOT_PRESENT;
+    
+    if (!_sourceTrackIDs.contains(sourceTrackID))
+        return AAFRESULT_INVALID_PARAM;
+    
+    _sourceTrackIDs.remove(sourceTrackID);
+    
+    if (_sourceTrackIDs.count() == 0) {
+        _sourceTrackIDs.removeProperty();
+    }
+    
+    return AAFRESULT_SUCCESS;
+}
 

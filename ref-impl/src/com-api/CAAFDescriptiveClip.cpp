@@ -145,8 +145,7 @@ HRESULT STDMETHODCALLTYPE
 
 
 HRESULT STDMETHODCALLTYPE
-    CAAFDescriptiveClip::SetSourceTrackIDs (aafUInt32  numberElements,
-        aafUInt32*  pSourceTrackIDs)
+    CAAFDescriptiveClip::CountSourceTrackIDs (aafUInt32*  pCount)
 {
   HRESULT hr;
 
@@ -160,9 +159,8 @@ HRESULT STDMETHODCALLTYPE
 
   try
     {
-      hr = ptr->SetSourceTrackIDs
-       (numberElements,
-        pSourceTrackIDs);
+      hr = ptr->CountSourceTrackIDs
+       (pCount);
     }
   catch (OMException& e)
     {
@@ -199,8 +197,8 @@ HRESULT STDMETHODCALLTYPE
 
 
 HRESULT STDMETHODCALLTYPE
-    CAAFDescriptiveClip::GetSourceTrackIDs (aafUInt32  numberElements,
-        aafUInt32*  pSourceTrackIDs)
+    CAAFDescriptiveClip::GetSourceTrackIDs (aafUInt32  maxSourceTrackIDCount,
+        aafUInt32 *  pSourceTrackIDs)
 {
   HRESULT hr;
 
@@ -215,7 +213,7 @@ HRESULT STDMETHODCALLTYPE
   try
     {
       hr = ptr->GetSourceTrackIDs
-       (numberElements,
+       (maxSourceTrackIDCount,
         pSourceTrackIDs);
     }
   catch (OMException& e)
@@ -251,8 +249,10 @@ HRESULT STDMETHODCALLTYPE
 }
 
 
+
 HRESULT STDMETHODCALLTYPE
-    CAAFDescriptiveClip::GetSourceTrackIDsSize (aafUInt32 *  numberElements)
+    CAAFDescriptiveClip::IsSourceTrackIDPresent (aafUInt32  sourceTrackID,
+        aafBoolean_t*  pIsPresent)
 {
   HRESULT hr;
 
@@ -266,8 +266,9 @@ HRESULT STDMETHODCALLTYPE
 
   try
     {
-      hr = ptr->GetSourceTrackIDsSize
-       (numberElements);
+      hr = ptr->IsSourceTrackIDPresent
+       (sourceTrackID,
+        pIsPresent);
     }
   catch (OMException& e)
     {
@@ -300,6 +301,111 @@ HRESULT STDMETHODCALLTYPE
 
   return hr;
 }
+
+
+
+HRESULT STDMETHODCALLTYPE
+    CAAFDescriptiveClip::AddSourceTrackID (aafUInt32  sourceTrackID)
+{
+  HRESULT hr;
+
+  ImplAAFDescriptiveClip * ptr;
+  ImplAAFRoot * pO;
+  pO = GetRepObject ();
+  assert (pO);
+  ptr = static_cast<ImplAAFDescriptiveClip*> (pO);
+  assert (ptr);
+
+
+  try
+    {
+      hr = ptr->AddSourceTrackID
+       (sourceTrackID);
+    }
+  catch (OMException& e)
+    {
+      // OMExceptions should be handled by the impl code. However, if an
+      // unhandled OMException occurs, control reaches here. We must not
+      // allow the unhandled exception to reach the client code, so we
+      // turn it into a failure status code.
+      //
+      // If the OMException contains an HRESULT, it is returned to the
+      // client, if not, AAFRESULT_UHANDLED_EXCEPTION is returned.
+      //
+      hr = OMExceptionToResult(e, AAFRESULT_UNHANDLED_EXCEPTION);
+    }
+  catch (OMAssertionViolation &)
+    {
+      // Control reaches here if there is a programming error in the
+      // impl code that was detected by an assertion violation.
+      // We must not allow the assertion to reach the client code so
+      // here we turn it into a failure status code.
+      //
+      hr = AAFRESULT_ASSERTION_VIOLATION;
+    }
+  catch (...)
+    {
+      // We CANNOT throw an exception out of a COM interface method!
+      // Return a reasonable exception code.
+      //
+      hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+    }
+
+  return hr;
+}
+
+
+
+HRESULT STDMETHODCALLTYPE
+    CAAFDescriptiveClip::RemoveSourceTrackID (aafUInt32  sourceTrackID)
+{
+  HRESULT hr;
+
+  ImplAAFDescriptiveClip * ptr;
+  ImplAAFRoot * pO;
+  pO = GetRepObject ();
+  assert (pO);
+  ptr = static_cast<ImplAAFDescriptiveClip*> (pO);
+  assert (ptr);
+
+
+  try
+    {
+      hr = ptr->RemoveSourceTrackID
+       (sourceTrackID);
+    }
+  catch (OMException& e)
+    {
+      // OMExceptions should be handled by the impl code. However, if an
+      // unhandled OMException occurs, control reaches here. We must not
+      // allow the unhandled exception to reach the client code, so we
+      // turn it into a failure status code.
+      //
+      // If the OMException contains an HRESULT, it is returned to the
+      // client, if not, AAFRESULT_UHANDLED_EXCEPTION is returned.
+      //
+      hr = OMExceptionToResult(e, AAFRESULT_UNHANDLED_EXCEPTION);
+    }
+  catch (OMAssertionViolation &)
+    {
+      // Control reaches here if there is a programming error in the
+      // impl code that was detected by an assertion violation.
+      // We must not allow the assertion to reach the client code so
+      // here we turn it into a failure status code.
+      //
+      hr = AAFRESULT_ASSERTION_VIOLATION;
+    }
+  catch (...)
+    {
+      // We CANNOT throw an exception out of a COM interface method!
+      // Return a reasonable exception code.
+      //
+      hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+    }
+
+  return hr;
+}
+
 
 
 //

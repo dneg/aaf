@@ -73,15 +73,12 @@ public:
          const aafSourceRef_t & sourceRef);
 
   //****************
-  // SetSourceTrackIDs()
+  // CountSourceTrackIDs()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    SetSourceTrackIDs
-        (// @parm [in] Number of elements in the pSourceTrackIDs array
-         aafUInt32  numberElements,
-
-         // @parm [in] Array of source track IDs
-         aafUInt32*  pSourceTrackIDs);
+    CountSourceTrackIDs
+        // @parm [out, retval] Number of source track IDs
+        (aafUInt32*  pCount);
 
 
   //****************
@@ -89,19 +86,45 @@ public:
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     GetSourceTrackIDs
-        (// @parm [in] Number of elements in the pSourceTrackIDs array
-         aafUInt32  numberElements,
+        (// @parm [in] The size of the given pSourceTrackIDs buffer
+         aafUInt32  maxSourceTrackIDCount,
 
-         // @parm [in] Array of channel IDs
-         aafUInt32*  pSourceTrackIDs);
+         // @parm [out, size_is(maxSourceTrackIDsCount)] Array to hold the source track IDs
+         aafUInt32 *  pSourceTrackIDs);
+
 
   //****************
-  // GetSourceTrackIDsSize()
+  // IsSourceTrackIDPresent()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    GetSourceTrackIDsSize
-        // @parm [out] Number of elements in the pSourceTrackIDs array
-        (aafUInt32 *  numberElements);
+    IsSourceTrackIDPresent
+        (// @parm [in, ref] Source track ID whose presence is to be queried
+         aafUInt32  sourceTrackID,
+
+         // @parm [out,retval] True if sourceTrackID is present
+         aafBoolean_t*  pIsPresent);
+
+
+  //****************
+  // AddSourceTrackID()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    AddSourceTrackID
+        // @parm [in] Source track ID to add.
+        (aafUInt32  sourceTrackID);
+
+
+  //****************
+  // RemoveSourceTrackID()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    RemoveSourceTrackID
+        // @parm [in] Source track ID to remove.
+        (aafUInt32  sourceTrackID);
+
+
+
+
 
 private:
 	OMSetProperty<aafUInt32> _sourceTrackIDs;

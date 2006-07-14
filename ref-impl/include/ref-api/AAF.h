@@ -5742,75 +5742,175 @@ DECLARE_INTERFACE_(IAAFDescriptiveClip, IUnknown)
 
   //***********************************************************
   //
-  // SetSourceTrackIDs()
+  // CountSourceTrackIDs()
   //
-  /// Specifies the Source Track IDs in the Mob.
-  /// 
-  /// Return codes:
+  /// Gets the total number of source track IDs present in
+  /// the list of source track IDs referenced by this DescriptiveClip.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pCount pointer is valid;
+  /// - the SourceTrackIDs property is present.
+  ///
+  /// If this method fails nothing will be written to *pCount.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
   ///
   /// AAFRESULT_SUCCESS
-  ///   - succeeded
+  ///   - succeeded.  (This is the only code indicating success.)
   ///
   /// AAFRESULT_NULL_PARAM
-  ///   - pSourceTrackIDs is null 
+  ///   - pCount arg is NULL.
   ///
-  /// This interface is not currently implemented.
+  /// AAFRESULT_PROP_NOT_PRESENT
+  ///   - the SourceTrackIDs property is not present.
   ///
-  /// @param numberElements [in] Number of elements in the pSourceTrackIDs array
-  /// @param pSourceTrackIDs [in] Array of source track IDs
+  /// @param pCount [out, retval] Number of source track IDs
   ///
-  STDMETHOD(SetSourceTrackIDs) (THIS_
-    aafUInt32  numberElements,
-    aafUInt32*  pSourceTrackIDs) PURE;
+  STDMETHOD(CountSourceTrackIDs) (THIS_
+    aafUInt32*  pCount) PURE;
 
 
   //***********************************************************
   //
   // GetSourceTrackIDs()
   //
-  /// Get the source track IDs that are referenced by this object. 
+  /// Gets all the source track IDs in the list of
+  /// source track IDs referenced by this DescriptiveClip.
   ///
-  /// Return codes:
-  ///
+  /// The values are written to the array specified by pSourceTrackIDs,
+  /// which is of size maxSourceTrackIDCount. The required size may be found
+  /// by calling CountSourceTrackIDs().
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - pSourceTrackIDs is a valid pointer;
+  /// - maxSourceTrackIDCount indicates the array is large enough to hold the
+  ///   data;
+  /// - the SourceTrackIDs property is present.
+  /// 
+  /// If this method fails, the property will not be changed.
+  /// 
+  /// This method will return the following codes:
+  /// 
   /// AAFRESULT_SUCCESS
-  ///   - succeeded
+  ///   - succeeded.  (This is the only code indicating success.)
   ///
   /// AAFRESULT_NULL_PARAM
-  ///   - pSourceTrackIDs is null
-  ///
-  /// AAFRESULT_PROP_NOT_PRESENT
-  ///   - the property is not present
+  ///   - pSourceTrackIDs is NULL.
   ///
   /// AAFRESULT_SMALLBUF
-  ///   - pSourceTrackIDs is too small
+  ///   - maxSourceTrackIDCount indicates that the array is too small to hold
+  ///     all the referenced source track IDs.
   ///
-  /// This interface is not currently implemented.
+  /// AAFRESULT_PROP_NOT_PRESENT
+  ///   - the SourceTrackIDs property is not present.
   ///
-  /// @param numberElements [in] Number of elements in the pSourceTrackIDs array
-  /// @param pSourceTrackIDs [in] Array of channel IDs
+  /// @param maxSourceTrackIDCount [in] The size of the given pSourceTrackIDs buffer
+  /// @param pSourceTrackIDs [out, size_is(maxSourceTrackIDsCount)] Array to hold the source track IDs
   ///
   STDMETHOD(GetSourceTrackIDs) (THIS_
-    aafUInt32  numberElements,
-    aafUInt32*  pSourceTrackIDs) PURE;
+    aafUInt32  maxSourceTrackIDCount,
+    aafUInt32 *  pSourceTrackIDs) PURE;
+
 
   //***********************************************************
   //
-  // GetSourceTrackIDsSize()
+  // IsSourceTrackIDPresent()
   //
-  /// Get the number of source track IDs stored by this DescriptiveClip.
+  /// Determines if the given source track ID is present in
+  /// the list of source track IDs referenced by this DescriptiveClip.
   ///
-  /// Return codes:
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pIsPresent pointer is valid;
+  /// - the SourceTrackIDs property is present.
+  ///
+  /// If this method fails nothing will be written to *pIsPresent.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
   ///
   /// AAFRESULT_SUCCESS
-  ///   - succeeded
+  ///   - succeeded.  (This is the only code indicating success.)
   ///
   /// AAFRESULT_NULL_PARAM
-  ///   - pSourceTrackIDs is null 
+  ///   - pIsPresent arg is NULL.
   ///
-  /// @param numberElements [out] Number of elements in the pSourceTrackIDs array
+  /// AAFRESULT_PROP_NOT_PRESENT
+  ///   - the SourceTrackIDs property is not present.
   ///
-  STDMETHOD(GetSourceTrackIDsSize) (THIS_
-    aafUInt32 *  numberElements) PURE;
+  /// @param sourceTrackID [in, ref] Source track ID whose presence is to be queried
+  /// @param pIsPresent [out,retval] True if sourceTrackID is present
+  ///
+  STDMETHOD(IsSourceTrackIDPresent) (THIS_
+    aafUInt32  sourceTrackID,
+    aafBoolean_t*  pIsPresent) PURE;
+
+
+  //***********************************************************
+  //
+  // AddSourceTrackID()
+  //
+  /// Appends the given source track ID to the list of
+  /// source track IDs referenced by this DescriptiveClip.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the given source track ID is not already contained in the list
+  ///   of source track IDs referenced by this DescriptiveClip.
+  ///
+  /// If this method fails, the property will not be changed.
+  ///
+  /// This method will return the following codes:
+  ///
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_INVALID_PARAM
+  ///   - The given source track ID is already contained in the list
+  ///     of source track IDs referenced by this DescriptiveClip.
+  ///
+  /// @param sourceTrackID [in] Source track ID to add.
+  ///
+  STDMETHOD(AddSourceTrackID) (THIS_
+    aafUInt32  sourceTrackID) PURE;
+
+
+  //***********************************************************
+  //
+  // RemoveSourceTrackID()
+  //
+  /// Removes the given source track ID from
+  /// the list of source track IDs referenced by this DescriptiveClip.
+  ///
+  /// If the removed ID was the last ID in the list, the list is removed
+  /// from this DescriptiveClip (the property is removed).
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the SourceTrackIDs property is present;
+  /// - the given source track ID is present in the list
+  ///   of source track IDs referenced by this DescriptiveClip.
+  ///
+  /// If this method fails, the property will not be changed.
+  ///
+  /// This method will return the following codes:
+  ///
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_PROP_NOT_PRESENT
+  ///   - property not present.
+  ///
+  /// AAFRESULT_INVALID_PARAM
+  ///   - The given source track ID is not present in the list
+  ///     of source track IDs referenced by this DescriptiveClip.
+  ///
+  /// @param sourceTrackID [in] Source track ID to remove.
+  ///
+  STDMETHOD(RemoveSourceTrackID) (THIS_
+    aafUInt32  sourceTrackID) PURE;
+
 
 
   END_INTERFACE
@@ -45771,7 +45871,7 @@ DECLARE_INTERFACE_(IAAFHeader2, IUnknown)
   /// descriptive schemes found in the file.
   ///
   /// Succeeds if all of the following are true:
-  /// - the given desriptive scheme ID is not already contained.
+  /// - the given descriptive scheme ID is not already contained.
   ///
   /// If this method fails, the property will not be changed.
   ///
@@ -45801,7 +45901,7 @@ DECLARE_INTERFACE_(IAAFHeader2, IUnknown)
   ///
   /// Succeeds if all of the following are true:
   /// - the DescriptiveSchemes property is present;
-  /// - the given desriptive scheme ID is present in the list
+  /// - the given descriptive scheme ID is present in the list
   ///   of descriptive schemes found in the file.
   ///
   /// If this method fails, the property will not be changed.
@@ -45815,7 +45915,7 @@ DECLARE_INTERFACE_(IAAFHeader2, IUnknown)
   ///   - property not present.
   ///
   /// AAFRESULT_INVALID_PARAM
-  ///   - The given desriptive scheme ID is present in the list
+  ///   - The given descriptive scheme ID is present in the list
   ///     of descriptive schemes found in the file.
   ///
   /// @param descriptiveSchemeID [in] Descriptive scheme to remove.
