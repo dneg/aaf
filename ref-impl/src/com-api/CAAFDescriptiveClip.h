@@ -168,7 +168,7 @@ public:
     /*[in]*/ aafUInt32  maxSourceTrackIDCount,
 
     // Array to hold the source track IDs
-    /*[out, size_is(maxSourceTrackIDsCount)]*/ aafUInt32 *  pSourceTrackIDs);
+    /*[out, size_is(maxSourceTrackIDCount)]*/ aafUInt32 *  pSourceTrackIDs);
 
 
   //***********************************************************
@@ -200,7 +200,7 @@ public:
   //
   STDMETHOD (IsSourceTrackIDPresent) (
     // Source track ID whose presence is to be queried
-    /*[in, ref]*/ aafUInt32  sourceTrackID,
+    /*[in]*/ aafUInt32  sourceTrackID,
 
     // True if sourceTrackID is present
     /*[out,retval]*/ aafBoolean_t*  pIsPresent);

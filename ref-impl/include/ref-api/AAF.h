@@ -5809,7 +5809,7 @@ DECLARE_INTERFACE_(IAAFDescriptiveClip, IUnknown)
   ///   - the SourceTrackIDs property is not present.
   ///
   /// @param maxSourceTrackIDCount [in] The size of the given pSourceTrackIDs buffer
-  /// @param pSourceTrackIDs [out, size_is(maxSourceTrackIDsCount)] Array to hold the source track IDs
+  /// @param pSourceTrackIDs [out, size_is(maxSourceTrackIDCount)] Array to hold the source track IDs
   ///
   STDMETHOD(GetSourceTrackIDs) (THIS_
     aafUInt32  maxSourceTrackIDCount,
@@ -5843,7 +5843,7 @@ DECLARE_INTERFACE_(IAAFDescriptiveClip, IUnknown)
   /// AAFRESULT_PROP_NOT_PRESENT
   ///   - the SourceTrackIDs property is not present.
   ///
-  /// @param sourceTrackID [in, ref] Source track ID whose presence is to be queried
+  /// @param sourceTrackID [in] Source track ID whose presence is to be queried
   /// @param pIsPresent [out,retval] True if sourceTrackID is present
   ///
   STDMETHOD(IsSourceTrackIDPresent) (THIS_
