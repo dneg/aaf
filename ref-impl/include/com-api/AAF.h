@@ -777,6 +777,12 @@ typedef interface IEnumAAFEssenceData IEnumAAFEssenceData;
 #endif 	/* __IEnumAAFEssenceData_FWD_DEFINED__ */
 
 
+#ifndef __IEnumAAFFileDescriptors_FWD_DEFINED__
+#define __IEnumAAFFileDescriptors_FWD_DEFINED__
+typedef interface IEnumAAFFileDescriptors IEnumAAFFileDescriptors;
+#endif 	/* __IEnumAAFFileDescriptors_FWD_DEFINED__ */
+
+
 #ifndef __IEnumAAFFileEncodings_FWD_DEFINED__
 #define __IEnumAAFFileEncodings_FWD_DEFINED__
 typedef interface IEnumAAFFileEncodings IEnumAAFFileEncodings;
@@ -1109,6 +1115,7 @@ void __RPC_USER MIDL_user_free( void * );
 // AAF Interfaces.
 //=--------------------------------------------------------------------------=
 //
+
 
 
 
@@ -6037,16 +6044,22 @@ EXTERN_C const IID IID_IAAFDescriptiveClip;
             /* [in] */ aafLength_constref length,
             /* [in] */ aafSourceRef_t sourceRef) = 0;
         
-        virtual HRESULT STDMETHODCALLTYPE SetSourceTrackIDs( 
-            /* [in] */ aafUInt32 numberElements,
-            /* [in] */ aafUInt32 *pSourceTrackIDs) = 0;
+        virtual HRESULT STDMETHODCALLTYPE CountSourceTrackIDs( 
+            /* [retval][out] */ aafUInt32 *pCount) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetSourceTrackIDs( 
-            /* [in] */ aafUInt32 numberElements,
-            /* [in] */ aafUInt32 *pSourceTrackIDs) = 0;
+            /* [in] */ aafUInt32 maxSourceTrackIDCount,
+            /* [size_is][out] */ aafUInt32 *pSourceTrackIDs) = 0;
         
-        virtual HRESULT STDMETHODCALLTYPE GetSourceTrackIDsSize( 
-            /* [out] */ aafUInt32 *numberElements) = 0;
+        virtual HRESULT STDMETHODCALLTYPE IsSourceTrackIDPresent( 
+            /* [in] */ aafUInt32 sourceTrackID,
+            /* [retval][out] */ aafBoolean_t *pIsPresent) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE AddSourceTrackID( 
+            /* [in] */ aafUInt32 sourceTrackID) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE RemoveSourceTrackID( 
+            /* [in] */ aafUInt32 sourceTrackID) = 0;
         
     };
     
@@ -6073,19 +6086,27 @@ EXTERN_C const IID IID_IAAFDescriptiveClip;
             /* [in] */ aafLength_constref length,
             /* [in] */ aafSourceRef_t sourceRef);
         
-        HRESULT ( STDMETHODCALLTYPE *SetSourceTrackIDs )( 
+        HRESULT ( STDMETHODCALLTYPE *CountSourceTrackIDs )( 
             IAAFDescriptiveClip * This,
-            /* [in] */ aafUInt32 numberElements,
-            /* [in] */ aafUInt32 *pSourceTrackIDs);
+            /* [retval][out] */ aafUInt32 *pCount);
         
         HRESULT ( STDMETHODCALLTYPE *GetSourceTrackIDs )( 
             IAAFDescriptiveClip * This,
-            /* [in] */ aafUInt32 numberElements,
-            /* [in] */ aafUInt32 *pSourceTrackIDs);
+            /* [in] */ aafUInt32 maxSourceTrackIDCount,
+            /* [size_is][out] */ aafUInt32 *pSourceTrackIDs);
         
-        HRESULT ( STDMETHODCALLTYPE *GetSourceTrackIDsSize )( 
+        HRESULT ( STDMETHODCALLTYPE *IsSourceTrackIDPresent )( 
             IAAFDescriptiveClip * This,
-            /* [out] */ aafUInt32 *numberElements);
+            /* [in] */ aafUInt32 sourceTrackID,
+            /* [retval][out] */ aafBoolean_t *pIsPresent);
+        
+        HRESULT ( STDMETHODCALLTYPE *AddSourceTrackID )( 
+            IAAFDescriptiveClip * This,
+            /* [in] */ aafUInt32 sourceTrackID);
+        
+        HRESULT ( STDMETHODCALLTYPE *RemoveSourceTrackID )( 
+            IAAFDescriptiveClip * This,
+            /* [in] */ aafUInt32 sourceTrackID);
         
         END_INTERFACE
     } IAAFDescriptiveClipVtbl;
@@ -6113,14 +6134,20 @@ EXTERN_C const IID IID_IAAFDescriptiveClip;
 #define IAAFDescriptiveClip_Initialize(This,pDataDef,length,sourceRef)	\
     (This)->lpVtbl -> Initialize(This,pDataDef,length,sourceRef)
 
-#define IAAFDescriptiveClip_SetSourceTrackIDs(This,numberElements,pSourceTrackIDs)	\
-    (This)->lpVtbl -> SetSourceTrackIDs(This,numberElements,pSourceTrackIDs)
+#define IAAFDescriptiveClip_CountSourceTrackIDs(This,pCount)	\
+    (This)->lpVtbl -> CountSourceTrackIDs(This,pCount)
 
-#define IAAFDescriptiveClip_GetSourceTrackIDs(This,numberElements,pSourceTrackIDs)	\
-    (This)->lpVtbl -> GetSourceTrackIDs(This,numberElements,pSourceTrackIDs)
+#define IAAFDescriptiveClip_GetSourceTrackIDs(This,maxSourceTrackIDCount,pSourceTrackIDs)	\
+    (This)->lpVtbl -> GetSourceTrackIDs(This,maxSourceTrackIDCount,pSourceTrackIDs)
 
-#define IAAFDescriptiveClip_GetSourceTrackIDsSize(This,numberElements)	\
-    (This)->lpVtbl -> GetSourceTrackIDsSize(This,numberElements)
+#define IAAFDescriptiveClip_IsSourceTrackIDPresent(This,sourceTrackID,pIsPresent)	\
+    (This)->lpVtbl -> IsSourceTrackIDPresent(This,sourceTrackID,pIsPresent)
+
+#define IAAFDescriptiveClip_AddSourceTrackID(This,sourceTrackID)	\
+    (This)->lpVtbl -> AddSourceTrackID(This,sourceTrackID)
+
+#define IAAFDescriptiveClip_RemoveSourceTrackID(This,sourceTrackID)	\
+    (This)->lpVtbl -> RemoveSourceTrackID(This,sourceTrackID)
 
 #endif /* COBJMACROS */
 
@@ -6143,13 +6170,12 @@ void __RPC_STUB IAAFDescriptiveClip_Initialize_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IAAFDescriptiveClip_SetSourceTrackIDs_Proxy( 
+HRESULT STDMETHODCALLTYPE IAAFDescriptiveClip_CountSourceTrackIDs_Proxy( 
     IAAFDescriptiveClip * This,
-    /* [in] */ aafUInt32 numberElements,
-    /* [in] */ aafUInt32 *pSourceTrackIDs);
+    /* [retval][out] */ aafUInt32 *pCount);
 
 
-void __RPC_STUB IAAFDescriptiveClip_SetSourceTrackIDs_Stub(
+void __RPC_STUB IAAFDescriptiveClip_CountSourceTrackIDs_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
@@ -6158,8 +6184,8 @@ void __RPC_STUB IAAFDescriptiveClip_SetSourceTrackIDs_Stub(
 
 HRESULT STDMETHODCALLTYPE IAAFDescriptiveClip_GetSourceTrackIDs_Proxy( 
     IAAFDescriptiveClip * This,
-    /* [in] */ aafUInt32 numberElements,
-    /* [in] */ aafUInt32 *pSourceTrackIDs);
+    /* [in] */ aafUInt32 maxSourceTrackIDCount,
+    /* [size_is][out] */ aafUInt32 *pSourceTrackIDs);
 
 
 void __RPC_STUB IAAFDescriptiveClip_GetSourceTrackIDs_Stub(
@@ -6169,12 +6195,37 @@ void __RPC_STUB IAAFDescriptiveClip_GetSourceTrackIDs_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IAAFDescriptiveClip_GetSourceTrackIDsSize_Proxy( 
+HRESULT STDMETHODCALLTYPE IAAFDescriptiveClip_IsSourceTrackIDPresent_Proxy( 
     IAAFDescriptiveClip * This,
-    /* [out] */ aafUInt32 *numberElements);
+    /* [in] */ aafUInt32 sourceTrackID,
+    /* [retval][out] */ aafBoolean_t *pIsPresent);
 
 
-void __RPC_STUB IAAFDescriptiveClip_GetSourceTrackIDsSize_Stub(
+void __RPC_STUB IAAFDescriptiveClip_IsSourceTrackIDPresent_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFDescriptiveClip_AddSourceTrackID_Proxy( 
+    IAAFDescriptiveClip * This,
+    /* [in] */ aafUInt32 sourceTrackID);
+
+
+void __RPC_STUB IAAFDescriptiveClip_AddSourceTrackID_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFDescriptiveClip_RemoveSourceTrackID_Proxy( 
+    IAAFDescriptiveClip * This,
+    /* [in] */ aafUInt32 sourceTrackID);
+
+
+void __RPC_STUB IAAFDescriptiveClip_RemoveSourceTrackID_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
@@ -15659,6 +15710,9 @@ EXTERN_C const IID IID_IAAFMultipleDescriptor;
         virtual HRESULT STDMETHODCALLTYPE RemoveFileDescriptorAt( 
             /* [in] */ aafUInt32 index) = 0;
         
+        virtual HRESULT STDMETHODCALLTYPE GetFileDescriptors( 
+            /* [out] */ IEnumAAFFileDescriptors **ppEnum) = 0;
+        
     };
     
 #else 	/* C style interface */
@@ -15707,6 +15761,10 @@ EXTERN_C const IID IID_IAAFMultipleDescriptor;
             IAAFMultipleDescriptor * This,
             /* [in] */ aafUInt32 index);
         
+        HRESULT ( STDMETHODCALLTYPE *GetFileDescriptors )( 
+            IAAFMultipleDescriptor * This,
+            /* [out] */ IEnumAAFFileDescriptors **ppEnum);
+        
         END_INTERFACE
     } IAAFMultipleDescriptorVtbl;
 
@@ -15750,6 +15808,9 @@ EXTERN_C const IID IID_IAAFMultipleDescriptor;
 
 #define IAAFMultipleDescriptor_RemoveFileDescriptorAt(This,index)	\
     (This)->lpVtbl -> RemoveFileDescriptorAt(This,index)
+
+#define IAAFMultipleDescriptor_GetFileDescriptors(This,ppEnum)	\
+    (This)->lpVtbl -> GetFileDescriptors(This,ppEnum)
 
 #endif /* COBJMACROS */
 
@@ -15837,6 +15898,18 @@ HRESULT STDMETHODCALLTYPE IAAFMultipleDescriptor_RemoveFileDescriptorAt_Proxy(
 
 
 void __RPC_STUB IAAFMultipleDescriptor_RemoveFileDescriptorAt_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFMultipleDescriptor_GetFileDescriptors_Proxy( 
+    IAAFMultipleDescriptor * This,
+    /* [out] */ IEnumAAFFileDescriptors **ppEnum);
+
+
+void __RPC_STUB IAAFMultipleDescriptor_GetFileDescriptors_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
@@ -32754,6 +32827,187 @@ void __RPC_STUB IEnumAAFEssenceData_Clone_Stub(
 #endif 	/* __IEnumAAFEssenceData_INTERFACE_DEFINED__ */
 
 
+#ifndef __IEnumAAFFileDescriptors_INTERFACE_DEFINED__
+#define __IEnumAAFFileDescriptors_INTERFACE_DEFINED__
+
+/* interface IEnumAAFFileDescriptors */
+/* [unique][helpstring][uuid][object] */ 
+
+
+EXTERN_C const IID IID_IEnumAAFFileDescriptors;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("FD4B6BC0-0787-4F5E-9FBD-37282B8706E7")
+    IEnumAAFFileDescriptors : public IUnknown
+    {
+    public:
+        virtual HRESULT STDMETHODCALLTYPE NextOne( 
+            /* [retval][out] */ IAAFFileDescriptor **ppFileDescriptors) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE Next( 
+            /* [in] */ aafUInt32 count,
+            /* [length_is][size_is][out] */ IAAFFileDescriptor **ppFileDescriptors,
+            /* [ref][out] */ aafUInt32 *pNumFetched) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE Skip( 
+            /* [in] */ aafUInt32 count) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE Clone( 
+            /* [retval][out] */ IEnumAAFFileDescriptors **ppEnum) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IEnumAAFFileDescriptorsVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IEnumAAFFileDescriptors * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IEnumAAFFileDescriptors * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IEnumAAFFileDescriptors * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *NextOne )( 
+            IEnumAAFFileDescriptors * This,
+            /* [retval][out] */ IAAFFileDescriptor **ppFileDescriptors);
+        
+        HRESULT ( STDMETHODCALLTYPE *Next )( 
+            IEnumAAFFileDescriptors * This,
+            /* [in] */ aafUInt32 count,
+            /* [length_is][size_is][out] */ IAAFFileDescriptor **ppFileDescriptors,
+            /* [ref][out] */ aafUInt32 *pNumFetched);
+        
+        HRESULT ( STDMETHODCALLTYPE *Skip )( 
+            IEnumAAFFileDescriptors * This,
+            /* [in] */ aafUInt32 count);
+        
+        HRESULT ( STDMETHODCALLTYPE *Reset )( 
+            IEnumAAFFileDescriptors * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *Clone )( 
+            IEnumAAFFileDescriptors * This,
+            /* [retval][out] */ IEnumAAFFileDescriptors **ppEnum);
+        
+        END_INTERFACE
+    } IEnumAAFFileDescriptorsVtbl;
+
+    interface IEnumAAFFileDescriptors
+    {
+        CONST_VTBL struct IEnumAAFFileDescriptorsVtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IEnumAAFFileDescriptors_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IEnumAAFFileDescriptors_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IEnumAAFFileDescriptors_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IEnumAAFFileDescriptors_NextOne(This,ppFileDescriptors)	\
+    (This)->lpVtbl -> NextOne(This,ppFileDescriptors)
+
+#define IEnumAAFFileDescriptors_Next(This,count,ppFileDescriptors,pNumFetched)	\
+    (This)->lpVtbl -> Next(This,count,ppFileDescriptors,pNumFetched)
+
+#define IEnumAAFFileDescriptors_Skip(This,count)	\
+    (This)->lpVtbl -> Skip(This,count)
+
+#define IEnumAAFFileDescriptors_Reset(This)	\
+    (This)->lpVtbl -> Reset(This)
+
+#define IEnumAAFFileDescriptors_Clone(This,ppEnum)	\
+    (This)->lpVtbl -> Clone(This,ppEnum)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+HRESULT STDMETHODCALLTYPE IEnumAAFFileDescriptors_NextOne_Proxy( 
+    IEnumAAFFileDescriptors * This,
+    /* [retval][out] */ IAAFFileDescriptor **ppFileDescriptors);
+
+
+void __RPC_STUB IEnumAAFFileDescriptors_NextOne_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IEnumAAFFileDescriptors_Next_Proxy( 
+    IEnumAAFFileDescriptors * This,
+    /* [in] */ aafUInt32 count,
+    /* [length_is][size_is][out] */ IAAFFileDescriptor **ppFileDescriptors,
+    /* [ref][out] */ aafUInt32 *pNumFetched);
+
+
+void __RPC_STUB IEnumAAFFileDescriptors_Next_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IEnumAAFFileDescriptors_Skip_Proxy( 
+    IEnumAAFFileDescriptors * This,
+    /* [in] */ aafUInt32 count);
+
+
+void __RPC_STUB IEnumAAFFileDescriptors_Skip_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IEnumAAFFileDescriptors_Reset_Proxy( 
+    IEnumAAFFileDescriptors * This);
+
+
+void __RPC_STUB IEnumAAFFileDescriptors_Reset_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IEnumAAFFileDescriptors_Clone_Proxy( 
+    IEnumAAFFileDescriptors * This,
+    /* [retval][out] */ IEnumAAFFileDescriptors **ppEnum);
+
+
+void __RPC_STUB IEnumAAFFileDescriptors_Clone_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __IEnumAAFFileDescriptors_INTERFACE_DEFINED__ */
+
+
 #ifndef __IEnumAAFFileEncodings_INTERFACE_DEFINED__
 #define __IEnumAAFFileEncodings_INTERFACE_DEFINED__
 
@@ -47032,7 +47286,7 @@ void __RPC_STUB IAAFTypeDefVariableArrayEx_InsertElement_Stub(
 #endif 	/* __IAAFTypeDefVariableArrayEx_INTERFACE_DEFINED__ */
 
 
-/* interface __MIDL_itf_AAF_0266 */
+/* interface __MIDL_itf_AAF_0267 */
 /* [local] */ 
 
   ///***********************************************************
@@ -47165,8 +47419,8 @@ STDAPI AAFResultToText (
 
 
 
-extern RPC_IF_HANDLE __MIDL_itf_AAF_0266_v0_0_c_ifspec;
-extern RPC_IF_HANDLE __MIDL_itf_AAF_0266_v0_0_s_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_AAF_0267_v0_0_c_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_AAF_0267_v0_0_s_ifspec;
 
 /* Additional Prototypes for ALL interfaces */
 
