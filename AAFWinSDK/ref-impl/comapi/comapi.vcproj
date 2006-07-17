@@ -3133,6 +3133,9 @@
 			</FileConfiguration>
 		</File>
 		<File
+			RelativePath="..\..\..\ref-impl\src\com-api\CEnumAAFFileDescriptors.cpp">
+		</File>
+		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CEnumAAFFileEncodings.cpp">
 			<FileConfiguration
 				Name="Release|Win32">
