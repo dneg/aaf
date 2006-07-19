@@ -2640,6 +2640,13 @@ static void dumpLibInfo(ostream & os)
 	}
 }
 
+void printHRESULT(HRESULT hr, ostream& s)
+{
+	s << hex
+	  << hr
+	  << endl;
+}
+
 //
 // Dumps the given file.  Returns true if successful; returns false if
 // an error was encountered.
@@ -2733,11 +2740,9 @@ static bool dumpFile (aafCharacter * pwFileName,
 	  }
 	  else
 	    {
-	      cerr << "Other error opening file " << name
-		   << " returning status 0x"
-		   << hex
-		   << hr
-		   << endl;
+	      cerr << "Other error opening file " << name << " ";
+	      printHRESULT(hr, cerr);
+	      cerr << endl;
 	      return false;
 	    }
 	}
