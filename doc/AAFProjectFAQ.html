@@ -67,7 +67,7 @@ the AAF support website]
 <HR>
 <P> How do I get started with the AAF project at SourceForge ?</P>
 
-SourceForge is at<a href="%20http://sourceforge.net/">
+SourceForge is at<a href="http://sourceforge.net/">
 http://sourceforge.net/</a> The SourceForge Project Info page for AAF
 is <a href="http://sourceforge.net/projects/aaf/">
 http://sourceforge.net/projects/aaf/</a> and the Developer Support
@@ -92,7 +92,7 @@ href="http://www.wincvs.org/">http://www.wincvs.org</a>)
 
 <br>
 Admin -&gt; Preferences ... -&gt; Enter the CVSROOT -&gt;<font color="#FF0000"> 
-  :pserver:anonymous@cvs.sourceforge.net:/cvsroot/aaf</font><br>
+  :pserver:anonymous@aaf.cvs.sourceforge.net:/cvsroot/aaf</font><br>
   Admin -&gt; Preferences ... -&gt; Authentication -&gt; "passwd" file on the 
   cvs server<br>
   Admin -&gt; Login ... -&gt; <font color="#FF0000">&lt;no password - just click 
@@ -107,8 +107,8 @@ Open AAF/AAFWinSDK/AAFWinSDK.dsw with Visual Studio,<br> click on the
 
 <P> How do I obtain and build the AAF SDK on Linux ?</p>
 
-  $ export CVSROOT=:pserver:anonymous@cvs.sourceforge.net:/cvsroot/aaf<br>
-  $ cvs login (Logging in to anonymous@cvs.sourceforge.net) CVS password: 
+  $ export CVSROOT=:pserver:anonymous@aaf.cvs.sourceforge.net:/cvsroot/aaf<br>
+  $ cvs login (Logging in to anonymous@aaf.cvs.sourceforge.net) CVS password: 
   <font color="#FF0000">&lt;no password - just hit return&gt;</font><br>
   $ cvs checkout AAFLinuxSDK ...<br>
   $ cd AAF<br>
@@ -164,7 +164,7 @@ contain a <b>Root</b> file specifing the original checkout
 parameters.<br> Although this can be overriden by explicitly forcing a
 new access method with each command<font face="Courier New, Courier,
 mono" size="+1"><br> cvs -d :ext:<font color="#FF0000">&lt;developer
-name&gt;</font>@cvs.sourceforge.net:/cvsroot/aaf</font> ... <br>
+name&gt;</font>@aaf.cvs.sourceforge.net:/cvsroot/aaf</font> ... <br>
 It's much more sanitary to do a new clean checkout.<br> Refer to the
 AAF web pages <a href="http://aaf.sourceforge.net/sshWin32.html">Using
 CVS/ssh on Windows</a> or <a
@@ -174,16 +174,16 @@ MacOS</a><br> <br>
 <p>How do I use CVS/ssh on Linux ? </p>
 
 <br>
-$ export CVSROOT=:ext:<font color="#FF0000">&lt;developer name&gt;</font>@cvs.sourceforge.net:/cvsroot/aaf 
+$ export CVSROOT=:ext:<font color="#FF0000">&lt;developer name&gt;</font>@aaf.cvs.sourceforge.net:/cvsroot/aaf 
 <br>
 $ export CVS_RSH=ssh ... <br>
 $ cvs checkout -rRC1 AAFLinuxSDK<br>
-<font color="#FF0000">&lt;developer name&gt;</font>@cvs.sourceforge.net's 
+<font color="#FF0000">&lt;developer name&gt;</font>@aaf.cvs.sourceforge.net's 
 password: <font color="#FF0000">&lt;enter your password&gt;<br>
 </font>cvs server: Updating AAF ...<br>
 <br>
 $ cvs commit -m"Add new defrobnicate() member." frobber.cpp<br>
-<font color="#FF0000">&lt;developer name&gt;</font>@cvs.sourceforge.net's 
+<font color="#FF0000">&lt;developer name&gt;</font>@aaf.cvs.sourceforge.net's 
 password: <font color="#FF0000">&lt;enter your password&gt;<br>
 </font>...<br>
 $ . 
@@ -199,7 +199,7 @@ going on ?</p>
 
 SourceForge does not create a home directory for you until you attempt a real 
 login to the server (as opposed to a CVS session) with name and password:<br>
-ssh -l <font color="#FF0000">&lt;myname&gt;</font> cvs.sourceforge.net 
+ssh -l <font color="#FF0000">&lt;myname&gt;</font> aaf.cvs.sourceforge.net 
 
 <p>My company's firewall is preventing me accessing sourceforge what
   do I need to do ? </p>
@@ -1688,7 +1688,7 @@ project files back in to sourceforge.
 <p>I'm having problems getting CVS to work, is there any way to view
   individual source files ?</p>
 
-Yes, the <a href="http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/aaf/AAF/">CVS 
+Yes, the <a href="http://aaf.cvs.sourceforge.net/aaf/">CVS 
 browse interface</a> on SourceForge allows you to download individual files as 
 well as viewing the differences between versions. 
 
