@@ -348,7 +348,7 @@
 #define AAFRESULT_INCONSISTENCY                   ((HRESULT)0x801201CC)
 
 /* INTERNAL Error Codes - programming errors */
-        /* Reference implementation assertion violation (programming error). */
+        /* Reference implementation assertion violation (programming error) */
 #define AAFRESULT_ASSERTION_VIOLATION             ((HRESULT)0x801201D0)
         /* Reference implementation unexpected C++ exception (programming error) */
 #define AAFRESULT_UNEXPECTED_EXCEPTION            ((HRESULT)0x801201D1)
