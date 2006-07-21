@@ -22,6 +22,7 @@
 				Name="VCNMakeTool"
 				BuildCommandLine="NMAKE /f generate.mak"
 				ReBuildCommandLine="NMAKE /f generate.mak /a"
+				CleanCommandLine="NMAKE /f generate.mak clean"
 				Output="generate.exe"/>
 		</Configuration>
 		<Configuration
@@ -35,15 +36,13 @@
 				Name="VCNMakeTool"
 				BuildCommandLine="NMAKE /f generate.mak"
 				ReBuildCommandLine="NMAKE /f generate.mak /a"
+				CleanCommandLine="NMAKE /f generate.mak clean"
 				Output="generate.exe"/>
 		</Configuration>
 	</Configurations>
 	<References>
 	</References>
 	<Files>
-		<File
-			RelativePath="generate.bsc">
-		</File>
 		<File
 			RelativePath="generate.mak">
 		</File>

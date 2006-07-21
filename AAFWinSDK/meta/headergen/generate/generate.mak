@@ -114,3 +114,6 @@ $(GEN_H_DIR)\AAFCodecDefs.h : $(META_BIN)\genDefInstances$(EXE)
 
 $(GEN_H_DIR)\AAFCompressionDefs.h : $(META_BIN)\genDefInstances$(EXE)
 	$(META_BIN)\genDefInstances$(EXE) CompressionDefinition kAAF > $(GEN_H_DIR)\AAFCompressionDefs.h
+
+# Clean target doesn't do anything yet
+clean:
