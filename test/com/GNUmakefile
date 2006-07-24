@@ -27,7 +27,7 @@ AAFBASE ?= ../../..
 
 
 .PHONY : all
-all : ComModTestAAF CreateSequence EssenceAccess MultiGenTest ComFileKindTest UTF8FileNameTest OpenExistingModify ScaleTest
+all : ComModTestAAF CreateSequence EssenceAccess MultiGenTest ComFileKindTest UTF8FileNameTest OpenExistingModify ScaleTest ResultToTextTest
 
 .PHONY : ComModTestAAF
 ComModTestAAF :
@@ -61,6 +61,10 @@ OpenExistingModify :
 ScaleTest :
 	cd ScaleTest && $(MAKE)
 
+.PHONY : ResultToTextTest
+ResultToTextTest :
+	cd ResultToTextTest && $(MAKE)
+
 .PHONY : check
 check :
 	cd ComModTestAAF && $(MAKE) $@
@@ -71,6 +75,7 @@ check :
 	cd UTF8FileNameTest && $(MAKE) $@
 	cd OpenExistingModify && $(MAKE) $@
 	cd ScaleTest && $(MAKE) $@
+	cd ResultToTextTest && $(MAKE) $@
 
 .PHONY : clean
 clean :
@@ -82,6 +87,7 @@ clean :
 	cd UTF8FileNameTest && $(MAKE) GENDEPS=0 $@
 	cd OpenExistingModify && $(MAKE) GENDEPS=0 $@
 	cd ScaleTest && $(MAKE) GENDEPS=0 $@
+	cd ResultToTextTest && $(MAKE) GENDEPS=0 $@
 
 .PHONY : realclean
 realclean :
@@ -93,3 +99,4 @@ realclean :
 	cd UTF8FileNameTest && $(MAKE) GENDEPS=0 $@
 	cd OpenExistingModify && $(MAKE) GENDEPS=0 $@
 	cd ScaleTest && $(MAKE) GENDEPS=0 $@
+	cd ResultToTextTest && $(MAKE) GENDEPS=0 $@
