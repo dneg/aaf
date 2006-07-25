@@ -42,6 +42,7 @@
 using namespace std;
 
 
+#if 0
 aafUInt32 TestSourceTrackIDsVector[] = { 1, 3, 5, 7, 11 };
 const aafUInt32 TestSourceTrackIDsVectorSize = 5;
 
@@ -358,3 +359,10 @@ extern "C" HRESULT CAAFDescriptiveClip_test(testMode_t mode)
 	return hr;
 }
 
+#else
+extern "C" HRESULT CAAFDescriptiveClip_test(testMode_t mode)
+{	
+	HRESULT hr = AAFRESULT_NOT_IMPLEMENTED;
+	return hr;
+}
+#endif
