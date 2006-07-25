@@ -191,6 +191,7 @@ interface IAAFComponent2;
 interface IAAFCompositionMob2;
 interface IAAFDataDef2;
 interface IAAFDataDef3;
+interface IAAFDiagnosticOutput;
 interface IAAFDictionary2;
 interface IAAFDigitalImageDescriptor2;
 interface IAAFEndian;
@@ -363,6 +364,7 @@ typedef interface IAAFComponent2 IAAFComponent2;
 typedef interface IAAFCompositionMob2 IAAFCompositionMob2;
 typedef interface IAAFDataDef2 IAAFDataDef2;
 typedef interface IAAFDataDef3 IAAFDataDef3;
+typedef interface IAAFDiagnosticOutput IAAFDiagnosticOutput;
 typedef interface IAAFDictionary2 IAAFDictionary2;
 typedef interface IAAFDigitalImageDescriptor2 IAAFDigitalImageDescriptor2;
 typedef interface IAAFEndian IAAFEndian;
@@ -41074,6 +41076,56 @@ DECLARE_INTERFACE_(IAAFDataDef3, IUnknown)
 
 
 
+// IAAFDiagnosticOutput
+
+// ************************
+//
+// Interface IAAFDiagnosticOutput
+//
+// ************************
+
+
+
+#ifndef __IAAFDiagnosticOutput_INTERFACE_DEFINED__
+#define __IAAFDiagnosticOutput_INTERFACE_DEFINED__
+
+EXTERN_C const IID IID_IAAFDiagnosticOutput;
+
+
+#undef  INTERFACE
+#define INTERFACE   IAAFDiagnosticOutput
+
+DECLARE_INTERFACE_(IAAFDiagnosticOutput, IUnknown)
+{
+  BEGIN_INTERFACE
+
+  /* *** IUnknown methods *** */
+  STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppvObj) PURE;
+  STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
+  STDMETHOD_(ULONG,Release) (THIS) PURE;
+
+  /* *** IAAFDiagnosticOutput methods *** */
+
+
+  //***********************************************************
+  //
+  // PutString()
+  //
+  /// This method is called by the AAF toolkit to write a string
+  /// to this diagnostic output.
+  ///
+  /// @param pString [in, string] string to print out
+  ///
+  STDMETHOD(PutString) (THIS_
+    aafCharacter_constptr  pString) PURE;
+
+
+  END_INTERFACE
+};
+#endif // __IAAFDiagnosticOutput_INTERFACE_DEFINED__
+
+
+
 // IAAFDictionary2
 
 // ************************
@@ -50748,6 +50800,33 @@ DECLARE_INTERFACE_(IAAFTypeDefVariableArrayEx, IUnknown)
   STDAPI AAFGetFileEncodings (
     IEnumAAFFileEncodings ** ppFileEncodings);
 
+  //***********************************************************
+  //
+  // AAFSetDiagnosticOutput()
+  //
+  /// Make the specified diagnostic output stream the AAF Toolkit's diagnostic output stream.
+  /// By default the diagnostic output goes to stderr. The passed in pointer is AddRefed.
+  /// The pointer will be Released the next time AAFSetDiagnosticOutput is called or when
+  /// the AAF DLL is unloaded.
+  /// 
+  ///
+  /// This method will succeed if the following are true:
+  /// - The pOutput pointer is valid.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pStream arg is NULL.
+  ///
+  /// @param pOutput [in] New diagnostic output.
+  /// 
+  STDAPI AAFSetDiagnosticOutput (
+    IAAFDiagnosticOutput*  pOutput);
 
   //***********************************************************
   //

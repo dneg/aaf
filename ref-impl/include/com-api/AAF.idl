@@ -192,6 +192,7 @@ interface IAAFComponent2;
 interface IAAFCompositionMob2;
 interface IAAFDataDef2;
 interface IAAFDataDef3;
+interface IAAFDiagnosticOutput;
 interface IAAFDictionary2;
 interface IAAFDigitalImageDescriptor2;
 interface IAAFEndian;
@@ -40724,6 +40725,54 @@ interface IAAFDataDef3 : IUnknown
 
 // ************************
 //
+// Interface IAAFDiagnosticOutput
+//
+// ************************
+///
+/// This interface is used by AAF Toolkit as an output stream to which
+/// it writes diagnostic messages. AAF Toolkit clients can create their
+/// own implementation of this interface  The default implementation of
+/// AAFDiagnosticOutput is a wrapper for the standard error stream (stderr).
+///
+///
+/// In addition to the specific error results listed for each method,
+/// all methods in this interface may also return one of the following
+/// values:
+/// 
+/// AAFRESULT_NOMEMORY
+///   - insufficient system memory is available to perform the
+///     operation.
+
+
+[
+    object,
+    uuid(C9346826-1CFE-4AEF-BA4D-54D414138739),
+    helpstring("IAAFDiagnosticOutput Interface"),
+    pointer_default(unique)
+]
+
+interface IAAFDiagnosticOutput : IUnknown
+{
+
+
+  //***********************************************************
+  //
+  // PutString()
+  //
+  /// This method is called by the AAF toolkit to write a string
+  /// to this diagnostic output.
+  /// 
+  /// @param pString [in, string] string to print out
+  ///
+  HRESULT PutString (
+    [in, string] aafCharacter_constptr  pString);
+
+}
+
+
+
+// ************************
+//
 // Interface IAAFDictionary2
 //
 // ************************
@@ -50506,6 +50555,33 @@ cpp_quote("")
 cpp_quote("STDAPI AAFGetFileEncodings (IEnumAAFFileEncodings ** ppFileEncodings);")
 cpp_quote("")
 
+  //***********************************************************
+  //
+  // AAFSetDiagnosticOutput()
+  //
+  /// Make the specified diagnostic output stream the AAF Toolkit's diagnostic output stream.
+  /// By default the diagnostic output goes to stderr. The passed in pointer is AddRefed.
+  /// The pointer will be Released the next time AAFSetDiagnosticOutput is called or when
+  /// the AAF DLL is unloaded.
+  /// 
+  ///
+  /// This method will succeed if the following are true:
+  /// - The pOutput pointer is valid.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pStream arg is NULL.
+  ///
+  /// @param pOutput [in] New diagnostic output. 
+  ///
+cpp_quote("STDAPI AAFSetDiagnosticOutput (IAAFDiagnosticOutput*  pOutput);")
+cpp_quote("")
 
   //***********************************************************
   //
