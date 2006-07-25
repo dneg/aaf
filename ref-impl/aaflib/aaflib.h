@@ -139,6 +139,9 @@ typedef STDAPICALLTYPE HRESULT (* LPFNAAFSETPROGRESSCALLBACK)(
 typedef STDAPICALLTYPE HRESULT (* LPFNAAFGETFILEENCODINGS)(
     IEnumAAFFileEncodings ** ppFileEncodings);
 
+typedef STDAPICALLTYPE HRESULT (* LPFNAAFSETOUTPUTSTREAM)(
+    IAAFDiagnosticOutput * pStream);
+
 typedef STDAPICALLTYPE HRESULT (* LPFNAAFGETLIBRARYVERSION)(
     aafProductVersion_t *  pVersion);
 
@@ -259,6 +262,9 @@ typedef HRESULT (STDAPICALLTYPE * LPFNAAFSETPROGRESSCALLBACK)(
 
 typedef HRESULT (STDAPICALLTYPE * LPFNAAFGETFILEENCODINGS)(
     IEnumAAFFileEncodings ** ppFileEncodings);
+
+typedef HRESULT (STDAPICALLTYPE * LPFNAAFSETOUTPUTSTREAM)(
+    IAAFDiagnosticOutput * pStream);
 
 typedef HRESULT (STDAPICALLTYPE * LPFNAAFGETLIBRARYVERSION)(
     aafProductVersion_t *  pVersion);
@@ -422,6 +428,9 @@ public:
   HRESULT GetFileEncodings (
     IEnumAAFFileEncodings ** ppFileEncodings);
 
+  HRESULT SetDiagnosticOutput (
+    IAAFDiagnosticOutput * pStreams);
+
   HRESULT GetLibraryVersion (
     aafProductVersion_t *  pVersion);
 
@@ -474,6 +483,7 @@ protected:
   LPFNAAFCREATEAAFFILEONRAWSTORAGE _pfnCreateAAFFileOnRawStorage;
   LPFNAAFSETPROGRESSCALLBACK       _pfnSetProgressCallback;
   LPFNAAFGETFILEENCODINGS          _pfnGetFileEncodings;
+  LPFNAAFSETOUTPUTSTREAM           _pfnSetDiagnosticOutput;
   LPFNAAFGETLIBRARYVERSION         _pfnGetLibraryVersion;
   LPFNAAFGETLIBRARYPATHNAMEBUFLEN  _pfnGetLibraryPathNameBufLen;
   LPFNAAFGETLIBRARYPATHNAME        _pfnGetLibraryPathName;

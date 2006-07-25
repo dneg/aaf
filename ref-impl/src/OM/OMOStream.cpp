@@ -99,12 +99,41 @@ OMOStream& endl(OMOStream& s)
   return s.endLine();
 }
 
- // @globalv Global <c OMOStream> for Object Manager logging.
- //          Debug use only.
-OMOStream omlog;
+ // @globalv Global <c OMDiagnosticStream> for Object Manager logging.
+OMDiagnosticStream omlog;
 
 // @devnote If your platform doesn't have <iostream> you'll need to
 //          implement the following functions differently.
+
+// @devnote If your platform doesn't have <lt>iostream<gt> you'll need to
+//          implement the <mf OMOStream::put> and <mf OMOStream::putLine>
+//          functions differently.
+
+// Diagnostic output to cerr
+
+#include <iostream>
+using namespace std;
+
+OMStandardDiagnosticStream::OMStandardDiagnosticStream(void)
+{
+}
+
+  // @mfunc Put a character string.
+  //   @parm The character string to be written.
+  //   @rdesc The modified <c OMOStream>
+OMOStream& OMStandardDiagnosticStream::put(const char* string)
+{
+  cerr << string;
+  return *this;
+}
+
+  // @mfunc Put a new line.
+  //   @rdesc The modified <c OMOStream>
+OMOStream& OMStandardDiagnosticStream::putLine(void)
+{
+  cerr << endl;
+  return *this;
+}
 
 #if !defined(OM_OUTPUT_TO_DEBUGGER)
 
@@ -257,4 +286,56 @@ OMOStream& OMOStream::putLine(void)
 }
 
 #endif
+
+OMDiagnosticStream::OMDiagnosticStream(void)
+{
+  initialize();
+//TRACE("OMDiagnosticStream::OMDiagnosticStream");
+//POSTCONDITION("Valid stream", _stream != 0);
+}
+
+OMDiagnosticStream::OMDiagnosticStream(OMOStream* stream)
+: _stream(stream)
+{
+//TRACE("OMDiagnosticStream::OMDiagnosticStream");
+//POSTCONDITION("Valid stream", _stream != 0);
+}
+
+OMDiagnosticStream::~OMDiagnosticStream(void)
+{
+  delete _stream; // We own _stream
+  _stream = 0;
+}
+
+void OMDiagnosticStream::initialize(void)
+{
+#if defined(OM_OUTPUT_TO_DEBUGGER)
+  _stream = new OMDebuggerDiagnosticStream();
+#else
+  _stream = new OMStandardDiagnosticStream();
+#endif
+}
+
+void OMDiagnosticStream::setStream(OMOStream* stream)
+{
+//TRACE("OMDiagnosticStream::setStream");
+//PRECONDITION("Valid stream", stream != 0);
+
+  delete _stream; // We own _stream
+  _stream = stream;
+}
+
+OMOStream& OMDiagnosticStream::put(const char* string)
+{
+//TRACE("OMDiagnosticStream::put");
+  (*_stream) << string;
+  return *this;
+}
+
+OMOStream& OMDiagnosticStream::putLine(void)
+{
+//TRACE("OMDiagnosticStream::putLine");
+  (*_stream) << endl;
+  return *this;
+}
 

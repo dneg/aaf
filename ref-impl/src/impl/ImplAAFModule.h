@@ -476,6 +476,28 @@ STDAPI
 ImplAAFGetFileEncodings
   (ImplEnumAAFFileEncodings** ppFileEncodings);
 
+//***********************************************************
+//
+// ImplAAFSetDiagnosticOutput()
+//
+// Makes the specified stream the AAF Toolkit's diagnostic output stream
+//
+// This method will succeed if the following are true:
+// - The pOutput pointer is valid.
+//
+// This method will return the following codes.  If more than one of
+// the listed errors is in effect, it will return the first one
+// encountered in the order given below:
+// 
+// AAFRESULT_SUCCESS
+//   - succeeded.  (This is the only code indicating success.)
+//
+// AAFRESULT_NULL_PARAM
+//   - pOutput arg is NULL.
+// 
+STDAPI
+ImplAAFSetDiagnosticOutput
+  (IAAFDiagnosticOutput* pOutput);
 
 //***********************************************************
 //

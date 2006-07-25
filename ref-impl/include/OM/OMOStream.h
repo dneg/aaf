@@ -90,8 +90,48 @@ protected:
  //   @rdesc The modified <c OMOStream>.
 OMOStream& endl(OMOStream& s);
 
- // @globalv Global <c OMOStream> for Object Manager logging.
- //          Debug use only.
-extern OMOStream omlog;
+// Diagnostic stream which outputs to standard error/cerr
+//
+class OMStandardDiagnosticStream : public OMOStream {
+public:
+
+  OMStandardDiagnosticStream(void);
+
+protected:
+
+  virtual OMOStream& put(const char* string);
+
+  virtual OMOStream& putLine(void);
+
+};
+
+// Run-time configurable diagnostic stream
+//
+class OMDiagnosticStream : public OMOStream {
+public:
+
+  OMDiagnosticStream(void);
+
+  OMDiagnosticStream(OMOStream* stream);
+
+  virtual ~OMDiagnosticStream(void);
+
+    // Set the disgnostic stream, relinquishing ownership
+  void setStream(OMOStream* stream);
+
+protected:
+
+  void initialize(void);
+
+  virtual OMOStream& put(const char* string);
+
+  virtual OMOStream& putLine(void);
+
+private:
+  OMOStream* _stream; // Owned by this
+};
+
+ // @globalv Global <c OMDiagnosticStream> for Object Manager logging.
+extern OMDiagnosticStream omlog;
 
 #endif

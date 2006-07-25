@@ -828,8 +828,36 @@ STDAPI AAFGetFileEncodings (
 
 
 
+//***********************************************************
+//
+// AAFSetDiagnosticOutput()
+//
+STDAPI AAFSetDiagnosticOutput (
+  IAAFDiagnosticOutput * pStream)
+{
+  HRESULT hr = S_OK;
+  AAFDLL *pAAFDLL = NULL;
 
+  // Get the dll wrapper
+  hr = LoadIfNecessary(&pAAFDLL);
+  if (FAILED(hr))
+    return hr;
+  
+  try
+  {
+    // Attempt to call the dll's exported function...
+    hr = pAAFDLL->SetDiagnosticOutput
+	  (pStream);
+  }
+  catch (...)
+  {
+    // Return a reasonable exception code.
+    //
+    hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+  }
 
+  return hr;
+}
 
 STDAPI
 AAFGetLibraryVersion
@@ -1132,6 +1160,10 @@ HRESULT AAFDLL::Load(const char *dllname)
   					   (AAFSymbolAddr *)&_pfnRawStorageIsAAFFileKind);
 
   rc = ::AAFFindSymbol(_libHandle,
+					   "AAFSetDiagnosticOutput",
+  					   (AAFSymbolAddr *)&_pfnSetDiagnosticOutput);
+
+  rc = ::AAFFindSymbol(_libHandle,
 					   "AAFGetLibraryVersion",
   					   (AAFSymbolAddr *)&_pfnGetLibraryVersion);
 
@@ -1201,6 +1233,7 @@ void AAFDLL::ClearEntrypoints()
   _pfnCreateAAFFileOnRawStorage = 0;
   _pfnSetProgressCallback = 0;
   _pfnGetFileEncodings = 0;
+  _pfnSetDiagnosticOutput = 0;
   _pfnGetLibraryVersion = 0;
   _pfnGetLibraryPathNameBufLen = 0;
   _pfnGetLibraryPathName = 0;
@@ -1460,6 +1493,16 @@ HRESULT AAFDLL::GetFileEncodings (
     	(ppFileEncodings);
 }
 
+HRESULT AAFDLL::SetDiagnosticOutput (
+    IAAFDiagnosticOutput * pStream)
+{
+  // This callback did not exist in DR4 or earlier toolkits.
+  if (NULL == _pfnSetDiagnosticOutput)
+    return AAFRESULT_DLL_SYMBOL_NOT_FOUND;
+    
+  return _pfnSetDiagnosticOutput
+	(pStream);
+}
 
 HRESULT AAFDLL::GetLibraryVersion
   (aafProductVersion_t *  pVersion)
