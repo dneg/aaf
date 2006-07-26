@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2006, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -35,23 +35,35 @@ class OMOStream {
 public:
   // @access Public members.
 
+    // @cmember Constructor.
+  OMOStream(void);
+
     // @cmember Insert a character string.
   OMOStream& operator << (const char* string);
 
-    // @cmember Insert an OMUInt32 in decimal.
+    // @cmember Insert an OMUInt64.
+  OMOStream& operator << (OMUInt64 i);
+
+    // @cmember Insert an OMInt64.
+  OMOStream& operator << (OMInt64 i);
+
+    // @cmember Insert an OMUInt32.
   OMOStream& operator << (OMUInt32 i);
 
-    // @cmember Insert an OMInt32 in decimal.
+    // @cmember Insert an OMInt32.
   OMOStream& operator << (OMInt32 i);
 
-    // @cmember Insert an OMUInt16 in decimal.
+    // @cmember Insert an OMUInt16.
   OMOStream& operator << (OMUInt16 i);
 
-    // @cmember Insert an OMInt16 in decimal.
+    // @cmember Insert an OMInt16.
   OMOStream& operator << (OMInt16 i);
 
-    // @cmember Insert a pointer in hex.
+    // @cmember Insert a pointer.
   OMOStream& operator << (void* p);
+
+    // @cmember Insert a double.
+  OMOStream& operator << (double d);
 
     // @cmember Insert a new line.
   OMOStream& endLine(void);
@@ -59,36 +71,60 @@ public:
     // @cmember Insert (call) a manipulator.
   OMOStream& operator << (OMOStream& (*manipulator)(OMOStream&));
 
+  OMOStream& dec(void);
+
+  OMOStream& hex(void);
+
+  OMOStream& setw(int n);
+
 protected:
   // @access Protected members.
 
     // @cmember Put a character string.
-  OMOStream& put(const char* string);
-
-    // @cmember Put an OMUInt32 in decimal.
-  OMOStream& put(OMUInt32 i);
-
-    // @cmember Put an OMInt32 in decimal.
-  OMOStream& put(OMInt32 i);
-
-    // @cmember Put an OMUInt16 in decimal.
-  OMOStream& put(OMUInt16 i);
-
-    // @cmember Put an OMInt16 in decimal.
-  OMOStream& put(OMInt16 i);
-
-    // @cmember Put a pointer in hex.
-  OMOStream& put(void* p);
+  virtual OMOStream& put(const char* string) = 0;
 
     // @cmember Put a new line.
-  OMOStream& putLine(void);
+  virtual OMOStream& putLine(void) = 0;
 
+    // @cmember Put an OMUInt64.
+  OMOStream& put(OMUInt64 i);
+
+    // @cmember Put an OMInt64.
+  OMOStream& put(OMInt64 i);
+
+    // @cmember Put an OMUInt32.
+  OMOStream& put(OMUInt32 i);
+
+    // @cmember Put an OMInt32.
+  OMOStream& put(OMInt32 i);
+
+    // @cmember Put an OMUInt16.
+  OMOStream& put(OMUInt16 i);
+
+    // @cmember Put an OMInt16.
+  OMOStream& put(OMInt16 i);
+
+    // @cmember Put a pointer.
+  OMOStream& put(void* p);
+
+    // @cmember Put a double.
+  OMOStream& put(double d);
+
+private:
+  int _base;
+  int _width;
 };
 
  // @func <c OMOStream> end of line manipulator.
  //   @parm The <c OMOStream> in which to inset the new line.
  //   @rdesc The modified <c OMOStream>.
 OMOStream& endl(OMOStream& s);
+
+OMOStream& dec(OMOStream& s);
+
+OMOStream& hex(OMOStream& s);
+
+OMOStream& set_w(OMOStream& s, int n);
 
 // Diagnostic stream which outputs to standard error/cerr
 //

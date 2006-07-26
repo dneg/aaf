@@ -27,6 +27,23 @@
 
 #include "OMOStream.h"
 
+#include "OMUtilities.h"
+
+#include <sstream>
+#include <string>
+using namespace std;
+
+static void format(ostringstream& s,
+                   int base,
+                   int& width);
+
+  // @mfunc Constructor.
+OMOStream::OMOStream(void)
+: _base(10),
+  _width(0)
+{
+}
+
   // @mfunc Insert a character string.
   //   @parm The string to insert.
   //   @rdesc The modified <c OMOStream>
@@ -35,7 +52,23 @@ OMOStream& OMOStream::operator << (const char* string)
   return put(string);
 }
 
-  // @mfunc Insert an OMUInt32 in decimal.
+  // @mfunc Insert an OMUInt64.
+  //   @parm The OMUInt64 to insert.
+  //   @rdesc The modified <c OMOStream>
+OMOStream& OMOStream::operator << (OMUInt64 i)
+{
+  return put(i);
+}
+
+  // @mfunc Insert an OMInt64.
+  //   @parm The OMInt64 to insert.
+  //   @rdesc The modified <c OMOStream>
+OMOStream& OMOStream::operator << (OMInt64 i)
+{
+  return put(i);
+}
+
+  // @mfunc Insert an OMUInt32.
   //   @parm The OMUInt32 to insert.
   //   @rdesc The modified <c OMOStream>
 OMOStream& OMOStream::operator << (OMUInt32 i)
@@ -43,7 +76,7 @@ OMOStream& OMOStream::operator << (OMUInt32 i)
   return put(i);
 }
 
-  // @mfunc Insert an OMInt32 in decimal.
+  // @mfunc Insert an OMInt32.
   //   @parm The OMInt32 to insert.
   //   @rdesc The modified <c OMOStream>
 OMOStream& OMOStream::operator << (OMInt32 i)
@@ -51,7 +84,7 @@ OMOStream& OMOStream::operator << (OMInt32 i)
   return put(i);
 }
 
-  // @mfunc Insert an OMUInt16 in decimal.
+  // @mfunc Insert an OMUInt16.
   //   @parm The OMUInt16 to insert.
   //   @rdesc The modified <c OMOStream>
 OMOStream& OMOStream::operator << (OMUInt16 i)
@@ -59,7 +92,7 @@ OMOStream& OMOStream::operator << (OMUInt16 i)
   return put(i);
 }
 
-  // @mfunc Insert an OMInt16 in decimal.
+  // @mfunc Insert an OMInt16.
   //   @parm The OMInt16 to insert.
   //   @rdesc The modified <c OMOStream>
 OMOStream& OMOStream::operator << (OMInt16 i)
@@ -67,12 +100,20 @@ OMOStream& OMOStream::operator << (OMInt16 i)
   return put(i);
 }
 
-  // @mfunc Insert a pointer in hex.
+  // @mfunc Insert a pointer.
   //   @parm The pointer to insert.
   //   @rdesc The modified <c OMOStream>
 OMOStream& OMOStream::operator << (void* p)
 {
   return put(p);
+}
+
+  // @mfunc Insert a double.
+  //   @parm The double to insert.
+  //   @rdesc The modified <c OMOStream>
+OMOStream& OMOStream::operator << (double d)
+{
+  return put(d);
 }
 
   // @mfunc Put a new line.
@@ -85,10 +126,28 @@ OMOStream& OMOStream::endLine(void)
   // @mfunc Insert (call) a manipulator.
   //   @parm The manipulator to insert (call).
   //   @rdesc The modified <c OMOStream>
-OMOStream&
-OMOStream::operator << (OMOStream& (*manipulator)(OMOStream&))
+OMOStream& OMOStream::operator << (OMOStream& (*manipulator)(OMOStream&))
 {
   return(*manipulator)(*this);
+}
+
+
+OMOStream& OMOStream::dec(void)
+{
+  _base = 10;
+  return *this;
+}
+
+OMOStream& OMOStream::hex(void)
+{
+  _base = 16;
+  return *this;
+}
+
+OMOStream& OMOStream::setw(int n)
+{
+  _width = n;
+  return *this;
 }
 
  // @func <c OMOStream> end of line manipulator.
@@ -154,48 +213,107 @@ OMOStream& OMOStream::put(const char* string)
   return *this;
 }
 
-  // @mfunc Put an OMUInt32 in decimal.
+  // @mfunc Put an OMUInt64.
+  //   @parm The OMUInt64 to write.
+  //   @rdesc The modified <c OMOStream>
+OMOStream& OMOStream::put(OMUInt64 i)
+{
+  ostringstream s;
+  format(s, _base, _width);
+  s << i << ends;
+  string buffer = s.str();
+  put(buffer.c_str());
+  return *this;
+}
+
+  // @mfunc Put an OMInt64.
+  //   @parm The OMInt64 to write.
+  //   @rdesc The modified <c OMOStream>
+OMOStream& OMOStream::put(OMInt64 i)
+{
+  ostringstream s;
+  format(s, _base, _width);
+  s << i << ends;
+  string buffer = s.str();
+  put(buffer.c_str());
+  return *this;
+}
+
+  // @mfunc Put an OMUInt32.
   //   @parm The OMUInt32 to write.
   //   @rdesc The modified <c OMOStream>
 OMOStream& OMOStream::put(OMUInt32 i)
 {
-  cerr << i;
+  ostringstream s;
+  format(s, _base, _width);
+  s << i << ends;
+  string buffer = s.str();
+  put(buffer.c_str());
   return *this;
 }
 
-  // @mfunc Put an OMInt32 in decimal.
+  // @mfunc Put an OMInt32.
   //   @parm The OMInt32 to write.
   //   @rdesc The modified <c OMOStream>
 OMOStream& OMOStream::put(OMInt32 i)
 {
-  cerr << i;
+  ostringstream s;
+  format(s, _base, _width);
+  s << i << ends;
+  string buffer = s.str();
+  put(buffer.c_str());
   return *this;
 }
 
-  // @mfunc Put an OMUInt16 in decimal.
+  // @mfunc Put an OMUInt16.
   //   @parm The OMUInt16 to write.
   //   @rdesc The modified <c OMOStream>
 OMOStream& OMOStream::put(OMUInt16 i)
 {
-  cerr << i;
+  ostringstream s;
+  format(s, _base, _width);
+  s << i << ends;
+  string buffer = s.str();
+  put(buffer.c_str());
   return *this;
 }
 
-  // @mfunc Put an OMInt16 in decimal.
+  // @mfunc Put an OMInt16.
   //   @parm The OMInt16 to write.
   //   @rdesc The modified <c OMOStream>
 OMOStream& OMOStream::put(OMInt16 i)
 {
-  cerr << i;
+  ostringstream s;
+  format(s, _base, _width);
+  s << i << ends;
+  string buffer = s.str();
+  put(buffer.c_str());
   return *this;
 }
 
-  // @mfunc Put a pointer in hex.
+  // @mfunc Put a pointer.
   //   @parm The pointer to write.
   //   @rdesc The modified <c OMOStream>
 OMOStream& OMOStream::put(void* p)
 {
-  cerr << p;
+  ostringstream s;
+  format(s, _base, _width);
+  s << p << ends;
+  string buffer = s.str();
+  put(buffer.c_str());
+  return *this;
+}
+
+  // @mfunc Put a double.
+  //   @parm The double to write.
+  //   @rdesc The modified <c OMOStream>
+OMOStream& OMOStream::put(double d)
+{
+  ostringstream s;
+  format(s, _base, _width);
+  s << d << ends;
+  string buffer = s.str();
+  put(buffer.c_str());
   return *this;
 }
 
@@ -378,3 +496,15 @@ OMOStream& OMDiagnosticStream::putLine(void)
   return *this;
 }
 
+static void format(ostringstream& s,
+                   int base,
+                   int& width)
+{
+  if (width != 0) {
+    s.width(width);
+    width = 0;
+  }
+  if (base != 10) {
+    s.setf(ios::hex,ios::basefield);
+  }
+}
