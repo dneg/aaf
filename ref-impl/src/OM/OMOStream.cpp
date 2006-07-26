@@ -131,6 +131,10 @@ OMOStream& OMOStream::operator << (OMOStream& (*manipulator)(OMOStream&))
   return(*manipulator)(*this);
 }
 
+OMOStream& OMOStream::operator << (const OMOStreamManipulator& m)
+{
+  return m._f(*this, m._i);
+}
 
 OMOStream& OMOStream::dec(void)
 {

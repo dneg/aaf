@@ -28,6 +28,8 @@
 
 #include "OMDataTypes.h"
 
+class OMOStreamManipulator;
+
   // @class Simple, platform independent, text output stream
   //        for diagnostic (debug only) use by the Object Manager.
   //   @cauthor Tim Bingham | tjb | Avid Technology, Inc.
@@ -70,6 +72,9 @@ public:
 
     // @cmember Insert (call) a manipulator.
   OMOStream& operator << (OMOStream& (*manipulator)(OMOStream&));
+
+    // @cmember Insert (call) a manipulator.
+  OMOStream& operator << (const OMOStreamManipulator& m);
 
   OMOStream& dec(void);
 
@@ -115,6 +120,22 @@ private:
   int _width;
 };
 
+class OMOStreamManipulator {
+public:
+  OMOStreamManipulator(OMOStream& (*f)(OMOStream&, int), int i);
+
+  OMOStream& (*_f)(OMOStream&, int);
+  int _i;
+};
+
+inline OMOStreamManipulator::OMOStreamManipulator(
+                                              OMOStream& (*f)(OMOStream&, int),
+                                              int i)
+: _f(f),
+  _i(i)
+{
+}
+
  // @func <c OMOStream> end of line manipulator.
  //   @parm The <c OMOStream> in which to inset the new line.
  //   @rdesc The modified <c OMOStream>.
@@ -125,6 +146,11 @@ OMOStream& dec(OMOStream& s);
 OMOStream& hex(OMOStream& s);
 
 OMOStream& set_w(OMOStream& s, int n);
+
+inline OMOStreamManipulator setw(int n)
+{
+  return OMOStreamManipulator(set_w, n);
+}
 
 // Diagnostic stream which outputs to standard error/cerr
 //
