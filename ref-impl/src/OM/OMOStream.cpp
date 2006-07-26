@@ -305,6 +305,27 @@ OMOStream& OMOStream::putLine(void)
 
 #endif
 
+static void debugPrint(const char* string)
+{
+  cerr << string;
+}
+
+OMDebuggerDiagnosticStream::OMDebuggerDiagnosticStream(void)
+{
+}
+
+OMOStream& OMDebuggerDiagnosticStream::put(const char* string)
+{
+  debugPrint(string);
+  return *this;
+}
+
+OMOStream& OMDebuggerDiagnosticStream::putLine(void)
+{
+  debugPrint("\n");
+  return *this;
+}
+
 OMDiagnosticStream::OMDiagnosticStream(void)
 {
   initialize();

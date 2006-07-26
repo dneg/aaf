@@ -120,6 +120,21 @@ protected:
 
 };
 
+// Diagnostic stream which outputs to the debugger
+//
+class OMDebuggerDiagnosticStream : public OMOStream {
+public:
+
+  OMDebuggerDiagnosticStream(void);
+
+protected:
+
+  virtual OMOStream& put(const char* string);
+
+  virtual OMOStream& putLine(void);
+
+};
+
 // Run-time configurable diagnostic stream
 //
 class OMDiagnosticStream : public OMOStream {
