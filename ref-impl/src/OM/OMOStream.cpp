@@ -162,44 +162,6 @@ OMOStream& endl(OMOStream& s)
   return s.endLine();
 }
 
- // @globalv Global <c OMDiagnosticStream> for Object Manager logging.
-OMDiagnosticStream omlog;
-
-OMStandardOutputStream omout;
-
-// @devnote If your platform doesn't have <iostream> you'll need to
-//          implement the following functions differently.
-
-// @devnote If your platform doesn't have <lt>iostream<gt> you'll need to
-//          implement the <mf OMOStream::put> and <mf OMOStream::putLine>
-//          functions differently.
-
-// Diagnostic output to cerr
-
-#include <iostream>
-using namespace std;
-
-OMStandardDiagnosticStream::OMStandardDiagnosticStream(void)
-{
-}
-
-  // @mfunc Put a character string.
-  //   @parm The character string to be written.
-  //   @rdesc The modified <c OMOStream>
-OMOStream& OMStandardDiagnosticStream::put(const char* string)
-{
-  cerr << string;
-  return *this;
-}
-
-  // @mfunc Put a new line.
-  //   @rdesc The modified <c OMOStream>
-OMOStream& OMStandardDiagnosticStream::putLine(void)
-{
-  cerr << endl;
-  return *this;
-}
-
 #if !defined(OM_OUTPUT_TO_DEBUGGER)
 
 // Diagnostic output to cerr
@@ -324,6 +286,44 @@ OMOStream& OMOStream::put(double d)
   // @mfunc Put a new line.
   //   @rdesc The modified <c OMOStream>
 OMOStream& OMOStream::putLine(void)
+{
+  cerr << endl;
+  return *this;
+}
+
+ // @globalv Global <c OMDiagnosticStream> for Object Manager logging.
+OMDiagnosticStream omlog;
+
+OMStandardOutputStream omout;
+
+// @devnote If your platform doesn't have <iostream> you'll need to
+//          implement the following functions differently.
+
+// @devnote If your platform doesn't have <lt>iostream<gt> you'll need to
+//          implement the <mf OMOStream::put> and <mf OMOStream::putLine>
+//          functions differently.
+
+// Diagnostic output to cerr
+
+#include <iostream>
+using namespace std;
+
+OMStandardDiagnosticStream::OMStandardDiagnosticStream(void)
+{
+}
+
+  // @mfunc Put a character string.
+  //   @parm The character string to be written.
+  //   @rdesc The modified <c OMOStream>
+OMOStream& OMStandardDiagnosticStream::put(const char* string)
+{
+  cerr << string;
+  return *this;
+}
+
+  // @mfunc Put a new line.
+  //   @rdesc The modified <c OMOStream>
+OMOStream& OMStandardDiagnosticStream::putLine(void)
 {
   cerr << endl;
   return *this;
