@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2006, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -162,6 +162,42 @@ OMOStream& endl(OMOStream& s)
   return s.endLine();
 }
 
+OMOStream& dec(OMOStream& s)
+{
+  return s.dec();
+}
+
+OMOStream& hex(OMOStream& s)
+{
+  return s.hex();
+}
+
+OMOStream& set_w(OMOStream& s, int n)
+{
+  return s.setw(n);
+}
+
+#if defined(_MSC_VER) && (_MSC_VER <= 1200)
+// Missing from VC++ version 6.0 and earlier
+
+ostream& operator << (ostream& s, __int64 i);
+
+ostream& operator << (ostream& s, unsigned __int64 i);
+
+ostream& operator << (ostream& s, __int64 i)
+{
+  s << (OMInt32)i; // tjb - hack
+  return s;
+}
+
+ostream& operator << (ostream& s, unsigned __int64 i)
+{
+  s << (OMUInt32)i; // tjb - hack
+  return s;
+}
+
+#endif
+
 #if !defined(OM_OUTPUT_TO_DEBUGGER)
 
 // Diagnostic output to cerr
@@ -291,13 +327,24 @@ OMOStream& OMOStream::putLine(void)
   return *this;
 }
 
+#if defined(_MSC_VER)
+
+// Disable warning from pragma below.
+//
+#pragma warning(disable:4073)
+
+// Ensure that this compilation unit (in particular the global
+// OMOStream objects below) is initialized after the run-time library
+// and before any client code.
+//
+#pragma init_seg(lib)
+
+#endif
+
  // @globalv Global <c OMDiagnosticStream> for Object Manager logging.
 OMDiagnosticStream omlog;
 
 OMStandardOutputStream omout;
-
-// @devnote If your platform doesn't have <iostream> you'll need to
-//          implement the following functions differently.
 
 // @devnote If your platform doesn't have <lt>iostream<gt> you'll need to
 //          implement the <mf OMOStream::put> and <mf OMOStream::putLine>
