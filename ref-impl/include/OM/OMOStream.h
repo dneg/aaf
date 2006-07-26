@@ -105,6 +105,21 @@ protected:
 
 };
 
+// Diagnostic stream which outputs to standard out/cout
+//
+class OMStandardOutputStream : public OMOStream {
+public:
+
+  OMStandardOutputStream(void);
+
+protected:
+
+  virtual OMOStream& put(const char* string);
+
+  virtual OMOStream& putLine(void);
+
+};
+
 // Run-time configurable diagnostic stream
 //
 class OMDiagnosticStream : public OMOStream {
@@ -133,5 +148,7 @@ private:
 
  // @globalv Global <c OMDiagnosticStream> for Object Manager logging.
 extern OMDiagnosticStream omlog;
+
+extern OMStandardOutputStream omout;
 
 #endif

@@ -102,6 +102,8 @@ OMOStream& endl(OMOStream& s)
  // @globalv Global <c OMDiagnosticStream> for Object Manager logging.
 OMDiagnosticStream omlog;
 
+OMStandardOutputStream omout;
+
 // @devnote If your platform doesn't have <iostream> you'll need to
 //          implement the following functions differently.
 
@@ -202,6 +204,22 @@ OMOStream& OMOStream::put(void* p)
 OMOStream& OMOStream::putLine(void)
 {
   cerr << endl;
+  return *this;
+}
+
+OMStandardOutputStream::OMStandardOutputStream(void)
+{
+}
+
+OMOStream& OMStandardOutputStream::put(const char* string)
+{
+  cout << string;
+  return *this;
+}
+
+OMOStream& OMStandardOutputStream::putLine(void)
+{
+  cout << endl;
   return *this;
 }
 
