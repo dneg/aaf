@@ -198,23 +198,6 @@ ostream& operator << (ostream& s, unsigned __int64 i)
 
 #endif
 
-#if !defined(OM_OUTPUT_TO_DEBUGGER)
-
-// Diagnostic output to cerr
-
-#include <iostream>
-using std::cerr;
-using std::endl;
-
-  // @mfunc Put a character string.
-  //   @parm The character string to be written.
-  //   @rdesc The modified <c OMOStream>
-OMOStream& OMOStream::put(const char* string)
-{
-  cerr << string;
-  return *this;
-}
-
   // @mfunc Put an OMUInt64.
   //   @parm The OMUInt64 to write.
   //   @rdesc The modified <c OMOStream>
@@ -319,14 +302,6 @@ OMOStream& OMOStream::put(double d)
   return *this;
 }
 
-  // @mfunc Put a new line.
-  //   @rdesc The modified <c OMOStream>
-OMOStream& OMOStream::putLine(void)
-{
-  cerr << endl;
-  return *this;
-}
-
 #if defined(_MSC_VER)
 
 // Disable warning from pragma below.
@@ -392,15 +367,7 @@ OMOStream& OMStandardOutputStream::putLine(void)
   return *this;
 }
 
-#else
-
 // Diagnostic output to debugger
-#include <iostream>
-#include <sstream>
-#include <string>
-using namespace std;
-
-#include "OMUtilities.h"
 
 #if defined (OM_OS_WINDOWS)
 
@@ -413,71 +380,14 @@ static void debugPrint(const char* string)
   OutputDebugString(s);
 }
 
-#endif
-
-OMOStream& OMOStream::put(const char* string)
-{
-  debugPrint(string);
-  return *this;
-}
-
-OMOStream& OMOStream::put(OMUInt32 i)
-{
-  ostringstream s;
-  s << i << ends;
-  string buffer = s.str();
-  debugPrint(buffer.c_str());
-  return *this;
-}
-
-OMOStream& OMOStream::put(OMInt32 i)
-{
-  ostringstream s;
-  s << i << ends;
-  string buffer = s.str();
-  debugPrint(buffer.c_str());
-  return *this;
-}
-
-OMOStream& OMOStream::put(OMUInt16 i)
-{
-  ostringstream s;
-  s << i << ends;
-  string buffer = s.str();
-  debugPrint(buffer.c_str());
-  return *this;
-}
-
-OMOStream& OMOStream::put(OMInt16 i)
-{
-  ostringstream s;
-  s << i << ends;
-  string buffer = s.str();
-  debugPrint(buffer.c_str());
-  return *this;
-}
-
-OMOStream& OMOStream::put(void* p)
-{
-  ostringstream s;
-  s << p << ends;
-  string buffer = s.str();
-  debugPrint(buffer.c_str());
-  return *this;
-}
-
-OMOStream& OMOStream::putLine(void)
-{
-  debugPrint("\n");
-  return *this;
-}
-
-#endif
+#else
 
 static void debugPrint(const char* string)
 {
   cerr << string;
 }
+
+#endif
 
 OMDebuggerDiagnosticStream::OMDebuggerDiagnosticStream(void)
 {
