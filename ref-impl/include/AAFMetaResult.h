@@ -89,7 +89,8 @@ AAF_DEFINE_ERROR(GETEXTENT_FAILURE,              0x0038, "")
 AAF_DEFINE_ERROR(SETEXTENT_FAILURE,              0x0039, "")
 
 AAF_ERROR_SECTION("Read-while-modify errors")
-AAF_DEFINE_ERROR(FILE_BEING_MODIFIED,            0x003A, "")
+AAF_DEFINE_ERROR(FILE_BEING_MODIFIED,            0x003A,
+    "The file is being modified (the header partition is open and incomplete)")
 
 AAF_ERROR_SECTION("MEDIA Error Codes")
 AAF_DEFINE_ERROR(DESCSAMPRATE,                   0x0064, "")

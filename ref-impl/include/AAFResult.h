@@ -90,6 +90,7 @@
 #define AAFRESULT_SETEXTENT_FAILURE               ((HRESULT)0x80120039)
 
 /* Read-while-modify errors */
+        /* The file is being modified (the header partition is open and incomplete) */
 #define AAFRESULT_FILE_BEING_MODIFIED             ((HRESULT)0x8012003A)
 
 /* MEDIA Error Codes */
