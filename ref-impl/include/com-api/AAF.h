@@ -951,6 +951,12 @@ typedef interface IAAFDataDef3 IAAFDataDef3;
 #endif 	/* __IAAFDataDef3_FWD_DEFINED__ */
 
 
+#ifndef __IAAFDiagnosticOutput_FWD_DEFINED__
+#define __IAAFDiagnosticOutput_FWD_DEFINED__
+typedef interface IAAFDiagnosticOutput IAAFDiagnosticOutput;
+#endif 	/* __IAAFDiagnosticOutput_FWD_DEFINED__ */
+
+
 #ifndef __IAAFDictionary2_FWD_DEFINED__
 #define __IAAFDictionary2_FWD_DEFINED__
 typedef interface IAAFDictionary2 IAAFDictionary2;
@@ -1115,6 +1121,7 @@ void __RPC_USER MIDL_user_free( void * );
 // AAF Interfaces.
 //=--------------------------------------------------------------------------=
 //
+
 
 
 
@@ -38958,6 +38965,96 @@ void __RPC_STUB IAAFDataDef3_IsDescriptiveMetadataKind_Stub(
 #endif 	/* __IAAFDataDef3_INTERFACE_DEFINED__ */
 
 
+#ifndef __IAAFDiagnosticOutput_INTERFACE_DEFINED__
+#define __IAAFDiagnosticOutput_INTERFACE_DEFINED__
+
+/* interface IAAFDiagnosticOutput */
+/* [unique][helpstring][uuid][object] */ 
+
+
+EXTERN_C const IID IID_IAAFDiagnosticOutput;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("C9346826-1CFE-4AEF-BA4D-54D414138739")
+    IAAFDiagnosticOutput : public IUnknown
+    {
+    public:
+        virtual HRESULT STDMETHODCALLTYPE PutString( 
+            /* [string][in] */ aafCharacter_constptr pString) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IAAFDiagnosticOutputVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IAAFDiagnosticOutput * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IAAFDiagnosticOutput * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IAAFDiagnosticOutput * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *PutString )( 
+            IAAFDiagnosticOutput * This,
+            /* [string][in] */ aafCharacter_constptr pString);
+        
+        END_INTERFACE
+    } IAAFDiagnosticOutputVtbl;
+
+    interface IAAFDiagnosticOutput
+    {
+        CONST_VTBL struct IAAFDiagnosticOutputVtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IAAFDiagnosticOutput_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IAAFDiagnosticOutput_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IAAFDiagnosticOutput_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IAAFDiagnosticOutput_PutString(This,pString)	\
+    (This)->lpVtbl -> PutString(This,pString)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+HRESULT STDMETHODCALLTYPE IAAFDiagnosticOutput_PutString_Proxy( 
+    IAAFDiagnosticOutput * This,
+    /* [string][in] */ aafCharacter_constptr pString);
+
+
+void __RPC_STUB IAAFDiagnosticOutput_PutString_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __IAAFDiagnosticOutput_INTERFACE_DEFINED__ */
+
+
 #ifndef __IAAFDictionary2_INTERFACE_DEFINED__
 #define __IAAFDictionary2_INTERFACE_DEFINED__
 
@@ -47286,7 +47383,7 @@ void __RPC_STUB IAAFTypeDefVariableArrayEx_InsertElement_Stub(
 #endif 	/* __IAAFTypeDefVariableArrayEx_INTERFACE_DEFINED__ */
 
 
-/* interface __MIDL_itf_AAF_0267 */
+/* interface __MIDL_itf_AAF_0268 */
 /* [local] */ 
 
   ///***********************************************************
@@ -47398,6 +47495,8 @@ STDAPI AAFSetProgressCallback (IAAFProgress*  pProgress);
 
 STDAPI AAFGetFileEncodings (IEnumAAFFileEncodings ** ppFileEncodings);
 
+STDAPI AAFSetDiagnosticOutput (IAAFDiagnosticOutput*  pOutput);
+
 STDAPI AAFGetLibraryVersion (aafProductVersion_t *  pVersion);
 
 STDAPI AAFGetStaticLibraryVersion (aafProductVersion_t *  pVersion);
@@ -47419,8 +47518,8 @@ STDAPI AAFResultToText (
 
 
 
-extern RPC_IF_HANDLE __MIDL_itf_AAF_0267_v0_0_c_ifspec;
-extern RPC_IF_HANDLE __MIDL_itf_AAF_0267_v0_0_s_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_AAF_0268_v0_0_c_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_AAF_0268_v0_0_s_ifspec;
 
 /* Additional Prototypes for ALL interfaces */
 
