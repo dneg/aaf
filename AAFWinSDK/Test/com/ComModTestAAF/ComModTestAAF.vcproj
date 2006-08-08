@@ -2666,6 +2666,9 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\..\..\..\test\com\ComModTestAAF\ModuleTests\CEnumAAFFileDescriptorsTest.cpp">
+			</File>
+			<File
 				RelativePath="..\..\..\..\test\com\ComModTestAAF\ModuleTests\CEnumAAFFileEncodingsTest.cpp">
 				<FileConfiguration
 					Name="Release|Win32">
