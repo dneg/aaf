@@ -42,7 +42,6 @@
 using namespace std;
 
 
-#if 0
 aafUInt32 TestSourceTrackIDsVector[] = { 1, 3, 5, 7, 11 };
 const aafUInt32 TestSourceTrackIDsVectorSize = 5;
 
@@ -152,19 +151,25 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
     	// Get described slots - should not be present.
     	aafUInt32 size = 0;
-    	AAFRESULT hr = pDescClip->GetSourceTrackIDsSize( &size );
+    	AAFRESULT hr = pDescClip->CountSourceTrackIDs( &size );
     	checkExpression( AAFRESULT_PROP_NOT_PRESENT == hr, AAFRESULT_TEST_FAILED );
     	
 	    // Set/Get single sourcetrack id
 	    aafUInt32 setSingleSourceTrackID = 0xdeadbeef;
-	    checkResult( pDescClip->SetSourceTrackIDs( 1, &setSingleSourceTrackID ) );
+	    checkResult( pDescClip->AddSourceTrackID( setSingleSourceTrackID ) );
 	    aafUInt32 getSingleSourceTrackID = 0;
 	    checkResult( pDescClip->GetSourceTrackIDs( 1, &getSingleSourceTrackID ) );
 	    checkExpression( setSingleSourceTrackID == getSingleSourceTrackID, AAFRESULT_TEST_FAILED );
 
+	    // Clear the ID set for the next test
+	    checkResult( pDescClip->RemoveSourceTrackID( setSingleSourceTrackID ) );
+
 	    // Set the persistent described slots.
-	    checkResult( pDescClip->SetSourceTrackIDs( TestSourceTrackIDsVectorSize, TestSourceTrackIDsVector ) );
-		
+	    for( aafUInt32 i_tid = 0; i_tid < TestSourceTrackIDsVectorSize; ++i_tid )
+	    {
+		    checkResult( pDescClip->AddSourceTrackID( TestSourceTrackIDsVector[i_tid] ) );
+	    }
+
 		aafUInt32 getSourceTrackIDsVector[TestSourceTrackIDsVectorSize];
 
 		checkResult( pDescClip->GetSourceTrackIDs( TestSourceTrackIDsVectorSize, getSourceTrackIDsVector ) );
@@ -270,7 +275,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 			    aafUInt32 getSourceTrackIDsVector[TestSourceTrackIDsVectorSize];
 			    aafUInt32 getSourceTrackIDsVectorSize = 0;
 			
-			    checkResult( pDescClip->GetSourceTrackIDsSize( &getSourceTrackIDsVectorSize ) );
+			    checkResult( pDescClip->CountSourceTrackIDs( &getSourceTrackIDsVectorSize ) );
 			    checkExpression( TestSourceTrackIDsVectorSize == getSourceTrackIDsVectorSize, AAFRESULT_TEST_FAILED );
 			
 			    checkExpression( AAFRESULT_SMALLBUF ==
@@ -358,11 +363,3 @@ extern "C" HRESULT CAAFDescriptiveClip_test(testMode_t mode)
 
 	return hr;
 }
-
-#else
-extern "C" HRESULT CAAFDescriptiveClip_test(testMode_t mode)
-{	
-	HRESULT hr = AAFRESULT_NOT_IMPLEMENTED;
-	return hr;
-}
-#endif
