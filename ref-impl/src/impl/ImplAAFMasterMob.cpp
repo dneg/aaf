@@ -831,6 +831,7 @@ AAFRESULT ImplAAFMasterMob::ReconcileMobLength(void)
 				seg = NULL;
 			} else {
 				CHECK(fileSeq->CountComponents(&numComponents));
+				endPos = 0;
 				if (numComponents >= 1) {
 					for (aafUInt32 i = 0 ; i < numComponents ; i++) {
 						CHECK(fileSeq->GetComponentAt(i, (ImplAAFComponent**)&fileClip));
