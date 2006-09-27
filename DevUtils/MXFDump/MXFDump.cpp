@@ -310,8 +310,8 @@ void readMxfRational(mxfRational& r, mxfFile infile);
 void readMxfLabel(mxfKey& k, mxfFile infile);
 void readMxfKey(mxfKey& k, mxfFile infile);
 bool readOuterMxfKey(mxfKey& k, mxfFile infile);
-int readBERLength(mxfUInt64& i, mxfFile infile);
-int readMxfLength(mxfLength& l, mxfFile infile);
+int readBERLength(mxfUInt64& i, mxfUInt08& ll, mxfFile infile);
+int readMxfLength(mxfLength& l, mxfUInt08& ll, mxfFile infile);
 void readMxfLocalKey(mxfLocalKey& k, mxfFile infile);
 
 void reorder(mxfUInt16& i);
@@ -1138,7 +1138,7 @@ bool readOuterMxfKey(mxfKey& k, mxfFile infile)
   return result;
 }
 
-int readBERLength(mxfUInt64& i, mxfFile infile)
+int readBERLength(mxfUInt64& i, mxfUInt08& ll, mxfFile infile)
 {
   int bytesRead = 0;
   mxfUInt08 b;
@@ -1147,9 +1147,11 @@ int readBERLength(mxfUInt64& i, mxfFile infile)
   if (b == 0x80) {
     // unknown length
     i = 0;
+    ll = 0;
   } else if ((b & 0x80) != 0x80) {
     // short form
     i = b;
+    ll = 1;
   } else {
     // long form
     int length = b & 0x7f;
@@ -1160,14 +1162,16 @@ int readBERLength(mxfUInt64& i, mxfFile infile)
       i = i << 8;
       i = i + b;
     }
+    ll = length + 1;
   }
   return bytesRead;
 }
 
-int readMxfLength(mxfLength& l, mxfFile infile)
+int readMxfLength(mxfLength& l, mxfUInt08& ll, mxfFile infile)
 {
   mxfUInt64 x = 0;
-  int bytesRead = readBERLength(x, infile);
+  mxfUInt08 xl = 0;
+  int bytesRead = readBERLength(x, xl, infile);
   if (bytesRead > 9) {
     mxfError(currentKey, keyPosition, "Invalid BER encoded length");
   }
@@ -1175,6 +1179,7 @@ int readMxfLength(mxfLength& l, mxfFile infile)
     mxfWarning(currentKey, keyPosition, "Length is zero");
   }
   l = x;
+  ll = xl;
   return bytesRead;
 }
 
@@ -2797,6 +2802,9 @@ void printFormatOptions(void)
 
   fprintf(stderr, "  --show-run-in       = ");
   fprintf(stderr, "dump run-in\n");
+
+  fprintf(stderr, "  --diff-friendly     = ");
+  fprintf(stderr, "less readable but more useful when diffing mxf files\n");
 }
 
 void printRawOptions(void);
@@ -3360,9 +3368,9 @@ void printDarkItems(void)
   }
 }
 
-void printKL(mxfKey& k, mxfLength& l);
+void printKL(mxfKey& k, mxfLength& l, mxfUInt08& llen);
 
-void printKL(mxfKey& k, mxfLength& l)
+void printKL(mxfKey& k, mxfLength& l, mxfUInt08& llen)
 {
   printDarkItems();
   fprintf(stdout, "\n");
@@ -3371,6 +3379,8 @@ void printKL(mxfKey& k, mxfLength& l)
   fprintf(stdout, ", ");
   fprintf(stdout, "L = ");
   printMxfLength(l, stdout);
+  fprintf(stdout, ", ");
+  fprintf(stdout, "LL = %d", llen);
   fprintf(stdout, " ]\n");
 }
 
@@ -3803,6 +3813,7 @@ void printEssenceFrameFill(mxfKey& k,
 
 void printEssenceFrameValue(mxfKey& k,
                             mxfLength& length,
+                            mxfUInt08& llen,
                             mxfUInt32 frameCount,
                             bool limitBytes,
                             mxfUInt32 limit,
@@ -3810,6 +3821,7 @@ void printEssenceFrameValue(mxfKey& k,
 
 void printEssenceFrameValue(mxfKey& k,
                             mxfLength& length,
+                            mxfUInt08& llen,
                             mxfUInt32 frameCount,
                             bool limitBytes,
                             mxfUInt32 limit,
@@ -3821,7 +3833,7 @@ void printEssenceFrameValue(mxfKey& k,
     printDecField(stdout, frameCount);
     fprintf(stdout, "]");
 
-    printKL(k, length);
+    printKL(k, length, llen);
     printV(length, limitBytes, limit, infile);
   } else {
     skipV(length, infile);
@@ -3848,13 +3860,16 @@ void printEssenceFrames(mxfKey& k,
     mxfKey k;
     readMxfKey(k, infile);
     mxfLength len;
-    int lengthLen = readMxfLength(len, infile);
+    mxfUInt08 llen;
+    int lengthLen = readMxfLength(len, llen, infile);
     total = total + lengthLen;
 
+    fprintf(stdout, "[ llen = %d ]", llen);
+    
     if (isFill(k)) {
       printEssenceFrameFill(k, len, frameCount, infile);
     } else {
-      printEssenceFrameValue(k, len, frameCount, limitBytes, limit, infile);
+      printEssenceFrameValue(k, len, llen, frameCount, limitBytes, limit, infile);
       frameCount = frameCount + 1;
     }
     total = total + len;
@@ -5861,6 +5876,8 @@ void checkPrimerLength(mxfUInt64& length)
   }
 }
 
+bool diffFriendly = false;
+
 void printPrimer(mxfKey& k, mxfLength& len, mxfFile infile);
 
 void printPrimer(mxfKey& /* k */, mxfLength& len, mxfFile infile)
@@ -5880,12 +5897,20 @@ void printPrimer(mxfKey& /* k */, mxfLength& len, mxfFile infile)
 
   fprintf(stdout, "  [ Number of entries = ");
   printDecField(stdout, elementCount);
-  fprintf(stdout, ", Entry size        = ");
+  if (diffFriendly) {
+    fprintf(stdout, ",\n    Entry size        = ");
+  } else {
+    fprintf(stdout, ", Entry size        = ");
+  }
   printDecField(stdout, elementSize);
   fprintf(stdout, " ]\n");
 
   if (elementCount > 0) {
-    fprintf(stdout, "  Local Tag      UID\n");
+    if (diffFriendly) {
+      fprintf(stdout, "  Local Tag\n  UID\n");
+    } else {
+      fprintf(stdout, "  Local Tag      UID\n");
+    }
   }
 
   for (mxfUInt32 j = 0; j < count; j++) {
@@ -5895,7 +5920,11 @@ void printPrimer(mxfKey& /* k */, mxfLength& len, mxfFile infile)
     readMxfLabel(longIdentifier, infile);
     fprintf(stdout, "  ");
     printMxfLocalKey(identifier, stdout);
-    fprintf(stdout, "     :    ");
+    if (diffFriendly) {
+      fprintf(stdout, "     :\n    ");
+    } else {
+      fprintf(stdout, "     :    ");
+    }
     printMxfKey(longIdentifier, stdout);
     fprintf(stdout, "\n");
   }
@@ -5932,14 +5961,24 @@ void printObjectDirectory(mxfKey& /* k */,
 
   fprintf(stdout, "  [ Number of entries = ");
   printDecField(stdout, entryCount);
-  fprintf(stdout, ", Entry size        = ");
+  if (diffFriendly) {
+    fprintf(stdout, ",\n    Entry size        = ");
+  } else {
+    fprintf(stdout, ", Entry size        = ");
+  }
   printDecField(stdout, entrySize);
   fprintf(stdout, " ]\n");
 
   if (entryCount > 0) {
-    fprintf(stdout, "  Object");
-    fprintf(stdout, "                                           Offset");
-    fprintf(stdout, "            Flags\n");
+    if (diffFriendly) {
+      fprintf(stdout, "  Object\n");
+      fprintf(stdout, "  Offset\n");
+      fprintf(stdout, "  Flags\n");
+    } else {
+      fprintf(stdout, "  Object");
+      fprintf(stdout, "                                           Offset");
+      fprintf(stdout, "            Flags\n");
+    }
   }
 
   for (mxfUInt64 i = 0; i < entryCount; i++) {
@@ -5952,9 +5991,17 @@ void printObjectDirectory(mxfKey& /* k */,
 
     fprintf(stdout, "  ");
     printMxfKey(instance, stdout);
-    fprintf(stdout, "  ");
+    if (diffFriendly) {
+      fprintf(stdout, "\n  ");
+    } else {
+      fprintf(stdout, "  ");
+    }
     printHexFieldPad(stdout, offset);
-    fprintf(stdout, "  ");
+    if (diffFriendly) {
+      fprintf(stdout, "\n  ");
+    } else {
+      fprintf(stdout, "  ");
+    }
     printHexFieldPad(stdout, flags);
     fprintf(stdout, "\n");
   }
@@ -6081,8 +6128,9 @@ void klvDumpFile(mxfFile infile)
   while (readOuterMxfKey(k, infile)) {
     checkKey(k);
     mxfLength len;
-    readMxfLength(len, infile);
-    printKL(k, len);
+    mxfUInt08 llen;
+    readMxfLength(len, llen, infile);
+    printKL(k, len, llen);
     len = checkLength(len, fileSize, position(infile));
     printV(len, limitBytes, limit, infile);
   }
@@ -6095,8 +6143,9 @@ void setDumpFile(mxfFile infile)
   while (readOuterMxfKey(k, infile)) {
     checkKey(k);
     mxfLength len;
-    readMxfLength(len, infile);
-    printKL(k, len);
+    mxfUInt08 llen;
+    readMxfLength(len, llen, infile);
+    printKL(k, len, llen);
     len = checkLength(len, fileSize, position(infile));
 
     if (isLocalSet(k)) {
@@ -6216,9 +6265,10 @@ void mxfDumpFile(mxfFile infile)
     }
     checkKey(k);
     mxfLength len;
-    readMxfLength(len, infile);
+    mxfUInt08 llen;
+    readMxfLength(len, llen, infile);
     if (isEssenceElement(k) || !isDark(k, mode) || dumpDark) {
-      printKL(k, len);
+      printKL(k, len, llen);
     }
     len = checkLength(len, fileSize, position(infile));
     mxfDumpKLV(k, len, infile);
@@ -6246,9 +6296,10 @@ void aafDumpFile(mxfFile infile)
     }
     checkKey(k);
     mxfLength len;
-    readMxfLength(len, infile);
+    mxfUInt08 llen;
+    readMxfLength(len, llen, infile);
     if (isEssenceElement(k) || !isDark(k, mode) || dumpDark) {
-      printKL(k, len);
+      printKL(k, len, llen);
     }
     len = checkLength(len, fileSize, position(infile));
     aafDumpKLV(k, len, infile);
@@ -6265,7 +6316,8 @@ void klvValidate(mxfFile infile)
   while (readOuterMxfKey(k, infile)) {
     checkKey(k);
     mxfLength len;
-    readMxfLength(len, infile);
+    mxfUInt08 llen;
+    readMxfLength(len, llen, infile);
     len = checkLength(len, fileSize, position(infile));
     skipV(len, infile);
   }
@@ -6315,7 +6367,8 @@ void setValidate(mxfFile infile)
   while (readOuterMxfKey(k, infile)) {
     checkKey(k);
     mxfLength len;
-    readMxfLength(len, infile);
+    mxfUInt08 llen;
+    readMxfLength(len, llen, infile);
     len = checkLength(len, fileSize, position(infile));
     if (isLocalSet(k)) {
       validateLocalSet(k, len, infile);
@@ -6346,7 +6399,8 @@ void mxfValidate(mxfFile infile)
   while (readOuterMxfKey(k, infile)) {
     checkKey(k);
     mxfLength len;
-    readMxfLength(len, infile);
+    mxfUInt08 llen;
+    readMxfLength(len, llen, infile);
     mxfLength length = len;
     len = checkLength(len, fileSize, position(infile));
     if (memcmp(&Primer, &k, sizeof(mxfKey)) == 0) {
@@ -6597,6 +6651,7 @@ int mxfExitStatus(int status)
 // -p --frames
 // -i --limit-frames
 //    --no-limit-frames
+//    --diff-friendly
 // -j --key-addresses
 //    --no-key-addresses
 // -r --relative
@@ -6707,6 +6762,9 @@ int main(int argumentCount, char* argumentVector[])
       checkDumpMode(p);
       iFlag = false;
       i = i + 1;
+    } else if (strcmp(p, "--diff-friendly") == 0) {
+      checkDumpMode(p);
+      diffFriendly = true;
     } else if ((strcmp(p, "--key-addresses") == 0) ||
                (strcmp(p, "-j") == 0)) {
       checkDumpMode(p);
