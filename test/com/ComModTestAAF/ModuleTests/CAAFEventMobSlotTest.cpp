@@ -62,7 +62,10 @@ public:
   EventMobSlotTest();
   ~EventMobSlotTest();
 
-  void Create(wchar_t *pFileName, aafProductIdentification_t* pinfo);
+  void Create(wchar_t *pFileName,
+              aafUID_constref fileKind,
+              testRawStorageType_t rawStorageType,
+              aafProductIdentification_constref productID);
   void Open(wchar_t *pFileName);
   void Close();
 
@@ -111,26 +114,21 @@ static const aafMobID_t gEventMobID2 = {
 {0xf8d86bea, 0x8d6f, 0x11d4, {0xa3, 0x80, 0x00, 0x90, 0x27, 0xdf, 0xca, 0x6a}}};
 
 
-extern "C" HRESULT CAAFEventMobSlot_test(testMode_t mode);
-extern "C" HRESULT CAAFEventMobSlot_test(testMode_t mode)
+extern "C" HRESULT CAAFEventMobSlot_test(
+    testMode_t mode,
+    aafUID_t fileKind,
+    testRawStorageType_t rawStorageType,
+    aafProductIdentification_t productID);
+extern "C" HRESULT CAAFEventMobSlot_test(
+    testMode_t mode,
+    aafUID_t fileKind,
+    testRawStorageType_t rawStorageType,
+    aafProductIdentification_t productID)
 {
   HRESULT hr = S_OK;
-  aafProductIdentification_t	ProductInfo = {0};
-  aafWChar * pFileName = L"AAFEventMobSlotTest.aaf";
-
-  // Initialize the product info for this module test
-  aafProductVersion_t v;
-  v.major = 1;
-  v.minor = 0;
-  v.tertiary = 0;
-  v.patchLevel = 0;
-  v.type = kAAFVersionUnknown;
-  ProductInfo.companyName = L"AAF Developers Desk";
-  ProductInfo.productName = L"AAFEventMobSlot Test";
-  ProductInfo.productVersion = &v;
-  ProductInfo.productVersionString = NULL;
-  ProductInfo.productID = UnitTestProductID;
-  ProductInfo.platform = NULL;
+  const size_t fileNameBufLen = 128;
+  aafWChar pFileName[ fileNameBufLen ] = L"";
+  GenerateTestFileName( productID.productName, fileKind, fileNameBufLen, pFileName );
 
   // Create an instance of our text clip test class and run the
   // tests...
@@ -140,7 +138,7 @@ extern "C" HRESULT CAAFEventMobSlot_test(testMode_t mode)
   {
     // Attempt to create a test file
 	if(mode == kAAFUnitTestReadWrite)
-  	  test.Create(pFileName, &ProductInfo);
+  	  test.Create(pFileName, fileKind, rawStorageType, productID);
 
     // Attempt to read the test file.
     test.Open(pFileName);
@@ -179,8 +177,12 @@ EventMobSlotTest::~EventMobSlotTest()
 }
 
 
-void EventMobSlotTest::Create(wchar_t *pFileName,
-                              aafProductIdentification_t* pinfo)
+void EventMobSlotTest::Create(
+    aafWChar * pFileName,
+    aafUID_constref fileKind,
+    testRawStorageType_t rawStorageType,
+    aafProductIdentification_constref productID)
+
 {
   assert(NULL == _pFile);
 
@@ -188,7 +190,7 @@ void EventMobSlotTest::Create(wchar_t *pFileName,
   RemoveTestFile(pFileName);
     
   // Create the file
-  checkResult(AAFFileOpenNewModify(pFileName, 0, pinfo, &_pFile));
+  checkResult(CreateTestFile( pFileName, fileKind, rawStorageType, productID, &_pFile ));
   _bWritableFile = true;
 
   // We can't really do anthing in AAF without the header.

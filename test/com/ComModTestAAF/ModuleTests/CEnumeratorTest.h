@@ -46,7 +46,10 @@ class CEnumeratorTest
   public:
 	CEnumeratorTest() {}
 	virtual ~CEnumeratorTest() {}
-	void Run(testMode_t mode);
+	void Run(testMode_t mode,
+                 aafUID_constref fileKind,
+                 testRawStorageType_t rawStorageType,
+                 aafProductIdentification_constref productID);
 
   protected:
 	// "Callbacks" to count the number of items we are enumerating over, to get an
@@ -74,40 +77,34 @@ class CEnumeratorTest
 };
 
 template<class TEnum,class TItem>
-void CEnumeratorTest<TEnum,TItem>::Run(testMode_t mode)
+void CEnumeratorTest<TEnum,TItem>::Run(
+    testMode_t mode,
+    aafUID_constref fileKind,
+    testRawStorageType_t rawStorageType,
+    aafProductIdentification_constref productID)
 {
 	typedef IAAFSmartPointer<TEnum> TEnumSP;
 	typedef IAAFSmartPointer<TItem> TItemSP;
 	typedef TItem* PItem;
 
-	aafProductVersion_t v;
-	aafProductIdentification_t	ProductInfo;
-	v.major = 1;
-	v.minor = 0;
-	v.tertiary = 0;
-	v.patchLevel = 0;
-	v.type = kAAFVersionUnknown;
-	ProductInfo.companyName = L"AAF Developers Desk";
-	ProductInfo.productName = L"AAF Enumerator Test";
-	ProductInfo.productVersion = &v;
-	ProductInfo.productVersionString = NULL;
-	ProductInfo.productID = UnitTestProductID;
-	ProductInfo.platform = NULL;
+	const size_t fileNameBufLen = 128;
+	aafWChar fileName[ fileNameBufLen ] = L"";
+	GenerateTestFileName( productID.productName, fileKind, fileNameBufLen, fileName );
 
 	// Remove the previous test file, if any.
 	if(mode == kAAFUnitTestReadWrite)
-		RemoveTestFile(L"CEnumeratorTest.aaf");
+		RemoveTestFile(fileName);
 
 	// Create new AAF file.
 	IAAFFile *pFile;
 	if(mode == kAAFUnitTestReadWrite)
 	{
-		checkResult(AAFFileOpenNewModify(L"CEnumeratorTest.aaf",0,&ProductInfo,
-			&pFile));
+		checkResult(CreateTestFile( fileName, fileKind,
+			rawStorageType, productID, &pFile ));
 	}
 	else
 	{
-		checkResult(AAFFileOpenExistingRead(L"CEnumeratorTest.aaf",0,&pFile));
+		checkResult(AAFFileOpenExistingRead(fileName,0,&pFile));
 	}
 
 	// Get AAF header & dictionary

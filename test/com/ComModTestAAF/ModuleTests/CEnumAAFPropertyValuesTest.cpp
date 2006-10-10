@@ -35,9 +35,17 @@
 #include "ModuleTest.h"
 
 // Required function prototype.
-extern "C" HRESULT CEnumAAFPropertyValues_test(testMode_t);
+extern "C" HRESULT CEnumAAFPropertyValues_test(
+    testMode_t mode,
+    aafUID_t fileKind,
+    testRawStorageType_t rawStorageType,
+    aafProductIdentification_t productID);
 
-HRESULT CEnumAAFPropertyValues_test(testMode_t /*mode*/)
+HRESULT CEnumAAFPropertyValues_test(
+    testMode_t /*mode*/,
+    aafUID_t /*fileKind*/,
+    testRawStorageType_t /*rawStorageType*/,
+    aafProductIdentification_t /*productID*/)
 {
   return AAFRESULT_NOT_IN_CURRENT_VERSION;
 }

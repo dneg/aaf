@@ -33,6 +33,7 @@ using namespace std;
 
 #include "AAFPlatform.h"
 
+
 #include "AAFTypes.h"
 #include "AAFResult.h"
 #include "ModuleTest.h"
@@ -424,7 +425,11 @@ static aafWChar *makeURLfromFileInCwd(aafWChar *file, aafWChar *url)
 
 
 // Prototype to satisfy the CW compiler.
-extern "C" HRESULT CAAFEssenceAccess_test(testMode_t mode);
+extern "C" HRESULT CAAFEssenceAccess_test(
+    testMode_t mode,
+    aafUID_t fileKind,
+    testRawStorageType_t rawStorageType,
+    aafProductIdentification_t productID);
 
 
 #define TEST_PATH	L"SomeFile.dat"
@@ -711,6 +716,9 @@ static HRESULT ReadStaticEssenceAAFFile(aafWChar * pFileName, testType_t testTyp
 
 static HRESULT CreateStaticEssenceAAFFile(
 	aafWChar * pFileName, 
+	aafUID_constref fileKind,
+	testRawStorageType_t rawStorageType,
+	aafProductIdentification_constref productID,
 	testDataFile_t *dataFile, 
 	testType_t testType,
 	aafUID_t codecID,
@@ -732,7 +740,6 @@ static HRESULT CreateStaticEssenceAAFFile(
 	IAAFLocator					*pLocator = NULL;
 	// !!!Previous revisions of this file contained variables here required to handle external essence
 	aafMobID_t					masterMobID;
-	aafProductIdentification_t	ProductInfo;
 	aafUID_t			 testContainer;
 
 	// delete any previous test file before continuing...
@@ -751,20 +758,7 @@ static HRESULT CreateStaticEssenceAAFFile(
 			remove(chNameBuffer);
 		}
 		
-		aafProductVersion_t v;
-		v.major = 1;
-		v.minor = 0;
-		v.tertiary = 0;
-		v.patchLevel = 0;
-		v.type = kAAFVersionUnknown;
-		ProductInfo.companyName = L"AAF Developers Desk";
-		ProductInfo.productName = L"Essence Data Test";
-		ProductInfo.productVersion = &v;
-		ProductInfo.productVersionString = NULL;
-		ProductInfo.productID = UnitTestProductID;
-		ProductInfo.platform = NULL;
-		
-		checkResult(AAFFileOpenNewModify (pFileName, 0, &ProductInfo, &pFile));
+		checkResult(CreateTestFile( pFileName, fileKind, rawStorageType, productID, &pFile ));
 		checkResult(pFile->GetHeader(&pHeader));
 
 		// Get the AAF Dictionary so that we can create valid AAF objects.
@@ -872,8 +866,16 @@ static HRESULT CreateStaticEssenceAAFFile(
 }
 
 
-static HRESULT CreateAudioAAFFile(aafWChar * pFileName, testDataFile_t *dataFile, testType_t testType,
-								  aafUID_t codecID, aafUID_t ddefID, aafBool bCallSetTransformParameters=kAAFFalse)
+static HRESULT CreateAudioAAFFile(
+    aafWChar * pFileName,
+    aafUID_constref fileKind,
+    testRawStorageType_t rawStorageType,
+    aafProductIdentification_constref productID,
+    testDataFile_t *dataFile,
+    testType_t testType,
+    aafUID_t codecID,
+	aafUID_t ddefID,
+    aafBool bCallSetTransformParameters=kAAFFalse)
 {
 	HRESULT hr = AAFRESULT_SUCCESS;
 	IAAFFile*					pFile = NULL;
@@ -890,7 +892,6 @@ static HRESULT CreateAudioAAFFile(aafWChar * pFileName, testDataFile_t *dataFile
 	IAAFLocator					*pLocator = NULL;
 	// !!!Previous revisions of this file contained variables here required to handle external essence
 	aafMobID_t					masterMobID;
-	aafProductIdentification_t	ProductInfo;
 	aafRational_t				editRate = {44100, 1};
 	aafRational_t				sampleRate = {44100, 1};
 	unsigned char				dataBuff[4096], *dataPtr;
@@ -915,20 +916,7 @@ static HRESULT CreateAudioAAFFile(aafWChar * pFileName, testDataFile_t *dataFile
 			remove(chNameBuffer);
 		}
 		
-		aafProductVersion_t v;
-		v.major = 1;
-		v.minor = 0;
-		v.tertiary = 0;
-		v.patchLevel = 0;
-		v.type = kAAFVersionUnknown;
-		ProductInfo.companyName = L"AAF Developers Desk";
-		ProductInfo.productName = L"Essence Data Test";
-		ProductInfo.productVersion = &v;
-		ProductInfo.productVersionString = NULL;
-		ProductInfo.productID = UnitTestProductID;
-		ProductInfo.platform = NULL;
-		
-		checkResult(AAFFileOpenNewModify (pFileName, 0, &ProductInfo, &pFile));
+		checkResult(CreateTestFile( pFileName, fileKind, rawStorageType, productID, &pFile ));
 		checkResult(pFile->GetHeader(&pHeader));
 
 		// Get the AAF Dictionary so that we can create valid AAF objects.
@@ -1362,6 +1350,9 @@ static void FillYCbCr422SampleBufferFromYCbCr(
 
 static HRESULT CreateVideoAAFFile(
   aafWChar * pFileName,
+    aafUID_constref fileKind,
+    testRawStorageType_t rawStorageType,
+    aafProductIdentification_constref productID,
   testDataFile_t *dataFile,
   aafCompressEnable_t compressEnable,
 	aafColorSpace_t colorSpace,
@@ -1386,7 +1377,6 @@ static HRESULT CreateVideoAAFFile(
 	IAAFEssenceFormat* pTransformFormat = NULL;
 	IAAFLocator					*pLocator = NULL;
 	aafMobID_t					masterMobID;
-	aafProductIdentification_t	ProductInfo;
 	aafRational_t				editRate = {30000, 1001};
 	aafRational_t				sampleRate = {30000, 1001};
 //	unsigned char				dataBuff[4096], *dataPtr;
@@ -1492,20 +1482,7 @@ static HRESULT CreateVideoAAFFile(
 			writeBuffer = initUncompressedVideo( horizontalSubsample, &writeBufferSize );
 		}
 		
-		aafProductVersion_t v;
-		v.major = 1;
-		v.minor = 0;
-		v.tertiary = 0;
-		v.patchLevel = 0;
-		v.type = kAAFVersionUnknown;
-		ProductInfo.companyName = L"AAF Developers Desk";
-		ProductInfo.productName = L"Video Essence Codec Test";
-		ProductInfo.productVersion = &v;
-		ProductInfo.productVersionString = NULL;
-		ProductInfo.productID = NIL_UID;
-		ProductInfo.platform = NULL;
-		
-		checkResult(AAFFileOpenNewModify (pFileName, 0, &ProductInfo, &pFile));
+		checkResult(CreateTestFile( pFileName, fileKind, rawStorageType, productID, &pFile ));
 		checkResult(pFile->GetHeader(&pHeader));
 		
 		// Get the AAF Dictionary so that we can create valid AAF objects.
@@ -2288,17 +2265,21 @@ AAFRESULT loadWAVEHeader(aafUInt8 *buf,
 	return(AAFRESULT_SUCCESS);
 }
 
-HRESULT CAAFEssenceAccess_test(testMode_t mode);
-HRESULT CAAFEssenceAccess_test(testMode_t mode)
+HRESULT CAAFEssenceAccess_test(
+    testMode_t mode,
+    aafUID_t fileKind,
+    testRawStorageType_t rawStorageType,
+    aafProductIdentification_t productID)
 {
 	AAFRESULT	hr = S_OK;
 
 	aafWChar	tmpURL[FILENAME_MAX];
 
+	const size_t	fileNameBufLen = 128;
+	aafWChar	metadataFileName[ fileNameBufLen ] = L"";
+	aafWChar	mediaFileName[ fileNameBufLen ] = L"";
 	aafWChar *	rawDataWave = L"EssenceAccessExtRaw.wav";
 	aafWChar *	rawDataAifc = L"EssenceAccessExtRaw.aif";
-	aafWChar *	externalWaveAAF = L"EssenceAccessExtWAV.aaf";
-	aafWChar *	externalAifcAAF = L"EssenceAccessExtAIF.aaf";
 	testDataFile_t	dataFile;
 
 	cout << endl << endl;
@@ -2307,42 +2288,49 @@ HRESULT CAAFEssenceAccess_test(testMode_t mode)
   cout << "    Internal Essence (WAVE)" << endl;
   
 	/**/
+	GenerateTestFileName( L"EssenceAccessWAVE", fileKind, fileNameBufLen, metadataFileName );
 	if(hr == AAFRESULT_SUCCESS && mode == kAAFUnitTestReadWrite)
 	{
         cout << "        WriteSamples" << endl;
-		hr = CreateAudioAAFFile(L"EssenceAccessWAVE.aaf", NULL, testStandardCalls, kAAFCodecWAVE, kAAFDataDef_Sound, kAAFTrue);
+		hr = CreateAudioAAFFile(metadataFileName, fileKind, rawStorageType, productID,
+				NULL, testStandardCalls, kAAFCodecWAVE, kAAFDataDef_Sound, kAAFTrue);
 	}
 	
 	if(hr == AAFRESULT_SUCCESS)
 	{
 		cout << "        ReadSamples" << endl;
-		hr = ReadAAFFile(L"EssenceAccessWAVE.aaf", testStandardCalls, kAAFCodecWAVE);
+		hr = ReadAAFFile(metadataFileName, testStandardCalls, kAAFCodecWAVE);
 	}
 	/**/
+	GenerateTestFileName( L"EssenceAccessWAVELegacy", fileKind, fileNameBufLen, metadataFileName );
 	if(hr == AAFRESULT_SUCCESS && mode == kAAFUnitTestReadWrite)
 	{
         cout << "        WriteSamples (Legacy DDEF_Sound)" << endl;
-		hr = CreateAudioAAFFile(L"EssenceAccessWAVELegacy.aaf", NULL, testStandardCalls, kAAFCodecWAVE, DDEF_Sound, kAAFTrue);
+		hr = CreateAudioAAFFile(metadataFileName, fileKind, rawStorageType, productID,
+				NULL, testStandardCalls, kAAFCodecWAVE, DDEF_Sound, kAAFTrue);
 	}
 	
 	if(hr == AAFRESULT_SUCCESS)
 	{
 		cout << "        ReadSamples" << endl;
-		hr = ReadAAFFile(L"EssenceAccessWAVELegacy.aaf", testStandardCalls, kAAFCodecWAVE);
+		hr = ReadAAFFile(metadataFileName, testStandardCalls, kAAFCodecWAVE);
 	}
 	/**/
+	GenerateTestFileName( L"EssenceAccessMultiWAVE", fileKind, fileNameBufLen, metadataFileName );
 	if(hr == AAFRESULT_SUCCESS && mode == kAAFUnitTestReadWrite)
 	{
         cout << "        WriteMultiSamples" << endl;
-		checkResult(CreateAudioAAFFile(L"EssenceAccessMultiWAVE.aaf", NULL, testMultiCalls, kAAFCodecWAVE, kAAFDataDef_Sound));
+		checkResult(CreateAudioAAFFile(metadataFileName, fileKind, rawStorageType, productID,
+				NULL, testMultiCalls, kAAFCodecWAVE, kAAFDataDef_Sound));
 	}
 	if(hr == AAFRESULT_SUCCESS)
 	{
 		cout << "        ReadMultiSamples" << endl;
-		hr = ReadAAFFile(L"EssenceAccessMultiWAVE.aaf", testMultiCalls, kAAFCodecWAVE);
+		hr = ReadAAFFile(metadataFileName, testMultiCalls, kAAFCodecWAVE);
 	}
 	/**/
 	/**/
+	GenerateTestFileName( L"EssenceAccessRawRef", fileKind, fileNameBufLen, metadataFileName );
 	dataFile.dataFilename = makeURLfromFileInCwd(rawDataWave, tmpURL);
 	dataFile.dataFormat = ContainerFile;
 	if(hr == AAFRESULT_SUCCESS)
@@ -2350,67 +2338,78 @@ HRESULT CAAFEssenceAccess_test(testMode_t mode)
 	if(hr == AAFRESULT_SUCCESS && mode == kAAFUnitTestReadWrite)
 	{
         cout << "        WriteSamples (External Raw Essence)" << endl;
-		hr = CreateAudioAAFFile(L"EssenceAccessRawRef.aaf", &dataFile, testStandardCalls, kAAFCodecWAVE, kAAFDataDef_Sound);
+		hr = CreateAudioAAFFile(metadataFileName, fileKind, rawStorageType, productID,
+				&dataFile, testStandardCalls, kAAFCodecWAVE, kAAFDataDef_Sound);
 	}
 	if(hr == AAFRESULT_SUCCESS)
 	{
 		cout << "        ReadSamples (External Raw Essence)" << endl;
-		hr = ReadAAFFile(L"EssenceAccessRawRef.aaf", testStandardCalls, kAAFCodecWAVE);
+		hr = ReadAAFFile(metadataFileName, testStandardCalls, kAAFCodecWAVE);
 	}
 	/**/
-	dataFile.dataFilename = makeURLfromFileInCwd(externalWaveAAF, tmpURL);
+	GenerateTestFileName( L"EssenceAccessRef", fileKind, fileNameBufLen, metadataFileName );
+	GenerateTestFileName( L"EssenceAccessExtWAV", fileKind, fileNameBufLen, mediaFileName );
+	dataFile.dataFilename = makeURLfromFileInCwd(mediaFileName, tmpURL);
 	dataFile.dataFormat = ContainerAAF;
 	if(hr == AAFRESULT_SUCCESS && mode == kAAFUnitTestReadWrite)
 	{
         cout << "        WriteSamples (External AAF Essence)" << endl;
-		hr = CreateAudioAAFFile(L"EssenceAccessRef.aaf", &dataFile, testStandardCalls, kAAFCodecWAVE, kAAFDataDef_Sound);
+		hr = CreateAudioAAFFile(metadataFileName, fileKind, rawStorageType, productID,
+				&dataFile, testStandardCalls, kAAFCodecWAVE, kAAFDataDef_Sound);
 	}
 	if(hr == AAFRESULT_SUCCESS)
 	{
 		cout << "        ReadSamples (External AAF Essence)" << endl;
-		hr = ReadAAFFile(L"EssenceAccessRef.aaf", testStandardCalls, kAAFCodecWAVE);
+		hr = ReadAAFFile(metadataFileName, testStandardCalls, kAAFCodecWAVE);
 	}
 
 	if(hr == AAFRESULT_SUCCESS)
 		  cout << "    Internal Essence (AIFC)" << endl;
   
 	/**/
+	GenerateTestFileName( L"EssenceAccessAIFC", fileKind, fileNameBufLen, metadataFileName );
 	if(hr == AAFRESULT_SUCCESS && mode == kAAFUnitTestReadWrite)
 	{
         cout << "        WriteSamples" << endl;
-		hr = CreateAudioAAFFile(L"EssenceAccessAIFC.aaf", NULL, testStandardCalls, kAAFCODEC_AIFC, kAAFDataDef_Sound);
+		hr = CreateAudioAAFFile(metadataFileName, fileKind, rawStorageType, productID,
+				NULL, testStandardCalls, kAAFCODEC_AIFC, kAAFDataDef_Sound);
 	}
 	
 	if(hr == AAFRESULT_SUCCESS)
 	{
 		cout << "        ReadSamples" << endl;
-		hr = ReadAAFFile(L"EssenceAccessAIFC.aaf", testStandardCalls, kAAFCODEC_AIFC);
+		hr = ReadAAFFile(metadataFileName, testStandardCalls, kAAFCODEC_AIFC);
 	}
 	/**/
+	GenerateTestFileName( L"EssenceAccessAIFCLegacy", fileKind, fileNameBufLen, metadataFileName );
 	if(hr == AAFRESULT_SUCCESS && mode == kAAFUnitTestReadWrite)
 	{
         cout << "        WriteSamples (Legacy DDEF_Sound)" << endl;
-		hr = CreateAudioAAFFile(L"EssenceAccessAIFCLegacy.aaf", NULL, testStandardCalls, kAAFCODEC_AIFC, DDEF_Sound);
+		hr = CreateAudioAAFFile(metadataFileName, fileKind, rawStorageType, productID,
+				NULL, testStandardCalls, kAAFCODEC_AIFC, DDEF_Sound);
 	}
 	
 	if(hr == AAFRESULT_SUCCESS)
 	{
 		cout << "        ReadSamples" << endl;
-		hr = ReadAAFFile(L"EssenceAccessAIFCLegacy.aaf", testStandardCalls, kAAFCODEC_AIFC);
+		hr = ReadAAFFile(metadataFileName, testStandardCalls, kAAFCODEC_AIFC);
 	}
 	/**/
+	GenerateTestFileName( L"EssenceAccessMultiAIFC", fileKind, fileNameBufLen, metadataFileName );
 	if(hr == AAFRESULT_SUCCESS && mode == kAAFUnitTestReadWrite)
 	{
         cout << "        WriteMultiSamples" << endl;
-		hr = CreateAudioAAFFile(L"EssenceAccessMultiAIFC.aaf", NULL, testMultiCalls, kAAFCODEC_AIFC, kAAFDataDef_Sound);
+		hr = CreateAudioAAFFile(metadataFileName, fileKind, rawStorageType, productID,
+				NULL, testMultiCalls, kAAFCODEC_AIFC, kAAFDataDef_Sound);
 	}
 	if(hr == AAFRESULT_SUCCESS)
 	{
        	cout << "        ReadMultiSamples" << endl;
-		hr = ReadAAFFile(L"EssenceAccessMultiAIFC.aaf", testMultiCalls, kAAFCODEC_AIFC);
+		hr = ReadAAFFile(metadataFileName, testMultiCalls, kAAFCODEC_AIFC);
 	}
 	/**/
 	/**/
+	GenerateTestFileName( L"EssenceAccessRawRefAIFC", fileKind, fileNameBufLen, metadataFileName );
 	dataFile.dataFilename = makeURLfromFileInCwd(rawDataAifc, tmpURL);
 	dataFile.dataFormat = ContainerFile;
 	if(hr == AAFRESULT_SUCCESS)
@@ -2418,25 +2417,29 @@ HRESULT CAAFEssenceAccess_test(testMode_t mode)
 	if(hr == AAFRESULT_SUCCESS && mode == kAAFUnitTestReadWrite)
 	{
         cout << "        WriteSamples (External Raw Essence)" << endl;
-		hr = CreateAudioAAFFile(L"EssenceAccessRawRefAIFC.aaf", &dataFile, testStandardCalls, kAAFCODEC_AIFC, kAAFDataDef_Sound);
+		hr = CreateAudioAAFFile(metadataFileName, fileKind, rawStorageType, productID,
+				&dataFile, testStandardCalls, kAAFCODEC_AIFC, kAAFDataDef_Sound);
 	}
 	if(hr == AAFRESULT_SUCCESS)
 	{
 		cout << "        ReadSamples (External Raw Essence)" << endl;
-		hr = ReadAAFFile(L"EssenceAccessRawRefAIFC.aaf", testStandardCalls, kAAFCODEC_AIFC);
+		hr = ReadAAFFile(metadataFileName, testStandardCalls, kAAFCODEC_AIFC);
 	}
 	/**/
-	dataFile.dataFilename = makeURLfromFileInCwd(externalAifcAAF, tmpURL);
+	GenerateTestFileName( L"EssenceAccessRefAIFC", fileKind, fileNameBufLen, metadataFileName );
+	GenerateTestFileName( L"EssenceAccessExtAIF", fileKind, fileNameBufLen, mediaFileName );
+	dataFile.dataFilename = makeURLfromFileInCwd(mediaFileName, tmpURL);
 	dataFile.dataFormat = ContainerAAF;
 	if(hr == AAFRESULT_SUCCESS && mode == kAAFUnitTestReadWrite)
 	{
         cout << "        WriteSamples (External AAF Essence)" << endl;
-		hr = CreateAudioAAFFile(L"EssenceAccessRefAIFC.aaf", &dataFile, testStandardCalls, kAAFCODEC_AIFC, kAAFDataDef_Sound);
+		hr = CreateAudioAAFFile(metadataFileName, fileKind, rawStorageType, productID,
+				&dataFile, testStandardCalls, kAAFCODEC_AIFC, kAAFDataDef_Sound);
 	}
 	if(hr == AAFRESULT_SUCCESS)
 	{
         cout << "        ReadSamples (External AAF Essence)" << endl;
-		hr = ReadAAFFile(L"EssenceAccessRefAIFC.aaf", testStandardCalls, kAAFCODEC_AIFC);
+		hr = ReadAAFFile(metadataFileName, testStandardCalls, kAAFCODEC_AIFC);
 	}
 
 	if (SUCCEEDED(hr))
@@ -2444,60 +2447,68 @@ HRESULT CAAFEssenceAccess_test(testMode_t mode)
     cout << "    Internal Essence (JPEG):" << endl;
   }
   
+	GenerateTestFileName( L"EssenceAccessJPEG", fileKind, fileNameBufLen, metadataFileName );
 	if(hr == AAFRESULT_SUCCESS && mode == kAAFUnitTestReadWrite)
 	{
 		cout << "        WriteSamples (compression disabled, RGB)" << endl;
-		hr = CreateVideoAAFFile(L"EssenceAccessJPEG.aaf",NULL, kAAFCompressionDisable, kAAFColorSpaceRGB, 1, 
+		hr = CreateVideoAAFFile(metadataFileName, fileKind, rawStorageType, productID,
+				NULL, kAAFCompressionDisable, kAAFColorSpaceRGB, 1, 
 				kAAFCodecJPEG, kAAFDataDef_Picture, testStandardCalls, NIL_UID);
 	}
 	if (SUCCEEDED(hr))
 	{
 		cout << "        ReadSamples (compression disabled, RGB)" << endl;
-		hr = ReadVideoAAFFile(L"EssenceAccessJPEG.aaf", kAAFCompressionDisable, kAAFColorSpaceRGB, 1,  
+		hr = ReadVideoAAFFile(metadataFileName, kAAFCompressionDisable, kAAFColorSpaceRGB, 1,  
 				kAAFCodecJPEG, testStandardCalls, NIL_UID);
 	}
 	if (SUCCEEDED(hr))
 	{
 		cout << "        ReadSamples (compression enabled, RGB)" << endl;
-		hr = ReadVideoAAFFile(L"EssenceAccessJPEG.aaf", kAAFCompressionEnable, kAAFColorSpaceRGB, 1,  
+		hr = ReadVideoAAFFile(metadataFileName, kAAFCompressionEnable, kAAFColorSpaceRGB, 1,  
 				kAAFCodecJPEG, testStandardCalls, NIL_UID);
 	}
+	GenerateTestFileName( L"EssenceAccessJPEGLegacy", fileKind, fileNameBufLen, metadataFileName );
 	if(hr == AAFRESULT_SUCCESS && mode == kAAFUnitTestReadWrite)
 	{
 		cout << "        WriteSamples (compression disabled, RGB) (Legacy DDEF_Picture)" << endl;
-		hr = CreateVideoAAFFile(L"EssenceAccessJPEGLegacy.aaf",NULL, kAAFCompressionDisable, kAAFColorSpaceRGB, 1, 
+		hr = CreateVideoAAFFile(metadataFileName, fileKind, rawStorageType, productID,
+				NULL, kAAFCompressionDisable, kAAFColorSpaceRGB, 1, 
 				kAAFCodecJPEG, DDEF_Picture, testStandardCalls, NIL_UID);
 	}
 	if (SUCCEEDED(hr))
 	{
 		cout << "        ReadSamples (compression disabled, RGB)" << endl;
-		hr = ReadVideoAAFFile(L"EssenceAccessJPEGLegacy.aaf", kAAFCompressionDisable, kAAFColorSpaceRGB, 1,  
+		hr = ReadVideoAAFFile(metadataFileName, kAAFCompressionDisable, kAAFColorSpaceRGB, 1,  
 				kAAFCodecJPEG, testStandardCalls, NIL_UID);
 	}
 
+	GenerateTestFileName( L"EssenceAccessJPEGComp", fileKind, fileNameBufLen, metadataFileName );
 	if(hr == AAFRESULT_SUCCESS && mode == kAAFUnitTestReadWrite)
 	{
 		cout << "        WriteSamples (compression enabled, RGB)" << endl;
-		hr = CreateVideoAAFFile(L"EssenceAccessJPEGComp.aaf",NULL, kAAFCompressionEnable, kAAFColorSpaceRGB, 1,  
+		hr = CreateVideoAAFFile(metadataFileName, fileKind, rawStorageType, productID,
+				NULL, kAAFCompressionEnable, kAAFColorSpaceRGB, 1,  
 				kAAFCodecJPEG, kAAFDataDef_Picture, testStandardCalls, NIL_UID);
 	}
 	if (SUCCEEDED(hr))
 	{
 		cout << "        ReadSamples (compression disabled, RGB)" << endl;
-		hr = ReadVideoAAFFile(L"EssenceAccessJPEGComp.aaf", kAAFCompressionDisable, kAAFColorSpaceRGB, 1,  
+		hr = ReadVideoAAFFile(metadataFileName, kAAFCompressionDisable, kAAFColorSpaceRGB, 1,  
 				kAAFCodecJPEG, testStandardCalls, NIL_UID);
 	}
 	if (SUCCEEDED(hr))
 	{
 		cout << "        ReadSamples (compression enabled, RGB)" << endl;
-		hr = ReadVideoAAFFile(L"EssenceAccessJPEGComp.aaf", kAAFCompressionEnable, kAAFColorSpaceRGB, 1,  
+		hr = ReadVideoAAFFile(metadataFileName, kAAFCompressionEnable, kAAFColorSpaceRGB, 1,  
 				kAAFCodecJPEG, testStandardCalls, NIL_UID);
 	}
 
 	if(hr == AAFRESULT_SUCCESS && mode == kAAFUnitTestReadWrite)
 	{
+		GenerateTestFileName( L"EssenceAccessJPEGMulti", fileKind, fileNameBufLen, metadataFileName );
 		cout << "        WriteMultiSamples (compression disabled, RGB)" << endl;
-		hr = CreateVideoAAFFile(L"EssenceAccessJPEGMulti.aaf",NULL, kAAFCompressionDisable, kAAFColorSpaceRGB, 1, 
+		hr = CreateVideoAAFFile(metadataFileName, fileKind, rawStorageType, productID,
+				NULL, kAAFCompressionDisable, kAAFColorSpaceRGB, 1, 
 				kAAFCodecJPEG, kAAFDataDef_Picture, testMultiCalls, NIL_UID);
 		if (AAFRESULT_INVALID_OP_CODEC == hr)
 		{
@@ -2509,13 +2520,13 @@ HRESULT CAAFEssenceAccess_test(testMode_t mode)
 			if (SUCCEEDED(hr))
 			{
 				cout << "        ReadMultiSamples (compression disabled, RGB)" << endl;
-				hr = ReadVideoAAFFile(L"EssenceAccessJPEGMulti.aaf", kAAFCompressionDisable, kAAFColorSpaceRGB, 1,  
+				hr = ReadVideoAAFFile(metadataFileName, kAAFCompressionDisable, kAAFColorSpaceRGB, 1,  
 					kAAFCodecJPEG, testMultiCalls, NIL_UID);
 			}
 			if (SUCCEEDED(hr))
 			{
 				cout << "        ReadMultiSamples (compression enabled, RGB)" << endl;
-				hr = ReadVideoAAFFile(L"EssenceAccessJPEGMulti.aaf", kAAFCompressionEnable, kAAFColorSpaceRGB, 1,  
+				hr = ReadVideoAAFFile(metadataFileName, kAAFCompressionEnable, kAAFColorSpaceRGB, 1,  
 					kAAFCodecJPEG, testMultiCalls, NIL_UID);
 			}
 		}
@@ -2523,8 +2534,10 @@ HRESULT CAAFEssenceAccess_test(testMode_t mode)
 
 	if(hr == AAFRESULT_SUCCESS && mode == kAAFUnitTestReadWrite)
 	{
+		GenerateTestFileName( L"EssenceAccessJPEGMultiComp", fileKind, fileNameBufLen, metadataFileName );
 		cout << "        WriteMultiSamples (compression enabled, RGB)" << endl;
-		hr = CreateVideoAAFFile(L"EssenceAccessJPEGMultiComp.aaf",NULL, kAAFCompressionEnable, kAAFColorSpaceRGB,1, 
+		hr = CreateVideoAAFFile(metadataFileName, fileKind, rawStorageType, productID,
+				NULL, kAAFCompressionEnable, kAAFColorSpaceRGB,1, 
 				kAAFCodecJPEG, kAAFDataDef_Picture, testMultiCalls, NIL_UID);
 		if (AAFRESULT_INVALID_OP_CODEC == hr)
 		{
@@ -2536,61 +2549,65 @@ HRESULT CAAFEssenceAccess_test(testMode_t mode)
 			if (SUCCEEDED(hr))
 			{
 				cout << "        ReadMultiSamples (compression disabled, RGB)" << endl;
-				hr = ReadVideoAAFFile(L"EssenceAccessJPEGMultiComp.aaf", kAAFCompressionDisable, kAAFColorSpaceRGB, 1, 
+				hr = ReadVideoAAFFile(metadataFileName, kAAFCompressionDisable, kAAFColorSpaceRGB, 1, 
 					kAAFCodecJPEG, testMultiCalls, NIL_UID);
 			}
 			if (SUCCEEDED(hr))
 			{
 				cout << "        ReadMultiSamples (compression enabled, RGB)" << endl;
-				hr = ReadVideoAAFFile(L"EssenceAccessJPEGMultiComp.aaf", kAAFCompressionEnable, kAAFColorSpaceRGB, 1, 
+				hr = ReadVideoAAFFile(metadataFileName, kAAFCompressionEnable, kAAFColorSpaceRGB, 1, 
 					kAAFCodecJPEG, testMultiCalls, NIL_UID);
 			}
 		}
 	}
 
 
+	GenerateTestFileName( L"EssenceAccessJPEGCompYUV", fileKind, fileNameBufLen, metadataFileName );
 	if(hr == AAFRESULT_SUCCESS && mode == kAAFUnitTestReadWrite)
 	{
 		cout << "        WriteSamples (compression enabled, YUV)" << endl;
-		hr = CreateVideoAAFFile(L"EssenceAccessJPEGCompYUV.aaf",NULL, kAAFCompressionEnable, kAAFColorSpaceYUV, 1, 
+		hr = CreateVideoAAFFile(metadataFileName, fileKind, rawStorageType, productID,
+				NULL, kAAFCompressionEnable, kAAFColorSpaceYUV, 1, 
 				kAAFCodecJPEG, kAAFDataDef_Picture, testStandardCalls, NIL_UID);
 	}
 	if (SUCCEEDED(hr))
 	{
 		cout << "        ReadSamples (compression disabled, YUV)" << endl;
-		hr = ReadVideoAAFFile(L"EssenceAccessJPEGCompYUV.aaf", kAAFCompressionDisable, kAAFColorSpaceYUV, 1, 
+		hr = ReadVideoAAFFile(metadataFileName, kAAFCompressionDisable, kAAFColorSpaceYUV, 1, 
 				kAAFCodecJPEG, testStandardCalls, NIL_UID);
 	}
 	if (SUCCEEDED(hr))
 	{
 		cout << "        ReadSamples (compression enabled, YUV)" << endl;
-		hr = ReadVideoAAFFile(L"EssenceAccessJPEGCompYUV.aaf", kAAFCompressionEnable, kAAFColorSpaceYUV, 1, 
+		hr = ReadVideoAAFFile(metadataFileName, kAAFCompressionEnable, kAAFColorSpaceYUV, 1, 
 				kAAFCodecJPEG, testStandardCalls, NIL_UID);
 	}
 	if (SUCCEEDED(hr))
 	{
 		cout << "        ReadSamples (compression enabled, RGB)" << endl;
-		hr = ReadVideoAAFFile(L"EssenceAccessJPEGCompYUV.aaf", kAAFCompressionEnable, kAAFColorSpaceRGB, 1, 
+		hr = ReadVideoAAFFile(metadataFileName, kAAFCompressionEnable, kAAFColorSpaceRGB, 1, 
 				kAAFCodecJPEG, testStandardCalls, NIL_UID);
 	}
 
 
+	GenerateTestFileName( L"EssenceAccessJPEGCompYUV422", fileKind, fileNameBufLen, metadataFileName );
 	if(hr == AAFRESULT_SUCCESS && mode == kAAFUnitTestReadWrite)
 	{
 		cout << "        WriteSamples (compression enabled, YUV 4-2-2)" << endl;
-		hr = CreateVideoAAFFile(L"EssenceAccessJPEGCompYUV422.aaf",NULL, kAAFCompressionEnable, kAAFColorSpaceYUV, 2, 
+		hr = CreateVideoAAFFile(metadataFileName, fileKind, rawStorageType, productID,
+				NULL, kAAFCompressionEnable, kAAFColorSpaceYUV, 2, 
 				kAAFCodecJPEG, kAAFDataDef_Picture, testStandardCalls, NIL_UID);
 	}
 	if (SUCCEEDED(hr))
 	{
 		cout << "        ReadSamples (compression disabled, YUV)" << endl;
-		hr = ReadVideoAAFFile(L"EssenceAccessJPEGCompYUV422.aaf", kAAFCompressionDisable, kAAFColorSpaceYUV, 2, 
+		hr = ReadVideoAAFFile(metadataFileName, kAAFCompressionDisable, kAAFColorSpaceYUV, 2, 
 				kAAFCodecJPEG, testStandardCalls, NIL_UID);
 	}
 	if (SUCCEEDED(hr))
 	{
 		cout << "        ReadSamples (compression enabled, YUV 4-2-2)" << endl;
-		hr = ReadVideoAAFFile(L"EssenceAccessJPEGCompYUV422.aaf", kAAFCompressionEnable, kAAFColorSpaceYUV, 2, 
+		hr = ReadVideoAAFFile(metadataFileName, kAAFCompressionEnable, kAAFColorSpaceYUV, 2, 
 				kAAFCodecJPEG, testStandardCalls, NIL_UID);
 	}
 
@@ -2600,25 +2617,29 @@ HRESULT CAAFEssenceAccess_test(testMode_t mode)
 		cout << "    Internal Static Essence (JPEG)" << endl;
 	}
 
+	GenerateTestFileName( L"StaticEssenceAccessJPEG", fileKind, fileNameBufLen, metadataFileName );
 	if(hr == AAFRESULT_SUCCESS && mode == kAAFUnitTestReadWrite)
 	{
 		cout << "        WriteSamples" << endl;
-		hr = CreateStaticEssenceAAFFile(L"StaticEssenceAccessJPEG.aaf", NULL, testStandardCalls, kAAFCodecJPEG, kAAFDataDef_Picture);
+		hr = CreateStaticEssenceAAFFile(metadataFileName, fileKind, rawStorageType, productID,
+				NULL, testStandardCalls, kAAFCodecJPEG, kAAFDataDef_Picture);
 	}
 	if (SUCCEEDED(hr))
 	{
 		cout << "        ReadSamples" << endl;
-		hr = ReadStaticEssenceAAFFile(L"StaticEssenceAccessJPEG.aaf", testStandardCalls, kAAFCodecJPEG);
+		hr = ReadStaticEssenceAAFFile(metadataFileName, testStandardCalls, kAAFCodecJPEG);
 	}
+	GenerateTestFileName( L"StaticEssenceAccessJPEGLegacy", fileKind, fileNameBufLen, metadataFileName );
 	if(hr == AAFRESULT_SUCCESS && mode == kAAFUnitTestReadWrite)
 	{
 		cout << "        WriteSamples (Legacy DDEF_Picture)" << endl;
-		hr = CreateStaticEssenceAAFFile(L"StaticEssenceAccessJPEGLegacy.aaf", NULL, testStandardCalls, kAAFCodecJPEG, DDEF_Picture);
+		hr = CreateStaticEssenceAAFFile(metadataFileName, fileKind, rawStorageType, productID,
+				NULL, testStandardCalls, kAAFCodecJPEG, DDEF_Picture);
 	}
 	if (SUCCEEDED(hr))
 	{
 		cout << "        ReadSamples" << endl;
-		hr = ReadStaticEssenceAAFFile(L"StaticEssenceAccessJPEGLegacy.aaf", testStandardCalls, kAAFCodecJPEG);
+		hr = ReadStaticEssenceAAFFile(metadataFileName, testStandardCalls, kAAFCodecJPEG);
 	}
 
 
@@ -2630,54 +2651,62 @@ HRESULT CAAFEssenceAccess_test(testMode_t mode)
 		cout << "    Internal Essence (CDCI):" << endl;
 	}
 	
+	GenerateTestFileName( L"EssenceAccessCDCICompYUV", fileKind, fileNameBufLen, metadataFileName );
 	if(hr == AAFRESULT_SUCCESS && mode == kAAFUnitTestReadWrite)
 	{
 		cout << "        WriteSamples (YUV)" << endl;
-		hr = CreateVideoAAFFile(L"EssenceAccessCDCICompYUV.aaf",NULL, kAAFCompressionDisable, kAAFColorSpaceYUV, 1, 
+		hr = CreateVideoAAFFile(metadataFileName, fileKind, rawStorageType, productID,
+				NULL, kAAFCompressionDisable, kAAFColorSpaceYUV, 1, 
 			kAAFCodecCDCI, kAAFDataDef_Picture, testStandardCalls, NIL_UID);
 	}
 	if (SUCCEEDED(hr))
 	{
 		cout << "        ReadSamples (YUV)" << endl;
-		hr = ReadVideoAAFFile(L"EssenceAccessCDCICompYUV.aaf", kAAFCompressionDisable, kAAFColorSpaceYUV, 1, 
+		hr = ReadVideoAAFFile(metadataFileName, kAAFCompressionDisable, kAAFColorSpaceYUV, 1, 
 			kAAFCodecCDCI, testStandardCalls, NIL_UID);
 	}
+	GenerateTestFileName( L"EssenceAccessCDCICompYUVLegacy", fileKind, fileNameBufLen, metadataFileName );
 	if(hr == AAFRESULT_SUCCESS && mode == kAAFUnitTestReadWrite)
 	{
 		cout << "        WriteSamples (YUV) (Legacy DDEF_Picture)" << endl;
-		hr = CreateVideoAAFFile(L"EssenceAccessCDCICompYUVLegacy.aaf",NULL, kAAFCompressionDisable, kAAFColorSpaceYUV, 1, 
+		hr = CreateVideoAAFFile(metadataFileName, fileKind, rawStorageType, productID,
+				NULL, kAAFCompressionDisable, kAAFColorSpaceYUV, 1, 
 			kAAFCodecCDCI, DDEF_Picture, testStandardCalls, NIL_UID);
 	}
 	if (SUCCEEDED(hr))
 	{
 		cout << "        ReadSamples (YUV)" << endl;
-		hr = ReadVideoAAFFile(L"EssenceAccessCDCICompYUVLegacy.aaf", kAAFCompressionDisable, kAAFColorSpaceYUV, 1, 
+		hr = ReadVideoAAFFile(metadataFileName, kAAFCompressionDisable, kAAFColorSpaceYUV, 1, 
 			kAAFCodecCDCI, testStandardCalls, NIL_UID);
 	}
 	
+	GenerateTestFileName( L"EssenceAccessCDCICompYUV422", fileKind, fileNameBufLen, metadataFileName );
 	if(hr == AAFRESULT_SUCCESS && mode == kAAFUnitTestReadWrite)
 	{
 		cout << "        WriteSamples (YUV 4-2-2)" << endl;
-		hr = CreateVideoAAFFile(L"EssenceAccessCDCICompYUV422.aaf",NULL, kAAFCompressionDisable, kAAFColorSpaceYUV, 2, 
+		hr = CreateVideoAAFFile(metadataFileName, fileKind, rawStorageType, productID,
+				NULL, kAAFCompressionDisable, kAAFColorSpaceYUV, 2, 
 			kAAFCodecCDCI, kAAFDataDef_Picture, testStandardCalls, NIL_UID);
 	}
 	if (SUCCEEDED(hr))
 	{
 		cout << "        ReadSamples (YUV 4-2-2)" << endl;
-		hr = ReadVideoAAFFile(L"EssenceAccessCDCICompYUV422.aaf", kAAFCompressionDisable, kAAFColorSpaceYUV, 2, 
+		hr = ReadVideoAAFFile(metadataFileName, kAAFCompressionDisable, kAAFColorSpaceYUV, 2, 
 			kAAFCodecCDCI, testStandardCalls, NIL_UID);
 	}
 
+	GenerateTestFileName( L"EssenceAccessCDCI_DV", fileKind, fileNameBufLen, metadataFileName );
 	if(hr == AAFRESULT_SUCCESS && mode == kAAFUnitTestReadWrite)
 	{
 		cout << "        WriteSamples (DV CompressionDisable)" << endl;
-		hr = CreateVideoAAFFile(L"EssenceAccessCDCI_DV.aaf",NULL, kAAFCompressionDisable, kAAFColorSpaceYUV, 2, 
+		hr = CreateVideoAAFFile(metadataFileName, fileKind, rawStorageType, productID,
+				NULL, kAAFCompressionDisable, kAAFColorSpaceYUV, 2, 
 			kAAFCodecCDCI, kAAFDataDef_Picture, testStandardCalls, kAAFCompressionDef_LegacyDV);
 	}
 	if (SUCCEEDED(hr))
 	{
 		cout << "        ReadSamples (DV CompressionDisable)" << endl;
-		hr = ReadVideoAAFFile(L"EssenceAccessCDCI_DV.aaf", kAAFCompressionDisable, kAAFColorSpaceYUV, 2, 
+		hr = ReadVideoAAFFile(metadataFileName, kAAFCompressionDisable, kAAFColorSpaceYUV, 2, 
 			kAAFCodecCDCI, testStandardCalls, kAAFCompressionDef_LegacyDV);
 	}
 

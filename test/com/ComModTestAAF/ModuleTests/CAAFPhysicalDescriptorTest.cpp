@@ -1,3 +1,4 @@
+
 //=---------------------------------------------------------------------=
 //
 // $Id$ $Name$
@@ -118,7 +119,10 @@ static HRESULT OpenAAFFile(
 
 
 static HRESULT CreateAAFFile(
-    aafWChar * pFileName)
+    aafWChar * pFileName,
+    aafUID_constref fileKind,
+    testRawStorageType_t rawStorageType,
+    aafProductIdentification_constref productID)
 {
 	IAAFFile *					pFile = NULL;
 	IAAFHeader *				pHeader = NULL;
@@ -134,59 +138,62 @@ static HRESULT CreateAAFFile(
 	// Remove the previous test file if any.
 	RemoveTestFile(pFileName);
 
-	hr = OpenAAFFile(pFileName, kAAFMediaOpenAppend, &pFile, &pHeader);
+	hr = CreateTestFile( pFileName, fileKind, rawStorageType, productID, &pFile );
 
 	if (AAFRESULT_SUCCESS == hr)
 	{
-	  hr = pHeader->GetDictionary(&pDictionary);
-	  if (AAFRESULT_SUCCESS == hr)
+		hr = pFile->GetHeader(&pHeader);
+		if (AAFRESULT_SUCCESS == hr)
 		{
-			// Create a source mob
-
-		  CAAFBuiltinDefs defs (pDictionary);
-			hr = defs.cdSourceMob()->
-			  CreateInstance(IID_IAAFSourceMob, 
-							 (IUnknown **)&pSourceMob);
-			if (AAFRESULT_SUCCESS == hr)
+		  hr = pHeader->GetDictionary(&pDictionary);
+		  if (AAFRESULT_SUCCESS == hr)
 			{
-				hr = pSourceMob->QueryInterface(IID_IAAFMob, (void **)&pMob);
+				// Create a source mob
+
+			  CAAFBuiltinDefs defs (pDictionary);
+				hr = defs.cdSourceMob()->
+				  CreateInstance(IID_IAAFSourceMob, 
+								 (IUnknown **)&pSourceMob);
 				if (AAFRESULT_SUCCESS == hr)
 				{
-					pMob->SetMobID(TEST_MobID);
-					pMob->SetName(L"IPhysicalDescriptorTest");
-					hr = defs.cdImportDescriptor()->
-					  CreateInstance(IID_IAAFImportDescriptor, 
-									 (IUnknown **)&pImportDesc);		
- 					if (AAFRESULT_SUCCESS == hr)
-					{
-						hr = pImportDesc->QueryInterface(IID_IAAFEssenceDescriptor, (void **)&pEssDesc);
-						if (AAFRESULT_SUCCESS == hr)
-						{
-							hr = pSourceMob->SetEssenceDescriptor(pEssDesc);
-							pEssDesc->Release();
-							pEssDesc = NULL;
-						}
-						pImportDesc->Release();
-						pImportDesc = NULL;
-					}
-
-					// Add the MOB to the file
+					hr = pSourceMob->QueryInterface(IID_IAAFMob, (void **)&pMob);
 					if (AAFRESULT_SUCCESS == hr)
-						hr = pHeader->AddMob(pMob);
+					{
+						pMob->SetMobID(TEST_MobID);
+						pMob->SetName(L"IPhysicalDescriptorTest");
+						hr = defs.cdImportDescriptor()->
+						  CreateInstance(IID_IAAFImportDescriptor, 
+										 (IUnknown **)&pImportDesc);		
+ 						if (AAFRESULT_SUCCESS == hr)
+						{
+							hr = pImportDesc->QueryInterface(IID_IAAFEssenceDescriptor, (void **)&pEssDesc);
+							if (AAFRESULT_SUCCESS == hr)
+							{
+								hr = pSourceMob->SetEssenceDescriptor(pEssDesc);
+								pEssDesc->Release();
+								pEssDesc = NULL;
+							}
+							pImportDesc->Release();
+							pImportDesc = NULL;
+						}
 
-					pMob->Release();
-					pMob = NULL;
-				}
-				pSourceMob->Release();
-				pSourceMob = NULL;
+						// Add the MOB to the file
+						if (AAFRESULT_SUCCESS == hr)
+							hr = pHeader->AddMob(pMob);
+
+						pMob->Release();
+						pMob = NULL;
+					}
+					pSourceMob->Release();
+					pSourceMob = NULL;
+        }
+
+				pDictionary->Release();
+				pDictionary = NULL;
 			}
-
-			pDictionary->Release();
-			pDictionary = NULL;
+			pHeader->Release();
+			pHeader = NULL;
 		}
-		pHeader->Release();
-		pHeader = NULL;
-
 		pFile->Save();
 		pFile->Close();
 
@@ -274,17 +281,25 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 }
 
 extern "C" HRESULT CAAFPhysicalDescriptor_test(
-    testMode_t mode);
+    testMode_t mode,
+    aafUID_t fileKind,
+    testRawStorageType_t rawStorageType,
+    aafProductIdentification_t productID);
 extern "C" HRESULT CAAFPhysicalDescriptor_test(
-    testMode_t mode)
+    testMode_t mode,
+    aafUID_t fileKind,
+    testRawStorageType_t rawStorageType,
+    aafProductIdentification_t productID)
 {
 	HRESULT hr = AAFRESULT_NOT_IMPLEMENTED;
-	aafWChar* pFileName = L"AAFPhysicalDescriptorTest.aaf";
+	const size_t fileNameBufLen = 128;
+	aafWChar pFileName[ fileNameBufLen ] = L"";
+	GenerateTestFileName( productID.productName, fileKind, fileNameBufLen, pFileName );
 
 	try
 	{
 		if(mode == kAAFUnitTestReadWrite)
-			hr = CreateAAFFile(pFileName);
+			hr = CreateAAFFile(pFileName, fileKind, rawStorageType, productID);
 		else
 			hr = AAFRESULT_SUCCESS;
 		if (hr == AAFRESULT_SUCCESS)

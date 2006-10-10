@@ -94,10 +94,12 @@ inline void checkhr(HRESULT expression, HRESULT r)
 // Utility class to implement the test.
 struct HeaderTest
 {
-  HeaderTest();
+  HeaderTest(aafProductIdentification_constref productID);
   ~HeaderTest();
 
-  void createFile(wchar_t *pFileName);
+  void createFile(wchar_t *pFileName,
+                  aafUID_constref fileKind,
+                  testRawStorageType_t rawStorageType);
   void openFile(wchar_t *pFileName);
 
   void writeOptionalProperties();
@@ -146,17 +148,27 @@ struct HeaderTest
   IAAFEndian *_pEndian;
 };
 
-extern "C" HRESULT CAAFHeader_test(testMode_t mode);
-extern "C" HRESULT CAAFHeader_test(testMode_t mode)
+extern "C" HRESULT CAAFHeader_test(
+    testMode_t mode,
+    aafUID_t fileKind,
+    testRawStorageType_t rawStorageType,
+    aafProductIdentification_t productID);
+extern "C" HRESULT CAAFHeader_test(
+    testMode_t mode,
+    aafUID_t fileKind,
+    testRawStorageType_t rawStorageType,
+    aafProductIdentification_t productID)
 {
   HRESULT hr = AAFRESULT_SUCCESS;
-  wchar_t *fileName = L"AAFHeaderTest.aaf";
-  HeaderTest ht;
+  const size_t fileNameBufLen = 128;
+  aafWChar fileName[ fileNameBufLen ] = L"";
+  GenerateTestFileName( productID.productName, fileKind, fileNameBufLen, fileName );
+  HeaderTest ht(productID);
 
   try
   {
 	if(mode == kAAFUnitTestReadWrite)
-	   ht.createFile(fileName);
+	   ht.createFile(fileName, fileKind, rawStorageType);
     ht.openFile(fileName);
   }
   catch (HRESULT& ehr)
@@ -176,8 +188,9 @@ extern "C" HRESULT CAAFHeader_test(testMode_t mode)
   return hr;
 }
 
-HeaderTest::HeaderTest():
+HeaderTest::HeaderTest(aafProductIdentification_constref productID):
   _hr(AAFRESULT_SUCCESS),
+  _productInfo(productID),
   _pFile(NULL),
   _bFileOpen(false),
   _pHeader(NULL),
@@ -199,18 +212,6 @@ HeaderTest::HeaderTest():
   _pOptionalPropValue(NULL),
   _pEndian(NULL)
 {
-  _productVersion.major = 1;
-  _productVersion.minor = 0;
-  _productVersion.tertiary = 0;
-  _productVersion.patchLevel = 0;
-  _productVersion.type = kAAFVersionUnknown;
-  _productInfo.companyName = L"AAF Developers Desk";
-  _productInfo.productName = L"AAFHeader Test";
-  _productInfo.productVersion = &_productVersion;
-  _productInfo.productVersionString = NULL;
-  _productInfo.productID = UnitTestProductID;
-  _productInfo.platform = NULL;
-
 }
 
 HeaderTest::~HeaderTest()
@@ -357,12 +358,15 @@ void HeaderTest::removeTestFile(const wchar_t* pFileName)
 }
 
 
-void HeaderTest::createFile(wchar_t *pFileName)
+void HeaderTest::createFile(
+    wchar_t *pFileName,
+    aafUID_constref fileKind,
+    testRawStorageType_t rawStorageType)
 {
   // Remove the previous test file if any.
   removeTestFile(pFileName);
 
-  check(AAFFileOpenNewModify(pFileName, 0, &_productInfo, &_pFile));
+  check(CreateTestFile( pFileName, fileKind, rawStorageType, _productInfo, &_pFile ));
 
   _bFileOpen = true;
   check(_pFile->GetHeader(&_pHeader));

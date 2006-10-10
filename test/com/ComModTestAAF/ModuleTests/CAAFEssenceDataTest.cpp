@@ -59,10 +59,12 @@ static const 	aafMobID_t	TEST_MobIDs[2] =
 // Utility class to implement the test.
 struct EssenceDataTest
 {
-  EssenceDataTest();
+  EssenceDataTest(aafProductIdentification_constref productID);
   ~EssenceDataTest();
 
-  void createFile(wchar_t *pFileName);
+  void createFile(wchar_t *pFileName,
+                  aafUID_constref fileKind,
+                  testRawStorageType_t rawStorageType);
   void openFile(wchar_t *pFileName);
 
   void createFileMob(unsigned int mobid_Index);
@@ -84,7 +86,6 @@ struct EssenceDataTest
 
   // Shared member data:
   HRESULT _hr;
-  aafProductVersion_t _prodecutVersion;
   aafProductIdentification_t _productInfo;
   IAAFFile *_pFile;
   bool _bFileOpen;
@@ -104,17 +105,27 @@ struct EssenceDataTest
   static const char _frowney[];
 };
 
-extern "C" HRESULT CAAFEssenceData_test(testMode_t mode);
-extern "C" HRESULT CAAFEssenceData_test(testMode_t mode)
+extern "C" HRESULT CAAFEssenceData_test(
+    testMode_t mode,
+    aafUID_t fileKind,
+    testRawStorageType_t rawStorageType,
+    aafProductIdentification_t productID);
+extern "C" HRESULT CAAFEssenceData_test(
+    testMode_t mode,
+    aafUID_t fileKind,
+    testRawStorageType_t rawStorageType,
+    aafProductIdentification_t productID)
 {
   HRESULT hr = AAFRESULT_SUCCESS;
-  wchar_t *fileName = L"AAFEssenceDataTest.aaf";
-  EssenceDataTest edt;
+  const size_t fileNameBufLen = 128;
+  aafWChar fileName[ fileNameBufLen ] = L"";
+  GenerateTestFileName( productID.productName, fileKind, fileNameBufLen, fileName );
+  EssenceDataTest edt(productID);
 
   try
   {
 	if(mode == kAAFUnitTestReadWrite)
-    	edt.createFile(fileName);
+    	edt.createFile(fileName, fileKind, rawStorageType);
     edt.openFile(fileName);
   }
   catch (HRESULT& ehr)
@@ -173,8 +184,9 @@ const char EssenceDataTest::_frowney[] =        /* 16x16 frowney face */
 
 
 
-EssenceDataTest::EssenceDataTest():
+EssenceDataTest::EssenceDataTest(aafProductIdentification_constref productID):
   _hr(AAFRESULT_SUCCESS),
+  _productInfo(productID),
   _pFile(NULL),
   _bFileOpen(false),
   _pHeader(NULL),
@@ -188,17 +200,6 @@ EssenceDataTest::EssenceDataTest():
   _buffer(NULL),
   _bufferSize(0)
 {
-  _prodecutVersion.major = 1;
-  _prodecutVersion.minor = 0;
-  _prodecutVersion.tertiary = 0;
-  _prodecutVersion.patchLevel = 0;
-  _prodecutVersion.type = kAAFVersionUnknown;
-  _productInfo.companyName = L"AAF Developers Desk";
-  _productInfo.productName = L"AAFEssenceData Test";
-  _productInfo.productVersion = &_prodecutVersion;
-  _productInfo.productVersionString = NULL;
-  _productInfo.productID = UnitTestProductID;
-  _productInfo.platform = NULL;
 }
 
 EssenceDataTest::~EssenceDataTest()
@@ -318,12 +319,15 @@ const char * EssenceDataTest::convert(const wchar_t* pwcName)
 
 
 
-void EssenceDataTest::createFile(wchar_t *pFileName)
+void EssenceDataTest::createFile(
+    wchar_t *pFileName,
+    aafUID_constref fileKind,
+    testRawStorageType_t rawStorageType)
 {
   // Delete the test file if it already exists.
   remove(convert(pFileName));
 
-  check(AAFFileOpenNewModify(pFileName, 0, &_productInfo, &_pFile));
+  check(CreateTestFile( pFileName, fileKind, rawStorageType, _productInfo, &_pFile ));
   _bFileOpen = true;
   check(_pFile->GetHeader(&_pHeader));
   check(_pHeader->GetDictionary(&_pDictionary));

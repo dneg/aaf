@@ -35,8 +35,16 @@
 #include "ModuleTest.h"
 
 
-extern "C" HRESULT CAAFEssencePlugin_test(testMode_t);
-extern "C" HRESULT CAAFEssencePlugin_test(testMode_t /*mode*/)
+extern "C" HRESULT CAAFEssencePlugin_test(
+    testMode_t mode,
+    aafUID_t fileKind,
+    testRawStorageType_t rawStorageType,
+    aafProductIdentification_t productID);
+extern "C" HRESULT CAAFEssencePlugin_test(
+    testMode_t /* mode */,
+    aafUID_t /* fileKind */,
+    testRawStorageType_t /* rawStorageType */,
+    aafProductIdentification_t /* productID */)
 {
   return AAFRESULT_NOT_IMPLEMENTED;
 }

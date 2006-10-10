@@ -106,8 +106,16 @@ static HRESULT OpenAAFFile(aafWChar*			pFileName,
 	return hr;
 }
 
-extern "C" HRESULT CEnumAAFLoadedPlugins_test(testMode_t );
-extern "C" HRESULT CEnumAAFLoadedPlugins_test(testMode_t mode)
+extern "C" HRESULT CEnumAAFLoadedPlugins_test(
+    testMode_t mode,
+    aafUID_t fileKind,
+    testRawStorageType_t rawStorageType,
+    aafProductIdentification_t productID);
+extern "C" HRESULT CEnumAAFLoadedPlugins_test(
+    testMode_t mode,
+    aafUID_t fileKind,
+    testRawStorageType_t rawStorageType,
+    aafProductIdentification_t productID)
 {
 	HRESULT hr = AAFRESULT_SUCCESS;
 	IEnumAAFLoadedPlugins	*pEnum = NULL, *pCloneEnum = NULL;
@@ -117,9 +125,12 @@ extern "C" HRESULT CEnumAAFLoadedPlugins_test(testMode_t mode)
 	bool bFileOpen = false;
 	IAAFHeader *        pHeader = NULL;
 	IAAFDictionary*  pDictionary = NULL;
-	aafWChar * pFileName = L"EnumAAFLoadedPluginsTest.aaf";
 	IAAFDefObject	*pPluginDef = NULL;
 	aafInt32		numPlugins, checkNumPlugins;
+
+	const size_t fileNameBufLen = 128;
+	aafWChar pFileName[ fileNameBufLen ] = L"";
+	GenerateTestFileName( productID.productName, fileKind, fileNameBufLen, pFileName );
 
 	try
 	{
@@ -132,9 +143,12 @@ extern "C" HRESULT CEnumAAFLoadedPlugins_test(testMode_t mode)
 		checkResult(AAFGetPluginManager (&pMgr));
 
 		// Create the AAF file
-		checkResult(OpenAAFFile(pFileName, kAAFMediaOpenAppend, /*&pSession,*/ &pFile, &pHeader));			
+		checkResult(CreateTestFile( pFileName, fileKind, rawStorageType, productID, &pFile ));
 		bFileOpen = true;
 		
+		// We can't really do anthing in AAF without the header.
+		checkResult(pFile->GetHeader(&pHeader));
+
 		// Get the AAF Dictionary so that we can create valid AAF objects.
 		checkResult(pHeader->GetDictionary(&pDictionary));
 		

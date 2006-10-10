@@ -166,7 +166,11 @@ static HRESULT OpenAAFFile(aafWChar*			pFileName,
 }
 
 
-static HRESULT CreateAAFFile(aafWChar * pFileName)
+static HRESULT CreateAAFFile(
+    aafWChar * pFileName,
+    aafUID_constref fileKind,
+    testRawStorageType_t rawStorageType,
+    aafProductIdentification_constref productID)
 {
   IAAFFileSP       pFile;
   HRESULT          hr = S_OK;
@@ -179,8 +183,11 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		
 	  // Create the AAF file
 	  IAAFHeaderSP pHeader;
-	  checkResult (OpenAAFFile(pFileName, kAAFMediaOpenAppend, &pFile, &pHeader));
+	  checkResult (CreateTestFile( pFileName, fileKind, rawStorageType, productID, &pFile ));
 		
+	  // We can't really do anthing in AAF without the header.
+	  checkResult(pFile->GetHeader(&pHeader));
+
 	  // Get the AAF Dictionary so that we can create valid AAF objects.
 	  IAAFDictionarySP pDictionary;
 	  checkResult (pHeader->GetDictionary(&pDictionary));
@@ -443,18 +450,28 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
   return 	hr;
 }
 
-extern "C" HRESULT CAAFTypeDefStrongObjRef_test(testMode_t mode);
+extern "C" HRESULT CAAFTypeDefStrongObjRef_test(
+    testMode_t mode,
+    aafUID_t fileKind,
+    testRawStorageType_t rawStorageType,
+    aafProductIdentification_t productID);
 
-HRESULT CAAFTypeDefStrongObjRef_test(testMode_t mode)
+HRESULT CAAFTypeDefStrongObjRef_test(
+    testMode_t mode,
+    aafUID_t fileKind,
+    testRawStorageType_t rawStorageType,
+    aafProductIdentification_t productID)
 {
   HRESULT hr = AAFRESULT_NOT_IMPLEMENTED;
 
-  aafWChar * pFileName = L"AAFTypeDefStrongObjRefTest.aaf";
+  const size_t fileNameBufLen = 128;
+  aafWChar pFileName[ fileNameBufLen ] = L"";
+  GenerateTestFileName( productID.productName, fileKind, fileNameBufLen, pFileName );
 
   try
 	{
 		if(mode == kAAFUnitTestReadWrite)
-			hr = CreateAAFFile(pFileName);
+			hr = CreateAAFFile(pFileName, fileKind, rawStorageType, productID);
 		else
 			hr = AAFRESULT_SUCCESS;
 	  if (SUCCEEDED(hr))

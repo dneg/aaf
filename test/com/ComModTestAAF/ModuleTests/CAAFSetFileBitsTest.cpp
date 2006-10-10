@@ -43,7 +43,11 @@ typedef IAAFSmartPointer<IAAFRandomFile>  IAAFRandomFileSP;
 typedef IAAFSmartPointer<IAAFSetFileBits> IAAFSetFileBitsSP;
 
 // Required function prototype.
-extern "C" HRESULT CAAFSetFileBits_test(testMode_t /*mode*/);
+extern "C" HRESULT CAAFSetFileBits_test(
+    testMode_t mode,
+    aafUID_t fileKind,
+    testRawStorageType_t rawStorageType,
+    aafProductIdentification_t productID);
 
 // convenient error handlers.
 inline void checkResult(HRESULT r)
@@ -123,7 +127,11 @@ static HRESULT SetFileBitsTest ()
   return AAFRESULT_SUCCESS;
 }
 
-HRESULT CAAFSetFileBits_test(testMode_t /*mode*/)
+HRESULT CAAFSetFileBits_test(
+    testMode_t /* mode */,
+    aafUID_t /* fileKind */,
+    testRawStorageType_t /* rawStorageType */,
+    aafProductIdentification_t /* productID */)
 {
   HRESULT hr = AAFRESULT_NOT_IMPLEMENTED;
   try

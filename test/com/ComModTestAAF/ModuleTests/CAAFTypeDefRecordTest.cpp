@@ -65,14 +65,6 @@ inline void checkExpression(bool expression, HRESULT r)
 }
 
 
-#define COMPANY_NAME		L"AAF Developers Desk"
-#define PRODUCT_NAME		L"AAFTypeDefRecord Test"
-#define TEST_VERSION		L"TEST VERSION"
-#define TEST_PLATFORM		L"TEST PLATFORM"
-
-static aafProductVersion_t testVersion =
-{ 1, 0, 0, 0, kAAFVersionUnknown };
-
 //
 // Type IDs
 //
@@ -152,16 +144,13 @@ static HRESULT RegisterRational8PairOffsets (IAAFTypeDefRecord * ptd)
 }
 
 
-static HRESULT WriteRecord (const aafWChar * pFileName)
+static HRESULT WriteRecord (
+    const aafWChar * pFileName,
+    aafUID_constref fileKind,
+    testRawStorageType_t rawStorageType,
+    aafProductIdentification_constref productID)
 {
   HRESULT hr = E_FAIL;
-  aafProductIdentification_t ProductInfo;
-  ProductInfo.companyName = COMPANY_NAME;
-  ProductInfo.productName = PRODUCT_NAME;
-  ProductInfo.productVersionString = TEST_VERSION;
-  ProductInfo.productID = UnitTestProductID;
-  ProductInfo.platform = TEST_PLATFORM;
-  ProductInfo.productVersion = &testVersion;
   IAAFFileSP   pFile;
 
   try 
@@ -172,7 +161,7 @@ static HRESULT WriteRecord (const aafWChar * pFileName)
 	  RemoveTestFile(pFileName);
 
 	  // Create the file and get the new file's header.
-	  checkResult(AAFFileOpenNewModify(pFileName, 0, &ProductInfo, &pFile));
+	  checkResult(CreateTestFile( pFileName, fileKind, rawStorageType, productID, &pFile ));
 	  IAAFHeaderSP pHeader;
   	  checkResult(pFile->GetHeader(&pHeader));
 	  IAAFDictionarySP pDict;
@@ -735,16 +724,26 @@ static HRESULT ReadRecord (const aafWChar * pFileName)
 }
 
 
-extern "C" HRESULT CAAFTypeDefRecord_test(testMode_t mode);
-extern "C" HRESULT CAAFTypeDefRecord_test(testMode_t mode)
+extern "C" HRESULT CAAFTypeDefRecord_test(
+    testMode_t mode,
+    aafUID_t fileKind,
+    testRawStorageType_t rawStorageType,
+    aafProductIdentification_t productID);
+extern "C" HRESULT CAAFTypeDefRecord_test(
+    testMode_t mode,
+    aafUID_t fileKind,
+    testRawStorageType_t rawStorageType,
+    aafProductIdentification_t productID)
 {
   HRESULT hr = AAFRESULT_TEST_FAILED;
-  const aafWChar * pFileName = L"AAFTypeDefRecordTest.aaf";
+  const size_t fileNameBufLen = 128;
+  aafWChar pFileName[ fileNameBufLen ] = L"";
+  GenerateTestFileName( productID.productName, fileKind, fileNameBufLen, pFileName );
 
   try
     {
       if(mode == kAAFUnitTestReadWrite)
-		hr =  WriteRecord(pFileName);
+		hr =  WriteRecord(pFileName, fileKind, rawStorageType, productID);
 	  if (SUCCEEDED (hr) || mode != mode == kAAFUnitTestReadWrite)
 		{
 		  hr = AAFRESULT_TEST_FAILED;

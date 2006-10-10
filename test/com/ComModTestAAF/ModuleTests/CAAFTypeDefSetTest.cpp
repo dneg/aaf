@@ -312,24 +312,40 @@ static const MyDefRecord kMyWeakRefSetPropData =
 // forward declarations and prototypes
 extern "C"
 {
-  HRESULT CAAFTypeDefSet_test(testMode_t);
+  HRESULT CAAFTypeDefSet_test(
+    testMode_t mode,
+    aafUID_t fileKind,
+    testRawStorageType_t rawStorageType,
+    aafProductIdentification_t productID);
 } 
-  void CAAFTypeDefSet_Create(aafCharacter_constptr fileName);
+
+  void CAAFTypeDefSet_Create(
+    aafCharacter_constptr fileName,
+    aafUID_constref fileKind,
+    testRawStorageType_t rawStorageType,
+    aafProductIdentification_constref productID);
+
   void CAAFTypeDefSet_Open(aafCharacter_constptr fileName);
   
   void CAAFTypeDefSet_Register(IAAFHeader * pHeader, IAAFDictionary* pDictionary);
   void CAAFTypeDefSet_Write(IAAFHeader* pHeader, IAAFDictionary* pDictionary);
   void CAAFTypeDefSet_Read(IAAFHeader* pHeader, IAAFDictionary* pDictionary);
 
-extern "C" HRESULT CAAFTypeDefSet_test(testMode_t mode)
+extern "C" HRESULT CAAFTypeDefSet_test(
+    testMode_t mode,
+    aafUID_t fileKind,
+    testRawStorageType_t rawStorageType,
+    aafProductIdentification_t productID)
 {
   HRESULT hr = S_OK;
-  aafCharacter_constptr pFileName = L"AAFTypeDefSetTest.aaf";
+  const size_t fileNameBufLen = 128;
+  aafWChar pFileName[ fileNameBufLen ] = L"";
+  GenerateTestFileName( productID.productName, fileKind, fileNameBufLen, pFileName );
   
   try
   {
     if(mode == kAAFUnitTestReadWrite)
-		  CAAFTypeDefSet_Create(pFileName);
+		  CAAFTypeDefSet_Create(pFileName, fileKind, rawStorageType, productID);
     CAAFTypeDefSet_Open(pFileName);
   }
   catch (HRESULT& rhr)
@@ -364,30 +380,20 @@ static bool EqualObject(IUnknown* pObject1, IUnknown* pObject2)
 }
 
 
-void CAAFTypeDefSet_Create(aafCharacter_constptr fileName)
+void CAAFTypeDefSet_Create(
+    aafCharacter_constptr fileName,
+    aafUID_constref fileKind,
+    testRawStorageType_t rawStorageType,
+    aafProductIdentification_constref productID)
 {
-  aafProductIdentification_t  ProductInfo;
   IAAFFileSP pFile;
   IAAFHeaderSP pHeader;
   IAAFDictionarySP pDictionary;
-
-  aafProductVersion_t v;
-  v.major = 1;
-  v.minor = 0;
-  v.tertiary = 0;
-  v.patchLevel = 0;
-  v.type = kAAFVersionUnknown;
-  ProductInfo.companyName = L"AAF Developers Desk";
-  ProductInfo.productName = L"AAFTypeDefSet Test";
-  ProductInfo.productVersion = &v;
-  ProductInfo.productVersionString = NULL;
-  ProductInfo.productID = UnitTestProductID;
-  ProductInfo.platform = NULL;
   
   // Cleanup the old test file...
   RemoveTestFile(fileName);
   
-  checkResult(AAFFileOpenNewModify(fileName, 0, &ProductInfo, &pFile));
+  checkResult(CreateTestFile( fileName, fileKind, rawStorageType, productID, &pFile ));
   try
   {
     checkResult(pFile->GetHeader(&pHeader));

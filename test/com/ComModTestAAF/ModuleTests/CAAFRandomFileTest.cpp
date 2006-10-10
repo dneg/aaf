@@ -55,34 +55,10 @@ inline void checkExpression(bool expression, HRESULT r=AAFRESULT_TEST_FAILED)
     throw r;
 }
 
-static aafProductVersion_t sVers =
-{
-  1,                 // major
-  0,                 // minor
-  0,                 // tertiary
-  0,                 // patchLevel
-  kAAFVersionUnknown // type
-};
 
-static aafProductIdentification_t
-sInitProductInfo (aafProductVersion_t & v)
-{
-  aafProductIdentification_t r;
-  r.companyName = L"AAF Developers Desk";
-  r.productName = L"AAFFile Test";
-  r.productVersionString = NULL;
-  r.productID = UnitTestProductID;
-  r.platform = NULL;
-  r.productVersion = &v;
-
-  return r;
-};
-
-static aafProductIdentification_t sIdent =
-  sInitProductInfo (sVers);
-
-
-static HRESULT TestGetSetFileBits ()
+static HRESULT TestGetSetFileBits (
+    aafUID_constref fileKind,
+    aafProductIdentification_constref productID)
 {
   HRESULT hr;
   // Create a disk raw storage and a file on it, to be opened for
@@ -99,7 +75,7 @@ static HRESULT TestGetSetFileBits ()
 								   kAAFFileAccess_modify,
 								   &kAAFFileKind_Aaf4KBinary,
 								   0,
-								   &sIdent,
+								   &productID,
 								   &pWriteFile));
   assert (pWriteFile);
   checkExpression (0 != (IAAFFile*)pWriteFile,
@@ -201,14 +177,22 @@ static HRESULT TestGetSetFileBits ()
 
 
 // Required function prototype.
-extern "C" HRESULT CAAFRandomFile_test(testMode_t /*mode*/);
+extern "C" HRESULT CAAFRandomFile_test(
+    testMode_t mode,
+    aafUID_t fileKind,
+    testRawStorageType_t rawStorageType,
+    aafProductIdentification_t productID);
 
-HRESULT CAAFRandomFile_test(testMode_t /*mode*/)
+HRESULT CAAFRandomFile_test(
+    testMode_t /* mode */,
+    aafUID_t fileKind,
+    testRawStorageType_t /* rawStorageType */,
+    aafProductIdentification_t productID)
 {
   HRESULT hr = AAFRESULT_NOT_IMPLEMENTED;
   try
 	{
-	  hr = TestGetSetFileBits ();
+	  hr = TestGetSetFileBits (fileKind, productID);
 	}
   catch (...)
 	{

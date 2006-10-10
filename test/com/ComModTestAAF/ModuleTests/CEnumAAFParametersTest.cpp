@@ -198,14 +198,22 @@ void CEnumAAFParametersTest::GetAUID(IAAFParameter *pParameter,aafUID_t *pAUID)
 	checkResult(pDefObject->GetAUID(pAUID));
 }
 
-extern "C" HRESULT CEnumAAFParameters_test(testMode_t mode);
-extern "C" HRESULT CEnumAAFParameters_test(testMode_t mode)
+extern "C" HRESULT CEnumAAFParameters_test(
+    testMode_t mode,
+    aafUID_t fileKind,
+    testRawStorageType_t rawStorageType,
+    aafProductIdentification_t productID);
+extern "C" HRESULT CEnumAAFParameters_test(
+    testMode_t mode,
+    aafUID_t fileKind,
+    testRawStorageType_t rawStorageType,
+    aafProductIdentification_t productID)
 {
 	try
 	{
 		CEnumAAFParametersTest Test;
   		if(mode == kAAFUnitTestReadWrite)
-			Test.Run(mode);		// !!! This test requires create & verify intermixed
+			Test.Run(mode, fileKind, rawStorageType, productID); // !!! This test requires create & verify intermixed
 	}
 	catch(HRESULT& rResult)
 	{

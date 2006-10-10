@@ -107,28 +107,6 @@ static aafBoolean_t AreAUIDsEqual(aafUID_t& a1, aafUID_t& a2)
 	return(kAAFTrue);
 }
 
-// These two functions fill in the product version and product info structures,
-// respectively, for the AAF files we will create
-static void FillInProductVersion(aafProductVersion_t& v)
-{
-	v.major = 1;
-	v.minor = 0;
-	v.tertiary = 0;
-	v.patchLevel = 0;
-	v.type = kAAFVersionUnknown;
-}
-
-static void FillInProductInfo(aafProductIdentification_t& ProductInfo,
-	aafProductVersion_t& v)
-{
-	ProductInfo.companyName = L"AAF Developers Desk";
-	ProductInfo.productName = L"AAFFile Test";
-	ProductInfo.productVersion = &v;
-	ProductInfo.productVersionString = NULL;
-	ProductInfo.productID = UnitTestProductID;
-	ProductInfo.platform = NULL;
-}
-
 static const 	aafMobID_t	TEST_MobID =
 	{{0x07, 0x0c, 0x2b, 0x34, 0x02, 0x05, 0x11, 0x01, 0x01, 0x00, 0x10, 0x00},
 	0x13, 0x00, 0x00, 0x00,
@@ -148,19 +126,18 @@ static aafBool PropValTypeIs(IAAFPropertyValue *pPropVal,aafUID_t *pAUID)
 	return(AreAUIDsEqual(PropValAUID,*pAUID));
 }
 
-static void CreateTypeDefRenameFile(aafWChar *pFilename)
+static void CreateTypeDefRenameFile(
+    aafWChar *pFilename,
+    aafUID_constref fileKind,
+    testRawStorageType_t rawStorageType,
+    aafProductIdentification_constref productID)
 {
-	aafProductVersion_t v;
-	aafProductIdentification_t	ProductInfo;
-	FillInProductVersion(v);
-	FillInProductInfo(ProductInfo,v);
-
 	// Remove the previous test file, if any.
 	RemoveTestFile(pFilename);
 
 	// Create new AAF file.
 	IAAFFileSP pFile;
-	checkResult(AAFFileOpenNewModify(pFilename,0,&ProductInfo, &pFile));
+	checkResult(CreateTestFile( pFilename, fileKind, rawStorageType, productID, &pFile ));
 
 	// Get AAF header & dictionary
 	IAAFHeaderSP pHeader;
@@ -361,15 +338,25 @@ static void ReadTypeDefRenameFile(aafWChar *pFilename)
 	pFile->Close();
 }
 
-extern "C" HRESULT CAAFTypeDefRename_test(testMode_t mode);
-extern "C" HRESULT CAAFTypeDefRename_test(testMode_t mode)
+extern "C" HRESULT CAAFTypeDefRename_test(
+    testMode_t mode,
+    aafUID_t fileKind,
+    testRawStorageType_t rawStorageType,
+    aafProductIdentification_t productID);
+extern "C" HRESULT CAAFTypeDefRename_test(
+    testMode_t mode,
+    aafUID_t fileKind,
+    testRawStorageType_t rawStorageType,
+    aafProductIdentification_t productID)
 {
-	aafWChar *pTestFilename=L"TypeDefRenameTest.aaf";
+	const size_t fileNameBufLen = 128;
+	aafWChar pTestFilename[ fileNameBufLen ] = L"";
+	GenerateTestFileName( productID.productName, fileKind, fileNameBufLen, pTestFilename );
 
 	try
 	{
       	if(mode == kAAFUnitTestReadWrite)
-			CreateTypeDefRenameFile(pTestFilename);
+			CreateTypeDefRenameFile(pTestFilename, fileKind, rawStorageType, productID);
 		ReadTypeDefRenameFile(pTestFilename);
 //		RemoveTestFile(pTestFilename);
 	}

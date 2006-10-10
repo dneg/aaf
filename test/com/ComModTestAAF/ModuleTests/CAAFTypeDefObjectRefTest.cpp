@@ -119,28 +119,6 @@ static aafBoolean_t AreClassDefsEquivalent(IAAFClassDef *pClassDef1,
 	return(AreAUIDsEqual(FirstAUID,SecondAUID));
 }
 
-// These two functions fill in the product version and product info structures,
-// respectively, for the AAF files we will create
-static void FillInProductVersion(aafProductVersion_t& v)
-{
-	v.major = 1;
-	v.minor = 0;
-	v.tertiary = 0;
-	v.patchLevel = 0;
-	v.type = kAAFVersionUnknown;
-}
-
-static void FillInProductInfo(aafProductIdentification_t& ProductInfo,
-	aafProductVersion_t& v)
-{
-	ProductInfo.companyName = L"AAF Developers Desk";
-	ProductInfo.productName = L"AAFTypeDefObjectRef Test";
-	ProductInfo.productVersion = &v;
-	ProductInfo.productVersionString = NULL;
-	ProductInfo.productID = UnitTestProductID;
-	ProductInfo.platform = NULL;
-}
-
 // IDs of objects & types we will create
 
 // AUID of our "StrongReferenceToFiller" type def
@@ -158,19 +136,18 @@ static const aafMobID_t	Test_MobID =
 	0x13, 0x00, 0x00, 0x00,
 	{0xffd21460, 0x4e92, 0x11d4, {0x92, 0x26, 0x0, 0x50, 0x4, 0x9c, 0x3b, 0x9d}} };	
 
-static void CreateTypeDefObjectRefFile(aafWChar *pFilename)
+static void CreateTypeDefObjectRefFile(
+    aafWChar *pFilename,
+    aafUID_constref fileKind,
+    testRawStorageType_t rawStorageType,
+    aafProductIdentification_constref productID)
 {
-	aafProductVersion_t v;
-	aafProductIdentification_t	ProductInfo;
-	FillInProductVersion(v);
-	FillInProductInfo(ProductInfo,v);
-
 	// Remove the previous test file, if any.
 	RemoveTestFile(pFilename);
 
 	// Create new AAF file.
 	IAAFFileSP pFile;
-	checkResult(AAFFileOpenNewModify(pFilename,0,&ProductInfo, &pFile));
+	checkResult(CreateTestFile( pFilename, fileKind, rawStorageType, productID, &pFile ));
 
 	// Get AAF header & dictionary
 	IAAFHeaderSP pHeader;
@@ -368,15 +345,25 @@ static void ReadTypeDefObjectRefFile(aafWChar *pFilename)
 	pFile->Close();
 }
 
-extern "C" HRESULT CAAFTypeDefObjectRef_test(testMode_t mode);
-extern "C" HRESULT CAAFTypeDefObjectRef_test(testMode_t mode)
+extern "C" HRESULT CAAFTypeDefObjectRef_test(
+    testMode_t mode,
+    aafUID_t fileKind,
+    testRawStorageType_t rawStorageType,
+    aafProductIdentification_t productID);
+extern "C" HRESULT CAAFTypeDefObjectRef_test(
+    testMode_t mode,
+    aafUID_t fileKind,
+    testRawStorageType_t rawStorageType,
+    aafProductIdentification_t productID)
 {
-	aafWChar *pTestFilename=L"TypeDefObjectRefTest.aaf";
+	const size_t fileNameBufLen = 128;
+	aafWChar pTestFilename[ fileNameBufLen ] = L"";
+	GenerateTestFileName( productID.productName, fileKind, fileNameBufLen, pTestFilename );
 
 	try
 	{
 		if(mode == kAAFUnitTestReadWrite)
-			CreateTypeDefObjectRefFile(pTestFilename);
+			CreateTypeDefObjectRefFile(pTestFilename, fileKind, rawStorageType, productID);
 		ReadTypeDefObjectRefFile(pTestFilename);
 	}
 	catch(HRESULT& rResult)

@@ -1,3 +1,4 @@
+
 //=---------------------------------------------------------------------=
 //
 // $Id$ $Name$
@@ -83,7 +84,10 @@ inline void PrintTestResult(char *testName, HRESULT localhr, HRESULT *phr)
 
 static aafProductVersion_t			testVersion =  { 1, 0, 0, 0, kAAFVersionUnknown };
 
-static HRESULT CreateAAFFile(aafWChar * pFileName)
+static HRESULT CreateAAFFile(
+    aafWChar * pFileName,
+    aafUID_constref fileKind,
+    testRawStorageType_t rawStorageType)
 {
 	IAAFDictionary				*pDictionary = NULL;
 	IAAFFile *					pFile = NULL;
@@ -112,7 +116,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		RemoveTestFile(pFileName);
 		
 		// Create the file.
-		checkResult(AAFFileOpenNewModify(pFileName, 0, &ProductInfo, &pFile));
+		checkResult(CreateTestFile(pFileName, fileKind,
+				rawStorageType, ProductInfo, &pFile));
 		bFileOpen = true;
 		
 		// We can't really do anthing in AAF without the header.
@@ -585,16 +590,26 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	return hr;
 }
 
-extern "C" HRESULT CEnumAAFIdentifications_test(testMode_t mode);
-extern "C" HRESULT CEnumAAFIdentifications_test(testMode_t mode)
+extern "C" HRESULT CEnumAAFIdentifications_test(
+    testMode_t mode,
+    aafUID_t fileKind,
+    testRawStorageType_t rawStorageType,
+    aafProductIdentification_t productID);
+extern "C" HRESULT CEnumAAFIdentifications_test(
+    testMode_t mode,
+    aafUID_t fileKind,
+    testRawStorageType_t rawStorageType,
+    aafProductIdentification_t productID)
 {
 	HRESULT hr = AAFRESULT_NOT_IMPLEMENTED;
-	aafWChar * pFileName = L"EnumAAFIdentificationsTest.aaf";
+	const size_t fileNameBufLen = 128;
+	aafWChar pFileName[ fileNameBufLen ] = L"";
+	GenerateTestFileName( productID.productName, fileKind, fileNameBufLen, pFileName );
 	
 	try
 	{
 		if(mode == kAAFUnitTestReadWrite)
-			hr = CreateAAFFile(pFileName);
+			hr = CreateAAFFile(pFileName, fileKind, rawStorageType);
 		else
 			hr = AAFRESULT_SUCCESS;
 		if(hr == AAFRESULT_SUCCESS)

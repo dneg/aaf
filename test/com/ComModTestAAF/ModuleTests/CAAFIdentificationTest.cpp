@@ -139,7 +139,10 @@ static void GetDateTime(aafTimeStamp_t *ts)
 
 aafProductVersion_t			testVersion =  { 1, 0, 0, 0, kAAFVersionUnknown };
 
-static HRESULT CreateAAFFile(aafWChar * pFileName)
+static HRESULT CreateAAFFile(
+    aafWChar * pFileName,
+    aafUID_constref fileKind,
+    testRawStorageType_t rawStorageType)
 {
 	IAAFFile *					pFile = NULL;
 	bool 						bFileOpen = false;
@@ -168,7 +171,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		RemoveTestFile(pFileName);
 				
 		// Create the file.
-		checkResult(AAFFileOpenNewModify(pFileName, 0, &ProductInfo, &pFile));
+		checkResult(CreateTestFile(pFileName, fileKind,
+				rawStorageType, ProductInfo, &pFile));
 		bFileOpen = true;
 		
 		// We can't really do anthing in AAF without the header.
@@ -574,16 +578,26 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	return hr;
 }
 
-extern "C" HRESULT CAAFIdentification_test(testMode_t mode);
-extern "C" HRESULT CAAFIdentification_test(testMode_t mode)
+extern "C" HRESULT CAAFIdentification_test(
+    testMode_t mode,
+    aafUID_t fileKind,
+    testRawStorageType_t rawStorageType,
+    aafProductIdentification_t productID);
+extern "C" HRESULT CAAFIdentification_test(
+    testMode_t mode,
+    aafUID_t fileKind,
+    testRawStorageType_t rawStorageType,
+    aafProductIdentification_t productID)
 {
 	HRESULT hr = AAFRESULT_NOT_IMPLEMENTED;
-	aafWChar * pFileName = L"AAFIdentificationTest.aaf";
+	const size_t fileNameBufLen = 128;
+	aafWChar pFileName[ fileNameBufLen ] = L"";
+	GenerateTestFileName( productID.productName, fileKind, fileNameBufLen, pFileName );
 	
 	try
 	{
 		if(mode == kAAFUnitTestReadWrite)
-			hr = CreateAAFFile(pFileName);
+			hr = CreateAAFFile(pFileName, fileKind, rawStorageType);
 		else
 			hr = AAFRESULT_SUCCESS;
 		if(hr == AAFRESULT_SUCCESS)

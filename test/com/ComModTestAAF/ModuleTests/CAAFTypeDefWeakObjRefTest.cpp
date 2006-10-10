@@ -1,3 +1,4 @@
+
 //=---------------------------------------------------------------------=
 //
 // $Id$ $Name$
@@ -64,7 +65,11 @@ using namespace std;
 // Required function prototypes
 
   // Create the test file.
-  void CAAFTypeDefWeakObjRef_create (aafCharacter_constptr pFileName); // throw HRESULT
+  void CAAFTypeDefWeakObjRef_create (
+    aafCharacter_constptr pFileName,
+    aafUID_constref fileKind,
+    testRawStorageType_t rawStorageType,
+    aafProductIdentification_constref productID); // throw HRESULT
 
   // Open the test file read only and validate the data.
   void CAAFTypeDefWeakObjRef_read (aafCharacter_constptr pFileName); // throw HRESULT
@@ -72,18 +77,28 @@ using namespace std;
   void CAAFTypeDefWeakObjRef_verify (IAAFHeader * pHeader); // throw HRESULT
 
 
-extern "C" HRESULT CAAFTypeDefWeakObjRef_test(testMode_t);
-extern "C" HRESULT CAAFTypeDefWeakObjRef_test(testMode_t mode)
+extern "C" HRESULT CAAFTypeDefWeakObjRef_test(
+    testMode_t mode,
+    aafUID_t fileKind,
+    testRawStorageType_t rawStorageType,
+    aafProductIdentification_t productID);
+extern "C" HRESULT CAAFTypeDefWeakObjRef_test(
+    testMode_t mode,
+    aafUID_t fileKind,
+    testRawStorageType_t rawStorageType,
+    aafProductIdentification_t productID)
 {
   HRESULT result = AAFRESULT_SUCCESS;
-  aafCharacter_constptr wFileName = L"AAFTypeDefWeakObjRefTest.aaf";
+  const size_t fileNameBufLen = 128;
+  aafCharacter wFileName[ fileNameBufLen ] = L"";
+  GenerateTestFileName( productID.productName, fileKind, fileNameBufLen, wFileName );
 
   try
   {
     // Run through a basic set of tests. Create the file, 
     // and then read and validate the new file.
     if(mode == kAAFUnitTestReadWrite)
-      CAAFTypeDefWeakObjRef_create (wFileName);
+      CAAFTypeDefWeakObjRef_create (wFileName, fileKind, rawStorageType, productID);
     CAAFTypeDefWeakObjRef_read (wFileName);
   }
   catch (HRESULT &rhr)
@@ -265,30 +280,18 @@ static void CheckWeakReference(
 
 
 // Create the test file.
-void CAAFTypeDefWeakObjRef_create (aafCharacter_constptr pFileName) // throw HRESULT
+void CAAFTypeDefWeakObjRef_create (
+    aafCharacter_constptr pFileName,
+    aafUID_constref fileKind,
+    testRawStorageType_t rawStorageType,
+    aafProductIdentification_constref productID)
 {
   // Remove the previous test file is one exists
   RemoveTestFile (pFileName);
 
   // Create the file.
-  aafProductIdentification_t	ProductInfo;
-  aafProductVersion_t v;
-  v.major = 1;
-  v.minor = 0;
-  v.tertiary = 0;
-  v.patchLevel = 0;
-  v.type = kAAFVersionUnknown;
-
-  ProductInfo.companyName = L"AAF Developers Desk";
-  ProductInfo.productName = L"AAFTypeDefWeakObjRef Test - create";
-  ProductInfo.productVersion = &v;
-  ProductInfo.productVersionString = NULL;
-  ProductInfo.productID = UnitTestProductID;
-  ProductInfo.platform = NULL;
-
-
   IAAFFileSP pFile;
-  checkResult (AAFFileOpenNewModify(pFileName, 0, &ProductInfo, &pFile));
+  checkResult (CreateTestFile( pFileName, fileKind, rawStorageType, productID, &pFile ));
   
   try
   {

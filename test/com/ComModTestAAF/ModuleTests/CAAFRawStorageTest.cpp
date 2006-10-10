@@ -24,11 +24,18 @@
 
 #include "AAFTypes.h" //Use #include "AAF.h" for functional module test.
 #include "AAFResult.h"
+#include "ModuleTest.h"
 
 // Required function prototype.
-extern "C" HRESULT CAAFRawStorage_test(void);
+extern "C" HRESULT CAAFRawStorage_test(testMode_t mode,
+    aafUID_t fileKind,
+    testRawStorageType_t rawStorageType,
+    aafProductIdentification_t productID);
 
-HRESULT CAAFRawStorage_test()
+HRESULT CAAFRawStorage_test(testMode_t /* mode */,
+    aafUID_t /* fileKind */,
+    testRawStorageType_t /* rawStorageType */,
+    aafProductIdentification_t /* productID */)
 {
   // There is currently no support in the toolkit to make use if
   // non-Random Raw Storages (e.g. streams).  When that's in, we can

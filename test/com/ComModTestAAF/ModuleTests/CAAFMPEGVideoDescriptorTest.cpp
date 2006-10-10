@@ -69,7 +69,11 @@ inline void checkExpression(bool expression, HRESULT r)
 
 
 // Required function prototype.
-extern "C" HRESULT CAAFMPEGVideoDescriptor_test(testMode_t mode);
+extern "C" HRESULT CAAFMPEGVideoDescriptor_test(
+    testMode_t mode,
+    aafUID_t fileKind,
+    testRawStorageType_t rawStorageType,
+    aafProductIdentification_t productID);
 
 static HRESULT OpenAAFFile(
     aafWChar*           pFileName,
@@ -78,7 +82,10 @@ static HRESULT OpenAAFFile(
     IAAFHeader**        ppHeader);
 
 static HRESULT CreateAAFFile(
-    aafWChar * pFileName);
+    aafWChar * pFileName,
+    aafUID_constref fileKind,
+    testRawStorageType_t rawStorageType,
+    aafProductIdentification_constref productID);
 
 static HRESULT ReadAAFFile(
     aafWChar * pFileName);
@@ -127,16 +134,21 @@ bool operator !=( const aafUID_t uid1, const aafUID_t uid2 );
 // The public entry for this module test,
 //
 HRESULT CAAFMPEGVideoDescriptor_test(
-    testMode_t mode )
+    testMode_t mode,
+    aafUID_t fileKind,
+    testRawStorageType_t rawStorageType,
+    aafProductIdentification_t productID )
 {
     HRESULT  hr = AAFRESULT_NOT_IMPLEMENTED;
-    aafWChar* pFileName = L"AAFMPEGVideoDescriptorTest.aaf";
+	const size_t fileNameBufLen = 128;
+	aafWChar pFileName[ fileNameBufLen ] = L"";
+	GenerateTestFileName( productID.productName, fileKind, fileNameBufLen, pFileName );
 
 
     try
     {
         if(mode == kAAFUnitTestReadWrite)
-            hr = CreateAAFFile(pFileName);
+            hr = CreateAAFFile(pFileName, fileKind, rawStorageType, productID);
         else
             hr = AAFRESULT_SUCCESS;
         if(hr == AAFRESULT_SUCCESS)
@@ -215,7 +227,10 @@ static HRESULT OpenAAFFile(aafWChar*			pFileName,
 
 
 static HRESULT CreateAAFFile(
-    aafWChar * pFileName)
+    aafWChar * pFileName,
+    aafUID_constref fileKind,
+    testRawStorageType_t rawStorageType,
+    aafProductIdentification_constref productID)
 {
     IAAFFile*               pFile = 0;
     IAAFHeader*             pHeader = 0;
@@ -235,7 +250,10 @@ static HRESULT CreateAAFFile(
 
 
 	  	// Create the AAF file
-	  	checkResult(OpenAAFFile(pFileName, kAAFMediaOpenAppend, &pFile, &pHeader));
+    	checkResult(CreateTestFile( pFileName, fileKind, rawStorageType, productID, &pFile ));
+
+    	// We can't really do anthing in AAF without the header.
+    	checkResult(pFile->GetHeader(&pHeader));
 
     	// Get the AAF Dictionary so that we can create valid AAF objects.
     	checkResult(pHeader->GetDictionary(&pDictionary));

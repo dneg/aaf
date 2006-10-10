@@ -50,33 +50,25 @@ inline void checkExpression(bool expression, HRESULT r)
     throw r;
 }
 
-static wchar_t testFileName[] = L"AAFPropertyValueTest.aaf";
 
-
-static HRESULT TestPropertyValue (testMode_t mode)
+static HRESULT TestPropertyValue (
+    testMode_t mode,
+    aafUID_constref fileKind,
+    testRawStorageType_t rawStorageType,
+    aafProductIdentification_constref productID)
 {
   // HRESULT hr = E_FAIL;
   long hr = E_FAIL;
-  aafProductIdentification_t ProductInfo;
 
-  aafProductVersion_t v;
-  v.major = 1;
-  v.minor = 0;
-  v.tertiary = 0;
-  v.patchLevel = 0;
-  v.type = kAAFVersionUnknown;
-  ProductInfo.companyName = L"AAF Developers Desk";
-  ProductInfo.productName = L"AAFPropertyValue Test";
-  ProductInfo.productVersion = &v;
-  ProductInfo.productVersionString = NULL;
-  ProductInfo.productID = UnitTestProductID;
-  ProductInfo.platform = NULL;
+  const size_t fileNameBufLen = 128;
+  aafWChar testFileName[ fileNameBufLen ] = L"";
+  GenerateTestFileName( productID.productName, fileKind, fileNameBufLen, testFileName );
 
   IAAFFile* pFile = NULL;
   if(mode == kAAFUnitTestReadWrite)
   {
   	RemoveTestFile (testFileName);
-  	checkResult (AAFFileOpenNewModify(testFileName, 0, &ProductInfo, &pFile));
+  	checkResult (CreateTestFile( testFileName, fileKind, rawStorageType, productID, &pFile ));
  	 assert (pFile);
  }
   else
@@ -197,14 +189,22 @@ static HRESULT TestPropertyValue (testMode_t mode)
 
 
 
-extern "C" HRESULT CAAFPropertyValue_test(testMode_t mode);
-extern "C" HRESULT CAAFPropertyValue_test(testMode_t mode)
+extern "C" HRESULT CAAFPropertyValue_test(
+    testMode_t mode,
+    aafUID_t fileKind,
+    testRawStorageType_t rawStorageType,
+    aafProductIdentification_t productID);
+extern "C" HRESULT CAAFPropertyValue_test(
+    testMode_t mode,
+    aafUID_t fileKind,
+    testRawStorageType_t rawStorageType,
+    aafProductIdentification_t productID)
 {
   HRESULT hr = AAFRESULT_NOT_IMPLEMENTED;
 
   try
 	{
-	  	hr = TestPropertyValue(mode);
+	  	hr = TestPropertyValue(mode, fileKind, rawStorageType, productID);
 	}
   catch (...)
 	{

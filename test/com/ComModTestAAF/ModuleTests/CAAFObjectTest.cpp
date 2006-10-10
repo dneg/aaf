@@ -71,8 +71,8 @@ inline void checkExpression(bool expression, HRESULT r=AAFRESULT_TEST_FAILED)
     throw r;
 }
 
-static wchar_t testFileName[] = L"AAFObjectTest.aaf";
-
+const size_t fileNameBufLen = 128;
+static aafWChar testFileName[ fileNameBufLen ] = L"";
 // AUIDs of optional properties we will create
 static const aafUID_t AUID_OptionalProperty = 
 { 0xacf15840, 0x58d6, 0x11d4, { 0x92, 0x2a, 0x0, 0x50, 0x4, 0x9c, 0x3b, 0x9d } };
@@ -105,11 +105,15 @@ enum traversalType_e
 
 static void TraverseObject(IAAFObject *, IAAFPropertyDef *, IAAFTypeDefInt *, traversalType_e); // throw HRESULT
 
-static HRESULT ObjectWriteTest ()
+static HRESULT ObjectWriteTest (
+	testMode_t mode,
+    aafUID_constref fileKind,
+    testRawStorageType_t rawStorageType,
+    aafProductIdentification_constref productID)
+
 {
   HRESULT hr = AAFRESULT_TEST_FAILED;
 
-  aafProductIdentification_t ProductInfo;
   IAAFFile* pFile = NULL;
   IAAFHeader * pHeader = NULL;
   IAAFDictionary * pDict = NULL;
@@ -120,24 +124,8 @@ static HRESULT ObjectWriteTest ()
 
   try
   {
-	  aafProductVersion_t v;
-	  v.major = 1;
-	  v.minor = 0;
-	  v.tertiary = 0;
-	  v.patchLevel = 0;
-	  v.type = kAAFVersionUnknown;
-	  ProductInfo.companyName = L"AAF Developers Desk";
-	  ProductInfo.productName = L"AAFObject Test";
-	  ProductInfo.productVersion = &v;
-	  ProductInfo.productVersionString = NULL;
-	  ProductInfo.productID = UnitTestProductID;
-	  ProductInfo.platform = NULL;
-	  
 	  RemoveTestFile (testFileName);
-	  checkResult (AAFFileOpenNewModify(testFileName,
-										0,
-										&ProductInfo,
-										&pFile));
+	  checkResult (CreateTestFile( testFileName, fileKind, rawStorageType, productID, &pFile ));
 	  assert (pFile);
 	  checkResult (pFile->GetHeader (&pHeader));
 	  assert (pHeader);
@@ -738,16 +726,26 @@ void TraverseObject(
 } // TraverseObject
 
 
-extern "C" HRESULT CAAFObject_test(testMode_t mode);
-extern "C" HRESULT CAAFObject_test(testMode_t mode)
+extern "C" HRESULT CAAFObject_test(
+    testMode_t mode,
+    aafUID_t fileKind,
+    testRawStorageType_t rawStorageType,
+    aafProductIdentification_t productID);
+extern "C" HRESULT CAAFObject_test(
+    testMode_t mode,
+    aafUID_t fileKind,
+    testRawStorageType_t rawStorageType,
+    aafProductIdentification_t productID)
 {
   HRESULT hr = AAFRESULT_NOT_IMPLEMENTED;
+
+  GenerateTestFileName( productID.productName, fileKind, fileNameBufLen, testFileName );
 
   try
   {
 		  if(mode == kAAFUnitTestReadWrite)
 		  {
-			  hr = ObjectWriteTest ();
+			  hr = ObjectWriteTest (mode, fileKind, rawStorageType, productID);
 			  if (FAILED(hr))
 			  {
 				  cerr << "CAAFObject_test...FAILED!" << endl;

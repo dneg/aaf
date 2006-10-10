@@ -53,13 +53,21 @@ public:
 	}
 };
 
-extern "C" HRESULT CEnumAAFClassDefs_test(testMode_t mode);
-extern "C" HRESULT CEnumAAFClassDefs_test(testMode_t mode)
+extern "C" HRESULT CEnumAAFClassDefs_test(
+    testMode_t mode,
+    aafUID_t fileKind,
+    testRawStorageType_t rawStorageType,
+    aafProductIdentification_t productID);
+extern "C" HRESULT CEnumAAFClassDefs_test(
+    testMode_t mode,
+    aafUID_t fileKind,
+    testRawStorageType_t rawStorageType,
+    aafProductIdentification_t productID)
 {
 	try
 	{
 		CEnumAAFClassDefsTest Test;
-		Test.Run(mode);
+		Test.Run(mode, fileKind, rawStorageType, productID);
 	}
 	catch(HRESULT& rResult)
 	{

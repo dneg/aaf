@@ -1,3 +1,4 @@
+
 //=---------------------------------------------------------------------=
 //
 // $Id$ $Name$
@@ -223,7 +224,8 @@ static aafCharacter_constptr kOptionalObjectPropertyName = L"Optional Object Pro
 // create
 static aafUID_t AUID_ParentClass=AUID_AAFFiller;
 
-static wchar_t testFileName[] = L"AAFClassDef.aaf";
+const size_t fileNameBufLen = 128;
+static aafCharacter testFileName[ fileNameBufLen ] = L"";
 
 // convenient error handlers.
 inline void checkResult(HRESULT r)
@@ -385,7 +387,11 @@ static void VerifyAAFFile(CAAFClassDefTestLog& Log,IAAFFileSP pFile)
 
 // This function creates the AAF file we will use for our test, and also performs
 // some simple tests on the IAAFClassDef interface
-static void CreateAAFFile(CAAFClassDefTestLog& Log)
+static void CreateAAFFile(
+    aafUID_constref fileKind,
+    testRawStorageType_t rawStorageType,
+    aafProductIdentification_constref productID,
+    CAAFClassDefTestLog& Log)
 {
 	// GUIDs we will use locally in this test
 
@@ -416,7 +422,7 @@ static void CreateAAFFile(CAAFClassDefTestLog& Log)
 	ProductInfo.platform = NULL;
 
 	RemoveTestFile(testFileName);
-	checkResult(AAFFileOpenNewModify(testFileName, 0, &ProductInfo, &pFile));
+	checkResult(CreateTestFile( testFileName, fileKind, rawStorageType, productID, &pFile ));
 	checkExpression(pFile!=0);
 
 	checkResult(pFile->GetHeader(&pHeader));
@@ -566,10 +572,15 @@ static void ReadAAFFile(CAAFClassDefTestLog& Log)
 	checkResult(pFile->Close());
 }
 
-static void ClassDefTest(CAAFClassDefTestLog& Log, testMode_t mode)
+static void ClassDefTest(
+    testMode_t mode,
+    aafUID_constref fileKind,
+    testRawStorageType_t rawStorageType,
+    aafProductIdentification_constref productID,
+    CAAFClassDefTestLog& Log)
 {
 	if(mode == kAAFUnitTestReadWrite)
-		CreateAAFFile(Log);
+		CreateAAFFile(fileKind, rawStorageType, productID, Log);
 	else	// These tests occur only on write, but are required to pass the whole thing
 	{
 		Log.MarkAsTested(INITIALIZE);
@@ -578,9 +589,20 @@ static void ClassDefTest(CAAFClassDefTestLog& Log, testMode_t mode)
 	ReadAAFFile(Log);
 }
 
-extern "C" HRESULT CAAFClassDef_test(testMode_t mode);
-extern "C" HRESULT CAAFClassDef_test(testMode_t mode)
+extern "C" HRESULT CAAFClassDef_test(
+    testMode_t mode,
+    aafUID_t fileKind,
+    testRawStorageType_t rawStorageType,
+    aafProductIdentification_t productID);
+extern "C" HRESULT CAAFClassDef_test(
+    testMode_t mode,
+    aafUID_t fileKind,
+    testRawStorageType_t rawStorageType,
+    aafProductIdentification_t productID)
 {
+	// Generate test file name
+	GenerateTestFileName( productID.productName, fileKind, fileNameBufLen, testFileName );
+
 	// Create test log
 	CAAFClassDefTestLog Log(NUM_IAAFCLASSDEF_METHODS,
 		(const char**)ppIAAFMethodNames);
@@ -589,7 +611,7 @@ extern "C" HRESULT CAAFClassDef_test(testMode_t mode)
 	aafBool bException=kAAFFalse;
 	try
 	{
-		ClassDefTest(Log, mode);
+		ClassDefTest(mode, fileKind, rawStorageType, productID, Log);
 	}
 	catch (...)
 	{

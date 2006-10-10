@@ -1,3 +1,4 @@
+
 //=---------------------------------------------------------------------=
 //
 
@@ -163,7 +164,11 @@ inline void checkExpression(bool expression, HRESULT r)
     throw r;
 }
 
-static HRESULT CreateAAFFile(aafWChar * pFileName)
+static HRESULT CreateAAFFile(
+    aafWChar * pFileName,
+    aafUID_constref fileKind,
+    testRawStorageType_t rawStorageType,
+    aafProductIdentification_constref productID)
 {
   IAAFFile *					pFile = NULL;
   bool 							bFileOpen = false;
@@ -182,7 +187,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
   IAAFClassDef					*pcdEventMeta=NULL;
   IAAFClassDef					*pcdEvent=NULL;
   IAAFClassDef					*pcdEventConcrete=NULL;
-  aafProductIdentification_t	ProductInfo;
   HRESULT						hr = S_OK;
   aafNumSlots_t					numMobs;
   aafUInt32 					bufLen = 0;
@@ -202,18 +206,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
   aafTimecode_t					timecode;
   int 							i;
 
-  aafProductVersion_t v;
-  v.major = 1;
-  v.minor = 0;
-  v.tertiary = 0;
-  v.patchLevel = 0;
-  v.type = kAAFVersionUnknown;
-  ProductInfo.companyName = L"AAF Developers Desk";
-  ProductInfo.productName = L"AAFMob Test";
-  ProductInfo.productVersion = &v;
-  ProductInfo.productVersionString = NULL;
-  ProductInfo.productID = UnitTestProductID;
-  ProductInfo.platform = NULL;
 
   try
 	{
@@ -221,7 +213,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	  RemoveTestFile(pFileName);
 
 	  // Create the file.
-	  checkResult(AAFFileOpenNewModify(pFileName, 0, &ProductInfo, &pFile));
+	  checkResult(CreateTestFile( pFileName, fileKind, rawStorageType, productID, &pFile ));
 	  bFileOpen = true;
  
 	  // We can't really do anthing in AAF without the header.
@@ -699,7 +691,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 	  // Remove the previous test file if any.
 	  RemoveTestFile(dest_filename);
-	  checkResult(AAFFileOpenNewModify(dest_filename, 0, &ProductInfo, &spDestFile));
+	  checkResult(CreateTestFile( dest_filename, fileKind, rawStorageType, productID, &spDestFile ));
 	  checkResult(pMob->CloneExternal(kAAFNoFollowDepend, kAAFNoIncludeMedia, spDestFile, &spClonedMob));
 	  checkResult(spDestFile->Save());	  	
 	  checkResult(spDestFile->Close());	  	
@@ -1239,17 +1231,27 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 }
  
 
-extern "C" HRESULT CAAFMob_test(testMode_t mode);
-extern "C" HRESULT CAAFMob_test(testMode_t mode)
+extern "C" HRESULT CAAFMob_test(
+    testMode_t mode,
+    aafUID_t fileKind,
+    testRawStorageType_t rawStorageType,
+    aafProductIdentification_t productID);
+extern "C" HRESULT CAAFMob_test(
+    testMode_t mode,
+    aafUID_t fileKind,
+    testRawStorageType_t rawStorageType,
+    aafProductIdentification_t productID)
 {
 	HRESULT hr = AAFRESULT_SUCCESS;
- 	aafWChar * pFileName = L"AAFMobTest.aaf";
+	const size_t fileNameBufLen = 128;
+	aafWChar pFileName[ fileNameBufLen ] = L"";
+	GenerateTestFileName( productID.productName, fileKind, fileNameBufLen, pFileName );
 
 	try
 	{
 		if(mode == kAAFUnitTestReadWrite)
 		{
-			hr = CreateAAFFile(pFileName);
+			hr = CreateAAFFile(pFileName, fileKind, rawStorageType, productID);
 		}
 		else
 			hr = AAFRESULT_SUCCESS;

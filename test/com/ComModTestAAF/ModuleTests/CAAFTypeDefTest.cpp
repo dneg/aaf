@@ -45,34 +45,27 @@ typedef IAAFSmartPointer<IAAFTypeDef>    IAAFTypeDefSP;
 typedef IAAFSmartPointer<IAAFTypeDefInt> IAAFTypeDefIntSP;
 typedef IAAFSmartPointer<IUnknown>       IUnknownSP;
 
-static wchar_t testFileName[] = L"AAFTypeDefTest.aaf";
+const size_t fileNameBufLen = 128;
+static aafCharacter testFileName[ fileNameBufLen ] = L"";
 
 
 const aafUID_t NIL_UID = { 0, 0, 0, { 0, 0, 0, 0, 0, 0, 0, 0 } };
 
-static HRESULT TestTypeDef (testMode_t mode)
+static HRESULT TestTypeDef (
+    testMode_t mode,
+    aafUID_constref fileKind,
+    testRawStorageType_t rawStorageType,
+    aafProductIdentification_constref productID)
 {
   HRESULT hr = E_FAIL;
-  aafProductIdentification_t ProductInfo;
 
-  aafProductVersion_t v;
-  v.major = 1;
-  v.minor = 0;
-  v.tertiary = 0;
-  v.patchLevel = 0;
-  v.type = kAAFVersionUnknown;
-  ProductInfo.companyName = L"AAF Developers Desk";
-  ProductInfo.productName = L"AAFTypeDef Test";
-  ProductInfo.productVersion = &v;
-  ProductInfo.productVersionString = NULL;
-  ProductInfo.productID = NIL_UID;
-  ProductInfo.platform = NULL;
+  GenerateTestFileName( productID.productName, fileKind, fileNameBufLen, testFileName );
 
   IAAFFileSP pFile;
   if(mode == kAAFUnitTestReadWrite)
   {
  	 RemoveTestFile (testFileName);
-  	hr = AAFFileOpenNewModify(testFileName, 0, &ProductInfo, &pFile);
+  	hr = CreateTestFile( testFileName, fileKind, rawStorageType, productID, &pFile );
   }
   else
   {
@@ -154,15 +147,23 @@ static HRESULT TestTypeDef (testMode_t mode)
 }
 
 
-extern "C" HRESULT CAAFTypeDef_test(testMode_t mode);
-extern "C" HRESULT CAAFTypeDef_test(testMode_t mode)
+extern "C" HRESULT CAAFTypeDef_test(
+    testMode_t mode,
+    aafUID_t fileKind,
+    testRawStorageType_t rawStorageType,
+    aafProductIdentification_t productID);
+extern "C" HRESULT CAAFTypeDef_test(
+    testMode_t mode,
+    aafUID_t fileKind,
+    testRawStorageType_t rawStorageType,
+    aafProductIdentification_t productID)
 {
   HRESULT hr = AAFRESULT_NOT_IMPLEMENTED;
 
   try
     {
       // Attempt to create an AAFTypeDef.
-      hr =  TestTypeDef(mode);
+      hr =  TestTypeDef(mode, fileKind, rawStorageType, productID);
 	}
   catch (...)
     {

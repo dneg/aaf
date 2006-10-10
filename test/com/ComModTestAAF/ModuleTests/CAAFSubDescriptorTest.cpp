@@ -30,13 +30,22 @@
 
 // Test routine defined in CAAFEssenceDescriptorTest.cpp
 extern "C" HRESULT CAAFEssenceDescriptor_test(
-    testMode_t mode);
+    testMode_t mode,
+    aafUID_t fileKind,
+    testRawStorageType_t rawStorageType,
+    aafProductIdentification_t productID);
 
 // Required function prototype.
 extern "C" HRESULT CAAFSubDescriptor_test(
-    testMode_t mode);
+    testMode_t mode,
+    aafUID_t fileKind,
+    testRawStorageType_t rawStorageType,
+    aafProductIdentification_t productID);
 extern "C" HRESULT CAAFSubDescriptor_test(
-    testMode_t mode)
+    testMode_t mode,
+    aafUID_t fileKind,
+    testRawStorageType_t rawStorageType,
+    aafProductIdentification_t productID)
 {
   // SubDescriptor is an abstract base class.  By itself, there
   // is nothing to test other than that a concrete instance of a
@@ -47,5 +56,8 @@ extern "C" HRESULT CAAFSubDescriptor_test(
   // "ComModAAF AAFSubDescriptor" executes a meaningful test in
   // the event it is run on its own.
 
-  return CAAFEssenceDescriptor_test( mode);
+  return CAAFEssenceDescriptor_test( mode,
+	                                 fileKind,
+									 rawStorageType,
+									 productID );
 }

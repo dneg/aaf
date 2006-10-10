@@ -67,19 +67,32 @@ using namespace std;
 extern "C"
 {
   // Main test function.
-  HRESULT CAAFTypeDefIndirect_test(testMode_t mode);
+  HRESULT CAAFTypeDefIndirect_test(
+    testMode_t mode,
+    aafUID_t fileKind,
+    testRawStorageType_t rawStorageType,
+    aafProductIdentification_t productID);
 }
   // Create the test file.
-  void CAAFTypeDefIndirect_create (aafCharacter_constptr pFileName); // throw HRESULT
+  void CAAFTypeDefIndirect_create (
+     aafCharacter_constptr pFileName,
+     aafUID_constref fileKind,
+     testRawStorageType_t rawStorageType,
+     aafProductIdentification_constref productID); // throw HRESULT
 
   // Open the test file read only and validate the data.
   void CAAFTypeDefIndirect_read (aafCharacter_constptr pFileName); // throw HRESULT
 
-extern "C" HRESULT CAAFTypeDefIndirect_test(testMode_t mode);
-extern "C" HRESULT CAAFTypeDefIndirect_test(testMode_t mode)
+extern "C" HRESULT CAAFTypeDefIndirect_test(
+    testMode_t mode,
+    aafUID_t fileKind,
+    testRawStorageType_t rawStorageType,
+    aafProductIdentification_t productID)
 {
   HRESULT result = AAFRESULT_SUCCESS;
-  aafCharacter_constptr wFileName = L"AAFTypeDefIndirectTest.aaf";
+  const size_t fileNameBufLen = 128;
+  aafCharacter wFileName[ fileNameBufLen ] = L"";
+  GenerateTestFileName( productID.productName, fileKind, fileNameBufLen, wFileName );
 
   try
   {
@@ -87,7 +100,7 @@ extern "C" HRESULT CAAFTypeDefIndirect_test(testMode_t mode)
     // back and validate it.
 
 	if(mode == kAAFUnitTestReadWrite)
-   		 CAAFTypeDefIndirect_create (wFileName);
+   		 CAAFTypeDefIndirect_create (wFileName, fileKind, rawStorageType, productID);
     CAAFTypeDefIndirect_read (wFileName);
   }
   catch (HRESULT &rhr)
@@ -565,9 +578,12 @@ static void ValidateTestPropertyValues(IAAFDictionary *pDictionary,
 }
 
 // Create the test file.
-void CAAFTypeDefIndirect_create (aafCharacter_constptr pFileName)
+void CAAFTypeDefIndirect_create (
+    aafCharacter_constptr pFileName,
+    aafUID_constref fileKind,
+    testRawStorageType_t rawStorageType,
+    aafProductIdentification_constref productID)
 {
-  aafProductIdentification_t	ProductInfo;
   IAAFFileSP pFile;
   IAAFHeaderSP pHeader;
   IAAFDictionarySP pDictionary;
@@ -585,21 +601,7 @@ void CAAFTypeDefIndirect_create (aafCharacter_constptr pFileName)
   RemoveTestFile (pFileName);
 
   // Create the file.
-  aafProductVersion_t v;
-  v.major = 1;
-  v.minor = 0;
-  v.tertiary = 0;
-  v.patchLevel = 0;
-  v.type = kAAFVersionUnknown;
-
-  ProductInfo.companyName = L"AAF Developers Desk";
-  ProductInfo.productName = L"AAFTypeDefIndirect Test";
-  ProductInfo.productVersion = &v;
-  ProductInfo.productVersionString = NULL;
-  ProductInfo.productID = UnitTestProductID;
-  ProductInfo.platform = NULL;
-
-  checkResult (AAFFileOpenNewModify (pFileName, 0, &ProductInfo, &pFile));
+  checkResult (CreateTestFile( pFileName, fileKind, rawStorageType, productID, &pFile ));
   checkResult (pFile->GetHeader (&pHeader));
   checkResult (pHeader->GetDictionary (&pDictionary));
   

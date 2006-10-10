@@ -38,7 +38,11 @@ using namespace std;
 #include "CAAFBuiltinDefs.h"
 
 // Foward declaration.
-extern "C" HRESULT CAAFTypeDefInt_test(testMode_t mode);
+extern "C" HRESULT CAAFTypeDefInt_test(
+    testMode_t mode,
+    aafUID_t fileKind,
+    testRawStorageType_t rawStorageType,
+    aafProductIdentification_t productID);
 
 // convenient error handlers.
 inline void checkResult(HRESULT r)
@@ -51,8 +55,6 @@ inline void checkExpression(bool expression, HRESULT r)
   if (!expression)
     throw r;
 }
-
-static wchar_t testFileName[] = L"AAFTypeDefIntTest.aaf";
 
 
 static HRESULT GetOneTypeDef (IAAFDictionary *  pDict,
@@ -353,11 +355,14 @@ static HRESULT TestOneValue (aafUInt32 setDataSize,
 
 
 
-static HRESULT TestTypeDefInt (testMode_t mode)
+static HRESULT TestTypeDefInt (
+    testMode_t mode,
+    aafUID_constref fileKind,
+    testRawStorageType_t rawStorageType,
+    aafProductIdentification_constref productID)
 {
   HRESULT hr = E_FAIL;
   HRESULT caughtHr = AAFRESULT_SUCCESS;
-  aafProductIdentification_t ProductInfo;
 
   IAAFFile* pFile = NULL;
   IAAFHeader * pHeader = NULL;
@@ -371,26 +376,16 @@ static HRESULT TestTypeDefInt (testMode_t mode)
   IAAFTypeDefInt * ptdu32 = NULL;
   IAAFTypeDefInt * ptdu64 = NULL;
 
+  const size_t fileNameBufLen = 128;
+  aafWChar testFileName[ fileNameBufLen ] = L"";
+  GenerateTestFileName( productID.productName, fileKind, fileNameBufLen, testFileName );
+
   try
 	{
-	  aafProductVersion_t v;
-	  v.major = 1;
-	  v.minor = 0;
-	  v.tertiary = 0;
-	  v.patchLevel = 0;
-	  v.type = kAAFVersionUnknown;
-
-	  ProductInfo.companyName = L"AAF Developers Desk";
-	  ProductInfo.productName = L"AAFTypeDefInt Test";
-	  ProductInfo.productVersion = &v;
-	  ProductInfo.productVersionString = NULL;
-	  ProductInfo.productID = UnitTestProductID;
-	  ProductInfo.platform = NULL;
-
 	  if(mode == kAAFUnitTestReadWrite)
 	  {
 		  RemoveTestFile (testFileName);
-	  	 checkResult (AAFFileOpenNewModify(testFileName, 0, &ProductInfo, &pFile));
+	  	 checkResult (CreateTestFile( testFileName, fileKind, rawStorageType, productID, &pFile ));
 	  }
 	  else
 	  {
@@ -564,14 +559,17 @@ static HRESULT TestTypeDefInt (testMode_t mode)
 }
 
 
-HRESULT CAAFTypeDefInt_test(testMode_t mode);
-HRESULT CAAFTypeDefInt_test(testMode_t mode)
+HRESULT CAAFTypeDefInt_test(
+    testMode_t mode,
+    aafUID_t fileKind,
+    testRawStorageType_t rawStorageType,
+    aafProductIdentification_t productID)
 {
   HRESULT hr = AAFRESULT_NOT_IMPLEMENTED;
 
   try
     {
-      hr =  TestTypeDefInt(mode);
+      hr =  TestTypeDefInt(mode, fileKind, rawStorageType, productID);
 	}
   catch (...)
     {

@@ -66,7 +66,11 @@ inline void checkExpression(bool expression, HRESULT r)
 
 
 
-static HRESULT CreateAAFFile(aafWChar * pFileName)
+static HRESULT CreateAAFFile(
+    aafWChar * pFileName,
+    aafUID_constref fileKind,
+    testRawStorageType_t rawStorageType,
+    aafProductIdentification_constref productID)
 {
   // IAAFSession*				pSession = NULL;
 	IAAFFile*					pFile = NULL;
@@ -76,22 +80,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFMob*					pReferencedMob = NULL;
 	IAAFDescriptiveObject*		 pDescObject = NULL;
 	bool bFileOpen = false;
-	aafProductIdentification_t	ProductInfo;
 	HRESULT						hr = AAFRESULT_SUCCESS;
 	
-	aafProductVersion_t v;
-	v.major = 1;
-	v.minor = 0;
-	v.tertiary = 0;
-	v.patchLevel = 0;
-	v.type = kAAFVersionUnknown;
-	ProductInfo.companyName = L"AAF Developers Desk";
-	ProductInfo.productName = L"AAFDescriptiveObject Test";
-	ProductInfo.productVersion = &v;
-	ProductInfo.productVersionString = NULL;
-	ProductInfo.productID = UnitTestProductID;
-	ProductInfo.platform = NULL;
-
 	try
 	{
 		
@@ -99,7 +89,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	    RemoveTestFile(pFileName);
 
 		// Create the file
-		checkResult(AAFFileOpenNewModify(pFileName, 0, &ProductInfo, &pFile));
+		checkResult(CreateTestFile( pFileName, fileKind, rawStorageType, productID, &pFile ));
 		bFileOpen = true;
  
 		// We can't really do anthing in AAF without the header.
@@ -270,16 +260,26 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 
 // Required function prototype.
 
-extern "C" HRESULT CAAFDescriptiveObject_test(testMode_t mode);
-extern "C" HRESULT CAAFDescriptiveObject_test(testMode_t mode)
+extern "C" HRESULT CAAFDescriptiveObject_test(
+    testMode_t mode,
+    aafUID_t fileKind,
+    testRawStorageType_t rawStorageType,
+    aafProductIdentification_t productID);
+extern "C" HRESULT CAAFDescriptiveObject_test(
+    testMode_t mode,
+    aafUID_t fileKind,
+    testRawStorageType_t rawStorageType,
+    aafProductIdentification_t productID)
 {	
 	HRESULT hr = AAFRESULT_NOT_IMPLEMENTED;
- 	aafWChar * pFileName = L"AAFDescriptiveObjectTest.aaf";
+	const size_t fileNameBufLen = 128;
+	aafWChar pFileName[ fileNameBufLen ] = L"";
+	GenerateTestFileName( productID.productName, fileKind, fileNameBufLen, pFileName );
 	
 	try
 	{
 		if(mode == kAAFUnitTestReadWrite)
-			hr = CreateAAFFile(pFileName);
+			hr = CreateAAFFile(pFileName, fileKind, rawStorageType, productID);
 		else
 			hr = AAFRESULT_SUCCESS;
 		if(hr == AAFRESULT_SUCCESS)

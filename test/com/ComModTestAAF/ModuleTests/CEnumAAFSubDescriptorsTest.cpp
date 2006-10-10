@@ -78,7 +78,11 @@ static void RegisterSubDescriptorTest( IAAFDictionary* pDict )
   checkResult( pDict->RegisterClassDef( pClassDef ) );
 }
 
-static HRESULT CreateAAFFile(aafWChar * pFileName)
+static HRESULT CreateAAFFile(
+    aafWChar * pFileName,
+    aafUID_constref fileKind,
+    testRawStorageType_t rawStorageType,
+    aafProductIdentification_constref productID)
 {
 	// IAAFSession *				pSession = NULL;
 	IAAFFile *					pFile = NULL;
@@ -89,24 +93,10 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFMob			*pMob = NULL;
 	IAAFEssenceDescriptor *edesc = NULL;
 	IAAFEssenceDescriptor2 *edesc2 = NULL;
-	aafProductIdentification_t	ProductInfo;
 	aafUInt32					numSubDescriptors;
 	HRESULT						hr = AAFRESULT_SUCCESS;
 	bool bFileOpen = false;
 //	aafUID_t					ddef = kAAFDataDef_Sound;
-
-	aafProductVersion_t v;
-	v.major = 1;
-	v.minor = 0;
-	v.tertiary = 0;
-	v.patchLevel = 0;
-	v.type = kAAFVersionUnknown;
-	ProductInfo.companyName = L"AAF Developers Desk";
-	ProductInfo.productName = L"EnumAAFSubDescriptors Test";
-	ProductInfo.productVersion = &v;
-	ProductInfo.productVersionString = NULL;
-	ProductInfo.productID = UnitTestProductID;
-	ProductInfo.platform = NULL;
 
 	try 
 	{
@@ -114,7 +104,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
     RemoveTestFile(pFileName);
 
     // Create the file.
-		checkResult(AAFFileOpenNewModify(pFileName, 0, &ProductInfo, &pFile));
+		checkResult(CreateTestFile( pFileName, fileKind, rawStorageType, productID, &pFile ));
 		bFileOpen = true;
  
     // We can't really do anthing in AAF without the header.
@@ -387,16 +377,26 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	return hr;
 }
  
-extern "C" HRESULT CEnumAAFSubDescriptors_test(testMode_t mode);
-extern "C" HRESULT CEnumAAFSubDescriptors_test(testMode_t mode)
+extern "C" HRESULT CEnumAAFSubDescriptors_test(
+    testMode_t mode,
+    aafUID_t fileKind,
+    testRawStorageType_t rawStorageType,
+    aafProductIdentification_t productID);
+extern "C" HRESULT CEnumAAFSubDescriptors_test(
+    testMode_t mode,
+    aafUID_t fileKind,
+    testRawStorageType_t rawStorageType,
+    aafProductIdentification_t productID)
 {
   HRESULT hr = AAFRESULT_SUCCESS;
-  aafWChar * pFileName = L"EnumAAFSubDescriptors.aaf";
+	const size_t fileNameBufLen = 128;
+	aafWChar pFileName[ fileNameBufLen ] = L"";
+	GenerateTestFileName( productID.productName, fileKind, fileNameBufLen, pFileName );
 
   try
 	{
 		if(mode == kAAFUnitTestReadWrite)
-			hr = CreateAAFFile(pFileName);
+			hr = CreateAAFFile(pFileName, fileKind, rawStorageType, productID);
 		else
 			hr = AAFRESULT_SUCCESS;
 		if(hr == AAFRESULT_SUCCESS)

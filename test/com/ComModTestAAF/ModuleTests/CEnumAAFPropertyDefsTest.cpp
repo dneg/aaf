@@ -79,14 +79,22 @@ private:
 	IAAFClassDef *_pKnownClassDef;
 };
 
-extern "C" HRESULT CEnumAAFPropertyDefs_test(testMode_t mode);
-extern "C" HRESULT CEnumAAFPropertyDefs_test(testMode_t mode)
+extern "C" HRESULT CEnumAAFPropertyDefs_test(
+    testMode_t mode,
+    aafUID_t fileKind,
+    testRawStorageType_t rawStorageType,
+    aafProductIdentification_t productID);
+extern "C" HRESULT CEnumAAFPropertyDefs_test(
+    testMode_t mode,
+    aafUID_t fileKind,
+    testRawStorageType_t rawStorageType,
+    aafProductIdentification_t productID)
 {
 	try
 	{
 		CEnumAAFPropertyDefsTest Test;
   		if(mode == kAAFUnitTestReadWrite)
-			Test.Run(mode);		// !!! This test requires create & verify intermixed
+			Test.Run(mode, fileKind, rawStorageType, productID);		// !!! This test requires create & verify intermixed
 	}
 	catch(HRESULT& rResult)
 	{

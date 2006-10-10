@@ -172,7 +172,11 @@ static HRESULT OpenAAFFile(aafWChar*			pFileName,
 	return hr;
 }
 
-static HRESULT CreateAAFFile(aafWChar * pFileName)
+static HRESULT CreateAAFFile(
+    aafWChar * pFileName,
+    aafUID_constref fileKind,
+    testRawStorageType_t rawStorageType,
+    aafProductIdentification_constref productID)
 {
 	IAAFFile*		pFile = NULL;
 	IAAFHeader*		pHeader = NULL;
@@ -185,9 +189,17 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
   RemoveTestFile(pFileName);
 
 	// Create the AAF file
-	hr = OpenAAFFile(pFileName, kAAFMediaOpenAppend, &pFile, &pHeader);
+	hr = CreateTestFile( pFileName, fileKind, rawStorageType, productID, &pFile );
 	if (FAILED(hr))
 		return hr;
+
+  // Get the AAF file header.
+  hr = pFile->GetHeader(&pHeader);
+  if (FAILED(hr))
+  {
+    pFile->Release();
+    return hr;
+  }
 
   // Get the AAF Dictionary so that we can create valid AAF objects.
   hr = pHeader->GetDictionary(&pDictionary);
@@ -405,16 +417,21 @@ Cleanup:
 	return hr;
 }
 
-extern "C" HRESULT CAAFCDCIDescriptor_test(testMode_t mode);
-extern "C" HRESULT CAAFCDCIDescriptor_test(testMode_t mode)
+extern "C" HRESULT CAAFCDCIDescriptor_test(
+    testMode_t mode,
+    aafUID_t fileKind,
+    testRawStorageType_t rawStorageType,
+    aafProductIdentification_t productID)
 {
-	aafWChar*	pFileName = L"AAFCDCIDescriptorTest.aaf";
 	HRESULT		hr = AAFRESULT_NOT_IMPLEMENTED;
+	const size_t fileNameBufLen = 128;
+	aafWChar pFileName[ fileNameBufLen ] = L"";
+	GenerateTestFileName( productID.productName, fileKind, fileNameBufLen, pFileName );
 
 	try
 	{
 		if(mode == kAAFUnitTestReadWrite)
-			hr = CreateAAFFile(pFileName);
+			hr = CreateAAFFile(pFileName, fileKind, rawStorageType, productID);
 		else
 			hr = AAFRESULT_SUCCESS;
 		if (SUCCEEDED(hr))

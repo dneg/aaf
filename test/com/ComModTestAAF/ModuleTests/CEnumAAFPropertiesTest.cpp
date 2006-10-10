@@ -353,11 +353,14 @@ static void  AddOptionalProperties(IAAFDictionary* const pDict,
 
 }//AddOptionalProperties()
 
-static HRESULT CreateAAFFile(aafWChar *  pFileName )
+static HRESULT CreateAAFFile(
+    aafWChar * pFileName,
+    aafUID_constref fileKind,
+    testRawStorageType_t rawStorageType,
+    aafProductIdentification_constref productID)
 {
 	HRESULT hr = AAFRESULT_SUCCESS;
 	
-	aafProductIdentification_t ProductInfo;
 	IAAFFile* pFile = NULL;
 	IAAFHeader * pHeader = NULL;
 	IAAFDictionary * pDict = NULL;
@@ -366,23 +369,9 @@ static HRESULT CreateAAFFile(aafWChar *  pFileName )
 	
 	try
 	{
-		aafProductVersion_t v;
-		v.major = 1;
-		v.minor = 0;
-		v.tertiary = 0;
-		v.patchLevel = 0;
-		v.type = kAAFVersionUnknown;
-		
-		ProductInfo.companyName = L"AAF Developers Desk";
-		ProductInfo.productName = L"EnumAAFProperties Test";
-		ProductInfo.productVersion = &v;
-		ProductInfo.productVersionString = NULL;
-		ProductInfo.productID = UnitTestProductID;
-		ProductInfo.platform = NULL;
-		
 		//Do the usual ...
 		RemoveTestFile (pFileName);
-		checkResult (AAFFileOpenNewModify(pFileName, 0, &ProductInfo, &pFile));
+		checkResult (CreateTestFile( pFileName, fileKind, rawStorageType, productID, &pFile ));
 		assert (pFile);
 		checkResult (pFile->GetHeader (&pHeader));
 		assert (pHeader);
@@ -466,17 +455,27 @@ static HRESULT  ReadAAFFile(aafWChar *  pFileName )
 	
 }
 
-extern "C" HRESULT CEnumAAFProperties_test(testMode_t mode);
-extern "C" HRESULT CEnumAAFProperties_test(testMode_t mode)
+extern "C" HRESULT CEnumAAFProperties_test(
+    testMode_t mode,
+    aafUID_t fileKind,
+    testRawStorageType_t rawStorageType,
+    aafProductIdentification_t productID);
+extern "C" HRESULT CEnumAAFProperties_test(
+    testMode_t mode,
+    aafUID_t fileKind,
+    testRawStorageType_t rawStorageType,
+    aafProductIdentification_t productID)
 {
 	
 	HRESULT hr = AAFRESULT_SUCCESS;
-	aafWChar * pFileName = L"EnumAAFPropertiesTest.aaf";
+	const size_t fileNameBufLen = 128;
+	aafWChar pFileName[ fileNameBufLen ] = L"";
+	GenerateTestFileName( productID.productName, fileKind, fileNameBufLen, pFileName );
 	
 	try
 	{
 		if(mode == kAAFUnitTestReadWrite)
-			hr = CreateAAFFile(pFileName);
+			hr = CreateAAFFile(pFileName, fileKind, rawStorageType, productID);
 		else
 			hr = AAFRESULT_SUCCESS;
 		if(hr == AAFRESULT_SUCCESS)
