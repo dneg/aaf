@@ -81,55 +81,6 @@ const aafRational_t kTestLevel2 = { 0, 1 };
 const aafRational_t kTestTime1 = { 0, 1 };
 const aafRational_t kTestTime2 = { 1, 1 };
 
-static HRESULT OpenAAFFile(aafWChar*			pFileName,
-						   aafMediaOpenMode_t	mode,
-						   IAAFFile**			ppFile,
-						   IAAFHeader**			ppHeader)
-{
-	aafProductIdentification_t	ProductInfo;
-	HRESULT						hr = AAFRESULT_SUCCESS;
-
-	aafProductVersion_t v;
-	v.major = 1;
-	v.minor = 0;
-	v.tertiary = 0;
-	v.patchLevel = 0;
-	v.type = kAAFVersionUnknown;
-	ProductInfo.companyName = L"AAF Developers Desk";
-	ProductInfo.productName = L"AAFControlPoint Test";
-	ProductInfo.productVersion = &v;
-	ProductInfo.productVersionString = NULL;
-	ProductInfo.productID = UnitTestProductID;
-	ProductInfo.platform = NULL;
-
-	*ppFile = NULL;
-
-	if(mode == kAAFMediaOpenAppend)
-		hr = AAFFileOpenNewModify(pFileName, 0, &ProductInfo, ppFile);
-	else
-		hr = AAFFileOpenExistingRead(pFileName, 0, ppFile);
-
-	if (FAILED(hr))
-	{
-		if (*ppFile)
-		{
-			(*ppFile)->Release();
-			*ppFile = NULL;
-		}
-		return hr;
-	}
-  
-  	hr = (*ppFile)->GetHeader(ppHeader);
-	if (FAILED(hr))
-	{
-		(*ppFile)->Release();
-		*ppFile = NULL;
-		return hr;
-	}
- 	
-	return hr;
-}
-
 static HRESULT CreateAAFFile(
     aafWChar * pFileName,
     aafUID_constref fileKind,
@@ -420,9 +371,12 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 	try
 	{
 		// Open the AAF file
-		checkResult(OpenAAFFile(pFileName, kAAFMediaOpenReadOnly, &pFile, &pHeader));
+		checkResult(AAFFileOpenExistingRead(pFileName, 0, &pFile));
 		bFileOpen = true;
 		
+		// Get the AAF file header.
+		checkResult(pFile->GetHeader(&pHeader));
+
 		aafSearchCrit_t		criteria;
 		criteria.searchTag = kAAFNoSearch;
 		checkResult(pHeader->GetMobs (&criteria, &mobIter));

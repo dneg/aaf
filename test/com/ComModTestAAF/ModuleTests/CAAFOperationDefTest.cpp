@@ -78,55 +78,6 @@ static aafUID_t effectID[3] =
 	{ 0x88928EB2, 0x18FA, 0x11d3, { 0x80, 0xAB, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F } },
 	{ 0x88928EB3, 0x18FA, 0x11d3, { 0x80, 0xAB, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F } } };
 
-static HRESULT OpenAAFFile(aafWChar*			pFileName,
-						   aafMediaOpenMode_t	mode,
-						   IAAFFile**			ppFile,
-						   IAAFHeader**			ppHeader)
-{
-	aafProductIdentification_t	ProductInfo;
-	HRESULT						hr = AAFRESULT_SUCCESS;
-
-	aafProductVersion_t v;
-	v.major = 1;
-	v.minor = 0;
-	v.tertiary = 0;
-	v.patchLevel = 0;
-	v.type = kAAFVersionUnknown;
-	ProductInfo.companyName = L"AAF Developers Desk";
-	ProductInfo.productName = L"AAFOperationDef Test";
-	ProductInfo.productVersion = &v;
-	ProductInfo.productVersionString = NULL;
-	ProductInfo.productID = UnitTestProductID;
-	ProductInfo.platform = NULL;
-
-	*ppFile = NULL;
-
-	if(mode == kAAFMediaOpenAppend)
-		hr = AAFFileOpenNewModify(pFileName, 0, &ProductInfo, ppFile);
-	else
-		hr = AAFFileOpenExistingRead(pFileName, 0, ppFile);
-
-	if (FAILED(hr))
-	{
-		if (*ppFile)
-		{
-			(*ppFile)->Release();
-			*ppFile = NULL;
-		}
-		return hr;
-	}
-  
-  	hr = (*ppFile)->GetHeader(ppHeader);
-	if (FAILED(hr))
-	{
-		(*ppFile)->Release();
-		*ppFile = NULL;
-		return hr;
-	}
- 	
-	return hr;
-}
-
 static HRESULT CreateAAFFile(
     aafWChar * pFileName,
     aafUID_constref fileKind,
@@ -264,8 +215,11 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 	try
 	{
 		// Open the AAF file
-		checkResult(OpenAAFFile(pFileName, kAAFMediaOpenReadOnly, &pFile, &pHeader));
+		checkResult(AAFFileOpenExistingRead(pFileName, 0, &pFile));
 		bFileOpen = true;
+
+		// Get the AAF file header.
+		checkResult(pFile->GetHeader(&pHeader));
 
 		checkResult(pHeader->GetDictionary(&pDictionary));
 		CAAFBuiltinDefs defs (pDictionary);

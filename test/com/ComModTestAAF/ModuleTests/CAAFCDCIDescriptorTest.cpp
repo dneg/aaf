@@ -113,65 +113,6 @@ static HRESULT SetDigitalImageDescProps(IAAFCDCIDescriptor* pDesc)
 	return AAFRESULT_SUCCESS;
 }
 
-static HRESULT OpenAAFFile(aafWChar*			pFileName,
-						   aafMediaOpenMode_t	mode,
-						   IAAFFile**			ppFile,
-						   IAAFHeader**			ppHeader)
-{
-	aafProductIdentification_t	ProductInfo;
-	HRESULT						hr = AAFRESULT_SUCCESS;
-
-	aafProductVersion_t v;
-	v.major = 1;
-	v.minor = 0;
-	v.tertiary = 0;
-	v.patchLevel = 0;
-	v.type = kAAFVersionUnknown;
-	ProductInfo.companyName = L"AAF Developers Desk";
-	ProductInfo.productName = L"AAFCDCIDescriptor Test";
-	ProductInfo.productVersion = &v;
-	ProductInfo.productVersionString = NULL;
-	ProductInfo.productID = UnitTestProductID;
-	ProductInfo.platform = NULL;
-
-	*ppFile = NULL;
-
-	switch (mode)
-	{
-	case kAAFMediaOpenReadOnly:
-		hr = AAFFileOpenExistingRead(pFileName, 0, ppFile);
-		break;
-
-	case kAAFMediaOpenAppend:
-		hr = AAFFileOpenNewModify(pFileName, 0, &ProductInfo, ppFile);
-		break;
-
-	default:
-		hr = AAFRESULT_TEST_FAILED;
-		break;
-	}
-
-	if (FAILED(hr))
-	{
-		if (*ppFile)
-		{
-			(*ppFile)->Release();
-			*ppFile = NULL;
-		}
-		return hr;
-	}
-  
-  	hr = (*ppFile)->GetHeader(ppHeader);
-	if (FAILED(hr))
-	{
-		(*ppFile)->Release();
-		*ppFile = NULL;
-		return hr;
-	}
- 	
-	return hr;
-}
-
 static HRESULT CreateAAFFile(
     aafWChar * pFileName,
     aafUID_constref fileKind,
@@ -300,9 +241,17 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	HRESULT			hr = AAFRESULT_SUCCESS;
 
 	// Open the AAF file
-	hr = OpenAAFFile(pFileName, kAAFMediaOpenReadOnly, &pFile, &pHeader);
+	hr = AAFFileOpenExistingRead(pFileName, 0, &pFile);
 	if (FAILED(hr))
 		return hr;
+
+	// Get the AAF file header.
+	hr = pFile->GetHeader(&pHeader);
+	if (FAILED(hr))
+	{
+		pFile->Release();
+		return hr;
+	}
 
 	hr = pHeader->CountMobs(kAAFAllMob, &numMobs);
 	if (1 != numMobs)

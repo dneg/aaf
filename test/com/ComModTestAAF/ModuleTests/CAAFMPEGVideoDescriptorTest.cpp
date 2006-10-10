@@ -75,12 +75,6 @@ extern "C" HRESULT CAAFMPEGVideoDescriptor_test(
     testRawStorageType_t rawStorageType,
     aafProductIdentification_t productID);
 
-static HRESULT OpenAAFFile(
-    aafWChar*           pFileName,
-    aafMediaOpenMode_t  mode,
-    IAAFFile**          ppFile,
-    IAAFHeader**        ppHeader);
-
 static HRESULT CreateAAFFile(
     aafWChar * pFileName,
     aafUID_constref fileKind,
@@ -163,66 +157,6 @@ HRESULT CAAFMPEGVideoDescriptor_test(
 
 
     return hr;
-}
-
-
-static HRESULT OpenAAFFile(aafWChar*			pFileName,
-						   aafMediaOpenMode_t	mode,
-						   IAAFFile**			ppFile,
-						   IAAFHeader**			ppHeader)
-{
-	aafProductIdentification_t	ProductInfo;
-	HRESULT						hr = AAFRESULT_SUCCESS;
-
-	aafProductVersion_t v;
-	v.major = 1;
-	v.minor = 0;
-	v.tertiary = 0;
-	v.patchLevel = 0;
-	v.type = kAAFVersionUnknown;
-	ProductInfo.companyName = L"AAF Developers Desk";
-	ProductInfo.productName = L"AAFMPEGVideoDescriptor Test";
-	ProductInfo.productVersion = &v;
-	ProductInfo.productVersionString = NULL;
-	ProductInfo.productID = UnitTestProductID;
-	ProductInfo.platform = NULL;
-
-	*ppFile = NULL;
-
-	switch (mode)
-	{
-	case kAAFMediaOpenReadOnly:
-		hr = AAFFileOpenExistingRead(pFileName, 0, ppFile);
-		break;
-
-	case kAAFMediaOpenAppend:
-		hr = AAFFileOpenNewModify(pFileName, 0, &ProductInfo, ppFile);
-		break;
-
-	default:
-		hr = AAFRESULT_TEST_FAILED;
-		break;
-	}
-
-	if (FAILED(hr))
-	{
-		if (*ppFile)
-		{
-			(*ppFile)->Release();
-			*ppFile = NULL;
-		}
-		return hr;
-	}
-  
-  	hr = (*ppFile)->GetHeader(ppHeader);
-	if (FAILED(hr))
-	{
-		(*ppFile)->Release();
-		*ppFile = NULL;
-		return hr;
-	}
- 	
-	return hr;
 }
 
 
@@ -337,8 +271,10 @@ static HRESULT ReadAAFFile(
     {
 
         // Open the test file
-        //checkResult(AAFFileOpenExistingRead(pFileName, 0, &pFile));
-         checkResult(OpenAAFFile(pFileName, kAAFMediaOpenReadOnly, &pFile, &pHeader));
+		checkResult(AAFFileOpenExistingRead(pFileName, 0, &pFile));
+
+		// Get the AAF file header.
+		checkResult(pFile->GetHeader(&pHeader));
         
         // Get the source mob
         checkResult(pHeader->LookupMob(TEST_MobID, &pMob));
