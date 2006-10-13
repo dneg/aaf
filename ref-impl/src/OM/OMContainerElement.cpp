@@ -84,7 +84,7 @@ OMStrongReferenceVectorElement::operator= (
 {
   TRACE("OMStrongReferenceVectorElement::operator=");
 
-  if (*this == rhs) {
+  if (this == &rhs) {
     return *this; // early return !
   }
 
@@ -227,7 +227,7 @@ OMStrongReferenceSetElement::operator= (const OMStrongReferenceSetElement& rhs)
 {
   TRACE("OMStrongReferenceSetElement::operator=");
 
-  if (*this == rhs) {
+  if (this == &rhs) {
     return *this; // early return !
   }
 
@@ -459,7 +459,7 @@ OMWeakReferenceVectorElement::operator= (
 {
   TRACE("OMWeakReferenceVectorElement::operator=");
 
-  if (*this == rhs) {
+  if (this == &rhs) {
     return *this; // early return !
   }
 
@@ -565,7 +565,7 @@ OMWeakReferenceSetElement::operator= (const OMWeakReferenceSetElement& rhs)
 {
   TRACE("OMWeakReferenceSetElement::operator=");
 
-  if (*this == rhs) {
+  if (this == &rhs) {
     return *this; // early return !
   }
 

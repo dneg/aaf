@@ -81,7 +81,7 @@ OMVectorElement<ReferencedObject>::operator= (
 {
   TRACE("OMVectorElement<ReferencedObject>::operator=");
 
-  if (*this == rhs) {
+  if (this == &rhs) {
     return *this; // early return !
   }
 
@@ -207,7 +207,7 @@ OMSetElement<UniqueIdentification, ReferencedObject>::operator= (
 {
   TRACE("OMSetElement<UniqueIdentification, ReferencedObject>::operator=");
 
-  if (*this == rhs) {
+  if (this == &rhs) {
     return *this; // early return !
   }
 
@@ -307,7 +307,7 @@ OMContainerElement<ObjectReference>::operator= (
 {
   TRACE("OMContainerElement<ObjectReference>::operator=");
 
-  if (*this == rhs) {
+  if (this == &rhs) {
     return *this; // early return !
   }
 

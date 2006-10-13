@@ -92,7 +92,7 @@ OMObjectReference& OMObjectReference::operator= (const OMObjectReference& rhs)
 {
   TRACE("OMObjectReference::operator=");
 
-  if (*this == rhs) {
+  if (this == &rhs) {
     return *this; // early return !
   }
   _property = rhs._property;

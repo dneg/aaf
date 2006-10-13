@@ -137,7 +137,7 @@ OMWeakObjectReference<Key>::operator= (const OMWeakObjectReference& rhs)
 {
   TRACE("OMWeakObjectReference<Key>::operator=");
 
-  if (*this == rhs) {
+  if (this == &rhs) {
     return *this; // early return !
   }
   OMObjectReference::operator=(rhs);
