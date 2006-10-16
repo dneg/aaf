@@ -70,8 +70,10 @@
 			CharacterSet="2">
 			<Tool
 				Name="VCCLCompilerTool"
+				AdditionalIncludeDirectories=".;../../../Utilities/AAFAnalyzer/AnalyzerBase;../../../Utilities/AAFAnalyzer/RequirementLib;../../../Utilities/AAFAnalyzer/TestPhaseLib;../../../Utilities/AAFAnalyzer/AAFAnalyzerBase;../../../Utilities/AAFAnalyzer/BaseTestImpl;../../include;../../../examples2/axLib;&quot;$(BOOSTINC)&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
-				RuntimeLibrary="4"
+				RuntimeLibrary="2"
+				RuntimeTypeInfo="TRUE"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="TRUE"
@@ -80,8 +82,10 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="../AnalyzerBase/Release/AnalyzerBase.lib ../RequirementLib/Release/RequirementLib.lib ../TestPhaseLib/Release/TestPhaseLib.lib ../AAFAnalyzerBase/Release/AAFAnalyzerBase.lib ../BaseTestImpl/Release/BaseTestImpl.lib ../../../examples2/axLib/Release/axLib.lib ../../lib/AAFD.lib ../../lib/AAFIIDD.lib"
 				OutputFile="$(OutDir)/RegressionTestStructure.exe"
 				LinkIncremental="1"
+				IgnoreDefaultLibraryNames="MSVCRTd"
 				GenerateDebugInformation="TRUE"
 				SubSystem="1"
 				OptimizeReferences="2"

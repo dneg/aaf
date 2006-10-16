@@ -62,7 +62,7 @@
 			CharacterSet="2">
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories=".,  ../../../Utilities/AAFAnalyzer/AAFAnalyzerBase,  ../../../Utilities/AAFAnalyzer/TestPhaseLib, ../../../Utilities/AAFAnalyzer/EditProtocolTestImpl, ../../include, ../../../examples2/axLib, $(BOOSTINC),"
+				AdditionalIncludeDirectories=".;../../../Utilities/AAFAnalyzer/AnalyzerBase;../../../Utilities/AAFAnalyzer/RequirementLib;../../../Utilities/AAFAnalyzer/TestPhaseLib;../../../Utilities/AAFAnalyzer/AAFAnalyzerBase;../../../Utilities/AAFAnalyzer/EPAnalyzerBase;../../../Utilities/AAFAnalyzer/EditProtocolTestImpl;../../include;../../../examples2/axLib;&quot;$(BOOSTINC)&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB"
 				RuntimeLibrary="2"
 				RuntimeTypeInfo="TRUE"

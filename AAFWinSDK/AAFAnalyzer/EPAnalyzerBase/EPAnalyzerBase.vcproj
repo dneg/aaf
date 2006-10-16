@@ -61,8 +61,10 @@
 			CharacterSet="2">
 			<Tool
 				Name="VCCLCompilerTool"
+				AdditionalIncludeDirectories=".;../../../Utilities/AAFAnalyzer/AnalyzerBase;../../../Utilities/AAFAnalyzer/RequirementLib;../../../Utilities/AAFAnalyzer/TestPhaseLib;../../../Utilities/AAFAnalyzer/AAFAnalyzerBase;../../../Utilities/AAFAnalyzer/EPAnalyzerBase;../../include;../../../examples2/axLib;&quot;$(BOOSTINC)&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB"
-				RuntimeLibrary="4"
+				RuntimeLibrary="2"
+				RuntimeTypeInfo="TRUE"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="TRUE"

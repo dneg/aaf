@@ -72,8 +72,10 @@
 			CharacterSet="2">
 			<Tool
 				Name="VCCLCompilerTool"
+				AdditionalIncludeDirectories=".;../../../Utilities/AAFAnalyzer/RegressionTest/TestFiles;../../include;../../../examples2/axLib;&quot;$(BOOSTINC)&quot;;&quot;$(EXPAT_INSTALL_DIR)/Source/lib&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
-				RuntimeLibrary="4"
+				RuntimeLibrary="2"
+				RuntimeTypeInfo="TRUE"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="TRUE"
@@ -82,8 +84,10 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="../../../examples2/axLib/Release/axLib.lib ../../lib/AAFD.lib ../../lib/AAFIIDD.lib $(EXPAT_INSTALL_DIR)/StaticLibs/libexpatMT.lib"
 				OutputFile="$(OutDir)/RegressionTestFiles.exe"
 				LinkIncremental="1"
+				IgnoreDefaultLibraryNames="MSVCRTd;LIBCMT"
 				GenerateDebugInformation="TRUE"
 				SubSystem="1"
 				OptimizeReferences="2"
