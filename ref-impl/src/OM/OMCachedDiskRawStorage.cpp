@@ -287,59 +287,39 @@ void OMCachedDiskRawStorage::synchronize(void)
   }
 }
 
-  // @mfunc Read a page or partial page without using the cache.
+  // @mfunc Read bytes without using the cache.
   //   @parm TBS
   //   @parm TBS
   //   @parm TBS
-void OMCachedDiskRawStorage::readPage(OMUInt64 position,
-                                      OMUInt32 byteCount,
-                                      OMByte* destination)
+void OMCachedDiskRawStorage::rawReadAt(OMUInt64 position,
+                                       OMUInt32 byteCount,
+                                       OMByte* destination)
 {
-  TRACE("OMCachedDiskRawStorage::readPage");
+  TRACE("OMCachedDiskRawStorage::rawReadAt");
   PRECONDITION("Valid destination", destination != 0);
 
-  OMUInt64 streamSize = size();
-  if (position < streamSize) {
-    OMUInt32 remaining = static_cast<OMUInt32>(streamSize - position);
-    OMUInt32 readSize;
-    if (remaining < byteCount) {
-      readSize = remaining;
-    } else {
-      readSize = byteCount;
-    }
-    ASSERT("Valid read size", readSize != 0);
-    OMUInt32 br;
-    _file->setPosition(position);
-    _file->read(destination, readSize, br);
-    ASSERT("All bytes read", br == readSize);
-  }
+  _file->setPosition(position);
+  OMUInt32 br;
+  _file->read(destination, byteCount, br);
+  ASSERT("All bytes read", br == byteCount);
 }
 
-  // @mfunc Write a page or partial page without using the cache.
+  // @mfunc Write bytes without using the cache.
   //   @parm TBS
   //   @parm TBS
   //   @parm TBS
-void OMCachedDiskRawStorage::writePage(OMUInt64 position,
-                                       OMUInt32 byteCount,
-                                       const OMByte* source)
+void OMCachedDiskRawStorage::rawWriteAt(OMUInt64 position,
+                                        OMUInt32 byteCount,
+                                        const OMByte* source)
 {
-  TRACE("OMCachedDiskRawStorage::writePage");
+  TRACE("OMCachedDiskRawStorage::rawWriteAt");
   PRECONDITION("Valid source", source != 0);
   PRECONDITION("Stream is writable", isWritable());
 
-  OMUInt64 streamSize = extent();
-  OMUInt32 remaining = static_cast<OMUInt32>(streamSize - position);
-  OMUInt32 writeSize;
-  if (remaining < byteCount) {
-    writeSize = remaining;
-  } else {
-    writeSize = byteCount;
-  }
-  ASSERT("Valid write size", writeSize != 0);
-  OMUInt32 bw;
   _file->setPosition(position);
-  _file->write(source, writeSize, bw);
-  ASSERT("All bytes written", bw == writeSize);
+  OMUInt32 bw;
+  _file->write(source, byteCount, bw);
+  ASSERT("All bytes written", bw == byteCount);
 }
 
   // @mfunc Constructor.
@@ -347,7 +327,7 @@ OMCachedDiskRawStorage::OMCachedDiskRawStorage(OMStream* file,
                                                OMFile::OMAccessMode accessMode,
                                                OMUInt32 pageSize,
                                                OMUInt32 pageCount)
-: OMCachedRawStorage(pageSize, pageCount, file->size()),
+: OMBaseCachedDiskRawStorage(pageSize, pageCount, file->size()),
   _file(file),
   _mode(accessMode)
 {
