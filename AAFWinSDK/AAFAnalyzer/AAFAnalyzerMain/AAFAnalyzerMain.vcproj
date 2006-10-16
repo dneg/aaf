@@ -71,7 +71,7 @@
 			CharacterSet="2">
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories=".;../../../Utilities/AAFAnalyzer/AAFAnalyzerBase;../../../Utilities/AAFAnalyzer/TestPhaseLib;../../../Utilities/AAFAnalyzer/BaseTestImpl;../../../Utilities/AAFAnalyzer/EditProtocolTestImpl;../../include;../../../examples2/axLib;&quot;$(BOOSTINC)&quot;"
+				AdditionalIncludeDirectories=".;../../../Utilities/AAFAnalyzer/AnalyzerBase;../../../Utilities/AAFAnalyzer/RequirementLib;../../../Utilities/AAFAnalyzer/TestPhaseLib;../../../Utilities/AAFAnalyzer/AAFAnalyzerBase;../../../Utilities/AAFAnalyzer/BaseTestImpl;../../../Utilities/AAFAnalyzer/EPAnalyzerBase;../../../Utilities/AAFAnalyzer/EditProtocolTestImpl;../../include;../../../examples2/axLib;&quot;$(BOOSTINC)&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				RuntimeLibrary="2"
 				RuntimeTypeInfo="TRUE"
@@ -83,11 +83,11 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="../AAFAnalyzerBase/Release/AAFAnalyzerBase.lib ../TestPhaseLib/Release/TestPhaseLib.lib ../BaseTestImpl/Release/BaseTestImpl.lib ../EditProtocolTestImpl/Release/EditProtocolTestImpl.lib ../../../examples2/axLib/Release/axLib.lib ../../lib/AAF.lib ../../lib/AAFIID.lib"
+				AdditionalDependencies="../AnalyzerBase/Release/AnalyzerBase.lib ../RequirementLib/Release/RequirementLib.lib ../TestPhaseLib/Release/TestPhaseLib.lib ../AAFAnalyzerBase/Release/AAFAnalyzerBase.lib ../BaseTestImpl/Release/BaseTestImpl.lib ../EPAnalyzerBase/Release/EPAnalyzerBase.lib ../EditProtocolTestImpl/Release/EditProtocolTestImpl.lib ../../../examples2/axLib/Release/axLib.lib ../../lib/AAFD.lib ../../lib/AAFIIDD.lib $(EXPAT_INSTALL_DIR)/StaticLibs/libexpatMT.lib"
 				OutputFile="$(OutDir)/AAFAnalyzerMain.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
-				IgnoreDefaultLibraryNames="MSVCRTD"
+				IgnoreDefaultLibraryNames="MSVCRTd;LIBCMT"
 				GenerateDebugInformation="TRUE"
 				SubSystem="1"
 				OptimizeReferences="2"
