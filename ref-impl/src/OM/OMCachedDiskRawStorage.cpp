@@ -225,7 +225,6 @@ OMCachedDiskRawStorage::~OMCachedDiskRawStorage(void)
 {
   TRACE("OMCachedDiskRawStorage::~OMCachedDiskRawStorage");
 
-  flush();
   synchronize();
 }
 
@@ -399,6 +398,10 @@ void OMCachedDiskRawStorage::setPosition(OMUInt64 newPosition) const
 void OMCachedDiskRawStorage::synchronize(void)
 {
   TRACE("OMCachedDiskRawStorage::synchronize");
+
+  if (isWritable()) {
+    flush();
+  }
 }
 
   // @mfunc Read a page or partial page without using the cache.
