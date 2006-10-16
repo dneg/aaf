@@ -27,12 +27,11 @@
 #ifndef OMCACHEDDISKRAWSTORAGE_H
 #define OMCACHEDDISKRAWSTORAGE_H
 
-#include "OMDiskRawStorage.h"
 #include "OMFile.h"
-#include "OMPageCache.h"
 #include "OMCachedRawStorage.h"
 
 class OMCachePageAllocator;
+class OMStream;
 
   // @class Base class supporting access to the raw bytes of disk
   //        files supported by the Object Manager. Disk pages
@@ -93,11 +92,9 @@ private:
   //        This is an Object Manager built-in implementation of the
   //        <c OMRawStorage> interface.
   //
-  //   @base public | <c OMDiskRawStorage>
-  //   @base public | <c OMPageCache>
+  //   @base public | <c OMCachedRawStorage>
   //   @cauthor Tim Bingham | tjb | Avid Technology, Inc.
-class OMCachedDiskRawStorage : public OMDiskRawStorage,
-                               public OMPageCache {
+class OMCachedDiskRawStorage : public OMCachedRawStorage {
 public:
 
   enum {defaultPageSize  = 4096};
@@ -142,96 +139,18 @@ public:
     // @cmember Destructor.
   virtual ~OMCachedDiskRawStorage(void);
 
-    // @cmember Attempt to read the number of bytes given by <p byteCount>
-    //          from the current position in this <c OMCachedDiskRawStorage>
-    //          into the buffer at address <p bytes>.
-    //          The actual number of bytes read is returned in <p bytesRead>.
-    //          Reading from positions greater than
-    //          <mf OMCachedDiskRawStorage::size> causes <p bytesRead>
-    //          to be less than <p byteCount>. Reading bytes that have never
-    //          been written returns undefined data in <p bytes>.
-  virtual void read(OMByte* bytes,
-                    OMUInt32 byteCount,
-                    OMUInt32& bytesRead) const;
+    // @cmember Is it possible to read from this <c OMCachedDiskRawStorage> ?
+  virtual bool isReadable(void) const;
 
-    // @cmember Attempt to read the number of bytes given by <p byteCount>
-    //          from offset <p position> in this <c OMCachedDiskRawStorage>
-    //          into the buffer at address <p bytes>.
-    //          The actual number of bytes read is returned in <p bytesRead>.
-    //          Reading from positions greater than
-    //          <mf OMCachedDiskRawStorage::size> causes <p bytesRead>
-    //          to be less than <p byteCount>. Reading bytes that have never
-    //          been written returns undefined data in <p bytes>.
-    //          @precondition <f isReadable()> && <f isPositionable()>
-  virtual void readAt(OMUInt64 position,
-                      OMByte* bytes,
-                      OMUInt32 byteCount,
-                      OMUInt32& bytesRead) const;
+    // @cmember Is it possible to write to this <c OMCachedDiskRawStorage> ?
+  virtual bool isWritable(void) const;
 
-    // @cmember Attempt to write the number of bytes given by <p byteCount>
-    //          to the current position in this <c OMCachedDiskRawStorage>
-    //          from the buffer at address <p bytes>.
-    //          The actual number of bytes written is returned in
-    //          <p bytesWritten>.
-    //          Writing to positions greater than
-    //          <mf OMCachedDiskRawStorage::size> causes this
-    //          <c OMCachedDiskRawStorage>
-    //          to be extended, however such extension can fail, causing
-    //          <p bytesWritten> to be less than <p byteCount>.
-  virtual void write(const OMByte* bytes,
-                     OMUInt32 byteCount,
-                     OMUInt32& bytesWritten);
+    // @cmember May this <c OMCachedDiskRawStorage> be changed in size ?
+  virtual bool isExtendible(void) const;
 
-    // @cmember Attempt to write the number of bytes given by <p byteCount>
-    //          to offset <p position> in this <c OMCachedDiskRawStorage>
-    //          from the buffer at address <p bytes>.
-    //          The actual number of bytes written is returned in
-    //          <p bytesWritten>.
-    //          Writing to positions greater than
-    //          <mf OMCachedDiskRawStorage::size> causes this
-    //          <c OMCachedDiskRawStorage>
-    //          to be extended, however such extension can fail, causing
-    //          <p bytesWritten> to be less than <p byteCount>.
-    //          @precondition <f isWritable()> && <f isPositionable()>
-    //   @devnote How is failure to extend indicated ?
-  virtual void writeAt(OMUInt64 position,
-                       const OMByte* bytes,
-                       OMUInt32 byteCount,
-                       OMUInt32& bytesWritten);
-
-    // @cmember The current extent of this <c OMCachedDiskRawStorage> in bytes.
-    //          The <f extent()> is the allocated size, while the <f size()>
-    //          is the valid size.
-    //          precondition - isPositionable()
-  virtual OMUInt64 extent(void) const;
-
-    // @cmember Set the size of this <c OMCachedDiskRawStorage> to <p newSize>
-    //          bytes. If <p newSize> is greater than
-    //          <mf OMCachedDiskRawStorage::size> then this
-    //          <c OMCachedDiskRawStorage> is extended. If <p newSize> is less
-    //          than <mf OMCachedDiskRawStorage::size> then this
-    //          <c OMCachedDiskRawStorage> is truncated. Truncation may also
-    //          result in the current position for <f read()> and <f write()>
-    //          being set to <mf OMCachedDiskRawStorage::size>.
-    //          precondition - isExtendible()
-  virtual void extend(OMUInt64 newSize);
-
-    // @cmember The current size of this <c OMCachedDiskRawStorage> in bytes.
-    //          The <f size()> is the valid size, while the <f extent()>
-    //          is the allocated size.
-    //          precondition - isPositionable()
-  virtual OMUInt64 size(void) const;
-
-    // @cmember The current position for <f read()> and <f write()>, as an
-    //          offset in bytes from the beginning of this
-    //          <c OMCachedDiskRawStorage>.
-  virtual OMUInt64 position(void) const;
-
-    // @cmember Set the current position for <f read()> and <f write()>, as an
-    //          offset in bytes from the beginning of this
-    //          <c OMCachedDiskRawStorage>.
-    //          precondition - isPositionable()
-  virtual void setPosition(OMUInt64 newPosition) const;
+    // @cmember May the current position, for <f read()> and <f write()>,
+    //          of this <c OMCachedDiskRawStorage> be changed ?
+  virtual bool isPositionable(void) const;
 
     // @cmember Synchronize this <c OMCachedDiskRawStorage> with its external
     //          representation.
@@ -256,9 +175,8 @@ private:
                          OMUInt32 pageSize,
                          OMUInt32 pageCount);
 
-  OMUInt64 _size;       // Size as known to clients
-  OMUInt64 _actualSize; // Cached actual size of disk file
-  OMUInt64 _position;   // Position as known to clients
+  OMStream* _file;            // The underlying disk file
+  OMFile::OMAccessMode _mode; // Disk file is open in this mode
 
 };
 

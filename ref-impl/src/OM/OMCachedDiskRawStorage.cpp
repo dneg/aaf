@@ -226,171 +226,53 @@ OMCachedDiskRawStorage::~OMCachedDiskRawStorage(void)
   TRACE("OMCachedDiskRawStorage::~OMCachedDiskRawStorage");
 
   synchronize();
+  delete _file;
+  _file = 0;
 }
 
-  // @mfunc Attempt to read the number of bytes given by <p byteCount>
-  //        from the current position in this <c OMCachedDiskRawStorage>
-  //        into the buffer at address <p bytes>.
-  //        The actual number of bytes read is returned in <p bytesRead>.
-  //        Reading from positions greater than
-  //        <mf OMCachedDiskRawStorage::size> causes <p bytesRead> to be less
-  //        than <p byteCount>. Reading bytes that have never been written
-  //        returns undefined data in <p bytes>.
-  //   @parm The buffer into which the bytes are to be read.
-  //   @parm The number of bytes to read.
-  //   @parm The number of bytes actually read.
-  //   @this const
-void OMCachedDiskRawStorage::read(OMByte* bytes,
-                                  OMUInt32 byteCount,
-                                  OMUInt32& bytesRead) const
+  // @mfunc Is it possible to read from this <c OMCachedDiskRawStorage> ?
+bool OMCachedDiskRawStorage::isReadable(void) const
 {
-  TRACE("OMCachedDiskRawStorage::read");
+  TRACE("OMCachedDiskRawStorage::isReadable");
+  bool result;
 
-  readAt(_position, bytes, byteCount, bytesRead);
+  if ((_mode == OMFile::modifyMode) || (_mode == OMFile::readOnlyMode)) {
+    result = true;
+  } else {
+    result = false;
+}
+  return result;
 }
 
-  // @mfunc Attempt to read the number of bytes given by <p byteCount>
-  //        from offset <p position> in this <c OMCachedDiskRawStorage>
-  //        into the buffer at address <p bytes>.
-  //        The actual number of bytes read is returned in <p bytesRead>.
-  //        Reading from positions greater than
-  //        <mf OMCachedDiskRawStorage::size> causes <p bytesRead> to be less
-  //        than <p byteCount>. Reading bytes that have never been written
-  //        returns undefined data in <p bytes>.
-  //   @parm The position from which the bytes are to be read.
-  //   @parm The buffer into which the bytes are to be read.
-  //   @parm The number of bytes to read.
-  //   @parm The number of bytes actually read.
-  //   @this const
-void OMCachedDiskRawStorage::readAt(OMUInt64 position,
-                                    OMByte* bytes,
-                                    OMUInt32 byteCount,
-                                    OMUInt32& bytesRead) const
+  // @mfunc Is it possible to write to this <c OMCachedDiskRawStorage> ?
+bool OMCachedDiskRawStorage::isWritable(void) const
 {
-  TRACE("OMCachedDiskRawStorage::readAt");
-  PRECONDITION("Readable", isReadable());
-  PRECONDITION("Positionable", isPositionable());
+  TRACE("OMCachedDiskRawStorage::isWritable");
 
-  const_cast<OMCachedDiskRawStorage*>(this)->
-  readCachedAt(position, bytes, byteCount, bytesRead);
-  const_cast<OMCachedDiskRawStorage*>(this)->
-  _position = position + bytesRead;
+  bool result;
+  if ((_mode == OMFile::modifyMode) || (_mode == OMFile::writeOnlyMode)) {
+    result = true;
+  } else {
+    result = false;
+}
+  return result;
 }
 
-  // @mfunc Attempt to write the number of bytes given by <p byteCount>
-  //        to the current position in this <c OMCachedDiskRawStorage>
-  //        from the buffer at address <p bytes>.
-  //        The actual number of bytes written is returned in
-  //        <p bytesWritten>.
-  //        Writing to positions greater than
-  //        <mf OMCachedDiskRawStorage::size> causes this
-  //        <c OMCachedDiskRawStorage>
-  //        to be extended, however such extension can fail, causing
-  //        <p bytesWritten> to be less than <p byteCount>.
-  //   @parm The buffer from which the bytes are to be written.
-  //   @parm The number of bytes to write.
-  //   @parm The actual number of bytes written.
-void OMCachedDiskRawStorage::write(const OMByte* bytes,
-                                   OMUInt32 byteCount,
-                                   OMUInt32& bytesWritten)
+  // @mfunc May this <c OMCachedDiskRawStorage> be changed in size ?
+bool OMCachedDiskRawStorage::isExtendible(void) const
 {
-  TRACE("OMCachedDiskRawStorage::write");
+  TRACE("OMCachedDiskRawStorage::isExtendible");
 
-  writeAt(_position, bytes, byteCount, bytesWritten);
+  return true;
 }
 
-  // @mfunc Attempt to write the number of bytes given by <p byteCount>
-  //        to offset <p position> in this <c OMCachedDiskRawStorage>
-  //        from the buffer at address <p bytes>.
-  //        The actual number of bytes written is returned in
-  //        <p bytesWritten>.
-  //        Writing to positions greater than
-  //        <mf OMCachedDiskRawStorage::size> causes this
-  //        <c OMCachedDiskRawStorage> to be extended, however such
-  //        extension can fail, causing
-  //        <p bytesWritten> to be less than <p byteCount>.
-  //   @parm The position to which the bytes are to be written.
-  //   @parm The buffer from which the bytes are to be written.
-  //   @parm The number of bytes to write.
-  //   @parm The actual number of bytes written.
-void OMCachedDiskRawStorage::writeAt(OMUInt64 position,
-                                     const OMByte* bytes,
-                                     OMUInt32 byteCount,
-                                     OMUInt32& bytesWritten)
+  // @mfunc May the current position, for <f read()> and <f write()>,
+  //        of this <c OMCachedDiskRawStorage> be changed ?
+bool OMCachedDiskRawStorage::isPositionable(void) const
 {
-  TRACE("OMCachedDiskRawStorage::writeAt");
+  TRACE("OMCachedDiskRawStorage::isPositionable");
 
-  PRECONDITION("Writable", isWritable());
-  PRECONDITION("Positionable", isPositionable());
-
-  OMUInt64 lastPosition = position + byteCount;
-  if (lastPosition > _size) {
-    _size = lastPosition;
-  }
-  writeCachedAt(position, bytes, byteCount, bytesWritten);
-  _position = position + bytesWritten;
-}
-
-  // @mfunc The current extent of this <c OMCachedDiskRawStorage> in bytes.
-  //        The <f extent()> is the allocated size, while the <f size()>
-  //        is the valid size.
-  //        precondition - isPositionable()
-OMUInt64 OMCachedDiskRawStorage::extent(void) const
-{
-  TRACE("OMCachedDiskRawStorage::extent");
-
-  // Size and Extent are equivalent
-  return size();
-}
-
-  // @mfunc Set the size of this <c OMCachedDiskRawStorage> to <p newSize>
-  //        bytes. If <p newSize> is greater than
-  //        <mf OMCachedDiskRawStorage::size> then this
-  //        <c OMCachedDiskRawStorage> is extended. If <p newSize> is less
-  //        than <mf OMCachedDiskRawStorage::size> then this
-  //        <c OMCachedDiskRawStorage> is truncated. Truncation may also
-  //        result in the current position for <f read()> and <f write()>
-  //        being set to <mf OMCachedDiskRawStorage::size>.
-  //        precondition - isExtendible()
-void OMCachedDiskRawStorage::extend(OMUInt64 newSize)
-{
-  TRACE("OMCachedDiskRawStorage::extend");
-
-  _size = newSize;
-}
-
-  // @mfunc The current size of this <c OMCachedDiskRawStorage> in bytes.
-  //        precondition - isPositionable()
-  //   @rdesc The current size of this <c OMCachedDiskRawStorage> in bytes.
-  //   @this const
-OMUInt64 OMCachedDiskRawStorage::size(void) const
-{
-  TRACE("OMCachedDiskRawStorage::size");
-
-  PRECONDITION("Positionable", isPositionable());
-  return _size;
-}
-
-  // @mfunc The current position for <f read()> and <f write()>, as an
-  //        offset in bytes from the beginning of this
-  //        <c OMCachedDiskRawStorage>.
-OMUInt64 OMCachedDiskRawStorage::position(void) const
-{
-  TRACE("OMCachedDiskRawStorage::position");
-
-  return _position;
-}
-
-  // @mfunc Set the current position for <f read()> and <f write()>, as an
-  //        offset in bytes from the beginning of this
-  //        <c OMCachedDiskRawStorage>.
-  //        precondition - isPositionable()
-void OMCachedDiskRawStorage::setPosition(OMUInt64 newPosition) const
-{
-  TRACE("OMCachedDiskRawStorage::setPosition");
-
-  const_cast<OMCachedDiskRawStorage*>(this)->
-  _position = newPosition;
+  return true;
 }
 
   // @mfunc Synchronize this <c OMCachedDiskRawStorage> with its external
@@ -401,6 +283,7 @@ void OMCachedDiskRawStorage::synchronize(void)
 
   if (isWritable()) {
     flush();
+    _file->synchronize();
   }
 }
 
@@ -415,7 +298,7 @@ void OMCachedDiskRawStorage::readPage(OMUInt64 position,
   TRACE("OMCachedDiskRawStorage::readPage");
   PRECONDITION("Valid destination", destination != 0);
 
-  OMUInt64 streamSize = _actualSize;
+  OMUInt64 streamSize = size();
   if (position < streamSize) {
     OMUInt32 remaining = static_cast<OMUInt32>(streamSize - position);
     OMUInt32 readSize;
@@ -426,8 +309,8 @@ void OMCachedDiskRawStorage::readPage(OMUInt64 position,
     }
     ASSERT("Valid read size", readSize != 0);
     OMUInt32 br;
-    OMDiskRawStorage::setPosition(position);
-    OMDiskRawStorage::read(destination, readSize, br);
+    _file->setPosition(position);
+    _file->read(destination, readSize, br);
     ASSERT("All bytes read", br == readSize);
   }
 }
@@ -444,7 +327,7 @@ void OMCachedDiskRawStorage::writePage(OMUInt64 position,
   PRECONDITION("Valid source", source != 0);
   PRECONDITION("Stream is writable", isWritable());
 
-  OMUInt64 streamSize = _size;
+  OMUInt64 streamSize = extent();
   OMUInt32 remaining = static_cast<OMUInt32>(streamSize - position);
   OMUInt32 writeSize;
   if (remaining < byteCount) {
@@ -454,13 +337,9 @@ void OMCachedDiskRawStorage::writePage(OMUInt64 position,
   }
   ASSERT("Valid write size", writeSize != 0);
   OMUInt32 bw;
-  OMDiskRawStorage::setPosition(position);
-  OMDiskRawStorage::write(source, writeSize, bw);
+  _file->setPosition(position);
+  _file->write(source, writeSize, bw);
   ASSERT("All bytes written", bw == writeSize);
-  OMUInt64 lastPosition = position + writeSize;
-  if (lastPosition > _actualSize) {
-    _actualSize = lastPosition;
-  }
 }
 
   // @mfunc Constructor.
@@ -468,13 +347,10 @@ OMCachedDiskRawStorage::OMCachedDiskRawStorage(OMStream* file,
                                                OMFile::OMAccessMode accessMode,
                                                OMUInt32 pageSize,
                                                OMUInt32 pageCount)
-: OMDiskRawStorage(file, accessMode),
-  OMPageCache(pageSize, pageCount),
-  _size(0),
-  _actualSize(0),
-  _position(0)
+: OMCachedRawStorage(pageSize, pageCount, file->size()),
+  _file(file),
+  _mode(accessMode)
 {
   TRACE("OMCachedDiskRawStorage::OMCachedDiskRawStorage");
-  _actualSize = OMDiskRawStorage::size();
-  _size = _actualSize;
+  PRECONDITION("Valid file", _file != 0);
 }
