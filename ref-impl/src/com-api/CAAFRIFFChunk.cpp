@@ -68,10 +68,7 @@ CAAFRIFFChunk::~CAAFRIFFChunk ()
 
 
 HRESULT STDMETHODCALLTYPE
-    CAAFRIFFChunk::Initialize (aafUInt32  chunkID,
-        aafUInt32  chunkLength,
-        aafUInt32  bytes,
-        aafDataBuffer_t  buffer)
+    CAAFRIFFChunk::Initialize (aafUInt32  chunkID)
 {
   HRESULT hr;
 
@@ -86,10 +83,7 @@ HRESULT STDMETHODCALLTYPE
   try
     {
       hr = ptr->Initialize
-       (chunkID,
-        chunkLength,
-        bytes,
-        buffer);
+       (chunkID);
     }
   catch (OMException& e)
     {
@@ -229,166 +223,7 @@ HRESULT STDMETHODCALLTYPE
 
 
 HRESULT STDMETHODCALLTYPE
-    CAAFRIFFChunk::SetChunkLength (aafUInt32  chunkLength)
-{
-  HRESULT hr;
-
-  ImplAAFRIFFChunk * ptr;
-  ImplAAFRoot * pO;
-  pO = GetRepObject ();
-  assert (pO);
-  ptr = static_cast<ImplAAFRIFFChunk*> (pO);
-  assert (ptr);
-
-
-  try
-    {
-      hr = ptr->SetChunkLength
-       (chunkLength);
-    }
-  catch (OMException& e)
-    {
-      // OMExceptions should be handled by the impl code. However, if an
-      // unhandled OMException occurs, control reaches here. We must not
-      // allow the unhandled exception to reach the client code, so we
-      // turn it into a failure status code.
-      //
-      // If the OMException contains an HRESULT, it is returned to the
-      // client, if not, AAFRESULT_UHANDLED_EXCEPTION is returned.
-      //
-      hr = OMExceptionToResult(e, AAFRESULT_UNHANDLED_EXCEPTION);
-    }
-  catch (OMAssertionViolation &)
-    {
-      // Control reaches here if there is a programming error in the
-      // impl code that was detected by an assertion violation.
-      // We must not allow the assertion to reach the client code so
-      // here we turn it into a failure status code.
-      //
-      hr = AAFRESULT_ASSERTION_VIOLATION;
-    }
-  catch (...)
-    {
-      // We CANNOT throw an exception out of a COM interface method!
-      // Return a reasonable exception code.
-      //
-      hr = AAFRESULT_UNEXPECTED_EXCEPTION;
-    }
-
-  return hr;
-}
-
-
-HRESULT STDMETHODCALLTYPE
-    CAAFRIFFChunk::GetChunkLength (aafUInt32 *  pChunkLength)
-{
-  HRESULT hr;
-
-  ImplAAFRIFFChunk * ptr;
-  ImplAAFRoot * pO;
-  pO = GetRepObject ();
-  assert (pO);
-  ptr = static_cast<ImplAAFRIFFChunk*> (pO);
-  assert (ptr);
-
-
-  try
-    {
-      hr = ptr->GetChunkLength
-       (pChunkLength);
-    }
-  catch (OMException& e)
-    {
-      // OMExceptions should be handled by the impl code. However, if an
-      // unhandled OMException occurs, control reaches here. We must not
-      // allow the unhandled exception to reach the client code, so we
-      // turn it into a failure status code.
-      //
-      // If the OMException contains an HRESULT, it is returned to the
-      // client, if not, AAFRESULT_UHANDLED_EXCEPTION is returned.
-      //
-      hr = OMExceptionToResult(e, AAFRESULT_UNHANDLED_EXCEPTION);
-    }
-  catch (OMAssertionViolation &)
-    {
-      // Control reaches here if there is a programming error in the
-      // impl code that was detected by an assertion violation.
-      // We must not allow the assertion to reach the client code so
-      // here we turn it into a failure status code.
-      //
-      hr = AAFRESULT_ASSERTION_VIOLATION;
-    }
-  catch (...)
-    {
-      // We CANNOT throw an exception out of a COM interface method!
-      // Return a reasonable exception code.
-      //
-      hr = AAFRESULT_UNEXPECTED_EXCEPTION;
-    }
-
-  return hr;
-}
-
-
-
-HRESULT STDMETHODCALLTYPE
-    CAAFRIFFChunk::WriteChunkData (aafUInt32  bytes,
-        aafDataBuffer_t  buffer,
-        aafUInt32 *  pBytesWritten)
-{
-  HRESULT hr;
-
-  ImplAAFRIFFChunk * ptr;
-  ImplAAFRoot * pO;
-  pO = GetRepObject ();
-  assert (pO);
-  ptr = static_cast<ImplAAFRIFFChunk*> (pO);
-  assert (ptr);
-
-
-  try
-    {
-      hr = ptr->WriteChunkData
-       (bytes,
-        buffer,
-        pBytesWritten);
-    }
-  catch (OMException& e)
-    {
-      // OMExceptions should be handled by the impl code. However, if an
-      // unhandled OMException occurs, control reaches here. We must not
-      // allow the unhandled exception to reach the client code, so we
-      // turn it into a failure status code.
-      //
-      // If the OMException contains an HRESULT, it is returned to the
-      // client, if not, AAFRESULT_UHANDLED_EXCEPTION is returned.
-      //
-      hr = OMExceptionToResult(e, AAFRESULT_UNHANDLED_EXCEPTION);
-    }
-  catch (OMAssertionViolation &)
-    {
-      // Control reaches here if there is a programming error in the
-      // impl code that was detected by an assertion violation.
-      // We must not allow the assertion to reach the client code so
-      // here we turn it into a failure status code.
-      //
-      hr = AAFRESULT_ASSERTION_VIOLATION;
-    }
-  catch (...)
-    {
-      // We CANNOT throw an exception out of a COM interface method!
-      // Return a reasonable exception code.
-      //
-      hr = AAFRESULT_UNEXPECTED_EXCEPTION;
-    }
-
-  return hr;
-}
-
-
-
-HRESULT STDMETHODCALLTYPE
-    CAAFRIFFChunk::ReadChunkData (aafUInt32  bytes,
+    CAAFRIFFChunk::Read (aafUInt32  bytes,
         aafDataBuffer_t  buffer,
         aafUInt32 *  pBytesRead)
 {
@@ -404,7 +239,7 @@ HRESULT STDMETHODCALLTYPE
 
   try
     {
-      hr = ptr->ReadChunkData
+      hr = ptr->Read
        (bytes,
         buffer,
         pBytesRead);
@@ -444,7 +279,9 @@ HRESULT STDMETHODCALLTYPE
 
 
 HRESULT STDMETHODCALLTYPE
-    CAAFRIFFChunk::SetChunkDataPosition (aafPosition_t  position)
+    CAAFRIFFChunk::Write (aafUInt32  bytes,
+        aafDataBuffer_t  buffer,
+        aafUInt32 *  pBytesWritten)
 {
   HRESULT hr;
 
@@ -458,8 +295,10 @@ HRESULT STDMETHODCALLTYPE
 
   try
     {
-      hr = ptr->SetChunkDataPosition
-       (position);
+      hr = ptr->Write
+       (bytes,
+        buffer,
+        pBytesWritten);
     }
   catch (OMException& e)
     {
@@ -496,7 +335,7 @@ HRESULT STDMETHODCALLTYPE
 
 
 HRESULT STDMETHODCALLTYPE
-    CAAFRIFFChunk::GetChunkDataPosition (aafPosition_t *  pPosition)
+    CAAFRIFFChunk::SetPosition (aafPosition_t  offset)
 {
   HRESULT hr;
 
@@ -510,8 +349,8 @@ HRESULT STDMETHODCALLTYPE
 
   try
     {
-      hr = ptr->GetChunkDataPosition
-       (pPosition);
+      hr = ptr->SetPosition
+       (offset);
     }
   catch (OMException& e)
     {
@@ -548,7 +387,7 @@ HRESULT STDMETHODCALLTYPE
 
 
 HRESULT STDMETHODCALLTYPE
-    CAAFRIFFChunk::GetChunkDataSize (aafLength_t *  pSize)
+    CAAFRIFFChunk::GetPosition (aafPosition_t*  pOffset)
 {
   HRESULT hr;
 
@@ -562,8 +401,60 @@ HRESULT STDMETHODCALLTYPE
 
   try
     {
-      hr = ptr->GetChunkDataSize
-       (pSize);
+      hr = ptr->GetPosition
+       (pOffset);
+    }
+  catch (OMException& e)
+    {
+      // OMExceptions should be handled by the impl code. However, if an
+      // unhandled OMException occurs, control reaches here. We must not
+      // allow the unhandled exception to reach the client code, so we
+      // turn it into a failure status code.
+      //
+      // If the OMException contains an HRESULT, it is returned to the
+      // client, if not, AAFRESULT_UHANDLED_EXCEPTION is returned.
+      //
+      hr = OMExceptionToResult(e, AAFRESULT_UNHANDLED_EXCEPTION);
+    }
+  catch (OMAssertionViolation &)
+    {
+      // Control reaches here if there is a programming error in the
+      // impl code that was detected by an assertion violation.
+      // We must not allow the assertion to reach the client code so
+      // here we turn it into a failure status code.
+      //
+      hr = AAFRESULT_ASSERTION_VIOLATION;
+    }
+  catch (...)
+    {
+      // We CANNOT throw an exception out of a COM interface method!
+      // Return a reasonable exception code.
+      //
+      hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+    }
+
+  return hr;
+}
+
+
+
+HRESULT STDMETHODCALLTYPE
+    CAAFRIFFChunk::GetLength (aafLength_t *  pLength)
+{
+  HRESULT hr;
+
+  ImplAAFRIFFChunk * ptr;
+  ImplAAFRoot * pO;
+  pO = GetRepObject ();
+  assert (pO);
+  ptr = static_cast<ImplAAFRIFFChunk*> (pO);
+  assert (ptr);
+
+
+  try
+    {
+      hr = ptr->GetLength
+       (pLength);
     }
   catch (OMException& e)
     {

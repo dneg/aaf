@@ -95,7 +95,7 @@ static HRESULT CreateAAFFile(
 		// Initialize mob properties:
 		checkResult(pSourceMob->QueryInterface (IID_IAAFMob, (void **)&pMob));
 		checkResult(pMob->SetMobID(TEST_MobID));
-		checkResult(pMob->SetName(L"EssenceDescriptorTest"));
+		checkResult(pMob->SetName(L"MultipleDescriptorTest"));
 		
 
 		IAAFEssenceDescriptor 		*eDesc = NULL;

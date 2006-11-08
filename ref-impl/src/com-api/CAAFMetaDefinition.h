@@ -73,7 +73,7 @@ public:
   // Init all fields of a meta definition object.
   //
   STDMETHOD (Initialize) (
-    // AUID for new DeObject
+    // AUID for new DefObject
     /*[in, ref]*/ aafUID_constref  id,
 
     // Name for new Meta Definition

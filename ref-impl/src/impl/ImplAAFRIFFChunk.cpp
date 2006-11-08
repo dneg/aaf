@@ -47,17 +47,14 @@
 ImplAAFRIFFChunk::ImplAAFRIFFChunk () :
 
   _chunkID(PID_RIFFChunk_ChunkID,	L"ChunkID"),
-  _chunkLength(PID_RIFFChunk_ChunkLength,	L"ChunkLength"),
   _chunkData(PID_RIFFChunk_ChunkData,	L"ChunkData")
 {
   // Add the properties into the property set.
   _persistentProperties.put(_chunkID.address());
-  _persistentProperties.put(_chunkLength.address());
   _persistentProperties.put(_chunkData.address());
 
   // Initial default property values.
   _chunkID = 0;
-  _chunkLength = 0;
 
 }
 
@@ -68,24 +65,17 @@ ImplAAFRIFFChunk::~ImplAAFRIFFChunk ()
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFRIFFChunk::Initialize (
-      aafUInt32  chunkID,
-      aafUInt32  chunkLength,
-      aafUInt32  bytes,
-      aafDataBuffer_t  buffer)
+      aafUInt32  chunkID)
 {
 	if( isInitialized() )
     {
         return AAFRESULT_ALREADY_INITIALIZED;
     }
 	_chunkID = chunkID;
-	_chunkLength = chunkLength;
-	aafUInt32 bytesWritten;
-	
-	AAFRESULT ar = WriteChunkData (bytes, buffer, &bytesWritten);
-	if( ar == AAFRESULT_SUCCESS )
-    {
-        setInitialized();
-    }
+
+	AAFRESULT ar = AAFRESULT_SUCCESS;
+    setInitialized();
+
   	return ar;
 }
 
@@ -118,25 +108,25 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFRIFFChunk::SetChunkLength (
-      aafUInt32  chunkLength)
+    ImplAAFRIFFChunk::GetLength (
+      aafLength_t *  pLength)
 {
-	_chunkLength = chunkLength;
-	return AAFRESULT_SUCCESS;
-}
-
-
-AAFRESULT STDMETHODCALLTYPE
-    ImplAAFRIFFChunk::GetChunkLength (
-      aafUInt32 *  pChunkLength)
-{
-	if( pChunkLength == NULL )
+	if( pLength == NULL )
     {
         return AAFRESULT_NULL_PARAM;
     }
-   
+    if( !isInitialized() )
+    {
+        return AAFRESULT_NOT_INITIALIZED;
+    }
+    if( !persistent() )
+    {
+        return AAFRESULT_OBJECT_NOT_PERSISTENT;
+    }
 
-    *pChunkLength = _chunkLength;
+
+    OMUInt64  omSize = _chunkData.size();
+	*pLength = omSize;
 
 
     return AAFRESULT_SUCCESS;
@@ -145,7 +135,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFRIFFChunk::WriteChunkData (
+    ImplAAFRIFFChunk::Write (
       aafUInt32  bytes,
       aafDataBuffer_t  buffer,
       aafUInt32 *  pBytesWritten)
@@ -167,7 +157,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFRIFFChunk::ReadChunkData (
+    ImplAAFRIFFChunk::Read (
       aafUInt32  bytes,
       aafDataBuffer_t  buffer,
       aafUInt32 *  pBytesRead)
@@ -188,8 +178,8 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 
-AAFRESULT STDMETHODCALLTYPE ImplAAFRIFFChunk::SetChunkDataPosition(
-    aafPosition_t position )
+AAFRESULT STDMETHODCALLTYPE ImplAAFRIFFChunk::SetPosition(
+    aafPosition_t offset )
 {
     if( !isInitialized() )
     {
@@ -201,7 +191,7 @@ AAFRESULT STDMETHODCALLTYPE ImplAAFRIFFChunk::SetChunkDataPosition(
     }
 
 
-    OMUInt64  omPosition = position;
+    OMUInt64  omPosition = offset;
     _chunkData.setPosition( omPosition );
 
 
@@ -210,10 +200,10 @@ AAFRESULT STDMETHODCALLTYPE ImplAAFRIFFChunk::SetChunkDataPosition(
 
 
 
-AAFRESULT STDMETHODCALLTYPE ImplAAFRIFFChunk::GetChunkDataPosition(
-    aafPosition_t*  pPosition )
+AAFRESULT STDMETHODCALLTYPE ImplAAFRIFFChunk::GetPosition(
+    aafPosition_t*  pOffset )
 {
-    if( pPosition == 0 )
+    if( pOffset == 0 )
     {
         return AAFRESULT_NULL_PARAM;
     }
@@ -228,39 +218,11 @@ AAFRESULT STDMETHODCALLTYPE ImplAAFRIFFChunk::GetChunkDataPosition(
 
 
     OMUInt64  omPosition = _chunkData.position();
-    *pPosition = omPosition;
+    *pOffset = omPosition;
 
 
     return AAFRESULT_SUCCESS;
 }
-
-
-
-AAFRESULT STDMETHODCALLTYPE ImplAAFRIFFChunk::GetChunkDataSize(
-    aafLength_t* pSize )
-{
-    if( pSize == 0 )
-    {
-        return AAFRESULT_NULL_PARAM;
-    }
-    if( !isInitialized() )
-    {
-        return AAFRESULT_NOT_INITIALIZED;
-    }
-    if( !persistent() )
-    {
-        return AAFRESULT_OBJECT_NOT_PERSISTENT;
-    }
-
-
-    OMUInt64  omSize = _chunkData.size();
-    *pSize = omSize;
-
-
-    return AAFRESULT_SUCCESS;
-}
-
-
 
 
 

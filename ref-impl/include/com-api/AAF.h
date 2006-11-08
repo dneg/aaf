@@ -21672,10 +21672,7 @@ EXTERN_C const IID IID_IAAFRIFFChunk;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Initialize( 
-            /* [in] */ aafUInt32 chunkID,
-            /* [in] */ aafUInt32 chunkLength,
-            /* [in] */ aafUInt32 bytes,
-            /* [size_is][out] */ aafDataBuffer_t buffer) = 0;
+            /* [in] */ aafUInt32 chunkID) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetChunkID( 
             /* [in] */ aafUInt32 chunkID) = 0;
@@ -21683,30 +21680,24 @@ EXTERN_C const IID IID_IAAFRIFFChunk;
         virtual HRESULT STDMETHODCALLTYPE GetChunkID( 
             /* [out] */ aafUInt32 *pChunkID) = 0;
         
-        virtual HRESULT STDMETHODCALLTYPE SetChunkLength( 
-            /* [in] */ aafUInt32 chunkLength) = 0;
+        virtual HRESULT STDMETHODCALLTYPE GetLength( 
+            /* [out] */ aafLength_t *pLength) = 0;
         
-        virtual HRESULT STDMETHODCALLTYPE GetChunkLength( 
-            /* [out] */ aafUInt32 *pChunkLength) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE WriteChunkData( 
+        virtual HRESULT STDMETHODCALLTYPE Write( 
             /* [in] */ aafUInt32 bytes,
             /* [size_is][out] */ aafDataBuffer_t buffer,
             /* [ref][out] */ aafUInt32 *pBytesWritten) = 0;
         
-        virtual HRESULT STDMETHODCALLTYPE ReadChunkData( 
+        virtual HRESULT STDMETHODCALLTYPE Read( 
             /* [in] */ aafUInt32 bytes,
             /* [size_is][out] */ aafDataBuffer_t buffer,
             /* [ref][out] */ aafUInt32 *pBytesRead) = 0;
         
-        virtual HRESULT STDMETHODCALLTYPE SetChunkDataPosition( 
-            /* [in] */ aafPosition_t position) = 0;
+        virtual HRESULT STDMETHODCALLTYPE SetPosition( 
+            /* [in] */ aafPosition_t offset) = 0;
         
-        virtual HRESULT STDMETHODCALLTYPE GetChunkDataPosition( 
-            /* [out] */ aafPosition_t *pPosition) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetChunkDataSize( 
-            /* [out] */ aafLength_t *pSize) = 0;
+        virtual HRESULT STDMETHODCALLTYPE GetPosition( 
+            /* [out] */ aafPosition_t *pOffset) = 0;
         
     };
     
@@ -21729,10 +21720,7 @@ EXTERN_C const IID IID_IAAFRIFFChunk;
         
         HRESULT ( STDMETHODCALLTYPE *Initialize )( 
             IAAFRIFFChunk * This,
-            /* [in] */ aafUInt32 chunkID,
-            /* [in] */ aafUInt32 chunkLength,
-            /* [in] */ aafUInt32 bytes,
-            /* [size_is][out] */ aafDataBuffer_t buffer);
+            /* [in] */ aafUInt32 chunkID);
         
         HRESULT ( STDMETHODCALLTYPE *SetChunkID )( 
             IAAFRIFFChunk * This,
@@ -21742,37 +21730,29 @@ EXTERN_C const IID IID_IAAFRIFFChunk;
             IAAFRIFFChunk * This,
             /* [out] */ aafUInt32 *pChunkID);
         
-        HRESULT ( STDMETHODCALLTYPE *SetChunkLength )( 
+        HRESULT ( STDMETHODCALLTYPE *GetLength )( 
             IAAFRIFFChunk * This,
-            /* [in] */ aafUInt32 chunkLength);
+            /* [out] */ aafLenght_t *pLength);
         
-        HRESULT ( STDMETHODCALLTYPE *GetChunkLength )( 
-            IAAFRIFFChunk * This,
-            /* [out] */ aafUInt32 *pChunkLength);
-        
-        HRESULT ( STDMETHODCALLTYPE *WriteChunkData )( 
+        HRESULT ( STDMETHODCALLTYPE *Write )( 
             IAAFRIFFChunk * This,
             /* [in] */ aafUInt32 bytes,
             /* [size_is][out] */ aafDataBuffer_t buffer,
             /* [ref][out] */ aafUInt32 *pBytesWritten);
         
-        HRESULT ( STDMETHODCALLTYPE *ReadChunkData )( 
+        HRESULT ( STDMETHODCALLTYPE *Read )( 
             IAAFRIFFChunk * This,
             /* [in] */ aafUInt32 bytes,
             /* [size_is][out] */ aafDataBuffer_t buffer,
             /* [ref][out] */ aafUInt32 *pBytesRead);
         
-        HRESULT ( STDMETHODCALLTYPE *SetChunkDataPosition )( 
+        HRESULT ( STDMETHODCALLTYPE *SetPosition )( 
             IAAFRIFFChunk * This,
-            /* [in] */ aafPosition_t position);
+            /* [in] */ aafPosition_t offset);
         
-        HRESULT ( STDMETHODCALLTYPE *GetChunkDataPosition )( 
+        HRESULT ( STDMETHODCALLTYPE *GetPosition )( 
             IAAFRIFFChunk * This,
-            /* [out] */ aafPosition_t *pPosition);
-        
-        HRESULT ( STDMETHODCALLTYPE *GetChunkDataSize )( 
-            IAAFRIFFChunk * This,
-            /* [out] */ aafLength_t *pSize);
+            /* [out] */ aafPosition_t *pOffset);
         
         END_INTERFACE
     } IAAFRIFFChunkVtbl;
@@ -21797,8 +21777,8 @@ EXTERN_C const IID IID_IAAFRIFFChunk;
     (This)->lpVtbl -> Release(This)
 
 
-#define IAAFRIFFChunk_Initialize(This,chunkID,chunkLength,bytes,buffer)	\
-    (This)->lpVtbl -> Initialize(This,chunkID,chunkLength,bytes,buffer)
+#define IAAFRIFFChunk_Initialize(This,chunkID)	\
+    (This)->lpVtbl -> Initialize(This,chunkID)
 
 #define IAAFRIFFChunk_SetChunkID(This,chunkID)	\
     (This)->lpVtbl -> SetChunkID(This,chunkID)
@@ -21806,26 +21786,20 @@ EXTERN_C const IID IID_IAAFRIFFChunk;
 #define IAAFRIFFChunk_GetChunkID(This,pChunkID)	\
     (This)->lpVtbl -> GetChunkID(This,pChunkID)
 
-#define IAAFRIFFChunk_SetChunkLength(This,chunkLength)	\
-    (This)->lpVtbl -> SetChunkLength(This,chunkLength)
+#define IAAFRIFFChunk_GetLength(This,pLength)	\
+    (This)->lpVtbl -> GetLength(This,pLength)
 
-#define IAAFRIFFChunk_GetChunkLength(This,pChunkLength)	\
-    (This)->lpVtbl -> GetChunkLength(This,pChunkLength)
+#define IAAFRIFFChunk_Write(This,bytes,buffer,pBytesWritten)	\
+    (This)->lpVtbl -> Write(This,bytes,buffer,pBytesWritten)
 
-#define IAAFRIFFChunk_WriteChunkData(This,bytes,buffer,pBytesWritten)	\
-    (This)->lpVtbl -> WriteChunkData(This,bytes,buffer,pBytesWritten)
+#define IAAFRIFFChunk_Read(This,bytes,buffer,pBytesRead)	\
+    (This)->lpVtbl -> Read(This,bytes,buffer,pBytesRead)
 
-#define IAAFRIFFChunk_ReadChunkData(This,bytes,buffer,pBytesRead)	\
-    (This)->lpVtbl -> ReadChunkData(This,bytes,buffer,pBytesRead)
+#define IAAFRIFFChunk_SetPosition(This,offset)	\
+    (This)->lpVtbl -> SetPosition(This,offset)
 
-#define IAAFRIFFChunk_SetChunkDataPosition(This,position)	\
-    (This)->lpVtbl -> SetChunkDataPosition(This,position)
-
-#define IAAFRIFFChunk_GetChunkDataPosition(This,pPosition)	\
-    (This)->lpVtbl -> GetChunkDataPosition(This,pPosition)
-
-#define IAAFRIFFChunk_GetChunkDataSize(This,pSize)	\
-    (This)->lpVtbl -> GetChunkDataSize(This,pSize)
+#define IAAFRIFFChunk_GetPosition(This,pOffset)	\
+    (This)->lpVtbl -> GetPosition(This,pOffset)
 
 #endif /* COBJMACROS */
 
@@ -21836,10 +21810,7 @@ EXTERN_C const IID IID_IAAFRIFFChunk;
 
 HRESULT STDMETHODCALLTYPE IAAFRIFFChunk_Initialize_Proxy( 
     IAAFRIFFChunk * This,
-    /* [in] */ aafUInt32 chunkID,
-    /* [in] */ aafUInt32 chunkLength,
-    /* [in] */ aafUInt32 bytes,
-    /* [size_is][out] */ aafDataBuffer_t buffer);
+    /* [in] */ aafUInt32 chunkID);
 
 
 void __RPC_STUB IAAFRIFFChunk_Initialize_Stub(
@@ -21873,93 +21844,68 @@ void __RPC_STUB IAAFRIFFChunk_GetChunkID_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IAAFRIFFChunk_SetChunkLength_Proxy( 
+HRESULT STDMETHODCALLTYPE IAAFRIFFChunk_GetLength_Proxy( 
     IAAFRIFFChunk * This,
-    /* [in] */ aafUInt32 chunkLength);
+    /* [out] */ aafLength_t *pLength);
 
 
-void __RPC_STUB IAAFRIFFChunk_SetChunkLength_Stub(
+void __RPC_STUB IAAFRIFFChunk_GetLength_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IAAFRIFFChunk_GetChunkLength_Proxy( 
-    IAAFRIFFChunk * This,
-    /* [out] */ aafUInt32 *pChunkLength);
-
-
-void __RPC_STUB IAAFRIFFChunk_GetChunkLength_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFRIFFChunk_WriteChunkData_Proxy( 
+HRESULT STDMETHODCALLTYPE IAAFRIFFChunk_Write_Proxy( 
     IAAFRIFFChunk * This,
     /* [in] */ aafUInt32 bytes,
     /* [size_is][out] */ aafDataBuffer_t buffer,
     /* [ref][out] */ aafUInt32 *pBytesWritten);
 
 
-void __RPC_STUB IAAFRIFFChunk_WriteChunkData_Stub(
+void __RPC_STUB IAAFRIFFChunk_Write_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IAAFRIFFChunk_ReadChunkData_Proxy( 
+HRESULT STDMETHODCALLTYPE IAAFRIFFChunk_Read_Proxy( 
     IAAFRIFFChunk * This,
     /* [in] */ aafUInt32 bytes,
     /* [size_is][out] */ aafDataBuffer_t buffer,
     /* [ref][out] */ aafUInt32 *pBytesRead);
 
 
-void __RPC_STUB IAAFRIFFChunk_ReadChunkData_Stub(
+void __RPC_STUB IAAFRIFFChunk_Read_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IAAFRIFFChunk_SetChunkDataPosition_Proxy( 
+HRESULT STDMETHODCALLTYPE IAAFRIFFChunk_SetPosition_Proxy( 
     IAAFRIFFChunk * This,
-    /* [in] */ aafPosition_t position);
+    /* [in] */ aafPosition_t offset);
 
 
-void __RPC_STUB IAAFRIFFChunk_SetChunkDataPosition_Stub(
+void __RPC_STUB IAAFRIFFChunk_SetPosition_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IAAFRIFFChunk_GetChunkDataPosition_Proxy( 
+HRESULT STDMETHODCALLTYPE IAAFRIFFChunk_GetPosition_Proxy( 
     IAAFRIFFChunk * This,
-    /* [out] */ aafPosition_t *pPosition);
+    /* [out] */ aafPosition_t *pOffset);
 
 
-void __RPC_STUB IAAFRIFFChunk_GetChunkDataPosition_Stub(
+void __RPC_STUB IAAFRIFFChunk_GetPosition_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFRIFFChunk_GetChunkDataSize_Proxy( 
-    IAAFRIFFChunk * This,
-    /* [out] */ aafLength_t *pSize);
-
-
-void __RPC_STUB IAAFRIFFChunk_GetChunkDataSize_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
 
 
 #endif 	/* __IAAFRIFFChunk_INTERFACE_DEFINED__ */

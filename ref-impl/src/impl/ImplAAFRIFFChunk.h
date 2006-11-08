@@ -59,7 +59,6 @@ protected:
   virtual ~ImplAAFRIFFChunk ();
   
   	OMFixedSizeProperty<aafUInt32>          _chunkID;
-  	OMFixedSizeProperty<aafUInt32> 			_chunkLength;
     OMDataStreamProperty                    _chunkData;
 
 public:
@@ -70,16 +69,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     Initialize
         (// @parm [in] ChunkID value
-         aafUInt32  chunkID,
-
-         // @parm [in] ChunkLength value
-         aafUInt32  chunkLength,
-
-         // @parm [in] Write this many bytes
-         aafUInt32  bytes,
-
-         // @parm [out, size_is(bytes)] Data to write
-         aafDataBuffer_t  buffer);
+         aafUInt32  chunkID);
 
 
   //****************
@@ -100,27 +90,19 @@ public:
 
 
   //****************
-  // SetChunkLength()
+  // GetLength()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    SetChunkLength
-        // @parm [in] Length to set
-        (aafUInt32  chunkLength);
-
-  //****************
-  // GetChunkLength()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    GetChunkLength
-        // @parm [out] Retrieved ChuckLength
-        (aafUInt32 *  pChunkLength);
+    GetLength
+        // @parm [out] Retrieved Chunk Length
+        (aafLength_t *  pLength);
 
 
   //****************
-  // WriteChunkData()
+  // Write()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    WriteChunkData
+    Write
         (// @parm [in] Write this many bytes
          aafUInt32  bytes,
 
@@ -128,14 +110,14 @@ public:
          aafDataBuffer_t  buffer,
 
          // @parm [out,ref] Number of bytes actually written
-         aafUInt32 *  pBytesWritten);
+         aafUInt32 *  bytesWritten);
 
 
   //****************
-  // ReadChunkData()
+  // Read()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    ReadChunkData
+    Read
         (// @parm [in] Read this many bytes
          aafUInt32  bytes,
 
@@ -143,32 +125,24 @@ public:
          aafDataBuffer_t  buffer,
 
          // @parm [out,ref] Number of bytes actually read
-         aafUInt32 *  pBytesRead);
+         aafUInt32 *  bytesRead);
          
 
  //****************
-  // SetChunkDataPosition()
+  // SetPosition()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    SetChunkDataPosition
+		  SetPosition
         // @parm [in] Offset from the beginning of chunk data
-        (aafPosition_t position);
+        (aafPosition_t offset);
 
   //****************
-  // GetChunkDataPosition()
+  // GetPosition()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    GetChunkDataPosition
+    GetPosition
         // @parm [out] Offset from the beginning of chunk data
-        (aafPosition_t *  pPosition);
-
-  //****************
-  // GetChunkDataSize()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    GetChunkDataSize
-        // @parm [out] The size of chunk data
-        (aafLength_t *  pSize);
+        (aafPosition_t *  pOffset);
 
 };
 

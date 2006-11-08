@@ -68,9 +68,11 @@ public:
   // Initialize()
   //
   // Initializes a newly allocated, empty
-  /// IAAFRIFFChunk-supporting object.  This method must be
-  /// called after allocation, and before any other method can be
-  /// called.
+  /// IAAFRIFFChunk-supporting object. The data content is initially
+  /// empty.
+  ///
+  /// This method must be called after allocation, and before any other
+  /// method can be called.
   ///
   /// Succeeds if:
   /// - Initialize() has not yet been called on this object.
@@ -86,17 +88,8 @@ public:
   ///   - Initialize() has already been called on this object.
   //
   STDMETHOD (Initialize) (
-    // ChunkID value
-    /*[in]*/ aafUInt32  chunkID,
-
-    // ChunkLength value
-    /*[in]*/ aafUInt32  chunkLength,
-
-    // Write this many bytes
-    /*[in]*/ aafUInt32  bytes,
-
-    // Data to write
-    /*[out, size_is(bytes)]*/ aafDataBuffer_t  buffer);
+    // ChunkID value 
+    /*[in]*/ aafUInt32  chunkID);
 
 
   //***********************************************************
@@ -107,6 +100,7 @@ public:
                         
   ///
   /// Succeeds if all of the following are true:
+  /// - This object has already been had Initialize() called on it.
   ///
   /// If this method fails, the ChunkID property will not be
   /// changed.
@@ -125,11 +119,10 @@ public:
   // GetChunkID()
   //
   // Gets the ChunkID property.
-                        
+  ///
   ///
   /// Succeeds if all of the following are true:
   /// - pChunkID is a valid pointer
-  /// - the property is present.
   ///
   /// If this method fails, pChunkID will not be changed.
   ///
@@ -140,9 +133,6 @@ public:
   ///
   /// AAFRESULT_NULL_PARAM
   ///   - pChunkID is NULL.
-  ///
-  /// AAFRESULT_PROP_NOT_PRESENT
-  ///   - the property is not present.
   //
   STDMETHOD (GetChunkID) (
     // Retrieved ChunkID 
@@ -151,255 +141,74 @@ public:
 
   //***********************************************************
   //
-  // SetChunkLength()
+  // Read()
   //
-  // Sets the ChunkLength property
-                   
-  ///
-  /// Succeeds if all of the following are true:
-  ///
-  /// If this method fails, the ChunkLength property will not be
-  /// changed.
-  ///
-  /// This method will return the following codes:
-  ///
-  /// AAFRESULT_SUCCESS
-  ///   - succeeded.  (This is the only code indicating success.)
+  // Reads data from this RIFFChunk at the current position. Advances the position
+  // by the number of bytes read.
   //
-  STDMETHOD (SetChunkLength) (
-    // Length to set 
-    /*[in]*/ aafUInt32  chunkLength);
-
-  //***********************************************************
-  //
-  // GetChunkLength()
-  //
-  // Gets the ChunkLength property
-                      
-  ///
-  /// Succeeds if all of the following are true:
-  /// - pMChunkLength is a valid pointer
-  /// - the property is present.
-  ///
-  /// If this method fails, pChunkLength will not be changed.
-  ///
-  /// This method will return the following codes:
-  ///
-  /// AAFRESULT_SUCCESS
-  ///   - succeeded.  (This is the only code indicating success.)
-  ///
-  /// AAFRESULT_NULL_PARAM
-  ///   - pChunkLength is NULL.
-  ///
-  /// AAFRESULT_PROP_NOT_PRESENT
-  ///   - the property is not present.
-  //
-  STDMETHOD (GetChunkLength) (
-    // Retrieved ChuckLength 
-    /*[out]*/ aafUInt32 *  pChunkLength);
-
-
-  //***********************************************************
-  //
-  // WriteChunkData()
-  //
-  // Write the specified bytes to the chunk data stream.
-  /// 
-  /// Succeeds if all of the following are true:
-  /// - the number of bytes to write is non-zero.
-  /// - the buffer pointer is valid.
-  /// - the pBytesWritten pointer is valid.
-  /// - the object is initialized.
-  /// - the object is persistent (attached to a file).
-  /// 
-  /// If this method fails the ChunkData property will
-  /// not be changed.
-  /// 
-  /// This method will return the following codes:
-  /// 
-  /// AAFRESULT_SUCCESS
-  ///   - succeeded.  (This is the only code indicating success.)
-  ///
-  /// AAFRESULT_INVALID_PARAM
-  ///   - bytes arg is larger than zero.
-  ///
-  /// AAFRESULT_NULL_PARAM
-  ///   - buffer arg is NULL.
-  ///
-  /// AAFRESULT_NULL_PARAM
-  ///   - pBytesWritten arg is NULL.
-  ///
-  /// AAFRESULT_NOT_INITIALIZED
-  ///   - the object is not initialized.
-  ///
-  /// AAFRESULT_OBJECT_NOT_PERSISTENT
-  ///   - the object is not persistent.
-  ///
-  /// AAFRESULT_CONTAINERWRITE
-  ///   - writing failed.
-  //
-  STDMETHOD (WriteChunkData) (
-    // Write this many bytes
+  STDMETHOD (Read) (
+    // read this many bytes
     /*[in]*/ aafUInt32  bytes,
 
-    // Data to write
-    /*[out, size_is(bytes)]*/ aafDataBuffer_t  buffer,
+    // buffer to receive chunk data
+    /*[out, size_is(bytes), length_is(*pBytesRead)]*/ aafDataBuffer_t  buffer,
 
-    // Number of bytes actually written
-    /*[out,ref]*/ aafUInt32 *  pBytesWritten);
-
-
-  //***********************************************************
-  //
-  // ReadChunkData()
-  //
-  // Read the specified number of bytes from the chunk data
-  /// stream into buffer.
-  /// 
-  /// Succeeds if all of the following are true:
-  /// - the object is initialized.
-  /// - the number of bytes to read is non-zero.
-  /// - the buffer pointer is valid.
-  /// - the pBytesRead pointer is valid.
-  /// - the ChunkData property is present.
-  /// - the object is persistent (attached to a file).
-  /// - not yet reached the end of the data stream.
-  /// 
-  /// This method will return the following codes:
-  /// 
-  /// AAFRESULT_SUCCESS
-  ///   - succeeded.  (This is the only code indicating success.)
-  /// 
-  /// AAFRESULT_END_OF_DATA
-  ///   - trying to read beyond the end of the data stream.
-  /// 
-  /// AAFRESULT_NOT_INITIALIZED
-  ///   - the object is not initialized.
-  /// 
-  /// AAFRESULT_INVALID_PARAM
-  ///   - bytes arg is larger than zero.
-  ///
-  /// AAFRESULT_NULL_PARAM
-  ///   - buffer arg is NULL.
-  ///
-  /// AAFRESULT_NULL_PARAM
-  ///   - pBytesRead arg is NULL.
-  ///
-  /// AAFRESULT_PROP_NOT_PRESENT
-  ///   - the ChunkData property is not present.
-  ///
-  /// AAFRESULT_OBJECT_NOT_PERSISTENT
-  ///   - the object is not persistent.
-  //
-  STDMETHOD (ReadChunkData) (
-    // Read this many bytes
-    /*[in]*/ aafUInt32  bytes,
-
-    // Buffer to read the data to
-    /*[out, size_is(bytes)]*/ aafDataBuffer_t  buffer,
-
-    // Number of bytes actually read
+    // 
     /*[out,ref]*/ aafUInt32 *  pBytesRead);
 
 
   //***********************************************************
   //
-  // SetChunkDataPosition()
+  // Write()
   //
-  // Sets the offset from the beginning of chunk data.
-  /// 
-  /// Succeeds if all of the following are true:
-  /// - the object is initialized.
-  /// - the object is persistent (attached to a file).
-  /// 
-  /// If this method fails the position will not be changed.
-  /// 
-  /// This method will return the following codes:
-  /// 
-  /// AAFRESULT_SUCCESS
-  ///   - succeeded.  (This is the only code indicating success.)
-  ///
-  /// AAFRESULT_NOT_INITIALIZED
-  ///   - the object is not initialized.
-  ///
-  /// AAFRESULT_OBJECT_NOT_PERSISTENT
-  ///   - the object is not persistent.
+  // Write data to this RIFFChunk at the current position. Advances the position
+  // by the number of bytes written. Any data beyond the new position is lost;
+  // that is, the buffer is truncated.
   //
-  STDMETHOD (SetChunkDataPosition) (
-    // Offset from the beginning of chunk data. 
-    /*[in]*/ aafPosition_t  position);
+  STDMETHOD (Write) (
+    // write this many bytes
+    /*[in]*/ aafUInt32  bytes,
+
+    // chunk data to write
+    /*[out, size_is(bytes)]*/ aafDataBuffer_t  buffer,
+
+    // actual number of bytes written
+    /*[out,ref]*/ aafUInt32 *  pBytesWritten);
 
 
   //***********************************************************
   //
-  // GetChunkDataPosition()
+  // SetPosition()
   //
-  // Gets the offset from the beginning of chunk data.
-  /// 
-  /// Succeeds if all of the following are true:
-  /// - the object is initialized.
-  /// - the pPosition pointer is valid.
-  /// - the object is persistent (attached to a file).
-  /// 
-  /// If this method fails nothing will be written to *pPosition.
-  /// 
-  /// This method will return the following codes:
-  /// 
-  /// AAFRESULT_SUCCESS
-  ///   - succeeded.  (This is the only code indicating success.)
-  ///
-  /// AAFRESULT_NOT_INITIALIZED
-  ///   - the object is not initialized.
-  ///
-  /// AAFRESULT_NULL_PARAM
-  ///   - pPosition arg is NULL.
-  ///
-  /// AAFRESULT_PROP_NOT_PRESENT
-  ///   - the ChunkData property is not present.
-  ///
-  /// AAFRESULT_OBJECT_NOT_PERSISTENT
-  ///   - the object is not persistent.
+  // Seeks to absolute position within the RIFFChunk data. The next Read or Write
+  // call will operate from the given position.
   //
-  STDMETHOD (GetChunkDataPosition) (
-    // Offset from the beginning of chunk data. 
-    /*[out]*/ aafPosition_t *  pPosition);
+  STDMETHOD (SetPosition) (
+    // offset from beginning of the RIFFChunk data 
+    /*[in]*/ aafPosition_t  offset);
 
 
   //***********************************************************
   //
-  // GetChunkDataSize()
+  // GetPosition()
   //
-  // Gets the size of chunk data.
-  /// ChunkData is optional property.
-  /// 
-  /// Succeeds if all of the following are true:
-  /// - the object is initialized.
-  /// - the pSize pointer is valid.
-  /// - the ChunkData property is present.
-  /// - the object is persistent (attached to a file).
-  /// 
-  /// If this method fails nothing will be written to *pSize.
-  /// 
-  /// This method will return the following codes:
-  /// 
-  /// AAFRESULT_SUCCESS
-  ///   - succeeded.  (This is the only code indicating success.)
-  ///
-  /// AAFRESULT_NOT_INITIALIZED
-  ///   - the object is not initialized.
-  ///
-  /// AAFRESULT_NULL_PARAM
-  ///   - pSize arg is NULL.
-  ///
-  /// AAFRESULT_PROP_NOT_PRESENT
-  ///   - the ChunkData property is not present.
-  ///
-  /// AAFRESULT_OBJECT_NOT_PERSISTENT
-  ///   - the object is not persistent.
+  // Gets the current position within the RIFFChunk data. This is the position at
+  // which the next Read or Write call will operate.
   //
-  STDMETHOD (GetChunkDataSize) (
-    // The size of chunk data. 
-    /*[out]*/ aafLength_t *  pSize);
+  STDMETHOD (GetPosition) (
+    // current offset from beginning of the RIFFChunk data 
+    /*[out]*/ aafPosition_t*  pOffset);
+
+
+  //***********************************************************
+  //
+  // GetLength()
+  //
+  // Returns the total size of the RIFFChunk data, in bytes.
+  //
+  STDMETHOD (GetLength) (
+    // length of the RIFFChunk data 
+    /*[out]*/ aafLength_t *  pLength);
 
 
 

@@ -42,8 +42,8 @@
 using namespace std;
 
 
-aafUInt32 TestSourceTrackIDsVector[] = { 1, 3, 5, 7, 11 };
-const aafUInt32 TestSourceTrackIDsVectorSize = 5;
+static aafUInt32 TestSourceTrackIDsVector[] = { 1, 3, 5, 7, 11 };
+static const aafUInt32 TestSourceTrackIDsVectorSize = 5;
 
 static aafSourceRef_t sourceRef; 
 static aafWChar *slotName = L"SLOT1";

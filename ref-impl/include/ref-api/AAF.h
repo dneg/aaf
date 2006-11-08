@@ -3339,7 +3339,7 @@ DECLARE_INTERFACE_(IAAFCodecDef, IUnknown)
   //
   /// Init all fields of a definition object.
   ///
-  /// @param id [in, ref] AUID for new DeObject
+  /// @param id [in, ref] AUID for new DefObject
   /// @param pName [in, string] Name for new DefObject
   /// @param pDescription [in, string] Description for new DefObject
   ///
@@ -4373,7 +4373,7 @@ DECLARE_INTERFACE_(IAAFContainerDef, IUnknown)
   //
   /// Init all fields of a definition object.
   ///
-  /// @param id [in, ref] AUID for new DeObject
+  /// @param id [in, ref] AUID for new DefObject
   /// @param pName [in, string] Name for new DefObject
   /// @param pDescription [in, string] Description for new DefObject
   ///
@@ -5176,7 +5176,7 @@ DECLARE_INTERFACE_(IAAFDataDef, IUnknown)
   //
   /// Init all fields of a definition object.
   ///
-  /// @param id [in, ref] AUID for new DeObject
+  /// @param id [in, ref] AUID for new DefObject
   /// @param pName [in, string] Name for new DefObject
   /// @param pDescription [in, string] Description for new DefObject
   ///
@@ -5652,7 +5652,7 @@ DECLARE_INTERFACE_(IAAFDefObject, IUnknown)
   //
   /// Init all fields of a definition object.
   ///
-  /// @param id [in, ref] AUID for new DeObject
+  /// @param id [in, ref] AUID for new DefObject
   /// @param pName [in, string] Name for new DefObject
   ///
   STDMETHOD(Initialize) (THIS_
@@ -12455,7 +12455,7 @@ DECLARE_INTERFACE_(IAAFInterpolationDef, IUnknown)
   //
   /// Init all fields of a definition object.
   ///
-  /// @param id [in, ref] AUID for new DeObject
+  /// @param id [in, ref] AUID for new DefObject
   /// @param pName [in, string] Name for new DefObject
   /// @param pDescription [in, string] Description for new DefObject
   ///
@@ -12723,7 +12723,7 @@ DECLARE_INTERFACE_(IAAFKLVDataDefinition, IUnknown)
   //
   /// Init all fields of a definition object.
   ///
-  /// @param id [in, ref] AUID for new DeObject
+  /// @param id [in, ref] AUID for new DefObject
   /// @param pName [in, string] Name for new DefObject
   /// @param pDescription [in, string] Description for new DefObject
   ///
@@ -13688,7 +13688,7 @@ DECLARE_INTERFACE_(IAAFMetaDefinition, IUnknown)
   //
   /// Init all fields of a meta definition object.
   ///
-  /// @param id [in, ref] AUID for new DeObject
+  /// @param id [in, ref] AUID for new DefObject
   /// @param pName [in, string] Name for new Meta Definition
   /// @param pDescription [in, string] the Description of this meta definition
   ///
@@ -17028,7 +17028,7 @@ DECLARE_INTERFACE_(IAAFOperationDef, IUnknown)
   //
   /// Init all fields of a definition object.
   ///
-  /// @param id [in, ref] AUID for new DeObject
+  /// @param id [in, ref] AUID for new DefObject
   /// @param pName [in, string] Name for new DefObject
   /// @param pDescription [in, string] Description for new DefObject
   ///
@@ -19400,7 +19400,7 @@ DECLARE_INTERFACE_(IAAFParameterDef, IUnknown)
   //
   /// Init all fields of a definition object.
   ///
-  /// @param id [in, ref] AUID for new DeObject
+  /// @param id [in, ref] AUID for new DefObject
   /// @param pName [in, string] Name for new DefObject
   /// @param pDescription [in, string] Description for new DefObject
   /// @param pType [in] The type definition for all parameters that use this definition
@@ -19638,7 +19638,7 @@ DECLARE_INTERFACE_(IAAFPluginDef, IUnknown)
   //
   /// Init all fields of a definition object.
   ///
-  /// @param id [in, ref] AUID for new DeObject
+  /// @param id [in, ref] AUID for new DefObject
   /// @param pName [in] Name for new DefObject
   /// @param pDescription [in] Description for new DefObject
   ///
@@ -22909,9 +22909,11 @@ DECLARE_INTERFACE_(IAAFRIFFChunk, IUnknown)
   // Initialize()
   //
   /// Initializes a newly allocated, empty
-  /// IAAFRIFFChunk-supporting object.  This method must be
-  /// called after allocation, and before any other method can be
-  /// called.
+  /// IAAFRIFFChunk-supporting object. The data content is initially
+  /// empty.
+  ///
+  /// This method must be called after allocation, and before any other
+  /// method can be called.
   ///
   /// Succeeds if:
   /// - Initialize() has not yet been called on this object.
@@ -22927,15 +22929,9 @@ DECLARE_INTERFACE_(IAAFRIFFChunk, IUnknown)
   ///   - Initialize() has already been called on this object.
   ///
   /// @param chunkID [in] ChunkID value
-  /// @param chunkLength [in] ChunkLength value
-  /// @param bytes [in] Write this many bytes
-  /// @param buffer [out, size_is(bytes)] Data to write
   ///
   STDMETHOD(Initialize) (THIS_
-    aafUInt32  chunkID,
-    aafUInt32  chunkLength,
-    aafUInt32  bytes,
-    aafDataBuffer_t  buffer) PURE;
+    aafUInt32  chunkID) PURE;
 
 
   //***********************************************************
@@ -22946,6 +22942,7 @@ DECLARE_INTERFACE_(IAAFRIFFChunk, IUnknown)
                         
   ///
   /// Succeeds if all of the following are true:
+  /// - This object has already been had Initialize() called on it.
   ///
   /// If this method fails, the ChunkID property will not be
   /// changed.
@@ -22965,11 +22962,10 @@ DECLARE_INTERFACE_(IAAFRIFFChunk, IUnknown)
   // GetChunkID()
   //
   /// Gets the ChunkID property.
-                        
+  ///
   ///
   /// Succeeds if all of the following are true:
   /// - pChunkID is a valid pointer
-  /// - the property is present.
   ///
   /// If this method fails, pChunkID will not be changed.
   ///
@@ -22981,9 +22977,6 @@ DECLARE_INTERFACE_(IAAFRIFFChunk, IUnknown)
   /// AAFRESULT_NULL_PARAM
   ///   - pChunkID is NULL.
   ///
-  /// AAFRESULT_PROP_NOT_PRESENT
-  ///   - the property is not present.
-  ///
   /// @param pChunkID [out] Retrieved ChunkID
   ///
   STDMETHOD(GetChunkID) (THIS_
@@ -22992,152 +22985,16 @@ DECLARE_INTERFACE_(IAAFRIFFChunk, IUnknown)
 
   //***********************************************************
   //
-  // SetChunkLength()
+  // Read()
   //
-  /// Sets the ChunkLength property
-                   
+  /// Reads data from this RIFFChunk at the current position. Advances the position
+  /// by the number of bytes read.
   ///
-  /// Succeeds if all of the following are true:
+  /// @param bytes [in] read this many bytes
+  /// @param buffer [out, size_is(bytes), length_is(*bytesRead)] buffer to receive chunk data
+  /// @param bytesRead [out,ref] 
   ///
-  /// If this method fails, the ChunkLength property will not be
-  /// changed.
-  ///
-  /// This method will return the following codes:
-  ///
-  /// AAFRESULT_SUCCESS
-  ///   - succeeded.  (This is the only code indicating success.)
-  ///
-  /// @param chunkLength [in] Length to set
-  ///
-  STDMETHOD(SetChunkLength) (THIS_
-    aafUInt32  chunkLength) PURE;
-
-  //***********************************************************
-  //
-  // GetChunkLength()
-  //
-  /// Gets the ChunkLength property
-                      
-  ///
-  /// Succeeds if all of the following are true:
-  /// - pMChunkLength is a valid pointer
-  /// - the property is present.
-  ///
-  /// If this method fails, pChunkLength will not be changed.
-  ///
-  /// This method will return the following codes:
-  ///
-  /// AAFRESULT_SUCCESS
-  ///   - succeeded.  (This is the only code indicating success.)
-  ///
-  /// AAFRESULT_NULL_PARAM
-  ///   - pChunkLength is NULL.
-  ///
-  /// AAFRESULT_PROP_NOT_PRESENT
-  ///   - the property is not present.
-  ///
-  /// @param pChunkLength [out] Retrieved ChuckLength
-  ///
-  STDMETHOD(GetChunkLength) (THIS_
-    aafUInt32 *  pChunkLength) PURE;
-
-
-  //***********************************************************
-  //
-  // WriteChunkData()
-  //
-  /// Write the specified bytes to the chunk data stream.
-  /// 
-  /// Succeeds if all of the following are true:
-  /// - the number of bytes to write is non-zero.
-  /// - the buffer pointer is valid.
-  /// - the pBytesWritten pointer is valid.
-  /// - the object is initialized.
-  /// - the object is persistent (attached to a file).
-  /// 
-  /// If this method fails the ChunkData property will
-  /// not be changed.
-  /// 
-  /// This method will return the following codes:
-  /// 
-  /// AAFRESULT_SUCCESS
-  ///   - succeeded.  (This is the only code indicating success.)
-  ///
-  /// AAFRESULT_INVALID_PARAM
-  ///   - bytes arg is larger than zero.
-  ///
-  /// AAFRESULT_NULL_PARAM
-  ///   - buffer arg is NULL.
-  ///
-  /// AAFRESULT_NULL_PARAM
-  ///   - pBytesWritten arg is NULL.
-  ///
-  /// AAFRESULT_NOT_INITIALIZED
-  ///   - the object is not initialized.
-  ///
-  /// AAFRESULT_OBJECT_NOT_PERSISTENT
-  ///   - the object is not persistent.
-  ///
-  /// AAFRESULT_CONTAINERWRITE
-  ///   - writing failed.
-  ///
-  /// @param bytes [in] Write this many bytes
-  /// @param buffer [out, size_is(bytes)] Data to write
-  /// @param pBytesWritten [out,ref] Number of bytes actually written
-  ///
-  STDMETHOD(WriteChunkData) (THIS_
-    aafUInt32  bytes,
-    aafDataBuffer_t  buffer,
-    aafUInt32 *  pBytesWritten) PURE;
-
-
-  //***********************************************************
-  //
-  // ReadChunkData()
-  //
-  /// Read the specified number of bytes from the chunk data
-  /// stream into buffer.
-  /// 
-  /// Succeeds if all of the following are true:
-  /// - the object is initialized.
-  /// - the number of bytes to read is non-zero.
-  /// - the buffer pointer is valid.
-  /// - the pBytesRead pointer is valid.
-  /// - the ChunkData property is present.
-  /// - the object is persistent (attached to a file).
-  /// - not yet reached the end of the data stream.
-  /// 
-  /// This method will return the following codes:
-  /// 
-  /// AAFRESULT_SUCCESS
-  ///   - succeeded.  (This is the only code indicating success.)
-  /// 
-  /// AAFRESULT_END_OF_DATA
-  ///   - trying to read beyond the end of the data stream.
-  /// 
-  /// AAFRESULT_NOT_INITIALIZED
-  ///   - the object is not initialized.
-  /// 
-  /// AAFRESULT_INVALID_PARAM
-  ///   - bytes arg is larger than zero.
-  ///
-  /// AAFRESULT_NULL_PARAM
-  ///   - buffer arg is NULL.
-  ///
-  /// AAFRESULT_NULL_PARAM
-  ///   - pBytesRead arg is NULL.
-  ///
-  /// AAFRESULT_PROP_NOT_PRESENT
-  ///   - the ChunkData property is not present.
-  ///
-  /// AAFRESULT_OBJECT_NOT_PERSISTENT
-  ///   - the object is not persistent.
-  ///
-  /// @param bytes [in] Read this many bytes
-  /// @param buffer [out, size_is(bytes)] Buffer to read the data to
-  /// @param pBytesRead [out,ref] Number of bytes actually read
-  ///
-  STDMETHOD(ReadChunkData) (THIS_
+  STDMETHOD(Read) (THIS_
     aafUInt32  bytes,
     aafDataBuffer_t  buffer,
     aafUInt32 *  pBytesRead) PURE;
@@ -23145,105 +23002,58 @@ DECLARE_INTERFACE_(IAAFRIFFChunk, IUnknown)
 
   //***********************************************************
   //
-  // SetChunkDataPosition()
+  // Write()
   //
-  /// Sets the offset from the beginning of chunk data.
-  /// 
-  /// Succeeds if all of the following are true:
-  /// - the object is initialized.
-  /// - the object is persistent (attached to a file).
-  /// 
-  /// If this method fails the position will not be changed.
-  /// 
-  /// This method will return the following codes:
-  /// 
-  /// AAFRESULT_SUCCESS
-  ///   - succeeded.  (This is the only code indicating success.)
+  /// Write data to this RIFFChunk at the current position. Advances the position
+  /// by the number of bytes written. Any data beyond the new position is lost;
+  /// that is, the buffer is truncated.
   ///
-  /// AAFRESULT_NOT_INITIALIZED
-  ///   - the object is not initialized.
+  /// @param bytes [in] write this many bytes
+  /// @param buffer [out, size_is(bytes)] chunk data to write
+  /// @param bytesWritten [out,ref] actual number of bytes written
   ///
-  /// AAFRESULT_OBJECT_NOT_PERSISTENT
-  ///   - the object is not persistent.
-  ///
-  /// @param position [in] Offset from the beginning of chunk data.
-  ///
-  STDMETHOD(SetChunkDataPosition) (THIS_
-    aafPosition_t  position) PURE;
+  STDMETHOD(Write) (THIS_
+    aafUInt32  bytes,
+    aafDataBuffer_t  buffer,
+    aafUInt32 *  pBytesWritten) PURE;
 
 
   //***********************************************************
   //
-  // GetChunkDataPosition()
+  // SetPosition()
   //
-  /// Gets the offset from the beginning of chunk data.
-  /// 
-  /// Succeeds if all of the following are true:
-  /// - the object is initialized.
-  /// - the pPosition pointer is valid.
-  /// - the object is persistent (attached to a file).
-  /// 
-  /// If this method fails nothing will be written to *pPosition.
-  /// 
-  /// This method will return the following codes:
-  /// 
-  /// AAFRESULT_SUCCESS
-  ///   - succeeded.  (This is the only code indicating success.)
+  /// Seeks to absolute position within the RIFFChunk data. The next Read or Write
+  /// call will operate from the given position.
   ///
-  /// AAFRESULT_NOT_INITIALIZED
-  ///   - the object is not initialized.
+  /// @param offset [in] offset from beginning of the RIFFChunk data
   ///
-  /// AAFRESULT_NULL_PARAM
-  ///   - pPosition arg is NULL.
-  ///
-  /// AAFRESULT_PROP_NOT_PRESENT
-  ///   - the ChunkData property is not present.
-  ///
-  /// AAFRESULT_OBJECT_NOT_PERSISTENT
-  ///   - the object is not persistent.
-  ///
-  /// @param pPosition [out] Offset from the beginning of chunk data.
-  ///
-  STDMETHOD(GetChunkDataPosition) (THIS_
-    aafPosition_t *  pPosition) PURE;
+  STDMETHOD(SetPosition) (THIS_
+    aafPosition_t  offset) PURE;
 
 
   //***********************************************************
   //
-  // GetChunkDataSize()
+  // GetPosition()
   //
-  /// Gets the size of chunk data.
-  /// ChunkData is optional property.
-  /// 
-  /// Succeeds if all of the following are true:
-  /// - the object is initialized.
-  /// - the pSize pointer is valid.
-  /// - the ChunkData property is present.
-  /// - the object is persistent (attached to a file).
-  /// 
-  /// If this method fails nothing will be written to *pSize.
-  /// 
-  /// This method will return the following codes:
-  /// 
-  /// AAFRESULT_SUCCESS
-  ///   - succeeded.  (This is the only code indicating success.)
+  /// Gets the current position within the RIFFChunk data. This is the position at
+  /// which the next Read or Write call will operate.
   ///
-  /// AAFRESULT_NOT_INITIALIZED
-  ///   - the object is not initialized.
+  /// @param pOffset [out] current offset from beginning of the RIFFChunk data
   ///
-  /// AAFRESULT_NULL_PARAM
-  ///   - pSize arg is NULL.
+  STDMETHOD(GetPosition) (THIS_
+    aafPosition_t*  pOffset) PURE;
+
+
+  //***********************************************************
+  //
+  // GetLength()
+  //
+  /// Returns the total size of the RIFFChunk data, in bytes.
   ///
-  /// AAFRESULT_PROP_NOT_PRESENT
-  ///   - the ChunkData property is not present.
+  /// @param pLength [out] length of the RIFFChunk data
   ///
-  /// AAFRESULT_OBJECT_NOT_PERSISTENT
-  ///   - the object is not persistent.
-  ///
-  /// @param pSize [out] The size of chunk data.
-  ///
-  STDMETHOD(GetChunkDataSize) (THIS_
-    aafLength_t *  pSize) PURE;
+  STDMETHOD(GetLength) (THIS_
+    aafLength_t *  pLength) PURE;
 
 
 
@@ -26452,7 +26262,7 @@ DECLARE_INTERFACE_(IAAFTaggedValueDefinition, IUnknown)
   //
   /// Init all fields of a definition object.
   ///
-  /// @param id [in, ref] AUID for new DeObject
+  /// @param id [in, ref] AUID for new DefObject
   /// @param pName [in, string] Name for new DefObject
   /// @param pDescription [in, string] Description for new DefObject
   ///
@@ -40750,7 +40560,7 @@ DECLARE_INTERFACE_(IAAFDataDef2, IUnknown)
   //
   /// Init all fields of a definition object.
   ///
-  /// @param id [in, ref] AUID for new DeObject
+  /// @param id [in, ref] AUID for new DefObject
   /// @param pName [in, string] Name for new DefObject
   /// @param pDescription [in, string] Description for new DefObject
   ///
@@ -40918,7 +40728,7 @@ DECLARE_INTERFACE_(IAAFDataDef3, IUnknown)
   //
   /// Init all fields of a definition object.
   ///
-  /// @param id [in, ref] AUID for new DeObject
+  /// @param id [in, ref] AUID for new DefObject
   /// @param pName [in, string] Name for new DefObject
   /// @param pDescription [in, string] Description for new DefObject
   ///

@@ -137,6 +137,7 @@ static HRESULT CreateAAFFile(
 	IAAFSourceMob*				pSourceMob = NULL;
 	IAAFEssenceDescriptor*		pEssDesc = NULL;
 	IAAFBWFImportDescriptor*			pBWFImportDesc = NULL;
+	aafUInt32			testNum;
 	HRESULT				hr = S_OK;
 
 
@@ -167,7 +168,7 @@ static HRESULT CreateAAFFile(
 		checkResult( defs.cdBWFImportDescriptor()->
 					  CreateInstance(IID_IAAFBWFImportDescriptor, (IUnknown **)&pBWFImportDesc));
 					 
-		// Create RIFFChunks and them to BWFImportDescriptor
+		// Create RIFFChunks and append them to BWFImportDescriptor
 
 		checkResult(defs.cdRIFFChunk()->CreateInstance(IID_IAAFRIFFChunk, 
 							 (IUnknown **)&pRIFFChunk));
@@ -194,9 +195,14 @@ static HRESULT CreateAAFFile(
 		//Add the MOB to the file
 		checkResult(pHeader->AddMob(pMob));
 		
-		checkResult(pRIFFChunk->Initialize(chunkID, chunkLength, sizeof(RIFFChunksmiley), (unsigned char *)RIFFChunksmiley));
-		checkResult(pRIFFChunk2->Initialize(chunkID2, chunkLength, sizeof(RIFFChunkfrowney), (unsigned char *)RIFFChunkfrowney));
-		
+		testNum = 0;
+		checkResult(pRIFFChunk->Initialize(chunkID));
+		checkResult(pRIFFChunk->Write(sizeof(RIFFChunksmiley), (unsigned char *)RIFFChunksmiley, &testNum));
+		checkExpression(testNum == sizeof(RIFFChunksmiley), AAFRESULT_TEST_FAILED);
+		testNum = 0;
+		checkResult(pRIFFChunk2->Initialize(chunkID2));
+		checkResult(pRIFFChunk2->Write(sizeof(RIFFChunkfrowney), (unsigned char *)RIFFChunkfrowney, &testNum));
+		checkExpression(testNum == sizeof(RIFFChunkfrowney), AAFRESULT_TEST_FAILED);
 		pFile->Save();
 
 		pEssDesc->Release();
@@ -245,8 +251,8 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	IAAFRIFFChunk*				pRIFFChunk = NULL;
 	IAAFRIFFChunk*				pRIFFChunkTest = NULL;
 	IEnumAAFMobs*				pMobIter = NULL;
-	aafUInt32					numData, bytesRead, com, testNum ;
-	aafLength_t 				testRIFFLen;
+	aafUInt32					numData, bytesRead, com, testNum;
+	aafLength_t					testRIFFLen;
 	aafNumSlots_t				numMobs;
 	char						Value[sizeof(RIFFChunksmiley)];
 	char						Value2[sizeof(RIFFChunkfrowney)];
@@ -301,19 +307,19 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 			for(com = 0; com < numData; com++)
 			{	
 				checkResult(pEnum->NextOne(&pRIFFChunk));	
-				pRIFFChunk->GetChunkLength(&testNum);
-				checkExpression(testNum==chunkLength, AAFRESULT_TEST_FAILED);
-				checkResult(pRIFFChunk->GetChunkDataSize(&testRIFFLen));
+				pRIFFChunk->GetLength(&testRIFFLen);
+				checkExpression(testRIFFLen!=chunkLength /*huh?*/, AAFRESULT_TEST_FAILED);
+				checkResult(pRIFFChunk->GetLength(&testRIFFLen));
 				pRIFFChunk->GetChunkID(&testNum);
 				
 				if (testNum==1){
 					checkExpression(sizeof(RIFFChunksmiley) == testRIFFLen, AAFRESULT_TEST_FAILED);
-					checkResult(pRIFFChunk->ReadChunkData( sizeof(Value), (unsigned char *)Value, &bytesRead));
+					checkResult(pRIFFChunk->Read( sizeof(Value), (unsigned char *)Value, &bytesRead));
 					checkExpression(memcmp(Value, RIFFChunksmiley, sizeof(RIFFChunksmiley)) == 0, AAFRESULT_TEST_FAILED);						
 				}
 				else if (testNum==2){
 					checkExpression(sizeof(RIFFChunkfrowney) == testRIFFLen, AAFRESULT_TEST_FAILED);
-					checkResult(pRIFFChunk->ReadChunkData( sizeof(Value2), (unsigned char *)Value2, &bytesRead));
+					checkResult(pRIFFChunk->Read( sizeof(Value2), (unsigned char *)Value2, &bytesRead));
 					checkExpression(memcmp(Value2, RIFFChunkfrowney, sizeof(RIFFChunkfrowney)) == 0, AAFRESULT_TEST_FAILED);
 				}
 				pRIFFChunk->Release();

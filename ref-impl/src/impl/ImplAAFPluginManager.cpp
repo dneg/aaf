@@ -456,7 +456,7 @@ AAFRESULT ImplAAFPluginManager::ForEachPluginWithDefinitionDo(
 }
 
 
-bool ImplAAFPluginManager::FindPluginFromDefintion(
+bool ImplAAFPluginManager::FindPluginFromDefinition(
   aafUID_constref	pluginID,
   CLSID& clsid)
 {
@@ -482,7 +482,7 @@ AAFRESULT ImplAAFPluginManager::CreateInstanceFromDefinition(
 
 	XPROTECT()
 	{
-		if(!FindPluginFromDefintion(pluginID, codecCLSID))
+		if(!FindPluginFromDefinition(pluginID, codecCLSID))
 			return(AAFRESULT_CODEC_INVALID);
 		CHECK(CreateInstance(codecCLSID,
 			pUnkOuter, 

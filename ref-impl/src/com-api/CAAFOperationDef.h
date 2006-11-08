@@ -73,7 +73,7 @@ public:
   // Init all fields of a definition object.
   //
   STDMETHOD (Initialize) (
-    // AUID for new DeObject
+    // AUID for new DefObject
     /*[in, ref]*/ aafUID_constref  id,
 
     // Name for new DefObject

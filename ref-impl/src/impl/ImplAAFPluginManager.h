@@ -94,7 +94,7 @@ AAFRESULT ForEachPluginWithDefinitionDo(
   AAFDOTOPLUGINWITHDEFINTIONPROC proc, 
   void *refCon);
 
-bool FindPluginFromDefintion(
+bool FindPluginFromDefinition(
   aafUID_constref	pluginID,
   CLSID& clsid);
 
