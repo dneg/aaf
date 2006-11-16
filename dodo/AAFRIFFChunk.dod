@@ -123,10 +123,9 @@ AD_XMETHOD1(GetChunkID,
 
 AD_METHOD3(Read,
 [in],aafUInt32, bytes, read this many bytes,
-[out\\\, size_is\\\(bytes\\\)\\\, length_is\\\(*bytesRead\\\)],aafDataBuffer_t,buffer, buffer to receive chunk data,
+[out\\\, size_is\\\(bytes\\\)\\\, length_is\\\(*pBytesRead\\\)],aafDataBuffer_t,buffer, buffer to receive chunk data,
 [out\\\,ref],aafUInt32 *,pBytesRead,,
-Reads data from this RIFFChunk at the current position. Advances the position \
-by the number of bytes read.)
+Reads data from this RIFFChunk at the current position. Advances the position by the number of bytes read.)
 
 
 AD_METHOD3(Write,
