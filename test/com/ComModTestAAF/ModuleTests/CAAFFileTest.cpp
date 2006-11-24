@@ -41,6 +41,11 @@
 
 #include "CAAFBuiltinDefs.h"
 
+#include "CAAFFileTest.h"
+
+typedef IAAFSmartPointer<IAAFRawStorage>  IAAFRawStorageSP;
+typedef IAAFSmartPointer<IAAFFile>        IAAFFileSP;
+
 // convenient error handlers.
 inline void checkResult(HRESULT r)
 {
@@ -246,10 +251,27 @@ static HRESULT CreateAAFFile(
 	  // Check for illegal mode flags.
 	  checkResult(checkModeFlags (fileKind, rawStorageType, productID));
 
+/* Premature Close() test inserted ******************************************/
 	  // Create the file.
       checkResult(CreateTestFile(pFileName, fileKind, rawStorageType, productID, &pFile));
 	  bFileOpen = true;
   
+	  checkResult(pFile->Close());
+	  bFileOpen = false;
+	  HRESULT	hBad1 = pFile->GetHeader(&pHeader);
+	  checkExpression( AAFRESULT_NOT_OPEN == hBad1, AAFRESULT_TEST_FAILED );
+	  checkExpression( NULL == pHeader, AAFRESULT_TEST_FAILED );
+	  pFile->Release();
+	  pFile = NULL;
+	  
+	  // Remove the previous test file again.
+	  RemoveTestFile(pFileName);
+
+/* Actual Create file happening now! ******************************************/
+	  // Create the file again.
+      checkResult(CreateTestFile(pFileName, fileKind, rawStorageType, productID, &pFile));
+	  bFileOpen = true;
+
 	  // We can't really do anthing in AAF without the header.
 	  checkResult(pFile->GetHeader(&pHeader));
 
@@ -544,6 +566,546 @@ static HRESULT CreateEmptyFile(wchar_t* pFileName)
   return hr;
 }
 
+static HRESULT ComprehensiveOpenTest(testMode_t /* mode */,
+									 aafUID_t fileKind,
+                                     testRawStorageType_t rawStorageType,
+                                     aafProductIdentification_t productID)
+{
+  // Summary of tests
+  //    A) Error cases:
+  //	   1. Not Initialized
+  //	   2. Already Open
+  //	   3. Already Closed
+  //	   4. Later Version
+  //
+  //	B) Multiple Opens:
+  //	   1. Already OpenExistingRead
+  //	   2. Already OpenExistingModify
+  //	   3. Already OpenNewModify
+  //	   4. Already OpenTransient
+  //	   5. Already CreateAAFFileOnRawStorage
+  //
+  //	C) Open Success:
+  //	   1. Save after Open
+  //	   2. Revert after Open
+  //	   3. Close after Open
+  //	   4. GetHeader after Open
+  //
+  //	D) Not Open:
+  //	   1. Save before Open
+  //	   2. Revert before Open
+  //	   3. Close before Open
+  //	   4. GetHeader before Open
+
+  int f = 0; // Local count of failures
+  IAAFFile* pFile = 0;
+  
+  // Open Test file present for functions that require one
+  //
+  aafWChar * pFileName = L"OpenTestF.ile";
+  RemoveTestFile(pFileName);
+
+  /* **************************************************************************
+	 A) Error cases:
+		1. Not Initialized:
+		   - Create object only new()-style,
+		   - then Open()
+		   - expect AAFRESULT_NOT_INITIALIZED
+  ************************************************************************** */
+  {
+	  std::cout << "\tSkipping ComprehensiveOpenTest A1." << std::endl;
+#if 0
+	  // Can't be done, new-style methods not accesible at this level
+	  pFile = static_cast<ImplAAFFile *>(::CreateImpl(CLSID_AAFFile));
+	  if (pFile)
+		  checkExpression( AAFRESULT_NOT_INITIALIZED == pFile->Open(), AAFRESULT_TEST_FAILED );
+	  else
+		  f++;
+	  if (pFile)
+		  pFile->Release(), pFile = 0;
+	  RemoveTestFile(pFileName);
+#endif
+  }
+
+  /* **************************************************************************
+	 A) Error cases:
+		2. Already Open:
+		   - Open(),
+		   - then Open() again
+		   - expect AAFRESULT_ALREADY_OPEN
+  ************************************************************************** */
+  {
+	  std::cout << "\tExecuting ComprehensiveOpenTest A2." << std::endl;
+	  checkResult(CreateTestFile(pFileName, fileKind, rawStorageType, productID, &pFile));
+	  if (pFile)
+	  {
+		  checkExpression( AAFRESULT_ALREADY_OPEN == pFile->Open(), AAFRESULT_TEST_FAILED );
+
+		  // Cleanup for the next test
+		  pFile->Close(), pFile->Release(), pFile = 0;
+	  }
+	  else
+	  {
+		  f++;
+	  }
+	  RemoveTestFile(pFileName);
+  }
+
+  /* **************************************************************************
+	 A) Error cases:
+		3. Already Closed:
+		   - Open(),
+		   - then Close(),
+		   - then Open() again
+		   - expect AAFRESULT_ALREADY_OPEN
+  ************************************************************************** */
+  {
+	  std::cout << "\tExecuting ComprehensiveOpenTest A3." << std::endl;
+	  checkResult(CreateTestFile(pFileName, fileKind, rawStorageType, productID, &pFile));
+	  if (pFile)
+	  {
+		  checkExpression( AAFRESULT_SUCCESS == pFile->Close(), AAFRESULT_TEST_FAILED );
+		  checkExpression( AAFRESULT_ALREADY_OPEN == pFile->Open(), AAFRESULT_TEST_FAILED );
+
+		  // Cleanup for the next test
+		  pFile->Release(), pFile = 0;
+	  }
+	  else
+	  {
+		  f++;
+	  }
+	  RemoveTestFile(pFileName);
+  }
+
+  /* **************************************************************************
+	 A) Error cases:
+		4. Later Version:
+		   - Create/setup AAF file with later version somehow
+		   - Open(),
+		   - expect AAFRESULT_FILEREV_DIFF
+  ************************************************************************** */
+  {
+	  std::cout << "\tExecuting ComprehensiveOpenTest A4." << std::endl;
+	  aafWChar* pBadVersionFileName = L"./my_second_aaf_f.ile";
+	  RemoveTestFile(pBadVersionFileName);
+
+	  char cBadVersionFileName[FILENAME_MAX];
+#ifdef _DEBUG
+	  size_t status =
+#endif
+	  wcstombs( cBadVersionFileName, pBadVersionFileName, FILENAME_MAX );
+	  assert( status != (size_t) - 1 );
+
+	  FILE* fs = fopen( cBadVersionFileName, "wb" );
+	  assert( fs );
+
+	  int nbytes = sizeof(MY_SECOND_AAF_FILE) / sizeof(aafUInt8);
+	  fwrite( MY_SECOND_AAF_FILE, sizeof(aafUInt8), nbytes, fs );
+	  fclose( fs );
+
+	  checkExpression( AAFRESULT_FILEREV_DIFF == AAFFileOpenExistingRead( pBadVersionFileName, 0, &pFile ), AAFRESULT_TEST_FAILED );
+	  RemoveTestFile( pBadVersionFileName );
+  }
+
+  /* **************************************************************************
+	 B) Multiple Opens:
+		1. Already OpenExistingRead:
+		   - OpenExistingRead(),
+		   - then Open(),
+		   - expect AAFRESULT_ALREADY_OPEN
+  ************************************************************************** */
+  {
+	  std::cout << "\tExecuting ComprehensiveOpenTest B1." << std::endl;
+	  checkResult(CreateTestFile(pFileName, fileKind, rawStorageType, productID, &pFile));
+	  if (pFile)
+	  {
+		  checkResult(pFile->Save());
+		  checkResult(pFile->Close());
+		  pFile->Release(), pFile = 0;
+
+		  checkExpression( AAFRESULT_SUCCESS == AAFFileOpenExistingRead( pFileName, 0, &pFile ), AAFRESULT_TEST_FAILED );
+		  checkExpression( AAFRESULT_ALREADY_OPEN == pFile->Open(), AAFRESULT_TEST_FAILED );
+
+		  // Cleanup for the next test
+		  pFile->Close(), pFile->Release(), pFile = 0;
+	  }
+	  else
+	  {
+		  f++;
+	  }
+	  RemoveTestFile(pFileName);
+  }
+
+  /* **************************************************************************
+	 B) Multiple Opens:
+		2. Already OpenExistingModify:
+		   - OpenExistingRead(),
+		   - then Open(),
+		   - expect AAFRESULT_ALREADY_OPEN
+  ************************************************************************** */
+  {
+	  std::cout << "\tExecuting ComprehensiveOpenTest B2." << std::endl;
+	  checkResult(CreateTestFile(pFileName, fileKind, rawStorageType, productID, &pFile));
+	  if (pFile)
+	  {
+		  checkResult(pFile->Save());
+		  checkResult(pFile->Close());
+		  pFile->Release(), pFile = 0;
+
+		  checkExpression( AAFRESULT_SUCCESS == AAFFileOpenExistingModify( pFileName, 0, &productID, &pFile ), AAFRESULT_TEST_FAILED );
+		  checkExpression( AAFRESULT_ALREADY_OPEN == pFile->Open(), AAFRESULT_TEST_FAILED );
+
+		  // Cleanup for the next test
+		  pFile->Close(), pFile->Release(), pFile = 0;
+	  }
+	  else
+	  {
+		  f++;
+	  }
+	  RemoveTestFile(pFileName);
+  }
+
+  /* **************************************************************************
+	 B) Multiple Opens:
+		3. Already OpenNewModify:
+		   - OpenNewModify(),
+		   - then Open(),
+		   - expect AAFRESULT_ALREADY_OPEN
+  ************************************************************************** */
+  {
+	  std::cout << "\tExecuting ComprehensiveOpenTest B3." << std::endl;
+	  checkExpression( AAFRESULT_SUCCESS == AAFFileOpenNewModify( pFileName, 0, &productID, &pFile ), AAFRESULT_TEST_FAILED );
+	  checkExpression( AAFRESULT_ALREADY_OPEN == pFile->Open(), AAFRESULT_TEST_FAILED );
+
+	  // Cleanup for the next test
+	  pFile->Close(), pFile->Release(), pFile = 0;
+	  RemoveTestFile(pFileName);
+  }
+
+  /* **************************************************************************
+	 B) Multiple Opens:
+		4. Already OpenTransient:
+		   - OpenTransient(),
+		   - then Open(),
+		   - expect AAFRESULT_ALREADY_OPEN
+  ************************************************************************** */
+  {
+	  std::cout << "\tExecuting ComprehensiveOpenTest B4." << std::endl;
+	  checkExpression( AAFRESULT_SUCCESS == AAFFileOpenTransient(&productID, &pFile ), AAFRESULT_TEST_FAILED );
+	  checkExpression( AAFRESULT_ALREADY_OPEN == pFile->Open(), AAFRESULT_TEST_FAILED );
+
+	  // Cleanup for the next test
+	  pFile->Close(), pFile->Release(), pFile = 0;
+  }
+
+  /* **************************************************************************
+	 B) Multiple Opens:
+		5. Already CreateAAFFileOnRawStorage:
+		   - CreateAAFFileOnRawStorage(),
+		   - then Open(),
+		   - expect AAFRESULT_ALREADY_OPEN
+  ************************************************************************** */
+{
+	  std::cout << "\tSkipping ComprehensiveOpenTest B5." << std::endl;
+#if 0
+	  // Create a memory raw storage and a file on it, to be opened for
+	  // reading.  We'll use this to get the SetFileBits to be tested.
+	  IAAFRawStorageSP pRawStg;
+	  checkResult
+			  (AAFCreateRawStorageMemory (kAAFFileAccess_read,
+										  &pRawStg));
+	  IAAFFileSP pRawFile;
+	  checkResult
+			  (AAFCreateAAFFileOnRawStorage (pRawStg,
+											 kAAFFileExistence_existing,
+											 kAAFFileAccess_read,
+											 0,
+											 0,
+											 0,
+											 &pRawFile));
+	  assert (pRawFile);
+	  checkExpression (0 != (IAAFFile*)pRawFile,
+					   AAFRESULT_TEST_FAILED);
+
+	  //Next line will fail.  Doesn't work, inside the code, the file is neither Open nor Closed.  Go Figure!
+	  checkExpression( AAFRESULT_ALREADY_OPEN == pRawFile->Open(), AAFRESULT_TEST_FAILED );
+
+	  // Cleanup for the next test
+	  pRawFile->Close(), pRawFile->Release();
+#endif
+  }
+
+  /* **************************************************************************
+	 C) Open Success:
+		1. Save after Open:
+		   - Open(),
+		   - then Save(),
+		   - expect AAFRESULT_SUCCESS
+  ************************************************************************** */
+  // This test is too basic, every module test does approximately the same thing!
+  //   We want the precious don't we.  Do it anyway!
+  // Yes, yes the precious!  OK we will run this basic test and maybe she will leave it for us!
+  {
+	  std::cout << "\tExecuting ComprehensiveOpenTest C1." << std::endl;
+	  checkExpression( AAFRESULT_SUCCESS == AAFFileOpenNewModify( pFileName, 0, &productID, &pFile ), AAFRESULT_TEST_FAILED );
+	  checkExpression( AAFRESULT_SUCCESS == pFile->Save(), AAFRESULT_TEST_FAILED );
+
+	  // Cleanup for the next test
+	  pFile->Close(), pFile->Release(), pFile = 0;
+	  RemoveTestFile(pFileName);
+  }
+
+  /* **************************************************************************
+	 C) Open Success:
+		2. Revert after Open:
+		   - Open(),
+		   - then Revert(),
+		   - expect AAFRESULT_SUCCESS
+  ************************************************************************** */
+  {
+	  std::cout << "\tSkipping ComprehensiveOpenTest C2." << std::endl;
+#if 0
+	  // Can't be done, Revert is not exposed for IAAFFile objects
+	  checkResult(CreateTestFile(pFileName, fileKind, rawStorageType, productID, &pFile));
+	  if (pFile)
+	  {
+		  checkResult(pFile->Save());
+		  checkResult(pFile->Close());
+		  pFile->Release(), pFile = 0;
+
+		  checkExpression( AAFRESULT_SUCCESS == AAFFileOpenExistingModify( pFileName, 0, &productID, &pFile ), AAFRESULT_TEST_FAILED );
+		  checkExpression( AAFRESULT_SUCCESS == pFile->Revert(), AAFRESULT_TEST_FAILED );
+
+		  // Cleanup for the next test
+		  pFile->Close(), pFile->Release(), pFile = 0;
+	  }
+	  else
+	  {
+		  f++;
+	  }
+	  RemoveTestFile(pFileName);
+#endif
+  }
+
+  /* **************************************************************************
+	 C) Open Success:
+		3. Close after Open:
+		   - Open(),
+		   - then Close(),
+		   - expect AAFRESULT_SUCCESS
+  ************************************************************************** */
+  // This test is also too basic!  Forget it!
+  //   You call me "storm crow" eh?
+  // Whenever you show up war increases!
+  //   Not this time, just test it and you'll see!
+  {
+	  std::cout << "\tExecuting ComprehensiveOpenTest C3." << std::endl;
+	  checkResult(CreateTestFile(pFileName, fileKind, rawStorageType, productID, &pFile));
+	  if (pFile)
+	  {
+		  checkResult(pFile->Save());
+		  checkResult(pFile->Close());
+		  pFile->Release(), pFile = 0;
+
+		  checkExpression( AAFRESULT_SUCCESS == AAFFileOpenExistingModify( pFileName, 0, &productID, &pFile ), AAFRESULT_TEST_FAILED );
+		  checkExpression( AAFRESULT_SUCCESS == pFile->Close(), AAFRESULT_TEST_FAILED );
+
+		  // Cleanup for the next test
+		  pFile->Release(), pFile = 0;
+	  }
+	  else
+	  {
+		  f++;
+	  }
+	  RemoveTestFile(pFileName);
+  }
+
+  /* **************************************************************************
+	 C) Open Success:
+		4. GetHeader after Open:
+		   - Open(),
+		   - then GetHeader(),
+		   - expect AAFRESULT_SUCCESS
+  ************************************************************************** */
+  // One more basic test!
+  //   Now let's go for it.  We may yet return!
+  // It's no use Sam!
+  //   We will run this test if I have to carry you up the mountain!
+  {
+	  std::cout << "\tExecuting ComprehensiveOpenTest C4." << std::endl;
+	  checkResult(CreateTestFile(pFileName, fileKind, rawStorageType, productID, &pFile));
+	  if (pFile)
+	  {
+		  checkResult(pFile->Save());
+		  checkResult(pFile->Close());
+		  pFile->Release(), pFile = 0;
+
+		  checkExpression( AAFRESULT_SUCCESS == AAFFileOpenExistingRead( pFileName, 0, &pFile ), AAFRESULT_TEST_FAILED );
+
+		  IAAFHeader *				pTestHeader = NULL;
+		  checkExpression( AAFRESULT_SUCCESS == pFile->GetHeader(&pTestHeader), AAFRESULT_TEST_FAILED );
+		  checkExpression( NULL != pTestHeader, AAFRESULT_TEST_FAILED );
+	  
+		  // Cleanup for the next test
+		  pFile->Close(), pFile->Release(), pFile = 0;
+	  }
+	  else
+	  {
+		  f++;
+	  }
+	  RemoveTestFile(pFileName);
+  }
+
+  /* **************************************************************************
+	 D) Not Open:
+		1. Save before Open:
+		   - Save(),
+		   - expect AAFRESULT_NOT_OPEN
+		   - Open() and Close(),
+		   - then Save(),
+		   - expect AAFRESULT_NOT_OPEN
+  ************************************************************************** */
+  {
+	  std::cout << "\tExecuting ComprehensiveOpenTest D1." << std::endl;
+	  // First two sub-steps can't be done.  I don't know of a way to create an IAAFFile object unopened.
+#if 0
+	  checkExpression( AAFRESULT_NOT_OPEN == pFile->Save(), AAFRESULT_TEST_FAILED );
+#endif
+	  checkExpression( AAFRESULT_SUCCESS == AAFFileOpenNewModify( pFileName, 0, &productID, &pFile ), AAFRESULT_TEST_FAILED );
+
+	  // Cleanup for the next test
+	  pFile->Close();
+  	  checkExpression( AAFRESULT_NOT_OPEN == pFile->Save(), AAFRESULT_TEST_FAILED );
+	  pFile->Release(), pFile = 0;
+	  RemoveTestFile(pFileName);
+  }
+
+  /* **************************************************************************
+	 D) Not Open:
+		2. Revert before Open:
+		   - Revert(),
+		   - expect AAFRESULT_NOT_OPEN
+		   - Open() and Close(),
+		   - then Revert(),
+		   - expect AAFRESULT_NOT_OPEN
+  ************************************************************************** */
+  {
+	  std::cout << "\tSkipping ComprehensiveOpenTest D2." << std::endl;
+#if 0
+	  // First two sub-steps can't be done.  I don't know of a way to create an IAAFFile object unopened.
+	  // But that is immaterial because there is no Revert method in IAAFFile.
+	  checkResult(CreateTestFile(pFileName, fileKind, rawStorageType, productID, &pFile));
+	  if (pFile)
+	  {
+		  checkResult(pFile->Save());
+		  checkResult(pFile->Close());
+		  pFile->Release(), pFile = 0;
+
+#if 0
+		  checkExpression( AAFRESULT_NOT_OPEN == pFile->Revert(), AAFRESULT_TEST_FAILED );
+#endif
+		  checkExpression( AAFRESULT_SUCCESS == AAFFileOpenExistingModify( pFileName, 0, &productID, &pFile ), AAFRESULT_TEST_FAILED );
+
+		  pFile->Close();
+  		  checkExpression( AAFRESULT_NOT_OPEN == pFile->Revert(), AAFRESULT_TEST_FAILED );
+		
+		  // Cleanup for the next test
+		pFile->Release(), pFile = 0;
+	  }
+	  else
+	  {
+		  f++;
+	  }
+	  RemoveTestFile(pFileName);
+#endif
+  }
+
+  /* **************************************************************************
+	 D) Not Open:
+		3. Close before Open:
+		   - Close(),
+		   - expect AAFRESULT_NOT_OPEN
+		   - Open() and Close(),
+		   - then Close(),
+		   - expect AAFRESULT_NOT_OPEN
+  ************************************************************************** */
+  {
+	  std::cout << "\tExecuting ComprehensiveOpenTest D3." << std::endl;
+	  // First two sub-steps can't be done.  I don't know of a way to create an IAAFFile object unopened.
+	  checkResult(CreateTestFile(pFileName, fileKind, rawStorageType, productID, &pFile));
+	  if (pFile)
+	  {
+		  checkResult(pFile->Save());
+		  checkResult(pFile->Close());
+		  pFile->Release(), pFile = 0;
+
+#if 0
+		  checkExpression( AAFRESULT_NOT_OPEN == pFile->Close(), AAFRESULT_TEST_FAILED );
+#endif
+		  checkExpression( AAFRESULT_SUCCESS == AAFFileOpenExistingModify( pFileName, 0, &productID, &pFile ), AAFRESULT_TEST_FAILED );
+		  checkExpression( AAFRESULT_SUCCESS == pFile->Close(), AAFRESULT_TEST_FAILED );
+		  checkExpression( AAFRESULT_NOT_OPEN == pFile->Close(), AAFRESULT_TEST_FAILED );
+
+		  // Cleanup for the next test
+		  pFile->Release(), pFile = 0;
+	  }
+	  else
+	  {
+		  f++;
+	  }
+	  RemoveTestFile(pFileName);
+  }
+  /* **************************************************************************
+	 D) Not Open:
+		4. GetHeader before Open:
+		   - GetHeader(),
+		   - expect AAFRESULT_NOT_OPEN
+		   - Open() and Close(),
+		   - then GetHeader(),
+		   - expect AAFRESULT_NOT_OPEN
+  ************************************************************************** */
+  {
+	  std::cout << "\tExecuting ComprehensiveOpenTest D4." << std::endl;
+	  // First two sub-steps can't be done.  I don't know of a way to create an IAAFFile object unopened.
+	  checkResult(CreateTestFile(pFileName, fileKind, rawStorageType, productID, &pFile));
+	  if (pFile)
+	  {
+		  checkResult(pFile->Save());
+		  checkResult(pFile->Close());
+		  pFile->Release(), pFile = 0;
+
+		  IAAFHeader *				pTestHeader = NULL;
+#if 0
+		  checkExpression( AAFRESULT_NOT_OPEN == pFile->GetHeader(&pTestHeader), AAFRESULT_TEST_FAILED );
+		  checkExpression( NULL == pTestHeader, AAFRESULT_TEST_FAILED );
+#endif
+		  checkExpression( AAFRESULT_SUCCESS == AAFFileOpenExistingRead( pFileName, 0, &pFile ), AAFRESULT_TEST_FAILED );
+		  pFile->Close();
+
+		  checkExpression( AAFRESULT_NOT_OPEN == pFile->GetHeader(&pTestHeader), AAFRESULT_TEST_FAILED );
+		  checkExpression( NULL == pTestHeader, AAFRESULT_TEST_FAILED );
+	  
+		  // Cleanup for the next test
+		  pFile->Release(), pFile = 0;
+	  }
+	  else
+	  {
+		  f++;
+	  }
+	  RemoveTestFile(pFileName);
+  }
+
+
+  HRESULT hr;
+  if (f == 0) {
+    hr = AAFRESULT_SUCCESS;
+  } else {
+    hr = AAFRESULT_TEST_FAILED;
+  }
+  return hr;
+}
+
+
 static HRESULT NegativeTestPublicGlobalFunctions(
                                           testMode_t /* mode */,
                                           aafUID_t fileKind,
@@ -734,6 +1296,12 @@ extern "C" HRESULT CAAFFile_test(
 													rawStorageType,
 													productID);
 			}
+		}
+		if (hr == AAFRESULT_SUCCESS) {
+		    hr = ComprehensiveOpenTest(mode,
+                                       fileKind,
+                                       rawStorageType,
+									   productID);
 		}
 	}
 	catch (...)
