@@ -48,8 +48,8 @@
 //
 // AAFMetaDict.csv 
 //
-// This file was generated on Tue Jun 27 15:37:50 EST 2006
-// by user heydowns on system rain.
+// This file was generated on Mon Nov 27 14:47:56 GMT 2006
+// by user phil on system pilot16.
 //
 // Key to macros.
 //
@@ -10824,6 +10824,27 @@ AAF_INSTANCE_GROUP(OPDefinitionInstances, OPDefinition)
       AAF_LITERAL_AUID(0x0D011201,
         0x0100, 0x0000,
         0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x05))
+  AAF_INSTANCE_SEPARATOR()
+  AAF_INSTANCE(OPDefinition, AAF_SYMBOL(OPDef_Unconstrained,OPDef_Unconstrained,"","Unconstrained by an Operational Pattern"), 
+      // {0D011201-0200-0000-060E-2B3404010109}
+      // 06.0E.2B.34.04.01.01.09.0D.01.12.01.02.00.00.00
+      AAF_LITERAL_AUID(0x0D011201,
+        0x0200, 0x0000,
+        0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x09), "Unconstrained by an Operational Pattern")
+    AAF_INSTANCE_PROPERTY(Name, String, "OPDef_Unconstrained")
+    AAF_INSTANCE_PROPERTY(Description, String, "Unconstrained by an Operational Pattern")
+    AAF_INSTANCE_PROPERTY(Identification, AUID, 
+      // {0D011201-0200-0000-060E-2B3404010109}
+      // 06.0E.2B.34.04.01.01.09.0D.01.12.01.02.00.00.00
+      AAF_LITERAL_AUID(0x0D011201,
+        0x0200, 0x0000,
+        0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x09))
+  AAF_INSTANCE_END(OPDefinition, AAF_SYMBOL(OPDef_Unconstrained,OPDef_Unconstrained,"","Unconstrained by an Operational Pattern"), 
+      // {0D011201-0200-0000-060E-2B3404010109}
+      // 06.0E.2B.34.04.01.01.09.0D.01.12.01.02.00.00.00
+      AAF_LITERAL_AUID(0x0D011201,
+        0x0200, 0x0000,
+        0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x09))
 AAF_INSTANCE_GROUP_END(OPDefinitionInstances, OPDefinition)
 AAF_INSTANCE_GROUP_SEPARATOR()
 AAF_INSTANCE_GROUP(KLVDataDefinitionInstances, KLVDataDefinition)
