@@ -23,73 +23,75 @@
 //=---------------------------------------------------------------------=
 
 // @doc OMINTERNAL
-#ifndef OMKLVSTOREDSTREAM_H
-#define OMKLVSTOREDSTREAM_H
+#ifndef OMKLVSTOREDSTREAMFILTER_H
+#define OMKLVSTOREDSTREAMFILTER_H
 
-#include "OMStoredStream.h"
-#include "OMVector.h"
+#include "OMStoredStreamFilter.h"
 
-class OMMXFStorage;
-class OMMXFStream;
+class OMKLVStoredStream;
 
-  // @class Implementation of <c OMStoredStream> for
+  // @class Implementation of <c OMStoredStreamFilter> for
   //        SMPTE (Society of Motion Picture and Television Engineers)
   //        Key Length Value (KLV) binary files.
-  //   @base public | <c OMStoredStream>
-  //   @cauthor Tim Bingham | tjb | Avid Technology, Inc.
-class OMKLVStoredStream : public OMStoredStream {
+  //   @base public | <c OMStoredStreamFilter>
+class OMKLVStoredStreamFilter : public OMStoredStreamFilter {
 public:
   // @access Public members.
 
     // @cmember Constructor.
-  OMKLVStoredStream(OMMXFStorage* store, OMUInt32 sid);
-
-    // @cmember Constructor.
-  OMKLVStoredStream(OMMXFStorage* store);
+  OMKLVStoredStreamFilter(OMKLVStoredStream* stream);
 
     // @cmember Destructor.
-  ~OMKLVStoredStream(void);
+  ~OMKLVStoredStreamFilter(void);
 
-    // @cmember Read <p size> bytes from this <c OMKLVStoredStream>
+    // @cmember Read <p size> bytes from this <c OMKLVStoredStreamFilter>
     //          into the buffer at address <p data>.
   virtual void read(void* data, OMUInt32 size) const;
 
     // @cmember Attempt to read <p bytes> bytes from this
-    //          <c OMKLVStoredStream> into the buffer at address <p data>.
+    //          <c OMKLVStoredStreamFilter> into the buffer at address <p data>.
     //          The actual number of bytes read is returned in <p bytesRead>.
   virtual void read(OMByte* data,
                     const OMUInt32 bytes,
                     OMUInt32& bytesRead) const;
 
     // @cmember Write <p size> bytes from the buffer at address
-    //          <p data> to this <c OMKLVStoredStream>.
+    //          <p data> to this <c OMKLVStoredStreamFilter>.
   virtual void write(void* data, OMUInt32 size);
 
     // @cmember Attempt to write <p bytes> bytes from the buffer at
-    //          address <p data> to this <c OMKLVStoredStream>. The actual
+    //          address <p data> to this <c OMKLVStoredStreamFilter>. The actual
     //          number of bytes written is returned in <p bytesWritten>.
   virtual void write(const OMByte* data,
                      const OMUInt32 bytes,
                      OMUInt32& bytesWritten);
 
-    // @cmember The size of this <c OMKLVStoredStream> in bytes.
+    // @cmember The size of this <c OMKLVStoredStreamFilter> in bytes.
   virtual OMUInt64 size(void) const;
 
-    // @cmember Set the size of this <c OMKLVStoredStream> to <p bytes>.
+    // @cmember Set the size of this <c OMKLVStoredStreamFilter> to <p bytes>.
   virtual void setSize(const OMUInt64 newSize);
 
     // @cmember The current position for <f read()> and
     //          <f write()>, as an offset in bytes from the
-    //          begining of this <c OMKLVStoredStream>.
+    //          begining of this <c OMKLVStoredStreamFilter>.
   virtual OMUInt64 position(void) const;
 
     // @cmember Set the current position for <f read()> and
     //          <f write()>, as an offset in bytes from the
-    //          begining of this <c OMKLVStoredStream>.
+    //          begining of this <c OMKLVStoredStreamFilter>.
   virtual void setPosition(const OMUInt64 offset) const;
 
-    // @cmember Close this <c OMKLVStoredStream>.
+    // @cmember Close this <c OMStoredStream>.
   virtual void close(void);
+
+    // @cmember Get unfiltered <c OMStoredStream>.
+  virtual const OMStoredStream* stream() const;
+
+    // @cmember Get unfiltered <c OMStoredStream>.
+  virtual OMStoredStream* stream();
+
+  // Get rid of the following 5
 
   virtual OMUInt32 streamIdentification(void) const;
 
@@ -105,26 +107,18 @@ public:
     // @cmember The block size (alignment) of this essence element.
   virtual OMUInt32 blockSize(void) const;
 
-    // @cmember Set the file offset of this essence element.
-  virtual void setFileOffset(OMUInt64 fileOffset);
-
-    // @cmember The file offset of this essence element.
-  virtual OMUInt64 fileOffset(void) const;
-
-  static bool readKLVKey(const OMStoredStream& stream, OMKLVKey& key);
-
-  static bool readKLVLength(const OMStoredStream& stream, OMUInt64& length);
-
 private:
   // @access Private members.
-  OMKLVKey _label;
-  OMUInt32 _blockSize;
-  OMUInt64 _fileOffset;
-  OMMXFStorage* _store;
-  OMUInt32 _sid;
-  OMUInt64 _position;
-  OMMXFStream* _stream;
 
+  void initialize() const;
+
+  OMKLVStoredStream* _stream;
+  bool _initialized;
+  bool _keyWritten;
+  OMUInt64 _position;
+  OMUInt64 _klvLength;
+  OMUInt64 _klvLengthOffset;
+  OMUInt64 _klvValueOffset;
 };
 
 #endif

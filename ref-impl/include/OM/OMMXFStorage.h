@@ -32,6 +32,7 @@
 #include "OMDataStream.h"
 #include "OMList.h"
 #include "OMListIterator.h"
+#include "OMSet.h"
 #include "OMVector.h"
 
 //#define OM_NEW_STREAM_PARSING
@@ -172,11 +173,10 @@ static const OMUInt8 FUT_OBJECTDIRECTORY = 0xff;
 
 class OMStorable;
 template <typename Key, typename Element>
-class OMSet;
-template <typename Key, typename Element>
 class OMSetIterator;
 template <typename Element>
 class OMIdentitySetIterator;
+class OMMXFStream;
 
   // @class Class supporting access to the raw bytes of MXF
   //        files supported by the Object Manager.
@@ -387,6 +387,16 @@ public:
 
   virtual void setObjectDirectoryOffset(OMUInt64 objectDirectoryOffset);
 
+  OMMXFStream* zz_createStream();
+
+  OMMXFStream* zz_createStream(OMUInt32 sid);
+
+  OMMXFStream* zz_stream(OMUInt32 sid) const;
+
+  void zz_associate(OMMXFStream* stream, OMUInt32 sid);
+
+//  bool zz_containsStream(OMUInt32 sid) const;
+
   virtual OMUInt32 addStream(OMDataStream* stream);
 
   virtual OMUInt32 streamIdentification(OMDataStream* stream);
@@ -462,7 +472,11 @@ public:
     OMUInt64 _start;   // Stream position of this Segment
     OMUInt64 _size;    // Size of this Segment in bytes
     OMUInt64 _origin;  // File position of this Segment
+#if 2
+    OMMXFStream* _stream;   // Stream to which this segment belongs
+#else
     Stream* _stream;   // Stream to which this segment belongs
+#endif
   };
   typedef OMList<Segment*> SegmentList;
   typedef OMListIterator<Segment*> SegmentListIterator;
@@ -476,6 +490,11 @@ public:
   };
 
   virtual SegmentListIterator* streamSegments(OMUInt32 sid) const;
+
+  virtual Segment* addStreamSegment(OMMXFStream* s,
+                                    OMUInt64 start,
+                                    OMUInt64 size,
+                                    OMUInt64 origin);
 
     // @cmember Record a reference to <p tag> at <p address>.
   void reference(OMUInt64 address, OMUInt8 tag);
@@ -556,6 +575,11 @@ private:
   OMSet<OMDataStream*, OMUInt32>* streamToSid(void);
   OMSet<OMUInt32, OMDataStream*>* sidToStream(void);
 
+        OMSet<OMMXFStream*, OMUInt32>* zz_streamToSid(void);
+  const OMSet<OMMXFStream*, OMUInt32>* zz_streamToSid(void) const;
+        OMSet<OMUInt32, OMMXFStream*>* zz_sidToStream(void);
+  const OMSet<OMUInt32, OMMXFStream*>* zz_sidToStream(void) const;
+
   struct Fixup;
   typedef OMList<Fixup*> FixupList;
   typedef OMListIterator<Fixup*> FixupListIterator;
@@ -577,6 +601,8 @@ private:
   ObjectSet* _objectToInstanceId;
   OMSet<OMDataStream*, OMUInt32>* _streamToSid;
   OMSet<OMUInt32, OMDataStream*>* _sidToStream;
+  OMSet<OMMXFStream*, OMUInt32> _zz_streamToSid;
+  OMSet<OMUInt32, OMMXFStream*> _zz_sidToStream;
   OMUInt32 _maxSid;
 
   virtual Stream* createStream(OMUInt32 sid,
