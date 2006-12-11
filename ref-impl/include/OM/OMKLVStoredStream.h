@@ -30,7 +30,6 @@
 #include "OMVector.h"
 
 class OMMXFStorage;
-class OMMXFStream;
 
   // @class Implementation of <c OMStoredStream> for
   //        SMPTE (Society of Motion Picture and Television Engineers)
@@ -43,9 +42,6 @@ public:
 
     // @cmember Constructor.
   OMKLVStoredStream(OMMXFStorage* store, OMUInt32 sid);
-
-    // @cmember Constructor.
-  OMKLVStoredStream(OMMXFStorage* store);
 
     // @cmember Destructor.
   ~OMKLVStoredStream(void);
@@ -123,7 +119,6 @@ private:
   OMMXFStorage* _store;
   OMUInt32 _sid;
   OMUInt64 _position;
-  OMMXFStream* _stream;
 
 };
 
