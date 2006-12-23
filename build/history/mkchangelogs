@@ -325,10 +325,7 @@ do
   ptag=${tagnames[i - 1]}
   tag=${tagnames[i]}
   file=Changes-${ptag}-${tag}
-  if [[ -s ${file}.clog ]]
-  then
-    files="$files ${file}.html"
-  fi
+  files="$files ${file}.html"
   let i=$i-1
 done
 
