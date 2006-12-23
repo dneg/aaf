@@ -251,35 +251,35 @@ do
   verbosePrint "Finding changes made between $ptag and $tag."
   title="Log of changes made between $ptag and $tag"
   #
-  # get the raw "cvs log" output, after first making a working copy
-  # corresponging to $tag/$date
-  #
-  if [[ ! -f $log ]]
-  then
-    if [[ "${tag}" != "head" ]]
-    then
-      DFLAG="-D \"${date}\""
-    else
-      DFLAG=""
-    fi
-    verbosePrint "  cvs update to ${tag}."
-    eval cvs update -C -P -A -d ${DFLAG} > /dev/null 2>&1
-    verbosePrint "  Create cvs log ($log)."
-    cvs -q log -d"${pdate}<${date}" > $log
-  fi
-  #
-  # make the change log
-  #
-  if [[ ! -f $clog ]]
-  then
-    verbosePrint "  Convert cvs log to change log ($clog)."
-    cat $log | ${TOOLPATH}/cvs2cl.pl --stdin --stdout > $clog
-  fi
-  #
-  # convert the change log to html
-  # 
   if [[ ! -f $html ]]
   then
+    if [[ ! -f $clog ]]
+    then
+      if [[ ! -f $log ]]
+      then
+        # get the raw "cvs log" output, after first making a working copy
+        # corresponging to $tag/$date
+        #
+        if [[ "${tag}" != "head" ]]
+        then
+          DFLAG="-D \"${date}\""
+        else
+          DFLAG=""
+        fi
+        verbosePrint "  cvs update to ${tag}."
+        eval cvs update -C -P -A -d ${DFLAG} > /dev/null 2>&1
+        verbosePrint "  Create cvs log ($log)."
+        cvs -q log -d"${pdate}<${date}" > $log
+      fi
+      #
+      # make the change log
+      #
+      verbosePrint "  Convert cvs log to change log ($clog)."
+      cat $log | ${TOOLPATH}/cvs2cl.pl --stdin --stdout > $clog
+    fi
+    #
+    # convert the change log to html
+    # 
     verbosePrint "  Convert change log to html ($html)."
     cat $clog | awk -v TITLE="$title" -f ${TOOLPATH}/cl2html.awk ${cmfile} > $html
   fi
