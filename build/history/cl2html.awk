@@ -51,7 +51,7 @@ BEGIN {
   if (entrytext != "") {
     entry(entrytext);
   }
-  /* Build new table row */
+  # Build new table row
   date = $1;
   gsub("-", "/", date);
   name = $3;
@@ -61,7 +61,7 @@ BEGIN {
 }
 
 /^\t/ {
-  /* Accumulate the text of this entry */
+  # Accumulate the text of this entry
   entrytext = entrytext $0;
 }
 
@@ -241,16 +241,16 @@ function createColorMap(file) {
 
 function rowcolor(files) {
   result = default;
-  /* Get first file */
+  # Get first file
   split(files, fns, ",");
   ff = fns[1];
 #  printf("<!--[%s]-->\n", ff);
-  /* Match directory of file to a color */
+  # Match directory of file to a color
   len = 0;
-  for (x in map) { /* Arbitrary order */
+  for (x in map) { # Arbitrary order
     if (match(ff, "^" x)) {
       if (RLENGTH > len) {
-        /* Take longest match */
+        # Take longest match
         len = RLENGTH;
         result = map[x];
       }
@@ -275,13 +275,13 @@ function entry(entrytext) {
 #  for (i = 1; i <= f; i++) {
 #    printf("<!--[%d : \"%s\"]-->\n", i, fields[i]);
 #  }
-  /* We should have at least a file name and a comment */
+  # We should have at least a file name and a comment
   if (f < 2) {
     printf("cl2html : Error near \"%s\"\n", entrytext) | "cat 1>&2";
     exit(1);
   }
   if (match(fields[1], "/$")) {
-    /* The first field is a directory */
+    # The first field is a directory
     dir = fields[1];
     files = trim(fields[2], 1);
     gsub(" ", "", files);
@@ -290,19 +290,19 @@ function entry(entrytext) {
 #    for (i = 1; i <= n; i++) {
 #      printf("<!--[%d : \"%s\"]-->\n", i, fnames[i]);
 #    }
-    /* Insert directory names */
+    # Insert directory names
     files = dir fnames[1];
     for (i = 2; i <= n; i++) {
       files = files ", " dir fnames[i];
     }
-    cs = 3; /* Start of comment */
+    cs = 3; # Start of comment
   } else {
-    /* The first field is not a directory */
+    # The first field is not a directory
     dir = "";
     files = fields[1];
-    cs = 2; /* Start of comment */
+    cs = 2; # Start of comment
   }
-  /* Put comment back together - undo split on ":" */
+  # Put comment back together - undo split on ":"
   comments = trim(fields[cs], 1);
   for (i = cs + 1; i <= f; i++) {
     comments = comments ":" fields[i]
@@ -314,6 +314,6 @@ function entry(entrytext) {
 #  printf("<!--[dir      = \"%s\"]-->\n", dir);
 #  printf("<!--[files    = \"%s\"]-->\n", files);
 #  printf("<!--[comments = \"%s\"]-->\n", comments);
-  /* Print previous table row */
+  # Print previous table row
   printRow(date, name, files, comments, color);
 }
