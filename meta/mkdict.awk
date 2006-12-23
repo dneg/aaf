@@ -934,8 +934,12 @@ BEGIN {
         errors++;
       }
       # AAF_CLASS(name, id, parent)
+      
+      # the registry may contain ul_6 = 0x53, or 0x7f...needs to be changed to 0x06 for AAF
+      syntax = "06";
+      
       cguid = formatAUID($C["ul_1"], $C["ul_2"], $C["ul_3"], $C["ul_4"],
-                         $C["ul_5"], $C["ul_6"], $C["ul_7"], $C["ul_8"],
+                         $C["ul_5"], syntax, $C["ul_7"], $C["ul_8"],
                          $C["ul_9"], $C["ul_10"], $C["ul_11"], $C["ul_12"],
                          $C["ul_13"], $C["ul_14"], $C["ul_15"], $C["ul_16"], "  ");
       printf("AAF_CLASS(%s,%s,\n  %s,\n  %s)\n",
