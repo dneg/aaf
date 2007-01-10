@@ -241,3 +241,52 @@ bool OMKLVStoredStream::readKLVLength(const OMStoredStream& stream,
   }
   return result;
 }
+
+void OMKLVStoredStream::writeKLVKey(OMStoredStream& stream,
+                                    const OMKLVKey& key)
+{
+  TRACE("OMKLVStoredStream::writeKLVKey");
+
+  OMUInt32 x;
+  const OMByte* src = reinterpret_cast<const OMByte*>(&key);
+  stream.write(src, sizeof(OMKLVKey), x);
+
+  POSTCONDITION("All bytes written", x == sizeof(OMKLVKey));
+}
+
+void OMKLVStoredStream::writeKLVLength(OMStoredStream& stream,
+                                       const OMUInt64& length)
+{
+  TRACE("OMKLVStoredStream::writeKLVLength");
+
+  OMByte buffer[sizeof(OMUInt64) + 1]; // Max
+
+  OMMXFStorage::berEncode(buffer, sizeof(buffer), sizeof(OMUInt64), length);
+  OMUInt32 x;
+  stream.write(buffer, sizeof(OMUInt64) + 1, x);
+
+  POSTCONDITION("All bytes written", x == (sizeof(OMUInt64) + 1));
+}
+
+OMUInt64 OMKLVStoredStream::reserveKLVLength(OMStoredStream& stream)
+{
+  TRACE("OMKLVStoredStream::reserveKLVLength");
+  // Bah ! should reuse code in OMMXFStorage - tjb
+  OMUInt64 lengthPosition = stream.position();
+  OMUInt64 length = 0;
+  writeKLVLength(stream, length); // must be fixed up later
+  return lengthPosition;
+}
+
+void OMKLVStoredStream::fixupKLVLength(OMStoredStream& stream,
+                                       const OMUInt64 lengthPosition)
+{
+  TRACE("OMKLVStoredStream::fixupKLVLength");
+  // Bah ! should reuse code in OMMXFStorage - tjb
+  OMUInt64 endPosition = stream.position();
+  ASSERT("Proper position", endPosition >= (lengthPosition + 8 + 1));
+  OMUInt64 length = endPosition - (lengthPosition + 8 + 1);
+  stream.setPosition(lengthPosition);
+  writeKLVLength(stream, length);
+  stream.setPosition(endPosition);
+}

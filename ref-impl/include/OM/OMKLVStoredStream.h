@@ -111,6 +111,15 @@ public:
 
   static bool readKLVLength(const OMStoredStream& stream, OMUInt64& length);
 
+  static void writeKLVKey(OMStoredStream& stream, const OMKLVKey& key);
+
+  static void writeKLVLength(OMStoredStream& stream, const OMUInt64& length);
+
+  static OMUInt64 reserveKLVLength(OMStoredStream& stream);
+
+  static void fixupKLVLength(OMStoredStream& stream,
+                             const OMUInt64 lengthPosition);
+
 private:
   // @access Private members.
   OMKLVKey _label;
