@@ -32,6 +32,7 @@
 
 class OMStoredStream;
 class OMDataStreamAccess;
+class OMDataStreamPropertyFilter;
 
   // @class Persistent data stream properties supported by the Object
   //        Manager.
@@ -170,6 +171,11 @@ public:
   OMDataStreamAccess* streamAccess(void) const;
 
   OMStoredStream* stream(void) const; // tjb should be private
+
+  // Stream filtering
+
+  virtual OMDataStreamPropertyFilter* createFilter();
+
 
 protected:
 

@@ -36,6 +36,7 @@
 #include "OMType.h"
 #include "OMUtilities.h"
 #include "OMDataStreamAccess.h"
+#include "OMDataStreamPropertyFilter.h"
 
 OMDataStreamProperty::OMDataStreamProperty(const OMPropertyId propertyId,
                                            const wchar_t* name)
@@ -587,6 +588,15 @@ OMDataStreamAccess* OMDataStreamProperty::streamAccess(void) const
   PRECONDITION("Has stream access", hasStreamAccess());
   OMDataStreamAccess* result = _streamAccess;
   POSTCONDITION("Valid result", result != 0);
+  return result;
+}
+
+OMDataStreamPropertyFilter* OMDataStreamProperty::createFilter()
+{
+  TRACE("OMDataStreamProperty::createFilter");
+
+  OMDataStreamPropertyFilter* result = new OMDataStreamPropertyFilter(this);
+  ASSERT("Valid heap pointer", result != 0);
   return result;
 }
 
