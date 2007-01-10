@@ -35,9 +35,6 @@ class OMStoredStreamFilter {
 public:
   // @access Public members.
 
-    // @cmember Destructor.
-  virtual ~OMStoredStreamFilter(void) {} = 0;
-
     // @cmember Read <p size> bytes from this <c OMStoredStreamFilter>
     //          into the buffer at address <p data>.
   virtual void read(void* data, OMUInt32 size) const = 0;
