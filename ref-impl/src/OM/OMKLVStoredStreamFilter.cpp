@@ -156,8 +156,15 @@ void OMKLVStoredStreamFilter::setSize(const OMUInt64 newSize)
     initialize();
   }
 
+  OMUInt64 currentPosition = _stream->position();
+
   _stream->setSize(_klvValueOffset + newSize);
   _klvLength = newSize;
+
+  // Update KLV length
+  _stream->setPosition(_klvValueOffset + newSize);
+  OMKLVStoredStream::fixupKLVLength(*_stream, _klvLengthOffset);
+  _stream->setPosition(currentPosition);
 }
 
 OMUInt64 OMKLVStoredStreamFilter::position(void) const
