@@ -28,6 +28,7 @@
 
 #include "OMAssertions.h"
 #include "OMRawStorage.h"
+#include "OMTransparentStoredStreamFilter.h"
 #include "OMUtilities.h"
 
 OMXMLStoredStream::OMXMLStoredStream(OMRawStorage* store)
@@ -140,3 +141,13 @@ void OMXMLStoredStream::close(void)
   _store = 0;
   _position = 0;
 }
+
+OMStoredStreamFilter* OMXMLStoredStream::createFilter(void)
+{
+  TRACE("OMXMLStoredStream::createFilter");
+
+  OMStoredStreamFilter* result = new OMTransparentStoredStreamFilter(this);
+  ASSERT("Valid heap pointer", result != 0);
+  return result;
+}
+

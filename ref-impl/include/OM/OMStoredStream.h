@@ -28,6 +28,8 @@
 
 #include "OMDataTypes.h"
 
+class OMStoredStreamFilter;
+
   // @class Persistent data streams, contained with <c OMStoredObject>s,
   //        supported by the Object Manager.
   //   @cauthor Tim Bingham | tjb | Avid Technology, Inc.
@@ -79,6 +81,8 @@ public:
     // @cmember Close this <c OMStoredStream>.
   virtual void close(void) = 0;
 
+    // @cmember Filter this <c OMStoredStream>.
+  virtual OMStoredStreamFilter* createFilter(void) = 0;
 };
 
 #endif

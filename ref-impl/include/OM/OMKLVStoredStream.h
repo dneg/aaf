@@ -87,6 +87,9 @@ public:
     // @cmember Close this <c OMKLVStoredStream>.
   virtual void close(void);
 
+    // @cmember Filter this <c OMStoredStream>.
+  virtual OMStoredStreamFilter* createFilter(void);
+
   virtual OMUInt32 streamIdentification(void) const;
 
     // @cmember Set the label to <p label>.

@@ -32,6 +32,7 @@
 #include "OMMSStructuredStorage.h"
 #include "OMAssertions.h"
 #include "OMExceptions.h"
+#include "OMTransparentStoredStreamFilter.h"
 
 static void checkStatus(HRESULT status);
 
@@ -172,6 +173,15 @@ void OMSSStoredStream::close(void)
   _stream->Release();
 #endif
   _stream = 0;
+}
+
+OMStoredStreamFilter* OMSSStoredStream::createFilter(void)
+{
+  TRACE("OMKLVStoredStream::createFilter");
+
+  OMStoredStreamFilter* result = new OMTransparentStoredStreamFilter(this);
+  ASSERT("Valid heap pointer", result != 0);
+  return result;
 }
 
 static void checkStatus(HRESULT status)

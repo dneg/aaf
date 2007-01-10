@@ -84,6 +84,9 @@ public:
     // @cmember Close this <c OMStoredStream>.
   virtual void close(void);
 
+    // @cmember Filter this <c OMStoredStream>.
+  virtual OMStoredStreamFilter* createFilter(void);
+
 private:
   // @access Private members.
 

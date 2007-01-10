@@ -27,6 +27,7 @@
 #include "OMKLVStoredStream.h"
 
 #include "OMAssertions.h"
+#include "OMKLVStoredStreamFilter.h"
 #include "OMMXFStorage.h"
 
 OMKLVStoredStream::OMKLVStoredStream(OMMXFStorage* store, OMUInt32 sid)
@@ -138,6 +139,15 @@ void OMKLVStoredStream::close(void)
 
   // We don't own _store
   _store = 0;
+}
+
+OMStoredStreamFilter* OMKLVStoredStream::createFilter(void)
+{
+  TRACE("OMKLVStoredStream::createFilter");
+
+  OMStoredStreamFilter* result = new OMKLVStoredStreamFilter(this);
+  ASSERT("Valid heap pointer", result != 0);
+  return result;
 }
 
 OMUInt32 OMKLVStoredStream::streamIdentification(void) const
