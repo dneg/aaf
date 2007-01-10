@@ -44,6 +44,10 @@ static const 	aafMobID_t	TEST_MobID =
 0x13, 0x00, 0x00, 0x00,
 {0xe86291dc, 0x03fe, 0x11d4, {0x8e, 0x3d, 0x00, 0x90, 0x27, 0xdf, 0xca, 0x7c}}};
 
+const aafUInt32 SizeOfFixedChannelStatusData = 24;
+const aafUInt32 SizeOfFixedUserData = 24;
+
+
 
 
 // convenient error handlers.
@@ -56,6 +60,45 @@ inline void checkExpression(bool expression, HRESULT r)
 {
 	if (!expression)
 		throw r;
+}
+
+static HRESULT 
+TestArrayBasedStuff(aafUInt32 channelCount, IAAFAES3PCMDescriptor2 * pAES3PCMDesc2)
+{
+	for(aafUInt32 count = 0; count < channelCount; ++count) {
+		// test ChannelStatusModeArray
+		aafChannelStatusModeType_t currChanStatus = kAAFChannelStatusMode_None;
+		checkResult(pAES3PCMDesc2->GetChannelStatusModeAt(count,
+			&currChanStatus));
+		checkExpression(currChanStatus == kAAFChannelStatusMode_Essence,
+			AAFRESULT_TEST_FAILED);
+
+		// test FixedChannelStatusDataArray
+		aafUInt8 fixedChannelStatusData[SizeOfFixedChannelStatusData];
+		checkResult(pAES3PCMDesc2->GetFixedChannelStatusDataAt(count,
+			fixedChannelStatusData));
+		for(aafUInt32 index = 0; index < SizeOfFixedChannelStatusData; ++index) {
+			checkExpression(fixedChannelStatusData[index] == (count + index + 100),
+				AAFRESULT_TEST_FAILED);
+		}
+
+		// test dataModeArray
+		aafUserDataModeType_t currDataMode = kAAFUserDataMode_NotDefined;
+		checkResult(pAES3PCMDesc2->GetUserDataModeAt(count,
+			&currDataMode));
+		checkExpression(currDataMode == kAAFUserDataMode_IEC,
+			AAFRESULT_TEST_FAILED);
+
+		// test fixedUserDataArray
+		aafUInt8 fixedUserData[SizeOfFixedUserData];
+		checkResult(pAES3PCMDesc2->GetFixedUserDataAt(count,
+			fixedUserData));
+		for(aafUInt8 index = 0; index < SizeOfFixedUserData; ++index) {
+			checkExpression(fixedUserData[index] == (count + index + 100),
+				AAFRESULT_TEST_FAILED);
+		}
+	}
+	return(S_OK);
 }
 
 
@@ -111,7 +154,9 @@ static HRESULT CreateAAFFile(
 		// Add some slots
 		for(test = 0; test < 2; test++)
 		{
-			checkResult(pSourceMob->AddNilReference (test+1, 0, defs.ddkAAFSound(), audioRate));
+			checkResult(pSourceMob->AddNilReference (test+1, 0, defs.
+													 ddkAAFSound(), 
+													 audioRate));
 		}
 		
 		// Create a an instance of AES3PCMDescriptor
@@ -119,14 +164,154 @@ static HRESULT CreateAAFFile(
 					CreateInstance(IID_IAAFAES3PCMDescriptor, 
 								   (IUnknown **)&pAES3PCMDesc));		
 
-		checkResult(pAES3PCMDesc->QueryInterface(IID_IAAFEssenceDescriptor, (void **) &pEssenceDesc));
+		checkResult(pAES3PCMDesc->QueryInterface(IID_IAAFEssenceDescriptor, 
+												 (void **) &pEssenceDesc));
         checkResult(pSourceMob->SetEssenceDescriptor(pEssenceDesc));
 		
-		pAES3PCMDesc->Release();
-		pAES3PCMDesc = NULL;
-		
 		checkResult(pHeader->AddMob(pMob));
-		
+
+		// Create a an instance of AES3PCMDescriptor2
+		IAAFAES3PCMDescriptor2 *pAES3PCMDesc2 = NULL;
+		checkResult(defs.cdAES3PCMDescriptor()->
+					CreateInstance(IID_IAAFAES3PCMDescriptor2, 
+								   (IUnknown **)&pAES3PCMDesc2));		
+
+		pEssenceDesc->Release();
+
+		checkResult(pAES3PCMDesc2->QueryInterface(IID_IAAFEssenceDescriptor, 
+				    (void **) &pEssenceDesc));
+        checkResult(pSourceMob->SetEssenceDescriptor(pEssenceDesc));
+
+		IAAFSoundDescriptor *pSoundDesc = NULL;
+		pAES3PCMDesc2->QueryInterface(IID_IAAFSoundDescriptor,
+									  (void **) &pSoundDesc);
+
+		checkResult(pFile->Save());
+
+		// test initialization
+		AAFRESULT res = pAES3PCMDesc2->SetEmphasis(kAAFEmphasis_Unknown);
+		checkExpression(res == AAFRESULT_NOT_INITIALIZED,
+						AAFRESULT_TEST_FAILED);
+		checkResult(pAES3PCMDesc2->Initialize());
+
+		// test emphasis
+		aafEmphasisType_t emphasisType = kAAFEmphasis_Unknown;
+		res = pAES3PCMDesc2->GetEmphasis(&emphasisType);
+		checkExpression(res == AAFRESULT_PROP_NOT_PRESENT,
+						AAFRESULT_TEST_FAILED);
+
+		checkResult(pAES3PCMDesc2->SetEmphasis(kAAFEmphasis_Reserved0));
+		checkResult(pAES3PCMDesc2->GetEmphasis(&emphasisType));
+		checkExpression((emphasisType == kAAFEmphasis_Reserved0), 
+						AAFRESULT_TEST_FAILED);
+		res = pAES3PCMDesc2->SetEmphasis(8);
+		checkExpression(res == AAFRESULT_INVALID_ENUM_VALUE,
+						AAFRESULT_TEST_FAILED);
+		checkResult(pAES3PCMDesc2->SetEmphasis(kAAFEmphasis_ITU));
+		checkResult(pAES3PCMDesc2->GetEmphasis(&emphasisType));
+		checkExpression((emphasisType == kAAFEmphasis_ITU), 
+						AAFRESULT_TEST_FAILED);
+
+		// test blockStartOffset
+		aafUInt16 blockStartOffset = 0;
+		res = pAES3PCMDesc2->GetBlockStartOffset(&blockStartOffset);
+		checkExpression(res == AAFRESULT_PROP_NOT_PRESENT,
+						AAFRESULT_TEST_FAILED);
+		checkResult(pAES3PCMDesc2->SetBlockStartOffset(100));
+		checkResult(pAES3PCMDesc2->GetBlockStartOffset(&blockStartOffset));
+		checkExpression((blockStartOffset == 100), 
+						AAFRESULT_TEST_FAILED);
+		checkResult(pAES3PCMDesc2->SetBlockStartOffset(65535));
+		checkResult(pAES3PCMDesc2->GetBlockStartOffset(&blockStartOffset));
+		checkExpression((blockStartOffset == 65535), 
+						AAFRESULT_TEST_FAILED);
+
+		// test auxBitsMode
+        aafAuxBitsModeType_t auxBitsMode = kAAFAuxBitsMode_NotDefined;
+		res = pAES3PCMDesc2->GetAuxBitsMode(&auxBitsMode);
+		checkExpression(res == AAFRESULT_PROP_NOT_PRESENT,
+						AAFRESULT_TEST_FAILED);
+		res = pAES3PCMDesc2->SetAuxBitsMode(8);
+		checkExpression(res == AAFRESULT_INVALID_ENUM_VALUE,
+						AAFRESULT_TEST_FAILED);
+		checkResult(pAES3PCMDesc2->SetAuxBitsMode(kAAFAuxBitsMode_Reserved3));
+		checkResult(pAES3PCMDesc2->GetAuxBitsMode(&auxBitsMode));
+		checkExpression(auxBitsMode == kAAFAuxBitsMode_Reserved3,
+						AAFRESULT_TEST_FAILED);
+
+
+		// now test array based stuff
+
+		aafChannelStatusModeType_t ChannelStatusMode = 
+									kAAFChannelStatusMode_None;
+		res = pAES3PCMDesc2->GetChannelStatusModeAt(1, &ChannelStatusMode);
+		checkExpression(res == AAFRESULT_PROP_NOT_PRESENT,
+						AAFRESULT_TEST_FAILED);
+
+		aafUInt8 fixedChannelStatusData[SizeOfFixedChannelStatusData];
+		res = 
+			pAES3PCMDesc2->GetFixedChannelStatusDataAt(1, 
+												fixedChannelStatusData);
+		checkExpression(res == AAFRESULT_PROP_NOT_PRESENT,
+						AAFRESULT_TEST_FAILED);
+
+		aafUserDataModeType_t UserDataMode = kAAFUserDataMode_NotDefined;
+		res = pAES3PCMDesc2->GetUserDataModeAt(1, &UserDataMode);
+		checkExpression(res == AAFRESULT_PROP_NOT_PRESENT,
+						AAFRESULT_TEST_FAILED);
+
+		aafUInt8 fixedUserData[SizeOfFixedUserData];
+		res = pAES3PCMDesc2->GetFixedUserDataAt(1, fixedUserData);
+		checkExpression(res == AAFRESULT_PROP_NOT_PRESENT,
+						AAFRESULT_TEST_FAILED);
+
+		aafUInt32 channelCount = 4;
+		checkResult(pSoundDesc->SetChannelCount(channelCount));
+		channelCount = 0;
+		checkResult(pSoundDesc->GetChannelCount(&channelCount));
+		checkExpression(channelCount == 4, AAFRESULT_TEST_FAILED);
+
+		for(aafUInt8 count = 0; count < channelCount; ++count) {
+			// test ChannelStatusModeArray
+			res = pAES3PCMDesc2->SetChannelStatusModeAt(count, 6);
+			checkExpression(res == AAFRESULT_INVALID_ENUM_VALUE, 
+				AAFRESULT_TEST_FAILED);
+			checkResult(pAES3PCMDesc2->SetChannelStatusModeAt(count,
+				kAAFChannelStatusMode_Essence));
+
+			// test FixedChannelStatusDataArray
+			for(aafUInt8 index = 0; 
+				index < SizeOfFixedChannelStatusData; 
+				++index) 
+			{
+				fixedChannelStatusData[index] = count + index + 100;
+			}
+			checkResult(pAES3PCMDesc2->SetFixedChannelStatusDataAt(count,
+				fixedChannelStatusData));
+
+			// test dataModeArray
+			res = pAES3PCMDesc2->SetUserDataModeAt(count, 16);
+			checkExpression(res == AAFRESULT_INVALID_ENUM_VALUE, 
+				AAFRESULT_TEST_FAILED);
+			checkResult(pAES3PCMDesc2->SetUserDataModeAt(count,
+				kAAFUserDataMode_IEC));
+
+			// test fixedUserDataArray
+			for(aafUInt8 index = 0; index < SizeOfFixedUserData; ++index) {
+				fixedUserData[index] = count + index + 100;
+			}
+			checkResult(pAES3PCMDesc2->SetFixedUserDataAt(count,
+				fixedUserData));
+		}
+		//TestArrayBasedStuff(channelCount, pAES3PCMDesc2);
+
+
+
+		//checkResult(pFile->Save());
+		pAES3PCMDesc2->Release();
+		pAES3PCMDesc2 = NULL;
+		pSoundDesc->Release();
+		pSoundDesc = NULL;
 	}
 	catch (HRESULT& rResult)
 	{
@@ -150,11 +335,7 @@ static HRESULT CreateAAFFile(
 	
 	if (pFile) 
 	{
-		if (bFileOpen)
-		{
-			pFile->Save();
-			pFile->Close();
-		}
+		pFile->Close();
 		pFile->Release();
 	}
 	
@@ -200,36 +381,66 @@ static HRESULT ReadAAFFile(
 			aafNumSlots_t	numSlots;
 			aafMobID_t		mobID;
 			aafSlotID_t		trackID;
-			
+
 			checkResult(mobIter->NextOne (&pMob));
 			checkResult(pMob->GetName (name, sizeof(name)));
 			checkResult(pMob->GetMobID (&mobID));
-			
+
 			checkResult(pMob->CountSlots (&numSlots));
 			if (2 != numSlots)
 				return AAFRESULT_TEST_FAILED;
 			if(numSlots != 0)
 			{
 				checkResult(pMob->GetSlots(&slotIter));
-				
+
 				for(s = 0; s < numSlots; s++)
 				{
 					checkResult(slotIter->NextOne (&slot));
 					checkResult(slot->GetSlotID(&trackID));
-					
+
 					slot->Release();
 					slot = NULL;
 				}
 			}
-        // Get the source mob
-        checkResult(pMob->QueryInterface (IID_IAAFSourceMob, (void **)&pSourceMob));
+			// Get the source mob
+			checkResult(pMob->QueryInterface (IID_IAAFSourceMob, 
+											  (void **)&pSourceMob));
 
-        // Get the sound descriptor
-        checkResult(pSourceMob->GetEssenceDescriptor(&pEssenceDesc));
-        checkResult(pEssenceDesc->QueryInterface(IID_IAAFAES3PCMDescriptor,
-                                                 (void **)&pAES3PCMDesc));
+			// Get the sound descriptor
+			checkResult(pSourceMob->GetEssenceDescriptor(&pEssenceDesc));
+			checkResult(pEssenceDesc->QueryInterface(IID_IAAFAES3PCMDescriptor,
+				(void **)&pAES3PCMDesc));
+			IAAFAES3PCMDescriptor2 * pAES3PCMDesc2 = NULL;
+			checkResult(pEssenceDesc->QueryInterface(IID_IAAFAES3PCMDescriptor2,
+				(void **)&pAES3PCMDesc2));
 
 
+			//// test emphasis
+			//aafEmphasisType_t emphasisType = kAAFEmphasis_Unknown;
+			//checkResult(pAES3PCMDesc2->GetEmphasis(&emphasisType));
+			//checkExpression((emphasisType == kAAFEmphasis_ITU), 
+			//				AAFRESULT_TEST_FAILED);
+
+			//// test blockStartOffset
+			//aafUInt16 blockStartOffset = 0;
+			//checkResult(pAES3PCMDesc2->GetBlockStartOffset(&blockStartOffset));
+			//checkExpression((blockStartOffset == 65535), 
+			//				AAFRESULT_TEST_FAILED);
+
+			//// test auxBitsMode
+			//aafAuxBitsModeType_t auxBitsMode = kAAFAuxBitsMode_NotDefined;
+			//checkResult(pAES3PCMDesc2->GetAuxBitsMode(&auxBitsMode));
+			//checkExpression(auxBitsMode == kAAFAuxBitsMode_Reserved3,
+			//				AAFRESULT_TEST_FAILED);
+
+			//// now test array based stuff
+			//IAAFSoundDescriptor *pSoundDesc = NULL;
+			//pAES3PCMDesc2->QueryInterface(IID_IAAFSoundDescriptor,
+			//							  (void **) &pSoundDesc);
+			//aafUInt32 channelCount = 0;
+			//checkResult(pSoundDesc->GetChannelCount(&channelCount));
+			//checkExpression(channelCount == 4, AAFRESULT_TEST_FAILED);
+			//hr = TestArrayBasedStuff(channelCount, pAES3PCMDesc2);
 		}
     }
     catch (HRESULT& rResult)

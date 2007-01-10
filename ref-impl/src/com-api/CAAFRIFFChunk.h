@@ -143,8 +143,7 @@ public:
   //
   // Read()
   //
-  // Reads data from this RIFFChunk at the current position. Advances the position
-  // by the number of bytes read.
+  // Reads data from this RIFFChunk at the current position. Advances the position by the number of bytes read.
   //
   STDMETHOD (Read) (
     // read this many bytes
@@ -162,8 +161,8 @@ public:
   // Write()
   //
   // Write data to this RIFFChunk at the current position. Advances the position
-  // by the number of bytes written. Any data beyond the new position is lost;
-  // that is, the buffer is truncated.
+/// by the number of bytes written. Any data beyond the new position is lost; 
+///that is, the buffer is truncated.
   //
   STDMETHOD (Write) (
     // write this many bytes
@@ -181,7 +180,7 @@ public:
   // SetPosition()
   //
   // Seeks to absolute position within the RIFFChunk data. The next Read or Write
-  // call will operate from the given position.
+/// call will operate from the given position.
   //
   STDMETHOD (SetPosition) (
     // offset from beginning of the RIFFChunk data 
@@ -193,7 +192,7 @@ public:
   // GetPosition()
   //
   // Gets the current position within the RIFFChunk data. This is the position at
-  // which the next Read or Write call will operate.
+///which the next Read or Write call will operate.
   //
   STDMETHOD (GetPosition) (
     // current offset from beginning of the RIFFChunk data 

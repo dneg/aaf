@@ -1,0 +1,460 @@
+#c *********************************************************************
+#c
+#c $Id$ $Name$
+#c
+#c The contents of this file are subject to the AAF SDK Public
+#c Source License Agreement (the "License"); You may not use this file
+#c except in compliance with the License.  The License is available in
+#c AAFSDKPSL.TXT, or you may obtain a copy of the License from the AAF
+#c Association or its successor.
+#c 
+#c Software distributed under the License is distributed on an "AS IS"
+#c basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.  See
+#c the License for the specific language governing rights and limitations
+#c under the License.
+#c 
+#c The Original Code of this file is Copyright 1998-2005, Licensor of the
+#c AAF Association.
+#c 
+#c The Initial Developer of the Original Code of this file and the
+#c Licensor of the AAF Association is Avid Technology.
+#c All rights reserved.
+#c
+#c *********************************************************************
+#startm .this-module 0
+AAFAES3PCMDescriptor2\
+#endm
+#c
+#startm .parent-module 0
+AAFPCMDescriptor\
+#endm
+#c
+#c #import ./AAFPCMDescriptor.exp
+#c #import ./AAFPCMDescriptor2.exp
+AD_HEAD
+AD_IDL(///
+/// The IAAFAES3PCMDescriptor2 interface is implemented by objects which
+/// describe video essence formatted with one luminance component and 
+/// two color-difference components.
+///
+/// In addition to the specific error results listed for each method\,
+/// all methods in this interface may also return one of the following
+/// values:
+/// 
+/// AAFRESULT_NOMEMORY
+///   - insufficient system memory is available to perform the
+///     operation.
+///)
+AD_CLASS_UUID(d360ab63, 4f69, 411e, 88, b9, a3, 43, c7, 1d, 4c, 2a)
+
+AD_DEFAULT_UUID(5d7d099b, 02eb, 4dc8, af, e8, 01, ce, 13, 1f, 56, 63)
+AD_XCLASS_BEGIN(Concrete, StoredObject)
+AD_METHOD0(Initialize,
+		   Initializes a newly allocated\, IAAFAES3PCMDescriptor-supporting
+  /// object. This method must be called after allocation\, and before
+  /// any other method can be called.
+  ///
+  /// Succeeds if:
+  /// - Initialize\(\) has not yet been called on this object.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_ALREADY_INITIALIZED
+  ///   - Initialize\(\) has already been called on this object.)
+
+AD_XMETHOD1(GetEmphasis,
+		   [out],
+		   objPass,
+		   aafEmphasisType_t *,
+		   pEmphasisType,
+		   Address to store the emphasis type.,
+		Gets the Emphasis type property.
+  /// Succeeds if all of the following are true:
+  /// - pEmphasisType is a valid pointer.
+  ///
+  /// If this method fails\, *pEmphasisType will not be changed.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize\(\) called on it.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pEmphasisType arg is NULL.)
+
+AD_XMETHOD1(SetEmphasis,
+		   [in],
+		   enumIn,
+		   aafEmphasisType_t,
+		   EmphasisType,
+		   Sets the Emphasis type property.,
+		Gets the Emphasis type property.
+  /// Succeeds if all of the following are true:
+  /// 
+  ///
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize\(\) called on it.)
+
+AD_XMETHOD1(GetBlockStartOffset,
+		   [out],
+		   objPass,
+		   aafUInt16 *,
+		   pBlockStartOffset,
+		   Address to store the BlockStartOffset.,
+		Gets the BlockStartOffset.
+  /// Succeeds if all of the following are true:
+  /// - pBlockStartOffset is a valid pointer.
+  ///
+  /// If this method fails\, *pBlockStartOffset will not be changed.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize\(\) called on it.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pBlockStartOffset arg is NULL.)
+
+AD_XMETHOD1(SetBlockStartOffset,
+		   [in],
+		   objPass,
+		   aafUInt16,
+		   BlockStartOffset,
+		   Sets the BlockStartOffset.,
+		Sets the BlockStartOffset.
+  /// Succeeds if all of the following are true:
+  /// 
+  ///
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize\(\) called on it.)
+
+AD_XMETHOD1(GetAuxBitsMode,
+		   [out],
+		   objPass,
+		   aafAuxBitsModeType_t *,
+		   pAuxBitsMode,
+		   Address to store the AuxBitsMode.,
+		Gets the AuxBitsMode.
+  /// Succeeds if all of the following are true:
+  /// - pAuxBitsMode is a valid pointer.
+  ///
+  /// If this method fails\, *pAuxBitsMode will not be changed.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize\(\) called on it.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pAuxBitsMode arg is NULL.)
+
+AD_XMETHOD1(SetAuxBitsMode,
+		   [in],
+		   enumIn,
+		   aafAuxBitsModeType_t,
+		   AuxBitsMode,
+		   Sets the AuxBitsMode.,
+		Sets the AuxBitsMode.
+  /// Succeeds if all of the following are true:
+  /// 
+  ///
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize\(\) called on it.)
+
+AD_XMETHOD2(GetChannelStatusModeAt,
+			[in],
+			objPass,
+			aafUInt32,
+			index,
+			Index of the channel desired.,
+
+			[out],
+			objPass,
+			aafChannelStatusModeType_t *,
+			pChannelStatusMode,
+			Address to store ChannelStatusMode for the index given.,
+
+			Gets the ChannelStatusMode for the channel referenced by the index
+	/// Succeeds if all of the following are true:
+	///	
+	/// - pChannelStatusMode is a valid pointer
+	/// - index is a valid index with the array of channels
+	///
+	/// this method will return the following codes
+	///
+	/// AAFRESULT_SUCCESS
+	///   - succeeded.  \(This is the only code indicating success.\)
+	///
+	/// AAFRESULT_NOT_INITIALIZED
+	///   - This object has not yet had Initialize\(\) called on it.
+	///
+	/// AAFRESULT_NULL_PARAM
+	///	 - pChannelStatusMode arg is NULL
+	///
+	///	AAFRESULT_BADINDEX
+	///	 - index is not a valid index)
+
+AD_XMETHOD2(SetChannelStatusModeAt,
+			[in],
+			objPass,
+			aafUInt32,
+			index,
+			Index of the channel desired.,
+
+			[in],
+			enumIn,
+			aafChannelStatusModeType_t,
+			ChannelStatusMode,
+			Set ChannelStatusMode for the index given.,
+
+			Sets the ChannelStatusMode for the channel referenced by the index
+	/// Succeeds if all of the following are true:
+	///	
+	/// - index is a valid index with the array of channels
+	///
+	/// this method will return the following codes
+	///
+	/// AAFRESULT_SUCCESS
+	///   - succeeded.  \(This is the only code indicating success.\)
+	///
+	/// AAFRESULT_NOT_INITIALIZED
+	///   - This object has not yet had Initialize\(\) called on it.
+	///
+	///	AAFRESULT_BADINDEX
+	///	 - index is not a valid index)
+
+AD_XMETHOD2(GetFixedChannelStatusDataAt,
+			[in],
+			objPass,
+			aafUInt32,
+			index,
+			Index of the channel desired.,
+
+			[out],
+			objPass,
+			aafUInt8 *,
+			pFixedChannelStatusData,
+			Address to store FixedChannelStatusData for the index given.,
+
+			Gets the FixedChannelStatusData for the channel referenced by the index
+	///		each channel's status is a 24 byte array that gets copied into the 
+	///		the address pointed to by pFixedChannelStatusData.
+	/// Succeeds if all of the following are true:
+	///	
+	/// - pFixedChannelStatusData is a valid pointer
+	/// - index is a valid index with the array of channels
+	///
+	/// this method will return the following codes
+	///
+	/// AAFRESULT_SUCCESS
+	///   - succeeded.  \(This is the only code indicating success.\)
+	///
+	/// AAFRESULT_NOT_INITIALIZED
+	///   - This object has not yet had Initialize\(\) called on it.
+	///
+	/// AAFRESULT_NULL_PARAM
+	///	 - pFixedChannelStatusData arg is NULL
+	///
+	///	AAFRESULT_BADINDEX
+	///	 - index is not a valid index)
+
+AD_XMETHOD2(SetFixedChannelStatusDataAt,
+			[in],
+			objPass,
+			aafUInt32,
+			index,
+			Index of the channel desired.,
+
+			[in],
+			objPass,
+			aafUInt8 *,
+			pFixedChannelStatusData,
+			Set FixedChannelStatusData for the index given.,
+
+			Sets the FixedChannelStatusData for the channel referenced by the index
+	///		each channel's status is a 24 byte array that gets copied from the 
+	///		the address pointed to by pFixedChannelStatusData .
+	/// Succeeds if all of the following are true:
+	///	
+	/// - pFixedChannelStatusData is a valid pointer
+	/// - index is a valid index with the array of channels
+	///
+	/// this method will return the following codes
+	///
+	/// AAFRESULT_SUCCESS
+	///   - succeeded.  \(This is the only code indicating success.\)
+	///
+	/// AAFRESULT_NOT_INITIALIZED
+	///   - This object has not yet had Initialize\(\) called on it.
+	///
+	/// AAFRESULT_NULL_PARAM
+	///	 - pFixedChannelStatusData arg is NULL
+	///
+	///	AAFRESULT_BADINDEX
+	///	 - index is not a valid index)
+
+AD_XMETHOD2(GetUserDataModeAt,
+			[in],
+			objPass,
+			aafUInt32,
+			index,
+			Index of the channel desired.,
+
+			[out],
+			objPass,
+			aafUserDataModeType_t *,
+			pUserDataMode,
+			Address to store UserDataMode for the index given.,
+
+			Gets the UserDataMode for the channel referenced by the index
+	/// Succeeds if all of the following are true:
+	///	
+	/// - pUserDataMode is a valid pointer
+	/// - index is a valid index with the array of channels
+	///
+	/// this method will return the following codes
+	///
+	/// AAFRESULT_SUCCESS
+	///   - succeeded.  \(This is the only code indicating success.\)
+	///
+	/// AAFRESULT_NOT_INITIALIZED
+	///   - This object has not yet had Initialize\(\) called on it.
+	///
+	/// AAFRESULT_NULL_PARAM
+	///	 - pUserDataMode arg is NULL
+	///
+	///	AAFRESULT_BADINDEX
+	///	 - index is not a valid index)
+
+AD_XMETHOD2(SetUserDataModeAt,
+			[in],
+			objPass,
+			aafUInt32,
+			index,
+			Index of the channel desired.,
+
+			[in],
+			enumIn,
+			aafUserDataModeType_t,
+			UserDataMode,
+			Set UserDataMode for the index given.,
+
+			Sets the UserDataMode for the channel referenced by the index
+	/// Succeeds if all of the following are true:
+	///	
+	/// - index is a valid index with the array of channels
+	///
+	/// this method will return the following codes
+	///
+	/// AAFRESULT_SUCCESS
+	///   - succeeded.  \(This is the only code indicating success.\)
+	///
+	/// AAFRESULT_NOT_INITIALIZED
+	///   - This object has not yet had Initialize\(\) called on it.
+	///
+	///	AAFRESULT_BADINDEX
+	///	 - index is not a valid index)
+
+AD_XMETHOD2(GetFixedUserDataAt,
+			[in],
+			objPass,
+			aafUInt32,
+			index,
+			Index of the channel desired.,
+
+			[out],
+			objPass,
+			aafUInt8 *,
+			pFixedUserData,
+			Address to store FixedUserData for the index given.,
+
+			Gets the FixedUserData for the channel referenced by the index
+	///		each channel's status is a 24 byte array that gets copied into the 
+	///		the address pointed to by pFixedUserData.
+	/// Succeeds if all of the following are true:
+	///	
+	/// - pFixedUserData is a valid pointer
+	/// - index is a valid index with the array of channels
+	///
+	/// this method will return the following codes
+	///
+	/// AAFRESULT_SUCCESS
+	///   - succeeded.  \(This is the only code indicating success.\)
+	///
+	/// AAFRESULT_NOT_INITIALIZED
+	///   - This object has not yet had Initialize\(\) called on it.
+	///
+	/// AAFRESULT_NULL_PARAM
+	///	 - pFixedUserData arg is NULL
+	///
+	///	AAFRESULT_BADINDEX
+	///	 - index is not a valid index)
+
+AD_XMETHOD2(SetFixedUserDataAt,
+			[in],
+			objPass,
+			aafUInt32,
+			index,
+			Index of the channel desired.,
+
+			[in],
+			objPass,
+			aafUInt8 *,
+			pFixedUserData,
+			Set FixedUserData for the index given.,
+
+			Sets the FixedUserData for the channel referenced by the index
+	///		each channel's status is a 24 byte array that gets copied from the 
+	///		the address pointed to by pFixedUserData .
+	/// Succeeds if all of the following are true:
+	///	
+	/// - pFixedUserData is a valid pointer
+	/// - index is a valid index with the array of channels
+	///
+	/// this method will return the following codes
+	///
+	/// AAFRESULT_SUCCESS
+	///   - succeeded.  \(This is the only code indicating success.\)
+	///
+	/// AAFRESULT_NOT_INITIALIZED
+	///   - This object has not yet had Initialize\(\) called on it.
+	///
+	/// AAFRESULT_NULL_PARAM
+	///	 - pFixedUserData arg is NULL
+	///
+	///	AAFRESULT_BADINDEX
+	///	 - index is not a valid index)
+
+AD_XCLASS_END(Concrete, StoredObject)

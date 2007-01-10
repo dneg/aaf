@@ -29,9 +29,11 @@ AAFAES3PCMDescriptor\
 AAFPCMDescriptor\
 #endm
 #c
-#c #import ./AAFPCMDescriptor.exp
+#import ./AAFAES3PCMDescriptor2.exp
 AD_HEAD
 AD_IDL(///
+/// The IAAFAES3PCMDescriptor is DEPRECATED\, please use IAAFAES3PCMDescriptor2
+///
 /// The IAAFAES3PCMDescriptor interface is implemented by objects which
 /// describe video essence formatted with one luminance component and 
 /// two color-difference components.
@@ -47,7 +49,8 @@ AD_IDL(///
 AD_CLASS_UUID(2EBFFDDF, 5997, 414D, 80, 8B, 6B, AA, 4A, 74, F4, 0F)
 
 AD_DEFAULT_UUID(2EBFFDE0, 5997, 414D, 80, 8B, 6B, AA, 4A, 74, F4, 0F)
-AD_XCLASS_BEGIN(Concrete, StoredObject)
+AD_COM_EXT_CLASS_BEGIN(public IAAFAES3PCMDescriptor2)
+
 AD_METHOD0(Initialize,
 		   Initializes a newly allocated\, IAAFAES3PCMDescriptor-supporting
   /// object. This method must be called after allocation\, and before
@@ -66,5 +69,20 @@ AD_METHOD0(Initialize,
   /// AAFRESULT_ALREADY_INITIALIZED
   ///   - Initialize\(\) has already been called on this object.)
 
+AD_COM_METH(.method-GetEmphasis)
+AD_COM_METH(.method-SetEmphasis)
+AD_COM_METH(.method-GetBlockStartOffset)
+AD_COM_METH(.method-SetBlockStartOffset)
+AD_COM_METH(.method-GetAuxBitsMode)
+AD_COM_METH(.method-SetAuxBitsMode)
+AD_COM_METH(.method-GetChannelStatusModeAt)
+AD_COM_METH(.method-SetChannelStatusModeAt)
+AD_COM_METH(.method-GetFixedChannelStatusDataAt)
+AD_COM_METH(.method-SetFixedChannelStatusDataAt)
+AD_COM_METH(.method-GetUserDataModeAt)
+AD_COM_METH(.method-SetUserDataModeAt)
+AD_COM_METH(.method-GetFixedUserDataAt)
+AD_COM_METH(.method-SetFixedUserDataAt)
 
-AD_XCLASS_END(Concrete, StoredObject)
+
+AD_COM_EXT_CLASS_END(AAFAES3PCMDescriptor2)

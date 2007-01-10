@@ -1171,7 +1171,7 @@ public:
   /// descriptive schemes found in the file.
   ///
   /// Succeeds if all of the following are true:
-  /// - the given desriptive scheme ID is not already contained.
+  /// - the given descriptive scheme ID is not already contained.
   ///
   /// If this method fails, the property will not be changed.
   ///
@@ -1203,7 +1203,7 @@ public:
   ///
   /// Succeeds if all of the following are true:
   /// - the DescriptiveSchemes property is present;
-  /// - the given desriptive scheme ID is present in the list
+  /// - the given descriptive scheme ID is present in the list
   ///   of descriptive schemes found in the file.
   ///
   /// If this method fails, the property will not be changed.
@@ -1217,7 +1217,7 @@ public:
   ///   - property not present.
   ///
   /// AAFRESULT_INVALID_PARAM
-  ///   - The given desriptive scheme ID is present in the list
+  ///   - The given descriptive scheme ID is present in the list
   ///     of descriptive schemes found in the file.
   // @end
   // 

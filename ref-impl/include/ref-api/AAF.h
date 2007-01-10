@@ -186,6 +186,7 @@ interface IEnumAAFSubDescriptors;
 interface IEnumAAFTaggedValueDefs;
 interface IEnumAAFTaggedValues;
 interface IEnumAAFTypeDefs;
+interface IAAFAES3PCMDescriptor2;
 interface IAAFCDCIDescriptor2;
 interface IAAFComponent2;
 interface IAAFCompositionMob2;
@@ -359,6 +360,7 @@ typedef interface IEnumAAFSubDescriptors IEnumAAFSubDescriptors;
 typedef interface IEnumAAFTaggedValueDefs IEnumAAFTaggedValueDefs;
 typedef interface IEnumAAFTaggedValues IEnumAAFTaggedValues;
 typedef interface IEnumAAFTypeDefs IEnumAAFTypeDefs;
+typedef interface IAAFAES3PCMDescriptor2 IAAFAES3PCMDescriptor2;
 typedef interface IAAFCDCIDescriptor2 IAAFCDCIDescriptor2;
 typedef interface IAAFComponent2 IAAFComponent2;
 typedef interface IAAFCompositionMob2 IAAFCompositionMob2;
@@ -440,11 +442,24 @@ DECLARE_INTERFACE_(IAAFAES3PCMDescriptor, IUnknown)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   END_INTERFACE
 };
 #endif // __IAAFAES3PCMDescriptor_INTERFACE_DEFINED__
-
-
 
 // IAAFAIFCDescriptor
 
@@ -22987,12 +23002,11 @@ DECLARE_INTERFACE_(IAAFRIFFChunk, IUnknown)
   //
   // Read()
   //
-  /// Reads data from this RIFFChunk at the current position. Advances the position
-  /// by the number of bytes read.
+  /// Reads data from this RIFFChunk at the current position. Advances the position by the number of bytes read.
   ///
   /// @param bytes [in] read this many bytes
-  /// @param buffer [out, size_is(bytes), length_is(*bytesRead)] buffer to receive chunk data
-  /// @param bytesRead [out,ref] 
+  /// @param buffer [out, size_is(bytes), length_is(*pBytesRead)] buffer to receive chunk data
+  /// @param pBytesRead [out,ref] 
   ///
   STDMETHOD(Read) (THIS_
     aafUInt32  bytes,
@@ -23005,12 +23019,12 @@ DECLARE_INTERFACE_(IAAFRIFFChunk, IUnknown)
   // Write()
   //
   /// Write data to this RIFFChunk at the current position. Advances the position
-  /// by the number of bytes written. Any data beyond the new position is lost;
-  /// that is, the buffer is truncated.
+/// by the number of bytes written. Any data beyond the new position is lost; 
+///that is, the buffer is truncated.
   ///
   /// @param bytes [in] write this many bytes
   /// @param buffer [out, size_is(bytes)] chunk data to write
-  /// @param bytesWritten [out,ref] actual number of bytes written
+  /// @param pBytesWritten [out,ref] actual number of bytes written
   ///
   STDMETHOD(Write) (THIS_
     aafUInt32  bytes,
@@ -23023,7 +23037,7 @@ DECLARE_INTERFACE_(IAAFRIFFChunk, IUnknown)
   // SetPosition()
   //
   /// Seeks to absolute position within the RIFFChunk data. The next Read or Write
-  /// call will operate from the given position.
+/// call will operate from the given position.
   ///
   /// @param offset [in] offset from beginning of the RIFFChunk data
   ///
@@ -23036,7 +23050,7 @@ DECLARE_INTERFACE_(IAAFRIFFChunk, IUnknown)
   // GetPosition()
   //
   /// Gets the current position within the RIFFChunk data. This is the position at
-  /// which the next Read or Write call will operate.
+///which the next Read or Write call will operate.
   ///
   /// @param pOffset [out] current offset from beginning of the RIFFChunk data
   ///
@@ -39173,6 +39187,456 @@ DECLARE_INTERFACE_(IEnumAAFTypeDefs, IUnknown)
   END_INTERFACE
 };
 #endif // __IEnumAAFTypeDefs_INTERFACE_DEFINED__
+
+
+
+// IAAFAES3PCMDescriptor2
+
+// ************************
+//
+// Interface IAAFAES3PCMDescriptor2
+//
+// ************************
+
+
+
+#ifndef __IAAFAES3PCMDescriptor2_INTERFACE_DEFINED__
+#define __IAAFAES3PCMDescriptor2_INTERFACE_DEFINED__
+
+EXTERN_C const IID IID_IAAFAES3PCMDescriptor2;
+
+#undef  INTERFACE
+#define INTERFACE   IAAFAES3PCMDescriptor2
+
+DECLARE_INTERFACE_(IAAFAES3PCMDescriptor2, IUnknown)
+{
+  BEGIN_INTERFACE
+
+  /* *** IUnknown methods *** */
+  STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppvObj) PURE;
+  STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
+  STDMETHOD_(ULONG,Release) (THIS) PURE;
+
+  /* *** IAAFAES3PCMDescriptor2 methods *** */
+
+  //***********************************************************
+  //
+  // Initialize()
+  //
+  /// Initializes a newly allocated, IAAFAES3PCMDescriptor-supporting
+  /// object. This method must be called after allocation, and before
+  /// any other method can be called.
+  ///
+  /// Succeeds if:
+  /// - Initialize() has not yet been called on this object.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_ALREADY_INITIALIZED
+  ///   - Initialize() has already been called on this object.
+  STDMETHOD(Initialize) (THIS) PURE;
+
+  //***********************************************************
+  //
+  // GetEmphasis()
+  //
+  /// Gets the Emphasis type property.
+  /// Succeeds if all of the following are true:
+  /// - pEmphasisType is a valid pointer.
+  ///
+  /// If this method fails, *pEmphasisType will not be changed.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pEmphasisType arg is NULL.
+  ///
+  /// @param pEmphasisType [out] Address to store the emphasis type.
+  ///
+  STDMETHOD(GetEmphasis) (THIS_
+    aafEmphasisType_t *  pEmphasisType) PURE;
+
+  //***********************************************************
+  //
+  // SetEmphasis()
+  //
+  /// Gets the Emphasis type property.
+  /// Succeeds if all of the following are true:
+  /// 
+  ///
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
+  ///
+  /// @param EmphasisType [in] Sets the Emphasis type property.
+  ///
+  STDMETHOD(SetEmphasis) (THIS_
+    aafEmphasisType_t  EmphasisType) PURE;
+
+  //***********************************************************
+  //
+  // GetBlockStartOffset()
+  //
+  /// Gets the BlockStartOffset.
+  /// Succeeds if all of the following are true:
+  /// - pBlockStartOffset is a valid pointer.
+  ///
+  /// If this method fails, *pBlockStartOffset will not be changed.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pBlockStartOffset arg is NULL.
+  ///
+  /// @param pBlockStartOffset [out] Address to store the BlockStartOffset.
+  ///
+  STDMETHOD(GetBlockStartOffset) (THIS_
+    aafUInt16 *  pBlockStartOffset) PURE;
+
+  //***********************************************************
+  //
+  // SetBlockStartOffset()
+  //
+  /// Sets the BlockStartOffset.
+  /// Succeeds if all of the following are true:
+  /// 
+  ///
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
+  ///
+  /// @param BlockStartOffset [in] Sets the BlockStartOffset.
+  ///
+  STDMETHOD(SetBlockStartOffset) (THIS_
+    aafUInt16  BlockStartOffset) PURE;
+
+  //***********************************************************
+  //
+  // GetAuxBitsMode()
+  //
+  /// Gets the AuxBitsMode.
+  /// Succeeds if all of the following are true:
+  /// - pAuxBitsMode is a valid pointer.
+  ///
+  /// If this method fails, *pAuxBitsMode will not be changed.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pAuxBitsMode arg is NULL.
+  ///
+  /// @param pAuxBitsMode [out] Address to store the AuxBitsMode.
+  ///
+  STDMETHOD(GetAuxBitsMode) (THIS_
+    aafAuxBitsModeType_t *  pAuxBitsMode) PURE;
+
+  //***********************************************************
+  //
+  // SetAuxBitsMode()
+  //
+  /// Sets the AuxBitsMode.
+  /// Succeeds if all of the following are true:
+  /// 
+  ///
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
+  ///
+  /// @param AuxBitsMode [in] Sets the AuxBitsMode.
+  ///
+  STDMETHOD(SetAuxBitsMode) (THIS_
+    aafAuxBitsModeType_t  AuxBitsMode) PURE;
+
+  //***********************************************************
+  //
+  // GetChannelStatusModeAt()
+  //
+  /// Gets the ChannelStatusMode for the channel referenced by the index
+	/// Succeeds if all of the following are true:
+	///	
+	/// - pChannelStatusMode is a valid pointer
+	/// - index is a valid index with the array of channels
+	///
+	/// this method will return the following codes
+	///
+	/// AAFRESULT_SUCCESS
+	///   - succeeded.  (This is the only code indicating success.)
+	///
+	/// AAFRESULT_NOT_INITIALIZED
+	///   - This object has not yet had Initialize() called on it.
+	///
+	/// AAFRESULT_NULL_PARAM
+	///	 - pChannelStatusMode arg is NULL
+	///
+	///	AAFRESULT_BADINDEX
+	///	 - index is not a valid index
+  ///
+  /// @param index [in] Index of the channel desired.
+  /// @param pChannelStatusMode [out] Address to store ChannelStatusMode for the index given.
+  ///
+  STDMETHOD(GetChannelStatusModeAt) (THIS_
+    aafUInt32  index,
+    aafChannelStatusModeType_t *  pChannelStatusMode) PURE;
+
+  //***********************************************************
+  //
+  // SetChannelStatusModeAt()
+  //
+  /// Sets the ChannelStatusMode for the channel referenced by the index
+	/// Succeeds if all of the following are true:
+	///	
+	/// - index is a valid index with the array of channels
+	///
+	/// this method will return the following codes
+	///
+	/// AAFRESULT_SUCCESS
+	///   - succeeded.  (This is the only code indicating success.)
+	///
+	/// AAFRESULT_NOT_INITIALIZED
+	///   - This object has not yet had Initialize() called on it.
+	///
+	///	AAFRESULT_BADINDEX
+	///	 - index is not a valid index
+  ///
+  /// @param index [in] Index of the channel desired.
+  /// @param ChannelStatusMode [in] Set ChannelStatusMode for the index given.
+  ///
+  STDMETHOD(SetChannelStatusModeAt) (THIS_
+    aafUInt32  index,
+    aafChannelStatusModeType_t  ChannelStatusMode) PURE;
+
+  //***********************************************************
+  //
+  // GetFixedChannelStatusDataAt()
+  //
+  /// Gets the FixedChannelStatusData for the channel referenced by the index
+	///		each channel's status is a 24 byte array that gets copied into the 
+	///		the address pointed to by pFixedChannelStatusData.
+	/// Succeeds if all of the following are true:
+	///	
+	/// - pFixedChannelStatusData is a valid pointer
+	/// - index is a valid index with the array of channels
+	///
+	/// this method will return the following codes
+	///
+	/// AAFRESULT_SUCCESS
+	///   - succeeded.  (This is the only code indicating success.)
+	///
+	/// AAFRESULT_NOT_INITIALIZED
+	///   - This object has not yet had Initialize() called on it.
+	///
+	/// AAFRESULT_NULL_PARAM
+	///	 - pFixedChannelStatusData arg is NULL
+	///
+	///	AAFRESULT_BADINDEX
+	///	 - index is not a valid index
+  ///
+  /// @param index [in] Index of the channel desired.
+  /// @param pFixedChannelStatusData [out] Address to store FixedChannelStatusData for the index given.
+  ///
+  STDMETHOD(GetFixedChannelStatusDataAt) (THIS_
+    aafUInt32  index,
+    aafUInt8 *  pFixedChannelStatusData) PURE;
+
+  //***********************************************************
+  //
+  // SetFixedChannelStatusDataAt()
+  //
+  /// Sets the FixedChannelStatusData for the channel referenced by the index
+	///		each channel's status is a 24 byte array that gets copied from the 
+	///		the address pointed to by pFixedChannelStatusData .
+	/// Succeeds if all of the following are true:
+	///	
+	/// - pFixedChannelStatusData is a valid pointer
+	/// - index is a valid index with the array of channels
+	///
+	/// this method will return the following codes
+	///
+	/// AAFRESULT_SUCCESS
+	///   - succeeded.  (This is the only code indicating success.)
+	///
+	/// AAFRESULT_NOT_INITIALIZED
+	///   - This object has not yet had Initialize() called on it.
+	///
+	/// AAFRESULT_NULL_PARAM
+	///	 - pFixedChannelStatusData arg is NULL
+	///
+	///	AAFRESULT_BADINDEX
+	///	 - index is not a valid index
+  ///
+  /// @param index [in] Index of the channel desired.
+  /// @param pFixedChannelStatusData [in] Set FixedChannelStatusData for the index given.
+  ///
+  STDMETHOD(SetFixedChannelStatusDataAt) (THIS_
+    aafUInt32  index,
+    aafUInt8 *  pFixedChannelStatusData) PURE;
+
+  //***********************************************************
+  //
+  // GetUserDataModeAt()
+  //
+  /// Gets the UserDataMode for the channel referenced by the index
+	/// Succeeds if all of the following are true:
+	///	
+	/// - pUserDataMode is a valid pointer
+	/// - index is a valid index with the array of channels
+	///
+	/// this method will return the following codes
+	///
+	/// AAFRESULT_SUCCESS
+	///   - succeeded.  (This is the only code indicating success.)
+	///
+	/// AAFRESULT_NOT_INITIALIZED
+	///   - This object has not yet had Initialize() called on it.
+	///
+	/// AAFRESULT_NULL_PARAM
+	///	 - pUserDataMode arg is NULL
+	///
+	///	AAFRESULT_BADINDEX
+	///	 - index is not a valid index
+  ///
+  /// @param index [in] Index of the channel desired.
+  /// @param pUserDataMode [out] Address to store UserDataMode for the index given.
+  ///
+  STDMETHOD(GetUserDataModeAt) (THIS_
+    aafUInt32  index,
+    aafUserDataModeType_t *  pUserDataMode) PURE;
+
+  //***********************************************************
+  //
+  // SetUserDataModeAt()
+  //
+  /// Sets the UserDataMode for the channel referenced by the index
+	/// Succeeds if all of the following are true:
+	///	
+	/// - index is a valid index with the array of channels
+	///
+	/// this method will return the following codes
+	///
+	/// AAFRESULT_SUCCESS
+	///   - succeeded.  (This is the only code indicating success.)
+	///
+	/// AAFRESULT_NOT_INITIALIZED
+	///   - This object has not yet had Initialize() called on it.
+	///
+	///	AAFRESULT_BADINDEX
+	///	 - index is not a valid index
+  ///
+  /// @param index [in] Index of the channel desired.
+  /// @param UserDataMode [in] Set UserDataMode for the index given.
+  ///
+  STDMETHOD(SetUserDataModeAt) (THIS_
+    aafUInt32  index,
+    aafUserDataModeType_t  UserDataMode) PURE;
+
+  //***********************************************************
+  //
+  // GetFixedUserDataAt()
+  //
+  /// Gets the FixedUserData for the channel referenced by the index
+	///		each channel's status is a 24 byte array that gets copied into the 
+	///		the address pointed to by pFixedUserData.
+	/// Succeeds if all of the following are true:
+	///	
+	/// - pFixedUserData is a valid pointer
+	/// - index is a valid index with the array of channels
+	///
+	/// this method will return the following codes
+	///
+	/// AAFRESULT_SUCCESS
+	///   - succeeded.  (This is the only code indicating success.)
+	///
+	/// AAFRESULT_NOT_INITIALIZED
+	///   - This object has not yet had Initialize() called on it.
+	///
+	/// AAFRESULT_NULL_PARAM
+	///	 - pFixedUserData arg is NULL
+	///
+	///	AAFRESULT_BADINDEX
+	///	 - index is not a valid index
+  ///
+  /// @param index [in] Index of the channel desired.
+  /// @param pFixedUserData [out] Address to store FixedUserData for the index given.
+  ///
+  STDMETHOD(GetFixedUserDataAt) (THIS_
+    aafUInt32  index,
+    aafUInt8 *  pFixedUserData) PURE;
+
+  //***********************************************************
+  //
+  // SetFixedUserDataAt()
+  //
+  /// Sets the FixedUserData for the channel referenced by the index
+	///		each channel's status is a 24 byte array that gets copied from the 
+	///		the address pointed to by pFixedUserData .
+	/// Succeeds if all of the following are true:
+	///	
+	/// - pFixedUserData is a valid pointer
+	/// - index is a valid index with the array of channels
+	///
+	/// this method will return the following codes
+	///
+	/// AAFRESULT_SUCCESS
+	///   - succeeded.  (This is the only code indicating success.)
+	///
+	/// AAFRESULT_NOT_INITIALIZED
+	///   - This object has not yet had Initialize() called on it.
+	///
+	/// AAFRESULT_NULL_PARAM
+	///	 - pFixedUserData arg is NULL
+	///
+	///	AAFRESULT_BADINDEX
+	///	 - index is not a valid index
+  ///
+  /// @param index [in] Index of the channel desired.
+  /// @param pFixedUserData [in] Set FixedUserData for the index given.
+  ///
+  STDMETHOD(SetFixedUserDataAt) (THIS_
+    aafUInt32  index,
+    aafUInt8 *  pFixedUserData) PURE;
+
+
+  END_INTERFACE
+};
+#endif // __IAAFAES3PCMDescriptor2_INTERFACE_DEFINED__
 
 
 
