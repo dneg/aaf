@@ -403,6 +403,9 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\..\..\ref-impl\src\Om\OMDataStreamPropertyFilter.cpp">
+			</File>
+			<File
 				RelativePath="..\..\..\ref-impl\src\OM\OMDataVector.cpp">
 				<FileConfiguration
 					Name="Debug|Win32">
@@ -661,6 +664,9 @@
 						AdditionalIncludeDirectories=""
 						PreprocessorDefinitions=""/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\ref-impl\src\Om\OMKLVStoredStreamFilter.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\ref-impl\src\OM\OMMappedFileRawStorage.cpp">
@@ -1797,6 +1803,9 @@
 				RelativePath="..\..\..\ref-impl\include\OM\OMDataStreamProperty.h">
 			</File>
 			<File
+				RelativePath="..\..\..\ref-impl\include\Om\OMDataStreamPropertyFilter.h">
+			</File>
+			<File
 				RelativePath="..\..\..\ref-impl\include\OM\OMDataTypes.h">
 			</File>
 			<File
@@ -1855,6 +1864,9 @@
 			</File>
 			<File
 				RelativePath="..\..\..\ref-impl\include\OM\OMKLVStoredStream.h">
+			</File>
+			<File
+				RelativePath="..\..\..\ref-impl\include\Om\OMKLVStoredStreamFilter.h">
 			</File>
 			<File
 				RelativePath="..\..\..\ref-impl\include\OM\OMList.h">
@@ -2064,6 +2076,9 @@
 				RelativePath="..\..\..\ref-impl\include\OM\OMStoredStream.h">
 			</File>
 			<File
+				RelativePath="..\..\..\ref-impl\include\Om\OMStoredStreamFilter.h">
+			</File>
+			<File
 				RelativePath="..\..\..\ref-impl\src\OM\OMStoredVectorIndex.h">
 			</File>
 			<File
@@ -2119,6 +2134,9 @@
 			</File>
 			<File
 				RelativePath="..\..\..\ref-impl\src\OM\OMStrongRefVectorPropertyT.h">
+			</File>
+			<File
+				RelativePath="..\..\..\ref-impl\include\Om\OMTransparentStoredStreamFilter.h">
 			</File>
 			<File
 				RelativePath="..\..\..\ref-impl\include\OM\OMType.h">
