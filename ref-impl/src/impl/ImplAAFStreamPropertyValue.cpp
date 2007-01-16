@@ -35,19 +35,23 @@
 #include "OMProperty.h"
 #include "OMPropertyDefinition.h"
 #include "OMDataStreamProperty.h"
+#include "OMDataStreamPropertyFilter.h"
 
 #include "OMAssertions.h"
 #include <string.h>
 
 
 ImplAAFStreamPropertyValue::ImplAAFStreamPropertyValue () :
-  _streamProperty(NULL)
+  _streamProperty(NULL),
+  _streamPropertyFilter(NULL)
 {
 }
 
 
 ImplAAFStreamPropertyValue::~ImplAAFStreamPropertyValue ()
 {
+  delete _streamPropertyFilter;
+  _streamPropertyFilter = 0;
 }
  
 
@@ -446,6 +450,320 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFStreamPropertyValue::GetSizeFiltered (
+      aafInt64 *  pSize)
+{
+  if (!isInitialized())
+    return AAFRESULT_NOT_INITIALIZED;
+  if (NULL == pSize)
+    return AAFRESULT_NULL_PARAM;    
+  
+  *pSize = (aafInt64)(_streamPropertyFilter->size());
+  return AAFRESULT_SUCCESS;
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFStreamPropertyValue::SetSizeFiltered (
+      aafInt64  newSize)
+{
+  if (!isInitialized())
+    return AAFRESULT_NOT_INITIALIZED;
+  if (0 > newSize) // TEMP: need unsigned aafUInt64!
+    return AAFRESULT_INVALID_PARAM;
+
+  // *** Structured Storage PATCH! *** transdel:2000-JUN-20
+  // Save the old position so that we can detect whether
+  // or not the stream is being truncated.
+  OMUInt64 position = _streamPropertyFilter->position();
+
+
+  // Set the new size of the data stream.
+  _streamPropertyFilter->setSize((OMUInt64)newSize); // What happens if this call fails?
+
+
+  // *** Structured Storage PATCH! *** transdel:2000-JUN-20
+  // If the file is truncated then force the position
+  // to be the same as the new stream size (eof).
+  // Without this PATCH Structrured Storage may leave
+  // "stale bytes" in the stream after the next write
+  // operation.
+  if (position > (OMUInt64)newSize)
+    _streamPropertyFilter->setPosition((OMUInt64)newSize); // What happens if this call fails?
+    
+  return AAFRESULT_SUCCESS;
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFStreamPropertyValue::GetPositionFiltered (
+      aafInt64 *  pPosition)
+{
+ if (!isInitialized())
+    return AAFRESULT_NOT_INITIALIZED;
+  if (NULL == pPosition)
+    return AAFRESULT_NULL_PARAM;
+    
+  *pPosition = (aafInt64)_streamPropertyFilter->position();
+    
+  return AAFRESULT_SUCCESS;
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFStreamPropertyValue::SetPositionFiltered (
+      aafInt64  newPosition)
+{
+  if (!isInitialized())
+    return AAFRESULT_NOT_INITIALIZED;
+  if (0 > newPosition) // TEMP: need unsigned aafUInt64!
+    return AAFRESULT_INVALID_PARAM;
+  
+  // Set the new size of the data stream.
+  _streamPropertyFilter->setPosition((OMUInt64)newPosition); // What happens if this call fails?
+    
+  return AAFRESULT_SUCCESS;
+}
+
+
+
+
+
+ AAFRESULT STDMETHODCALLTYPE
+   ImplAAFStreamPropertyValue::ReadFiltered (
+      aafUInt32  dataSize,
+      aafMemPtr_t  pData,
+      aafUInt32 *  bytesRead)
+{
+  if (!isInitialized())
+    return AAFRESULT_NOT_INITIALIZED;
+  if (NULL == pData || NULL == bytesRead)
+    return AAFRESULT_NULL_PARAM;
+
+  // Cannot read from an optional property unless it is present.
+  if (_streamProperty->isOptional() && !_streamProperty->isPresent())
+    return AAFRESULT_PROP_NOT_PRESENT;
+    
+  // Read the bytes from the data stream.
+  _streamPropertyFilter->read(pData, dataSize, *bytesRead);
+  
+  if (0 < dataSize && 0 == *bytesRead)
+    return AAFRESULT_END_OF_DATA;
+  
+  ASSERTU(dataSize == *bytesRead);  
+  return AAFRESULT_SUCCESS;
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFStreamPropertyValue::WriteFiltered (
+      aafUInt32  dataSize,
+      aafMemPtr_t  pData)
+{
+  if (!isInitialized())
+    return AAFRESULT_NOT_INITIALIZED;
+  if (NULL == pData)
+    return AAFRESULT_NULL_PARAM;
+    
+  // Write the bytes from the data stream.
+  OMUInt32 bytesWritten = 0;
+  if (0 < dataSize)
+  {
+    _streamPropertyFilter->write(pData, dataSize, bytesWritten);
+  }
+  
+  if (0 < dataSize && 0 == bytesWritten)
+    return AAFRESULT_END_OF_DATA;
+  
+  ASSERTU(dataSize == bytesWritten);  
+  return AAFRESULT_SUCCESS;
+}
+
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFStreamPropertyValue::AppendFiltered (
+      aafUInt32  dataSize,
+      aafMemPtr_t  pData)
+{
+  if (!isInitialized())
+    return AAFRESULT_NOT_INITIALIZED;
+  if (NULL == pData)
+    return AAFRESULT_NULL_PARAM;    
+
+  // Set the position to the size of the stream.
+  _streamPropertyFilter->setPosition(_streamPropertyFilter->size());
+       
+  // Write the bytes from the data stream.
+  OMUInt32 bytesWritten = 0;
+  if (0 < dataSize)
+  {
+    _streamPropertyFilter->write(pData, dataSize, bytesWritten);
+  }
+  
+  if (0 < dataSize && 0 == bytesWritten)
+    return AAFRESULT_END_OF_DATA;
+  
+  ASSERTU(dataSize == bytesWritten);  
+  return AAFRESULT_SUCCESS;
+}
+
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFStreamPropertyValue::AppendElementsFiltered (
+      ImplAAFTypeDef * pElementType,
+      aafUInt32  dataSize,
+      aafMemPtr_t  pData)
+{
+  if (!isInitialized())
+    return AAFRESULT_NOT_INITIALIZED;
+  if (NULL == pElementType || NULL == pData)
+    return AAFRESULT_NULL_PARAM;    
+  
+  // Element access methods need to fail if the stream element type
+  // offsets have not been registered. 
+  if (!pElementType->IsRegistered())
+    return AAFRESULT_NOT_REGISTERED;
+  
+  OMUInt32 internalElementSize = pElementType->NativeSize(); 
+  if (0 == internalElementSize)
+     return AAFRESULT_INVALID_PARAM; 
+
+  // Make sure that the given dataSize is an integral number of stream elements.
+  OMUInt32 elementCount = dataSize / internalElementSize;
+  if (dataSize != (elementCount * internalElementSize))
+    return AAFRESULT_INVALID_PARAM;
+  
+  // Set the position to the size of the stream.
+  _streamPropertyFilter->setPosition(_streamPropertyFilter->size());
+   
+  // Write the elements to the data stream.
+  OMUInt32 elementsWritten;
+  _streamPropertyFilter->writeTypedElements(pElementType,
+                                    internalElementSize,
+                                    pData,
+                                    elementCount,
+                                    elementsWritten);
+  
+  if (0 < dataSize && 0 == elementsWritten)
+    return AAFRESULT_CONTAINERWRITE; 
+    
+  ASSERTU(elementCount == elementsWritten); 
+  return AAFRESULT_SUCCESS;
+}
+
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFStreamPropertyValue::WriteElementsFiltered (
+      ImplAAFTypeDef * pElementType,
+      aafUInt32  dataSize,
+      aafMemPtr_t  pData)
+{
+  if (!isInitialized())
+    return AAFRESULT_NOT_INITIALIZED;
+  if (NULL == pElementType || NULL == pData)
+    return AAFRESULT_NULL_PARAM;    
+
+  // Cannot get the byte order if it has never been set.
+  if (!_streamProperty->hasByteOrder())
+    return AAFRESULT_NOBYTEORDER;
+  
+  // Element access methods need to fail if the stream element type
+  // offsets have not been registered. 
+  if (!pElementType->IsRegistered())
+    return AAFRESULT_NOT_REGISTERED;
+  
+  OMUInt32 internalElementSize = pElementType->NativeSize(); 
+  ASSERTU (0 < internalElementSize);
+  if (0 == internalElementSize)
+     return AAFRESULT_INVALID_PARAM; 
+
+  // Make sure that the given dataSize is an integral number of stream elements.
+  OMUInt32 elementCount = dataSize / internalElementSize;
+  if (dataSize != (elementCount * internalElementSize))
+    return AAFRESULT_INVALID_PARAM;
+  
+  // Write the elements to the data stream.
+  OMUInt32 elementsWritten;
+  _streamPropertyFilter->writeTypedElements(pElementType,
+                                    internalElementSize,
+                                    pData,
+                                    elementCount,
+                                    elementsWritten);
+  
+  if (0 < dataSize && 0 == elementsWritten)
+    return AAFRESULT_CONTAINERWRITE; 
+    
+  ASSERTU(elementCount == elementsWritten); 
+  return AAFRESULT_SUCCESS;
+}
+
+
+
+AAFRESULT STDMETHODCALLTYPE
+   ImplAAFStreamPropertyValue::ReadElementsFiltered (
+      ImplAAFTypeDef * pElementType,
+      aafUInt32  dataSize,
+      aafMemPtr_t  pData,
+      aafUInt32 *  bytesRead)
+{
+  if (!isInitialized())
+    return AAFRESULT_NOT_INITIALIZED;
+  if (NULL == pElementType || NULL == pData || NULL == bytesRead)
+    return AAFRESULT_NULL_PARAM;    
+
+  // Cannot get the byte order if it has never been set.
+  if (!_streamProperty->hasByteOrder())
+    return AAFRESULT_NOBYTEORDER;
+  
+  // Element access methods need to fail if the stream element type
+  // offsets have not been registered. 
+  if (!pElementType->IsRegistered())
+    return AAFRESULT_NOT_REGISTERED;
+  
+  OMUInt32 internalElementSize = pElementType->NativeSize();
+  ASSERTU (0 < internalElementSize);
+  if (0 == internalElementSize)
+     return AAFRESULT_INVALID_PARAM; 
+
+  // Make sure that the given dataSize is an integral number of stream elements.
+  OMUInt32 elementCount = dataSize / internalElementSize;
+  if (dataSize != (elementCount * internalElementSize))
+    return AAFRESULT_INVALID_PARAM;
+  
+  // Get the external size of an element from the type.  
+  OMUInt32 externalElementSize = pElementType->PropValSize();
+  ASSERTU (0 < externalElementSize);
+  if (0 == externalElementSize)
+     return AAFRESULT_INVALID_PARAM; 
+
+  // Cannot read from an optional property unless it is present.
+  if (_streamProperty->isOptional() && !_streamProperty->isPresent())
+    return AAFRESULT_PROP_NOT_PRESENT;
+  
+  // Read the elements from the data stream.
+  OMUInt32 elementsRead;
+  _streamPropertyFilter->readTypedElements(pElementType,
+                                   externalElementSize,
+                                   pData,
+                                   elementCount,
+                                   elementsRead);
+  *bytesRead = elementsRead * internalElementSize;
+  
+  if (0 < dataSize && 0 == *bytesRead)
+    return AAFRESULT_END_OF_DATA;
+  
+  ASSERTU(elementCount == elementsRead);  
+  return AAFRESULT_SUCCESS;
+}
+
+
+
+
+
 AAFRESULT ImplAAFStreamPropertyValue::Initialize (
   const ImplAAFTypeDefStream *streamType,    
   OMProperty *property)
@@ -490,6 +808,7 @@ AAFRESULT ImplAAFStreamPropertyValue::Initialize (
   if (AAFRESULT_SUCCEEDED(result))
   {
     _streamProperty = streamProperty;
+    _streamPropertyFilter = streamProperty->createFilter();
    
     // This instance is now fully initialized.
     setInitialized();
