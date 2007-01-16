@@ -44,7 +44,7 @@ AD_CLASS_UUID(307e9e6d, dcb2, 11d2, 84, 29, 00, 60, 08, 32, ac, b8)
 
 AD_DEFAULT_UUID(307e9e6e, dcb2, 11d2, 84, 29, 00, 60, 08, 32, ac, b8)
 #c AD_XCLASS_BEGIN(Concrete, StoredObject)
-AD_COM_EXT_CLASS_BEGIN(public IAAFTypeDefStreamEx)
+AD_COM_EXT2_CLASS_BEGIN(public IAAFTypeDefStreamEx, public IAAFTypeDefStream2)
 
 AD_XMETHOD2(GetSize,
 			[in],
@@ -500,4 +500,4 @@ AD_XMETHOD4(AppendElements,
 AD_OVERRIDE(.method-GetTypeCategory)
 AD_COM_METH(.method-SetCallback)
 #c AD_XCLASS_END(Concrete, StoredObject)
-AD_COM_EXT_CLASS_END(AAFTypeDefStreamEx)
+AD_COM_EXT2_CLASS_END(AAFTypeDefStreamEx, AAFTypeDefStream2)

@@ -38,11 +38,11 @@ CP = cp.exe
 CAT = cat.exe
 CHMOD = chmod.exe
 MV = mv.exe
-SH = bash.exe
+SH = sh.exe
 TOUCH = touch.exe
 PERL = perl.exe
 
-SHELL = bash.exe
+SHELL = sh.exe
 MAKE_SUFFIX =
 
 CC = cl
