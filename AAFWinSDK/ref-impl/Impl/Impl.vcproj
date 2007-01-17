@@ -2890,6 +2890,9 @@
 			</FileConfiguration>
 		</File>
 		<File
+			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFTypeDefMXFEssenceStream.cpp">
+		</File>
+		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFTypeDefObjectRef.cpp">
 			<FileConfiguration
 				Name="Debug|Win32">

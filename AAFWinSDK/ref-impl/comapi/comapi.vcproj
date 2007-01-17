@@ -2629,6 +2629,9 @@
 			</FileConfiguration>
 		</File>
 		<File
+			RelativePath="..\..\..\ref-impl\src\com-api\CAAFTypeDefMXFEssenceStream.cpp">
+		</File>
+		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFTypeDefObjectRef.cpp">
 			<FileConfiguration
 				Name="Release|Win32">
