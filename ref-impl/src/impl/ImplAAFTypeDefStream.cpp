@@ -346,6 +346,18 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFTypeDefStream::GetMXFEssenceStream (
+      aafUInt32 filterType,
+      ImplAAFTypeDefStream ** pFilteredStream)
+{
+  AAFRESULT result = AAFRESULT_NOT_IMPLEMENTED;
+
+  return result;
+}
+
+
+
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFTypeDefStream::GetTypeCategory (

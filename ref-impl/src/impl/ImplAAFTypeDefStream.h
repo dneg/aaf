@@ -271,6 +271,18 @@ public:
 
 
   //****************
+  // GetMXFEssenceStream()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetMXFEssenceStream
+        (// @parm [in] type of the stream data filter
+         aafUInt32 filterType,
+
+         // @parm [in] filtered stream access
+         ImplAAFTypeDefStream ** pFilteredStream);
+
+
+  //****************
   // GetTypeCategory()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
