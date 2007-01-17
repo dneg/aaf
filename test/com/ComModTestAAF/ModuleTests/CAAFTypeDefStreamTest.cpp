@@ -47,6 +47,7 @@ typedef IAAFSmartPointer<IAAFTypeDef>               IAAFTypeDefSP;
 typedef IAAFSmartPointer<IAAFTypeDefStream>         IAAFTypeDefStreamSP;
 typedef IAAFSmartPointer<IAAFTypeDefStreamEx>       IAAFTypeDefStreamExSP;
 typedef IAAFSmartPointer<IAAFSourceMob>             IAAFSourceMobSP;
+typedef IAAFSmartPointer<IAAFMetaDefinition>        IAAFMetaDefinitionSP;
 typedef IAAFSmartPointer<IAAFMob>                   IAAFMobSP;
 typedef IAAFSmartPointer<IAAFEssenceDescriptor>     IAAFEssenceDescriptorSP;
 typedef IAAFSmartPointer<IAAFEssenceData>           IAAFEssenceDataSP;
@@ -547,10 +548,10 @@ class TestStreamAccess : public IAAFStreamAccess
 HRESULT STDMETHODCALLTYPE
 TestStreamAccess::WriteStream (IAAFPropertyValue *propertyValue, aafMemPtr_t pUserData)
 {
-	IAAFTypeDef			*pTypeDef;
-	IAAFTypeDefStream	*pTypeDefStream;
-	IAAFMetaDefinition	*pMetaDef;
-	aafCharacter		debugBuf[256];
+	IAAFTypeDefSP			pTypeDef;
+	IAAFTypeDefStreamSP		pTypeDefStream;
+	IAAFMetaDefinitionSP	pMetaDef;
+	aafCharacter			debugBuf[256];
 
 	CheckResult(propertyValue->GetType(&pTypeDef));
 	CheckResult(pTypeDef->QueryInterface(IID_IAAFMetaDefinition, (void **)&pMetaDef));
