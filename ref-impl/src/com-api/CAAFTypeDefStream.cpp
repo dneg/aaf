@@ -1276,13 +1276,96 @@ HRESULT STDMETHODCALLTYPE
 }
 
 
+HRESULT STDMETHODCALLTYPE
+    CAAFTypeDefStream::GetMXFEssenceStream (aafUInt32  filterType,
+        IAAFTypeDefStream ** pFilteredStream)
+{
+  HRESULT hr;
+
+  ImplAAFTypeDefStream * ptr;
+  ImplAAFRoot * pO;
+  pO = GetRepObject ();
+  assert (pO);
+  ptr = static_cast<ImplAAFTypeDefStream*> (pO);
+  assert (ptr);
+
+
+  //
+  // set up for pFilteredStream
+  //
+  ImplAAFTypeDefStream * internalpFilteredStream = NULL;
+  ImplAAFTypeDefStream ** pinternalpFilteredStream = NULL;
+  if (pFilteredStream)
+    {
+      pinternalpFilteredStream = &internalpFilteredStream;
+    }
+
+  try
+    {
+      hr = ptr->GetMXFEssenceStream (filterType,
+    pinternalpFilteredStream);
+    }
+  catch (OMException& e)
+    {
+      // OMExceptions should be handled by the impl code. However, if an
+      // unhandled OMException occurs, control reaches here. We must not
+      // allow the unhandled exception to reach the client code, so we
+      // turn it into a failure status code.
+      //
+      // If the OMException contains an HRESULT, it is returned to the
+      // client, if not, AAFRESULT_UHANDLED_EXCEPTION is returned.
+      //
+      hr = OMExceptionToResult(e, AAFRESULT_UNHANDLED_EXCEPTION);
+    }
+  catch (OMAssertionViolation &)
+    {
+      // Control reaches here if there is a programming error in the
+      // impl code that was detected by an assertion violation.
+      // We must not allow the assertion to reach the client code so
+      // here we turn it into a failure status code.
+      //
+      hr = AAFRESULT_ASSERTION_VIOLATION;
+    }
+  catch (...)
+    {
+      // We CANNOT throw an exception out of a COM interface method!
+      // Return a reasonable exception code.
+      //
+      hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+    }
+
+
+  //
+  // cleanup for pFilteredStream
+  //
+  if (SUCCEEDED(hr))
+    {
+      IUnknown *pUnknown;
+      HRESULT hStat;
+
+      if (internalpFilteredStream)
+        {
+          pUnknown = static_cast<IUnknown *> (internalpFilteredStream->GetContainer());
+          hStat = pUnknown->QueryInterface(IID_IAAFTypeDefStream, (void **)pFilteredStream);
+          assert (SUCCEEDED (hStat));
+          //pUnknown->Release();
+          internalpFilteredStream->ReleaseReference(); // We are through with this pointer.
+        }
+    }
+
+  return hr;
+}
+
+
+
+
 //
 // 
-// 
+//
 inline int EQUAL_UID(const GUID & a, const GUID & b)
 {
   return (0 == memcmp((&a), (&b), sizeof (aafUID_t)));
-}
+} 
 HRESULT CAAFTypeDefStream::InternalQueryInterface
 (
     REFIID riid,
@@ -1302,6 +1385,12 @@ HRESULT CAAFTypeDefStream::InternalQueryInterface
     if (EQUAL_UID(riid,IID_IAAFTypeDefStreamEx)) 
     { 
         *ppvObj = (IAAFTypeDefStreamEx *)this; 
+        ((IUnknown *)*ppvObj)->AddRef();
+        return S_OK;
+    }
+    if (EQUAL_UID(riid,IID_IAAFTypeDefStream2)) 
+    { 
+        *ppvObj = (IAAFTypeDefStream2 *)this; 
         ((IUnknown *)*ppvObj)->AddRef();
         return S_OK;
     }

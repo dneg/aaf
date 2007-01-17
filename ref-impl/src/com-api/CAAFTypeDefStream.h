@@ -44,10 +44,16 @@
 #include "CAAFTypeDef.h"
 #endif
 
+//
+// Forward declaration
+//
+class ImplAAFTypeDefStream;
+
 
 class CAAFTypeDefStream
   : public IAAFTypeDefStream,
     public IAAFTypeDefStreamEx,
+	public IAAFTypeDefStream2,
     public CAAFTypeDef
 {
 protected:
@@ -632,6 +638,43 @@ public:
     // @parm [in] aafMemPtr_t | pUserData | Client-specific data passed through to the callback
     aafMemPtr_t  pUserData
   );
+
+  //***********************************************************
+  // METHOD NAME: GetMXFEssenceStream()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFTypeDefStream2 | GetMXFEssenceStream |
+  // Creates a type definition object which implements
+  // the IAAFTypeDefStream interface and performs a file
+  // encoding dependent filtering of the raw stream data.
+  //
+  // Succeeds if:
+  // - Initialize() has already been called on this object.
+  // - pFilteredStream is a valid pointer.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize() called on it.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pFilteredStream arg is NULL.
+  // @end
+  // 
+  STDMETHOD (GetMXFEssenceStream)
+   (
+    // @parm [in] aafUInt32 | filterType | type of the stream data filter
+    aafUInt32  filterType,
+
+    // @parm [out,retval] AAFTypeDefStream | pFilteredStream | filtered stream access
+    IAAFTypeDefStream ** pFilteredStream
+  );
+
 
 
 protected:
