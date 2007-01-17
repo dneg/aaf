@@ -1,0 +1,45 @@
+#c *********************************************************************
+#c
+#c $Id$ $Name$
+#c
+#c The contents of this file are subject to the AAF SDK Public
+#c Source License Agreement (the "License"); You may not use this file
+#c except in compliance with the License.  The License is available in
+#c AAFSDKPSL.TXT, or you may obtain a copy of the License from the AAF
+#c Association or its successor.
+#c
+#c Software distributed under the License is distributed on an "AS IS"
+#c basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.  See
+#c the License for the specific language governing rights and limitations
+#c under the License.
+#c
+#c The Original Code of this file is Copyright 1998-2007, Licensor of the
+#c AAF Association.
+#c
+#c The Initial Developer of the Original Code of this file and the
+#c Licensor of the AAF Association is Avid Technology.
+#c All rights reserved.
+#c
+#c *********************************************************************
+#startm .this-module 0
+AAFTypeDefMXFEssenceStream\
+#endm
+#c
+#startm .parent-module 0
+AAFTypeDefStream\
+#endm
+#c
+AD_HEAD
+AD_IDL(///
+/// This interface is used to define Stream types used in AAF
+/// persistent objects.  Streams are conceptually similar to
+/// variably-sized arrays except that they are intended to be used for
+/// very large pieces of data \(such as essence\).
+/// Note: All reads/and writes advance the current position.
+AD_STD_COMMENT_IFC_HEADER)
+AD_CLASS_UUID(6760c4b4, 129c, 4356, 80, 48, bd, 69, c6, ab, a4, a4)
+
+AD_DEFAULT_UUID(86f9aaff, b6ad, 4f3e, a7, 1c, f6, 9f, 1b, 4c, 48, a5)
+AD_XCLASS_BEGIN(Concrete, Transient)
+
+AD_XCLASS_END(Concrete, Transient)
