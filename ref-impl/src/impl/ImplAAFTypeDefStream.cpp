@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2006, Licensor of the
+// The Original Code of this file is Copyright 1998-2007, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -51,6 +51,7 @@
 
 
 extern "C" const aafClassID_t CLSID_AAFStreamPropertyValue;
+extern "C" const aafClassID_t CLSID_AAFTypeDefMXFEssenceStream;
 
 class ImplAAFOMDataStreamAccess : public OMDataStreamAccess {
 public:
@@ -139,7 +140,11 @@ AAFRESULT ImplAAFTypeDefStream::GetStreamPropertyValue(
   // ImplAAFTypeDefStream.
   ImplAAFTypeDefSP pPropertyValueType;
   pPropertyValue->GetType(&pPropertyValueType);
-  if ((ImplAAFTypeDef *)pPropertyValueType != (ImplAAFTypeDef *)this)
+  eAAFTypeCategory_t propertyTypeCategory = kAAFTypeCatUnknown;
+  pPropertyValueType->GetTypeCategory(&propertyTypeCategory);
+  eAAFTypeCategory_t thisTypeCategory = kAAFTypeCatUnknown;
+  GetTypeCategory(&thisTypeCategory);
+  if (propertyTypeCategory != thisTypeCategory)
     return AAFRESULT_INVALID_PARAM;
   
   pStreamPropertyValue = dynamic_cast<ImplAAFStreamPropertyValue *>(pPropertyValue);
@@ -348,10 +353,21 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFTypeDefStream::GetMXFEssenceStream (
-      aafUInt32 filterType,
+      aafUInt32 /*filterType*/,
       ImplAAFTypeDefStream ** pFilteredStream)
 {
   AAFRESULT result = AAFRESULT_NOT_IMPLEMENTED;
+  ImplAAFTypeDefStream* pTypeDefMXFEssenceStream =
+    (ImplAAFTypeDefStream*) CreateImpl (CLSID_AAFTypeDefMXFEssenceStream);
+  if (pTypeDefMXFEssenceStream)
+  {
+    *pFilteredStream = pTypeDefMXFEssenceStream;
+    result = AAFRESULT_SUCCESS;
+  }
+  else
+  {
+    result = AAFRESULT_INTERNAL_ERROR;
+  }
 
   return result;
 }
