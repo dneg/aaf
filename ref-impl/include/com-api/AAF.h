@@ -657,6 +657,12 @@ typedef interface IAAFTypeDefInt IAAFTypeDefInt;
 #endif 	/* __IAAFTypeDefInt_FWD_DEFINED__ */
 
 
+#ifndef __IAAFTypeDefMXFEssenceStream_FWD_DEFINED__
+#define __IAAFTypeDefMXFEssenceStream_FWD_DEFINED__
+typedef interface IAAFTypeDefMXFEssenceStream IAAFTypeDefMXFEssenceStream;
+#endif 	/* __IAAFTypeDefMXFEssenceStream_FWD_DEFINED__ */
+
+
 #ifndef __IAAFTypeDefObjectRef_FWD_DEFINED__
 #define __IAAFTypeDefObjectRef_FWD_DEFINED__
 typedef interface IAAFTypeDefObjectRef IAAFTypeDefObjectRef;
@@ -1133,6 +1139,7 @@ void __RPC_USER MIDL_user_free( void * );
 // AAF Interfaces.
 //=--------------------------------------------------------------------------=
 //
+
 
 
 
@@ -28356,6 +28363,74 @@ void __RPC_STUB IAAFTypeDefInt_IsSigned_Stub(
 #endif 	/* __IAAFTypeDefInt_INTERFACE_DEFINED__ */
 
 
+#ifndef __IAAFTypeDefMXFEssenceStream_INTERFACE_DEFINED__
+#define __IAAFTypeDefMXFEssenceStream_INTERFACE_DEFINED__
+
+/* interface IAAFTypeDefMXFEssenceStream */
+/* [unique][helpstring][uuid][object] */ 
+
+
+EXTERN_C const IID IID_IAAFTypeDefMXFEssenceStream;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("86f9aaff-b6ad-4f3e-a71c-f69f1b4c48a5")
+    IAAFTypeDefMXFEssenceStream : public IUnknown
+    {
+    public:
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IAAFTypeDefMXFEssenceStreamVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IAAFTypeDefMXFEssenceStream * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IAAFTypeDefMXFEssenceStream * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IAAFTypeDefMXFEssenceStream * This);
+        
+        END_INTERFACE
+    } IAAFTypeDefMXFEssenceStreamVtbl;
+
+    interface IAAFTypeDefMXFEssenceStream
+    {
+        CONST_VTBL struct IAAFTypeDefMXFEssenceStreamVtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IAAFTypeDefMXFEssenceStream_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IAAFTypeDefMXFEssenceStream_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IAAFTypeDefMXFEssenceStream_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+
+#endif 	/* __IAAFTypeDefMXFEssenceStream_INTERFACE_DEFINED__ */
+
+
 #ifndef __IAAFTypeDefObjectRef_INTERFACE_DEFINED__
 #define __IAAFTypeDefObjectRef_INTERFACE_DEFINED__
 
@@ -48237,7 +48312,7 @@ void __RPC_STUB IAAFTypeDefVariableArrayEx_InsertElement_Stub(
 #endif 	/* __IAAFTypeDefVariableArrayEx_INTERFACE_DEFINED__ */
 
 
-/* interface __MIDL_itf_AAF_0270 */
+/* interface __MIDL_itf_AAF_0271 */
 /* [local] */ 
 
   ///***********************************************************
@@ -48372,8 +48447,8 @@ STDAPI AAFResultToText (
 
 
 
-extern RPC_IF_HANDLE __MIDL_itf_AAF_0270_v0_0_c_ifspec;
-extern RPC_IF_HANDLE __MIDL_itf_AAF_0270_v0_0_s_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_AAF_0271_v0_0_c_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_AAF_0271_v0_0_s_ifspec;
 
 /* Additional Prototypes for ALL interfaces */
 

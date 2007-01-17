@@ -151,6 +151,7 @@ EXTERN_C const CLSID CLSID_AAFTypeDefExtEnum;
 EXTERN_C const CLSID CLSID_AAFTypeDefFixedArray;
 EXTERN_C const CLSID CLSID_AAFTypeDefIndirect;
 EXTERN_C const CLSID CLSID_AAFTypeDefInt;
+EXTERN_C const CLSID CLSID_AAFTypeDefMXFEssenceStream;
 EXTERN_C const CLSID CLSID_AAFTypeDefObjectRef;
 EXTERN_C const CLSID CLSID_AAFTypeDefOpaque;
 EXTERN_C const CLSID CLSID_AAFTypeDefRecord;

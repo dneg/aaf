@@ -148,6 +148,7 @@
 #include "CAAFTypeDefFixedArray.h"
 #include "CAAFTypeDefIndirect.h"
 #include "CAAFTypeDefInt.h"
+#include "CAAFTypeDefMXFEssenceStream.h"
 #include "CAAFTypeDefObjectRef.h"
 #include "CAAFTypeDefOpaque.h"
 #include "CAAFTypeDefRecord.h"

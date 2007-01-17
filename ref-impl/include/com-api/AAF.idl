@@ -143,6 +143,7 @@ interface IAAFTypeDefExtEnum;
 interface IAAFTypeDefFixedArray;
 interface IAAFTypeDefIndirect;
 interface IAAFTypeDefInt;
+interface IAAFTypeDefMXFEssenceStream;
 interface IAAFTypeDefObjectRef;
 interface IAAFTypeDefOpaque;
 interface IAAFTypeDefRecord;
@@ -30149,6 +30150,46 @@ interface IAAFTypeDefInt : IUnknown
   HRESULT IsSigned (
     [out] aafBoolean_t *  pSigned);
 
+
+
+}
+
+
+
+// ************************
+//
+// Interface IAAFTypeDefMXFEssenceStream
+//
+// ************************
+///
+/// This interface is used to define Stream types used in AAF
+/// persistent objects.  Streams are conceptually similar to
+/// variably-sized arrays except that they are intended to be used for
+/// very large pieces of data (such as essence).
+/// Note: All reads/and writes advance the current position.
+///
+/// In addition to the specific error results listed for each method,
+/// all methods in this interface may also return one of the following
+/// values:
+/// 
+/// AAFRESULT_NOMEMORY
+///   - insufficient system memory is available to perform the
+///     operation.
+
+
+///
+/// Objects that implement IAAFTypeDefMXFEssenceStream also implement the following interfaces:
+///  - IAAFTypeDefStream
+///  - IAAFTypeDef
+///  - IAAFMetaDefinition
+[
+    object,
+    uuid(86f9aaff-b6ad-4f3e-a71c-f69f1b4c48a5),
+    helpstring("IAAFTypeDefMXFEssenceStream Interface"),
+    pointer_default(unique)
+]
+interface IAAFTypeDefMXFEssenceStream : IUnknown
+{
 
 
 }

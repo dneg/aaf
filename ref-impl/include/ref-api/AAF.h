@@ -142,6 +142,7 @@ interface IAAFTypeDefExtEnum;
 interface IAAFTypeDefFixedArray;
 interface IAAFTypeDefIndirect;
 interface IAAFTypeDefInt;
+interface IAAFTypeDefMXFEssenceStream;
 interface IAAFTypeDefObjectRef;
 interface IAAFTypeDefOpaque;
 interface IAAFTypeDefRecord;
@@ -317,6 +318,7 @@ typedef interface IAAFTypeDefExtEnum IAAFTypeDefExtEnum;
 typedef interface IAAFTypeDefFixedArray IAAFTypeDefFixedArray;
 typedef interface IAAFTypeDefIndirect IAAFTypeDefIndirect;
 typedef interface IAAFTypeDefInt IAAFTypeDefInt;
+typedef interface IAAFTypeDefMXFEssenceStream IAAFTypeDefMXFEssenceStream;
 typedef interface IAAFTypeDefObjectRef IAAFTypeDefObjectRef;
 typedef interface IAAFTypeDefOpaque IAAFTypeDefOpaque;
 typedef interface IAAFTypeDefRecord IAAFTypeDefRecord;
@@ -30144,6 +30146,43 @@ DECLARE_INTERFACE_(IAAFTypeDefInt, IUnknown)
   END_INTERFACE
 };
 #endif // __IAAFTypeDefInt_INTERFACE_DEFINED__
+
+
+
+// IAAFTypeDefMXFEssenceStream
+
+// ************************
+//
+// Interface IAAFTypeDefMXFEssenceStream
+//
+// ************************
+
+
+
+#ifndef __IAAFTypeDefMXFEssenceStream_INTERFACE_DEFINED__
+#define __IAAFTypeDefMXFEssenceStream_INTERFACE_DEFINED__
+
+EXTERN_C const IID IID_IAAFTypeDefMXFEssenceStream;
+
+#undef  INTERFACE
+#define INTERFACE   IAAFTypeDefMXFEssenceStream
+
+DECLARE_INTERFACE_(IAAFTypeDefMXFEssenceStream, IUnknown)
+{
+  BEGIN_INTERFACE
+
+  /* *** IUnknown methods *** */
+  STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppvObj) PURE;
+  STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
+  STDMETHOD_(ULONG,Release) (THIS) PURE;
+
+  /* *** IAAFTypeDefMXFEssenceStream methods *** */
+
+
+
+  END_INTERFACE
+};
+#endif // __IAAFTypeDefMXFEssenceStream_INTERFACE_DEFINED__
 
 
 

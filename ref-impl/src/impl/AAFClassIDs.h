@@ -152,6 +152,7 @@ extern "C" const aafClassID_t CLSID_AAFTypeDefExtEnum;
 extern "C" const aafClassID_t CLSID_AAFTypeDefFixedArray;
 extern "C" const aafClassID_t CLSID_AAFTypeDefIndirect;
 extern "C" const aafClassID_t CLSID_AAFTypeDefInt;
+extern "C" const aafClassID_t CLSID_AAFTypeDefMXFEssenceStream;
 extern "C" const aafClassID_t CLSID_AAFTypeDefObjectRef;
 extern "C" const aafClassID_t CLSID_AAFTypeDefOpaque;
 extern "C" const aafClassID_t CLSID_AAFTypeDefRecord;
