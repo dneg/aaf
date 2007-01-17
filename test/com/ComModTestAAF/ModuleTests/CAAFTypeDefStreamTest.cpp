@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2005, Licensor of the
+// The Original Code of this file is Copyright 1998-2007, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -45,6 +45,7 @@ typedef IAAFSmartPointer<IAAFPropertyDef>           IAAFPropertyDefSP;
 typedef IAAFSmartPointer<IAAFPropertyValue>         IAAFPropertyValueSP;
 typedef IAAFSmartPointer<IAAFTypeDef>               IAAFTypeDefSP;
 typedef IAAFSmartPointer<IAAFTypeDefStream>         IAAFTypeDefStreamSP;
+typedef IAAFSmartPointer<IAAFTypeDefStream2>        IAAFTypeDefStream2SP;
 typedef IAAFSmartPointer<IAAFTypeDefStreamEx>       IAAFTypeDefStreamExSP;
 typedef IAAFSmartPointer<IAAFSourceMob>             IAAFSourceMobSP;
 typedef IAAFSmartPointer<IAAFMetaDefinition>        IAAFMetaDefinitionSP;
@@ -292,8 +293,10 @@ static void Test_GetTypeDefStream(
   IAAFTypeDefSP pTypeDef;
 
   CheckResult(pStreamPropertyValue->GetType(&pTypeDef));
-  CheckResult(pTypeDef->QueryInterface(IID_IAAFTypeDefStream,
-                                       (void **)ppTypeDefStream));
+  IAAFTypeDefStream2SP pTypeDefStreamRaw;
+  CheckResult(pTypeDef->QueryInterface(IID_IAAFTypeDefStream2,
+                                       (void **)&pTypeDefStreamRaw));
+  CheckResult(pTypeDefStreamRaw->GetMXFEssenceStream(0, ppTypeDefStream));
 }
 
 static void Test_EssenceStreamWrite(
@@ -549,6 +552,7 @@ HRESULT STDMETHODCALLTYPE
 TestStreamAccess::WriteStream (IAAFPropertyValue *propertyValue, aafMemPtr_t pUserData)
 {
 	IAAFTypeDefSP			pTypeDef;
+	IAAFTypeDefStream2SP	pTypeDefStreamRaw;
 	IAAFTypeDefStreamSP		pTypeDefStream;
 	IAAFMetaDefinitionSP	pMetaDef;
 	aafCharacter			debugBuf[256];
@@ -557,8 +561,10 @@ TestStreamAccess::WriteStream (IAAFPropertyValue *propertyValue, aafMemPtr_t pUs
 	CheckResult(pTypeDef->QueryInterface(IID_IAAFMetaDefinition, (void **)&pMetaDef));
 	CheckResult(pMetaDef->GetName(debugBuf, 256));
 
-	CheckResult(pTypeDef->QueryInterface(IID_IAAFTypeDefStream,
-                                       (void **)&pTypeDefStream));
+	CheckResult(pTypeDef->QueryInterface(IID_IAAFTypeDefStream2,
+                                       (void **)&pTypeDefStreamRaw));
+
+	CheckResult(pTypeDefStreamRaw->GetMXFEssenceStream(0, &pTypeDefStream));
 
 	// Set the byte order of the stream to big endian...
 	CheckResult(pTypeDefStream->SetStoredByteOrder(propertyValue, kAAFByteOrderBig));
