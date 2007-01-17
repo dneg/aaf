@@ -13,7 +13,7 @@
 #c the License for the specific language governing rights and limitations
 #c under the License.
 #c
-#c The Original Code of this file is Copyright 1998-2004, Licensor of the
+#c The Original Code of this file is Copyright 1998-2007, Licensor of the
 #c AAF Association.
 #c
 #c The Initial Developer of the Original Code of this file and the
@@ -22,20 +22,14 @@
 #c
 #c *********************************************************************
 #startm .this-module 0
-AAFTypeDefStream\
+AAFTypeDefStream2\
 #endm
 #c
 #startm .parent-module 0
 AAFTypeDef\
 #endm
-#c
-#c #import ./AAFTypeDef.exp
-#import ./AAFTypeDefStreamEx.exp
-#import ./AAFTypeDefStream2.exp
 AD_HEAD
 AD_IDL(///
-/// AAFTypeDefStream is DEPRECATED\, please use AAFTypeDefStream2
-///
 /// This interface is used to define Stream types used in AAF
 /// persistent objects.  Streams are conceptually similar to
 /// variably-sized arrays except that they are intended to be used for
@@ -43,11 +37,12 @@ AD_IDL(///
 /// Note: All reads/and writes advance the current position.
 AD_STD_COMMENT_IFC_HEADER)
 AD_FORWARD_DECLARATION(AAFPropertyValue)
-AD_CLASS_UUID(307e9e6d, dcb2, 11d2, 84, 29, 00, 60, 08, 32, ac, b8)
 
-AD_DEFAULT_UUID(307e9e6e, dcb2, 11d2, 84, 29, 00, 60, 08, 32, ac, b8)
-#c AD_XCLASS_BEGIN(Concrete, StoredObject)
-AD_COM_EXT2_CLASS_BEGIN(public IAAFTypeDefStreamEx, public IAAFTypeDefStream2)
+AD_CLASS_UUID(6F9A7E6D, 29F0, 4b8b, 9E, A0, B4, F0, DB, 7F, 8B, C4)
+AD_DEFAULT_UUID(D1E43120, D90A, 463f, BC, 4D, BB, 11, 74, A8, DB, D3)
+
+AD_XCLASS_BEGIN(Concrete, StoredObject)
+
 
 AD_XMETHOD2(GetSize,
 			[in],
@@ -500,9 +495,29 @@ AD_XMETHOD4(AppendElements,
   ///
   /// AAFRESULT_NOT_REGISTERED
   ///  - struct offsets have not yet been registered for the element typedef.)
-AD_OVERRIDE(.method-GetTypeCategory)
-AD_COM_METH(.method-SetCallback)
-AD_COM_METH(.method-GetMXFEssenceStream)
 
-#c AD_XCLASS_END(Concrete, StoredObject)
-AD_COM_EXT2_CLASS_END(AAFTypeDefStreamEx, AAFTypeDefStream2)
+AD_XMETHOD2(GetMXFEssenceStream,
+			[in],
+			objPass,
+			aafUInt32,
+			filterType,
+			type of the stream data filter,
+
+			[out\,retval],
+			objOut,
+			AAFTypeDefStream,
+			pFilteredStream,
+			filtered stream access,
+
+     Creates a type definition object which implements
+  // the IAAFTypeDefStream interface and performs a file
+  // encoding dependent filtering of the raw stream data.
+  //
+  // Succeeds if:
+  // - Initialize\(\) has already been called on this object.
+  // - pFilteredStream is a valid pointer.
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NO_INIT
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pFilteredStream\))
+
+AD_XCLASS_END(Concrete, StoredObject)
