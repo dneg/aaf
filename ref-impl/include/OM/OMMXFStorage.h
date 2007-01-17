@@ -36,7 +36,7 @@
 
 //#define OM_NEW_STREAM_PARSING
 #define OM_FASTER_STREAM_PARSING
-//#define OM_NEW_STREAM_WRITING
+#define OM_NEW_STREAM_WRITING
 
 static const OMKLVKey OpenIncompleteHeaderPartitionKey =
   {0x06, 0x0e, 0x2b, 0x34, 0x02, 0x05, 0x01, 0x01,
