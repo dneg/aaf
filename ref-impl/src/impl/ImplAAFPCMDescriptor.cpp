@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 // 
-// The Original Code of this file is Copyright 1998-2001, Licensor of the
+// The Original Code of this file is Copyright 1998-2007, Licensor of the
 // AAF Association.
 // 
 // The Initial Developer of the Original Code of this file and the
@@ -24,6 +24,7 @@
 
 #include "ImplAAFPCMDescriptor.h"
 #include "AAFPropertyIDs.h"
+#include "OMDataStreamPropertyFilter.h"
 
 
 
@@ -41,7 +42,8 @@ ImplAAFPCMDescriptor::ImplAAFPCMDescriptor() :
     _peakFrames( PID_PCMDescriptor_PeakFrames, L"PeakFrames" ),
     _peakOfPeaksPosition( PID_PCMDescriptor_PeakOfPeaksPosition, L"PeakOfPeaksPosition" ),
     _peakEnvelopeTimestamp( PID_PCMDescriptor_PeakEnvelopeTimestamp, L"PeakEnvelopeTimestamp" ),
-    _peakEnvelopeData( PID_PCMDescriptor_PeakEnvelopeData, L"PeakEnvelopeData" )
+    _peakEnvelopeData( PID_PCMDescriptor_PeakEnvelopeData, L"PeakEnvelopeData" ),
+    _peakEnvelopeDataFilter( _peakEnvelopeData.createFilter() )
 {
     _persistentProperties.put( _blockAlign.address() );
     _persistentProperties.put( _sequenceOffset.address() );
@@ -68,6 +70,8 @@ ImplAAFPCMDescriptor::ImplAAFPCMDescriptor() :
 
 ImplAAFPCMDescriptor::~ImplAAFPCMDescriptor ()
 {
+    delete _peakEnvelopeDataFilter;
+    _peakEnvelopeDataFilter = 0;
 }
 
 
@@ -644,7 +648,7 @@ AAFRESULT STDMETHODCALLTYPE ImplAAFPCMDescriptor::SetPeakEnvelopeDataPosition(
 
 
     OMUInt64  omPosition = position;
-    _peakEnvelopeData.setPosition( omPosition );
+    _peakEnvelopeDataFilter->setPosition( omPosition );
 
 
     return AAFRESULT_SUCCESS;
@@ -673,7 +677,7 @@ AAFRESULT STDMETHODCALLTYPE ImplAAFPCMDescriptor::GetPeakEnvelopeDataPosition(
     }
 
 
-    OMUInt64  omPosition = _peakEnvelopeData.position();
+    OMUInt64  omPosition = _peakEnvelopeDataFilter->position();
     *pPosition = omPosition;
 
 
@@ -703,7 +707,7 @@ AAFRESULT STDMETHODCALLTYPE ImplAAFPCMDescriptor::GetPeakEnvelopeDataSize(
     }
 
 
-    OMUInt64  omSize = _peakEnvelopeData.size();
+    OMUInt64  omSize = _peakEnvelopeDataFilter->size();
     *pSize = omSize;
 
 
@@ -742,7 +746,7 @@ AAFRESULT STDMETHODCALLTYPE ImplAAFPCMDescriptor::WritePeakEnvelopeData(
 
     AAFRESULT  ar = AAFRESULT_SUCCESS;
 
-    _peakEnvelopeData.write( buffer, bytes, *pBytesWritten );
+    _peakEnvelopeDataFilter->write( buffer, bytes, *pBytesWritten );
     if( *pBytesWritten == 0 )
     {
         ar = AAFRESULT_CONTAINERWRITE;
@@ -787,7 +791,7 @@ AAFRESULT STDMETHODCALLTYPE ImplAAFPCMDescriptor::ReadPeakEnvelopeData(
 
     AAFRESULT  ar = AAFRESULT_SUCCESS;
 
-    _peakEnvelopeData.read( buffer, bytes, *pBytesRead );
+    _peakEnvelopeDataFilter->read( buffer, bytes, *pBytesRead );
     if( *pBytesRead == 0 )
     {
         ar = AAFRESULT_END_OF_DATA;

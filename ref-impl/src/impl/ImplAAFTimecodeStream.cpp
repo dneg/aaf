@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2007, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -29,6 +29,7 @@
 
 #include "AAFStoredObjectIDs.h"
 #include "AAFPropertyIDs.h"
+#include "OMDataStreamPropertyFilter.h"
 
 
 #ifndef __ImplAAFTimecodeStream_h__
@@ -41,7 +42,8 @@
 ImplAAFTimecodeStream::ImplAAFTimecodeStream ()
 : _sampleRate(		PID_TimecodeStream_SampleRate,	L"SampleRate"),
   _source(			PID_TimecodeStream_Source,		L"Source"),
-  _sourceType(		PID_TimecodeStream_SourceType,	L"SourceType")
+  _sourceType(		PID_TimecodeStream_SourceType,	L"SourceType"),
+  _sourceStreamFilter(_source.createFilter())
 {
   _persistentProperties.put(_sampleRate.address());
   _persistentProperties.put(_source.address());
@@ -50,7 +52,10 @@ ImplAAFTimecodeStream::ImplAAFTimecodeStream ()
 
 
 ImplAAFTimecodeStream::~ImplAAFTimecodeStream ()
-{}
+{
+	delete _sourceStreamFilter;
+	_sourceStreamFilter = NULL;
+}
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFTimecodeStream::GetPositionTimecode (
@@ -451,7 +456,7 @@ AAFRESULT STDMETHODCALLTYPE
 	if(pValue == NULL || bytesRead == NULL)
 		return(AAFRESULT_NULL_PARAM);
 
-	if (_source.size() > valueSize)
+	if (_sourceStreamFilter->size() > valueSize)
 	  return AAFRESULT_SMALLBUF;
 
 	XPROTECT()
@@ -524,7 +529,7 @@ AAFRESULT STDMETHODCALLTYPE
   
   try
   {
-    _source.write(buffer, bytes, *bytesWritten);
+    _sourceStreamFilter->write(buffer, bytes, *bytesWritten);
     if (0 < bytes && 0 == *bytesWritten)
       result = AAFRESULT_CONTAINERWRITE;
   }
@@ -555,7 +560,7 @@ AAFRESULT STDMETHODCALLTYPE
   
   try
   {
-    _source.read(buffer, bytes, *bytesRead);
+    _sourceStreamFilter->read(buffer, bytes, *bytesRead);
     if (0 < bytes && 0 == *bytesRead)
       result = AAFRESULT_END_OF_DATA;
   }
@@ -582,7 +587,7 @@ AAFRESULT STDMETHODCALLTYPE
   try
   {
     OMUInt64 tmpOffset = offset;
-    _source.setPosition(tmpOffset);
+    _sourceStreamFilter->setPosition(tmpOffset);
   }
   //catch (OMException& ome)
   //{
@@ -611,7 +616,7 @@ AAFRESULT STDMETHODCALLTYPE
   try
   {
     OMUInt64 tmpOffset;
-    tmpOffset = _source.position();
+    tmpOffset = _sourceStreamFilter->position();
     *pOffset = tmpOffset;
   }
   //catch (OMException& ome)
@@ -641,7 +646,7 @@ AAFRESULT STDMETHODCALLTYPE
 
   try
   {
-    *pSize = _source.size();
+    *pSize = _sourceStreamFilter->size();
   }
   //catch (OMException& ome)
   //{

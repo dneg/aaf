@@ -16,7 +16,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 // 
-// The Original Code of this file is Copyright 1998-2001, Licensor of the
+// The Original Code of this file is Copyright 1998-2007, Licensor of the
 // AAF Association.
 // 
 // The Initial Developer of the Original Code of this file and the
@@ -30,6 +30,9 @@
 
 #include "ImplAAFSoundDescriptor.h"
 
+
+
+class OMDataStreamPropertyFilter;
 
 
 class ImplAAFPCMDescriptor : public ImplAAFSoundDescriptor
@@ -315,7 +318,7 @@ public:
         aafUInt32* pBytesRead);
 
   //********************************
-  // AAF SDK exported methods start
+  // AAF SDK exported methods end
   //********************************
 
 protected:
@@ -333,6 +336,7 @@ protected:
     OMFixedSizeProperty<aafPosition_t>          _peakOfPeaksPosition;
     OMFixedSizeProperty<aafTimeStamp_t>         _peakEnvelopeTimestamp;
     OMDataStreamProperty                        _peakEnvelopeData;
+    OMDataStreamPropertyFilter*                 _peakEnvelopeDataFilter;
 };
 
 #endif // ! __ImplAAFPCMDescriptor_h__

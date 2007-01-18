@@ -19,7 +19,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2007, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -42,6 +42,9 @@
 #ifndef __ImplAAFSegment_h__
 #include "ImplAAFSegment.h"
 #endif
+
+
+class OMDataStreamPropertyFilter;
 
 
 class ImplAAFTimecodeStream : public ImplAAFSegment
@@ -238,6 +241,7 @@ private:
 	OMFixedSizeProperty<aafRational_t>				_sampleRate;
 	OMDataStreamProperty							_source;
 	OMFixedSizeProperty<aafTimecodeSourceType_t>	_sourceType;
+	OMDataStreamPropertyFilter*						_sourceStreamFilter;
 };
 
 #endif // ! __ImplAAFTimecodeStream_h__

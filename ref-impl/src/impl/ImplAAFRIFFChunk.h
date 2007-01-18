@@ -21,7 +21,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2005, Licensor of the
+// The Original Code of this file is Copyright 1998-2007, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -46,6 +46,9 @@
 #endif
 
 
+class OMDataStreamPropertyFilter;
+
+
 class ImplAAFRIFFChunk : public ImplAAFObject
 {
 public:
@@ -60,6 +63,7 @@ protected:
   
   	OMFixedSizeProperty<aafUInt32>          _chunkID;
     OMDataStreamProperty                    _chunkData;
+    OMDataStreamPropertyFilter*             _chunkDataFilter;
 
 public:
 

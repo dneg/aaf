@@ -15,7 +15,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2005, Licensor of the
+// The Original Code of this file is Copyright 1998-2007, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -41,13 +41,16 @@
 #include "ImplAAFRIFFChunk.h"
 #endif
 
+#include "OMDataStreamPropertyFilter.h"
+
 #include <string.h>
 
 
 ImplAAFRIFFChunk::ImplAAFRIFFChunk () :
 
   _chunkID(PID_RIFFChunk_ChunkID,	L"ChunkID"),
-  _chunkData(PID_RIFFChunk_ChunkData,	L"ChunkData")
+  _chunkData(PID_RIFFChunk_ChunkData,	L"ChunkData"),
+  _chunkDataFilter(_chunkData.createFilter())
 {
   // Add the properties into the property set.
   _persistentProperties.put(_chunkID.address());
@@ -61,7 +64,10 @@ ImplAAFRIFFChunk::ImplAAFRIFFChunk () :
 
 
 ImplAAFRIFFChunk::~ImplAAFRIFFChunk ()
-{}
+{
+    delete _chunkDataFilter;
+    _chunkDataFilter = NULL;
+}
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFRIFFChunk::Initialize (
@@ -125,7 +131,7 @@ AAFRESULT STDMETHODCALLTYPE
     }
 
 
-    OMUInt64  omSize = _chunkData.size();
+    OMUInt64  omSize = _chunkDataFilter->size();
 	*pLength = omSize;
 
 
@@ -146,7 +152,7 @@ AAFRESULT STDMETHODCALLTYPE
   	if (!persistent())
     	return AAFRESULT_OBJECT_NOT_PERSISTENT;
   
-  	_chunkData.write(buffer, bytes, *pBytesWritten);
+  	_chunkDataFilter->write(buffer, bytes, *pBytesWritten);
   	
   	if (0 < bytes && 0 == *pBytesWritten)
     	return AAFRESULT_CONTAINERWRITE;
@@ -169,7 +175,7 @@ AAFRESULT STDMETHODCALLTYPE
   if (!persistent())
     return AAFRESULT_OBJECT_NOT_PERSISTENT;
   
-  _chunkData.read(buffer, bytes, *pBytesRead);
+  _chunkDataFilter->read(buffer, bytes, *pBytesRead);
   if (0 < bytes && 0 == *pBytesRead)
     return AAFRESULT_END_OF_DATA;
 
@@ -192,7 +198,7 @@ AAFRESULT STDMETHODCALLTYPE ImplAAFRIFFChunk::SetPosition(
 
 
     OMUInt64  omPosition = offset;
-    _chunkData.setPosition( omPosition );
+    _chunkDataFilter->setPosition( omPosition );
 
 
     return AAFRESULT_SUCCESS;
@@ -217,7 +223,7 @@ AAFRESULT STDMETHODCALLTYPE ImplAAFRIFFChunk::GetPosition(
     }
 
 
-    OMUInt64  omPosition = _chunkData.position();
+    OMUInt64  omPosition = _chunkDataFilter->position();
     *pOffset = omPosition;
 
 
