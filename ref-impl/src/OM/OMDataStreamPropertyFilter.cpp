@@ -75,6 +75,7 @@ void OMDataStreamPropertyFilter::setSize(const OMUInt64 newSize)
   TRACE("OMDataStreamPropertyFilter::setSize");
 
   _streamFilter->setSize(newSize);
+  _property->setPresent();
 
   POSTCONDITION("Size properly set", size() == newSize);
 }
@@ -141,6 +142,7 @@ void OMDataStreamPropertyFilter::write(const OMByte* buffer,
   TRACE("OMDataStreamPropertyFilter::write");
 
   _streamFilter->write(buffer, bytes, bytesWritten);
+  _property->setPresent();
 }
 
   // @mfunc Attempt to read the number of elements given by
@@ -280,5 +282,6 @@ void OMDataStreamPropertyFilter::writeTypedElements(const OMType* elementType,
   }
   delete [] buffer;
   elementsWritten = elementCount;
+  _property->setPresent();
 }
 
