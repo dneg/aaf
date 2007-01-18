@@ -38,10 +38,6 @@ OMDataStreamPropertyFilter::OMDataStreamPropertyFilter(
 {
   TRACE("OMDataStreamPropertyFilter::OMDataStreamPropertyFilter");
   PRECONDITION("Valid property", property != 0);
-
-  _streamFilter = property->stream()->createFilter();
-
-  POSTCONDITION("Valid stream filter", _streamFilter != 0);
 }
 
 OMDataStreamPropertyFilter::~OMDataStreamPropertyFilter(void)
@@ -61,7 +57,7 @@ OMUInt64 OMDataStreamPropertyFilter::size(void) const
 {
   TRACE("OMDataStreamPropertyFilter::size");
 
-  OMUInt64 result = _streamFilter->size();
+  OMUInt64 result = streamFilter()->size();
 
   return result;
 }
@@ -74,7 +70,7 @@ void OMDataStreamPropertyFilter::setSize(const OMUInt64 newSize)
 {
   TRACE("OMDataStreamPropertyFilter::setSize");
 
-  _streamFilter->setSize(newSize);
+  streamFilter()->setSize(newSize);
   _property->setPresent();
 
   POSTCONDITION("Size properly set", size() == newSize);
@@ -89,7 +85,7 @@ OMUInt64 OMDataStreamPropertyFilter::position(void) const
 {
   TRACE("OMDataStreamPropertyFilter::position");
 
-  OMUInt64 result = _streamFilter->position();
+  OMUInt64 result = streamFilter()->position();
   return result;
 }
 
@@ -103,7 +99,7 @@ void OMDataStreamPropertyFilter::setPosition(const OMUInt64 offset) const
 {
   TRACE("OMDataStreamPropertyFilter::setPosition");
 
-  _streamFilter->setPosition(offset);
+  streamFilter()->setPosition(offset);
 
   POSTCONDITION("Position properly set", position() == offset);
 }
@@ -125,7 +121,7 @@ void OMDataStreamPropertyFilter::read(OMByte* buffer,
   PRECONDITION("Optional property is present",
                      IMPLIES(_property->isOptional(), _property->isPresent()));
 
-  _streamFilter->read(buffer, bytes, bytesRead);
+  streamFilter()->read(buffer, bytes, bytesRead);
 }
 
   // @mfunc  Attempt to write the number of bytes given by <p bytes>
@@ -141,7 +137,7 @@ void OMDataStreamPropertyFilter::write(const OMByte* buffer,
 {
   TRACE("OMDataStreamPropertyFilter::write");
 
-  _streamFilter->write(buffer, bytes, bytesWritten);
+  streamFilter()->write(buffer, bytes, bytesWritten);
   _property->setPresent();
 }
 
@@ -285,3 +281,21 @@ void OMDataStreamPropertyFilter::writeTypedElements(const OMType* elementType,
   _property->setPresent();
 }
 
+OMStoredStreamFilter* OMDataStreamPropertyFilter::streamFilter()
+{
+  TRACE("OMDataStreamPropertyFilter::streamFilter");
+
+  if (!_streamFilter) {
+    _streamFilter = _property->stream()->createFilter();
+  }
+
+  POSTCONDITION("Valid stream filter", _streamFilter != 0);
+  return _streamFilter;
+}
+
+const OMStoredStreamFilter* OMDataStreamPropertyFilter::streamFilter() const
+{
+  TRACE("OMDataStreamPropertyFilter::streamFilter");
+
+  return const_cast<OMDataStreamPropertyFilter*>(this)->streamFilter();
+}

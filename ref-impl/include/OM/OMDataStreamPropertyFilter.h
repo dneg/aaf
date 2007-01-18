@@ -103,6 +103,10 @@ public:
 private:
   // @access Private members.
 
+        OMStoredStreamFilter* streamFilter();
+  const OMStoredStreamFilter* streamFilter() const;
+
+
   OMDataStreamProperty* _property;
   OMStoredStreamFilter* _streamFilter;
 };
