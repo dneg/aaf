@@ -210,14 +210,6 @@ public:
   // Methods used internally by the SDK.
   //
 
-  //****************
-  // Allocate and initialize the correct subclass of ImplAAFPropertyValue 
-  // for the given OMProperty.
-  /*
-  virtual AAFRESULT STDMETHODCALLTYPE
-    CreatePropertyValue(OMProperty *property, 
-                        ImplAAFPropertyValue ** pPropertyValue) const;
-                        */
 
 
 protected:

@@ -172,20 +172,3 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 
-
-// Allocate and initialize the correct subclass of ImplAAFPropertyValue 
-// for the given OMProperty.
-/*
-AAFRESULT STDMETHODCALLTYPE
-  ImplAAFTypeDefMXFEssenceStream::CreatePropertyValue(
-    OMProperty *property,
-    ImplAAFPropertyValue ** ppPropertyValue ) const
-{
-  AAFRESULT result = AAFRESULT_SUCCESS;
- 
-  result = ImplAAFTypeDefStream::CreatePropertyValue (property, ppPropertyValue);
-  return result;
-}
-*/
-
-
