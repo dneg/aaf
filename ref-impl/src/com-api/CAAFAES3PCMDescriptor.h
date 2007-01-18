@@ -326,6 +326,7 @@ public:
 	///	
 	/// - pFixedChannelStatusData is a valid pointer
 	/// - index is a valid index with the array of channels
+	/// - sizeOfBuffer must be 24
 	///
 	/// this method will return the following codes
 	///
@@ -340,12 +341,18 @@ public:
 	///
 	///	AAFRESULT_BADINDEX
 	///	 - index is not a valid index
+	///
+	/// AAFRESULT_WRONG_SIZE
+	///  - buffer size is not correct
   // @end
   // 
   STDMETHOD (GetFixedChannelStatusDataAt)
    (
     // @parm [in] aafUInt32 | index | Index of the channel desired.
     aafUInt32  index,
+
+    // @parm [in] aafUInt32 | sizeOfBuffer | Size of pFixedChannelStatusData buffer in bytes.
+    aafUInt32  sizeOfBuffer,
 
     // @parm [out] aafUInt8 * | pFixedChannelStatusData | Address to store FixedChannelStatusData for the index given.
     aafUInt8 *  pFixedChannelStatusData
@@ -363,6 +370,7 @@ public:
 	///	
 	/// - pFixedChannelStatusData is a valid pointer
 	/// - index is a valid index with the array of channels
+	/// - sizeOfBuffer must be 24
 	///
 	/// this method will return the following codes
 	///
@@ -377,12 +385,18 @@ public:
 	///
 	///	AAFRESULT_BADINDEX
 	///	 - index is not a valid index
+	///
+	/// AAFRESULT_WRONG_SIZE
+	///  - buffer size is not correct
   // @end
   // 
   STDMETHOD (SetFixedChannelStatusDataAt)
    (
     // @parm [in] aafUInt32 | index | Index of the channel desired.
     aafUInt32  index,
+
+    // @parm [in] aafUInt32 | sizeOfBuffer | Size of pFixedChannelStatusData buffer in bytes.
+    aafUInt32  sizeOfBuffer,
 
     // @parm [in] aafUInt8 * | pFixedChannelStatusData | Set FixedChannelStatusData for the index given.
     aafUInt8 *  pFixedChannelStatusData
@@ -466,6 +480,7 @@ public:
 	///	
 	/// - pFixedUserData is a valid pointer
 	/// - index is a valid index with the array of channels
+	/// - sizeOfBuffer must be 24
 	///
 	/// this method will return the following codes
 	///
@@ -480,12 +495,18 @@ public:
 	///
 	///	AAFRESULT_BADINDEX
 	///	 - index is not a valid index
+	///
+	/// AAFRESULT_WRONG_SIZE
+	///  - buffer size is not correct
   // @end
   // 
   STDMETHOD (GetFixedUserDataAt)
    (
     // @parm [in] aafUInt32 | index | Index of the channel desired.
     aafUInt32  index,
+
+    // @parm [in] aafUInt32 | sizeOfBuffer | Size of pFixedUserData buffer in bytes.
+    aafUInt32  sizeOfBuffer,
 
     // @parm [out] aafUInt8 * | pFixedUserData | Address to store FixedUserData for the index given.
     aafUInt8 *  pFixedUserData
@@ -503,6 +524,7 @@ public:
 	///	
 	/// - pFixedUserData is a valid pointer
 	/// - index is a valid index with the array of channels
+	/// - sizeOfBuffer must be 24
 	///
 	/// this method will return the following codes
 	///
@@ -517,12 +539,18 @@ public:
 	///
 	///	AAFRESULT_BADINDEX
 	///	 - index is not a valid index
+	///
+	/// AAFRESULT_WRONG_SIZE
+	///  - buffer size is not correct
   // @end
   // 
   STDMETHOD (SetFixedUserDataAt)
    (
     // @parm [in] aafUInt32 | index | Index of the channel desired.
     aafUInt32  index,
+
+    // @parm [in] aafUInt32 | sizeOfBuffer | Size of pFixedUserData buffer in bytes.
+    aafUInt32  sizeOfBuffer,
 
     // @parm [in] aafUInt8 * | pFixedUserData | Set FixedUserData for the index given.
     aafUInt8 *  pFixedUserData

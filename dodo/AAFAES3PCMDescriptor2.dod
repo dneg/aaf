@@ -255,12 +255,18 @@ AD_XMETHOD2(SetChannelStatusModeAt,
 	///	AAFRESULT_BADINDEX
 	///	 - index is not a valid index)
 
-AD_XMETHOD2(GetFixedChannelStatusDataAt,
+AD_XMETHOD3(GetFixedChannelStatusDataAt,
 			[in],
 			objPass,
 			aafUInt32,
 			index,
 			Index of the channel desired.,
+
+			[in],
+			objPass,
+			aafUInt32,
+			sizeOfBuffer,
+			Size of pFixedChannelStatusData buffer in bytes.,
 
 			[out],
 			objPass,
@@ -275,6 +281,7 @@ AD_XMETHOD2(GetFixedChannelStatusDataAt,
 	///	
 	/// - pFixedChannelStatusData is a valid pointer
 	/// - index is a valid index with the array of channels
+	/// - sizeOfBuffer must be 24
 	///
 	/// this method will return the following codes
 	///
@@ -288,14 +295,23 @@ AD_XMETHOD2(GetFixedChannelStatusDataAt,
 	///	 - pFixedChannelStatusData arg is NULL
 	///
 	///	AAFRESULT_BADINDEX
-	///	 - index is not a valid index)
+	///	 - index is not a valid index
+	///
+	/// AAFRESULT_WRONG_SIZE
+	///  - buffer size is not correct)
 
-AD_XMETHOD2(SetFixedChannelStatusDataAt,
+AD_XMETHOD3(SetFixedChannelStatusDataAt,
 			[in],
 			objPass,
 			aafUInt32,
 			index,
 			Index of the channel desired.,
+
+			[in],
+			objPass,
+			aafUInt32,
+			sizeOfBuffer,
+			Size of pFixedChannelStatusData buffer in bytes.,
 
 			[in],
 			objPass,
@@ -310,6 +326,7 @@ AD_XMETHOD2(SetFixedChannelStatusDataAt,
 	///	
 	/// - pFixedChannelStatusData is a valid pointer
 	/// - index is a valid index with the array of channels
+	/// - sizeOfBuffer must be 24
 	///
 	/// this method will return the following codes
 	///
@@ -323,7 +340,10 @@ AD_XMETHOD2(SetFixedChannelStatusDataAt,
 	///	 - pFixedChannelStatusData arg is NULL
 	///
 	///	AAFRESULT_BADINDEX
-	///	 - index is not a valid index)
+	///	 - index is not a valid index
+	///
+	/// AAFRESULT_WRONG_SIZE
+	///  - buffer size is not correct)
 
 AD_XMETHOD2(GetUserDataModeAt,
 			[in],
@@ -387,12 +407,18 @@ AD_XMETHOD2(SetUserDataModeAt,
 	///	AAFRESULT_BADINDEX
 	///	 - index is not a valid index)
 
-AD_XMETHOD2(GetFixedUserDataAt,
+AD_XMETHOD3(GetFixedUserDataAt,
 			[in],
 			objPass,
 			aafUInt32,
 			index,
 			Index of the channel desired.,
+
+			[in],
+			objPass,
+			aafUInt32,
+			sizeOfBuffer,
+			Size of pFixedUserData buffer in bytes.,
 
 			[out],
 			objPass,
@@ -407,6 +433,7 @@ AD_XMETHOD2(GetFixedUserDataAt,
 	///	
 	/// - pFixedUserData is a valid pointer
 	/// - index is a valid index with the array of channels
+	/// - sizeOfBuffer must be 24
 	///
 	/// this method will return the following codes
 	///
@@ -420,14 +447,23 @@ AD_XMETHOD2(GetFixedUserDataAt,
 	///	 - pFixedUserData arg is NULL
 	///
 	///	AAFRESULT_BADINDEX
-	///	 - index is not a valid index)
+	///	 - index is not a valid index
+	///
+	/// AAFRESULT_WRONG_SIZE
+	///  - buffer size is not correct)
 
-AD_XMETHOD2(SetFixedUserDataAt,
+AD_XMETHOD3(SetFixedUserDataAt,
 			[in],
 			objPass,
 			aafUInt32,
 			index,
 			Index of the channel desired.,
+
+			[in],
+			objPass,
+			aafUInt32,
+			sizeOfBuffer,
+			Size of pFixedUserData buffer in bytes.,
 
 			[in],
 			objPass,
@@ -442,6 +478,7 @@ AD_XMETHOD2(SetFixedUserDataAt,
 	///	
 	/// - pFixedUserData is a valid pointer
 	/// - index is a valid index with the array of channels
+	/// - sizeOfBuffer must be 24
 	///
 	/// this method will return the following codes
 	///
@@ -455,6 +492,9 @@ AD_XMETHOD2(SetFixedUserDataAt,
 	///	 - pFixedUserData arg is NULL
 	///
 	///	AAFRESULT_BADINDEX
-	///	 - index is not a valid index)
+	///	 - index is not a valid index
+	///
+	/// AAFRESULT_WRONG_SIZE
+	///  - buffer size is not correct)
 
 AD_XCLASS_END(Concrete, StoredObject)

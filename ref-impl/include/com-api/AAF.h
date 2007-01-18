@@ -37259,10 +37259,12 @@ EXTERN_C const IID IID_IAAFAES3PCMDescriptor2;
         
         virtual HRESULT STDMETHODCALLTYPE GetFixedChannelStatusDataAt( 
             /* [in] */ aafUInt32 index,
+            /* [in] */ aafUInt32 sizeOfBuffer,
             /* [out] */ aafUInt8 *pFixedChannelStatusData) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetFixedChannelStatusDataAt( 
             /* [in] */ aafUInt32 index,
+            /* [in] */ aafUInt32 sizeOfBuffer,
             /* [in] */ aafUInt8 *pFixedChannelStatusData) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetUserDataModeAt( 
@@ -37275,10 +37277,12 @@ EXTERN_C const IID IID_IAAFAES3PCMDescriptor2;
         
         virtual HRESULT STDMETHODCALLTYPE GetFixedUserDataAt( 
             /* [in] */ aafUInt32 index,
+            /* [in] */ aafUInt32 sizeOfBuffer,
             /* [out] */ aafUInt8 *pFixedUserData) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetFixedUserDataAt( 
             /* [in] */ aafUInt32 index,
+            /* [in] */ aafUInt32 sizeOfBuffer,
             /* [in] */ aafUInt8 *pFixedUserData) = 0;
         
     };
@@ -37340,11 +37344,13 @@ EXTERN_C const IID IID_IAAFAES3PCMDescriptor2;
         HRESULT ( STDMETHODCALLTYPE *GetFixedChannelStatusDataAt )( 
             IAAFAES3PCMDescriptor2 * This,
             /* [in] */ aafUInt32 index,
+            /* [in] */ aafUInt32 sizeOfBuffer,
             /* [out] */ aafUInt8 *pFixedChannelStatusData);
         
         HRESULT ( STDMETHODCALLTYPE *SetFixedChannelStatusDataAt )( 
             IAAFAES3PCMDescriptor2 * This,
             /* [in] */ aafUInt32 index,
+            /* [in] */ aafUInt32 sizeOfBuffer,
             /* [in] */ aafUInt8 *pFixedChannelStatusData);
         
         HRESULT ( STDMETHODCALLTYPE *GetUserDataModeAt )( 
@@ -37360,11 +37366,13 @@ EXTERN_C const IID IID_IAAFAES3PCMDescriptor2;
         HRESULT ( STDMETHODCALLTYPE *GetFixedUserDataAt )( 
             IAAFAES3PCMDescriptor2 * This,
             /* [in] */ aafUInt32 index,
+            /* [in] */ aafUInt32 sizeOfBuffer,
             /* [out] */ aafUInt8 *pFixedUserData);
         
         HRESULT ( STDMETHODCALLTYPE *SetFixedUserDataAt )( 
             IAAFAES3PCMDescriptor2 * This,
             /* [in] */ aafUInt32 index,
+            /* [in] */ aafUInt32 sizeOfBuffer,
             /* [in] */ aafUInt8 *pFixedUserData);
         
         END_INTERFACE
@@ -37417,11 +37425,11 @@ EXTERN_C const IID IID_IAAFAES3PCMDescriptor2;
 #define IAAFAES3PCMDescriptor2_SetChannelStatusModeAt(This,index,ChannelStatusMode)	\
     (This)->lpVtbl -> SetChannelStatusModeAt(This,index,ChannelStatusMode)
 
-#define IAAFAES3PCMDescriptor2_GetFixedChannelStatusDataAt(This,index,pFixedChannelStatusData)	\
-    (This)->lpVtbl -> GetFixedChannelStatusDataAt(This,index,pFixedChannelStatusData)
+#define IAAFAES3PCMDescriptor2_GetFixedChannelStatusDataAt(This,index,sizeOfBuffer,pFixedChannelStatusData)	\
+    (This)->lpVtbl -> GetFixedChannelStatusDataAt(This,index,sizeOfBuffer,pFixedChannelStatusData)
 
-#define IAAFAES3PCMDescriptor2_SetFixedChannelStatusDataAt(This,index,pFixedChannelStatusData)	\
-    (This)->lpVtbl -> SetFixedChannelStatusDataAt(This,index,pFixedChannelStatusData)
+#define IAAFAES3PCMDescriptor2_SetFixedChannelStatusDataAt(This,index,sizeOfBuffer,pFixedChannelStatusData)	\
+    (This)->lpVtbl -> SetFixedChannelStatusDataAt(This,index,sizeOfBuffer,pFixedChannelStatusData)
 
 #define IAAFAES3PCMDescriptor2_GetUserDataModeAt(This,index,pUserDataMode)	\
     (This)->lpVtbl -> GetUserDataModeAt(This,index,pUserDataMode)
@@ -37429,11 +37437,11 @@ EXTERN_C const IID IID_IAAFAES3PCMDescriptor2;
 #define IAAFAES3PCMDescriptor2_SetUserDataModeAt(This,index,UserDataMode)	\
     (This)->lpVtbl -> SetUserDataModeAt(This,index,UserDataMode)
 
-#define IAAFAES3PCMDescriptor2_GetFixedUserDataAt(This,index,pFixedUserData)	\
-    (This)->lpVtbl -> GetFixedUserDataAt(This,index,pFixedUserData)
+#define IAAFAES3PCMDescriptor2_GetFixedUserDataAt(This,index,sizeOfBuffer,pFixedUserData)	\
+    (This)->lpVtbl -> GetFixedUserDataAt(This,index,sizeOfBuffer,pFixedUserData)
 
-#define IAAFAES3PCMDescriptor2_SetFixedUserDataAt(This,index,pFixedUserData)	\
-    (This)->lpVtbl -> SetFixedUserDataAt(This,index,pFixedUserData)
+#define IAAFAES3PCMDescriptor2_SetFixedUserDataAt(This,index,sizeOfBuffer,pFixedUserData)	\
+    (This)->lpVtbl -> SetFixedUserDataAt(This,index,sizeOfBuffer,pFixedUserData)
 
 #endif /* COBJMACROS */
 
@@ -37554,6 +37562,7 @@ void __RPC_STUB IAAFAES3PCMDescriptor2_SetChannelStatusModeAt_Stub(
 HRESULT STDMETHODCALLTYPE IAAFAES3PCMDescriptor2_GetFixedChannelStatusDataAt_Proxy( 
     IAAFAES3PCMDescriptor2 * This,
     /* [in] */ aafUInt32 index,
+    /* [in] */ aafUInt32 sizeOfBuffer,
     /* [out] */ aafUInt8 *pFixedChannelStatusData);
 
 
@@ -37567,6 +37576,7 @@ void __RPC_STUB IAAFAES3PCMDescriptor2_GetFixedChannelStatusDataAt_Stub(
 HRESULT STDMETHODCALLTYPE IAAFAES3PCMDescriptor2_SetFixedChannelStatusDataAt_Proxy( 
     IAAFAES3PCMDescriptor2 * This,
     /* [in] */ aafUInt32 index,
+    /* [in] */ aafUInt32 sizeOfBuffer,
     /* [in] */ aafUInt8 *pFixedChannelStatusData);
 
 
@@ -37606,6 +37616,7 @@ void __RPC_STUB IAAFAES3PCMDescriptor2_SetUserDataModeAt_Stub(
 HRESULT STDMETHODCALLTYPE IAAFAES3PCMDescriptor2_GetFixedUserDataAt_Proxy( 
     IAAFAES3PCMDescriptor2 * This,
     /* [in] */ aafUInt32 index,
+    /* [in] */ aafUInt32 sizeOfBuffer,
     /* [out] */ aafUInt8 *pFixedUserData);
 
 
@@ -37619,6 +37630,7 @@ void __RPC_STUB IAAFAES3PCMDescriptor2_GetFixedUserDataAt_Stub(
 HRESULT STDMETHODCALLTYPE IAAFAES3PCMDescriptor2_SetFixedUserDataAt_Proxy( 
     IAAFAES3PCMDescriptor2 * This,
     /* [in] */ aafUInt32 index,
+    /* [in] */ aafUInt32 sizeOfBuffer,
     /* [in] */ aafUInt8 *pFixedUserData);
 
 

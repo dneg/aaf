@@ -129,6 +129,7 @@ public:
 	  GetFixedChannelStatusDataAt
 	  // @parm [out] Address to store the FixedChannelStatusData.
 	  (aafUInt32 index,
+	  aafUInt32 sizeOfBuffer,
 	  aafUInt8 * pFixedChannelStatusData);
 
   //****************
@@ -138,6 +139,7 @@ public:
 	  SetFixedChannelStatusDataAt
 	  // @parm [in] FixedChannelStatusData.
 	  (aafUInt32 index,
+	  aafUInt32 sizeOfBuffer,
 	  aafUInt8 * pFixedChannelStatusData);
 
   //****************
@@ -165,6 +167,7 @@ public:
 	  GetFixedUserDataAt
 	  // @parm [out] Address to store the FixedUserData.
 	  (aafUInt32 index,
+	  aafUInt32 sizeOfBuffer,
 	  aafUInt8 * pFixedUserData);
 
   //****************
@@ -174,6 +177,7 @@ public:
 	  SetFixedUserDataAt
 	  // @parm [in] FixedUserData.
 	  (aafUInt32 index,
+	  aafUInt32 sizeOfBuffer,
 	  aafUInt8 * pFixedUserData);
 
 
@@ -201,11 +205,12 @@ private:
 
 	template<class T, class U> AAFRESULT STDMETHODCALLTYPE 
 	GetDataAt(aafUInt32 index, T * pData, U & array,
-				   aafUInt32 SizeOfData);
+				   aafUInt32 SizeOfData, aafUInt32 sizeOfBuffer);
 
 	template<class T, class U> AAFRESULT STDMETHODCALLTYPE
 	SetDataAt(aafUInt32 index, T * pData, U & array, 
-				   aafUInt32 SizeOfData, const T & defValue);
+				   aafUInt32 SizeOfData, 
+				   aafUInt32 sizeOfBuffer, const T & defValue);
 
 	
 	OMFixedSizeProperty<aafEmphasisType_t>		_emphasis;

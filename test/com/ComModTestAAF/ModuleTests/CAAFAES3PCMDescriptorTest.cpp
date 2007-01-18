@@ -76,6 +76,7 @@ TestArrayBasedStuff(aafUInt32 channelCount, IAAFAES3PCMDescriptor2 * pAES3PCMDes
 		// test FixedChannelStatusDataArray
 		aafUInt8 fixedChannelStatusData[SizeOfFixedChannelStatusData];
 		checkResult(pAES3PCMDesc2->GetFixedChannelStatusDataAt(count,
+			SizeOfFixedChannelStatusData,
 			fixedChannelStatusData));
 		for(aafUInt32 index = 0; index < SizeOfFixedChannelStatusData; ++index) {
 			checkExpression(fixedChannelStatusData[index] == (count + index + 100),
@@ -91,7 +92,8 @@ TestArrayBasedStuff(aafUInt32 channelCount, IAAFAES3PCMDescriptor2 * pAES3PCMDes
 
 		// test fixedUserDataArray
 		aafUInt8 fixedUserData[SizeOfFixedUserData];
-		checkResult(pAES3PCMDesc2->GetFixedUserDataAt(count,
+		checkResult(pAES3PCMDesc2->GetFixedUserDataAt(count, 
+			SizeOfFixedChannelStatusData,
 			fixedUserData));
 		for(aafUInt8 index = 0; index < SizeOfFixedUserData; ++index) {
 			checkExpression(fixedUserData[index] == (count + index + 100),
@@ -251,7 +253,8 @@ static HRESULT CreateAAFFile(
 		aafUInt8 fixedChannelStatusData[SizeOfFixedChannelStatusData];
 		res = 
 			pAES3PCMDesc2->GetFixedChannelStatusDataAt(1, 
-												fixedChannelStatusData);
+			SizeOfFixedChannelStatusData,
+			fixedChannelStatusData);
 		checkExpression(res == AAFRESULT_PROP_NOT_PRESENT,
 						AAFRESULT_TEST_FAILED);
 
@@ -261,7 +264,8 @@ static HRESULT CreateAAFFile(
 						AAFRESULT_TEST_FAILED);
 
 		aafUInt8 fixedUserData[SizeOfFixedUserData];
-		res = pAES3PCMDesc2->GetFixedUserDataAt(1, fixedUserData);
+		res = pAES3PCMDesc2->GetFixedUserDataAt(1, SizeOfFixedChannelStatusData,
+			fixedUserData);
 		checkExpression(res == AAFRESULT_PROP_NOT_PRESENT,
 						AAFRESULT_TEST_FAILED);
 
@@ -287,7 +291,8 @@ static HRESULT CreateAAFFile(
 				fixedChannelStatusData[index] = count + index + 100;
 			}
 			checkResult(pAES3PCMDesc2->SetFixedChannelStatusDataAt(count,
-				fixedChannelStatusData));
+						SizeOfFixedChannelStatusData,
+						fixedChannelStatusData));
 
 			// test dataModeArray
 			res = pAES3PCMDesc2->SetUserDataModeAt(count, 16);
@@ -301,7 +306,8 @@ static HRESULT CreateAAFFile(
 				fixedUserData[index] = count + index + 100;
 			}
 			checkResult(pAES3PCMDesc2->SetFixedUserDataAt(count,
-				fixedUserData));
+							SizeOfFixedChannelStatusData,
+							fixedUserData));
 		}
 		//TestArrayBasedStuff(channelCount, pAES3PCMDesc2);
 

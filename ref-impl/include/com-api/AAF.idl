@@ -300,7 +300,6 @@ interface IAAFAES3PCMDescriptor : IUnknown
 
 }
 
-
 // ************************
 //
 // Interface IAAFAIFCDescriptor
@@ -39171,6 +39170,7 @@ interface IAAFAES3PCMDescriptor2 : IUnknown
 	///	
 	/// - pFixedChannelStatusData is a valid pointer
 	/// - index is a valid index with the array of channels
+	/// - sizeOfBuffer must be 24
 	///
 	/// this method will return the following codes
 	///
@@ -39185,12 +39185,17 @@ interface IAAFAES3PCMDescriptor2 : IUnknown
 	///
 	///	AAFRESULT_BADINDEX
 	///	 - index is not a valid index
+	///
+	/// AAFRESULT_WRONG_SIZE
+	///  - buffer size is not correct
   /// 
   /// @param index [in] Index of the channel desired.
+  /// @param sizeOfBuffer [in] Size of pFixedChannelStatusData buffer in bytes.
   /// @param pFixedChannelStatusData [out] Address to store FixedChannelStatusData for the index given.
   ///
   HRESULT GetFixedChannelStatusDataAt (
     [in] aafUInt32  index,
+    [in] aafUInt32  sizeOfBuffer,
     [out] aafUInt8 *  pFixedChannelStatusData);
 
   //***********************************************************
@@ -39204,6 +39209,7 @@ interface IAAFAES3PCMDescriptor2 : IUnknown
 	///	
 	/// - pFixedChannelStatusData is a valid pointer
 	/// - index is a valid index with the array of channels
+	/// - sizeOfBuffer must be 24
 	///
 	/// this method will return the following codes
 	///
@@ -39218,12 +39224,17 @@ interface IAAFAES3PCMDescriptor2 : IUnknown
 	///
 	///	AAFRESULT_BADINDEX
 	///	 - index is not a valid index
+	///
+	/// AAFRESULT_WRONG_SIZE
+	///  - buffer size is not correct
   /// 
   /// @param index [in] Index of the channel desired.
+  /// @param sizeOfBuffer [in] Size of pFixedChannelStatusData buffer in bytes.
   /// @param pFixedChannelStatusData [in] Set FixedChannelStatusData for the index given.
   ///
   HRESULT SetFixedChannelStatusDataAt (
     [in] aafUInt32  index,
+    [in] aafUInt32  sizeOfBuffer,
     [in] aafUInt8 *  pFixedChannelStatusData);
 
   //***********************************************************
@@ -39295,6 +39306,7 @@ interface IAAFAES3PCMDescriptor2 : IUnknown
 	///	
 	/// - pFixedUserData is a valid pointer
 	/// - index is a valid index with the array of channels
+	/// - sizeOfBuffer must be 24
 	///
 	/// this method will return the following codes
 	///
@@ -39309,12 +39321,17 @@ interface IAAFAES3PCMDescriptor2 : IUnknown
 	///
 	///	AAFRESULT_BADINDEX
 	///	 - index is not a valid index
+	///
+	/// AAFRESULT_WRONG_SIZE
+	///  - buffer size is not correct
   /// 
   /// @param index [in] Index of the channel desired.
+  /// @param sizeOfBuffer [in] Size of pFixedUserData buffer in bytes.
   /// @param pFixedUserData [out] Address to store FixedUserData for the index given.
   ///
   HRESULT GetFixedUserDataAt (
     [in] aafUInt32  index,
+    [in] aafUInt32  sizeOfBuffer,
     [out] aafUInt8 *  pFixedUserData);
 
   //***********************************************************
@@ -39328,6 +39345,7 @@ interface IAAFAES3PCMDescriptor2 : IUnknown
 	///	
 	/// - pFixedUserData is a valid pointer
 	/// - index is a valid index with the array of channels
+	/// - sizeOfBuffer must be 24
 	///
 	/// this method will return the following codes
 	///
@@ -39342,12 +39360,17 @@ interface IAAFAES3PCMDescriptor2 : IUnknown
 	///
 	///	AAFRESULT_BADINDEX
 	///	 - index is not a valid index
+	///
+	/// AAFRESULT_WRONG_SIZE
+	///  - buffer size is not correct
   /// 
   /// @param index [in] Index of the channel desired.
+  /// @param sizeOfBuffer [in] Size of pFixedUserData buffer in bytes.
   /// @param pFixedUserData [in] Set FixedUserData for the index given.
   ///
   HRESULT SetFixedUserDataAt (
     [in] aafUInt32  index,
+    [in] aafUInt32  sizeOfBuffer,
     [in] aafUInt8 *  pFixedUserData);
 
 }

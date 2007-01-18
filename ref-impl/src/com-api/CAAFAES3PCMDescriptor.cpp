@@ -539,6 +539,7 @@ HRESULT STDMETHODCALLTYPE
 
 HRESULT STDMETHODCALLTYPE
     CAAFAES3PCMDescriptor::GetFixedChannelStatusDataAt (aafUInt32  index,
+        aafUInt32  sizeOfBuffer,
         aafUInt8 *  pFixedChannelStatusData)
 {
   HRESULT hr;
@@ -552,9 +553,11 @@ HRESULT STDMETHODCALLTYPE
 
 
 
+
   try
     {
       hr = ptr->GetFixedChannelStatusDataAt (index,
+    sizeOfBuffer,
     pFixedChannelStatusData);
     }
   catch (OMException& e)
@@ -585,6 +588,7 @@ HRESULT STDMETHODCALLTYPE
       //
       hr = AAFRESULT_UNEXPECTED_EXCEPTION;
     }
+
 
 
 
@@ -594,6 +598,7 @@ HRESULT STDMETHODCALLTYPE
 
 HRESULT STDMETHODCALLTYPE
     CAAFAES3PCMDescriptor::SetFixedChannelStatusDataAt (aafUInt32  index,
+        aafUInt32  sizeOfBuffer,
         aafUInt8 *  pFixedChannelStatusData)
 {
   HRESULT hr;
@@ -607,9 +612,11 @@ HRESULT STDMETHODCALLTYPE
 
 
 
+
   try
     {
       hr = ptr->SetFixedChannelStatusDataAt (index,
+    sizeOfBuffer,
     pFixedChannelStatusData);
     }
   catch (OMException& e)
@@ -640,6 +647,7 @@ HRESULT STDMETHODCALLTYPE
       //
       hr = AAFRESULT_UNEXPECTED_EXCEPTION;
     }
+
 
 
 
@@ -764,6 +772,7 @@ HRESULT STDMETHODCALLTYPE
 
 HRESULT STDMETHODCALLTYPE
     CAAFAES3PCMDescriptor::GetFixedUserDataAt (aafUInt32  index,
+        aafUInt32  sizeOfBuffer,
         aafUInt8 *  pFixedUserData)
 {
   HRESULT hr;
@@ -777,9 +786,11 @@ HRESULT STDMETHODCALLTYPE
 
 
 
+
   try
     {
       hr = ptr->GetFixedUserDataAt (index,
+    sizeOfBuffer,
     pFixedUserData);
     }
   catch (OMException& e)
@@ -810,6 +821,7 @@ HRESULT STDMETHODCALLTYPE
       //
       hr = AAFRESULT_UNEXPECTED_EXCEPTION;
     }
+
 
 
 
@@ -819,6 +831,7 @@ HRESULT STDMETHODCALLTYPE
 
 HRESULT STDMETHODCALLTYPE
     CAAFAES3PCMDescriptor::SetFixedUserDataAt (aafUInt32  index,
+        aafUInt32  sizeOfBuffer,
         aafUInt8 *  pFixedUserData)
 {
   HRESULT hr;
@@ -832,9 +845,11 @@ HRESULT STDMETHODCALLTYPE
 
 
 
+
   try
     {
       hr = ptr->SetFixedUserDataAt (index,
+    sizeOfBuffer,
     pFixedUserData);
     }
   catch (OMException& e)
@@ -865,6 +880,7 @@ HRESULT STDMETHODCALLTYPE
       //
       hr = AAFRESULT_UNEXPECTED_EXCEPTION;
     }
+
 
 
 

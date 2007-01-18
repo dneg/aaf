@@ -39497,6 +39497,7 @@ DECLARE_INTERFACE_(IAAFAES3PCMDescriptor2, IUnknown)
 	///	
 	/// - pFixedChannelStatusData is a valid pointer
 	/// - index is a valid index with the array of channels
+	/// - sizeOfBuffer must be 24
 	///
 	/// this method will return the following codes
 	///
@@ -39511,12 +39512,17 @@ DECLARE_INTERFACE_(IAAFAES3PCMDescriptor2, IUnknown)
 	///
 	///	AAFRESULT_BADINDEX
 	///	 - index is not a valid index
+	///
+	/// AAFRESULT_WRONG_SIZE
+	///  - buffer size is not correct
   ///
   /// @param index [in] Index of the channel desired.
+  /// @param sizeOfBuffer [in] Size of pFixedChannelStatusData buffer in bytes.
   /// @param pFixedChannelStatusData [out] Address to store FixedChannelStatusData for the index given.
   ///
   STDMETHOD(GetFixedChannelStatusDataAt) (THIS_
     aafUInt32  index,
+    aafUInt32  sizeOfBuffer,
     aafUInt8 *  pFixedChannelStatusData) PURE;
 
   //***********************************************************
@@ -39530,6 +39536,7 @@ DECLARE_INTERFACE_(IAAFAES3PCMDescriptor2, IUnknown)
 	///	
 	/// - pFixedChannelStatusData is a valid pointer
 	/// - index is a valid index with the array of channels
+	/// - sizeOfBuffer must be 24
 	///
 	/// this method will return the following codes
 	///
@@ -39544,12 +39551,17 @@ DECLARE_INTERFACE_(IAAFAES3PCMDescriptor2, IUnknown)
 	///
 	///	AAFRESULT_BADINDEX
 	///	 - index is not a valid index
+	///
+	/// AAFRESULT_WRONG_SIZE
+	///  - buffer size is not correct
   ///
   /// @param index [in] Index of the channel desired.
+  /// @param sizeOfBuffer [in] Size of pFixedChannelStatusData buffer in bytes.
   /// @param pFixedChannelStatusData [in] Set FixedChannelStatusData for the index given.
   ///
   STDMETHOD(SetFixedChannelStatusDataAt) (THIS_
     aafUInt32  index,
+    aafUInt32  sizeOfBuffer,
     aafUInt8 *  pFixedChannelStatusData) PURE;
 
   //***********************************************************
@@ -39621,6 +39633,7 @@ DECLARE_INTERFACE_(IAAFAES3PCMDescriptor2, IUnknown)
 	///	
 	/// - pFixedUserData is a valid pointer
 	/// - index is a valid index with the array of channels
+	/// - sizeOfBuffer must be 24
 	///
 	/// this method will return the following codes
 	///
@@ -39635,12 +39648,17 @@ DECLARE_INTERFACE_(IAAFAES3PCMDescriptor2, IUnknown)
 	///
 	///	AAFRESULT_BADINDEX
 	///	 - index is not a valid index
+	///
+	/// AAFRESULT_WRONG_SIZE
+	///  - buffer size is not correct
   ///
   /// @param index [in] Index of the channel desired.
+  /// @param sizeOfBuffer [in] Size of pFixedUserData buffer in bytes.
   /// @param pFixedUserData [out] Address to store FixedUserData for the index given.
   ///
   STDMETHOD(GetFixedUserDataAt) (THIS_
     aafUInt32  index,
+    aafUInt32  sizeOfBuffer,
     aafUInt8 *  pFixedUserData) PURE;
 
   //***********************************************************
@@ -39654,6 +39672,7 @@ DECLARE_INTERFACE_(IAAFAES3PCMDescriptor2, IUnknown)
 	///	
 	/// - pFixedUserData is a valid pointer
 	/// - index is a valid index with the array of channels
+	/// - sizeOfBuffer must be 24
 	///
 	/// this method will return the following codes
 	///
@@ -39668,12 +39687,17 @@ DECLARE_INTERFACE_(IAAFAES3PCMDescriptor2, IUnknown)
 	///
 	///	AAFRESULT_BADINDEX
 	///	 - index is not a valid index
+	///
+	/// AAFRESULT_WRONG_SIZE
+	///  - buffer size is not correct
   ///
   /// @param index [in] Index of the channel desired.
+  /// @param sizeOfBuffer [in] Size of pFixedUserData buffer in bytes.
   /// @param pFixedUserData [in] Set FixedUserData for the index given.
   ///
   STDMETHOD(SetFixedUserDataAt) (THIS_
     aafUInt32  index,
+    aafUInt32  sizeOfBuffer,
     aafUInt8 *  pFixedUserData) PURE;
 
 

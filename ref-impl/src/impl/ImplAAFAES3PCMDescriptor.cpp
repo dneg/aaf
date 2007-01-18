@@ -300,7 +300,8 @@ template<class T, class U>
 AAFRESULT STDMETHODCALLTYPE 
 ImplAAFAES3PCMDescriptor::GetDataAt(aafUInt32 index,
 										 T * pData, U & array,
-										 aafUInt32 SizeOfData)
+										 aafUInt32 SizeOfData, 
+										 aafUInt32 sizeOfBuffer)
 {
 	TRACE("ImplAAFAES3PCMDescriptor::GetDataAt");
 	if( !isInitialized() )
@@ -311,6 +312,10 @@ ImplAAFAES3PCMDescriptor::GetDataAt(aafUInt32 index,
 	if( !array.isPresent() )
 	{
 		return AAFRESULT_PROP_NOT_PRESENT;
+	}
+
+	if(SizeOfData != sizeOfBuffer) {
+		return AAFRESULT_WRONG_SIZE;
 	}
 
 	AAFRESULT res = VerifyDataArraySize<T, U>(index, SizeOfData, array, pData);
@@ -333,7 +338,9 @@ template<class T, class U>
 AAFRESULT STDMETHODCALLTYPE
 ImplAAFAES3PCMDescriptor::SetDataAt(aafUInt32 index,
 									T * pData, U & array,
-									aafUInt32 SizeOfData, const T & defValue)
+									aafUInt32 SizeOfData, 
+									aafUInt32 sizeOfBuffer, 
+									const T & defValue)
 {
 	TRACE("ImplAAFAES3PCMDescriptor::SetDataAt");
 	if( !isInitialized() )
@@ -346,6 +353,11 @@ ImplAAFAES3PCMDescriptor::SetDataAt(aafUInt32 index,
 	if(res != AAFRESULT_SUCCESS) {
 		return(res);
 	}
+
+	if(SizeOfData != sizeOfBuffer) {
+		return AAFRESULT_WRONG_SIZE;
+	}
+
 	aafUInt32 beginIndex = index * SizeOfData;
 	aafUInt32 endIndex = (index + 1) * SizeOfData;
 	for(aafUInt32 myIndex = beginIndex, outputIndex = 0;
@@ -359,40 +371,44 @@ ImplAAFAES3PCMDescriptor::SetDataAt(aafUInt32 index,
 
 AAFRESULT STDMETHODCALLTYPE 
 ImplAAFAES3PCMDescriptor::GetFixedChannelStatusDataAt(aafUInt32 index,
+													  aafUInt32 sizeOfBuffer,
 											aafUInt8 * pFixedChannelStatusData)
 {
 	TRACE("ImplAAFAES3PCMDescriptor::GetFixedChannelStatusDataAt");
 	return(GetDataAt<aafUInt8, OMArrayProperty<aafUInt8> >
 				(index, pFixedChannelStatusData, _fixedChannelStatusDataArray,
-				 SizeOfFixedChannelStatusData));
+				 SizeOfFixedChannelStatusData, sizeOfBuffer));
 }
 
 AAFRESULT STDMETHODCALLTYPE
 ImplAAFAES3PCMDescriptor::SetFixedChannelStatusDataAt(aafUInt32 index,
+													  aafUInt32 sizeOfBuffer,
 											aafUInt8 * pFixedChannelStatusData)
 {
 	TRACE("ImplAAFAES3PCMDescriptor::SetFixedChannelStatusDataAt");
 	return(SetDataAt<aafUInt8, OMArrayProperty<aafUInt8> >
 				(index, pFixedChannelStatusData, _fixedChannelStatusDataArray,
-				 SizeOfFixedChannelStatusData, 0));
+				 SizeOfFixedChannelStatusData, sizeOfBuffer, 0));
 }
 
 AAFRESULT STDMETHODCALLTYPE 
 ImplAAFAES3PCMDescriptor::GetFixedUserDataAt(aafUInt32 index,
-												  aafUInt8 * pFixedUserData)
+											 aafUInt32 sizeOfBuffer,
+											 aafUInt8 * pFixedUserData)
 {
 	TRACE("ImplAAFAES3PCMDescriptor::GetFixedUserDataAt");
 	return(GetDataAt<aafUInt8, OMArrayProperty<aafUInt8> >
 		(index, pFixedUserData, _fixedUserDataArray,
-		SizeOfFixedUserData));
+		SizeOfFixedUserData, sizeOfBuffer));
 }
 
 AAFRESULT STDMETHODCALLTYPE
 ImplAAFAES3PCMDescriptor::SetFixedUserDataAt(aafUInt32 index,
-												  aafUInt8 * pFixedUserData)
+											 aafUInt32 sizeOfBuffer,
+											 aafUInt8 * pFixedUserData)
 {
 	TRACE("ImplAAFAES3PCMDescriptor::SetFixedUserDataAt");
 	return(SetDataAt<aafUInt8, OMArrayProperty<aafUInt8> >
 		(index, pFixedUserData, _fixedUserDataArray,
-		SizeOfFixedUserData, 0));
+		SizeOfFixedUserData, sizeOfBuffer, 0));
 }
