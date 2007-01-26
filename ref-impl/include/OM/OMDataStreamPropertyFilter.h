@@ -103,6 +103,8 @@ public:
 private:
   // @access Private members.
 
+    // @cmember A filter on top of the stored stream in the data stream
+    //          property.
         OMStoredStreamFilter* streamFilter();
   const OMStoredStreamFilter* streamFilter() const;
 
