@@ -53,7 +53,7 @@ class ImplAAFTypeDefStream;
 class CAAFTypeDefStream
   : public IAAFTypeDefStream,
     public IAAFTypeDefStreamEx,
-	public IAAFTypeDefStream2,
+	public IAAFTypeDefStream3,
     public CAAFTypeDef
 {
 protected:
@@ -643,7 +643,7 @@ public:
   // METHOD NAME: GetMXFEssenceStream()
   //
   // DESCRIPTION:
-  // @mfunc AAFRESULT | AAFTypeDefStream2 | GetMXFEssenceStream |
+  // @mfunc AAFRESULT | AAFTypeDefStream3 | GetMXFEssenceStream |
   // Creates a type definition object which implements
   // the IAAFTypeDefStream interface and performs a file
   // encoding dependent filtering of the raw stream data.

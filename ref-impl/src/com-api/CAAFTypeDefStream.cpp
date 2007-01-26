@@ -1388,9 +1388,9 @@ HRESULT CAAFTypeDefStream::InternalQueryInterface
         ((IUnknown *)*ppvObj)->AddRef();
         return S_OK;
     }
-    if (EQUAL_UID(riid,IID_IAAFTypeDefStream2)) 
+    if (EQUAL_UID(riid,IID_IAAFTypeDefStream3)) 
     { 
-        *ppvObj = (IAAFTypeDefStream2 *)this; 
+        *ppvObj = (IAAFTypeDefStream3 *)this; 
         ((IUnknown *)*ppvObj)->AddRef();
         return S_OK;
     }

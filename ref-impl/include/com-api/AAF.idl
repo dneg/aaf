@@ -214,7 +214,7 @@ interface IAAFSourceReference2;
 interface IAAFStreamAccess;
 interface IAAFTimelineMobSlot2;
 interface IAAFTypeDefStreamEx;
-interface IAAFTypeDefStream2;
+interface IAAFTypeDefStream3;
 interface IAAFTypeDefVariableArrayEx;
 
 
@@ -299,6 +299,7 @@ interface IAAFAES3PCMDescriptor : IUnknown
 
 
 }
+
 
 // ************************
 //
@@ -31692,7 +31693,7 @@ interface IAAFTypeDefSet : IUnknown
 //
 // ************************
 ///
-/// AAFTypeDefStream is DEPRECATED, please use AAFTypeDefStream2
+/// AAFTypeDefStream is DEPRECATED, please use AAFTypeDefStream3
 ///
 /// This interface is used to define Stream types used in AAF
 /// persistent objects.  Streams are conceptually similar to
@@ -49909,7 +49910,7 @@ interface IAAFTypeDefStreamEx : IUnknown
 
 // ************************
 //
-// Interface IAAFTypeDefStream2
+// Interface IAAFTypeDefStream3
 //
 // ************************
 ///
@@ -49927,17 +49928,17 @@ interface IAAFTypeDefStreamEx : IUnknown
 ///   - insufficient system memory is available to perform the
 ///     operation.
 ///
-/// Objects that implement IAAFTypeDefStream2 also implement the following interfaces:
+/// Objects that implement IAAFTypeDefStream3 also implement the following interfaces:
 ///  - IAAFTypeDef
 ///  - IAAFMetaDefinition
 [
     object,
     uuid(D1E43120-D90A-463f-BC4D-BB1174A8DBD3),
-    helpstring("IAAFTypeDefStream2 Interface"),
+    helpstring("IAAFTypeDefStream3 Interface"),
     pointer_default(unique)
 ]
 
-interface IAAFTypeDefStream2 : IUnknown
+interface IAAFTypeDefStream3 : IUnknown
 {
 
 

@@ -1083,10 +1083,10 @@ typedef interface IAAFTypeDefStreamEx IAAFTypeDefStreamEx;
 #endif 	/* __IAAFTypeDefStreamEx_FWD_DEFINED__ */
 
 
-#ifndef __IAAFTypeDefStream2_FWD_DEFINED__
-#define __IAAFTypeDefStream2_FWD_DEFINED__
-typedef interface IAAFTypeDefStream2 IAAFTypeDefStream2;
-#endif 	/* __IAAFTypeDefStream2_FWD_DEFINED__ */
+#ifndef __IAAFTypeDefStream3_FWD_DEFINED__
+#define __IAAFTypeDefStream3_FWD_DEFINED__
+typedef interface IAAFTypeDefStream3 IAAFTypeDefStream3;
+#endif 	/* __IAAFTypeDefStream3_FWD_DEFINED__ */
 
 
 #ifndef __IAAFTypeDefVariableArrayEx_FWD_DEFINED__
@@ -47704,20 +47704,20 @@ void __RPC_STUB IAAFTypeDefStreamEx_SetCallback_Stub(
 #endif 	/* __IAAFTypeDefStreamEx_INTERFACE_DEFINED__ */
 
 
-#ifndef __IAAFTypeDefStream2_INTERFACE_DEFINED__
-#define __IAAFTypeDefStream2_INTERFACE_DEFINED__
+#ifndef __IAAFTypeDefStream3_INTERFACE_DEFINED__
+#define __IAAFTypeDefStream3_INTERFACE_DEFINED__
 
-/* interface IAAFTypeDefStream2 */
+/* interface IAAFTypeDefStream3 */
 /* [unique][helpstring][uuid][object] */ 
 
   /// Extend in chunks of typed Elements
 
-EXTERN_C const IID IID_IAAFTypeDefStream2;
+EXTERN_C const IID IID_IAAFTypeDefStream3;
 
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
     MIDL_INTERFACE("D1E43120-D90A-463f-BC4D-BB1174A8DBD3")
-    IAAFTypeDefStream2 : public IUnknown
+    IAAFTypeDefStream3 : public IUnknown
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetSize( 
@@ -47794,81 +47794,81 @@ EXTERN_C const IID IID_IAAFTypeDefStream2;
     
 #else 	/* C style interface */
 
-    typedef struct IAAFTypeDefStream2Vtbl
+    typedef struct IAAFTypeDefStream3Vtbl
     {
         BEGIN_INTERFACE
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
-            IAAFTypeDefStream2 * This,
+            IAAFTypeDefStream3 * This,
             /* [in] */ REFIID riid,
             /* [iid_is][out] */ void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
-            IAAFTypeDefStream2 * This);
+            IAAFTypeDefStream3 * This);
         
         ULONG ( STDMETHODCALLTYPE *Release )( 
-            IAAFTypeDefStream2 * This);
+            IAAFTypeDefStream3 * This);
         
         HRESULT ( STDMETHODCALLTYPE *GetSize )( 
-            IAAFTypeDefStream2 * This,
+            IAAFTypeDefStream3 * This,
             /* [in] */ IAAFPropertyValue *pStreamPropertyValue,
             /* [out] */ aafInt64 *pSize);
         
         HRESULT ( STDMETHODCALLTYPE *SetSize )( 
-            IAAFTypeDefStream2 * This,
+            IAAFTypeDefStream3 * This,
             /* [in] */ IAAFPropertyValue *pStreamPropertyValue,
             /* [in] */ aafInt64 newSize);
         
         HRESULT ( STDMETHODCALLTYPE *GetPosition )( 
-            IAAFTypeDefStream2 * This,
+            IAAFTypeDefStream3 * This,
             /* [in] */ IAAFPropertyValue *pStreamPropertyValue,
             /* [out] */ aafInt64 *pPosition);
         
         HRESULT ( STDMETHODCALLTYPE *SetPosition )( 
-            IAAFTypeDefStream2 * This,
+            IAAFTypeDefStream3 * This,
             /* [in] */ IAAFPropertyValue *pStreamPropertyValue,
             /* [in] */ aafInt64 newPosition);
         
         HRESULT ( STDMETHODCALLTYPE *Read )( 
-            IAAFTypeDefStream2 * This,
+            IAAFTypeDefStream3 * This,
             /* [in] */ IAAFPropertyValue *pStreamPropertyValue,
             /* [in] */ aafUInt32 dataSize,
             /* [length_is][size_is][out] */ aafMemPtr_t pData,
             /* [ref][out] */ aafUInt32 *bytesRead);
         
         HRESULT ( STDMETHODCALLTYPE *Write )( 
-            IAAFTypeDefStream2 * This,
+            IAAFTypeDefStream3 * This,
             /* [in] */ IAAFPropertyValue *pStreamPropertyValue,
             /* [in] */ aafUInt32 dataSize,
             /* [size_is][ref][in] */ aafMemPtr_t pData);
         
         HRESULT ( STDMETHODCALLTYPE *Append )( 
-            IAAFTypeDefStream2 * This,
+            IAAFTypeDefStream3 * This,
             /* [in] */ IAAFPropertyValue *pStreamPropertyValue,
             /* [in] */ aafUInt32 dataSize,
             /* [size_is][ref][in] */ aafMemPtr_t pData);
         
         HRESULT ( STDMETHODCALLTYPE *HasStoredByteOrder )( 
-            IAAFTypeDefStream2 * This,
+            IAAFTypeDefStream3 * This,
             /* [in] */ IAAFPropertyValue *pStreamPropertyValue,
             /* [out] */ aafBoolean_t *pHasByteOrder);
         
         HRESULT ( STDMETHODCALLTYPE *GetStoredByteOrder )( 
-            IAAFTypeDefStream2 * This,
+            IAAFTypeDefStream3 * This,
             /* [in] */ IAAFPropertyValue *pStreamPropertyValue,
             /* [out] */ eAAFByteOrder_t *pByteOrder);
         
         HRESULT ( STDMETHODCALLTYPE *SetStoredByteOrder )( 
-            IAAFTypeDefStream2 * This,
+            IAAFTypeDefStream3 * This,
             /* [in] */ IAAFPropertyValue *pStreamPropertyValue,
             /* [in] */ eAAFByteOrder_t byteOrder);
         
         HRESULT ( STDMETHODCALLTYPE *ClearStoredByteOrder )( 
-            IAAFTypeDefStream2 * This,
+            IAAFTypeDefStream3 * This,
             /* [in] */ IAAFPropertyValue *pStreamPropertyValue);
         
         HRESULT ( STDMETHODCALLTYPE *ReadElements )( 
-            IAAFTypeDefStream2 * This,
+            IAAFTypeDefStream3 * This,
             /* [in] */ IAAFPropertyValue *pStreamPropertyValue,
             /* [in] */ IAAFTypeDef *pElementType,
             /* [in] */ aafUInt32 dataSize,
@@ -47876,30 +47876,30 @@ EXTERN_C const IID IID_IAAFTypeDefStream2;
             /* [ref][out] */ aafUInt32 *pBytesRead);
         
         HRESULT ( STDMETHODCALLTYPE *WriteElements )( 
-            IAAFTypeDefStream2 * This,
+            IAAFTypeDefStream3 * This,
             /* [in] */ IAAFPropertyValue *pStreamPropertyValue,
             /* [in] */ IAAFTypeDef *pElementType,
             /* [in] */ aafUInt32 dataSize,
             /* [size_is][ref][in] */ aafMemPtr_t pData);
         
         HRESULT ( STDMETHODCALLTYPE *AppendElements )( 
-            IAAFTypeDefStream2 * This,
+            IAAFTypeDefStream3 * This,
             /* [in] */ IAAFPropertyValue *pStreamPropertyValue,
             /* [in] */ IAAFTypeDef *pElementType,
             /* [in] */ aafUInt32 dataSize,
             /* [size_is][ref][in] */ aafMemPtr_t pData);
         
         HRESULT ( STDMETHODCALLTYPE *GetMXFEssenceStream )( 
-            IAAFTypeDefStream2 * This,
+            IAAFTypeDefStream3 * This,
             /* [in] */ aafUInt32 filterType,
             /* [retval][out] */ IAAFTypeDefStream **pFilteredStream);
         
         END_INTERFACE
-    } IAAFTypeDefStream2Vtbl;
+    } IAAFTypeDefStream3Vtbl;
 
-    interface IAAFTypeDefStream2
+    interface IAAFTypeDefStream3
     {
-        CONST_VTBL struct IAAFTypeDefStream2Vtbl *lpVtbl;
+        CONST_VTBL struct IAAFTypeDefStream3Vtbl *lpVtbl;
     };
 
     
@@ -47907,59 +47907,59 @@ EXTERN_C const IID IID_IAAFTypeDefStream2;
 #ifdef COBJMACROS
 
 
-#define IAAFTypeDefStream2_QueryInterface(This,riid,ppvObject)	\
+#define IAAFTypeDefStream3_QueryInterface(This,riid,ppvObject)	\
     (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
 
-#define IAAFTypeDefStream2_AddRef(This)	\
+#define IAAFTypeDefStream3_AddRef(This)	\
     (This)->lpVtbl -> AddRef(This)
 
-#define IAAFTypeDefStream2_Release(This)	\
+#define IAAFTypeDefStream3_Release(This)	\
     (This)->lpVtbl -> Release(This)
 
 
-#define IAAFTypeDefStream2_GetSize(This,pStreamPropertyValue,pSize)	\
+#define IAAFTypeDefStream3_GetSize(This,pStreamPropertyValue,pSize)	\
     (This)->lpVtbl -> GetSize(This,pStreamPropertyValue,pSize)
 
-#define IAAFTypeDefStream2_SetSize(This,pStreamPropertyValue,newSize)	\
+#define IAAFTypeDefStream3_SetSize(This,pStreamPropertyValue,newSize)	\
     (This)->lpVtbl -> SetSize(This,pStreamPropertyValue,newSize)
 
-#define IAAFTypeDefStream2_GetPosition(This,pStreamPropertyValue,pPosition)	\
+#define IAAFTypeDefStream3_GetPosition(This,pStreamPropertyValue,pPosition)	\
     (This)->lpVtbl -> GetPosition(This,pStreamPropertyValue,pPosition)
 
-#define IAAFTypeDefStream2_SetPosition(This,pStreamPropertyValue,newPosition)	\
+#define IAAFTypeDefStream3_SetPosition(This,pStreamPropertyValue,newPosition)	\
     (This)->lpVtbl -> SetPosition(This,pStreamPropertyValue,newPosition)
 
-#define IAAFTypeDefStream2_Read(This,pStreamPropertyValue,dataSize,pData,bytesRead)	\
+#define IAAFTypeDefStream3_Read(This,pStreamPropertyValue,dataSize,pData,bytesRead)	\
     (This)->lpVtbl -> Read(This,pStreamPropertyValue,dataSize,pData,bytesRead)
 
-#define IAAFTypeDefStream2_Write(This,pStreamPropertyValue,dataSize,pData)	\
+#define IAAFTypeDefStream3_Write(This,pStreamPropertyValue,dataSize,pData)	\
     (This)->lpVtbl -> Write(This,pStreamPropertyValue,dataSize,pData)
 
-#define IAAFTypeDefStream2_Append(This,pStreamPropertyValue,dataSize,pData)	\
+#define IAAFTypeDefStream3_Append(This,pStreamPropertyValue,dataSize,pData)	\
     (This)->lpVtbl -> Append(This,pStreamPropertyValue,dataSize,pData)
 
-#define IAAFTypeDefStream2_HasStoredByteOrder(This,pStreamPropertyValue,pHasByteOrder)	\
+#define IAAFTypeDefStream3_HasStoredByteOrder(This,pStreamPropertyValue,pHasByteOrder)	\
     (This)->lpVtbl -> HasStoredByteOrder(This,pStreamPropertyValue,pHasByteOrder)
 
-#define IAAFTypeDefStream2_GetStoredByteOrder(This,pStreamPropertyValue,pByteOrder)	\
+#define IAAFTypeDefStream3_GetStoredByteOrder(This,pStreamPropertyValue,pByteOrder)	\
     (This)->lpVtbl -> GetStoredByteOrder(This,pStreamPropertyValue,pByteOrder)
 
-#define IAAFTypeDefStream2_SetStoredByteOrder(This,pStreamPropertyValue,byteOrder)	\
+#define IAAFTypeDefStream3_SetStoredByteOrder(This,pStreamPropertyValue,byteOrder)	\
     (This)->lpVtbl -> SetStoredByteOrder(This,pStreamPropertyValue,byteOrder)
 
-#define IAAFTypeDefStream2_ClearStoredByteOrder(This,pStreamPropertyValue)	\
+#define IAAFTypeDefStream3_ClearStoredByteOrder(This,pStreamPropertyValue)	\
     (This)->lpVtbl -> ClearStoredByteOrder(This,pStreamPropertyValue)
 
-#define IAAFTypeDefStream2_ReadElements(This,pStreamPropertyValue,pElementType,dataSize,pData,pBytesRead)	\
+#define IAAFTypeDefStream3_ReadElements(This,pStreamPropertyValue,pElementType,dataSize,pData,pBytesRead)	\
     (This)->lpVtbl -> ReadElements(This,pStreamPropertyValue,pElementType,dataSize,pData,pBytesRead)
 
-#define IAAFTypeDefStream2_WriteElements(This,pStreamPropertyValue,pElementType,dataSize,pData)	\
+#define IAAFTypeDefStream3_WriteElements(This,pStreamPropertyValue,pElementType,dataSize,pData)	\
     (This)->lpVtbl -> WriteElements(This,pStreamPropertyValue,pElementType,dataSize,pData)
 
-#define IAAFTypeDefStream2_AppendElements(This,pStreamPropertyValue,pElementType,dataSize,pData)	\
+#define IAAFTypeDefStream3_AppendElements(This,pStreamPropertyValue,pElementType,dataSize,pData)	\
     (This)->lpVtbl -> AppendElements(This,pStreamPropertyValue,pElementType,dataSize,pData)
 
-#define IAAFTypeDefStream2_GetMXFEssenceStream(This,filterType,pFilteredStream)	\
+#define IAAFTypeDefStream3_GetMXFEssenceStream(This,filterType,pFilteredStream)	\
     (This)->lpVtbl -> GetMXFEssenceStream(This,filterType,pFilteredStream)
 
 #endif /* COBJMACROS */
@@ -47969,154 +47969,154 @@ EXTERN_C const IID IID_IAAFTypeDefStream2;
 
 
 
-HRESULT STDMETHODCALLTYPE IAAFTypeDefStream2_GetSize_Proxy( 
-    IAAFTypeDefStream2 * This,
+HRESULT STDMETHODCALLTYPE IAAFTypeDefStream3_GetSize_Proxy( 
+    IAAFTypeDefStream3 * This,
     /* [in] */ IAAFPropertyValue *pStreamPropertyValue,
     /* [out] */ aafInt64 *pSize);
 
 
-void __RPC_STUB IAAFTypeDefStream2_GetSize_Stub(
+void __RPC_STUB IAAFTypeDefStream3_GetSize_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IAAFTypeDefStream2_SetSize_Proxy( 
-    IAAFTypeDefStream2 * This,
+HRESULT STDMETHODCALLTYPE IAAFTypeDefStream3_SetSize_Proxy( 
+    IAAFTypeDefStream3 * This,
     /* [in] */ IAAFPropertyValue *pStreamPropertyValue,
     /* [in] */ aafInt64 newSize);
 
 
-void __RPC_STUB IAAFTypeDefStream2_SetSize_Stub(
+void __RPC_STUB IAAFTypeDefStream3_SetSize_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IAAFTypeDefStream2_GetPosition_Proxy( 
-    IAAFTypeDefStream2 * This,
+HRESULT STDMETHODCALLTYPE IAAFTypeDefStream3_GetPosition_Proxy( 
+    IAAFTypeDefStream3 * This,
     /* [in] */ IAAFPropertyValue *pStreamPropertyValue,
     /* [out] */ aafInt64 *pPosition);
 
 
-void __RPC_STUB IAAFTypeDefStream2_GetPosition_Stub(
+void __RPC_STUB IAAFTypeDefStream3_GetPosition_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IAAFTypeDefStream2_SetPosition_Proxy( 
-    IAAFTypeDefStream2 * This,
+HRESULT STDMETHODCALLTYPE IAAFTypeDefStream3_SetPosition_Proxy( 
+    IAAFTypeDefStream3 * This,
     /* [in] */ IAAFPropertyValue *pStreamPropertyValue,
     /* [in] */ aafInt64 newPosition);
 
 
-void __RPC_STUB IAAFTypeDefStream2_SetPosition_Stub(
+void __RPC_STUB IAAFTypeDefStream3_SetPosition_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IAAFTypeDefStream2_Read_Proxy( 
-    IAAFTypeDefStream2 * This,
+HRESULT STDMETHODCALLTYPE IAAFTypeDefStream3_Read_Proxy( 
+    IAAFTypeDefStream3 * This,
     /* [in] */ IAAFPropertyValue *pStreamPropertyValue,
     /* [in] */ aafUInt32 dataSize,
     /* [length_is][size_is][out] */ aafMemPtr_t pData,
     /* [ref][out] */ aafUInt32 *bytesRead);
 
 
-void __RPC_STUB IAAFTypeDefStream2_Read_Stub(
+void __RPC_STUB IAAFTypeDefStream3_Read_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IAAFTypeDefStream2_Write_Proxy( 
-    IAAFTypeDefStream2 * This,
+HRESULT STDMETHODCALLTYPE IAAFTypeDefStream3_Write_Proxy( 
+    IAAFTypeDefStream3 * This,
     /* [in] */ IAAFPropertyValue *pStreamPropertyValue,
     /* [in] */ aafUInt32 dataSize,
     /* [size_is][ref][in] */ aafMemPtr_t pData);
 
 
-void __RPC_STUB IAAFTypeDefStream2_Write_Stub(
+void __RPC_STUB IAAFTypeDefStream3_Write_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IAAFTypeDefStream2_Append_Proxy( 
-    IAAFTypeDefStream2 * This,
+HRESULT STDMETHODCALLTYPE IAAFTypeDefStream3_Append_Proxy( 
+    IAAFTypeDefStream3 * This,
     /* [in] */ IAAFPropertyValue *pStreamPropertyValue,
     /* [in] */ aafUInt32 dataSize,
     /* [size_is][ref][in] */ aafMemPtr_t pData);
 
 
-void __RPC_STUB IAAFTypeDefStream2_Append_Stub(
+void __RPC_STUB IAAFTypeDefStream3_Append_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IAAFTypeDefStream2_HasStoredByteOrder_Proxy( 
-    IAAFTypeDefStream2 * This,
+HRESULT STDMETHODCALLTYPE IAAFTypeDefStream3_HasStoredByteOrder_Proxy( 
+    IAAFTypeDefStream3 * This,
     /* [in] */ IAAFPropertyValue *pStreamPropertyValue,
     /* [out] */ aafBoolean_t *pHasByteOrder);
 
 
-void __RPC_STUB IAAFTypeDefStream2_HasStoredByteOrder_Stub(
+void __RPC_STUB IAAFTypeDefStream3_HasStoredByteOrder_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IAAFTypeDefStream2_GetStoredByteOrder_Proxy( 
-    IAAFTypeDefStream2 * This,
+HRESULT STDMETHODCALLTYPE IAAFTypeDefStream3_GetStoredByteOrder_Proxy( 
+    IAAFTypeDefStream3 * This,
     /* [in] */ IAAFPropertyValue *pStreamPropertyValue,
     /* [out] */ eAAFByteOrder_t *pByteOrder);
 
 
-void __RPC_STUB IAAFTypeDefStream2_GetStoredByteOrder_Stub(
+void __RPC_STUB IAAFTypeDefStream3_GetStoredByteOrder_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IAAFTypeDefStream2_SetStoredByteOrder_Proxy( 
-    IAAFTypeDefStream2 * This,
+HRESULT STDMETHODCALLTYPE IAAFTypeDefStream3_SetStoredByteOrder_Proxy( 
+    IAAFTypeDefStream3 * This,
     /* [in] */ IAAFPropertyValue *pStreamPropertyValue,
     /* [in] */ eAAFByteOrder_t byteOrder);
 
 
-void __RPC_STUB IAAFTypeDefStream2_SetStoredByteOrder_Stub(
+void __RPC_STUB IAAFTypeDefStream3_SetStoredByteOrder_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IAAFTypeDefStream2_ClearStoredByteOrder_Proxy( 
-    IAAFTypeDefStream2 * This,
+HRESULT STDMETHODCALLTYPE IAAFTypeDefStream3_ClearStoredByteOrder_Proxy( 
+    IAAFTypeDefStream3 * This,
     /* [in] */ IAAFPropertyValue *pStreamPropertyValue);
 
 
-void __RPC_STUB IAAFTypeDefStream2_ClearStoredByteOrder_Stub(
+void __RPC_STUB IAAFTypeDefStream3_ClearStoredByteOrder_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IAAFTypeDefStream2_ReadElements_Proxy( 
-    IAAFTypeDefStream2 * This,
+HRESULT STDMETHODCALLTYPE IAAFTypeDefStream3_ReadElements_Proxy( 
+    IAAFTypeDefStream3 * This,
     /* [in] */ IAAFPropertyValue *pStreamPropertyValue,
     /* [in] */ IAAFTypeDef *pElementType,
     /* [in] */ aafUInt32 dataSize,
@@ -48124,50 +48124,50 @@ HRESULT STDMETHODCALLTYPE IAAFTypeDefStream2_ReadElements_Proxy(
     /* [ref][out] */ aafUInt32 *pBytesRead);
 
 
-void __RPC_STUB IAAFTypeDefStream2_ReadElements_Stub(
+void __RPC_STUB IAAFTypeDefStream3_ReadElements_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IAAFTypeDefStream2_WriteElements_Proxy( 
-    IAAFTypeDefStream2 * This,
+HRESULT STDMETHODCALLTYPE IAAFTypeDefStream3_WriteElements_Proxy( 
+    IAAFTypeDefStream3 * This,
     /* [in] */ IAAFPropertyValue *pStreamPropertyValue,
     /* [in] */ IAAFTypeDef *pElementType,
     /* [in] */ aafUInt32 dataSize,
     /* [size_is][ref][in] */ aafMemPtr_t pData);
 
 
-void __RPC_STUB IAAFTypeDefStream2_WriteElements_Stub(
+void __RPC_STUB IAAFTypeDefStream3_WriteElements_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IAAFTypeDefStream2_AppendElements_Proxy( 
-    IAAFTypeDefStream2 * This,
+HRESULT STDMETHODCALLTYPE IAAFTypeDefStream3_AppendElements_Proxy( 
+    IAAFTypeDefStream3 * This,
     /* [in] */ IAAFPropertyValue *pStreamPropertyValue,
     /* [in] */ IAAFTypeDef *pElementType,
     /* [in] */ aafUInt32 dataSize,
     /* [size_is][ref][in] */ aafMemPtr_t pData);
 
 
-void __RPC_STUB IAAFTypeDefStream2_AppendElements_Stub(
+void __RPC_STUB IAAFTypeDefStream3_AppendElements_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IAAFTypeDefStream2_GetMXFEssenceStream_Proxy( 
-    IAAFTypeDefStream2 * This,
+HRESULT STDMETHODCALLTYPE IAAFTypeDefStream3_GetMXFEssenceStream_Proxy( 
+    IAAFTypeDefStream3 * This,
     /* [in] */ aafUInt32 filterType,
     /* [retval][out] */ IAAFTypeDefStream **pFilteredStream);
 
 
-void __RPC_STUB IAAFTypeDefStream2_GetMXFEssenceStream_Stub(
+void __RPC_STUB IAAFTypeDefStream3_GetMXFEssenceStream_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
@@ -48175,7 +48175,7 @@ void __RPC_STUB IAAFTypeDefStream2_GetMXFEssenceStream_Stub(
 
 
 
-#endif 	/* __IAAFTypeDefStream2_INTERFACE_DEFINED__ */
+#endif 	/* __IAAFTypeDefStream3_INTERFACE_DEFINED__ */
 
 
 #ifndef __IAAFTypeDefVariableArrayEx_INTERFACE_DEFINED__

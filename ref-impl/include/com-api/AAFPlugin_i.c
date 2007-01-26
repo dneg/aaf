@@ -5,10 +5,10 @@
 /* link this file in with the server and any clients */
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* at Fri Mar 24 17:09:31 2006
+/* File created by MIDL compiler version 6.00.0361 */
+/* at TIMESTAMP REMOVED
  */
-/* Compiler settings for C:\cygwin\home\jesse\SDK\AAF\ref-impl\include\com-api\AAFPlugin.idl:
+/* Compiler settings for ../ref-impl/include/com-api/AAFPlugin.idl:
     Oicf, W1, Zp8, env=Win32 (32b run)
     protocol : dce , ms_ext, c_ext, robust
     error checks: allocation ref bounds_check enum stub_data 
@@ -113,10 +113,10 @@ MIDL_DEFINE_GUID(IID, IID_IAAFPlugin,0x3631F7A4,0x9121,0x11d2,0x80,0x88,0x00,0x6
 /* link this file in with the server and any clients */
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* at Fri Mar 24 17:09:31 2006
+/* File created by MIDL compiler version 6.00.0361 */
+/* at TIMESTAMP REMOVED
  */
-/* Compiler settings for C:\cygwin\home\jesse\SDK\AAF\ref-impl\include\com-api\AAFPlugin.idl:
+/* Compiler settings for ../ref-impl/include/com-api/AAFPlugin.idl:
     Oicf, W1, Zp8, env=Win64 (32b run,appending)
     protocol : dce , ms_ext, c_ext, robust
     error checks: allocation ref bounds_check enum stub_data 

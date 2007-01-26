@@ -213,7 +213,7 @@ interface IAAFSourceReference2;
 interface IAAFStreamAccess;
 interface IAAFTimelineMobSlot2;
 interface IAAFTypeDefStreamEx;
-interface IAAFTypeDefStream2;
+interface IAAFTypeDefStream3;
 interface IAAFTypeDefVariableArrayEx;
 #else
 typedef interface IAAFAES3PCMDescriptor IAAFAES3PCMDescriptor;
@@ -389,7 +389,7 @@ typedef interface IAAFSourceReference2 IAAFSourceReference2;
 typedef interface IAAFStreamAccess IAAFStreamAccess;
 typedef interface IAAFTimelineMobSlot2 IAAFTimelineMobSlot2;
 typedef interface IAAFTypeDefStreamEx IAAFTypeDefStreamEx;
-typedef interface IAAFTypeDefStream2 IAAFTypeDefStream2;
+typedef interface IAAFTypeDefStream3 IAAFTypeDefStream3;
 typedef interface IAAFTypeDefVariableArrayEx IAAFTypeDefVariableArrayEx;
 #endif
 
@@ -50159,27 +50159,27 @@ DECLARE_INTERFACE_(IAAFTypeDefStreamEx, IUnknown)
 
 
 
-// IAAFTypeDefStream2
+// IAAFTypeDefStream3
 
 // ************************
 //
-// Interface IAAFTypeDefStream2
+// Interface IAAFTypeDefStream3
 //
 // ************************
 
 
 
 
-#ifndef __IAAFTypeDefStream2_INTERFACE_DEFINED__
-#define __IAAFTypeDefStream2_INTERFACE_DEFINED__
+#ifndef __IAAFTypeDefStream3_INTERFACE_DEFINED__
+#define __IAAFTypeDefStream3_INTERFACE_DEFINED__
 
-EXTERN_C const IID IID_IAAFTypeDefStream2;
+EXTERN_C const IID IID_IAAFTypeDefStream3;
 
 
 #undef  INTERFACE
-#define INTERFACE   IAAFTypeDefStream2
+#define INTERFACE   IAAFTypeDefStream3
 
-DECLARE_INTERFACE_(IAAFTypeDefStream2, IUnknown)
+DECLARE_INTERFACE_(IAAFTypeDefStream3, IUnknown)
 {
   BEGIN_INTERFACE
 
@@ -50188,7 +50188,7 @@ DECLARE_INTERFACE_(IAAFTypeDefStream2, IUnknown)
   STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
   STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-  /* *** IAAFTypeDefStream2 methods *** */
+  /* *** IAAFTypeDefStream3 methods *** */
 
 
 
@@ -50751,7 +50751,7 @@ DECLARE_INTERFACE_(IAAFTypeDefStream2, IUnknown)
 
   END_INTERFACE
 };
-#endif // __IAAFTypeDefStream2_INTERFACE_DEFINED__
+#endif // __IAAFTypeDefStream3_INTERFACE_DEFINED__
 
 
 
