@@ -496,6 +496,36 @@ AD_XMETHOD4(AppendElements,
   /// AAFRESULT_NOT_REGISTERED
   ///  - struct offsets have not yet been registered for the element typedef.)
 
+AD_XMETHOD3(SetCallback,
+			[in],
+			objIn,
+			AAFPropertyValue,
+			pPropertyValue,
+			Issue the callback for this property,
+
+			[in],
+			objPass,
+			IAAFStreamAccess*,
+			pCallbackIF,
+			Interface of the callback object,
+
+			[in],
+			objPass,
+			aafMemPtr_t,
+			pUserData,
+			Client-specific data passed through to the callback,
+
+			Sets a callback interface to be called when a stream is written to or
+  /// read from the file.  This allows the stream property to be built bottom up.
+  ///
+  /// Succeeds if:
+  /// - Initialize\(\) has already been called on this object.
+  /// - pPropertyValue pointer is valid.
+  /// - pCallbackIF pointer is valid.
+  /// - pUserData pointer is valid.
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(either pPropertyValue or pCallbackIF or pUserData\))
+
 AD_XMETHOD2(GetMXFEssenceStream,
 			[in],
 			objPass,
