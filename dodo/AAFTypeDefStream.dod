@@ -31,10 +31,10 @@ AAFTypeDef\
 #c
 #c #import ./AAFTypeDef.exp
 #import ./AAFTypeDefStreamEx.exp
-#import ./AAFTypeDefStream2.exp
+#import ./AAFTypeDefStream3.exp
 AD_HEAD
 AD_IDL(///
-/// AAFTypeDefStream is DEPRECATED\, please use AAFTypeDefStream2
+/// AAFTypeDefStream is DEPRECATED\, please use AAFTypeDefStream3
 ///
 /// This interface is used to define Stream types used in AAF
 /// persistent objects.  Streams are conceptually similar to
@@ -47,7 +47,7 @@ AD_CLASS_UUID(307e9e6d, dcb2, 11d2, 84, 29, 00, 60, 08, 32, ac, b8)
 
 AD_DEFAULT_UUID(307e9e6e, dcb2, 11d2, 84, 29, 00, 60, 08, 32, ac, b8)
 #c AD_XCLASS_BEGIN(Concrete, StoredObject)
-AD_COM_EXT2_CLASS_BEGIN(public IAAFTypeDefStreamEx, public IAAFTypeDefStream2)
+AD_COM_EXT2_CLASS_BEGIN(public IAAFTypeDefStreamEx, public IAAFTypeDefStream3)
 
 AD_XMETHOD2(GetSize,
 			[in],
@@ -505,4 +505,4 @@ AD_COM_METH(.method-SetCallback)
 AD_COM_METH(.method-GetMXFEssenceStream)
 
 #c AD_XCLASS_END(Concrete, StoredObject)
-AD_COM_EXT2_CLASS_END(AAFTypeDefStreamEx, AAFTypeDefStream2)
+AD_COM_EXT2_CLASS_END(AAFTypeDefStreamEx, AAFTypeDefStream3)

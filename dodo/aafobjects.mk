@@ -56,7 +56,7 @@ AAFCOMINTERFACESONLY="\
 	AAFStreamAccess \
 	AAFTimelineMobSlot2 \
 	AAFTypeDefStreamEx \
-	AAFTypeDefStream2 \
+	AAFTypeDefStream3 \
 	AAFTypeDefVariableArrayEx "
 
 # These are the impl files that are typed by humans.  Be sure to

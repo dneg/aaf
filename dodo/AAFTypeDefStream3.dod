@@ -22,7 +22,7 @@
 #c
 #c *********************************************************************
 #startm .this-module 0
-AAFTypeDefStream2\
+AAFTypeDefStream3\
 #endm
 #c
 #startm .parent-module 0
