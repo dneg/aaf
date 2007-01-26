@@ -47786,6 +47786,11 @@ EXTERN_C const IID IID_IAAFTypeDefStream3;
             /* [in] */ aafUInt32 dataSize,
             /* [size_is][ref][in] */ aafMemPtr_t pData) = 0;
         
+        virtual HRESULT STDMETHODCALLTYPE SetCallback( 
+            /* [in] */ IAAFPropertyValue *pPropertyValue,
+            /* [in] */ IAAFStreamAccess *pCallbackIF,
+            /* [in] */ aafMemPtr_t pUserData) = 0;
+        
         virtual HRESULT STDMETHODCALLTYPE GetMXFEssenceStream( 
             /* [in] */ aafUInt32 filterType,
             /* [retval][out] */ IAAFTypeDefStream **pFilteredStream) = 0;
@@ -47889,6 +47894,12 @@ EXTERN_C const IID IID_IAAFTypeDefStream3;
             /* [in] */ aafUInt32 dataSize,
             /* [size_is][ref][in] */ aafMemPtr_t pData);
         
+        HRESULT ( STDMETHODCALLTYPE *SetCallback )( 
+            IAAFTypeDefStream3 * This,
+            /* [in] */ IAAFPropertyValue *pPropertyValue,
+            /* [in] */ IAAFStreamAccess *pCallbackIF,
+            /* [in] */ aafMemPtr_t pUserData);
+        
         HRESULT ( STDMETHODCALLTYPE *GetMXFEssenceStream )( 
             IAAFTypeDefStream3 * This,
             /* [in] */ aafUInt32 filterType,
@@ -47958,6 +47969,9 @@ EXTERN_C const IID IID_IAAFTypeDefStream3;
 
 #define IAAFTypeDefStream3_AppendElements(This,pStreamPropertyValue,pElementType,dataSize,pData)	\
     (This)->lpVtbl -> AppendElements(This,pStreamPropertyValue,pElementType,dataSize,pData)
+
+#define IAAFTypeDefStream3_SetCallback(This,pPropertyValue,pCallbackIF,pUserData)	\
+    (This)->lpVtbl -> SetCallback(This,pPropertyValue,pCallbackIF,pUserData)
 
 #define IAAFTypeDefStream3_GetMXFEssenceStream(This,filterType,pFilteredStream)	\
     (This)->lpVtbl -> GetMXFEssenceStream(This,filterType,pFilteredStream)
@@ -48155,6 +48169,20 @@ HRESULT STDMETHODCALLTYPE IAAFTypeDefStream3_AppendElements_Proxy(
 
 
 void __RPC_STUB IAAFTypeDefStream3_AppendElements_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFTypeDefStream3_SetCallback_Proxy( 
+    IAAFTypeDefStream3 * This,
+    /* [in] */ IAAFPropertyValue *pPropertyValue,
+    /* [in] */ IAAFStreamAccess *pCallbackIF,
+    /* [in] */ aafMemPtr_t pUserData);
+
+
+void __RPC_STUB IAAFTypeDefStream3_SetCallback_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
