@@ -45,7 +45,7 @@ typedef IAAFSmartPointer<IAAFPropertyDef>           IAAFPropertyDefSP;
 typedef IAAFSmartPointer<IAAFPropertyValue>         IAAFPropertyValueSP;
 typedef IAAFSmartPointer<IAAFTypeDef>               IAAFTypeDefSP;
 typedef IAAFSmartPointer<IAAFTypeDefStream>         IAAFTypeDefStreamSP;
-typedef IAAFSmartPointer<IAAFTypeDefStream2>        IAAFTypeDefStream2SP;
+typedef IAAFSmartPointer<IAAFTypeDefStream3>        IAAFTypeDefStream3SP;
 typedef IAAFSmartPointer<IAAFTypeDefStreamEx>       IAAFTypeDefStreamExSP;
 typedef IAAFSmartPointer<IAAFSourceMob>             IAAFSourceMobSP;
 typedef IAAFSmartPointer<IAAFMetaDefinition>        IAAFMetaDefinitionSP;
@@ -293,8 +293,8 @@ static void Test_GetTypeDefStream(
   IAAFTypeDefSP pTypeDef;
 
   CheckResult(pStreamPropertyValue->GetType(&pTypeDef));
-  IAAFTypeDefStream2SP pTypeDefStreamRaw;
-  CheckResult(pTypeDef->QueryInterface(IID_IAAFTypeDefStream2,
+  IAAFTypeDefStream3SP pTypeDefStreamRaw;
+  CheckResult(pTypeDef->QueryInterface(IID_IAAFTypeDefStream3,
                                        (void **)&pTypeDefStreamRaw));
   CheckResult(pTypeDefStreamRaw->GetMXFEssenceStream(0, ppTypeDefStream));
 }
@@ -552,7 +552,7 @@ HRESULT STDMETHODCALLTYPE
 TestStreamAccess::WriteStream (IAAFPropertyValue *propertyValue, aafMemPtr_t pUserData)
 {
 	IAAFTypeDefSP			pTypeDef;
-	IAAFTypeDefStream2SP	pTypeDefStreamRaw;
+	IAAFTypeDefStream3SP	pTypeDefStreamRaw;
 	IAAFTypeDefStreamSP		pTypeDefStream;
 	IAAFMetaDefinitionSP	pMetaDef;
 	aafCharacter			debugBuf[256];
@@ -561,7 +561,7 @@ TestStreamAccess::WriteStream (IAAFPropertyValue *propertyValue, aafMemPtr_t pUs
 	CheckResult(pTypeDef->QueryInterface(IID_IAAFMetaDefinition, (void **)&pMetaDef));
 	CheckResult(pMetaDef->GetName(debugBuf, 256));
 
-	CheckResult(pTypeDef->QueryInterface(IID_IAAFTypeDefStream2,
+	CheckResult(pTypeDef->QueryInterface(IID_IAAFTypeDefStream3,
                                        (void **)&pTypeDefStreamRaw));
 
 	CheckResult(pTypeDefStreamRaw->GetMXFEssenceStream(0, &pTypeDefStream));
@@ -734,7 +734,7 @@ void CAAFTypeDefStream_create (
 
     Test_EssenceStreamPullWrite(pFile, defs);
 
-    // Test IAAFTypeDefStream2 methods
+    // Test IAAFTypeDefStream3 methods
     IAAFEssenceDataSP pEssenceData2;
     IAAFPropertyValueSP pDataPropertyValue2;
     IAAFPropertyValueSP pSampleIndexPropertyValue2;
@@ -815,7 +815,7 @@ void CAAFTypeDefStream_read (aafCharacter_constptr pFileName) // throw HRESULT
     }  
 
 
-    // Test IAAFTypeDefStream2 methods
+    // Test IAAFTypeDefStream3 methods
     IAAFEssenceDataSP pEssenceData2;
 
     // sMobID[3] may not be in the file, in the case
