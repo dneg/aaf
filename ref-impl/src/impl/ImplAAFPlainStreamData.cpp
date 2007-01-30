@@ -22,7 +22,7 @@
 //
 //=---------------------------------------------------------------------=
 
-#include "ImplAAFTypeDefMXFEssenceStream.h"
+#include "ImplAAFPlainStreamData.h"
 #include "ImplAAFStreamPropertyValue.h"
 
 
@@ -39,19 +39,19 @@
 
 
 
-ImplAAFTypeDefMXFEssenceStream::ImplAAFTypeDefMXFEssenceStream ()
+ImplAAFPlainStreamData::ImplAAFPlainStreamData ()
 : ImplAAFTypeDefStream()
 {
 }
 
 
-ImplAAFTypeDefMXFEssenceStream::~ImplAAFTypeDefMXFEssenceStream ()
+ImplAAFPlainStreamData::~ImplAAFPlainStreamData ()
 {
 }
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFTypeDefMXFEssenceStream::GetSize (
+    ImplAAFPlainStreamData::GetSize (
       ImplAAFPropertyValue * pPropertyValue,
       aafInt64 *  pSize)
 {
@@ -62,7 +62,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFTypeDefMXFEssenceStream::SetSize (
+    ImplAAFPlainStreamData::SetSize (
       ImplAAFPropertyValue * pPropertyValue,
       aafInt64  newSize)
 {
@@ -73,7 +73,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFTypeDefMXFEssenceStream::GetPosition (
+    ImplAAFPlainStreamData::GetPosition (
       ImplAAFPropertyValue * pPropertyValue,
       aafInt64 *  pPosition)
 {
@@ -84,7 +84,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFTypeDefMXFEssenceStream::SetPosition (
+    ImplAAFPlainStreamData::SetPosition (
       ImplAAFPropertyValue * pPropertyValue,
       aafInt64  newPosition)
 {
@@ -96,7 +96,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-   ImplAAFTypeDefMXFEssenceStream::Read (
+   ImplAAFPlainStreamData::Read (
       ImplAAFPropertyValue * pPropertyValue,
       aafUInt32  dataSize,
       aafMemPtr_t  pData,
@@ -109,7 +109,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFTypeDefMXFEssenceStream::Write (
+    ImplAAFPlainStreamData::Write (
       ImplAAFPropertyValue * pPropertyValue,
       aafUInt32  dataSize,
       aafMemPtr_t  pData)
@@ -121,7 +121,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFTypeDefMXFEssenceStream::Append (
+    ImplAAFPlainStreamData::Append (
       ImplAAFPropertyValue * pPropertyValue,
       aafUInt32  dataSize,
       aafMemPtr_t  pData)
@@ -133,7 +133,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-   ImplAAFTypeDefMXFEssenceStream::ReadElements (
+   ImplAAFPlainStreamData::ReadElements (
       ImplAAFPropertyValue * pPropertyValue,
       ImplAAFTypeDef * pElementType,
       aafUInt32  dataSize,
@@ -147,7 +147,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFTypeDefMXFEssenceStream::WriteElements (
+    ImplAAFPlainStreamData::WriteElements (
       ImplAAFPropertyValue * pPropertyValue,
       ImplAAFTypeDef * pElementType,
       aafUInt32  dataSize,
@@ -160,7 +160,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFTypeDefMXFEssenceStream::AppendElements (
+    ImplAAFPlainStreamData::AppendElements (
       ImplAAFPropertyValue * pPropertyValue,
       ImplAAFTypeDef * pElementType,
       aafUInt32  dataSize,

@@ -1424,6 +1424,9 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFPlainStreamDataTest.cpp">
+			</File>
+			<File
 				RelativePath="..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFPluginDefTest.cpp">
 				<FileConfiguration
 					Name="Release|Win32">
@@ -2223,9 +2226,6 @@
 						PreprocessorDefinitions=""
 						ForcedIncludeFiles=""/>
 				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFTypeDefMXFEssenceStream.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFTypeDefObjectRefTest.cpp">

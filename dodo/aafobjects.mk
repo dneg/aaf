@@ -126,6 +126,7 @@ HUMAN_TYPED_IMPL="\
 	AAFParameter \
 	AAFParameterDef \
 	AAFPhysicalDescriptor \
+	AAFPlainStreamData \
 	AAFPluginDef \
 	AAFPluginManager \
 	AAFProperty \
@@ -166,7 +167,6 @@ HUMAN_TYPED_IMPL="\
 	AAFTypeDefFixedArray \
 	AAFTypeDefIndirect \
 	AAFTypeDefInt \
-	AAFTypeDefMXFEssenceStream \
 	AAFTypeDefObjectRef \
 	AAFTypeDefOpaque \
 	AAFTypeDefRecord \

@@ -1,8 +1,8 @@
 // @doc INTERNAL
-// @com This file implements the module test for CAAFTypeDefMXFEssenceStream
+// @com This file implements the module test for CAAFPlainStreamData
 //=---------------------------------------------------------------------=
 //
-// $Id$ $Name$
+// $$ $Name$
 //
 // The contents of this file are subject to the AAF SDK Public
 // Source License Agreement (the "License"); You may not use this file
@@ -27,7 +27,7 @@
 #include "AAFResult.h"
 #include "ModuleTest.h"
 
-extern "C" HRESULT CAAFTypeDefMXFEssenceStream_test(
+extern "C" HRESULT CAAFPlainStreamData_test(
     testMode_t mode,
     aafUID_t fileKind,
     testRawStorageType_t rawStorageType,

@@ -1,7 +1,7 @@
 //@doc
-//@class    AAFTypeDefMXFEssenceStream | Implementation class for AAFTypeDefMXFEssenceStream
-#ifndef __CAAFTypeDefMXFEssenceStream_h__
-#define __CAAFTypeDefMXFEssenceStream_h__
+//@class    AAFPlainStreamData | Implementation class for AAFPlainStreamData
+#ifndef __CAAFPlainStreamData_h__
+#define __CAAFPlainStreamData_h__
 
 //=---------------------------------------------------------------------=
 //
@@ -44,8 +44,8 @@
 #endif
 
 
-class CAAFTypeDefMXFEssenceStream
-  : public IAAFTypeDefMXFEssenceStream,
+class CAAFPlainStreamData
+  : public IAAFPlainStreamData,
     public CAAFTypeDefStream
 {
 protected:
@@ -54,8 +54,8 @@ protected:
   //
   // Constructor/destructor
   //
-  CAAFTypeDefMXFEssenceStream (IUnknown * pControllingUnknown, aafBool doInit = kAAFTrue);
-  virtual ~CAAFTypeDefMXFEssenceStream ();
+  CAAFPlainStreamData (IUnknown * pControllingUnknown, aafBool doInit = kAAFTrue);
+  virtual ~CAAFPlainStreamData ();
 
 public:
 
@@ -81,6 +81,6 @@ public:
   //********
 };
 
-#endif // ! __CAAFTypeDefMXFEssenceStream_h__
+#endif // ! __CAAFPlainStreamData_h__
 
 

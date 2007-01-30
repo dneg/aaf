@@ -1,5 +1,5 @@
-#ifndef __ImplAAFTypeDefMXFEssenceStream_h__
-#define __ImplAAFTypeDefMXFEssenceStream_h__
+#ifndef __ImplAAFPlainStreamData_h__
+#define __ImplAAFPlainStreamData_h__
 //=---------------------------------------------------------------------=
 //
 // $Id$ $Name$
@@ -27,14 +27,14 @@
 #include "ImplAAFTypeDefStream.h"
 
 
-class ImplAAFTypeDefMXFEssenceStream : public ImplAAFTypeDefStream
+class ImplAAFPlainStreamData : public ImplAAFTypeDefStream
 {
 public:
   //
   // Constructor/destructor
   //
   //********
-  ImplAAFTypeDefMXFEssenceStream ();
+  ImplAAFPlainStreamData ();
 
 
 public:
@@ -213,8 +213,8 @@ public:
 
 
 protected:
-  virtual ~ImplAAFTypeDefMXFEssenceStream ();
+  virtual ~ImplAAFPlainStreamData ();
 
 };
 
-#endif // ! __ImplAAFTypeDefMXFEssenceStream_h__
+#endif // ! __ImplAAFPlainStreamData_h__

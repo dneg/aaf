@@ -417,6 +417,12 @@ typedef interface IAAFPhysicalDescriptor IAAFPhysicalDescriptor;
 #endif 	/* __IAAFPhysicalDescriptor_FWD_DEFINED__ */
 
 
+#ifndef __IAAFPlainStreamData_FWD_DEFINED__
+#define __IAAFPlainStreamData_FWD_DEFINED__
+typedef interface IAAFPlainStreamData IAAFPlainStreamData;
+#endif 	/* __IAAFPlainStreamData_FWD_DEFINED__ */
+
+
 #ifndef __IAAFPluginDef_FWD_DEFINED__
 #define __IAAFPluginDef_FWD_DEFINED__
 typedef interface IAAFPluginDef IAAFPluginDef;
@@ -655,12 +661,6 @@ typedef interface IAAFTypeDefIndirect IAAFTypeDefIndirect;
 #define __IAAFTypeDefInt_FWD_DEFINED__
 typedef interface IAAFTypeDefInt IAAFTypeDefInt;
 #endif 	/* __IAAFTypeDefInt_FWD_DEFINED__ */
-
-
-#ifndef __IAAFTypeDefMXFEssenceStream_FWD_DEFINED__
-#define __IAAFTypeDefMXFEssenceStream_FWD_DEFINED__
-typedef interface IAAFTypeDefMXFEssenceStream IAAFTypeDefMXFEssenceStream;
-#endif 	/* __IAAFTypeDefMXFEssenceStream_FWD_DEFINED__ */
 
 
 #ifndef __IAAFTypeDefObjectRef_FWD_DEFINED__
@@ -18817,6 +18817,74 @@ EXTERN_C const IID IID_IAAFPhysicalDescriptor;
 #endif 	/* __IAAFPhysicalDescriptor_INTERFACE_DEFINED__ */
 
 
+#ifndef __IAAFPlainStreamData_INTERFACE_DEFINED__
+#define __IAAFPlainStreamData_INTERFACE_DEFINED__
+
+/* interface IAAFPlainStreamData */
+/* [unique][helpstring][uuid][object] */ 
+
+
+EXTERN_C const IID IID_IAAFPlainStreamData;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("86f9aaff-b6ad-4f3e-a71c-f69f1b4c48a5")
+    IAAFPlainStreamData : public IUnknown
+    {
+    public:
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IAAFPlainStreamDataVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IAAFPlainStreamData * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IAAFPlainStreamData * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IAAFPlainStreamData * This);
+        
+        END_INTERFACE
+    } IAAFPlainStreamDataVtbl;
+
+    interface IAAFPlainStreamData
+    {
+        CONST_VTBL struct IAAFPlainStreamDataVtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IAAFPlainStreamData_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IAAFPlainStreamData_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IAAFPlainStreamData_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+
+#endif 	/* __IAAFPlainStreamData_INTERFACE_DEFINED__ */
+
+
 #ifndef __IAAFPluginDef_INTERFACE_DEFINED__
 #define __IAAFPluginDef_INTERFACE_DEFINED__
 
@@ -28361,74 +28429,6 @@ void __RPC_STUB IAAFTypeDefInt_IsSigned_Stub(
 
 
 #endif 	/* __IAAFTypeDefInt_INTERFACE_DEFINED__ */
-
-
-#ifndef __IAAFTypeDefMXFEssenceStream_INTERFACE_DEFINED__
-#define __IAAFTypeDefMXFEssenceStream_INTERFACE_DEFINED__
-
-/* interface IAAFTypeDefMXFEssenceStream */
-/* [unique][helpstring][uuid][object] */ 
-
-
-EXTERN_C const IID IID_IAAFTypeDefMXFEssenceStream;
-
-#if defined(__cplusplus) && !defined(CINTERFACE)
-    
-    MIDL_INTERFACE("86f9aaff-b6ad-4f3e-a71c-f69f1b4c48a5")
-    IAAFTypeDefMXFEssenceStream : public IUnknown
-    {
-    public:
-    };
-    
-#else 	/* C style interface */
-
-    typedef struct IAAFTypeDefMXFEssenceStreamVtbl
-    {
-        BEGIN_INTERFACE
-        
-        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
-            IAAFTypeDefMXFEssenceStream * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
-        
-        ULONG ( STDMETHODCALLTYPE *AddRef )( 
-            IAAFTypeDefMXFEssenceStream * This);
-        
-        ULONG ( STDMETHODCALLTYPE *Release )( 
-            IAAFTypeDefMXFEssenceStream * This);
-        
-        END_INTERFACE
-    } IAAFTypeDefMXFEssenceStreamVtbl;
-
-    interface IAAFTypeDefMXFEssenceStream
-    {
-        CONST_VTBL struct IAAFTypeDefMXFEssenceStreamVtbl *lpVtbl;
-    };
-
-    
-
-#ifdef COBJMACROS
-
-
-#define IAAFTypeDefMXFEssenceStream_QueryInterface(This,riid,ppvObject)	\
-    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
-
-#define IAAFTypeDefMXFEssenceStream_AddRef(This)	\
-    (This)->lpVtbl -> AddRef(This)
-
-#define IAAFTypeDefMXFEssenceStream_Release(This)	\
-    (This)->lpVtbl -> Release(This)
-
-
-#endif /* COBJMACROS */
-
-
-#endif 	/* C style interface */
-
-
-
-
-#endif 	/* __IAAFTypeDefMXFEssenceStream_INTERFACE_DEFINED__ */
 
 
 #ifndef __IAAFTypeDefObjectRef_INTERFACE_DEFINED__

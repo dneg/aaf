@@ -15,7 +15,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2005, Licensor of the
+// The Original Code of this file is Copyright 1998-2007, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -26,8 +26,8 @@
 
 
 
-#include "CAAFTypeDefMXFEssenceStream.h"
-#include "ImplAAFTypeDefMXFEssenceStream.h"
+#include "CAAFPlainStreamData.h"
+#include "ImplAAFPlainStreamData.h"
 #include "AAFResult.h"
 #include "CAAFEnumValidation.h"
 
@@ -38,28 +38,28 @@
 #include <string.h>
 
 
-// CLSID for AAFTypeDefMXFEssenceStream 
+// CLSID for AAFPlainStreamData 
 // {6760c4b4-129c-4356-8048-bd69c6aba4a4}
-EXTERN_C const CLSID CLSID_AAFTypeDefMXFEssenceStream = { 0x6760c4b4, 0x129c, 0x4356, { 0x80, 0x48, 0xbd, 0x69, 0xc6, 0xab, 0xa4, 0xa4 } };
+EXTERN_C const CLSID CLSID_AAFPlainStreamData = { 0x6760c4b4, 0x129c, 0x4356, { 0x80, 0x48, 0xbd, 0x69, 0xc6, 0xab, 0xa4, 0xa4 } };
 
 
 
 
 
-CAAFTypeDefMXFEssenceStream::CAAFTypeDefMXFEssenceStream (IUnknown * pControllingUnknown, aafBool doInit)
+CAAFPlainStreamData::CAAFPlainStreamData (IUnknown * pControllingUnknown, aafBool doInit)
   : CAAFTypeDefStream (pControllingUnknown, kAAFFalse)
 {
   if (doInit)
     {
-      ImplAAFTypeDefMXFEssenceStream * newRep;
-      newRep = new ImplAAFTypeDefMXFEssenceStream;
+      ImplAAFPlainStreamData * newRep;
+      newRep = new ImplAAFPlainStreamData;
       assert (newRep);
       InitRep (newRep);
     }
 }
 
 
-CAAFTypeDefMXFEssenceStream::~CAAFTypeDefMXFEssenceStream ()
+CAAFPlainStreamData::~CAAFPlainStreamData ()
 {
 }
 
@@ -72,7 +72,7 @@ inline int EQUAL_UID(const GUID & a, const GUID & b)
 {
   return (0 == memcmp((&a), (&b), sizeof (aafUID_t)));
 }
-HRESULT CAAFTypeDefMXFEssenceStream::InternalQueryInterface
+HRESULT CAAFPlainStreamData::InternalQueryInterface
 (
     REFIID riid,
     void **ppvObj)
@@ -81,9 +81,9 @@ HRESULT CAAFTypeDefMXFEssenceStream::InternalQueryInterface
         return E_INVALIDARG;
 
     // We only support the IClassFactory interface 
-    if (EQUAL_UID(riid,IID_IAAFTypeDefMXFEssenceStream)) 
+    if (EQUAL_UID(riid,IID_IAAFPlainStreamData)) 
     { 
-        *ppvObj = (IAAFTypeDefMXFEssenceStream *)this; 
+        *ppvObj = (IAAFPlainStreamData *)this; 
         ((IUnknown *)*ppvObj)->AddRef();
         return S_OK;
     }
@@ -95,5 +95,5 @@ HRESULT CAAFTypeDefMXFEssenceStream::InternalQueryInterface
 //
 // Define the contrete object support implementation.
 // 
-AAF_DEFINE_FACTORY(AAFTypeDefMXFEssenceStream)
+AAF_DEFINE_FACTORY(AAFPlainStreamData)
 

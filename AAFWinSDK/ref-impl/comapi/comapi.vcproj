@@ -1639,6 +1639,9 @@
 			</FileConfiguration>
 		</File>
 		<File
+			RelativePath="..\..\..\ref-impl\src\com-api\CAAFPlainStreamData.cpp">
+		</File>
+		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFPluginDef.cpp">
 			<FileConfiguration
 				Name="Release|Win32">
@@ -2627,9 +2630,6 @@
 					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;WIN32_LEAN_AND_MEAN;$(NoInherit)"
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
-		</File>
-		<File
-			RelativePath="..\..\..\ref-impl\src\com-api\CAAFTypeDefMXFEssenceStream.cpp">
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\com-api\CAAFTypeDefObjectRef.cpp">

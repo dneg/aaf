@@ -22,7 +22,7 @@
 #c
 #c *********************************************************************
 #startm .this-module 0
-AAFTypeDefMXFEssenceStream\
+AAFPlainStreamData\
 #endm
 #c
 #startm .parent-module 0

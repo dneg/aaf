@@ -102,6 +102,7 @@ interface IAAFPCMDescriptor;
 interface IAAFParameter;
 interface IAAFParameterDef;
 interface IAAFPhysicalDescriptor;
+interface IAAFPlainStreamData;
 interface IAAFPluginDef;
 interface IAAFPluginManager;
 interface IAAFProperty;
@@ -142,7 +143,6 @@ interface IAAFTypeDefExtEnum;
 interface IAAFTypeDefFixedArray;
 interface IAAFTypeDefIndirect;
 interface IAAFTypeDefInt;
-interface IAAFTypeDefMXFEssenceStream;
 interface IAAFTypeDefObjectRef;
 interface IAAFTypeDefOpaque;
 interface IAAFTypeDefRecord;
@@ -278,6 +278,7 @@ typedef interface IAAFPCMDescriptor IAAFPCMDescriptor;
 typedef interface IAAFParameter IAAFParameter;
 typedef interface IAAFParameterDef IAAFParameterDef;
 typedef interface IAAFPhysicalDescriptor IAAFPhysicalDescriptor;
+typedef interface IAAFPlainStreamData IAAFPlainStreamData;
 typedef interface IAAFPluginDef IAAFPluginDef;
 typedef interface IAAFPluginManager IAAFPluginManager;
 typedef interface IAAFProperty IAAFProperty;
@@ -318,7 +319,6 @@ typedef interface IAAFTypeDefExtEnum IAAFTypeDefExtEnum;
 typedef interface IAAFTypeDefFixedArray IAAFTypeDefFixedArray;
 typedef interface IAAFTypeDefIndirect IAAFTypeDefIndirect;
 typedef interface IAAFTypeDefInt IAAFTypeDefInt;
-typedef interface IAAFTypeDefMXFEssenceStream IAAFTypeDefMXFEssenceStream;
 typedef interface IAAFTypeDefObjectRef IAAFTypeDefObjectRef;
 typedef interface IAAFTypeDefOpaque IAAFTypeDefOpaque;
 typedef interface IAAFTypeDefRecord IAAFTypeDefRecord;
@@ -19619,6 +19619,43 @@ DECLARE_INTERFACE_(IAAFPhysicalDescriptor, IUnknown)
 
 
 
+// IAAFPlainStreamData
+
+// ************************
+//
+// Interface IAAFPlainStreamData
+//
+// ************************
+
+
+
+#ifndef __IAAFPlainStreamData_INTERFACE_DEFINED__
+#define __IAAFPlainStreamData_INTERFACE_DEFINED__
+
+EXTERN_C const IID IID_IAAFPlainStreamData;
+
+#undef  INTERFACE
+#define INTERFACE   IAAFPlainStreamData
+
+DECLARE_INTERFACE_(IAAFPlainStreamData, IUnknown)
+{
+  BEGIN_INTERFACE
+
+  /* *** IUnknown methods *** */
+  STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppvObj) PURE;
+  STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
+  STDMETHOD_(ULONG,Release) (THIS) PURE;
+
+  /* *** IAAFPlainStreamData methods *** */
+
+
+
+  END_INTERFACE
+};
+#endif // __IAAFPlainStreamData_INTERFACE_DEFINED__
+
+
+
 // IAAFPluginDef
 
 // ************************
@@ -30146,43 +30183,6 @@ DECLARE_INTERFACE_(IAAFTypeDefInt, IUnknown)
   END_INTERFACE
 };
 #endif // __IAAFTypeDefInt_INTERFACE_DEFINED__
-
-
-
-// IAAFTypeDefMXFEssenceStream
-
-// ************************
-//
-// Interface IAAFTypeDefMXFEssenceStream
-//
-// ************************
-
-
-
-#ifndef __IAAFTypeDefMXFEssenceStream_INTERFACE_DEFINED__
-#define __IAAFTypeDefMXFEssenceStream_INTERFACE_DEFINED__
-
-EXTERN_C const IID IID_IAAFTypeDefMXFEssenceStream;
-
-#undef  INTERFACE
-#define INTERFACE   IAAFTypeDefMXFEssenceStream
-
-DECLARE_INTERFACE_(IAAFTypeDefMXFEssenceStream, IUnknown)
-{
-  BEGIN_INTERFACE
-
-  /* *** IUnknown methods *** */
-  STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppvObj) PURE;
-  STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
-  STDMETHOD_(ULONG,Release) (THIS) PURE;
-
-  /* *** IAAFTypeDefMXFEssenceStream methods *** */
-
-
-
-  END_INTERFACE
-};
-#endif // __IAAFTypeDefMXFEssenceStream_INTERFACE_DEFINED__
 
 
 
