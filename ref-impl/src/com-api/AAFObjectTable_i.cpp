@@ -108,6 +108,7 @@
 #include "CAAFParameter.h"
 #include "CAAFParameterDef.h"
 #include "CAAFPhysicalDescriptor.h"
+#include "CAAFPlainEssenceData.h"
 #include "CAAFPlainStreamData.h"
 #include "CAAFPluginDef.h"
 #include "CAAFPluginManager.h"

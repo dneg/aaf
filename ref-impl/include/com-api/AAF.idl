@@ -103,6 +103,7 @@ interface IAAFPCMDescriptor;
 interface IAAFParameter;
 interface IAAFParameterDef;
 interface IAAFPhysicalDescriptor;
+interface IAAFPlainEssenceData;
 interface IAAFPlainStreamData;
 interface IAAFPluginDef;
 interface IAAFPluginManager;
@@ -19589,6 +19590,43 @@ interface IAAFParameterDef : IUnknown
     pointer_default(unique)
 ]
 interface IAAFPhysicalDescriptor : IUnknown
+{
+
+
+}
+
+
+
+// ************************
+//
+// Interface IAAFPlainEssenceData
+//
+// ************************
+///
+/// This is a default inerface for a class used to provide
+/// access to file encoding-independent stream data.
+///
+/// In addition to the specific error results listed for each method,
+/// all methods in this interface may also return one of the following
+/// values:
+/// 
+/// AAFRESULT_NOMEMORY
+///   - insufficient system memory is available to perform the
+///     operation.
+
+
+///
+/// Objects that implement IAAFPlainEssenceData also implement the following interfaces:
+///  - IAAFEssenceData
+///  - IAAFEssenceDataEx
+///  - IAAFObject
+[
+    object,
+    uuid(3bde74ff-7305-4a19-b3b1-b13501404dff),
+    helpstring("IAAFPlainEssenceData Interface"),
+    pointer_default(unique)
+]
+interface IAAFPlainEssenceData : IUnknown
 {
 
 

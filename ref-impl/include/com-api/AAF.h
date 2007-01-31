@@ -417,6 +417,12 @@ typedef interface IAAFPhysicalDescriptor IAAFPhysicalDescriptor;
 #endif 	/* __IAAFPhysicalDescriptor_FWD_DEFINED__ */
 
 
+#ifndef __IAAFPlainEssenceData_FWD_DEFINED__
+#define __IAAFPlainEssenceData_FWD_DEFINED__
+typedef interface IAAFPlainEssenceData IAAFPlainEssenceData;
+#endif 	/* __IAAFPlainEssenceData_FWD_DEFINED__ */
+
+
 #ifndef __IAAFPlainStreamData_FWD_DEFINED__
 #define __IAAFPlainStreamData_FWD_DEFINED__
 typedef interface IAAFPlainStreamData IAAFPlainStreamData;
@@ -1139,6 +1145,7 @@ void __RPC_USER MIDL_user_free( void * );
 // AAF Interfaces.
 //=--------------------------------------------------------------------------=
 //
+
 
 
 
@@ -18815,6 +18822,74 @@ EXTERN_C const IID IID_IAAFPhysicalDescriptor;
 
 
 #endif 	/* __IAAFPhysicalDescriptor_INTERFACE_DEFINED__ */
+
+
+#ifndef __IAAFPlainEssenceData_INTERFACE_DEFINED__
+#define __IAAFPlainEssenceData_INTERFACE_DEFINED__
+
+/* interface IAAFPlainEssenceData */
+/* [unique][helpstring][uuid][object] */ 
+
+
+EXTERN_C const IID IID_IAAFPlainEssenceData;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("3bde74ff-7305-4a19-b3b1-b13501404dff")
+    IAAFPlainEssenceData : public IUnknown
+    {
+    public:
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IAAFPlainEssenceDataVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IAAFPlainEssenceData * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IAAFPlainEssenceData * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IAAFPlainEssenceData * This);
+        
+        END_INTERFACE
+    } IAAFPlainEssenceDataVtbl;
+
+    interface IAAFPlainEssenceData
+    {
+        CONST_VTBL struct IAAFPlainEssenceDataVtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IAAFPlainEssenceData_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IAAFPlainEssenceData_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IAAFPlainEssenceData_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+
+#endif 	/* __IAAFPlainEssenceData_INTERFACE_DEFINED__ */
 
 
 #ifndef __IAAFPlainStreamData_INTERFACE_DEFINED__
@@ -48352,7 +48427,7 @@ void __RPC_STUB IAAFTypeDefVariableArrayEx_InsertElement_Stub(
 #endif 	/* __IAAFTypeDefVariableArrayEx_INTERFACE_DEFINED__ */
 
 
-/* interface __MIDL_itf_AAF_0271 */
+/* interface __MIDL_itf_AAF_0272 */
 /* [local] */ 
 
   ///***********************************************************
@@ -48487,8 +48562,8 @@ STDAPI AAFResultToText (
 
 
 
-extern RPC_IF_HANDLE __MIDL_itf_AAF_0271_v0_0_c_ifspec;
-extern RPC_IF_HANDLE __MIDL_itf_AAF_0271_v0_0_s_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_AAF_0272_v0_0_c_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_AAF_0272_v0_0_s_ifspec;
 
 /* Additional Prototypes for ALL interfaces */
 

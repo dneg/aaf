@@ -112,6 +112,7 @@ extern "C" const aafClassID_t CLSID_AAFPCMDescriptor;
 extern "C" const aafClassID_t CLSID_AAFParameter;
 extern "C" const aafClassID_t CLSID_AAFParameterDef;
 extern "C" const aafClassID_t CLSID_AAFPhysicalDescriptor;
+extern "C" const aafClassID_t CLSID_AAFPlainEssenceData;
 extern "C" const aafClassID_t CLSID_AAFPlainStreamData;
 extern "C" const aafClassID_t CLSID_AAFPluginDef;
 extern "C" const aafClassID_t CLSID_AAFPluginManager;

@@ -102,6 +102,7 @@ interface IAAFPCMDescriptor;
 interface IAAFParameter;
 interface IAAFParameterDef;
 interface IAAFPhysicalDescriptor;
+interface IAAFPlainEssenceData;
 interface IAAFPlainStreamData;
 interface IAAFPluginDef;
 interface IAAFPluginManager;
@@ -278,6 +279,7 @@ typedef interface IAAFPCMDescriptor IAAFPCMDescriptor;
 typedef interface IAAFParameter IAAFParameter;
 typedef interface IAAFParameterDef IAAFParameterDef;
 typedef interface IAAFPhysicalDescriptor IAAFPhysicalDescriptor;
+typedef interface IAAFPlainEssenceData IAAFPlainEssenceData;
 typedef interface IAAFPlainStreamData IAAFPlainStreamData;
 typedef interface IAAFPluginDef IAAFPluginDef;
 typedef interface IAAFPluginManager IAAFPluginManager;
@@ -19616,6 +19618,43 @@ DECLARE_INTERFACE_(IAAFPhysicalDescriptor, IUnknown)
   END_INTERFACE
 };
 #endif // __IAAFPhysicalDescriptor_INTERFACE_DEFINED__
+
+
+
+// IAAFPlainEssenceData
+
+// ************************
+//
+// Interface IAAFPlainEssenceData
+//
+// ************************
+
+
+
+#ifndef __IAAFPlainEssenceData_INTERFACE_DEFINED__
+#define __IAAFPlainEssenceData_INTERFACE_DEFINED__
+
+EXTERN_C const IID IID_IAAFPlainEssenceData;
+
+#undef  INTERFACE
+#define INTERFACE   IAAFPlainEssenceData
+
+DECLARE_INTERFACE_(IAAFPlainEssenceData, IUnknown)
+{
+  BEGIN_INTERFACE
+
+  /* *** IUnknown methods *** */
+  STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppvObj) PURE;
+  STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
+  STDMETHOD_(ULONG,Release) (THIS) PURE;
+
+  /* *** IAAFPlainEssenceData methods *** */
+
+
+
+  END_INTERFACE
+};
+#endif // __IAAFPlainEssenceData_INTERFACE_DEFINED__
 
 
 

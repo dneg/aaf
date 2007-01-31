@@ -111,6 +111,7 @@ EXTERN_C const CLSID CLSID_AAFPCMDescriptor;
 EXTERN_C const CLSID CLSID_AAFParameter;
 EXTERN_C const CLSID CLSID_AAFParameterDef;
 EXTERN_C const CLSID CLSID_AAFPhysicalDescriptor;
+EXTERN_C const CLSID CLSID_AAFPlainEssenceData;
 EXTERN_C const CLSID CLSID_AAFPlainStreamData;
 EXTERN_C const CLSID CLSID_AAFPluginDef;
 EXTERN_C const CLSID CLSID_AAFPluginManager;
