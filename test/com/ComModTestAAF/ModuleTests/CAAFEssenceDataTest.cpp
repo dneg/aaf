@@ -15,7 +15,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2007, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -413,13 +413,18 @@ void EssenceDataTest::createEssenceData(IAAFSourceMob *pSourceMob)
   CAAFBuiltinDefs defs (_pDictionary);
 
   // Attempt to create an AAFEssenceData.
+  IAAFEssenceData* pRawEssenceData = NULL;
   check(defs.cdEssenceData()->
 		CreateInstance(IID_IAAFEssenceData,
-					   (IUnknown **)&_pEssenceData));
+					   (IUnknown **)&pRawEssenceData));
 
-  check(_pEssenceData->SetFileMob(pSourceMob));
-  check(_pHeader->AddEssenceData(_pEssenceData));
+  check(pRawEssenceData->SetFileMob(pSourceMob));
+  check(_pHeader->AddEssenceData(pRawEssenceData));
   
+  IAAFEssenceData2* pEssenceData2 = NULL;
+  check(pRawEssenceData->QueryInterface(IID_IAAFEssenceData2, (void**)&pEssenceData2));
+  check(pEssenceData2->GetPlainEssenceData(0, &_pEssenceData));
+
   writeEssenceData(_pEssenceData, (aafDataBuffer_t)_smiley, sizeof(_smiley));
   writeEssenceData(_pEssenceData, (aafDataBuffer_t)_frowney, sizeof(_frowney));
 
@@ -439,6 +444,12 @@ void EssenceDataTest::createEssenceData(IAAFSourceMob *pSourceMob)
   readEssenceData(_pEssenceData, (aafDataBuffer_t)_smiley, sizeof(_smiley));
   readEssenceData(_pEssenceData, (aafDataBuffer_t)_frowney, sizeof(_frowney));
 
+  pRawEssenceData->Release();
+  pRawEssenceData = NULL;
+
+  pEssenceData2->Release();
+  pEssenceData2 = NULL;
+
   _pEssenceData->Release();
   _pEssenceData = NULL;
 }
@@ -452,8 +463,13 @@ void EssenceDataTest::openEssenceData()
 
   
   check(_pHeader->EnumEssenceData(&_pEnumEssenceData));
-  while (AAFRESULT_SUCCESS == (_hr = _pEnumEssenceData->NextOne(&_pEssenceData)))
+  IAAFEssenceData* pNextEssenceData = NULL;
+  while (AAFRESULT_SUCCESS == (_hr = _pEnumEssenceData->NextOne(&pNextEssenceData)))
   {
+    IAAFEssenceData2* pEssenceData2 = NULL;
+    check(pNextEssenceData->QueryInterface(IID_IAAFEssenceData2, (void**)&pEssenceData2));
+    check(pEssenceData2->GetPlainEssenceData(0, &_pEssenceData));
+
     // Validate the essence.
     // Validate the current essence size.
     aafLength_t essenceSize = 0;
@@ -474,6 +490,12 @@ void EssenceDataTest::openEssenceData()
 
     _pEssenceData->Release();
     _pEssenceData = NULL;
+
+    pEssenceData2->Release();
+    pEssenceData2 = NULL;
+
+    pNextEssenceData->Release();
+    pNextEssenceData = NULL;
   }
 
   // It is ok to run out of objects.
