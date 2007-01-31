@@ -48298,9 +48298,9 @@ EXTERN_C const IID IID_IAAFTypeDefStream3;
             /* [in] */ IAAFStreamAccess *pCallbackIF,
             /* [in] */ aafMemPtr_t pUserData) = 0;
         
-        virtual HRESULT STDMETHODCALLTYPE GetMXFEssenceStream( 
-            /* [in] */ aafUInt32 filterType,
-            /* [retval][out] */ IAAFTypeDefStream **pFilteredStream) = 0;
+        virtual HRESULT STDMETHODCALLTYPE GetPlainStreamData( 
+            /* [in] */ aafUInt32 reserved,
+            /* [retval][out] */ IAAFTypeDefStream **pPlainStreamData) = 0;
         
     };
     
@@ -48407,10 +48407,10 @@ EXTERN_C const IID IID_IAAFTypeDefStream3;
             /* [in] */ IAAFStreamAccess *pCallbackIF,
             /* [in] */ aafMemPtr_t pUserData);
         
-        HRESULT ( STDMETHODCALLTYPE *GetMXFEssenceStream )( 
+        HRESULT ( STDMETHODCALLTYPE *GetPlainStreamData )( 
             IAAFTypeDefStream3 * This,
-            /* [in] */ aafUInt32 filterType,
-            /* [retval][out] */ IAAFTypeDefStream **pFilteredStream);
+            /* [in] */ aafUInt32 reserved,
+            /* [retval][out] */ IAAFTypeDefStream **pPlainStreamData);
         
         END_INTERFACE
     } IAAFTypeDefStream3Vtbl;
@@ -48480,8 +48480,8 @@ EXTERN_C const IID IID_IAAFTypeDefStream3;
 #define IAAFTypeDefStream3_SetCallback(This,pPropertyValue,pCallbackIF,pUserData)	\
     (This)->lpVtbl -> SetCallback(This,pPropertyValue,pCallbackIF,pUserData)
 
-#define IAAFTypeDefStream3_GetMXFEssenceStream(This,filterType,pFilteredStream)	\
-    (This)->lpVtbl -> GetMXFEssenceStream(This,filterType,pFilteredStream)
+#define IAAFTypeDefStream3_GetPlainStreamData(This,reserved,pPlainStreamData)	\
+    (This)->lpVtbl -> GetPlainStreamData(This,reserved,pPlainStreamData)
 
 #endif /* COBJMACROS */
 
@@ -48696,13 +48696,13 @@ void __RPC_STUB IAAFTypeDefStream3_SetCallback_Stub(
     DWORD *_pdwStubPhase);
 
 
-HRESULT STDMETHODCALLTYPE IAAFTypeDefStream3_GetMXFEssenceStream_Proxy( 
+HRESULT STDMETHODCALLTYPE IAAFTypeDefStream3_GetPlainStreamData_Proxy( 
     IAAFTypeDefStream3 * This,
-    /* [in] */ aafUInt32 filterType,
-    /* [retval][out] */ IAAFTypeDefStream **pFilteredStream);
+    /* [in] */ aafUInt32 reserved,
+    /* [retval][out] */ IAAFTypeDefStream **pPlainStreamData);
 
 
-void __RPC_STUB IAAFTypeDefStream3_GetMXFEssenceStream_Stub(
+void __RPC_STUB IAAFTypeDefStream3_GetPlainStreamData_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,

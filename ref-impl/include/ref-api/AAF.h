@@ -51099,15 +51099,15 @@ DECLARE_INTERFACE_(IAAFTypeDefStream3, IUnknown)
 
   //***********************************************************
   //
-  // GetMXFEssenceStream()
+  // GetPlainStreamData()
   //
-  /// Creates a type definition object which implements
-  // the IAAFTypeDefStream interface and performs a file
-  // encoding dependent filtering of the raw stream data.
+  /// Creates an object which implements the IAAFTypeDefStream
+  // interface and provides access to the file encoding-independent
+  // stream data.
   //
   // Succeeds if:
   // - Initialize() has already been called on this object.
-  // - pFilteredStream is a valid pointer.
+  // - pPlainStreamData is a valid pointer.
   ///
   /// This method will return the following codes.  If more than one of
   /// the listed errors is in effect, it will return the first one
@@ -51120,14 +51120,14 @@ DECLARE_INTERFACE_(IAAFTypeDefStream3, IUnknown)
   ///   - This object has not yet had Initialize() called on it.
   ///
   /// AAFRESULT_NULL_PARAM
-  ///   - pFilteredStream arg is NULL.
+  ///   - pPlainStreamData arg is NULL.
   ///
-  /// @param filterType [in] type of the stream data filter
-  /// @param pFilteredStream [out,retval] filtered stream access
+  /// @param reserved [in] Reserved for future use
+  /// @param pPlainStreamData [out,retval] file encoding-independent stream data
   ///
-  STDMETHOD(GetMXFEssenceStream) (THIS_
-    aafUInt32  filterType,
-    IAAFTypeDefStream ** pFilteredStream) PURE;
+  STDMETHOD(GetPlainStreamData) (THIS_
+    aafUInt32  reserved,
+    IAAFTypeDefStream ** pPlainStreamData) PURE;
 
 
   END_INTERFACE

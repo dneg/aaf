@@ -1277,8 +1277,8 @@ HRESULT STDMETHODCALLTYPE
 
 
 HRESULT STDMETHODCALLTYPE
-    CAAFTypeDefStream::GetMXFEssenceStream (aafUInt32  filterType,
-        IAAFTypeDefStream ** pFilteredStream)
+    CAAFTypeDefStream::GetPlainStreamData (aafUInt32  reserved,
+        IAAFTypeDefStream ** pPlainStreamData)
 {
   HRESULT hr;
 
@@ -1291,19 +1291,19 @@ HRESULT STDMETHODCALLTYPE
 
 
   //
-  // set up for pFilteredStream
+  // set up for pPlainStreamData
   //
-  ImplAAFTypeDefStream * internalpFilteredStream = NULL;
-  ImplAAFTypeDefStream ** pinternalpFilteredStream = NULL;
-  if (pFilteredStream)
+  ImplAAFTypeDefStream * internalpPlainStreamData = NULL;
+  ImplAAFTypeDefStream ** pinternalpPlainStreamData = NULL;
+  if (pPlainStreamData)
     {
-      pinternalpFilteredStream = &internalpFilteredStream;
+      pinternalpPlainStreamData = &internalpPlainStreamData;
     }
 
   try
     {
-      hr = ptr->GetMXFEssenceStream (filterType,
-    pinternalpFilteredStream);
+      hr = ptr->GetPlainStreamData (reserved,
+    pinternalpPlainStreamData);
     }
   catch (OMException& e)
     {
@@ -1336,20 +1336,20 @@ HRESULT STDMETHODCALLTYPE
 
 
   //
-  // cleanup for pFilteredStream
+  // cleanup for pPlainStreamData
   //
   if (SUCCEEDED(hr))
     {
       IUnknown *pUnknown;
       HRESULT hStat;
 
-      if (internalpFilteredStream)
+      if (internalpPlainStreamData)
         {
-          pUnknown = static_cast<IUnknown *> (internalpFilteredStream->GetContainer());
-          hStat = pUnknown->QueryInterface(IID_IAAFTypeDefStream, (void **)pFilteredStream);
+          pUnknown = static_cast<IUnknown *> (internalpPlainStreamData->GetContainer());
+          hStat = pUnknown->QueryInterface(IID_IAAFTypeDefStream, (void **)pPlainStreamData);
           assert (SUCCEEDED (hStat));
           //pUnknown->Release();
-          internalpFilteredStream->ReleaseReference(); // We are through with this pointer.
+          internalpPlainStreamData->ReleaseReference(); // We are through with this pointer.
         }
     }
 

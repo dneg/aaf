@@ -640,17 +640,17 @@ public:
   );
 
   //***********************************************************
-  // METHOD NAME: GetMXFEssenceStream()
+  // METHOD NAME: GetPlainStreamData()
   //
   // DESCRIPTION:
-  // @mfunc AAFRESULT | AAFTypeDefStream3 | GetMXFEssenceStream |
-  // Creates a type definition object which implements
-  // the IAAFTypeDefStream interface and performs a file
-  // encoding dependent filtering of the raw stream data.
+  // @mfunc AAFRESULT | AAFTypeDefStream3 | GetPlainStreamData |
+  // Creates an object which implements the IAAFTypeDefStream
+  // interface and provides access to a file encoding-independent
+  // stream data.
   //
   // Succeeds if:
   // - Initialize() has already been called on this object.
-  // - pFilteredStream is a valid pointer.
+  // - pPlainStreamData is a valid pointer.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -663,16 +663,16 @@ public:
   //   - This object has not yet had Initialize() called on it.
   //
   // AAFRESULT_NULL_PARAM
-  //   - pFilteredStream arg is NULL.
+  //   - pPlainStreamData arg is NULL.
   // @end
   // 
-  STDMETHOD (GetMXFEssenceStream)
+  STDMETHOD (GetPlainStreamData)
    (
-    // @parm [in] aafUInt32 | filterType | type of the stream data filter
-    aafUInt32  filterType,
+    // @parm [in] aafUInt32 | reserved | Reserved for future use
+    aafUInt32  reserved,
 
-    // @parm [out,retval] AAFTypeDefStream | pFilteredStream | filtered stream access
-    IAAFTypeDefStream ** pFilteredStream
+    // @parm [out,retval] AAFTypeDefStream | pPlainStreamData | file encoding-independent stream data
+    IAAFTypeDefStream ** pPlainStreamData
   );
 
 
