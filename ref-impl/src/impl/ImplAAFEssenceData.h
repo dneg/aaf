@@ -202,6 +202,18 @@ public:
 		// @parm [out] the file mob id associated with essence
         (aafMobID_t *  pFileMobID);
 
+/****/
+  //****************
+  // GetPlainEssenceData()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetPlainEssenceData
+        (// @parm [in] Reserved for future use
+         aafUInt32 reserved,
+
+         // @parm [in] plain essence data
+         ImplAAFEssenceData ** pPlainEssenceData);
+
   virtual const OMMaterialIdentification& identification(void) const;
 
   OMDataStreamPropertyFilter* createMediaDataFilter();

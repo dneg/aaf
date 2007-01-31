@@ -13,7 +13,7 @@
 #c the License for the specific language governing rights and limitations
 #c under the License.
 #c
-#c The Original Code of this file is Copyright 1998-2004, Licensor of the
+#c The Original Code of this file is Copyright 1998-2007, Licensor of the
 #c AAF Association.
 #c
 #c The Initial Developer of the Original Code of this file and the
@@ -22,7 +22,7 @@
 #c
 #c *********************************************************************
 #startm .this-module 0
-AAFEssenceDataEx\
+AAFEssenceData2\
 #endm
 #c
 #startm .parent-module 0
@@ -32,10 +32,7 @@ AAFObject\
 AD_HEAD
 
 AD_IDL(///
-///
-/// This interface is DEPRECATED\, please use IAAFEssenceData2.
-///
-/// The IAAFEssenceData interface is used to modify AAFEssenceData
+/// The IAAFEssenceData2 interface is used to modify AAFEssenceData
 /// objects\, which contain the actual essence data \(ex. WAVE\) when
 /// it is contained within an AAF file.  Normally the client
 /// application would access the essence through the IAAFEssenceAccess
@@ -55,9 +52,9 @@ AD_IDL(///
 ///     operation.
 ///)
 AD_FORWARD_DECLARATION(AAFSourceMob)
-AD_CLASS_UUID(47C2B646, 9A9, 4B36, 8A, F6, 60, 9F, 5E, 85, 2, 84)
+AD_CLASS_UUID(971b4ab3, 120e, 4ac2, a6, 26, 56, e0, 2a, cb, 3c, b3)
 
-AD_DEFAULT_UUID(d919d41f, 979b, 4aba, 97, 85, 8e, c3, 19, db, a4, 48)
+AD_DEFAULT_UUID(a4b0a376, af63, 4620, 8a, e7, 0d, b8, 19, ac, 4b, 06)
 AD_XCLASS_BEGIN(Concrete, StoredObject)
 
 AD_XMETHOD1(Initialize,
@@ -200,5 +197,30 @@ AD_METHOD1(GetFileMobID,
      Return the mob id used to find the file mob associated with this
   /// essence.  The file mob must exist in the same file as this
   /// essence data.)
+
+
+AD_XMETHOD2(GetPlainEssenceData,
+			[in],
+			objPass,
+			aafUInt32,
+			reserved,
+			Reserved for future use,
+
+			[out\,retval],
+			objOut,
+			AAFEssenceData,
+			pPlainEssenceData,
+			file encoding-independent essence data,
+
+     Creates an object which implements
+  // the IAAFEssenceData interface and provides access to a file
+  // encoding-independent essence data.
+  //
+  // Succeeds if:
+  // - Initialize\(\) has already been called on this object.
+  // - pPlainEssenceData is a valid pointer.
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NO_INIT
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pPlainEssenceData\))
 
 AD_XCLASS_END(Abstract, Transient)

@@ -41,6 +41,7 @@ AAFCOMINTERFACESONLY="\
 	AAFDigitalImageDescriptor2 \
 	AAFEndian \
 	AAFEssenceDataEx \
+	AAFEssenceData2 \
 	AAFEssenceDescriptor2 \
 	AAFEssenceMultiAccess \
 	AAFEventMobSlot2 \

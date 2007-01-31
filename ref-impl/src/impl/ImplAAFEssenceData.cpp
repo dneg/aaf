@@ -39,8 +39,13 @@
 #include "ImplAAFFileDescriptor.h"
 #endif
 
+#include "ImplAAFPlainEssenceData.h"
+
 #include <string.h>
 #include "AAFResult.h"
+
+
+extern "C" const aafClassID_t CLSID_AAFPlainEssenceData;
 
 
 const aafMobID_t kNullMobID = {{0,0,0,0,0,0,0,0,0,0,0,0},0,0,0,0,
@@ -393,6 +398,31 @@ AAFRESULT STDMETHODCALLTYPE
 
   *pFileMobID = _fileMobID;
   return AAFRESULT_SUCCESS;
+}
+
+
+
+/****/
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFEssenceData::GetPlainEssenceData (
+      aafUInt32 /*reserved*/,
+      ImplAAFEssenceData ** pEssenceData)
+{
+  AAFRESULT result = AAFRESULT_NOT_IMPLEMENTED;
+  ImplAAFPlainEssenceData* pPlainEssenceData =
+    (ImplAAFPlainEssenceData*) CreateImpl (CLSID_AAFPlainEssenceData);
+  if (pEssenceData)
+  {
+    pPlainEssenceData->pvtInitialize(this);
+    *pEssenceData = pPlainEssenceData;
+    result = AAFRESULT_SUCCESS;
+  }
+  else
+  {
+    result = AAFRESULT_INTERNAL_ERROR;
+  }
+
+  return result;
 }
 
 

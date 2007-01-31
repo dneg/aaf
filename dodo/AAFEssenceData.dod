@@ -13,7 +13,7 @@
 #c the License for the specific language governing rights and limitations
 #c under the License.
 #c
-#c The Original Code of this file is Copyright 1998-2004, Licensor of the
+#c The Original Code of this file is Copyright 1998-2007, Licensor of the
 #c AAF Association.
 #c
 #c The Initial Developer of the Original Code of this file and the
@@ -30,11 +30,12 @@ AAFObject\
 #endm
 #c
 #import ./AAFEssenceDataEx.exp
+#import ./AAFEssenceData2.exp
 AD_HEAD
 
 AD_IDL(///
 ///
-/// This interface is DEPRECATED\, please use IAAFEssenceDataEx.
+/// This interface is DEPRECATED\, please use IAAFEssenceData2.
 ///
 /// The IAAFEssenceData interface is used to modify AAFEssenceData
 /// objects\, which contain the actual essence data \(ex. WAVE\) when
@@ -59,7 +60,7 @@ AD_FORWARD_DECLARATION(AAFSourceMob)
 AD_CLASS_UUID(6a33f4e1, 8ed6, 11d2, bf, 9d, 00, 10, 4b, c9, 15, 6d)
 
 AD_DEFAULT_UUID(6a33f4e2, 8ed6, 11d2, bf, 9d, 00, 10, 4b, c9, 15, 6d)
-AD_COM_EXT_CLASS_BEGIN(public IAAFEssenceDataEx)
+AD_COM_EXT2_CLASS_BEGIN(public IAAFEssenceDataEx, public IAAFEssenceData2)
 
 AD_XMETHOD1(Initialize,
 [in],
@@ -179,4 +180,5 @@ AD_COM_METH(.method-ReadSampleIndex)
 AD_COM_METH(.method-SetSampleIndexPosition)
 AD_COM_METH(.method-GetSampleIndexPosition)
 AD_COM_METH(.method-GetSampleIndexSize)
-AD_COM_EXT_CLASS_END(AAFEssenceDataEx)
+AD_COM_METH(.method-GetPlainEssenceData)
+AD_COM_EXT2_CLASS_END(AAFEssenceDataEx, AAFEssenceData2)
