@@ -1424,6 +1424,9 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFPlainEssenceDataTest.cpp">
+			</File>
+			<File
 				RelativePath="..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFPlainStreamDataTest.cpp">
 			</File>
 			<File

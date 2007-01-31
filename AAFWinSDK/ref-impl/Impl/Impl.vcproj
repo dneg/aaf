@@ -1753,6 +1753,9 @@
 			</FileConfiguration>
 		</File>
 		<File
+			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFPlainEssenceData.cpp">
+		</File>
+		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFPlainStreamData.cpp">
 		</File>
 		<File

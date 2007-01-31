@@ -126,6 +126,7 @@ HUMAN_TYPED_IMPL="\
 	AAFParameter \
 	AAFParameterDef \
 	AAFPhysicalDescriptor \
+	AAFPlainEssenceData \
 	AAFPlainStreamData \
 	AAFPluginDef \
 	AAFPluginManager \
