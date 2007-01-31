@@ -45,10 +45,16 @@
 #include "CAAFObject.h"
 #endif
 
+//
+// Forward declaration
+//
+class ImplAAFEssenceData;
+
 
 class CAAFEssenceData
   : public IAAFEssenceData,
     public IAAFEssenceDataEx,
+	public IAAFEssenceData2,
     public CAAFObject
 {
 protected:
@@ -306,6 +312,42 @@ public:
    (
     // @parm [out] aafLength_t * | pSize  | size of sample index data
     aafLength_t *  pSize 
+  );
+
+  //***********************************************************
+  // METHOD NAME: GetPlainEssenceData()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFEssenceData2 | GetPlainEssenceData |
+  // Creates an object which implements
+  // the IAAFEssenceData interface and provides access to a file
+  // encoding-independent essence data.
+  //
+  // Succeeds if:
+  // - Initialize() has already been called on this object.
+  // - pPlainEssenceData is a valid pointer.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize() called on it.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pPlainEssenceData arg is NULL.
+  // @end
+  // 
+  STDMETHOD (GetPlainEssenceData)
+   (
+    // @parm [in] aafUInt32 | reserved | Reserved for future use
+    aafUInt32  reserved,
+
+    // @parm [out,retval] AAFEssenceData | pPlainEssenceData | file encoding-independent essence data
+    IAAFEssenceData ** pPlainEssenceData
   );
 
 

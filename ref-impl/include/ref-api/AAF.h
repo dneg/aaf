@@ -199,6 +199,7 @@ interface IAAFDictionary2;
 interface IAAFDigitalImageDescriptor2;
 interface IAAFEndian;
 interface IAAFEssenceDataEx;
+interface IAAFEssenceData2;
 interface IAAFEssenceDescriptor2;
 interface IAAFEssenceMultiAccess;
 interface IAAFEventMobSlot2;
@@ -376,6 +377,7 @@ typedef interface IAAFDictionary2 IAAFDictionary2;
 typedef interface IAAFDigitalImageDescriptor2 IAAFDigitalImageDescriptor2;
 typedef interface IAAFEndian IAAFEndian;
 typedef interface IAAFEssenceDataEx IAAFEssenceDataEx;
+typedef interface IAAFEssenceData2 IAAFEssenceData2;
 typedef interface IAAFEssenceDescriptor2 IAAFEssenceDescriptor2;
 typedef interface IAAFEssenceMultiAccess IAAFEssenceMultiAccess;
 typedef interface IAAFEventMobSlot2 IAAFEventMobSlot2;
@@ -8540,6 +8542,7 @@ DECLARE_INTERFACE_(IAAFEssenceData, IUnknown)
   ///
   STDMETHOD(GetFileMobID) (THIS_
     aafMobID_t *  pFileMobID) PURE;
+
 
 
 
@@ -44431,6 +44434,313 @@ DECLARE_INTERFACE_(IAAFEssenceDataEx, IUnknown)
   END_INTERFACE
 };
 #endif // __IAAFEssenceDataEx_INTERFACE_DEFINED__
+
+
+
+// IAAFEssenceData2
+
+// ************************
+//
+// Interface IAAFEssenceData2
+//
+// ************************
+
+
+
+
+
+#ifndef __IAAFEssenceData2_INTERFACE_DEFINED__
+#define __IAAFEssenceData2_INTERFACE_DEFINED__
+
+EXTERN_C const IID IID_IAAFEssenceData2;
+
+#undef  INTERFACE
+#define INTERFACE   IAAFEssenceData2
+
+DECLARE_INTERFACE_(IAAFEssenceData2, IUnknown)
+{
+  BEGIN_INTERFACE
+
+  /* *** IUnknown methods *** */
+  STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppvObj) PURE;
+  STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
+  STDMETHOD_(ULONG,Release) (THIS) PURE;
+
+  /* *** IAAFEssenceData2 methods *** */
+
+
+  //***********************************************************
+  //
+  // Initialize()
+  //
+  /// Associates a weak reference to the given file mob with the
+  /// essence data.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pFileMob pointer is valid and points to 
+  /// a file mob (contains a file descriptor).
+  /// 
+  /// If this method fails no state will be changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pFileMob is null.
+  ///
+  /// @param pFileMob [in] reference to a file mob
+  ///
+  STDMETHOD(Initialize) (THIS_
+    IAAFSourceMob * pFileMob) PURE;
+
+  //***********************************************************
+  //
+  // Write()
+  //
+  /// Write pre-interleaved data to a essence stream.
+  ///
+  /// @param bytes [in] write this many bytes to the data stream
+  /// @param buffer [out, size_is(bytes)] here is the buffer
+  /// @param bytesWritten [out,ref] 
+  ///
+  STDMETHOD(Write) (THIS_
+    aafUInt32  bytes,
+    aafDataBuffer_t  buffer,
+    aafUInt32 *  bytesWritten) PURE;
+
+
+  //***********************************************************
+  //
+  // Read()
+  //
+  /// Read pre-interleaved data from a essence stream.
+  ///
+  /// @param bytes [in] read this many bytes from the data stream
+  /// @param buffer [out, size_is(bytes), length_is(*bytesRead)] here is the buffer
+  /// @param bytesRead [out,ref] 
+  ///
+  STDMETHOD(Read) (THIS_
+    aafUInt32  bytes,
+    aafDataBuffer_t  buffer,
+    aafUInt32 *  bytesRead) PURE;
+
+
+  //***********************************************************
+  //
+  // SetPosition()
+  //
+  /// Seek to absolute position within the essence data.
+  ///
+  /// @param offset [in] offset from beginning of essence
+  ///
+  STDMETHOD(SetPosition) (THIS_
+    aafPosition_t  offset) PURE;
+
+
+  //***********************************************************
+  //
+  // GetPosition()
+  //
+  /// Get the absolute position within the essence data.
+  ///
+  /// @param pOffset [out] offset from beginning of essence
+  ///
+  STDMETHOD(GetPosition) (THIS_
+    aafPosition_t*  pOffset) PURE;
+
+
+  //***********************************************************
+  //
+  // GetSize()
+  //
+  /// Return the total size of the essence data.
+  ///
+  /// @param pSize  [out] size of essence data
+  ///
+  STDMETHOD(GetSize) (THIS_
+    aafLength_t *  pSize ) PURE;
+
+  //***********************************************************
+  //
+  // WriteSampleIndex()
+  //
+  /// Write pre-interleaved data to a sample index stream.
+  ///
+  /// @param bytes [in] write this many bytes to the sample index stream
+  /// @param buffer [out, size_is(bytes)] here is the buffer
+  /// @param bytesWritten [out,ref] 
+  ///
+  STDMETHOD(WriteSampleIndex) (THIS_
+    aafUInt32  bytes,
+    aafDataBuffer_t  buffer,
+    aafUInt32 *  bytesWritten) PURE;
+
+
+  //***********************************************************
+  //
+  // ReadSampleIndex()
+  //
+  /// Read pre-interleaved data from a sample index stream.
+  ///
+  /// @param bytes [in] read this many bytes from the sample index stream
+  /// @param buffer [out, size_is(bytes), length_is(*bytesRead)] here is the buffer
+  /// @param bytesRead [out,ref] 
+  ///
+  STDMETHOD(ReadSampleIndex) (THIS_
+    aafUInt32  bytes,
+    aafDataBuffer_t  buffer,
+    aafUInt32 *  bytesRead) PURE;
+
+
+  //***********************************************************
+  //
+  // SetSampleIndexPosition()
+  //
+  /// Seek to absolute position within the sample index data.
+  ///
+  /// @param offset [in] offset from beginning of sample index
+  ///
+  STDMETHOD(SetSampleIndexPosition) (THIS_
+    aafPosition_t  offset) PURE;
+
+
+  //***********************************************************
+  //
+  // GetSampleIndexPosition()
+  //
+  /// Get the absolute position within the sample index data.
+  ///
+  /// @param pOffset [out] offset from beginning of sample index
+  ///
+  STDMETHOD(GetSampleIndexPosition) (THIS_
+    aafPosition_t*  pOffset) PURE;
+
+
+  //***********************************************************
+  //
+  // GetSampleIndexSize()
+  //
+  /// Return the total size of the sample index data.
+  ///
+  /// @param pSize  [out] size of sample index data
+  ///
+  STDMETHOD(GetSampleIndexSize) (THIS_
+    aafLength_t *  pSize ) PURE;
+
+
+  //***********************************************************
+  //
+  // SetFileMob()
+  //
+  /// Associates a weak reference to the given file mob with the
+  /// essence data.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pFileMob pointer is valid and points to 
+  /// a file mob (contains a file descriptor).
+  /// 
+  /// If this method fails no state will be changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pFileMob is null.
+  ///
+  /// @param pFileMob [in] reference to a file mob
+  ///
+  STDMETHOD(SetFileMob) (THIS_
+    IAAFSourceMob * pFileMob) PURE;
+
+
+  //***********************************************************
+  //
+  // GetFileMob()
+  //
+  /// Associates a weak reference to the given file mob with the
+  /// essence data.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the ppFileMob pointer is valid and a weak
+  /// reference to the associated file mob can be
+  /// resolved.
+  /// 
+  /// If this method fails no state will be changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - ppFileMob is null.
+  ///
+  /// @param ppFileMob [in] reference to a file mob
+  ///
+  STDMETHOD(GetFileMob) (THIS_
+    IAAFSourceMob ** ppFileMob) PURE;
+
+
+  //***********************************************************
+  //
+  // GetFileMobID()
+  //
+  /// Return the mob id used to find the file mob associated with this
+  /// essence.  The file mob must exist in the same file as this
+  /// essence data.
+  ///
+  /// @param pFileMobID [out] the file mob id associated with essence
+  ///
+  STDMETHOD(GetFileMobID) (THIS_
+    aafMobID_t *  pFileMobID) PURE;
+
+
+  //***********************************************************
+  //
+  // GetPlainEssenceData()
+  //
+  /// Creates an object which implements
+  // the IAAFEssenceData interface and provides access to a file
+  // encoding-independent essence data.
+  //
+  // Succeeds if:
+  // - Initialize() has already been called on this object.
+  // - pPlainEssenceData is a valid pointer.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pPlainEssenceData arg is NULL.
+  ///
+  /// @param reserved [in] Reserved for future use
+  /// @param pPlainEssenceData [out,retval] file encoding-independent essence data
+  ///
+  STDMETHOD(GetPlainEssenceData) (THIS_
+    aafUInt32  reserved,
+    IAAFEssenceData ** pPlainEssenceData) PURE;
+
+
+  END_INTERFACE
+};
+#endif // __IAAFEssenceData2_INTERFACE_DEFINED__
 
 
 
