@@ -405,4 +405,8 @@ const OMMaterialIdentification&
 
 
 
+OMDataStreamPropertyFilter* ImplAAFEssenceData::createMediaDataFilter()
+{
+  return _mediaData.createFilter();
+}
 

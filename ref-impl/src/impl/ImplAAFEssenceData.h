@@ -37,6 +37,9 @@ class ImplAAFSourceMob;
 #endif
 
 
+class OMDataStreamPropertyFilter;
+
+
 class ImplAAFEssenceData : public ImplAAFObject
 {
 public:
@@ -200,6 +203,8 @@ public:
         (aafMobID_t *  pFileMobID);
 
   virtual const OMMaterialIdentification& identification(void) const;
+
+  OMDataStreamPropertyFilter* createMediaDataFilter();
 
 private:
   OMFixedSizeProperty<aafMobID_t> _fileMobID;
