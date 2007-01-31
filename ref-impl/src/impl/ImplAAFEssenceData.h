@@ -211,7 +211,7 @@ public:
         (// @parm [in] Reserved for future use
          aafUInt32 reserved,
 
-         // @parm [in] plain essence data
+         // @parm [in] file encoding-independent essence data
          ImplAAFEssenceData ** pPlainEssenceData);
 
   virtual const OMMaterialIdentification& identification(void) const;

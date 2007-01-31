@@ -406,15 +406,15 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFEssenceData::GetPlainEssenceData (
       aafUInt32 /*reserved*/,
-      ImplAAFEssenceData ** pEssenceData)
+      ImplAAFEssenceData ** pPlainEssenceData)
 {
   AAFRESULT result = AAFRESULT_NOT_IMPLEMENTED;
-  ImplAAFPlainEssenceData* pPlainEssenceData =
+  ImplAAFPlainEssenceData* pResult =
     (ImplAAFPlainEssenceData*) CreateImpl (CLSID_AAFPlainEssenceData);
-  if (pEssenceData)
+  if (pResult)
   {
-    pPlainEssenceData->pvtInitialize(this);
-    *pEssenceData = pPlainEssenceData;
+    pResult->pvtInitialize(this);
+    *pPlainEssenceData = pResult;
     result = AAFRESULT_SUCCESS;
   }
   else
