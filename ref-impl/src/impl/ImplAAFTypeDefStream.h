@@ -274,12 +274,12 @@ public:
   // GetMXFEssenceStream()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    GetMXFEssenceStream
-        (// @parm [in] type of the stream data filter
-         aafUInt32 filterType,
+    GetPlainStreamData
+        (// @parm [in] reserved (type of the stream data filter)
+         aafUInt32 reserved,
 
-         // @parm [in] filtered stream access
-         ImplAAFTypeDefStream ** pFilteredStream);
+         // @parm [in] file encoding-independent stream data
+         ImplAAFTypeDefStream ** pPlainStreamData);
 
 
   //****************

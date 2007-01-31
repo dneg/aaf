@@ -502,7 +502,7 @@ AD_XMETHOD4(AppendElements,
   ///  - struct offsets have not yet been registered for the element typedef.)
 AD_OVERRIDE(.method-GetTypeCategory)
 AD_COM_METH(.method-SetCallback)
-AD_COM_METH(.method-GetMXFEssenceStream)
+AD_COM_METH(.method-GetPlainStreamData)
 
 #c AD_XCLASS_END(Concrete, StoredObject)
 AD_COM_EXT2_CLASS_END(AAFTypeDefStreamEx, AAFTypeDefStream3)

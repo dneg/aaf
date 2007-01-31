@@ -352,16 +352,16 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFTypeDefStream::GetMXFEssenceStream (
-      aafUInt32 /*filterType*/,
-      ImplAAFTypeDefStream ** pFilteredStream)
+    ImplAAFTypeDefStream::GetPlainStreamData (
+      aafUInt32 /*reserved*/,
+      ImplAAFTypeDefStream ** pPlainStreamData)
 {
   AAFRESULT result = AAFRESULT_NOT_IMPLEMENTED;
-  ImplAAFTypeDefStream* pPlainStreamData =
+  ImplAAFTypeDefStream* pResult =
     (ImplAAFTypeDefStream*) CreateImpl (CLSID_AAFPlainStreamData);
   if (pPlainStreamData)
   {
-    *pFilteredStream = pPlainStreamData;
+    *pPlainStreamData = pResult;
     result = AAFRESULT_SUCCESS;
   }
   else

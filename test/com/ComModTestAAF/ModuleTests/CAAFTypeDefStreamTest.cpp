@@ -296,7 +296,7 @@ static void Test_GetTypeDefStream(
   IAAFTypeDefStream3SP pTypeDefStreamRaw;
   CheckResult(pTypeDef->QueryInterface(IID_IAAFTypeDefStream3,
                                        (void **)&pTypeDefStreamRaw));
-  CheckResult(pTypeDefStreamRaw->GetMXFEssenceStream(0, ppTypeDefStream));
+  CheckResult(pTypeDefStreamRaw->GetPlainStreamData(0, ppTypeDefStream));
 }
 
 static void Test_EssenceStreamWrite(
@@ -564,7 +564,7 @@ TestStreamAccess::WriteStream (IAAFPropertyValue *propertyValue, aafMemPtr_t pUs
 	CheckResult(pTypeDef->QueryInterface(IID_IAAFTypeDefStream3,
                                        (void **)&pTypeDefStreamRaw));
 
-	CheckResult(pTypeDefStreamRaw->GetMXFEssenceStream(0, &pTypeDefStream));
+	CheckResult(pTypeDefStreamRaw->GetPlainStreamData(0, &pTypeDefStream));
 
 	// Set the byte order of the stream to big endian...
 	CheckResult(pTypeDefStream->SetStoredByteOrder(propertyValue, kAAFByteOrderBig));
