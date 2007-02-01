@@ -53,6 +53,7 @@ typedef IAAFSmartPointer<IAAFMob>                   IAAFMobSP;
 typedef IAAFSmartPointer<IAAFEssenceDescriptor>     IAAFEssenceDescriptorSP;
 typedef IAAFSmartPointer<IAAFEssenceData>           IAAFEssenceDataSP;
 typedef IAAFSmartPointer<IEnumAAFEssenceData>       IEnumAAFEssenceDataSP;
+typedef IAAFSmartPointer<IAAFKLVStreamParameters>   IAAFKLVStreamParametersSP;
 
 
 
@@ -83,7 +84,12 @@ static const aafMobID_t sMobID[] = {
   //{060c2b340205110101001000-13-00-00-00-{F1EE3A2E-0A3A-4c2b-A422-7BECE6AE43FA}}
   {{0x06, 0x0c, 0x2b, 0x34, 0x02, 0x05, 0x11, 0x01, 0x01, 0x00, 0x10, 0x00}, 
   0x13, 0x00, 0x00, 0x00, 
-  {0xf1ee3a2e, 0x0a3a, 0x4c2b, {0xa4, 0x22, 0x7b, 0xec, 0xe6, 0xae, 0x43, 0xfa}}}
+  {0xf1ee3a2e, 0x0a3a, 0x4c2b, {0xa4, 0x22, 0x7b, 0xec, 0xe6, 0xae, 0x43, 0xfa}}},
+
+  //{060c2b340205110101001000-13-00-00-00-{3F546F83-D784-4c98-A6C8-B498DAAF98F4}}
+  {{0x06, 0x0c, 0x2b, 0x34, 0x02, 0x05, 0x11, 0x01, 0x01, 0x00, 0x10, 0x00}, 
+  0x13, 0x00, 0x00, 0x00, 
+  {0x3f546f83, 0xd784, 0x4c98, {0xa6, 0xc8, 0xb4, 0x98, 0xda, 0xaf, 0x98, 0xf4}}}
 };
 
 static aafCharacter_constptr sMobName[] = 
@@ -91,7 +97,8 @@ static aafCharacter_constptr sMobName[] =
   L"TypeDefStreamTest File Mob - 1",
   L"TypeDefStreamTest File Mob - 2", 
   L"TypeDefStreamTest File Mob - 3",
-  L"TypeDefStreamTest File Mob - 4"
+  L"TypeDefStreamTest File Mob - 4",
+  L"TypeDefStreamTest File Mob - 5"
 };
 
 static const char sSmiley[] =        /* 16x16 smiley face */
@@ -139,6 +146,12 @@ static const aafUInt16 sTestUInt16[] =
 
 static const aafCharacter sTestCharacter[] = L"0123456789ABCDEF";
 static const aafCharacter sTruncatedCharacters[] = L"Truncated Characters";
+
+static const aafUID_t sTestEssenceElementKey =
+{0x0d010301, 0xdddd, 0xdddd, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x02, 0x01, 0x01}};
+static const aafUInt32 sTestAlignmentGridSize = 0x300;
+
+
 
 
 
@@ -683,6 +696,78 @@ static void Test_EssenceStreamPullWrite(
 	// !!! tjb not yet cb->Release();
 }
 
+static void Test_KLVStreamParametersOnWrite(
+  CAAFBuiltinDefs & defs,
+  IAAFPropertyValue *pStreamPropertyValue)
+{
+  AAFRESULT hr = AAFRESULT_SUCCESS;
+
+  IAAFTypeDefStreamSP pTypeDefStream;
+  Test_GetTypeDefStream(pStreamPropertyValue, &pTypeDefStream);
+
+  IAAFKLVStreamParametersSP pParameters;
+  CheckResult(pTypeDefStream->QueryInterface(IID_IAAFKLVStreamParameters, (void **)&pParameters));
+
+  // Expect AAFRESULT_OPERATION_NOT_PERMITTED for streams that
+  // don't support essence element keys.
+  hr = pParameters->SetEssenceElementKey(pStreamPropertyValue, sTestEssenceElementKey);
+  CheckExpression(AAFRESULT_SUCCEEDED(hr) || hr == AAFRESULT_OPERATION_NOT_PERMITTED,
+                  AAFRESULT_TEST_FAILED);
+  if (AAFRESULT_SUCCEEDED(hr))
+  {
+    aafUID_t key;
+    CheckResult(pParameters->GetEssenceElementKey(pStreamPropertyValue, &key));
+    CheckExpression(key == sTestEssenceElementKey, AAFRESULT_TEST_FAILED);
+  }
+
+  /*
+  // Expect AAFRESULT_OPERATION_NOT_PERMITTED for streams that
+  // don't support alignment grid.
+  hr = pParameters->SetAlignmentGridSize(pStreamPropertyValue, sTestAlignmentGridSize);
+  CheckExpression(AAFRESULT_SUCCEEDED(hr) || hr == AAFRESULT_OPERATION_NOT_PERMITTED,
+                  AAFRESULT_TEST_FAILED);
+  if (AAFRESULT_SUCCEEDED(hr))
+  {
+    aafUInt32 size = 0;
+    CheckResult(pParameters->GetAlignmentGridSize(pStreamPropertyValue, &size));
+    CheckExpression(size == sTestAlignmentGridSize, AAFRESULT_TEST_FAILED);
+  }
+  */
+}
+
+static void Test_KLVStreamParametersOnRead(
+  CAAFBuiltinDefs & defs,
+  IAAFPropertyValue *pStreamPropertyValue)
+{
+  AAFRESULT hr = AAFRESULT_SUCCESS;
+
+  IAAFTypeDefStreamSP pTypeDefStream;
+  Test_GetTypeDefStream(pStreamPropertyValue, &pTypeDefStream);
+
+  IAAFKLVStreamParametersSP pParameters;
+  CheckResult(pTypeDefStream->QueryInterface(IID_IAAFKLVStreamParameters, (void **)&pParameters));
+
+  // Expect AAFRESULT_OPERATION_NOT_PERMITTED for streams that
+  // don't support essence element keys.
+  aafUID_t key;
+  hr = pParameters->GetEssenceElementKey(pStreamPropertyValue, &key);
+  CheckExpression(AAFRESULT_SUCCEEDED(hr) || hr == AAFRESULT_OPERATION_NOT_PERMITTED,
+                  AAFRESULT_TEST_FAILED);
+  CheckExpression(AAFRESULT_FAILED(hr) || key == sTestEssenceElementKey,
+                  AAFRESULT_TEST_FAILED);
+
+  /*
+  // Expect AAFRESULT_OPERATION_NOT_PERMITTED for streams that
+  // don't support alignment grid.
+  aafUInt32 size = 0;
+  hr = pParameters->GetAlignmentGridSize(pStreamPropertyValue, &size);
+  CheckExpression(AAFRESULT_SUCCEEDED(hr) || hr == AAFRESULT_OPERATION_NOT_PERMITTED,
+                  AAFRESULT_TEST_FAILED);
+  CheckExpression(AAFRESULT_FAILED(hr) || size == sTestAlignmentGridSize,
+                  AAFRESULT_TEST_FAILED);
+  */
+}
+
 // Create the test file.
 void CAAFTypeDefStream_create (
     aafCharacter_constptr pFileName,
@@ -745,6 +830,25 @@ void CAAFTypeDefStream_create (
                                      pEssenceData2,
                                      &pDataPropertyValue2,
                                      &pSampleIndexPropertyValue2);
+
+
+    // Test IAAFTypeDefStream3 methods
+    IAAFEssenceDataSP pEssenceData3;
+    IAAFPropertyValueSP pDataPropertyValue3;
+    IAAFPropertyValueSP pSampleIndexPropertyValue3;
+
+    Test_CreateEssenceData(defs, pHeader, sMobID[4], sMobName[4], &pEssenceData3);
+
+    Test_EssenceStreamPropertyValues(pDictionary,
+                                     pEssenceData3,
+                                     &pDataPropertyValue3,
+                                     &pSampleIndexPropertyValue3);
+
+    Test_KLVStreamParametersOnWrite(defs, pDataPropertyValue3);
+    Test_EssenceStreamWrite(defs, pDataPropertyValue3);
+    Test_KLVStreamParametersOnRead(defs, pDataPropertyValue3);
+    Test_EssenceStreamRead(defs, pDataPropertyValue3);
+
 
     CheckResult(pFile->Save());
     CheckResult(pFile->Close());
@@ -830,6 +934,26 @@ void CAAFTypeDefStream_read (aafCharacter_constptr pFileName) // throw HRESULT
                                        &pDataPropertyValue2,
                                        &pSampleIndexPropertyValue2);
 
+    }
+
+
+    // Test IAAFTypeDefStream3 methods
+    IAAFEssenceDataSP pEssenceData3;
+
+    // sMobID[4] may not be in the file, in the case
+    // the file was created by an older test.
+    if(pHeader->LookupEssenceData(sMobID[4], &pEssenceData3)==AAFRESULT_SUCCESS)
+    {
+      IAAFPropertyValueSP pDataPropertyValue3;
+      IAAFPropertyValueSP pSampleIndexPropertyValue3;
+
+      Test_EssenceStreamPropertyValues(pDictionary,
+                                       pEssenceData3,
+                                       &pDataPropertyValue3,
+                                       &pSampleIndexPropertyValue3);
+
+      Test_KLVStreamParametersOnRead(defs, pDataPropertyValue3);
+      Test_EssenceStreamRead(defs, pDataPropertyValue3);
     }
 
 

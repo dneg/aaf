@@ -47,6 +47,7 @@ AAFCOMINTERFACESONLY="\
 	AAFEventMobSlot2 \
 	AAFFileDescriptor2 \
 	AAFHeader2 \
+	AAFKLVStreamParameters \
 	AAFMasterMob2 \
 	AAFMasterMobEx \
 	AAFMob2 \
