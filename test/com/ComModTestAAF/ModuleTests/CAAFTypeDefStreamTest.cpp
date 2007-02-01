@@ -734,7 +734,7 @@ void CAAFTypeDefStream_create (
 
     Test_EssenceStreamPullWrite(pFile, defs);
 
-    // Test IAAFTypeDefStream3 methods
+    // Test IAAFTypeDefStream2 methods
     IAAFEssenceDataSP pEssenceData2;
     IAAFPropertyValueSP pDataPropertyValue2;
     IAAFPropertyValueSP pSampleIndexPropertyValue2;
@@ -815,7 +815,7 @@ void CAAFTypeDefStream_read (aafCharacter_constptr pFileName) // throw HRESULT
     }  
 
 
-    // Test IAAFTypeDefStream3 methods
+    // Test IAAFTypeDefStream2 methods
     IAAFEssenceDataSP pEssenceData2;
 
     // sMobID[3] may not be in the file, in the case
