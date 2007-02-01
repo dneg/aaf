@@ -1035,6 +1035,12 @@ typedef interface IAAFHeader2 IAAFHeader2;
 #endif 	/* __IAAFHeader2_FWD_DEFINED__ */
 
 
+#ifndef __IAAFKLVStreamParameters_FWD_DEFINED__
+#define __IAAFKLVStreamParameters_FWD_DEFINED__
+typedef interface IAAFKLVStreamParameters IAAFKLVStreamParameters;
+#endif 	/* __IAAFKLVStreamParameters_FWD_DEFINED__ */
+
+
 #ifndef __IAAFMasterMob2_FWD_DEFINED__
 #define __IAAFMasterMob2_FWD_DEFINED__
 typedef interface IAAFMasterMob2 IAAFMasterMob2;
@@ -1151,6 +1157,7 @@ void __RPC_USER MIDL_user_free( void * );
 // AAF Interfaces.
 //=--------------------------------------------------------------------------=
 //
+
 
 
 
@@ -44872,6 +44879,124 @@ void __RPC_STUB IAAFHeader2_RemoveDescriptiveScheme_Stub(
 #endif 	/* __IAAFHeader2_INTERFACE_DEFINED__ */
 
 
+#ifndef __IAAFKLVStreamParameters_INTERFACE_DEFINED__
+#define __IAAFKLVStreamParameters_INTERFACE_DEFINED__
+
+/* interface IAAFKLVStreamParameters */
+/* [unique][helpstring][uuid][object] */ 
+
+
+EXTERN_C const IID IID_IAAFKLVStreamParameters;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("379d9d03-4a5f-4399-a105-5ae6e17d9e59")
+    IAAFKLVStreamParameters : public IUnknown
+    {
+    public:
+        virtual HRESULT STDMETHODCALLTYPE GetEssenceElementKey( 
+            /* [in] */ IAAFPropertyValue *pStreamPropertyValue,
+            /* [out] */ aafUID_t *pEssenceElementKey) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetEssenceElementKey( 
+            /* [in] */ IAAFPropertyValue *pStreamPropertyValue,
+            /* [ref][in] */ aafUID_constref key) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IAAFKLVStreamParametersVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IAAFKLVStreamParameters * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IAAFKLVStreamParameters * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IAAFKLVStreamParameters * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetEssenceElementKey )( 
+            IAAFKLVStreamParameters * This,
+            /* [in] */ IAAFPropertyValue *pStreamPropertyValue,
+            /* [out] */ aafUID_t *pEssenceElementKey);
+        
+        HRESULT ( STDMETHODCALLTYPE *SetEssenceElementKey )( 
+            IAAFKLVStreamParameters * This,
+            /* [in] */ IAAFPropertyValue *pStreamPropertyValue,
+            /* [ref][in] */ aafUID_constref key);
+        
+        END_INTERFACE
+    } IAAFKLVStreamParametersVtbl;
+
+    interface IAAFKLVStreamParameters
+    {
+        CONST_VTBL struct IAAFKLVStreamParametersVtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IAAFKLVStreamParameters_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IAAFKLVStreamParameters_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IAAFKLVStreamParameters_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IAAFKLVStreamParameters_GetEssenceElementKey(This,pStreamPropertyValue,pEssenceElementKey)	\
+    (This)->lpVtbl -> GetEssenceElementKey(This,pStreamPropertyValue,pEssenceElementKey)
+
+#define IAAFKLVStreamParameters_SetEssenceElementKey(This,pStreamPropertyValue,key)	\
+    (This)->lpVtbl -> SetEssenceElementKey(This,pStreamPropertyValue,key)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+HRESULT STDMETHODCALLTYPE IAAFKLVStreamParameters_GetEssenceElementKey_Proxy( 
+    IAAFKLVStreamParameters * This,
+    /* [in] */ IAAFPropertyValue *pStreamPropertyValue,
+    /* [out] */ aafUID_t *pEssenceElementKey);
+
+
+void __RPC_STUB IAAFKLVStreamParameters_GetEssenceElementKey_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFKLVStreamParameters_SetEssenceElementKey_Proxy( 
+    IAAFKLVStreamParameters * This,
+    /* [in] */ IAAFPropertyValue *pStreamPropertyValue,
+    /* [ref][in] */ aafUID_constref key);
+
+
+void __RPC_STUB IAAFKLVStreamParameters_SetEssenceElementKey_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __IAAFKLVStreamParameters_INTERFACE_DEFINED__ */
+
+
 #ifndef __IAAFMasterMob2_INTERFACE_DEFINED__
 #define __IAAFMasterMob2_INTERFACE_DEFINED__
 
@@ -48859,7 +48984,7 @@ void __RPC_STUB IAAFTypeDefVariableArrayEx_InsertElement_Stub(
 #endif 	/* __IAAFTypeDefVariableArrayEx_INTERFACE_DEFINED__ */
 
 
-/* interface __MIDL_itf_AAF_0273 */
+/* interface __MIDL_itf_AAF_0274 */
 /* [local] */ 
 
   ///***********************************************************
@@ -48994,8 +49119,8 @@ STDAPI AAFResultToText (
 
 
 
-extern RPC_IF_HANDLE __MIDL_itf_AAF_0273_v0_0_c_ifspec;
-extern RPC_IF_HANDLE __MIDL_itf_AAF_0273_v0_0_s_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_AAF_0274_v0_0_c_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_AAF_0274_v0_0_s_ifspec;
 
 /* Additional Prototypes for ALL interfaces */
 

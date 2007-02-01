@@ -205,6 +205,7 @@ interface IAAFEssenceMultiAccess;
 interface IAAFEventMobSlot2;
 interface IAAFFileDescriptor2;
 interface IAAFHeader2;
+interface IAAFKLVStreamParameters;
 interface IAAFMasterMob2;
 interface IAAFMasterMobEx;
 interface IAAFMob2;
@@ -383,6 +384,7 @@ typedef interface IAAFEssenceMultiAccess IAAFEssenceMultiAccess;
 typedef interface IAAFEventMobSlot2 IAAFEventMobSlot2;
 typedef interface IAAFFileDescriptor2 IAAFFileDescriptor2;
 typedef interface IAAFHeader2 IAAFHeader2;
+typedef interface IAAFKLVStreamParameters IAAFKLVStreamParameters;
 typedef interface IAAFMasterMob2 IAAFMasterMob2;
 typedef interface IAAFMasterMobEx IAAFMasterMobEx;
 typedef interface IAAFMob2 IAAFMob2;
@@ -19671,6 +19673,7 @@ DECLARE_INTERFACE_(IAAFPlainEssenceData, IUnknown)
 
 
 
+
 #ifndef __IAAFPlainStreamData_INTERFACE_DEFINED__
 #define __IAAFPlainStreamData_INTERFACE_DEFINED__
 
@@ -19695,7 +19698,6 @@ DECLARE_INTERFACE_(IAAFPlainStreamData, IUnknown)
   END_INTERFACE
 };
 #endif // __IAAFPlainStreamData_INTERFACE_DEFINED__
-
 
 
 // IAAFPluginDef
@@ -46890,6 +46892,117 @@ DECLARE_INTERFACE_(IAAFHeader2, IUnknown)
   END_INTERFACE
 };
 #endif // __IAAFHeader2_INTERFACE_DEFINED__
+
+
+
+// IAAFKLVStreamParameters
+
+// ************************
+//
+// Interface IAAFKLVStreamParameters
+//
+// ************************
+
+
+
+
+#ifndef __IAAFKLVStreamParameters_INTERFACE_DEFINED__
+#define __IAAFKLVStreamParameters_INTERFACE_DEFINED__
+
+EXTERN_C const IID IID_IAAFKLVStreamParameters;
+
+#undef  INTERFACE
+#define INTERFACE   IAAFKLVStreamParameters
+
+DECLARE_INTERFACE_(IAAFKLVStreamParameters, IUnknown)
+{
+  BEGIN_INTERFACE
+
+  /* *** IUnknown methods *** */
+  STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppvObj) PURE;
+  STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
+  STDMETHOD_(ULONG,Release) (THIS) PURE;
+
+  /* *** IAAFKLVStreamParameters methods *** */
+
+
+  //***********************************************************
+  //
+  // GetEssenceElementKey()
+  //
+  /// This method returns essence element key associated
+  /// with the specified stream.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - pStreamPropertyValue is a valid pointer.
+  /// - pEssenceElementKey is a valid pointer.
+  /// - the specified stream supports essence element keys.
+  ///
+  /// If this method fails nothing will be written to *pEssenceElementKey.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - either pStreamPropertyValue or pEssenceElementKey arg is NULL.
+  ///
+  /// AAFRESULT_INVALID_PARAM
+  ///   - the specified stream does not support essence element keys.
+  ///
+  /// @param pStreamPropertyValue [in] stream property value
+  /// @param pEssenceElementKey [out] Essence element key.
+  ///
+  STDMETHOD(GetEssenceElementKey) (THIS_
+    IAAFPropertyValue * pStreamPropertyValue,
+    aafUID_t *  pEssenceElementKey) PURE;
+
+
+  //***********************************************************
+  //
+  // SetEssenceElementKey()
+  //
+  /// Set the essence element key on the specified stream.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - pStreamPropertyValue is a valid pointer.
+  /// - the specified stream supports essence element keys.
+  /// 
+  /// If this method fails, the property will not be changed.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pStreamPropertyValue arg is NULL.
+  ///
+  /// AAFRESULT_INVALID_PARAM
+  ///   - the specified stream does not support essence element keys.
+  ///
+  /// @param pStreamPropertyValue [in] stream property value
+  /// @param key [in, ref] essence element key
+  ///
+  STDMETHOD(SetEssenceElementKey) (THIS_
+    IAAFPropertyValue * pStreamPropertyValue,
+    aafUID_constref  key) PURE;
+
+
+  END_INTERFACE
+};
+#endif // __IAAFKLVStreamParameters_INTERFACE_DEFINED__
 
 
 

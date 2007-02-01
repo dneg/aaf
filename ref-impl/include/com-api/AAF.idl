@@ -206,6 +206,7 @@ interface IAAFEssenceMultiAccess;
 interface IAAFEventMobSlot2;
 interface IAAFFileDescriptor2;
 interface IAAFHeader2;
+interface IAAFKLVStreamParameters;
 interface IAAFMasterMob2;
 interface IAAFMasterMobEx;
 interface IAAFMob2;
@@ -19653,10 +19654,9 @@ interface IAAFPlainEssenceData : IUnknown
 /// AAFRESULT_NOMEMORY
 ///   - insufficient system memory is available to perform the
 ///     operation.
-
-
 ///
 /// Objects that implement IAAFPlainStreamData also implement the following interfaces:
+///  - IAAFKLVStreamParameters
 ///  - IAAFTypeDefStream
 ///  - IAAFTypeDef
 ///  - IAAFMetaDefinition
@@ -19671,7 +19671,6 @@ interface IAAFPlainStreamData : IUnknown
 
 
 }
-
 
 
 // ************************
@@ -46614,6 +46613,107 @@ interface IAAFHeader2 : IUnknown
   ///
   HRESULT RemoveDescriptiveScheme (
     [in] aafUID_constref  descriptiveSchemeID);
+
+}
+
+
+
+// ************************
+//
+// Interface IAAFKLVStreamParameters
+//
+// ************************
+///
+///
+/// In addition to the specific error results listed for each method,
+/// all methods in this interface may also return one of the following
+/// values:
+/// 
+/// AAFRESULT_NOMEMORY
+///   - insufficient system memory is available to perform the
+///     operation.
+[
+    object,
+    uuid(379d9d03-4a5f-4399-a105-5ae6e17d9e59),
+    helpstring("IAAFKLVStreamParameters Interface"),
+    pointer_default(unique)
+]
+interface IAAFKLVStreamParameters : IUnknown
+{
+
+
+  //***********************************************************
+  //
+  // GetEssenceElementKey()
+  //
+  /// This method returns essence element key associated
+  /// with the specified stream.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - pStreamPropertyValue is a valid pointer.
+  /// - pEssenceElementKey is a valid pointer.
+  /// - the specified stream supports essence element keys.
+  ///
+  /// If this method fails nothing will be written to *pEssenceElementKey.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - either pStreamPropertyValue or pEssenceElementKey arg is NULL.
+  ///
+  /// AAFRESULT_INVALID_PARAM
+  ///   - the specified stream does not support essence element keys.
+  /// 
+  /// @param pStreamPropertyValue [in] stream property value
+  /// @param pEssenceElementKey [out] Essence element key.
+  ///
+  HRESULT GetEssenceElementKey (
+    [in] IAAFPropertyValue * pStreamPropertyValue,
+    [out] aafUID_t *  pEssenceElementKey);
+
+
+  //***********************************************************
+  //
+  // SetEssenceElementKey()
+  //
+  /// Set the essence element key on the specified stream.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - pStreamPropertyValue is a valid pointer.
+  /// - the specified stream supports essence element keys.
+  /// 
+  /// If this method fails, the property will not be changed.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pStreamPropertyValue arg is NULL.
+  ///
+  /// AAFRESULT_INVALID_PARAM
+  ///   - the specified stream does not support essence element keys.
+  /// 
+  /// @param pStreamPropertyValue [in] stream property value
+  /// @param key [in, ref] essence element key
+  ///
+  HRESULT SetEssenceElementKey (
+    [in] IAAFPropertyValue * pStreamPropertyValue,
+    [in, ref] aafUID_constref  key);
 
 }
 

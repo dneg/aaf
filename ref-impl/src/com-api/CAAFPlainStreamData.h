@@ -39,6 +39,7 @@
 
 
 
+
 #ifndef __CAAFTypeDefStream_h__
 #include "CAAFTypeDefStream.h"
 #endif
@@ -46,6 +47,7 @@
 
 class CAAFPlainStreamData
   : public IAAFPlainStreamData,
+    public IAAFKLVStreamParameters,
     public CAAFTypeDefStream
 {
 protected:
@@ -59,7 +61,85 @@ protected:
 
 public:
 
+  //***********************************************************
+  // METHOD NAME: GetEssenceElementKey()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFKLVStreamParameters | GetEssenceElementKey |
+  // This method returns essence element key associated
+  /// with the specified stream.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - pStreamPropertyValue is a valid pointer.
+  /// - pEssenceElementKey is a valid pointer.
+  /// - the specified stream supports essence element keys.
+  ///
+  /// If this method fails nothing will be written to *pEssenceElementKey.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize() called on it.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - either pStreamPropertyValue or pEssenceElementKey arg is NULL.
+  ///
+  /// AAFRESULT_INVALID_PARAM
+  ///   - the specified stream does not support essence element keys.
+  // @end
+  // 
+  STDMETHOD (GetEssenceElementKey)
+   (
+    // @parm [in] AAFPropertyValue | pStreamPropertyValue | stream property value
+    IAAFPropertyValue * pStreamPropertyValue,
 
+    // @parm [out] aafUID_t * | pEssenceElementKey | Essence element key.
+    aafUID_t *  pEssenceElementKey
+  );
+
+  //***********************************************************
+  // METHOD NAME: SetEssenceElementKey()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFKLVStreamParameters | SetEssenceElementKey |
+  // Set the essence element key on the specified stream.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - pStreamPropertyValue is a valid pointer.
+  /// - the specified stream supports essence element keys.
+  /// 
+  /// If this method fails, the property will not be changed.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize() called on it.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pStreamPropertyValue arg is NULL.
+  ///
+  /// AAFRESULT_INVALID_PARAM
+  ///   - the specified stream does not support essence element keys.
+  // @end
+  // 
+  STDMETHOD (SetEssenceElementKey)
+   (
+    // @parm [in] AAFPropertyValue | pStreamPropertyValue | stream property value
+    IAAFPropertyValue * pStreamPropertyValue,
+
+    // @parm [in, ref] aafUID_constref | key | essence element key
+    aafUID_constref  key
+  );
 
 
 protected:
@@ -82,5 +162,4 @@ public:
 };
 
 #endif // ! __CAAFPlainStreamData_h__
-
 
