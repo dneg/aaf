@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2006, Licensor of the
+// The Original Code of this file is Copyright 1998-2007, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -140,6 +140,37 @@ void OMXMLStoredStream::close(void)
   delete _store;
   _store = 0;
   _position = 0;
+}
+
+  // @mfunc Does this <c OMStoredStream> know about essence element keys?
+  //   @rdesc True if this supports essence element keys, false otherwise.
+  //   @this const
+bool OMXMLStoredStream::hasEssenceElementKey(void) const
+{
+  TRACE("OMXMLStoredStream::hasEssenceElementKey");
+
+  return false;
+}
+
+  // @mfunc The essence element key associated with this <c OMStoredStream>.
+  //   @rdesc The essence element key.
+  //   @this const
+OMKLVKey OMXMLStoredStream::essenceElementKey(void) const
+{
+  TRACE("OMXMLStoredStream::essenceElementKey");
+  PRECONDITION("Stream supports essence element keys", false);
+
+  // Shouldn't be here
+  return nullOMKLVKey;
+}
+
+  // @mfunc Specify the essence element key for this <c OMStoredStream>.
+  //   @parm The essence element key.
+void OMXMLStoredStream::setEssenceElementKey(const OMKLVKey& /*key*/)
+{
+  TRACE("OMXMLStoredStream::setEssenceElementKey");
+  PRECONDITION("Stream supports essence element keys", false);
+  // Shouldn't be here
 }
 
 OMStoredStreamFilter* OMXMLStoredStream::createFilter(void)

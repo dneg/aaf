@@ -172,3 +172,31 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFPlainStreamData::GetEssenceElementKey (
+      ImplAAFPropertyValue * pPropertyValue,
+      aafUID_t * pEssenceElementKey)
+{
+  PROPERTYVALUE_TO_STREAMPROPERTYVALUE(pPropertyValue, pStreamPropertyValue);
+
+  if (!pStreamPropertyValue->HasEssenceElementKey())
+      return AAFRESULT_OPERATION_NOT_PERMITTED;
+
+  return pStreamPropertyValue->GetEssenceElementKey(pEssenceElementKey);
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFPlainStreamData::SetEssenceElementKey (
+      ImplAAFPropertyValue * pPropertyValue,
+      aafUID_constref  key)
+{
+  PROPERTYVALUE_TO_STREAMPROPERTYVALUE(pPropertyValue, pStreamPropertyValue);
+  
+  if (!pStreamPropertyValue->HasEssenceElementKey())
+      return AAFRESULT_OPERATION_NOT_PERMITTED;
+
+  return pStreamPropertyValue->SetEssenceElementKey(key);
+}
+
+

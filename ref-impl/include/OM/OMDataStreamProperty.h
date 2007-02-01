@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2006, Licensor of the
+// The Original Code of this file is Copyright 1998-2007, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -171,6 +171,21 @@ public:
   OMDataStreamAccess* streamAccess(void) const;
 
   OMStoredStream* stream(void) const; // tjb should be private
+
+
+  // Stream essence element key
+
+    // @cmember Does this stream know about essence element keys?
+  virtual bool hasEssenceElementKey(void) const;
+
+    // @cmember The essence element key associated with this stream.
+    //          @precondition <f hasEssenceElementKey()>
+  virtual OMKLVKey essenceElementKey(void) const;
+
+    // @cmember Specify the essence element key for this stream.
+    //          @precondition <f hasEssenceElementKey()>
+  virtual void setEssenceElementKey(const OMKLVKey& key);
+
 
   // Stream filtering
 

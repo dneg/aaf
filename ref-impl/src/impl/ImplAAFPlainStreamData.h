@@ -204,6 +204,30 @@ public:
          aafMemPtr_t  pData);
 
 
+  // Stream parameters
+
+  //****************
+  // GetEssenceElementKey()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetEssenceElementKey
+        (// @parm [in] stream property value to initialize
+         ImplAAFPropertyValue * pStreamPropertyValue,
+
+         // @parm [out,ref] key of the essence elements in this stream
+         aafUID_t *  pEssenceElementKey);
+
+
+  //****************
+  // SetEssenceElementKey()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    SetEssenceElementKey
+        (// @parm [in] stream property value
+         ImplAAFPropertyValue * pStreamPropertyValue,
+
+         // @parm [in] new stream alignment grid size
+         aafUID_constref  key);
 
 
   //

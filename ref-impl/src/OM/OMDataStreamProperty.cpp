@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2006, Licensor of the
+// The Original Code of this file is Copyright 1998-2007, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -591,7 +591,42 @@ OMDataStreamAccess* OMDataStreamProperty::streamAccess(void) const
   return result;
 }
 
-OMDataStreamPropertyFilter* OMDataStreamProperty::createFilter()
+  // @mfunc Does this stream know about essence element keys?
+  //   @rdesc True if this supports essence element keys, false otherwise.
+  //   @this const
+bool OMDataStreamProperty::hasEssenceElementKey(void) const
+{
+  TRACE("OMDataStreamProperty::hasEssenceElementKey");
+
+  bool result = stream()->hasEssenceElementKey();
+  return result;
+}
+
+  // @mfunc The essence element key associated with this stream.
+  //   @rdesc The essence element key.
+  //   @this const
+OMKLVKey OMDataStreamProperty::essenceElementKey(void) const
+{
+  TRACE("OMDataStreamProperty::essenceElementKey");
+  PRECONDITION("Stream supports essence element keys", hasEssenceElementKey());
+
+  OMKLVKey result = stream()->essenceElementKey();
+  return result;
+}
+
+  // @mfunc Specify the essence element key for this stream.
+  //   @parm The essence element key.
+void OMDataStreamProperty::setEssenceElementKey(const OMKLVKey& key)
+{
+  TRACE("OMDataStreamProperty::setEssenceElementKey");
+  PRECONDITION("Stream supports essence element keys", hasEssenceElementKey());
+
+  stream()->setEssenceElementKey(key);
+
+  POSTCONDITION("Essence element key set", essenceElementKey() == key);
+}
+
+OMDataStreamPropertyFilter* OMDataStreamProperty::createFilter(void)
 {
   TRACE("OMDataStreamProperty::createFilter");
 
