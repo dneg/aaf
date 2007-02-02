@@ -395,9 +395,6 @@ public:
          aafUID_constref  key);
 
 
-  bool HasEssenceElementKey() const;
-
-
 protected:
   virtual ~ImplAAFStreamPropertyValue ();
   

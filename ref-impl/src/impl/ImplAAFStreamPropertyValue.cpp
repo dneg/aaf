@@ -836,12 +836,12 @@ AAFRESULT STDMETHODCALLTYPE ImplAAFStreamPropertyValue::WriteTo(
 AAFRESULT STDMETHODCALLTYPE ImplAAFStreamPropertyValue::GetEssenceElementKey(
   aafUID_t * pEssenceElementKey)
 {
-  ASSERTU(HasEssenceElementKey());
-
   if (!isInitialized())
     return AAFRESULT_NOT_INITIALIZED;
   if (NULL == pEssenceElementKey)
     return AAFRESULT_NULL_PARAM;
+  if (!_streamProperty->hasEssenceElementKey())
+      return AAFRESULT_OPERATION_NOT_PERMITTED;
 
   convert( *reinterpret_cast<OMUniqueObjectIdentification*>(pEssenceElementKey),
            _streamProperty->essenceElementKey() );
@@ -852,10 +852,10 @@ AAFRESULT STDMETHODCALLTYPE ImplAAFStreamPropertyValue::GetEssenceElementKey(
 AAFRESULT STDMETHODCALLTYPE ImplAAFStreamPropertyValue::SetEssenceElementKey(
   aafUID_constref  key)
 {
-  ASSERTU(HasEssenceElementKey());
-
   if (!isInitialized())
     return AAFRESULT_NOT_INITIALIZED;
+  if (!_streamProperty->hasEssenceElementKey())
+      return AAFRESULT_OPERATION_NOT_PERMITTED;
 
   OMKLVKey klvKey;
   convert( klvKey,
@@ -864,9 +864,3 @@ AAFRESULT STDMETHODCALLTYPE ImplAAFStreamPropertyValue::SetEssenceElementKey(
 
   return AAFRESULT_SUCCESS;
 }
-
-bool ImplAAFStreamPropertyValue::HasEssenceElementKey() const
-{
-  return _streamProperty->hasEssenceElementKey();
-}
-

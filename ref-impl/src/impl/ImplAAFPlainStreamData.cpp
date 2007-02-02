@@ -179,9 +179,6 @@ AAFRESULT STDMETHODCALLTYPE
 {
   PROPERTYVALUE_TO_STREAMPROPERTYVALUE(pPropertyValue, pStreamPropertyValue);
 
-  if (!pStreamPropertyValue->HasEssenceElementKey())
-      return AAFRESULT_OPERATION_NOT_PERMITTED;
-
   return pStreamPropertyValue->GetEssenceElementKey(pEssenceElementKey);
 }
 
@@ -193,9 +190,6 @@ AAFRESULT STDMETHODCALLTYPE
 {
   PROPERTYVALUE_TO_STREAMPROPERTYVALUE(pPropertyValue, pStreamPropertyValue);
   
-  if (!pStreamPropertyValue->HasEssenceElementKey())
-      return AAFRESULT_OPERATION_NOT_PERMITTED;
-
   return pStreamPropertyValue->SetEssenceElementKey(key);
 }
 
