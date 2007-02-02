@@ -1035,6 +1035,12 @@ typedef interface IAAFHeader2 IAAFHeader2;
 #endif 	/* __IAAFHeader2_FWD_DEFINED__ */
 
 
+#ifndef __IAAFKLVEssenceDataParameters_FWD_DEFINED__
+#define __IAAFKLVEssenceDataParameters_FWD_DEFINED__
+typedef interface IAAFKLVEssenceDataParameters IAAFKLVEssenceDataParameters;
+#endif 	/* __IAAFKLVEssenceDataParameters_FWD_DEFINED__ */
+
+
 #ifndef __IAAFKLVStreamParameters_FWD_DEFINED__
 #define __IAAFKLVStreamParameters_FWD_DEFINED__
 typedef interface IAAFKLVStreamParameters IAAFKLVStreamParameters;
@@ -1157,6 +1163,7 @@ void __RPC_USER MIDL_user_free( void * );
 // AAF Interfaces.
 //=--------------------------------------------------------------------------=
 //
+
 
 
 
@@ -44879,6 +44886,118 @@ void __RPC_STUB IAAFHeader2_RemoveDescriptiveScheme_Stub(
 #endif 	/* __IAAFHeader2_INTERFACE_DEFINED__ */
 
 
+#ifndef __IAAFKLVEssenceDataParameters_INTERFACE_DEFINED__
+#define __IAAFKLVEssenceDataParameters_INTERFACE_DEFINED__
+
+/* interface IAAFKLVEssenceDataParameters */
+/* [unique][helpstring][uuid][object] */ 
+
+
+EXTERN_C const IID IID_IAAFKLVEssenceDataParameters;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("cc2af9ae-edad-4b30-9e3e-5ba692380a84")
+    IAAFKLVEssenceDataParameters : public IUnknown
+    {
+    public:
+        virtual HRESULT STDMETHODCALLTYPE GetEssenceElementKey( 
+            /* [out] */ aafUID_t *pEssenceElementKey) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetEssenceElementKey( 
+            /* [ref][in] */ aafUID_constref key) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IAAFKLVEssenceDataParametersVtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IAAFKLVEssenceDataParameters * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IAAFKLVEssenceDataParameters * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IAAFKLVEssenceDataParameters * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetEssenceElementKey )( 
+            IAAFKLVEssenceDataParameters * This,
+            /* [out] */ aafUID_t *pEssenceElementKey);
+        
+        HRESULT ( STDMETHODCALLTYPE *SetEssenceElementKey )( 
+            IAAFKLVEssenceDataParameters * This,
+            /* [ref][in] */ aafUID_constref key);
+        
+        END_INTERFACE
+    } IAAFKLVEssenceDataParametersVtbl;
+
+    interface IAAFKLVEssenceDataParameters
+    {
+        CONST_VTBL struct IAAFKLVEssenceDataParametersVtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IAAFKLVEssenceDataParameters_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IAAFKLVEssenceDataParameters_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IAAFKLVEssenceDataParameters_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IAAFKLVEssenceDataParameters_GetEssenceElementKey(This,pEssenceElementKey)	\
+    (This)->lpVtbl -> GetEssenceElementKey(This,pEssenceElementKey)
+
+#define IAAFKLVEssenceDataParameters_SetEssenceElementKey(This,key)	\
+    (This)->lpVtbl -> SetEssenceElementKey(This,key)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+HRESULT STDMETHODCALLTYPE IAAFKLVEssenceDataParameters_GetEssenceElementKey_Proxy( 
+    IAAFKLVEssenceDataParameters * This,
+    /* [out] */ aafUID_t *pEssenceElementKey);
+
+
+void __RPC_STUB IAAFKLVEssenceDataParameters_GetEssenceElementKey_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFKLVEssenceDataParameters_SetEssenceElementKey_Proxy( 
+    IAAFKLVEssenceDataParameters * This,
+    /* [ref][in] */ aafUID_constref key);
+
+
+void __RPC_STUB IAAFKLVEssenceDataParameters_SetEssenceElementKey_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __IAAFKLVEssenceDataParameters_INTERFACE_DEFINED__ */
+
+
 #ifndef __IAAFKLVStreamParameters_INTERFACE_DEFINED__
 #define __IAAFKLVStreamParameters_INTERFACE_DEFINED__
 
@@ -48984,7 +49103,7 @@ void __RPC_STUB IAAFTypeDefVariableArrayEx_InsertElement_Stub(
 #endif 	/* __IAAFTypeDefVariableArrayEx_INTERFACE_DEFINED__ */
 
 
-/* interface __MIDL_itf_AAF_0274 */
+/* interface __MIDL_itf_AAF_0275 */
 /* [local] */ 
 
   ///***********************************************************
@@ -49119,8 +49238,8 @@ STDAPI AAFResultToText (
 
 
 
-extern RPC_IF_HANDLE __MIDL_itf_AAF_0274_v0_0_c_ifspec;
-extern RPC_IF_HANDLE __MIDL_itf_AAF_0274_v0_0_s_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_AAF_0275_v0_0_c_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_AAF_0275_v0_0_s_ifspec;
 
 /* Additional Prototypes for ALL interfaces */
 

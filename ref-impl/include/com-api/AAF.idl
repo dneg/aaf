@@ -206,6 +206,7 @@ interface IAAFEssenceMultiAccess;
 interface IAAFEventMobSlot2;
 interface IAAFFileDescriptor2;
 interface IAAFHeader2;
+interface IAAFKLVEssenceDataParameters;
 interface IAAFKLVStreamParameters;
 interface IAAFMasterMob2;
 interface IAAFMasterMobEx;
@@ -19619,6 +19620,7 @@ interface IAAFPhysicalDescriptor : IUnknown
 
 ///
 /// Objects that implement IAAFPlainEssenceData also implement the following interfaces:
+///  - IAAFKLVEssenceDataParameters
 ///  - IAAFEssenceData
 ///  - IAAFObject
 [
@@ -19632,7 +19634,6 @@ interface IAAFPlainEssenceData : IUnknown
 
 
 }
-
 
 
 // ************************
@@ -46613,6 +46614,100 @@ interface IAAFHeader2 : IUnknown
   ///
   HRESULT RemoveDescriptiveScheme (
     [in] aafUID_constref  descriptiveSchemeID);
+
+}
+
+
+
+// ************************
+//
+// Interface IAAFKLVEssenceDataParameters
+//
+// ************************
+///
+///
+/// In addition to the specific error results listed for each method,
+/// all methods in this interface may also return one of the following
+/// values:
+/// 
+/// AAFRESULT_NOMEMORY
+///   - insufficient system memory is available to perform the
+///     operation.
+
+
+[
+    object,
+    uuid(cc2af9ae-edad-4b30-9e3e-5ba692380a84),
+    helpstring("IAAFKLVEssenceDataParameters Interface"),
+    pointer_default(unique)
+]
+interface IAAFKLVEssenceDataParameters : IUnknown
+{
+
+
+  //***********************************************************
+  //
+  // GetEssenceElementKey()
+  //
+  /// This method returns essence element key associated
+  /// with the essence stream.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - pEssenceElementKey is a valid pointer.
+  /// - the essence stream supports essence element keys.
+  ///
+  /// If this method fails nothing will be written to *pEssenceElementKey.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pEssenceElementKey arg is NULL.
+  ///
+  /// AAFRESULT_OPERATION_NOT_PERMITTED
+  ///   - the essence stream does not support essence element keys.
+  /// 
+  /// @param pEssenceElementKey [out] Essence element key.
+  ///
+  HRESULT GetEssenceElementKey (
+    [out] aafUID_t *  pEssenceElementKey);
+
+
+  //***********************************************************
+  //
+  // SetEssenceElementKey()
+  //
+  /// Set the essence element key on the essence stream.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the essence stream supports essence element keys.
+  /// 
+  /// If this method fails, the property will not be changed.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
+  ///
+  /// AAFRESULT_OPERATION_NOT_PERMITTED
+  ///   - the essence stream does not support essence element keys.
+  /// 
+  /// @param key [in, ref] essence element key
+  ///
+  HRESULT SetEssenceElementKey (
+    [in, ref] aafUID_constref  key);
 
 }
 

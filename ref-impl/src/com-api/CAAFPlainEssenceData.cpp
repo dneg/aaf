@@ -63,7 +63,105 @@ CAAFPlainEssenceData::~CAAFPlainEssenceData ()
 {
 }
 
+HRESULT STDMETHODCALLTYPE
+    CAAFPlainEssenceData::GetEssenceElementKey (aafUID_t *  pEssenceElementKey)
+{
+  HRESULT hr;
 
+  ImplAAFPlainEssenceData * ptr;
+  ImplAAFRoot * pO;
+  pO = GetRepObject ();
+  assert (pO);
+  ptr = static_cast<ImplAAFPlainEssenceData*> (pO);
+  assert (ptr);
+
+
+  try
+    {
+      hr = ptr->GetEssenceElementKey (pEssenceElementKey);
+    }
+  catch (OMException& e)
+    {
+      // OMExceptions should be handled by the impl code. However, if an
+      // unhandled OMException occurs, control reaches here. We must not
+      // allow the unhandled exception to reach the client code, so we
+      // turn it into a failure status code.
+      //
+      // If the OMException contains an HRESULT, it is returned to the
+      // client, if not, AAFRESULT_UHANDLED_EXCEPTION is returned.
+      //
+      hr = OMExceptionToResult(e, AAFRESULT_UNHANDLED_EXCEPTION);
+    }
+  catch (OMAssertionViolation &)
+    {
+      // Control reaches here if there is a programming error in the
+      // impl code that was detected by an assertion violation.
+      // We must not allow the assertion to reach the client code so
+      // here we turn it into a failure status code.
+      //
+      hr = AAFRESULT_ASSERTION_VIOLATION;
+    }
+  catch (...)
+    {
+      // We CANNOT throw an exception out of a COM interface method!
+      // Return a reasonable exception code.
+      //
+      hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+    }
+
+
+  return hr;
+}
+
+HRESULT STDMETHODCALLTYPE
+    CAAFPlainEssenceData::SetEssenceElementKey (aafUID_constref  key)
+{
+  HRESULT hr;
+
+  ImplAAFPlainEssenceData * ptr;
+  ImplAAFRoot * pO;
+  pO = GetRepObject ();
+  assert (pO);
+  ptr = static_cast<ImplAAFPlainEssenceData*> (pO);
+  assert (ptr);
+
+
+  try
+    {
+      hr = ptr->SetEssenceElementKey (key);
+    }
+  catch (OMException& e)
+    {
+      // OMExceptions should be handled by the impl code. However, if an
+      // unhandled OMException occurs, control reaches here. We must not
+      // allow the unhandled exception to reach the client code, so we
+      // turn it into a failure status code.
+      //
+      // If the OMException contains an HRESULT, it is returned to the
+      // client, if not, AAFRESULT_UHANDLED_EXCEPTION is returned.
+      //
+      hr = OMExceptionToResult(e, AAFRESULT_UNHANDLED_EXCEPTION);
+    }
+  catch (OMAssertionViolation &)
+    {
+      // Control reaches here if there is a programming error in the
+      // impl code that was detected by an assertion violation.
+      // We must not allow the assertion to reach the client code so
+      // here we turn it into a failure status code.
+      //
+      hr = AAFRESULT_ASSERTION_VIOLATION;
+    }
+  catch (...)
+    {
+      // We CANNOT throw an exception out of a COM interface method!
+      // Return a reasonable exception code.
+      //
+      hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+    }
+
+
+  return hr;
+}
 
 //
 // 
@@ -88,6 +186,13 @@ HRESULT CAAFPlainEssenceData::InternalQueryInterface
         return S_OK;
     }
 
+    if (EQUAL_UID(riid,IID_IAAFKLVEssenceDataParameters)) 
+    { 
+        *ppvObj = (IAAFKLVEssenceDataParameters *)this; 
+        ((IUnknown *)*ppvObj)->AddRef();
+        return S_OK;
+    }
+
     // Always delegate back to base implementation.
     return CAAFEssenceData::InternalQueryInterface(riid, ppvObj);
 }
@@ -96,4 +201,3 @@ HRESULT CAAFPlainEssenceData::InternalQueryInterface
 // Define the contrete object support implementation.
 // 
 AAF_DEFINE_FACTORY(AAFPlainEssenceData)
-

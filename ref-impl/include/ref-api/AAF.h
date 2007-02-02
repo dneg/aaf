@@ -205,6 +205,7 @@ interface IAAFEssenceMultiAccess;
 interface IAAFEventMobSlot2;
 interface IAAFFileDescriptor2;
 interface IAAFHeader2;
+interface IAAFKLVEssenceDataParameters;
 interface IAAFKLVStreamParameters;
 interface IAAFMasterMob2;
 interface IAAFMasterMobEx;
@@ -384,6 +385,7 @@ typedef interface IAAFEssenceMultiAccess IAAFEssenceMultiAccess;
 typedef interface IAAFEventMobSlot2 IAAFEventMobSlot2;
 typedef interface IAAFFileDescriptor2 IAAFFileDescriptor2;
 typedef interface IAAFHeader2 IAAFHeader2;
+typedef interface IAAFKLVEssenceDataParameters IAAFKLVEssenceDataParameters;
 typedef interface IAAFKLVStreamParameters IAAFKLVStreamParameters;
 typedef interface IAAFMasterMob2 IAAFMasterMob2;
 typedef interface IAAFMasterMobEx IAAFMasterMobEx;
@@ -19660,7 +19662,6 @@ DECLARE_INTERFACE_(IAAFPlainEssenceData, IUnknown)
   END_INTERFACE
 };
 #endif // __IAAFPlainEssenceData_INTERFACE_DEFINED__
-
 
 
 // IAAFPlainStreamData
@@ -46892,6 +46893,107 @@ DECLARE_INTERFACE_(IAAFHeader2, IUnknown)
   END_INTERFACE
 };
 #endif // __IAAFHeader2_INTERFACE_DEFINED__
+
+
+
+// IAAFKLVEssenceDataParameters
+
+// ************************
+//
+// Interface IAAFKLVEssenceDataParameters
+//
+// ************************
+
+
+
+#ifndef __IAAFKLVEssenceDataParameters_INTERFACE_DEFINED__
+#define __IAAFKLVEssenceDataParameters_INTERFACE_DEFINED__
+
+EXTERN_C const IID IID_IAAFKLVEssenceDataParameters;
+
+#undef  INTERFACE
+#define INTERFACE   IAAFKLVEssenceDataParameters
+
+DECLARE_INTERFACE_(IAAFKLVEssenceDataParameters, IUnknown)
+{
+  BEGIN_INTERFACE
+
+  /* *** IUnknown methods *** */
+  STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppvObj) PURE;
+  STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
+  STDMETHOD_(ULONG,Release) (THIS) PURE;
+
+  /* *** IAAFKLVEssenceDataParameters methods *** */
+
+
+  //***********************************************************
+  //
+  // GetEssenceElementKey()
+  //
+  /// This method returns essence element key associated
+  /// with the essence stream.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - pEssenceElementKey is a valid pointer.
+  /// - the essence stream supports essence element keys.
+  ///
+  /// If this method fails nothing will be written to *pEssenceElementKey.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pEssenceElementKey arg is NULL.
+  ///
+  /// AAFRESULT_OPERATION_NOT_PERMITTED
+  ///   - the essence stream does not support essence element keys.
+  ///
+  /// @param pEssenceElementKey [out] Essence element key.
+  ///
+  STDMETHOD(GetEssenceElementKey) (THIS_
+    aafUID_t *  pEssenceElementKey) PURE;
+
+
+  //***********************************************************
+  //
+  // SetEssenceElementKey()
+  //
+  /// Set the essence element key on the essence stream.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the essence stream supports essence element keys.
+  /// 
+  /// If this method fails, the property will not be changed.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
+  ///
+  /// AAFRESULT_OPERATION_NOT_PERMITTED
+  ///   - the essence stream does not support essence element keys.
+  ///
+  /// @param key [in, ref] essence element key
+  ///
+  STDMETHOD(SetEssenceElementKey) (THIS_
+    aafUID_constref  key) PURE;
+
+
+  END_INTERFACE
+};
+#endif // __IAAFKLVEssenceDataParameters_INTERFACE_DEFINED__
 
 
 
