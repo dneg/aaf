@@ -41,6 +41,8 @@
 
 #include "ImplAAFPlainEssenceData.h"
 
+#include "OMUtilities.h"
+
 #include <string.h>
 #include "AAFResult.h"
 
@@ -423,6 +425,44 @@ AAFRESULT STDMETHODCALLTYPE
   }
 
   return result;
+}
+
+
+
+AAFRESULT STDMETHODCALLTYPE ImplAAFEssenceData::GetEssenceElementKey(
+  aafUID_t * pEssenceElementKey)
+{
+  if (NULL == pEssenceElementKey)
+    return AAFRESULT_NULL_PARAM;
+  // Cannot access the data property if it is NOT associated with a file.
+  if (!persistent())
+    return AAFRESULT_OBJECT_NOT_PERSISTENT;
+  if (!_mediaData.hasEssenceElementKey())
+      return AAFRESULT_OPERATION_NOT_PERMITTED;
+
+  convert( *reinterpret_cast<OMUniqueObjectIdentification*>(pEssenceElementKey),
+           _mediaData.essenceElementKey() );
+
+  return AAFRESULT_SUCCESS;
+}
+
+
+
+AAFRESULT STDMETHODCALLTYPE ImplAAFEssenceData::SetEssenceElementKey(
+  aafUID_constref  key)
+{
+  // Cannot access the data property if it is NOT associated with a file.
+  if (!persistent())
+    return AAFRESULT_OBJECT_NOT_PERSISTENT;
+  if (!_mediaData.hasEssenceElementKey())
+      return AAFRESULT_OPERATION_NOT_PERMITTED;
+
+  OMKLVKey klvKey;
+  convert( klvKey,
+           *reinterpret_cast<const OMUniqueObjectIdentification*>(&key) );
+  _mediaData.setEssenceElementKey(klvKey);
+
+  return AAFRESULT_SUCCESS;
 }
 
 

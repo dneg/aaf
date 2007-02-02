@@ -217,6 +217,22 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 
+/****/
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFPlainEssenceData::GetEssenceElementKey (aafUID_t * pEssenceElementKey)
+{
+  return _mediaDataContainer->GetEssenceElementKey(pEssenceElementKey);
+}
+
+
+/****/
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFPlainEssenceData::SetEssenceElementKey (aafUID_constref  key)
+{
+  return _mediaDataContainer->SetEssenceElementKey(key);
+}
+
+
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFPlainEssenceData::pvtInitialize (
       ImplAAFEssenceData* pRawEssenceData)

@@ -194,6 +194,33 @@ public:
 
 
 
+  // Stream parameters
+
+/****/
+  //****************
+  // GetEssenceElementKey()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetEssenceElementKey
+        (// @parm [out,ref] key of the essence elements in this stream
+         aafUID_t *  pEssenceElementKey);
+
+
+/****/
+  //****************
+  // SetEssenceElementKey()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    SetEssenceElementKey
+        (// @parm [in] new stream alignment grid size
+         aafUID_constref  key);
+
+
+
+  //
+  // Methods used internally by the SDK.
+  //
+
   //****************
   // pvtInitialize()
   //
