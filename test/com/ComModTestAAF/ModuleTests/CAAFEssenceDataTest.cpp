@@ -103,6 +103,8 @@ struct EssenceDataTest
 
   static const char _smiley[];
   static const char _frowney[];
+
+  static const aafUID_t _essenceElementKey;
 };
 
 extern "C" HRESULT CAAFEssenceData_test(
@@ -181,6 +183,9 @@ const char EssenceDataTest::_frowney[] =        /* 16x16 frowney face */
   "   **********   "
   "    ********    "
   "      ****     ";
+
+/*static*/ const aafUID_t EssenceDataTest::_essenceElementKey =
+{0x0d010301, 0xdddd, 0xdddd, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x02, 0x01, 0x01}};
 
 
 
@@ -425,6 +430,20 @@ void EssenceDataTest::createEssenceData(IAAFSourceMob *pSourceMob)
   check(pRawEssenceData->QueryInterface(IID_IAAFEssenceData2, (void**)&pEssenceData2));
   check(pEssenceData2->GetPlainEssenceData(0, &_pEssenceData));
 
+  // Set essence element key
+  IAAFKLVEssenceDataParameters* pParameters = NULL;
+  check(_pEssenceData->QueryInterface(IID_IAAFKLVEssenceDataParameters, (void **)&pParameters));
+  AAFRESULT hr = pParameters->SetEssenceElementKey(_essenceElementKey);
+  checkExpression(AAFRESULT_SUCCEEDED(hr) || hr == AAFRESULT_OPERATION_NOT_PERMITTED,
+                  AAFRESULT_TEST_FAILED);
+  aafUID_t key;
+  hr = pParameters->GetEssenceElementKey(&key);
+  checkExpression(AAFRESULT_SUCCEEDED(hr) || hr == AAFRESULT_OPERATION_NOT_PERMITTED,
+                  AAFRESULT_TEST_FAILED);
+  checkExpression(AAFRESULT_FAILED(hr) || key == _essenceElementKey,
+                  AAFRESULT_TEST_FAILED);
+
+
   writeEssenceData(_pEssenceData, (aafDataBuffer_t)_smiley, sizeof(_smiley));
   writeEssenceData(_pEssenceData, (aafDataBuffer_t)_frowney, sizeof(_frowney));
 
@@ -443,6 +462,9 @@ void EssenceDataTest::createEssenceData(IAAFSourceMob *pSourceMob)
 
   readEssenceData(_pEssenceData, (aafDataBuffer_t)_smiley, sizeof(_smiley));
   readEssenceData(_pEssenceData, (aafDataBuffer_t)_frowney, sizeof(_frowney));
+
+  pParameters->Release();
+  pParameters = NULL;
 
   pRawEssenceData->Release();
   pRawEssenceData = NULL;
@@ -470,6 +492,16 @@ void EssenceDataTest::openEssenceData()
     check(pNextEssenceData->QueryInterface(IID_IAAFEssenceData2, (void**)&pEssenceData2));
     check(pEssenceData2->GetPlainEssenceData(0, &_pEssenceData));
 
+    // Validate essence element key
+    IAAFKLVEssenceDataParameters* pParameters = NULL;
+    check(_pEssenceData->QueryInterface(IID_IAAFKLVEssenceDataParameters, (void **)&pParameters));
+    aafUID_t key;
+    AAFRESULT hr = pParameters->GetEssenceElementKey(&key);
+    checkExpression(AAFRESULT_SUCCEEDED(hr) || hr == AAFRESULT_OPERATION_NOT_PERMITTED,
+                    AAFRESULT_TEST_FAILED);
+    checkExpression(AAFRESULT_FAILED(hr) || key == _essenceElementKey,
+                    AAFRESULT_TEST_FAILED);
+
     // Validate the essence.
     // Validate the current essence size.
     aafLength_t essenceSize = 0;
@@ -487,6 +519,9 @@ void EssenceDataTest::openEssenceData()
 
     _pSourceMob->Release();
     _pSourceMob = NULL;
+
+    pParameters->Release();
+    pParameters = NULL;
 
     _pEssenceData->Release();
     _pEssenceData = NULL;

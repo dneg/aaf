@@ -29,6 +29,7 @@ AAFPlainEssenceData\
 AAFEssenceData\
 #endm
 #c
+#import ./AAFKLVEssenceDataParameters.exp
 AD_HEAD
 AD_IDL(///
 /// This is a default inerface for a class used to provide
@@ -37,6 +38,7 @@ AD_STD_COMMENT_IFC_HEADER)
 AD_CLASS_UUID(38b4b20d, d7b8, 4005, ae, 7c, a2, da, b4, 78, 5c, 8d)
 
 AD_DEFAULT_UUID(3bde74ff, 7305, 4a19, b3, b1, b1, 35, 01, 40, 4d, ff)
-AD_XCLASS_BEGIN(Concrete, Transient)
-
-AD_XCLASS_END(Concrete, Transient)
+AD_COM_EXT_CLASS_BEGIN(public IAAFKLVEssenceDataParameters)
+AD_COM_METH(.method-GetEssenceElementKey)
+AD_COM_METH(.method-SetEssenceElementKey)
+AD_COM_EXT_CLASS_END(AAFKLVEssenceDataParameters)
