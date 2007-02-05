@@ -58,7 +58,16 @@ CAAFEssenceDataStream::Init(
   if (NULL != _data)
     return AAFRESULT_NOT_INITIALIZED;
 
-	return(essenceData->QueryInterface (IID_IAAFEssenceData, (void **)&_data));
+  IAAFEssenceData2* essenceData2 = NULL;
+  AAFRESULT hr = essenceData->QueryInterface (IID_IAAFEssenceData2, (void **)&essenceData2);
+  if (AAFRESULT_SUCCEEDED(hr))
+  {
+    hr = essenceData2->GetPlainEssenceData(0, &_data);
+    essenceData2->Release();
+    essenceData2 = NULL;
+  }
+
+  return hr;
 }
 
 HRESULT STDMETHODCALLTYPE
