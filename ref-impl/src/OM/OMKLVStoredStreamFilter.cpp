@@ -134,9 +134,9 @@ void OMKLVStoredStreamFilter::write(const OMByte* data,
 
   _stream->setPosition(_klvValueOffset + _position);
   _stream->write(data, bytes, bytesWritten);
-  OMKLVStoredStream::fixupKLVLength(*_stream, _klvLengthOffset);
   _position += bytesWritten;
   if (_position > _klvLength) {
+    OMKLVStoredStream::fixupKLVLength(*_stream, _klvLengthOffset);
     _klvLength = _position;
   }
 }
