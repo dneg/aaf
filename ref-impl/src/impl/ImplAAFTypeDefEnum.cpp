@@ -45,6 +45,8 @@
 #include "AAFTypeDefUIDs.h"
 #endif
 
+#include "OMTypeVisitor.h"
+
 #include "OMAssertions.h"
 #include <string.h>
 #include <wchar.h>
@@ -73,11 +75,19 @@ ImplAAFTypeDefEnum::ImplAAFTypeDefEnum ()
 	_persistentProperties.put(_ElementType.address());
 	_persistentProperties.put(_ElementNames.address());
 	_persistentProperties.put(_ElementValues.address());
+  _baseTypeIsCached = false;
 }
 
 
 ImplAAFTypeDefEnum::~ImplAAFTypeDefEnum ()
-{}
+{
+	if(_baseTypeIsCached)
+	{
+		_cachedBaseType->ReleaseReference();
+		_cachedBaseType = NULL;
+		_baseTypeIsCached = false;
+	}
+}
 
 
 AAFRESULT STDMETHODCALLTYPE
@@ -211,7 +221,7 @@ static void pvtZeroFill (const aafMemPtr_t inVal,
 						   aafMemPtr_t outVal,
 						   aafUInt32   outValSize)
 {
-  aafUInt32 localValue = 0;	// only 4 bytes; see below for why it's OK.
+  aafUInt32 localValue;	// only 4 bytes; see below for why it's OK.
 
   ASSERTU (inVal);
   ASSERTU (outVal);
@@ -436,7 +446,7 @@ ImplAAFTypeDefEnum::CreateValueFromName (
 	aafInt64 the_value = 0;
 	AAFRESULT rc;
 	rc = LookupValByName(&the_value, Name);
-
+	
 	if (rc == AAFRESULT_INVALID_PARAM)
 	{
 	    // Built-In names changed from v1.0 -> v1.1
@@ -455,7 +465,7 @@ ImplAAFTypeDefEnum::CreateValueFromName (
 		wcscpy(Name_mod, Name + 4);
 	    }
 	    else
-	    {
+		{
 		// Prepend kAAF
 		Name_mod = new aafCharacter[wcslen(Name) + 5];
 		if (!Name_mod)
@@ -463,14 +473,14 @@ ImplAAFTypeDefEnum::CreateValueFromName (
 		wcscpy(Name_mod, L"kAAF");
 		wcscat(Name_mod, Name);
 	    }
-
+			
 	    // Look up again - Return checked later.
 	    rc = LookupValByName(&the_value, Name_mod);
-
+			
 	    // Cleanup of allocated memory
 	    delete[] Name_mod;
 	}
-
+	
 	// At this point, we have a successful lookup and the_val is
 	// set, the name was not found (even with variation), or
 	// some other error occurred. Check the result and return
@@ -704,6 +714,8 @@ ImplAAFTypeDefEnum::GetIntegerValue (
 	// if (AAFRESULT_FAILED(hr)) return hr;
 	localIntSize = NativeSize();
 	
+	aafInt64 retval;
+	
 	ImplAAFDictionarySP pDict;
 	hr = GetDictionary(&pDict);
 	ASSERTU (AAFRESULT_SUCCEEDED (hr));
@@ -735,9 +747,8 @@ ImplAAFTypeDefEnum::GetIntegerValue (
 	ImplAAFTypeDefInt * pLocalTd =
 		dynamic_cast<ImplAAFTypeDefInt*>((ImplAAFTypeDef*) ptd);
 	ASSERTU (pLocalTd);
-
+	
 	ASSERTU (pPropValIn);
-	aafInt64 retval = 0;
 	switch (localIntSize)
 	{
 	case 1:
@@ -1073,26 +1084,77 @@ ImplAAFTypeDefEnum::GetElementNameBufLen (
 }
 
 
-ImplAAFTypeDefSP ImplAAFTypeDefEnum::BaseType () const
+ImplAAFTypeDef* ImplAAFTypeDefEnum::NonRefCountedBaseType (void) const
 {
-	ImplAAFTypeDefSP result;
-	AAFRESULT hr = GetElementType (&result);
-	ASSERTU (AAFRESULT_SUCCEEDED (hr));
-	ASSERTU (result);
-	return result;
+	if(_baseTypeIsCached)
+	{
+		return _cachedBaseType;
+	}
+	else
+	{	
+			ImplAAFTypeDef* result;
+			AAFRESULT hr = GetElementType (&result);
+			ASSERTU (AAFRESULT_SUCCEEDED (hr));
+			ASSERTU (result);
+ 		  ((ImplAAFTypeDefEnum*)this)->_cachedBaseType = result;
+ 		  ((ImplAAFTypeDefEnum*)this)->_baseTypeIsCached = true;
+			return result;
+  	}
+}
+
+
+const OMUniqueObjectIdentification&
+ImplAAFTypeDefEnum::identification(void) const
+{
+  return ImplAAFMetaDefinition::identification();
+}
+
+const wchar_t* ImplAAFTypeDefEnum::name(void) const
+{
+  return ImplAAFMetaDefinition::name();
+}
+
+bool ImplAAFTypeDefEnum::hasDescription(void) const
+{
+  return ImplAAFMetaDefinition::hasDescription();
+}
+
+const wchar_t* ImplAAFTypeDefEnum::description(void) const
+{
+  return ImplAAFMetaDefinition::description();
+}
+
+bool ImplAAFTypeDefEnum::isPredefined(void) const
+{
+  return ImplAAFMetaDefinition::isPredefined();
+}
+
+bool ImplAAFTypeDefEnum::isFixedSize(void) const
+{
+  bool result = false;
+  if (IsFixedSize() == kAAFTrue) {
+    result = true;
+  }
+  return result;
 }
 
 void ImplAAFTypeDefEnum::reorder(OMByte* externalBytes,
 								 OMUInt32 externalBytesSize) const
 {
-	BaseType()->reorder (externalBytes, externalBytesSize);
+	NonRefCountedBaseType()->type()->reorder (externalBytes, externalBytesSize);
 }
 
 
 OMUInt32 ImplAAFTypeDefEnum::externalSize(const OMByte* /*internalBytes*/,
-										OMUInt32 /*internalBytesSize*/) const
+										  OMUInt32 /*internalBytesSize*/) const
 {
 	return PropValSize ();
+}
+
+
+OMUInt32 ImplAAFTypeDefEnum::externalSize(void) const
+{
+  return PropValSize();
 }
 
 
@@ -1102,7 +1164,7 @@ void ImplAAFTypeDefEnum::externalize(const OMByte* internalBytes,
 									 OMUInt32 externalBytesSize,
 									 OMByteOrder byteOrder) const
 {
-	BaseType()->externalize (internalBytes,
+	NonRefCountedBaseType()->type()->externalize (internalBytes,
 		internalBytesSize,
 		externalBytes,
 		externalBytesSize,
@@ -1111,12 +1173,18 @@ void ImplAAFTypeDefEnum::externalize(const OMByte* internalBytes,
 
 
 OMUInt32 ImplAAFTypeDefEnum::internalSize(const OMByte* /*externalBytes*/,
-										OMUInt32 /*externalBytesSize*/) const
+										  OMUInt32 /*externalBytesSize*/) const
 {
 	if (IsRegistered ())
 		return NativeSize ();
 	else
 		return PropValSize ();
+}
+
+
+OMUInt32 ImplAAFTypeDefEnum::internalSize(void) const
+{
+  return NativeSize();
 }
 
 
@@ -1126,13 +1194,79 @@ void ImplAAFTypeDefEnum::internalize(const OMByte* externalBytes,
 									 OMUInt32 internalBytesSize,
 									 OMByteOrder byteOrder) const
 {
-	BaseType()->internalize (externalBytes,
+	NonRefCountedBaseType()->type()->internalize (externalBytes,
 		externalBytesSize,
 		internalBytes,
 		internalBytesSize,
 		byteOrder);
 }
 
+
+void ImplAAFTypeDefEnum::accept(OMTypeVisitor& visitor) const
+{
+  visitor.visitEnumeratedType(this);
+  elementType()->accept(visitor);
+}
+
+
+OMType* ImplAAFTypeDefEnum::elementType(void) const
+{
+  ImplAAFTypeDef* type = NonRefCountedBaseType();
+  return type->type();
+}
+
+
+OMUInt32 ImplAAFTypeDefEnum::elementCount(void) const
+{
+  const size_t  count = _ElementValues.count();
+  return static_cast<OMUInt32>(count);
+}
+
+
+const wchar_t* ImplAAFTypeDefEnum::elementName( aafUInt32 index ) const
+{
+  TRACE("ImplAAFTypeDefEnum::elementName");
+  PRECONDITION( "Valid index", index < elementCount() );
+
+
+  // Get the element names buffer and the number of characters in the buffer
+  const wchar_t* namesBuffer =
+    reinterpret_cast<const wchar_t*>(_ElementNames.bits());
+  const size_t namesBufferSize = _ElementNames.bitsSize() / sizeof(wchar_t);
+
+  // Allocate an array that will contain the pointers to the element names
+  const size_t nameCount =
+      ImplAAFTypeDef::stringArrayStringCount( namesBuffer, namesBufferSize );
+  ASSERT( "Valid name count", nameCount == elementCount() );
+  const wchar_t** names = new const wchar_t*[ nameCount ];
+
+  // Get the pointers to the element names
+  ImplAAFTypeDef::getStringArrayStrings( namesBuffer,
+                                         namesBufferSize,
+                                         names,
+                                         nameCount );
+
+  // The reguested element name
+  const wchar_t* result = names[index];
+
+  delete[] names;
+  names = 0;
+
+
+  POSTCONDITION( "Valid result", result != 0 );
+  return result;
+}
+
+
+OMInt64 ImplAAFTypeDefEnum::elementValue( aafUInt32 index ) const
+{
+  TRACE("ImplAAFTypeDefEnum::elementValue");
+  PRECONDITION("Valid index", index < elementCount());
+
+  const aafInt64& v = _ElementValues.getAt(index);
+
+  return static_cast<OMUInt64>(v);
+}
 
 
 aafBool ImplAAFTypeDefEnum::IsFixedSize (void) const
@@ -1143,7 +1277,7 @@ aafBool ImplAAFTypeDefEnum::IsFixedSize (void) const
 
 OMUInt32 ImplAAFTypeDefEnum::PropValSize (void) const
 {
-	return BaseType()->PropValSize ();
+	return NonRefCountedBaseType()->PropValSize ();
 }
 
 

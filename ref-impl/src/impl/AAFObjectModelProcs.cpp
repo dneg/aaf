@@ -207,6 +207,7 @@ static bool InitializePropertyDefinition(
   ImplAAFPropertyDef *pProperty = NULL;
   ImplAAFTypeDef *pType = NULL;
   const TypeDefinition *typeDefinition = NULL;
+  ImplAAFClassDef *pClass = NULL;
   AAFRESULT result;
 
   
@@ -219,16 +220,24 @@ static bool InitializePropertyDefinition(
     pType = metaDictionary->findAxiomaticTypeDefinition(*typeDefinition->id());
     ASSERTU (pType);
 
+    pClass = metaDictionary->findAxiomaticClassDefinition(*(propertyDefinition->classId()));
+    ASSERTU (pClass);
+
     result = pProperty->pvtInitialize (
       *propertyDefinition->id(),
       propertyDefinition->pid(),
       propertyDefinition->name(),
       pType,
       (propertyDefinition->required()) ? kAAFFalse : kAAFTrue,
-      (propertyDefinition->uid()) ? kAAFTrue : kAAFFalse);
+      (propertyDefinition->uid()) ? kAAFTrue : kAAFFalse,
+      pClass);
     ASSERTU (AAFRESULT_SUCCEEDED(result));
     if (AAFRESULT_FAILED(result))
+    {
+      pClass->ReleaseReference();
+      pClass = NULL;
       throw result;
+    }
 
     return true;
   }

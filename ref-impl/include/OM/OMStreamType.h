@@ -26,6 +26,17 @@
 #ifndef OMSTREAMTYPE_H
 #define OMSTREAMTYPE_H
 
-// Nothing yet
+#include "OMType.h"
+#include "OMSingleton.h"
+
+class OMStreamType;
+
+// @author Tim Bingham | tjb | Avid Technology, Inc. | OMStreamType
+class OMStreamType : public OMType, public OMSingleton<OMStreamType> {
+public:
+
+  virtual OMType::Tag tag(void) const;
+
+};
 
 #endif

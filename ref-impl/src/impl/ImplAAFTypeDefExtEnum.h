@@ -29,6 +29,7 @@
 //=---------------------------------------------------------------------=
 
 class ImplAAFPropertyValue;
+class OMTypeVisitor;
 
 #ifndef __ImplAAFTypeDef_h__
 #include "ImplAAFTypeDef.h"
@@ -36,9 +37,10 @@ class ImplAAFPropertyValue;
 
 #include "AAFUtils.h"
 #include "OMArrayProperty.h"
+#include "OMExtendibleEnumeratedType.h"
 
 
-class ImplAAFTypeDefExtEnum : public ImplAAFTypeDef
+class ImplAAFTypeDefExtEnum : public ImplAAFTypeDef, public OMExtendibleEnumeratedType
 {
 public:
 	//
@@ -205,16 +207,37 @@ public:
 	
 	//*************************************************************
 	//
+	// Overrides from OMDefinition
+	//
+	//*************************************************************
+
+	virtual const OMUniqueObjectIdentification& identification(void) const;
+
+	virtual const wchar_t* name(void) const;
+
+	virtual bool hasDescription(void) const;
+
+	virtual const wchar_t* description(void) const;
+
+	virtual bool isPredefined(void) const;
+
+
+	//*************************************************************
+	//
 	// Overrides from OMType, via inheritace through ImplAAFTypeDef
 	//
 	//*************************************************************
 	
+	virtual bool isFixedSize(void) const;
+
 	virtual void reorder(OMByte* bytes,
 		OMUInt32 bytesSize) const;
 	
 	virtual OMUInt32 externalSize(const OMByte* internalBytes,
 		OMUInt32 internalBytesSize) const;
 	
+	virtual OMUInt32 externalSize(void) const;
+
 	virtual void externalize(const OMByte* internalBytes,
 		OMUInt32 internalBytesSize,
 		OMByte* externalBytes,
@@ -224,12 +247,29 @@ public:
 	virtual OMUInt32 internalSize(const OMByte* externalBytes,
 		OMUInt32 externalBytesSize) const;
 	
+	virtual OMUInt32 internalSize(void) const;
+
 	virtual void internalize(const OMByte* externalBytes,
 		OMUInt32 externalBytesSize,
 		OMByte* internalBytes,
 		OMUInt32 internalBytesSize,
 		OMByteOrder byteOrder) const;
 	
+  virtual void accept(OMTypeVisitor& visitor) const;
+
+	//*************************************************************
+	//
+	// Overrides from OMExtendibleEnumeratedType
+	//
+	//*************************************************************
+
+	virtual OMUInt32 elementCount(void) const;
+
+	virtual const wchar_t* elementName(OMUInt32 index) const;
+
+	virtual OMUniqueObjectIdentification elementValue(OMUInt32 index) const;
+
+
 	AAFRESULT STDMETHODCALLTYPE
 		GetElementNameBufLen (aafUInt32  index,
 						  aafUInt32 * pLen);
@@ -247,7 +287,8 @@ private:
 	// array of values for elements.
 	OMArrayProperty<aafUID_t> _ElementValues;
 	
-	ImplAAFTypeDefSP _cachedBaseType;
+  ImplAAFTypeDef     *_cachedBaseType;
+  aafBool            _baseTypeIsCached;
 	
         // Lookup a value identifier by name. pName is assumed
         // to be non-null. Returns AAFRESULT_SUCCESS if found.
@@ -256,7 +297,7 @@ private:
 
 public:
 	
-	ImplAAFTypeDefSP BaseType (void) const;
+	ImplAAFTypeDef* NonRefCountedBaseType (void) const;
 	
 public:
 	// Overrides from ImplAAFTypeDef

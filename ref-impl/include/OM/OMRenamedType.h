@@ -26,6 +26,16 @@
 #ifndef OMRENAMEDTYPE_H
 #define OMRENAMEDTYPE_H
 
-// Nothing yet
+#include "OMType.h"
+
+// @author Tim Bingham | tjb | Avid Technology, Inc. | OMRenamedType
+class OMRenamedType : public OMType {
+public:
+
+  virtual OMType::Tag tag(void) const;
+
+  virtual OMType* renamedType(void) const = 0;
+
+};
 
 #endif

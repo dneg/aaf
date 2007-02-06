@@ -1,9 +1,4 @@
-#ifndef __TaggedValueDefinition_h__
-#define __TaggedValueDefinition_h__
-
 //=---------------------------------------------------------------------=
-//
-// This file was GENERATED for the AAF SDK
 //
 // $Id$ $Name$
 //
@@ -18,23 +13,34 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2006, Licensor of the
+// The Original Code of this file is Copyright 1998-2004, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
-// Licensor of the AAF Association is Metaglue Corporation.
+// Licensor of the AAF Association is Avid Technology.
 // All rights reserved.
 //
 //=---------------------------------------------------------------------=
 
+// @doc OMEXTERNAL
+#ifndef OMEXTENDIBLEENUMERATEDTYPE_H
+#define OMEXTENDIBLEENUMERATEDTYPE_H
 
-#include "AAFTypes.h"
+#include "OMType.h"
 
-// AAF well-known TaggedValueDefinition instances
-//
+// @author Tim Bingham | tjb | Avid Technology, Inc. |
+// OMExtendibleEnumeratedType
+class OMExtendibleEnumeratedType : public OMType {
+public:
 
-// AAF TaggedValueDefinition legacy aliases
-//
+  virtual OMType::Tag tag(void) const;
 
+  virtual OMUInt32 elementCount(void) const = 0;
 
-#endif // ! __TaggedValueDefinition_h__
+  virtual const wchar_t* elementName(OMUInt32 index) const = 0;
+
+  virtual OMUniqueObjectIdentification elementValue(OMUInt32 index) const = 0;
+
+};
+
+#endif

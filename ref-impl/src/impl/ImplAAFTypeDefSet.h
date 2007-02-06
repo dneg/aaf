@@ -33,7 +33,7 @@ class ImplAAFPropertyValue;
 class ImplEnumAAFPropertyValues;
 class ImplAAFTypeDefRecord;
 class ImplAAFPropertyDef;
-
+class OMTypeVisitor;
 
 
 #ifndef __ImplAAFTypeDef_h__
@@ -236,6 +236,37 @@ public:
   // Override callbacks from OMStorable
   virtual void onSave(void* clientContext) const;
   virtual void onRestore(void* clientContext) const;
+
+ 
+  // Override from OMDefinition
+  virtual const OMUniqueObjectIdentification& identification(void) const;
+  virtual const wchar_t* name(void) const;
+  virtual bool  hasDescription(void) const;
+  virtual const wchar_t* description(void) const;
+  virtual bool isPredefined(void) const;
+
+  // Override from OMType
+  virtual bool isFixedSize(void) const;
+  virtual void reorder(OMByte* externalBytes,
+                       OMUInt32 externalBytesSize) const;
+  virtual OMUInt32 externalSize(const OMByte* internalBytes,
+                                OMUInt32 internalBytesSize) const;
+  virtual OMUInt32 externalSize(void) const;
+  virtual void externalize(const OMByte* internalBytes,
+                           OMUInt32 internalBytesSize,
+                           OMByte* externalBytes,
+                           OMUInt32 externalBytesSize,
+                           OMByteOrder byteOrder) const;
+  virtual OMUInt32 internalSize(const OMByte* externalBytes,
+                                OMUInt32 externalSize) const;
+  virtual OMUInt32 internalSize(void) const;
+  virtual void internalize(const OMByte* externalBytes,
+                           OMUInt32 externalBytesSize,
+                           OMByte* internalBytes,
+                           OMUInt32 internalBytesSize,
+                           OMByteOrder byteOrder) const;
+
+  virtual void accept(OMTypeVisitor& visitor) const;
 
   // Method is called after class has been added to MetaDictionary.
   // If this method fails the class is removed from the MetaDictionary and the

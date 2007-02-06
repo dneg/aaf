@@ -26,14 +26,37 @@
 #ifndef OMTYPE_H
 #define OMTYPE_H
 
+#include "OMDefinition.h"
 #include "OMDataTypes.h"
+
+class OMTypeVisitor;
 
   // @class Abstract base class describing the data types that may be
   //        assumed by persistent properties supported by the Object Manager.
   //   @cauthor Tim Bingham | tjb | Avid Technology, Inc.
-class OMType {
+class OMType : public OMDefinition {
 public:
   // @access Public members.
+
+  enum Tag {
+    OMTTUnknown               =  0,
+    OMTTInteger               =  1,
+    OMTTCharacter             =  2,
+    OMTTStrongObjectReference =  3,
+    OMTTWeakObjectReference   =  4,
+    OMTTRename                =  5,
+    OMTTEnumerated            =  6,
+    OMTTFixedArray            =  7,
+    OMTTVaryingArray          =  8,
+    OMTTSet                   =  9,
+    OMTTRecord                = 10,
+    OMTTStream                = 11,
+    OMTTString                = 12,
+    OMTTExtendibleEnumerated  = 13,
+    OMTTIndirect              = 14,
+    OMTTOpaque                = 15};
+
+  virtual OMType::Tag tag(void) const = 0;
 
     // @cmember Are all instances of this type the same size ?
     //          The <f externalSize()> and <f internalSize()> of
@@ -187,8 +210,7 @@ public:
                    OMByte* outputBytes,
                    OMUInt32 bytesSize);
 
-  // tjb - temporary - should use "identification" inherited from OMDefinition
-  virtual const OMUniqueObjectIdentification& uniqueIdentification(void) const;
+  virtual void accept(OMTypeVisitor& visitor) const = 0;
 
 };
 

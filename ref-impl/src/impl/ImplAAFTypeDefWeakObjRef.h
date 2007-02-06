@@ -36,11 +36,14 @@ class ImplAAFClassDef;
 #include "ImplAAFTypeDefObjectRef.h"
 #endif
 #include "AAFUtils.h"
+#include "OMObjectReferenceType.h"
 #include "OMWeakRefProperty.h"
 #include "OMArrayProperty.h"
 
 
-class ImplAAFTypeDefWeakObjRef : public ImplAAFTypeDefObjectRef
+class ImplAAFTypeDefWeakObjRef : public ImplAAFTypeDefObjectRef,
+                                 public OMWeakObjectReferenceType
+
 {
 public:
   //
@@ -120,6 +123,80 @@ public:
   aafUInt32 GetTargetPidCount(void) const;
   const OMPropertyId * GetTargetPids(void) const;
   OMPropertyId GetUniqueIdentifierPid(void) const;
+
+
+  //*************************************************************
+  //
+  // Overrides from OMDefinition
+  //
+  //*************************************************************
+
+  virtual const OMUniqueObjectIdentification& identification(void) const;
+
+  virtual const wchar_t* name(void) const;
+
+  virtual bool hasDescription(void) const;
+
+  virtual const wchar_t* description(void) const;
+
+  virtual bool isPredefined(void) const;
+
+
+  //*************************************************************
+  //
+  // Overrides from OMType, via inheritace through ImplAAFTypeDef
+  //
+  //*************************************************************
+
+  virtual bool isFixedSize(void) const;
+
+  virtual void reorder(OMByte* externalBytes,
+                       OMUInt32 externalBytesSize) const;
+
+  virtual OMUInt32 externalSize(const OMByte* internalBytes,
+                                OMUInt32 internalBytesSize) const;
+
+  virtual OMUInt32 externalSize(void) const;
+
+  virtual void externalize(const OMByte* internalBytes,
+                           OMUInt32 internalBytesSize,
+                           OMByte* externalBytes,
+                           OMUInt32 externalBytesSize,
+                           OMByteOrder byteOrder) const;
+
+  virtual OMUInt32 internalSize(const OMByte* externalBytes,
+                                OMUInt32 externalSize) const;
+
+  virtual OMUInt32 internalSize(void) const;
+
+  virtual void internalize(const OMByte* externalBytes,
+                           OMUInt32 externalBytesSize,
+                           OMByte* internalBytes,
+                           OMUInt32 internalBytesSize,
+                           OMByteOrder byteOrder) const;
+
+  virtual void accept(OMTypeVisitor& visitor) const;
+
+
+  //*************************************************************
+  //
+  // Overrides from OMObjectReferenceType, via inheritace
+  // through OMWeakObjectReferenceType
+  //
+  //*************************************************************
+
+  virtual const OMUniqueObjectIdentification& referencedType(void) const;
+
+  //*************************************************************
+  //
+  // Overrides from OMWeakObjectReferenceType
+  //
+  //*************************************************************
+
+  virtual OMUInt32 targetPathElementCount(void) const;
+
+  virtual const OMUniqueObjectIdentification& targetPathElement(
+                                                         OMUInt32 index) const;
 
 
   // overrides from ImplAAFTypeDef

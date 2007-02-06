@@ -26,6 +26,24 @@
 #ifndef OMENUMERATEDTYPE_H
 #define OMENUMERATEDTYPE_H
 
-// Nothing yet
+#include "OMType.h"
+
+// @author Tim Bingham | tjb | Avid Technology, Inc. | OMEnumeratedType
+class OMEnumeratedType : public OMType {
+public:
+
+  virtual OMType::Tag tag(void) const;
+
+  virtual OMType* elementType(void) const = 0;
+
+  virtual OMUInt32 elementCount(void) const = 0;
+
+  virtual const wchar_t* elementName(OMUInt32 index) const = 0;
+
+  virtual OMInt64 elementValue(OMUInt32 index) const = 0;
+
+
+
+};
 
 #endif

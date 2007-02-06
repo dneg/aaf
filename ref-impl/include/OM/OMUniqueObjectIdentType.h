@@ -27,6 +27,8 @@
 #define OMUNIQUEOBJECTIDENTTYPE_H
 
 #include "OMType.h"
+#include "OMRecordType.h"
+#include "OMDefinition.h"
 #include "OMSingleton.h"
 
 class OMUniqueObjectIdentificationType;
@@ -36,8 +38,9 @@ class OMUniqueObjectIdentificationType;
   //   @base public | <c OMSingleton>
   //   @cauthor Tim Bingham | tjb | Avid Technology, Inc.
 class OMUniqueObjectIdentificationType :
-                         public OMType,
-                         public OMSingleton<OMUniqueObjectIdentificationType> {
+                         public OMRecordType,
+                         public OMSingleton<OMUniqueObjectIdentificationType>,
+                         private OMBuiltinDefinition {
 public:
 
   OMUniqueObjectIdentificationType(void);
@@ -70,6 +73,22 @@ public:
                            OMByte* internalBytes,
                            OMUInt32 internalBytesSize,
                            OMByteOrder byteOrder) const;
+
+  virtual const OMUniqueObjectIdentification& identification(void) const;
+
+  virtual const wchar_t* name(void) const;
+
+  virtual bool hasDescription(void) const;
+
+  virtual const wchar_t* description(void) const;
+
+  virtual bool isPredefined(void) const;
+
+  virtual OMUInt32 memberCount(void) const;
+
+  virtual const wchar_t* memberName(OMUInt32 index) const;
+
+  virtual const OMType* memberType(OMUInt32 index) const;
 
 };
 

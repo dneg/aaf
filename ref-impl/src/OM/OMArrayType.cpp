@@ -25,4 +25,18 @@
 // @doc OMEXTERNAL
 #include "OMArrayType.h"
 
-// Nothing yet
+// class OMFixedArrayType;
+
+OMType::Tag OMFixedArrayType::tag(void) const
+{
+  return OMTTFixedArray;
+}
+
+
+// class OMVaryingArrayType;
+
+OMType::Tag OMVaryingArrayType::tag(void) const
+{
+  return OMTTVaryingArray;
+}
+

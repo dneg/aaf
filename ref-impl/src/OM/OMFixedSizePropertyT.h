@@ -119,6 +119,17 @@ PropertyType* OMFixedSizeProperty<PropertyType>::operator &(void)
   return reinterpret_cast<PropertyType*>(_bits);
 }
 
+  // @mfunc Const "Address of" operator.
+  //   @tcarg class | PropertyType | The type of the property. This
+  //          can be any type with well defined copy and assignment
+  //          semantics.
+  //   @rdesc Const pointer to a <p PropertyType>
+template <typename PropertyType>
+const PropertyType* OMFixedSizeProperty<PropertyType>::operator &(void) const
+{
+  return reinterpret_cast<const PropertyType*>(_bits);
+}
+
   // @mfunc Convert this <c OMFixedSizeProperty> into a const
   //        reference to a <p PropertyType>.
   //   @tcarg class | PropertyType | The type of the property. This

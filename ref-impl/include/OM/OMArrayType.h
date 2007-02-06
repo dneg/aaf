@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2005, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -28,11 +28,29 @@
 
 #include "OMType.h"
 
-// @author Tim Bingham | tjb | Avid Technology, Inc. | OMArrayType
-class OMArrayType {
+class OMArrayType : public OMType {
 public:
 
   virtual OMType* elementType(void) const = 0;
+
+};
+
+// @author Tim Bingham | tjb | Avid Technology, Inc. | OMFixedArrayType
+class OMFixedArrayType : public OMArrayType {
+public:
+
+  virtual OMType::Tag tag(void) const;
+
+  virtual OMUInt32 elementCount(void) const = 0;
+
+};
+
+// @author Tim Bingham | tjb | Avid Technology, Inc. | OMVaryingArrayType
+class OMVaryingArrayType : public OMArrayType {
+public:
+
+  virtual OMType::Tag tag(void) const;
+
 
 };
 

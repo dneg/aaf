@@ -57,9 +57,9 @@ ImplAAFPropertyDef::ImplAAFPropertyDef ()
     _IsOptional(PID_PropertyDefinition_IsOptional, L"IsOptional"),
     _pid(PID_PropertyDefinition_LocalIdentification, L"LocalIdentification"),
     _IsUniqueIdentifier(PID_PropertyDefinition_IsUniqueIdentifier, L"IsUniqueIdentifier"),
-	_cachedType (0),  // BobT: don't reference count the cached type!
-	_wname (0),
-	_OMPropCreateFunc (0)
+	_cachedType (0),
+    _OMPropCreateFunc (0),
+    _containingClass(0)
 {
   _persistentProperties.put (_Type.address());
   _persistentProperties.put (_IsOptional.address());
@@ -70,9 +70,9 @@ ImplAAFPropertyDef::ImplAAFPropertyDef ()
 
 ImplAAFPropertyDef::~ImplAAFPropertyDef ()
 {
-  // BobT: don't reference count the cached type!
-
-  delete[] _wname;
+  if (_cachedType)
+    _cachedType->ReleaseReference();
+  _cachedType = 0;
 }
 
 
@@ -82,11 +82,14 @@ AAFRESULT ImplAAFPropertyDef::pvtInitialize (
       const aafCharacter * pPropName,
 	  const aafUID_t & typeId,
       aafBoolean_t isOptional,
-      aafBoolean_t isUniqueIdentifier)
+      aafBoolean_t isUniqueIdentifier,
+      OMClassDefinition* pContainingClass)
 {
   AAFRESULT hr;
 
   if (! pPropName) return AAFRESULT_NULL_PARAM;
+  if (! pContainingClass)
+    return AAFRESULT_NULL_PARAM;
 
   hr = ImplAAFMetaDefinition::Initialize(propertyAuid, pPropName, NULL);
 	if (AAFRESULT_FAILED (hr))
@@ -102,6 +105,8 @@ AAFRESULT ImplAAFPropertyDef::pvtInitialize (
     _IsUniqueIdentifier = isUniqueIdentifier;
   }
 
+  _containingClass = pContainingClass;
+
   return AAFRESULT_SUCCESS;
 }
 
@@ -112,12 +117,15 @@ AAFRESULT ImplAAFPropertyDef::pvtInitialize (
       aafCharacter_constptr pPropName,
       ImplAAFTypeDef *pType,
       aafBoolean_t isOptional,
-      aafBoolean_t isUniqueIdentifier)
+      aafBoolean_t isUniqueIdentifier,
+      OMClassDefinition* pContainingClass)
 {
   AAFRESULT hr;
 
   if (! pPropName) return AAFRESULT_NULL_PARAM;
   if (! pType)
+    return AAFRESULT_NULL_PARAM;
+  if (! pContainingClass)
     return AAFRESULT_NULL_PARAM;
 
   aafUID_t typeId;
@@ -129,8 +137,8 @@ AAFRESULT ImplAAFPropertyDef::pvtInitialize (
   if (AAFRESULT_FAILED (hr))
     return hr;
 
-  // Save the type. This is NOT reference counted!
   _cachedType = pType;
+  _cachedType->AcquireReference();
 
 
   _Type = typeId;
@@ -142,6 +150,8 @@ AAFRESULT ImplAAFPropertyDef::pvtInitialize (
     // Only set this optional property if true.
     _IsUniqueIdentifier = isUniqueIdentifier;
   }
+
+  _containingClass = pContainingClass;
 
   return AAFRESULT_SUCCESS;
 }
@@ -166,16 +176,17 @@ AAFRESULT STDMETHODCALLTYPE
 		  (ImplAAFPropertyDef *) this;
 	  aafUID_t typeId = _Type;
 
-	  // Remember that _cachedType is *not* referenced counted!
 	  ImplAAFTypeDef * tmp = 0;
 	  hr = pDict->LookupTypeDef (typeId, &tmp);
 	  if (AAFRESULT_FAILED (hr))
 		return hr;
 	  ASSERTU (tmp);
+	  if (!_cachedType) {
+		pNonConstThis->_cachedType = tmp;
+		_cachedType->AcquireReference();
+	  }
 	  // If lookup caused this to already be put into the cache, just
 	  // throw away the current copy (in tmp)
-	  if (! pNonConstThis->_cachedType)
-		pNonConstThis->_cachedType = tmp;
 	  tmp->ReleaseReference ();
 	  tmp = 0;
 	}
@@ -229,6 +240,15 @@ OMPropertyId ImplAAFPropertyDef::OmPid (void) const
 }
 
 
+OMClassDefinition* ImplAAFPropertyDef::containingClass(void) const
+{
+  TRACE( "ImplAAFPropertyDef::containingClass" );
+  PRECONDITION( "Property definition is registered", _containingClass != 0 );
+
+  return _containingClass;
+}
+
+
 const OMType* ImplAAFPropertyDef::type(void) const
 {
   AAFRESULT hr;
@@ -242,50 +262,51 @@ const OMType* ImplAAFPropertyDef::type(void) const
   refCount = ptd->ReleaseReference ();
   // make sure our assumption (dict owns a ref) is correct
   ASSERTU (refCount > 0);
-  return ptd;
+  return ptd->type();
 }
 
+
 const OMUniqueObjectIdentification&
-ImplAAFPropertyDef::uniqueIdentification(void) const
+ImplAAFPropertyDef::identification(void) const
 {
-  ASSERTU( sizeof(OMUniqueObjectIdentification) == sizeof(aafUID_t) );
-  static aafUID_t auid;
-  HRESULT hr = GetAUID( &auid );
-
-  if ( AAFRESULT_SUCCESS != hr ) {
-	return nullOMUniqueObjectIdentification;
-  }
-
-  return reinterpret_cast<const OMUniqueObjectIdentification&>( auid );
+  // to prevent ambiguity
+  return ImplAAFMetaDefinition::identification();
 }
 
 const wchar_t* ImplAAFPropertyDef::name(void) const
 {
-  if (! _wname)
-	{
-	  AAFRESULT hr;
-	  aafUInt32 nameLen;
-
-	  ImplAAFPropertyDef * pNonConstThis =
-		(ImplAAFPropertyDef *) this;
-	  hr = pNonConstThis->GetNameBufLen (&nameLen);
-	  ASSERTU (AAFRESULT_SUCCEEDED (hr));
-	  pNonConstThis->_wname = (aafCharacter*) new aafUInt8[nameLen];
-	  ASSERTU (_wname);
-
-	  hr = pNonConstThis->GetName (_wname, nameLen);
-	  ASSERTU (AAFRESULT_SUCCEEDED (hr));
-	}
-  ASSERTU (_wname);
-  return _wname;
+  // to prevent ambiguity
+  return ImplAAFMetaDefinition::name();
 }
 
+
+bool ImplAAFPropertyDef::hasDescription(void) const
+{
+  // to prevent ambiguity
+  return ImplAAFMetaDefinition::hasDescription();
+}
+
+const wchar_t* ImplAAFPropertyDef::description(void) const
+{
+  // to prevent ambiguity
+  return ImplAAFMetaDefinition::description();
+}
+
+bool ImplAAFPropertyDef::isPredefined(void) const
+{
+  // to prevent ambiguity
+  return ImplAAFMetaDefinition::isPredefined();
+}
 
 OMPropertyId ImplAAFPropertyDef::localIdentification(void) const
 {
   return _pid;
 }
 
+void ImplAAFPropertyDef::setLocalIdentification(OMPropertyId propertyId)
+{
+  _pid = propertyId;
+}
 
 bool ImplAAFPropertyDef::isOptional(void) const
 {
@@ -425,6 +446,8 @@ void ImplAAFPropertyDef::onRestore(void* clientContext) const
 #undef AAF_BEGIN_TYPE_PATCHES
 #undef AAF_PATCH_PROPETY_TYPE
 #undef AAF_END_TYPE_PATCHES
+
+
 
 // Method is called after class has been added to MetaDictionary.
 // If this method fails the class is removed from the MetaDictionary and the

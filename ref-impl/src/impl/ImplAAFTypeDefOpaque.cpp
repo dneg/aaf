@@ -43,6 +43,7 @@
 #include "AAFStoredObjectIDs.h"
 #include "ImplAAFObjectCreation.h"
 
+#include "OMTypeVisitor.h"
 
 #include "OMAssertions.h"
 #include <string.h>
@@ -99,7 +100,7 @@ AAFRESULT ImplAAFTypeDefOpaque::GetOpaqueHandleInfo(aafUInt32 handleSize, aafDat
     return AAFRESULT_INVALID_PARAM; // not even large enough for the version.
 
   OMVersion handleVersion = 0;
-  copy ((OMByte *)pHandle, (OMByte *)&handleVersion, sizeof(OMVersion));
+  OMOpaqueType::copy ((OMByte *)pHandle, (OMByte *)&handleVersion, sizeof(OMVersion));
 
   if (kAAFCurrentOpaqueHandleVersion == handleVersion)
   {
@@ -283,19 +284,19 @@ AAFRESULT ImplAAFTypeDefOpaque::GetHandle (
   //
   // Copy the opaque signature before the opaque data.
   //
-  copy ((OMByte *)kAAFOpaqueHandleSignature, (OMByte *)&pHandle[bytesCopied], sizeof(kAAFOpaqueHandleSignature));
+  OMOpaqueType::copy ((OMByte *)kAAFOpaqueHandleSignature, (OMByte *)&pHandle[bytesCopied], sizeof(kAAFOpaqueHandleSignature));
   bytesCopied += kAAFOpaqueHandleSignatureSize;
 
   //
   // Copy the opaque data.
   //
-  copy ((OMByte *)pOpaqueValueDataBits, (OMByte *)&pHandle[bytesCopied], opaqueValueDataSize);
+  OMOpaqueType::copy ((OMByte *)pOpaqueValueDataBits, (OMByte *)&pHandle[bytesCopied], opaqueValueDataSize);
   bytesCopied += opaqueValueDataSize;
 
   //
   // Copy the opaque signature again after the opaque data.
   //
-  copy ((OMByte *)kAAFOpaqueHandleSignature, (OMByte *)&pHandle[bytesCopied], sizeof(kAAFOpaqueHandleSignature));
+  OMOpaqueType::copy ((OMByte *)kAAFOpaqueHandleSignature, (OMByte *)&pHandle[bytesCopied], sizeof(kAAFOpaqueHandleSignature));
   bytesCopied += kAAFOpaqueHandleSignatureSize;
 
   // Return the actual number of bytes copied to the handle.
@@ -428,7 +429,7 @@ AAFRESULT ImplAAFTypeDefOpaque::SetHandle (
   //
   // Copy the opaque data from the handle into the newly resized opaque value.
   //
-  copy ((OMByte *)opaqueDataBits, pOpaqueValueDataBits, opaqueDataSize);
+  OMOpaqueType::copy ((OMByte *)opaqueDataBits, pOpaqueValueDataBits, opaqueDataSize);
 
   return (result);
 }
@@ -546,8 +547,114 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 
+const OMType* ImplAAFTypeDefOpaque::type() const
+{
+  const OMType* pType = dynamic_cast<const OMType*>(dynamic_cast<const OMOpaqueType*>(this));
+  ASSERTU (pType);
+
+  return pType;
+}
+
+OMType* ImplAAFTypeDefOpaque::type()
+{
+  OMType* pType = dynamic_cast<OMType*>(dynamic_cast<OMOpaqueType*>(this));
+  ASSERTU (pType);
+
+  return pType;
+}
 
 
+
+const OMUniqueObjectIdentification&
+ImplAAFTypeDefOpaque::identification(void) const
+{
+  return ImplAAFMetaDefinition::identification();
+}
+
+const wchar_t* ImplAAFTypeDefOpaque::name(void) const
+{
+  return ImplAAFMetaDefinition::name();
+}
+
+bool ImplAAFTypeDefOpaque::hasDescription(void) const
+{
+  return ImplAAFMetaDefinition::hasDescription();
+}
+
+const wchar_t* ImplAAFTypeDefOpaque::description(void) const
+{
+  return ImplAAFMetaDefinition::description();
+}
+
+bool ImplAAFTypeDefOpaque::isPredefined(void) const
+{
+  return ImplAAFMetaDefinition::isPredefined();
+}
+
+bool ImplAAFTypeDefOpaque::isFixedSize(void) const
+{
+  return ImplAAFTypeDefIndirect::isFixedSize();
+}
+
+void ImplAAFTypeDefOpaque::reorder(OMByte* bytes,
+                                   OMUInt32 bytesSize) const
+{
+  ImplAAFTypeDefIndirect::reorder(bytes, bytesSize);
+}
+
+OMUInt32 ImplAAFTypeDefOpaque::externalSize(const OMByte* internalBytes,
+                                            OMUInt32 internalBytesSize) const
+{
+  return ImplAAFTypeDefIndirect::externalSize(internalBytes, internalBytesSize);
+}
+
+OMUInt32 ImplAAFTypeDefOpaque::externalSize(void) const
+{
+  return ImplAAFTypeDefIndirect::externalSize();
+}
+
+void ImplAAFTypeDefOpaque::externalize(const OMByte* internalBytes,
+                                       OMUInt32 internalBytesSize,
+                                       OMByte* externalBytes,
+                                       OMUInt32 externalBytesSize,
+                                       OMByteOrder byteOrder) const
+{
+  ImplAAFTypeDefIndirect::externalize(internalBytes,
+                                      internalBytesSize,
+                                      externalBytes,
+                                      externalBytesSize,
+                                      byteOrder);
+}
+
+OMUInt32 ImplAAFTypeDefOpaque::internalSize(const OMByte* externalBytes,
+                                            OMUInt32 externalBytesSize) const
+{
+  return ImplAAFTypeDefIndirect::internalSize(externalBytes, externalBytesSize);
+}
+
+OMUInt32 ImplAAFTypeDefOpaque::internalSize(void) const
+{
+  return ImplAAFTypeDefIndirect::internalSize();
+}
+
+void ImplAAFTypeDefOpaque::internalize(const OMByte* externalBytes,
+                                       OMUInt32 externalBytesSize,
+                                       OMByte* internalBytes,
+                                       OMUInt32 internalBytesSize,
+                                       OMByteOrder byteOrder) const
+{
+  ImplAAFTypeDefIndirect::internalize(externalBytes,
+                                      externalBytesSize,
+                                      internalBytes,
+                                      internalBytesSize,
+                                      byteOrder);
+}
+
+void ImplAAFTypeDefOpaque::accept(OMTypeVisitor& visitor) const
+{
+  visitor.visitOpaqueType(this);
+  // We don't visit the opaque type here // tjb !!!
+}
 
 // override from OMStorable.
 const OMClassId& ImplAAFTypeDefOpaque::classId(void) const

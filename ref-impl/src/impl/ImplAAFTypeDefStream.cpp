@@ -22,6 +22,11 @@
 //
 //=---------------------------------------------------------------------=
 
+
+
+
+
+
 #ifndef __ImplAAFTypeDefStream_h__
 #include "ImplAAFTypeDefStream.h"
 #endif
@@ -43,6 +48,7 @@
 #include "OMDataStreamProperty.h"
 #include "OMAssertions.h"
 #include "OMUtilities.h"
+#include "OMTypeVisitor.h"
 #include "AAF.h"
 #include "AAFUtils.h"
 
@@ -52,6 +58,8 @@
 
 extern "C" const aafClassID_t CLSID_AAFStreamPropertyValue;
 extern "C" const aafClassID_t CLSID_AAFPlainStreamData;
+
+struct IAAFPropertyValue;
 
 class ImplAAFOMDataStreamAccess : public OMDataStreamAccess {
 public:
@@ -462,6 +470,99 @@ AAFRESULT STDMETHODCALLTYPE
   pStreamPropertyValue->setStreamAccess(access);
 
   return AAFRESULT_SUCCESS;
+}
+
+const OMUniqueObjectIdentification&
+ImplAAFTypeDefStream::identification(void) const
+{
+  return ImplAAFMetaDefinition::identification();
+}
+
+const wchar_t* ImplAAFTypeDefStream::name(void) const
+{
+  return ImplAAFMetaDefinition::name();
+}
+
+bool ImplAAFTypeDefStream::hasDescription(void) const
+{
+  return ImplAAFMetaDefinition::hasDescription();
+}
+
+const wchar_t* ImplAAFTypeDefStream::description(void) const
+{
+  return ImplAAFMetaDefinition::description();
+}
+
+bool ImplAAFTypeDefStream::isPredefined(void) const
+{
+  return ImplAAFMetaDefinition::isPredefined();
+}
+
+bool ImplAAFTypeDefStream::isFixedSize(void) const
+{
+  bool result = false;
+  if (IsFixedSize() == kAAFTrue) {
+    result = true;
+  }
+  return result;
+}
+
+void ImplAAFTypeDefStream::reorder(OMByte* /* bytes */,
+                                   OMUInt32 /* bytesSize */) const
+{
+  // Should be properly implemented
+  ASSERTU (0);
+}
+
+OMUInt32 ImplAAFTypeDefStream::externalSize(const OMByte* /* internalBytes */,
+                                            OMUInt32 /* internalBytesSize */) const
+{
+  // Should be properly implemented
+  ASSERTU (0);
+  return 0; // Not reached!
+}
+
+OMUInt32 ImplAAFTypeDefStream::externalSize(void) const
+{
+  return PropValSize();
+}
+
+void ImplAAFTypeDefStream::externalize(const OMByte* /* internalBytes */,
+                                       OMUInt32 /* internalBytesSize */,
+                                       OMByte* /* externalBytes */,
+                                       OMUInt32 /* externalBytesSize */,
+                                       OMByteOrder /* byteOrder */) const
+{
+  // Should be properly implemented
+  ASSERTU (0);
+}
+
+OMUInt32 ImplAAFTypeDefStream::internalSize(const OMByte* /* externalBytes */,
+                                            OMUInt32 /* externalBytesSize */) const
+{
+  // Should be properly implemented
+  ASSERTU (0);
+  return 0; // Not reached!
+}
+
+OMUInt32 ImplAAFTypeDefStream::internalSize(void) const
+{
+  return NativeSize();
+}
+
+void ImplAAFTypeDefStream::internalize(const OMByte* /* externalBytes */,
+                                       OMUInt32 /* externalBytesSize */,
+                                       OMByte* /* internalBytes */,
+                                       OMUInt32 /* internalBytesSize */,
+                                       OMByteOrder /* byteOrder */) const
+{
+  // Should be properly implemented
+  ASSERTU (0);
+}
+
+void ImplAAFTypeDefStream::accept(OMTypeVisitor& visitor) const
+{
+  visitor.visitStreamType(this);
 }
 
 //

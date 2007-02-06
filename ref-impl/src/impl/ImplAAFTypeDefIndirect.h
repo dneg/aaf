@@ -33,16 +33,17 @@
 #include "ImplAAFTypeDef.h"
 #endif
 
+#include "OMIndirectType.h"
 
 
 // Forward declarations:
 class ImplAAFPropertyValue;
 class ImplAAFDictioanry;
+class OMTypeVisitor;
 
 
 
-
-class ImplAAFTypeDefIndirect : public ImplAAFTypeDef
+class ImplAAFTypeDefIndirect : public ImplAAFTypeDef, public OMIndirectType
 {
 public:
   //
@@ -147,13 +148,30 @@ public:
   //
 
   //
+  // OMDefinition methods
+  //
+  virtual const OMUniqueObjectIdentification& identification(void) const;
+
+  virtual const wchar_t* name(void) const;
+
+  virtual bool hasDescription(void) const;
+
+  virtual const wchar_t* description(void) const;
+
+  virtual bool isPredefined(void) const;
+
+  //
   // OMType methods
   //
+  virtual bool isFixedSize(void) const;
+
   virtual void reorder(OMByte* externalBytes,
                        OMUInt32 externalBytesSize) const;
 
   virtual OMUInt32 externalSize(const OMByte* internalBytes,
                                 OMUInt32 internalBytesSize) const;
+
+  virtual OMUInt32 externalSize(void) const;
 
   virtual void externalize(const OMByte* internalBytes,
                            OMUInt32 internalBytesSize,
@@ -164,12 +182,15 @@ public:
   virtual OMUInt32 internalSize(const OMByte* externalBytes,
                                 OMUInt32 externalSize) const;
 
+  virtual OMUInt32 internalSize(void) const;
+
   virtual void internalize(const OMByte* externalBytes,
                            OMUInt32 externalBytesSize,
                            OMByte* internalBytes,
                            OMUInt32 internalBytesSize,
                            OMByteOrder byteOrder) const;
 
+  virtual void accept(OMTypeVisitor& visitor) const;
 
   //****************
   // Initialize() 

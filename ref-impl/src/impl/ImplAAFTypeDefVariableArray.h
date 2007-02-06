@@ -26,16 +26,18 @@
 //=---------------------------------------------------------------------=
 
 class ImplAAFPropertyValue;
+class OMTypeVisitor;
 
 #ifndef __ImplAAFTypeDefArray_h__
 #include "ImplAAFTypeDefArray.h"
 #endif
 
+#include "OMArrayType.h"
 #include "OMWeakRefProperty.h"
 
 class ImplEnumAAFPropertyValues;
 
-class ImplAAFTypeDefVariableArray : public ImplAAFTypeDefArray
+class ImplAAFTypeDefVariableArray : public ImplAAFTypeDefArray, public OMVaryingArrayType
 {
 public:
   //
@@ -127,11 +129,15 @@ public:
   //*************************************************************
 
 
+  virtual bool isFixedSize(void) const;
+
   virtual void reorder(OMByte* externalBytes,
                        OMUInt32 externalBytesSize) const;
 
   virtual OMUInt32 externalSize(const OMByte* internalBytes,
-                                OMUInt32 internalBytesSize) const;
+								OMUInt32 internalBytesSize) const;
+
+  virtual OMUInt32 externalSize(void) const;
 
   virtual void externalize(const OMByte* internalBytes,
                            OMUInt32 internalBytesSize,
@@ -140,7 +146,9 @@ public:
                            OMByteOrder byteOrder) const;
 
   virtual OMUInt32 internalSize(const OMByte* externalBytes,
-                                OMUInt32 externalBytesSize) const;
+								OMUInt32 externalBytesSize) const;
+
+  virtual OMUInt32 internalSize(void) const;
 
   virtual void internalize(const OMByte* externalBytes,
                            OMUInt32 externalBytesSize,
@@ -150,6 +158,8 @@ public:
 
   virtual OMType* elementType(void) const;
 
+
+  virtual void accept(OMTypeVisitor& visitor) const;
 
   //****************
   // pvtInitialize()
@@ -236,6 +246,12 @@ public:
   virtual bool IsVariableArrayable () const;
   virtual bool IsStringable () const;
 
+  // Override from OMDefinition
+  virtual const OMUniqueObjectIdentification& identification(void) const;
+  virtual const wchar_t* name(void) const;
+  virtual bool  hasDescription(void) const;
+  virtual const wchar_t* description(void) const;
+  virtual bool isPredefined(void) const;
 
   // override from OMStorable.
   virtual const OMClassId& classId(void) const;

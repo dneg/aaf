@@ -30,14 +30,16 @@
 class ImplAAFPropertyValue;
 
 class ImplEnumAAFPropertyValues;
+class OMTypeVisitor;
 
 #ifndef __ImplAAFTypeDef_h__
 #include "ImplAAFTypeDef.h"
 #endif
 
+#include "OMRecordType.h"
 #include "OMWeakRefVectorProperty.h"
 
-class ImplAAFTypeDefRecord : public ImplAAFTypeDef
+class ImplAAFTypeDefRecord : public ImplAAFTypeDef, public OMRecordType
 {
 public:
   //
@@ -244,15 +246,35 @@ public:
 
   //*************************************************************
   //
+  // Overrides from OMDefinition
+  //
+  //*************************************************************
+
+  virtual const OMUniqueObjectIdentification& identification(void) const;
+
+  virtual const wchar_t* name(void) const;
+
+  virtual bool hasDescription(void) const;
+
+  virtual const wchar_t* description(void) const;
+
+  virtual bool isPredefined(void) const;
+
+  //*************************************************************
+  //
   // Overrides from OMType, via inheritace through ImplAAFTypeDef
   //
   //*************************************************************
+
+  virtual bool isFixedSize(void) const;
 
   virtual void reorder(OMByte* externalBytes,
                        OMUInt32 externalBytesSize) const;
 
   virtual OMUInt32 externalSize(const OMByte* internalBytes,
-                                OMUInt32 internalBytesSize) const;
+								OMUInt32 internalBytesSize) const;
+
+  virtual OMUInt32 externalSize(void) const;
 
   virtual void externalize(const OMByte* internalBytes,
                            OMUInt32 internalBytesSize,
@@ -261,7 +283,7 @@ public:
                            OMByteOrder byteOrder) const;
 
   virtual OMUInt32 internalSize(const OMByte* externalBytes,
-                                OMUInt32 externalBytesSize) const;
+								OMUInt32 externalBytesSize) const;
 
   virtual OMUInt32 internalSize(void) const;
 
@@ -270,6 +292,19 @@ public:
                            OMByte* internalBytes,
                            OMUInt32 internalBytesSize,
                            OMByteOrder byteOrder) const;
+
+  virtual void accept(OMTypeVisitor& visitor) const;
+
+  //*************************************************************
+  //
+  // Overrides from OMRecordType
+  //
+  //*************************************************************
+  virtual OMUInt32 memberCount(void) const;
+
+  virtual const wchar_t* memberName(OMUInt32 index) const;
+
+  virtual const OMType* memberType(OMUInt32 index) const;
 
 
   //****************

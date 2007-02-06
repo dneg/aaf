@@ -40,6 +40,8 @@
 #include "AAFTypeDefUIDs.h"
 #endif
 
+#include "OMTypeVisitor.h"
+
 #include "OMAssertions.h"
 #include <string.h>
 
@@ -60,7 +62,7 @@ static void pvtSignExtend (const aafMemPtr_t inVal,
 						   aafMemPtr_t outVal,
 						   aafUInt32   outValSize)
 {
-  aafInt32 localValue = 0;	// only 4 bytes; see below for why it's OK.
+  aafInt32 localValue;	// only 4 bytes; see below for why it's OK.
 
   ASSERTU (inVal);
   ASSERTU (outVal);
@@ -133,7 +135,7 @@ static void pvtZeroFill (const aafMemPtr_t inVal,
 						   aafMemPtr_t outVal,
 						   aafUInt32   outValSize)
 {
-  aafUInt32 localValue = 0;	// only 4 bytes; see below for why it's OK.
+  aafUInt32 localValue;	// only 4 bytes; see below for why it's OK.
 
   ASSERTU (inVal);
   ASSERTU (outVal);
@@ -268,7 +270,7 @@ AAFRESULT STDMETHODCALLTYPE
 	  return AAFRESULT_NULL_PARAM;
 	}
 
-  if (valSize > static_cast<aafUInt32>(_size))
+  if (valSize > _size)
 	{
 	  return AAFRESULT_BAD_SIZE;
 	}
@@ -284,7 +286,7 @@ AAFRESULT STDMETHODCALLTYPE
 
   // sign-extend or zero-fill the value.
   aafUInt8 valBuf[8];
-  ASSERTU (static_cast<size_t>(_size) <= sizeof (valBuf));
+  ASSERTU (_size <= sizeof (valBuf));
   if (_isSigned != 0)
 	{
 	  pvtSignExtend (pVal, valSize, valBuf, _size);
@@ -341,7 +343,7 @@ AAFRESULT STDMETHODCALLTYPE
 	{
 	  return AAFRESULT_NULL_PARAM;
 	}
-  if (valSize < static_cast<aafUInt32>(_size))
+  if (valSize < _size)
 	{
 	  return AAFRESULT_BAD_SIZE;
 	}
@@ -386,7 +388,7 @@ AAFRESULT STDMETHODCALLTYPE
 	{
 	  return hr;
 	}
-  if (static_cast<aafUInt32>(_size) < bitsSize)
+  if (_size < bitsSize)
 	{
 	  return AAFRESULT_BAD_TYPE;
 	}
@@ -431,7 +433,7 @@ AAFRESULT STDMETHODCALLTYPE
 	{
 	  return AAFRESULT_NULL_PARAM;
 	}
-  if (valSize > static_cast<aafUInt32>(_size))
+  if (valSize > _size)
 	{
 	  return AAFRESULT_BAD_SIZE;
 	}
@@ -470,7 +472,7 @@ AAFRESULT STDMETHODCALLTYPE
 
   // sign-extend or zero-fill the value.
   aafUInt8 valBuf[8];
-  ASSERTU (static_cast<size_t>(_size) <= sizeof (valBuf));
+  ASSERTU (_size <= sizeof (valBuf));
   if (_isSigned != 0)
 	{
 	  pvtSignExtend (pVal, valSize, valBuf, _size);
@@ -525,6 +527,32 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 
+const OMUniqueObjectIdentification&
+ImplAAFTypeDefInt::identification(void) const
+{
+  return ImplAAFMetaDefinition::identification();
+}
+
+const wchar_t* ImplAAFTypeDefInt::name(void) const
+{
+  return ImplAAFMetaDefinition::name();
+}
+
+bool ImplAAFTypeDefInt::hasDescription(void) const
+{
+  return ImplAAFMetaDefinition::hasDescription();
+}
+
+const wchar_t* ImplAAFTypeDefInt::description(void) const
+{
+  return ImplAAFMetaDefinition::description();
+}
+
+bool ImplAAFTypeDefInt::isPredefined(void) const
+{
+  return ImplAAFMetaDefinition::isPredefined();
+}
+
 void ImplAAFTypeDefInt::reorder(OMByte* bytes,
 								OMUInt32 bytesSize) const
 
@@ -538,7 +566,7 @@ void ImplAAFTypeDefInt::reorder(OMByte* bytes,
 
 
 OMUInt32 ImplAAFTypeDefInt::externalSize(const OMByte* /*internalBytes*/,
-									   OMUInt32 /*internalBytesSize*/) const
+										 OMUInt32 /*internalBytesSize*/) const
 {
   ASSERTU (IsFixedSize());
   return PropValSize();
@@ -588,7 +616,7 @@ void ImplAAFTypeDefInt::externalize(const OMByte* internalBytes,
 
 
 OMUInt32 ImplAAFTypeDefInt::internalSize(const OMByte* /*externalBytes*/,
-									   OMUInt32 /*externalSize*/) const
+										 OMUInt32 /*externalSize*/) const
 {
   return NativeSize ();
 }
@@ -635,6 +663,27 @@ void ImplAAFTypeDefInt::internalize(const OMByte* externalBytes,
 	}
 }
 
+void ImplAAFTypeDefInt::accept(OMTypeVisitor& visitor) const
+{
+  visitor.visitIntegerType(this);
+}
+
+OMUInt8 ImplAAFTypeDefInt::size(void) const
+{
+  // Should be properly implemented
+  return _size;
+}
+
+bool ImplAAFTypeDefInt::isSigned(void) const
+{
+  bool result = false;
+  if (_isSigned == kAAFTrue)
+  {
+    result = true;
+  }
+
+  return result;
+}
 
 aafBool ImplAAFTypeDefInt::IsFixedSize (void) const
 {

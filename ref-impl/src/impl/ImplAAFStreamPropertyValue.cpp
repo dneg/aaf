@@ -340,7 +340,7 @@ AAFRESULT STDMETHODCALLTYPE
   
   // Read the elements from the data stream.
   OMUInt32 elementsRead;
-  _streamProperty->readTypedElements(pElementType,
+  _streamProperty->readTypedElements(pElementType->type(),
                                      externalElementSize,
                                      pData,
                                      elementCount,
@@ -387,7 +387,7 @@ AAFRESULT STDMETHODCALLTYPE
   
   // Write the elements to the data stream.
   OMUInt32 elementsWritten;
-  _streamProperty->writeTypedElements(pElementType,
+  _streamProperty->writeTypedElements(pElementType->type(),
                                      internalElementSize,
                                      pData,
                                      elementCount,
@@ -434,7 +434,7 @@ AAFRESULT STDMETHODCALLTYPE
    
   // Write the elements to the data stream.
   OMUInt32 elementsWritten;
-  _streamProperty->writeTypedElements(pElementType,
+  _streamProperty->writeTypedElements(pElementType->type(),
                                       internalElementSize,
                                       pData,
                                       elementCount,
@@ -642,7 +642,7 @@ AAFRESULT STDMETHODCALLTYPE
    
   // Write the elements to the data stream.
   OMUInt32 elementsWritten;
-  _streamPropertyFilter->writeTypedElements(pElementType,
+  _streamPropertyFilter->writeTypedElements(pElementType->type(),
                                     internalElementSize,
                                     pData,
                                     elementCount,
@@ -689,7 +689,7 @@ AAFRESULT STDMETHODCALLTYPE
   
   // Write the elements to the data stream.
   OMUInt32 elementsWritten;
-  _streamPropertyFilter->writeTypedElements(pElementType,
+  _streamPropertyFilter->writeTypedElements(pElementType->type(),
                                     internalElementSize,
                                     pData,
                                     elementCount,
@@ -747,7 +747,7 @@ AAFRESULT STDMETHODCALLTYPE
   
   // Read the elements from the data stream.
   OMUInt32 elementsRead;
-  _streamPropertyFilter->readTypedElements(pElementType,
+  _streamPropertyFilter->readTypedElements(pElementType->type(),
                                    externalElementSize,
                                    pData,
                                    elementCount,

@@ -45,6 +45,7 @@
 #include "AAFStoredObjectIDs.h"
 #include "AAFPropertyIDs.h"
 #include "ImplAAFObjectCreation.h"
+#include "OMTypeVisitor.h"
 
 #include "OMAssertions.h"
 #include <string.h>
@@ -478,6 +479,41 @@ ImplAAFTypeDefSP ImplAAFTypeDefString::BaseType() const
 }
 
 
+const OMUniqueObjectIdentification&
+ImplAAFTypeDefString::identification(void) const
+{
+  return ImplAAFMetaDefinition::identification();
+}
+
+const wchar_t* ImplAAFTypeDefString::name(void) const
+{
+  return ImplAAFMetaDefinition::name();
+}
+
+bool ImplAAFTypeDefString::hasDescription(void) const
+{
+  return ImplAAFMetaDefinition::hasDescription();
+}
+
+const wchar_t* ImplAAFTypeDefString::description(void) const
+{
+  return ImplAAFMetaDefinition::description();
+}
+
+bool ImplAAFTypeDefString::isPredefined(void) const
+{
+  return ImplAAFMetaDefinition::isPredefined();
+}
+
+bool ImplAAFTypeDefString::isFixedSize(void) const
+{
+  bool result = false;
+  if (IsFixedSize() == kAAFTrue) {
+    result = true;
+  }
+  return result;
+}
+
 void ImplAAFTypeDefString::reorder(OMByte* externalBytes,
 								   OMUInt32 externalBytesSize) const
 {
@@ -491,7 +527,7 @@ void ImplAAFTypeDefString::reorder(OMByte* externalBytes,
 
   for (elem = 0; elem < numElems; elem++)
 	{
-	  ptd->reorder (externalBytes, extElemSize);
+	  ptd->type()->reorder (externalBytes, extElemSize);
 	  externalBytes += extElemSize;
 	  numBytesLeft -= extElemSize;
 	  ASSERTU (numBytesLeft >= 0);
@@ -500,7 +536,7 @@ void ImplAAFTypeDefString::reorder(OMByte* externalBytes,
 
 
 OMUInt32 ImplAAFTypeDefString::externalSize(const OMByte* /*internalBytes*/,
-										  OMUInt32 internalBytesSize) const
+											OMUInt32 internalBytesSize) const
 {
   ImplAAFTypeDefSP ptd = BaseType();
   ASSERTU (ptd);
@@ -513,6 +549,12 @@ OMUInt32 ImplAAFTypeDefString::externalSize(const OMByte* /*internalBytes*/,
   ASSERTU (intElemSize);
   aafUInt32 numElems = internalBytesSize / intElemSize;
   return numElems * extElemSize;
+}
+
+
+OMUInt32 ImplAAFTypeDefString::externalSize(void) const
+{
+  return PropValSize();
 }
 
 
@@ -535,7 +577,7 @@ void ImplAAFTypeDefString::externalize(const OMByte* internalBytes,
 
   for (elem = 0; elem < numElems; elem++)
 	{
-	  ptd->externalize (internalBytes,
+	  ptd->type()->externalize (internalBytes,
 						intElemSize,
 						externalBytes,
 						extElemSize,
@@ -551,7 +593,7 @@ void ImplAAFTypeDefString::externalize(const OMByte* internalBytes,
 
 
 OMUInt32 ImplAAFTypeDefString::internalSize(const OMByte* /*externalBytes*/,
-										  OMUInt32 externalBytesSize) const
+											OMUInt32 externalBytesSize) const
 {
   ImplAAFTypeDefSP ptd = BaseType();
   ASSERTU (ptd);
@@ -564,6 +606,12 @@ OMUInt32 ImplAAFTypeDefString::internalSize(const OMByte* /*externalBytes*/,
   ASSERTU (intElemSize);
   aafUInt32 numElems = externalBytesSize / extElemSize;
   return numElems * intElemSize;
+}
+
+
+OMUInt32 ImplAAFTypeDefString::internalSize(void) const
+{
+  return NativeSize();
 }
 
 
@@ -588,7 +636,7 @@ void ImplAAFTypeDefString::internalize(const OMByte* externalBytes,
 
   for (elem = 0; elem < numElems; elem++)
 	{
-	  ptd->internalize (externalBytes,
+	  ptd->type()->internalize (externalBytes,
 						extElemSize,
 						internalBytes,
 						intElemSize,
@@ -600,6 +648,20 @@ void ImplAAFTypeDefString::internalize(const OMByte* externalBytes,
 	  ASSERTU (intNumBytesLeft >= 0);
 	  ASSERTU (extNumBytesLeft >= 0);
 	}
+}
+
+void ImplAAFTypeDefString::accept(OMTypeVisitor& visitor) const
+{
+  visitor.visitStringType(this);
+  elementType()->accept(visitor);
+}
+
+
+OMType* ImplAAFTypeDefString::elementType(void) const
+{
+  ImplAAFTypeDef* type = BaseType();
+
+  return type->type();
 }
 
 

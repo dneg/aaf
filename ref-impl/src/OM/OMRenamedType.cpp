@@ -25,4 +25,8 @@
 // @doc OMEXTERNAL
 #include "OMRenamedType.h"
 
-// Nothing yet
+OMType::Tag OMRenamedType::tag(void) const
+{
+  return OMType::OMTTRename;
+}
+

@@ -32,7 +32,7 @@
 class ImplAAFPropertyValue;
 class ImplAAFRoot;
 class ImplAAFClassDef;
-
+class OMTypeVisitor;
 
 
 
@@ -99,35 +99,6 @@ public:
 
          // @parm [in] pointer to object value
          ImplAAFRoot * ppObject);
-
-
-
-  //*************************************************************
-  //
-  // Overrides from OMType, via inheritace through ImplAAFTypeDef
-  //
-  //*************************************************************
-
-  virtual void reorder(OMByte* externalBytes,
-                       OMUInt32 externalBytesSize) const;
-
-  virtual OMUInt32 externalSize(const OMByte* internalBytes,
-							  OMUInt32 internalBytesSize) const;
-
-  virtual void externalize(const OMByte* internalBytes,
-                           OMUInt32 internalBytesSize,
-                           OMByte* externalBytes,
-                           OMUInt32 externalBytesSize,
-                           OMByteOrder byteOrder) const;
-
-  virtual OMUInt32 internalSize(const OMByte* externalBytes,
-							  OMUInt32 externalBytesSize) const;
-
-  virtual void internalize(const OMByte* externalBytes,
-                           OMUInt32 externalBytesSize,
-                           OMByte* internalBytes,
-                           OMUInt32 internalBytesSize,
-                           OMByteOrder byteOrder) const;
 
 
 

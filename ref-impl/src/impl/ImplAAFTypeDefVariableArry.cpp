@@ -66,6 +66,7 @@
 #include "ImplAAFObjectCreation.h"
 
 #include "OMArrayProperty.h"
+#include "OMTypeVisitor.h"
 
 #include "OMAssertions.h"
 #include <string.h>
@@ -73,7 +74,7 @@
 extern "C" const aafClassID_t CLSID_AAFPropValData;
 extern "C" const aafClassID_t CLSID_AAFStrongRefArrayValue;
 extern "C" const aafClassID_t CLSID_AAFWeakRefArrayValue;
-extern "C" const aafClassID_t CLSID_EnumAAFPropertyValues;
+
 
 ImplAAFTypeDefVariableArray::ImplAAFTypeDefVariableArray ()
 : _ElementType  ( PID_TypeDefinitionVariableArray_ElementType,
@@ -184,7 +185,7 @@ ImplAAFTypeDefVariableArray::GetCount (
 	if (AAFRESULT_FAILED(hr)) return hr;
 	ASSERTU (ptd);
 	ASSERTU (ptd->IsFixedSize());
-	aafUInt32 elemSize = ptd->PropValSize();
+	aafUInt32 elemSize = ptd->ActualSize();
 	aafUInt32 propSize;
 	ASSERTU (pPropVal);
 	
@@ -334,26 +335,8 @@ ImplAAFTypeDefVariableArray::GetElements (
   {
     return pRefArray->GetElements(ppEnum);
   }
-  else {
-    // The property value is of the "old" variety.
 
-    ImplEnumAAFPropertyValues* pEnum = 
-      static_cast<ImplEnumAAFPropertyValues*>( ::CreateImpl(CLSID_EnumAAFPropertyValues) );
-
-    if ( !pEnum ) {
-      return AAFRESULT_NOMEMORY;
-    }
-
-    AAFRESULT hr = pEnum->Initialize( this, pInPropVal );
-    if ( AAFRESULT_FAILED( hr ) ) {
-      return hr;
-    }
-    
-    pEnum->AcquireReference();
-    *ppEnum = pEnum;
-  
-    return AAFRESULT_SUCCESS;
-  }
+	return AAFRESULT_NOT_IN_CURRENT_VERSION;
 }
 
 ImplAAFTypeDefSP ImplAAFTypeDefVariableArray::BaseType() const
@@ -363,6 +346,16 @@ ImplAAFTypeDefSP ImplAAFTypeDefVariableArray::BaseType() const
 	ASSERTU (AAFRESULT_SUCCEEDED (hr));
 	ASSERTU (result);
 	return result;
+}
+
+
+bool ImplAAFTypeDefVariableArray::isFixedSize(void) const
+{
+  bool result = false;
+  if (IsFixedSize() == kAAFTrue) {
+    result = true;
+  }
+  return result;
 }
 
 
@@ -380,7 +373,7 @@ void ImplAAFTypeDefVariableArray::reorder(OMByte* externalBytes,
 	
 	for (elem = 0; elem < numElems; elem++)
 	{
-		ptd->reorder (externalBytes, extElemSize);
+		ptd->type()->reorder (externalBytes, extElemSize);
 		externalBytes += extElemSize;
 		numBytesLeft -= extElemSize;
 		ASSERTU (numBytesLeft >= 0);
@@ -389,7 +382,7 @@ void ImplAAFTypeDefVariableArray::reorder(OMByte* externalBytes,
 
 
 OMUInt32 ImplAAFTypeDefVariableArray::externalSize(const OMByte* /*internalBytes*/,
-												 OMUInt32 internalBytesSize) const
+												   OMUInt32 internalBytesSize) const
 {
 	ImplAAFTypeDefSP ptd = BaseType ();
 	ASSERTU (ptd);
@@ -403,6 +396,14 @@ OMUInt32 ImplAAFTypeDefVariableArray::externalSize(const OMByte* /*internalBytes
 	ASSERTU (intElemSize);
 	aafUInt32 numElems = internalBytesSize / intElemSize;
 	return numElems * extElemSize;
+}
+
+
+OMUInt32 ImplAAFTypeDefVariableArray::externalSize(void) const
+{
+  // Should be properly implemented
+  ASSERTU (0);
+  return 0; // Not reached!
 }
 
 
@@ -426,8 +427,8 @@ void ImplAAFTypeDefVariableArray::externalize(const OMByte* internalBytes,
 	  if (numElems > 0)
 	  {
 		  copy (internalBytes,
-				externalBytes,
-				externalBytesSize);
+			externalBytes,
+			externalBytesSize);
 	  }
 	}
 	else
@@ -438,7 +439,7 @@ void ImplAAFTypeDefVariableArray::externalize(const OMByte* internalBytes,
 		
 		for (elem = 0; elem < numElems; elem++)
 		{
-			ptd->externalize (internalBytes,
+			ptd->type()->externalize (internalBytes,
 				intElemSize,
 				externalBytes,
 				extElemSize,
@@ -455,7 +456,7 @@ void ImplAAFTypeDefVariableArray::externalize(const OMByte* internalBytes,
 
 
 OMUInt32 ImplAAFTypeDefVariableArray::internalSize(const OMByte* /*externalBytes*/,
-												 OMUInt32 externalBytesSize) const
+												   OMUInt32 externalBytesSize) const
 {
 	ImplAAFTypeDefSP ptd = BaseType ();
 	ASSERTU (ptd);
@@ -469,6 +470,14 @@ OMUInt32 ImplAAFTypeDefVariableArray::internalSize(const OMByte* /*externalBytes
 	ASSERTU (intElemSize);
 	aafUInt32 numElems = externalBytesSize / extElemSize;
 	return numElems * intElemSize;
+}
+
+
+OMUInt32 ImplAAFTypeDefVariableArray::internalSize(void) const
+{
+  // Should be properly implemented
+  ASSERTU (0);
+  return 0; // Not reached!
 }
 
 
@@ -493,8 +502,8 @@ void ImplAAFTypeDefVariableArray::internalize(const OMByte* externalBytes,
 		if (numElems > 0)
 		{
 		  copy (externalBytes,
-				internalBytes,
-				internalBytesSize);
+			internalBytes,
+			internalBytesSize);
 		}
 	}
 	else
@@ -505,7 +514,7 @@ void ImplAAFTypeDefVariableArray::internalize(const OMByte* externalBytes,
 		
 		for (elem = 0; elem < numElems; elem++)
 		{
-			ptd->internalize (externalBytes,
+			ptd->type()->internalize (externalBytes,
 				extElemSize,
 				internalBytes,
 				intElemSize,
@@ -522,11 +531,14 @@ void ImplAAFTypeDefVariableArray::internalize(const OMByte* externalBytes,
 
 OMType* ImplAAFTypeDefVariableArray::elementType(void) const
 {
-  ImplAAFTypeDef* result = 0;
-  AAFRESULT hr = GetType(&result);
-  ASSERTU(hr == 0);
-  result->ReleaseReference();
-  return result;
+  ImplAAFTypeDef* type = BaseType();
+  return type->type();
+}
+
+void ImplAAFTypeDefVariableArray::accept(OMTypeVisitor& visitor) const
+{
+  visitor.visitVaryingArrayType(this);
+  elementType()->accept(visitor);
 }
 
 aafUInt32 ImplAAFTypeDefVariableArray::pvtCount
@@ -649,17 +661,7 @@ OMProperty * ImplAAFTypeDefVariableArray::pvtCreateOMProperty
 		
 		// Use a variable sized property so that we can allow a property value
 		// size of 0 (i.e. no elements in the array). (transdel 2000-MAR-14)
-
-		// Oliver/Ian 2004-10-08: reinstate code to accept objects with
-		// properties of client-defined types that have not yet had
-		// their types registered.
-
-		// aafUInt32 elemSize = ptd->NativeSize();
-        aafUInt32 elemSize; 
-        if (ptd->IsRegistered()) 
-                elemSize = ptd->NativeSize (); 
-        else 
-				elemSize = ptd->PropValSize (); 
+		OMUInt32 elemSize = ptd->NativeSize();
 		switch (elemSize) {
 		case 1:
 			result = new OMArrayProperty<aafUInt8> (pid, name);
@@ -807,9 +809,35 @@ bool ImplAAFTypeDefVariableArray::IsArrayable(ImplAAFTypeDef * pSourceTypeDef) c
 { return pSourceTypeDef->IsVariableArrayable(); }
 
 
+const OMUniqueObjectIdentification& ImplAAFTypeDefVariableArray::identification(void) const
+{
+  // Re-implement pure virtual method inherited from OMArrayType
+  return ImplAAFMetaDefinition::identification();
+}
 
+const wchar_t* ImplAAFTypeDefVariableArray::name(void) const
+{
+  // Re-implement pure virtual method inherited from OMArrayType
+  return ImplAAFMetaDefinition::name();
+}
 
+bool ImplAAFTypeDefVariableArray::hasDescription(void) const
+{
+  // Re-implement pure virtual method inherited from OMArrayType
+  return ImplAAFMetaDefinition::hasDescription();
+}
 
+const wchar_t* ImplAAFTypeDefVariableArray::description(void) const
+{
+  // Re-implement pure virtual method inherited from OMArrayType
+  return ImplAAFMetaDefinition::description();
+}
+
+bool ImplAAFTypeDefVariableArray::isPredefined(void) const
+{
+  // Re-implement pure virtual method inherited from OMArrayType
+  return ImplAAFMetaDefinition::isPredefined();
+}
 
 // override from OMStorable.
 const OMClassId& ImplAAFTypeDefVariableArray::classId(void) const

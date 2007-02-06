@@ -26,6 +26,39 @@
 #ifndef OMOBJECTREFERENCETYPE_H
 #define OMOBJECTREFERENCETYPE_H
 
-// Nothing yet
+#include "OMType.h"
+#include "OMSingleton.h"
+
+// @author Tim Bingham | tjb | Avid Technology, Inc. |
+//         OMObjectReferenceType
+class OMObjectReferenceType : public OMType {
+public:
+
+  virtual const OMUniqueObjectIdentification& referencedType(void) const = 0;
+
+};
+
+// @author Tim Bingham | tjb | Avid Technology, Inc. |
+//         OMStrongObjectReferenceType
+class OMStrongObjectReferenceType : public OMObjectReferenceType {
+public:
+
+  virtual OMType::Tag tag(void) const;
+
+};
+
+// @author Tim Bingham | tjb | Avid Technology, Inc. |
+//         OMWeakObjectReferenceType
+class OMWeakObjectReferenceType : public OMObjectReferenceType {
+public:
+
+  virtual OMType::Tag tag(void) const;
+
+  virtual OMUInt32 targetPathElementCount(void) const = 0;
+
+  virtual const OMUniqueObjectIdentification& targetPathElement(OMUInt32 index) const = 0;
+
+};
+
 
 #endif

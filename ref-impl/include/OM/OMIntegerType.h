@@ -27,6 +27,7 @@
 #define OMINTEGERTYPE_H
 
 #include "OMType.h"
+#include "OMDefinition.h"
 #include "OMSingleton.h"
 
 class OMIntegerType;
@@ -35,7 +36,7 @@ class OMIntegerType;
 class OMIntegerType : public OMType {
 public:
 
-  OMIntegerType(void);
+  virtual OMType::Tag tag(void) const;
 
   virtual ~OMIntegerType(void);
 
@@ -45,7 +46,7 @@ public:
                        OMUInt32 externalBytesSize) const;
 
   virtual OMUInt32 externalSize(const OMByte* internalBytes,
-                                OMUInt32 internalBytesSize) const;
+                              OMUInt32 internalBytesSize) const;
 
   virtual OMUInt32 externalSize(void) const;
 
@@ -56,7 +57,7 @@ public:
                            OMByteOrder byteOrder) const;
 
   virtual OMUInt32 internalSize(const OMByte* externalBytes,
-                                OMUInt32 externalBytesSize) const;
+                              OMUInt32 externalBytesSize) const;
 
   virtual OMUInt32 internalSize(void) const;
 
@@ -68,12 +69,37 @@ public:
 
   virtual OMUInt8 size(void) const = 0;
 
+  virtual bool isSigned(void) const = 0;
+  
+  virtual void accept(OMTypeVisitor& visitor) const;
+
+};
+
+class OMBuiltinIntegerType : public OMIntegerType,
+                             private OMBuiltinDefinition {
+public:
+
+  OMBuiltinIntegerType(const OMStoredObjectIdentification& identification,
+                       const wchar_t* name);
+
+  virtual ~OMBuiltinIntegerType(void);
+
+  virtual const OMUniqueObjectIdentification& identification(void) const;
+
+  virtual const wchar_t* name(void) const;
+
+  virtual bool hasDescription(void) const;
+
+  virtual const wchar_t* description(void) const;
+
+  virtual bool isPredefined(void) const;
+
 };
 
 class OMInteger08Type;
 
 // @author Tim Bingham | tjb | Avid Technology, Inc. | OMInteger08Type
-class OMInteger08Type : public OMIntegerType,
+class OMInteger08Type : public OMBuiltinIntegerType,
                         public OMSingleton<OMInteger08Type> {
 public:
 
@@ -83,12 +109,14 @@ public:
 
   virtual OMUInt8 size(void) const;
 
+  virtual bool isSigned(void) const;
+
 };
 
 class OMInteger16Type;
 
 // @author Tim Bingham | tjb | Avid Technology, Inc. | OMInteger16Type
-class OMInteger16Type : public OMIntegerType,
+class OMInteger16Type : public OMBuiltinIntegerType,
                         public OMSingleton<OMInteger16Type> {
 public:
 
@@ -98,12 +126,14 @@ public:
 
   virtual OMUInt8 size(void) const;
 
+  virtual bool isSigned(void) const;
+
 };
 
 class OMInteger32Type;
 
 // @author Tim Bingham | tjb | Avid Technology, Inc. | OMInteger32Type
-class OMInteger32Type : public OMIntegerType,
+class OMInteger32Type : public OMBuiltinIntegerType,
                         public OMSingleton<OMInteger32Type> {
 public:
 
@@ -113,12 +143,14 @@ public:
 
   virtual OMUInt8 size(void) const;
 
+  virtual bool isSigned(void) const;
+
 };
 
 class OMInteger64Type;
 
 // @author Tim Bingham | tjb | Avid Technology, Inc. | OMInteger64Type
-class OMInteger64Type : public OMIntegerType,
+class OMInteger64Type : public OMBuiltinIntegerType,
                         public OMSingleton<OMInteger64Type> {
 public:
 
@@ -127,6 +159,8 @@ public:
   virtual ~OMInteger64Type(void);
 
   virtual OMUInt8 size(void) const;
+
+  virtual bool isSigned(void) const;
 
 };
 

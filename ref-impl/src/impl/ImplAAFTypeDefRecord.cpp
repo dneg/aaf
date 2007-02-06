@@ -46,6 +46,8 @@
 #include "AAFPropertyIDs.h"
 #include "ImplAAFObjectCreation.h"
 
+#include "OMTypeVisitor.h"
+
 #include "OMAssertions.h"
 #include <string.h>
 #include <wchar.h>
@@ -64,6 +66,7 @@ ImplAAFTypeDefRecord::ImplAAFTypeDefRecord ()
 	_internalSizes (0),
 	_cachedMemberTypes (0),
 	_cachedCount ((aafUInt32) -1),
+	_propValSizeIsCached (kAAFFalse),
 	_registrationAttempted (kAAFFalse),
 	_defaultRegistrationUsed (kAAFFalse)
 {
@@ -124,7 +127,11 @@ AAFRESULT STDMETHODCALLTYPE
 {
   if (isInitialized ()) return AAFRESULT_ALREADY_INITIALIZED;
 
-  if (!ppMemberTypes && !pMemberNames && !pTypeName)
+  if (!ppMemberTypes)
+    return AAFRESULT_NULL_PARAM;
+  if (!pMemberNames)
+    return AAFRESULT_NULL_PARAM;
+  if (!pTypeName)
     return AAFRESULT_NULL_PARAM;
 
   AAFRESULT hr;
@@ -621,7 +628,7 @@ AAFRESULT STDMETHODCALLTYPE
   // and extendable enumeration type properties to be read by this 
   // type def.
   eAAFTypeCategory_t        type_category = kAAFTypeCatUnknown;
-  ImplAAFTypeDefRecordSP    pActualRecordType;
+  ImplAAFTypeDefRecord*    pActualRecordType;
 
   pInPropType->GetTypeCategory( &type_category );
 
@@ -634,8 +641,8 @@ AAFRESULT STDMETHODCALLTYPE
 	return AAFRESULT_BAD_TYPE;
 
       // Now get base type of ExtEnum and cast it to Record.
-      ImplAAFTypeDefSP	pBaseType;
-      pBaseType = pExtEnumType->BaseType();
+      ImplAAFTypeDef*	pBaseType;
+      pBaseType = pExtEnumType->NonRefCountedBaseType();
       pActualRecordType = dynamic_cast<ImplAAFTypeDefRecord*>( (ImplAAFTypeDef*)pBaseType );
       if( pActualRecordType == NULL )
 	  return AAFRESULT_BAD_TYPE;
@@ -794,7 +801,7 @@ AAFRESULT STDMETHODCALLTYPE
   // and enumeration type properties to be read by this integral type def.
   //
   eAAFTypeCategory_t        type_category = kAAFTypeCatUnknown;
-  ImplAAFTypeDefRecordSP    pActualRecordType;
+  ImplAAFTypeDefRecord*    pActualRecordType;
 
   pInPropType->GetTypeCategory( &type_category );
 
@@ -807,8 +814,8 @@ AAFRESULT STDMETHODCALLTYPE
 	return AAFRESULT_BAD_TYPE;
 
       // Now get base type of ExtEnum and cast it to Record.
-      ImplAAFTypeDefSP	pBaseType;
-      pBaseType = pExtEnumType->BaseType();
+      ImplAAFTypeDef*	pBaseType;
+      pBaseType = pExtEnumType->NonRefCountedBaseType();
       pActualRecordType = dynamic_cast<ImplAAFTypeDefRecord*>( (ImplAAFTypeDef*)pBaseType );
       if( pActualRecordType == NULL )
 	  return AAFRESULT_BAD_TYPE;
@@ -862,25 +869,6 @@ AAFRESULT STDMETHODCALLTYPE
 
   hr = pvdOut->GetBits (&pOutBits);
   if (AAFRESULT_FAILED(hr)) return hr;
-
-	/*	
-		this seems areasonable and worthwhile defensive addition
-
-		but whence comes the real problem?
-
-		pOutBits will be 0 if the PropValData has not been initialized
-		which will be the case if the ImplAAFProperty for the member believes it is Optional
-		which of course record members are not - they are mandatory
-
-		perhaps this is the real bug?
-	*/
-	if( !pOutBits )
-	{
-		aafUInt32 bitsSize; pvdOut->GetBitsSize( &bitsSize );
-
-		hr = pvdOut->AllocateBits ( bitsSize, &pOutBits);
-		if (AAFRESULT_FAILED(hr)) return hr;
-	}
 
   memcpy (pOutBits+offset, pInBits, ptd->PropValSize());
 
@@ -977,11 +965,6 @@ AAFRESULT STDMETHODCALLTYPE
   if (numMembers != count) return AAFRESULT_ILLEGAL_VALUE;
 
 
-  if (_defaultRegistrationUsed)
-	{
-	  return AAFRESULT_DEFAULT_ALREADY_USED;
-	}
-
   aafUInt32 i;
   for (i = 0; i < numMembers; i++)
 	{
@@ -995,6 +978,41 @@ AAFRESULT STDMETHODCALLTYPE
 		}
 	}
 
+  if (_defaultRegistrationUsed)
+	{
+	  // In the case when the type definition has already been restored
+	  // from the file (_defaultRegistrationUsed is 'true') the record
+	  // member offset was assumed to be the sum of the sizes of the
+	  // preceeding members. Here we check that the passed in offsets
+	  // also make the same assumption. If so we allow registration to
+	  // proceed, otherwise we return with an error.
+	  aafUInt32 i;
+	  aafUInt32 calculatedMemberOffset = 0;
+	  for (i = 0; i < numMembers; i++)
+		{
+		  ImplAAFTypeDefSP ptd;
+		  hr = GetMemberType (i, &ptd);
+		  if (AAFRESULT_SUCCEEDED (hr))
+			{
+			  hr = AAFRESULT_SUCCESS;
+			  if (_internalSizes[i] != ptd->ActualSize ())
+				{
+				  hr = AAFRESULT_DEFAULT_ALREADY_USED;
+				}
+			  if (calculatedMemberOffset != pOffsets[i])
+				{
+				  hr = AAFRESULT_DEFAULT_ALREADY_USED;
+				}
+			  if (AAFRESULT_FAILED (hr))
+				{
+				  return hr;
+				}
+
+			  calculatedMemberOffset += _internalSizes[i];
+			}
+		}
+	}
+
   if (_registeredOffsets) delete[] _registeredOffsets;
   _registeredOffsets = new aafUInt32[numMembers];
   if (! _registeredOffsets) return AAFRESULT_NOMEMORY;
@@ -1005,18 +1023,12 @@ AAFRESULT STDMETHODCALLTYPE
   for (i = 0; i < numMembers; i++)
 	{
 	  _registeredOffsets[i] = pOffsets[i];
-	  if ((numMembers-1) == i)
-		{
-		  // Last (or perhaps only) member; take total struct size and
-		  // subtract last offset for this size
-		  _internalSizes[i] = structSize - pOffsets[i];
-		}
-	  else
-		{
-		  // We know it's not the last member, so it's safe to index
-		  // to the next element in pOffsets array.
-		  _internalSizes[i] = pOffsets[i+1] - pOffsets[i];
-		}
+
+	  ImplAAFTypeDefSP ptd;
+	  GetMemberType (i, &ptd);
+	  ASSERTU (AAFRESULT_SUCCEEDED (hr));
+	  ASSERTU (ptd);
+	  _internalSizes[i] = ptd->ActualSize ();
 	}
 
   _registeredSize = structSize;
@@ -1034,6 +1046,41 @@ ImplAAFTypeDefRecord::GetTypeCategory (eAAFTypeCategory_t *  pTid)
   return AAFRESULT_SUCCESS;
 }
 
+
+const OMUniqueObjectIdentification&
+ImplAAFTypeDefRecord::identification(void) const
+{
+  return ImplAAFMetaDefinition::identification();
+}
+
+const wchar_t* ImplAAFTypeDefRecord::name(void) const
+{
+  return ImplAAFMetaDefinition::name();
+}
+
+bool ImplAAFTypeDefRecord::hasDescription(void) const
+{
+  return ImplAAFMetaDefinition::hasDescription();
+}
+
+const wchar_t* ImplAAFTypeDefRecord::description(void) const
+{
+  return ImplAAFMetaDefinition::description();
+}
+
+bool ImplAAFTypeDefRecord::isPredefined(void) const
+{
+  return ImplAAFMetaDefinition::isPredefined();
+}
+
+bool ImplAAFTypeDefRecord::isFixedSize(void) const
+{
+  bool result = false;
+  if (IsFixedSize() == kAAFTrue) {
+    result = true;
+  }
+  return result;
+}
 
 void ImplAAFTypeDefRecord::reorder(OMByte* externalBytes,
 								   OMUInt32 externalBytesSize) const
@@ -1058,7 +1105,7 @@ void ImplAAFTypeDefRecord::reorder(OMByte* externalBytes,
 	  ASSERTU (AAFRESULT_SUCCEEDED (hr));
 	  externalMemberSize = ptdm->PropValSize ();
 
-	  ptdm->reorder (externalBytes, externalMemberSize);
+	  ptdm->type()->reorder (externalBytes, externalMemberSize);
 	  externalBytes += externalMemberSize;
 	  numBytesLeft -= externalMemberSize;
 	  ASSERTU (numBytesLeft >= 0);
@@ -1067,9 +1114,15 @@ void ImplAAFTypeDefRecord::reorder(OMByte* externalBytes,
 
 
 OMUInt32 ImplAAFTypeDefRecord::externalSize(const OMByte* /*internalBytes*/,
-										  OMUInt32 /*internalBytesSize*/) const
+											OMUInt32 /*internalBytesSize*/) const
 {
   return PropValSize ();
+}
+
+
+OMUInt32 ImplAAFTypeDefRecord::externalSize(void) const
+{
+  return PropValSize();
 }
 
 
@@ -1102,10 +1155,10 @@ void ImplAAFTypeDefRecord::externalize(const OMByte* internalBytes,
 	  hr = pNonConstThis->GetMemberType (member, &ptdm);
 	  ASSERTU (AAFRESULT_SUCCEEDED (hr));
 	  externalMemberSize = ptdm->PropValSize ();
-	  //internalMemberSize = _internalSizes[member];
-          internalMemberSize = ptdm->internalSize (externalBytes, externalMemberSize);
+	  internalMemberSize = _internalSizes[member];
+       //   internalMemberSize = ptdm->internalSize (externalBytes, externalMemberSize); JeffB: Try changing back
 
-	  ptdm->externalize (internalBytes,
+	  ptdm->type()->externalize (internalBytes,
 						 internalMemberSize,
 						 externalBytes,
 						 externalMemberSize,
@@ -1127,23 +1180,20 @@ void ImplAAFTypeDefRecord::externalize(const OMByte* internalBytes,
 }
 
 
+OMUInt32 ImplAAFTypeDefRecord::internalSize(const OMByte* /*externalBytes*/,
+											OMUInt32 /*externalBytesSize*/) const
+{
+  if (IsRegistered ())
+	return NativeSize ();
+  else
+	return PropValSize ();
+}
+
+
 OMUInt32 ImplAAFTypeDefRecord::internalSize(void) const
 {
-  if (IsRegistered ())
-	return NativeSize ();
-  else
-	return PropValSize ();
+  return NativeSize();
 }
-
-OMUInt32 ImplAAFTypeDefRecord::internalSize(const OMByte* /*externalBytes*/,
-										  OMUInt32 /*externalBytesSize*/) const
-{
-  if (IsRegistered ())
-	return NativeSize ();
-  else
-	return PropValSize ();
-}
-
 
 void ImplAAFTypeDefRecord::internalize(const OMByte* externalBytes,
 									   OMUInt32 externalBytesSize,
@@ -1174,10 +1224,10 @@ void ImplAAFTypeDefRecord::internalize(const OMByte* externalBytes,
 	  hr = pNonConstThis->GetMemberType (member, &ptdm);
 	  ASSERTU (AAFRESULT_SUCCEEDED (hr));
 	  externalMemberSize = ptdm->PropValSize ();
-	  //internalMemberSize = _internalSizes[member];
-          internalMemberSize = ptdm->internalSize (externalBytes, externalMemberSize);
+	  internalMemberSize = _internalSizes[member];
+      //    internalMemberSize = ptdm->internalSize (externalBytes, externalMemberSize);
 
-	  ptdm->internalize (externalBytes,
+	  ptdm->type()->internalize (externalBytes,
 						 externalMemberSize,
 						 internalBytes,
 						 internalMemberSize,
@@ -1198,7 +1248,71 @@ void ImplAAFTypeDefRecord::internalize(const OMByte* externalBytes,
 	}
 }
 
+void ImplAAFTypeDefRecord::accept(OMTypeVisitor& visitor) const
+{
+  visitor.visitRecordType(this);
 
+  for (OMUInt32 i = 0; i < memberCount(); i++) {
+    memberType(i)->accept(visitor);
+  }
+}
+
+OMUInt32 ImplAAFTypeDefRecord::memberCount(void) const
+{
+  TRACE("ImplAAFTypeDefRecord::memberCount");
+
+  const size_t  count = _memberTypes.count();
+
+  return static_cast<OMUInt32>(count);
+}
+
+const wchar_t* ImplAAFTypeDefRecord::memberName(OMUInt32 index) const
+{
+  TRACE("ImplAAFTypeDefRecord::memberName");
+  PRECONDITION("Valid index", index < memberCount());
+
+
+  // Get the member names buffer and the number of characters in the buffer
+  const wchar_t* namesBuffer =
+    reinterpret_cast<const wchar_t*>(_memberNames.bits());
+  const size_t namesBufferSize = _memberNames.bitsSize() / sizeof(wchar_t);
+
+  // Allocate an array that will contain the pointers to the member names
+  const size_t nameCount =
+      ImplAAFTypeDef::stringArrayStringCount( namesBuffer, namesBufferSize );
+  ASSERT( "Valid name count", nameCount == memberCount() );
+  const wchar_t** names = new const wchar_t*[ nameCount ];
+
+  // Get the pointers to the member names
+  ImplAAFTypeDef::getStringArrayStrings( namesBuffer,
+                                         namesBufferSize,
+                                         names,
+                                         nameCount );
+
+  // The reguested member name
+  const wchar_t* result = names[index];
+
+  delete[] names;
+  names = 0;
+
+
+  POSTCONDITION( "Valid result", result != 0 );
+  return result;
+}
+
+const OMType* ImplAAFTypeDefRecord::memberType(OMUInt32 index) const
+{
+  TRACE("ImplAAFTypeDefRecord::memberType");
+  PRECONDITION("Valid index", index < memberCount());
+
+
+  ImplAAFTypeDefRecord* nonConstThis = const_cast<ImplAAFTypeDefRecord*>(this);
+  ImplAAFTypeDef* type = 0;
+  nonConstThis->GetMemberType(index, &type);
+  type->ReleaseReference();
+
+  return type->type();
+}
 
 aafBool ImplAAFTypeDefRecord::IsFixedSize (void) const
 {
@@ -1212,24 +1326,34 @@ OMUInt32 ImplAAFTypeDefRecord::PropValSize (void) const
   OMUInt32 totalSize = 0;
   AAFRESULT hr;
 
-  hr = GetCount (&count);
-  if (AAFRESULT_FAILED(hr)) return hr;
+  if(_propValSizeIsCached)
+  	return _cachedPropValSize;
+  else
+  {
+	hr = GetCount (&count);
+	if (AAFRESULT_FAILED(hr)) return hr;
 
-  for (aafUInt32 i = 0; i < count; i++)
+    // Bobt semi-hack: need non-const this in order to call
+    // non-const GetMemberType. We know we aren't mangling it, so it
+    // technically is OK...
+    ImplAAFTypeDefRecord * pNonConstThis =
+	  (ImplAAFTypeDefRecord*) this;
+
+	for (aafUInt32 i = 0; i < count; i++)
 	{
 	  ImplAAFTypeDefSP pMemType;
-	  // Bobt semi-hack: need non-const this in order to call
-	  // non-const GetMemberType. We know we aren't mangling it, so it
-	  // technically is OK...
-	  ImplAAFTypeDefRecord * pNonConstThis =
-		(ImplAAFTypeDefRecord*) this;
 	  hr = pNonConstThis->GetMemberType (i, &pMemType);
 	  ASSERTU (AAFRESULT_SUCCEEDED(hr));
 	  ASSERTU (pMemType);
 	  ASSERTU (pMemType->IsFixedSize());
 	  totalSize += pMemType->PropValSize();
 	}
-  return totalSize;
+	
+	pNonConstThis->_cachedPropValSize = totalSize;
+	pNonConstThis->_propValSizeIsCached = true;
+	
+	return totalSize;
+  }
 }
 
 

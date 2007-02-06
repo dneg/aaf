@@ -39,8 +39,9 @@
 
 
 class ImplAAFPropertyValue;
+class OMTypeVisitor;
 
-class ImplAAFTypeDef : public ImplAAFMetaDefinition, public OMType
+class ImplAAFTypeDef : public ImplAAFMetaDefinition
 {
 public:
   //
@@ -102,41 +103,10 @@ public:
   // dictionary.
   virtual AAFRESULT MergeTo( ImplAAFDictionary* pDestDictionary );
 
-  //*************************************************************
-  //
-  // Overrides from OMType, via inheritace through ImplAAFTypeDef
-  //
-  //*************************************************************
-
-  virtual bool isFixedSize(void) const;
-
-  virtual void reorder(OMByte* bytes,
-                       OMUInt32 bytesSize) const;
-
-  virtual OMUInt32 externalSize(const OMByte* internalBytes,
-                                OMUInt32 internalBytesSize) const;
-
-  virtual OMUInt32 externalSize(void) const;
-
-  virtual void externalize(const OMByte* internalBytes,
-                           OMUInt32 internalBytesSize,
-                           OMByte* externalBytes,
-                           OMUInt32 externalBytesSize,
-                           OMByteOrder byteOrder) const;
-
-  virtual OMUInt32 internalSize(const OMByte* externalBytes,
-                                OMUInt32 externalSize) const;
-
-  virtual OMUInt32 internalSize(void) const;
-
-  virtual void internalize(const OMByte* externalBytes,
-                           OMUInt32 externalBytesSize,
-                           OMByte* internalBytes,
-                           OMUInt32 internalBytesSize,
-                           OMByteOrder byteOrder) const;
-
-  // tjb - temporary
-  virtual const OMUniqueObjectIdentification& uniqueIdentification(void) const;
+  // Methods to return OMType. Helps to maintain client code once
+  // ImplAAFTypeDef inheritance from OMType is removed.
+  virtual const OMType* type() const;
+  virtual OMType*       type();
 
   // Allocate an OMProperty that can represent this type.  Implemented
   // by derived classes.
@@ -187,6 +157,9 @@ public:
   // Overrides from OMDefinition
   virtual const OMUniqueObjectIdentification& identification(void) const;
   virtual const wchar_t* name(void) const;
+  virtual bool hasDescription(void) const;
+  virtual const wchar_t* description(void) const;
+  virtual bool isPredefined(void) const;
 
 protected:
   // Helper function to return the raw type of UInt8Array (if
@@ -194,6 +167,20 @@ protected:
   virtual AAFRESULT STDMETHODCALLTYPE
     pvtGetUInt8Array8Type
         (ImplAAFTypeDef ** ppRawTypeDef);
+
+
+  // The function returns the number of NULL-terminated strings
+  // found in the specified array.
+  static size_t stringArrayStringCount( const wchar_t* buffer,
+                                        size_t bufferSize );
+
+  // The function parses an array containing a sequence
+  // of NULL-terminated strings returning a list of pointers
+  // to the beginning of each string.
+  static void getStringArrayStrings( const wchar_t* buffer,
+                                     size_t bufferSize,
+                                     const wchar_t** strings,
+                                     size_t stringCount );
 };
 
 //

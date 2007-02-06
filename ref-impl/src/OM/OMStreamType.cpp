@@ -25,4 +25,8 @@
 // @doc OMEXTERNAL
 #include "OMStreamType.h"
 
-// Nothing yet
+OMType::Tag OMStreamType::tag(void) const
+{
+  return OMTTStream;
+}
+

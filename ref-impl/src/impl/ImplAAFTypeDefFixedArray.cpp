@@ -50,6 +50,8 @@
 #include "ImplAAFObjectCreation.h"
 #include "AAFClassIDs.h"
 
+#include "OMTypeVisitor.h"
+
 #include "OMAssertions.h"
 #include <string.h>
 
@@ -66,11 +68,19 @@ ImplAAFTypeDefFixedArray::ImplAAFTypeDefFixedArray ()
 {
   _persistentProperties.put(_ElementType.address());
   _persistentProperties.put(_ElementCount.address());
+  _baseTypeIsCached = false;
 }
 
 
 ImplAAFTypeDefFixedArray::~ImplAAFTypeDefFixedArray ()
-{}
+{
+	if(_baseTypeIsCached)
+	{
+		_cachedBaseType->ReleaseReference();
+		_cachedBaseType = NULL;
+		_baseTypeIsCached = false;
+	}
+}
 
 
 AAFRESULT STDMETHODCALLTYPE
@@ -194,12 +204,32 @@ aafUInt32 ImplAAFTypeDefFixedArray::pvtCount
 }
 
 
-ImplAAFTypeDefSP ImplAAFTypeDefFixedArray::BaseType (void) const
+// This pointer is not reference counted when returned, DO NOT KEEP A COPY
+ImplAAFTypeDef* ImplAAFTypeDefFixedArray::NonRefCountedBaseType (void) const
 {
-  ImplAAFTypeDefSP result;
-  AAFRESULT hr = GetType (&result);
-  ASSERTU (AAFRESULT_SUCCEEDED (hr));
-  ASSERTU (result);
+	if(_baseTypeIsCached)
+	{
+		return _cachedBaseType;
+	}
+	else
+	{	
+		ImplAAFTypeDef* result;
+ 		AAFRESULT hr = GetType (&result);
+ 		ASSERTU (AAFRESULT_SUCCEEDED (hr));
+ 		ASSERTU (result);
+ 		((ImplAAFTypeDefFixedArray*)this)->_cachedBaseType = result;
+ 		((ImplAAFTypeDefFixedArray*)this)->_baseTypeIsCached = true;
+  		return result;
+  	}
+}
+
+
+bool ImplAAFTypeDefFixedArray::isFixedSize(void) const
+{
+  bool result = false;
+  if (IsFixedSize() == kAAFTrue) {
+    result = true;
+  }
   return result;
 }
 
@@ -210,13 +240,13 @@ void ImplAAFTypeDefFixedArray::reorder(OMByte* externalBytes,
   aafUInt32 numElems = _ElementCount;
   aafUInt32 elem = 0;
 
-  ImplAAFTypeDefSP ptd = BaseType ();
+  ImplAAFTypeDef* ptd = NonRefCountedBaseType ();
   aafUInt32 elemSize = ptd->PropValSize ();
   aafInt32 numBytesLeft = externalBytesSize;
 
   for (elem = 0; elem < numElems; elem++)
 	{
-	  ptd->reorder (externalBytes, elemSize);
+	  ptd->type()->reorder (externalBytes, elemSize);
 	  externalBytes += elemSize;
 	  numBytesLeft -= elemSize;
 	  ASSERTU (numBytesLeft >= 0);
@@ -225,13 +255,21 @@ void ImplAAFTypeDefFixedArray::reorder(OMByte* externalBytes,
 
 
 OMUInt32 ImplAAFTypeDefFixedArray::externalSize(const OMByte* /*internalBytes*/,
-											  OMUInt32 /*internalBytesSize*/) const
+												OMUInt32 /*internalBytesSize*/) const
 {
-  ImplAAFTypeDefSP ptd = BaseType ();
+  ImplAAFTypeDef* ptd = NonRefCountedBaseType ();
   ASSERTU (ptd->IsFixedSize ());
   // OMUInt32 result = _ElementCount * ptd->externalSize (0, 0);
   OMUInt32 result = _ElementCount * ptd->PropValSize ();
   return result;
+}
+
+
+OMUInt32 ImplAAFTypeDefFixedArray::externalSize(void) const
+{
+  // Should be properly implemented
+  ASSERTU (0);
+  return 0; // Not reached!
 }
 
 
@@ -244,7 +282,7 @@ void ImplAAFTypeDefFixedArray::externalize(const OMByte* internalBytes,
   aafUInt32 numElems = _ElementCount;
   aafUInt32 elem = 0;
 
-  ImplAAFTypeDefSP ptd = BaseType ();
+  ImplAAFTypeDef* ptd = NonRefCountedBaseType ();
   aafUInt32 internalSize = ptd->ActualSize ();
   aafUInt32 externalSize = ptd->PropValSize ();
   if (internalSize == externalSize)
@@ -263,7 +301,7 @@ void ImplAAFTypeDefFixedArray::externalize(const OMByte* internalBytes,
 
 	  for (elem = 0; elem < numElems; elem++)
 		{
-		  ptd->externalize (internalBytes,
+		  ptd->type()->externalize (internalBytes,
 							internalSize,
 							externalBytes,
 							externalSize,
@@ -280,13 +318,21 @@ void ImplAAFTypeDefFixedArray::externalize(const OMByte* internalBytes,
 
 
 OMUInt32 ImplAAFTypeDefFixedArray::internalSize(const OMByte* /*externalBytes*/,
-											  OMUInt32 /*externalBytesSize*/) const
+												OMUInt32 /*externalBytesSize*/) const
 {
-  ImplAAFTypeDefSP ptd = BaseType ();
+  ImplAAFTypeDef* ptd = NonRefCountedBaseType ();
   ASSERTU (ptd->IsFixedSize ());
   // OMUInt32 result = _ElementCount * ptd->internalSize (0, 0);
   OMUInt32 result = _ElementCount * ptd->ActualSize ();
   return result;
+}
+
+
+OMUInt32 ImplAAFTypeDefFixedArray::internalSize(void) const
+{
+  // Should be properly implemented
+  ASSERTU (0);
+  return 0; // Not reached!
 }
 
 
@@ -299,7 +345,7 @@ void ImplAAFTypeDefFixedArray::internalize(const OMByte* externalBytes,
   aafUInt32 numElems = _ElementCount;
   aafUInt32 elem = 0;
 
-  ImplAAFTypeDefSP ptd = BaseType ();
+  ImplAAFTypeDef* ptd = NonRefCountedBaseType ();
   ASSERTU (ptd->IsFixedSize ());
   aafUInt32 internalElemSize = ptd->ActualSize ();
   aafUInt32 externalElemSize = ptd->PropValSize ();
@@ -319,7 +365,7 @@ void ImplAAFTypeDefFixedArray::internalize(const OMByte* externalBytes,
 
 	  for (elem = 0; elem < numElems; elem++)
 		{
-		  ptd->internalize (externalBytes,
+		  ptd->type()->internalize (externalBytes,
 							externalElemSize,
 							internalBytes,
 							internalElemSize,
@@ -336,27 +382,36 @@ void ImplAAFTypeDefFixedArray::internalize(const OMByte* externalBytes,
 
 OMType* ImplAAFTypeDefFixedArray::elementType(void) const
 {
-  ImplAAFTypeDef* result = 0;
-  AAFRESULT hr = GetType(&result);
-  ASSERTU(hr == 0);
-  result->ReleaseReference();
-  return result;
+  ImplAAFTypeDef* type = NonRefCountedBaseType();
+  return type->type();
 }
+
+void ImplAAFTypeDefFixedArray::accept(OMTypeVisitor& visitor) const
+{
+  visitor.visitFixedArrayType(this);
+  elementType()->accept(visitor);
+}
+
+OMUInt32 ImplAAFTypeDefFixedArray::elementCount(void) const
+{
+  return _ElementCount;
+}
+
 
 aafBool ImplAAFTypeDefFixedArray::IsFixedSize (void) const
 {
-  return BaseType()->IsFixedSize();
+  return NonRefCountedBaseType()->IsFixedSize();
 }
 
 OMUInt32 ImplAAFTypeDefFixedArray::PropValSize (void) const
 {
-  return (BaseType()->PropValSize()) * _ElementCount;
+  return (NonRefCountedBaseType()->PropValSize()) * _ElementCount;
 }
 
 
 aafBool ImplAAFTypeDefFixedArray::IsRegistered (void) const
 {
-  return BaseType()->IsRegistered();
+  return NonRefCountedBaseType()->IsRegistered();
 }
 
 
@@ -366,8 +421,8 @@ OMUInt32 ImplAAFTypeDefFixedArray::NativeSize (void) const
   ASSERTU (IsRegistered());
 
   OMUInt32 result;
-  ImplAAFTypeDefSP elemType;
-  elemType = BaseType ();
+  ImplAAFTypeDef* elemType;
+  elemType = NonRefCountedBaseType ();
   ASSERTU (elemType);
   result = elemType->NativeSize() * _ElementCount;
   return result;
@@ -380,7 +435,7 @@ OMProperty * ImplAAFTypeDefFixedArray::pvtCreateOMProperty
 {
   ASSERTU (name);
 
-  ImplAAFTypeDefSP ptd = BaseType ();
+  ImplAAFTypeDef* ptd = NonRefCountedBaseType ();
   ASSERTU (ptd);
 
   OMProperty * result = 0;
@@ -493,3 +548,34 @@ void ImplAAFTypeDefFixedArray::onRestore(void* clientContext) const
 {
   ImplAAFTypeDefArray::onRestore(clientContext);
 }
+
+const OMUniqueObjectIdentification& ImplAAFTypeDefFixedArray::identification(void) const
+{
+  // Re-implement pure virtual method inherited from OMArrayType
+  return ImplAAFMetaDefinition::identification();
+}
+
+const wchar_t* ImplAAFTypeDefFixedArray::name(void) const
+{
+  // Re-implement pure virtual method inherited from OMArrayType
+  return ImplAAFMetaDefinition::name();
+}
+
+bool ImplAAFTypeDefFixedArray::hasDescription(void) const
+{
+  // Re-implement pure virtual method inherited from OMArrayType
+  return ImplAAFMetaDefinition::hasDescription();
+}
+
+const wchar_t* ImplAAFTypeDefFixedArray::description(void) const
+{
+  // Re-implement pure virtual method inherited from OMArrayType
+  return ImplAAFMetaDefinition::description();
+}
+
+bool ImplAAFTypeDefFixedArray::isPredefined(void) const
+{
+  // Re-implement pure virtual method inherited from OMArrayType
+  return ImplAAFMetaDefinition::isPredefined();
+}
+

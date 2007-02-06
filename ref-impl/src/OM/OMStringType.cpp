@@ -25,4 +25,8 @@
 // @doc OMEXTERNAL
 #include "OMStringType.h"
 
-// Nothing yet
+OMType::Tag OMStringType::tag(void) const
+{
+  return OMTTString;
+}
+

@@ -146,31 +146,11 @@ static const OMObjectIdentification Class_Root =
 
 static const OMPropertyId PID_Root_MetaDictionary  = 0x001;
 static const OMPropertyId PID_Root_Header          = 0x002;
-static const OMPropertyId PID_Root_ObjectDirectory = 0x003;
-static const OMPropertyId PID_Root_FormatVersion   = 0x004;
-
-static const OMPropertyId PID_InterchangeObject_InstanceUID = 0x3c0a;
-
-//{0d010301-0101-0100-060e-2b3401010102}
-const OMUniqueObjectIdentification Property_Root_MetaDictionary =
-{0x0d010301, 0x0101, 0x0100, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02}};
-
-//{0d010301-0102-0100-060e-2b3401010102}
-const OMUniqueObjectIdentification Property_Root_Header =
-{0x0d010301, 0x0102, 0x0100, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02}};
-
-// {01011502-0000-0000-060E-2B3401010101}
-static const OMObjectIdentification Property_InterchangeObject_InstanceUID =
-{0x01011502, 0x0000, 0x0000, {0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x01}};
-
-
 
 class OMPropertyDefinition;
 
 class OMReferenceContainerIterator;
 typedef OMReferenceContainerIterator ClassDefinitionsIterator;
-
-class OMPropertyDefinition;
 
   // @class Dictionary containing definitions of classes, properties and types.
   //        The dictionary is a factory for <c OMstorable> objects.
@@ -192,6 +172,106 @@ public:
 
   virtual void associate(const OMObjectIdentification& id,
                          const OMPropertyId propertyId) = 0;
+
+  virtual void newClass(const OMUniqueObjectIdentification& id,
+                        const wchar_t* name,
+                        const wchar_t* description,
+                        const OMUniqueObjectIdentification& parent,
+                        bool isConcrete);
+
+  virtual void newProperty(const OMUniqueObjectIdentification& id,
+                           const wchar_t* name,
+                           const wchar_t* description,
+                           const OMUniqueObjectIdentification& type,
+                           bool& isRequired,
+                           const OMUniqueObjectIdentification& memberOf);
+
+  virtual void newIntegerType(const OMObjectIdentification& id,
+                              const wchar_t* name,
+                              const wchar_t* description,
+                              OMUInt8 size,
+                              bool isSigned);
+
+  virtual void newCharacterType(const OMObjectIdentification& id,
+                                const wchar_t* name,
+                                const wchar_t* description);
+
+  virtual void newStrongReferenceType(
+                                 const OMObjectIdentification& id,
+                                 const wchar_t* name,
+                                 const wchar_t* description,
+                                 const OMObjectIdentification& referencedType);
+
+  virtual void newWeakReferenceType(
+                                 const OMObjectIdentification& id,
+                                 const wchar_t* name,
+                                 const wchar_t* description,
+                                 const OMObjectIdentification& referencedType,
+                                 const OMObjectIdentification* path,
+                                 OMUInt32 pathCount);
+
+  virtual void newRenamedType(const OMObjectIdentification& id,
+                              const wchar_t* name,
+                              const wchar_t* description,
+                              const OMObjectIdentification& renamedType);
+
+  virtual void newEnumeratedType(const OMObjectIdentification& id,
+                                 const wchar_t* name,
+                                 const wchar_t* description,
+                                 const OMObjectIdentification& elementType,
+                                 const wchar_t** elementNames,
+                                 OMInt64* elementValues,
+                                 OMUInt32 elementCount);
+
+  virtual void newFixedArrayType(const OMObjectIdentification& id,
+                                 const wchar_t* name,
+                                 const wchar_t* description,
+                                 const OMObjectIdentification& elementType,
+                                 OMUInt32 elementCount);
+
+  virtual void newVaryingArrayType(const OMObjectIdentification& id,
+                                   const wchar_t* name,
+                                   const wchar_t* description,
+                                   const OMObjectIdentification& elementType);
+
+  virtual void newSetType(const OMObjectIdentification& id,
+                          const wchar_t* name,
+                          const wchar_t* description,
+                          const OMObjectIdentification& elementType);
+
+  virtual void newRecordType(const OMObjectIdentification& id,
+                             const wchar_t* name,
+                             const wchar_t* description,
+                             const OMObjectIdentification* memberTypes,
+                             const wchar_t** memberNames,
+                             OMUInt32 memberCount);
+
+  virtual void newStreamType(const OMObjectIdentification& id,
+                             const wchar_t* name,
+                             const wchar_t* description);
+
+  virtual void newStringType(const OMObjectIdentification& id,
+                             const wchar_t* name,
+                             const wchar_t* description,
+                             const OMObjectIdentification& elementType);
+
+  virtual void newExtendibleEnumeratedType(
+                                 const OMObjectIdentification& id,
+                                 const wchar_t* name,
+                                 const wchar_t* description,
+                                 const wchar_t** elementNames,
+                                 const OMObjectIdentification* elementValues,
+                                 OMUInt32 elementCount);
+
+  virtual void newIndirectType(const OMObjectIdentification& id,
+                               const wchar_t* name,
+                               const wchar_t* description);
+
+  virtual void newOpaqueType(const OMObjectIdentification& id,
+                             const wchar_t* name,
+                             const wchar_t* description);
+
+  virtual void resolve(void);
 
   static void initialize(void);
 

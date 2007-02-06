@@ -69,75 +69,6 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 
-bool ImplAAFTypeDef::isFixedSize(void) const
-{
-  bool result = false;
-  if (IsFixedSize() == kAAFTrue) {
-    result = true;
-  }
-  return result;
-}
-
-void ImplAAFTypeDef::reorder(OMByte* /*bytes*/,
-							 OMUInt32 /*bytesSize*/) const
-{
-  // Should be implemented in derived class.
-  ASSERTU (0);
-}
-
-
-OMUInt32 ImplAAFTypeDef::externalSize(const OMByte* /*internalBytes*/,
-									OMUInt32 /*internalBytesSize*/) const
-{
-  // Should be implemented in derived class.
-  ASSERTU (0);
-  return 0; // Not reached!
-}
-
-OMUInt32 ImplAAFTypeDef::externalSize(void) const
-{
-  return PropValSize();
-}
-
-void ImplAAFTypeDef::externalize(const OMByte* /*internalBytes*/,
-								 OMUInt32 /*internalBytesSize*/,
-								 OMByte* /*externalBytes*/,
-								 OMUInt32 /*externalBytesSize*/,
-								 OMByteOrder /*byteOrder*/) const
-{
-  // Should be implemented in derived class.
-  ASSERTU (0);
-}
-
-
-OMUInt32 ImplAAFTypeDef::internalSize(const OMByte* /*externalBytes*/,
-									OMUInt32 /*externalSize*/) const
-{
-  // Should be implemented in derived class.
-  ASSERTU (0);
-  return 0; // Not reached!
-}
-
-OMUInt32 ImplAAFTypeDef::internalSize(void) const
-{
-  return NativeSize();
-}
-
-void ImplAAFTypeDef::internalize(const OMByte* /*externalBytes*/,
-								 OMUInt32 /*externalBytesSize*/,
-								 OMByte* /*internalBytes*/,
-								 OMUInt32 /*internalBytesSize*/,
-								 OMByteOrder /*byteOrder*/) const
-{
-  // Should be implemented in derived class.
-  ASSERTU (0);
-}
-
-const OMUniqueObjectIdentification& ImplAAFTypeDef::uniqueIdentification(void) const
-{
-  return identification();
-}
-
 aafBool ImplAAFTypeDef::IsFixedSize (void) const
 {
   // Should be implemented in derived class.
@@ -221,6 +152,21 @@ AAFRESULT ImplAAFTypeDef::MergeTo( ImplAAFDictionary* pDstDictionary )
   return hr;
 }
 
+const OMType* ImplAAFTypeDef::type() const
+{
+  const OMType* pType = dynamic_cast<const OMType*>(this);
+  ASSERTU (pType);
+
+  return pType;
+}
+
+OMType* ImplAAFTypeDef::type()
+{
+  OMType* pType = dynamic_cast<OMType*>(this);
+  ASSERTU (pType);
+
+  return pType;
+}
 
 OMProperty * ImplAAFTypeDef::pvtCreateOMProperty
   (OMPropertyId /*pid*/,
@@ -314,6 +260,52 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 
+/*static*/ size_t ImplAAFTypeDef::stringArrayStringCount(
+    const wchar_t* buffer,
+    size_t bufferSize )
+{
+  TRACE("ImplAAFTypeDefEnum::stringArrayStringCount");
+  PRECONDITION("Valid string array", buffer);
+  PRECONDITION("Valid string array size", bufferSize > 0);
+  PRECONDITION("Is NULL-terminated string", !(buffer[bufferSize-1]));
+
+  size_t count = 0;
+  for( size_t i=0; i<bufferSize; i++ )
+  {
+    if( !(buffer[i]) )
+    {
+        count++;
+    }
+  }
+
+  return count;
+}
+
+
+/*static*/ void ImplAAFTypeDef::getStringArrayStrings(
+    const wchar_t* buffer,
+    size_t ANAME(bufferSize),
+    const wchar_t** strings,
+    size_t stringCount )
+{
+  TRACE("ImplAAFTypeDefEnum::parseStringArray");
+  PRECONDITION("Valid string array", buffer);
+  PRECONDITION("Valid string array size", bufferSize > 0);
+  PRECONDITION("Is NULL-terminated string", !(buffer[bufferSize-1]));
+  PRECONDITION("Valid string count",
+               stringCount > 0 && stringCount == stringArrayStringCount(buffer, bufferSize));
+
+  const wchar_t* p = buffer;
+  for( size_t i=0; i<stringCount; i++ )
+  {
+    strings[i] = p;
+    while( *(p++) )
+    {
+    }
+  }
+}
+
+
 // These all should be pure virtual, but if we allow client extension
 // of behavior, clients may have to instantiate these.
 bool ImplAAFTypeDef::IsAggregatable () const
@@ -372,4 +364,22 @@ const wchar_t* ImplAAFTypeDef::name(void) const
 {
   // tjb - to prevent ambiguity
   return ImplAAFMetaDefinition::name();
+}
+
+bool ImplAAFTypeDef::hasDescription(void) const
+{
+  // to prevent ambiguity
+  return ImplAAFMetaDefinition::hasDescription();
+}
+
+const wchar_t* ImplAAFTypeDef::description(void) const
+{
+  // to prevent ambiguity
+  return ImplAAFMetaDefinition::description();
+}
+
+bool ImplAAFTypeDef::isPredefined(void) const
+{
+  // to prevent ambiguity
+  return ImplAAFMetaDefinition::isPredefined();
 }

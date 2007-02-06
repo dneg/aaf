@@ -29,12 +29,14 @@
 #include "ImplAAFTypeDefArray.h"
 #endif
 
+#include "OMArrayType.h"
 #include "OMWeakRefVectorProperty.h"
 #include "OMWeakRefProperty.h"
 
 class ImplEnumAAFPropertyValues;
+class OMTypeVisitor;
 
-class ImplAAFTypeDefFixedArray : public ImplAAFTypeDefArray
+class ImplAAFTypeDefFixedArray : public ImplAAFTypeDefArray, public OMFixedArrayType
 {
 public:
   //
@@ -120,11 +122,15 @@ public:
   //
   //*************************************************************
 
+  virtual bool isFixedSize(void) const;
+
   virtual void reorder(OMByte* bytes,
                        OMUInt32 bytesSize) const;
 
   virtual OMUInt32 externalSize(const OMByte* internalBytes,
                                 OMUInt32 internalBytesSize) const;
+
+  virtual OMUInt32 externalSize(void) const;
 
   virtual void externalize(const OMByte* internalBytes,
                            OMUInt32 internalBytesSize,
@@ -141,7 +147,19 @@ public:
                            OMUInt32 internalBytesSize,
                            OMByteOrder byteOrder) const;
 
+  virtual OMUInt32 internalSize(void) const;
+
   virtual OMType* elementType(void) const;
+
+  virtual void accept(OMTypeVisitor& visitor) const;
+
+  //*************************************************************
+  //
+  // Overrides from OMFixedArrayType
+  //
+  //*************************************************************
+
+  virtual OMUInt32 elementCount(void) const;
 
   //****************
   // pvtInitialize()
@@ -196,6 +214,12 @@ public:
   virtual bool IsVariableArrayable () const;
   virtual bool IsStringable () const;
 
+  // Override from OMDefinition
+  virtual const OMUniqueObjectIdentification& identification(void) const;
+  virtual const wchar_t* name(void) const;
+  virtual bool  hasDescription(void) const;
+  virtual const wchar_t* description(void) const;
+  virtual bool isPredefined(void) const;
 
   // override from OMStorable.
   virtual const OMClassId& classId(void) const;
@@ -205,10 +229,12 @@ public:
   virtual void onRestore(void* clientContext) const;
 
 private:
-  ImplAAFTypeDefSP BaseType (void) const;
+  ImplAAFTypeDef* NonRefCountedBaseType (void) const;
 
   OMWeakReferenceProperty<OMUniqueObjectIdentification, ImplAAFTypeDef> _ElementType;
   OMFixedSizeProperty<aafUInt32>          _ElementCount;
+  ImplAAFTypeDef     *_cachedBaseType;
+  aafBool            _baseTypeIsCached;
 };
 
 //

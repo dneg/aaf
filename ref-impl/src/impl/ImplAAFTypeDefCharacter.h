@@ -31,7 +31,7 @@
 
 
 class ImplAAFPropertyValue;
-
+class OMTypeVisitor;
 
 
 
@@ -41,8 +41,10 @@ class ImplAAFPropertyValue;
 #include "ImplAAFTypeDef.h"
 #endif
 
+#include "OMCharacterType.h"
 
-class ImplAAFTypeDefCharacter : public ImplAAFTypeDef
+
+class ImplAAFTypeDefCharacter : public ImplAAFTypeDef, public OMCharacterType
 {
 public:
   //
@@ -106,13 +108,30 @@ public:
 
 public:
   //
+  // OMDefinition methods
+  //
+  virtual const OMUniqueObjectIdentification& identification(void) const;
+
+  virtual const wchar_t* name(void) const;
+
+  virtual bool hasDescription(void) const;
+
+  virtual const wchar_t* description(void) const;
+
+  virtual bool isPredefined(void) const;
+
+  //
   // OMType methods
   //
+  virtual bool isFixedSize(void) const;
+
   virtual void reorder(OMByte* externalBytes,
                        OMUInt32 externalBytesSize) const;
 
   virtual OMUInt32 externalSize(const OMByte* internalBytes,
                                 OMUInt32 internalBytesSize) const;
+
+  virtual OMUInt32 externalSize(void) const;
 
   virtual void externalize(const OMByte* internalBytes,
                            OMUInt32 internalBytesSize,
@@ -123,13 +142,15 @@ public:
   virtual OMUInt32 internalSize(const OMByte* externalBytes,
                                 OMUInt32 externalSize) const;
 
+  virtual OMUInt32 internalSize(void) const;
+
   virtual void internalize(const OMByte* externalBytes,
                            OMUInt32 externalBytesSize,
                            OMByte* internalBytes,
                            OMUInt32 internalBytesSize,
                            OMByteOrder byteOrder) const;
 
-  
+  virtual void accept(OMTypeVisitor& visitor) const;  
   
   //
   // ImplAAFTypeDef methods

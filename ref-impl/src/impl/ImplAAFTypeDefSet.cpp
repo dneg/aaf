@@ -91,6 +91,7 @@
 #include "OMWeakRefSetProperty.h"
 #include "OMDataTypes.h"
 #include "OMSetProperty.h"
+#include "OMTypeVisitor.h"
 
 
 #include "AAFStoredObjectIDs.h"
@@ -219,7 +220,7 @@ OMType* ImplAAFTypeDefSet::elementType(void) const
   AAFRESULT hr = GetElementType(&result);
   ASSERTU(hr == 0);
   result->ReleaseReference();
-  return result;
+  return result->type();
 }
 
 AAFRESULT STDMETHODCALLTYPE
@@ -887,6 +888,108 @@ void ImplAAFTypeDefSet::onSave(void* clientContext) const
 void ImplAAFTypeDefSet::onRestore(void* clientContext) const
 {
   ImplAAFTypeDef::onRestore(clientContext);
+}
+
+const OMUniqueObjectIdentification& ImplAAFTypeDefSet::identification(void) const
+{
+  // Re-implement pure virtual method inherited from OMSetType
+  return ImplAAFMetaDefinition::identification();
+}
+
+const wchar_t* ImplAAFTypeDefSet::name(void) const
+{
+  // Re-implement pure virtual method inherited from OMSetType
+  return ImplAAFMetaDefinition::name();
+}
+
+bool ImplAAFTypeDefSet::hasDescription(void) const
+{
+  // Re-implement pure virtual method inherited from OMSetType
+  return ImplAAFMetaDefinition::hasDescription();
+}
+
+const wchar_t* ImplAAFTypeDefSet::description(void) const
+{
+  // Re-implement pure virtual method inherited from OMSetType
+  return ImplAAFMetaDefinition::description();
+}
+
+bool ImplAAFTypeDefSet::isPredefined(void) const
+{
+  // Re-implement pure virtual method inherited from OMSetType
+  return ImplAAFMetaDefinition::isPredefined();
+}
+
+bool ImplAAFTypeDefSet::isFixedSize(void) const
+{
+  bool result = false;
+  if (IsFixedSize() == kAAFTrue) {
+    result = true;
+  }
+  return result;
+}
+
+void ImplAAFTypeDefSet::reorder(OMByte* /*bytes*/,
+							 OMUInt32 /*bytesSize*/) const
+{
+  // Should be properly implemented
+  ASSERTU (0);
+}
+
+OMUInt32 ImplAAFTypeDefSet::externalSize(const OMByte* /*internalBytes*/,
+									OMUInt32 /*internalBytesSize*/) const
+{
+  // Should be properly implemented
+  ASSERTU (0);
+  return 0; // Not reached!
+}
+
+OMUInt32 ImplAAFTypeDefSet::externalSize(void) const
+{
+  // Should be properly implemented
+  ASSERTU (0);
+  return 0; // Not reached!
+}
+
+void ImplAAFTypeDefSet::externalize(const OMByte* /*internalBytes*/,
+								 OMUInt32 /*internalBytesSize*/,
+								 OMByte* /*externalBytes*/,
+								 OMUInt32 /*externalBytesSize*/,
+								 OMByteOrder /*byteOrder*/) const
+{
+  // Should be properly implemented
+  ASSERTU (0);
+}
+
+OMUInt32 ImplAAFTypeDefSet::internalSize(const OMByte* /*externalBytes*/,
+									OMUInt32 /*externalSize*/) const
+{
+  // Should be properly implemented
+  ASSERTU (0);
+  return 0; // Not reached!
+}
+
+OMUInt32 ImplAAFTypeDefSet::internalSize(void) const
+{
+  // Should be properly implemented
+  ASSERTU (0);
+  return 0; // Not reached!
+}
+
+void ImplAAFTypeDefSet::internalize(const OMByte* /*externalBytes*/,
+								 OMUInt32 /*externalBytesSize*/,
+								 OMByte* /*internalBytes*/,
+								 OMUInt32 /*internalBytesSize*/,
+								 OMByteOrder /*byteOrder*/) const
+{
+  // Should be properly implemented
+  ASSERTU (0);
+}
+
+void ImplAAFTypeDefSet::accept(OMTypeVisitor& visitor) const
+{
+  visitor.visitSetType(this);
+  elementType()->accept(visitor);
 }
 
 // Method is called after associated class has been added to MetaDictionary.

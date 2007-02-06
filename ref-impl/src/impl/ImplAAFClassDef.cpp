@@ -849,7 +849,8 @@ AAFRESULT STDMETHODCALLTYPE
 								pName,
 								typeId,
 								isOptional,
-                isUniqueIdentifier));
+								isUniqueIdentifier,
+								this));
 
 //  ImplAAFPropertyDef * pdTemp = pd;
 //  _Properties.appendValue(pdTemp);

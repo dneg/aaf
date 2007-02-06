@@ -33,7 +33,7 @@
 
 class ImplAAFPropertyValue;
 
-class ImplAAFTypeDefArray : public ImplAAFTypeDef, public OMArrayType
+class ImplAAFTypeDefArray : public ImplAAFTypeDef
 {
 public:
   //

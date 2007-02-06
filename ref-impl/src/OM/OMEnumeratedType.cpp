@@ -25,4 +25,9 @@
 // @doc OMEXTERNAL
 #include "OMEnumeratedType.h"
 
-// Nothing yet
+OMType::Tag OMEnumeratedType::tag(void) const
+{
+  return OMTTEnumerated;
+}
+
+

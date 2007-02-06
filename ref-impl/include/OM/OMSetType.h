@@ -25,10 +25,12 @@
 #ifndef OMSETTYPE_H
 #define OMSETTYPE_H
 
-class OMType;
+#include "OMType.h"
 
-class OMSetType {
+class OMSetType : public OMType {
 public:
+
+  virtual OMType::Tag tag(void) const;
 
   virtual OMType* elementType(void) const = 0;
 

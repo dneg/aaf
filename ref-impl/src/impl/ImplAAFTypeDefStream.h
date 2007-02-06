@@ -24,16 +24,25 @@
 //
 //=---------------------------------------------------------------------=
 
+
+
+
+
+
 #ifndef __ImplAAFTypeDef_h__
 #include "ImplAAFTypeDef.h"
 #endif
 
+#include "OMStreamType.h"
+
 
 class ImplAAFPropertyValue;
 class ImplAAFStreamPropertyValue;
+struct IAAFIOCompletion;
 struct IAAFStreamAccess;
 
-class ImplAAFTypeDefStream : public ImplAAFTypeDef
+class ImplAAFTypeDefStream : public ImplAAFTypeDef,
+                             public OMStreamType
 {
 public:
   //
@@ -349,6 +358,56 @@ public:
         aafMemPtr_t  pUserData);
 public:
 
+  //*************************************************************
+  //
+  // Overrides from OMDefinition
+  //
+  //*************************************************************
+
+  virtual const OMUniqueObjectIdentification& identification(void) const;
+
+  virtual const wchar_t* name(void) const;
+
+  virtual bool hasDescription(void) const;
+
+  virtual const wchar_t* description(void) const;
+
+  virtual bool isPredefined(void) const;
+
+  //*************************************************************
+  //
+  // Overrides from OMType, via inheritace through ImplAAFTypeDef
+  //
+  //*************************************************************
+
+  virtual bool isFixedSize(void) const;
+
+  virtual void reorder(OMByte* externalBytes,
+                       OMUInt32 externalBytesSize) const;
+
+  virtual OMUInt32 externalSize(const OMByte* internalBytes,
+                                OMUInt32 internalBytesSize) const;
+
+  virtual OMUInt32 externalSize(void) const;
+
+  virtual void externalize(const OMByte* internalBytes,
+                           OMUInt32 internalBytesSize,
+                           OMByte* externalBytes,
+                           OMUInt32 externalBytesSize,
+                           OMByteOrder byteOrder) const;
+
+  virtual OMUInt32 internalSize(const OMByte* externalBytes,
+                                OMUInt32 externalSize) const;
+
+  virtual OMUInt32 internalSize(void) const;
+
+  virtual void internalize(const OMByte* externalBytes,
+                           OMUInt32 externalBytesSize,
+                           OMByte* internalBytes,
+                           OMUInt32 internalBytesSize,
+                           OMByteOrder byteOrder) const;
+
+  virtual void accept(OMTypeVisitor& visitor) const;
 
   //
   // ImplAAFTypeDef methods

@@ -44,11 +44,15 @@
 #include "OMDataStream.h"
 #include "OMDataStreamAccess.h"  // !!! tjb
 #include "OMIntegerType.h"
+#include "OMCharacterType.h"
 #include "OMStringType.h"
 #include "OMEnumeratedType.h"
 #include "OMObjectReferenceType.h"
 #include "OMRenamedType.h"
 #include "OMStreamType.h"
+#include "OMOpaqueType.h"
+#include "OMExtendibleEnumeratedType.h"
+#include "OMIndirectType.h"
 #include "OMUniqueObjectIdentType.h"
 #include "OMRootStorable.h"
 #include "OMVector.h"
@@ -67,6 +71,7 @@
 #include "OMDataVector.h"
 #include "OMDataContainer.h"
 #include "OMDataContainerIterator.h"
+#include "OMExceptions.h"
 
 #include "OMUtilities.h"
 
@@ -74,6 +79,12 @@
 
 #define USETAGTABLE 1
 //#define OM_EXTENSIONSONLY 1
+
+#include "OMTypeVisitor.h"
+
+OMKLVKey metaDictionaryKey =
+  {0x8A, 0xE5, 0x95, 0x9D, 0x57, 0xB3, 0xDA, 0x33,
+   0x8A, 0x5F, 0xB4, 0x11, 0x4D, 0x66, 0x4B, 0x40};
 
   // @mfunc Open the root <c OMKLVStoredObject> in the raw storage
   //        <p rawStorage> for reading only.
@@ -362,7 +373,6 @@ static struct {
 };
 
 static size_t mapSize = sizeof(map)  / sizeof(map[0]);
-//static size_t pidsSize = sizeof(map[0]._pids) / sizeof(map[0]._pids[0]);
 
 static void initializeMap(OMFile& file)
 {
@@ -498,13 +508,8 @@ void OMKLVStoredObject::save(const OMSimpleProperty& property)
   OMByte* buffer = new OMByte[externalBytesSize];
   ASSERT("Valid heap pointer", buffer != 0);
 
-#if 0 // tjb not yet
-  const OMUniqueObjectIdentification id = propertyType->identification();
-#else
-  const OMUniqueObjectIdentification id = propertyType->uniqueIdentification();
-#endif
-  if ((id == Type_UniqueObjectIdentification) ||
-      (id == Type_TransferCharacteristic)) {
+  if ((propertyType->identification() == Type_UniqueObjectIdentification) ||
+      (propertyType->identification() == Type_TransferCharacteristic)) {
     // UniqueObjectIdentification properties are stored
     // as SMPTE universal labels in KLV-encoded files
     const OMUniqueObjectIdentification& id =
@@ -570,13 +575,8 @@ void OMKLVStoredObject::save(const OMDataVector& property)
     // Get a pointer to the element
     const OMByte* bits = it->currentElement();
 
-#if 0 // tjb not yet
-    const OMUniqueObjectIdentification id = elementType->identification();
-#else
-    const OMUniqueObjectIdentification id = elementType->uniqueIdentification();
-#endif
-    if ((id == Type_UniqueObjectIdentification) ||
-        (id == Type_TransferCharacteristic)) {
+    if ((elementType->identification() == Type_UniqueObjectIdentification) ||
+        (elementType->identification() == Type_TransferCharacteristic)) {
       // UniqueObjectIdentification properties are stored
       // as SMPTE universal labels in KLV-encoded files
       const OMUniqueObjectIdentification& id =
@@ -642,13 +642,9 @@ void OMKLVStoredObject::save(const OMDataSet& property)
     // Get a pointer to the element
     const OMByte* bits = it->currentElement();
 
-#if 0 // tjb not yet
-    const OMUniqueObjectIdentification id = elementType->identification();
-#else
-    const OMUniqueObjectIdentification id = elementType->uniqueIdentification();
-#endif
-    if ((id == Type_UniqueObjectIdentification) ||
-        (id == Type_TransferCharacteristic)) {
+
+    if ((elementType->identification() == Type_UniqueObjectIdentification) ||
+        (elementType->identification() == Type_TransferCharacteristic)) {
       // UniqueObjectIdentification properties are stored
       // as SMPTE universal labels in KLV-encoded files
       const OMUniqueObjectIdentification& id =
@@ -974,13 +970,8 @@ void OMKLVStoredObject::restore(OMSimpleProperty& property,
 
   _storage->read(buffer, externalSize);
 
-#if 0 // tjb not yet
-  const OMUniqueObjectIdentification id = propertyType->identification();
-#else
-  const OMUniqueObjectIdentification id = propertyType->uniqueIdentification();
-#endif
-  if ((id == Type_UniqueObjectIdentification) ||
-      (id == Type_TransferCharacteristic)) {
+  if ((propertyType->identification() == Type_UniqueObjectIdentification) ||
+      (propertyType->identification() == Type_TransferCharacteristic)) {
     // UniqueObjectIdentification properties are stored
     // as SMPTE universal labels in KLV-encoded files.
     const OMKLVKey* key = (OMKLVKey*)buffer;
@@ -1049,13 +1040,8 @@ void OMKLVStoredObject::restore(OMDataVector& property,
     // Read one element
     _storage->read(buffer, externalElementSize);
 
-#if 0 // tjb not yet
-    const OMUniqueObjectIdentification id = elementType->identification();
-#else
-    const OMUniqueObjectIdentification id = elementType->uniqueIdentification();
-#endif
-    if ((id == Type_UniqueObjectIdentification) ||
-        (id == Type_TransferCharacteristic)) {
+    if ((elementType->identification() == Type_UniqueObjectIdentification) ||
+        (elementType->identification() == Type_TransferCharacteristic)) {
       // UniqueObjectIdentification properties are stored
       // as SMPTE universal labels in KLV-encoded files.
       const OMKLVKey* key = (OMKLVKey*)buffer;
@@ -1110,13 +1096,8 @@ void OMKLVStoredObject::restore(OMDataSet& property,
     // Read one element
     _storage->read(buffer, externalElementSize);
 
-#if 0 // tjb not yet
-    const OMUniqueObjectIdentification id = elementType->identification();
-#else
-    const OMUniqueObjectIdentification id = elementType->uniqueIdentification();
-#endif
-    if ((id == Type_UniqueObjectIdentification) ||
-        (id == Type_TransferCharacteristic)) {
+    if ((elementType->identification() == Type_UniqueObjectIdentification) ||
+        (elementType->identification() == Type_TransferCharacteristic)) {
       // UniqueObjectIdentification properties are stored
       // as SMPTE universal labels in KLV-encoded files.
       const OMKLVKey* key = (OMKLVKey*)buffer;
@@ -2204,12 +2185,7 @@ void OMKLVStoredObject::writePrimerPack(const OMDictionary* dictionary)
       OMPropertyId pid = propertyDefinition->localIdentification();
       OMDictionary::mapToKLV(pid);
       _storage->write(pid, _reorderBytes);
-#if 0 // tjb not yet
       OMUniqueObjectIdentification id = propertyDefinition->identification();
-#else
-      OMUniqueObjectIdentification id =
-                                    propertyDefinition->uniqueIdentification();
-#endif
       OMDictionary::mapToKLV(id);
       OMKLVKey k;
       convert(k, id);

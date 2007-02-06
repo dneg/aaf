@@ -34,6 +34,7 @@
 OMBuiltinPropertyDefinition::OMBuiltinPropertyDefinition(
                                                  const OMType* type,
                                                  const wchar_t* name,
+                                                 const wchar_t* /*description*/,
                                                  const OMPropertyId propertyId,
                                                  const bool isOptional)
 : _type(type),
@@ -61,9 +62,9 @@ const OMType* OMBuiltinPropertyDefinition::type(void) const
   // @mfunc The unique identification of the <c OMProperty> defined by
   //        this <c OMPropertyDefinition>.
 const OMUniqueObjectIdentification&
-OMBuiltinPropertyDefinition::uniqueIdentification(void) const
+OMBuiltinPropertyDefinition::identification(void) const
 {
-  TRACE("OMBuiltinPropertyDefinition::uniqueIdentification");
+  TRACE("OMBuiltinPropertyDefinition::identification");
   ASSERT("Unimplemented code not reached", false); // tjb -stub
   return nullOMUniqueObjectIdentification;
 }
@@ -74,6 +75,25 @@ const wchar_t* OMBuiltinPropertyDefinition::name(void) const
 {
   TRACE("OMBuiltinPropertyDefinition::name");
   return _name;
+}
+
+  // @mfunc The description of the <c OMProperty> defined by
+  //          this <c OMBuiltinPropertyDefinition>.
+  //          @precondition <f hasDefinition()>
+bool OMBuiltinPropertyDefinition::hasDescription(void) const
+{
+  TRACE("OMBuiltinPropertyDefinition::hasDescription");
+  return false;
+}
+
+  // @mfunc The description of the <c OMProperty> defined by
+  //          this <c OMBuiltinPropertyDefinition>.
+  //          @precondition <f hasDefinition()>
+const wchar_t* OMBuiltinPropertyDefinition::description(void) const
+{
+  TRACE("OMBuiltinPropertyDefinition::description");
+  PRECONDITION("Definition has a description", hasDescription());
+  return 0;
 }
 
   // @mfunc The locally unique identification of the <c OMProperty>
@@ -92,3 +112,19 @@ bool OMBuiltinPropertyDefinition::isOptional(void) const
   return _isOptional;
 }
 
+OMClassDefinition* OMBuiltinPropertyDefinition::containingClass(void) const
+{
+  TRACE("OMBuiltinPropertyDefinition::containingClass");
+  ASSERT("Unimplemented code not reached", false);
+  return 0;
+}
+
+  // @mfunc Is the <c OMProperty> defined by this
+  //          <c OMBuiltinPropertyDefinition> predefined
+  //          with respect to a well known baseline?
+bool OMBuiltinPropertyDefinition::isPredefined(void) const
+{
+  TRACE("OMBuiltinPropertyDefinition::isPredefined");
+  ASSERT("Unimplemented code not reached", false);
+  return true;
+}

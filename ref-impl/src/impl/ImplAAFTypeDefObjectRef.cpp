@@ -41,6 +41,7 @@
 #include "OMAssertions.h"
 
 #include <string.h>
+#include "OMAssertions.h"
 
 
 ImplAAFTypeDefObjectRef::ImplAAFTypeDefObjectRef ()
@@ -92,61 +93,6 @@ AAFRESULT STDMETHODCALLTYPE
 {
   // This is a virtual function should be implemented in a derived class.
   return AAFRESULT_INTERNAL_ERROR;
-}
-
-
-void ImplAAFTypeDefObjectRef::reorder(OMByte* /*externalBytes*/,
-									  OMUInt32 /*externalBytesSize*/) const
-{
-  // nothing to do for obj refs
-}
-
-
-OMUInt32 ImplAAFTypeDefObjectRef::externalSize(const OMByte* /*internalBytes*/,
-											 OMUInt32 /*internalBytesSize*/) const
-{
-  return PropValSize ();
-}
-
-
-void ImplAAFTypeDefObjectRef::externalize(const OMByte* internalBytes,
-										  OMUInt32 internalBytesSize,
-										  OMByte* externalBytes,
-										  OMUInt32 ANAME(externalBytesSize),
-										  OMByteOrder NNAME(byteOrder)) const
-{
-  TRACE("ImplAAFTypeDefObjectRef::externalize");
-  PRECONDITION("Valid internal bytes", internalBytes != 0);
-  PRECONDITION("Valid internal byte size", internalBytesSize > 0);
-  PRECONDITION("Valid external bytes", externalBytes != 0);
-  PRECONDITION("Valid external byte size", externalBytesSize > 0);
-  PRECONDITION("Internal and external sizes are equal", externalBytesSize == internalBytesSize);
-
-  copy (internalBytes, externalBytes, internalBytesSize);
-}
-
-
-OMUInt32 ImplAAFTypeDefObjectRef::internalSize(const OMByte* /*externalBytes*/,
-											 OMUInt32 /*externalBytesSize*/) const
-{
-  return NativeSize ();
-}
-
-
-void ImplAAFTypeDefObjectRef::internalize(const OMByte* externalBytes,
-										  OMUInt32 externalBytesSize,
-										  OMByte* internalBytes,
-										  OMUInt32 ANAME(internalBytesSize),
-										  OMByteOrder NNAME(byteOrder)) const
-{
-  TRACE("ImplAAFTypeDefObjectRef::internalize");
-  PRECONDITION("Valid external bytes", externalBytes != 0);
-  PRECONDITION("Valid external byte size", externalBytesSize > 0);
-  PRECONDITION("Valid internal bytes", internalBytes != 0);
-  PRECONDITION("Valid internal byte size", internalBytesSize > 0);
-  PRECONDITION("Internal and external sizes are equal", internalBytesSize == externalBytesSize);
-		           
-  copy (externalBytes, internalBytes, externalBytesSize);
 }
 
 

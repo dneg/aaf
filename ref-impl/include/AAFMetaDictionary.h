@@ -48,8 +48,8 @@
 //
 // AAFMetaDict.csv 
 //
-// This file was generated on Mon Nov 27 14:47:56 GMT 2006
-// by user phil on system pilot16.
+// This file was generated on Fri Feb  2 15:47:31 EST 2007
+// by user wschilp on system wschilppc.
 //
 // Key to macros.
 //
@@ -4800,7 +4800,7 @@ AAF_CLASS(AES3PCMDescriptor,
       0x0200, 0x0000,
       0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x05),
     0x3d10,
-    AAF_TYPE(ChannelStatusModeType),
+    AAF_TYPE(ChannelStatusModeArray),
     false,
     false,
     AES3PCMDescriptor)
@@ -4822,7 +4822,7 @@ AAF_CLASS(AES3PCMDescriptor,
       0x0400, 0x0000,
       0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x05),
     0x3d12,
-    AAF_TYPE(UserDataModeType),
+    AAF_TYPE(UserDataModeArray),
     false,
     false,
     AES3PCMDescriptor)
@@ -7678,6 +7678,28 @@ AAF_TYPE_DEFINITION_VARYING_ARRAY(UInt32Array,
     0x0000, 0x0000,
     0x06, 0x0E, 0x2B, 0x34, 0x01, 0x04, 0x01, 0x01),
   AAF_TYPE(UInt32))
+AAF_TYPE_SEPARATOR()
+
+// ChannelStatusModeArray
+//
+AAF_TYPE_DEFINITION_VARYING_ARRAY(ChannelStatusModeArray, 
+  // {04010A00-0000-0000-060E-2B3401040101}
+  // 06.0E.2B.34.01.04.01.01.04.01.0A.00.00.00.00.00
+  AAF_LITERAL_AUID(0x04010A00,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x04, 0x01, 0x01),
+  AAF_TYPE(ChannelStatusModeType))
+AAF_TYPE_SEPARATOR()
+
+// UserDataModeArray
+//
+AAF_TYPE_DEFINITION_VARYING_ARRAY(UserDataModeArray, 
+  // {04010B00-0000-0000-060E-2B3401040101}
+  // 06.0E.2B.34.01.04.01.01.04.01.0B.00.00.00.00.00
+  AAF_LITERAL_AUID(0x04010B00,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x04, 0x01, 0x01),
+  AAF_TYPE(UserDataModeType))
 AAF_TYPE_SEPARATOR()
 
 // RGBALayout

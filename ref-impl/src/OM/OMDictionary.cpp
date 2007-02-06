@@ -105,12 +105,211 @@ bool OMDictionary::contains(const OMPropertyId propertyId)
   return result;
 }
 
+void OMDictionary::newClass(const OMUniqueObjectIdentification& /* id */,
+                            const wchar_t* /* name */,
+                            const wchar_t* /* description */,
+                            const OMUniqueObjectIdentification& /* parent */,
+                            bool /* isConcrete */)
+{
+  TRACE("OMDictionary::newClass");
+
+  ASSERT("Unimplemented code not reached.", false);
+}
+
+void OMDictionary::newProperty(
+                            const OMUniqueObjectIdentification& /* id */,
+                            const wchar_t* /* name */,
+                            const wchar_t* /* description */,
+                            const OMUniqueObjectIdentification& /* type */,
+                            bool& /* isRequired */,
+                            const OMUniqueObjectIdentification& /* memberOf */)
+{
+  TRACE("OMDictionary::newProperty");
+
+  ASSERT("Unimplemented code not reached.", false);
+}
+
+void OMDictionary::newIntegerType(const OMObjectIdentification& /* id */,
+                                  const wchar_t* /* name */,
+                                  const wchar_t* /* description */,
+                                  OMUInt8 /* size */,
+                                  bool /* isSigned */)
+{
+  TRACE("OMDictionary::newIntegerType");
+
+  ASSERT("Unimplemented code not reached.", false);
+}
+
+void OMDictionary::newCharacterType(const OMObjectIdentification& /* id */,
+                                    const wchar_t* /* name */,
+                                    const wchar_t* /* description */)
+{
+  TRACE("OMDictionary::newCharacterType");
+
+  ASSERT("Unimplemented code not reached.", false);
+}
+
+void OMDictionary::newStrongReferenceType(
+                            const OMObjectIdentification& /* id */,
+                            const wchar_t* /* name */,
+                            const wchar_t* /* description */,
+                            const OMObjectIdentification& /* referencedType */)
+{
+  TRACE("OMDictionary::newStrongReferenceType");
+
+  ASSERT("Unimplemented code not reached.", false);
+}
+
+void OMDictionary::newWeakReferenceType(
+                            const OMObjectIdentification& /* id */,
+                            const wchar_t* /* name */,
+                            const wchar_t* /* description */,
+                            const OMObjectIdentification& /* referencedType */,
+                            const OMObjectIdentification* /* path */,
+                            OMUInt32 /* pathCount */)
+{
+  TRACE("OMDictionary::newWeakReferenceType");
+
+  ASSERT("Unimplemented code not reached.", false);
+}
+
+void OMDictionary::newRenamedType(
+                               const OMObjectIdentification& /* id */,
+                               const wchar_t* /* name */,
+                               const wchar_t* /* description */,
+                               const OMObjectIdentification& /* renamedType */)
+{
+  TRACE("OMDictionary::newRenamedType");
+
+  ASSERT("Unimplemented code not reached.", false);
+}
+
+void OMDictionary::newEnumeratedType(
+                               const OMObjectIdentification& /* id */,
+                               const wchar_t* /* name */,
+                               const wchar_t* /* description */,
+                               const OMObjectIdentification& /* elementType */,
+                               const wchar_t** /* elementNames */,
+                               OMInt64* /* elementValues */,
+                               OMUInt32 /* elementCount */)
+{
+  TRACE("OMDictionary::newEnumeratedType");
+
+  ASSERT("Unimplemented code not reached.", false);
+}
+
+void OMDictionary::newFixedArrayType(
+                               const OMObjectIdentification& /* id */,
+                               const wchar_t* /* name */,
+                               const wchar_t* /* description */,
+                               const OMObjectIdentification& /* elementType */,
+                               OMUInt32 /* elementCount */)
+{
+  TRACE("OMDictionary::newFixedArrayType");
+
+  ASSERT("Unimplemented code not reached.", false);
+}
+
+void OMDictionary::newVaryingArrayType(
+                               const OMObjectIdentification& /* id */,
+                               const wchar_t* /* name */,
+                               const wchar_t* /* description */,
+                               const OMObjectIdentification& /* elementType */)
+{
+  TRACE("OMDictionary::newVaryingArrayType");
+
+  ASSERT("Unimplemented code not reached.", false);
+}
+
+void OMDictionary::newSetType(const OMObjectIdentification& /* id */,
+                              const wchar_t* /* name */,
+                              const wchar_t* /* description */,
+                              const OMObjectIdentification& /* elementType */)
+{
+  TRACE("OMDictionary::newSetType");
+
+  ASSERT("Unimplemented code not reached.", false);
+}
+
+void OMDictionary::newRecordType(
+                               const OMObjectIdentification& /* id */,
+                               const wchar_t* /* name */,
+                               const wchar_t* /* description */,
+                               const OMObjectIdentification* /* memberTypes */,
+                               const wchar_t** /* memberNames */,
+                               OMUInt32 /* memberCount */)
+{
+  TRACE("OMDictionary::newRecordType");
+
+  ASSERT("Unimplemented code not reached.", false);
+}
+
+void OMDictionary::newStreamType(const OMObjectIdentification& /* id */,
+                             const wchar_t* /* name */,
+                             const wchar_t* /* description */)
+{
+  TRACE("OMDictionary::newStreamType");
+
+  ASSERT("Unimplemented code not reached.", false);
+}
+
+void OMDictionary::newStringType(
+                               const OMObjectIdentification& /* id */,
+                               const wchar_t* /* name */,
+                               const wchar_t* /* description */,
+                               const OMObjectIdentification& /* elementType */)
+{
+  TRACE("OMDictionary::newStringType");
+
+  ASSERT("Unimplemented code not reached.", false);
+}
+
+void OMDictionary::newExtendibleEnumeratedType(
+                             const OMObjectIdentification& /* id */,
+                             const wchar_t* /* name */,
+                             const wchar_t* /* description */,
+                             const wchar_t** /* elementNames */,
+                             const OMObjectIdentification* /* elementValues */,
+                             OMUInt32 /* elementCount */)
+{
+  TRACE("OMDictionary::newExtendibleEnumeratedType");
+
+  ASSERT("Unimplemented code not reached.", false);
+}
+
+void OMDictionary::newIndirectType(const OMObjectIdentification& /* id */,
+                                   const wchar_t* /* name */,
+                                   const wchar_t* /* description */)
+{
+  TRACE("OMDictionary::newIndirectType");
+
+  ASSERT("Unimplemented code not reached.", false);
+}
+
+void OMDictionary::newOpaqueType(const OMObjectIdentification& /* id */,
+                                 const wchar_t* /* name */,
+                                 const wchar_t* /* description */)
+{
+  TRACE("OMDictionary::newOpaqueType");
+
+  ASSERT("Unimplemented code not reached.", false);
+}
+
+void OMDictionary::resolve(void)
+{
+  TRACE("OMDictionary::resolve");
+
+  ASSERT("Unimplemented code not reached.", false);
+}
+
 struct _properties_t {
   OMPropertyId _pid;
   wchar_t* _name;
+  wchar_t* _description;
+
 } _properties[] = {
-  {0x0001, L"MetaDictionary"},
-  {0x0002, L"Header"}
+  {0x0001, L"MetaDictionary", L"MetaDictionary"},
+  {0x0002, L"Header",         L"Header"}
 };
 
 void OMDictionary::initialize(void)
@@ -125,6 +324,7 @@ void OMDictionary::initialize(void)
     OMPropertyDefinition* d =
       new OMBuiltinPropertyDefinition (0,
                                        _properties[i]._name,
+                                       _properties[i]._description,
                                        _properties[i]._pid,
                                        false);
     ASSERT("Valid heap pointer", d != 0);

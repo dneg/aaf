@@ -25,4 +25,15 @@
 // @doc OMEXTERNAL
 #include "OMRecordType.h"
 
-// Nothing yet
+#include "OMAssertions.h"
+
+OMType::Tag OMRecordType::tag(void) const
+{
+  return OMTTRecord;
+}
+
+void OMRecordType::accept(OMTypeVisitor& /* visitor */) const
+{
+  TRACE("OMRecordType::accept");
+  ASSERT("Unimplemented code not reached", false); // tjb - not yet
+}

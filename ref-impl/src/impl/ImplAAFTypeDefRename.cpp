@@ -39,6 +39,8 @@
 
 #include "ImplAAFDictionary.h"
 
+#include "OMTypeVisitor.h"
+
 #include "OMAssertions.h"
 #include <string.h>
 
@@ -212,17 +214,58 @@ ImplAAFTypeDefSP ImplAAFTypeDefRename::BaseType () const
   return result;
 }
 
+const OMUniqueObjectIdentification&
+ImplAAFTypeDefRename::identification(void) const
+{
+  return ImplAAFMetaDefinition::identification();
+}
+
+const wchar_t* ImplAAFTypeDefRename::name(void) const
+{
+  return ImplAAFMetaDefinition::name();
+}
+
+bool ImplAAFTypeDefRename::hasDescription(void) const
+{
+  return ImplAAFMetaDefinition::hasDescription();
+}
+
+const wchar_t* ImplAAFTypeDefRename::description(void) const
+{
+  return ImplAAFMetaDefinition::description();
+}
+
+bool ImplAAFTypeDefRename::isPredefined(void) const
+{
+  return ImplAAFMetaDefinition::isPredefined();
+}
+
+bool ImplAAFTypeDefRename::isFixedSize(void) const
+{
+  bool result = false;
+  if (IsFixedSize() == kAAFTrue) {
+    result = true;
+  }
+  return result;
+}
+
 void ImplAAFTypeDefRename::reorder(OMByte* externalBytes,
 								   OMUInt32 externalBytesSize) const
 {
-  BaseType()->reorder (externalBytes, externalBytesSize);
+  BaseType()->type()->reorder (externalBytes, externalBytesSize);
 }
 
 
 OMUInt32 ImplAAFTypeDefRename::externalSize(const OMByte* internalBytes,
-										  OMUInt32 internalBytesSize) const
+											OMUInt32 internalBytesSize) const
 {
-  return BaseType()->externalSize (internalBytes, internalBytesSize);
+  return BaseType()->type()->externalSize (internalBytes, internalBytesSize);
+}
+
+
+OMUInt32 ImplAAFTypeDefRename::externalSize(void) const
+{
+  return PropValSize();
 }
 
 
@@ -232,7 +275,7 @@ void ImplAAFTypeDefRename::externalize(const OMByte* internalBytes,
 									   OMUInt32 externalBytesSize,
 									   OMByteOrder byteOrder) const
 {
-  BaseType()->externalize (internalBytes,
+  BaseType()->type()->externalize (internalBytes,
 						   internalBytesSize,
 						   externalBytes,
 						   externalBytesSize,
@@ -241,9 +284,15 @@ void ImplAAFTypeDefRename::externalize(const OMByte* internalBytes,
 
 
 OMUInt32 ImplAAFTypeDefRename::internalSize(const OMByte* externalBytes,
-										  OMUInt32 externalBytesSize) const
+											OMUInt32 externalBytesSize) const
 {
-  return BaseType()->internalSize (externalBytes, externalBytesSize);
+  return BaseType()->type()->internalSize (externalBytes, externalBytesSize);
+}
+
+
+OMUInt32 ImplAAFTypeDefRename::internalSize(void) const
+{
+  return NativeSize();
 }
 
 
@@ -253,13 +302,28 @@ void ImplAAFTypeDefRename::internalize(const OMByte* externalBytes,
 									   OMUInt32 internalBytesSize,
 									   OMByteOrder byteOrder) const
 {
-  BaseType()->internalize (externalBytes,
+  BaseType()->type()->internalize (externalBytes,
 						   externalBytesSize,
 						   internalBytes,
 						   internalBytesSize,
 						   byteOrder);
 }
 
+
+void ImplAAFTypeDefRename::accept(OMTypeVisitor& visitor) const
+{
+  visitor.visitRenamedType(this);
+  renamedType()->accept(visitor);
+}
+
+
+OMType* ImplAAFTypeDefRename::renamedType(void) const
+{
+  // Should be properly implemented
+  ImplAAFTypeDef* type = BaseType();
+
+  return type->type();
+}
 
 
 aafBool ImplAAFTypeDefRename::IsFixedSize() const

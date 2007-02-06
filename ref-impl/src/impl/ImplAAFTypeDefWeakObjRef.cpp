@@ -72,6 +72,8 @@
 #include "AAFPropertyDefs.h"
 #include "AAFPropertyIDs.h"
 
+#include "OMTypeVisitor.h"
+
 #include "OMAssertions.h"
 #include <string.h>
 
@@ -700,6 +702,135 @@ AAFRESULT ImplAAFTypeDefWeakObjRef::SyncTargetPidsFromTargetSet(void)
   return result;
 }
 
+const OMUniqueObjectIdentification&
+ImplAAFTypeDefWeakObjRef::identification(void) const
+{
+  return ImplAAFMetaDefinition::identification();
+}
+
+const wchar_t* ImplAAFTypeDefWeakObjRef::name(void) const
+{
+  return ImplAAFMetaDefinition::name();
+}
+
+bool ImplAAFTypeDefWeakObjRef::hasDescription(void) const
+{
+  return ImplAAFMetaDefinition::hasDescription();
+}
+
+const wchar_t* ImplAAFTypeDefWeakObjRef::description(void) const
+{
+  return ImplAAFMetaDefinition::description();
+}
+
+bool ImplAAFTypeDefWeakObjRef::isPredefined(void) const
+{
+  return ImplAAFMetaDefinition::isPredefined();
+}
+
+bool ImplAAFTypeDefWeakObjRef::isFixedSize(void) const
+{
+  bool result = false;
+  if (IsFixedSize() == kAAFTrue) {
+    result = true;
+  }
+  return result;
+}
+
+void ImplAAFTypeDefWeakObjRef::reorder(OMByte* /*externalBytes*/,
+                                       OMUInt32 /*externalBytesSize*/) const
+{
+  // nothing to do for obj refs
+}
+
+
+OMUInt32 ImplAAFTypeDefWeakObjRef::externalSize(const OMByte* /*internalBytes*/,
+                                                OMUInt32 /*internalBytesSize*/) const
+{
+  return PropValSize ();
+}
+
+
+OMUInt32 ImplAAFTypeDefWeakObjRef::externalSize(void) const
+{
+  return PropValSize();
+}
+
+
+void ImplAAFTypeDefWeakObjRef::externalize(const OMByte* internalBytes,
+                                           OMUInt32 internalBytesSize,
+                                           OMByte* externalBytes,
+                                           OMUInt32 ANAME(externalBytesSize),
+                                           OMByteOrder NNAME(byteOrder)) const
+{
+  TRACE("ImplAAFTypeDefWeakObjRef::externalize");
+  PRECONDITION("Valid internal bytes", internalBytes != 0);
+  PRECONDITION("Valid internal byte size", internalBytesSize > 0);
+  PRECONDITION("Valid external bytes", externalBytes != 0);
+  PRECONDITION("Valid external byte size", externalBytesSize > 0);
+  PRECONDITION("Internal and external sizes are equal", externalBytesSize == internalBytesSize);
+
+  copy (internalBytes, externalBytes, internalBytesSize);
+}
+
+
+OMUInt32 ImplAAFTypeDefWeakObjRef::internalSize(const OMByte* /*externalBytes*/,
+                                                OMUInt32 /*externalBytesSize*/) const
+{
+  return NativeSize ();
+}
+
+
+OMUInt32 ImplAAFTypeDefWeakObjRef::internalSize(void) const
+{
+  return NativeSize();
+}
+
+
+void ImplAAFTypeDefWeakObjRef::internalize(const OMByte* externalBytes,
+                                           OMUInt32 externalBytesSize,
+                                           OMByte* internalBytes,
+                                           OMUInt32 ANAME(internalBytesSize),
+                                           OMByteOrder NNAME(byteOrder)) const
+{
+  TRACE("ImplAAFTypeDefWeakObjRef::internalize");
+  PRECONDITION("Valid external bytes", externalBytes != 0);
+  PRECONDITION("Valid external byte size", externalBytesSize > 0);
+  PRECONDITION("Valid internal bytes", internalBytes != 0);
+  PRECONDITION("Valid internal byte size", internalBytesSize > 0);
+  PRECONDITION("Internal and external sizes are equal", internalBytesSize == externalBytesSize);
+		           
+  copy (externalBytes, internalBytes, externalBytesSize);
+}
+
+void ImplAAFTypeDefWeakObjRef::accept(OMTypeVisitor& visitor) const
+{
+  visitor.visitWeakObjectReferenceType(this);
+  // We don't visit the referenced type here
+}
+
+const OMUniqueObjectIdentification&
+ImplAAFTypeDefWeakObjRef::referencedType(void) const
+{
+  return _referencedType.identification();
+}
+
+OMUInt32 ImplAAFTypeDefWeakObjRef::targetPathElementCount(void) const
+{
+  TRACE("ImplAAFTypeDefWeakObjRef::targetPathElementCount");
+  const OMUInt32 count = static_cast<aafUInt32>(_targetSet.count());
+  return count;
+}
+
+const OMUniqueObjectIdentification&
+ImplAAFTypeDefWeakObjRef::targetPathElement(OMUInt32 index) const
+{
+  TRACE("ImplAAFTypeDefWeakObjRef::targetPathElement");
+  PRECONDITION("Valid index", index < targetPathElementCount());
+
+  const aafUID_t& element = _targetSet.getAt(index);
+  return reinterpret_cast<const OMUniqueObjectIdentification&>(element);
+}
 
 aafBool ImplAAFTypeDefWeakObjRef::IsFixedSize (void) const
 {

@@ -26,4 +26,62 @@
 // @author Tim Bingham | tjb | Avid Technology, Inc. | OMDefinition
 
 #include "OMDefinition.h"
-// Nothing yet
+#include "OMAssertions.h"
+
+OMBuiltinDefinition::OMBuiltinDefinition(
+                            const OMStoredObjectIdentification& identification,
+                            const wchar_t* name)
+: _identification(identification),
+  _name(name),
+  _description(0),
+  _hasDescription(false)
+{
+  TRACE("OMBuiltinDefinition::OMBuiltinDefinition");
+}
+
+OMBuiltinDefinition::OMBuiltinDefinition(
+                            const OMStoredObjectIdentification& identification,
+                            const wchar_t* name,
+                            const wchar_t* descritpion)
+: _identification(identification),
+  _name(name),
+  _description(descritpion),
+  _hasDescription(true)
+{
+  TRACE("OMBuiltinDefinition::OMBuiltinDefinition");
+}
+
+OMBuiltinDefinition::~OMBuiltinDefinition(void)
+{
+}
+
+const OMUniqueObjectIdentification&
+OMBuiltinDefinition::identification(void) const
+{
+  return _identification;
+}
+
+const wchar_t* OMBuiltinDefinition::name(void) const
+{
+  return _name;
+}
+
+bool OMBuiltinDefinition::hasDescription(void) const
+{
+  TRACE("OMBuiltinDefinition::hasDescription");
+  return _hasDescription;
+}
+
+const wchar_t* OMBuiltinDefinition::description(void) const
+{
+  TRACE("OMBuiltinDefinition::description");
+  return _description;
+}
+
+bool OMBuiltinDefinition::isPredefined(void) const
+{
+  TRACE("OMBuiltinDefinition::isPredefined");
+  ASSERT("Unimplemented code not reached", false);
+  return true;
+}
+

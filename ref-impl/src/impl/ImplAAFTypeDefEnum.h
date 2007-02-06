@@ -34,11 +34,12 @@
 
 #include "OMWeakRefProperty.h"
 #include "OMArrayProperty.h"
+#include "OMEnumeratedType.h"
 
 class ImplAAFPropertyValue;
+class OMTypeVistor;
 
-
-class ImplAAFTypeDefEnum : public ImplAAFTypeDef
+class ImplAAFTypeDefEnum : public ImplAAFTypeDef, public OMEnumeratedType
 {
 public:
   //
@@ -253,15 +254,35 @@ public:
 
   //*************************************************************
   //
+  // Overrides from OMDefinition
+  //
+  //*************************************************************
+  virtual const OMUniqueObjectIdentification& identification(void) const;
+
+  virtual const wchar_t* name(void) const;
+
+  virtual bool hasDescription(void) const;
+
+  virtual const wchar_t* description(void) const;
+
+  virtual bool isPredefined(void) const;
+
+
+  //*************************************************************
+  //
   // Overrides from OMType, via inheritace through ImplAAFTypeDef
   //
   //*************************************************************
+
+  virtual bool isFixedSize(void) const;
 
   virtual void reorder(OMByte* externalBytes,
                        OMUInt32 externalBytesSize) const;
 
   virtual OMUInt32 externalSize(const OMByte* internalBytes,
                                 OMUInt32 internalBytesSize) const;
+
+  virtual OMUInt32 externalSize(void) const;
 
   virtual void externalize(const OMByte* internalBytes,
                            OMUInt32 internalBytesSize,
@@ -270,7 +291,9 @@ public:
                            OMByteOrder byteOrder) const;
 
   virtual OMUInt32 internalSize(const OMByte* externalBytes,
-                                OMUInt32 externalBytesSize) const;
+                                OMUInt32 externalSize) const;
+
+  virtual OMUInt32 internalSize(void) const;
 
   virtual void internalize(const OMByte* externalBytes,
                            OMUInt32 externalBytesSize,
@@ -278,6 +301,21 @@ public:
                            OMUInt32 internalBytesSize,
                            OMByteOrder byteOrder) const;
 
+  virtual void accept(OMTypeVisitor& visitor) const;
+
+  //*************************************************************
+  //
+  // Overrides from OMEnumeratedType
+  //
+  //*************************************************************
+
+  virtual OMType* elementType(void) const;
+
+  virtual OMUInt32 elementCount(void) const;
+
+  virtual const wchar_t* elementName(OMUInt32 index) const;
+
+  virtual OMInt64 elementValue(OMUInt32 index) const;
 
   //****************
   // pvtInitialize()
@@ -318,12 +356,14 @@ private:
   aafBool          _isRegistered;
   aafBool          _registrationAttempted;
   aafUInt32        _registeredSize;
+  ImplAAFTypeDef     *_cachedBaseType;
+  aafBool            _baseTypeIsCached;
 
   //
   // private methods
   //
 
-  ImplAAFTypeDefSP BaseType (void) const;
+  ImplAAFTypeDef* NonRefCountedBaseType (void) const;
 
   // Lookup a value identifier by name. pName is assumed
   // to be non-null. Returns AAFRESULT_SUCCESS if found.

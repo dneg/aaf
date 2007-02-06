@@ -47,6 +47,8 @@
 #include "AAFTypeDefUIDs.h"
 #endif
 
+#include "OMTypeVisitor.h"
+
 #include <string.h>
 
 // We only support two byte unicode characters.
@@ -224,6 +226,41 @@ AAFRESULT STDMETHODCALLTYPE
 
 // class ImplAAFTypeDefCharacter
 
+const OMUniqueObjectIdentification&
+ImplAAFTypeDefCharacter::identification(void) const
+{
+  return ImplAAFMetaDefinition::identification();
+}
+
+const wchar_t* ImplAAFTypeDefCharacter::name(void) const
+{
+  return ImplAAFMetaDefinition::name();
+}
+
+bool ImplAAFTypeDefCharacter::hasDescription(void) const
+{
+  return ImplAAFMetaDefinition::hasDescription();
+}
+
+const wchar_t* ImplAAFTypeDefCharacter::description(void) const
+{
+  return ImplAAFMetaDefinition::description();
+}
+
+bool ImplAAFTypeDefCharacter::isPredefined(void) const
+{
+  return ImplAAFMetaDefinition::isPredefined();
+}
+
+bool ImplAAFTypeDefCharacter::isFixedSize(void) const
+{
+  bool result = false;
+  if (IsFixedSize() == kAAFTrue) {
+    result = true;
+  }
+  return result;
+}
+
 void ImplAAFTypeDefCharacter::reorder(OMByte* externalBytes,
                              OMUInt32 ANAME(externalBytesSize)) const
 {
@@ -243,6 +280,11 @@ OMUInt32 ImplAAFTypeDefCharacter::externalSize(const OMByte* ANAME(internalBytes
   PRECONDITION("Valid internal bytes size", internalBytesSize >= kExternalCharacterSize);
   
   return kExternalCharacterSize;
+}
+
+OMUInt32 ImplAAFTypeDefCharacter::externalSize(void) const
+{
+  return PropValSize();
 }
 
 void ImplAAFTypeDefCharacter::externalize(const OMByte* internalBytes,
@@ -276,6 +318,11 @@ OMUInt32 ImplAAFTypeDefCharacter::internalSize(const OMByte* ANAME(externalBytes
   return (sizeof(aafCharacter));
 }
 
+OMUInt32 ImplAAFTypeDefCharacter::internalSize(void) const
+{
+  return NativeSize();
+}
+
 void ImplAAFTypeDefCharacter::internalize(const OMByte* externalBytes,
                                  OMUInt32 ANAME(externalBytesSize),
                                  OMByte* internalBytes,
@@ -298,7 +345,10 @@ void ImplAAFTypeDefCharacter::internalize(const OMByte* externalBytes,
 
 
 
-
+void ImplAAFTypeDefCharacter::accept(OMTypeVisitor& visitor) const
+{
+  visitor.visitCharacterType(this);
+}
 
 
 

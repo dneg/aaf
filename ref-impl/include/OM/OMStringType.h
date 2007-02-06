@@ -26,6 +26,16 @@
 #ifndef OMSTRINGTYPE_H
 #define OMSTRINGTYPE_H
 
-// Nothing yet
+#include "OMType.h"
+
+// @author Tim Bingham | tjb | Avid Technology, Inc. | OMStringType
+class OMStringType : public OMType {
+public:
+
+  virtual OMType::Tag tag(void) const;
+
+  virtual OMType* elementType(void) const = 0;
+
+};
 
 #endif

@@ -29,9 +29,12 @@
 #include "OMUniqueObjectIdentType.h"
 
 #include "OMAssertions.h"
+#include "OMDictionary.h"
 #include "OMIntegerType.h"
 
 OMUniqueObjectIdentificationType::OMUniqueObjectIdentificationType(void)
+: OMBuiltinDefinition(Type_UniqueObjectIdentification,
+                      L"UniqueObjectIdentification")
 {
   TRACE("OMUniqueObjectIdentificationType::OMUniqueObjectIdentificationType");
 }
@@ -122,4 +125,56 @@ void OMUniqueObjectIdentificationType::internalize(
   ASSERT("Sizes match",
                     externalBytesSize == sizeof(OMUniqueObjectIdentification));
   copy(externalBytes, internalBytes, externalBytesSize);
+}
+
+const OMUniqueObjectIdentification&
+OMUniqueObjectIdentificationType::identification(void) const
+{
+  return OMBuiltinDefinition::identification();
+}
+
+const wchar_t* OMUniqueObjectIdentificationType::name(void) const
+{
+  return OMBuiltinDefinition::name();
+}
+
+bool OMUniqueObjectIdentificationType::hasDescription(void) const
+{
+  TRACE("OMUniqueObjectIdentificationType::hasDescription");
+  return OMBuiltinDefinition::hasDescription();
+}
+
+const wchar_t* OMUniqueObjectIdentificationType::description(void) const
+{
+  TRACE("OMUniqueObjectIdentificationType::description");
+  return OMBuiltinDefinition::description();
+}
+
+bool OMUniqueObjectIdentificationType::isPredefined(void) const
+{
+  TRACE("OMUniqueObjectIdentificationType::isPredefined");
+  return OMBuiltinDefinition::isPredefined();
+}
+
+OMUInt32 OMUniqueObjectIdentificationType::memberCount(void) const
+{
+  TRACE("OMUniqueObjectIdentificationType::memberCount");
+  ASSERT("Unimplemented code not reached", false);
+  return 0;
+}
+
+const wchar_t* OMUniqueObjectIdentificationType::memberName(
+                                                    OMUInt32 /* index */) const
+{
+  TRACE("OMUniqueObjectIdentificationType::memberName");
+  ASSERT("Unimplemented code not reached", false);
+  return 0;
+}
+
+const OMType* OMUniqueObjectIdentificationType::memberType(
+                                                    OMUInt32 /* index */) const
+{
+  TRACE("OMUniqueObjectIdentificationType::memberType");
+  ASSERT("Unimplemented code not reached", false);
+  return 0;
 }

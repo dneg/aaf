@@ -263,6 +263,9 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\..\..\ref-impl\src\Om\OMCharacterType.cpp">
+			</File>
+			<File
 				RelativePath="..\..\..\ref-impl\src\OM\OMClassDefinition.cpp">
 				<FileConfiguration
 					Name="Debug|Win32">
@@ -546,6 +549,9 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\..\..\ref-impl\src\Om\OMExtendibleEnumeratedType.cpp">
+			</File>
+			<File
 				RelativePath="..\..\..\ref-impl\src\OM\OMFile.cpp">
 				<FileConfiguration
 					Name="Debug|Win32">
@@ -564,6 +570,9 @@
 						AdditionalIncludeDirectories=""
 						PreprocessorDefinitions=""/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\ref-impl\src\Om\OMIndirectType.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\ref-impl\src\OM\OMIntegerType.cpp">
@@ -810,6 +819,9 @@
 						AdditionalIncludeDirectories=""
 						PreprocessorDefinitions=""/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\ref-impl\src\Om\OMOpaqueType.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\ref-impl\src\OM\OMOStream.cpp">
@@ -1090,6 +1102,9 @@
 						AdditionalIncludeDirectories=""
 						PreprocessorDefinitions=""/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\ref-impl\src\Om\OMSetType.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\ref-impl\src\OM\OMSS_SSStoredObjectFactory.cpp">
@@ -1510,6 +1525,9 @@
 						AdditionalIncludeDirectories=""
 						PreprocessorDefinitions=""/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\ref-impl\src\Om\OMTypeVisitor.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\ref-impl\src\OM\OMUniqueObjectIdentType.cpp">

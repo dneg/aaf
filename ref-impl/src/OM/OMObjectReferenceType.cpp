@@ -25,4 +25,18 @@
 // @doc OMEXTERNAL
 #include "OMObjectReferenceType.h"
 
-// Nothing yet
+// class OMStrongObjectReferenceType;
+
+OMType::Tag OMStrongObjectReferenceType::tag(void) const
+{
+  return OMTTStrongObjectReference;
+}
+
+// class OMWeakObjectReferenceType;
+
+OMType::Tag OMWeakObjectReferenceType::tag(void) const
+{
+  return OMTTWeakObjectReference;
+}
+
+

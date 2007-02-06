@@ -52,6 +52,7 @@
 #include "ImplAAFObjectCreation.h"
 #include "ImplAAFDictionary.h"
 
+#include "OMTypeVisitor.h"
 
 #include "OMAssertions.h"
 #include <string.h>
@@ -401,6 +402,116 @@ AAFRESULT STDMETHODCALLTYPE
   return result;
 }
 
+const OMUniqueObjectIdentification&
+ImplAAFTypeDefStrongObjRef::identification(void) const
+{
+  return ImplAAFMetaDefinition::identification();
+}
+
+const wchar_t* ImplAAFTypeDefStrongObjRef::name(void) const
+{
+  return ImplAAFMetaDefinition::name();
+}
+
+bool ImplAAFTypeDefStrongObjRef::hasDescription(void) const
+{
+  return ImplAAFMetaDefinition::hasDescription();
+}
+
+const wchar_t* ImplAAFTypeDefStrongObjRef::description(void) const
+{
+  return ImplAAFMetaDefinition::description();
+}
+
+bool ImplAAFTypeDefStrongObjRef::isPredefined(void) const
+{
+  return ImplAAFMetaDefinition::isPredefined();
+}
+
+bool ImplAAFTypeDefStrongObjRef::isFixedSize(void) const
+{
+  bool result = false;
+  if (IsFixedSize() == kAAFTrue) {
+    result = true;
+  }
+  return result;
+}
+
+void ImplAAFTypeDefStrongObjRef::reorder(OMByte* /*externalBytes*/,
+                                         OMUInt32 /*externalBytesSize*/) const
+{
+  // nothing to do for obj refs
+}
+
+
+OMUInt32 ImplAAFTypeDefStrongObjRef::externalSize(const OMByte* /*internalBytes*/,
+                                                  OMUInt32 /*internalBytesSize*/) const
+{
+  return PropValSize ();
+}
+
+
+OMUInt32 ImplAAFTypeDefStrongObjRef::externalSize(void) const
+{
+  return PropValSize();
+}
+
+void ImplAAFTypeDefStrongObjRef::externalize(const OMByte* internalBytes,
+                                             OMUInt32 internalBytesSize,
+                                             OMByte* externalBytes,
+                                             OMUInt32 ANAME(externalBytesSize),
+                                             OMByteOrder NNAME(byteOrder)) const
+{
+  TRACE("ImplAAFTypeDefStrongObjRef::externalize");
+  PRECONDITION("Valid internal bytes", internalBytes != 0);
+  PRECONDITION("Valid internal byte size", internalBytesSize > 0);
+  PRECONDITION("Valid external bytes", externalBytes != 0);
+  PRECONDITION("Valid external byte size", externalBytesSize > 0);
+  PRECONDITION("Internal and external sizes are equal", externalBytesSize == internalBytesSize);
+
+  copy (internalBytes, externalBytes, internalBytesSize);
+}
+
+
+OMUInt32 ImplAAFTypeDefStrongObjRef::internalSize(const OMByte* /*externalBytes*/,
+                                                  OMUInt32 /*externalBytesSize*/) const
+{
+  return NativeSize ();
+}
+
+
+OMUInt32 ImplAAFTypeDefStrongObjRef::internalSize(void) const
+{
+  return NativeSize();
+}
+
+void ImplAAFTypeDefStrongObjRef::internalize(const OMByte* externalBytes,
+                                             OMUInt32 externalBytesSize,
+                                             OMByte* internalBytes,
+                                             OMUInt32 ANAME(internalBytesSize),
+                                             OMByteOrder NNAME(byteOrder)) const
+{
+  TRACE("ImplAAFTypeDefStrongObjRef::internalize");
+  PRECONDITION("Valid external bytes", externalBytes != 0);
+  PRECONDITION("Valid external byte size", externalBytesSize > 0);
+  PRECONDITION("Valid internal bytes", internalBytes != 0);
+  PRECONDITION("Valid internal byte size", internalBytesSize > 0);
+  PRECONDITION("Internal and external sizes are equal", internalBytesSize == externalBytesSize);
+		           
+  copy (externalBytes, internalBytes, externalBytesSize);
+}
+
+void ImplAAFTypeDefStrongObjRef::accept(OMTypeVisitor& visitor) const
+{
+  visitor.visitStrongObjectReferenceType(this);
+  // We don't visit the referenced type here
+}
+
+const OMUniqueObjectIdentification&
+ImplAAFTypeDefStrongObjRef::referencedType(void) const
+{
+  return _referencedType.identification();
+}
 
 aafBool ImplAAFTypeDefStrongObjRef::IsFixedSize (void) const
 {
