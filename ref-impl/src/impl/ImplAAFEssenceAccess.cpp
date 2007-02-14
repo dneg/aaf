@@ -247,6 +247,7 @@ ImplAAFEssenceAccess::CreateEx (ImplAAFMasterMob *    masterMob,
 	IAAFEssenceContainer	*container = NULL;
 	IAAFPlugin				*plug = NULL;
 	aafMobID_t			fileMobUID;
+	ImplAAFDictionary	*compDict = NULL;
 	ImplAAFDictionary	*dataDict = NULL;
 	ImplAAFHeader		*compHead = NULL;
 	ImplAAFHeader		*dataHead = NULL;
@@ -262,6 +263,7 @@ ImplAAFEssenceAccess::CreateEx (ImplAAFMasterMob *    masterMob,
 		_dataFile = NULL;
 		
 		CHECK(masterMob->MyHeadObject(&compHead));
+		CHECK(compHead->GetDictionary(&compDict));
 		
 		if((_destination != NULL) && EqualAUID(&_containerDefID, &ContainerAAF))
 		{
@@ -322,7 +324,7 @@ ImplAAFEssenceAccess::CreateEx (ImplAAFMasterMob *    masterMob,
 			_dataFileMob = NULL;
 		
 		ImplAAFDataDefSP pMediaKind;
-		CHECK (dataDict->LookupDataDef (mediaKind, &pMediaKind));
+		CHECK (compDict->LookupDataDef (mediaKind, &pMediaKind));
 		CHECK(masterMob->AddMasterSlot (pMediaKind, DEFAULT_FILE_SLOT, _compFileMob, masterSlotID, L"A Slot"));	// Should be NULL or something useful!!!
 		if(_destination != NULL)
 		{
@@ -411,6 +413,11 @@ ImplAAFEssenceAccess::CreateEx (ImplAAFMasterMob *    masterMob,
     iFileMob->Release();
     iFileMob = NULL;
 
+		if(compDict != NULL)
+		{
+			compDict->ReleaseReference();
+			compDict = NULL;
+		}
 		if(dataDict != NULL)
 		{
 			dataDict->ReleaseReference();
@@ -444,6 +451,9 @@ ImplAAFEssenceAccess::CreateEx (ImplAAFMasterMob *    masterMob,
       iFileMob->Release();
       iFileMob = NULL;
     }
+		if(compDict != NULL)
+		  compDict->ReleaseReference();
+		compDict = 0;
 		if(dataDict != NULL)
 		  dataDict->ReleaseReference();
 		dataDict = 0;
@@ -505,6 +515,7 @@ AAFRESULT STDMETHODCALLTYPE
 	aafMobID_t				fileMobUID;
 	aafUID_t				essenceKind;
 	aafLength_t				oneLength = 1;
+	ImplAAFDictionary		*compDict = NULL;
 	ImplAAFDictionary		*dataDict = NULL;
 	ImplAAFHeader			*compHead = NULL;
 	ImplAAFHeader			*dataHead = NULL;
@@ -526,6 +537,7 @@ AAFRESULT STDMETHODCALLTYPE
 		_dataFile = NULL;
 		
 		CHECK(masterMob->MyHeadObject(&compHead));
+		CHECK(compHead->GetDictionary(&compDict));
 		
 		if((_destination != NULL) && EqualAUID(&_containerDefID, &ContainerAAF))
 		{
@@ -638,7 +650,7 @@ AAFRESULT STDMETHODCALLTYPE
 			destPtr->trackID = initPtr->slotID;
 			destPtr->physicalOutChan = initPtr->subTrackNum;
 			ImplAAFDataDefSP pEssenceKind;
-			CHECK(dataDict->LookupDataDef (essenceKind, &pEssenceKind));
+			CHECK(compDict->LookupDataDef (essenceKind, &pEssenceKind));
 			CHECK(masterMob->AddMasterSlot (pEssenceKind, initPtr->slotID, _compFileMob, initPtr->slotID, L"A Slot"));	// Should be NULL or something useful!!!
 			if(tmpTrack != NULL)
 			{
@@ -731,6 +743,11 @@ AAFRESULT STDMETHODCALLTYPE
 		//			dataObj->Release();
 		//			dataObj = NULL;
 		//		}
+		if(compDict != NULL)
+		{
+			compDict->ReleaseReference();
+			compDict = NULL;
+		}
 		if(dataDict != NULL)
 		{
 			dataDict->ReleaseReference();
@@ -775,6 +792,9 @@ AAFRESULT STDMETHODCALLTYPE
 		if(tmpTrack != NULL)
 			tmpTrack->ReleaseReference();
 		tmpTrack = 0;
+		if(compDict != NULL)
+			compDict->ReleaseReference();
+		compDict = 0;
 		if(dataDict != NULL)
 			dataDict->ReleaseReference();
 		dataDict = 0;
