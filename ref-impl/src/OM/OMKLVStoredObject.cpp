@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2006, Licensor of the
+// The Original Code of this file is Copyright 1998-2007, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -1180,11 +1180,9 @@ void OMKLVStoredObject::restore(OMWeakReference& singleton,
   OMUniqueObjectIdentification id;
   _storage->read(id, _reorderBytes);
 
-  OMWeakObjectReference<OMUniqueObjectIdentification> newReference(
-                                                            &singleton,
-                                                            id,
-                                                            nullOMPropertyTag);
-  singleton.reference() = newReference;
+  // Remember the InstanceUID of the object referenced by
+  // this OMWeakReference.
+  _storage->associate(&singleton, id);
 }
 
   // @mfunc Restore the <c OMWeakReferenceVector> <p vector> into this
@@ -1981,10 +1979,15 @@ void OMKLVStoredObject::deepRestore(const OMPropertySet& properties)
       case SF_WEAK_OBJECT_REFERENCE: {
         OMWeakReference* wr = dynamic_cast<OMWeakReference*>(p);
         ASSERT("Valid type", wr != 0);
-        OMWeakObjectReference<OMUniqueObjectIdentification>& r =
-                                                               wr->reference();
-        OMUniqueObjectIdentification id = r.identification();
-        OMStorable* obj = _storage->object(id);
+
+        // Find the InstanceUID of the object referenced by
+        // this weak reference property and then find an
+        // object with this InstanceUID.
+        OMStorable* obj = 0;
+        OMUniqueObjectIdentification id;
+        if (_storage->findReferencedInstanceId(wr, &id)) {
+          obj = _storage->object(id);
+        }
 #if defined(USETAGTABLE)
         if (obj != 0) {
 #endif
@@ -2010,6 +2013,11 @@ void OMKLVStoredObject::deepRestore(const OMPropertySet& properties)
         } else {
           OMPropertyTag tag = findTag(wr->targetName());
           wr->reference().setTargetTag(tag);
+
+          // HACK4MEIP2
+          // We failed to find the reference object by its InstanceUID,
+          // save the ID to try it again later as a universal label.
+          wr->reference().setIdentification(id);
         }
 #endif
         break;
