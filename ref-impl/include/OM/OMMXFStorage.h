@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2005, Licensor of the
+// The Original Code of this file is Copyright 1998-2007, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -365,6 +365,26 @@ public:
 
   static OMUInt64 readBerLength(const OMRawStorage* store);
 
+
+  // A weak reference in MXF file is stored as 16-byte InstanceUID of the
+  // referenced object (see SMPTE 377M, Section 5.7.)
+  // InstanceUID isn't currently part of the object model and cannot be
+  // stored in OMReferenceProperty but it has to be preserved to resolve
+  // (i.e. find the referenced object) the references once all the objects
+  // were read from the file.
+  // The following methods are used to save and access InstanceUID of the
+  // referenced object for each restored weak reference property.
+  //
+    // @cmember Given pointer to a weak reference property return
+    //          the InstanceUID of the referenced object.
+  bool findReferencedInstanceId(const void* reference,
+                                OMUniqueObjectIdentification* id);
+    // @cmember Remember the InstanceUID of the object referenced
+    //          by the specified weak reference property.
+  void associate(const void* reference,
+                 const OMUniqueObjectIdentification& referencedInstanceId);
+
+
     // Object -> instanceId
   OMUniqueObjectIdentification instanceId(OMStorable* object);
 
@@ -581,6 +601,7 @@ private:
   OMKLVKey _operationalPattern;
   LabelSet _essenceContainerLabels;
   OMUniqueObjectIdentification _generation;
+  OMSet<const void*, OMUniqueObjectIdentification>* _referenceToInstanceId;
   OMUInt64 _objectDirectoryOffset;    // offset of object directory
   ObjectDirectory* _instanceIdToObject;
   ObjectSet* _objectToInstanceId;

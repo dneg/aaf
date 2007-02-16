@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2005, Licensor of the
+// The Original Code of this file is Copyright 1998-2007, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -74,6 +74,7 @@ OMMXFStorage::OMMXFStorage(OMRawStorage* store)
   _operationalPattern(nullOMKLVKey),
   _essenceContainerLabels(),
   _generation(nullOMUniqueObjectIdentification),
+  _referenceToInstanceId(0),
   _objectDirectoryOffset(0),
   _instanceIdToObject(0),
   _objectToInstanceId(0),
@@ -102,6 +103,12 @@ OMMXFStorage::OMMXFStorage(OMRawStorage* store)
 OMMXFStorage::~OMMXFStorage(void)
 {
   TRACE("OMMXFStorage::~OMMXFStorage");
+
+  if (_referenceToInstanceId != 0) {
+    _referenceToInstanceId->clear();
+    delete _referenceToInstanceId;
+    _referenceToInstanceId = 0;
+  }
 
   if (_instanceIdToObject != 0) {
     _instanceIdToObject->clear();
@@ -1259,6 +1266,57 @@ OMUInt64 OMMXFStorage::readBerLength(const OMRawStorage* store)
     }
   }
   return result;
+}
+
+  // @mfunc Given pointer to a weak reference property return
+  //        the InstanceUID of the referenced object.
+  //   @rdesc <e bool.true> if an InstanceUID of object referenced
+  //          by weak reference property <p reference> was found
+  //          <e bool.false> otherwise.
+  //   @parm const void* | reference | Pointer to the weak reference
+  //         property to search for.
+  //   @parm OMUniqueObjectIdentification* | id | The buffer in
+  //         which to place the InstanceUID.
+bool OMMXFStorage::findReferencedInstanceId(const void* reference,
+                                            OMUniqueObjectIdentification* id)
+{
+  TRACE("OMMXFStorage::findReferencedInstanceId");
+  PRECONDITION("Valid reference", reference != 0);
+  PRECONDITION("Valid id pointer", id != 0);
+  PRECONDITION("Valid heap pointer", _referenceToInstanceId != 0);
+
+  return _referenceToInstanceId->find(reference, *id);
+}
+
+  // @mfunc Remember the InstanceUID of the object referenced
+  //        by the specified weak reference property.
+  //   @parm const void* | reference | Pointer to the weak
+  //         reference property.
+  //   @parm const OMUniqueObjectIdentification& | referencedInstanceId |
+  //         InstanceUID of the object referenced by weak reference
+  //         property <p reference>.
+void OMMXFStorage::associate(
+                      const void* reference,
+                      const OMUniqueObjectIdentification& referencedInstanceId)
+{
+  TRACE("OMMXFStorage::instanceId");
+  PRECONDITION("Valid reference", reference != 0);
+
+  if (!_referenceToInstanceId) {
+    _referenceToInstanceId =
+             new OMSet<const void*, OMUniqueObjectIdentification>();
+    ASSERT("Valid heap pointer", _referenceToInstanceId != 0);
+  }
+
+  OMUniqueObjectIdentification* id = 0;
+  if (_referenceToInstanceId->find(reference, &id)) {
+    *id = referencedInstanceId;
+  } else {
+    _referenceToInstanceId->insert(reference, referencedInstanceId);
+  }
+
+  POSTCONDITION("Reference present",
+                                  _referenceToInstanceId->contains(reference));
 }
 
 OMUniqueObjectIdentification OMMXFStorage::instanceId(OMStorable* object)
