@@ -45,7 +45,7 @@
 template<typename Key>
 OMWeakObjectReference<Key>::OMWeakObjectReference(void)
 : OMObjectReference(),
-  _identification(nullOMUniqueObjectIdentification),
+  _identification(OMConstant<Key>::null),
   _targetTag(nullOMPropertyTag),
   _targetSet(0)
 {
@@ -58,7 +58,7 @@ OMWeakObjectReference<Key>::OMWeakObjectReference(void)
 template<typename Key>
 OMWeakObjectReference<Key>::OMWeakObjectReference(OMProperty* property)
 : OMObjectReference(property),
-  _identification(nullOMUniqueObjectIdentification),
+  _identification(OMConstant<Key>::null),
   _targetTag(nullOMPropertyTag),
   _targetSet(0)
 {
@@ -112,7 +112,7 @@ bool OMWeakObjectReference<Key>::isVoid(void) const
   TRACE("OMWeakObjectReference<Key>::isVoid");
   bool result = OMObjectReference::isVoid();
   if (result) {
-    if (_identification != nullOMUniqueObjectIdentification) {
+    if (_identification != OMConstant<Key>::null) {
       ASSERT("Valid containing property", _property != 0);
       OMFile* file = _property->propertySet()->container()->file();
       OMPropertyTable* table = file->referencedProperties();
@@ -168,7 +168,7 @@ void OMWeakObjectReference<Key>::save(void) const
 {
   TRACE("OMWeakObjectReference<Key>::save");
   PRECONDITION("Valid identification",
-                          _identification != nullOMUniqueObjectIdentification);
+                                     _identification != OMConstant<Key>::null);
 
   // tjb nothing to do ?
 }
@@ -196,7 +196,7 @@ void OMWeakObjectReference<Key>::restore(void)
 
   PRECONDITION("Reference not already set", _pointer == 0);
   PRECONDITION("Valid identification",
-                          _identification != nullOMUniqueObjectIdentification);
+                                     _identification != OMConstant<Key>::null);
 
   // tjb nothing to do ?
 
@@ -215,14 +215,14 @@ OMStorable* OMWeakObjectReference<Key>::getValue(void) const
                                       const_cast<OMWeakObjectReference*>(this);
 
   if ((_pointer == 0) &&
-      (_identification != nullOMUniqueObjectIdentification)) {
+      (_identification != OMConstant<Key>::null)) {
     OMStorable* object = 0;
     set()->find(&nonConstThis->_identification, object);
     nonConstThis->_pointer = object;
   }
 #if 1 // HACK4MEIP2
   if ((_pointer == 0) &&
-      (_identification != nullOMUniqueObjectIdentification)) {
+      (_identification != OMConstant<Key>::null)) {
     // We failed to resolve the reference as an object id, try again as a label
     // We should only come here for KLV encoded files.
     OMUniqueObjectIdentification bid;
@@ -249,8 +249,8 @@ OMStorable* OMWeakObjectReference<Key>::getValue(void) const
   // reference is an assertion violation rather than a run-time error.
   //
   POSTCONDITION("Object found",
-                   IMPLIES(_identification != nullOMUniqueObjectIdentification,
-                           _pointer != 0));
+                              IMPLIES(_identification != OMConstant<Key>::null,
+                                      _pointer != 0));
   return _pointer;
 }
 
@@ -269,9 +269,9 @@ OMStorable* OMWeakObjectReference<Key>::setValue(
   PRECONDITION("Valid container property", _property != 0);
 
   ASSERT("Valid identification",
-      IMPLIES(value != 0, identification != nullOMUniqueObjectIdentification));
+                 IMPLIES(value != 0, identification != OMConstant<Key>::null));
   ASSERT("Valid identification",
-      IMPLIES(value == 0, identification == nullOMUniqueObjectIdentification));
+                 IMPLIES(value == 0, identification == OMConstant<Key>::null));
 
   OMStorable* oldObject = _pointer;
   _pointer = const_cast<OMStorable*>(value);

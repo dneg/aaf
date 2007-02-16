@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2006, Licensor of the
+// The Original Code of this file is Copyright 1998-2007, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -173,7 +173,7 @@ OMWeakReferenceProperty<Key, ReferencedObject>::clearValue(void)
 {
   TRACE("OMWeakReferenceProperty<Key, ReferencedObject>::clearValue");
 
-  OMStorable* p = _reference.setValue(nullOMUniqueObjectIdentification, 0);
+  OMStorable* p = _reference.setValue(OMConstant<Key>::null, 0);
   ReferencedObject* result = 0;
   if (p != 0) {
     result = dynamic_cast<ReferencedObject*>(p);
@@ -312,7 +312,7 @@ bool OMWeakReferenceProperty<Key, ReferencedObject>::isVoid(void) const
 
   bool result;
   const OMUniqueObjectIdentification& key = _reference.identification();
-  if (key == nullOMUniqueObjectIdentification) {
+  if (key == OMConstant<Key>::null) {
     result = true;
   } else {
     result = false;
