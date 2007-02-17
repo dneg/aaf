@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2006, Licensor of the
+// The Original Code of this file is Copyright 1998-2007, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -49,6 +49,21 @@ public:
     // tjb - deprecated
   virtual OMWeakObjectReference<OMUniqueObjectIdentification>&
                                                      reference(void) const = 0;
+
+    // @cmember Get the raw bits of the identification of this
+    //          <c OMWeakReferenceProperty>.
+  virtual const void* identificationBits(void) const = 0;
+
+    // @cmember Set the raw bits of the identification of this
+    //          <c OMWeakReferenceProperty>. The raw bits are
+    //          copied from the buffer at address <p id> which
+    //          is <p idSize> bytes in size.
+  virtual void setIdentificationBits(const void* id, OMKeySize idSize) = 0;
+
+    // @cmember The size of the raw bits of the identification
+    //          of this <c OMWeakReferenceProperty>. The size is
+    //          given in bytes.
+  virtual OMKeySize keySize(void) const = 0;
 
   virtual OMPropertyId keyPropertyId(void) const = 0;
 

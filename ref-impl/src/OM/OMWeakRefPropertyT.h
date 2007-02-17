@@ -444,6 +444,57 @@ OMWeakReferenceProperty<Key, ReferencedObject>::reference(void) const
   return const_cast<OMWeakObjectReference<Key>&>(_reference);
 }
 
+  // @mfunc Get the raw bits of the identification of this
+  //        <c OMWeakReferenceProperty>.
+  //   @tcarg class | ReferencedObject | The type of the referenced
+  //          (contained) object. This type must be a descendant of
+  //          <c OMStorable>.
+  //   @rdesc A pointer to the buffer containing the identification.
+template <typename Key, typename ReferencedObject>
+const void*
+OMWeakReferenceProperty<Key, ReferencedObject>::identificationBits(void) const
+{
+  TRACE("OMWeakReferenceProperty<Key, ReferencedObject>::identificationBits");
+
+  return &(_reference.identification());
+}
+
+  // @mfunc Set the raw bits of the identification of this
+  //        <c OMWeakReferenceProperty>. The raw bits are
+  //        copied from the buffer at address <p id> which
+  //        is <p keySize> bytes in size.
+  //   @tcarg class | ReferencedObject | The type of the referenced
+  //          (contained) object. This type must be a descendant of
+  //          <c OMStorable>.
+  //   @parm The address of the buffer from which the raw bits are copied.
+  //   @parm The size of the buffer.
+template <typename Key, typename ReferencedObject>
+void
+OMWeakReferenceProperty<Key, ReferencedObject>::setIdentificationBits(
+  const void* id,
+  OMKeySize idSize)
+{
+  TRACE("OMWeakReferenceProperty<Key, ReferencedObject>::setIdentificationBits");
+  PRECONDITION("Valid key size", idSize == keySize());
+
+  _reference.setIdentification( *reinterpret_cast<const Key*>(id));
+}
+
+  // @mfunc The size of the raw bits of the identification
+  //        of this <c OMWeakReferenceProperty>. The size is
+  //        given in bytes.
+  //   @tcarg class | ReferencedObject | The type of the referenced
+  //          (contained) object. This type must be a descendant of
+  //          <c OMStorable>.
+  //   @rdesc The size of the raw bits of the identification.
+template <typename Key, typename ReferencedObject>
+OMKeySize
+OMWeakReferenceProperty<Key, ReferencedObject>::keySize(void) const
+{
+  TRACE("OMWeakReferenceProperty<Key, ReferencedObject>::keySize");
+
+  return sizeof(Key);
+}
 
 template <typename Key, typename ReferencedObject>
 OMStrongReferenceSet*
