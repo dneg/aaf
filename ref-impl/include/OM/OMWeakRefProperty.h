@@ -165,6 +165,13 @@ public:
   virtual void deepCopyTo(OMProperty* destination,
                           void* clientContext) const;
 
+protected:
+  // @access Protected members.
+
+    // @cmember Get the value of this <c OMWeakReferenceProperty>.
+    //          The value is a pointer to the referenced <c OMStorable>.
+  OMStorable* getReferencedValue(void) const;
+
 private:
 
   OMPropertyId* targetPropertyPath(void) const;

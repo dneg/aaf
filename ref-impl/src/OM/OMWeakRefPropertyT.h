@@ -113,7 +113,7 @@ void OMWeakReferenceProperty<Key, ReferencedObject>::getValue(
   PRECONDITION("Optional property is present",
                                            IMPLIES(isOptional(), isPresent()));
 
-  OMStorable* p = _reference.getValue();
+  OMStorable* p = getReferencedValue();
   if (p != 0) {
     ReferencedObject* result = dynamic_cast<ReferencedObject*>(p);
     ASSERT("Object is correct type", result != 0);
@@ -212,7 +212,7 @@ OMWeakReferenceProperty<Key, ReferencedObject>::operator -> (void)
 {
   TRACE("OMWeakReferenceProperty<Key, ReferencedObject>::operator ->");
 
-  return _reference.getValue();
+  return getReferencedValue();
 }
 
 template <typename Key, typename ReferencedObject>
@@ -221,7 +221,7 @@ OMWeakReferenceProperty<Key, ReferencedObject>::operator -> (void) const
 {
   TRACE("OMWeakReferenceProperty<Key, ReferencedObject>::operator ->");
 
-  return _reference.getValue();
+  return getReferencedValue();
 }
 
   // @mfunc Type conversion. Convert an
@@ -432,7 +432,7 @@ OMWeakReferenceProperty<Key, ReferencedObject>::identification(void) const
 {
   TRACE("OMWeakReferenceProperty<Key, ReferencedObject>::identification");
 
-  return reference().identification();
+  return _reference.identification();
 }
 
 template <typename Key, typename ReferencedObject>
@@ -664,17 +664,17 @@ void OMWeakReferenceProperty<Key, ReferencedObject>::deepCopyTo(
   TRACE("OMWeakReferenceProperty<Key, ReferencedObject>::deepCopyTo");
   PRECONDITION( "Valid destination", destination != 0 );
 
-  OMStorable* source = _reference.getValue();
+  OMStorable* source = getReferencedValue();
   if (source != 0) {
     // There's a referenced object, copy it
-    Key id = reference().identification();
+    Key id = _reference.identification();
 
     typedef OMWeakReferenceProperty<Key, ReferencedObject> Property;
     Property* wp = dynamic_cast<Property*>(destination);
     ASSERT("Correct property type", wp != 0);
 
     // Update the target tag on object reference
-    wp->reference().setTargetTag(wp->targetTag());
+    wp->setTargetTag(wp->targetTag());
 
     OMStrongReferenceSet* dest = wp->targetSet();
     ASSERT("Destination is correct type", dest != 0);
@@ -694,4 +694,58 @@ void OMWeakReferenceProperty<Key, ReferencedObject>::deepCopyTo(
   }
 }
 
+template <typename Key, typename ReferencedObject>
+OMStorable* OMWeakReferenceProperty<Key, ReferencedObject>::getReferencedValue(void) const
+{
+  TRACE("OMWeakReferenceProperty<Key, ReferencedObject>::getReferencedValue");
+
+  OMWeakReferenceProperty<Key, ReferencedObject>* nonConstThis =
+             const_cast<OMWeakReferenceProperty<Key, ReferencedObject>*>(this);
+
+  if ((_reference.pointer() == 0) &&
+      (_reference.identification() != OMConstant<Key>::null)) {
+    OMStorable* object = 0;
+    Key id = _reference.identification();
+    targetSet()->find(&id, object);
+    if (object) {  // HACK4MEIP2
+      nonConstThis->_reference.setValue(id, object);
+    }
+  }
+#if 1 // HACK4MEIP2
+  if ((_reference.pointer() == 0) &&
+      (_reference.identification() != OMConstant<Key>::null)) {
+    // We failed to resolve the reference as an object id, try again as a label
+    // We should only come here for KLV encoded files.
+    ASSERT("Referenced object ID can be a label",
+                        keySize() == sizeof(OMUniqueObjectIdentification));
+    OMUniqueObjectIdentification bid;
+    *reinterpret_cast<Key*>(&bid) = _reference.identification();
+    if (hostByteOrder() != bigEndian) {
+	  OMUniqueObjectIdentificationType::instance()->reorder(
+                                               reinterpret_cast<OMByte*>(&bid),
+                                               sizeof(bid));
+    }
+    OMKLVKey k;
+    memcpy(&k, &bid, sizeof(OMKLVKey));
+    OMUniqueObjectIdentification id;
+    convert(id, k);
+    nonConstThis->_reference.setIdentification(*reinterpret_cast<Key*>(&id));
+    OMStorable* object = 0;
+    targetSet()->find(&id, object);
+    if (object) {
+      nonConstThis->_reference.setValue(*reinterpret_cast<Key*>(&id), object);
+    }
+  }
+#endif
+  // If the following assertion is violated we have a dangling weak
+  // reference.  The reference illegally designates an object that is
+  // not present in the target set.  Code elsewhere prevents the
+  // removal of objects that are weakly referenced hence a dangling
+  // reference is an assertion violation rather than a run-time error.
+  //
+  POSTCONDITION("Object found",
+                  IMPLIES(_reference.identification() != OMConstant<Key>::null,
+                          _reference.pointer() != 0));
+  return _reference.pointer();
+}
 #endif
