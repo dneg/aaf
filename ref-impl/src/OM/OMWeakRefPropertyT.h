@@ -435,15 +435,6 @@ OMWeakReferenceProperty<Key, ReferencedObject>::identification(void) const
   return _reference.identification();
 }
 
-template <typename Key, typename ReferencedObject>
-OMWeakObjectReference<Key>&
-OMWeakReferenceProperty<Key, ReferencedObject>::reference(void) const
-{
-  TRACE("OMWeakReferenceProperty<Key, ReferencedObject>::reference");
-
-  return const_cast<OMWeakObjectReference<Key>&>(_reference);
-}
-
   // @mfunc Get the raw bits of the identification of this
   //        <c OMWeakReferenceProperty>.
   //   @tcarg class | ReferencedObject | The type of the referenced

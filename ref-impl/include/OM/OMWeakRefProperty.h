@@ -121,9 +121,6 @@ public:
 
   const Key& identification(void) const;
 
-    // tjb - deprecated
-  virtual OMWeakObjectReference<Key>& reference(void) const;
-
     // @cmember Get the raw bits of the identification of this
     //          <c OMWeakReferenceProperty>.
   virtual const void* identificationBits(void) const;

@@ -46,10 +46,6 @@ public:
     // @cmember Destructor.
   ~OMWeakReference(void);
 
-    // tjb - deprecated
-  virtual OMWeakObjectReference<OMUniqueObjectIdentification>&
-                                                     reference(void) const = 0;
-
     // @cmember Get the raw bits of the identification of this
     //          <c OMWeakReferenceProperty>.
   virtual const void* identificationBits(void) const = 0;
