@@ -1491,9 +1491,7 @@ void OMKLVStoredObject::flatSave(const OMPropertySet& properties) const
       case SF_WEAK_OBJECT_REFERENCE: {
         OMWeakReference* wr = dynamic_cast<OMWeakReference*>(p);
         ASSERT("Valid type", wr != 0);
-        OMWeakObjectReference<OMUniqueObjectIdentification>& r =
-                                                               wr->reference();
-        OMStorable* object = r.getValue();
+        OMStorable* object = dynamic_cast<OMStorable*>(wr->getObject());
         ASSERT("Valid object", object != 0);
 #if 1 // HACK
         // In AAF the properties with the following ids are historically and
@@ -1502,7 +1500,11 @@ void OMKLVStoredObject::flatSave(const OMPropertySet& properties) const
         // of reference. tjb 11/14/05
         //
         if ((id == 0x0201) || (id == 0x3004) || (id == 0x3005) || (id == 0x0b01) || (id == 0x4e01)){
-          OMUniqueObjectIdentification k = r.identification();
+          ASSERT("Valid identification size",
+                        wr->keySize() == sizeof(OMUniqueObjectIdentification));
+          const OMUniqueObjectIdentification k =
+            *reinterpret_cast<const OMUniqueObjectIdentification*>(
+                                                     wr->identificationBits());
           _storage->write(id, _reorderBytes);
           OMPropertySize s = sizeof(OMKLVKey);
           _storage->write(s, _reorderBytes);
@@ -2001,23 +2003,31 @@ void OMKLVStoredObject::deepRestore(const OMPropertySet& properties)
         ASSERT("Consistent sizes", kp->bitsSize() == sizeof(k));
         kp->getBits(reinterpret_cast<OMByte*>(&k), sizeof(k));
 #if defined(USETAGTABLE)
+        /*
+        // Setting the target tag on the weak reference property
+        // marks the reference as resolvable (see IsResolvable())
+        // even before the file's OMRootStorable is set up for
+        // referenced properties search. This violates a precondition
+        // in OMFile::findProperty().
+        //
         OMPropertyTag tag = findTag(wr->targetName());
-        OMWeakObjectReference<OMUniqueObjectIdentification> newReference(p,
-                                                                         k,
-                                                                         tag);
-        wr->reference() = newReference;
+        wr->setTargetTag(tag);
+        */
+        wr->setIdentificationBits(&k, sizeof(k));
 #else
-        wr->reference().setValue(id, obj);
+        wr->setIdentificationBits(keyBits, keySize);
+        wr->setValue(obj);
+
 #endif
 #if defined(USETAGTABLE)
         } else {
           OMPropertyTag tag = findTag(wr->targetName());
-          wr->reference().setTargetTag(tag);
+          wr->setTargetTag(tag);
 
           // HACK4MEIP2
           // We failed to find the reference object by its InstanceUID,
           // save the ID to try it again later as a universal label.
-          wr->reference().setIdentification(id);
+          wr->setIdentificationBits(&id, sizeof(id));
         }
 #endif
         break;

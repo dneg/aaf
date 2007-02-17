@@ -678,18 +678,21 @@ void OMSSStoredObject::save(const OMWeakReference& singleton)
 {
   TRACE("OMSSStoredObject::save");
 
-  OMWeakObjectReference<OMUniqueObjectIdentification>& reference =
-                                                         singleton.reference();
-
   OMPropertyId propertyId = singleton.propertyId();
   OMStoredForm storedForm = singleton.storedForm();
-  const OMUniqueObjectIdentification& id = reference.identification();
+  ASSERT("Valid identification size",
+                  singleton.keySize() == sizeof(OMUniqueObjectIdentification));
+  const OMUniqueObjectIdentification& id =
+    *reinterpret_cast<const OMUniqueObjectIdentification*>(
+                                               singleton.identificationBits());
   OMPropertyTag tag = singleton.targetTag();
   OMPropertyId keyPid = singleton.keyPropertyId();
 
   save(propertyId, storedForm, id, tag, keyPid);
 
+  /* Does nothing. Remove, replace? - Alexey
   singleton.reference().save();
+  */
 
   singleton.clearTargetTag();
 }
@@ -1276,13 +1279,12 @@ void OMSSStoredObject::restore(OMWeakReference& singleton,
   ASSERT("Consistent key property ids",
                                    keyPropertyId == singleton.keyPropertyId());
 
-  OMWeakObjectReference<OMUniqueObjectIdentification>& reference =
-                                                         singleton.reference();
+  singleton.setIdentificationBits(&id, sizeof(id));
   singleton.setTargetTag(tag);
-  reference = OMWeakObjectReference<OMUniqueObjectIdentification>(&singleton,
-                                                                  id,
-                                                                  tag);
+  
+  /* Does nothing. Remove, replace? - Alexey
   reference.restore();
+  */
 }
 
   // @mfunc Restore the <c OMWeakReferenceVector> <p vector> into this
