@@ -680,15 +680,27 @@ void OMSSStoredObject::save(const OMWeakReference& singleton)
 
   OMPropertyId propertyId = singleton.propertyId();
   OMStoredForm storedForm = singleton.storedForm();
-  ASSERT("Valid identification size",
-                  singleton.keySize() == sizeof(OMUniqueObjectIdentification));
-  const OMUniqueObjectIdentification& id =
-    *reinterpret_cast<const OMUniqueObjectIdentification*>(
-                                               singleton.identificationBits());
   OMPropertyTag tag = singleton.targetTag();
   OMPropertyId keyPid = singleton.keyPropertyId();
 
-  save(propertyId, storedForm, id, tag, keyPid);
+  // The following ought to be done via the key type and not
+  // via the key size
+  const OMKeySize keySize = singleton.keySize();
+  if (keySize == sizeof(OMUniqueObjectIdentification)) {
+    const OMUniqueObjectIdentification* id =
+      reinterpret_cast<const OMUniqueObjectIdentification*>(
+                                               singleton.identificationBits());
+    ASSERT("Vaild identification", id != 0);
+    save(propertyId, storedForm, *id, tag, keyPid);
+  } else if (keySize == sizeof(OMUniqueMaterialIdentification)) {
+    const OMUniqueMaterialIdentification* id =
+      reinterpret_cast<const OMUniqueMaterialIdentification*>(
+                                               singleton.identificationBits());
+    ASSERT("Vaild identification", id != 0);
+    save(propertyId, storedForm, *id, tag, keyPid);
+  } else {
+    ASSERT("Unimplemented code not reached", false);
+  }
 
   /* Does nothing. Remove, replace? - Alexey
   singleton.reference().save();
@@ -1268,20 +1280,35 @@ void OMSSStoredObject::restore(OMWeakReference& singleton,
                        (sizeof(OMPropertyTag) +
                         sizeof(OMPropertyId) +
                         sizeof(OMKeySize) +
-                        sizeof(OMUniqueObjectIdentification)) == externalSize);
+                        singleton.keySize()) == externalSize);
 
   OMPropertyId propertyId = singleton.propertyId();
   OMStoredForm storedForm = singleton.storedForm();
-  OMUniqueObjectIdentification id;
   OMPropertyTag tag;
   OMPropertyId keyPropertyId;
-  restore(propertyId, storedForm, id, tag, keyPropertyId);
+  // The following ought to be done via the key type and not
+  // via the key size
+  const OMKeySize keySize = singleton.keySize();
+  OMByte* idBits = new OMByte[keySize];
+  if (keySize == sizeof(OMUniqueObjectIdentification)) {
+    OMUniqueObjectIdentification* id =
+                          reinterpret_cast<OMUniqueObjectIdentification*>(idBits);
+    restore(propertyId, storedForm, *id, tag, keyPropertyId);
+  } else if (keySize == sizeof(OMUniqueMaterialIdentification)) {
+    OMUniqueMaterialIdentification* id =
+                          reinterpret_cast<OMUniqueMaterialIdentification*>(idBits);
+    restore(propertyId, storedForm, *id, tag, keyPropertyId);
+  } else {
+    ASSERT("Unimplemented code not reached", false);
+  }
   ASSERT("Consistent key property ids",
                                    keyPropertyId == singleton.keyPropertyId());
-
-  singleton.setIdentificationBits(&id, sizeof(id));
+  singleton.setIdentificationBits(idBits, keySize);
   singleton.setTargetTag(tag);
-  
+
+  delete [] idBits;
+  idBits = 0;
+
   /* Does nothing. Remove, replace? - Alexey
   reference.restore();
   */
@@ -1722,6 +1749,39 @@ void OMSSStoredObject::save(OMPropertyId propertyId,
   _offset += size;
 }
 
+  // @mfunc Save a single weak reference.
+  //   @parm The property id.
+  //   @parm The property type.
+  //   @parm The unique identification of the target.
+  //   @parm A tag identifying the collection in which the target resides.
+  //   @parm The id of the property whose value is the unique
+  //         identifier of objects in the target set.
+void OMSSStoredObject::save(OMPropertyId propertyId,
+                            OMStoredForm storedForm,
+                            const OMUniqueMaterialIdentification& id,
+                            OMPropertyTag tag,
+                            OMPropertyId keyPropertyId)
+{
+  TRACE("OMSSStoredObject::save");
+
+  // tag, key pid, key size, key
+  OMPropertySize size = sizeof(OMPropertyTag) +
+                        sizeof(OMPropertyId) +
+                        sizeof(OMKeySize) +
+                        sizeof(OMUniqueMaterialIdentification);
+  writeUInt16ToStream(_properties, tag, _reorderBytes);
+  writeUInt16ToStream(_properties, keyPropertyId, _reorderBytes);
+  OMUniqueMaterialIdentification key = id;
+  OMKeySize keySize = sizeof(key);
+  writeUInt8ToStream(_properties, keySize);
+  writeUniqueMaterialIdentificationToStream(_properties, key, _reorderBytes);
+
+  // Index entry.
+  //
+  _index->insert(propertyId, storedForm, _offset, size);
+  _offset += size;
+}
+
   // @mfunc Save a collection (vector/set) of weak references.
   //   @parm The name of the collection.
   //   @parm The unique identifications of the targets.
@@ -2023,6 +2083,44 @@ void OMSSStoredObject::restore(OMPropertyId propertyId,
   }
 }
 
+  // @mfunc Restore a single weak reference.
+  //   @parm The property id.
+  //   @parm The property type.
+  //   @parm The unique identification of the target.
+  //   @parm A tag identifying the collection in which the target resides.
+  //   @parm The id of the property whose value is the unique
+  //         identifier of objects in the target set.
+void OMSSStoredObject::restore(OMPropertyId propertyId,
+                               OMStoredForm storedForm,
+                               OMUniqueMaterialIdentification& id,
+                               OMPropertyTag& tag,
+                               OMPropertyId& keyPropertyId)
+{
+  TRACE("OMSSStoredObject::restore");
+
+  // tag, key pid, key size, key
+  const size_t size = sizeof(tag) +
+                      sizeof(OMPropertyId) + sizeof(OMKeySize) + sizeof(id);
+  OMByte buffer[size];
+  OMByte* p = &buffer[0];
+
+  read(propertyId, storedForm, buffer, size);
+  memcpy(&tag, p, sizeof(tag));
+  p += sizeof(tag);
+  memcpy(&keyPropertyId, p, sizeof(keyPropertyId));
+  p += sizeof(keyPropertyId);
+  OMKeySize keySize;
+  memcpy(&keySize, p, sizeof(keySize));
+  p += sizeof(keySize);
+  memcpy(&id, p, sizeof(id));
+
+  if (byteOrder() != hostByteOrder()) {
+    reorderUInt16(tag);
+    reorderUInt16(keyPropertyId);
+    // no need to reorder keySize
+    reorderUniqueMaterialIdentification(id);
+  }
+}
   // @mfunc Restore a collection (vector/set) of weak references.
   //   @parm The name of the collection.
   //   @parm The unique identifications of the targets.

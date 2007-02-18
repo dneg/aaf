@@ -1999,9 +1999,11 @@ void OMKLVStoredObject::deepRestore(const OMPropertySet& properties)
         // build new reference from key and object
         OMProperty* kp = obj->propertySet()->get(keyPid);
         ASSERT("Valid property", kp != 0);
-        OMUniqueObjectIdentification k;
-        ASSERT("Consistent sizes", kp->bitsSize() == sizeof(k));
-        kp->getBits(reinterpret_cast<OMByte*>(&k), sizeof(k));
+
+        const OMKeySize keySize = wr->keySize();
+        ASSERT("Consistent sizes", kp->bitsSize() == keySize);
+        OMByte* keyBits = new OMByte[keySize];
+        kp->getBits(keyBits, keySize);
 #if defined(USETAGTABLE)
         /*
         // Setting the target tag on the weak reference property
@@ -2013,12 +2015,15 @@ void OMKLVStoredObject::deepRestore(const OMPropertySet& properties)
         OMPropertyTag tag = findTag(wr->targetName());
         wr->setTargetTag(tag);
         */
-        wr->setIdentificationBits(&k, sizeof(k));
+        wr->setIdentificationBits(keyBits, keySize);
 #else
         wr->setIdentificationBits(keyBits, keySize);
         wr->setValue(obj);
 
 #endif
+        delete [] keyBits;
+        keyBits = 0;
+
 #if defined(USETAGTABLE)
         } else {
           OMPropertyTag tag = findTag(wr->targetName());
@@ -2027,6 +2032,8 @@ void OMKLVStoredObject::deepRestore(const OMPropertySet& properties)
           // HACK4MEIP2
           // We failed to find the reference object by its InstanceUID,
           // save the ID to try it again later as a universal label.
+          ASSERT("Referenced object ID can be a label",
+                        wr->keySize() == sizeof(OMUniqueObjectIdentification));
           wr->setIdentificationBits(&id, sizeof(id));
         }
 #endif

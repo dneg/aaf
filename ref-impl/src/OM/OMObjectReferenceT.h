@@ -225,8 +225,10 @@ OMStorable* OMWeakObjectReference<Key>::getValue(void) const
       (_identification != OMConstant<Key>::null)) {
     // We failed to resolve the reference as an object id, try again as a label
     // We should only come here for KLV encoded files.
+    ASSERT("Referenced object ID can be a label",
+                        sizeof(Key) == sizeof(OMUniqueObjectIdentification));
     OMUniqueObjectIdentification bid;
-    bid = _identification;
+    *reinterpret_cast<Key*>(&bid) = _identification;
     if (hostByteOrder() != bigEndian) {
 	  OMUniqueObjectIdentificationType::instance()->reorder(
                                                reinterpret_cast<OMByte*>(&bid),
@@ -236,7 +238,8 @@ OMStorable* OMWeakObjectReference<Key>::getValue(void) const
     memcpy(&k, &bid, sizeof(OMKLVKey));
     OMUniqueObjectIdentification id;
     convert(id, k);
-    nonConstThis->_identification = id;
+    nonConstThis->_identification =
+                         *reinterpret_cast<Key*>(&id);
     OMStorable* object = 0;
     set()->find(&nonConstThis->_identification, object);
     nonConstThis->_pointer = object;
