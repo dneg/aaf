@@ -1923,6 +1923,9 @@
 				RelativePath="..\..\..\ref-impl\include\OM\OMObjectReference.h">
 			</File>
 			<File
+				RelativePath="..\..\..\ref-impl\src\Om\OMObjectReferenceT.h">
+			</File>
+			<File
 				RelativePath="..\..\..\ref-impl\include\OM\OMObjectReferenceType.h">
 			</File>
 			<File
