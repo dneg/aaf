@@ -298,6 +298,20 @@ static void printMobID (const aafMobID_t &mobIDVal,
   os << " }" ;
 }
 
+static HRESULT printMobID (
+		IAAFMob  *pMob,
+		ostream		    &os )
+{
+    HRESULT         status = AAFRESULT_SUCCESS;
+    aafMobID_t      mobID;
+
+    checkResult( pMob->GetMobID( &mobID ) );
+    printMobID(mobID, os);
+
+
+    return status;
+}
+
 static HRESULT dumpSummary
 (
  IAAFHeaderSP pHeader, // object to be dumped
@@ -1719,6 +1733,7 @@ HRESULT dumpPropertyValue (IAAFPropertyValueSP pPVal,
 	      {
 		IAAFDefObjectSP pDefObj;
 		IAAFMetaDefinitionSP pMetaDef;
+		IAAFMobSP pMob;
 		// weak object reference; only dump summary info (not
 		// recursively)
 		IAAFTypeDefObjectRefSP pTDO;
@@ -1736,6 +1751,10 @@ HRESULT dumpPropertyValue (IAAFPropertyValueSP pPVal,
 					      (IUnknown**)&pMetaDef))
 		  {
 		    checkResult(printAAFName(pMetaDef, os));
+		  } else if (!pTDO->GetObject(pPVal, IID_IAAFMob, 
+					      (IUnknown**)&pMob))
+		  {
+		    checkResult(printMobID(pMob, os));
 		  } else
 		  {
 		    // treat as AUID
