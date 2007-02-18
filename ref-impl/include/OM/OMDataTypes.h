@@ -230,6 +230,13 @@ inline bool operator > (const OMMaterialIdentification& lhs,
 //
 typedef OMMaterialIdentification OMUniqueMaterialIdentification;
 
+template<>
+const OMUniqueMaterialIdentification
+OMConstant<OMUniqueMaterialIdentification>::null =
+{{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+ 0, 0, 0, 0,
+ {0, 0, 0, {0, 0, 0, 0, 0, 0, 0, 0}}};
+
 // For (but more general than) a SMPTE Universal label
 struct OMKLVKey
 {
