@@ -68,6 +68,8 @@
 #endif
 
 #include "ImplAAFDictionary.h"
+#include "ImplAAFEssenceData.h"
+#include "ImplAAFMob.h"
 #include "AAFStoredObjectIDs.h"
 #include "AAFPropertyDefs.h"
 #include "AAFPropertyIDs.h"
@@ -897,6 +899,14 @@ OMProperty * ImplAAFTypeDefWeakObjRef::pvtCreateOMProperty
       result = new OMWeakReferenceProperty<OMUniqueObjectIdentification, ImplAAFDefObject>(pid, name, _uniqueIdentifierPid, _targetPids);
       break;
     
+    case PID_Mob_MobID:
+      result = new OMWeakReferenceProperty<OMUniqueMaterialIdentification, ImplAAFMob>(pid, name, _uniqueIdentifierPid, _targetPids);
+      break;
+
+    case PID_EssenceData_MobID:
+      result = new OMWeakReferenceProperty<OMUniqueMaterialIdentification, ImplAAFEssenceData>(pid, name, _uniqueIdentifierPid, _targetPids);
+      break;
+
     default:
       // No support for other "key properties"
       ASSERTU (0);
