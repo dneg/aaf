@@ -270,7 +270,7 @@ void OMKLVStoredStreamFilter::initialize() const
   _stream->setPosition(0);
   OMKLVKey key;
   if (OMKLVStoredStream::readKLVKey(*_stream, key)) {
-    const OMUInt64 lengthPosition = _stream->position();
+    lengthPosition = _stream->position();
 
     // Attempt to read the length following the key
     if (OMKLVStoredStream::readKLVLength(*_stream, length)) {
