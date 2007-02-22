@@ -230,8 +230,8 @@ public:
        ImplAAFEssenceData* pRawEssenceData);
 
 private:
-  OMDataStreamPropertyFilter* _mediaDataFilter;
   ImplAAFEssenceData* _mediaDataContainer;
+  OMDataStreamPropertyFilter* _mediaDataFilter;
 
 };
 
