@@ -2064,6 +2064,9 @@ void OMKLVStoredObject::deepRestore(const OMPropertySet& properties)
         OMWeakReferenceVector* v = dynamic_cast<OMWeakReferenceVector*>(p);
         ASSERT("Valid type", v != 0);
         OMPropertyId keyPid = v->keyPropertyId();
+        const OMKeySize keySize = v->keySize();
+        OMByte* key = new OMByte[keySize];
+        ASSERT("Valid heap pointer", key != 0);
         OMContainerIterator<OMWeakReferenceVectorElement>& iterator =
                                                                 *v->iterator();
         while (++iterator) {
@@ -2079,18 +2082,18 @@ void OMKLVStoredObject::deepRestore(const OMPropertySet& properties)
           ASSERT("Valid object", obj != 0);
           OMProperty* kp = obj->propertySet()->get(keyPid);
           ASSERT("Valid property", kp != 0);
-          OMUniqueObjectIdentification k;
-          ASSERT("Consistent sizes", kp->bitsSize() == sizeof(k));
-          kp->getBits(reinterpret_cast<OMByte*>(&k), sizeof(k));
+          ASSERT("Consistent sizes", kp->bitsSize() == keySize);
+          memset(key, 0, keySize);
+          kp->getBits(key, keySize);
 #if defined(USETAGTABLE)
           OMPropertyTag tag = findTag(v->targetName());
           OMWeakObjectReference newReference(v,
-                                             &k,
-                                             sizeof(k),
+                                             key,
+                                             keySize,
                                              tag);
           r = newReference;
 #else
-          r.setValue(k, obj);
+          r.setValue(key, obj);
 #endif
 #if defined(USETAGTABLE)
         } else {
@@ -2100,6 +2103,8 @@ void OMKLVStoredObject::deepRestore(const OMPropertySet& properties)
 #endif
         }
         delete &iterator;
+        delete [] key;
+        key = 0;
         break;
       }
       case SF_WEAK_OBJECT_REFERENCE_SET: {
@@ -2110,7 +2115,9 @@ void OMKLVStoredObject::deepRestore(const OMPropertySet& properties)
           OMContainerIterator<OMWeakReferenceSetElement>& iterator =
                                                                 *s->iterator();
           OMPropertyId keyPid = s->keyPropertyId();
-          OMUniqueObjectIdentification key;
+          const OMKeySize keySize = s->keySize();
+          OMByte* key = new OMByte[keySize];
+          ASSERT("Valid heap pointer", key != 0);
           OMVector<OMUniqueObjectIdentification> objects;
 
           objects.grow(count);
@@ -2134,21 +2141,22 @@ void OMKLVStoredObject::deepRestore(const OMPropertySet& properties)
             ASSERT("Valid object", obj != 0);
             OMProperty* kp = obj->propertySet()->get(keyPid);
             ASSERT("Valid property", kp != 0);
-            ASSERT("Consistent sizes", kp->bitsSize() == sizeof(key));
-            kp->getBits(reinterpret_cast<OMByte*>(&key), sizeof(key));
+            ASSERT("Consistent sizes", kp->bitsSize() == keySize);
+            memset(key, 0, keySize);
+            kp->getBits(key, keySize);
 
-            OMWeakReferenceSetElement element(s, &key, sizeof(key), nullOMPropertyTag);
+            OMWeakReferenceSetElement element(s, key, keySize, nullOMPropertyTag);
 #if defined(USETAGTABLE)
             OMPropertyTag tag = findTag(s->targetName());
             OMWeakObjectReference newReference(s,
-                                               &key,
-                                               sizeof(key),
+                                               key,
+                                               keySize,
                                                tag);
             element.reference() = newReference;
 #else
             element.setValue(key, obj);
 #endif
-            s->insert(&key, element);
+            s->insert(key, element);
 #if defined(USETAGTABLE)
             } else {
               /* OMPropertyTag tag = */ findTag(s->targetName());
@@ -2157,6 +2165,8 @@ void OMKLVStoredObject::deepRestore(const OMPropertySet& properties)
 #endif
           }
           delete &iterator;
+          delete [] key;
+          key = 0;
         }
         break;
       }

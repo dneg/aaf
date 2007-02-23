@@ -721,9 +721,10 @@ void OMSSStoredObject::save(const OMWeakReferenceVector& vector)
   // create a vector index
   //
   OMUInt32 count = vector.count();
-  OMUniqueObjectIdentification* index = 0;
+  const OMKeySize keySize = vector.keySize();
+  OMByte* index = 0;
   if (count > 0) {
-    index = new OMUniqueObjectIdentification[count];
+    index = new OMByte[count * keySize];
     ASSERT("Valid heap pointer", index != 0);
   }
   size_t position = 0;
@@ -739,7 +740,7 @@ void OMSSStoredObject::save(const OMWeakReferenceVector& vector)
 
     // enter into the index
     //
-    memcpy(&index[position], element.identification(), sizeof(OMUniqueObjectIdentification));
+    memcpy(&index[position * keySize], element.identification(), keySize);
 
     // save the object
     //
@@ -752,7 +753,7 @@ void OMSSStoredObject::save(const OMWeakReferenceVector& vector)
   // save the vector index
   //
   wchar_t* name = collectionName(vector.name(), vector.propertyId());
-  save(name, reinterpret_cast<OMByte*>(index), count, sizeof(OMUniqueObjectIdentification), tag, vector.keyPropertyId());
+  save(name, index, count, keySize, tag, vector.keyPropertyId());
   delete [] index;
 
   // make an entry in the property index
@@ -775,9 +776,10 @@ void OMSSStoredObject::save(const OMWeakReferenceSet& set)
   // create a set index
   //
   OMUInt32 count = set.count();
-  OMUniqueObjectIdentification* index = 0;
+  const OMKeySize keySize = set.keySize();
+  OMByte* index = 0;
   if (count > 0) {
-    index = new OMUniqueObjectIdentification[count];
+    index = new OMByte[count * keySize];
     ASSERT("Valid heap pointer", index != 0);
   }
   size_t position = 0;
@@ -792,7 +794,7 @@ void OMSSStoredObject::save(const OMWeakReferenceSet& set)
 
     // enter into the index
     //
-    memcpy(&index[position], element.identification(), sizeof(OMUniqueObjectIdentification));
+    memcpy(&index[position * keySize], element.identification(), keySize);
 
     // save the object
     //
@@ -805,7 +807,7 @@ void OMSSStoredObject::save(const OMWeakReferenceSet& set)
   // save the set index
   //
   wchar_t* name = collectionName(set.name(), set.propertyId());
-  save(name, reinterpret_cast<OMByte*>(index), count, sizeof(OMUniqueObjectIdentification), tag, set.keyPropertyId());
+  save(name, index, count, keySize, tag, set.keyPropertyId());
   delete [] index;
 
   // make an entry in the property index
@@ -1337,7 +1339,7 @@ void OMSSStoredObject::restore(OMWeakReferenceVector& vector,
 
   ASSERT("Valid vector index", IMPLIES(entries != 0, vectorIndex != 0));
   ASSERT("Valid vector index", IMPLIES(entries == 0, vectorIndex == 0));
-  ASSERT("Consistent key sizes", keySize == sizeof(OMUniqueObjectIdentification));
+  ASSERT("Consistent key sizes", keySize == vector.keySize());
   ASSERT("Consistent key property ids",
                                       keyPropertyId == vector.keyPropertyId());
   vector.setTargetTag(tag);
@@ -1379,7 +1381,7 @@ void OMSSStoredObject::restore(OMWeakReferenceSet& set,
 
   ASSERT("Valid set index", IMPLIES(entries != 0, setIndex != 0));
   ASSERT("Valid set index", IMPLIES(entries == 0, setIndex == 0));
-  ASSERT("Consistent key sizes", keySize == sizeof(OMUniqueObjectIdentification));
+  ASSERT("Consistent key sizes", keySize == set.keySize());
   ASSERT("Consistent key property ids", keyPropertyId == set.keyPropertyId());
   set.setTargetTag(tag);
 

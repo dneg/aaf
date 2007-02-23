@@ -588,6 +588,7 @@ void OMXMLStoredObject::save(const OMWeakReferenceVector& vector)
           << " objects -->" << endl;
   _stream << outdent;
 
+  const OMKeySize keySize = vector.keySize();
   OMContainerIterator<OMWeakReferenceVectorElement>& iterator =
                                                             *vector.iterator();
   while (++iterator) {
@@ -598,9 +599,22 @@ void OMXMLStoredObject::save(const OMWeakReferenceVector& vector)
 
     _stream << indent;
     _stream << beginl;
-    const OMUniqueObjectIdentification* id =
+    _stream << "<identification guid=\""; // Alexey - is 'identification guid'
+                                          // applicable to all types if IDs?
+    // The following ought to be done via the key type and not
+    // via the key size
+    if (keySize == sizeof(OMUniqueObjectIdentification)) {
+      const OMUniqueObjectIdentification* id =
                     reinterpret_cast<const OMUniqueObjectIdentification*>(key);
-    _stream << "<identification guid=\"" << *id << "\"/>" << endl;
+      _stream << *id;
+    } else if (keySize == sizeof(OMMaterialIdentification)) {
+      const OMMaterialIdentification* id =
+                        reinterpret_cast<const OMMaterialIdentification*>(key);
+      _stream << *id;
+    } else {
+      _stream << OMConstant<OMUniqueObjectIdentification>::null;
+    }
+    _stream << "\"/>" << endl;
     _stream << outdent;
   }
   _stream << beginl;
@@ -628,6 +642,7 @@ void OMXMLStoredObject::save(const OMWeakReferenceSet& set)
           << " objects -->" << endl;
   _stream << outdent;
 
+  const OMKeySize keySize = set.keySize();
   OMContainerIterator<OMWeakReferenceSetElement>& iterator = *set.iterator();
   while (++iterator) {
 
@@ -637,9 +652,22 @@ void OMXMLStoredObject::save(const OMWeakReferenceSet& set)
 
     _stream << indent;
     _stream << beginl;
-    const OMUniqueObjectIdentification* id =
+    _stream << "<identification guid=\""; // Alexey - is 'identification guid'
+                                          // applicable to all types if IDs?
+    // The following ought to be done via the key type and not
+    // via the key size
+    if (keySize == sizeof(OMUniqueObjectIdentification)) {
+      const OMUniqueObjectIdentification* id =
                     reinterpret_cast<const OMUniqueObjectIdentification*>(key);
-    _stream << "<identification guid=\"" << *id << "\"/>" << endl;
+      _stream << *id;
+    } else if (keySize == sizeof(OMMaterialIdentification)) {
+      const OMMaterialIdentification* id =
+                        reinterpret_cast<const OMMaterialIdentification*>(key);
+      _stream << *id;
+    } else {
+      _stream << OMConstant<OMUniqueObjectIdentification>::null;
+    }
+    _stream << "\"/>" << endl;
     _stream << outdent;
   }
   _stream << beginl;
