@@ -322,7 +322,7 @@ bool OMWeakReferenceSetProperty<ReferencedObject>::ensureAbsent(
   SetElement* element = 0;
   bool result = _set.find(identification, &element);
   if (result) {
-    element->setValue(nullOMUniqueObjectIdentification, 0);
+    element->setValue(&nullOMUniqueObjectIdentification, 0);
     _set.remove(identification);
   }
 
