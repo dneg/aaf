@@ -170,11 +170,6 @@ typedef OMObjectIdentification OMStoredObjectIdentification;
 //
 typedef OMObjectIdentification OMUniqueObjectIdentification;
 
-template<>
-const OMUniqueObjectIdentification
-OMConstant<OMUniqueObjectIdentification>::null =
-{0, 0, 0, {0, 0, 0, 0, 0, 0, 0, 0}};
-
 // For backwards compatibility - all instances of
 // nullOMUniqueObjectIdentification should eventually be replaced
 // with OMConstant<OMUniqueObjectIdentification>::null.
@@ -229,13 +224,6 @@ inline bool operator > (const OMMaterialIdentification& lhs,
 // For uniquely identifying material instances.
 //
 typedef OMMaterialIdentification OMUniqueMaterialIdentification;
-
-template<>
-const OMUniqueMaterialIdentification
-OMConstant<OMUniqueMaterialIdentification>::null =
-{{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
- 0, 0, 0, 0,
- {0, 0, 0, {0, 0, 0, 0, 0, 0, 0, 0}}};
 
 // For (but more general than) a SMPTE Universal label
 struct OMKLVKey
