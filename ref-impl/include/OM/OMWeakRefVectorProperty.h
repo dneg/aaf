@@ -259,6 +259,11 @@ public:
 
   const OMUniqueObjectIdentification& identification(OMUInt32 index) const;
 
+  // @cmember The size of the identification of <c OMObject> in this
+  //          <c OMWeakReferenceVectorProperty>. The size is given
+  //          in bytes.
+  virtual OMKeySize keySize(void) const;
+
     // @cmember The <c OMStrongReferenceSet> in which the objects
     //          referenced by this <c OMWeakReferenceVectorProperty>
     //          must reside.

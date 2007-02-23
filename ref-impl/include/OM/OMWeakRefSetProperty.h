@@ -207,6 +207,11 @@ public:
   virtual void insert(void* key,
                       const OMWeakReferenceSetElement& element);
 
+  // @cmember The size of the identification of <c OMObject> in this
+  //          <c OMWeakReferenceSetProperty>. The size is given
+  //          in bytes.
+  virtual OMKeySize keySize(void) const;
+
     // @cmember The <c OMStrongReferenceSet> in which the objects
     //          referenced by this <c OMWeakReferenceSetProperty>
     //          must reside.

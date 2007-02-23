@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2007, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -54,6 +54,11 @@ public:
 
   virtual void insert(void* key,
                       const OMWeakReferenceSetElement& element) = 0;
+
+  // @cmember The size of the identification of <c OMObject> in this
+  //          <c OMWeakReferenceSetProperty>. The size is given
+  //          in bytes.
+  virtual OMKeySize keySize(void) const = 0;
 
   virtual OMPropertyId keyPropertyId(void) const = 0;
 

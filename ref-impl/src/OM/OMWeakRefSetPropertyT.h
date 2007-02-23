@@ -818,6 +818,22 @@ OMWeakReferenceSetProperty<ReferencedObject>::setTargetTag(
   _targetTag = targetTag;
 }
 
+  // @mfunc The size of the identification of <c OMObject> in this
+  //        <c OMWeakReferenceSetProperty>. The size is given
+  //        in bytes.
+  //   @tcarg class | ReferencedObject | The type of the referenced
+  //          (contained) object. This type must be a descendant of
+  //          <c OMStorable> and <c OMUnique>.
+  //   @rdesc The size of the identification.
+template <typename ReferencedObject>
+OMKeySize
+OMWeakReferenceSetProperty<ReferencedObject>::keySize(void) const
+{
+  TRACE("OMWeakReferenceSetProperty<ReferencedObject>::keySize");
+
+  return sizeof(OMUniqueObjectIdentification);
+}
+
 template <typename ReferencedObject>
 OMStrongReferenceSet*
 OMWeakReferenceSetProperty<ReferencedObject>::targetSet(void) const

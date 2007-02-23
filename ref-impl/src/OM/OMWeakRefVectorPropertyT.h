@@ -1081,6 +1081,22 @@ OMWeakReferenceVectorProperty<ReferencedObject>::identification(
   return *reinterpret_cast<const OMUniqueObjectIdentification*>(element.identification());
 }
 
+  // @mfunc The size of the identification of <c OMObject> in this
+  //        <c OMWeakReferenceVectorProperty>. The size is given
+  //        in bytes.
+  //   @tcarg class | ReferencedObject | The type of the referenced
+  //          (contained) object. This type must be a descendant of
+  //          <c OMStorable> and <c OMUnique>.
+  //   @rdesc The size of the identification.
+template <typename ReferencedObject>
+OMKeySize
+OMWeakReferenceVectorProperty<ReferencedObject>::keySize(void) const
+{
+  TRACE("OMWeakReferenceVectorProperty<ReferencedObject>::keySize");
+
+  return sizeof(OMUniqueObjectIdentification);
+}
+
 template <typename ReferencedObject>
 OMStrongReferenceSet*
 OMWeakReferenceVectorProperty<ReferencedObject>::targetSet(void) const
