@@ -752,7 +752,7 @@ void OMSSStoredObject::save(const OMWeakReferenceVector& vector)
   // save the vector index
   //
   wchar_t* name = collectionName(vector.name(), vector.propertyId());
-  save(name, index, count, tag, vector.keyPropertyId());
+  save(name, reinterpret_cast<OMByte*>(index), count, sizeof(OMUniqueObjectIdentification), tag, vector.keyPropertyId());
   delete [] index;
 
   // make an entry in the property index
@@ -805,7 +805,7 @@ void OMSSStoredObject::save(const OMWeakReferenceSet& set)
   // save the set index
   //
   wchar_t* name = collectionName(set.name(), set.propertyId());
-  save(name, index, count, tag, set.keyPropertyId());
+  save(name, reinterpret_cast<OMByte*>(index), count, sizeof(OMUniqueObjectIdentification), tag, set.keyPropertyId());
   delete [] index;
 
   // make an entry in the property index
@@ -1325,17 +1325,19 @@ void OMSSStoredObject::restore(OMWeakReferenceVector& vector,
 
   // restore the index
   //
-  OMUniqueObjectIdentification* vectorIndex = 0;
+  OMByte* vectorIndex = 0;
   OMUInt32 entries;
+  OMKeySize keySize;
   OMPropertyTag tag;
   OMPropertyId keyPropertyId;
   wchar_t* name = collectionName(vector.name(), vector.propertyId());
-  restore(name, vectorIndex, entries, tag, keyPropertyId);
+  restore(name, vectorIndex, entries, keySize, tag, keyPropertyId);
   restoreName(vector, name, externalSize);
   delete [] name;
 
   ASSERT("Valid vector index", IMPLIES(entries != 0, vectorIndex != 0));
   ASSERT("Valid vector index", IMPLIES(entries == 0, vectorIndex == 0));
+  ASSERT("Consistent key sizes", keySize == sizeof(OMUniqueObjectIdentification));
   ASSERT("Consistent key property ids",
                                       keyPropertyId == vector.keyPropertyId());
   vector.setTargetTag(tag);
@@ -1345,8 +1347,8 @@ void OMSSStoredObject::restore(OMWeakReferenceVector& vector,
   if (entries > 0) {
     vector.grow(entries); // Set the vector size
     for (OMUInt32 i = 0; i < entries; i++) {
-      OMUniqueObjectIdentification key = vectorIndex[i];
-      OMWeakReferenceVectorElement element(&vector, &key, sizeof(OMUniqueObjectIdentification), tag);
+      void* key = &vectorIndex[i * keySize];
+      OMWeakReferenceVectorElement element(&vector, key, keySize, tag);
       element.restore();
       vector.insert(i, element);
     }
@@ -1365,17 +1367,19 @@ void OMSSStoredObject::restore(OMWeakReferenceSet& set,
 
   // restore the index
   //
-  OMUniqueObjectIdentification* setIndex = 0;
+  OMByte* setIndex = 0;
   OMUInt32 entries;
+  OMKeySize keySize;
   OMPropertyTag tag;
   OMPropertyId keyPropertyId;
   wchar_t* name = collectionName(set.name(), set.propertyId());
-  restore(name, setIndex, entries, tag, keyPropertyId);
+  restore(name, setIndex, entries, keySize, tag, keyPropertyId);
   restoreName(set, name, externalSize);
   delete [] name;
 
   ASSERT("Valid set index", IMPLIES(entries != 0, setIndex != 0));
   ASSERT("Valid set index", IMPLIES(entries == 0, setIndex == 0));
+  ASSERT("Consistent key sizes", keySize == sizeof(OMUniqueObjectIdentification));
   ASSERT("Consistent key property ids", keyPropertyId == set.keyPropertyId());
   set.setTargetTag(tag);
 
@@ -1388,10 +1392,10 @@ void OMSSStoredObject::restore(OMWeakReferenceSet& set,
   // (recursively) all the keys above the middle key.
   //
   for (size_t i = 0; i < entries; i++) {
-    OMUniqueObjectIdentification key = setIndex[i];
-    OMWeakReferenceSetElement element(&set, &key, sizeof(OMUniqueObjectIdentification), tag);
+    void* key = &setIndex[i * keySize];
+    OMWeakReferenceSetElement element(&set, key, keySize, tag);
     element.restore();
-    set.insert(&key, element);
+    set.insert(key, element);
    }
   delete [] setIndex;
 }
@@ -1786,13 +1790,15 @@ void OMSSStoredObject::save(OMPropertyId propertyId,
   //   @parm The name of the collection.
   //   @parm The unique identifications of the targets.
   //   @parm Count of targets.
+  //   @parm Size of each target.
   //   @parm A tag identifying the collection in which each of the
   //         targets reside.
   //   @parm The id of the property whose value is the unique
   //         identifier of objects in the target set.
 void OMSSStoredObject::save(const wchar_t* collectionName,
-                             const OMUniqueObjectIdentification* index,
+                             const OMByte* index,
                              OMUInt32 count,
+                             OMKeySize keySize,
                              OMPropertyTag tag,
                              OMPropertyId keyPropertyId)
 {
@@ -1830,7 +1836,6 @@ void OMSSStoredObject::save(const wchar_t* collectionName,
 
   // Write key size.
   //
-  OMKeySize keySize = sizeof(OMUniqueObjectIdentification);
   writeUInt8ToStream(indexStream, keySize);
 
   if (count > 0) {
@@ -1838,14 +1843,25 @@ void OMSSStoredObject::save(const wchar_t* collectionName,
     //
     if (_reorderBytes) {
       for (OMUInt32 i = 0; i < entries; i++) {
-        OMUniqueObjectIdentification* k =
-                          const_cast<OMUniqueObjectIdentification*>(&index[i]);
-        reorderUniqueObjectIdentification(*k);
+        OMByte* key = const_cast<OMByte*>(&index[i * keySize]);
+
+        // The following ought to be done via the key type and not
+        // via the key size
+        if (keySize == 16) {
+          OMUniqueObjectIdentification* k =
+                          reinterpret_cast<OMUniqueObjectIdentification*>(key);
+          reorderUniqueObjectIdentification(*k);
+        } else if (keySize == 32) {
+          OMUniqueMaterialIdentification* k =
+                        reinterpret_cast<OMUniqueMaterialIdentification*>(key);
+          reorderUniqueMaterialIdentification(*k);
+        }
+
        }
     }
     writeToStream(indexStream,
                   (void *)index,
-                  count * sizeof(OMUniqueObjectIdentification));
+                  count * keySize);
   }
 
   // Close the stream.
@@ -2130,8 +2146,9 @@ void OMSSStoredObject::restore(OMPropertyId propertyId,
   //   @parm The id of the property whose value is the unique
   //         identifier of objects in the target set.
 void OMSSStoredObject::restore(const wchar_t* collectionName,
-                                OMUniqueObjectIdentification*& index,
+                                OMByte*& index,
                                 OMUInt32 &count,
+                                OMKeySize& keySize,
                                 OMPropertyTag& tag,
                                 OMPropertyId& keyPropertyId)
 {
@@ -2166,24 +2183,34 @@ void OMSSStoredObject::restore(const wchar_t* collectionName,
 
   // Read the key size.
   //
-  OMKeySize keySize;
   readUInt8FromStream(indexStream, keySize);
 
   // Create an index.
   //
-  OMUniqueObjectIdentification* collectionIndex = 0;
+  OMByte* collectionIndex = 0;
   if (entries > 0) {
-    collectionIndex = new OMUniqueObjectIdentification[entries];
+    collectionIndex = new OMByte[entries * keySize];
     ASSERT("Valid heap pointer", collectionIndex != 0);
 
     // Read the element keys, placing them in the index.
     //
     readFromStream(indexStream,
                    collectionIndex,
-                   entries * sizeof(OMUniqueObjectIdentification));
+                   entries * keySize);
     if (_reorderBytes) {
       for (size_t i = 0; i < entries; i++) {
-        reorderUniqueObjectIdentification(collectionIndex[i]);
+        OMByte* key = &collectionIndex[i * keySize];
+        // The following ought to be done via the key type and not
+        // via the key size
+        if (keySize == 16) {
+          OMUniqueObjectIdentification* k =
+                          reinterpret_cast<OMUniqueObjectIdentification*>(key);
+          reorderUniqueObjectIdentification(*k);
+        } else if (keySize == 32) {
+          OMUniqueMaterialIdentification* k =
+                        reinterpret_cast<OMUniqueMaterialIdentification*>(key);
+          reorderUniqueMaterialIdentification(*k);
+        }
       }
     }
   }

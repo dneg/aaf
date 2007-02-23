@@ -262,8 +262,9 @@ protected:
 
     // @cmember Save a collection (vector/set) of weak references.
   void save(const wchar_t* collectionName,
-            const OMUniqueObjectIdentification* index,
+            const OMByte* index,
             OMUInt32 count,
+            OMKeySize keySize,
             OMPropertyTag tag,
             OMPropertyId keyPropertyId);
 
@@ -296,8 +297,9 @@ protected:
 
     // @cmember Restore a collection (vector/set) of weak references.
   void restore(const wchar_t* collectionName,
-               OMUniqueObjectIdentification*& index,
+               OMByte*& index,
                OMUInt32& count,
+               OMKeySize& keySize,
                OMPropertyTag& tag,
                OMPropertyId& keyPropertyId);
 
