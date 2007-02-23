@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2006, Licensor of the
+// The Original Code of this file is Copyright 1998-2007, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -304,6 +304,7 @@ void* OMStrongReferenceSetElement::identification(void) const
 {
   TRACE("OMStrongReferenceSetElement::identification");
 
+  POSTCONDITION("Valid identification", _identification != 0);
   return _identification;
 }
 
@@ -409,7 +410,7 @@ OMUInt32 OMStrongReferenceSetElement::_initialReferenceCount = sticky;
 
   // @mfunc Constructor.
 OMWeakReferenceVectorElement::OMWeakReferenceVectorElement(void)
-: OMContainerElement<OMWeakObjectReference<OMUniqueObjectIdentification> >()
+: OMContainerElement<OMWeakObjectReference>()
 {
   TRACE("OMWeakReferenceVectorElement::OMWeakReferenceVectorElement");
 }
@@ -421,13 +422,15 @@ OMWeakReferenceVectorElement::OMWeakReferenceVectorElement(void)
   //   @parm A tag identifying the <c OMStrongReferenceVectorProperty>
   //         in which the target resides.
 OMWeakReferenceVectorElement::OMWeakReferenceVectorElement(
-                                   OMProperty* property,
-                                   OMUniqueObjectIdentification identification,
-                                   OMPropertyTag targetTag)
-: OMContainerElement<OMWeakObjectReference<OMUniqueObjectIdentification> >(
-  OMWeakObjectReference<OMUniqueObjectIdentification>(property,
-                                                      identification,
-                                                      targetTag))
+                                                    OMProperty* property,
+                                                    const void* identification,
+                                                    size_t identificationSize,
+                                                    OMPropertyTag targetTag)
+: OMContainerElement<OMWeakObjectReference>(
+  OMWeakObjectReference(property,
+                        identification,
+                        identificationSize,
+                        targetTag))
 {
   TRACE("OMWeakReferenceVectorElement::OMWeakReferenceVectorElement");
 }
@@ -436,7 +439,7 @@ OMWeakReferenceVectorElement::OMWeakReferenceVectorElement(
   //   @parm The <c OMWeakReferenceVectorElement> to copy.
 OMWeakReferenceVectorElement::OMWeakReferenceVectorElement(
                                        const OMWeakReferenceVectorElement& rhs)
-: OMContainerElement<OMWeakObjectReference<OMUniqueObjectIdentification> >(rhs)
+: OMContainerElement<OMWeakObjectReference>(rhs)
 {
   TRACE("OMWeakReferenceVectorElement::OMWeakReferenceVectorElement");
 }
@@ -463,9 +466,7 @@ OMWeakReferenceVectorElement::operator= (
     return *this; // early return !
   }
 
-  OMContainerElement<
-    OMWeakObjectReference<
-      OMUniqueObjectIdentification> >::operator=(rhs);
+  OMContainerElement<OMWeakObjectReference>::operator=(rhs);
   return *this;
 }
 
@@ -479,9 +480,7 @@ bool OMWeakReferenceVectorElement::operator== (
 {
   TRACE("OMWeakReferenceVectorElement::operator==");
 
-  bool result = OMContainerElement<
-                  OMWeakObjectReference<
-                    OMUniqueObjectIdentification> >::operator==(rhs);
+  bool result = OMContainerElement<OMWeakObjectReference>::operator==(rhs);
 
   return result;
 }
@@ -490,23 +489,24 @@ bool OMWeakReferenceVectorElement::operator== (
   //   @parm TBS
   //   @parm A pointer to the new <c OMStorable>.
   //   @rdesc A pointer to previous <c OMStorable>, if any.
-OMStorable* OMWeakReferenceVectorElement::setValue(
-                            const OMUniqueObjectIdentification& identification,
-                            const OMStorable* value)
+OMStorable* OMWeakReferenceVectorElement::setValue(const void* identification,
+                                                   const OMStorable* value)
 {
   TRACE("OMWeakReferenceVectorElement::setValue");
   OBSOLETE("OMContainerElement<ObjectReference>::reference");
+  PRECONDITION("Valid new identification", identification != 0);
 
   return _reference.setValue(identification, value);
 }
 
   // @mfunc The unique key of this <c OMWeakReferenceVectorElement>.
   //   @rdesc  The unique key of this <c OMWeakReferenceVectorElement>.
-const OMUniqueObjectIdentification&
+const void*
 OMWeakReferenceVectorElement::identification(void) const
 {
   TRACE("OMWeakReferenceVectorElement::identification");
 
+  POSTCONDITION("Valid identification", _reference.identification() != 0);
   return _reference.identification();
 }
 
@@ -516,7 +516,7 @@ OMWeakReferenceVectorElement::identification(void) const
 
   // @mfunc Constructor.
 OMWeakReferenceSetElement::OMWeakReferenceSetElement(void)
-: OMContainerElement<OMWeakObjectReference<OMUniqueObjectIdentification> >()
+: OMContainerElement<OMWeakObjectReference>()
 {
   TRACE("OMWeakReferenceSetElement::OMWeakReferenceSetElement");
 }
@@ -528,13 +528,15 @@ OMWeakReferenceSetElement::OMWeakReferenceSetElement(void)
   //   @parm A tag identifying the <c OMStrongReferenceSetProperty>
   //         in which the target resides.
 OMWeakReferenceSetElement::OMWeakReferenceSetElement(
-                                   OMProperty* property,
-                                   OMUniqueObjectIdentification identification,
-                                   OMPropertyTag targetTag)
-: OMContainerElement<OMWeakObjectReference<OMUniqueObjectIdentification> >(
-  OMWeakObjectReference<OMUniqueObjectIdentification>(property,
-                                                      identification,
-                                                      targetTag))
+                                                    OMProperty* property,
+                                                    const void* identification,
+                                                    size_t identificationSize,
+                                                    OMPropertyTag targetTag)
+: OMContainerElement<OMWeakObjectReference>(
+  OMWeakObjectReference(property,
+                        identification,
+                        identificationSize,
+                        targetTag))
 {
   TRACE("OMWeakReferenceSetElement::OMWeakReferenceSetElement");
 }
@@ -543,7 +545,7 @@ OMWeakReferenceSetElement::OMWeakReferenceSetElement(
   //   @parm The <c OMWeakReferenceSetElement> to copy.
 OMWeakReferenceSetElement::OMWeakReferenceSetElement(
                                           const OMWeakReferenceSetElement& rhs)
-: OMContainerElement<OMWeakObjectReference<OMUniqueObjectIdentification> >(rhs)
+: OMContainerElement<OMWeakObjectReference>(rhs)
 {
   TRACE("OMWeakReferenceSetElement::OMWeakReferenceSetElement");
 }
@@ -569,9 +571,7 @@ OMWeakReferenceSetElement::operator= (const OMWeakReferenceSetElement& rhs)
     return *this; // early return !
   }
 
-  OMContainerElement<
-    OMWeakObjectReference<
-      OMUniqueObjectIdentification> >::operator=(rhs);
+  OMContainerElement<OMWeakObjectReference>::operator=(rhs);
   return *this;
 }
 
@@ -585,9 +585,7 @@ bool OMWeakReferenceSetElement::operator== (
 {
   TRACE("OMWeakReferenceSetElement::operator==");
 
-  bool result = OMContainerElement<
-                  OMWeakObjectReference<
-                    OMUniqueObjectIdentification> >::operator==(rhs);
+  bool result = OMContainerElement<OMWeakObjectReference>::operator==(rhs);
 
   return result;
 }
@@ -596,22 +594,23 @@ bool OMWeakReferenceSetElement::operator== (
   //   @parm TBS
   //   @parm A pointer to the new <c OMStorable>.
   //   @rdesc A pointer to previous <c OMStorable>, if any.
-OMStorable* OMWeakReferenceSetElement::setValue(
-                            const OMUniqueObjectIdentification& identification,
-                            const OMStorable* value)
+OMStorable* OMWeakReferenceSetElement::setValue(const void* identification,
+                                                const OMStorable* value)
 {
   TRACE("OMWeakReferenceSetElement::setValue");
   OBSOLETE("OMContainerElement<ObjectReference>::reference");
+  PRECONDITION("Valid new identification", identification != 0);
 
   return _reference.setValue(identification, value);
 }
 
   // @mfunc The unique key of this <c OMWeakReferenceSetElement>.
   //   @rdesc  The unique key of this <c OMWeakReferenceSetElement>.
-const OMUniqueObjectIdentification&
+const void*
 OMWeakReferenceSetElement::identification(void) const
 {
   TRACE("OMWeakReferenceSetElement::identification");
 
+  POSTCONDITION("Valid identification", _reference.identification() != 0);
   return _reference.identification();
 }

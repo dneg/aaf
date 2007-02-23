@@ -173,7 +173,7 @@ private:
 
   OMPropertyId* targetPropertyPath(void) const;
 
-  OMWeakObjectReference<Key> _reference;
+  OMWeakObjectReference _reference;
   OMPropertyTag _targetTag;
   const wchar_t* _targetName;
   OMPropertyId* _targetPropertyPath;

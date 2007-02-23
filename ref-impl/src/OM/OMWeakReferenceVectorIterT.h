@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2007, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -242,7 +242,7 @@ OMWeakReferenceVectorIterator<ReferencedObject>::setValue(
   VectorElement& element = _iterator.value();
 
   ReferencedObject* result = 0;
-  OMStorable* p = element.setValue(id, newObject);
+  OMStorable* p = element.setValue(&id, newObject);
   if (p != 0) {
     result = dynamic_cast<ReferencedObject*>(p);
     ASSERT("Object is correct type", result != 0);
@@ -265,7 +265,7 @@ OMWeakReferenceVectorIterator<ReferencedObject>::clearValue(void)
   VectorElement& element = _iterator.value();
 
   ReferencedObject* result = 0;
-  OMStorable* p = element.setValue(nullOMUniqueObjectIdentification, 0);
+  OMStorable* p = element.setValue(&nullOMUniqueObjectIdentification, 0);
   if (p != 0) {
     result = dynamic_cast<ReferencedObject*>(p);
     ASSERT("Object is correct type", result != 0);

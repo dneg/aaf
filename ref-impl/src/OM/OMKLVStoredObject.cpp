@@ -1535,8 +1535,7 @@ void OMKLVStoredObject::flatSave(const OMPropertySet& properties) const
                                                                 *v->iterator();
         while (++iterator) {
           OMWeakReferenceVectorElement& element = iterator.value();
-          OMWeakObjectReference<OMUniqueObjectIdentification>& r =
-                                                           element.reference();
+          OMWeakObjectReference& r = element.reference();
           OMStorable* object = r.getValue();
           ASSERT("Valid object", object != 0);
           OMUniqueObjectIdentification id = _storage->instanceId(object);
@@ -1561,8 +1560,7 @@ void OMKLVStoredObject::flatSave(const OMPropertySet& properties) const
                                                                 *s->iterator();
         while (++iterator) {
           OMWeakReferenceSetElement& element = iterator.value();
-          OMWeakObjectReference<OMUniqueObjectIdentification>& r =
-                                                           element.reference();
+          OMWeakObjectReference& r = element.reference();
           OMStorable* object = r.getValue();
           ASSERT("Valid object", object != 0);
           OMUniqueObjectIdentification id = _storage->instanceId(object);
@@ -1814,7 +1812,11 @@ void OMKLVStoredObject::flatRestore(const OMPropertySet& properties)
           OMUniqueObjectIdentification id;
           _storage->read(id, _reorderBytes);
 
-          OMWeakReferenceVectorElement element(v, id, nullOMPropertyTag);
+          OMWeakReferenceVectorElement element(
+                                          v,
+                                          &id,
+                                          sizeof(OMUniqueObjectIdentification),
+                                          nullOMPropertyTag);
           v->insert(i, element);
         }
       }
@@ -1832,7 +1834,11 @@ void OMKLVStoredObject::flatRestore(const OMPropertySet& properties)
           OMUniqueObjectIdentification id;
           _storage->read(id, _reorderBytes);
 
-          OMWeakReferenceSetElement element(s, id, nullOMPropertyTag);
+          OMWeakReferenceSetElement element(
+                                          s,
+                                          &id,
+                                          sizeof(OMUniqueObjectIdentification),
+                                          nullOMPropertyTag);
           s->insert(&id, element);
         }
       }
@@ -2062,9 +2068,10 @@ void OMKLVStoredObject::deepRestore(const OMPropertySet& properties)
                                                                 *v->iterator();
         while (++iterator) {
           OMWeakReferenceVectorElement& element = iterator.value();
-          OMWeakObjectReference<OMUniqueObjectIdentification>& r =
-                                                           element.reference();
-          OMUniqueObjectIdentification id = r.identification();
+          OMWeakObjectReference& r = element.reference();
+          const OMUniqueObjectIdentification id =
+              *reinterpret_cast<const OMUniqueObjectIdentification*>(
+                                                     element.identification());
           OMStorable* obj = _storage->object(id);
 #if defined(USETAGTABLE)
         if (obj != 0) {
@@ -2077,10 +2084,10 @@ void OMKLVStoredObject::deepRestore(const OMPropertySet& properties)
           kp->getBits(reinterpret_cast<OMByte*>(&k), sizeof(k));
 #if defined(USETAGTABLE)
           OMPropertyTag tag = findTag(v->targetName());
-          OMWeakObjectReference<OMUniqueObjectIdentification> newReference(
-                                                                          v,
-                                                                          k,
-                                                                          tag);
+          OMWeakObjectReference newReference(v,
+                                             &k,
+                                             sizeof(k),
+                                             tag);
           r = newReference;
 #else
           r.setValue(k, obj);
@@ -2109,9 +2116,10 @@ void OMKLVStoredObject::deepRestore(const OMPropertySet& properties)
           objects.grow(count);
           while (++iterator) {
             OMWeakReferenceSetElement& element = iterator.value();
-            OMWeakObjectReference<OMUniqueObjectIdentification>& r =
-                                                           element.reference();
-            OMUniqueObjectIdentification id = r.identification();
+            OMWeakObjectReference& r = element.reference();
+            const OMUniqueObjectIdentification id =
+                *reinterpret_cast<const OMUniqueObjectIdentification*>(
+                                                     element.identification());
             objects.insert(id);
           }
           s->removeAllObjects();
@@ -2129,13 +2137,13 @@ void OMKLVStoredObject::deepRestore(const OMPropertySet& properties)
             ASSERT("Consistent sizes", kp->bitsSize() == sizeof(key));
             kp->getBits(reinterpret_cast<OMByte*>(&key), sizeof(key));
 
-            OMWeakReferenceSetElement element(s, key, nullOMPropertyTag);
+            OMWeakReferenceSetElement element(s, &key, sizeof(key), nullOMPropertyTag);
 #if defined(USETAGTABLE)
             OMPropertyTag tag = findTag(s->targetName());
-            OMWeakObjectReference<OMUniqueObjectIdentification> newReference(
-                                                                          s,
-                                                                          key,
-                                                                          tag);
+            OMWeakObjectReference newReference(s,
+                                               &key,
+                                               sizeof(key),
+                                               tag);
             element.reference() = newReference;
 #else
             element.setValue(key, obj);

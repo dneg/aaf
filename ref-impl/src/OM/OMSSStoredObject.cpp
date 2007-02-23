@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2006, Licensor of the
+// The Original Code of this file is Copyright 1998-2007, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -739,7 +739,7 @@ void OMSSStoredObject::save(const OMWeakReferenceVector& vector)
 
     // enter into the index
     //
-    index[position] = element.identification();
+    memcpy(&index[position], element.identification(), sizeof(OMUniqueObjectIdentification));
 
     // save the object
     //
@@ -792,7 +792,7 @@ void OMSSStoredObject::save(const OMWeakReferenceSet& set)
 
     // enter into the index
     //
-    index[position] = element.identification();
+    memcpy(&index[position], element.identification(), sizeof(OMUniqueObjectIdentification));
 
     // save the object
     //
@@ -1346,7 +1346,7 @@ void OMSSStoredObject::restore(OMWeakReferenceVector& vector,
     vector.grow(entries); // Set the vector size
     for (OMUInt32 i = 0; i < entries; i++) {
       OMUniqueObjectIdentification key = vectorIndex[i];
-      OMWeakReferenceVectorElement element(&vector, key, tag);
+      OMWeakReferenceVectorElement element(&vector, &key, sizeof(OMUniqueObjectIdentification), tag);
       element.restore();
       vector.insert(i, element);
     }
@@ -1389,7 +1389,7 @@ void OMSSStoredObject::restore(OMWeakReferenceSet& set,
   //
   for (size_t i = 0; i < entries; i++) {
     OMUniqueObjectIdentification key = setIndex[i];
-    OMWeakReferenceSetElement element(&set, key, tag);
+    OMWeakReferenceSetElement element(&set, &key, sizeof(OMUniqueObjectIdentification), tag);
     element.restore();
     set.insert(&key, element);
    }

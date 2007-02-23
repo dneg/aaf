@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2006, Licensor of the
+// The Original Code of this file is Copyright 1998-2007, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -31,6 +31,10 @@
 #include "OMStoredObject.h"
 #include "OMStrongReferenceSet.h"
 #include "OMUtilities.h"
+
+#if 1 // HACK4MEIP2
+#include "OMUniqueObjectIdentType.h"
+#endif
 
 // class OMObjectReference
 // @author Tim Bingham | tjb | Avid Technology, Inc. | OMObjectReference
@@ -471,3 +475,382 @@ void OMStrongObjectReference::load(void)
   POSTCONDITION("Property properly loaded", isLoaded());
 }
 
+// class OMWeakObjectReference
+// @author Tim Bingham | tjb | Avid Technology, Inc. | OMWeakObjectReference
+
+  // @mfunc Constructor.
+OMWeakObjectReference::OMWeakObjectReference(void)
+: OMObjectReference(),
+  _identification(0),
+  _identificationSize(0),
+  _targetTag(nullOMPropertyTag),
+  _targetSet(0)
+{
+  TRACE("OMWeakObjectReference::OMWeakObjectReference");
+  POSTCONDITION("void", isVoid());
+}
+
+  // @mfunc Constructor.
+  //   @parm The <c OMProperty> that contains this <c OMWeakObjectReference>.
+OMWeakObjectReference::OMWeakObjectReference(OMProperty* property,
+                                                  const void* identification,
+                                                  size_t identificationSize)
+: OMObjectReference(property),
+  _identification(0),
+  _identificationSize(identificationSize),
+  _targetTag(nullOMPropertyTag),
+  _targetSet(0)
+{
+  TRACE("OMWeakObjectReference::OMWeakObjectReference");
+  PRECONDITION("Valid identification",
+                                identification != 0 && identificationSize > 0);
+
+  _identification = new OMByte[_identificationSize];
+  ASSERT("Valid heap pointer", _identification != 0);
+  memcpy(_identification, identification, _identificationSize);
+}
+
+  // @mfunc Constructor.
+  //   @parm The <c OMProperty> that contains this <c OMWeakObjectReference>.
+  //   @parm The unique key of this <c OMWeakObjectReference>.
+  //   @parm A tag identifying the <c OMStrongReferenceSetProperty>
+  //         in which the target resides.
+OMWeakObjectReference::OMWeakObjectReference(
+                                   OMProperty* property,
+                                   const void* identification,
+                                   size_t identificationSize,
+                                   OMPropertyTag targetTag)
+: OMObjectReference(property),
+  _identification(0),
+  _identificationSize(identificationSize),
+  _targetTag(targetTag),
+  _targetSet(0)
+{
+  TRACE("OMWeakObjectReference::OMWeakObjectReference");
+  PRECONDITION("Valid identification",
+                                identification != 0 && identificationSize > 0);
+
+  _identification = new OMByte[_identificationSize];
+  ASSERT("Valid heap pointer", _identification != 0);
+  memcpy(_identification, identification, _identificationSize);
+}
+
+  // @mfunc Copy constructor.
+  //   @parm The <c OMWeakObjectReference> to copy.
+OMWeakObjectReference::OMWeakObjectReference(
+                                              const OMWeakObjectReference& rhs)
+: OMObjectReference(rhs),
+  _identification(0),
+  _identificationSize(rhs._identificationSize),
+  _targetTag(rhs._targetTag),
+  _targetSet(0)
+{
+  TRACE("OMWeakObjectReference::OMWeakObjectReference");
+
+  delete [] _identification;
+  _identification = 0;
+  if (rhs._identification != 0 ) {
+    _identification = new OMByte[_identificationSize];
+    ASSERT("Valid heap pointer", _identification != 0);
+    memcpy(_identification, rhs._identification, _identificationSize);
+  }
+}
+
+  // @mfunc Destructor.
+OMWeakObjectReference::~OMWeakObjectReference(void)
+{
+  delete [] _identification;
+  _identification = 0;
+}
+
+  // @mfunc Is this <c OMWeakObjectReference> void ?
+  //   @rdesc True if this <c OMWeakObjectReference> is void,
+  //          false otherwise.
+  //   @this const
+bool OMWeakObjectReference::isVoid(void) const
+{
+  TRACE("OMWeakObjectReference::isVoid");
+  bool result = OMObjectReference::isVoid();
+  if (result) {
+    if (!isNullIdentification(_identification, _identificationSize)) {
+      ASSERT("Valid containing property", _property != 0);
+      OMFile* file = _property->propertySet()->container()->file();
+      OMPropertyTable* table = file->referencedProperties();
+      if (!table->isValid(_targetTag)) {
+        result = true;
+      } else {
+        result = false;
+      }
+    }
+  }
+  return result;
+}
+
+  // @mfunc Assignment.
+  //        This operator provides value semantics for <c OMContainer>.
+  //        This operator does not provide assignment of object references.
+  //   @parm The <c OMWeakObjectReference> to be assigned.
+  //   @rdesc The <c OMWeakObjectReference> resulting from the assignment.
+OMWeakObjectReference&
+OMWeakObjectReference::operator= (const OMWeakObjectReference& rhs)
+{
+  TRACE("OMWeakObjectReference::operator=");
+  PRECONDITION("Valid identification", 
+                    IMPLIES(_identification != 0,
+                            (rhs._identificationSize == 0) ||
+                            (rhs._identificationSize == _identificationSize)));
+
+  if (this == &rhs) {
+    return *this; // early return !
+  }
+  OMObjectReference::operator=(rhs);
+  _identificationSize = rhs._identificationSize;
+  delete [] _identification;
+  _identification = 0; // for BoundsChecker
+  if (rhs._identification != 0) {
+    _identification = new OMByte[_identificationSize];
+    ASSERT("Valid heap pointer", _identification != 0);
+    memcpy(_identification, rhs._identification, _identificationSize);
+  }
+  _targetTag = rhs._targetTag;
+  _targetSet = 0;
+
+  return *this;
+}
+
+  // @mfunc Equality.
+  //   @parm The <c OMWeakObjectReference> to be compared.
+  //   @rdesc True if the values are the same, false otherwise.
+  //   @this const
+bool OMWeakObjectReference::operator== (const OMWeakObjectReference& rhs) const
+{
+  TRACE("OMWeakObjectReference::operator==");
+
+  bool result;
+
+  if ((_identification != 0) && (rhs._identification != 0)) {
+    if (memcmp(_identification,
+               rhs._identification,
+               _identificationSize) == 0) {
+      result = true;
+    } else {
+      result = false;
+    }
+  } else if ((_identification == 0) && (rhs._identification == 0)) {
+    result = true;
+  } else {
+    result = false;
+  }
+
+  return result;
+}
+
+  // @mfunc Save this <c OMWeakObjectReference>.
+  //   @this const
+void OMWeakObjectReference::save(void) const
+{
+  TRACE("OMWeakObjectReference::save");
+  PRECONDITION("Valid identification",
+                  !isNullIdentification(_identification, _identificationSize));
+
+  // tjb nothing to do ?
+}
+
+  // @mfunc Close this <c OMWeakObjectReference>.
+void OMWeakObjectReference::close(void)
+{
+  TRACE("OMWeakObjectReference::close");
+
+}
+
+  // @mfunc Detach this <c OMWeakObjectReference>.
+void OMWeakObjectReference::detach(void)
+{
+  TRACE("OMWeakObjectReference::detach");
+}
+
+  // @mfunc Restore this <c OMWeakObjectReference>.
+void OMWeakObjectReference::restore(void)
+{
+  TRACE("OMWeakObjectReference::restore");
+
+  PRECONDITION("Reference not already set", _pointer == 0);
+  PRECONDITION("Valid identification",
+                  !isNullIdentification(_identification, _identificationSize));
+
+  // tjb nothing to do ?
+
+}
+
+  // @mfunc Get the value of this <c OMWeakObjectReference>.
+  //        The value is a pointer to the referenced <c OMStorable>.
+  //   @rdesc  A pointer to the referenced <c OMStorable>.
+  //   @this const
+OMStorable* OMWeakObjectReference::getValue(void) const
+{
+  TRACE("OMWeakObjectReference::getValue");
+
+  OMWeakObjectReference* nonConstThis =
+                                      const_cast<OMWeakObjectReference*>(this);
+
+  if ((_pointer == 0) &&
+      (!isNullIdentification(_identification, _identificationSize))) {
+    OMStorable* object = 0;
+    set()->find(_identification, object);
+    nonConstThis->_pointer = object;
+  }
+#if 1 // HACK4MEIP2
+  if ((_pointer == 0) &&
+      (!isNullIdentification(_identification, _identificationSize))) {
+    // We failed to resolve the reference as an object id, try again as a label
+    // We should only come here for KLV encoded files.
+    ASSERT("Referenced object ID can be a label",
+                  _identificationSize == sizeof(OMUniqueObjectIdentification));
+    OMUniqueObjectIdentification bid;
+    memcpy(&bid, _identification, sizeof(OMUniqueObjectIdentification));
+    if (hostByteOrder() != bigEndian) {
+	  OMUniqueObjectIdentificationType::instance()->reorder(
+                                               reinterpret_cast<OMByte*>(&bid),
+                                               sizeof(bid));
+    }
+    OMKLVKey k;
+    memcpy(&k, &bid, sizeof(OMKLVKey));
+    OMUniqueObjectIdentification id;
+    convert(id, k);
+    memcpy(_identification, &id, sizeof(OMUniqueObjectIdentification));
+    OMStorable* object = 0;
+    set()->find(_identification, object);
+    nonConstThis->_pointer = object;
+  }
+#endif
+  // If the following assertion is violated we have a dangling weak
+  // reference.  The reference illegally designates an object that is
+  // not present in the target set.  Code elsewhere prevents the
+  // removal of objects that are weakly referenced hence a dangling
+  // reference is an assertion violation rather than a run-time error.
+  //
+  POSTCONDITION("Object found", 
+           IMPLIES(!isNullIdentification(_identification, _identificationSize),
+                   _pointer != 0));
+  return _pointer;
+}
+
+  // @mfunc Set the value of this <c OMWeakObjectReference>.
+  //        The value is a pointer to the referenced <c OMStorable>.
+  //   @parm TBS
+  //   @parm A pointer to the new <c OMStorable>.
+  //   @rdesc A pointer to previous <c OMStorable>, if any.
+OMStorable* OMWeakObjectReference::setValue(
+                            const void* identification,
+                            const OMStorable* value)
+{
+  TRACE("OMWeakObjectReference::setValue");
+
+  PRECONDITION("Valid container property", _property != 0);
+  PRECONDITION("Valid identification",
+                          (_identification != 0) && (_identificationSize > 0));
+  PRECONDITION("Valid new identification", identification != 0);
+
+  ASSERT("Valid identification",
+          IMPLIES(value != 0,
+                  !isNullIdentification(identification, _identificationSize)));
+  ASSERT("Valid identification",
+          IMPLIES(value == 0,
+                  !isNullIdentification(identification, _identificationSize)));
+
+  OMStorable* oldObject = _pointer;
+  _pointer = const_cast<OMStorable*>(value);
+  memcpy(_identification, identification, _identificationSize);
+
+#if defined(OM_VALIDATE_WEAK_REFERENCES)
+#if 0
+  ASSERT("Consistent source and target",
+                     IMPLIES(_pointer != 0, set()->contains(_identification)));
+#endif
+#endif
+
+  POSTCONDITION("Element properly set", _pointer == value);
+  return oldObject;
+}
+
+OMStrongReferenceSet*
+OMWeakObjectReference::targetSet(const OMProperty* property,
+                                 OMPropertyTag targetTag)
+{
+  TRACE("OMWeakObjectReference::targetSet");
+
+  ASSERT("Valid containing property", property != 0);
+  OMFile* file = property->propertySet()->container()->file();
+  OMPropertyTable* table = file->referencedProperties();
+  ASSERT("Valid target tag", table->isValid(targetTag));
+  const OMPropertyId* targetPath = table->valueAt(targetTag);
+  ASSERT("Valid target path", validPropertyPath(targetPath));
+
+  OMProperty* set = file->findProperty(targetPath);
+
+  OMStrongReferenceSet* result = dynamic_cast<OMStrongReferenceSet*>(set);
+
+  POSTCONDITION("Valid result", result != 0);
+  return result;
+}
+
+const void*
+OMWeakObjectReference::identification(void) const
+{
+  return _identification;
+}
+
+void
+OMWeakObjectReference::setIdentification(const void* id)
+{
+  TRACE("OMWeakObjectReference::setIdentification");
+  PRECONDITION("Valid identification",
+                          (_identification != 0) && (_identificationSize > 0));
+  PRECONDITION("Valid new identification", id != 0);
+
+  memcpy(_identification, id, _identificationSize);
+}
+
+void OMWeakObjectReference::setTargetTag(OMPropertyTag targetTag)
+{
+  _targetTag = targetTag;
+}
+
+OMStrongReferenceSet* OMWeakObjectReference::set(void) const
+{
+  TRACE("OMWeakObjectReference::set");
+
+  if (_targetSet == 0) {
+    OMWeakObjectReference* nonConstThis =
+                                      const_cast<OMWeakObjectReference*>(this);
+    nonConstThis->_targetSet = targetSet(_property, _targetTag);
+  }
+
+  POSTCONDITION("Valid result", _targetSet != 0);
+  return _targetSet;
+}
+
+/*static*/
+bool OMWeakObjectReference::isNullIdentification(
+                                               const void* identification,
+                                               size_t identificationSize)
+{
+  TRACE("OMWeakObjectReference::isNullIdentification");
+  PRECONDITION("Valid identification",
+                         IMPLIES(identification != 0, identificationSize > 0));
+  PRECONDITION("Valid identification",
+                        IMPLIES(identification == 0, identificationSize == 0));
+
+  bool result = true;
+  if (identification != 0) {
+    const OMByte* bytes = reinterpret_cast<const OMByte*>(identification);
+    for (size_t i=0; i<identificationSize; i++) {
+      if (bytes[i] != 0) {
+        result = false;
+        break;
+      }
+    }
+  }
+
+  return result;
+}

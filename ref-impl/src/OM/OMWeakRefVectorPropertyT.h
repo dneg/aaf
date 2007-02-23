@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2006, Licensor of the
+// The Original Code of this file is Copyright 1998-2007, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -218,7 +218,8 @@ ReferencedObject* OMWeakReferenceVectorProperty<ReferencedObject>::setValueAt(
   element.reference().setTargetTag(targetTag());
 #endif
   ReferencedObject* result = 0;
-  OMStorable* p = element.setValue(object->identification(), object);
+  const OMUniqueObjectIdentification key = object->identification();
+  OMStorable* p = element.setValue(&key, object);
   if (p != 0) {
     result = dynamic_cast<ReferencedObject*>(p);
     ASSERT("Object is correct type", result != 0);
@@ -248,7 +249,7 @@ OMWeakReferenceVectorProperty<ReferencedObject>::clearValueAt(
   PRECONDITION("Valid index", index < count());
 
   VectorElement& element = _vector.getAt(index);
-  OMStorable* p = element.setValue(nullOMUniqueObjectIdentification, 0);
+  OMStorable* p = element.setValue(&nullOMUniqueObjectIdentification, 0);
   ReferencedObject* result = 0;
   if (p != 0) {
     result = dynamic_cast<ReferencedObject*>(p);
@@ -423,11 +424,11 @@ void OMWeakReferenceVectorProperty<ReferencedObject>::insertAt(
 #endif
 
   OMUniqueObjectIdentification key = object->identification();
-  VectorElement newElement(this, key, _targetTag);
+  VectorElement newElement(this, &key, sizeof(OMUniqueObjectIdentification), _targetTag);
 #if defined(OM_VALIDATE_WEAK_REFERENCES)
   newElement.reference().setTargetTag(targetTag());
 #endif
-  newElement.setValue(key, object);
+  newElement.setValue(&key, object);
   _vector.insertAt(newElement, index);
   setPresent();
 
@@ -1077,7 +1078,7 @@ OMWeakReferenceVectorProperty<ReferencedObject>::identification(
 
   VectorElement& element = _vector.getAt(index);
 
-  return element.identification();
+  return *reinterpret_cast<const OMUniqueObjectIdentification*>(element.identification());
 }
 
 template <typename ReferencedObject>
@@ -1088,10 +1089,8 @@ OMWeakReferenceVectorProperty<ReferencedObject>::targetSet(void) const
   OMWeakReferenceVectorProperty<ReferencedObject>* nonConstThis =
             const_cast<OMWeakReferenceVectorProperty<ReferencedObject>*>(this);
   if (_targetSet == 0) {
-    nonConstThis->_targetSet = OMWeakObjectReference<
-                                  OMUniqueObjectIdentification>::targetSet(
-                                                                  this,
-                                                                  targetTag());
+    nonConstThis->_targetSet = OMWeakObjectReference::targetSet(this,
+                                                                targetTag());
   }
   POSTCONDITION("Valid result", _targetSet != 0);
   return _targetSet;
@@ -1215,8 +1214,10 @@ void OMWeakReferenceVectorProperty<ReferencedObject>::shallowCopyTo(
   VectorIterator iterator(_vector, OMBefore);
   while (++iterator) {
     VectorElement& element = iterator.value();
-    VectorElement destElement(
-                            dest, element.identification(), nullOMPropertyTag);
+    VectorElement destElement(dest,
+                              element.identification(),
+                              sizeof(OMUniqueObjectIdentification),
+                              nullOMPropertyTag);
     dest->_vector.insert(destElement);
   }
 
@@ -1260,8 +1261,9 @@ void OMWeakReferenceVectorProperty<ReferencedObject>::deepCopyTo(
     VectorElement& element = iterator.value();
     OMStorable* source = element.getValue();
     if (source != 0) {
-      OMUniqueObjectIdentification id = element.identification();
-      if (!dest->contains(&id)) {
+      const void* id = element.identification();
+      // contains() should take 'const void*'
+      if (!dest->contains(const_cast<void*>(id))) {
         OMStorable* d = source->shallowCopy(factory);
         dest->insertObject(d);
         d->onCopy(clientContext);

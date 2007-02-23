@@ -28,7 +28,6 @@
 
 #include "OMRefProperty.h"
 
-template <typename Key>
 class OMWeakObjectReference;
 
   // @class Persistent weak reference (pointer to shared object)

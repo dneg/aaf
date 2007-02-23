@@ -191,7 +191,6 @@ class OMStrongReferenceSet;
   // @class Persistent weak references to persistent objects.
   //   @base public | <c OMObjectReference>
   //   @cauthor Tim Bingham | tjb | Avid Technology, Inc.
-template <typename Key>
 class OMWeakObjectReference : public OMObjectReference {
 public:
   // @access Public members.
@@ -200,12 +199,15 @@ public:
   OMWeakObjectReference(void);
 
     // @cmember Constructor.
-  OMWeakObjectReference(OMProperty* property);
+  OMWeakObjectReference(OMProperty* property,
+                        const void* identification,
+                        size_t identificationSize);
 
     // @cmember Constructor.
   OMWeakObjectReference(
                     OMProperty* property,
-                    Key identification,
+                    const void* identification,
+                    size_t identificationSize,
                     OMPropertyTag targetTag);
 
     // @cmember Copy constructor.
@@ -245,24 +247,29 @@ public:
 
     // @cmember Set the value of this <c OMWeakObjectReference>.
     //          The value is a pointer to the referenced <c OMStorable>.
-  virtual OMStorable* setValue(
-                            const Key& identification,
-                            const OMStorable* value);
+  virtual OMStorable* setValue( const void* identification,
+                                const OMStorable* value);
 
   void setTargetTag(OMPropertyTag targetTag);
 
   static OMStrongReferenceSet* targetSet(const OMProperty* property,
                                          OMPropertyTag targetTag);
 
-  const Key& identification(void) const;
+  const void* identification(void) const;
 
-  void setIdentification(const Key& id);
+  void setIdentification(const void* id);
 
 private:
 
   OMStrongReferenceSet* set(void) const;
 
-  Key _identification;
+    // @cmember Is the identification of this <c OMWeakObjectReference>
+    //          null.
+  static bool isNullIdentification( const void* identification,
+                                    size_t identificationSize);
+
+  OMByte* _identification;
+  size_t _identificationSize;
   OMPropertyTag _targetTag;         // tjb - deprecated
   OMStrongReferenceSet* _targetSet; // tjb - deprecated
 

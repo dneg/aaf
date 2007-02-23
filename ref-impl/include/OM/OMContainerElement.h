@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2006, Licensor of the
+// The Original Code of this file is Copyright 1998-2007, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -340,7 +340,7 @@ private:
   //   @base public | <c OMContainerElement>
   //   @cauthor Tim Bingham | tjb | Avid Technology, Inc.
 class OMWeakReferenceVectorElement : public
-     OMContainerElement<OMWeakObjectReference<OMUniqueObjectIdentification> > {
+     OMContainerElement<OMWeakObjectReference> {
 public:
   // @access Public members.
 
@@ -349,7 +349,8 @@ public:
 
     // @cmember Constructor.
   OMWeakReferenceVectorElement(OMProperty* property,
-                               OMUniqueObjectIdentification identification,
+                               const void* identification,
+                               size_t identificationSize,
                                OMPropertyTag targetTag);
 
     // @cmember Copy constructor.
@@ -370,11 +371,11 @@ public:
   bool operator== (const OMWeakReferenceVectorElement& rhs) const;
 
     // @cmember Set the value of this <c OMWeakReferenceVectorElement>.
-  OMStorable* setValue(const OMUniqueObjectIdentification& identification,
+  OMStorable* setValue(const void* identification,
                        const OMStorable* value);
 
     // @cmember The unique key of this <c OMWeakReferenceVectorElement>.
-  const OMUniqueObjectIdentification& identification(void) const;
+  const void* identification(void) const;
 
 };
 
@@ -382,7 +383,7 @@ public:
   //   @base public | <c OMContainerElement>
   //   @cauthor Tim Bingham | tjb | Avid Technology, Inc.
 class OMWeakReferenceSetElement : public
-     OMContainerElement<OMWeakObjectReference<OMUniqueObjectIdentification> > {
+     OMContainerElement<OMWeakObjectReference> {
 public:
   // @access Public members.
 
@@ -391,7 +392,8 @@ public:
 
     // @cmember Constructor.
   OMWeakReferenceSetElement(OMProperty* property,
-                            OMUniqueObjectIdentification identification,
+                            const void* identification,
+                            size_t identificationSize,
                             OMPropertyTag targetTag);
 
     // @cmember Copy constructor.
@@ -411,11 +413,11 @@ public:
   bool operator== (const OMWeakReferenceSetElement& rhs) const;
 
     // @cmember Set the value of this <c OMWeakReferenceSetElement>.
-  OMStorable* setValue(const OMUniqueObjectIdentification& identification,
+  OMStorable* setValue(const void* identification,
                        const OMStorable* value);
 
     // @cmember The unique key of this <c OMWeakReferenceSetElement>.
-  const OMUniqueObjectIdentification& identification(void) const;
+  const void* identification(void) const;
 
 };
 

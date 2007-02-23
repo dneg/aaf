@@ -33,6 +33,10 @@
 #include "OMStoredObject.h"
 #include "OMStrongReferenceSet.h"
 
+#if 1 // HACK4MEIP2
+#include "OMUniqueObjectIdentType.h"
+#endif
+
   // @mfunc Constructor.
   //   @parm The property id.
   //   @parm The name of this <c OMWeakReferenceProperty>.
@@ -58,7 +62,9 @@ OMWeakReferenceProperty<Key, ReferencedObject>::OMWeakReferenceProperty(
   TRACE("OMWeakReferenceProperty<Key, ReferencedObject>::"
                                                     "OMWeakReferenceProperty");
 
-  _reference = OMWeakObjectReference<Key>(this);
+  _reference = OMWeakObjectReference(this,
+                                     &(OMConstant<Key>::null),
+                                     sizeof(Key));
 }
 
   // @mfunc Constructor.
@@ -86,7 +92,9 @@ OMWeakReferenceProperty<Key, ReferencedObject>::OMWeakReferenceProperty(
   TRACE("OMWeakReferenceProperty<Key, ReferencedObject>::"
                                                     "OMWeakReferenceProperty");
 
-  _reference = OMWeakObjectReference<Key>(this);
+  _reference = OMWeakObjectReference(this,
+                                     &(OMConstant<Key>::null),
+                                     sizeof(Key));
   _targetPropertyPath = savePropertyPath(targetPropertyPath);
 }
 
@@ -148,7 +156,8 @@ ReferencedObject* OMWeakReferenceProperty<Key, ReferencedObject>::setValue(
 
   _reference.setTargetTag(targetTag());
 #endif
-  OMStorable* p = _reference.setValue(object->identification(), object);
+  const Key id = object->identification();
+  OMStorable* p = _reference.setValue(&id, object);
   ReferencedObject* result = 0;
   if (p != 0) {
     result = dynamic_cast<ReferencedObject*>(p);
@@ -173,7 +182,7 @@ OMWeakReferenceProperty<Key, ReferencedObject>::clearValue(void)
 {
   TRACE("OMWeakReferenceProperty<Key, ReferencedObject>::clearValue");
 
-  OMStorable* p = _reference.setValue(OMConstant<Key>::null, 0);
+  OMStorable* p = _reference.setValue(&(OMConstant<Key>::null), 0);
   ReferencedObject* result = 0;
   if (p != 0) {
     result = dynamic_cast<ReferencedObject*>(p);
@@ -311,8 +320,7 @@ bool OMWeakReferenceProperty<Key, ReferencedObject>::isVoid(void) const
   TRACE("OMWeakReferenceProperty<Key, ReferencedObject>::isVoid");
 
   bool result;
-  const Key& key = _reference.identification();
-  if (key == OMConstant<Key>::null) {
+  if (identification() == OMConstant<Key>::null) {
     result = true;
   } else {
     result = false;
@@ -432,7 +440,8 @@ OMWeakReferenceProperty<Key, ReferencedObject>::identification(void) const
 {
   TRACE("OMWeakReferenceProperty<Key, ReferencedObject>::identification");
 
-  return _reference.identification();
+  POSTCONDITION("Valid identification", _reference.identification() != 0);
+  return *reinterpret_cast<const Key*>(_reference.identification());
 }
 
   // @mfunc Get the raw bits of the identification of this
@@ -447,7 +456,7 @@ OMWeakReferenceProperty<Key, ReferencedObject>::identificationBits(void) const
 {
   TRACE("OMWeakReferenceProperty<Key, ReferencedObject>::identificationBits");
 
-  return &(_reference.identification());
+  return _reference.identification();
 }
 
   // @mfunc Set the raw bits of the identification of this
@@ -468,7 +477,7 @@ OMWeakReferenceProperty<Key, ReferencedObject>::setIdentificationBits(
   TRACE("OMWeakReferenceProperty<Key, ReferencedObject>::setIdentificationBits");
   PRECONDITION("Valid key size", idSize == keySize());
 
-  _reference.setIdentification( *reinterpret_cast<const Key*>(id));
+  _reference.setIdentification(id);
 }
 
   // @mfunc The size of the raw bits of the identification
@@ -495,9 +504,8 @@ OMWeakReferenceProperty<Key, ReferencedObject>::targetSet(void) const
   OMWeakReferenceProperty<Key, ReferencedObject>* nonConstThis =
              const_cast<OMWeakReferenceProperty<Key, ReferencedObject>*>(this);
   if (_targetSet == 0) {
-    nonConstThis->_targetSet = OMWeakObjectReference<Key>::targetSet(
-                                                                  this,
-                                                                  targetTag());
+    nonConstThis->_targetSet = OMWeakObjectReference::targetSet(this,
+                                                                targetTag());
   }
   POSTCONDITION("Valid result", _targetSet != 0);
   return _targetSet;
@@ -658,7 +666,7 @@ void OMWeakReferenceProperty<Key, ReferencedObject>::deepCopyTo(
   OMStorable* source = getReferencedValue();
   if (source != 0) {
     // There's a referenced object, copy it
-    Key id = _reference.identification();
+    Key id = identification();
 
     typedef OMWeakReferenceProperty<Key, ReferencedObject> Property;
     Property* wp = dynamic_cast<Property*>(destination);
@@ -694,23 +702,24 @@ OMStorable* OMWeakReferenceProperty<Key, ReferencedObject>::getReferencedValue(v
              const_cast<OMWeakReferenceProperty<Key, ReferencedObject>*>(this);
 
   if ((_reference.pointer() == 0) &&
-      (_reference.identification() != OMConstant<Key>::null)) {
+      (identification() != OMConstant<Key>::null)) {
     OMStorable* object = 0;
-    Key id = _reference.identification();
-    targetSet()->find(&id, object);
+    const void* id = _reference.identification();
+    // find() should take 'const void*'
+    targetSet()->find(const_cast<void*>(id), object);
     if (object) {  // HACK4MEIP2
       nonConstThis->_reference.setValue(id, object);
     }
   }
 #if 1 // HACK4MEIP2
   if ((_reference.pointer() == 0) &&
-      (_reference.identification() != OMConstant<Key>::null)) {
+      (identification() != OMConstant<Key>::null)) {
     // We failed to resolve the reference as an object id, try again as a label
     // We should only come here for KLV encoded files.
     ASSERT("Referenced object ID can be a label",
                         keySize() == sizeof(OMUniqueObjectIdentification));
     OMUniqueObjectIdentification bid;
-    *reinterpret_cast<Key*>(&bid) = _reference.identification();
+    *reinterpret_cast<Key*>(&bid) = identification();
     if (hostByteOrder() != bigEndian) {
 	  OMUniqueObjectIdentificationType::instance()->reorder(
                                                reinterpret_cast<OMByte*>(&bid),
@@ -720,11 +729,11 @@ OMStorable* OMWeakReferenceProperty<Key, ReferencedObject>::getReferencedValue(v
     memcpy(&k, &bid, sizeof(OMKLVKey));
     OMUniqueObjectIdentification id;
     convert(id, k);
-    nonConstThis->_reference.setIdentification(*reinterpret_cast<Key*>(&id));
+    nonConstThis->_reference.setIdentification(&id);
     OMStorable* object = 0;
     targetSet()->find(&id, object);
     if (object) {
-      nonConstThis->_reference.setValue(*reinterpret_cast<Key*>(&id), object);
+      nonConstThis->_reference.setValue(&id, object);
     }
   }
 #endif
@@ -735,7 +744,7 @@ OMStorable* OMWeakReferenceProperty<Key, ReferencedObject>::getReferencedValue(v
   // reference is an assertion violation rather than a run-time error.
   //
   POSTCONDITION("Object found",
-                  IMPLIES(_reference.identification() != OMConstant<Key>::null,
+                  IMPLIES(identification() != OMConstant<Key>::null,
                           _reference.pointer() != 0));
   return _reference.pointer();
 }

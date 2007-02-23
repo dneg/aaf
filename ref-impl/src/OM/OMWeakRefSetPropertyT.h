@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2006, Licensor of the
+// The Original Code of this file is Copyright 1998-2007, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -211,11 +211,11 @@ void OMWeakReferenceSetProperty<ReferencedObject>::insert(
   // Set the set to contain the new object
   //
   OMUniqueObjectIdentification key = object->identification();
-  SetElement newElement(this, key, _targetTag);
+  SetElement newElement(this, &key, sizeof(OMUniqueObjectIdentification), _targetTag);
 #if defined(OM_VALIDATE_WEAK_REFERENCES)
   newElement.reference().setTargetTag(targetTag());
 #endif
-  newElement.setValue(key, object);
+  newElement.setValue(&key, object);
   _set.insert(key, newElement);
   setPresent();
 
@@ -292,7 +292,7 @@ OMWeakReferenceSetProperty<ReferencedObject>::remove(
 #endif
   _set.find(identification, &element);
   ASSERT("Object found", found);
-  OMStorable* p = element->setValue(nullOMUniqueObjectIdentification, 0);
+  OMStorable* p = element->setValue(&nullOMUniqueObjectIdentification, 0);
   ReferencedObject* result = 0;
   if (p != 0) {
     result = dynamic_cast<ReferencedObject*>(p);
@@ -826,10 +826,8 @@ OMWeakReferenceSetProperty<ReferencedObject>::targetSet(void) const
   OMWeakReferenceSetProperty<ReferencedObject>* nonConstThis =
                const_cast<OMWeakReferenceSetProperty<ReferencedObject>*>(this);
   if (_targetSet == 0) {
-    nonConstThis->_targetSet = OMWeakObjectReference<
-                                 OMUniqueObjectIdentification>::targetSet(
-                                                                  this,
-                                                                  targetTag());
+    nonConstThis->_targetSet = OMWeakObjectReference::targetSet(this,
+                                                                targetTag());
   }
   POSTCONDITION("Valid result", _targetSet != 0);
   return _targetSet;
@@ -923,8 +921,13 @@ void OMWeakReferenceSetProperty<ReferencedObject>::shallowCopyTo(
   SetIterator iterator(_set, OMBefore);
   while (++iterator) {
     SetElement& element = iterator.value();
-    SetElement destElement( dest, element.identification(), nullOMPropertyTag);
-    dest->_set.insert(destElement.identification(), destElement);
+    SetElement destElement(dest,
+                           element.identification(),
+                           sizeof(OMUniqueObjectIdentification),
+                           nullOMPropertyTag);
+    dest->_set.insert(
+                   *reinterpret_cast<const OMUniqueObjectIdentification*>(destElement.identification()),
+                   destElement);
   }
 
   dest->_targetTag = nullOMPropertyTag;
@@ -967,8 +970,9 @@ void OMWeakReferenceSetProperty<ReferencedObject>::deepCopyTo(
     SetElement& element = iterator.value();
     OMStorable* source = element.getValue();
     if (source != 0) {
-      OMUniqueObjectIdentification id = element.identification();
-      if (!dest->contains(&id)) {
+      const void* id = element.identification();
+      // contains() should take 'const void*'
+      if (!dest->contains(const_cast<void*>(id))) {
         OMStorable* d = source->shallowCopy(factory);
         dest->insertObject(d);
         d->onCopy(clientContext);
