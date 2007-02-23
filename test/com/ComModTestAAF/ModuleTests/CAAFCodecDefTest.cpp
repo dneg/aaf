@@ -125,11 +125,11 @@ static HRESULT CreateAAFFile(
 		checkExpression(AreUnksSame(pReturnedClassDef,pWaveClassDef)==kAAFTrue,
 			AAFRESULT_TEST_FAILED);
 
-#if NOT_TESTED
+                /* Not tested
 		virtual HRESULT STDMETHODCALLTYPE RemoveEssenceKind();
 		virtual HRESULT STDMETHODCALLTYPE CountEssenceKinds();
 		virtual HRESULT STDMETHODCALLTYPE GetEssenceKinds();
-#endif
+                */
 
 	}
 	catch (HRESULT& rResult)
