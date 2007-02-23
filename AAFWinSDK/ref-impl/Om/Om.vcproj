@@ -409,6 +409,9 @@
 				RelativePath="..\..\..\ref-impl\src\Om\OMDataStreamPropertyFilter.cpp">
 			</File>
 			<File
+				RelativePath="..\..\..\ref-impl\src\Om\OMDataTypes.cpp">
+			</File>
+			<File
 				RelativePath="..\..\..\ref-impl\src\OM\OMDataVector.cpp">
 				<FileConfiguration
 					Name="Debug|Win32">
