@@ -544,23 +544,24 @@ void OMXMLStoredObject::save(const OMWeakReference& singleton)
 
   _stream << indent;
   _stream << beginl;
+  _stream << "<identification guid=\""; // Alexey - is 'identification guid'
+                                        // applicable to all types if IDs?
   // The following ought to be done via the key type and not
   // via the key size
   const OMKeySize keySize = singleton.keySize();
+  const void* key = singleton.identificationBits();
   if (keySize == sizeof(OMUniqueObjectIdentification) ) {
-    const OMUniqueObjectIdentification k =
-      *reinterpret_cast<const OMUniqueObjectIdentification*>(
-                                               singleton.identificationBits());
-    _stream << "<identification guid=\"" << k << "\"/>" << endl;
+    const OMUniqueObjectIdentification* id =
+                    reinterpret_cast<const OMUniqueObjectIdentification*>(key);
+    _stream << *id;
   } else if (keySize == sizeof(OMUniqueMaterialIdentification) ) {
-    const OMUniqueMaterialIdentification k =
-      *reinterpret_cast<const OMUniqueMaterialIdentification*>(
-                                               singleton.identificationBits());
-    // Alexey - is 'identification guid' applicable here?
-    _stream << "<identification guid=\"" << k << "\"/>" << endl;
+    const OMUniqueMaterialIdentification* id =
+                  reinterpret_cast<const OMUniqueMaterialIdentification*>(key);
+    _stream << *id;
   } else {
-    ASSERT("Unimplemented code not reached", false);
+    _stream << OMConstant<OMUniqueObjectIdentification>::null;
   }
+  _stream << "\"/>" << endl;
 
   _stream << outdent;
 
