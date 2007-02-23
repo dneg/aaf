@@ -2116,7 +2116,7 @@ void OMKLVStoredObject::deepRestore(const OMPropertySet& properties)
           objects.grow(count);
           while (++iterator) {
             OMWeakReferenceSetElement& element = iterator.value();
-            OMWeakObjectReference& r = element.reference();
+            //OMWeakObjectReference& r = element.reference();
             const OMUniqueObjectIdentification id =
                 *reinterpret_cast<const OMUniqueObjectIdentification*>(
                                                      element.identification());
