@@ -24,6 +24,12 @@
 //=---------------------------------------------------------------------=
 
 
+// Undefine NO_REFERENCE_TO_MOB_TEST to enable the test of
+// sets of references to mob. The tests a complied out because
+// files with property definitions which are references to mobs
+// cannot be opened by the previous version of the toolkit.
+#define NO_REFERENCE_TO_MOB_TEST
+
 #include "AAF.h"
 #include "AAFResult.h"
 #include "ModuleTest.h"
@@ -123,6 +129,7 @@ const aafCharacter kMyWeakReferenceToTypeDefinitionName[] = L"My Weak Reference 
 const aafCharacter kMyWeakReferenceToTypeDefinitionPropertyName[] = L"My Weak Reference to Type Definition Property";
 
 
+#ifndef NO_REFERENCE_TO_MOB_TEST
 // Constant for "new" weak reference to a mob.
 extern "C" const aafUID_t kAAFTypeID_TestWeakReferenceToMob = 
 { 0xfda25dda, 0xbb25, 0x493a, {0x84, 0x28, 0xf2, 0x54, 0x77, 0x23, 0x67, 0x74}};
@@ -133,6 +140,7 @@ extern "C" const aafUID_t kAAFPropID_TestWeakReferenceToMob =
 
 const aafCharacter kMyWeakReferenceToMobName[] = L"My Weak Reference to Mobs";
 const aafCharacter kMyWeakReferenceToMobPropertyName[] = L"My Weak Reference to Mob Property";
+#endif
 
 
 static const 	aafMobID_t	TEST_MobID =
@@ -291,6 +299,7 @@ static void CheckWeakReference(
 }
 
 
+#ifndef NO_REFERENCE_TO_MOB_TEST
 static void CreateWeakReference(
   IAAFFiller * pFiller,
   IAAFMob * pTargetMob)
@@ -353,6 +362,7 @@ static void CheckWeakReference(
   // type that we were expecting.
   checkExpression(EqualObjects(pFoundTargetMob, pTargetMob), AAFRESULT_TEST_FAILED);
 }
+#endif
 
 
 // Create the test file.
@@ -430,6 +440,7 @@ void CAAFTypeDefWeakObjRef_create (
     }
   
 
+#ifndef NO_REFERENCE_TO_MOB_TEST
     if (weakReferencesSupported)
     {
       // Create a Weak reference to a mob.
@@ -476,6 +487,7 @@ void CAAFTypeDefWeakObjRef_create (
         pTypeDef,
         &pWeakRefPropertyDef));
     }
+#endif
   
 
 
@@ -543,12 +555,14 @@ void CAAFTypeDefWeakObjRef_create (
     //
     checkResult(pHeader->AddMob(pMob));
 
+#ifndef NO_REFERENCE_TO_MOB_TEST
     if (weakReferencesSupported)
     {
       // The referenced object needs to be attached to the file.
       CreateWeakReference(pFiller1, pMob);
       CheckWeakReference(pFiller1, pMob);
     }
+#endif
 //    if (weakReferencesSupported)
 //    {
 //      // Try adding a weak reference after filler is attached to the file.
@@ -690,7 +704,9 @@ void CAAFTypeDefWeakObjRef_verify (IAAFHeader * pHeader)
     
     CheckWeakReference(pFiller1, defs.tdString());  	
     CheckWeakReference(pFiller2, defs.tdInt32());  	
+#ifndef NO_REFERENCE_TO_MOB_TEST
     CheckWeakReference(pFiller1, pMob);
+#endif
   }
   else if (!WeakReferencesSupported(toolkitVersion))
   {
