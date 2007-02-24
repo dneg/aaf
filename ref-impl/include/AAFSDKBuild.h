@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2007, Licensor of the
 // AAF Association.
 //
 //=---------------------------------------------------------------------=
@@ -37,15 +37,15 @@
 
 
 #define AAF_MAJOR_VERSION 1
-#define AAF_MINOR_VERSION 2
-#define AAF_MAINT_RELEASE 0
+#define AAF_MINOR_VERSION 1
+#define AAF_MAINT_RELEASE 2
 
 #define AAF_RELEASE_STAGE kAAFVersionBeta
  
 // these next two lines are monitored/incremented by newbuild.pl
 
 #define AAF_PATCH_LEVEL 0
-#define AAF_CURRENT_YEAR "2006"
+#define AAF_CURRENT_YEAR "2007"
 
 //   The lines below shouldn't normally need to be modified
 //
