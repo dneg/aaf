@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2005, Licensor of the
+// The Original Code of this file is Copyright 1998-2007, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -21,6 +21,12 @@
 // All rights reserved.
 //
 //=---------------------------------------------------------------------=
+
+// Undefine NO_REFERENCE_TO_MOB_TEST to enable the test of
+// sets of references to mob. The tests a complied out because
+// files with property definitions which are references to mobs
+// cannot be opened by the previous version of the toolkit.
+#define NO_REFERENCE_TO_MOB_TEST
 
 #include "AAF.h"
 #include "AAFResult.h"
@@ -78,6 +84,21 @@ struct MyDefRecord
   aafCharacter_constptr description;
   bool remove;
 };
+
+
+#ifndef NO_REFERENCE_TO_MOB_TEST
+struct MyMobRecord
+{
+  MyMobRecord(aafMobID_constref xid,
+                aafCharacter_constptr xname) :
+    id(xid),
+    name(xname)
+  {}
+
+  aafMobID_constref id;
+  aafCharacter_constptr name;
+};
+#endif
 
 
 //
@@ -309,6 +330,87 @@ static const MyDefRecord kMyWeakRefSetPropData =
     );
 
 
+#ifndef NO_REFERENCE_TO_MOB_TEST
+//
+// Test data for creating a set of weak references to mobs.
+//
+
+// {B652FB20-0EA4-400a-B817-F04B1D1223AD}
+static const aafMobID_t kMobID1 =
+{{0x06, 0x0c, 0x2b, 0x34, 0x02, 0x05, 0x11, 0x01, 0x01, 0x00, 0x10, 0x00},
+0x13, 0x00, 0x00, 0x00,
+{ 0xb652fb20, 0xea4, 0x400a, { 0xb8, 0x17, 0xf0, 0x4b, 0x1d, 0x12, 0x23, 0xad } } };
+
+// {7EE3CC99-D0FA-4a49-893B-E244951388BD}
+static const aafMobID_t kMobID2 =
+{{0x06, 0x0c, 0x2b, 0x34, 0x02, 0x05, 0x11, 0x01, 0x01, 0x00, 0x10, 0x00},
+0x13, 0x00, 0x00, 0x00,
+{ 0x7ee3cc99, 0xd0fa, 0x4a49, { 0x89, 0x3b, 0xe2, 0x44, 0x95, 0x13, 0x88, 0xbd } } };
+
+// {14DD6322-38BC-4ca1-9BF6-B044364382C3}
+static const aafMobID_t kMobID3 =
+{{0x06, 0x0c, 0x2b, 0x34, 0x02, 0x05, 0x11, 0x01, 0x01, 0x00, 0x10, 0x00},
+0x13, 0x00, 0x00, 0x00,
+{ 0x14dd6322, 0x38bc, 0x4ca1, { 0x9b, 0xf6, 0xb0, 0x44, 0x36, 0x43, 0x82, 0xc3 } } };
+
+static const MyMobRecord kMobTestData[] = 
+{
+  
+  MyMobRecord( kMobID1,
+    L"Mob 1"
+  ),
+  
+  MyMobRecord( kMobID2,
+    L"Mob 2"
+  ),
+  
+  MyMobRecord( kMobID3,
+    L"Mob 3"
+  )  
+};
+
+static const aafUInt32 kMobTestDataCount = sizeof(kMobTestData) / sizeof(MyMobRecord);
+
+
+// {7E6865FA-655F-46b3-98F0-CA0DC067B81F}
+static const aafUID_t kAAFTypeID_WeakReferenceToMobs = 
+{ 0x7e6865fa, 0x655f, 0x46b3, { 0x98, 0xf0, 0xca, 0xd, 0xc0, 0x67, 0xb8, 0x1f } };
+
+
+static const MyDefRecord kMyMobWeakRefData =
+  MyDefRecord( kAAFTypeID_WeakReferenceToMobs,
+      L"WeakReference<Mob>",
+      L"My Weak Reference to Mobs",
+      false
+    );
+
+
+// {387BA659-FAEE-4432-A3B3-EC0A793FCEB0}
+static const aafUID_t kAAFTypeID_WeakReferenceSetToMobs = 
+{ 0x387ba659, 0xfaee, 0x4432, { 0xa3, 0xb3, 0xec, 0xa, 0x79, 0x3f, 0xce, 0xb0 } };
+
+
+static const MyDefRecord kMyMobWeakRefSetData =
+  MyDefRecord( kAAFTypeID_WeakReferenceSetToMobs,
+      L"WeakReferenceSet<Mob>",
+      L"My Weak Reference Set of Mobs",
+      false
+    );
+
+
+// {0B707DAA-9DB1-49e2-B4F3-EE51B425F652}
+static const aafUID_t kAAFPropID_Header_MyMobs = 
+{ 0x0b707daa, 0x9db1, 0x49e2, { 0xb4, 0xf3, 0xee, 0x51, 0xb4, 0x25, 0xf6, 0x52 } };
+
+static const MyDefRecord kMyMobWeakRefSetPropData =
+  MyDefRecord( kAAFPropID_Header_MyMobs,
+      L"Test Property - WeakReferenceSet<Mob>",
+      L"Test Property - My Weak Reference Set of Mobs",
+      false
+    );
+#endif
+
+
 // forward declarations and prototypes
 extern "C"
 {
@@ -526,6 +628,51 @@ void CAAFTypeDefSet_Register(IAAFHeader * pHeader, IAAFDictionary* pDictionary)
       IAAFPropertyDefSP pMyWeakRerenceSetPropertyDef;
       checkResult(pHeaderClass->RegisterOptionalPropertyDef(kMyWeakRefSetData.id, kMyWeakRefSetData.name, pTempType, &pMyWeakRerenceSetPropertyDef));
     }
+
+#ifndef NO_REFERENCE_TO_MOB_TEST
+    if (WeakReferenceSetsSupported(toolkitVersion))
+    {
+      // Create the weak reference set of my definitions type definition.
+
+      // Target array for initializing the weak reference to my definitions.
+      aafUID_t myDefinitionsTargetArray[3];
+      myDefinitionsTargetArray[0] = kAAFPropID_Root_Header;
+      myDefinitionsTargetArray[1] = kAAFPropID_Header_Content;
+      myDefinitionsTargetArray[2] = kAAFPropID_ContentStorage_Mobs;
+
+      const aafUInt32 myDefinitionsTargetArrayCount = 
+               sizeof(myDefinitionsTargetArray)/sizeof(aafUID_t);
+
+      
+      // Create and initialize the element type for the weak reference set.
+      IAAFTypeDefWeakObjRefSP pWeakObjRef;
+      checkResult(pDictionary->CreateMetaInstance(AUID_AAFTypeDefWeakObjRef,
+                                                  IID_IAAFTypeDefWeakObjRef,
+                                                  (IUnknown **)&pWeakObjRef));
+      IAAFClassDefSP pTargetClass;
+      checkResult(pDictionary->LookupClassDef(AUID_AAFMob, &pTargetClass));   
+      checkResult(pWeakObjRef->Initialize(kMyMobWeakRefData.id,
+                                          pTargetClass,
+                                          kMyMobWeakRefData.name,
+                                          myDefinitionsTargetArrayCount,
+                                          myDefinitionsTargetArray));
+      checkResult(pWeakObjRef->QueryInterface(IID_IAAFTypeDef, (void**)&pTempType)); // recycle pTempType smart ptr
+      checkResult(pDictionary->RegisterTypeDef(pTempType));
+      
+      // Create and initialize the weak reference set.
+      IAAFTypeDefSetSP pMyMobWeakRefSetType;
+      checkResult(pDictionary->CreateMetaInstance(AUID_AAFTypeDefSet, IID_IAAFTypeDefSet, (IUnknown**)&pMyMobWeakRefSetType));
+      checkResult(pMyMobWeakRefSetType->Initialize(kMyMobWeakRefSetData.id, pTempType, kMyMobWeakRefSetData.name)); // pTempType <==> weak reference type
+      checkResult(pMyMobWeakRefSetType->QueryInterface(IID_IAAFTypeDef, (void**)&pTempType)); // recycle pTempType smart ptr
+      checkResult(pDictionary->RegisterTypeDef(pTempType));
+      
+      // Now add the weak reference set property to the header.
+      IAAFClassDefSP pHeaderClass;
+      checkResult(pDictionary->LookupClassDef(AUID_AAFHeader, &pHeaderClass));
+      IAAFPropertyDefSP pMyMobWeakRerenceSetPropertyDef;
+      checkResult(pHeaderClass->RegisterOptionalPropertyDef(kMyMobWeakRefSetPropData.id, kMyWeakRefSetPropData.name, pTempType, &pMyMobWeakRerenceSetPropertyDef));
+    }
+#endif
   }  
 } 
 
@@ -744,6 +891,47 @@ void CAAFTypeDefSet_Write(IAAFHeader* pHeader, IAAFDictionary* pDictionary)
         checkResult(pMyWeakDefinitionsSet->AddElement(pMyWeakDefinitionsValue, pMyWeakReferenceValue));
       }
     } 
+#ifndef NO_REFERENCE_TO_MOB_TEST
+    if (WeakReferenceSetsSupported(toolkitVersion))
+    {
+      aafUInt32 index;
+      for (index = 0; index < kMobTestDataCount; ++index)
+      {
+        IAAFMobSP pMob;
+        checkResult(pDictionary->CreateInstance(AUID_AAFMasterMob, IID_IAAFMob, (IUnknown**)&pMob));
+        checkResult(pMob->SetMobID(kMobTestData[index].id));
+        checkResult(pMob->SetName(kMobTestData[index].name));
+
+        checkResult(pHeader->AddMob(pMob));
+      }
+
+      // Get the property value that represents the set of the new definitions.
+      IAAFObjectSP pHeaderObject;
+      checkResult(pHeader->QueryInterface(IID_IAAFObject, (void**)&pHeaderObject));
+      IAAFTypeDefSetSP pMyWeakDefinitionsSet;
+      IAAFPropertyValueSP pMyWeakDefinitionsValue;
+      IAAFTypeDefObjectRefSP pMyWeakElementType;
+      CAAFTypeDefSet_GetDefinitionsSet(pHeaderObject,
+                                       kMyMobWeakRefSetPropData.id,
+                                       true, /*createOptional*/
+                                       &pMyWeakDefinitionsSet,
+                                       &pMyWeakElementType,
+                                       &pMyWeakDefinitionsValue);
+
+      for (index = 0; index < kMobTestDataCount; ++index)
+      {
+        IAAFMobSP pMob;
+        checkResult(pHeader->LookupMob(kMobTestData[index].id, &pMob));
+
+        IAAFDefObjectSP pMobObject;
+        checkResult(pMob->QueryInterface(IID_IAAFObject, (void**)&pMobObject));
+
+        IAAFPropertyValueSP pMyWeakReferenceValue;
+        checkResult(pMyWeakElementType->CreateValue(pMobObject, &pMyWeakReferenceValue));
+        checkResult(pMyWeakDefinitionsSet->AddElement(pMyWeakDefinitionsValue, pMyWeakReferenceValue));
+      }
+    }
+#endif
   }  
 
 } // CAAFTypeDefSet_Write
@@ -975,7 +1163,87 @@ void CAAFTypeDefSet_Read(IAAFHeader* pHeader, IAAFDictionary* pDictionary)
         }
         
       }
+
+#ifndef NO_REFERENCE_TO_MOB_TEST
+      if (WeakReferenceSetsSupported(toolkitVersion) && WeakReferenceSetsSupported(fileToolkitVersion))
+      {
+       // Get the property value that represents the set of weak references to mobs.
+        IAAFObjectSP pHeaderObject;
+        checkResult(pHeader->QueryInterface(IID_IAAFObject, (void**)&pHeaderObject));
+        IAAFTypeDefSetSP pMyMobWeakRefsSet;
+        IAAFPropertyValueSP pMyMobWeakRefsValue;
+        IAAFTypeDefObjectRefSP pSetElementType;
+        CAAFTypeDefSet_GetDefinitionsSet(pHeaderObject,
+                                         kMyMobWeakRefSetPropData.id,
+                                         false, /*!createOptional*/
+                                         &pMyMobWeakRefsSet,
+                                         &pSetElementType,
+                                         &pMyMobWeakRefsValue);
+
+        aafMobID_t mobID;
+        IEnumAAFPropertyValuesSP pEnumMyMobWeakRefValues;
+        IAAFPropertyValueSP pMyMobWeakRefValue;
+        IAAFPropertyValueSP pMyOtherMobWeakRefValue;
+        IAAFMobSP pMyMob;
+        IAAFMobSP pMyOtherMob;
+        IAAFTypeDefSP pValueType;
+        IAAFPropertyValueSP pKeyValue;
+        aafBoolean_t containsKey = kAAFFalse;
+        checkResult(pMyMobWeakRefsSet->GetElements(pMyMobWeakRefsValue, &pEnumMyMobWeakRefValues));
+        while (SUCCEEDED(pEnumMyMobWeakRefValues->NextOne(&pMyMobWeakRefValue)))
+        {  
+          // Make sure that we actually found the "same" definition.
+          checkResult(pSetElementType->GetObject(pMyMobWeakRefValue, IID_IAAFMob, (IUnknown**)&pMyMob));
+          checkResult(pMyMob->GetMobID(&mobID));
+          
+          // See if the given id can be found in the weak reference set.
+          checkResult(pMyMobWeakRefsSet->CreateKey((aafDataBuffer_t)&mobID, sizeof(mobID), &pKeyValue));
+          
+          // Is the key in the set?
+          checkResult(pMyMobWeakRefsSet->ContainsKey(pMyMobWeakRefsValue, pKeyValue, &containsKey));
+          checkExpression(kAAFTrue == containsKey, AAFRESULT_TEST_FAILED);
       
+          // Get the value with the same key from the set.
+          checkResult(pMyMobWeakRefsSet->LookupElement(pMyMobWeakRefsValue, pKeyValue, &pMyOtherMobWeakRefValue));
+          
+          // The property value's type  must be the same as the elment type of the set!
+          checkResult(pMyOtherMobWeakRefValue->GetType(&pValueType));
+          checkExpression(EqualObject(pValueType, pSetElementType), AAFRESULT_TEST_FAILED);
+          
+          checkResult(pSetElementType->GetObject(pMyOtherMobWeakRefValue, IID_IAAFMob, (IUnknown**)&pMyOtherMob));
+          checkExpression(EqualObject(pMyOtherMob, pMyMob), AAFRESULT_TEST_FAILED);
+        }
+
+        // Turn the test around...
+        IEnumAAFPropertyValuesSP pEnumMyOtherMobWeakRefValues;
+        checkResult(pMyMobWeakRefsSet->GetElements(pMyMobWeakRefsValue, &pEnumMyOtherMobWeakRefValues));
+        while (SUCCEEDED(pEnumMyOtherMobWeakRefValues->NextOne(&pMyOtherMobWeakRefValue)))
+        {           
+          // The property value's type  must be the same as the elment type of the set!
+          checkResult(pMyOtherMobWeakRefValue->GetType(&pValueType));
+          checkExpression(EqualObject(pValueType, pSetElementType), AAFRESULT_TEST_FAILED);
+
+          // Make sure that we actually found the "same" definition.
+          checkResult(pSetElementType->GetObject(pMyOtherMobWeakRefValue, IID_IAAFMob, (IUnknown**)&pMyMob));
+          checkResult(pMyMob->GetMobID(&mobID));
+         
+          // See if the given id can be found in the strong reference set.
+          checkResult(pMyMobWeakRefsSet->CreateKey((aafDataBuffer_t)&mobID, sizeof(mobID), &pKeyValue));
+          
+          // Is the key in the set?
+          checkResult(pMyMobWeakRefsSet->ContainsKey(pMyMobWeakRefsValue, pKeyValue, &containsKey));
+          checkExpression(kAAFTrue == containsKey, AAFRESULT_TEST_FAILED);
+      
+          // Get the value with the same key from the set.
+          checkResult(pMyMobWeakRefsSet->LookupElement(pMyMobWeakRefsValue, pKeyValue, &pMyMobWeakRefValue));
+          
+          checkResult(pSetElementType->GetObject(pMyMobWeakRefValue, IID_IAAFMob, (IUnknown**)&pMyOtherMob));
+          checkExpression(EqualObject(pMyMob, pMyOtherMob), AAFRESULT_TEST_FAILED);
+        }
+        
+      }
+#endif
+
     } // reading extended objects supported
     
   } // Reading sets supported.
