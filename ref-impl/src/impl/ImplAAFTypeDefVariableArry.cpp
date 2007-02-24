@@ -620,13 +620,13 @@ OMProperty * ImplAAFTypeDefVariableArray::pvtCreateOMProperty
           result = new OMWeakReferenceVectorProperty<OMUniqueObjectIdentification, ImplAAFDefObject>(pid, name, pWeakRefType->GetUniqueIdentifierPid(), pWeakRefType->GetTargetPids());
           break;
     
-//			  case PID_Mob_MobID:
-//          result = new OMWeakReferenceVectorProperty<OMUniqueMaterialIdentification, ImplAAFMob>(pid, name, pWeakRefType->GetUniqueIdentifierPid(), pWeakRefType->GetTargetPids());
-//          break;
-//
-//			  case PID_EssenceData_MobID:
-//          result = new OMWeakReferenceVectorProperty<OMUniqueMaterialIdentification, ImplAAFEssenceData>(pid, name, pWeakRefType->GetUniqueIdentifierPid(), pWeakRefType->GetTargetPids());
-//          break;
+        case PID_Mob_MobID:
+          result = new OMWeakReferenceVectorProperty<OMUniqueMaterialIdentification, ImplAAFMob>(pid, name, pWeakRefType->GetUniqueIdentifierPid(), pWeakRefType->GetTargetPids());
+          break;
+
+        case PID_EssenceData_MobID:
+          result = new OMWeakReferenceVectorProperty<OMUniqueMaterialIdentification, ImplAAFEssenceData>(pid, name, pWeakRefType->GetUniqueIdentifierPid(), pWeakRefType->GetTargetPids());
+          break;
     
         default:
           // No support for other "key properties"
