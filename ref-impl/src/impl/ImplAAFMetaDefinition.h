@@ -18,7 +18,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2006, Licensor of the
+// The Original Code of this file is Copyright 1998-2007, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -42,7 +42,7 @@ class ImplAAFClassDef;
 class ImplAAFTypeDef;
 template <typename Key, typename ReferencedObject>
 class OMWeakReferenceProperty;
-template <typename ReferencedObject>
+template <typename Key, typename ReferencedObject>
 class OMWeakReferenceVectorProperty;
 
 class ImplAAFMetaDefinition : 
@@ -144,7 +144,7 @@ public:
                const OMWeakReferenceProperty<OMUniqueObjectIdentification, ImplAAFTypeDef>& reference) const;
 
   ImplAAFTypeDef* bootstrapTypeWeakReferenceVectorElement(
-                   const OMWeakReferenceVectorProperty<ImplAAFTypeDef>& vector,
+                   const OMWeakReferenceVectorProperty<OMUniqueObjectIdentification, ImplAAFTypeDef>& vector,
                    aafUInt32 index) const;
 
   ImplAAFClassDef* bootstrapClassWeakReference(

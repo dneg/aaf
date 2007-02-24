@@ -30,14 +30,15 @@
 #include "OMReferenceContainerIter.h"
 #include "OMContainerElement.h"
 
-template <typename ReferencedObject>
+template <typename Key, typename ReferencedObject>
 class OMWeakReferenceSetProperty;
 
   // @class Iterators over <c OMWeakReferenceSetProperty>s.
   //   @tcarg class | ReferencedObject | The type of the contained objects.
+  //   @tcarg class | Key | The type of the identifier of the contained object.
   //   @base public | <c OMReferenceContainerIterator>
   //   @cauthor Tim Bingham | tjb | Avid Technology, Inc.
-template <typename ReferencedObject>
+template <typename Key, typename ReferencedObject>
 class OMWeakReferenceSetIterator : public OMReferenceContainerIterator {
 public:
   // @access Public members.
@@ -56,8 +57,8 @@ public:
     //          associated <c OMWeakReferenceSetProperty> in the reverse
     //          direction (decreasing <p Key>s).
   OMWeakReferenceSetIterator(
-                       const OMWeakReferenceSetProperty<ReferencedObject>& set,
-                       OMIteratorPosition initialPosition = OMBefore);
+                  const OMWeakReferenceSetProperty<Key, ReferencedObject>& set,
+                  OMIteratorPosition initialPosition = OMBefore);
 
     // @cmember Destroy this <c OMWeakReferenceSetIterator>.
   virtual ~OMWeakReferenceSetIterator(void);
@@ -150,7 +151,7 @@ public:
     // @cmember Return the <p Key> of the <p ReferencedObject> in the
     //          associated <c OMWeakReferenceSetProperty> at the position
     //          currently designated by this <c OMWeakReferenceSetIterator>.
-  OMUniqueObjectIdentification identification(void) const;
+  Key identification(void) const;
 
     // @cmember Return the <p OMObject> in the associated
     //          reference container property at the position currently
@@ -170,7 +171,7 @@ protected:
 
   typedef OMWeakReferenceSetElement SetElement;
 
-  typedef OMSetIterator<OMUniqueObjectIdentification, SetElement> SetIterator;
+  typedef OMSetIterator<Key, SetElement> SetIterator;
 
     // @cmember Create an <c OMWeakReferenceSetIterator> given
     //          an underlying <c OMSetIterator>.

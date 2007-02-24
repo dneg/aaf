@@ -18,7 +18,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2006, Licensor of the
+// The Original Code of this file is Copyright 1998-2007, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -243,11 +243,11 @@ public:
 private:
 	OMWeakReferenceProperty<OMUniqueObjectIdentification, ImplAAFDataDef>			_dataDef;
 	OMFixedSizeProperty<aafBool>					_isTimeWarp;
-	OMWeakReferenceVectorProperty<ImplAAFOperationDef>	_degradeTo;
+	OMWeakReferenceVectorProperty<OMUniqueObjectIdentification, ImplAAFOperationDef>	_degradeTo;
 	OMFixedSizeProperty<aafUID_t>                   _category;
 	OMFixedSizeProperty<aafInt32>					_numInputs;
 	OMFixedSizeProperty<aafUInt32>					_bypass;
-	OMWeakReferenceSetProperty<ImplAAFParameterDef>	_paramDefined;
+	OMWeakReferenceSetProperty<OMUniqueObjectIdentification, ImplAAFParameterDef>	_paramDefined;
 };
 
 #endif // ! __ImplAAFOperationDef_h__

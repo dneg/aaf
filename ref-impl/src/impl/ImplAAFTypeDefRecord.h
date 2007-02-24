@@ -18,7 +18,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2007, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -339,7 +339,7 @@ private:
   //
   // BobT Note!!! This should be weak reference vector property...
   //OMVariableSizeProperty<aafUID_t> _memberTypes;
-  OMWeakReferenceVectorProperty<ImplAAFTypeDef> _memberTypes;
+  OMWeakReferenceVectorProperty<OMUniqueObjectIdentification, ImplAAFTypeDef> _memberTypes;
 
   // names of members in this record; stored as single aafCharacter
   // array with embedded nulls

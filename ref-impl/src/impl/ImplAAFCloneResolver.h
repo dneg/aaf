@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2006, Licensor of the
+// The Original Code of this file is Copyright 1998-2007, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -148,8 +148,8 @@ class ImplAAFCloneResolver {
   ImplAAFCloneResolver( ImplAAFDictionary* pDstDict );
   ~ImplAAFCloneResolver();
 
-  template <class Type>
-    void ResolveWeakReference( const OMWeakReferenceProperty<OMUniqueObjectIdentification, Type>& weakRef )
+  template <class Key, class Type>
+    void ResolveWeakReference( const OMWeakReferenceProperty<Key, Type>& weakRef )
   {
 #ifndef DISABLE_CLONE_RESOLVER
 	if ( !weakRef.isOptional() || weakRef.isPresent() ) {
@@ -159,12 +159,12 @@ class ImplAAFCloneResolver {
 #endif
   }
 
-  template <class Type>
-  void ResolveWeakReference( const OMWeakReferenceVectorProperty<Type>& weakRefVec )
+  template <class Key, class Type>
+  void ResolveWeakReference( const OMWeakReferenceVectorProperty<Key, Type>& weakRefVec )
   {
 #ifndef DISABLE_CLONE_RESOLVER
 	if ( !weakRefVec.isOptional() || weakRefVec.isPresent() ) {
-		OMWeakReferenceVectorIterator<Type> iterator( weakRefVec );
+		OMWeakReferenceVectorIterator<Key, Type> iterator( weakRefVec );
 		while( ++iterator ) {
 			const Type *obj = iterator.value();
 			CloneAndRegister( obj );
@@ -173,12 +173,12 @@ class ImplAAFCloneResolver {
 #endif
   }
 
-  template <class Type>
-  void ResolveWeakReference( const OMWeakReferenceSetProperty<Type>& weakRefSet )
+  template <class Key, class Type>
+  void ResolveWeakReference( const OMWeakReferenceSetProperty<Key, Type>& weakRefSet )
   {
 #ifndef DISABLE_CLONE_RESOLVER
 	if ( !weakRefSet.isOptional() || weakRefSet.isPresent() ) {
-	  OMWeakReferenceSetIterator<Type> iterator( weakRefSet );
+	  OMWeakReferenceSetIterator<Key, Type> iterator( weakRefSet );
 	  while( ++iterator ) {
 	    const Type *obj = iterator.value();
 	    CloneAndRegister( obj );

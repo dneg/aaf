@@ -30,14 +30,15 @@
 #include "OMReferenceContainerIter.h"
 #include "OMContainerElement.h"
 
-template <typename ReferencedObject>
+template <typename Key, typename ReferencedObject>
 class OMWeakReferenceVectorProperty;
 
   // @class Iterators over <c OMWeakReferenceVectorProperty>s.
   //   @tcarg class | ReferencedObject | The type of the contained objects.
+  //   @tcarg class | Key | The type of the identifier of the contained object.
   //   @base public | <c OMReferenceContainerIterator>
   //   @cauthor Tim Bingham | tjb | Avid Technology, Inc.
-template <typename ReferencedObject>
+template <typename Key, typename ReferencedObject>
 class OMWeakReferenceVectorIterator : public OMReferenceContainerIterator {
 public:
   // @access Public members.
@@ -56,7 +57,7 @@ public:
     //          the associated <c OMWeakReferenceVectorProperty> in the
     //          reverse direction (decreasing indexes).
   OMWeakReferenceVectorIterator(
-                 const OMWeakReferenceVectorProperty<ReferencedObject>& vector,
+                 const OMWeakReferenceVectorProperty<Key, ReferencedObject>& vector,
                  OMIteratorPosition initialPosition = OMBefore);
 
     // @cmember Create a copy of this <c OMWeakReferenceVectorIterator>.
@@ -154,7 +155,7 @@ public:
     // @cmember Return the <p Key> of the <p ReferencedObject> in the
     //          associated <c OMWeakReferenceVectorProperty> at the position
     //          currently designated by this <c OMWeakReferenceVectorIterator>.
-  OMUniqueObjectIdentification identification(void) const;
+  Key identification(void) const;
 
     // @cmember Return the <p OMObject> in the associated
     //          reference container property at the position currently

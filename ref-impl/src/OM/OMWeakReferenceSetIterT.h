@@ -25,6 +25,9 @@
 // @doc OMEXTERNAL
 // @author Tim Bingham | tjb | Avid Technology, Inc. |
 //         OMWeakReferenceSetIterator
+#ifndef OMWEAKREFERENCESETITERT_H
+#define OMWEAKREFERENCESETITERT_H
+
 #include "OMAssertions.h"
 
   // @mfunc Create an <c OMWeakReferenceSetIterator> over the given
@@ -41,35 +44,38 @@
   //        associated <c OMWeakReferenceSetProperty> in the reverse
   //        direction (decreasing <p Key>s).
   //   @tcarg class | ReferencedObject | The type of the contained objects.
+  //   @tcarg class | Key | The type of the identifier of the contained object.
   //   @parm The <c OMWeakReferenceSet> over which to iterate.
   //   @parm The initial position for this <c OMWeakReferenceSetIterator>.
-template <typename ReferencedObject>
-OMWeakReferenceSetIterator<ReferencedObject>::OMWeakReferenceSetIterator(
-                       const OMWeakReferenceSetProperty<ReferencedObject>& set,
-                       OMIteratorPosition initialPosition)
+template <typename Key, typename ReferencedObject>
+OMWeakReferenceSetIterator<Key, ReferencedObject>::OMWeakReferenceSetIterator(
+                  const OMWeakReferenceSetProperty<Key, ReferencedObject>& set,
+                  OMIteratorPosition initialPosition)
   : _iterator(set._set, initialPosition)
 {
 }
 
   // @mfunc Destroy this <c OMWeakReferenceSetIterator>.
   //   @tcarg class | ReferencedObject | The type of the contained objects.
-template <typename ReferencedObject>
-OMWeakReferenceSetIterator<ReferencedObject>::~OMWeakReferenceSetIterator(void)
+  //   @tcarg class | Key | The type of the identifier of the contained object.
+template <typename Key, typename ReferencedObject>
+OMWeakReferenceSetIterator<Key, ReferencedObject>::~OMWeakReferenceSetIterator(void)
 {
 }
 
   // @mfunc Create a copy of this <c OMWeakReferenceSetIterator>.
   //   @tcarg class | ReferencedObject | The type of the contained objects.
+  //   @tcarg class | Key | The type of the identifier of the contained object.
   //   @rdesc The new <c OMWeakReferenceSetIterator>.
   //   @this const
-template <typename ReferencedObject>
+template <typename Key, typename ReferencedObject>
 OMReferenceContainerIterator*
-                 OMWeakReferenceSetIterator<ReferencedObject>::copy(void) const
+            OMWeakReferenceSetIterator<Key, ReferencedObject>::copy(void) const
 {
-  TRACE("OMWeakReferenceSetIterator<ReferencedObject>::copy");
+  TRACE("OMWeakReferenceSetIterator<Key, ReferencedObject>::copy");
 
-  OMWeakReferenceSetIterator<ReferencedObject>*
-          result = new OMWeakReferenceSetIterator<ReferencedObject>(_iterator);
+  OMWeakReferenceSetIterator<Key, ReferencedObject>*
+     result = new OMWeakReferenceSetIterator<Key, ReferencedObject>(_iterator);
 
   return result;
 }
@@ -87,10 +93,11 @@ OMReferenceContainerIterator*
   //        associated <c OMWeakReferenceSetProperty> in the reverse
   //        direction (decreasing <p Key>s).
   //   @tcarg class | ReferencedObject | The type of the contained objects.
+  //   @tcarg class | Key | The type of the identifier of the contained object.
   //   @parm The position to which this <c OMWeakReferenceSetIterator>
   //         should be reset.
-template <typename ReferencedObject>
-void OMWeakReferenceSetIterator<ReferencedObject>::reset(
+template <typename Key, typename ReferencedObject>
+void OMWeakReferenceSetIterator<Key, ReferencedObject>::reset(
                                             OMIteratorPosition initialPosition)
 {
   _iterator.reset(initialPosition);
@@ -99,12 +106,13 @@ void OMWeakReferenceSetIterator<ReferencedObject>::reset(
   // @mfunc Is this <c OMWeakReferenceSetIterator> positioned before
   //        the first <p ReferencedObject> ?
   //   @tcarg class | ReferencedObject | The type of the contained objects.
+  //   @tcarg class | Key | The type of the identifier of the contained object.
   //   @rdesc <e bool.true> if this <c OMWeakReferenceSetIterator> is
   //          positioned before the first <p ReferencedObject>, <e bool.false>
   //          otherwise.
   //   @this const
-template <typename ReferencedObject>
-bool OMWeakReferenceSetIterator<ReferencedObject>::before(void) const
+template <typename Key, typename ReferencedObject>
+bool OMWeakReferenceSetIterator<Key, ReferencedObject>::before(void) const
 {
   return _iterator.before();
 }
@@ -112,12 +120,13 @@ bool OMWeakReferenceSetIterator<ReferencedObject>::before(void) const
   // @mfunc Is this <c OMWeakReferenceSetIterator> positioned after
   //        the last <p ReferencedObject> ?
   //   @tcarg class | ReferencedObject | The type of the contained objects.
+  //   @tcarg class | Key | The type of the identifier of the contained object.
   //   @rdesc <e bool.true> if this <c OMWeakReferenceSetIterator> is
   //          positioned after the last <p ReferencedObject>, <e bool.false>
   //          otherwise.
   //   @this const
-template <typename ReferencedObject>
-bool OMWeakReferenceSetIterator<ReferencedObject>::after(void) const
+template <typename Key, typename ReferencedObject>
+bool OMWeakReferenceSetIterator<Key, ReferencedObject>::after(void) const
 {
   return _iterator.after();
 }
@@ -125,12 +134,13 @@ bool OMWeakReferenceSetIterator<ReferencedObject>::after(void) const
   // @mfunc Is this <c OMWeakReferenceSetIterator> validly
   //        positioned on a <p ReferencedObject> ?
   //   @tcarg class | ReferencedObject | The type of the contained objects.
+  //   @tcarg class | Key | The type of the identifier of the contained object.
   //   @rdesc <e bool.true> if this <c OMWeakReferenceSetIterator> is
   //          positioned on a <p ReferencedObject>, <e bool.false>
   //          otherwise.
   //   @this const
-template <typename ReferencedObject>
-bool OMWeakReferenceSetIterator<ReferencedObject>::valid(void) const
+template <typename Key, typename ReferencedObject>
+bool OMWeakReferenceSetIterator<Key, ReferencedObject>::valid(void) const
 {
   return _iterator.valid();
 }
@@ -138,10 +148,11 @@ bool OMWeakReferenceSetIterator<ReferencedObject>::valid(void) const
   // @mfunc The number of <p ReferencedObject>s in the associated
   //        <c OMWeakReferenceSetProperty>.
   //   @tcarg class | ReferencedObject | The type of the contained objects.
+  //   @tcarg class | Key | The type of the identifier of the contained object.
   //   @rdesc The number of <p ReferencedObject>s
   //   @this const
-template <typename ReferencedObject>
-size_t OMWeakReferenceSetIterator<ReferencedObject>::count(void) const
+template <typename Key, typename ReferencedObject>
+size_t OMWeakReferenceSetIterator<Key, ReferencedObject>::count(void) const
 {
   return _iterator.count();
 }
@@ -161,10 +172,11 @@ size_t OMWeakReferenceSetIterator<ReferencedObject>::count(void) const
   //        <mf OMWeakReferenceSetIterator::after> becomes
   //        <e bool.true>.
   //   @tcarg class | ReferencedObject | The type of the contained objects.
+  //   @tcarg class | Key | The type of the identifier of the contained object.
   //   @rdesc <e bool.false> if this <c OMWeakReferenceSetIterator> has
   //          passed the last <p ReferencedObject>, <e bool.true> otherwise.
-template <typename ReferencedObject>
-bool OMWeakReferenceSetIterator<ReferencedObject>::operator++()
+template <typename Key, typename ReferencedObject>
+bool OMWeakReferenceSetIterator<Key, ReferencedObject>::operator++()
 {
   return ++_iterator;
 }
@@ -184,10 +196,11 @@ bool OMWeakReferenceSetIterator<ReferencedObject>::operator++()
   //        <mf OMWeakReferenceSetIterator::before> becomes
   //        <e bool.true>.
   //   @tcarg class | ReferencedObject | The type of the contained objects.
+  //   @tcarg class | Key | The type of the identifier of the contained object.
   //   @rdesc <e bool.false> if this <c OMWeakReferenceSetIterator> has
   //          passed the first <p ReferencedObject>, <e bool.true> otherwise.
-template <typename ReferencedObject>
-bool OMWeakReferenceSetIterator<ReferencedObject>::operator--()
+template <typename Key, typename ReferencedObject>
+bool OMWeakReferenceSetIterator<Key, ReferencedObject>::operator--()
 {
   return --_iterator;
 }
@@ -196,13 +209,14 @@ bool OMWeakReferenceSetIterator<ReferencedObject>::operator--()
   //        <c OMWeakReferenceSetProperty> at the position currently
   //        designated by this <c OMWeakReferenceSetIterator>.
   //   @tcarg class | ReferencedObject | The type of the contained objects.
+  //   @tcarg class | Key | The type of the identifier of the contained object.
   //   @rdesc The <p ReferencedObject> at the current position.
   //   @this const
-template <typename ReferencedObject>
+template <typename Key, typename ReferencedObject>
 ReferencedObject*
-OMWeakReferenceSetIterator<ReferencedObject>::value(void) const
+OMWeakReferenceSetIterator<Key, ReferencedObject>::value(void) const
 {
-  TRACE("OMWeakReferenceSetIterator<ReferencedObject>::value");
+  TRACE("OMWeakReferenceSetIterator<Key, ReferencedObject>::value");
 
   const SetElement& element = _iterator.value();
 
@@ -225,19 +239,20 @@ OMWeakReferenceSetIterator<ReferencedObject>::value(void) const
   //        <p Key> of <p newObject> must be the same as that of the
   //        existing <p ReferencedObject>.
   //   @tcarg class | ReferencedObject | The type of the contained objects.
+  //   @tcarg class | Key | The type of the identifier of the contained object.
   //   @parm The new <p ReferencedObject>.
   //   @rdesc The previous <p ReferencedObject> if any, otherwise 0.
-template <typename ReferencedObject>
+template <typename Key, typename ReferencedObject>
 ReferencedObject*
-OMWeakReferenceSetIterator<ReferencedObject>::setValue(
+OMWeakReferenceSetIterator<Key, ReferencedObject>::setValue(
                                              const ReferencedObject* newObject)
 {
-  TRACE("OMWeakReferenceSetIterator<ReferencedObject>::setValue");
+  TRACE("OMWeakReferenceSetIterator<Key, ReferencedObject>::setValue");
 
   PRECONDITION("Matching keys",
     IMPLIES(newObject != 0 , newObject->identification() == identification()));
 
-  OMUniqueObjectIdentification id = nullOMUniqueObjectIdentification;
+  Key id = OMConstant<Key>::null;
   if (newObject != 0) {
     id = newObject->identification();
   }
@@ -258,17 +273,18 @@ OMWeakReferenceSetIterator<ReferencedObject>::setValue(
   //        designated by this <c OMWeakReferenceSetIterator> to 0.
   //        The previous <p ReferencedObject>, if any, is returned.
   //   @tcarg class | ReferencedObject | The type of the contained objects.
+  //   @tcarg class | Key | The type of the identifier of the contained object.
   //   @rdesc The previous <p ReferencedObject> if any, otherwise 0.
-template <typename ReferencedObject>
+template <typename Key, typename ReferencedObject>
 ReferencedObject*
-OMWeakReferenceSetIterator<ReferencedObject>::clearValue(void)
+OMWeakReferenceSetIterator<Key, ReferencedObject>::clearValue(void)
 {
-  TRACE("OMWeakReferenceSetIterator<ReferencedObject>::clearValue");
+  TRACE("OMWeakReferenceSetIterator<Key, ReferencedObject>::clearValue");
 
   SetElement& element = _iterator.value();
 
   ReferencedObject* result = 0;
-  OMStorable* p = element.setValue(&nullOMUniqueObjectIdentification, 0);
+  OMStorable* p = element.setValue(&(OMConstant<Key>::null), 0);
   if (p != 0) {
     result = dynamic_cast<ReferencedObject*>(p);
     ASSERT("Object is correct type", result != 0);
@@ -280,13 +296,14 @@ OMWeakReferenceSetIterator<ReferencedObject>::clearValue(void)
   //        associated <c OMWeakReferenceSetProperty> at the position
   //        currently designated by this <c OMWeakReferenceSetIterator>.
   //   @tcarg class | ReferencedObject | The type of the contained objects.
+  //   @tcarg class | Key | The type of the identifier of the contained object.
   //   @rdesc The <p Key> at the current position.
   //   @this const
-template <typename ReferencedObject>
-OMUniqueObjectIdentification
-OMWeakReferenceSetIterator<ReferencedObject>::identification(void) const
+template <typename Key, typename ReferencedObject>
+Key
+OMWeakReferenceSetIterator<Key, ReferencedObject>::identification(void) const
 {
-  TRACE("OMWeakReferenceSetIterator<ReferencedObject>::identification");
+  TRACE("OMWeakReferenceSetIterator<Key, ReferencedObject>::identification");
 
   return _iterator.key();
 }
@@ -295,13 +312,14 @@ OMWeakReferenceSetIterator<ReferencedObject>::identification(void) const
   //        <c OMWeakReferenceSetProperty> at the position currently
   //        designated by this <c OMWeakReferenceSetIterator>.
   //   @tcarg class | ReferencedObject | The type of the contained objects.
+  //   @tcarg class | Key | The type of the identifier of the contained object.
   //   @rdesc The <c OMObject> at the current position.
   //   @this const
-template <typename ReferencedObject>
+template <typename Key, typename ReferencedObject>
 OMObject*
-OMWeakReferenceSetIterator<ReferencedObject>::currentObject(void) const
+OMWeakReferenceSetIterator<Key, ReferencedObject>::currentObject(void) const
 {
-  TRACE("OMWeakReferenceSetIterator<ReferencedObject>::currentObject");
+  TRACE("OMWeakReferenceSetIterator<Key, ReferencedObject>::currentObject");
 
   OMObject* result = value();
 
@@ -316,11 +334,11 @@ OMWeakReferenceSetIterator<ReferencedObject>::currentObject(void) const
   //        removed, the existing entry remains but no longer refers
   //        to a valid object.
   //   @rdesc The previous <c OMObject> at the current position.
-template <typename ReferencedObject>
+template <typename Key, typename ReferencedObject>
 OMObject*
-OMWeakReferenceSetIterator<ReferencedObject>::clearObject(void)
+OMWeakReferenceSetIterator<Key, ReferencedObject>::clearObject(void)
 {
-  TRACE("OMWeakReferenceSetIterator<ReferencedObject>::clearObject");
+  TRACE("OMWeakReferenceSetIterator<Key, ReferencedObject>::clearObject");
 
   OMObject* result = 0;
   ASSERT("Unimplemented code not reached", false); // tjb
@@ -330,10 +348,13 @@ OMWeakReferenceSetIterator<ReferencedObject>::clearObject(void)
   // @mfunc Create an <c OMWeakReferenceSetIterator> given
   //        an underlying <c OMSetIterator>.
   //   @tcarg class | ReferencedObject | The type of the contained objects.
+  //   @tcarg class | Key | The type of the identifier of the contained object.
   //   @parm The underlying <c OMSetIterator>.
-template <typename ReferencedObject>
-OMWeakReferenceSetIterator<ReferencedObject>::OMWeakReferenceSetIterator(
+template <typename Key, typename ReferencedObject>
+OMWeakReferenceSetIterator<Key, ReferencedObject>::OMWeakReferenceSetIterator(
                                                        const SetIterator& iter)
   : _iterator(iter) // probably bitwise
 {
 }
+
+#endif

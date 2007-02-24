@@ -31,7 +31,7 @@
 #include "OMWeakReferenceSet.h"
 #include "OMDataTypes.h"
 
-template <typename ReferencedObject>
+template <typename Key, typename ReferencedObject>
 class OMWeakReferenceSetIterator;
 
 template <typename Key, typename Element>
@@ -41,12 +41,14 @@ class OMSetIterator;
   //        (non-contained) objects supported by the Object Manager.
   //        Objects are accessible by unique identifier (the key).
   //        The objects are not ordered. Duplicates objects are not allowed.
+  //   @tcarg class | Key | The type of the identifier of the referenced
+  //          (contained) object.
   //   @tcarg class | ReferencedObject | The type of the referenced
   //          (contained) object. This type must be a descendant of
   //          <c OMStorable> and of <c OMUnique>.
   //   @base public | <c OMWeakReferenceSet>
   //   @cauthor Tim Bingham | tjb | Avid Technology, Inc.
-template <typename ReferencedObject>
+template <typename Key, typename ReferencedObject>
 class OMWeakReferenceSetProperty : public OMWeakReferenceSet {
 public:
   // @access Public members.
@@ -102,12 +104,12 @@ public:
 
     // @cmember Remove the <p ReferencedObject> identified by
     //          <p identification> from this <c OMWeakReferenceSetProperty>.
-  ReferencedObject* remove(const OMUniqueObjectIdentification& identification);
+  ReferencedObject* remove(const Key& identification);
 
     // @cmember If it is present, remove the <p ReferencedObject> identified by
     //          <p identification> from this <c OMWeakReferenceSetProperty>
     //          and return true, otherwise return false.
-  bool ensureAbsent(const OMUniqueObjectIdentification& identification);
+  bool ensureAbsent(const Key& identification);
 
     // @cmember Remove <p object> from this
     //          <c OMWeakReferenceSetProperty>.
@@ -124,21 +126,19 @@ public:
 
     // @cmember Does this <c OMWeakReferenceSetProperty> contain a
     //          <p ReferencedObject> identified by <p identification>?
-  virtual bool contains(
-                     const OMUniqueObjectIdentification& identification) const;
+  virtual bool contains(const Key& identification) const;
 
     // @cmember The <p ReferencedObject> in this
     //          <c OMWeakReferenceSetProperty> identified by
     //          <p identification>.
-  ReferencedObject* value(
-                     const OMUniqueObjectIdentification& identification) const;
+  ReferencedObject* value(const Key& identification) const;
 
     // @cmember Find the <p ReferencedObject> in this
     //          <c OMWeakReferenceSetProperty> identified by
     //          <p identification>.  If the object is found it is returned
     //          in <p object> and the result is true. If the element is
     //          not found the result is false.
-  virtual bool find(const OMUniqueObjectIdentification& identification,
+  virtual bool find(const Key& identification,
                     ReferencedObject*& object) const;
 
   // Optional property interface
@@ -244,19 +244,19 @@ private:
 
   typedef OMWeakReferenceSetElement SetElement;
 
-  typedef OMSetIterator<OMUniqueObjectIdentification, SetElement> SetIterator;
+  typedef OMSetIterator<Key, SetElement> SetIterator;
 
   OMPropertyId* targetPropertyPath(void) const;
 
   // The set of references.
-  OMSet<OMUniqueObjectIdentification, SetElement> _set;
+  OMSet<Key, SetElement> _set;
   OMPropertyTag _targetTag;
   const wchar_t* _targetName;
   OMPropertyId* _targetPropertyPath;
   OMPropertyId _keyPropertyId;
   OMStrongReferenceSet* _targetSet;
 
-  friend class OMWeakReferenceSetIterator<ReferencedObject>;
+  friend class OMWeakReferenceSetIterator<Key, ReferencedObject>;
 
     // OMWeakReferenceSetProperty can't be assigned - declare but don't define
   OMWeakReferenceSetProperty& operator = (

@@ -30,7 +30,7 @@
 #include "OMContainerElement.h"
 #include "OMWeakReferenceVector.h"
 
-template <typename ReferencedObject>
+template <typename Key, typename ReferencedObject>
 class OMWeakReferenceVectorIterator;
 
 template <typename Element>
@@ -44,9 +44,11 @@ class OMVectorIterator;
   //   @tcarg class | ReferencedObject | The type of the referenced
   //          (contained) object. This type must be a descendant of
   //          <c OMStorable>.
+  //   @tcarg class | Key | The type of the identifier of the referenced
+  //          (contained) object.
   //   @base public | <c OMWeakReferenceVector>
   //   @cauthor Tim Bingham | tjb | Avid Technology, Inc.
-template <typename ReferencedObject>
+template <typename Key, typename ReferencedObject>
 class OMWeakReferenceVectorProperty : public OMWeakReferenceVector {
 public:
   // @access Public members.
@@ -257,7 +259,7 @@ public:
   virtual void insert(const OMUInt32 index,
                       const OMWeakReferenceVectorElement& element);
 
-  const OMUniqueObjectIdentification& identification(OMUInt32 index) const;
+  const Key& identification(OMUInt32 index) const;
 
   // @cmember The size of the identification of <c OMObject> in this
   //          <c OMWeakReferenceVectorProperty>. The size is given
@@ -306,7 +308,7 @@ private:
   OMPropertyId _keyPropertyId;
   OMStrongReferenceSet* _targetSet;
 
-  friend class OMWeakReferenceVectorIterator<ReferencedObject>;
+  friend class OMWeakReferenceVectorIterator<Key, ReferencedObject>;
 
     // OMWeakReferenceVectorProperty can't be assigned - declare but
     // don't define

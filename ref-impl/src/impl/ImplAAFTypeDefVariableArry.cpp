@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2007, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -613,19 +613,19 @@ OMProperty * ImplAAFTypeDefVariableArray::pvtCreateOMProperty
       switch (pWeakRefType->GetUniqueIdentifierPid())
       {
         case PID_MetaDefinition_Identification:
-          result = new OMWeakReferenceVectorProperty<ImplAAFMetaDefinition>(pid, name, pWeakRefType->GetUniqueIdentifierPid(), pWeakRefType->GetTargetPids());
+          result = new OMWeakReferenceVectorProperty<OMUniqueObjectIdentification, ImplAAFMetaDefinition>(pid, name, pWeakRefType->GetUniqueIdentifierPid(), pWeakRefType->GetTargetPids());
           break;
       
         case PID_DefinitionObject_Identification:
-          result = new OMWeakReferenceVectorProperty<ImplAAFDefObject>(pid, name, pWeakRefType->GetUniqueIdentifierPid(), pWeakRefType->GetTargetPids());
+          result = new OMWeakReferenceVectorProperty<OMUniqueObjectIdentification, ImplAAFDefObject>(pid, name, pWeakRefType->GetUniqueIdentifierPid(), pWeakRefType->GetTargetPids());
           break;
     
 //			  case PID_Mob_MobID:
-//          result = new OMWeakReferenceVectorProperty<ImplAAFMob>(pid, name, pWeakRefType->GetUniqueIdentifierPid(), pWeakRefType->GetTargetPids());
+//          result = new OMWeakReferenceVectorProperty<OMUniqueMaterialIdentification, ImplAAFMob>(pid, name, pWeakRefType->GetUniqueIdentifierPid(), pWeakRefType->GetTargetPids());
 //          break;
 //
 //			  case PID_EssenceData_MobID:
-//          result = new OMWeakReferenceVectorProperty<ImplAAFEssenceData>(pid, name, pWeakRefType->GetUniqueIdentifierPid(), pWeakRefType->GetTargetPids());
+//          result = new OMWeakReferenceVectorProperty<OMUniqueMaterialIdentification, ImplAAFEssenceData>(pid, name, pWeakRefType->GetUniqueIdentifierPid(), pWeakRefType->GetTargetPids());
 //          break;
     
         default:

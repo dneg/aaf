@@ -366,8 +366,8 @@ AAFRESULT STDMETHODCALLTYPE
 	
 	XPROTECT()
 	{
-		OMWeakReferenceVectorIterator</*OMUniqueObjectIdentification,*/ ImplAAFDataDef>* iter = 
-			new OMWeakReferenceVectorIterator</*OMUniqueObjectIdentification,*/ ImplAAFDataDef>(_dataDefs);
+		OMWeakReferenceVectorIterator<OMUniqueObjectIdentification, ImplAAFDataDef>* iter = 
+			new OMWeakReferenceVectorIterator<OMUniqueObjectIdentification, ImplAAFDataDef>(_dataDefs);
 		if(iter == 0)
 			RAISE(AAFRESULT_NOMEMORY);
 		CHECK(theEnum->Initialize(&CLSID_EnumAAFDataDefs, this, iter));

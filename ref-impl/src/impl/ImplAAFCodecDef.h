@@ -45,7 +45,7 @@ class ImplEnumAAFCodecFlavours;
 #include "ImplEnumAAFDataDefs.h"
 
 #include "OMWeakRefVectorProperty.h"
-typedef OMWeakReferenceVectorProperty<ImplAAFDataDef> DataDefWeakRefArrayProp_t;
+typedef OMWeakReferenceVectorProperty<OMUniqueObjectIdentification, ImplAAFDataDef> DataDefWeakRefArrayProp_t;
 
 class ImplAAFCodecDef : public ImplAAFDefObject
 {
