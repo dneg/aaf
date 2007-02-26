@@ -401,9 +401,9 @@ endif
 
 $(AAFSDK_HELP) :
 	@$(ECHO) Skipping $(AAFSDK_HELP) 
-	@#@if [ ! -d $@ ]; then \
-	@#	$(MKDIR) $(MKDIR_OPTS) $@; \
-	@#fi
+	#@if [ ! -d $@ ]; then \
+	#	$(MKDIR) $(MKDIR_OPTS) $@; \
+	#fi
 
 $(AAFSDK_INCLUDE) :
 	@if [ ! -d $@ ]; then \
