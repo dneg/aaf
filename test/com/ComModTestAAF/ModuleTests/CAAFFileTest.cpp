@@ -1,4 +1,4 @@
-//=---------------------------------------------------------------------=
+//=------------------------------------------------ -*- tab-width:4 -*- =
 //
 // $Id$ $Name$
 //
@@ -739,7 +739,7 @@ static HRESULT ComprehensiveOpenTest(testMode_t /* mode */,
   /* **************************************************************************
 	 B) Multiple Opens:
 		2. Already OpenExistingModify:
-		   - OpenExistingRead(),
+		   - OpenExistingModify(),
 		   - then Open(),
 		   - expect AAFRESULT_ALREADY_OPEN
   ************************************************************************** */
@@ -811,18 +811,15 @@ static HRESULT ComprehensiveOpenTest(testMode_t /* mode */,
 	  // Create a memory raw storage and a file on it, to be opened for
 	  // reading.  We'll use this to get the SetFileBits to be tested.
 	  IAAFRawStorageSP pRawStg;
-	  checkResult
-			  (AAFCreateRawStorageMemory (kAAFFileAccess_read,
-										  &pRawStg));
+	  checkResult( AAFCreateRawStorageMemory( kAAFFileAccess_read, &pRawStg ) );
 	  IAAFFileSP pRawFile;
-	  checkResult
-			  (AAFCreateAAFFileOnRawStorage (pRawStg,
-											 kAAFFileExistence_existing,
-											 kAAFFileAccess_read,
-											 0,
-											 0,
-											 0,
-											 &pRawFile));
+	  checkResult( AAFCreateAAFFileOnRawStorage( pRawStg,
+												 kAAFFileExistence_existing,
+												 kAAFFileAccess_read,
+												 0,
+												 0,
+												 0,
+												 &pRawFile ) );
 	  assert (pRawFile);
 	  checkExpression (0 != (IAAFFile*)pRawFile,
 					   AAFRESULT_TEST_FAILED);
@@ -1106,6 +1103,353 @@ static HRESULT ComprehensiveOpenTest(testMode_t /* mode */,
 }
 
 
+static HRESULT ComprehensiveSaveCopyAsTest(testMode_t /* mode */,
+					   aafUID_t fileKind,
+					   testRawStorageType_t rawStorageType,
+					   aafProductIdentification_t productID)
+{
+  // Summary of tests
+  //    A) Error cases:
+  //	   1. Already Exists
+  //	   2. Already Closed
+  //
+  //	B) Save from Various Opens:
+  //	   1. SaveCopyAs from OpenExistingRead
+  //	   2. SaveCopyAs from OpenExistingModify
+  //	   3. SaveCopyAs from OpenNewModify
+  //
+  //	C) Save Success:
+  //	   1. GetHeader after SaveCopyAs
+
+  //	D) Read Success:
+  //	   1. Read after SaveCopyAs
+
+  int f = 0; // Local count of failures
+  IAAFFile* pFile = 0;
+  IAAFFile* pCopy = 0;
+  
+  // SaveCopyAs Test file present for functions that require one
+  //
+  aafWChar * pFileName = L"SaveCopyAsTestF.ile";
+  aafWChar * pCopyName = L"CopyTestF.ile";
+  RemoveTestFile(pFileName);
+  RemoveTestFile(pCopyName);
+
+  /* **************************************************************************
+	 A) Error cases:
+		1. Already Exists:
+		   - file.Open(), file.Save(), file.Close(), file.Open()
+		   - copy.Open(), copy.Close()
+		   - then file.SaveCopyAs(copy)
+		   - expect AAFRESULT_NOT_OPEN
+  ************************************************************************** */
+  {
+	  std::cout << "\tExecuting ComprehensiveSaveCopyAsTest A1." << std::endl;
+	  checkResult(CreateTestFile(pFileName, fileKind, rawStorageType, productID, &pFile));
+	  if (pFile)
+	  {
+		  checkResult(pFile->Save());
+		  checkResult(pFile->Close());
+		  pFile->Release(), pFile = 0;
+
+		  checkExpression( AAFRESULT_SUCCESS == AAFFileOpenExistingRead( pFileName, 0, &pFile ), AAFRESULT_TEST_FAILED );
+
+		  checkResult(CreateTestFile(pCopyName, fileKind, rawStorageType, productID, &pCopy));
+		  if (pCopy)
+		  {
+			  checkResult( pCopy->Close() );
+			  checkExpression( AAFRESULT_NOT_OPEN == pFile->SaveCopyAs( pCopy ), AAFRESULT_TEST_FAILED );
+
+			  // Cleanup for the next test
+			  pCopy->Release(), pCopy = 0;
+		  }
+		  else
+		  {
+			  f++;
+		  }
+
+		  // Cleanup for the next test
+		  pFile->Close(), pFile->Release(), pFile = 0;
+	  }
+	  else
+	  {
+		  f++;
+	  }
+	  RemoveTestFile(pFileName);
+	  RemoveTestFile(pCopyName);
+  }
+
+  /* **************************************************************************
+	 A) Error cases:
+		2. Already Closed:
+		   - file.Open(), file.Close()
+		   - copy.Open()
+		   - then file.SaveCopyAs(copy)
+		   - expect AAFRESULT_UNEXPECTED_EXCEPTION (not sure about this one)
+  ************************************************************************** */
+  {
+	  std::cout << "\tSkipping ComprehensiveSaveCopyAsTest A2." << std::endl;
+#if 0
+	  // 14224 Segmentation fault in Linux.
+	  // create the copy throws exception that cannot be handled in
+	  // Linux (works fine in Windows XP).
+	  checkResult(CreateTestFile(pFileName, fileKind, rawStorageType, productID, &pFile));
+	  if (pFile)
+	  {
+		  checkExpression( AAFRESULT_SUCCESS == pFile->Close(), AAFRESULT_TEST_FAILED );
+		  checkResult(CreateTestFile(pCopyName, fileKind, rawStorageType, productID, &pCopy));
+		  if (pCopy)
+		  {
+			  checkExpression( AAFRESULT_UNEXPECTED_EXCEPTION == pFile->SaveCopyAs( pCopy ), AAFRESULT_TEST_FAILED );
+
+			  // Cleanup for the next test
+			  pCopy->Close(), pCopy->Release(), pCopy = 0;
+		  }
+		  else
+		  {
+			  f++;
+		  }
+
+		  // Cleanup for the next test
+		  pFile->Release(), pFile = 0;
+	  }
+	  else
+	  {
+		  f++;
+	  }
+	  RemoveTestFile(pFileName);
+	  RemoveTestFile(pCopyName);
+#endif
+  }
+
+  /* **************************************************************************
+	 B) Save from Various Opens:
+		1. SaveCopyAs from OpenExistingRead:
+		   - Create file
+		   - file.OpenExistingRead(),
+		   - copy.Open(),
+		   - file.SaveCopyAs(copy)
+		   - expect AAFRESULT_SUCCESS
+  ************************************************************************** */
+  {
+	  std::cout << "\tExecuting ComprehensiveSaveCopyAsTest B1." << std::endl;
+	  checkResult(CreateTestFile(pFileName, fileKind, rawStorageType, productID, &pFile));
+	  if (pFile)
+	  {
+		  checkResult(pFile->Save());
+		  checkResult(pFile->Close());
+		  pFile->Release(), pFile = 0;
+
+		  checkExpression( AAFRESULT_SUCCESS == AAFFileOpenExistingRead( pFileName, 0, &pFile ), AAFRESULT_TEST_FAILED );
+
+		  checkResult(CreateTestFile(pCopyName, fileKind, rawStorageType, productID, &pCopy));
+		  if (pCopy)
+		  {
+			  checkExpression( AAFRESULT_SUCCESS == pFile->SaveCopyAs( pCopy ), AAFRESULT_TEST_FAILED );
+
+			  // Cleanup for the next test
+			  pCopy->Close(), pCopy->Release(), pCopy = 0;
+		  }
+		  else
+		  {
+			  f++;
+		  }
+
+		  // Cleanup for the next test
+		  pFile->Close(), pFile->Release(), pFile = 0;
+	  }
+	  else
+	  {
+		  f++;
+	  }
+	  RemoveTestFile(pFileName);
+	  RemoveTestFile(pCopyName);
+  }
+
+  /* **************************************************************************
+	 B) Save from Various Opens:
+		2. SaveCopyAs from OpenExistingModify:
+		   - Create file
+		   - file.OpenExistingModify(),
+		   - copy.Open(),
+		   - file.SaveCopyAs(copy)
+		   - expect AAFRESULT_SUCCESS
+  ************************************************************************** */
+  {
+	  std::cout << "\tExecuting ComprehensiveSaveCopyAsTest B2." << std::endl;
+	  checkResult(CreateTestFile(pFileName, fileKind, rawStorageType, productID, &pFile));
+	  if (pFile)
+	  {
+		  checkResult(pFile->Save());
+		  checkResult(pFile->Close());
+		  pFile->Release(), pFile = 0;
+
+		  checkExpression( AAFRESULT_SUCCESS == AAFFileOpenExistingModify( pFileName, 0, &productID, &pFile ), AAFRESULT_TEST_FAILED );
+
+		  checkResult(CreateTestFile(pCopyName, fileKind, rawStorageType, productID, &pCopy));
+		  if (pCopy)
+		  {
+			  checkExpression( AAFRESULT_SUCCESS == pFile->SaveCopyAs( pCopy ), AAFRESULT_TEST_FAILED );
+
+			  // Cleanup for the next test
+			  pCopy->Close(), pCopy->Release(), pCopy = 0;
+		  }
+		  else
+		  {
+			  f++;
+		  }
+
+		  // Cleanup for the next test
+		  pFile->Close(), pFile->Release(), pFile = 0;
+	  }
+	  else
+	  {
+		  f++;
+	  }
+	  RemoveTestFile(pFileName);
+	  RemoveTestFile(pCopyName);
+  }
+
+  /* **************************************************************************
+	 B) Save from Various Opens:
+		3. SaveCopyAs from OpenNewModify:
+		   - file.OpenNewModify(),
+		   - copy.Open(),
+		   - file.SaveCopyAs(copy)
+		   - expect AAFRESULT_SUCCESS
+  ************************************************************************** */
+  {
+	  std::cout << "\tExecuting ComprehensiveSaveCopyAsTest B3." << std::endl;
+	  checkExpression( AAFRESULT_SUCCESS == AAFFileOpenNewModify( pFileName, 0, &productID, &pFile ), AAFRESULT_TEST_FAILED );
+
+	  checkResult(CreateTestFile(pCopyName, fileKind, rawStorageType, productID, &pCopy));
+	  if (pCopy)
+	  {
+		  checkExpression( AAFRESULT_SUCCESS == pFile->SaveCopyAs( pCopy ), AAFRESULT_TEST_FAILED );
+		  
+		  // Cleanup for the next test
+		  pCopy->Close(), pCopy->Release(), pCopy = 0;
+	  }
+	  else
+	  {
+		  f++;
+	  }
+
+	  // Cleanup for the next test
+	  pFile->Close(), pFile->Release(), pFile = 0;
+	  RemoveTestFile(pFileName);
+ 	  RemoveTestFile(pCopyName);
+  }
+
+  /* **************************************************************************
+	 C) Save Success:
+		1. GetHeader after SaveCopyAs:
+		   - Create file
+		   - file.OpenExistingRead(),
+		   - copy.Open(),
+		   - file.SaveCopyAs(copy)
+		   - then copy.GetHeader(),
+		   - expect AAFRESULT_SUCCESS
+		   - then file.GetHeader(),
+		   - expect AAFRESULT_SUCCESS
+  ************************************************************************** */
+  {
+	  std::cout << "\tExecuting ComprehensiveSaveCopyAsTest C1." << std::endl;
+	  checkResult(CreateTestFile(pFileName, fileKind, rawStorageType, productID, &pFile));
+	  if (pFile)
+	  {
+		  checkResult(pFile->Save());
+		  checkResult(pFile->Close());
+		  pFile->Release(), pFile = 0;
+
+		  checkExpression( AAFRESULT_SUCCESS == AAFFileOpenExistingRead( pFileName, 0, &pFile ), AAFRESULT_TEST_FAILED );
+
+  		  IAAFHeader *				pTestHeader = NULL;
+
+		  checkResult(CreateTestFile(pCopyName, fileKind, rawStorageType, productID, &pCopy));
+		  if (pCopy)
+		  {
+			  checkExpression( AAFRESULT_SUCCESS == pFile->SaveCopyAs( pCopy ), AAFRESULT_TEST_FAILED );
+
+			  checkExpression( AAFRESULT_SUCCESS == pCopy->GetHeader(&pTestHeader), AAFRESULT_TEST_FAILED );
+			  checkExpression( NULL != pTestHeader, AAFRESULT_TEST_FAILED );
+
+			  // Cleanup for the next test
+			  pCopy->Close(), pCopy->Release(), pCopy = 0;
+		  }
+		  else
+		  {
+			  f++;
+		  }
+
+		  checkExpression( AAFRESULT_SUCCESS == pFile->GetHeader(&pTestHeader), AAFRESULT_TEST_FAILED );
+		  checkExpression( NULL != pTestHeader, AAFRESULT_TEST_FAILED );
+
+		  // Cleanup for the next test
+		  pFile->Close(), pFile->Release(), pFile = 0;
+	  }
+	  else
+	  {
+		  f++;
+	  }
+	  RemoveTestFile(pFileName);
+	  RemoveTestFile(pCopyName);
+  }
+
+  /* **************************************************************************
+	 D) Read Success:
+		1. Read after SaveCopyAs:
+		   - CreateAAFFile(file)
+		   - file.OpenExistingRead(),
+		   - copy.Open(),
+		   - file.SaveCopyAs(copy)
+		   - then ReadAAFFile(copy)
+		   - expect AAFRESULT_SUCCESS
+  ************************************************************************** */
+  {
+	  std::cout << "\tExecuting ComprehensiveSaveCopyAsTest D1." << std::endl;
+	  checkExpression( AAFRESULT_SUCCESS == CreateAAFFile( pFileName, fileKind, rawStorageType, productID ) );
+	  checkExpression( AAFRESULT_SUCCESS == AAFFileOpenExistingRead( pFileName, 0, &pFile ), AAFRESULT_TEST_FAILED );
+	  if( pFile )
+	  {
+		  checkResult(CreateTestFile(pCopyName, fileKind, rawStorageType, productID, &pCopy));
+		  if (pCopy)
+		  {
+			  checkExpression( AAFRESULT_SUCCESS == pFile->SaveCopyAs( pCopy ), AAFRESULT_TEST_FAILED );
+
+			  // Cleanup for the next test
+			  pCopy->Close(), pCopy->Release(), pCopy = 0;
+
+			  checkExpression( AAFRESULT_SUCCESS == ReadAAFFile( pCopyName ), AAFRESULT_TEST_FAILED );
+		  }
+		  else
+		  {
+			  f++;
+		  }
+
+		  // Cleanup for the next test
+		  pFile->Close(), pFile->Release(), pFile = 0;
+	  }
+	  else
+	  {
+		  f++;
+	  }
+	  RemoveTestFile(pFileName);
+	  RemoveTestFile(pCopyName);
+  }
+
+
+
+  HRESULT hr;
+  if (f == 0) {
+    hr = AAFRESULT_SUCCESS;
+  } else {
+    hr = AAFRESULT_TEST_FAILED;
+  }
+  return hr;
+}
+
+
 static HRESULT NegativeTestPublicGlobalFunctions(
                                           testMode_t /* mode */,
                                           aafUID_t fileKind,
@@ -1130,14 +1474,15 @@ static HRESULT NegativeTestPublicGlobalFunctions(
   aafUID_t k;
   aafBool b;
   HRESULT h;
+//  IAAFRawStorage* pStg = 0;
 
   // no file present for functions that require one
   //
   aafWChar* pFileName = L"NoSuchF.ile";
 
   /* **************************************************************************
-     HACK ALERT -- temporaily remove non-existing file and already existing
-     file tests until OMStream divergence fixed
+     HACK ALERT -- temporarily remove non-existing file and already existing
+     file tests until OMStream divergence fixed.
 
   RemoveTestFile(pFileName);
 
@@ -1151,8 +1496,9 @@ static HRESULT NegativeTestPublicGlobalFunctions(
   f += ExpectFail(AAFFileIsAAFFileKind(pFileName, &kind, &b));
 
   /* **************************************************************************
-     HACK ALERT -- temporaily remove non-existing file and already existing
-     file tests until OMStream divergence fixed
+     HACK ALERT -- temporarily remove non-existing file and already existing
+     file tests until OMStream divergence fixed.
+   
 
   f += ExpectFail(AAFCreateRawStorageDisk(pFileName,
                                          kAAFFileExistence_existing,
@@ -1302,6 +1648,12 @@ extern "C" HRESULT CAAFFile_test(
                                        fileKind,
                                        rawStorageType,
 									   productID);
+		}
+		if (hr == AAFRESULT_SUCCESS) {
+			hr = ComprehensiveSaveCopyAsTest(mode,
+											 fileKind,
+											 rawStorageType,
+											 productID);
 		}
 	}
 	catch (...)
