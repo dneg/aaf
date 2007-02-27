@@ -890,6 +890,7 @@ OMRootStorable* OMKLVStoredObject::restore(OMFile& file)
     _storage->readKLVKey(k);
     convert(cid, k);
   }
+  ASSERT("Root object found", r != 0);
   OMProperty* hp = root->propertySet()->get(PID_Root_Header);
   OMStrongReference* hsr = dynamic_cast<OMStrongReference*>(hp);
   ASSERT("Valid type", hsr != 0);
