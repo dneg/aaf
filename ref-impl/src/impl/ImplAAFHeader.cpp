@@ -765,6 +765,10 @@ ImplAAFDictionary *ImplAAFHeader::GetDictionary() const
 	  aafUInt32 refcnt = result->ReleaseReference ();
 	  // make sure at least one reference remains.
 	  ASSERTU (refcnt > 0);
+#if 1 // HACK4MEIP2
+	  const_cast<ImplAAFHeader*>(this)->_dictionary = result;
+	  const_cast<ImplAAFHeader*>(this)->_dictionary->AcquireReference();
+#endif
 	}
   return(result);
 }
