@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2006, Licensor of the
+// The Original Code of this file is Copyright 1998-2007, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -1521,6 +1521,950 @@ void ImplAAFDictionary::InitBuiltins()
   InitContainerDef (kAAFContainerDef_External, L"External", L"External Container");
   InitContainerDef (kAAFContainerDef_RIFFWAVE, L"RIFFWAVE", L"RIFFWAVE Container");
   InitContainerDef (kAAFContainerDef_OMF, L"OMF", L"OMF Container");
+
+// tjb - begin automatically generated code
+
+// ============================================================
+// Generic container (deprecated) labels
+
+// No labels yet
+
+// ============================================================
+// D-10 labels
+
+// D-10 - 50Mbps 625/50i (defined template)
+// 06.0e.2b.34.04.01.01.01.0d.01.03.01.02.01.01.01
+// {0d010301-0201-0101-060e-2b3404010101}
+const aafUID_t ContainerD10_50Mbps_625x50i_defined_template =
+{0x0d010301, 0x0201, 0x0101, {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01}};
+
+// D-10 - 50Mbps 625/50i (extended template)
+// 06.0e.2b.34.04.01.01.01.0d.01.03.01.02.01.01.02
+// {0d010301-0201-0102-060e-2b3404010101}
+const aafUID_t ContainerD10_50Mbps_625x50i_extended_template =
+{0x0d010301, 0x0201, 0x0102, {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01}};
+
+// D-10 - 50Mbps 625/50i (picture only)
+// 06.0e.2b.34.04.01.01.01.0d.01.03.01.02.01.01.7f
+// {0d010301-0201-017f-060e-2b3404010101}
+const aafUID_t ContainerD10_50Mbps_625x50i_picture_only =
+{0x0d010301, 0x0201, 0x017f, {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01}};
+
+// D-10 - 50Mbps 525/60i (defined template)
+// 06.0e.2b.34.04.01.01.01.0d.01.03.01.02.01.02.01
+// {0d010301-0201-0201-060e-2b3404010101}
+const aafUID_t ContainerD10_50Mbps_525x60i_defined_template =
+{0x0d010301, 0x0201, 0x0201, {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01}};
+
+// D-10 - 50Mbps 525/60i (extended template)
+// 06.0e.2b.34.04.01.01.01.0d.01.03.01.02.01.02.02
+// {0d010301-0201-0202-060e-2b3404010101}
+const aafUID_t ContainerD10_50Mbps_525x60i_extended_template =
+{0x0d010301, 0x0201, 0x0202, {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01}};
+
+// D-10 - 50Mbps 525/60i (picture only)
+// 06.0e.2b.34.04.01.01.01.0d.01.03.01.02.01.02.7f
+// {0d010301-0201-027f-060e-2b3404010101}
+const aafUID_t ContainerD10_50Mbps_525x60i_picture_only =
+{0x0d010301, 0x0201, 0x027f, {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01}};
+
+// D-10 - 40Mbps 625/50i (defined template)
+// 06.0e.2b.34.04.01.01.01.0d.01.03.01.02.01.03.01
+// {0d010301-0201-0301-060e-2b3404010101}
+const aafUID_t ContainerD10_40Mbps_625x50i_defined_template =
+{0x0d010301, 0x0201, 0x0301, {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01}};
+
+// D-10 - 40Mbps 625/50i (extended template)
+// 06.0e.2b.34.04.01.01.01.0d.01.03.01.02.01.03.02
+// {0d010301-0201-0302-060e-2b3404010101}
+const aafUID_t ContainerD10_40Mbps_625x50i_extended_template =
+{0x0d010301, 0x0201, 0x0302, {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01}};
+
+// D-10 - 40Mbps 625/50i (picture only)
+// 06.0e.2b.34.04.01.01.01.0d.01.03.01.02.01.03.7f
+// {0d010301-0201-037f-060e-2b3404010101}
+const aafUID_t ContainerD10_40Mbps_625x50i_picture_only =
+{0x0d010301, 0x0201, 0x037f, {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01}};
+
+// D-10 - 40Mbps 525/60i (defined template)
+// 06.0e.2b.34.04.01.01.01.0d.01.03.01.02.01.04.01
+// {0d010301-0201-0401-060e-2b3404010101}
+const aafUID_t ContainerD10_40Mbps_525x60i_defined_template =
+{0x0d010301, 0x0201, 0x0401, {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01}};
+
+// D-10 - 40Mbps 525/60i (extended template)
+// 06.0e.2b.34.04.01.01.01.0d.01.03.01.02.01.04.02
+// {0d010301-0201-0402-060e-2b3404010101}
+const aafUID_t ContainerD10_40Mbps_525x60i_extended_template =
+{0x0d010301, 0x0201, 0x0402, {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01}};
+
+// D-10 - 40Mbps 525/60i (picture only)
+// 06.0e.2b.34.04.01.01.01.0d.01.03.01.02.01.04.7f
+// {0d010301-0201-047f-060e-2b3404010101}
+const aafUID_t ContainerD10_40Mbps_525x60i_picture_only =
+{0x0d010301, 0x0201, 0x047f, {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01}};
+
+// D-10 - 30Mbps 625/50i (defined template)
+// 06.0e.2b.34.04.01.01.01.0d.01.03.01.02.01.05.01
+// {0d010301-0201-0501-060e-2b3404010101}
+const aafUID_t ContainerD10_30Mbps_625x50i_defined_template =
+{0x0d010301, 0x0201, 0x0501, {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01}};
+
+// D-10 - 30Mbps 625/50i (extended template)
+// 06.0e.2b.34.04.01.01.01.0d.01.03.01.02.01.05.02
+// {0d010301-0201-0502-060e-2b3404010101}
+const aafUID_t ContainerD10_30Mbps_625x50i_extended_template =
+{0x0d010301, 0x0201, 0x0502, {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01}};
+
+// D-10 - 30Mbps 625/50i (picture only)
+// 06.0e.2b.34.04.01.01.01.0d.01.03.01.02.01.05.7f
+// {0d010301-0201-057f-060e-2b3404010101}
+const aafUID_t ContainerD10_30Mbps_625x50i_picture_only =
+{0x0d010301, 0x0201, 0x057f, {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01}};
+
+// D-10 - 30Mbps 525/60i (defined template)
+// 06.0e.2b.34.04.01.01.01.0d.01.03.01.02.01.06.01
+// {0d010301-0201-0601-060e-2b3404010101}
+const aafUID_t ContainerD10_30Mbps_525x60i_defined_template =
+{0x0d010301, 0x0201, 0x0601, {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01}};
+
+// D-10 - 30Mbps 525/60i (extended template)
+// 06.0e.2b.34.04.01.01.01.0d.01.03.01.02.01.06.02
+// {0d010301-0201-0602-060e-2b3404010101}
+const aafUID_t ContainerD10_30Mbps_525x60i_extended_template =
+{0x0d010301, 0x0201, 0x0602, {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01}};
+
+// D-10 - 30Mbps 525/60i (picture only)
+// 06.0e.2b.34.04.01.01.01.0d.01.03.01.02.01.06.7f
+// {0d010301-0201-067f-060e-2b3404010101}
+const aafUID_t ContainerD10_30Mbps_525x60i_picture_only =
+{0x0d010301, 0x0201, 0x067f, {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01}};
+
+// ============================================================
+// DV labels
+
+// DV - IEC 25Mbps 525/60i (frame wrapped)
+// 06.0e.2b.34.04.01.01.01.0d.01.03.01.02.02.01.01
+// {0d010301-0202-0101-060e-2b3404010101}
+const aafUID_t ContainerDV_IEC_25Mbps_525x60i_frame_wrapped =
+{0x0d010301, 0x0202, 0x0101, {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01}};
+
+// DV - IEC 25Mbps 525/60i (clip wrapped)
+// 06.0e.2b.34.04.01.01.01.0d.01.03.01.02.02.01.02
+// {0d010301-0202-0102-060e-2b3404010101}
+const aafUID_t ContainerDV_IEC_25Mbps_525x60i_clip_wrapped =
+{0x0d010301, 0x0202, 0x0102, {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01}};
+
+// DV - IEC 25Mbps 625/50i (frame wrapped)
+// 06.0e.2b.34.04.01.01.01.0d.01.03.01.02.02.02.01
+// {0d010301-0202-0201-060e-2b3404010101}
+const aafUID_t ContainerDV_IEC_25Mbps_625x50i_frame_wrapped =
+{0x0d010301, 0x0202, 0x0201, {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01}};
+
+// DV - IEC 25Mbps 625/50i (clip wrapped)
+// 06.0e.2b.34.04.01.01.01.0d.01.03.01.02.02.02.02
+// {0d010301-0202-0202-060e-2b3404010101}
+const aafUID_t ContainerDV_IEC_25Mbps_625x50i_clip_wrapped =
+{0x0d010301, 0x0202, 0x0202, {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01}};
+
+// DV - IEC 25Mbps 525/60i DVCAM (frame wrapped)
+// 06.0e.2b.34.04.01.01.01.0d.01.03.01.02.02.03.01
+// {0d010301-0202-0301-060e-2b3404010101}
+const aafUID_t ContainerDV_IEC_25Mbps_525x60i_DVCAM_frame_wrapped =
+{0x0d010301, 0x0202, 0x0301, {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01}};
+
+// DV - IEC 25Mbps 525/60i DVCAM (clip wrapped)
+// 06.0e.2b.34.04.01.01.01.0d.01.03.01.02.02.03.02
+// {0d010301-0202-0302-060e-2b3404010101}
+const aafUID_t ContainerDV_IEC_25Mbps_525x60i_DVCAM_clip_wrapped =
+{0x0d010301, 0x0202, 0x0302, {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01}};
+
+// DV - IEC 25Mbps 625/50i DVCAM (frame wrapped)
+// 06.0e.2b.34.04.01.01.01.0d.01.03.01.02.02.04.01
+// {0d010301-0202-0401-060e-2b3404010101}
+const aafUID_t ContainerDV_IEC_25Mbps_625x50i_DVCAM_frame_wrapped =
+{0x0d010301, 0x0202, 0x0401, {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01}};
+
+// DV - IEC 25Mbps 625/50i DVCAM (clip wrapped)
+// 06.0e.2b.34.04.01.01.01.0d.01.03.01.02.02.04.02
+// {0d010301-0202-0402-060e-2b3404010101}
+const aafUID_t ContainerDV_IEC_25Mbps_625x50i_DVCAM_clip_wrapped =
+{0x0d010301, 0x0202, 0x0402, {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01}};
+
+// DV - Undefined IEC DV (frame wrapped)
+// 06.0e.2b.34.04.01.01.01.0d.01.03.01.02.02.3f.01
+// {0d010301-0202-3f01-060e-2b3404010101}
+const aafUID_t ContainerDV_Undefined_IEC_DV_frame_wrapped =
+{0x0d010301, 0x0202, 0x3f01, {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01}};
+
+// DV - Undefined IEC DV (clip wrapped)
+// 06.0e.2b.34.04.01.01.01.0d.01.03.01.02.02.3f.02
+// {0d010301-0202-3f02-060e-2b3404010101}
+const aafUID_t ContainerDV_Undefined_IEC_DV_clip_wrapped =
+{0x0d010301, 0x0202, 0x3f02, {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01}};
+
+// DV - 25Mbps 525/60i (frame wrapped)
+// 06.0e.2b.34.04.01.01.01.0d.01.03.01.02.02.40.01
+// {0d010301-0202-4001-060e-2b3404010101}
+const aafUID_t ContainerDV_25Mbps_525x60i_frame_wrapped =
+{0x0d010301, 0x0202, 0x4001, {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01}};
+
+// DV - 25Mbps 525/60i (clip wrapped)
+// 06.0e.2b.34.04.01.01.01.0d.01.03.01.02.02.40.02
+// {0d010301-0202-4002-060e-2b3404010101}
+const aafUID_t ContainerDV_25Mbps_525x60i_clip_wrapped =
+{0x0d010301, 0x0202, 0x4002, {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01}};
+
+// DV - 25Mbps 625/50i (frame wrapped)
+// 06.0e.2b.34.04.01.01.01.0d.01.03.01.02.02.41.01
+// {0d010301-0202-4101-060e-2b3404010101}
+const aafUID_t ContainerDV_25Mbps_625x50i_frame_wrapped =
+{0x0d010301, 0x0202, 0x4101, {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01}};
+
+// DV - 25Mbps 625/50i (clip wrapped)
+// 06.0e.2b.34.04.01.01.01.0d.01.03.01.02.02.41.02
+// {0d010301-0202-4102-060e-2b3404010101}
+const aafUID_t ContainerDV_25Mbps_625x50i_clip_wrapped =
+{0x0d010301, 0x0202, 0x4102, {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01}};
+
+// DV - 50Mbps 525/60i (frame wrapped)
+// 06.0e.2b.34.04.01.01.01.0d.01.03.01.02.02.50.01
+// {0d010301-0202-5001-060e-2b3404010101}
+const aafUID_t ContainerDV_50Mbps_525x60i_frame_wrapped =
+{0x0d010301, 0x0202, 0x5001, {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01}};
+
+// DV - 50Mbps 525/60i (clip wrapped)
+// 06.0e.2b.34.04.01.01.01.0d.01.03.01.02.02.50.02
+// {0d010301-0202-5002-060e-2b3404010101}
+const aafUID_t ContainerDV_50Mbps_525x60i_clip_wrapped =
+{0x0d010301, 0x0202, 0x5002, {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01}};
+
+// DV - 50Mbps 625/50i (frame wrapped)
+// 06.0e.2b.34.04.01.01.01.0d.01.03.01.02.02.51.01
+// {0d010301-0202-5101-060e-2b3404010101}
+const aafUID_t ContainerDV_50Mbps_625x50i_frame_wrapped =
+{0x0d010301, 0x0202, 0x5101, {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01}};
+
+// DV - 50Mbps 625/50i (clip wrapped)
+// 06.0e.2b.34.04.01.01.01.0d.01.03.01.02.02.51.02
+// {0d010301-0202-5102-060e-2b3404010101}
+const aafUID_t ContainerDV_50Mbps_625x50i_clip_wrapped =
+{0x0d010301, 0x0202, 0x5102, {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01}};
+
+// DV - 100Mbps 1080/60i (frame wrapped)
+// 06.0e.2b.34.04.01.01.01.0d.01.03.01.02.02.60.01
+// {0d010301-0202-6001-060e-2b3404010101}
+const aafUID_t ContainerDV_100Mbps_1080x60i_frame_wrapped =
+{0x0d010301, 0x0202, 0x6001, {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01}};
+
+// DV - 100Mbps 1080/60i (clip wrapped)
+// 06.0e.2b.34.04.01.01.01.0d.01.03.01.02.02.60.02
+// {0d010301-0202-6002-060e-2b3404010101}
+const aafUID_t ContainerDV_100Mbps_1080x60i_clip_wrapped =
+{0x0d010301, 0x0202, 0x6002, {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01}};
+
+// DV - 100Mbps 1080/50i (frame wrapped)
+// 06.0e.2b.34.04.01.01.01.0d.01.03.01.02.02.61.01
+// {0d010301-0202-6101-060e-2b3404010101}
+const aafUID_t ContainerDV_100Mbps_1080x50i_frame_wrapped =
+{0x0d010301, 0x0202, 0x6101, {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01}};
+
+// DV - 100Mbps 1080/50i (clip wrapped)
+// 06.0e.2b.34.04.01.01.01.0d.01.03.01.02.02.61.02
+// {0d010301-0202-6102-060e-2b3404010101}
+const aafUID_t ContainerDV_100Mbps_1080x50i_clip_wrapped =
+{0x0d010301, 0x0202, 0x6102, {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01}};
+
+// DV - 100Mbps 720/60p (frame wrapped)
+// 06.0e.2b.34.04.01.01.01.0d.01.03.01.02.02.62.01
+// {0d010301-0202-6201-060e-2b3404010101}
+const aafUID_t ContainerDV_100Mbps_720x60p_frame_wrapped =
+{0x0d010301, 0x0202, 0x6201, {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01}};
+
+// DV - 100Mbps 720/60p (clip wrapped)
+// 06.0e.2b.34.04.01.01.01.0d.01.03.01.02.02.62.02
+// {0d010301-0202-6202-060e-2b3404010101}
+const aafUID_t ContainerDV_100Mbps_720x60p_clip_wrapped =
+{0x0d010301, 0x0202, 0x6202, {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01}};
+
+// DV - 100Mbps 720/50p (frame wrapped)
+// 06.0e.2b.34.04.01.01.01.0d.01.03.01.02.02.63.01
+// {0d010301-0202-6301-060e-2b3404010101}
+const aafUID_t ContainerDV_100Mbps_720x50p_frame_wrapped =
+{0x0d010301, 0x0202, 0x6301, {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01}};
+
+// DV - 100Mbps 720/50p (clip wrapped)
+// 06.0e.2b.34.04.01.01.01.0d.01.03.01.02.02.63.02
+// {0d010301-0202-6302-060e-2b3404010101}
+const aafUID_t ContainerDV_100Mbps_720x50p_clip_wrapped =
+{0x0d010301, 0x0202, 0x6302, {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01}};
+
+// DV - undefined (frame wrapped)
+// 06.0e.2b.34.04.01.01.01.0d.01.03.01.02.02.7f.01
+// {0d010301-0202-7f01-060e-2b3404010101}
+const aafUID_t ContainerDV_undefined_frame_wrapped =
+{0x0d010301, 0x0202, 0x7f01, {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01}};
+
+// DV - undefined (clip wrapped)
+// 06.0e.2b.34.04.01.01.01.0d.01.03.01.02.02.7f.02
+// {0d010301-0202-7f02-060e-2b3404010101}
+const aafUID_t ContainerDV_undefined_clip_wrapped =
+{0x0d010301, 0x0202, 0x7f02, {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01}};
+
+// ============================================================
+// D-11 labels
+
+// No labels yet
+
+// ============================================================
+// MPEG Elementary Stream labels
+
+// MPEG Elementary Stream - stream id 0x60 (frame wrapped)
+// 06.0e.2b.34.04.01.01.01.0d.01.03.01.02.04.60.01
+// {0d010301-0204-6001-060e-2b3404010101}
+const aafUID_t ContainerMPEG_Elementary_Stream_stream_id_0x60_frame_wrapped =
+{0x0d010301, 0x0204, 0x6001, {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01}};
+
+// ============================================================
+// Uncompressed Picture labels
+
+// Uncompressed Picture - 525 60i 422 13.5MHz (frame wrapped)
+// 06.0e.2b.34.04.01.01.01.0d.01.03.01.02.05.01.01
+// {0d010301-0205-0101-060e-2b3404010101}
+const aafUID_t ContainerUncompressed_Picture_525_60i_422_13p5MHz_frame_wrapped =
+{0x0d010301, 0x0205, 0x0101, {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01}};
+
+// Uncompressed Picture - 525 60i 422 13.5MHz (clip wrapped)
+// 06.0e.2b.34.04.01.01.01.0d.01.03.01.02.05.01.02
+// {0d010301-0205-0102-060e-2b3404010101}
+const aafUID_t ContainerUncompressed_Picture_525_60i_422_13p5MHz_clip_wrapped =
+{0x0d010301, 0x0205, 0x0102, {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01}};
+
+// Uncompressed Picture - 525 60i 422 13.5MHz (line wrapped)
+// 06.0e.2b.34.04.01.01.01.0d.01.03.01.02.05.01.03
+// {0d010301-0205-0103-060e-2b3404010101}
+const aafUID_t ContainerUncompressed_Picture_525_60i_422_13p5MHz_line_wrapped =
+{0x0d010301, 0x0205, 0x0103, {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01}};
+
+// Uncompressed Picture - 625 50i 422 13.5MHz (frame wrapped)
+// 06.0e.2b.34.04.01.01.01.0d.01.03.01.02.05.01.05
+// {0d010301-0205-0105-060e-2b3404010101}
+const aafUID_t ContainerUncompressed_Picture_625_50i_422_13p5MHz_frame_wrapped =
+{0x0d010301, 0x0205, 0x0105, {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01}};
+
+// Uncompressed Picture - 625 50i 422 13.5MHz (clip wrapped)
+// 06.0e.2b.34.04.01.01.01.0d.01.03.01.02.05.01.06
+// {0d010301-0205-0106-060e-2b3404010101}
+const aafUID_t ContainerUncompressed_Picture_625_50i_422_13p5MHz_clip_wrapped =
+{0x0d010301, 0x0205, 0x0106, {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01}};
+
+// Uncompressed Picture - 625 50i 422 13.5MHz (line wrapped)
+// 06.0e.2b.34.04.01.01.01.0d.01.03.01.02.05.01.07
+// {0d010301-0205-0107-060e-2b3404010101}
+const aafUID_t ContainerUncompressed_Picture_625_50i_422_13p5MHz_line_wrapped =
+{0x0d010301, 0x0205, 0x0107, {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01}};
+
+// Uncompressed Picture - 525 60p 422 27MHz (frame wrapped)
+// 06.0e.2b.34.04.01.01.01.0d.01.03.01.02.05.01.19
+// {0d010301-0205-0119-060e-2b3404010101}
+const aafUID_t ContainerUncompressed_Picture_525_60p_422_27MHz_frame_wrapped =
+{0x0d010301, 0x0205, 0x0119, {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01}};
+
+// Uncompressed Picture - 525 60p 422 27MHz (clip wrapped)
+// 06.0e.2b.34.04.01.01.01.0d.01.03.01.02.05.01.1a
+// {0d010301-0205-011a-060e-2b3404010101}
+const aafUID_t ContainerUncompressed_Picture_525_60p_422_27MHz_clip_wrapped =
+{0x0d010301, 0x0205, 0x011a, {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01}};
+
+// Uncompressed Picture - 525 60p 422 27MHz (line wrapped)
+// 06.0e.2b.34.04.01.01.01.0d.01.03.01.02.05.01.1b
+// {0d010301-0205-011b-060e-2b3404010101}
+const aafUID_t ContainerUncompressed_Picture_525_60p_422_27MHz_line_wrapped =
+{0x0d010301, 0x0205, 0x011b, {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01}};
+
+// Uncompressed Picture - 625 50p 422 27MHz (frame wrapped)
+// 06.0e.2b.34.04.01.01.01.0d.01.03.01.02.05.01.1d
+// {0d010301-0205-011d-060e-2b3404010101}
+const aafUID_t ContainerUncompressed_Picture_625_50p_422_27MHz_frame_wrapped =
+{0x0d010301, 0x0205, 0x011d, {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01}};
+
+// Uncompressed Picture - 625 50p 422 27MHz (clip wrapped)
+// 06.0e.2b.34.04.01.01.01.0d.01.03.01.02.05.01.1e
+// {0d010301-0205-011e-060e-2b3404010101}
+const aafUID_t ContainerUncompressed_Picture_625_50p_422_27MHz_clip_wrapped =
+{0x0d010301, 0x0205, 0x011e, {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01}};
+
+// Uncompressed Picture - 625 50p 422 27MHz (line wrapped)
+// 06.0e.2b.34.04.01.01.01.0d.01.03.01.02.05.01.1f
+// {0d010301-0205-011f-060e-2b3404010101}
+const aafUID_t ContainerUncompressed_Picture_625_50p_422_27MHz_line_wrapped =
+{0x0d010301, 0x0205, 0x011f, {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01}};
+
+// ============================================================
+// AES3/BWF labels
+
+// AES3/BWF - BWF (frame wrapped)
+// 06.0e.2b.34.04.01.01.01.0d.01.03.01.02.06.01.00
+// {0d010301-0206-0100-060e-2b3404010101}
+const aafUID_t ContainerAES3xBWF_BWF_frame_wrapped =
+{0x0d010301, 0x0206, 0x0100, {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01}};
+
+// AES3/BWF - BWF (clip wrapped)
+// 06.0e.2b.34.04.01.01.01.0d.01.03.01.02.06.02.00
+// {0d010301-0206-0200-060e-2b3404010101}
+const aafUID_t ContainerAES3xBWF_BWF_clip_wrapped =
+{0x0d010301, 0x0206, 0x0200, {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01}};
+
+// AES3/BWF - AES3 (frame wrapped)
+// 06.0e.2b.34.04.01.01.01.0d.01.03.01.02.06.03.00
+// {0d010301-0206-0300-060e-2b3404010101}
+const aafUID_t ContainerAES3xBWF_AES3_frame_wrapped =
+{0x0d010301, 0x0206, 0x0300, {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01}};
+
+// AES3/BWF - AES3 (clip wrapped)
+// 06.0e.2b.34.04.01.01.01.0d.01.03.01.02.06.04.00
+// {0d010301-0206-0400-060e-2b3404010101}
+const aafUID_t ContainerAES3xBWF_AES3_clip_wrapped =
+{0x0d010301, 0x0206, 0x0400, {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01}};
+
+// ============================================================
+// MPEG Packetized Elementary Stream labels
+
+// No labels yet
+
+// ============================================================
+// MPEG Programme Stream labels
+
+// No labels yet
+
+// ============================================================
+// MPEG Transport Stream labels
+
+// No labels yet
+
+// ============================================================
+// A-Law Sound Element labels
+
+// A-Law Sound Element - A-Law Audio (frame wrapped)
+// 06.0e.2b.34.04.01.01.01.0d.01.03.01.02.0a.01.00
+// {0d010301-020a-0100-060e-2b3404010101}
+const aafUID_t ContainerALaw_Sound_Element_ALaw_Audio_frame_wrapped =
+{0x0d010301, 0x020a, 0x0100, {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01}};
+
+// A-Law Sound Element - A-Law Audio (clip wrapped)
+// 06.0e.2b.34.04.01.01.01.0d.01.03.01.02.0a.02.00
+// {0d010301-020a-0200-060e-2b3404010101}
+const aafUID_t ContainerALaw_Sound_Element_ALaw_Audio_clip_wrapped =
+{0x0d010301, 0x020a, 0x0200, {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01}};
+
+// A-Law Sound Element - A-Law Audio (custom wrapped)
+// 06.0e.2b.34.04.01.01.01.0d.01.03.01.02.0a.03.00
+// {0d010301-020a-0300-060e-2b3404010101}
+const aafUID_t ContainerALaw_Sound_Element_ALaw_Audio_custom_wrapped =
+{0x0d010301, 0x020a, 0x0300, {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01}};
+
+// ============================================================
+// AvidHD labels
+
+// AvidHD - X_6_1_1080p
+// 06.0e.2b.34.04.01.01.01.0e.04.03.01.02.06.01.01
+// {0e040301-0206-0101-060e-2b3404010101}
+const aafUID_t ContainerAvidHD_X_6_1_1080p =
+{0x0e040301, 0x0206, 0x0101, {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01}};
+
+// AvidHD - 8_7_1_1080p
+// 06.0e.2b.34.04.01.01.01.0e.04.03.01.02.06.01.02
+// {0e040301-0206-0102-060e-2b3404010101}
+const aafUID_t ContainerAvidHD_8_7_1_1080p =
+{0x0e040301, 0x0206, 0x0102, {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01}};
+
+// AvidHD - 8_4_1_1080p
+// 06.0e.2b.34.04.01.01.01.0e.04.03.01.02.06.01.03
+// {0e040301-0206-0103-060e-2b3404010101}
+const aafUID_t ContainerAvidHD_8_4_1_1080p =
+{0x0e040301, 0x0206, 0x0103, {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01}};
+
+// AvidHD - X_6_1_1080i
+// 06.0e.2b.34.04.01.01.01.0e.04.03.01.02.06.02.01
+// {0e040301-0206-0201-060e-2b3404010101}
+const aafUID_t ContainerAvidHD_X_6_1_1080i =
+{0x0e040301, 0x0206, 0x0201, {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01}};
+
+// AvidHD - 8_7_1_1080i
+// 06.0e.2b.34.04.01.01.01.0e.04.03.01.02.06.02.02
+// {0e040301-0206-0202-060e-2b3404010101}
+const aafUID_t ContainerAvidHD_8_7_1_1080i =
+{0x0e040301, 0x0206, 0x0202, {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01}};
+
+// AvidHD - 8_4_1_1080i
+// 06.0e.2b.34.04.01.01.01.0e.04.03.01.02.06.02.03
+// {0e040301-0206-0203-060e-2b3404010101}
+const aafUID_t ContainerAvidHD_8_4_1_1080i =
+{0x0e040301, 0x0206, 0x0203, {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01}};
+
+// AvidHD - X_5_1_720p
+// 06.0e.2b.34.04.01.01.01.0e.04.03.01.02.06.03.01
+// {0e040301-0206-0301-060e-2b3404010101}
+const aafUID_t ContainerAvidHD_X_5_1_720p =
+{0x0e040301, 0x0206, 0x0301, {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01}};
+
+// AvidHD - 8_4_1_720p
+// 06.0e.2b.34.04.01.01.01.0e.04.03.01.02.06.03.02
+// {0e040301-0206-0302-060e-2b3404010101}
+const aafUID_t ContainerAvidHD_8_4_1_720p =
+{0x0e040301, 0x0206, 0x0302, {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01}};
+
+// AvidHD - 8_6_1_720p
+// 06.0e.2b.34.04.01.01.01.0e.04.03.01.02.06.03.03
+// {0e040301-0206-0303-060e-2b3404010101}
+const aafUID_t ContainerAvidHD_8_6_1_720p =
+{0x0e040301, 0x0206, 0x0303, {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01}};
+
+// ============================================================
+// Irregular labels
+
+// Unknown - Panasonic001
+// 06.0e.2b.34.01.02.01.01.0d.01.03.01.02.06.04.00
+// {0d010301-0206-0400-060e-2b3401020101}
+const aafUID_t ContainerUnknown_Panasonic001 =
+{0x0d010301, 0x0206, 0x0400, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x02, 0x01, 0x01}};
+
+// Unknown - Sony001
+// 06.0e.2b.34.04.01.01.04.0d.01.03.01.01.7f.01.00
+// {0d010301-017f-0100-060e-2b3404010104}
+const aafUID_t ContainerUnknown_Sony001 =
+{0x0d010301, 0x017f, 0x0100, {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x04}};
+
+// Unknown - Sony002
+// 06.0e.2b.34.04.01.01.01.0d.01.03.01.02.04.61.07
+// {0d010301-0204-6107-060e-2b3404010101}
+const aafUID_t ContainerUnknown_Sony002 =
+{0x0d010301, 0x0204, 0x6107, {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01}};
+
+// DV - undefined (clip wrapped) (bogus)
+// 06.0e.2b.34.04.01.01.02.0d.01.03.01.02.02.7f.02
+// {0d010301-0202-7f02-060e-2b3404010102}
+const aafUID_t ContainerDV_undefined_clip_wrapped_bogus =
+{0x0d010301, 0x0202, 0x7f02, {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x02}};
+
+// DV - 25Mbps 525/60i (clip wrapped) (bogus)
+// 06.0e.2b.34.04.01.01.02.0d.01.03.01.02.02.40.02
+// {0d010301-0202-4002-060e-2b3404010102}
+const aafUID_t ContainerDV_25Mbps_525x60i_clip_wrapped_bogus =
+{0x0d010301, 0x0202, 0x4002, {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x02}};
+
+// Generic Wrapping - Generic (multiple wrappings)
+// 06.0e.2b.34.04.01.01.03.0d.01.03.01.02.7f.01.00
+// {0d010301-027f-0100-060e-2b3404010103}
+const aafUID_t ContainerGeneric_Wrapping_Generic_multiple_wrappings =
+{0x0d010301, 0x027f, 0x0100, {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x03}};
+
+  InitContainerDef(
+    ContainerD10_50Mbps_625x50i_defined_template,
+    L"ContainerD10_50Mbps_625x50i_defined_template",
+    L"D-10; 50Mbps 625/50i (defined template)");
+
+  InitContainerDef(
+    ContainerD10_50Mbps_625x50i_extended_template,
+    L"ContainerD10_50Mbps_625x50i_extended_template",
+    L"D-10; 50Mbps 625/50i (extended template)");
+
+  InitContainerDef(
+    ContainerD10_50Mbps_625x50i_picture_only,
+    L"ContainerD10_50Mbps_625x50i_picture_only",
+    L"D-10; 50Mbps 625/50i (picture only)");
+
+  InitContainerDef(
+    ContainerD10_50Mbps_525x60i_defined_template,
+    L"ContainerD10_50Mbps_525x60i_defined_template",
+    L"D-10; 50Mbps 525/60i (defined template)");
+
+  InitContainerDef(
+    ContainerD10_50Mbps_525x60i_extended_template,
+    L"ContainerD10_50Mbps_525x60i_extended_template",
+    L"D-10; 50Mbps 525/60i (extended template)");
+
+  InitContainerDef(
+    ContainerD10_50Mbps_525x60i_picture_only,
+    L"ContainerD10_50Mbps_525x60i_picture_only",
+    L"D-10; 50Mbps 525/60i (picture only)");
+
+  InitContainerDef(
+    ContainerD10_40Mbps_625x50i_defined_template,
+    L"ContainerD10_40Mbps_625x50i_defined_template",
+    L"D-10; 40Mbps 625/50i (defined template)");
+
+  InitContainerDef(
+    ContainerD10_40Mbps_625x50i_extended_template,
+    L"ContainerD10_40Mbps_625x50i_extended_template",
+    L"D-10; 40Mbps 625/50i (extended template)");
+
+  InitContainerDef(
+    ContainerD10_40Mbps_625x50i_picture_only,
+    L"ContainerD10_40Mbps_625x50i_picture_only",
+    L"D-10; 40Mbps 625/50i (picture only)");
+
+  InitContainerDef(
+    ContainerD10_40Mbps_525x60i_defined_template,
+    L"ContainerD10_40Mbps_525x60i_defined_template",
+    L"D-10; 40Mbps 525/60i (defined template)");
+
+  InitContainerDef(
+    ContainerD10_40Mbps_525x60i_extended_template,
+    L"ContainerD10_40Mbps_525x60i_extended_template",
+    L"D-10; 40Mbps 525/60i (extended template)");
+
+  InitContainerDef(
+    ContainerD10_40Mbps_525x60i_picture_only,
+    L"ContainerD10_40Mbps_525x60i_picture_only",
+    L"D-10; 40Mbps 525/60i (picture only)");
+
+  InitContainerDef(
+    ContainerD10_30Mbps_625x50i_defined_template,
+    L"ContainerD10_30Mbps_625x50i_defined_template",
+    L"D-10; 30Mbps 625/50i (defined template)");
+
+  InitContainerDef(
+    ContainerD10_30Mbps_625x50i_extended_template,
+    L"ContainerD10_30Mbps_625x50i_extended_template",
+    L"D-10; 30Mbps 625/50i (extended template)");
+
+  InitContainerDef(
+    ContainerD10_30Mbps_625x50i_picture_only,
+    L"ContainerD10_30Mbps_625x50i_picture_only",
+    L"D-10; 30Mbps 625/50i (picture only)");
+
+  InitContainerDef(
+    ContainerD10_30Mbps_525x60i_defined_template,
+    L"ContainerD10_30Mbps_525x60i_defined_template",
+    L"D-10; 30Mbps 525/60i (defined template)");
+
+  InitContainerDef(
+    ContainerD10_30Mbps_525x60i_extended_template,
+    L"ContainerD10_30Mbps_525x60i_extended_template",
+    L"D-10; 30Mbps 525/60i (extended template)");
+
+  InitContainerDef(
+    ContainerD10_30Mbps_525x60i_picture_only,
+    L"ContainerD10_30Mbps_525x60i_picture_only",
+    L"D-10; 30Mbps 525/60i (picture only)");
+
+  InitContainerDef(
+    ContainerDV_IEC_25Mbps_525x60i_frame_wrapped,
+    L"ContainerDV_IEC_25Mbps_525x60i_frame_wrapped",
+    L"DV; IEC 25Mbps 525/60i (frame wrapped)");
+
+  InitContainerDef(
+    ContainerDV_IEC_25Mbps_525x60i_clip_wrapped,
+    L"ContainerDV_IEC_25Mbps_525x60i_clip_wrapped",
+    L"DV; IEC 25Mbps 525/60i (clip wrapped)");
+
+  InitContainerDef(
+    ContainerDV_IEC_25Mbps_625x50i_frame_wrapped,
+    L"ContainerDV_IEC_25Mbps_625x50i_frame_wrapped",
+    L"DV; IEC 25Mbps 625/50i (frame wrapped)");
+
+  InitContainerDef(
+    ContainerDV_IEC_25Mbps_625x50i_clip_wrapped,
+    L"ContainerDV_IEC_25Mbps_625x50i_clip_wrapped",
+    L"DV; IEC 25Mbps 625/50i (clip wrapped)");
+
+  InitContainerDef(
+    ContainerDV_IEC_25Mbps_525x60i_DVCAM_frame_wrapped,
+    L"ContainerDV_IEC_25Mbps_525x60i_DVCAM_frame_wrapped",
+    L"DV; IEC 25Mbps 525/60i DVCAM (frame wrapped)");
+
+  InitContainerDef(
+    ContainerDV_IEC_25Mbps_525x60i_DVCAM_clip_wrapped,
+    L"ContainerDV_IEC_25Mbps_525x60i_DVCAM_clip_wrapped",
+    L"DV; IEC 25Mbps 525/60i DVCAM (clip wrapped)");
+
+  InitContainerDef(
+    ContainerDV_IEC_25Mbps_625x50i_DVCAM_frame_wrapped,
+    L"ContainerDV_IEC_25Mbps_625x50i_DVCAM_frame_wrapped",
+    L"DV; IEC 25Mbps 625/50i DVCAM (frame wrapped)");
+
+  InitContainerDef(
+    ContainerDV_IEC_25Mbps_625x50i_DVCAM_clip_wrapped,
+    L"ContainerDV_IEC_25Mbps_625x50i_DVCAM_clip_wrapped",
+    L"DV; IEC 25Mbps 625/50i DVCAM (clip wrapped)");
+
+  InitContainerDef(
+    ContainerDV_Undefined_IEC_DV_frame_wrapped,
+    L"ContainerDV_Undefined_IEC_DV_frame_wrapped",
+    L"DV; Undefined IEC DV (frame wrapped)");
+
+  InitContainerDef(
+    ContainerDV_Undefined_IEC_DV_clip_wrapped,
+    L"ContainerDV_Undefined_IEC_DV_clip_wrapped",
+    L"DV; Undefined IEC DV (clip wrapped)");
+
+  InitContainerDef(
+    ContainerDV_25Mbps_525x60i_frame_wrapped,
+    L"ContainerDV_25Mbps_525x60i_frame_wrapped",
+    L"DV; 25Mbps 525/60i (frame wrapped)");
+
+  InitContainerDef(
+    ContainerDV_25Mbps_525x60i_clip_wrapped,
+    L"ContainerDV_25Mbps_525x60i_clip_wrapped",
+    L"DV; 25Mbps 525/60i (clip wrapped)");
+
+  InitContainerDef(
+    ContainerDV_25Mbps_625x50i_frame_wrapped,
+    L"ContainerDV_25Mbps_625x50i_frame_wrapped",
+    L"DV; 25Mbps 625/50i (frame wrapped)");
+
+  InitContainerDef(
+    ContainerDV_25Mbps_625x50i_clip_wrapped,
+    L"ContainerDV_25Mbps_625x50i_clip_wrapped",
+    L"DV; 25Mbps 625/50i (clip wrapped)");
+
+  InitContainerDef(
+    ContainerDV_50Mbps_525x60i_frame_wrapped,
+    L"ContainerDV_50Mbps_525x60i_frame_wrapped",
+    L"DV; 50Mbps 525/60i (frame wrapped)");
+
+  InitContainerDef(
+    ContainerDV_50Mbps_525x60i_clip_wrapped,
+    L"ContainerDV_50Mbps_525x60i_clip_wrapped",
+    L"DV; 50Mbps 525/60i (clip wrapped)");
+
+  InitContainerDef(
+    ContainerDV_50Mbps_625x50i_frame_wrapped,
+    L"ContainerDV_50Mbps_625x50i_frame_wrapped",
+    L"DV; 50Mbps 625/50i (frame wrapped)");
+
+  InitContainerDef(
+    ContainerDV_50Mbps_625x50i_clip_wrapped,
+    L"ContainerDV_50Mbps_625x50i_clip_wrapped",
+    L"DV; 50Mbps 625/50i (clip wrapped)");
+
+  InitContainerDef(
+    ContainerDV_100Mbps_1080x60i_frame_wrapped,
+    L"ContainerDV_100Mbps_1080x60i_frame_wrapped",
+    L"DV; 100Mbps 1080/60i (frame wrapped)");
+
+  InitContainerDef(
+    ContainerDV_100Mbps_1080x60i_clip_wrapped,
+    L"ContainerDV_100Mbps_1080x60i_clip_wrapped",
+    L"DV; 100Mbps 1080/60i (clip wrapped)");
+
+  InitContainerDef(
+    ContainerDV_100Mbps_1080x50i_frame_wrapped,
+    L"ContainerDV_100Mbps_1080x50i_frame_wrapped",
+    L"DV; 100Mbps 1080/50i (frame wrapped)");
+
+  InitContainerDef(
+    ContainerDV_100Mbps_1080x50i_clip_wrapped,
+    L"ContainerDV_100Mbps_1080x50i_clip_wrapped",
+    L"DV; 100Mbps 1080/50i (clip wrapped)");
+
+  InitContainerDef(
+    ContainerDV_100Mbps_720x60p_frame_wrapped,
+    L"ContainerDV_100Mbps_720x60p_frame_wrapped",
+    L"DV; 100Mbps 720/60p (frame wrapped)");
+
+  InitContainerDef(
+    ContainerDV_100Mbps_720x60p_clip_wrapped,
+    L"ContainerDV_100Mbps_720x60p_clip_wrapped",
+    L"DV; 100Mbps 720/60p (clip wrapped)");
+
+  InitContainerDef(
+    ContainerDV_100Mbps_720x50p_frame_wrapped,
+    L"ContainerDV_100Mbps_720x50p_frame_wrapped",
+    L"DV; 100Mbps 720/50p (frame wrapped)");
+
+  InitContainerDef(
+    ContainerDV_100Mbps_720x50p_clip_wrapped,
+    L"ContainerDV_100Mbps_720x50p_clip_wrapped",
+    L"DV; 100Mbps 720/50p (clip wrapped)");
+
+  InitContainerDef(
+    ContainerDV_undefined_frame_wrapped,
+    L"ContainerDV_undefined_frame_wrapped",
+    L"DV; undefined (frame wrapped)");
+
+  InitContainerDef(
+    ContainerDV_undefined_clip_wrapped,
+    L"ContainerDV_undefined_clip_wrapped",
+    L"DV; undefined (clip wrapped)");
+
+  InitContainerDef(
+    ContainerMPEG_Elementary_Stream_stream_id_0x60_frame_wrapped,
+    L"ContainerMPEG_Elementary_Stream_stream_id_0x60_frame_wrapped",
+    L"MPEG Elementary Stream; stream id 0x60 (frame wrapped)");
+
+  InitContainerDef(
+    ContainerUncompressed_Picture_525_60i_422_13p5MHz_frame_wrapped,
+    L"ContainerUncompressed_Picture_525_60i_422_13p5MHz_frame_wrapped",
+    L"Uncompressed Picture; 525 60i 422 13.5MHz (frame wrapped)");
+
+  InitContainerDef(
+    ContainerUncompressed_Picture_525_60i_422_13p5MHz_clip_wrapped,
+    L"ContainerUncompressed_Picture_525_60i_422_13p5MHz_clip_wrapped",
+    L"Uncompressed Picture; 525 60i 422 13.5MHz (clip wrapped)");
+
+  InitContainerDef(
+    ContainerUncompressed_Picture_525_60i_422_13p5MHz_line_wrapped,
+    L"ContainerUncompressed_Picture_525_60i_422_13p5MHz_line_wrapped",
+    L"Uncompressed Picture; 525 60i 422 13.5MHz (line wrapped)");
+
+  InitContainerDef(
+    ContainerUncompressed_Picture_625_50i_422_13p5MHz_frame_wrapped,
+    L"ContainerUncompressed_Picture_625_50i_422_13p5MHz_frame_wrapped",
+    L"Uncompressed Picture; 625 50i 422 13.5MHz (frame wrapped)");
+
+  InitContainerDef(
+    ContainerUncompressed_Picture_625_50i_422_13p5MHz_clip_wrapped,
+    L"ContainerUncompressed_Picture_625_50i_422_13p5MHz_clip_wrapped",
+    L"Uncompressed Picture; 625 50i 422 13.5MHz (clip wrapped)");
+
+  InitContainerDef(
+    ContainerUncompressed_Picture_625_50i_422_13p5MHz_line_wrapped,
+    L"ContainerUncompressed_Picture_625_50i_422_13p5MHz_line_wrapped",
+    L"Uncompressed Picture; 625 50i 422 13.5MHz (line wrapped)");
+
+  InitContainerDef(
+    ContainerUncompressed_Picture_525_60p_422_27MHz_frame_wrapped,
+    L"ContainerUncompressed_Picture_525_60p_422_27MHz_frame_wrapped",
+    L"Uncompressed Picture; 525 60p 422 27MHz (frame wrapped)");
+
+  InitContainerDef(
+    ContainerUncompressed_Picture_525_60p_422_27MHz_clip_wrapped,
+    L"ContainerUncompressed_Picture_525_60p_422_27MHz_clip_wrapped",
+    L"Uncompressed Picture; 525 60p 422 27MHz (clip wrapped)");
+
+  InitContainerDef(
+    ContainerUncompressed_Picture_525_60p_422_27MHz_line_wrapped,
+    L"ContainerUncompressed_Picture_525_60p_422_27MHz_line_wrapped",
+    L"Uncompressed Picture; 525 60p 422 27MHz (line wrapped)");
+
+  InitContainerDef(
+    ContainerUncompressed_Picture_625_50p_422_27MHz_frame_wrapped,
+    L"ContainerUncompressed_Picture_625_50p_422_27MHz_frame_wrapped",
+    L"Uncompressed Picture; 625 50p 422 27MHz (frame wrapped)");
+
+  InitContainerDef(
+    ContainerUncompressed_Picture_625_50p_422_27MHz_clip_wrapped,
+    L"ContainerUncompressed_Picture_625_50p_422_27MHz_clip_wrapped",
+    L"Uncompressed Picture; 625 50p 422 27MHz (clip wrapped)");
+
+  InitContainerDef(
+    ContainerUncompressed_Picture_625_50p_422_27MHz_line_wrapped,
+    L"ContainerUncompressed_Picture_625_50p_422_27MHz_line_wrapped",
+    L"Uncompressed Picture; 625 50p 422 27MHz (line wrapped)");
+
+  InitContainerDef(
+    ContainerAES3xBWF_BWF_frame_wrapped,
+    L"ContainerAES3xBWF_BWF_frame_wrapped",
+    L"AES3/BWF; BWF (frame wrapped)");
+
+  InitContainerDef(
+    ContainerAES3xBWF_BWF_clip_wrapped,
+    L"ContainerAES3xBWF_BWF_clip_wrapped",
+    L"AES3/BWF; BWF (clip wrapped)");
+
+  InitContainerDef(
+    ContainerAES3xBWF_AES3_frame_wrapped,
+    L"ContainerAES3xBWF_AES3_frame_wrapped",
+    L"AES3/BWF; AES3 (frame wrapped)");
+
+  InitContainerDef(
+    ContainerAES3xBWF_AES3_clip_wrapped,
+    L"ContainerAES3xBWF_AES3_clip_wrapped",
+    L"AES3/BWF; AES3 (clip wrapped)");
+
+  InitContainerDef(
+    ContainerALaw_Sound_Element_ALaw_Audio_frame_wrapped,
+    L"ContainerALaw_Sound_Element_ALaw_Audio_frame_wrapped",
+    L"A-Law Sound Element; A-Law Audio (frame wrapped)");
+
+  InitContainerDef(
+    ContainerALaw_Sound_Element_ALaw_Audio_clip_wrapped,
+    L"ContainerALaw_Sound_Element_ALaw_Audio_clip_wrapped",
+    L"A-Law Sound Element; A-Law Audio (clip wrapped)");
+
+  InitContainerDef(
+    ContainerALaw_Sound_Element_ALaw_Audio_custom_wrapped,
+    L"ContainerALaw_Sound_Element_ALaw_Audio_custom_wrapped",
+    L"A-Law Sound Element; A-Law Audio (custom wrapped)");
+
+  InitContainerDef(
+    ContainerAvidHD_X_6_1_1080p,
+    L"ContainerAvidHD_X_6_1_1080p",
+    L"AvidHD; X_6_1_1080p");
+
+  InitContainerDef(
+    ContainerAvidHD_8_7_1_1080p,
+    L"ContainerAvidHD_8_7_1_1080p",
+    L"AvidHD; 8_7_1_1080p");
+
+  InitContainerDef(
+    ContainerAvidHD_8_4_1_1080p,
+    L"ContainerAvidHD_8_4_1_1080p",
+    L"AvidHD; 8_4_1_1080p");
+
+  InitContainerDef(
+    ContainerAvidHD_X_6_1_1080i,
+    L"ContainerAvidHD_X_6_1_1080i",
+    L"AvidHD; X_6_1_1080i");
+
+  InitContainerDef(
+    ContainerAvidHD_8_7_1_1080i,
+    L"ContainerAvidHD_8_7_1_1080i",
+    L"AvidHD; 8_7_1_1080i");
+
+  InitContainerDef(
+    ContainerAvidHD_8_4_1_1080i,
+    L"ContainerAvidHD_8_4_1_1080i",
+    L"AvidHD; 8_4_1_1080i");
+
+  InitContainerDef(
+    ContainerAvidHD_X_5_1_720p,
+    L"ContainerAvidHD_X_5_1_720p",
+    L"AvidHD; X_5_1_720p");
+
+  InitContainerDef(
+    ContainerAvidHD_8_4_1_720p,
+    L"ContainerAvidHD_8_4_1_720p",
+    L"AvidHD; 8_4_1_720p");
+
+  InitContainerDef(
+    ContainerAvidHD_8_6_1_720p,
+    L"ContainerAvidHD_8_6_1_720p",
+    L"AvidHD; 8_6_1_720p");
+
+  InitContainerDef(
+    ContainerUnknown_Panasonic001,
+    L"ContainerUnknown_Panasonic001",
+    L"Unknown; Panasonic001");
+
+  InitContainerDef(
+    ContainerUnknown_Sony001,
+    L"ContainerUnknown_Sony001",
+    L"Unknown; Sony001");
+
+  InitContainerDef(
+    ContainerUnknown_Sony002,
+    L"ContainerUnknown_Sony002",
+    L"Unknown; Sony002");
+
+  InitContainerDef(
+    ContainerDV_undefined_clip_wrapped_bogus,
+    L"ContainerDV_undefined_clip_wrapped_bogus",
+    L"DV; undefined (clip wrapped) (bogus)");
+
+  InitContainerDef(
+    ContainerDV_25Mbps_525x60i_clip_wrapped_bogus,
+    L"ContainerDV_25Mbps_525x60i_clip_wrapped_bogus",
+    L"DV; 25Mbps 525/60i (clip wrapped) (bogus)");
+
+  InitContainerDef(
+    ContainerGeneric_Wrapping_Generic_multiple_wrappings,
+    L"ContainerGeneric_Wrapping_Generic_multiple_wrappings",
+    L"Generic Wrapping; Generic (multiple wrappings)");
+
+// tjb - end automatically generated code
 
   AssureClassPropertyTypes ();
 }
