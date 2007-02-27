@@ -298,9 +298,22 @@ ImplAAFDictionary *ImplAAFDictionary::CreateDictionary(void)
   return pDictionary;
 }
 
-bool ImplAAFDictionary::isRegistered(const OMClassId& classId ) const
+bool ImplAAFDictionary::isRegistered(const OMClassId& classId) const
 {
-  return metaDictionary()->isRegistered( classId );
+  bool result;
+  const aafUID_t* auid  = reinterpret_cast<const aafUID_t*>(&classId);
+  ImplAAFDictionary* pNonConstThis = const_cast<ImplAAFDictionary*>(this);
+  ImplAAFClassDef* pClassDef = 0;
+  HRESULT hr = pNonConstThis->LookupClassDef(*auid, &pClassDef);
+  if (AAFRESULT_SUCCEEDED(hr)) {
+    result = true;
+    ASSERTU(pClassDef != 0);
+    pClassDef->ReleaseReference();
+    pClassDef = 0;
+  } else {
+    result = false;
+  }
+  return result;
 }
 
 //
