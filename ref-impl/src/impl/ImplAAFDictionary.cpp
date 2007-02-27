@@ -357,6 +357,20 @@ void ImplAAFDictionary::destroy(OMStorable* victim) const
   v->ReleaseReference();
 }
 
+void ImplAAFDictionary::associate(const aafUID_t& id,
+                                  const OMPropertyId propertyId)
+{
+  ASSERTU (_pBuiltinClasses);
+  if (propertyId >= 0x8000) { // Only remap dynamic pids
+    OMPropertyId oldPid;
+    AAFRESULT r = _pBuiltinClasses->LookupOmPid(id, oldPid);
+    if (AAFRESULT_SUCCEEDED(r)) {
+      r = _pBuiltinClasses->MapOmPid(id, propertyId);
+      ASSERTU(AAFRESULT_SUCCEEDED(r));
+    } // else doesn't currently work for properties that aren't compiled-in
+  }
+}
+
 ImplAAFObject *
 ImplAAFDictionary::CreateAndInit(ImplAAFClassDef * pClassDef) const
 {

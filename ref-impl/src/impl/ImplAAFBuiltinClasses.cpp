@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2007, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -179,6 +179,34 @@ AAFRESULT ImplAAFBuiltinClasses::LookupOmPid
   return E_FAIL;
 }
 
+AAFRESULT ImplAAFBuiltinClasses::MapOmPid
+  (const aafUID_t & rAuid,
+   OMPropertyId pid)
+{
+  if (pid < 0x8000)
+    return E_FAIL; // Cannot map pids which aren't dynamic
+
+  // Find the builtin class definition template.
+	const AAFObjectModel * objectModel = AAFObjectModel::singleton();
+	PropertyDefinition * propertyDefinition = const_cast<PropertyDefinition*>(objectModel->findPropertyDefinition(&rAuid));
+
+  if (propertyDefinition && !propertyDefinition->isNil())
+		{
+		  // Yup, matches.  Set the pid.
+          OMPropertyId ePid = propertyDefinition->pid();
+          if ((ePid == 0) || (ePid >= 0x8000)) {
+            // remap from zero or another dynamic pid
+		    propertyDefinition->setPid(pid);
+		    return AAFRESULT_SUCCESS;
+          } else {
+            // Cannot remap from non-dynamic pid
+            return E_FAIL;
+          }
+		}
+
+  // Not found.
+  return E_FAIL;
+}
 
 ImplAAFClassDef * ImplAAFBuiltinClasses::LookupAxiomaticClass
 (const aafUID_t & classId)

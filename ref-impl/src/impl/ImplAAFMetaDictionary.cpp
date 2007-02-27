@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2005, Licensor of the
+// The Original Code of this file is Copyright 1998-2007, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -314,10 +314,11 @@ void ImplAAFMetaDictionary::onRestore(void* /* clientContext */) const
 
 // Use "propertyId" as the "local tag" (2 bytes) for "id" (16 bytes).
 void
-ImplAAFMetaDictionary::associate(const OMObjectIdentification& /* id */,
-                                 const OMPropertyId /* propertyId */)
+ImplAAFMetaDictionary::associate(const OMObjectIdentification& id,
+                                 const OMPropertyId propertyId)
 {
-  // Not yet implemented - will be needed for "dynamic local tags"
+  ASSERTU(_dataDictionary);
+  _dataDictionary->associate(*reinterpret_cast<const aafUID_t *>(&id), propertyId);
 }
 
 ClassDefinitionsIterator* ImplAAFMetaDictionary::classDefinitions(void) const

@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2007, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -72,6 +72,9 @@ public:
   // outPid and returns E_FAIL.
   AAFRESULT LookupOmPid (const aafUID_t & rAuid,
 						 OMPropertyId & outPid) const;
+
+  AAFRESULT MapOmPid(const aafUID_t & rAuid,
+                     OMPropertyId pid);
 
   // Returns the axiomatic class definition corresponding to the given
   // class ID.  If not found, returns null.
