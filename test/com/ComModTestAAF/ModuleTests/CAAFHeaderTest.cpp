@@ -15,7 +15,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2007, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -923,12 +923,6 @@ void HeaderTest::checkOperationalPattern()
 void HeaderTest::checkEssenceContainer()
 {
   //Essence containers created in createFileMob() so that below methods could be tested
-  if(_pDictionary2 == NULL)
-  {
-    check(_pDictionary->QueryInterface(IID_IAAFDictionary2, reinterpret_cast<void**>(&_pDictionary2) ) );
-    assert(_pDictionary2);
-  }
-
   //NOTE:_pHeader2 init'd in (this*)checkOperationalPattern()
   if(_pHeader2->UpdateEssenceContainers() != AAFRESULT_SUCCESS)
     check(AAFRESULT_TEST_FAILED); 
@@ -937,23 +931,17 @@ void HeaderTest::checkEssenceContainer()
   if(_pHeader2->CountEssenceContainers(&count) != AAFRESULT_SUCCESS)
     check(AAFRESULT_TEST_FAILED);
 
-  //ensure the # of container defs equals # of essence containers
-  aafUInt32 num;
-  check(_pDictionary2->CountContainerDefs(&num));
-  if(count != num)
-    check(AAFRESULT_TEST_FAILED);    
-
   aafUID_t* pContIDs = new aafUID_t [count]; 
   if(_pHeader2->GetEssenceContainers(count, pContIDs) != AAFRESULT_SUCCESS)
     check(AAFRESULT_TEST_FAILED);
 
-  aafBoolean_t isPresent = false;
+    aafBoolean_t isPresent = false;
   if(_pHeader2->IsEssenceContainerPresent(pContIDs[0], &isPresent) != AAFRESULT_SUCCESS)
-    check(AAFRESULT_TEST_FAILED);  
+      check(AAFRESULT_TEST_FAILED); 
 
-  //ensure the container was found
-  if(isPresent == false)
-    check(AAFRESULT_TEST_FAILED); 
+    //ensure the container was found
+    if(isPresent == false)
+      check(AAFRESULT_TEST_FAILED); 
 
   delete [] pContIDs;
 
