@@ -115,6 +115,7 @@ struct HeaderTest
   void openEssenceData();
 
   int formatMobName(aafUInt32 itemNumber, wchar_t* mobName);
+  aafUID_t getMobContainerFormatID(aafUInt32 itemNumber);
   void cleanupReferences();
   void check(HRESULT hr);
   void removeTestFile(const wchar_t* pFileName);
@@ -935,16 +936,105 @@ void HeaderTest::checkEssenceContainer()
   if(_pHeader2->GetEssenceContainers(count, pContIDs) != AAFRESULT_SUCCESS)
     check(AAFRESULT_TEST_FAILED);
 
+  //check essence containers
+  for (aafUInt32 c = 0; c < count; ++c)
+  {
     aafBoolean_t isPresent = false;
-  if(_pHeader2->IsEssenceContainerPresent(pContIDs[0], &isPresent) != AAFRESULT_SUCCESS)
-      check(AAFRESULT_TEST_FAILED); 
+    check(_pHeader2->IsEssenceContainerPresent(pContIDs[c], &isPresent));
 
     //ensure the container was found
     if(isPresent == false)
       check(AAFRESULT_TEST_FAILED); 
 
+    //ensure the container is used by at least one of the mobs
+    bool found = false;
+    for (aafUInt32 item = 0; item < gMaxMobCount; ++item)
+    {
+      aafUID_t containerFormatID = getMobContainerFormatID(item);
+      if(containerFormatID == pContIDs[c])
+      {
+        found = true;
+        break;
+      }
+    }
+    if(found != true)
+      check(AAFRESULT_TEST_FAILED);
+  }
+
+  // For each file mob ensure that the container definition it
+  // references is among essence containers in the header.
+  for (aafUInt32 item = 0; item < gMaxMobCount; ++item)
+  {
+    aafUID_t containerFormatID = getMobContainerFormatID(item);
+    aafBoolean_t isPresent = false;
+    check(_pHeader2->IsEssenceContainerPresent(containerFormatID, &isPresent));
+    //ensure the container was found
+    if(isPresent == false)
+      check(AAFRESULT_TEST_FAILED); 
+  }
+
   delete [] pContIDs;
 
+}
+
+aafUID_t HeaderTest::getMobContainerFormatID(aafUInt32 itemNumber)
+{
+  assert(_pHeader);
+  assert(0 <= itemNumber && gMaxMobCount > itemNumber);
+
+  IAAFMob* pMob = NULL;
+  check(_pHeader->LookupMob(_mobID[itemNumber], &pMob));
+
+  IAAFSourceMob* pSourceMob = NULL;
+  check(pMob->QueryInterface(IID_IAAFSourceMob, reinterpret_cast<void**>(&pSourceMob)));
+
+  IAAFEssenceDescriptor* pEssenceDescriptor = NULL;
+  check(pSourceMob->GetEssenceDescriptor(&pEssenceDescriptor));
+
+  IAAFFileDescriptor* pFileDescriptor = NULL;
+  check(pEssenceDescriptor->QueryInterface(IID_IAAFFileDescriptor, reinterpret_cast<void**>(&pFileDescriptor)));
+
+  IAAFContainerDef* pContainerDef = 0;
+  check(pFileDescriptor->GetContainerFormat(&pContainerDef));
+
+  IAAFDefObject* pDefObject = NULL;
+  check(pContainerDef->QueryInterface(IID_IAAFDefObject, reinterpret_cast<void**>(&pDefObject)));
+
+  aafUID_t  containerDefID;
+  check(pDefObject->GetAUID(&containerDefID));
+
+  if (NULL != pMob)
+  {
+    pMob->Release();
+    pMob = NULL;
+  }
+  if (NULL != pSourceMob)
+  {
+    pSourceMob->Release();
+    pSourceMob = NULL;
+  }
+  if (NULL != pEssenceDescriptor)
+  {
+    pEssenceDescriptor->Release();
+    pEssenceDescriptor = NULL;
+  }
+  if (NULL != pFileDescriptor)
+  {
+    pFileDescriptor->Release();
+    pFileDescriptor = NULL;
+  }
+  if (NULL != pContainerDef)
+  {
+    pContainerDef->Release();
+    pContainerDef = NULL;
+  }
+  if (NULL != pDefObject)
+  {
+    pDefObject->Release();
+    pDefObject = NULL;
+  }
+
+  return containerDefID;
 }
 
 void HeaderTest::checkDescriptiveSchemes()
