@@ -521,6 +521,8 @@ public:
     // @cmember Destroy all <c Fixup>s.
   void destroyFixups(void);
 
+  static bool endsMetadata(const OMKLVKey& k);
+
 private:
   // @access Private members.
 

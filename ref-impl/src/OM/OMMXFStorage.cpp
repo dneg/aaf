@@ -2678,6 +2678,23 @@ bool OMMXFStorage::findPattern(const OMRawStorage* store,
   return found;
 }
 
+bool OMMXFStorage::endsMetadata(const OMKLVKey& k)
+{
+  TRACE("OMMXFStorage::endsMetadata");
+
+  bool result = false;
+  if (isPartition(k)) {
+    result = true;
+  } else if (k == RandomIndexMetadataKey) {
+    result = true;
+  } else if (isEssence(k) || k == SystemMetadataKey) {
+    result = true;
+  } else if (isIndex(k)) {
+    result = true;
+  }
+  return result;
+}
+
 void OMMXFStorage::markMetadataStart(OMUInt64 primerKeyPosition)
 {
   TRACE("OMMXFStorage::markMetadataStart");
