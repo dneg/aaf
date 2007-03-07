@@ -261,8 +261,8 @@ void OMWeakReferenceProperty<Key, ReferencedObject>::save(void) const
 {
   TRACE("OMWeakReferenceProperty<Key, ReferencedObject>::save");
 
-  // Is this->isVoid() good enough? 
-  PRECONDITION("Non-void weak reference", !isVoid());
+  PRECONDITION("Non-void weak reference",
+                                isResolved() || (!isVoid() && isResolvable()));
 
   store()->save(*this);
 }
