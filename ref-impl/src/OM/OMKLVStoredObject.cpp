@@ -870,22 +870,27 @@ OMRootStorable* OMKLVStoredObject::restore(OMFile& file)
   OMStorable* r = 0;
   root->setClassFactory(dictionary);
   convert(cid, k);
-  while (dictionary->isRegistered(cid)) {
-    OMStorable* object = dictionary->create(cid);
-    ASSERT("Registered class id", object != 0);
-    ASSERT("Valid class factory", dictionary == object->classFactory());
+  while (!OMMXFStorage::endsMetadata(k)) {
+    if (dictionary->isRegistered(cid)) {
+      OMStorable* object = dictionary->create(cid);
+      ASSERT("Registered class id", object != 0);
+      ASSERT("Valid class factory", dictionary == object->classFactory());
 #if !defined(OM_NO_VALIDATE_DEFINITIONS)
-    ASSERT("Valid class definition", object->definition() != 0);
+      ASSERT("Valid class definition", object->definition() != 0);
 #endif
-    if (r == 0) {
-      r = object; // HACK4MEIP2 - First object is root
-    }
-    // Attach the object.
-    // tjb !!! object->attach(containingObject, name);
-    // tjb !!! object->setStore(this);
-    object->onRestore(file.clientOnSaveContext());
+      if (r == 0) {
+        r = object; // HACK4MEIP2 - First object is root
+      }
+      // Attach the object.
+      // tjb !!! object->attach(containingObject, name);
+      // tjb !!! object->setStore(this);
+      object->onRestore(file.clientOnSaveContext());
 
-    flatRestore(*object->propertySet());
+      flatRestore(*object->propertySet());
+    } else {
+      //  Dark meta data
+      _storage->skipLV();
+    }
 
     _storage->readKLVKey(k);
     convert(cid, k);
