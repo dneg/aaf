@@ -48,8 +48,8 @@
 //
 // AAFMetaDict.csv 
 //
-// This file was generated on Fri Feb  2 15:47:31 EST 2007
-// by user wschilp on system wschilppc.
+// This file was generated on Sun Mar 11 17:26:55 GMTST 2007
+// by user ian on system IANS.
 //
 // Key to macros.
 //
