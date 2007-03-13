@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2005, Licensor of the
+// The Original Code of this file is Copyright 1998-2007, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -21,6 +21,12 @@
 // All rights reserved.
 //
 //=---------------------------------------------------------------------=
+
+// Undefine NO_REFERENCE_TO_MOB_TEST to enable the test of
+// sets of references to mob. The tests a complied out because
+// files with property definitions which are references to mobs
+// cannot be opened by the previous version of the toolkit.
+#define NO_REFERENCE_TO_MOB_TEST
 
 #include "AAF.h"
 #include "AAFResult.h"
@@ -64,6 +70,7 @@ typedef IAAFSmartPointer<IEnumAAFMobSlots>      IEnumAAFMobSlotsSP;
 typedef IAAFSmartPointer<IAAFMobSlot>           IAAFMobSlotSP;
 typedef IAAFSmartPointer<IAAFTypeDefObjectRef>  IAAFTypeDefObjectRefSP;
 typedef IAAFSmartPointer<IAAFTypeDefStrongObjRef>   IAAFTypeDefStrongObjRefSP;
+typedef IAAFSmartPointer<IAAFTypeDefWeakObjRef>   IAAFTypeDefWeakObjRefSP;
 typedef IAAFSmartPointer<IAAFTaggedValue>       IAAFTaggedValueSP;
 typedef IAAFSmartPointer<IAAFMetaDefinition>    IAAFMetaDefinitionSP;
 typedef IAAFSmartPointer<IEnumAAFPropertyValues> IEnumAAFPropertyValuesSP;
@@ -139,6 +146,49 @@ static aafCharacter_constptr kTaggedValueValue[kMaxComponentAttributes] =
   L"VALUE 5"  
 };
  
+
+#ifndef NO_REFERENCE_TO_MOB_TEST
+// Data for testing weak reference to mob
+//
+
+static aafCharacter_constptr kMobWeakRefVariableArrayTypeName = L"MobWeakRefVariableArray type";
+
+// {E9794B79-AB2F-4827-9A31-3539B29867D6}
+static const aafUID_t kMobWeakRefVariableArrayTypeID =
+{ 0xe9794b79, 0xab2f, 0x4827, { 0x9a, 0x31, 0x35, 0x39, 0xb2, 0x98, 0x67, 0xd6 } };
+
+static aafCharacter_constptr kMobReferencedMobsPropertyName = L"Mob ReferencedMobs property";
+
+// {6F7B3C85-7F57-490b-A3A8-E5F2B4B14434}
+static const aafUID_t kMobReferencedMobsPropertyID =
+{ 0x6f7b3c85, 0x7f57, 0x490b, { 0xa3, 0xa8, 0xe5, 0xf2, 0xb4, 0xb1, 0x44, 0x34 } };
+
+
+static const aafMobID_t TEST_Referenced_MobID1 =
+{{0x06, 0x0c, 0x2b, 0x34, 0x02, 0x05, 0x11, 0x01, 0x01, 0x00, 0x10, 0x00},
+0x13, 0x00, 0x00, 0x00,
+{0xb6136bc8, 0xde6, 0x42b9, { 0xb2, 0xf5, 0x98, 0x08, 0x2b, 0x58, 0x1f, 0x56}}};
+
+static const aafMobID_t TEST_Referenced_MobID2 =
+{{0x06, 0x0c, 0x2b, 0x34, 0x02, 0x05, 0x11, 0x01, 0x01, 0x00, 0x10, 0x00},
+0x13, 0x00, 0x00, 0x00,
+{0xe147fba0, 0x8396, 0x41e8, { 0x83, 0x74, 0x9c, 0xe7, 0x23, 0x63, 0xaa, 0xcb}}};
+
+static const aafMobID_t TEST_Referenced_MobID3 =
+{{0x06, 0x0c, 0x2b, 0x34, 0x02, 0x05, 0x11, 0x01, 0x01, 0x00, 0x10, 0x00},
+0x13, 0x00, 0x00, 0x00,
+{0x9957965a, 0xefc3, 0x4b56, { 0xa0, 0x73, 0xf6, 0x09, 0x98, 0x37, 0x56, 0xa8}}};
+
+static const aafMobID_t TEST_Referenced_MobIDs[] =
+{
+  TEST_Referenced_MobID1,
+  TEST_Referenced_MobID2,
+  TEST_Referenced_MobID3
+};
+
+static const aafUInt32 kMaxReferencedMobs = sizeof(TEST_Referenced_MobIDs)/sizeof(TEST_Referenced_MobIDs[0]);
+#endif
+
 
 // i find this convenient to compare the IUNK's of two interfaces :
 template <class T1, class T2>
@@ -542,6 +592,239 @@ static HRESULT createVAFiller(IAAFDictionary* const pDict, IAAFFillerSP&  spFill
 
 
 
+#ifndef NO_REFERENCE_TO_MOB_TEST
+static HRESULT  createMobWeakRefVAType (IAAFDictionary* const pDict)
+{
+	IAAFTypeDefSP spTD_elem;
+	checkResult(pDict->LookupTypeDef (kAAFTypeID_MobWeakReference, &spTD_elem));
+	
+	//Create a Variable Array
+	IAAFTypeDefVariableArraySP spVA;
+	checkResult(pDict->CreateMetaInstance (AUID_AAFTypeDefVariableArray, IID_IAAFTypeDefVariableArray, (IUnknown **) &spVA));
+	
+	//IAAFTypeDefVariableArray::Initialize
+	checkResult(spVA->Initialize(kMobWeakRefVariableArrayTypeID, spTD_elem,  kMobWeakRefVariableArrayTypeName));
+	
+	//  Register our new VA type def :
+	IAAFTypeDefSP spTD_fa;
+	checkResult(spVA->QueryInterface(IID_IAAFTypeDef, (void**)&spTD_fa));
+	checkResult(pDict->RegisterTypeDef(spTD_fa));
+	
+	return S_OK;
+}//createMobWeakRefVAType()
+
+
+static HRESULT addMobWeakRefVATypeToMob(IAAFDictionary* const pDict)
+{
+	CAAFBuiltinDefs defs(pDict);
+	
+	IAAFClassDefSP spMobClass;
+	checkResult(pDict->LookupClassDef (AUID_AAFMob, &spMobClass));	
+	
+	IAAFTypeDefSP spTD;
+	checkResult(pDict->LookupTypeDef (kMobWeakRefVariableArrayTypeID, &spTD));
+	
+		
+	IAAFPropertyDefSP spPropDef;
+	checkResult(spMobClass->RegisterOptionalPropertyDef (kMobReferencedMobsPropertyID,
+                kMobReferencedMobsPropertyName,
+		spTD,
+		&spPropDef));
+	
+	return S_OK;
+}//addMobWeakRefVATypeToMob()
+
+
+static HRESULT createMobWeakRefValue(
+  IAAFDictionary* const pDict,
+  IAAFMob* pReferencedMob,
+  IAAFPropertyValue **ppPropertyValue)
+{
+	assert (pDict && pReferencedMob && ppPropertyValue);
+	CAAFBuiltinDefs defs(pDict);
+	
+	IAAFDefObjectSP pMobObject;
+	checkResult(pReferencedMob->QueryInterface(IID_IAAFObject, (void**)&pMobObject));
+
+	// Now create the strong reference to tagged value
+	IAAFTypeDefSP spType;
+	checkResult(pDict->LookupTypeDef(kAAFTypeID_MobWeakReference, &spType));
+
+	IAAFTypeDefObjectRefSP spObjectReferenceType;
+	checkResult(spType->QueryInterface(IID_IAAFTypeDefObjectRef, (void **)&spObjectReferenceType));
+
+	checkResult(spObjectReferenceType->CreateValue(pMobObject, ppPropertyValue));
+
+	return S_OK;
+}
+
+
+static HRESULT createMobWeakRefVA(IAAFDictionary* pDict, IAAFHeader* pHeader, IAAFMobSP&  spOwnerMob)
+{
+	IAAFObjectSP spObj;
+	checkResult(spOwnerMob->QueryInterface(IID_IAAFObject, (void**)&spObj));
+
+	//Get the  property def for Component::VA
+	IAAFClassDefSP spCD_mob;
+	checkResult(pDict->LookupClassDef(AUID_AAFMob, &spCD_mob));
+
+	//From Class Def, get the Property Def
+	IAAFPropertyDefSP spPD_mob;
+	checkResult(spCD_mob->LookupPropertyDef(kMobReferencedMobsPropertyID, &spPD_mob));
+
+	aafBoolean_t  bIsPresent = kAAFTrue;
+
+	//Verify that optional property is NOT yet present in object
+	checkResult(spObj->IsPropertyPresent(spPD_mob, &bIsPresent));
+	checkExpression(bIsPresent == kAAFFalse, AAFRESULT_TEST_FAILED);
+
+
+	//Now, create a property value .......
+
+	//first, get the type def
+	//Lookup the VA type
+	IAAFTypeDefSP spTypeDef;
+	checkResult(pDict->LookupTypeDef(kMobWeakRefVariableArrayTypeID, &spTypeDef));
+
+	//Get the VA typedef
+	IAAFTypeDefVariableArraySP  spVA;
+	checkResult(spTypeDef->QueryInterface(IID_IAAFTypeDefVariableArray, (void**)&spVA));
+
+
+	//Set the array up: Create an array of strong references to tagged values...
+	IAAFPropertyValueSP spElementPropertyValueArray[kMaxReferencedMobs];
+	IAAFPropertyValue * pElementPropertyValueArray[kMaxReferencedMobs]; // copies of pointers "owned by" the smartptr array.
+  	aafUInt32 i;
+  	for (i = 0; i < kMaxReferencedMobs; i++)
+	{
+	  IAAFMobSP spMob;
+	  checkResult(pHeader->LookupMob (TEST_Referenced_MobIDs[i], &spMob));
+
+	  IAAFPropertyValueSP spElementPropertyValue;
+	  checkResult(createMobWeakRefValue(pDict, spMob, &spElementPropertyValue));
+	  
+	  spElementPropertyValueArray[i] = spElementPropertyValue;
+	  pElementPropertyValueArray[i] = spElementPropertyValueArray[i];
+	}
+
+  
+	IAAFPropertyValueSP spArrayPropertyValue;
+	
+  	checkResult( spVA->CreateEmptyValue (&spArrayPropertyValue) );
+  	for (i = 0; i < kMaxReferencedMobs; i++)
+  	{	  
+  	  checkResult(spVA->AppendElement(spArrayPropertyValue, pElementPropertyValueArray[i]));
+  	}
+	
+	//Set the value VA to the Object *****************************************
+	checkResult(spObj->SetPropertyValue(spPD_mob, spArrayPropertyValue));
+	
+	//Verify that the optional property is now present in the object
+	checkResult(spObj->IsPropertyPresent(spPD_mob, &bIsPresent));
+	checkExpression(bIsPresent == kAAFTrue,  AAFRESULT_TEST_FAILED);
+	
+	return S_OK;
+}//createMobWeakRefVA()
+
+
+static HRESULT verityMobWeakRefs(
+  IAAFDictionary* pDict,
+  IAAFHeader* pHeader,
+  IAAFMob * pOwnerMob,
+  testMode_t testMode)
+{
+  if (kAAFUnitTestReadWrite == testMode)
+  { 
+  	IAAFObjectSP spObject;
+  	checkResult(pOwnerMob->QueryInterface(IID_IAAFObject, (void **)&spObject));
+
+  	IAAFClassDefSP spMobClass;
+  	checkResult(pDict->LookupClassDef(AUID_AAFMob, &spMobClass));
+
+  	IAAFPropertyDefSP spPropertyDef;
+  	checkResult(spMobClass->LookupPropertyDef(kMobReferencedMobsPropertyID, &spPropertyDef));
+
+  	// Verify that optional property is present in object
+  	aafBoolean_t  bIsPresent = kAAFFalse;
+  	checkResult(spObject->IsPropertyPresent(spPropertyDef, &bIsPresent));
+  	checkExpression(bIsPresent == kAAFTrue, AAFRESULT_TEST_FAILED);
+
+  	// Get the value...
+  	IAAFPropertyValueSP spArrayPropertyValue;
+  	checkResult(spObject->GetPropertyValue(spPropertyDef, &spArrayPropertyValue));
+  	IAAFTypeDefSP spPropertyValueType;
+  	checkResult(spArrayPropertyValue->GetType(&spPropertyValueType));
+
+  	// Make sure that the type is a variable array.
+  	IAAFTypeDefVariableArraySP spVA;
+  	checkResult(spPropertyValueType->QueryInterface(IID_IAAFTypeDefVariableArray, (void **)&spVA));
+
+  	IAAFTypeDefSP spElementType;
+  	checkResult(spVA->GetType(&spElementType));
+
+        // Make sure that the element type is a weak reference
+  	IAAFTypeDefWeakObjRefSP spWeakObjectReference;
+  	checkResult(spElementType->QueryInterface(IID_IAAFTypeDefWeakObjRef, (void **)&spWeakObjectReference));
+
+  	IAAFTypeDefObjectRefSP spObjectReference;
+  	checkResult(spWeakObjectReference->QueryInterface(IID_IAAFTypeDefObjectRef, (void **)&spObjectReference));
+
+  	IAAFClassDefSP spObjectClass;
+  	checkResult(spObjectReference->GetObjectType(&spObjectClass));
+
+  	IAAFMetaDefinitionSP spMetaDefinition;
+  	checkResult(spObjectClass->QueryInterface(IID_IAAFMetaDefinition, (void **)&spMetaDefinition));
+
+  	aafUID_t objectClassID;
+  	checkResult(spMetaDefinition->GetAUID(&objectClassID));
+  	checkExpression(0 == memcmp(&objectClassID, &AUID_AAFMob, sizeof(aafUID_t)), AAFRESULT_TEST_FAILED);
+
+  	// Check the count.
+  	aafUInt32 elementCount;
+  	checkResult(spVA->GetCount(spArrayPropertyValue, &elementCount));
+  	checkExpression(kMaxReferencedMobs == elementCount, AAFRESULT_TEST_FAILED);
+
+  	// Check the contents
+  	IEnumAAFPropertyValuesSP spPropertyValues;
+  	checkResult(spVA->GetElements(spArrayPropertyValue, &spPropertyValues));
+
+  	aafUInt32 index;
+  	for (index = 0; index < elementCount; index++)
+  	{
+  	  IAAFPropertyValueSP spElementValue;
+  	  checkResult(spPropertyValues->NextOne(&spElementValue));
+
+  	  // Get the referenced mob
+  	  IAAFMobSP spMob;
+  	  checkResult(spObjectReference->GetObject(spElementValue, IID_IAAFMob, (IUnknown **)&spMob));
+
+  	  aafMobID_t mobID;
+  	  checkResult(spMob->GetMobID(&mobID));
+
+	  // Make sure that the referenced mob
+	  bool found = false;
+	  for (aafUInt32 i = 0; i < kMaxReferencedMobs; i++)
+	  {
+		  if (memcmp(&mobID, &(TEST_Referenced_MobIDs[i]), sizeof(aafMobID_t)) == 0)
+		  {
+			  found = true;
+			  break;
+		  }
+	  }
+  	  checkExpression(found == true, AAFRESULT_TEST_FAILED);
+
+	  // Make sure that the referenced mob is in the header (redundant?)
+	  IAAFMobSP spTempMob;
+  	  checkResult(pHeader->LookupMob(mobID, &spTempMob));
+    }
+  }
+
+  return S_OK;
+}
+#endif
+
+
+
 static HRESULT verifyContents (testMode_t testMode, IAAFHeader* const pHeader, IAAFDictionary* const pDict,
 							   const aafBoolean_t bMinimalTesting)
 {
@@ -645,7 +928,12 @@ static HRESULT verifyContents (testMode_t testMode, IAAFHeader* const pHeader, I
   	//Test see if the variable arrays of tagged values are present.
   	checkResult(verityTaggedValueAttributes(pDict, spObj, kComponentAttributesProperty1ID, testMode));
   	checkResult(verityTaggedValueAttributes(pDict, spObj, kComponentAttributesProperty2ID, testMode));
-	}
+
+#ifndef NO_REFERENCE_TO_MOB_TEST
+  	// Test to see if the variable array of weak references to mobs is present.
+  	checkResult(verityMobWeakRefs(pDict, pHeader, spMob, testMode));
+#endif
+  }
 
 	//At this point, the test is succesful for both the CREATE and READ (unscrambling of .aaf file) routines
 	if (bMinimalTesting)
@@ -937,7 +1225,28 @@ static HRESULT CreateAAFFile(
 		
 		//FINALLY .... Add mob to header
 		checkResult (pHeader->AddMob (spMob));
-		
+
+#ifndef NO_REFERENCE_TO_MOB_TEST
+		// Add mobs to be weakly referenced
+		for (aafUInt32 i = 0; i < kMaxReferencedMobs; i++)
+		{
+			IAAFMobSP spReferencedMob;
+			checkResult(defs.cdMasterMob()->
+				CreateInstance(IID_IAAFMob, 
+				(IUnknown **)&spReferencedMob));
+			checkResult(spReferencedMob->SetMobID(TEST_Referenced_MobIDs[i]));
+			checkResult(pHeader->AddMob (spReferencedMob));
+		}
+
+		// Test array of weak references to mob
+		if(testRev.major >= 1 && (testRev.minor > 0 || testRev.patchLevel > 3))
+		{
+			checkResult(createMobWeakRefVAType (pDict));
+			checkResult(addMobWeakRefVATypeToMob (pDict));
+			checkResult(createMobWeakRefVA(pDict, pHeader, spMob));
+		}
+#endif
+
 		//////////////////// done /!!!!!!!!!!!!!!!!!!!!!!
 		
 		//Verify results right away (during this creation process) ....
