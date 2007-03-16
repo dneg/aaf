@@ -39,6 +39,9 @@
 
 
 
+#include "CAAFPlainEssenceData.h"
+#include "ImplAAFPlainEssenceData.h"
+
 #include "CAAFSourceMob.h"
 #include "ImplAAFSourceMob.h"
 
@@ -880,7 +883,7 @@ HRESULT STDMETHODCALLTYPE
 
 HRESULT STDMETHODCALLTYPE
     CAAFEssenceData::GetPlainEssenceData (aafUInt32  reserved,
-        IAAFEssenceData ** pPlainEssenceData)
+        IAAFPlainEssenceData ** pPlainEssenceData)
 {
   HRESULT hr;
 
@@ -895,8 +898,8 @@ HRESULT STDMETHODCALLTYPE
   //
   // set up for pPlainEssenceData
   //
-  ImplAAFEssenceData * internalpPlainEssenceData = NULL;
-  ImplAAFEssenceData ** pinternalpPlainEssenceData = NULL;
+  ImplAAFPlainEssenceData * internalpPlainEssenceData = NULL;
+  ImplAAFPlainEssenceData ** pinternalpPlainEssenceData = NULL;
   if (pPlainEssenceData)
     {
       pinternalpPlainEssenceData = &internalpPlainEssenceData;
@@ -948,7 +951,7 @@ HRESULT STDMETHODCALLTYPE
       if (internalpPlainEssenceData)
         {
           pUnknown = static_cast<IUnknown *> (internalpPlainEssenceData->GetContainer());
-          hStat = pUnknown->QueryInterface(IID_IAAFEssenceData, (void **)pPlainEssenceData);
+          hStat = pUnknown->QueryInterface(IID_IAAFPlainEssenceData, (void **)pPlainEssenceData);
           assert (SUCCEEDED (hStat));
           //pUnknown->Release();
           internalpPlainEssenceData->ReleaseReference(); // We are through with this pointer.

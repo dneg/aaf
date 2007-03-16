@@ -41,6 +41,7 @@
 
 
 
+
 #ifndef __CAAFObject_h__
 #include "CAAFObject.h"
 #endif
@@ -320,7 +321,7 @@ public:
   // DESCRIPTION:
   // @mfunc AAFRESULT | AAFEssenceData2 | GetPlainEssenceData |
   // Creates an object which implements
-  // the IAAFEssenceData interface and provides access to a file
+  // the AAFPlainEssenceData interface and provides access to a file
   // encoding-independent essence data.
   //
   // Succeeds if:
@@ -346,8 +347,8 @@ public:
     // @parm [in] aafUInt32 | reserved | Reserved for future use
     aafUInt32  reserved,
 
-    // @parm [out,retval] AAFEssenceData | pPlainEssenceData | file encoding-independent essence data
-    IAAFEssenceData ** pPlainEssenceData
+    // @parm [out,retval] AAFPlainEssenceData | pPlainEssenceData | file encoding-independent essence data
+    IAAFPlainEssenceData ** pPlainEssenceData
   );
 
 

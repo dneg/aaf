@@ -473,6 +473,7 @@ DECLARE_INTERFACE_(IAAFAES3PCMDescriptor, IUnknown)
 };
 #endif // __IAAFAES3PCMDescriptor_INTERFACE_DEFINED__
 
+
 // IAAFAIFCDescriptor
 
 // ************************
@@ -8355,6 +8356,7 @@ DECLARE_INTERFACE_(IAAFEssenceAccess, IUnknown)
 // Interface IAAFEssenceData
 //
 // ************************
+
 
 
 
@@ -19638,6 +19640,7 @@ DECLARE_INTERFACE_(IAAFPhysicalDescriptor, IUnknown)
 
 
 
+
 #ifndef __IAAFPlainEssenceData_INTERFACE_DEFINED__
 #define __IAAFPlainEssenceData_INTERFACE_DEFINED__
 
@@ -19656,6 +19659,245 @@ DECLARE_INTERFACE_(IAAFPlainEssenceData, IUnknown)
   STDMETHOD_(ULONG,Release) (THIS) PURE;
 
   /* *** IAAFPlainEssenceData methods *** */
+
+  //***********************************************************
+  //
+  // Initialize()
+  //
+  /// Associates a weak reference to the given file mob with the
+  /// essence data.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pFileMob pointer is valid and points to 
+  /// a file mob (contains a file descriptor).
+  /// 
+  /// If this method fails no state will be changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pFileMob is null.
+  ///
+  /// @param pFileMob [in] reference to a file mob
+  ///
+  STDMETHOD(Initialize) (THIS_
+    IAAFSourceMob * pFileMob) PURE;
+
+
+  //***********************************************************
+  //
+  // Write()
+  //
+  /// Write pre-interleaved data to a essence stream.
+  ///
+  /// @param bytes [in] write this many bytes
+  /// @param buffer [out, size_is(bytes)] here is the buffer
+  /// @param bytesWritten [out,ref] 
+  ///
+  STDMETHOD(Write) (THIS_
+    aafUInt32  bytes,
+    aafDataBuffer_t  buffer,
+    aafUInt32 *  bytesWritten) PURE;
+
+
+  //***********************************************************
+  //
+  // Read()
+  //
+  /// Read pre-interleaved data from a essence stream.
+  ///
+  /// @param bytes [in] read this many bytes
+  /// @param buffer [out, size_is(bytes), length_is(*bytesRead)] here is the buffer
+  /// @param bytesRead [out,ref] 
+  ///
+  STDMETHOD(Read) (THIS_
+    aafUInt32  bytes,
+    aafDataBuffer_t  buffer,
+    aafUInt32 *  bytesRead) PURE;
+
+
+  //***********************************************************
+  //
+  // SetPosition()
+  //
+  /// Seek to absolute position within the essence data.
+  ///
+  /// @param offset [in] offset from beginning of essence
+  ///
+  STDMETHOD(SetPosition) (THIS_
+    aafPosition_t  offset) PURE;
+
+
+  //***********************************************************
+  //
+  // GetPosition()
+  //
+  /// Get the absolute position within the essence data.
+  ///
+  /// @param pOffset [out] offset from beginning of essence
+  ///
+  STDMETHOD(GetPosition) (THIS_
+    aafPosition_t*  pOffset) PURE;
+
+
+  //***********************************************************
+  //
+  // GetSize()
+  //
+  /// Return the total size of the essence data.
+  ///
+  /// @param pSize  [out] size of essence data
+  ///
+  STDMETHOD(GetSize) (THIS_
+    aafLength_t *  pSize ) PURE;
+
+
+  //***********************************************************
+  //
+  // WriteSampleIndex()
+  //
+  /// Write pre-interleaved data to a sample index stream.
+  ///
+  /// @param bytes [in] write this many bytes to the sample index stream
+  /// @param buffer [out, size_is(bytes)] here is the buffer
+  /// @param bytesWritten [out,ref] 
+  ///
+  STDMETHOD(WriteSampleIndex) (THIS_
+    aafUInt32  bytes,
+    aafDataBuffer_t  buffer,
+    aafUInt32 *  bytesWritten) PURE;
+
+
+  //***********************************************************
+  //
+  // ReadSampleIndex()
+  //
+  /// Read pre-interleaved data from a sample index stream.
+  ///
+  /// @param bytes [in] read this many bytes from the sample index stream
+  /// @param buffer [out, size_is(bytes), length_is(*bytesRead)] here is the buffer
+  /// @param bytesRead [out,ref] 
+  ///
+  STDMETHOD(ReadSampleIndex) (THIS_
+    aafUInt32  bytes,
+    aafDataBuffer_t  buffer,
+    aafUInt32 *  bytesRead) PURE;
+
+
+  //***********************************************************
+  //
+  // SetSampleIndexPosition()
+  //
+  /// Seek to absolute position within the sample index data.
+  ///
+  /// @param offset [in] offset from beginning of sample index
+  ///
+  STDMETHOD(SetSampleIndexPosition) (THIS_
+    aafPosition_t  offset) PURE;
+
+
+  //***********************************************************
+  //
+  // GetSampleIndexPosition()
+  //
+  /// Get the absolute position within the sample index data.
+  ///
+  /// @param pOffset [out] offset from beginning of sample index
+  ///
+  STDMETHOD(GetSampleIndexPosition) (THIS_
+    aafPosition_t*  pOffset) PURE;
+
+
+  //***********************************************************
+  //
+  // GetSampleIndexSize()
+  //
+  /// Return the total size of the sample index data.
+  ///
+  /// @param pSize  [out] size of sample index data
+  ///
+  STDMETHOD(GetSampleIndexSize) (THIS_
+    aafLength_t *  pSize ) PURE;
+
+
+  //***********************************************************
+  //
+  // SetFileMob()
+  //
+  /// Associates a weak reference to the given file mob with the
+  /// essence data.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pFileMob pointer is valid and points to 
+  /// a file mob (contains a file descriptor).
+  /// 
+  /// If this method fails no state will be changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pFileMob is null.
+  ///
+  /// @param pFileMob [in] reference to a file mob
+  ///
+  STDMETHOD(SetFileMob) (THIS_
+    IAAFSourceMob * pFileMob) PURE;
+
+
+  //***********************************************************
+  //
+  // GetFileMob()
+  //
+  /// Associates a weak reference to the given file mob with the
+  /// essence data.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the ppFileMob pointer is valid and a weak
+  /// reference to the associated file mob can be
+  /// resolved.
+  /// 
+  /// If this method fails no state will be changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - ppFileMob is null.
+  ///
+  /// @param ppFileMob [in] reference to a file mob
+  ///
+  STDMETHOD(GetFileMob) (THIS_
+    IAAFSourceMob ** ppFileMob) PURE;
+
+
+  //***********************************************************
+  //
+  // GetFileMobID()
+  //
+  /// Return the mob id used to find the file mob associated with this
+  /// essence.  The file mob must exist in the same file as this
+  /// essence data.
+  ///
+  /// @param pFileMobID [out] the file mob id associated with essence
+  ///
+  STDMETHOD(GetFileMobID) (THIS_
+    aafMobID_t *  pFileMobID) PURE;
+
+
 
 
 
@@ -19693,6 +19935,534 @@ DECLARE_INTERFACE_(IAAFPlainStreamData, IUnknown)
   STDMETHOD_(ULONG,Release) (THIS) PURE;
 
   /* *** IAAFPlainStreamData methods *** */
+
+
+  //***********************************************************
+  //
+  // GetSize()
+  //
+  /// Returns number of bytes contained in the referenced property
+  /// value.
+  ///
+  /// Succeeds if:
+  /// - Initialize() has already been called on this object.
+  /// - pStreamPropertyValue is a valid pointer.
+  /// - pSize is a valid pointer.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - Either pStreamPropertyValue or pSize arg is NULL.
+  ///
+  /// @param pStreamPropertyValue [in] stream property value
+  /// @param pSize [out] count of bytes in the specified stream property value
+  ///
+  STDMETHOD(GetSize) (THIS_
+    IAAFPropertyValue * pStreamPropertyValue,
+    aafInt64 *  pSize) PURE;
+
+  //***********************************************************
+  //
+  // SetSize()
+  //
+  /// Set the number of bytes contained in the give stream property value
+  /// to newElementCount
+  /// Succeeds if:
+  /// - Initialize() has already been called on this object.
+  /// - pStreamPropertyValue is a valid pointer.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - If pStreamPropertyValue arg is NULL.
+  ///
+  /// @param pStreamPropertyValue [in] stream property value
+  /// @param newSize [in] new count of bytes in the specified stream property value
+  ///
+  STDMETHOD(SetSize) (THIS_
+    IAAFPropertyValue * pStreamPropertyValue,
+    aafInt64  newSize) PURE;
+
+  //***********************************************************
+  //
+  // GetPosition()
+  //
+  /// Returns the byte position of the current element in the stream. 
+  ///
+  /// Succeeds if:
+  /// - Initialize() has already been called on this object.
+  /// - pStreamPropertyValue is a valid pointer.
+  /// - pPosition is a valid pointer.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - Either pStreamPropertyValue or pPosition arg is NULL.
+  ///
+  /// @param pStreamPropertyValue [in] stream property value
+  /// @param pPosition [out] current byte position in the specified stream property value
+  ///
+  STDMETHOD(GetPosition) (THIS_
+    IAAFPropertyValue * pStreamPropertyValue,
+    aafInt64 *  pPosition) PURE;
+
+  //***********************************************************
+  //
+  // SetPosition()
+  //
+  /// Make the current byte position to the one at newPosition in the stream 
+  /// property value. 
+  ///
+  /// Succeeds if:
+  /// - pStreamPropertyValue is a valid pointer.
+  /// - the new position is valid
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - If pStreamPropertyValue arg is NULL.
+  ///
+  /// AAFRESULT_INVALID_PARAM
+  ///   - newPosition is outside the bounds of the stream.
+  ///
+  /// @param pStreamPropertyValue [in] stream property value
+  /// @param newPosition [in] the new position in the specified stream property value
+  ///
+  STDMETHOD(SetPosition) (THIS_
+    IAAFPropertyValue * pStreamPropertyValue,
+    aafInt64  newPosition) PURE;
+
+
+  //***********************************************************
+  //
+  // Read()
+  //
+  /// Sequential access.
+  /// Copies the data at the position of the stream to the given
+  /// buffer.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pStreamPropertyValue pointer is valid.
+  /// - the pData pointer is valid.
+  /// - the indicated bytes exist in the stream.
+  ///
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - either pStreamPropertyValue or pData arg is NULL.
+  ///
+  /// @param pStreamPropertyValue [in] stream property value to read
+  /// @param dataSize [in] number of bytes to read
+  /// @param pData [out, size_is(dataSize), length_is(*bytesRead)] buffer into which one element from the stream should be written
+  /// @param bytesRead [out,ref] number of bytes actually read (will be either dataSize or 0 if there 
+  /// is in error)
+  ///
+  STDMETHOD(Read) (THIS_
+    IAAFPropertyValue * pStreamPropertyValue,
+    aafUInt32  dataSize,
+    aafMemPtr_t  pData,
+    aafUInt32 *  bytesRead) PURE;
+
+  //***********************************************************
+  //
+  // Write()
+  //
+  /// Sequential access.
+  /// Copies the data in the given buffer into the stream at the 
+  /// current position of the stream..
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pStreamPropertyValue pointer is valid.
+  /// - the pData pointer is valid.
+  /// - the indicated bytes could be written to the stream.
+  ///
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - Either pStreamPropertyValue or pData arg is NULL.
+  ///
+  /// @param pStreamPropertyValue [in] stream property value to modify
+  /// @param dataSize [in] number of bytes to write
+  /// @param pData [in, ref, size_is(dataSize)] buffer into which should contain one element to be written to the stream
+  ///
+  STDMETHOD(Write) (THIS_
+    IAAFPropertyValue * pStreamPropertyValue,
+    aafUInt32  dataSize,
+    aafMemPtr_t  pData) PURE;
+
+  //***********************************************************
+  //
+  // Append()
+  //
+  /// Extending the stream.
+  /// Copies the data in the given buffer into the stream at the 
+  /// end of the stream.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pStreamPropertyValue pointer is valid.
+  /// - the pData pointer is valid.
+  /// - the indicated bytes could be appended to the stream.
+  ///
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - either pStreamPropertyValue or pData arg is NULL.
+  ///
+  /// @param pStreamPropertyValue [in] stream property value to modify
+  /// @param dataSize [in] number of bytes to write (must be equal to the element type length)
+  /// @param pData [in, ref, size_is(dataSize)] buffer into which should contain one element to be written to the stream
+  ///
+  STDMETHOD(Append) (THIS_
+    IAAFPropertyValue * pStreamPropertyValue,
+    aafUInt32  dataSize,
+    aafMemPtr_t  pData) PURE;
+
+
+  //***********************************************************
+  //
+  // HasStoredByteOrder()
+  //
+  /// Returns kAAFTrue if the stream has a stored byte order or 
+  /// kAAFFalse otherwise.
+  ///
+  /// Succeeds if:
+  /// - Initialize() has already been called on this object.
+  /// - pStreamPropertyValue is a valid pointer.
+  /// - pHasByteOrder is a valid pointer.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - Either pStreamPropertyValue or pHasByteOrder arg is NULL.
+  ///
+  /// @param pStreamPropertyValue [in] stream property value
+  /// @param pHasByteOrder [out] kAAFTrue if this stream has a stored byte order
+  ///
+  STDMETHOD(HasStoredByteOrder) (THIS_
+    IAAFPropertyValue * pStreamPropertyValue,
+    aafBoolean_t *  pHasByteOrder) PURE;
+
+  //***********************************************************
+  //
+  // GetStoredByteOrder()
+  //
+  /// Access byte order of the stream.
+  ///
+  /// Succeeds if:
+  /// - Initialize() has already been called on this object.
+  /// - pStreamPropertyValue is a valid pointer.
+  /// - pByteOrder is a valid pointer.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - Either pStreamPropertyValue or pByteOrder arg is NULL.
+  ///
+  /// @param pStreamPropertyValue [in] stream property value
+  /// @param pByteOrder [out] Pointer to variable where byte order is to be copied
+  ///
+  STDMETHOD(GetStoredByteOrder) (THIS_
+    IAAFPropertyValue * pStreamPropertyValue,
+    eAAFByteOrder_t *  pByteOrder) PURE;
+
+  //***********************************************************
+  //
+  // SetStoredByteOrder()
+  //
+  /// Sets the byte order to be associated with this stream. Note: the stream
+  /// must be empty.
+  ///
+  /// Succeeds if:
+  /// - Initialize() has already been called on this object.
+  /// - pStreamPropertyValue is a valid pointer.
+  /// - stream is empty.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - If pStreamPropertyValue arg is NULL.
+  ///
+  /// @param pStreamPropertyValue [in] stream property value
+  /// @param byteOrder [in] byte order is to be stored with the stream
+  ///
+  STDMETHOD(SetStoredByteOrder) (THIS_
+    IAAFPropertyValue * pStreamPropertyValue,
+    eAAFByteOrder_t  byteOrder) PURE;
+
+  //***********************************************************
+  //
+  // ClearStoredByteOrder()
+  //
+  /// Clears the byte order to be associated with this stream. Note: the stream
+  /// must be empty.
+  ///
+  /// Succeeds if:
+  /// - Initialize() has already been called on this object.
+  /// - pStreamPropertyValue is a valid pointer.
+  /// - stream is empty.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - If pStreamPropertyValue arg is NULL.
+  ///
+  /// @param pStreamPropertyValue [in] stream property value
+  ///
+  STDMETHOD(ClearStoredByteOrder) (THIS_
+    IAAFPropertyValue * pStreamPropertyValue) PURE;
+
+
+  //***********************************************************
+  //
+  // ReadElements()
+  //
+  /// Access in typed chunks of Elements.
+  /// Copies the data at the current position of the stream to the given
+  /// buffer. Requires that any structures declared within element 
+  /// typedef have had their offsets registered with that type.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pStreamPropertyValue pointer is valid.
+  /// - the pElementType pointer is valid.
+  /// - the pData pointer is valid.
+  /// - dataSize indicates pData is large enough to hold the data.
+  /// - compile-time struct has had its member offests registered.
+  /// - the indicated elements exist in this stream type def.
+  ///
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - either pStreamPropertyValue or pElementType or pBytesRead or pData arg is NULL.
+  ///
+  /// AAFRESULT_INVALID_PARAM
+  ///   - dataSize indicates pData is too small.
+  ///
+  /// AAFRESULT_NOT_REGISTERED
+  ///  - struct offsets have not yet been registered for element typedef.
+  ///
+  /// AAFRESULT_INVALID_PARAM
+  ///   - there are not dataSize bytes left in the stream.
+  ///
+  /// @param pStreamPropertyValue [in] stream property value to read
+  /// @param pElementType [in] the type definition of the elements to read
+  /// @param dataSize [in] number of bytes to read (must be evenly divisible by the element 
+  /// type length)
+  /// @param pData [out, size_is(dataSize), length_is(*pBytesRead)] buffer into which elements from the stream should be written
+  /// @param pBytesRead [out,ref] number of bytes actually read (will be either dataSize or 0 if 
+  /// there is in error)
+  ///
+  STDMETHOD(ReadElements) (THIS_
+    IAAFPropertyValue * pStreamPropertyValue,
+    IAAFTypeDef * pElementType,
+    aafUInt32  dataSize,
+    aafMemPtr_t  pData,
+    aafUInt32 *  pBytesRead) PURE;
+
+  //***********************************************************
+  //
+  // WriteElements()
+  //
+  /// Access in typed chunks of Elements.
+  /// Copies the data in the given buffer into the stream at the  
+  /// current position of the stream. Requires that any structures 
+  /// declared within element 
+  /// typedef have had their offsets registered with that type..
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pStreamPropertyValue pointer is valid.
+  /// - the pElementType pointer is valid.
+  /// - the pData pointer is valid.
+  /// - dataSize indicates pData is large enough to hold the data.
+  /// - compile-time struct has had its member offests registered.
+  /// - the indicated elements exist in this stream type def.
+  ///
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - either pStreamPropertyValue or pElementType or pData arg is NULL.
+  ///
+  /// AAFRESULT_INVALID_PARAM
+  ///   - dataSize indicates pData is an even multiple of the given 
+  ///     element type size.
+  ///
+  /// AAFRESULT_NOT_REGISTERED
+  ///  - struct offsets have not yet been registered for the element typedef.
+  ///
+  /// @param pStreamPropertyValue [in] stream property value to modify
+  /// @param pElementType [in] the type definition of the elements to read
+  /// @param dataSize [in] number of bytes to write (must be evenly divisible by the element type 
+  /// length)
+  /// @param pData [in, ref, size_is(dataSize)] buffer into which elements from the stream should be written
+  ///
+  STDMETHOD(WriteElements) (THIS_
+    IAAFPropertyValue * pStreamPropertyValue,
+    IAAFTypeDef * pElementType,
+    aafUInt32  dataSize,
+    aafMemPtr_t  pData) PURE;
+
+
+  /// Extend in chunks of typed Elements
+
+  //***********************************************************
+  //
+  // AppendElements()
+  //
+  /// Access in typed chunks of Elements.
+  /// Copies the data in the given buffer onto the end of the stream. 
+  /// Requires that any structures declared within element 
+  /// typedef have had their offsets registered with that type..
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pStreamPropertyValue pointer is valid.
+  /// - the pElementType pointer is valid.
+  /// - the pData pointer is valid.
+  /// - dataSize indicates pData is large enough to hold the data.
+  /// - compile-time struct has had its member offests registered.
+  /// - the indicated elements exist in this stream type def.
+  ///
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - either pStreamPropertyValue or pElementType or pData arg is NULL.
+  ///
+  /// AAFRESULT_INVALID_PARAM
+  ///   - dataSize indicates pData is an even multiple of the given 
+  ///     element type size.
+  ///
+  /// AAFRESULT_NOT_REGISTERED
+  ///  - struct offsets have not yet been registered for the element typedef.
+  ///
+  /// @param pStreamPropertyValue [in] stream property value to modify
+  /// @param pElementType [in] the type definition of the elements to read
+  /// @param dataSize [in] number of bytes to write (must be evenly divisible by the element type 
+  /// length)
+  /// @param pData [in, ref, size_is(dataSize)] buffer into which elements from the stream should be written
+  ///
+  STDMETHOD(AppendElements) (THIS_
+    IAAFPropertyValue * pStreamPropertyValue,
+    IAAFTypeDef * pElementType,
+    aafUInt32  dataSize,
+    aafMemPtr_t  pData) PURE;
+
+
 
 
 
@@ -31752,6 +32522,7 @@ DECLARE_INTERFACE_(IAAFTypeDefSet, IUnknown)
 // Interface IAAFTypeDefStream
 //
 // ************************
+
 
 
 
@@ -44452,6 +45223,7 @@ DECLARE_INTERFACE_(IAAFEssenceDataEx, IUnknown)
 
 
 
+
 #ifndef __IAAFEssenceData2_INTERFACE_DEFINED__
 #define __IAAFEssenceData2_INTERFACE_DEFINED__
 
@@ -44713,7 +45485,7 @@ DECLARE_INTERFACE_(IAAFEssenceData2, IUnknown)
   // GetPlainEssenceData()
   //
   /// Creates an object which implements
-  // the IAAFEssenceData interface and provides access to a file
+  // the AAFPlainEssenceData interface and provides access to a file
   // encoding-independent essence data.
   //
   // Succeeds if:
@@ -44738,7 +45510,7 @@ DECLARE_INTERFACE_(IAAFEssenceData2, IUnknown)
   ///
   STDMETHOD(GetPlainEssenceData) (THIS_
     aafUInt32  reserved,
-    IAAFEssenceData ** pPlainEssenceData) PURE;
+    IAAFPlainEssenceData ** pPlainEssenceData) PURE;
 
 
   END_INTERFACE
@@ -50734,6 +51506,7 @@ DECLARE_INTERFACE_(IAAFTypeDefStreamEx, IUnknown)
 
 
 
+
 #ifndef __IAAFTypeDefStream3_INTERFACE_DEFINED__
 #define __IAAFTypeDefStream3_INTERFACE_DEFINED__
 
@@ -51316,7 +52089,7 @@ DECLARE_INTERFACE_(IAAFTypeDefStream3, IUnknown)
   //
   // GetPlainStreamData()
   //
-  /// Creates an object which implements the IAAFTypeDefStream
+  /// Creates an object which implements the IAAFPlainStreamData
   // interface and provides access to the file encoding-independent
   // stream data.
   //
@@ -51342,7 +52115,7 @@ DECLARE_INTERFACE_(IAAFTypeDefStream3, IUnknown)
   ///
   STDMETHOD(GetPlainStreamData) (THIS_
     aafUInt32  reserved,
-    IAAFTypeDefStream ** pPlainStreamData) PURE;
+    IAAFPlainStreamData ** pPlainStreamData) PURE;
 
 
   END_INTERFACE

@@ -40,6 +40,7 @@
 
 
 
+
 #ifndef __CAAFTypeDef_h__
 #include "CAAFTypeDef.h"
 #endif
@@ -644,8 +645,8 @@ public:
   //
   // DESCRIPTION:
   // @mfunc AAFRESULT | AAFTypeDefStream3 | GetPlainStreamData |
-  // Creates an object which implements the IAAFTypeDefStream
-  // interface and provides access to a file encoding-independent
+  // Creates an object which implements the IAAFPlainStreamData
+  // interface and provides access to the file encoding-independent
   // stream data.
   //
   // Succeeds if:
@@ -671,8 +672,8 @@ public:
     // @parm [in] aafUInt32 | reserved | Reserved for future use
     aafUInt32  reserved,
 
-    // @parm [out,retval] AAFTypeDefStream | pPlainStreamData | file encoding-independent stream data
-    IAAFTypeDefStream ** pPlainStreamData
+    // @parm [out,retval] AAFPlainStreamData | pPlainStreamData | file encoding-independent stream data
+    IAAFPlainStreamData ** pPlainStreamData
   );
 
 

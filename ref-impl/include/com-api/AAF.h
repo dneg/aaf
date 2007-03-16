@@ -18860,6 +18860,56 @@ EXTERN_C const IID IID_IAAFPlainEssenceData;
     IAAFPlainEssenceData : public IUnknown
     {
     public:
+        virtual HRESULT STDMETHODCALLTYPE Initialize( 
+            /* [in] */ IAAFSourceMob *pFileMob) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE Write( 
+            /* [in] */ aafUInt32 bytes,
+            /* [size_is][out] */ aafDataBuffer_t buffer,
+            /* [ref][out] */ aafUInt32 *bytesWritten) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE Read( 
+            /* [in] */ aafUInt32 bytes,
+            /* [length_is][size_is][out] */ aafDataBuffer_t buffer,
+            /* [ref][out] */ aafUInt32 *bytesRead) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetPosition( 
+            /* [in] */ aafPosition_t offset) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetPosition( 
+            /* [out] */ aafPosition_t *pOffset) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetSize( 
+            /* [out] */ aafLength_t *pSize) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE WriteSampleIndex( 
+            /* [in] */ aafUInt32 bytes,
+            /* [size_is][out] */ aafDataBuffer_t buffer,
+            /* [ref][out] */ aafUInt32 *bytesWritten) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE ReadSampleIndex( 
+            /* [in] */ aafUInt32 bytes,
+            /* [length_is][size_is][out] */ aafDataBuffer_t buffer,
+            /* [ref][out] */ aafUInt32 *bytesRead) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetSampleIndexPosition( 
+            /* [in] */ aafPosition_t offset) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetSampleIndexPosition( 
+            /* [out] */ aafPosition_t *pOffset) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetSampleIndexSize( 
+            /* [out] */ aafLength_t *pSize) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetFileMob( 
+            /* [in] */ IAAFSourceMob *pFileMob) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetFileMob( 
+            /* [in] */ IAAFSourceMob **ppFileMob) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetFileMobID( 
+            /* [out] */ aafMobID_t *pFileMobID) = 0;
+        
     };
     
 #else 	/* C style interface */
@@ -18878,6 +18928,70 @@ EXTERN_C const IID IID_IAAFPlainEssenceData;
         
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IAAFPlainEssenceData * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *Initialize )( 
+            IAAFPlainEssenceData * This,
+            /* [in] */ IAAFSourceMob *pFileMob);
+        
+        HRESULT ( STDMETHODCALLTYPE *Write )( 
+            IAAFPlainEssenceData * This,
+            /* [in] */ aafUInt32 bytes,
+            /* [size_is][out] */ aafDataBuffer_t buffer,
+            /* [ref][out] */ aafUInt32 *bytesWritten);
+        
+        HRESULT ( STDMETHODCALLTYPE *Read )( 
+            IAAFPlainEssenceData * This,
+            /* [in] */ aafUInt32 bytes,
+            /* [length_is][size_is][out] */ aafDataBuffer_t buffer,
+            /* [ref][out] */ aafUInt32 *bytesRead);
+        
+        HRESULT ( STDMETHODCALLTYPE *SetPosition )( 
+            IAAFPlainEssenceData * This,
+            /* [in] */ aafPosition_t offset);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetPosition )( 
+            IAAFPlainEssenceData * This,
+            /* [out] */ aafPosition_t *pOffset);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetSize )( 
+            IAAFPlainEssenceData * This,
+            /* [out] */ aafLength_t *pSize);
+        
+        HRESULT ( STDMETHODCALLTYPE *WriteSampleIndex )( 
+            IAAFPlainEssenceData * This,
+            /* [in] */ aafUInt32 bytes,
+            /* [size_is][out] */ aafDataBuffer_t buffer,
+            /* [ref][out] */ aafUInt32 *bytesWritten);
+        
+        HRESULT ( STDMETHODCALLTYPE *ReadSampleIndex )( 
+            IAAFPlainEssenceData * This,
+            /* [in] */ aafUInt32 bytes,
+            /* [length_is][size_is][out] */ aafDataBuffer_t buffer,
+            /* [ref][out] */ aafUInt32 *bytesRead);
+        
+        HRESULT ( STDMETHODCALLTYPE *SetSampleIndexPosition )( 
+            IAAFPlainEssenceData * This,
+            /* [in] */ aafPosition_t offset);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetSampleIndexPosition )( 
+            IAAFPlainEssenceData * This,
+            /* [out] */ aafPosition_t *pOffset);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetSampleIndexSize )( 
+            IAAFPlainEssenceData * This,
+            /* [out] */ aafLength_t *pSize);
+        
+        HRESULT ( STDMETHODCALLTYPE *SetFileMob )( 
+            IAAFPlainEssenceData * This,
+            /* [in] */ IAAFSourceMob *pFileMob);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetFileMob )( 
+            IAAFPlainEssenceData * This,
+            /* [in] */ IAAFSourceMob **ppFileMob);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetFileMobID )( 
+            IAAFPlainEssenceData * This,
+            /* [out] */ aafMobID_t *pFileMobID);
         
         END_INTERFACE
     } IAAFPlainEssenceDataVtbl;
@@ -18902,11 +19016,229 @@ EXTERN_C const IID IID_IAAFPlainEssenceData;
     (This)->lpVtbl -> Release(This)
 
 
+#define IAAFPlainEssenceData_Initialize(This,pFileMob)	\
+    (This)->lpVtbl -> Initialize(This,pFileMob)
+
+#define IAAFPlainEssenceData_Write(This,bytes,buffer,bytesWritten)	\
+    (This)->lpVtbl -> Write(This,bytes,buffer,bytesWritten)
+
+#define IAAFPlainEssenceData_Read(This,bytes,buffer,bytesRead)	\
+    (This)->lpVtbl -> Read(This,bytes,buffer,bytesRead)
+
+#define IAAFPlainEssenceData_SetPosition(This,offset)	\
+    (This)->lpVtbl -> SetPosition(This,offset)
+
+#define IAAFPlainEssenceData_GetPosition(This,pOffset)	\
+    (This)->lpVtbl -> GetPosition(This,pOffset)
+
+#define IAAFPlainEssenceData_GetSize(This,pSize)	\
+    (This)->lpVtbl -> GetSize(This,pSize)
+
+#define IAAFPlainEssenceData_WriteSampleIndex(This,bytes,buffer,bytesWritten)	\
+    (This)->lpVtbl -> WriteSampleIndex(This,bytes,buffer,bytesWritten)
+
+#define IAAFPlainEssenceData_ReadSampleIndex(This,bytes,buffer,bytesRead)	\
+    (This)->lpVtbl -> ReadSampleIndex(This,bytes,buffer,bytesRead)
+
+#define IAAFPlainEssenceData_SetSampleIndexPosition(This,offset)	\
+    (This)->lpVtbl -> SetSampleIndexPosition(This,offset)
+
+#define IAAFPlainEssenceData_GetSampleIndexPosition(This,pOffset)	\
+    (This)->lpVtbl -> GetSampleIndexPosition(This,pOffset)
+
+#define IAAFPlainEssenceData_GetSampleIndexSize(This,pSize)	\
+    (This)->lpVtbl -> GetSampleIndexSize(This,pSize)
+
+#define IAAFPlainEssenceData_SetFileMob(This,pFileMob)	\
+    (This)->lpVtbl -> SetFileMob(This,pFileMob)
+
+#define IAAFPlainEssenceData_GetFileMob(This,ppFileMob)	\
+    (This)->lpVtbl -> GetFileMob(This,ppFileMob)
+
+#define IAAFPlainEssenceData_GetFileMobID(This,pFileMobID)	\
+    (This)->lpVtbl -> GetFileMobID(This,pFileMobID)
+
 #endif /* COBJMACROS */
 
 
 #endif 	/* C style interface */
 
+
+
+HRESULT STDMETHODCALLTYPE IAAFPlainEssenceData_Initialize_Proxy( 
+    IAAFPlainEssenceData * This,
+    /* [in] */ IAAFSourceMob *pFileMob);
+
+
+void __RPC_STUB IAAFPlainEssenceData_Initialize_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFPlainEssenceData_Write_Proxy( 
+    IAAFPlainEssenceData * This,
+    /* [in] */ aafUInt32 bytes,
+    /* [size_is][out] */ aafDataBuffer_t buffer,
+    /* [ref][out] */ aafUInt32 *bytesWritten);
+
+
+void __RPC_STUB IAAFPlainEssenceData_Write_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFPlainEssenceData_Read_Proxy( 
+    IAAFPlainEssenceData * This,
+    /* [in] */ aafUInt32 bytes,
+    /* [length_is][size_is][out] */ aafDataBuffer_t buffer,
+    /* [ref][out] */ aafUInt32 *bytesRead);
+
+
+void __RPC_STUB IAAFPlainEssenceData_Read_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFPlainEssenceData_SetPosition_Proxy( 
+    IAAFPlainEssenceData * This,
+    /* [in] */ aafPosition_t offset);
+
+
+void __RPC_STUB IAAFPlainEssenceData_SetPosition_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFPlainEssenceData_GetPosition_Proxy( 
+    IAAFPlainEssenceData * This,
+    /* [out] */ aafPosition_t *pOffset);
+
+
+void __RPC_STUB IAAFPlainEssenceData_GetPosition_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFPlainEssenceData_GetSize_Proxy( 
+    IAAFPlainEssenceData * This,
+    /* [out] */ aafLength_t *pSize);
+
+
+void __RPC_STUB IAAFPlainEssenceData_GetSize_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFPlainEssenceData_WriteSampleIndex_Proxy( 
+    IAAFPlainEssenceData * This,
+    /* [in] */ aafUInt32 bytes,
+    /* [size_is][out] */ aafDataBuffer_t buffer,
+    /* [ref][out] */ aafUInt32 *bytesWritten);
+
+
+void __RPC_STUB IAAFPlainEssenceData_WriteSampleIndex_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFPlainEssenceData_ReadSampleIndex_Proxy( 
+    IAAFPlainEssenceData * This,
+    /* [in] */ aafUInt32 bytes,
+    /* [length_is][size_is][out] */ aafDataBuffer_t buffer,
+    /* [ref][out] */ aafUInt32 *bytesRead);
+
+
+void __RPC_STUB IAAFPlainEssenceData_ReadSampleIndex_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFPlainEssenceData_SetSampleIndexPosition_Proxy( 
+    IAAFPlainEssenceData * This,
+    /* [in] */ aafPosition_t offset);
+
+
+void __RPC_STUB IAAFPlainEssenceData_SetSampleIndexPosition_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFPlainEssenceData_GetSampleIndexPosition_Proxy( 
+    IAAFPlainEssenceData * This,
+    /* [out] */ aafPosition_t *pOffset);
+
+
+void __RPC_STUB IAAFPlainEssenceData_GetSampleIndexPosition_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFPlainEssenceData_GetSampleIndexSize_Proxy( 
+    IAAFPlainEssenceData * This,
+    /* [out] */ aafLength_t *pSize);
+
+
+void __RPC_STUB IAAFPlainEssenceData_GetSampleIndexSize_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFPlainEssenceData_SetFileMob_Proxy( 
+    IAAFPlainEssenceData * This,
+    /* [in] */ IAAFSourceMob *pFileMob);
+
+
+void __RPC_STUB IAAFPlainEssenceData_SetFileMob_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFPlainEssenceData_GetFileMob_Proxy( 
+    IAAFPlainEssenceData * This,
+    /* [in] */ IAAFSourceMob **ppFileMob);
+
+
+void __RPC_STUB IAAFPlainEssenceData_GetFileMob_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFPlainEssenceData_GetFileMobID_Proxy( 
+    IAAFPlainEssenceData * This,
+    /* [out] */ aafMobID_t *pFileMobID);
+
+
+void __RPC_STUB IAAFPlainEssenceData_GetFileMobID_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
 
 
 
@@ -18919,6 +19251,7 @@ EXTERN_C const IID IID_IAAFPlainEssenceData;
 /* interface IAAFPlainStreamData */
 /* [unique][helpstring][uuid][object] */ 
 
+  /// Extend in chunks of typed Elements
 
 EXTERN_C const IID IID_IAAFPlainStreamData;
 
@@ -18928,6 +19261,72 @@ EXTERN_C const IID IID_IAAFPlainStreamData;
     IAAFPlainStreamData : public IUnknown
     {
     public:
+        virtual HRESULT STDMETHODCALLTYPE GetSize( 
+            /* [in] */ IAAFPropertyValue *pStreamPropertyValue,
+            /* [out] */ aafInt64 *pSize) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetSize( 
+            /* [in] */ IAAFPropertyValue *pStreamPropertyValue,
+            /* [in] */ aafInt64 newSize) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetPosition( 
+            /* [in] */ IAAFPropertyValue *pStreamPropertyValue,
+            /* [out] */ aafInt64 *pPosition) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetPosition( 
+            /* [in] */ IAAFPropertyValue *pStreamPropertyValue,
+            /* [in] */ aafInt64 newPosition) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE Read( 
+            /* [in] */ IAAFPropertyValue *pStreamPropertyValue,
+            /* [in] */ aafUInt32 dataSize,
+            /* [length_is][size_is][out] */ aafMemPtr_t pData,
+            /* [ref][out] */ aafUInt32 *bytesRead) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE Write( 
+            /* [in] */ IAAFPropertyValue *pStreamPropertyValue,
+            /* [in] */ aafUInt32 dataSize,
+            /* [size_is][ref][in] */ aafMemPtr_t pData) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE Append( 
+            /* [in] */ IAAFPropertyValue *pStreamPropertyValue,
+            /* [in] */ aafUInt32 dataSize,
+            /* [size_is][ref][in] */ aafMemPtr_t pData) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE HasStoredByteOrder( 
+            /* [in] */ IAAFPropertyValue *pStreamPropertyValue,
+            /* [out] */ aafBoolean_t *pHasByteOrder) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetStoredByteOrder( 
+            /* [in] */ IAAFPropertyValue *pStreamPropertyValue,
+            /* [out] */ eAAFByteOrder_t *pByteOrder) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetStoredByteOrder( 
+            /* [in] */ IAAFPropertyValue *pStreamPropertyValue,
+            /* [in] */ eAAFByteOrder_t byteOrder) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE ClearStoredByteOrder( 
+            /* [in] */ IAAFPropertyValue *pStreamPropertyValue) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE ReadElements( 
+            /* [in] */ IAAFPropertyValue *pStreamPropertyValue,
+            /* [in] */ IAAFTypeDef *pElementType,
+            /* [in] */ aafUInt32 dataSize,
+            /* [length_is][size_is][out] */ aafMemPtr_t pData,
+            /* [ref][out] */ aafUInt32 *pBytesRead) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE WriteElements( 
+            /* [in] */ IAAFPropertyValue *pStreamPropertyValue,
+            /* [in] */ IAAFTypeDef *pElementType,
+            /* [in] */ aafUInt32 dataSize,
+            /* [size_is][ref][in] */ aafMemPtr_t pData) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE AppendElements( 
+            /* [in] */ IAAFPropertyValue *pStreamPropertyValue,
+            /* [in] */ IAAFTypeDef *pElementType,
+            /* [in] */ aafUInt32 dataSize,
+            /* [size_is][ref][in] */ aafMemPtr_t pData) = 0;
+        
     };
     
 #else 	/* C style interface */
@@ -18946,6 +19345,86 @@ EXTERN_C const IID IID_IAAFPlainStreamData;
         
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IAAFPlainStreamData * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetSize )( 
+            IAAFPlainStreamData * This,
+            /* [in] */ IAAFPropertyValue *pStreamPropertyValue,
+            /* [out] */ aafInt64 *pSize);
+        
+        HRESULT ( STDMETHODCALLTYPE *SetSize )( 
+            IAAFPlainStreamData * This,
+            /* [in] */ IAAFPropertyValue *pStreamPropertyValue,
+            /* [in] */ aafInt64 newSize);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetPosition )( 
+            IAAFPlainStreamData * This,
+            /* [in] */ IAAFPropertyValue *pStreamPropertyValue,
+            /* [out] */ aafInt64 *pPosition);
+        
+        HRESULT ( STDMETHODCALLTYPE *SetPosition )( 
+            IAAFPlainStreamData * This,
+            /* [in] */ IAAFPropertyValue *pStreamPropertyValue,
+            /* [in] */ aafInt64 newPosition);
+        
+        HRESULT ( STDMETHODCALLTYPE *Read )( 
+            IAAFPlainStreamData * This,
+            /* [in] */ IAAFPropertyValue *pStreamPropertyValue,
+            /* [in] */ aafUInt32 dataSize,
+            /* [length_is][size_is][out] */ aafMemPtr_t pData,
+            /* [ref][out] */ aafUInt32 *bytesRead);
+        
+        HRESULT ( STDMETHODCALLTYPE *Write )( 
+            IAAFPlainStreamData * This,
+            /* [in] */ IAAFPropertyValue *pStreamPropertyValue,
+            /* [in] */ aafUInt32 dataSize,
+            /* [size_is][ref][in] */ aafMemPtr_t pData);
+        
+        HRESULT ( STDMETHODCALLTYPE *Append )( 
+            IAAFPlainStreamData * This,
+            /* [in] */ IAAFPropertyValue *pStreamPropertyValue,
+            /* [in] */ aafUInt32 dataSize,
+            /* [size_is][ref][in] */ aafMemPtr_t pData);
+        
+        HRESULT ( STDMETHODCALLTYPE *HasStoredByteOrder )( 
+            IAAFPlainStreamData * This,
+            /* [in] */ IAAFPropertyValue *pStreamPropertyValue,
+            /* [out] */ aafBoolean_t *pHasByteOrder);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetStoredByteOrder )( 
+            IAAFPlainStreamData * This,
+            /* [in] */ IAAFPropertyValue *pStreamPropertyValue,
+            /* [out] */ eAAFByteOrder_t *pByteOrder);
+        
+        HRESULT ( STDMETHODCALLTYPE *SetStoredByteOrder )( 
+            IAAFPlainStreamData * This,
+            /* [in] */ IAAFPropertyValue *pStreamPropertyValue,
+            /* [in] */ eAAFByteOrder_t byteOrder);
+        
+        HRESULT ( STDMETHODCALLTYPE *ClearStoredByteOrder )( 
+            IAAFPlainStreamData * This,
+            /* [in] */ IAAFPropertyValue *pStreamPropertyValue);
+        
+        HRESULT ( STDMETHODCALLTYPE *ReadElements )( 
+            IAAFPlainStreamData * This,
+            /* [in] */ IAAFPropertyValue *pStreamPropertyValue,
+            /* [in] */ IAAFTypeDef *pElementType,
+            /* [in] */ aafUInt32 dataSize,
+            /* [length_is][size_is][out] */ aafMemPtr_t pData,
+            /* [ref][out] */ aafUInt32 *pBytesRead);
+        
+        HRESULT ( STDMETHODCALLTYPE *WriteElements )( 
+            IAAFPlainStreamData * This,
+            /* [in] */ IAAFPropertyValue *pStreamPropertyValue,
+            /* [in] */ IAAFTypeDef *pElementType,
+            /* [in] */ aafUInt32 dataSize,
+            /* [size_is][ref][in] */ aafMemPtr_t pData);
+        
+        HRESULT ( STDMETHODCALLTYPE *AppendElements )( 
+            IAAFPlainStreamData * This,
+            /* [in] */ IAAFPropertyValue *pStreamPropertyValue,
+            /* [in] */ IAAFTypeDef *pElementType,
+            /* [in] */ aafUInt32 dataSize,
+            /* [size_is][ref][in] */ aafMemPtr_t pData);
         
         END_INTERFACE
     } IAAFPlainStreamDataVtbl;
@@ -18970,11 +19449,245 @@ EXTERN_C const IID IID_IAAFPlainStreamData;
     (This)->lpVtbl -> Release(This)
 
 
+#define IAAFPlainStreamData_GetSize(This,pStreamPropertyValue,pSize)	\
+    (This)->lpVtbl -> GetSize(This,pStreamPropertyValue,pSize)
+
+#define IAAFPlainStreamData_SetSize(This,pStreamPropertyValue,newSize)	\
+    (This)->lpVtbl -> SetSize(This,pStreamPropertyValue,newSize)
+
+#define IAAFPlainStreamData_GetPosition(This,pStreamPropertyValue,pPosition)	\
+    (This)->lpVtbl -> GetPosition(This,pStreamPropertyValue,pPosition)
+
+#define IAAFPlainStreamData_SetPosition(This,pStreamPropertyValue,newPosition)	\
+    (This)->lpVtbl -> SetPosition(This,pStreamPropertyValue,newPosition)
+
+#define IAAFPlainStreamData_Read(This,pStreamPropertyValue,dataSize,pData,bytesRead)	\
+    (This)->lpVtbl -> Read(This,pStreamPropertyValue,dataSize,pData,bytesRead)
+
+#define IAAFPlainStreamData_Write(This,pStreamPropertyValue,dataSize,pData)	\
+    (This)->lpVtbl -> Write(This,pStreamPropertyValue,dataSize,pData)
+
+#define IAAFPlainStreamData_Append(This,pStreamPropertyValue,dataSize,pData)	\
+    (This)->lpVtbl -> Append(This,pStreamPropertyValue,dataSize,pData)
+
+#define IAAFPlainStreamData_HasStoredByteOrder(This,pStreamPropertyValue,pHasByteOrder)	\
+    (This)->lpVtbl -> HasStoredByteOrder(This,pStreamPropertyValue,pHasByteOrder)
+
+#define IAAFPlainStreamData_GetStoredByteOrder(This,pStreamPropertyValue,pByteOrder)	\
+    (This)->lpVtbl -> GetStoredByteOrder(This,pStreamPropertyValue,pByteOrder)
+
+#define IAAFPlainStreamData_SetStoredByteOrder(This,pStreamPropertyValue,byteOrder)	\
+    (This)->lpVtbl -> SetStoredByteOrder(This,pStreamPropertyValue,byteOrder)
+
+#define IAAFPlainStreamData_ClearStoredByteOrder(This,pStreamPropertyValue)	\
+    (This)->lpVtbl -> ClearStoredByteOrder(This,pStreamPropertyValue)
+
+#define IAAFPlainStreamData_ReadElements(This,pStreamPropertyValue,pElementType,dataSize,pData,pBytesRead)	\
+    (This)->lpVtbl -> ReadElements(This,pStreamPropertyValue,pElementType,dataSize,pData,pBytesRead)
+
+#define IAAFPlainStreamData_WriteElements(This,pStreamPropertyValue,pElementType,dataSize,pData)	\
+    (This)->lpVtbl -> WriteElements(This,pStreamPropertyValue,pElementType,dataSize,pData)
+
+#define IAAFPlainStreamData_AppendElements(This,pStreamPropertyValue,pElementType,dataSize,pData)	\
+    (This)->lpVtbl -> AppendElements(This,pStreamPropertyValue,pElementType,dataSize,pData)
+
 #endif /* COBJMACROS */
 
 
 #endif 	/* C style interface */
 
+
+
+HRESULT STDMETHODCALLTYPE IAAFPlainStreamData_GetSize_Proxy( 
+    IAAFPlainStreamData * This,
+    /* [in] */ IAAFPropertyValue *pStreamPropertyValue,
+    /* [out] */ aafInt64 *pSize);
+
+
+void __RPC_STUB IAAFPlainStreamData_GetSize_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFPlainStreamData_SetSize_Proxy( 
+    IAAFPlainStreamData * This,
+    /* [in] */ IAAFPropertyValue *pStreamPropertyValue,
+    /* [in] */ aafInt64 newSize);
+
+
+void __RPC_STUB IAAFPlainStreamData_SetSize_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFPlainStreamData_GetPosition_Proxy( 
+    IAAFPlainStreamData * This,
+    /* [in] */ IAAFPropertyValue *pStreamPropertyValue,
+    /* [out] */ aafInt64 *pPosition);
+
+
+void __RPC_STUB IAAFPlainStreamData_GetPosition_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFPlainStreamData_SetPosition_Proxy( 
+    IAAFPlainStreamData * This,
+    /* [in] */ IAAFPropertyValue *pStreamPropertyValue,
+    /* [in] */ aafInt64 newPosition);
+
+
+void __RPC_STUB IAAFPlainStreamData_SetPosition_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFPlainStreamData_Read_Proxy( 
+    IAAFPlainStreamData * This,
+    /* [in] */ IAAFPropertyValue *pStreamPropertyValue,
+    /* [in] */ aafUInt32 dataSize,
+    /* [length_is][size_is][out] */ aafMemPtr_t pData,
+    /* [ref][out] */ aafUInt32 *bytesRead);
+
+
+void __RPC_STUB IAAFPlainStreamData_Read_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFPlainStreamData_Write_Proxy( 
+    IAAFPlainStreamData * This,
+    /* [in] */ IAAFPropertyValue *pStreamPropertyValue,
+    /* [in] */ aafUInt32 dataSize,
+    /* [size_is][ref][in] */ aafMemPtr_t pData);
+
+
+void __RPC_STUB IAAFPlainStreamData_Write_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFPlainStreamData_Append_Proxy( 
+    IAAFPlainStreamData * This,
+    /* [in] */ IAAFPropertyValue *pStreamPropertyValue,
+    /* [in] */ aafUInt32 dataSize,
+    /* [size_is][ref][in] */ aafMemPtr_t pData);
+
+
+void __RPC_STUB IAAFPlainStreamData_Append_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFPlainStreamData_HasStoredByteOrder_Proxy( 
+    IAAFPlainStreamData * This,
+    /* [in] */ IAAFPropertyValue *pStreamPropertyValue,
+    /* [out] */ aafBoolean_t *pHasByteOrder);
+
+
+void __RPC_STUB IAAFPlainStreamData_HasStoredByteOrder_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFPlainStreamData_GetStoredByteOrder_Proxy( 
+    IAAFPlainStreamData * This,
+    /* [in] */ IAAFPropertyValue *pStreamPropertyValue,
+    /* [out] */ eAAFByteOrder_t *pByteOrder);
+
+
+void __RPC_STUB IAAFPlainStreamData_GetStoredByteOrder_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFPlainStreamData_SetStoredByteOrder_Proxy( 
+    IAAFPlainStreamData * This,
+    /* [in] */ IAAFPropertyValue *pStreamPropertyValue,
+    /* [in] */ eAAFByteOrder_t byteOrder);
+
+
+void __RPC_STUB IAAFPlainStreamData_SetStoredByteOrder_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFPlainStreamData_ClearStoredByteOrder_Proxy( 
+    IAAFPlainStreamData * This,
+    /* [in] */ IAAFPropertyValue *pStreamPropertyValue);
+
+
+void __RPC_STUB IAAFPlainStreamData_ClearStoredByteOrder_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFPlainStreamData_ReadElements_Proxy( 
+    IAAFPlainStreamData * This,
+    /* [in] */ IAAFPropertyValue *pStreamPropertyValue,
+    /* [in] */ IAAFTypeDef *pElementType,
+    /* [in] */ aafUInt32 dataSize,
+    /* [length_is][size_is][out] */ aafMemPtr_t pData,
+    /* [ref][out] */ aafUInt32 *pBytesRead);
+
+
+void __RPC_STUB IAAFPlainStreamData_ReadElements_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFPlainStreamData_WriteElements_Proxy( 
+    IAAFPlainStreamData * This,
+    /* [in] */ IAAFPropertyValue *pStreamPropertyValue,
+    /* [in] */ IAAFTypeDef *pElementType,
+    /* [in] */ aafUInt32 dataSize,
+    /* [size_is][ref][in] */ aafMemPtr_t pData);
+
+
+void __RPC_STUB IAAFPlainStreamData_WriteElements_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFPlainStreamData_AppendElements_Proxy( 
+    IAAFPlainStreamData * This,
+    /* [in] */ IAAFPropertyValue *pStreamPropertyValue,
+    /* [in] */ IAAFTypeDef *pElementType,
+    /* [in] */ aafUInt32 dataSize,
+    /* [size_is][ref][in] */ aafMemPtr_t pData);
+
+
+void __RPC_STUB IAAFPlainStreamData_AppendElements_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
 
 
 
@@ -42701,7 +43414,7 @@ EXTERN_C const IID IID_IAAFEssenceData2;
         
         virtual HRESULT STDMETHODCALLTYPE GetPlainEssenceData( 
             /* [in] */ aafUInt32 reserved,
-            /* [retval][out] */ IAAFEssenceData **pPlainEssenceData) = 0;
+            /* [retval][out] */ IAAFPlainEssenceData **pPlainEssenceData) = 0;
         
     };
     
@@ -42789,7 +43502,7 @@ EXTERN_C const IID IID_IAAFEssenceData2;
         HRESULT ( STDMETHODCALLTYPE *GetPlainEssenceData )( 
             IAAFEssenceData2 * This,
             /* [in] */ aafUInt32 reserved,
-            /* [retval][out] */ IAAFEssenceData **pPlainEssenceData);
+            /* [retval][out] */ IAAFPlainEssenceData **pPlainEssenceData);
         
         END_INTERFACE
     } IAAFEssenceData2Vtbl;
@@ -43045,7 +43758,7 @@ void __RPC_STUB IAAFEssenceData2_GetFileMobID_Stub(
 HRESULT STDMETHODCALLTYPE IAAFEssenceData2_GetPlainEssenceData_Proxy( 
     IAAFEssenceData2 * This,
     /* [in] */ aafUInt32 reserved,
-    /* [retval][out] */ IAAFEssenceData **pPlainEssenceData);
+    /* [retval][out] */ IAAFPlainEssenceData **pPlainEssenceData);
 
 
 void __RPC_STUB IAAFEssenceData2_GetPlainEssenceData_Stub(
@@ -48544,7 +49257,7 @@ EXTERN_C const IID IID_IAAFTypeDefStream3;
         
         virtual HRESULT STDMETHODCALLTYPE GetPlainStreamData( 
             /* [in] */ aafUInt32 reserved,
-            /* [retval][out] */ IAAFTypeDefStream **pPlainStreamData) = 0;
+            /* [retval][out] */ IAAFPlainStreamData **pPlainStreamData) = 0;
         
     };
     
@@ -48654,7 +49367,7 @@ EXTERN_C const IID IID_IAAFTypeDefStream3;
         HRESULT ( STDMETHODCALLTYPE *GetPlainStreamData )( 
             IAAFTypeDefStream3 * This,
             /* [in] */ aafUInt32 reserved,
-            /* [retval][out] */ IAAFTypeDefStream **pPlainStreamData);
+            /* [retval][out] */ IAAFPlainStreamData **pPlainStreamData);
         
         END_INTERFACE
     } IAAFTypeDefStream3Vtbl;
@@ -48943,7 +49656,7 @@ void __RPC_STUB IAAFTypeDefStream3_SetCallback_Stub(
 HRESULT STDMETHODCALLTYPE IAAFTypeDefStream3_GetPlainStreamData_Proxy( 
     IAAFTypeDefStream3 * This,
     /* [in] */ aafUInt32 reserved,
-    /* [retval][out] */ IAAFTypeDefStream **pPlainStreamData);
+    /* [retval][out] */ IAAFPlainStreamData **pPlainStreamData);
 
 
 void __RPC_STUB IAAFTypeDefStream3_GetPlainStreamData_Stub(
