@@ -56,6 +56,7 @@ AD_IDL(///
 ///   - insufficient system memory is available to perform the
 ///     operation.
 ///)
+AD_FORWARD_DECLARATION(AAFPlainEssenceData)
 AD_FORWARD_DECLARATION(AAFSourceMob)
 AD_CLASS_UUID(6a33f4e1, 8ed6, 11d2, bf, 9d, 00, 10, 4b, c9, 15, 6d)
 

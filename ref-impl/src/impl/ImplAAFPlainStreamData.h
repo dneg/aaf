@@ -24,10 +24,15 @@
 //
 //=---------------------------------------------------------------------=
 
+#include "ImplAAFRoot.h"
 #include "ImplAAFTypeDefStream.h"
 
 
-class ImplAAFPlainStreamData : public ImplAAFTypeDefStream
+class ImplAAFPropertyValue;
+class ImplAAFStreamPropertyValue;
+
+
+class ImplAAFPlainStreamData : public ImplAAFRoot
 {
 public:
   //
@@ -139,6 +144,54 @@ public:
 
 
   // 
+  // Access byte order of the stream 
+  // 
+
+
+  //****************
+  // HasStoredByteOrder()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    HasStoredByteOrder
+        (// @parm [in] stream property value
+         ImplAAFPropertyValue * pStreamPropertyValue,
+
+         // @parm [out] kAAFTrue if this stream has a stored byte order
+         aafBoolean_t *  pHasByteOrder);
+
+  //****************
+  // GetStoredByteOrder()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetStoredByteOrder
+        (// @parm [in] stream property value
+         ImplAAFPropertyValue * pStreamPropertyValue,
+
+         // @parm [out] Pointer to variable where byte order is to be copied
+         eAAFByteOrder_t *  pByteOrder);
+
+  //****************
+  // SetStoredByteOrder()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    SetStoredByteOrder
+        (// @parm [in] stream property value
+         ImplAAFPropertyValue * pStreamPropertyValue,
+
+         // @parm [in] byte order is to be stored with the stream
+         eAAFByteOrder_t  byteOrder);
+
+  //****************
+  // ClearStoredByteOrder()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    ClearStoredByteOrder
+        // @parm [in] stream property value
+        (ImplAAFPropertyValue * pStreamPropertyValue);
+
+
+
+  // 
   // Access in typed chunks of Elements 
   // 
 
@@ -237,7 +290,21 @@ public:
 
 
 protected:
+
   virtual ~ImplAAFPlainStreamData ();
+
+  //****************
+  // GetStreamPropertyValue()
+  //
+  // Validate/conversion utility.
+  //
+  AAFRESULT STDMETHODCALLTYPE
+    GetStreamPropertyValue
+        (// @parm [in] opaque property value
+         ImplAAFPropertyValue * pPropertyValue,
+         
+         // @parm [out] stream property value
+         ImplAAFStreamPropertyValue *& pStreamPropertyValue);
 
 };
 

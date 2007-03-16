@@ -36,6 +36,7 @@ AD_IDL(///
 /// very large pieces of data \(such as essence\).
 /// Note: All reads/and writes advance the current position.
 AD_STD_COMMENT_IFC_HEADER)
+AD_FORWARD_DECLARATION(AAFPlainStreamData)
 AD_FORWARD_DECLARATION(AAFPropertyValue)
 
 AD_CLASS_UUID(6F9A7E6D, 29F0, 4b8b, 9E, A0, B4, F0, DB, 7F, 8B, C4)
@@ -535,11 +536,11 @@ AD_XMETHOD2(GetPlainStreamData,
 
 			[out\,retval],
 			objOut,
-			AAFTypeDefStream,
+			AAFPlainStreamData,
 			pPlainStreamData,
 			file encoding-independent stream data,
 
-     Creates an object which implements the IAAFTypeDefStream
+     Creates an object which implements the IAAFPlainStreamData
   // interface and provides access to the file encoding-independent
   // stream data.
   //

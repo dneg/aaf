@@ -36,6 +36,7 @@
 #include "OMStreamType.h"
 
 
+class ImplAAFPlainStreamData;
 class ImplAAFPropertyValue;
 class ImplAAFStreamPropertyValue;
 struct IAAFIOCompletion;
@@ -288,7 +289,7 @@ public:
          aafUInt32 reserved,
 
          // @parm [in] file encoding-independent stream data
-         ImplAAFTypeDefStream ** pPlainStreamData);
+         ImplAAFPlainStreamData ** pPlainStreamData);
 
 
   //****************

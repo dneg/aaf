@@ -24,6 +24,7 @@
 
 #include "ImplAAFPlainStreamData.h"
 #include "ImplAAFStreamPropertyValue.h"
+#include "ImplAAFTypeDef.h"
 
 
 //
@@ -40,7 +41,7 @@
 
 
 ImplAAFPlainStreamData::ImplAAFPlainStreamData ()
-: ImplAAFTypeDefStream()
+: ImplAAFRoot()
 {
 }
 
@@ -133,6 +134,49 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
+    ImplAAFPlainStreamData::HasStoredByteOrder (
+      ImplAAFPropertyValue * pPropertyValue,
+      aafBoolean_t *  pHasByteOrder)
+{
+  PROPERTYVALUE_TO_STREAMPROPERTYVALUE(pPropertyValue, pStreamPropertyValue);
+  
+  return pStreamPropertyValue->HasStoredByteOrder(pHasByteOrder);
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFPlainStreamData::GetStoredByteOrder (
+      ImplAAFPropertyValue * pPropertyValue,
+      eAAFByteOrder_t *  pByteOrder)
+{
+  PROPERTYVALUE_TO_STREAMPROPERTYVALUE(pPropertyValue, pStreamPropertyValue);
+  
+  return pStreamPropertyValue->GetStoredByteOrder(pByteOrder);
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFPlainStreamData::SetStoredByteOrder (
+      ImplAAFPropertyValue * pPropertyValue,
+      eAAFByteOrder_t  byteOrder)
+{
+  PROPERTYVALUE_TO_STREAMPROPERTYVALUE(pPropertyValue, pStreamPropertyValue);
+  
+  return pStreamPropertyValue->SetStoredByteOrder(byteOrder);
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFPlainStreamData::ClearStoredByteOrder (
+      ImplAAFPropertyValue * pPropertyValue)
+{
+  PROPERTYVALUE_TO_STREAMPROPERTYVALUE(pPropertyValue, pStreamPropertyValue);
+  
+  return pStreamPropertyValue->ClearStoredByteOrder();
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
    ImplAAFPlainStreamData::ReadElements (
       ImplAAFPropertyValue * pPropertyValue,
       ImplAAFTypeDef * pElementType,
@@ -193,4 +237,30 @@ AAFRESULT STDMETHODCALLTYPE
   return pStreamPropertyValue->SetEssenceElementKey(key);
 }
 
+
+AAFRESULT ImplAAFPlainStreamData::GetStreamPropertyValue(
+  ImplAAFPropertyValue * pPropertyValue,
+  ImplAAFStreamPropertyValue *& pStreamPropertyValue)
+{
+  pStreamPropertyValue = NULL; // init out parameter
+  
+  if (NULL == pPropertyValue)
+    return AAFRESULT_NULL_PARAM;
+  
+  // The stream property value's type should be this instance of 
+  // ImplAAFTypeDefStream.
+  ImplAAFTypeDefSP pPropertyValueType;
+  pPropertyValue->GetType(&pPropertyValueType);
+  eAAFTypeCategory_t propertyTypeCategory = kAAFTypeCatUnknown;
+  pPropertyValueType->GetTypeCategory(&propertyTypeCategory);
+  eAAFTypeCategory_t thisTypeCategory = kAAFTypeCatUnknown;
+  if (propertyTypeCategory != kAAFTypeCatStream)
+    return AAFRESULT_INVALID_PARAM;
+  
+  pStreamPropertyValue = dynamic_cast<ImplAAFStreamPropertyValue *>(pPropertyValue);
+  if (NULL == pStreamPropertyValue)
+    return AAFRESULT_INVALID_PARAM;
+    
+  return AAFRESULT_SUCCESS;
+}
 

@@ -26,7 +26,7 @@ AAFPlainStreamData\
 #endm
 #c
 #startm .parent-module 0
-AAFTypeDefStream\
+AAFRoot\
 #endm
 #c
 #import ./AAFKLVStreamParameters.exp
@@ -43,6 +43,462 @@ AD_CLASS_UUID(6760c4b4, 129c, 4356, 80, 48, bd, 69, c6, ab, a4, a4)
 
 AD_DEFAULT_UUID(86f9aaff, b6ad, 4f3e, a7, 1c, f6, 9f, 1b, 4c, 48, a5)
 AD_COM_EXT_CLASS_BEGIN(public IAAFKLVStreamParameters)
+
+
+AD_XMETHOD2(GetSize,
+			[in],
+			objIn,
+			AAFPropertyValue,
+			pStreamPropertyValue,
+			stream property value,
+
+			[out],
+			objPass,
+			aafInt64 *,
+			pSize,
+			count of bytes in the specified stream property value,
+
+     Returns number of bytes contained in the referenced property
+  /// value.
+  ///
+  /// Succeeds if:
+  /// - Initialize\(\) has already been called on this object.
+  /// - pStreamPropertyValue is a valid pointer.
+  /// - pSize is a valid pointer.
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NO_INIT
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(Either pStreamPropertyValue or pSize\))
+
+AD_XMETHOD2(SetSize,
+			[in],
+			objIn,
+			AAFPropertyValue,
+			pStreamPropertyValue,
+			stream property value,
+
+			[in],
+			objPass,
+			aafInt64,
+			newSize,
+			new count of bytes in the specified stream property value,
+
+     Set the number of bytes contained in the give stream property value
+  /// to newElementCount
+  /// Succeeds if:
+  /// - Initialize\(\) has already been called on this object.
+  /// - pStreamPropertyValue is a valid pointer.
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NO_INIT
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(If pStreamPropertyValue\))
+
+AD_XMETHOD2(GetPosition,
+			[in],
+			objIn,
+			AAFPropertyValue,
+			pStreamPropertyValue,
+			stream property value,
+
+			[out],
+			objPass,
+			aafInt64 *,
+			pPosition,
+			current byte position in the specified stream property value,
+
+     Returns the byte position of the current element in the stream. 
+  ///
+  /// Succeeds if:
+  /// - Initialize\(\) has already been called on this object.
+  /// - pStreamPropertyValue is a valid pointer.
+  /// - pPosition is a valid pointer.
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NO_INIT
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(Either pStreamPropertyValue or pPosition\))
+
+AD_XMETHOD2(SetPosition,
+			[in],
+			objIn,
+			AAFPropertyValue,
+			pStreamPropertyValue,
+			stream property value,
+
+			[in],
+			objPass,
+			aafInt64,
+			newPosition,
+			the new position in the specified stream property value,
+
+     Make the current byte position to the one at newPosition in the stream 
+  /// property value. 
+  ///
+  /// Succeeds if:
+  /// - pStreamPropertyValue is a valid pointer.
+  /// - the new position is valid
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NO_INIT
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(If pStreamPropertyValue\)
+  ///
+  /// AAFRESULT_INVALID_PARAM
+  ///   - newPosition is outside the bounds of the stream.)
+
+
+AD_XMETHOD4(Read,
+			[in],
+			objIn,
+			AAFPropertyValue,
+			pStreamPropertyValue,
+			stream property value to read,
+
+			[in],
+			objPass,
+			aafUInt32,
+			dataSize,
+			number of bytes to read,
+
+			[out\, size_is\(dataSize\)\, length_is\(*bytesRead\)],
+			objPass,
+			aafMemPtr_t,
+			pData,
+			buffer into which one element from the stream should be written,
+
+			[out\,ref],
+			objPass,
+			aafUInt32 *,
+			bytesRead,
+			number of bytes actually read \(will be either dataSize or 0 if there 
+  /// is in error\),
+
+     Sequential access.
+  /// Copies the data at the position of the stream to the given
+  /// buffer.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pStreamPropertyValue pointer is valid.
+  /// - the pData pointer is valid.
+  /// - the indicated bytes exist in the stream.
+  ///
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NO_INIT
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(either pStreamPropertyValue or pData\))
+
+AD_XMETHOD3(Write,
+			[in],
+			objIn,
+			AAFPropertyValue,
+			pStreamPropertyValue,
+			stream property value to modify,
+
+			[in],
+			objPass,
+			aafUInt32,
+			dataSize,
+			number of bytes to write,
+
+			[in\, ref\, size_is\(dataSize\)],
+			objPass,
+			aafMemPtr_t,
+			pData,
+			buffer into which should contain one element to be written to the stream,
+
+     Sequential access.
+  /// Copies the data in the given buffer into the stream at the 
+  /// current position of the stream..
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pStreamPropertyValue pointer is valid.
+  /// - the pData pointer is valid.
+  /// - the indicated bytes could be written to the stream.
+  ///
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NO_INIT
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(Either pStreamPropertyValue or pData\))
+
+AD_XMETHOD3(Append,
+			[in],
+			objIn,
+			AAFPropertyValue,
+			pStreamPropertyValue,
+			stream property value to modify,
+
+			[in],
+			objPass,
+			aafUInt32,
+			dataSize,
+			number of bytes to write \(must be equal to the element type length\),
+
+			[in\, ref\, size_is\(dataSize\)],
+			objPass,
+			aafMemPtr_t,
+			pData,
+			buffer into which should contain one element to be written to the stream,
+
+     Extending the stream.
+  /// Copies the data in the given buffer into the stream at the 
+  /// end of the stream.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pStreamPropertyValue pointer is valid.
+  /// - the pData pointer is valid.
+  /// - the indicated bytes could be appended to the stream.
+  ///
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NO_INIT
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(either pStreamPropertyValue or pData\))
+
+
+AD_XMETHOD2(HasStoredByteOrder,
+			[in],
+			objIn,
+			AAFPropertyValue,
+			pStreamPropertyValue,
+			stream property value,
+
+			[out],
+			objPass,
+			aafBoolean_t *,
+			pHasByteOrder,
+			kAAFTrue if this stream has a stored byte order,
+
+     Returns kAAFTrue if the stream has a stored byte order or 
+  /// kAAFFalse otherwise.
+  ///
+  /// Succeeds if:
+  /// - Initialize\(\) has already been called on this object.
+  /// - pStreamPropertyValue is a valid pointer.
+  /// - pHasByteOrder is a valid pointer.
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NO_INIT
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(Either pStreamPropertyValue or pHasByteOrder\))
+
+AD_XMETHOD2(GetStoredByteOrder,
+			[in],
+			objIn,
+			AAFPropertyValue,
+			pStreamPropertyValue,
+			stream property value,
+
+			[out],
+			objPass,
+			eAAFByteOrder_t *,
+			pByteOrder,
+			Pointer to variable where byte order is to be copied,
+
+     Access byte order of the stream.
+  ///
+  /// Succeeds if:
+  /// - Initialize\(\) has already been called on this object.
+  /// - pStreamPropertyValue is a valid pointer.
+  /// - pByteOrder is a valid pointer.
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NO_INIT
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(Either pStreamPropertyValue or pByteOrder\))
+
+AD_XMETHOD2(SetStoredByteOrder,
+			[in],
+			objIn,
+			AAFPropertyValue,
+			pStreamPropertyValue,
+			stream property value,
+
+			[in],
+			enumIn,
+			eAAFByteOrder_t,
+			byteOrder,
+			byte order is to be stored with the stream,
+
+     Sets the byte order to be associated with this stream. Note: the stream
+  /// must be empty.
+  ///
+  /// Succeeds if:
+  /// - Initialize\(\) has already been called on this object.
+  /// - pStreamPropertyValue is a valid pointer.
+  /// - stream is empty.
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NO_INIT
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(If pStreamPropertyValue\))
+
+AD_XMETHOD1(ClearStoredByteOrder,
+			[in],
+			objIn,
+			AAFPropertyValue,
+			pStreamPropertyValue,
+			stream property value,
+
+     Clears the byte order to be associated with this stream. Note: the stream
+  /// must be empty.
+  ///
+  /// Succeeds if:
+  /// - Initialize\(\) has already been called on this object.
+  /// - pStreamPropertyValue is a valid pointer.
+  /// - stream is empty.
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NO_INIT
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(If pStreamPropertyValue\))
+
+
+AD_XMETHOD5(ReadElements,
+			[in],
+			objIn,
+			AAFPropertyValue,
+			pStreamPropertyValue,
+			stream property value to read,
+
+			[in],
+			objIn,
+			AAFTypeDef,
+			pElementType,
+			the type definition of the elements to read,
+
+			[in],
+			objPass,
+			aafUInt32,
+			dataSize,
+			number of bytes to read \(must be evenly divisible by the element 
+  /// type length\),
+
+			[out\, size_is\(dataSize\)\, length_is\(*pBytesRead\)],
+			objPass,
+			aafMemPtr_t,
+			pData,
+			buffer into which elements from the stream should be written,
+
+			[out\,ref],
+			objPass,
+			aafUInt32 *,
+			pBytesRead,
+			number of bytes actually read \(will be either dataSize or 0 if 
+  /// there is in error\),
+
+     Access in typed chunks of Elements.
+  /// Copies the data at the current position of the stream to the given
+  /// buffer. Requires that any structures declared within element 
+  /// typedef have had their offsets registered with that type.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pStreamPropertyValue pointer is valid.
+  /// - the pElementType pointer is valid.
+  /// - the pData pointer is valid.
+  /// - dataSize indicates pData is large enough to hold the data.
+  /// - compile-time struct has had its member offests registered.
+  /// - the indicated elements exist in this stream type def.
+  ///
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NO_INIT
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(either pStreamPropertyValue or pElementType or pBytesRead or pData\)
+  ///
+  /// AAFRESULT_INVALID_PARAM
+  ///   - dataSize indicates pData is too small.
+  ///
+  /// AAFRESULT_NOT_REGISTERED
+  ///  - struct offsets have not yet been registered for element typedef.
+  ///
+  /// AAFRESULT_INVALID_PARAM
+  ///   - there are not dataSize bytes left in the stream.)
+
+AD_XMETHOD4(WriteElements,
+			[in],
+			objIn,
+			AAFPropertyValue,
+			pStreamPropertyValue,
+			stream property value to modify,
+
+			[in],
+			objIn,
+			AAFTypeDef,
+			pElementType,
+			the type definition of the elements to read,
+
+			[in],
+			objPass,
+			aafUInt32,
+			dataSize,
+			number of bytes to write \(must be evenly divisible by the element type 
+  /// length\),
+
+			[in\, ref\, size_is\(dataSize\)],
+			objPass,
+			aafMemPtr_t,
+			pData,
+			buffer into which elements from the stream should be written,
+
+     Access in typed chunks of Elements.
+  /// Copies the data in the given buffer into the stream at the  
+  /// current position of the stream. Requires that any structures 
+  /// declared within element 
+  /// typedef have had their offsets registered with that type..
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pStreamPropertyValue pointer is valid.
+  /// - the pElementType pointer is valid.
+  /// - the pData pointer is valid.
+  /// - dataSize indicates pData is large enough to hold the data.
+  /// - compile-time struct has had its member offests registered.
+  /// - the indicated elements exist in this stream type def.
+  ///
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NO_INIT
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(either pStreamPropertyValue or pElementType or pData\)
+  ///
+  /// AAFRESULT_INVALID_PARAM
+  ///   - dataSize indicates pData is an even multiple of the given 
+  ///     element type size.
+  ///
+  /// AAFRESULT_NOT_REGISTERED
+  ///  - struct offsets have not yet been registered for the element typedef.)
+
+
+AD_CPP_QUOTE(\  /// Extend in chunks of typed Elements)
+
+AD_XMETHOD4(AppendElements,
+			[in],
+			objIn,
+			AAFPropertyValue,
+			pStreamPropertyValue,
+			stream property value to modify,
+
+			[in],
+			objIn,
+			AAFTypeDef,
+			pElementType,
+			the type definition of the elements to read,
+
+			[in],
+			objPass,
+			aafUInt32,
+			dataSize,
+			number of bytes to write \(must be evenly divisible by the element type 
+  /// length\),
+
+			[in\, ref\, size_is\(dataSize\)],
+			objPass,
+			aafMemPtr_t,
+			pData,
+			buffer into which elements from the stream should be written,
+
+     Access in typed chunks of Elements.
+  /// Copies the data in the given buffer onto the end of the stream. 
+  /// Requires that any structures declared within element 
+  /// typedef have had their offsets registered with that type..
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pStreamPropertyValue pointer is valid.
+  /// - the pElementType pointer is valid.
+  /// - the pData pointer is valid.
+  /// - dataSize indicates pData is large enough to hold the data.
+  /// - compile-time struct has had its member offests registered.
+  /// - the indicated elements exist in this stream type def.
+  ///
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NO_INIT
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(either pStreamPropertyValue or pElementType or pData\)
+  ///
+  /// AAFRESULT_INVALID_PARAM
+  ///   - dataSize indicates pData is an even multiple of the given 
+  ///     element type size.
+  ///
+  /// AAFRESULT_NOT_REGISTERED
+  ///  - struct offsets have not yet been registered for the element typedef.)
+
+
 AD_COM_METH(.method-GetEssenceElementKey)
 AD_COM_METH(.method-SetEssenceElementKey)
 AD_COM_EXT_CLASS_END(AAFKLVStreamParameters)

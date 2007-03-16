@@ -71,10 +71,10 @@ struct EssenceDataTest
   void createEssenceData(IAAFSourceMob *pSourceMob);
   void openEssenceData();
 
-  void writeEssenceData(IAAFEssenceData *pEssenceData,
+  void writeEssenceData(IAAFPlainEssenceData *pEssenceData,
 		        const aafDataBuffer_t data,
 			aafUInt32 dataSize);
-  void readEssenceData(IAAFEssenceData *pEssenceData,
+  void readEssenceData(IAAFPlainEssenceData *pEssenceData,
 		        const aafDataBuffer_t data,
 			aafUInt32 dataSize);
 
@@ -97,7 +97,7 @@ struct EssenceDataTest
   IAAFEssenceDescriptor *_pEssenceDescriptor;
   IAAFFileDescriptor *_pFileDescriptor;
   IEnumAAFEssenceData *_pEnumEssenceData;
-  IAAFEssenceData *_pEssenceData;
+  IAAFPlainEssenceData *_pEssenceData;
   aafDataBuffer_t _buffer;
   aafUInt32 _bufferSize;
 
@@ -541,7 +541,7 @@ void EssenceDataTest::openEssenceData()
   _pEnumEssenceData = NULL;
 }
 
-void EssenceDataTest::writeEssenceData(IAAFEssenceData *pEssenceData,
+void EssenceDataTest::writeEssenceData(IAAFPlainEssenceData *pEssenceData,
 				       const aafDataBuffer_t data,
 				       aafUInt32 dataSize)
 {
@@ -580,7 +580,7 @@ void EssenceDataTest::writeEssenceData(IAAFEssenceData *pEssenceData,
   }
 }
 
-void EssenceDataTest::readEssenceData(IAAFEssenceData *pEssenceData,
+void EssenceDataTest::readEssenceData(IAAFPlainEssenceData *pEssenceData,
 				      const aafDataBuffer_t data,
 				      aafUInt32 dataSize)
 {

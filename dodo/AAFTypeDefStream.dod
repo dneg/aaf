@@ -42,6 +42,7 @@ AD_IDL(///
 /// very large pieces of data \(such as essence\).
 /// Note: All reads/and writes advance the current position.
 AD_STD_COMMENT_IFC_HEADER)
+AD_FORWARD_DECLARATION(AAFPlainStreamData)
 AD_FORWARD_DECLARATION(AAFPropertyValue)
 AD_CLASS_UUID(307e9e6d, dcb2, 11d2, 84, 29, 00, 60, 08, 32, ac, b8)
 

@@ -24,13 +24,14 @@
 //
 //=---------------------------------------------------------------------=
 
-#include "ImplAAFEssenceData.h"
+#include "ImplAAFRoot.h"
 
 
+class ImplAAFEssenceData;
+class ImplAAFSourceMob;
 class OMDataStreamPropertyFilter;
 
-
-class ImplAAFPlainEssenceData : public ImplAAFEssenceData
+class ImplAAFPlainEssenceData : public ImplAAFRoot
 {
 public:
   //

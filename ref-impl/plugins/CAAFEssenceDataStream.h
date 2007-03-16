@@ -141,7 +141,7 @@ public:
 
 
 private:
-	IAAFEssenceData		*_data;
+	IAAFPlainEssenceData		*_data;
 };
 
 #endif // ! __CAAFEssenceDataStream_h__

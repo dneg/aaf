@@ -54,6 +54,7 @@ typedef IAAFSmartPointer<IAAFEssenceDescriptor>     IAAFEssenceDescriptorSP;
 typedef IAAFSmartPointer<IAAFEssenceData>           IAAFEssenceDataSP;
 typedef IAAFSmartPointer<IEnumAAFEssenceData>       IEnumAAFEssenceDataSP;
 typedef IAAFSmartPointer<IAAFKLVStreamParameters>   IAAFKLVStreamParametersSP;
+typedef IAAFSmartPointer<IAAFPlainStreamData>       IAAFPlainStreamDataSP;
 
 
 
@@ -301,22 +302,23 @@ static void Test_EssenceStreamPropertyValues(
 
 static void Test_GetTypeDefStream(
   IAAFPropertyValue *pStreamPropertyValue,
-  IAAFTypeDefStream **ppTypeDefStream)
+  IAAFPlainStreamData **ppPlainStreamData)
 {
   IAAFTypeDefSP pTypeDef;
+  IAAFTypeDefStream3SP pTypeDefStream3;
 
   CheckResult(pStreamPropertyValue->GetType(&pTypeDef));
-  IAAFTypeDefStream3SP pTypeDefStreamRaw;
   CheckResult(pTypeDef->QueryInterface(IID_IAAFTypeDefStream3,
-                                       (void **)&pTypeDefStreamRaw));
-  CheckResult(pTypeDefStreamRaw->GetPlainStreamData(0, ppTypeDefStream));
+                                       (void **)&pTypeDefStream3));
+  CheckResult(pTypeDefStream3->GetPlainStreamData(0,
+                                                  ppPlainStreamData));
 }
 
 static void Test_EssenceStreamWrite(
   CAAFBuiltinDefs & defs,
   IAAFPropertyValue *pStreamPropertyValue)
 {
-  IAAFTypeDefStreamSP pTypeDefStream;
+  IAAFPlainStreamDataSP pTypeDefStream;
   Test_GetTypeDefStream(pStreamPropertyValue, &pTypeDefStream);
 
   // Check the byte order of the stream.
@@ -469,7 +471,7 @@ static void Test_EssenceStreamRead(
   CAAFBuiltinDefs & defs,
   IAAFPropertyValue *pStreamPropertyValue)
 {
-  IAAFTypeDefStreamSP pTypeDefStream;
+  IAAFPlainStreamDataSP pTypeDefStream;
   aafUInt32 bytesRead;
 
   Test_GetTypeDefStream(pStreamPropertyValue, &pTypeDefStream);
@@ -566,7 +568,7 @@ TestStreamAccess::WriteStream (IAAFPropertyValue *propertyValue, aafMemPtr_t pUs
 {
 	IAAFTypeDefSP			pTypeDef;
 	IAAFTypeDefStream3SP	pTypeDefStreamRaw;
-	IAAFTypeDefStreamSP		pTypeDefStream;
+	IAAFPlainStreamDataSP	pTypeDefStream;
 	IAAFMetaDefinitionSP	pMetaDef;
 	aafCharacter			debugBuf[256];
 
@@ -653,8 +655,8 @@ static void Test_EssenceStreamPullWrite(
 	IAAFFile	*pFile,
 	CAAFBuiltinDefs & defs)
 {
-  IAAFTypeDefStreamSP pTypeDefStream;
-  IAAFTypeDefStreamExSP pTypeDefStreamEx;
+	IAAFTypeDefSP pTypeDef;
+	IAAFTypeDefStream3SP pTypeDefStream3;
 
     // Get the direct access interfaces.
 	IAAFObjectSP		pObject;
@@ -687,11 +689,12 @@ static void Test_EssenceStreamPullWrite(
 	CheckResult(pObject->GetPropertyValue(pDataPropertyDef,
                                         &pStreamPropertyValue));
   
-	Test_GetTypeDefStream(pStreamPropertyValue, &pTypeDefStream);
+	CheckResult(pStreamPropertyValue->GetType(&pTypeDef));
+	CheckResult(pTypeDef->QueryInterface(IID_IAAFTypeDefStream3,
+                                         (void **)&pTypeDefStream3));
 
 	CheckResult(TestStreamAccess::Create(&cb));
-	CheckResult(pTypeDefStream->QueryInterface(IID_IAAFTypeDefStreamEx, (void **)&pTypeDefStreamEx));
-	CheckResult(pTypeDefStreamEx->SetCallback(pStreamPropertyValue, cb,
+	CheckResult(pTypeDefStream3->SetCallback(pStreamPropertyValue, cb,
 		reinterpret_cast<aafMemPtr_t>(const_cast<char *>(sSmiley))));
 	// !!! tjb not yet cb->Release();
 }
@@ -702,7 +705,7 @@ static void Test_KLVStreamParametersOnWrite(
 {
   AAFRESULT hr = AAFRESULT_SUCCESS;
 
-  IAAFTypeDefStreamSP pTypeDefStream;
+  IAAFPlainStreamDataSP pTypeDefStream;
   Test_GetTypeDefStream(pStreamPropertyValue, &pTypeDefStream);
 
   IAAFKLVStreamParametersSP pParameters;
@@ -741,7 +744,7 @@ static void Test_KLVStreamParametersOnRead(
 {
   AAFRESULT hr = AAFRESULT_SUCCESS;
 
-  IAAFTypeDefStreamSP pTypeDefStream;
+  IAAFPlainStreamDataSP pTypeDefStream;
   Test_GetTypeDefStream(pStreamPropertyValue, &pTypeDefStream);
 
   IAAFKLVStreamParametersSP pParameters;

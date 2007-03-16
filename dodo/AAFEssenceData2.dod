@@ -51,6 +51,7 @@ AD_IDL(///
 ///   - insufficient system memory is available to perform the
 ///     operation.
 ///)
+AD_FORWARD_DECLARATION(AAFPlainEssenceData)
 AD_FORWARD_DECLARATION(AAFSourceMob)
 AD_CLASS_UUID(971b4ab3, 120e, 4ac2, a6, 26, 56, e0, 2a, cb, 3c, b3)
 
@@ -208,12 +209,12 @@ AD_XMETHOD2(GetPlainEssenceData,
 
 			[out\,retval],
 			objOut,
-			AAFEssenceData,
+			AAFPlainEssenceData,
 			pPlainEssenceData,
 			file encoding-independent essence data,
 
      Creates an object which implements
-  // the IAAFEssenceData interface and provides access to a file
+  // the AAFPlainEssenceData interface and provides access to a file
   // encoding-independent essence data.
   //
   // Succeeds if:
