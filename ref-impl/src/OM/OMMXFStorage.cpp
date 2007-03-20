@@ -360,6 +360,18 @@ bool OMMXFStorage::isEssence(const OMKLVKey& k)
   return result;
 }
 
+bool OMMXFStorage::isFill(const OMKLVKey& k)
+{
+  TRACE("OMMXFStorage::isFill");
+  bool result;
+  if (memcmp(&fillKey, &k, sizeof(k)) == 0) {
+    result = true;
+  } else {
+    result = false;
+  }
+  return result;
+}
+
 void OMMXFStorage::writeHeaderPartition(OMUInt32 bodySID,
                                         OMUInt32 indexSID,
                                         OMUInt32 KAGSize)
@@ -2353,7 +2365,7 @@ void OMMXFStorage::restoreStreams(void)
         markIndexStart(k, indexSID, gridSize, keyPosition);
         needIndex = false;
         skipV(length);
-      } else if (k == fillKey) {
+      } else if (isFill(k)) {
         skipV(length);
         markFill(keyPosition, position());
       } else {
@@ -2398,7 +2410,7 @@ void OMMXFStorage::restoreStreams(void)
       markMetadataEnd(keyPosition);
       markIndexStart(k, indexSID, gridSize, keyPosition);
       skipV(length);
-    } else if (k == fillKey) {
+    } else if (isFill(k)) {
       skipV(length);
       markFill(keyPosition, position());
     } else {

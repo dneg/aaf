@@ -244,6 +244,8 @@ public:
 
   static bool isEssence(const OMKLVKey& k);
 
+  static bool isFill(const OMKLVKey& k);
+
   virtual void writeHeaderPartition(OMUInt32 bodySID,
                                     OMUInt32 indexSID,
                                     OMUInt32 KAGSize);

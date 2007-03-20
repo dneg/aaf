@@ -787,7 +787,7 @@ OMRootStorable* OMKLVStoredObject::restore(OMFile& file)
     _storage->readHeaderPartition();
     _storage->readKLVKey(k);
   }
-  if (k == fillKey) {
+  if (OMMXFStorage::isFill(k)) {
     _storage->readKLVFill();
     _storage->readKLVKey(k);
   }
@@ -800,7 +800,7 @@ OMRootStorable* OMKLVStoredObject::restore(OMFile& file)
   file.setLoadMode(OMFile::lazyLoad);
 
   _storage->readKLVKey(k);
-  if (k == fillKey) {
+  if (OMMXFStorage::isFill(k)) {
     _storage->readKLVFill();
     _storage->readKLVKey(k);
   }
