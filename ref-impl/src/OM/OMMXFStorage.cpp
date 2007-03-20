@@ -366,6 +366,8 @@ bool OMMXFStorage::isFill(const OMKLVKey& k)
   bool result;
   if (memcmp(&fillKey, &k, sizeof(k)) == 0) {
     result = true;
+  } else if (memcmp(&V2FillKey, &k, sizeof(k)) == 0) {
+    result = true;
   } else {
     result = false;
   }
