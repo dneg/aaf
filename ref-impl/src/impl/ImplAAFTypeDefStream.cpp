@@ -361,10 +361,14 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFTypeDefStream::GetPlainStreamData (
-      aafUInt32 /*reserved*/,
+      aafUInt32 reserved,
       ImplAAFPlainStreamData ** pPlainStreamData)
 {
   AAFRESULT result = AAFRESULT_NOT_IMPLEMENTED;
+
+  if (reserved != 0)
+    return AAFRESULT_INVALID_PARAM;
+
   ImplAAFPlainStreamData* pResult =
     (ImplAAFPlainStreamData*) CreateImpl (CLSID_AAFPlainStreamData);
   if (pPlainStreamData)
