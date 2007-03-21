@@ -45491,6 +45491,7 @@ DECLARE_INTERFACE_(IAAFEssenceData2, IUnknown)
   // Succeeds if:
   // - Initialize() has already been called on this object.
   // - pPlainEssenceData is a valid pointer.
+  // - reserved is 0.
   ///
   /// This method will return the following codes.  If more than one of
   /// the listed errors is in effect, it will return the first one
@@ -45504,6 +45505,9 @@ DECLARE_INTERFACE_(IAAFEssenceData2, IUnknown)
   ///
   /// AAFRESULT_NULL_PARAM
   ///   - pPlainEssenceData arg is NULL.
+  ///
+  /// AAFRESULT_INVALID_PARAM
+  ///   - reserved is not 0.
   ///
   /// @param reserved [in] Reserved for future use
   /// @param pPlainEssenceData [out,retval] file encoding-independent essence data
@@ -52096,6 +52100,7 @@ DECLARE_INTERFACE_(IAAFTypeDefStream3, IUnknown)
   // Succeeds if:
   // - Initialize() has already been called on this object.
   // - pPlainStreamData is a valid pointer.
+  // - reserved is 0.
   ///
   /// This method will return the following codes.  If more than one of
   /// the listed errors is in effect, it will return the first one
@@ -52109,6 +52114,9 @@ DECLARE_INTERFACE_(IAAFTypeDefStream3, IUnknown)
   ///
   /// AAFRESULT_NULL_PARAM
   ///   - pPlainStreamData arg is NULL.
+  ///
+  /// AAFRESULT_INVALID_PARAM
+  ///   - reserved is not 0.
   ///
   /// @param reserved [in] Reserved for future use
   /// @param pPlainStreamData [out,retval] file encoding-independent stream data
