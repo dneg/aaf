@@ -407,10 +407,14 @@ AAFRESULT STDMETHODCALLTYPE
 /****/
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFEssenceData::GetPlainEssenceData (
-      aafUInt32 /*reserved*/,
+      aafUInt32 reserved,
       ImplAAFPlainEssenceData ** pPlainEssenceData)
 {
   AAFRESULT result = AAFRESULT_NOT_IMPLEMENTED;
+
+  if (reserved != 0)
+    return AAFRESULT_INVALID_PARAM;
+
   ImplAAFPlainEssenceData* pResult =
     (ImplAAFPlainEssenceData*) CreateImpl (CLSID_AAFPlainEssenceData);
   if (pResult)
