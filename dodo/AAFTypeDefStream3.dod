@@ -547,8 +547,12 @@ AD_XMETHOD2(GetPlainStreamData,
   // Succeeds if:
   // - Initialize\(\) has already been called on this object.
   // - pPlainStreamData is a valid pointer.
+  // - reserved is 0.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NO_INIT
-  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pPlainStreamData\))
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pPlainStreamData\)
+  ///
+  /// AAFRESULT_INVALID_PARAM
+  ///   - reserved is not 0.)
 
 AD_XCLASS_END(Concrete, StoredObject)
