@@ -21,8 +21,8 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="../../../ref-impl/src/OM,../../../ref-impl/include/Om,../../../ref-impl/include,../../../sss-impl/include"
-				PreprocessorDefinitions="_DEBUG;OM_DEBUG;OM_STACK_TRACE_ON_ASSERT;OM_USE_WINDOWS_SS;_WIN32;WIN32;_WINDOWS;UNICODE;OM_USE_STORAGE_EX"
+				AdditionalIncludeDirectories="&quot;../../../ref-impl/src/OM&quot;;&quot;../../../ref-impl/include/Om&quot;;&quot;../../../ref-impl/include&quot;;&quot;../../../sss-impl/include&quot;;&quot;$(EXPAT_INSTALL_DIR)/Source/lib&quot;"
+				PreprocessorDefinitions="_DEBUG;OM_DEBUG;OM_STACK_TRACE_ON_ASSERT;OM_USE_WINDOWS_SS;_WIN32;HAVE_EXPAT;WIN32;_WINDOWS;UNICODE;OM_USE_STORAGE_EX"
 				RuntimeLibrary="3"
 				RuntimeTypeInfo="TRUE"
 				UsePrecompiledHeader="2"
@@ -74,8 +74,8 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="../../../ref-impl/src/OM,../../../ref-impl/include/Om,../../../ref-impl/include,../../../sss-impl/include"
-				PreprocessorDefinitions="NDEBUG;OM_USE_WINDOWS_SS;_WIN32;WIN32;_WINDOWS;UNICODE;OM_USE_STORAGE_EX"
+				AdditionalIncludeDirectories="&quot;../../../ref-impl/src/OM&quot;;&quot;../../../ref-impl/include/Om&quot;;&quot;../../../ref-impl/include&quot;;&quot;../../../sss-impl/include&quot;;&quot;$(EXPAT_INSTALL_DIR)/Source/lib&quot;"
+				PreprocessorDefinitions="NDEBUG;OM_USE_WINDOWS_SS;_WIN32;WIN32;_WINDOWS;UNICODE;HAVE_EXPAT;OM_USE_STORAGE_EX"
 				StringPooling="TRUE"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="TRUE"
@@ -1493,6 +1493,9 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\..\..\ref-impl\src\Om\OMSymbolspace.cpp">
+			</File>
+			<File
 				RelativePath="..\..\..\ref-impl\src\OM\OMType.cpp">
 				<FileConfiguration
 					Name="Debug|Win32">
@@ -2179,6 +2182,9 @@
 			</File>
 			<File
 				RelativePath="..\..\..\ref-impl\src\OM\OMStrongRefVectorPropertyT.h">
+			</File>
+			<File
+				RelativePath="..\..\..\ref-impl\src\Om\OMSymbolspace.h">
 			</File>
 			<File
 				RelativePath="..\..\..\ref-impl\include\Om\OMTransparentStoredStreamFilter.h">
