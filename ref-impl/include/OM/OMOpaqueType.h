@@ -34,6 +34,14 @@ public:
 
   virtual OMType::Tag tag(void) const;
 
+  virtual OMUniqueObjectIdentification actualTypeId(const OMByte* externalBytes, 
+      OMUInt32 externalSize) const = 0;
+  
+  virtual OMByteOrder byteOrder(const OMByte* externalBytes, OMUInt32 externalSize) const = 0;
+
+  virtual void externalData(const OMByte* externalBytes, OMUInt32 externalSize, 
+        const OMByte*& externalDataBytes, OMUInt32& externalDataSize) const = 0;
+        
 };
 
 #endif

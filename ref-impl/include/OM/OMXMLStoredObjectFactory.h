@@ -1,6 +1,6 @@
 //=---------------------------------------------------------------------=
 //
-// $Id$ $Name$
+// $Id$
 //
 // The contents of this file are subject to the AAF SDK Public
 // Source License Agreement (the "License"); You may not use this file
@@ -125,7 +125,7 @@ private:
     // @cmember Read the signature from the given raw storage.
   static bool readSignature(OMRawStorage* rawStorage,
                             char* signature,
-                            size_t signatureSize);
+                            OMUInt32 signatureSize);
 
 };
 

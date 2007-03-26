@@ -25,6 +25,8 @@
 // @doc OMINTERNAL
 // @author Tim Bingham | tjb | Avid Technology, Inc. | OMDiskRawStorage
 
+#include <wchar.h>
+
 #include "OMRawStorage.h"
 #include "OMAssertions.h"
 #include "OMExceptions.h"
@@ -46,7 +48,7 @@ OMDiskRawStorage::openExistingRead(const wchar_t* fileName)
 
   OMStream* file = OMStream::openExistingRead(fileName);
 
-  OMDiskRawStorage* result = new OMDiskRawStorage(file, OMFile::readOnlyMode);
+  OMDiskRawStorage* result = new OMDiskRawStorage(file, OMFile::readOnlyMode, fileName);
   ASSERT("Valid heap pointer", result != 0);
 
   return result;
@@ -66,7 +68,7 @@ OMDiskRawStorage::openExistingModify(const wchar_t* fileName)
 
   OMStream* file = OMStream::openExistingModify(fileName);
 
-  OMDiskRawStorage* result = new OMDiskRawStorage(file, OMFile::modifyMode);
+  OMDiskRawStorage* result = new OMDiskRawStorage(file, OMFile::modifyMode, fileName);
   ASSERT("Valid heap pointer", result != 0);
 
   return result;
@@ -86,7 +88,7 @@ OMDiskRawStorage::openNewModify(const wchar_t* fileName)
 
   OMStream* file = OMStream::openNewModify(fileName);
 
-  OMDiskRawStorage* result = new OMDiskRawStorage(file, OMFile::modifyMode);
+  OMDiskRawStorage* result = new OMDiskRawStorage(file, OMFile::modifyMode, fileName);
   ASSERT("Valid heap pointer", result != 0);
 
   return result;
@@ -102,7 +104,7 @@ OMDiskRawStorage::openNewModify(void)
 
   OMStream* file = OMStream::openNewModify();
 
-  OMDiskRawStorage* result = new OMDiskRawStorage(file, OMFile::modifyMode);
+  OMDiskRawStorage* result = new OMDiskRawStorage(file, OMFile::modifyMode, 0);
   ASSERT("Valid heap pointer", result != 0);
 
   return result;
@@ -118,6 +120,8 @@ OMDiskRawStorage::~OMDiskRawStorage(void)
   synchronize();
   delete _file;
   _file = 0;
+  delete [] _fileName;
+  _fileName = 0;
 }
 
   // @mfunc Is it possible to read from this <c OMDiskRawStorage> ?
@@ -335,9 +339,11 @@ void OMDiskRawStorage::synchronize(void)
   //   @parm The file.
   //   @parm The access mode.
 OMDiskRawStorage::OMDiskRawStorage(OMStream* file,
-                                   OMFile::OMAccessMode accessMode)
+                                   OMFile::OMAccessMode accessMode,
+                                   const wchar_t* fileName)
 : _file(file),
-  _mode(accessMode)
+  _mode(accessMode),
+  _fileName(0)
 {
   TRACE("OMDiskRawStorage::OMDiskRawStorage");
 
@@ -345,6 +351,12 @@ OMDiskRawStorage::OMDiskRawStorage(OMStream* file,
   PRECONDITION("Valid mode", (_mode == OMFile::readOnlyMode)  ||
                              (_mode == OMFile::writeOnlyMode) ||
                              (_mode == OMFile::modifyMode));
+
+  if (fileName != 0)
+  {
+    _fileName = new wchar_t[wcslen(fileName) + 1];
+    wcscpy(_fileName, fileName);
+  }
 }
 
   // @mfunc The current position for <f read()> and <f write()>, as an
@@ -376,3 +388,12 @@ void OMDiskRawStorage::setPosition(OMUInt64 newPosition) const
 
   _file->setPosition(newPosition);
 }
+
+  // @mfunc Return the file name for this <c OMDiskRawStorage>.
+  //   @this const
+const wchar_t* OMDiskRawStorage::fileName(void) const
+{
+  TRACE("OMDiskRawStorage::fileName");
+  return _fileName;
+}
+

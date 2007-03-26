@@ -27,6 +27,7 @@
 #define OMENUMERATEDTYPE_H
 
 #include "OMType.h"
+#include "OMVector.h"
 
 // @author Tim Bingham | tjb | Avid Technology, Inc. | OMEnumeratedType
 class OMEnumeratedType : public OMType {
@@ -42,7 +43,9 @@ public:
 
   virtual OMInt64 elementValue(OMUInt32 index) const = 0;
 
+  virtual wchar_t* elementNameFromValue(OMInt64 value) const = 0;
 
+  virtual OMInt64 elementValueFromName(const wchar_t* name) const = 0;
 
 };
 

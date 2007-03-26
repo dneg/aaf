@@ -1,6 +1,6 @@
 //=---------------------------------------------------------------------=
 //
-// $Id$ $Name$
+// $Id$
 //
 // The contents of this file are subject to the AAF SDK Public
 // Source License Agreement (the "License"); You may not use this file
@@ -28,8 +28,9 @@
 #include "OMXMLStoredObject.h"
 #include "OMUtilities.h"
 #include "OMAssertions.h"
-#include "OMRawStorage.h"
 #include "OMDiskRawStorage.h"
+#include "OMExceptions.h"
+
 
 #include <ctype.h>
 
@@ -71,10 +72,11 @@ void OMXMLStoredObjectFactory::finalize(void)
   //   @parm The raw storage in which to open the <c OMXMLStoredObject>.
   //   @rdesc An <c OMXMLStoredObject> representing the root object.
 OMStoredObject*
-OMXMLStoredObjectFactory::openRead(OMRawStorage* rawStorage)
+OMXMLStoredObjectFactory::openRead(OMRawStorage* /* rawStorage */)
 {
   TRACE("OMXMLStoredObjectFactory::openRead");
-  return OMXMLStoredObject::openRead(rawStorage);
+  ASSERT("Unimplemented code not reached", false);
+  return 0;
 }
 
   // @mfunc Open the root <c OMXMLStoredObject> in the raw storage
@@ -82,10 +84,11 @@ OMXMLStoredObjectFactory::openRead(OMRawStorage* rawStorage)
   //   @parm The raw storage in which to open the <c OMXMLStoredObject>.
   //   @rdesc An <c OMXMLStoredObject> representing the root object.
 OMStoredObject*
-OMXMLStoredObjectFactory::openModify(OMRawStorage* rawStorage)
+OMXMLStoredObjectFactory::openModify(OMRawStorage* /* rawStorage */)
 {
   TRACE("OMXMLStoredObjectFactory::openModify");
-  return OMXMLStoredObject::openModify(rawStorage);
+  ASSERT("Unimplemented code not reached", false);
+  return 0;
 }
 
   // @mfunc Create a new root <c OMXMLStoredObject> in the raw storage
@@ -95,11 +98,12 @@ OMXMLStoredObjectFactory::openModify(OMRawStorage* rawStorage)
   //   @parm The desired byte ordering for the new <c OMXMLStoredObject>.
   //   @rdesc An <c OMXMLStoredObject> representing the root object.
 OMStoredObject*
-OMXMLStoredObjectFactory::createWrite(OMRawStorage* rawStorage,
-                                      const OMByteOrder byteOrder)
+OMXMLStoredObjectFactory::createWrite(OMRawStorage* /* rawStorage */,
+                                      const OMByteOrder /* byteOrder */)
 {
   TRACE("OMXMLStoredObjectFactory::createWrite");
-  return OMXMLStoredObject::createWrite(rawStorage, byteOrder);
+  ASSERT("Unimplemented code not reached", false);
+  return 0;
 }
 
   // @mfunc Create a new root <c OMXMLStoredObject> in the raw storage
@@ -109,11 +113,12 @@ OMXMLStoredObjectFactory::createWrite(OMRawStorage* rawStorage,
   //   @parm The desired byte ordering for the new <c OMXMLStoredObject>.
   //   @rdesc An <c OMXMLStoredObject> representing the root object.
 OMStoredObject*
-OMXMLStoredObjectFactory::createModify(OMRawStorage* rawStorage,
-                                       const OMByteOrder byteOrder)
+OMXMLStoredObjectFactory::createModify(OMRawStorage* /* rawStorage */,
+                                       const OMByteOrder /* byteOrder */)
 {
   TRACE("OMXMLStoredObjectFactory::createModify");
-  return OMXMLStoredObject::createModify(rawStorage, byteOrder);
+  ASSERT("Unimplemented code not reached", false);
+  return 0;
 }
 
   // @mfunc Open the root <c OMXMLStoredObject> in the disk file
@@ -122,12 +127,17 @@ OMXMLStoredObjectFactory::createModify(OMRawStorage* rawStorage,
   //   @rdesc An <c OMXMLStoredObject> representing the root object in
   //          the disk file.
 OMStoredObject*
-OMXMLStoredObjectFactory::openRead(const wchar_t* /* fileName */)
+OMXMLStoredObjectFactory::openRead(const wchar_t* fileName )
 {
   TRACE("OMXMLStoredObjectFactory::openRead");
-  ASSERT("Unimplemented code not reached", false);
-//return OMXMLStoredObject::openRead(fileName);
-  return 0;
+#if !defined(HAVE_EXPAT)
+    ASSERT("Expat library available", false);
+    return 0;
+#else
+
+  OMDiskRawStorage* storage = OMDiskRawStorage::openExistingRead(fileName);
+  return OMXMLStoredObject::openRead(storage);
+#endif  
 }
 
   // @mfunc Open the root <c OMXMLStoredObject> in the disk file
@@ -136,12 +146,17 @@ OMXMLStoredObjectFactory::openRead(const wchar_t* /* fileName */)
   //   @rdesc An <c OMXMLStoredObject> representing the root object in
   //          the disk file.
 OMStoredObject*
-OMXMLStoredObjectFactory::openModify(const wchar_t* /* fileName */)
+OMXMLStoredObjectFactory::openModify(const wchar_t* fileName)
 {
   TRACE("OMXMLStoredObjectFactory::openModify");
-  ASSERT("Unimplemented code not reached", false);
-//return OMXMLStoredObject::openModify(fileName);
-  return 0;
+#if !defined(HAVE_EXPAT)
+    ASSERT("Expat library available", false);
+    return 0;
+#else
+
+  OMDiskRawStorage* storage = OMDiskRawStorage::openExistingModify(fileName);
+  return OMXMLStoredObject::openModify(storage);
+#endif  
 }
 
   // @mfunc Create a new root <c OMXMLStoredObject> in the disk file
@@ -152,12 +167,18 @@ OMXMLStoredObjectFactory::openModify(const wchar_t* /* fileName */)
   //   @rdesc An <c OMXMLStoredObject> representing the root object in
   //          the disk file.
 OMStoredObject*
-OMXMLStoredObjectFactory::createModify(const wchar_t* NNAME(fileName),
-                                       const OMByteOrder NNAME(byteOrder))
+OMXMLStoredObjectFactory::createModify(const wchar_t* fileName,
+                                       const OMByteOrder byteOrder)
 {
   TRACE("OMXMLStoredObjectFactory::createModify");
-  ASSERT("Unimplemented code not reached", false);
-  return 0;
+#if !defined(HAVE_EXPAT)
+    ASSERT("Expat library available", false);
+    return 0;
+#else
+
+  OMDiskRawStorage* storage = OMDiskRawStorage::openNewModify(fileName);
+  return OMXMLStoredObject::createModify(storage);
+#endif  
 }
 
   // @mfunc Create a new root <c OMXMLStoredObject> in the disk file
@@ -173,7 +194,6 @@ OMXMLStoredObjectFactory::createWrite(const wchar_t* /* fileName */,
 {
   TRACE("OMXMLStoredObjectFactory::creatWrite");
   ASSERT("Unimplemented code not reached", false);
-//return OMXMLStoredObject::createWrite(fileName, byteOrder);
   return 0;
 }
 
@@ -185,6 +205,11 @@ bool
 OMXMLStoredObjectFactory::isRecognized(const wchar_t* fileName)
 {
   TRACE("OMXMLStoredObjectFactory::isRecognized");
+  
+#if !defined(HAVE_EXPAT)
+    return false;
+#else
+
   bool result;
   OMRawStorage* rawStorage = OMDiskRawStorage::openExistingRead(fileName);
   if (rawStorage != 0) {
@@ -194,6 +219,7 @@ OMXMLStoredObjectFactory::isRecognized(const wchar_t* fileName)
     result = false;
   }
   return result;
+#endif  
 }
 
   // @mfunc Does <p rawStorage> contain a recognized file ?
@@ -207,23 +233,33 @@ OMXMLStoredObjectFactory::isRecognized(OMRawStorage* rawStorage)
   PRECONDITION("Valid raw storage", rawStorage != 0);
   PRECONDITION("Positionable raw storage", rawStorage->isPositionable());
 
-  char signature[] = "<?XML VERSION=\"1.0\"?>"
-  "<?OM SIGNATURE=\"{xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx}\"?>";
-  char* p = strchr(signature, '{');
-  ASSERT("Found place holder", p != 0);
-  toString(encoding(), p);
-  size_t bufferSize = strlen(signature) + 1;
-  char* buffer = new char[bufferSize];
-  ASSERT("Valid heap pointer", buffer != 0);
-  bool result = readSignature(rawStorage, buffer, bufferSize);
-  if (result) {
-    if (strcmp(signature, buffer) != 0) {
-      result = false;
+#if !defined(HAVE_EXPAT)
+    return false;
+#else
+
+  bool isRecog = false;
+  OMXMLReader* reader = 0;
+  try
+  {
+    reader = OMXMLReader::create(rawStorage);
+    if (reader->nextElement() &&
+          reader->elementEquals(OMSymbolspace::getBaselineURI(), L"AAF"))
+    {
+        isRecog = true;
     }
   }
-  delete [] buffer;
+  catch (...)
+  {}
+
+  if (reader != 0)
+  {
+    delete reader;
+  }
+  
   rawStorage->setPosition(0);
-  return result;
+  
+  return isRecog;
+#endif  
 }
 
   // @mfunc Can a file be created successfully on the given
@@ -237,10 +273,8 @@ bool OMXMLStoredObjectFactory::compatibleRawStorage(
                                   const OMFile::OMAccessMode NNAME(accessMode))
 {
   TRACE("OMXMLStoredObjectFactory::compatibleRawStorage");
-
-  // tjb -- missing checks ?
-  bool result = true;
-  return result;
+  // raw storage is not supported
+  return false;
 }
 
   // @mfunc Can a file be created successfully as a named file and
@@ -252,11 +286,7 @@ bool OMXMLStoredObjectFactory::compatibleNamedFile(
 {
   TRACE("OMXMLStoredObjectFactory::compatibleNamedFile");
 
-  // Directly accessed named files are not supported regardless of the
-  // access mode. Named files are supported via a disk file based
-  // implementation of OMRawStorage.
-  bool result = false;
-  return result;
+  return true;
 }
 
   // @mfunc Perform any necessary actions when the file
@@ -283,30 +313,11 @@ void OMXMLStoredObjectFactory::close(OMRawStorage* /* rawStorage */,
   //   @parm TBS
   //   @parm TBS
   //   @parm TBS
-bool OMXMLStoredObjectFactory::readSignature(OMRawStorage* rawStorage,
-                                             char* signature,
-                                             size_t signatureSize)
+bool OMXMLStoredObjectFactory::readSignature(OMRawStorage* /* rawStorage */,
+                                             char* /* signature */,
+                                             OMUInt32 /* signatureSize */)
 {
   TRACE("OMXMLStoredObjectFactory::readSignature");
-  size_t index = 0;
-  while (index < signatureSize - 1) {
-    unsigned char ch;
-    OMUInt32 bytesRead;
-    rawStorage->read(reinterpret_cast<OMByte*>(&ch), 1, bytesRead);
-    if (bytesRead != 1) {
-      break;
-    }
-    int c = ch;
-    if (isprint(c)) {
-      signature[index++] = toupper(ch);
-    }
-  }
-  bool result;
-  if (index == (signatureSize - 1)) {
-  signature[index] = 0;
-    result = true;
-  } else {
-    result = false;
-  }
-  return result;
+  ASSERT("Unimplemented code not reached", false);
+  return false;
 }

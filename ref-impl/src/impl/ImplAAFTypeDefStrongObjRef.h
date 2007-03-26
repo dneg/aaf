@@ -164,6 +164,8 @@ public:
 
   virtual const OMUniqueObjectIdentification& referencedType(void) const;
 
+  virtual OMClassDefinition* referencedClass(void) const;
+
 
   // overrides from ImplAAFTypeDef
   //

@@ -58,6 +58,10 @@ public:
 
   virtual OMClassDefinition* containingClass(void) const = 0;
 
+    // @cmember Does the Is the <c OMProperty> defined by this
+    //          <c OMPropertyDefinition> uniquely identify the object?
+  virtual bool isUniqueIdentifier(void) const = 0;
+  
 
 };
 
@@ -116,6 +120,10 @@ public:
     //          with respect to a well known baseline?
   virtual bool isPredefined(void) const;
 
+    // @cmember Does the <c OMProperty> defined by this
+    //          <c OMBuiltinPropertyDefinition> unique identify an object?
+  virtual bool isUniqueIdentifier(void) const;
+  
 private:
   // @access Private members.
 

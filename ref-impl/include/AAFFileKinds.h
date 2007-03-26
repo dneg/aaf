@@ -80,9 +80,8 @@ const aafUID_t kAAFFileKind_Aaf4KBinary = kAAFFileKind_Aaf4KBinary_Value;
 
 // AAF files encoded as XML (text).
 //
-// used in prototype only (TEST/ComFileKindTest)
 #define kAAFFileKind_AafXmlText_Value \
-{ 0xc59ef56f, 0x5cb4, 0x4cb8, { 0xbd, 0xe3, 0x8d, 0x7c, 0xd9, 0x25, 0x8e, 0x18 } }
+{ 0xfe0d0101, 0x60e1, 0x4e78, { 0xb2, 0xcd, 0x2b, 0x03, 0xdb, 0xb0, 0xfa, 0x87 } }
 const aafUID_t kAAFFileKind_AafXmlText = kAAFFileKind_AafXmlText_Value;
 
 // AAF files encoded as AAF SMPTE KLV (binary).
@@ -114,6 +113,11 @@ const aafUID_t kAAFSignature_Aaf512Binary = kAAFSignature_Aaf512Binary_Value;
 #define kAAFSignature_Aaf4KBinary_Value \
 {0x0d010201, 0x0200, 0x0000, {0x06, 0x0e, 0x2b, 0x34, 0x03, 0x02, 0x01, 0x01}};
 const aafUID_t kAAFSignature_Aaf4KBinary = kAAFSignature_Aaf4KBinary_Value;
+
+// no signature is required for AAF-XML 
+#define kAAFSignature_AafXmlText_Value \
+{0x00000000, 0x0000, 0x0000, {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}};
+const aafUID_t kAAFSignature_AafXmlText = kAAFSignature_AafXmlText_Value;
 
 
 // Deprecated symbols, which may be removed in a future release

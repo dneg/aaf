@@ -885,6 +885,74 @@ ImplAAFTypeDefExtEnum::elementValue( aafUInt32 index ) const
   return result;
 }
 
+wchar_t* ImplAAFTypeDefExtEnum::elementNameFromValue(OMUniqueObjectIdentification value) const
+{
+    ImplAAFTypeDefExtEnum* pNonConstThis = const_cast<ImplAAFTypeDefExtEnum*>(this);
+    
+    wchar_t* result = 0;
+    aafUID_t valueI = (*reinterpret_cast<aafUID_t*>(&value));
+    aafUInt32 len;
+    HRESULT hr = pNonConstThis->GetNameBufLenFromAUID(valueI, &len);
+    if (AAFRESULT_SUCCEEDED(hr))
+    {
+        result = (wchar_t*)(new OMByte[len]);
+        hr = pNonConstThis->GetNameFromAUID(valueI, result, len);
+        ASSERTU(AAFRESULT_SUCCEEDED(hr));
+    }
+    
+    return result;
+}
+
+OMUniqueObjectIdentification ImplAAFTypeDefExtEnum::elementValueFromName(
+    const wchar_t* name) const
+{
+    ImplAAFTypeDefExtEnum* pNonConstThis = const_cast<ImplAAFTypeDefExtEnum*>(this);
+    
+    aafUID_t result;
+    HRESULT hr = pNonConstThis->LookupValByName(&result, static_cast<const aafCharacter*>(name));
+    if (AAFRESULT_SUCCEEDED(hr))
+    {
+        return (*reinterpret_cast<const OMUniqueObjectIdentification*>(&result));
+    }
+    else
+    {
+        return nullOMUniqueObjectIdentification;
+    }
+}
+
+bool ImplAAFTypeDefExtEnum::registerElement(const wchar_t* name, 
+    OMUniqueObjectIdentification value)
+{
+    // check name and value are unique wrt existing names and values
+    bool result = elementValueFromName(name) == nullOMUniqueObjectIdentification;
+
+    if (result)
+    {
+        const wchar_t* namePtr = name;
+        while (*namePtr != 0)
+        {
+            _ElementNames.appendValue(namePtr);
+            namePtr++;
+        }
+        _ElementNames.appendValue(namePtr);
+        _ElementValues.append(*(reinterpret_cast<aafUID_t*>(&value)));
+    }
+    
+    return result;
+}
+
+bool ImplAAFTypeDefExtEnum::isValidValue(OMUniqueObjectIdentification value) const
+{
+    ImplAAFTypeDefExtEnum* pNonConstThis = const_cast<ImplAAFTypeDefExtEnum*>(this);
+    
+    aafUID_t valueI = (*reinterpret_cast<aafUID_t*>(&value));
+    aafUInt32 len;
+    HRESULT hr = pNonConstThis->GetNameBufLenFromAUID(valueI, &len);
+    
+    return AAFRESULT_SUCCEEDED(hr);
+}
+
+
 
 aafBool ImplAAFTypeDefExtEnum::IsFixedSize (void) const
 {

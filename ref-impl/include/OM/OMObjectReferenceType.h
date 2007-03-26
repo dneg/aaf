@@ -28,6 +28,8 @@
 
 #include "OMType.h"
 #include "OMSingleton.h"
+#include "OMClassDefinition.h"
+#include "OMVector.h"
 
 // @author Tim Bingham | tjb | Avid Technology, Inc. |
 //         OMObjectReferenceType
@@ -36,6 +38,7 @@ public:
 
   virtual const OMUniqueObjectIdentification& referencedType(void) const = 0;
 
+  virtual OMClassDefinition* referencedClass(void) const = 0;
 };
 
 // @author Tim Bingham | tjb | Avid Technology, Inc. |
@@ -58,6 +61,7 @@ public:
 
   virtual const OMUniqueObjectIdentification& targetPathElement(OMUInt32 index) const = 0;
 
+  virtual const OMPropertyId* targetPath(void) const = 0;
 };
 
 

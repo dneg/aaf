@@ -326,6 +326,7 @@ OMType* ImplAAFTypeDefRename::renamedType(void) const
 }
 
 
+
 aafBool ImplAAFTypeDefRename::IsFixedSize() const
 {
   return BaseType()->IsFixedSize ();

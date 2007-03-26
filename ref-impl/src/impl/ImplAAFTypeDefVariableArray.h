@@ -156,11 +156,18 @@ public:
                            OMUInt32 internalBytesSize,
                            OMByteOrder byteOrder) const;
 
-  virtual OMType* elementType(void) const;
-
-
   virtual void accept(OMTypeVisitor& visitor) const;
 
+
+  //*************************************************************
+  //
+  // Overrides from OMArrayType
+  //
+  //*************************************************************
+
+  virtual OMType* elementType(void) const;
+
+  
   //****************
   // pvtInitialize()
   //

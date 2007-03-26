@@ -631,11 +631,7 @@ STDAPI ImplAAFFileOpenNewModifyEx (
   /*[out]*/ ImplAAFFile ** ppFile)
 {
 
-  // this implementation requires the OM RAW_STORAGE apis
-  // an implementation using OM NAMED_FILE apis is possible, however it
-  // would require additional method on IAAFFile::OpenNewModifyEx()
-  // which is not felt to be worthwhile
-  // #if USE_RAW_STORAGE
+#if USE_RAW_STORAGE
   IAAFRawStorage * pRawStg = 0;
   AAFRESULT hr = AAFCreateRawStorageDisk
     (pFileName,
@@ -665,6 +661,52 @@ STDAPI ImplAAFFileOpenNewModifyEx (
     }
   
   return hr;
+  
+#else // ! USE_RAW_STORAGE
+
+    HRESULT hr = S_OK;
+    ImplAAFFile * pFile = 0;
+
+    if (!pFileName || !pIdent || !ppFile)
+        return AAFRESULT_NULL_PARAM;
+
+    // Initialize the out parameter.
+    *ppFile = 0;
+
+    //
+    // For backwards compatibility with existing client code
+    // the first checked in version of this function is implemented
+    // the same as the old client code which this function is 
+    // intended to replace...
+    // 
+
+    // Create an instance of an uninitialized file object.
+    pFile = static_cast<ImplAAFFile *>(::CreateImpl(CLSID_AAFFile));
+    if(!pFile)
+        hr = AAFRESULT_NOMEMORY;
+    else
+    {
+        // Make sure the file is initialized (not open yet...)
+        hr = pFile->Initialize();
+        if (SUCCEEDED(hr))
+        {
+            // Attempt to open a new file for modification.
+            hr = pFile->OpenNewModify(pFileName, pFileKind, modeFlags, pIdent);
+            if (SUCCEEDED(hr))
+            {
+                *ppFile = pFile;
+                pFile = 0;
+            }
+        }
+
+        // Cleanup the file if it could not be initialized and opened.
+        if (FAILED(hr) && pFile)
+            pFile->ReleaseReference();
+    }
+
+    return hr;
+
+#endif // USE_RAW_STORAGE
 }
 
 //***********************************************************

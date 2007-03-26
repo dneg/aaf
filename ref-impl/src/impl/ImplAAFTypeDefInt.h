@@ -199,6 +199,8 @@ public:
   virtual OMUInt8 size(void) const;
 
   virtual bool isSigned(void) const;
+  
+  
 
 public:
 

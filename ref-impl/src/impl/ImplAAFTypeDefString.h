@@ -214,6 +214,7 @@ public:
 
   virtual OMType* elementType(void) const;
 
+  
   //****************
   // pvtInitialize()
   //

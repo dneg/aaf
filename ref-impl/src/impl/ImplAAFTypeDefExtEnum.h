@@ -269,6 +269,14 @@ public:
 
 	virtual OMUniqueObjectIdentification elementValue(OMUInt32 index) const;
 
+    virtual wchar_t* elementNameFromValue(OMUniqueObjectIdentification value) const;
+
+    virtual OMUniqueObjectIdentification elementValueFromName(const wchar_t* name) const;
+    
+    virtual bool isValidValue(OMUniqueObjectIdentification value) const;
+    
+    virtual bool registerElement(const wchar_t* name, OMUniqueObjectIdentification value);
+        
 
 	AAFRESULT STDMETHODCALLTYPE
 		GetElementNameBufLen (aafUInt32  index,

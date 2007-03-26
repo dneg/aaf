@@ -151,7 +151,7 @@ public:
                            OMByteOrder byteOrder) const;
 
   virtual void accept(OMTypeVisitor& visitor) const;  
-  
+
   //
   // ImplAAFTypeDef methods
   //

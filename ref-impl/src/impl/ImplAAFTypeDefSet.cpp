@@ -223,6 +223,7 @@ OMType* ImplAAFTypeDefSet::elementType(void) const
   return result->type();
 }
 
+
 AAFRESULT STDMETHODCALLTYPE
 ImplAAFTypeDefSet::pvtInitialize (
                   aafUID_constref  id,

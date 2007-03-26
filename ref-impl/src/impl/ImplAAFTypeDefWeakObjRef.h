@@ -187,6 +187,8 @@ public:
 
   virtual const OMUniqueObjectIdentification& referencedType(void) const;
 
+  virtual OMClassDefinition* referencedClass(void) const;
+
   //*************************************************************
   //
   // Overrides from OMWeakObjectReferenceType
@@ -198,6 +200,7 @@ public:
   virtual const OMUniqueObjectIdentification& targetPathElement(
                                                          OMUInt32 index) const;
 
+  virtual const OMPropertyId* targetPath(void) const;
 
   // overrides from ImplAAFTypeDef
   //

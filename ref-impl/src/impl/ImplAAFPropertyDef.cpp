@@ -313,6 +313,25 @@ bool ImplAAFPropertyDef::isOptional(void) const
   return (kAAFTrue == _IsOptional) ? true : false;
 }
 
+OMUniqueObjectIdentification ImplAAFPropertyDef::typeId(void) const
+{
+    aafUID_t tid = _Type;
+    return *(reinterpret_cast<OMUniqueObjectIdentification*>(&tid));
+}
+
+bool ImplAAFPropertyDef::isUniqueIdentifier(void) const
+{
+  if (!_IsUniqueIdentifier.isPresent())
+  {
+      return false;
+  }
+  else
+  {
+      return _IsUniqueIdentifier == kAAFTrue;
+  }
+}
+
+
 
 OMProperty * ImplAAFPropertyDef::CreateOMProperty () const
 {

@@ -656,6 +656,28 @@ void ImplAAFTypeDefOpaque::accept(OMTypeVisitor& visitor) const
   // We don't visit the opaque type here // tjb !!!
 }
 
+OMUniqueObjectIdentification ImplAAFTypeDefOpaque::actualTypeId(
+    const OMByte* externalBytes, OMUInt32 externalSize) const
+{
+    return ImplAAFTypeDefIndirect::actualTypeId(externalBytes, externalSize);
+}
+
+OMByteOrder ImplAAFTypeDefOpaque::byteOrder(const OMByte* externalBytes,
+    OMUInt32 externalSize) const
+{
+    return ImplAAFTypeDefIndirect::byteOrder(externalBytes, externalSize);
+}
+
+void ImplAAFTypeDefOpaque::externalData(const OMByte* externalBytes, OMUInt32 externalSize,
+    const OMByte*& externalDataBytes, OMUInt32& externalDataSize) const
+{
+    ImplAAFTypeDefIndirect::externalData(externalBytes, externalSize, externalDataBytes, 
+        externalDataSize);
+}
+
+
+
+
 // override from OMStorable.
 const OMClassId& ImplAAFTypeDefOpaque::classId(void) const
 {

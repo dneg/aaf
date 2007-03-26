@@ -29,6 +29,9 @@
 #include "OMStorable.h"
 #include "OMRedBlackTree.h"
 #include "OMDataTypes.h"
+#include "OMType.h"
+#include "OMVector.h"
+
 
 // Abstract meta classes
 
@@ -151,6 +154,7 @@ class OMPropertyDefinition;
 
 class OMReferenceContainerIterator;
 typedef OMReferenceContainerIterator ClassDefinitionsIterator;
+typedef OMReferenceContainerIterator TypeDefinitionsIterator;
 
   // @class Dictionary containing definitions of classes, properties and types.
   //        The dictionary is a factory for <c OMstorable> objects.
@@ -179,11 +183,13 @@ public:
                         const OMUniqueObjectIdentification& parent,
                         bool isConcrete);
 
-  virtual void newProperty(const OMUniqueObjectIdentification& id,
+  virtual const OMPropertyDefinition* newProperty(const OMUniqueObjectIdentification& id,
                            const wchar_t* name,
                            const wchar_t* description,
+                           OMPropertyId localId,
                            const OMUniqueObjectIdentification& type,
-                           bool& isRequired,
+                           bool& isOptional,
+                           bool& isUniqueIdentifier,
                            const OMUniqueObjectIdentification& memberOf);
 
   virtual void newIntegerType(const OMObjectIdentification& id,
@@ -258,10 +264,12 @@ public:
   virtual void newExtendibleEnumeratedType(
                                  const OMObjectIdentification& id,
                                  const wchar_t* name,
-                                 const wchar_t* description,
-                                 const wchar_t** elementNames,
-                                 const OMObjectIdentification* elementValues,
-                                 OMUInt32 elementCount);
+                                 const wchar_t* description);
+
+  virtual void newExtendibleEnumeratedTypeElement(
+                                 const OMObjectIdentification& elementOf,
+                                 const wchar_t* name,
+                                 const OMObjectIdentification& value);
 
   virtual void newIndirectType(const OMObjectIdentification& id,
                                const wchar_t* name,
@@ -284,6 +292,9 @@ public:
   bool isMeta(const OMObjectIdentification& id) const;
 
   virtual ClassDefinitionsIterator* classDefinitions(void) const = 0;
+  
+  virtual void typeDefinitions(OMVector<OMType*>& typeDefs) const = 0;
+//  virtual TypeDefinitionsIterator* typeDefinitions(void) const = 0;
 
   static void mapFromKLV(OMPropertyId& id);
 
@@ -293,6 +304,10 @@ public:
 
   static void mapToKLV(OMObjectIdentification & id);
 
+  virtual bool registerClassDef(const OMUniqueObjectIdentification& classId) = 0;
+
+  virtual bool registerTypeDef(const OMUniqueObjectIdentification& typeId) = 0;
+  
 private:
 
   typedef OMRedBlackTree<OMPropertyId,

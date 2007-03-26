@@ -41,6 +41,14 @@ public:
 
   virtual OMUniqueObjectIdentification elementValue(OMUInt32 index) const = 0;
 
+  virtual wchar_t* elementNameFromValue(OMUniqueObjectIdentification value) const = 0;
+
+  virtual OMUniqueObjectIdentification elementValueFromName(const wchar_t* name) const = 0;
+
+  virtual bool isValidValue(OMUniqueObjectIdentification value) const = 0;
+
+  virtual bool registerElement(const wchar_t* name, OMUniqueObjectIdentification value) = 0;
+    
 };
 
 #endif

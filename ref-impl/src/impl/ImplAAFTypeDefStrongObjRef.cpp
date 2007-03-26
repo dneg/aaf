@@ -428,6 +428,7 @@ bool ImplAAFTypeDefStrongObjRef::isPredefined(void) const
   return ImplAAFMetaDefinition::isPredefined();
 }
 
+
 bool ImplAAFTypeDefStrongObjRef::isFixedSize(void) const
 {
   bool result = false;
@@ -511,6 +512,18 @@ const OMUniqueObjectIdentification&
 ImplAAFTypeDefStrongObjRef::referencedType(void) const
 {
   return _referencedType.identification();
+}
+
+OMClassDefinition* ImplAAFTypeDefStrongObjRef::referencedClass(void) const
+{
+    ImplAAFTypeDefStrongObjRef* pNonConstThis = const_cast<ImplAAFTypeDefStrongObjRef*>(this);
+    
+    ImplAAFClassDef* pClassDef = 0;
+    HRESULT hr = pNonConstThis->GetObjectType(&pClassDef);
+    ASSERTU(AAFRESULT_SUCCEEDED(hr));
+    pClassDef->ReleaseReference();
+    
+    return pClassDef;
 }
 
 aafBool ImplAAFTypeDefStrongObjRef::IsFixedSize (void) const

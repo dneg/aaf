@@ -149,10 +149,17 @@ public:
 
   virtual OMUInt32 internalSize(void) const;
 
-  virtual OMType* elementType(void) const;
-
   virtual void accept(OMTypeVisitor& visitor) const;
 
+  //*************************************************************
+  //
+  // Overrides from OMArrayType
+  //
+  //*************************************************************
+
+  virtual OMType* elementType(void) const;
+
+  
   //*************************************************************
   //
   // Overrides from OMFixedArrayType
@@ -161,6 +168,7 @@ public:
 
   virtual OMUInt32 elementCount(void) const;
 
+  
   //****************
   // pvtInitialize()
   //

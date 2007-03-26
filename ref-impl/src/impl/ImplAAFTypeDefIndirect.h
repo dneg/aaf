@@ -192,6 +192,30 @@ public:
 
   virtual void accept(OMTypeVisitor& visitor) const;
 
+  
+  //
+  // OMIndirectType methods
+  //
+  
+  virtual OMUniqueObjectIdentification actualTypeId(const OMByte* externalBytes, 
+      OMUInt32 externalSize) const;
+  
+  virtual OMType* actualType(const OMByte* externalBytes, OMUInt32 externalSize) const;
+  
+  virtual OMByteOrder byteOrder(const OMByte* externalBytes, OMUInt32 externalSize) const;
+
+  virtual void actualSize(const OMByte* externalBytes, OMUInt32 externalSize, 
+    OMUInt32& actualSize) const;
+    
+  virtual void actualData(const OMByte* externalBytes, OMUInt32 externalSize,
+    OMByte* actualBytes, OMUInt32& actualSize) const;
+  
+  virtual OMType* actualType(OMUniqueObjectIdentification id) const;
+
+  virtual void externalData(const OMByte* externalBytes, OMUInt32 externalSize, 
+        const OMByte*& externalDataBytes, OMUInt32& externalDataBytesSize) const;
+        
+  
   //****************
   // Initialize() 
   //   Called when we initialize as one of the "builtin" types.

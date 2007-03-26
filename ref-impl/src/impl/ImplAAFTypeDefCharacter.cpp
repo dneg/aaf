@@ -353,6 +353,7 @@ void ImplAAFTypeDefCharacter::accept(OMTypeVisitor& visitor) const
 
 
 
+
 //
 // Overrides of ImplAAFTypeDef
 //

@@ -128,3 +128,10 @@ bool OMBuiltinPropertyDefinition::isPredefined(void) const
   ASSERT("Unimplemented code not reached", false);
   return true;
 }
+
+bool OMBuiltinPropertyDefinition::isUniqueIdentifier(void) const
+{
+  TRACE("OMBuiltinPropertyDefinition::isUniqueIdentifier");
+  ASSERT("Unimplemented code not reached", false);
+  return true;
+}

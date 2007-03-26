@@ -202,6 +202,16 @@ public:
 
   virtual void accept(OMTypeVisitor& visitor) const;
 
+  // overrides from OMOpaqueType
+  virtual OMUniqueObjectIdentification actualTypeId(const OMByte* externalBytes, 
+      OMUInt32 externalSize) const;
+  
+  virtual OMByteOrder byteOrder(const OMByte* externalBytes, OMUInt32 externalSize) const;
+
+  virtual void externalData(const OMByte* externalBytes, OMUInt32 externalSize, 
+        const OMByte*& externalDataBytes, OMUInt32& externalDataSize) const;
+        
+  
   // override from OMStorable.
   virtual const OMClassId& classId(void) const;
 

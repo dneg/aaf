@@ -286,4 +286,14 @@ typedef OMUInt16 OMPropertyTag;
 
 const OMPropertyTag nullOMPropertyTag = (OMPropertyTag)(~(OMPropertyTag)0);
 
+// wide string format
+//
+#if defined(_MSC_VER)
+#define OMWFMT64 L"I64"
+#elif defined(__x86_64__)
+#define OMWFMT64 L"l"
+#else			// all 32bit platforms using POSIX compilers
+#define OMWFMT64 L"ll"
+#endif
+
 #endif

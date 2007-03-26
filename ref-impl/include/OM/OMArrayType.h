@@ -51,7 +51,6 @@ public:
 
   virtual OMType::Tag tag(void) const;
 
-
 };
 
 #endif

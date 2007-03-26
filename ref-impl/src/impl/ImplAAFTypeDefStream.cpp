@@ -628,6 +628,7 @@ OMProperty * ImplAAFTypeDefStream::pvtCreateOMProperty
 
 
 
+
 // override from OMStorable.
 const OMClassId& ImplAAFTypeDefStream::classId(void) const
 {

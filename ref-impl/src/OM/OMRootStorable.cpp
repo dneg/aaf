@@ -150,6 +150,14 @@ OMDictionary* OMRootStorable::dictionary(void) const
   return _dictionary;
 }
 
+void OMRootStorable::setDictionary(OMDictionary* dictionary)
+{
+  TRACE("OMRootStorable::setDictionary");
+  PRECONDITION("Dictionary is null", _dictionary.isVoid());
+  
+  _dictionary = dictionary;
+}
+
 void OMRootStorable::initialize(OMStorable* clientRoot,
                                 OMDictionary* dictionary)
 {

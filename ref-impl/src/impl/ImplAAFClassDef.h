@@ -208,8 +208,18 @@ public:
 			     const OMStorable* pDstStorable,
 				 const OMPropertyDefinition* pSrcPropertyDef );
 
-   virtual PropertyDefinitionsIterator* propertyDefinitions(void) const;
+  virtual PropertyDefinitionsIterator* propertyDefinitions(void) const;
 
+  virtual const OMUniqueObjectIdentification& identification(void) const;
+  virtual const wchar_t* name(void) const;
+  virtual bool hasDescription(void) const;
+  virtual const wchar_t* description(void) const;
+  virtual bool isPredefined(void) const;
+
+  virtual bool omIsConcrete(void) const;
+  virtual OMClassDefinition* omParentClass(void) const;
+  virtual bool omRegisterExtPropertyDef(OMPropertyDefinition* propertyDef);
+    
 public:
 
 	bool

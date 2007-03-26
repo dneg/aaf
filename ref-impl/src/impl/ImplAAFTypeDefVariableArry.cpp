@@ -541,6 +541,7 @@ void ImplAAFTypeDefVariableArray::accept(OMTypeVisitor& visitor) const
   elementType()->accept(visitor);
 }
 
+
 aafUInt32 ImplAAFTypeDefVariableArray::pvtCount
 (
  ImplAAFPropertyValue * pInPropVal

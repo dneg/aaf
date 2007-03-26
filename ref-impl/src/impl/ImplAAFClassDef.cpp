@@ -721,6 +721,84 @@ PropertyDefinitionsIterator* ImplAAFClassDef::propertyDefinitions(void) const
   return _Properties.createIterator();
 }
 
+const OMUniqueObjectIdentification&
+ImplAAFClassDef::identification(void) const
+{
+  // to prevent ambiguity
+  return ImplAAFMetaDefinition::identification();
+}
+
+const wchar_t* ImplAAFClassDef::name(void) const
+{
+  // to prevent ambiguity
+  return ImplAAFMetaDefinition::name();
+}
+
+bool ImplAAFClassDef::hasDescription(void) const
+{
+  // to prevent ambiguity
+  return ImplAAFMetaDefinition::hasDescription();
+}
+
+const wchar_t* ImplAAFClassDef::description(void) const
+{
+  // to prevent ambiguity
+  return ImplAAFMetaDefinition::description();
+}
+
+bool ImplAAFClassDef::isPredefined(void) const
+{
+  // to prevent ambiguity
+  return ImplAAFMetaDefinition::isPredefined();
+}
+
+bool ImplAAFClassDef::omIsConcrete(void) const
+{
+    return _IsConcrete == kAAFTrue;
+}
+  
+OMClassDefinition* ImplAAFClassDef::omParentClass(void) const
+{
+    ImplAAFClassDef* pParentClassDef = 0;
+    
+    ImplAAFClassDef* nonConstThis = const_cast<ImplAAFClassDef*>(this);
+    
+    aafBoolean_t isRoot = kAAFFalse;
+    nonConstThis->IsRoot(&isRoot);
+    if (isRoot == kAAFFalse)
+    {
+        HRESULT hr = nonConstThis->GetParent(&pParentClassDef);
+        if (AAFRESULT_SUCCESS == hr)
+        {
+            // This method does not increment the reference count
+            // of the returned class definition.
+            pParentClassDef->ReleaseReference();
+        }
+        else
+        {
+            pParentClassDef = 0;
+        }
+    }
+    
+    return pParentClassDef;
+}
+
+bool ImplAAFClassDef::omRegisterExtPropertyDef(OMPropertyDefinition* propertyDef)
+{
+    if (PvtIsPropertyDefRegistered(*(reinterpret_cast<const aafUID_t*>(
+        &(propertyDef->identification())))))
+    {
+        return false;
+    }
+    
+    HRESULT result = pvtRegisterExistingPropertyDef(dynamic_cast<ImplAAFPropertyDef*>(
+        propertyDef));
+        
+    return AAFRESULT_SUCCEEDED(result);
+}
+
+
+
 // Find the unique identifier property defintion for this class or any parent class
 // (RECURSIVE)
 ImplAAFPropertyDef * ImplAAFClassDef::pvtGetUniqueIdentifier(void) // result is NOT reference counted.

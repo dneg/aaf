@@ -83,6 +83,8 @@ public:
 
   static const OMClassId _rootClassId;
 
+  void setDictionary(OMDictionary* dictionary);
+  
 private:
 
   void initialize(OMStorable* clientRoot,

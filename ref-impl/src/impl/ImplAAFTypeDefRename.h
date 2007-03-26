@@ -160,7 +160,6 @@ public:
 
   virtual OMType* renamedType(void) const;
 
-
   // overrides from ImplAAFTypeDef
   //
   virtual aafBool IsFixedSize (void) const;

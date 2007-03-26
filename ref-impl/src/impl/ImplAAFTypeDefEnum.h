@@ -316,7 +316,12 @@ public:
   virtual const wchar_t* elementName(OMUInt32 index) const;
 
   virtual OMInt64 elementValue(OMUInt32 index) const;
+  
+  virtual wchar_t* elementNameFromValue(OMInt64 value) const;
 
+  virtual OMInt64 elementValueFromName(const wchar_t* name) const;
+
+  
   //****************
   // pvtInitialize()
   //

@@ -270,7 +270,7 @@ AAFRESULT STDMETHODCALLTYPE
 	  return AAFRESULT_NULL_PARAM;
 	}
 
-  if (valSize > _size)
+  if (valSize > static_cast<aafUInt32>(_size))
 	{
 	  return AAFRESULT_BAD_SIZE;
 	}
@@ -286,7 +286,7 @@ AAFRESULT STDMETHODCALLTYPE
 
   // sign-extend or zero-fill the value.
   aafUInt8 valBuf[8];
-  ASSERTU (_size <= sizeof (valBuf));
+  ASSERTU (static_cast<size_t>(_size) <= sizeof (valBuf));
   if (_isSigned != 0)
 	{
 	  pvtSignExtend (pVal, valSize, valBuf, _size);
@@ -343,7 +343,7 @@ AAFRESULT STDMETHODCALLTYPE
 	{
 	  return AAFRESULT_NULL_PARAM;
 	}
-  if (valSize < _size)
+  if (valSize < static_cast<aafUInt32>(_size))
 	{
 	  return AAFRESULT_BAD_SIZE;
 	}
@@ -388,7 +388,7 @@ AAFRESULT STDMETHODCALLTYPE
 	{
 	  return hr;
 	}
-  if (_size < bitsSize)
+  if (static_cast<aafUInt32>(_size) < bitsSize)
 	{
 	  return AAFRESULT_BAD_TYPE;
 	}
@@ -433,7 +433,7 @@ AAFRESULT STDMETHODCALLTYPE
 	{
 	  return AAFRESULT_NULL_PARAM;
 	}
-  if (valSize > _size)
+  if (valSize > static_cast<aafUInt32>(_size))
 	{
 	  return AAFRESULT_BAD_SIZE;
 	}
@@ -472,7 +472,7 @@ AAFRESULT STDMETHODCALLTYPE
 
   // sign-extend or zero-fill the value.
   aafUInt8 valBuf[8];
-  ASSERTU (_size <= sizeof (valBuf));
+  ASSERTU (static_cast<size_t>(_size) <= sizeof (valBuf));
   if (_isSigned != 0)
 	{
 	  pvtSignExtend (pVal, valSize, valBuf, _size);
@@ -684,6 +684,8 @@ bool ImplAAFTypeDefInt::isSigned(void) const
 
   return result;
 }
+
+
 
 aafBool ImplAAFTypeDefInt::IsFixedSize (void) const
 {

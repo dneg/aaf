@@ -253,7 +253,6 @@ AAFRESULT ImplAAFPlainStreamData::GetStreamPropertyValue(
   pPropertyValue->GetType(&pPropertyValueType);
   eAAFTypeCategory_t propertyTypeCategory = kAAFTypeCatUnknown;
   pPropertyValueType->GetTypeCategory(&propertyTypeCategory);
-  eAAFTypeCategory_t thisTypeCategory = kAAFTypeCatUnknown;
   if (propertyTypeCategory != kAAFTypeCatStream)
     return AAFRESULT_INVALID_PARAM;
   

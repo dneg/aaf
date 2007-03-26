@@ -1638,14 +1638,15 @@ OMRawStorage * ImplAAFFile::RawStorage ()
 #define AAFS4KEncoding ENCODING(kAAFFileKind_AafS4KBinary)
 #define AAFM4KEncoding ENCODING(kAAFFileKind_AafM4KBinary)
 #define AAFG4KEncoding ENCODING(kAAFFileKind_AafG4KBinary)
+#define AAFXMLEncoding ENCODING(kAAFFileKind_AafXmlText)
 
 // these are only prototype
-#define AAFXMLEncoding ENCODING(kAAFFileKind_AafXmlText)
 #define AAFKLVEncoding ENCODING(kAAFFileKind_AafKlvBinary)
 
 // signatures from the point of view of the OM
 #define Signature_SSBin_512 ENCODING(kAAFSignature_Aaf512Binary)
 #define Signature_SSBin_4K ENCODING(kAAFSignature_Aaf4KBinary)
+#define Signature_XML ENCODING(kAAFSignature_AafXmlText)
 
 void ImplAAFFile::registerFactories(void)
 {
@@ -1693,6 +1694,11 @@ void ImplAAFFile::registerFactories(void)
                                                        L"AAF GSF 4K"));
 #endif
 
+	OMFile::registerFactory(AAFXMLEncoding,
+                          new OMXMLStoredObjectFactory(AAFXMLEncoding,
+                                                       Signature_XML,
+                                                       L"XML",
+                                                       L"AAF XML"));
 	OMFile::registerFactory(AAFKLVEncoding,
                           new OMKLVStoredObjectFactory(AAFKLVEncoding,
                                                        AAFKLVEncoding,

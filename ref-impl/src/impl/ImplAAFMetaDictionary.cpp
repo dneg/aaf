@@ -63,6 +63,22 @@
 #include "AAFObjectModel.h"
 #include "AAFObjectModelProcs.h"
 
+#include "ImplAAFTypeDefCharacter.h"
+#include "ImplAAFTypeDefEnum.h"
+#include "ImplAAFTypeDefExtEnum.h"
+#include "ImplAAFTypeDefFixedArray.h"
+#include "ImplAAFTypeDefIndirect.h"
+#include "ImplAAFTypeDefInt.h"
+#include "ImplAAFTypeDefOpaque.h"
+#include "ImplAAFTypeDefRecord.h"
+#include "ImplAAFTypeDefRename.h"
+#include "ImplAAFTypeDefSet.h"
+#include "ImplAAFTypeDefStream.h"
+#include "ImplAAFTypeDefString.h"
+#include "ImplAAFTypeDefStrongObjRef.h"
+#include "ImplAAFTypeDefVariableArray.h"
+#include "ImplAAFTypeDefWeakObjRef.h"
+
 
 extern "C" const aafClassID_t CLSID_AAFMetaDictionary;
 extern "C" const aafClassID_t CLSID_AAFPropertyDef;
@@ -321,10 +337,1295 @@ ImplAAFMetaDictionary::associate(const OMObjectIdentification& id,
   _dataDictionary->associate(*reinterpret_cast<const aafUID_t *>(&id), propertyId);
 }
 
+void ImplAAFMetaDictionary::newClass(const OMUniqueObjectIdentification& id,
+                    const wchar_t* name,
+                    const wchar_t* description,
+                    const OMUniqueObjectIdentification& parent,
+                    bool isConcrete)
+{
+    TRACE("ImplAAFMetaDictionary::newClass");
+    
+    AAFRESULT hr;
+    
+    // lookup the class def
+    const aafUID_t* classDefAUID = reinterpret_cast<const aafUID_t*>(&id);
+    ImplAAFClassDefSP spClassDef;
+    hr = dataDictionary()->LookupClassDef(*classDefAUID, &spClassDef);
+    if (AAFRESULT_SUCCEEDED(hr))
+    {
+        // class def already exists
+        return;
+    }
+    
+    // Lookup the parent class def (we assume a new class cannot be a root class)
+    const aafUID_t* parentClassDefAUID = reinterpret_cast<const aafUID_t*>(&parent);
+    ImplAAFClassDefSP spParentClassDef;
+    hr = dataDictionary()->LookupClassDef(*parentClassDefAUID, &spParentClassDef);
+    if (!AAFRESULT_SUCCEEDED(hr))
+    {
+        // TODO: should throw an exception here
+        ASSERT("Parent of new class def exists", false);
+        return;
+    }
+    
+    // create new class def
+    ImplAAFMetaDefinition* pMetaDef;
+    hr = dataDictionary()->CreateMetaInstance(AUID_AAFClassDef, &pMetaDef);
+    if (!AAFRESULT_SUCCEEDED(hr))
+    {
+        // TODO: should throw an exception here
+        ASSERT("New class def created", false);
+        return;
+    }
+    
+    // initialise class def
+    ImplAAFClassDef* pClassDef = dynamic_cast<ImplAAFClassDef*>(pMetaDef);
+    ASSERT("Meta def is a class def", pClassDef != 0);
+    hr = pClassDef->Initialize(*classDefAUID, spParentClassDef, name, isConcrete);
+    if (!AAFRESULT_SUCCEEDED(hr))
+    {
+        // TODO: should throw an exception here
+        ASSERT("New class def initialised", false);
+        return;
+    }
+    
+    // set the description
+    if (description != 0)
+    {
+        hr = pClassDef->SetDescription(description);
+        if (!AAFRESULT_SUCCEEDED(hr))
+        {
+            // TODO: should throw an exception here
+            ASSERT("New class def description set", false);
+            return;
+        }
+    }
+    
+    // register in dictionary
+    hr = RegisterClassDef(pClassDef);
+    if (!AAFRESULT_SUCCEEDED(hr))
+    {
+        // TODO: should throw an exception here
+        ASSERT("New class def registered", false);
+        return;
+    }
+    
+}
+
+const OMPropertyDefinition* ImplAAFMetaDictionary::newProperty(const OMUniqueObjectIdentification& id,
+                       const wchar_t* name,
+                       const wchar_t* description,
+                       OMPropertyId localId,
+                       const OMUniqueObjectIdentification& type,
+                       bool& isOptional,
+                       bool& isUniqueIdentifier,
+                       const OMUniqueObjectIdentification& memberOf)
+{
+    TRACE("ImplAAFMetaDictionary::newProperty");
+    
+    AAFRESULT hr;
+    
+    // lookup the class def
+    const aafUID_t* classDefAUID = reinterpret_cast<const aafUID_t*>(&memberOf);
+    ImplAAFClassDefSP spClassDef;
+    hr = dataDictionary()->LookupClassDef(*classDefAUID, &spClassDef);
+    if (!AAFRESULT_SUCCEEDED(hr))
+    {
+        // class def does not exist
+        ASSERT("Class def for new property def exists", false);
+        return 0;
+    }
+    
+    // lookup property def
+    const aafUID_t* propDefAUID = reinterpret_cast<const aafUID_t*>(&id);
+    ImplAAFPropertyDef* pPropertyDef = 0;
+    hr = spClassDef->LookupPropertyDef(*propDefAUID, &pPropertyDef);
+    if (AAFRESULT_SUCCEEDED(hr))
+    {
+        // property def already exists - return it
+        return pPropertyDef;
+    }
+    
+    // create a new property def
+    // TODO: is it ok to use this "private" function?
+    //       the non-private function RegisterNewPropertyDef fails because it doesn't allow the
+    //       class to be attached
+    const aafUID_t* typeDefAUID = reinterpret_cast<const aafUID_t*>(&type);
+    hr = spClassDef->pvtRegisterPropertyDef(*propDefAUID, name, *typeDefAUID,
+        isOptional, isUniqueIdentifier, &pPropertyDef);
+    if (!AAFRESULT_SUCCEEDED(hr))
+    {
+        // TODO: should throw an exception here?
+        ASSERT("Created new property def", false);
+        return 0;
+    }
+    
+    // set the local Id if it is predefined, otherwise it is dynamic and should be ignored
+    if (localId < 0x8000)
+    {
+        pPropertyDef->setLocalIdentification(localId);
+    }
+
+    // set the description
+    if (description != 0)
+    {
+        hr = pPropertyDef->SetDescription(description);
+        if (!AAFRESULT_SUCCEEDED(hr))
+        {
+            // TODO: should throw an exception here
+            ASSERT("New property def description set", false);
+            return 0;
+        }
+    }
+    
+    return pPropertyDef;
+}
+
+void ImplAAFMetaDictionary::newIntegerType(const OMObjectIdentification& id,
+                          const wchar_t* name,
+                          const wchar_t* description,
+                          OMUInt8 size,
+                          bool isSigned)
+{
+    TRACE("ImplAAFMetaDictionary::newIntegerType");
+    
+    AAFRESULT hr;
+    
+    // try lookup the type 
+    const aafUID_t* typeDefAUID = reinterpret_cast<const aafUID_t*>(&id);
+    ImplAAFTypeDefSP spTypeDef;
+    hr = dataDictionary()->LookupTypeDef(*typeDefAUID, &spTypeDef);
+    if (AAFRESULT_SUCCEEDED(hr))
+    {
+        // type def already exist
+        return;
+    }
+    
+    // create new type def
+    ImplAAFMetaDefinition* pMetaDef;
+    hr = dataDictionary()->CreateMetaInstance(AUID_AAFTypeDefInt, &pMetaDef);
+    if (!AAFRESULT_SUCCEEDED(hr))
+    {
+        // TODO: should throw an exception here
+        ASSERT("New integer type def created", false);
+        return;
+    }
+    
+    // initialise type def
+    ImplAAFTypeDefInt* pTypeDef = dynamic_cast<ImplAAFTypeDefInt*>(pMetaDef);
+    ASSERT("Meta def is a integer type def", pTypeDef != 0);
+    hr = pTypeDef->Initialize(*typeDefAUID, size, isSigned, name);
+    if (!AAFRESULT_SUCCEEDED(hr))
+    {
+        // TODO: should throw an exception here
+        ASSERT("New integer type def initialised", false);
+        return;
+    }
+    
+    // set the description
+    if (description != 0)
+    {
+        hr = pTypeDef->SetDescription(description);
+        if (!AAFRESULT_SUCCEEDED(hr))
+        {
+            // TODO: should throw an exception here
+            ASSERT("New interger type def description set", false);
+            return;
+        }
+    }
+    
+    // register in dictionary
+    hr = RegisterTypeDef(pTypeDef);
+    if (!AAFRESULT_SUCCEEDED(hr))
+    {
+        // TODO: should throw an exception here
+        ASSERT("New integer type def registered", false);
+        return;
+    }
+    
+}
+
+void ImplAAFMetaDictionary::newCharacterType(const OMObjectIdentification& id,
+                            const wchar_t* name,
+                            const wchar_t* description)
+{
+    TRACE("ImplAAFMetaDictionary::newCharacterType");
+    
+    AAFRESULT hr;
+    
+    // try lookup the type 
+    const aafUID_t* typeDefAUID = reinterpret_cast<const aafUID_t*>(&id);
+    ImplAAFTypeDefSP spTypeDef;
+    hr = dataDictionary()->LookupTypeDef(*typeDefAUID, &spTypeDef);
+    if (AAFRESULT_SUCCEEDED(hr))
+    {
+        // type def already exist
+        return;
+    }
+    
+    // create new type def
+    ImplAAFMetaDefinition* pMetaDef;
+    hr = dataDictionary()->CreateMetaInstance(AUID_AAFTypeDefCharacter, &pMetaDef);
+    if (!AAFRESULT_SUCCEEDED(hr))
+    {
+        // TODO: should throw an exception here
+        ASSERT("New character type def created", false);
+        return;
+    }
+    
+    // initialise type def
+    ImplAAFTypeDefCharacter* pTypeDef = dynamic_cast<ImplAAFTypeDefCharacter*>(pMetaDef);
+    ASSERT("Meta def is a character type def", pTypeDef != 0);
+    hr = pTypeDef->pvtInitialize(*typeDefAUID, name);
+    if (!AAFRESULT_SUCCEEDED(hr))
+    {
+        // TODO: should throw an exception here
+        ASSERT("New character type def initialised", false);
+        return;
+    }
+    
+    // set the description
+    if (description != 0)
+    {
+        hr = pTypeDef->SetDescription(description);
+        if (!AAFRESULT_SUCCEEDED(hr))
+        {
+            // TODO: should throw an exception here
+            ASSERT("New character type def description set", false);
+            return;
+        }
+    }
+    
+    // register in dictionary
+    hr = RegisterTypeDef(pTypeDef);
+    if (!AAFRESULT_SUCCEEDED(hr))
+    {
+        // TODO: should throw an exception here
+        ASSERT("New character type def registered", false);
+        return;
+    }
+    
+}
+
+void ImplAAFMetaDictionary::newStrongReferenceType(
+                             const OMObjectIdentification& id,
+                             const wchar_t* name,
+                             const wchar_t* description,
+                             const OMObjectIdentification& referencedType)
+{
+    TRACE("ImplAAFMetaDictionary::newStrongReferenceType");
+    
+    AAFRESULT hr;
+    
+    // try lookup the type 
+    const aafUID_t* typeDefAUID = reinterpret_cast<const aafUID_t*>(&id);
+    ImplAAFTypeDefSP spTypeDef;
+    hr = dataDictionary()->LookupTypeDef(*typeDefAUID, &spTypeDef);
+    if (AAFRESULT_SUCCEEDED(hr))
+    {
+        // type def already exist
+        return;
+    }
+    
+    // lookup the referenced class def
+    const aafUID_t* classDefAUID = reinterpret_cast<const aafUID_t*>(&referencedType);
+    ImplAAFClassDefSP spClassDef;
+    hr = dataDictionary()->LookupClassDef(*classDefAUID, &spClassDef);
+    if (!AAFRESULT_SUCCEEDED(hr))
+    {
+        // class def does not exist
+        ASSERT("Referenced class def for strong ref type def exists", false);
+        return;
+    }
+    
+    // create new type def
+    ImplAAFMetaDefinition* pMetaDef;
+    hr = dataDictionary()->CreateMetaInstance(AUID_AAFTypeDefStrongObjRef, &pMetaDef);
+    if (!AAFRESULT_SUCCEEDED(hr))
+    {
+        // TODO: should throw an exception here
+        ASSERT("New strong ref type def created", false);
+        return;
+    }
+    
+    // initialise type def
+    ImplAAFTypeDefStrongObjRef* pTypeDef = dynamic_cast<ImplAAFTypeDefStrongObjRef*>(pMetaDef);
+    ASSERT("Meta def is a strong ref type def", pTypeDef != 0);
+    hr = pTypeDef->Initialize(*typeDefAUID, spClassDef, name);
+    if (!AAFRESULT_SUCCEEDED(hr))
+    {
+        // TODO: should throw an exception here
+        ASSERT("New strong ref type def initialised", false);
+        return;
+    }
+    
+    // set the description
+    if (description != 0)
+    {
+        hr = pTypeDef->SetDescription(description);
+        if (!AAFRESULT_SUCCEEDED(hr))
+        {
+            // TODO: should throw an exception here
+            ASSERT("New strong ref type def description set", false);
+            return;
+        }
+    }
+    
+    // register in dictionary
+    hr = RegisterTypeDef(pTypeDef);
+    if (!AAFRESULT_SUCCEEDED(hr))
+    {
+        // TODO: should throw an exception here
+        ASSERT("New strong ref type def registered", false);
+        return;
+    }
+    
+}
+
+void ImplAAFMetaDictionary::newWeakReferenceType(
+                             const OMObjectIdentification& id,
+                             const wchar_t* name,
+                             const wchar_t* description,
+                             const OMObjectIdentification& referencedType,
+                             const OMObjectIdentification* path,
+                             OMUInt32 pathCount)
+{
+    TRACE("ImplAAFMetaDictionary::newWeakReferenceType");
+    
+    AAFRESULT hr;
+    
+    // try lookup the type 
+    const aafUID_t* typeDefAUID = reinterpret_cast<const aafUID_t*>(&id);
+    ImplAAFTypeDefSP spTypeDef;
+    hr = dataDictionary()->LookupTypeDef(*typeDefAUID, &spTypeDef);
+    if (AAFRESULT_SUCCEEDED(hr))
+    {
+        // type def already exist
+        return;
+    }
+    
+    // lookup the referenced class def
+    const aafUID_t* classDefAUID = reinterpret_cast<const aafUID_t*>(&referencedType);
+    ImplAAFClassDefSP spClassDef;
+    hr = dataDictionary()->LookupClassDef(*classDefAUID, &spClassDef);
+    if (!AAFRESULT_SUCCEEDED(hr))
+    {
+        // class def does not exist
+        ASSERT("Referenced class def for weak ref type def exists", false);
+        return;
+    }
+    
+    // create new type def
+    ImplAAFMetaDefinition* pMetaDef;
+    hr = dataDictionary()->CreateMetaInstance(AUID_AAFTypeDefWeakObjRef, &pMetaDef);
+    if (!AAFRESULT_SUCCEEDED(hr))
+    {
+        // TODO: should throw an exception here
+        ASSERT("New weak ref type def created", false);
+        return;
+    }
+    
+    // initialise type def
+    ImplAAFTypeDefWeakObjRef* pTypeDef = dynamic_cast<ImplAAFTypeDefWeakObjRef*>(pMetaDef);
+    ASSERT("Meta def is a weak ref type def", pTypeDef != 0);
+    hr = pTypeDef->Initialize(*typeDefAUID, spClassDef, name, pathCount, 
+        reinterpret_cast<const aafUID_t*>(path));
+    if (!AAFRESULT_SUCCEEDED(hr))
+    {
+        // TODO: should throw an exception here
+        ASSERT("New weak ref type def initialised", false);
+        return;
+    }
+    
+    // set the description
+    if (description != 0)
+    {
+        hr = pTypeDef->SetDescription(description);
+        if (!AAFRESULT_SUCCEEDED(hr))
+        {
+            // TODO: should throw an exception here
+            ASSERT("New weak ref type def description set", false);
+            return;
+        }
+    }
+    
+    // register in dictionary
+    hr = RegisterTypeDef(pTypeDef);
+    if (!AAFRESULT_SUCCEEDED(hr))
+    {
+        // TODO: should throw an exception here
+        ASSERT("New weak ref type def registered", false);
+        return;
+    }
+    
+}
+
+void ImplAAFMetaDictionary::newRenamedType(const OMObjectIdentification& id,
+                          const wchar_t* name,
+                          const wchar_t* description,
+                          const OMObjectIdentification& renamedType)
+{
+    TRACE("ImplAAFMetaDictionary::newRenamedType");
+    
+    AAFRESULT hr;
+    
+    // try lookup the type 
+    const aafUID_t* typeDefAUID = reinterpret_cast<const aafUID_t*>(&id);
+    ImplAAFTypeDefSP spTypeDef;
+    hr = dataDictionary()->LookupTypeDef(*typeDefAUID, &spTypeDef);
+    if (AAFRESULT_SUCCEEDED(hr))
+    {
+        // type def already exist
+        return;
+    }
+    
+    // lookup the renamed type def
+    const aafUID_t* renamedTypeDefAUID = reinterpret_cast<const aafUID_t*>(&renamedType);
+    ImplAAFTypeDefSP spRenamedTypeDef;
+    hr = dataDictionary()->LookupTypeDef(*renamedTypeDefAUID, &spRenamedTypeDef);
+    if (!AAFRESULT_SUCCEEDED(hr))
+    {
+        // class def does not exist
+        ASSERT("Renamed type def exists", false);
+        return;
+    }
+    
+    // create new type def
+    ImplAAFMetaDefinition* pMetaDef;
+    hr = dataDictionary()->CreateMetaInstance(AUID_AAFTypeDefRename, &pMetaDef);
+    if (!AAFRESULT_SUCCEEDED(hr))
+    {
+        // TODO: should throw an exception here
+        ASSERT("New renamed type def created", false);
+        return;
+    }
+    
+    // initialise type def
+    ImplAAFTypeDefRename* pTypeDef = dynamic_cast<ImplAAFTypeDefRename*>(pMetaDef);
+    ASSERT("Meta def is a renamed type def", pTypeDef != 0);
+    hr = pTypeDef->Initialize(*typeDefAUID, spRenamedTypeDef, name);
+    if (!AAFRESULT_SUCCEEDED(hr))
+    {
+        // TODO: should throw an exception here
+        ASSERT("New renamed type def initialised", false);
+        return;
+    }
+    
+    // set the description
+    if (description != 0)
+    {
+        hr = pTypeDef->SetDescription(description);
+        if (!AAFRESULT_SUCCEEDED(hr))
+        {
+            // TODO: should throw an exception here
+            ASSERT("New renamed type def description set", false);
+            return;
+        }
+    }
+    
+    // register in dictionary
+    hr = RegisterTypeDef(pTypeDef);
+    if (!AAFRESULT_SUCCEEDED(hr))
+    {
+        // TODO: should throw an exception here
+        ASSERT("New renamed type def registered", false);
+        return;
+    }
+    
+}
+
+void ImplAAFMetaDictionary::newEnumeratedType(const OMObjectIdentification& id,
+                             const wchar_t* name,
+                             const wchar_t* description,
+                             const OMObjectIdentification& elementType,
+                             const wchar_t** elementNames,
+                             OMInt64* elementValues,
+                             OMUInt32 elementCount)
+{
+    TRACE("ImplAAFMetaDictionary::newEnumeratedType");
+    
+    AAFRESULT hr;
+    
+    // try lookup the type 
+    const aafUID_t* typeDefAUID = reinterpret_cast<const aafUID_t*>(&id);
+    ImplAAFTypeDefSP spTypeDef;
+    hr = dataDictionary()->LookupTypeDef(*typeDefAUID, &spTypeDef);
+    if (AAFRESULT_SUCCEEDED(hr))
+    {
+        // type def already exist
+        return;
+    }
+    
+    // lookup the element type def
+    const aafUID_t* elementTypeDefAUID = reinterpret_cast<const aafUID_t*>(&elementType);
+    ImplAAFTypeDefSP spElementTypeDef;
+    hr = dataDictionary()->LookupTypeDef(*elementTypeDefAUID, &spElementTypeDef);
+    if (!AAFRESULT_SUCCEEDED(hr))
+    {
+        // class def does not exist
+        ASSERT("Enum element type def exists", false);
+        return;
+    }
+    
+    // create new type def
+    ImplAAFMetaDefinition* pMetaDef;
+    hr = dataDictionary()->CreateMetaInstance(AUID_AAFTypeDefEnum, &pMetaDef);
+    if (!AAFRESULT_SUCCEEDED(hr))
+    {
+        // TODO: should throw an exception here
+        ASSERT("New enum type def created", false);
+        return;
+    }
+    
+    // initialise type def
+    ImplAAFTypeDefEnum* pTypeDef = dynamic_cast<ImplAAFTypeDefEnum*>(pMetaDef);
+    ASSERT("Meta def is a enum type def", pTypeDef != 0);
+    hr = pTypeDef->Initialize(*typeDefAUID, spElementTypeDef, elementValues, 
+        const_cast<wchar_t**>(elementNames), elementCount, name);
+    if (!AAFRESULT_SUCCEEDED(hr))
+    {
+        // TODO: should throw an exception here
+        ASSERT("New enum type def initialised", false);
+        return;
+    }
+    
+    // set the description
+    if (description != 0)
+    {
+        hr = pTypeDef->SetDescription(description);
+        if (!AAFRESULT_SUCCEEDED(hr))
+        {
+            // TODO: should throw an exception here
+            ASSERT("New enum type def description set", false);
+            return;
+        }
+    }
+    
+    // register in dictionary
+    hr = RegisterTypeDef(pTypeDef);
+    if (!AAFRESULT_SUCCEEDED(hr))
+    {
+        // TODO: should throw an exception here
+        ASSERT("New enum type def registered", false);
+        return;
+    }
+    
+}
+
+void ImplAAFMetaDictionary::newFixedArrayType(const OMObjectIdentification& id,
+                             const wchar_t* name,
+                             const wchar_t* description,
+                             const OMObjectIdentification& elementType,
+                             OMUInt32 elementCount)
+{
+    TRACE("ImplAAFMetaDictionary::newFixedArrayType");
+    
+    AAFRESULT hr;
+    
+    // try lookup the type 
+    const aafUID_t* typeDefAUID = reinterpret_cast<const aafUID_t*>(&id);
+    ImplAAFTypeDefSP spTypeDef;
+    hr = dataDictionary()->LookupTypeDef(*typeDefAUID, &spTypeDef);
+    if (AAFRESULT_SUCCEEDED(hr))
+    {
+        // type def already exist
+        return;
+    }
+    
+    // lookup the element type def
+    const aafUID_t* elementTypeDefAUID = reinterpret_cast<const aafUID_t*>(&elementType);
+    ImplAAFTypeDefSP spElementTypeDef;
+    hr = dataDictionary()->LookupTypeDef(*elementTypeDefAUID, &spElementTypeDef);
+    if (!AAFRESULT_SUCCEEDED(hr))
+    {
+        // class def does not exist
+        ASSERT("Fixed array type def exists", false);
+        return;
+    }
+    
+    // create new type def
+    ImplAAFMetaDefinition* pMetaDef;
+    hr = dataDictionary()->CreateMetaInstance(AUID_AAFTypeDefFixedArray, &pMetaDef);
+    if (!AAFRESULT_SUCCEEDED(hr))
+    {
+        // TODO: should throw an exception here
+        ASSERT("New fixed array type def created", false);
+        return;
+    }
+    
+    // initialise type def
+    ImplAAFTypeDefFixedArray* pTypeDef = dynamic_cast<ImplAAFTypeDefFixedArray*>(pMetaDef);
+    ASSERT("Meta def is a fixed array type def", pTypeDef != 0);
+    hr = pTypeDef->Initialize(*typeDefAUID, spElementTypeDef, elementCount, name);
+    if (!AAFRESULT_SUCCEEDED(hr))
+    {
+        // TODO: should throw an exception here
+        ASSERT("New fixed array type def initialised", false);
+        return;
+    }
+    
+    // set the description
+    if (description != 0)
+    {
+        hr = pTypeDef->SetDescription(description);
+        if (!AAFRESULT_SUCCEEDED(hr))
+        {
+            // TODO: should throw an exception here
+            ASSERT("New fixed array type def description set", false);
+            return;
+        }
+    }
+    
+    // register in dictionary
+    hr = RegisterTypeDef(pTypeDef);
+    if (!AAFRESULT_SUCCEEDED(hr))
+    {
+        // TODO: should throw an exception here
+        ASSERT("New fixed array type def registered", false);
+        return;
+    }
+    
+}
+
+void ImplAAFMetaDictionary::newVaryingArrayType(const OMObjectIdentification& id,
+                               const wchar_t* name,
+                               const wchar_t* description,
+                               const OMObjectIdentification& elementType)
+{
+    TRACE("ImplAAFMetaDictionary::newVaryingArrayType");
+    
+    AAFRESULT hr;
+    
+    // try lookup the type 
+    const aafUID_t* typeDefAUID = reinterpret_cast<const aafUID_t*>(&id);
+    ImplAAFTypeDefSP spTypeDef;
+    hr = dataDictionary()->LookupTypeDef(*typeDefAUID, &spTypeDef);
+    if (AAFRESULT_SUCCEEDED(hr))
+    {
+        // type def already exist
+        return;
+    }
+    
+    // lookup the element type def
+    const aafUID_t* elementTypeDefAUID = reinterpret_cast<const aafUID_t*>(&elementType);
+    ImplAAFTypeDefSP spElementTypeDef;
+    hr = dataDictionary()->LookupTypeDef(*elementTypeDefAUID, &spElementTypeDef);
+    if (!AAFRESULT_SUCCEEDED(hr))
+    {
+        // class def does not exist
+        ASSERT("Variable array type def exists", false);
+        return;
+    }
+    
+    // create new type def
+    ImplAAFMetaDefinition* pMetaDef;
+    hr = dataDictionary()->CreateMetaInstance(AUID_AAFTypeDefVariableArray, &pMetaDef);
+    if (!AAFRESULT_SUCCEEDED(hr))
+    {
+        // TODO: should throw an exception here
+        ASSERT("New variable array type def created", false);
+        return;
+    }
+    
+    // initialise type def
+    ImplAAFTypeDefVariableArray* pTypeDef = dynamic_cast<ImplAAFTypeDefVariableArray*>(pMetaDef);
+    ASSERT("Meta def is a variable array type def", pTypeDef != 0);
+    hr = pTypeDef->Initialize(*typeDefAUID, spElementTypeDef, name);
+    if (!AAFRESULT_SUCCEEDED(hr))
+    {
+        // TODO: should throw an exception here
+        ASSERT("New variable array type def initialised", false);
+        return;
+    }
+    
+    // set the description
+    if (description != 0)
+    {
+        hr = pTypeDef->SetDescription(description);
+        if (!AAFRESULT_SUCCEEDED(hr))
+        {
+            // TODO: should throw an exception here
+            ASSERT("New variable array type def description set", false);
+            return;
+        }
+    }
+    
+    // register in dictionary
+    hr = RegisterTypeDef(pTypeDef);
+    if (!AAFRESULT_SUCCEEDED(hr))
+    {
+        // TODO: should throw an exception here
+        ASSERT("New variable array type def registered", false);
+        return;
+    }
+    
+}
+
+void ImplAAFMetaDictionary::newSetType(const OMObjectIdentification& id,
+                      const wchar_t* name,
+                      const wchar_t* description,
+                      const OMObjectIdentification& elementType)
+{
+    TRACE("ImplAAFMetaDictionary::newSetType");
+    
+    AAFRESULT hr;
+    
+    // try lookup the type 
+    const aafUID_t* typeDefAUID = reinterpret_cast<const aafUID_t*>(&id);
+    ImplAAFTypeDefSP spTypeDef;
+    hr = dataDictionary()->LookupTypeDef(*typeDefAUID, &spTypeDef);
+    if (AAFRESULT_SUCCEEDED(hr))
+    {
+        // type def already exist
+        return;
+    }
+    
+    // lookup the element type def
+    const aafUID_t* elementTypeDefAUID = reinterpret_cast<const aafUID_t*>(&elementType);
+    ImplAAFTypeDefSP spElementTypeDef;
+    hr = dataDictionary()->LookupTypeDef(*elementTypeDefAUID, &spElementTypeDef);
+    if (!AAFRESULT_SUCCEEDED(hr))
+    {
+        // class def does not exist
+        ASSERT("Set type def exists", false);
+        return;
+    }
+    
+    // create new type def
+    ImplAAFMetaDefinition* pMetaDef;
+    hr = dataDictionary()->CreateMetaInstance(AUID_AAFTypeDefSet, &pMetaDef);
+    if (!AAFRESULT_SUCCEEDED(hr))
+    {
+        // TODO: should throw an exception here
+        ASSERT("New set type def created", false);
+        return;
+    }
+    
+    // initialise type def
+    ImplAAFTypeDefSet* pTypeDef = dynamic_cast<ImplAAFTypeDefSet*>(pMetaDef);
+    ASSERT("Meta def is a set type def", pTypeDef != 0);
+    hr = pTypeDef->Initialize(*typeDefAUID, spElementTypeDef, name);
+    if (!AAFRESULT_SUCCEEDED(hr))
+    {
+        // TODO: should throw an exception here
+        ASSERT("New set type def initialised", false);
+        return;
+    }
+    
+    // set the description
+    if (description != 0)
+    {
+        hr = pTypeDef->SetDescription(description);
+        if (!AAFRESULT_SUCCEEDED(hr))
+        {
+            // TODO: should throw an exception here
+            ASSERT("New set type def description set", false);
+            return;
+        }
+    }
+    
+    // register in dictionary
+    hr = RegisterTypeDef(pTypeDef);
+    if (!AAFRESULT_SUCCEEDED(hr))
+    {
+        // TODO: should throw an exception here
+        ASSERT("New set type def registered", false);
+        return;
+    }
+    
+}
+
+void ImplAAFMetaDictionary::newRecordType(const OMObjectIdentification& id,
+                         const wchar_t* name,
+                         const wchar_t* description,
+                         const OMObjectIdentification* memberTypes,
+                         const wchar_t** memberNames,
+                         OMUInt32 memberCount)
+{
+    TRACE("ImplAAFMetaDictionary::newRecordType");
+    
+    AAFRESULT hr;
+    
+    // try lookup the type 
+    const aafUID_t* typeDefAUID = reinterpret_cast<const aafUID_t*>(&id);
+    ImplAAFTypeDefSP spTypeDef;
+    hr = dataDictionary()->LookupTypeDef(*typeDefAUID, &spTypeDef);
+    if (AAFRESULT_SUCCEEDED(hr))
+    {
+        // type def already exist
+        return;
+    }
+    
+    // lookup the each member type
+    OMVector<ImplAAFTypeDef*> memberTypeDefs;
+    memberTypeDefs.grow(memberCount);
+    OMUInt32 i;
+    for (i = 0; i < memberCount; i++)
+    {
+        const aafUID_t* memberTypeDefAUID = reinterpret_cast<const aafUID_t*>(&memberTypes[i]);
+        ImplAAFTypeDef* pMemberTypeDef;
+        hr = dataDictionary()->LookupTypeDef(*memberTypeDefAUID, &pMemberTypeDef);
+        if (!AAFRESULT_SUCCEEDED(hr))
+        {
+            // class def does not exist
+            ASSERT("Enum element type def exists", false);
+            return;
+        }
+        memberTypeDefs.append(pMemberTypeDef);
+    }
+    
+    // create new type def
+    ImplAAFMetaDefinition* pMetaDef;
+    hr = dataDictionary()->CreateMetaInstance(AUID_AAFTypeDefRecord, &pMetaDef);
+    if (!AAFRESULT_SUCCEEDED(hr))
+    {
+        // TODO: should throw an exception here
+        ASSERT("New record type def created", false);
+        return;
+    }
+    
+    // initialise type def
+    // TODO: &memberTypeDefs.getAt(0) relies on vector implementation storing elements consecutively
+    ImplAAFTypeDefRecord* pTypeDef = dynamic_cast<ImplAAFTypeDefRecord*>(pMetaDef);
+    ASSERT("Meta def is a record type def", pTypeDef != 0);
+    hr = pTypeDef->Initialize(*typeDefAUID, &memberTypeDefs.getAt(0), 
+        const_cast<wchar_t**>(memberNames), memberCount, name);
+    if (!AAFRESULT_SUCCEEDED(hr))
+    {
+        // TODO: should throw an exception here
+        ASSERT("New record type def initialised", false);
+        return;
+    }
+    
+    // set the description
+    if (description != 0)
+    {
+        hr = pTypeDef->SetDescription(description);
+        if (!AAFRESULT_SUCCEEDED(hr))
+        {
+            // TODO: should throw an exception here
+            ASSERT("New record type def description set", false);
+            return;
+        }
+    }
+    
+    // register in dictionary
+    hr = RegisterTypeDef(pTypeDef);
+    if (!AAFRESULT_SUCCEEDED(hr))
+    {
+        // TODO: should throw an exception here
+        ASSERT("New record type def registered", false);
+        return;
+    }
+    
+}
+
+void ImplAAFMetaDictionary::newStreamType(const OMObjectIdentification& id,
+                         const wchar_t* name,
+                         const wchar_t* description)
+{
+    TRACE("ImplAAFMetaDictionary::newStreamType");
+    
+    AAFRESULT hr;
+    
+    // try lookup the type 
+    const aafUID_t* typeDefAUID = reinterpret_cast<const aafUID_t*>(&id);
+    ImplAAFTypeDefSP spTypeDef;
+    hr = dataDictionary()->LookupTypeDef(*typeDefAUID, &spTypeDef);
+    if (AAFRESULT_SUCCEEDED(hr))
+    {
+        // type def already exist
+        return;
+    }
+    
+    // create new type def
+    ImplAAFMetaDefinition* pMetaDef;
+    hr = dataDictionary()->CreateMetaInstance(AUID_AAFTypeDefStream, &pMetaDef);
+    if (!AAFRESULT_SUCCEEDED(hr))
+    {
+        // TODO: should throw an exception here
+        ASSERT("New stream type def created", false);
+        return;
+    }
+    
+    // initialise type def
+    ImplAAFTypeDefStream* pTypeDef = dynamic_cast<ImplAAFTypeDefStream*>(pMetaDef);
+    ASSERT("Meta def is a stream type def", pTypeDef != 0);
+    hr = pTypeDef->pvtInitialize(*typeDefAUID, name);
+    if (!AAFRESULT_SUCCEEDED(hr))
+    {
+        // TODO: should throw an exception here
+        ASSERT("New stream type def initialised", false);
+        return;
+    }
+    
+    // set the description
+    if (description != 0)
+    {
+        hr = pTypeDef->SetDescription(description);
+        if (!AAFRESULT_SUCCEEDED(hr))
+        {
+            // TODO: should throw an exception here
+            ASSERT("New stream type def description set", false);
+            return;
+        }
+    }
+    
+    // register in dictionary
+    hr = RegisterTypeDef(pTypeDef);
+    if (!AAFRESULT_SUCCEEDED(hr))
+    {
+        // TODO: should throw an exception here
+        ASSERT("New stream type def registered", false);
+        return;
+    }
+    
+}
+
+void ImplAAFMetaDictionary::newStringType(const OMObjectIdentification& id,
+                         const wchar_t* name,
+                         const wchar_t* description,
+                         const OMObjectIdentification& elementType)
+{
+    TRACE("ImplAAFMetaDictionary::newStringType");
+    
+    AAFRESULT hr;
+    
+    // try lookup the type 
+    const aafUID_t* typeDefAUID = reinterpret_cast<const aafUID_t*>(&id);
+    ImplAAFTypeDefSP spTypeDef;
+    hr = dataDictionary()->LookupTypeDef(*typeDefAUID, &spTypeDef);
+    if (AAFRESULT_SUCCEEDED(hr))
+    {
+        // type def already exist
+        return;
+    }
+    
+    // lookup the element type def
+    const aafUID_t* elementTypeDefAUID = reinterpret_cast<const aafUID_t*>(&elementType);
+    ImplAAFTypeDefSP spElementTypeDef;
+    hr = dataDictionary()->LookupTypeDef(*elementTypeDefAUID, &spElementTypeDef);
+    if (!AAFRESULT_SUCCEEDED(hr))
+    {
+        // class def does not exist
+        ASSERT("String type def exists", false);
+        return;
+    }
+    
+    // create new type def
+    ImplAAFMetaDefinition* pMetaDef;
+    hr = dataDictionary()->CreateMetaInstance(AUID_AAFTypeDefString, &pMetaDef);
+    if (!AAFRESULT_SUCCEEDED(hr))
+    {
+        // TODO: should throw an exception here
+        ASSERT("New string type def created", false);
+        return;
+    }
+    
+    // initialise type def
+    ImplAAFTypeDefString* pTypeDef = dynamic_cast<ImplAAFTypeDefString*>(pMetaDef);
+    ASSERT("Meta def is a string type def", pTypeDef != 0);
+    hr = pTypeDef->Initialize(*typeDefAUID, spElementTypeDef, name);
+    if (!AAFRESULT_SUCCEEDED(hr))
+    {
+        // TODO: should throw an exception here
+        ASSERT("New string type def initialised", false);
+        return;
+    }
+    
+    // set the description
+    if (description != 0)
+    {
+        hr = pTypeDef->SetDescription(description);
+        if (!AAFRESULT_SUCCEEDED(hr))
+        {
+            // TODO: should throw an exception here
+            ASSERT("New string type def description set", false);
+            return;
+        }
+    }
+    
+    // register in dictionary
+    hr = RegisterTypeDef(pTypeDef);
+    if (!AAFRESULT_SUCCEEDED(hr))
+    {
+        // TODO: should throw an exception here
+        ASSERT("New string type def registered", false);
+        return;
+    }
+    
+}
+
+void ImplAAFMetaDictionary::newExtendibleEnumeratedType(
+                             const OMObjectIdentification& id,
+                             const wchar_t* name,
+                             const wchar_t* description)
+{
+    TRACE("ImplAAFMetaDictionary::newExtendibleEnumeratedType");
+    
+    AAFRESULT hr;
+    
+    // try lookup the type 
+    const aafUID_t* typeDefAUID = reinterpret_cast<const aafUID_t*>(&id);
+    ImplAAFTypeDefSP spTypeDef;
+    hr = dataDictionary()->LookupTypeDef(*typeDefAUID, &spTypeDef);
+    if (AAFRESULT_SUCCEEDED(hr))
+    {
+        // type def already exist
+        return;
+    }
+    
+    // create new type def
+    ImplAAFMetaDefinition* pMetaDef;
+    hr = dataDictionary()->CreateMetaInstance(AUID_AAFTypeDefExtEnum, &pMetaDef);
+    if (!AAFRESULT_SUCCEEDED(hr))
+    {
+        // TODO: should throw an exception here
+        ASSERT("New ext enum type def created", false);
+        return;
+    }
+    
+    // initialise type def
+    ImplAAFTypeDefExtEnum* pTypeDef = dynamic_cast<ImplAAFTypeDefExtEnum*>(pMetaDef);
+    ASSERT("Meta def is a ext enum type def", pTypeDef != 0);
+    hr = pTypeDef->Initialize(*typeDefAUID, name);
+    if (!AAFRESULT_SUCCEEDED(hr))
+    {
+        // TODO: should throw an exception here
+        ASSERT("New ext enum type def initialised", false);
+        return;
+    }
+    
+    // set the description
+    if (description != 0)
+    {
+        hr = pTypeDef->SetDescription(description);
+        if (!AAFRESULT_SUCCEEDED(hr))
+        {
+            // TODO: should throw an exception here
+            ASSERT("New ext enum type def description set", false);
+            return;
+        }
+    }
+    
+    // register in dictionary
+    hr = RegisterTypeDef(pTypeDef);
+    if (!AAFRESULT_SUCCEEDED(hr))
+    {
+        // TODO: should throw an exception here
+        ASSERT("New ext enum type def registered", false);
+        return;
+    }
+    
+}
+
+void ImplAAFMetaDictionary::newExtendibleEnumeratedTypeElement(
+                             const OMObjectIdentification& elementOf,
+                             const wchar_t* name,
+                             const OMObjectIdentification& value)
+{
+    TRACE("ImplAAFMetaDictionary::newExtendibleEnumeratedType");
+    
+    AAFRESULT hr;
+    
+    // try lookup the ext enum type 
+    const aafUID_t* typeDefAUID = reinterpret_cast<const aafUID_t*>(&elementOf);
+    ImplAAFTypeDefSP spTypeDef;
+    hr = dataDictionary()->LookupTypeDef(*typeDefAUID, &spTypeDef);
+    if (!AAFRESULT_SUCCEEDED(hr))
+    {
+        // TODO: should throw an exception here
+        ASSERT("Ext enum type def exists", false);
+        return;
+    }
+    
+    // try lookup the value
+    ImplAAFTypeDefExtEnum* pExtEnumTypeDef = dynamic_cast<ImplAAFTypeDefExtEnum*>((ImplAAFTypeDef*)spTypeDef);
+    ASSERT("Type def is a ext enum type def", pExtEnumTypeDef != 0);
+    const aafUID_t* valueAUID = reinterpret_cast<const aafUID_t*>(&value);
+    aafUInt32 nameLen = 0;
+    hr = pExtEnumTypeDef->GetNameBufLenFromAUID(*valueAUID, &nameLen);
+    if (AAFRESULT_SUCCEEDED(hr))
+    {
+        // value already exists
+        return;
+    }
+    
+    // register value
+    hr = pExtEnumTypeDef->AppendElement(*valueAUID, name);
+    if (!AAFRESULT_SUCCEEDED(hr))
+    {
+        // TODO: should throw an exception here
+        ASSERT("New ext enum type def element appended", false);
+        return;
+    }
+}
+
+void ImplAAFMetaDictionary::newIndirectType(const OMObjectIdentification& id,
+                           const wchar_t* name,
+                           const wchar_t* description)
+{
+    TRACE("ImplAAFMetaDictionary::newIndirectType");
+    
+    AAFRESULT hr;
+    
+    // try lookup the type 
+    const aafUID_t* typeDefAUID = reinterpret_cast<const aafUID_t*>(&id);
+    ImplAAFTypeDefSP spTypeDef;
+    hr = dataDictionary()->LookupTypeDef(*typeDefAUID, &spTypeDef);
+    if (AAFRESULT_SUCCEEDED(hr))
+    {
+        // type def already exist
+        return;
+    }
+    
+    // create new type def
+    ImplAAFMetaDefinition* pMetaDef;
+    hr = dataDictionary()->CreateMetaInstance(AUID_AAFTypeDefIndirect, &pMetaDef);
+    if (!AAFRESULT_SUCCEEDED(hr))
+    {
+        // TODO: should throw an exception here
+        ASSERT("New indirect type def created", false);
+        return;
+    }
+    
+    // initialise type def
+    ImplAAFTypeDefIndirect* pTypeDef = dynamic_cast<ImplAAFTypeDefIndirect*>(pMetaDef);
+    ASSERT("Meta def is a indirect type def", pTypeDef != 0);
+    hr = pTypeDef->Initialize(*typeDefAUID, name);
+    if (!AAFRESULT_SUCCEEDED(hr))
+    {
+        // TODO: should throw an exception here
+        ASSERT("New indirect type def initialised", false);
+        return;
+    }
+    
+    // set the description
+    if (description != 0)
+    {
+        hr = pTypeDef->SetDescription(description);
+        if (!AAFRESULT_SUCCEEDED(hr))
+        {
+            // TODO: should throw an exception here
+            ASSERT("New indirect type def description set", false);
+            return;
+        }
+    }
+    
+    // register in dictionary
+    hr = RegisterTypeDef(pTypeDef);
+    if (!AAFRESULT_SUCCEEDED(hr))
+    {
+        // TODO: should throw an exception here
+        ASSERT("New indirect type def registered", false);
+        return;
+    }
+    
+}
+
+void ImplAAFMetaDictionary::newOpaqueType(const OMObjectIdentification& id,
+                         const wchar_t* name,
+                         const wchar_t* description)
+{
+    TRACE("ImplAAFMetaDictionary::newOpaqueType");
+    
+    AAFRESULT hr;
+    
+    // try lookup the type 
+    const aafUID_t* typeDefAUID = reinterpret_cast<const aafUID_t*>(&id);
+    ImplAAFTypeDefSP spTypeDef;
+    hr = dataDictionary()->LookupTypeDef(*typeDefAUID, &spTypeDef);
+    if (AAFRESULT_SUCCEEDED(hr))
+    {
+        // type def already exist
+        return;
+    }
+    
+    // create new type def
+    ImplAAFMetaDefinition* pMetaDef;
+    hr = dataDictionary()->CreateMetaInstance(AUID_AAFTypeDefOpaque, &pMetaDef);
+    if (!AAFRESULT_SUCCEEDED(hr))
+    {
+        // TODO: should throw an exception here
+        ASSERT("New indirect type def created", false);
+        return;
+    }
+    
+    // initialise type def
+    ImplAAFTypeDefOpaque* pTypeDef = dynamic_cast<ImplAAFTypeDefOpaque*>(pMetaDef);
+    ASSERT("Meta def is a opaque type def", pTypeDef != 0);
+    hr = pTypeDef->Initialize(*typeDefAUID, name);
+    if (!AAFRESULT_SUCCEEDED(hr))
+    {
+        // TODO: should throw an exception here
+        ASSERT("New opaque type def initialised", false);
+        return;
+    }
+    
+    // set the description
+    if (description != 0)
+    {
+        hr = pTypeDef->SetDescription(description);
+        if (!AAFRESULT_SUCCEEDED(hr))
+        {
+            // TODO: should throw an exception here
+            ASSERT("New opaque type def description set", false);
+            return;
+        }
+    }
+    
+    // register in dictionary
+    hr = RegisterTypeDef(pTypeDef);
+    if (!AAFRESULT_SUCCEEDED(hr))
+    {
+        // TODO: should throw an exception here
+        ASSERT("New opaque type def registered", false);
+        return;
+    }
+    
+}
+
+bool ImplAAFMetaDictionary::registerClassDef(const OMUniqueObjectIdentification& classId)
+{
+    const aafUID_t* auid = reinterpret_cast<const aafUID_t*>(&classId);
+    ImplAAFClassDefSP spClassDef;
+    AAFRESULT hr = dataDictionary()->LookupClassDef(*auid, &spClassDef);
+    spClassDef->AssurePropertyTypesLoaded();
+    return AAFRESULT_SUCCEEDED(hr);
+}
+
+bool ImplAAFMetaDictionary::registerTypeDef(const OMUniqueObjectIdentification& typeId)
+{
+    const aafUID_t* auid = reinterpret_cast<const aafUID_t*>(&typeId);
+    ImplAAFTypeDefSP pTypeDef;
+    AAFRESULT hr = dataDictionary()->LookupTypeDef(*auid, &pTypeDef);
+    return AAFRESULT_SUCCEEDED(hr);
+}
+
 ClassDefinitionsIterator* ImplAAFMetaDictionary::classDefinitions(void) const
 {
   return _classDefinitions.createIterator();
 }
+
+void ImplAAFMetaDictionary::typeDefinitions(OMVector<OMType*>& typeDefs) const
+{
+    if (_typeDefinitions.count() > 0)
+    {
+        OMStrongReferenceSetIterator<OMUniqueObjectIdentification, ImplAAFTypeDef> 
+            iter(_typeDefinitions);
+        typeDefs.grow(iter.count());
+        while(++iter)
+        {
+            typeDefs.append(iter.value()->type());
+        }
+    }
+}
+
+//TypeDefinitionsIterator* ImplAAFMetaDictionary::typeDefinitions(void) const
+//{
+//  return _typeDefinitions.createIterator();
+//}
+
 
 // Temporary method to set the 
 void ImplAAFMetaDictionary::setDataDictionary(ImplAAFDictionary *dataDictionary)
