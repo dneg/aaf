@@ -119,6 +119,8 @@ static HRESULT CreateAAFFile(
 	IAAFMob			*pMob = NULL;
 	IAAFEssenceDescriptor *pEssenceDesc = NULL;
 	IAAFAES3PCMDescriptor *pAES3PCMDesc = NULL;
+	IAAFAES3PCMDescriptor2 *pAES3PCMDesc2 = NULL;
+	IAAFSoundDescriptor *pSoundDesc = NULL;
 	
 	HRESULT						hr = S_OK;
 	
@@ -173,7 +175,6 @@ static HRESULT CreateAAFFile(
 		checkResult(pHeader->AddMob(pMob));
 
 		// Create a an instance of AES3PCMDescriptor2
-		IAAFAES3PCMDescriptor2 *pAES3PCMDesc2 = NULL;
 		checkResult(defs.cdAES3PCMDescriptor()->
 					CreateInstance(IID_IAAFAES3PCMDescriptor2, 
 								   (IUnknown **)&pAES3PCMDesc2));		
@@ -184,7 +185,6 @@ static HRESULT CreateAAFFile(
 				    (void **) &pEssenceDesc));
         checkResult(pSourceMob->SetEssenceDescriptor(pEssenceDesc));
 
-		IAAFSoundDescriptor *pSoundDesc = NULL;
 		pAES3PCMDesc2->QueryInterface(IID_IAAFSoundDescriptor,
 									  (void **) &pSoundDesc);
 
@@ -312,16 +312,21 @@ static HRESULT CreateAAFFile(
 
 
 		checkResult(pFile->Save());
-		pAES3PCMDesc2->Release();
-		pAES3PCMDesc2 = NULL;
-		pSoundDesc->Release();
-		pSoundDesc = NULL;
 	}
 	catch (HRESULT& rResult)
 	{
 		hr = rResult;
 	}
 	
+	if (pSoundDesc)
+		pSoundDesc->Release();
+
+	if (pAES3PCMDesc2)
+		pAES3PCMDesc2->Release();
+
+	if (pAES3PCMDesc)
+		pAES3PCMDesc->Release();
+
 	if (pEssenceDesc)
 		pEssenceDesc->Release();
 	
@@ -359,7 +364,9 @@ static HRESULT ReadAAFFile(
 	IAAFMob			*pMob = NULL;
 	IEnumAAFMobSlots	*slotIter = NULL;
 	IAAFMobSlot		*slot = NULL;
-	IAAFAES3PCMDescriptor 	*	pAES3PCMDesc = NULL;
+	IAAFAES3PCMDescriptor	*pAES3PCMDesc = NULL;
+	IAAFAES3PCMDescriptor2	*pAES3PCMDesc2 = NULL;
+	IAAFSoundDescriptor	*pSoundDesc = NULL;
 	aafNumSlots_t	numMobs, n, s;
 	HRESULT						hr = S_OK;
 
@@ -414,7 +421,6 @@ static HRESULT ReadAAFFile(
 			checkResult(pSourceMob->GetEssenceDescriptor(&pEssenceDesc));
 			checkResult(pEssenceDesc->QueryInterface(IID_IAAFAES3PCMDescriptor,
 				(void **)&pAES3PCMDesc));
-			IAAFAES3PCMDescriptor2 * pAES3PCMDesc2 = NULL;
 			checkResult(pEssenceDesc->QueryInterface(IID_IAAFAES3PCMDescriptor2,
 				(void **)&pAES3PCMDesc2));
 
@@ -438,13 +444,18 @@ static HRESULT ReadAAFFile(
 							AAFRESULT_TEST_FAILED);
 
 			// now test array based stuff
-			IAAFSoundDescriptor *pSoundDesc = NULL;
 			pAES3PCMDesc2->QueryInterface(IID_IAAFSoundDescriptor,
 										  (void **) &pSoundDesc);
 			aafUInt32 channelCount = 0;
 			checkResult(pSoundDesc->GetChannelCount(&channelCount));
 			checkExpression(channelCount == 4, AAFRESULT_TEST_FAILED);
 			hr = TestArrayBasedStuff(channelCount, pAES3PCMDesc2);
+
+			pMob->Release();
+			pMob = NULL;
+
+			mobIter->Release();
+			mobIter = NULL;
 		}
     }
     catch (HRESULT& rResult)
@@ -453,6 +464,14 @@ static HRESULT ReadAAFFile(
     }
 
 
+    if (pSoundDesc) 
+    {
+        pSoundDesc->Release();
+    }
+    if (pAES3PCMDesc2) 
+    {
+        pAES3PCMDesc2->Release();
+    }
     if (pAES3PCMDesc) 
     {
         pAES3PCMDesc->Release();
@@ -468,6 +487,18 @@ static HRESULT ReadAAFFile(
     if (pMob) 
     {
         pMob->Release();
+    }
+    if (slotIter) 
+    {
+        slotIter->Release();
+    }
+    if (slot) 
+    {
+        slot->Release();
+    }
+    if (mobIter) 
+    {
+        mobIter->Release();
     }
     if (pHeader) 
     {
