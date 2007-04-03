@@ -15,7 +15,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2007, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -239,14 +239,20 @@ static HRESULT ModifyAAFFile(aafWChar *filename, int level)
 
 			// Add EssenceData
 			IAAFEssenceData			*pEssenceData = NULL;
+			IAAFEssenceData2		*pEssenceData2 = NULL;
+			IAAFPlainEssenceData		*pPlainEssenceData = NULL;
 			aafUInt32				bytesWritten = 0;
 			aafUInt8				essdata[] = "Zaphod Beeblebrox";
 			CR(defs.cdEssenceData()->CreateInstance(
 					IID_IAAFEssenceData, (IUnknown **)&pEssenceData));
 			CR(pEssenceData->SetFileMob(pSourceMob));
 			CR(pHeader->AddEssenceData(pEssenceData));
-			CR(pEssenceData->Write(sizeof(essdata), essdata, &bytesWritten));
+			CR(pEssenceData->QueryInterface(IID_IAAFEssenceData2, (void**)&pEssenceData2));
+			CR(pEssenceData2->GetPlainEssenceData(0, &pPlainEssenceData));
+			CR(pPlainEssenceData->Write(sizeof(essdata), essdata, &bytesWritten));
 			pEssenceData->Release();
+			pEssenceData2->Release();
+			pPlainEssenceData->Release();
 			cout << "ModifyAAFFile() - added EssenceData" << endl;
 
 
