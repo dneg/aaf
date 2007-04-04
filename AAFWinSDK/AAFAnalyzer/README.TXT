@@ -11,7 +11,7 @@ Getting Started
 4. Download the Windows binaries from:
    http://sourceforge.net/project/showfiles.php?group_id=10127
 5. Run the install program.
-6. Set the EXPAT_INSTALL_DIR environment variable to the directory where the
-   Expat files were installed (ie. C:\AAF\Expat-1.95.8).
+6. Set the EXPAT_ROOT environment variable to the directory where the
+   Expat files were installed (ie. C:\AAF\Expat-2.0.0).
 7. Set the AX_AAF_COMAPI environment variable to point the the version of
    AAFCOAPI.dll being used.

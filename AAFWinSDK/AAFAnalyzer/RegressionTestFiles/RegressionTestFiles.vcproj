@@ -19,7 +19,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=".;../../../Utilities/AAFAnalyzer/RegressionTest/TestFiles;../../include;../../../examples2/axLib;&quot;$(BOOSTINC)&quot;;&quot;$(EXPAT_INSTALL_DIR)/Source/lib&quot;"
+				AdditionalIncludeDirectories=".;../../../Utilities/AAFAnalyzer/RegressionTest/TestFiles;../../include;../../../examples2/axLib;&quot;$(BOOSTINC)&quot;;&quot;$(EXPAT_ROOT)/Source/lib&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				MinimalRebuild="TRUE"
 				BasicRuntimeChecks="3"
@@ -34,7 +34,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="../../../examples2/axLib/Debug/axLib.lib ../../lib/AAFD.lib ../../lib/AAFIIDD.lib $(EXPAT_INSTALL_DIR)/StaticLibs/libexpatMT.lib"
+				AdditionalDependencies="../../../examples2/axLib/Debug/axLib.lib ../../lib/AAFD.lib ../../lib/AAFIIDD.lib $(EXPAT_ROOT)/StaticLibs/libexpatMT.lib"
 				OutputFile="$(OutDir)/TestFileBuilder.exe"
 				LinkIncremental="2"
 				IgnoreAllDefaultLibraries="FALSE"
@@ -72,7 +72,7 @@
 			CharacterSet="2">
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories=".;../../../Utilities/AAFAnalyzer/RegressionTest/TestFiles;../../include;../../../examples2/axLib;&quot;$(BOOSTINC)&quot;;&quot;$(EXPAT_INSTALL_DIR)/Source/lib&quot;"
+				AdditionalIncludeDirectories=".;../../../Utilities/AAFAnalyzer/RegressionTest/TestFiles;../../include;../../../examples2/axLib;&quot;$(BOOSTINC)&quot;;&quot;$(EXPAT_ROOT)/Source/lib&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				RuntimeLibrary="2"
 				RuntimeTypeInfo="TRUE"
@@ -84,7 +84,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="../../../examples2/axLib/Release/axLib.lib ../../lib/AAFD.lib ../../lib/AAFIIDD.lib $(EXPAT_INSTALL_DIR)/StaticLibs/libexpatMT.lib"
+				AdditionalDependencies="../../../examples2/axLib/Release/axLib.lib ../../lib/AAFD.lib ../../lib/AAFIIDD.lib $(EXPAT_ROOT)/StaticLibs/libexpatMT.lib"
 				OutputFile="$(OutDir)/RegressionTestFiles.exe"
 				LinkIncremental="1"
 				IgnoreDefaultLibraryNames="MSVCRTd;LIBCMT"
