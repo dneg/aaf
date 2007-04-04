@@ -26,7 +26,7 @@
 #
 # Command line:
 #
-# awk [-v APP="app"] [-v APPVER="1.1" ] [-v SYM="s_sym"] -f mkdict.awk AAFMetaDict.csv > AAFMetaDictionary.h
+# awk [-v APP="app"] [-v APPVER="1.1" ] [-v ALIAS=yes ] [-v SYM="s_sym"] -f mkdict.awk AAFMetaDict.csv > AAFMetaDictionary.h
 #
 #	the csv file must have a line with "_fields" in the first column
 #	before any line that does not begin with #
@@ -38,6 +38,8 @@
 #	always skips lines beginning ##
 #   always skips lines of r_nest==Node
 #   always skips lines with r_sym blank
+#
+#	if the -v ALIAS= is non-null, will emit aliases for Classes and Properties in place of sym
 #
 #   if the -v SYM= value is specified, mkdict will use this field instead of s_sym
 #   note that for legacy support, if s_sym does not exist, r_sym will be used
@@ -804,21 +806,31 @@ BEGIN {
   firstInstance = -1; # set to 1 by Aliases
 }
 
-/^[#_]fields/ {
+/^"*[#_]fields/ {
 	# set up indirect input column mapping
 	# line beginning #fields is legacy, line beginning _fields is now preferred 
-	# e.g. if 18th input column == "r_sym", C["r_sym"]==18 and thus $C["r_sym"]==$18
+	# e.g. if 18th input column == "r_sym", Col["r_sym"]==18 and CC["r_sym"]==$18
 
     # set erroneous column number for the source of symbols
-	C[SYM] = -1;
+	Col[SYM] = -1;
 
 	for( i=1; i<=NF; i++)
 	{
-		if( $i != "" ) C[ $i ] = i;
+		if( stripquotes($i) != "" )
+		{
+			C[ i ] = stripquotes($i);
+			Col[ stripquotes($i) ] = i;
+		}
+		else
+			C[ i ]= -1;
 	}
 
 	# for legacy, if s_sym is no provided, use r_sym
-    if( C[SYM]<0 ) C[SYM]=C["r_sym"];
+    if( Col[SYM]<0 )
+    {
+		Col[SYM]=Col["r_sym"];
+		C[Col["r_sym"]]="r_sym";
+	}
 
 	processedfields=1;
 	next
@@ -829,17 +841,23 @@ BEGIN {
 }
 
 {
+	# strip fields that are quoted strings
+	for( i=1; i<=NF; i++)
+	{
+		if( C[i] != "" ) CC[ C[i] ] = stripquotes($i);
+	}
+
   # Discard Node lines (not used by MetaDictionary.h)
-  if( $C["r_nest"] == "" || $C["r_nest"] == "Node") next 
+  if( CC["r_nest"] == "" || CC["r_nest"] == "Node") next 
 
   # Discard lines with no symbol field
-  if ($C[SYM] == "") next 
+  if (CC[SYM] == "") next 
 
   # If no APP is specified, discard lines beginning #
   if( APP == "" && 1 == index($1,"#") ) next
 
   # Discard lines that don't apply to the specified application
-  if( 0 == index($C["r_app"], APP) ) next 
+  if( APP != "" && 0 == index(CC["r_app"], APP) ) next 
 
 	# Discard lines that don't apply to the specified application version
 	# allow to specify an application version on the command line:  -v APPVER="1.2"
@@ -851,7 +869,7 @@ BEGIN {
 		tgtver = 10*substr(APPVER,1,1)+substr(APPVER,3,1);
 
 		# substr from r_app
-		ver = substr( $C["r_app"], index($C["r_app"], APP)+length(APP) );
+		ver = substr( CC["r_app"], index(CC["r_app"], APP)+length(APP) );
 
 		# evaluate relation
 		if( substr(ver,2,1)=="=" ) rel=substr(ver,1,2);
@@ -891,64 +909,74 @@ BEGIN {
   }
 
   # Diagnostics
-  # printf("// <%s> \n", $C["s_parent_sym"]);
+  # printf("// <%s> \n", CC["s_parent_sym"]);
 
   # Groups Register (SMPTE name for Classes)
-  if( $C["r_reg"] == "Groups" ){
+  if( CC["r_reg"] == "Groups" ){
 
-    if ($C["s_type_sym"] == "AAFClass" || $C["s_type_sym"] == "Class" || $C["s_type_sym"] == "Group") { # This item is a class
+    if (CC["s_type_sym"] == "AAFClass" || CC["s_type_sym"] == "Class" || CC["s_type_sym"] == "Group") { # This item is a class
 
 	  # "Class" allowed for backward compatibility; delete when old metadict.xls purged
 	  # "Group" allowed so headers may be generated for classes not derived from AAF
 	  #		e.g. ASPA::TimestampedKLV
 
-	  # assert( $C["r_nest"] == "Leaf" )
-      if ($C[SYM] != class) { # This is a new class
+	  # assert( CC["r_nest"] == "Leaf" )
+      if (CC[SYM] != class) { # This is a new class
         if (class != "" ) {
           # end the old one
           printf("AAF_CLASS_END(%s,%s,\n  %s,\n  %s)\n",
                  class, cguid, parent, concrete);
           printf("AAF_CLASS_SEPARATOR()\n");
-          parent = $C["s_parent_sym"];
+          parent = CC["s_parent_sym"];
         } else {
           parent = "Root"
         }
-        class = $C[SYM];
+        
+        # use alias
+        if( ALIAS != "" && CC["g_alias"] != "" ) class = CC["g_alias"];
+        else class = CC[SYM];
+        
+        class_s = CC["s_sym"];
+        
         printf("\n");
         printf("// %s\n", class);
         printf("//\n");
       }
-      if ($C["r_minOccurs"] != "") {
-        classError(class, C["r_minOccurs"]);
+      if (CC["r_minOccurs"] != "") {
+        classError(class, Col["r_minOccurs"]);
         errors++;
       }
-      if ($C["s_target_sym"] != "") {
-        classError(class, C["s_target_sym"]);
+      if (CC["s_target_sym"] != "") {
+        classError(class, Col["s_target_sym"]);
         errors++;
       }
+      
       concrete = "true";
-      if ($C["r_isAbstract"] == "abstract") {
+      if (CC["r_isAbstract"] == "abstract") {
         concrete = "false";
-      } else if ($C["r_isAbstract"] != "") {
-        classError(class, C["r_isAbstract"]);
+      } else if (CC["r_isAbstract"] == "") {
+        concrete = "true";
+      } else {
+        classError(class, Col["r_isAbstract"]);
         errors++;
       }
+      
       # AAF_CLASS(name, id, parent)
       
       # the registry may contain ul_6 = 0x53, or 0x7f...needs to be changed to 0x06 for AAF
       syntax = "06";
       
-      cguid = formatAUID($C["ul_1"], $C["ul_2"], $C["ul_3"], $C["ul_4"],
-                         $C["ul_5"], syntax, $C["ul_7"], $C["ul_8"],
-                         $C["ul_9"], $C["ul_10"], $C["ul_11"], $C["ul_12"],
-                         $C["ul_13"], $C["ul_14"], $C["ul_15"], $C["ul_16"], "  ");
+      cguid = formatAUID(CC["ul_1"], CC["ul_2"], CC["ul_3"], CC["ul_4"],
+                         CC["ul_5"], syntax, CC["ul_7"], CC["ul_8"],
+                         CC["ul_9"], CC["ul_10"], CC["ul_11"], CC["ul_12"],
+                         CC["ul_13"], CC["ul_14"], CC["ul_15"], CC["ul_16"], "  ");
       printf("AAF_CLASS(%s,%s,\n  %s,\n  %s)\n",
-             $C[SYM], cguid, parent, concrete);
+             class, cguid, parent, concrete);
 
     } else { # this item is a property
 
-	  # assert( $C["r_nest"] == "Child" )
-      type = $C["s_type_sym"];
+	  # assert( CC["r_nest"] == "Child" )
+      type = CC["s_type_sym"];
 
       # match reference types and separate out the target type
       target_type = type;
@@ -976,34 +1004,34 @@ BEGIN {
 
         type = sprintf("AAF_REFERENCE_TYPE(%s, %s)", reference_type, target_type);
       } else {
-        if ($C["s_target_sym"] == "") {
+        if (CC["s_target_sym"] == "") {
           type = sprintf("AAF_TYPE(%s)", type);
         } else {
-          propertyError($C[SYM], class, C["s_target_sym"]);
+          propertyError(CC[SYM], class, Col["s_target_sym"]);
           errors++;
         }
       }
 
-      if ($C["r_minOccurs"] == "1") {
+      if (CC["r_minOccurs"] == "1") {
         mandatory = "true";
-      } else if ($C["r_minOccurs"] == "0") {
+      } else if (CC["r_minOccurs"] == "0" || CC["r_minOccurs"] == "" ) {
         mandatory = "false";
       } else {
-        propertyError($C[SYM], class, C["r_minOccurs"]);
+        propertyError(CC[SYM], class, Col["r_minOccurs"]);
         errors++;
       }
-      if ($C["s_parent_sym"] != class) {
-        propertyError($C[SYM], class, C["s_parent_sym"]);
+      if (CC["s_parent_sym"] != class && CC["s_parent_sym"] != class_s) {
+        propertyError(CC[SYM], class, Col["s_parent_sym"]);
         errors++;
       }
-      if ($C["r_isAbstract"] != "") {
-        propertyError($C[SYM], class, C["r_isAbstract"]);
+      if (CC["r_isAbstract"] != "") {
+        propertyError(CC[SYM], class, Col["r_isAbstract"]);
         errors++;
       }
-      if ($C["r_isUnique"] == "uid") {
+      if (CC["r_isUnique"] == "uid") {
         uid = "true";
-        if ($C["r_minOccurs"] == "O") {
-          propertyError($C[SYM], class, C["r_isUnique"]);
+        if (CC["r_minOccurs"] == "O") {
+          propertyError(CC[SYM], class, Col["r_isUnique"]);
           printError("A unique identifier must be mandatory.\n");
           errors++;
         }
@@ -1011,25 +1039,30 @@ BEGIN {
         uid = "false";
       }
       # AAF_PROPERTY(name, id, tag, type, mandatory, container)
-      pguid = formatAUID($C["ul_1"], $C["ul_2"], $C["ul_3"], $C["ul_4"],
-                         $C["ul_5"], $C["ul_6"], $C["ul_7"], $C["ul_8"],
-                         $C["ul_9"], $C["ul_10"], $C["ul_11"], $C["ul_12"],
-                         $C["ul_13"], $C["ul_14"], $C["ul_15"], $C["ul_16"], "    ");
-	  ppid = formatTag( $C["r_tag"] );
+      pguid = formatAUID(CC["ul_1"], CC["ul_2"], CC["ul_3"], CC["ul_4"],
+                         CC["ul_5"], CC["ul_6"], CC["ul_7"], CC["ul_8"],
+                         CC["ul_9"], CC["ul_10"], CC["ul_11"], CC["ul_12"],
+                         CC["ul_13"], CC["ul_14"], CC["ul_15"], CC["ul_16"], "    ");
+	  ppid = formatTag( CC["r_tag"] );
       if (ppid == "0x0000") {
         comment = " // dynamic";
       } else {
         comment = "";
       }
-      printf("  AAF_PROPERTY(%s,%s,\n    %s,%s\n    %s,\n    %s,\n    %s,\n    %s)\n", $C[SYM], pguid, ppid, comment, type, mandatory, uid, class);
+      
+      # use alias
+      if( ALIAS != "" && CC["g_alias"] != "" ) prop = CC["g_alias"];
+      else prop = CC[SYM];
+      
+      printf("  AAF_PROPERTY(%s,%s,\n    %s,%s\n    %s,\n    %s,\n    %s,\n    %s)\n", prop, pguid, ppid, comment, type, mandatory, uid, class);
     }
 
   # Types Register
-  } else if( $C["r_reg"] == "Types" ) {
+  } else if( CC["r_reg"] == "Types" ) {
 
-    if ($C["s_type_sym"] == "type" ) { # a type
+    if (CC["s_type_sym"] == "type" ) { # a type
 
-	  # assert( $C["r_nest"] == "Leaf" )
+	  # assert( CC["r_nest"] == "Leaf" )
       if (firstType) {
         printf("AAF_CLASS_END(%s,%s,\n  %s,\n  %s)\n",
                class, cguid, parent, concrete);
@@ -1056,21 +1089,21 @@ BEGIN {
         if( kind != "formal" ) printf("AAF_TYPE_SEPARATOR()\n");
       }
 
-      tguid = formatAUID($C["ul_1"], $C["ul_2"], $C["ul_3"], $C["ul_4"],
-                         $C["ul_5"], $C["ul_6"], $C["ul_7"], $C["ul_8"],
-                         $C["ul_9"], $C["ul_10"], $C["ul_11"], $C["ul_12"],
-                         $C["ul_13"], $C["ul_14"], $C["ul_15"], $C["ul_16"], "  ");
+      tguid = formatAUID(CC["ul_1"], CC["ul_2"], CC["ul_3"], CC["ul_4"],
+                         CC["ul_5"], CC["ul_6"], CC["ul_7"], CC["ul_8"],
+                         CC["ul_9"], CC["ul_10"], CC["ul_11"], CC["ul_12"],
+                         CC["ul_13"], CC["ul_14"], CC["ul_15"], CC["ul_16"], "  ");
 
       # set kind and qualifier for use by child members
-	  kind = $C["r_kind"];
-      qualif = $C["r_qualif"];
+	  kind = CC["r_kind"];
+      qualif = CC["r_qualif"];
 
-      typeName = $C[SYM];
+      typeName = CC[SYM];
 
       # diagnostic comments
       printf("\n");
       if ((qualif == "weak") || (qualif == "strong"))
-        printf("// %s<%s>\n", referenceTypeName( kind, qualif ), $C["s_target_sym"]);
+        printf("// %s<%s>\n", referenceTypeName( kind, qualif ), CC["s_target_sym"]);
 	  else
         printf("// %s\n", typeName);
       printf("//\n");
@@ -1079,15 +1112,15 @@ BEGIN {
 	    # formal kind is just there as a target - nothing to emit
 		printf("// formal type\n");
       } else if (kind == "integer") {
-        printf("AAF_TYPE_DEFINITION_INTEGER(%s, %s, %s, %s)\n", typeName, tguid, qualif, $C["r_value"]);
+        printf("AAF_TYPE_DEFINITION_INTEGER(%s, %s, %s, %s)\n", typeName, tguid, qualif, CC["r_value"]);
 
       } else if (kind == "array") {
-        elementType = $C["s_target_sym"];
+        elementType = CC["s_target_sym"];
         if (qualif == "varying") {
           printf("AAF_TYPE_DEFINITION_VARYING_ARRAY(%s, %s,\n  AAF_TYPE(%s))\n", typeName, tguid, elementType);
 
         } else if (qualif == "fixed") {
-          printf("AAF_TYPE_DEFINITION_FIXED_ARRAY(%s, %s,\n  AAF_TYPE(%s), %s)\n", typeName, tguid, elementType, $C["r_minOccurs"]);
+          printf("AAF_TYPE_DEFINITION_FIXED_ARRAY(%s, %s,\n  AAF_TYPE(%s), %s)\n", typeName, tguid, elementType, CC["r_minOccurs"]);
 
         } else if (qualif == "strong") {
           # Special cases for strong reference vectors.
@@ -1100,12 +1133,12 @@ BEGIN {
           printf("AAF_TYPE_DEFINITION_WEAK_REFERENCE_VECTOR(\n  AAF_REFERENCE_TYPE_NAME(%s, %s), %s,\n  AAF_TYPE(%s))\n", typeName, elementType, tguid, elementType);
 
         } else {
-          typeError(typeName, C["r_qualif"]);
+          typeError(typeName, Col["r_qualif"]);
           errors++;
         }
 
       } else if (kind == "set") {
-        elementType = $C["s_target_sym"];
+        elementType = CC["s_target_sym"];
         # Special cases for strong/weak reference sets.
         if (qualif == "strong") {
 		  typeName = referenceTypeName( kind, qualif );
@@ -1122,12 +1155,12 @@ BEGIN {
           printf("AAF_TYPE_DEFINITION_SET(%s, %s,\n  AAF_TYPE(%s))\n", typeName, tguid, elementType);
 
         } else {
-          typeError(typeName, C["r_qualif"]);
+          typeError(typeName, Col["r_qualif"]);
           errors++;
         }
 
       } else if (kind == "reference") {
-        targetType = $C["s_target_sym"];
+        targetType = CC["s_target_sym"];
         if (qualif == "strong") {
 		  typeName = referenceTypeName( kind, qualif );
           printf("AAF_TYPE_DEFINITION_STRONG_REFERENCE(\n  AAF_REFERENCE_TYPE_NAME(%s, %s), %s,\n  AAF_TYPE(%s))\n", typeName, targetType, tguid, targetType);
@@ -1137,22 +1170,22 @@ BEGIN {
           printf("AAF_TYPE_DEFINITION_WEAK_REFERENCE(\n  AAF_REFERENCE_TYPE_NAME(%s, %s), %s,\n  AAF_TYPE(%s))\n", typeName, targetType, tguid, targetType);
 
         } else {
-          typeError(typeName, C["r_qualif"]);
+          typeError(typeName, Col["r_qualif"]);
           errors++;
         }
 
       } else if (kind == "enumeration" ) {
-        etype = $C["s_target_sym"];
+        etype = CC["s_target_sym"];
         printf("AAF_TYPE_DEFINITION_ENUMERATION(%s, %s, AAF_TYPE(%s))\n", typeName, tguid, etype);
 
       } else if (kind == "record") {
         printf("AAF_TYPE_DEFINITION_RECORD(%s, %s)\n", typeName, tguid)
 		;
       } else if (kind == "rename") {
-        printf("AAF_TYPE_DEFINITION_RENAME(%s, %s, %s)\n", typeName, tguid, $C["s_target_sym"]);
+        printf("AAF_TYPE_DEFINITION_RENAME(%s, %s, %s)\n", typeName, tguid, CC["s_target_sym"]);
 
       } else if (kind == "string") {
-        printf("AAF_TYPE_DEFINITION_STRING(%s, %s, %s)\n", typeName, tguid, $C["s_target_sym"]);
+        printf("AAF_TYPE_DEFINITION_STRING(%s, %s, %s)\n", typeName, tguid, CC["s_target_sym"]);
 
       } else if (kind == "extendible") {
         printf("AAF_TYPE_DEFINITION_EXTENDIBLE_ENUMERATION(%s, %s)\n", typeName, tguid);
@@ -1177,13 +1210,13 @@ BEGIN {
 	  # set parentTypeName for use by members
 	  parentTypeName = typeName;
 
-    } else if( $C["r_nest"] == "Child" ) { # all "member"s of a type are Child elements
+    } else if( CC["r_nest"] == "Child" ) { # all "member"s of a type are Child elements
 
-      memberName = $C[SYM];
+      memberName = CC[SYM];
       if (kind == "enumeration" )
 	  {
-		if( $C["s_type_sym"]==etype || $C["s_type_sym"]=="member" ) # "member" is old-style, etype is new-style (!)
-			printf("  AAF_TYPE_DEFINITION_ENUMERATION_MEMBER(%s,\n    %s, %s)\n", memberName, $C["r_value"], parentTypeName);
+		if( CC["s_type_sym"]==etype || CC["s_type_sym"]=="member" ) # "member" is old-style, etype is new-style (!)
+			printf("  AAF_TYPE_DEFINITION_ENUMERATION_MEMBER(%s,\n    %s, %s)\n", memberName, CC["r_value"], parentTypeName);
 		else
 		{
 			printError( "Invalid type of member of Enumeration");
@@ -1192,20 +1225,20 @@ BEGIN {
       }
 	  else if (kind == "record")
 	  {
-		if( $C["s_type_sym"]=="member" ) targetType=$C["s_target_sym"]; # "member" is old-style
-		else							 targetType=$C["s_type_sym"];	# new-style
+		if( CC["s_type_sym"]=="member" ) targetType=CC["s_target_sym"]; # "member" is old-style
+		else							 targetType=CC["s_type_sym"];	# new-style
 		 
 		printf("  AAF_TYPE_DEFINITION_RECORD_FIELD(%s, AAF_TYPE(%s),\n    %s)\n", memberName, targetType, parentTypeName);
       }
 	  else if (kind == "extendible")
 	  {
-		if( $C["s_type_sym"]==parentTypeName || $C["s_type_sym"]=="member" ) # "member" is old-style, "AUID" is new-style
+		if( CC["s_type_sym"]==parentTypeName || CC["s_type_sym"]=="member" ) # "member" is old-style, "AUID" is new-style
 		{
 			targetType="AUID";		# "member" is old-style
-			eguid = formatAUID(	$C["ul_1"], $C["ul_2"], $C["ul_3"], $C["ul_4"],
-								$C["ul_5"], $C["ul_6"], $C["ul_7"], $C["ul_8"],
-								$C["ul_9"], $C["ul_10"], $C["ul_11"], $C["ul_12"],
-								$C["ul_13"], $C["ul_14"], $C["ul_15"], $C["ul_16"], "    ");
+			eguid = formatAUID(	CC["ul_1"], CC["ul_2"], CC["ul_3"], CC["ul_4"],
+								CC["ul_5"], CC["ul_6"], CC["ul_7"], CC["ul_8"],
+								CC["ul_9"], CC["ul_10"], CC["ul_11"], CC["ul_12"],
+								CC["ul_13"], CC["ul_14"], CC["ul_15"], CC["ul_16"], "    ");
 
 			printf("  AAF_TYPE_DEFINITION_EXTENDIBLE_ENUMERATION_MEMBER(%s,%s,\n    %s)\n", memberName, eguid, parentTypeName);
 		}
@@ -1218,9 +1251,9 @@ BEGIN {
       }
 	  else if ((kind == "reference") && (qualif == "weak"))
 	  {
-		if( $C["s_type_sym"]=="member" ) # "member" is old-style, no new-style yet
+		if( CC["s_type_sym"]=="member" ) # "member" is old-style, no new-style yet
 		{
-			printf("  AAF_TYPE_DEFINITION_WEAK_REFERENCE_MEMBER(%s, %s,\n    AAF_REFERENCE_TYPE_NAME(%s, %s))\n", memberName, $C["s_parent_sym"], typeName, targetType);
+			printf("  AAF_TYPE_DEFINITION_WEAK_REFERENCE_MEMBER(%s, %s,\n    AAF_REFERENCE_TYPE_NAME(%s, %s))\n", memberName, CC["s_parent_sym"], typeName, targetType);
 		}
 		else
 		{
@@ -1241,11 +1274,11 @@ BEGIN {
 	}
 
   # Aliases Register (non SMPTE)
-  } else if( $C["r_reg"] == "Aliases" ) {
+  } else if( CC["r_reg"] == "Aliases" ) {
 
-    if ($C["s_type_sym"] == "alias") {
+    if (CC["s_type_sym"] == "alias") {
 
-	  # assert( $C["r_nest"] == "Leaf" )
+	  # assert( CC["r_nest"] == "Leaf" )
       if (firstAlias) {
         if (kind == "enumeration" ) {
           printf("AAF_TYPE_DEFINITION_ENUMERATION_END(%s, %s, AAF_TYPE(%s))\n", typeName, tguid, etype);
@@ -1272,24 +1305,24 @@ BEGIN {
         printf("AAF_ALIAS_SEPARATOR()\n");
       }
 
-      aalias = $C[SYM];
-      aoriginal = $C["g_alias"];
+      aalias = CC[SYM];
+      aoriginal = CC["g_alias"];
       printf("AAF_CLASS_ALIAS(%s, %s)\n", aoriginal, aalias); 
 	}
 
   # Labels Register
-  } else if( $C["r_reg"] == "Labels" ) {
+  } else if( CC["r_reg"] == "Labels" ) {
 
     next # not emitting any macros for Labels yet
 
   # Instances Register
-  } else if( $C["r_reg"] == "Instances" ) {
+  } else if( CC["r_reg"] == "Instances" ) {
 
-    if ($C["s_type_sym"] == "Instance" )
+    if (CC["s_type_sym"] == "Instance" )
     { 
         # a set of instances of a [subclass of] DefinitionObject
 
-        # assert( $C["r_nest"] == "Stalk" )
+        # assert( CC["r_nest"] == "Stalk" )
 
         if( firstInstance<0 )
         {
@@ -1358,10 +1391,10 @@ BEGIN {
             printf("AAF_INSTANCE_GROUP_SEPARATOR()\n");
         }
 
-        igsym = $C[SYM];
+        igsym = CC[SYM];
         if( igsym=="" ) nullError( "r_sym", "Instance" );
 
-        igtarget = $C["s_target_sym"];
+        igtarget = CC["s_target_sym"];
         if( igtarget=="" ) nullError( "s_target_sym", "Instance" );
 
         printf("AAF_INSTANCE_GROUP(%s, %s)\n", igsym, igtarget);
@@ -1372,7 +1405,7 @@ BEGIN {
     {
       # an instance of either a [subclass of] DefinitionObject or a property of the subclass
 
-       if( $C["r_nest"] == "Leaf" )
+       if( CC["r_nest"] == "Leaf" )
        { 
             # an instance of a [subclass of] DefinitionObject
 
@@ -1383,17 +1416,17 @@ BEGIN {
                 printf("  AAF_INSTANCE_SEPARATOR()\n");
             }
 
-            isym = $C[SYM];
+            isym = CC[SYM];
 
-            iid = formatAUID($C["ul_1"], $C["ul_2"], $C["ul_3"], $C["ul_4"],
-                             $C["ul_5"], $C["ul_6"], $C["ul_7"], $C["ul_8"],
-                             $C["ul_9"], $C["ul_10"], $C["ul_11"], $C["ul_12"],
-                             $C["ul_13"], $C["ul_14"], $C["ul_15"], $C["ul_16"], "      ");
+            iid = formatAUID(CC["ul_1"], CC["ul_2"], CC["ul_3"], CC["ul_4"],
+                             CC["ul_5"], CC["ul_6"], CC["ul_7"], CC["ul_8"],
+                             CC["ul_9"], CC["ul_10"], CC["ul_11"], CC["ul_12"],
+                             CC["ul_13"], CC["ul_14"], CC["ul_15"], CC["ul_16"], "      ");
 
-            iclass = $C["s_type_sym"];
-            idesc = $C["r_detail"];
+            iclass = CC["s_type_sym"];
+            idesc = CC["r_detail"];
 
-			asym = "AAF_SYMBOL(" $C[SYM] "," $C["r_name"] ",\"" $C["g_alias"] "\",\"" $C["r_detail"] "\")"
+			asym = "AAF_SYMBOL(" CC[SYM] "," CC["r_name"] ",\"" CC["g_alias"] "\",\"" CC["r_detail"] "\")"
 
             printf("  AAF_INSTANCE(%s, %s, %s, %s)\n", iclass, asym, iid, "\"" idesc "\"");
 
@@ -1405,13 +1438,13 @@ BEGIN {
             printf("    AAF_INSTANCE_PROPERTY(%s, %s, %s)\n", "Identification", "AUID", iid);
 
 	   }
-       else if( $C["r_nest"] == "Child" )
+       else if( CC["r_nest"] == "Child" )
        {
             # a property of the subclass
 
-            ipsym = $C[SYM];
-            iptype = $C["s_type_sym"];
-            ipvalue = $C["r_value"];
+            ipsym = CC[SYM];
+            iptype = CC["s_type_sym"];
+            ipvalue = CC["r_value"];
             printf("    AAF_INSTANCE_PROPERTY(%s, %s, %s)\n", ipsym, iptype, "\"" ipvalue "\"");
        }
        else
@@ -1582,22 +1615,22 @@ function formatAUID(O01, O02, O03, O04, O05, O06, O07, O08,
                     O09, O10, O11, O12, O13, O14, O15, O16,
                     indent)
 {
-  a01 = toupper(O01);
-  a02 = toupper(O02);
-  a03 = toupper(O03);
-  a04 = toupper(O04);
-  a05 = toupper(O05);
-  a06 = toupper(O06);
-  a07 = toupper(O07);
-  a08 = toupper(O08);
-  a09 = toupper(O09);
-  a10 = toupper(O10);
-  a11 = toupper(O11);
-  a12 = toupper(O12);
-  a13 = toupper(O13);
-  a14 = toupper(O14);
-  a15 = toupper(O15);
-  a16 = toupper(O16);
+  a01 = formatByte(O01);
+  a02 = formatByte(O02);
+  a03 = formatByte(O03);
+  a04 = formatByte(O04);
+  a05 = formatByte(O05);
+  a06 = formatByte(O06);
+  a07 = formatByte(O07);
+  a08 = formatByte(O08);
+  a09 = formatByte(O09);
+  a10 = formatByte(O10);
+  a11 = formatByte(O11);
+  a12 = formatByte(O12);
+  a13 = formatByte(O13);
+  a14 = formatByte(O14);
+  a15 = formatByte(O15);
+  a16 = formatByte(O16);
 
   s = formatAUIS(a01, a02, a03, a04, a05, a06, a07, a08,
                  a09, a10, a11, a12, a13, a14, a15, a16);
@@ -1629,11 +1662,19 @@ function formatAsLabel(O01, O02, O03, O04, O05, O06, O07, O08,
     L06 = 53;
   else
     L06= O06;
+    
   return sprintf("%s.%s.%s.%s.%s.%s.%s.%s.%s.%s.%s.%s.%s.%s.%s.%s",
              O01, O02, O03, O04,
              O05, L06, O07, O08,
              O09, O10, O11, O12,
              O13, O14, O15, O16);
+}
+
+function formatByte( str )
+{
+  while( length(str)<2 ) str = "0" str;
+  str = toupper( substr( str,1,2) );
+  return str;
 }
 
 function formatTag( tag )
@@ -1686,7 +1727,7 @@ function elementError(column, elementName)
 
 function elError(column, elementName)
 {
-  printError(sprintf("Illegal entry \"%s\" in column \"%s\", for %s.\n", $C[column], column, elementName));
+  printError(sprintf("Illegal entry \"%s\" in column \"%s\", for %s.\n", CC[column], column, elementName));
 }
 
 function nullError(column, elementName)
@@ -1722,4 +1763,10 @@ function getUser()
     }
   }
   return result
+}
+
+function stripquotes(input)
+{
+	if( substr(input,1,1) == "\"" ) return substr(input,2,length(input)-2);
+	else return input;
 }
