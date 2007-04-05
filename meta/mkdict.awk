@@ -1220,7 +1220,8 @@ BEGIN {
       if (kind == "enumeration" )
 	  {
 		if( CC["s_type_sym"]==etype || CC["s_type_sym"]=="member" ) # "member" is old-style, etype is new-style (!)
-			printf("  AAF_TYPE_DEFINITION_ENUMERATION_MEMBER(%s,\n    %s, %s)\n", memberName, CC["r_value"], parentTypeName);
+			# note concatenate with "" to force string typing and deal with vanishing 0 ?
+			printf("  AAF_TYPE_DEFINITION_ENUMERATION_MEMBER(%s,\n    %s, %s)\n", memberName, CC["r_value"] "", parentTypeName);
 		else
 		{
 			printError( "Invalid type of member of Enumeration");
