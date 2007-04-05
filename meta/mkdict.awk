@@ -867,7 +867,8 @@ BEGIN {
 		# parse appver x.y to tgtver
 		# allow 1.1.2, written 1.12
 		# assert( 3>=length(APPVER) )
-		tgtver = 100*substr(APPVER,1,1)+substr(APPVER,3);
+		tgtver = 100*substr(APPVER,1,1)+10*substr(APPVER,3,1);
+		if( length(APPVER)>3 ) tgtver = tgtver + substr(APPVER,4,1);
 
 		# substr from r_app
 		ver = substr( CC["r_app"], index(CC["r_app"], APP)+length(APP) );
@@ -888,7 +889,8 @@ BEGIN {
 		{
 			# allow 1.1.2, written 1.12
 			# assert 3>=length(ver)
-			relver = 100*substr(ver,1,1)+substr(ver,3);
+			relver = 100*substr(ver,1,1)+substr(ver,3,1);
+			if( length(ver)>3 ) relver = relver + substr(ver,4,1);
 
 			# diagnostics
 			# printf( "%d %s %d \n", tgtver, rel, relver);
