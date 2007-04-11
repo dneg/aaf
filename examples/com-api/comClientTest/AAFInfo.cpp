@@ -476,12 +476,16 @@ static void ReadAAFFile(aafWChar * pFileName)
         printf("Filekind             = 512-byte SS (reading with Schemasoft)\n");
       else if (memcmp( &fileKind, &kAAFFileKind_AafG512Binary, sizeof(fileKind)) == 0)
         printf("Filekind             = 512-byte SS (reading with GSF)\n");
+      else if (memcmp( &fileKind, &kAAFFileKind_Aaf512Binary, sizeof(fileKind)) == 0)
+        printf("Filekind             = 512-byte SS (reading with default implementation)\n");
       else if (memcmp( &fileKind, &kAAFFileKind_AafM4KBinary, sizeof(fileKind)) == 0)
         printf("Filekind             = 4096-byte SS (reading with Microsoft)\n");
       else if (memcmp( &fileKind, &kAAFFileKind_AafS4KBinary, sizeof(fileKind)) == 0)
         printf("Filekind             = 4096-byte SS (reading with Schemasoft)\n");
       else if (memcmp( &fileKind, &kAAFFileKind_AafG4KBinary, sizeof(fileKind)) == 0)
         printf("Filekind             = 4096-byte SS (reading with GSF)\n");
+      else if (memcmp( &fileKind, &kAAFFileKind_Aaf4KBinary, sizeof(fileKind)) == 0)
+        printf("Filekind             = 4096-byte SS (reading with default implementation)\n");
       else
         printf("Filekind             = Recognized by SDK but unknown to AAFInfo\n");
     }
