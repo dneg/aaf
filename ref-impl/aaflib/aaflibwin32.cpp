@@ -37,6 +37,7 @@
 
 // Win32 specific header files.
 #include "windows.h"
+#include "ctype.h"
 
 // AAF header files.
 #include "AAFResult.h"
