@@ -71,6 +71,9 @@
 #elif defined(__GNUC__) && defined(__i386__) && defined(__OpenBSD__)
 #define OM_COMPILER_GCC_INTEL_OPENBSD
 #define OM_OS_UNIX
+#elif defined(__GNUC__) && defined(__i386__) && defined(_WIN32)
+#define OM_COMPILER_GCC_INTEL_WINDOWS
+#define OM_OS_WINDOWS
 #elif defined(__GNUC__) && defined(__i386__) && defined(__CYGWIN__)
 #define OM_COMPILER_GCC_INTEL_CYGWIN
 #define OM_OS_UNIX

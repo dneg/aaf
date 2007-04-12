@@ -26,7 +26,8 @@
 #
 # pdefs-Win.mk
 #
-#	This file contains makefile definitions for the WinNT/Cygwin platform.
+#	This file contains makefile definitions for the WinNT platform family,
+#	and is intended to support native g++ (MinGW) and MSVC builds.
 #
 #
 # Uses:
@@ -47,7 +48,7 @@
 # Include common Unix definitions.
 #------------------------------------------------------------------------------
 include $(AAFBASE)/build/pdefs-Unix.mk
-SHELL = /bin/bash
+SHELL = /bin/sh
 
 #------------------------------------------------------------------------------
 # Compiler-specific definitions
@@ -59,7 +60,7 @@ include $(AAFBASE)/build/cdefs-$(COMPILER).mk
 #------------------------------------------------------------------------------
 # Platform specific compiler options
 #------------------------------------------------------------------------------
-PLATFORM_CFLAGS = 
+PLATFORM_CFLAGS = -DUNICODE
 
 
 #------------------------------------------------------------------------------

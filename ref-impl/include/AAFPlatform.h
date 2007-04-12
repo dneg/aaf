@@ -219,13 +219,28 @@
 /*
  *  Compiler:   GNU C++
  *  Processor:  Intel x86
+ *  OS:         MS Windows NT/2000/XP
+ *
+ *  For g++ on MS Windows using MinGW (Minimalist GNU for Windows)
+ *  either natively under MS Windows or as a cross-compiler.
+ *  Uses only native WIN32 APIs for system interaction (unlike Cygwin).
+ */
+#elif defined(__GNUC__) && defined(__i386__) && defined(_WIN32)
+#define CPU_INTEL
+#define OS_WINDOWS
+#define COMPILER_GCC
+#define PLATFORM_GCC_INTEL_WINDOWS
+
+/*
+ *  Compiler:   GNU C++
+ *  Processor:  Intel x86
  *  OS:         Windows/Cygwin
  */
 #elif defined(__GNUC__) && defined(__i386__) && defined(__CYGWIN__)
 #define CPU_INTEL
 #define OS_WINDOWS
 #define COMPILER_GCC
-#define PLATFORM_GCC_INTEL_WINDOWS
+#define PLATFORM_GCC_INTEL_CYGWIN
 
 #else
 #error Unknown platform
@@ -276,7 +291,7 @@
  ***************************************************************/
     
 /*
- *  MS Windows
+ *  Microsoft Compilers
  */
 #if defined( PLATFORM_MSC_INTEL_WINDOWS ) || \
     defined( PLATFORM_MSC_X64_WINDOWS )
@@ -297,7 +312,7 @@ typedef wchar_t			aafCharacter;
 
 
 /*
- *  Linux, Irix, Darwin, Solaris, FreeBSD, CygWin
+ *  All other compilers (g++, MIPSpro, Metrowerks)
  */
 #elif defined(PLATFORM_GCC_INTEL_LINUX) \
 	|| defined(PLATFORM_GCC_X86_64_LINUX) \
@@ -311,7 +326,8 @@ typedef wchar_t			aafCharacter;
 	|| defined(PLATFORM_GCC_SPARC_SOLARIS) \
 	|| defined(PLATFORM_GCC_INTEL_FREEBSD) \
 	|| defined(PLATFORM_GCC_INTEL_OPENBSD) \
-	|| defined(PLATFORM_GCC_INTEL_WINDOWS)
+	|| defined(PLATFORM_GCC_INTEL_WINDOWS) \
+	|| defined(PLATFORM_GCC_INTEL_CYGWIN)
 
 // Use ISO C99 (also ANSI and POSIX) fixed size integers
 #include <inttypes.h>
@@ -355,14 +371,14 @@ typedef wchar_t			aafCharacter;
  *
  *  The POSIX standard does not specify a printf() length modifier for 64bit
  *  integers.  Instead, experiment has revealed the following modifiers
- *  work on their respective platforms.
+ *  work on the following compilers.
  */
 #if defined(_MSC_VER)
 #define AAFFMT64 "I64"
 #elif defined(__x86_64__) || defined(__powerpc64__)
-#define AAFFMT64 "l"
-#else			// all 32bit platforms using POSIX compilers
-#define AAFFMT64 "ll"
+#define AAFFMT64 "l"		// 64bit g++
+#else
+#define AAFFMT64 "ll"		// 32bit g++ and MIPSpro
 #endif
 
 

@@ -58,8 +58,9 @@ typedef unsigned __int64       OMUInt64;
    || defined(OM_COMPILER_GCC_PPC64_LINUX) \
    || defined(OM_COMPILER_GCC_PPC_MACOSX) || defined(OM_COMPILER_GCC_INTEL_MACOSX) || defined(OM_COMPILER_MWERKS_PPC_MACOSX) \
    || defined(OM_COMPILER_SGICC_MIPS_SGI) || defined(OM_COMPILER_GCC_MIPS_SGI) \
-   || defined(OM_COMPILER_GCC_SPARC_SUNOS) || defined(OM_COMPILER_GCC_INTEL_FREEBSD) \
-   || defined(OM_COMPILER_GCC_INTEL_OPENBSD) || defined(OM_COMPILER_GCC_INTEL_CYGWIN)
+   || defined(OM_COMPILER_GCC_SPARC_SUNOS) \
+   || defined(OM_COMPILER_GCC_INTEL_FREEBSD) || defined(OM_COMPILER_GCC_INTEL_OPENBSD) \
+   || defined(OM_COMPILER_GCC_INTEL_WINDOWS) || defined(OM_COMPILER_GCC_INTEL_CYGWIN)
 
 // Use ISO C99 (also ANSI and POSIX) fixed size integers
 
