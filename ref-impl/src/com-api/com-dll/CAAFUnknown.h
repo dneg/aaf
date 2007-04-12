@@ -342,7 +342,7 @@ private:
 	// Member data:
 
 	//@cmember Current reference count for this object.
-  ULONG m_cRef;
+  aafUInt32 m_cRef;
 
   //@cmember Outer controlling Unknown
   IUnknown *m_pUnkOuter;
