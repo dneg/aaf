@@ -101,7 +101,7 @@ isSSFileKind(const aafUID_t& fileKind)
 static aafUID_t
 getSS4KFileKind(const aafUID_t& fileKind)
 {
-	aafUID_t ss4KFileKind=kAAFFileKind_Pathological_Value;
+	aafUID_t ss4KFileKind=kAAFFileKind_Pathological;
 	if (equalUID(fileKind, testFileKindDefault)) {
 		ss4KFileKind=kAAFFileKind_Aaf4KBinary;
 	} else if (equalUID(fileKind, kAAFFileKind_AafM4KBinary)) {

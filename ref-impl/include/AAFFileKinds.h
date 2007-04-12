@@ -29,95 +29,71 @@
 #endif
 
 // the enum to select DON'T CARE (whatever works)
-#define kAAFFileKind_DontCare_Value \
+const aafUID_t kAAFFileKind_DontCare =
 {0,0,0,{0,0,0,0,0,0,0,0}};
-const aafUID_t kAAFFileKind_DontCare = kAAFFileKind_DontCare_Value;
 
-// to cause error if used
-#define kAAFFileKind_Pathological_Value \
+// the enum to trigger error if used
+const aafUID_t kAAFFileKind_Pathological =
 {0xff,0xff,0xff,{0,0,0,0,0,0,0,0}};
-const aafUID_t kAAFFileKind_Pathological = kAAFFileKind_Pathological_Value;
 
+// AAF files encoded as structured storage (binary)
+//
 // the enum to select the Microsoft implementation with 512 byte sectors
-#define kAAFFileKind_AafM512Binary_Value \
-{ 0xc95e8ee6, 0xa6ec, 0x4e53, { 0x92, 0x28, 0xbd, 0x9b, 0x57, 0x23, 0x57, 0xe5 } }
-const aafUID_t kAAFFileKind_AafM512Binary = kAAFFileKind_AafM512Binary_Value;
+const aafUID_t kAAFFileKind_AafM512Binary =
+{ 0xc95e8ee6, 0xa6ec, 0x4e53, { 0x92, 0x28, 0xbd, 0x9b, 0x57, 0x23, 0x57, 0xe5 } };
 
 // the enum to select the SchemaSoft implementation with 512 byte sectors
-#define kAAFFileKind_AafS512Binary_Value \
-{ 0xbb153a22, 0xc2ed, 0x4b2e, { 0xbb, 0x69, 0x19, 0xbd, 0x58, 0x9d, 0xf6, 0xdc } }
-const aafUID_t kAAFFileKind_AafS512Binary = kAAFFileKind_AafS512Binary_Value;
+const aafUID_t kAAFFileKind_AafS512Binary =
+{ 0xbb153a22, 0xc2ed, 0x4b2e, { 0xbb, 0x69, 0x19, 0xbd, 0x58, 0x9d, 0xf6, 0xdc } };
 
 // the enum to select the GSF implementation with 512 byte sectors
-#define kAAFFileKind_AafG512Binary_Value \
-{ 0xb965c7f1, 0xf89d, 0x4490, { 0xbd, 0x22, 0x77, 0x35, 0x69, 0xb4, 0xd3, 0x61 } }
-const aafUID_t kAAFFileKind_AafG512Binary = kAAFFileKind_AafG512Binary_Value;
+const aafUID_t kAAFFileKind_AafG512Binary =
+{ 0xb965c7f1, 0xf89d, 0x4490, { 0xbd, 0x22, 0x77, 0x35, 0x69, 0xb4, 0xd3, 0x61 } };
 
 // the enum to select the default implementation with 512 byte sectors
-#define kAAFFileKind_AafSSBinary_Legacy_Value \
-{0x42464141, 0x000d, 0x4d4f, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0xff}};
-const aafUID_t kAAFFileKind_Aaf512Binary = kAAFFileKind_AafSSBinary_Legacy_Value;
+const aafUID_t kAAFFileKind_Aaf512Binary =
+{ 0x42464141, 0x000d, 0x4d4f, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0xff } };
 
 // the enum to select the Microsoft implementation with 4096 byte sectors
-#define kAAFFileKind_AafM4KBinary_Value \
-{ 0x7653a218, 0x3e03, 0x4ecf, { 0x87, 0x98, 0xf4, 0x5f, 0xc1, 0x17, 0x11, 0x78 } }
-const aafUID_t kAAFFileKind_AafM4KBinary = kAAFFileKind_AafM4KBinary_Value;
+const aafUID_t kAAFFileKind_AafM4KBinary =
+{ 0x7653a218, 0x3e03, 0x4ecf, { 0x87, 0x98, 0xf4, 0x5f, 0xc1, 0x17, 0x11, 0x78 } };
 
 // the enum to select the SchemaSoft implementation with 4096 byte sectors
-#define kAAFFileKind_AafS4KBinary_Value \
-{ 0xa8ab424a, 0xc5a0, 0x48d0, { 0x9e, 0xea, 0x96, 0x69, 0x69, 0x75, 0xc6, 0xd0 } }
-const aafUID_t kAAFFileKind_AafS4KBinary = kAAFFileKind_AafS4KBinary_Value;
+const aafUID_t kAAFFileKind_AafS4KBinary =
+{ 0xa8ab424a, 0xc5a0, 0x48d0, { 0x9e, 0xea, 0x96, 0x69, 0x69, 0x75, 0xc6, 0xd0 } };
 
 // the enum to select the GSF implementation with 4096 byte sectors
-#define kAAFFileKind_AafG4KBinary_Value \
-{ 0xb44818b, 0xc3dd, 0x4f0a, { 0xad, 0x37, 0xe9, 0x71, 0x0, 0x7a, 0x88, 0xe8 } }
-const aafUID_t kAAFFileKind_AafG4KBinary = kAAFFileKind_AafG4KBinary_Value;
+const aafUID_t kAAFFileKind_AafG4KBinary =
+{ 0xb44818b, 0xc3dd, 0x4f0a, { 0xad, 0x37, 0xe9, 0x71, 0x0, 0x7a, 0x88, 0xe8 } };
 
 // the enum to select the default implementation with 4096 byte sectors
-#define kAAFFileKind_Aaf4KBinary_Value \
-{0x92b02efb, 0xaf40, 0x4896, {0xa5, 0x8e, 0xd1, 0x57, 0x2f, 0x42, 0x2b, 0x58}}
-const aafUID_t kAAFFileKind_Aaf4KBinary = kAAFFileKind_Aaf4KBinary_Value;
+const aafUID_t kAAFFileKind_Aaf4KBinary =
+{0x92b02efb, 0xaf40, 0x4896, {0xa5, 0x8e, 0xd1, 0x57, 0x2f, 0x42, 0x2b, 0x58 } };
 
-// AAF files encoded as XML (text).
+// AAF files encoded as XML (text)
 //
-#define kAAFFileKind_AafXmlText_Value \
-{ 0xfe0d0101, 0x60e1, 0x4e78, { 0xb2, 0xcd, 0x2b, 0x03, 0xdb, 0xb0, 0xfa, 0x87 } }
-const aafUID_t kAAFFileKind_AafXmlText = kAAFFileKind_AafXmlText_Value;
+const aafUID_t kAAFFileKind_AafXmlText =
+{ 0xfe0d0101, 0x60e1, 0x4e78, { 0xb2, 0xcd, 0x2b, 0x03, 0xdb, 0xb0, 0xfa, 0x87 } };
 
-// AAF files encoded as AAF SMPTE KLV (binary).
-#define kAAFFileKind_AafKlvBinary_Value \
-{0x4b464141, 0x000d, 0x4d4f, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0xff}};
-const aafUID_t kAAFFileKind_AafKlvBinary = kAAFFileKind_AafKlvBinary_Value;
-
-// MXF files encoded as SMPTE KLV (binary).
+// AAF files encoded as KLV (binary) (MXF)
 //
-// not yet in use. this value is incorrect, see SMPTE 377M
-#define kAAFFileKind_MxfKlvBinary_Value \
-{ 0xfc88c800, 0x879d, 0x48a3, { 0x90, 0x53, 0xee, 0x33, 0x5e, 0x87, 0xe0, 0xc5 } }
-const aafUID_t kAAFFileKind_MxfKlvBinary = kAAFFileKind_MxfKlvBinary_Value;
-
+const aafUID_t kAAFFileKind_AafKlvBinary =
+{0x4b464141, 0x000d, 0x4d4f, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0xff } };
 
 // the following signatures could be factored into a separate file
 
-// AAF files encoded as structured storage (binary).
-//
 // the signature actually stored in all AAF SS (512) files
 // note this is not a properly-formed SMPTE label, but this is legacy
-#define kAAFSignature_Aaf512Binary_Value \
-kAAFFileKind_AafSSBinary_Legacy_Value
-const aafUID_t kAAFSignature_Aaf512Binary = kAAFSignature_Aaf512Binary_Value; 
-
+const aafUID_t kAAFSignature_Aaf512Binary = kAAFFileKind_Aaf512Binary;
 
 // the signature actually stored in all AAF SS (4096) files
 // [060e2b34.0302.0101.0d010201.02000000]
-#define kAAFSignature_Aaf4KBinary_Value \
-{0x0d010201, 0x0200, 0x0000, {0x06, 0x0e, 0x2b, 0x34, 0x03, 0x02, 0x01, 0x01}};
-const aafUID_t kAAFSignature_Aaf4KBinary = kAAFSignature_Aaf4KBinary_Value;
+const aafUID_t kAAFSignature_Aaf4KBinary =
+{ 0x0d010201, 0x0200, 0x0000, { 0x06, 0x0e, 0x2b, 0x34, 0x03, 0x02, 0x01, 0x01 } };
 
 // no signature is required for AAF-XML 
-#define kAAFSignature_AafXmlText_Value \
-{0x00000000, 0x0000, 0x0000, {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}};
-const aafUID_t kAAFSignature_AafXmlText = kAAFSignature_AafXmlText_Value;
+const aafUID_t kAAFSignature_AafXmlText =
+{ 0x00000000, 0x0000, 0x0000, { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 } };
 
 
 // Deprecated symbols, which may be removed in a future release
@@ -130,7 +106,6 @@ const aafUID_t aafFileKindAafM4KBinary = kAAFFileKind_AafM4KBinary;
 const aafUID_t aafFileKindAafSSSBinary = kAAFFileKind_AafS512Binary;
 const aafUID_t aafFileKindAafS4KBinary = kAAFFileKind_AafS4KBinary;
 const aafUID_t aafFileKindAafXmlText = kAAFFileKind_AafXmlText;
-const aafUID_t aafFileKindMxfKlvBinary = kAAFFileKind_MxfKlvBinary;
 const aafUID_t aafFileKindAafSSBinary = kAAFFileKind_Aaf512Binary;
 const aafUID_t aafFileKindAaf4KBinary = kAAFFileKind_Aaf4KBinary;
 const aafUID_t aafSignature_Aaf_SSBinary = kAAFSignature_Aaf512Binary;
