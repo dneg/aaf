@@ -25,8 +25,8 @@
 .PHONY : all
 all :
 	cd aaflib && $(MAKE)
-	cd src && $(MAKE)
 	cd aafiid && $(MAKE)
+	cd src && $(MAKE)
 	cd libjpeg && $(MAKE)
 	cd plugins && $(MAKE)
 
