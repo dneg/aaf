@@ -47,24 +47,6 @@ extern "C"{
 
 #else // !_MIDL_USE_GUIDDEF_
 
-#ifndef __IID_DEFINED__
-#define __IID_DEFINED__
-
-typedef struct _IID
-{
-    unsigned long x;
-    unsigned short s1;
-    unsigned short s2;
-    unsigned char  c[8];
-} IID;
-
-#endif // __IID_DEFINED__
-
-#ifndef CLSID_DEFINED
-#define CLSID_DEFINED
-typedef IID CLSID;
-#endif // CLSID_DEFINED
-
 #define MIDL_DEFINE_GUID(type,name,l,w1,w2,b1,b2,b3,b4,b5,b6,b7,b8) \
         const type name = {l,w1,w2,{b1,b2,b3,b4,b5,b6,b7,b8}}
 
@@ -169,24 +151,6 @@ extern "C"{
         DEFINE_GUID(name,l,w1,w2,b1,b2,b3,b4,b5,b6,b7,b8)
 
 #else // !_MIDL_USE_GUIDDEF_
-
-#ifndef __IID_DEFINED__
-#define __IID_DEFINED__
-
-typedef struct _IID
-{
-    unsigned long x;
-    unsigned short s1;
-    unsigned short s2;
-    unsigned char  c[8];
-} IID;
-
-#endif // __IID_DEFINED__
-
-#ifndef CLSID_DEFINED
-#define CLSID_DEFINED
-typedef IID CLSID;
-#endif // CLSID_DEFINED
 
 #define MIDL_DEFINE_GUID(type,name,l,w1,w2,b1,b2,b3,b4,b5,b6,b7,b8) \
         const type name = {l,w1,w2,{b1,b2,b3,b4,b5,b6,b7,b8}}

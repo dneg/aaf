@@ -36,24 +36,6 @@ echo "extern \"C\"{"
 echo \#endif
 echo ""
 echo ""
-echo \#ifndef __IID_DEFINED__
-echo \#define __IID_DEFINED__
-echo ""
-echo "typedef struct _IID"
-echo "{"
-echo "    unsigned int x;"
-echo "    unsigned short s1;"
-echo "    unsigned short s2;"
-echo "    unsigned char  c[8];"
-echo "} IID;"
-echo ""
-echo \#endif "// __IID_DEFINED__"
-echo ""
-echo \#ifndef CLSID_DEFINED
-echo \#define CLSID_DEFINED
-echo "typedef IID CLSID;"
-echo \#endif "// CLSID_DEFINED"
-echo ""
 for class in ${PLUGIN_OBJECTS} ; do \
 	awk -f dod2iid.awk C=$class $class.dod
 done

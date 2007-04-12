@@ -38,24 +38,6 @@ extern "C"{
 #endif
 
 
-#ifndef __IID_DEFINED__
-#define __IID_DEFINED__
-
-typedef struct _IID
-{
-    unsigned int x;
-    unsigned short s1;
-    unsigned short s2;
-    unsigned char  c[8];
-} IID;
-
-#endif // __IID_DEFINED__
-
-#ifndef CLSID_DEFINED
-#define CLSID_DEFINED
-typedef IID CLSID;
-#endif // CLSID_DEFINED
-
 const IID IID_IAAFClassExtension = {0x65C07344,0xDF36,0x11d3,{0x80,0x08,0x00,0x10,0x4b,0xc9,0x15,0x6d}};
 
 

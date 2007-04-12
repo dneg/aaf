@@ -38,24 +38,6 @@ extern "C"{
 #endif
 
 
-#ifndef __IID_DEFINED__
-#define __IID_DEFINED__
-
-typedef struct _IID
-{
-    unsigned int x;
-    unsigned short s1;
-    unsigned short s2;
-    unsigned char  c[8];
-} IID;
-
-#endif // __IID_DEFINED__
-
-#ifndef CLSID_DEFINED
-#define CLSID_DEFINED
-typedef IID CLSID;
-#endif // CLSID_DEFINED
-
 const IID IID_IAAFAES3PCMDescriptor = {0x2EBFFDE0,0x5997,0x414D,{0x80,0x8B,0x6B,0xAA,0x4A,0x74,0xF4,0x0F}};
 
 

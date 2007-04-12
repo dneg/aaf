@@ -28,28 +28,12 @@
 //=--------------------------------------------------------------------------=
 
 
+#include "AAFCOMPlatformTypes.h"
+
 #ifdef __cplusplus
 extern "C"{
 #endif
 
-
-#ifndef __IID_DEFINED__
-#define __IID_DEFINED__
-
-typedef struct _IID
-{
-    unsigned long x;
-    unsigned short s1;
-    unsigned short s2;
-    unsigned char  c[8];
-} IID;
-
-#endif // __IID_DEFINED__
-
-#ifndef CLSID_DEFINED
-#define CLSID_DEFINED
-typedef IID CLSID;
-#endif // CLSID_DEFINED
 
 const IID IID_IAAFPersonnelResource = {0x7AFD6B0A,0x9ED7,0x11D3,{0xBF,0xF9,0x00,0x10,0x4B,0xC9,0x15,0x6D}};
 

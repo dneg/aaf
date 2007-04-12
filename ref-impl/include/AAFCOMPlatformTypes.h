@@ -73,15 +73,8 @@
       BYTE  Data4[8];
   } GUID;
 
-# ifndef CLSID_DEFINED
-# define CLSID_DEFINED
-    typedef GUID CLSID;
-# endif /* ! CLSID_DEFINED */
-
-# ifndef __IID_DEFINED__
-# define __IID_DEFINED__
-    typedef GUID IID;
-# endif /* ! __IID_DEFINED__ */
+  typedef GUID CLSID;
+  typedef GUID IID;
 
 # define REFGUID             const GUID &
 # define REFIID              const IID &

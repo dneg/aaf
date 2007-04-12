@@ -37,25 +37,6 @@
 extern "C"{
 #endif
 
-
-#ifndef __IID_DEFINED__
-#define __IID_DEFINED__
-
-typedef struct _IID
-{
-    unsigned int x;
-    unsigned short s1;
-    unsigned short s2;
-    unsigned char  c[8];
-} IID;
-
-#endif // __IID_DEFINED__
-
-#ifndef CLSID_DEFINED
-#define CLSID_DEFINED
-typedef IID CLSID;
-#endif // CLSID_DEFINED
-
 const IID IID_IAAFRoot = {0x7C3712C2,0x390D,0x11D2,{0x84,0x1B,0x00,0x60,0x08,0x32,0xAC,0xB8}};
 
 
