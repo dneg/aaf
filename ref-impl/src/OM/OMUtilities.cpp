@@ -835,7 +835,9 @@ static WindowsKind getWindowsKind(void)
 
   DWORD version = GetVersion();
   BYTE majorVersion = (BYTE)(version        & 0x000000ff);
-  BYTE minorVersion = (BYTE)((version >> 8) & 0x000000ff);
+  // If minorVersion is needed use:
+  // minorVersion = (BYTE)((version >> 8) & 0x000000ff);
+
   if (version < 0x80000000) {
     result = wkProfessional;
   } else if (majorVersion < 4) {

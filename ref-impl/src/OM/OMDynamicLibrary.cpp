@@ -123,7 +123,7 @@ void* OMWindowsDynamicLibrary::findSymbol(const char* symbolName)
           << " \"" << error << "\"." << endl;
   }
 #endif
-  result = address;
+  result = (void *)address;
   return result;
 }
 
@@ -172,7 +172,10 @@ void OMWindowsDynamicLibrary::unload(void)
   TRACE("OMWindowsDynamicLibrary::unload");
 
   if (_library != 0) {
-    BOOL freed = FreeLibrary((HINSTANCE)_library);
+#if defined(OM_DYNAMIC_LIBRARY_DEBUG)
+    BOOL freed =
+#endif
+    FreeLibrary((HINSTANCE)_library);
 #if defined(OM_DYNAMIC_LIBRARY_DEBUG)
     if (!freed) {
       OMUInt32 error = GetLastError();
