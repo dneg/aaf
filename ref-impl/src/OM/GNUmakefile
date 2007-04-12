@@ -38,10 +38,10 @@ endif
 include $(AAFBASE)/build/common.mk
 
 INCLUDES = -I. \
-	   -I../../include/OM \
-	   -I$(AAFBASE)/ss-impl/ref \
-		 -I$(AAFBASE)/ref-impl/include \
-       -I$(AAFBASE)/sss-impl/include
+           -I../../include/OM \
+           -I$(AAFBASE)/ss-impl/ref \
+           -I$(AAFBASE)/ref-impl/include \
+           -I$(AAFBASE)/sss-impl/include
 
 # Optional libgsf support is enabled by LIBGSF_PATH variable
 # E.g. "make LIBGSF_PATH=/usr/local"
@@ -54,6 +54,17 @@ endif
 
 CFLAGS += -DOM_STACK_TRACE_ON_ASSERT
 
+# AAF-XML stored format support requires the expat library which is
+# bundled with the AAF SDK.  If you wish to use a different library
+# then set EXPAT_ROOT to point to the location of lib/libexpat.a and include/expat.h
+# E.g. make EXPAT_ROOT=/usr
+ifdef EXPAT_ROOT
+	CFLAGS += -DHAVE_EXPAT
+	INCLUDES += -I$(EXPAT_ROOT)/include
+else
+	CFLAGS += -DHAVE_EXPAT
+	INCLUDES += -I../../expat
+endif
 
 .PHONY : all
 all : om

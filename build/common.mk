@@ -96,17 +96,6 @@ endif
 
 
 #--------------------------------------------------------------------------
-# AAF-XML stored format support can be turned on using e.g.
-# make LIBEXPAT_PATH=/usr/local
-#--------------------------------------------------------------------------
-ifdef LIBEXPAT_PATH
-    PLATFORMLIBS += -L$(LIBEXPAT_PATH)/lib -lexpat
-    ADD_CFLAGS += -I$(LIBEXPAT_PATH)/include -DHAVE_EXPAT
-endif
-
-
-
-#--------------------------------------------------------------------------
 # Optional DV functionality requires libdv and can be turned on using e.g.
 # make LIBDV_PATH=/usr/lib
 #

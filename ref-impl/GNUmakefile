@@ -26,6 +26,7 @@
 all :
 	cd aaflib && $(MAKE)
 	cd aafiid && $(MAKE)
+	cd expat && $(MAKE)
 	cd src && $(MAKE)
 	cd libjpeg && $(MAKE)
 	cd plugins && $(MAKE)
