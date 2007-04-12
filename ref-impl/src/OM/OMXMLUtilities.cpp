@@ -29,7 +29,7 @@
 #include "wchar.h"
 
 // includes for function wmkdir()
-#if defined(_MSC_VER)
+#if defined(_WIN32)
 #include <direct.h>
 #else
 #include <sys/stat.h>
@@ -1774,7 +1774,7 @@ int
 wmkdir(const wchar_t* dirpath)
 {
     char* u8Dirpath = utf16ToUTF8(dirpath);
-#if defined(_MSC_VER)
+#if defined(_WIN32)
     int status = _mkdir(u8Dirpath);
 #else
     int status = mkdir(u8Dirpath, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
