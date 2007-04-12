@@ -468,7 +468,7 @@ AAFRESULT ImplAAFTypeDefOpaque::SetHandle (
   // AAFRESULT_ILLEGAL_VALUE
   //   - initDataSize indicates pInitData is of the wrong size.
   // 
-  HRESULT ImplAAFTypeDefOpaque::CreateValueFromHandle (
+  AAFRESULT ImplAAFTypeDefOpaque::CreateValueFromHandle (
     // pointer to buffer containing handle to use
      aafMemPtr_t  pInitData,
 
