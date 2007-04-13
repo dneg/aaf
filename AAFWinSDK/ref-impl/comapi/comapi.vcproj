@@ -44,11 +44,11 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="ssrw_c.lib libexpatMT.lib"
+				AdditionalDependencies="ssrw_c.lib"
 				OutputFile="../../Release/RefImpl/AAFCOAPI.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
-				AdditionalLibraryDirectories="&quot;../../sss-impl&quot;;&quot;$(EXPAT_ROOT)/StaticLibs&quot;"
+				AdditionalLibraryDirectories="&quot;../../sss-impl&quot;"
 				IgnoreDefaultLibraryNames="libc.lib,libcmt.lib,libcd.lib,libcmtd.lib,msvcrtd.lib"
 				ModuleDefinitionFile="..\..\..\ref-impl\src\com-api\com-dll\AAFCOM.DEF"
 				ProgramDatabaseFile=".\../../Release/RefImpl/AAFCOAPI.pdb"
@@ -115,11 +115,11 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="ssrw_c.lib libexpatMT.lib"
+				AdditionalDependencies="ssrw_c.lib"
 				OutputFile="../../Debug/RefImpl/AAFCOAPI.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
-				AdditionalLibraryDirectories="&quot;../../sss-impl&quot;;&quot;$(EXPAT_ROOT)/StaticLibs&quot;"
+				AdditionalLibraryDirectories="&quot;../../sss-impl&quot;"
 				IgnoreDefaultLibraryNames="libc.lib,libcmt.lib,msvcrt.lib,libcd.lib,libcmtd.lib"
 				ModuleDefinitionFile="..\..\..\ref-impl\src\com-api\com-dll\AAFCOM.DEF"
 				GenerateDebugInformation="TRUE"
