@@ -99,8 +99,6 @@ public:
 
 
 
-#if defined(HAVE_EXPAT)
-
 #include <expat.h>
 
 
@@ -206,9 +204,6 @@ void expat_EndNamespaceDeclHandler(void* userData, const XML_Char *prefix);
 void expat_StartElementHandler(void* userData, const XML_Char* name, const XML_Char** atts);
 void expat_EndElementHandler(void* userData, const XML_Char* name);
 void expat_CharacterDataHandler(void* userData, const XML_Char* s, int len);
-
-
-#endif // HAVE_EXPAT
 
 
 #endif

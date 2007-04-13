@@ -35,7 +35,6 @@ OMXMLReader::create(OMRawStorage* xmlStream)
 {
     TRACE("OMXMLReader::create");
     
-#if defined(HAVE_EXPAT)
     XML_Expat_Version version = XML_ExpatVersionInfo();
     if (version.major > 1 || 
         (version.major == 1 && version.minor > 95) ||
@@ -48,10 +47,6 @@ OMXMLReader::create(OMRawStorage* xmlStream)
         fprintf(stderr, "Error: Require Expat version >= 1.95.8\n");
         throw OMException("Require Expat version >= 1.95.8");
     }
-#else
-    ASSERT("Expat library available", false);
-    return NULL;
-#endif
 }
 
 OMXMLReader::~OMXMLReader()
@@ -213,9 +208,6 @@ OMXMLAttribute::getValue() const
     return _value.c_str();
 }
 
-
-
-#if defined(HAVE_EXPAT)
 
 
 #define NAMESPACE_SEPARATOR        0x20
@@ -1170,10 +1162,3 @@ expat_CharacterDataHandler(void* userData, const XML_Char* s, int len)
 
     reader->characterDataHandler(s, len);
 }
-
-
-
-#endif // HAVE_EXPAT
-
-
-

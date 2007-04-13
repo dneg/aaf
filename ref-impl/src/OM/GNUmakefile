@@ -59,10 +59,8 @@ CFLAGS += -DOM_STACK_TRACE_ON_ASSERT
 # then set EXPAT_ROOT to point to the location of lib/libexpat.a and include/expat.h
 # E.g. make EXPAT_ROOT=/usr
 ifdef EXPAT_ROOT
-	CFLAGS += -DHAVE_EXPAT
 	INCLUDES += -I$(EXPAT_ROOT)/include
 else
-	CFLAGS += -DHAVE_EXPAT
 	INCLUDES += -I../../expat
 endif
 

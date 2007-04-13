@@ -130,14 +130,9 @@ OMStoredObject*
 OMXMLStoredObjectFactory::openRead(const wchar_t* fileName )
 {
   TRACE("OMXMLStoredObjectFactory::openRead");
-#if !defined(HAVE_EXPAT)
-    ASSERT("Expat library available", false);
-    return 0;
-#else
 
   OMDiskRawStorage* storage = OMDiskRawStorage::openExistingRead(fileName);
   return OMXMLStoredObject::openRead(storage);
-#endif  
 }
 
   // @mfunc Open the root <c OMXMLStoredObject> in the disk file
@@ -149,14 +144,9 @@ OMStoredObject*
 OMXMLStoredObjectFactory::openModify(const wchar_t* fileName)
 {
   TRACE("OMXMLStoredObjectFactory::openModify");
-#if !defined(HAVE_EXPAT)
-    ASSERT("Expat library available", false);
-    return 0;
-#else
 
   OMDiskRawStorage* storage = OMDiskRawStorage::openExistingModify(fileName);
   return OMXMLStoredObject::openModify(storage);
-#endif  
 }
 
   // @mfunc Create a new root <c OMXMLStoredObject> in the disk file
@@ -171,14 +161,9 @@ OMXMLStoredObjectFactory::createModify(const wchar_t* fileName,
                                        const OMByteOrder byteOrder)
 {
   TRACE("OMXMLStoredObjectFactory::createModify");
-#if !defined(HAVE_EXPAT)
-    ASSERT("Expat library available", false);
-    return 0;
-#else
 
   OMDiskRawStorage* storage = OMDiskRawStorage::openNewModify(fileName);
   return OMXMLStoredObject::createModify(storage);
-#endif  
 }
 
   // @mfunc Create a new root <c OMXMLStoredObject> in the disk file
@@ -206,10 +191,6 @@ OMXMLStoredObjectFactory::isRecognized(const wchar_t* fileName)
 {
   TRACE("OMXMLStoredObjectFactory::isRecognized");
   
-#if !defined(HAVE_EXPAT)
-    return false;
-#else
-
   bool result;
   OMRawStorage* rawStorage = OMDiskRawStorage::openExistingRead(fileName);
   if (rawStorage != 0) {
@@ -219,7 +200,6 @@ OMXMLStoredObjectFactory::isRecognized(const wchar_t* fileName)
     result = false;
   }
   return result;
-#endif  
 }
 
   // @mfunc Does <p rawStorage> contain a recognized file ?
@@ -232,10 +212,6 @@ OMXMLStoredObjectFactory::isRecognized(OMRawStorage* rawStorage)
   TRACE("OMXMLStoredObjectFactory::isRecognized");
   PRECONDITION("Valid raw storage", rawStorage != 0);
   PRECONDITION("Positionable raw storage", rawStorage->isPositionable());
-
-#if !defined(HAVE_EXPAT)
-    return false;
-#else
 
   bool isRecog = false;
   OMXMLReader* reader = 0;
@@ -259,7 +235,6 @@ OMXMLStoredObjectFactory::isRecognized(OMRawStorage* rawStorage)
   rawStorage->setPosition(0);
   
   return isRecog;
-#endif  
 }
 
   // @mfunc Can a file be created successfully on the given
