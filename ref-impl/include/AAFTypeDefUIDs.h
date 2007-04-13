@@ -501,6 +501,10 @@ const aafUID_t kAAFTypeID_KLVDataDefinitionStrongReference =
 const aafUID_t kAAFTypeID_TaggedValueDefinitionStrongReference =
 {0x05022100, 0x0000, 0x0000, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x04, 0x01, 0x01}};
 
+//{05022200-0000-0000-060e-2b3401040101}
+const aafUID_t kAAFTypeID_DescriptiveObjectStrongReference =
+{0x05022200, 0x0000, 0x0000, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x04, 0x01, 0x01}};
+
 //{05022600-0000-0000-060e-2b3401040101}
 const aafUID_t kAAFTypeID_SubDescriptorStrongReference =
 {0x05022600, 0x0000, 0x0000, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x04, 0x01, 0x01}};
@@ -589,6 +593,10 @@ const aafUID_t kAAFTypeID_KLVDataDefinitionStrongReferenceSet =
 const aafUID_t kAAFTypeID_TaggedValueDefinitionStrongReferenceSet =
 {0x05050e00, 0x0000, 0x0000, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x04, 0x01, 0x01}};
 
+//{05050f00-0000-0000-060e-2b3401040101}
+const aafUID_t kAAFTypeID_DescriptiveObjectStrongReferenceSet =
+{0x05050f00, 0x0000, 0x0000, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x04, 0x01, 0x01}};
+
 //{05060100-0000-0000-060e-2b3401040101}
 const aafUID_t kAAFTypeID_ComponentStrongReferenceVector =
 {0x05060100, 0x0000, 0x0000, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x04, 0x01, 0x01}};
@@ -636,6 +644,10 @@ const aafUID_t kAAFTypeID_FileDescriptorStrongReferenceVector =
 //{05060c00-0000-0000-060e-2b3401040101}
 const aafUID_t kAAFTypeID_RIFFChunkStrongReferenceVector =
 {0x05060c00, 0x0000, 0x0000, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x04, 0x01, 0x01}};
+
+//{05060d00-0000-0000-060e-2b3401040101}
+const aafUID_t kAAFTypeID_DescriptiveObjectStrongReferenceVector =
+{0x05060d00, 0x0000, 0x0000, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x04, 0x01, 0x01}};
 
 //{05060e00-0000-0000-060e-2b3401040101}
 const aafUID_t kAAFTypeID_SubDescriptorStrongReferenceVector =
