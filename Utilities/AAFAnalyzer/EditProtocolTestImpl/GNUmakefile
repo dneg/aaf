@@ -47,10 +47,10 @@ gcov : CFLAGS+= -fprofile-arcs -ftest-coverage
 gcov :	EditProtocolTest
 
 .PHONY : EditProtocolTest
-EditProtocolTest : $(OBJDIR) $(LIBDIR) $(LIBDIR)/libEditProtocolTest$(LIB)
+EditProtocolTest : $(OBJDIR) $(LIBDIR) $(LIBDIR)/libEditProtocolTest$(LIBEXT)
 
 
-$(LIBDIR)/libEditProtocolTest$(LIB) : $(CXXOBJS)
+$(LIBDIR)/libEditProtocolTest$(LIBEXT) : $(CXXOBJS)
 	$(LD_STAT_LIB) $@ $(CXXOBJS)
 
 
@@ -58,7 +58,7 @@ $(LIBDIR)/libEditProtocolTest$(LIB) : $(CXXOBJS)
 clean :
 	@$(RM) $(CXXOBJS)
 	@$(RM) $(DEPS)
-	@$(RM) $(LIBDIR)/libEditProtocolTest$(LIB)
+	@$(RM) $(LIBDIR)/libEditProtocolTest$(LIBEXT)
 	@$(RMDIR) $(OBJDIR)/ii_files
 
 .PHONY : realclean

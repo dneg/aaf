@@ -57,10 +57,10 @@ all : impl
 
 
 .PHONY : impl
-impl : $(OBJDIR) $(LIBDIR) $(LIBDIR)/libimpl$(LIB)
+impl : $(OBJDIR) $(LIBDIR) $(LIBDIR)/libimpl$(LIBEXT)
 
 
-$(LIBDIR)/libimpl$(LIB) : $(CXXOBJS)
+$(LIBDIR)/libimpl$(LIBEXT) : $(CXXOBJS)
 	$(LD_STAT_LIB) $@ $(CXXOBJS)
 
 
@@ -68,7 +68,7 @@ $(LIBDIR)/libimpl$(LIB) : $(CXXOBJS)
 clean :
 	@$(RM) $(CXXOBJS)
 	@$(RM) $(DEPS)
-	@$(RM) $(LIBDIR)/libimpl$(LIB)
+	@$(RM) $(LIBDIR)/libimpl$(LIBEXT)
 	@$(RMDIR) $(OBJDIR)/ii_files
 
 

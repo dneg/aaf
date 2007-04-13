@@ -24,10 +24,10 @@ all : expat
 
 
 .PHONY : expat
-expat : $(OBJDIR) $(LIBDIR) $(LIBDIR)/libexpat$(LIB)
+expat : $(OBJDIR) $(LIBDIR) $(LIBDIR)/libexpat$(LIBEXT)
 
 
-$(LIBDIR)/libexpat$(LIB) :  $(CXXOBJS)
+$(LIBDIR)/libexpat$(LIBEXT) :  $(CXXOBJS)
 	$(LD_STAT_LIB) $@ $(CXXOBJS)
 
 
@@ -35,7 +35,7 @@ $(LIBDIR)/libexpat$(LIB) :  $(CXXOBJS)
 clean :
 	@$(RM) $(CXXOBJS)
 	@$(RM) $(DEPS)
-	@$(RM) $(LIBDIR)/libexpat$(LIB)
+	@$(RM) $(LIBDIR)/libexpat$(LIBEXT)
 
 
 .PHONY : realclean

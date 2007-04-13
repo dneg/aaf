@@ -47,10 +47,10 @@ gcov : CFLAGS+= -fprofile-arcs -ftest-coverage
 gcov :	EPAnalyzerBase
 
 .PHONY : EPAnalyzerBase
-EPAnalyzerBase : $(OBJDIR) $(LIBDIR) $(LIBDIR)/libEPAnalyzerBase$(LIB)
+EPAnalyzerBase : $(OBJDIR) $(LIBDIR) $(LIBDIR)/libEPAnalyzerBase$(LIBEXT)
 
 
-$(LIBDIR)/libEPAnalyzerBase$(LIB) : $(CXXOBJS)
+$(LIBDIR)/libEPAnalyzerBase$(LIBEXT) : $(CXXOBJS)
 	$(LD_STAT_LIB) $@ $(CXXOBJS)
 
 
@@ -58,7 +58,7 @@ $(LIBDIR)/libEPAnalyzerBase$(LIB) : $(CXXOBJS)
 clean :
 	@$(RM) $(CXXOBJS)
 	@$(RM) $(DEPS)
-	@$(RM) $(LIBDIR)/libEPAnalyzerBase$(LIB)
+	@$(RM) $(LIBDIR)/libEPAnalyzerBase$(LIBEXT)
 	@$(RMDIR) $(OBJDIR)/ii_files
 
 .PHONY : realclean

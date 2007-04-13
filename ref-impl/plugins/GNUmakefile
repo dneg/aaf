@@ -73,8 +73,8 @@ all : aafpgapi aafintp
 
 DYN_PGAPI_LIB = $(LIBDIR)/libaafpgapi$(DLL)
 DYN_INTP_LIB = $(LIBDIR)/libaafintp$(DLL)
-STAT_PGAPI_LIB = $(AAFBUILDDIR)/ref-impl/$(AAFTARGETDIR)/libaafpgapi$(LIB)
-STAT_INTP_LIB = $(AAFBUILDDIR)/ref-impl/$(AAFTARGETDIR)/libaafintp$(LIB)
+STAT_PGAPI_LIB = $(AAFBUILDDIR)/ref-impl/$(AAFTARGETDIR)/libaafpgapi$(LIBEXT)
+STAT_INTP_LIB = $(AAFBUILDDIR)/ref-impl/$(AAFTARGETDIR)/libaafintp$(LIBEXT)
 
 # Default targets are dynamic libraries
 PGAPI_LIB = $(DYN_PGAPI_LIB)
@@ -98,8 +98,8 @@ $(STAT_PGAPI_LIB) : $(CXXOBJS)
 $(DYN_PGAPI_LIB) : $(CXXOBJS)
 	$(LD_DYN_LIB) \
 	-L$(LIBDIR) $(SUPOBJS) $(CXXOBJS) -o $@ \
-	$(AAFBUILDDIR)/aaflib/$(AAFTARGETDIR)/libaaflib$(LIB) \
-	$(AAFBUILDDIR)/aafiid/$(AAFTARGETDIR)/libaafiid$(LIB) \
+	$(AAFBUILDDIR)/aaflib/$(AAFTARGETDIR)/libaaflib$(LIBEXT) \
+	$(AAFBUILDDIR)/aafiid/$(AAFTARGETDIR)/libaafiid$(LIBEXT) \
 	-ljpeg $(OPT_CODEC_LIBS)
 
 
@@ -114,8 +114,8 @@ $(STAT_INTP_LIB) : $(CXXOBJS2)
 $(DYN_INTP_LIB) : $(SUPOBJS) $(CXXOBJS2)
 	$(LD_DYN_LIB) \
 	-L$(LIBDIR) $(SUPOBJS) $(CXXOBJS2) -o $@ \
-	$(AAFBUILDDIR)/aaflib/$(AAFTARGETDIR)/libaaflib$(LIB) \
-	$(AAFBUILDDIR)/aafiid/$(AAFTARGETDIR)/libaafiid$(LIB)
+	$(AAFBUILDDIR)/aaflib/$(AAFTARGETDIR)/libaaflib$(LIBEXT) \
+	$(AAFBUILDDIR)/aafiid/$(AAFTARGETDIR)/libaafiid$(LIBEXT)
 
 
 .PHONY : clean

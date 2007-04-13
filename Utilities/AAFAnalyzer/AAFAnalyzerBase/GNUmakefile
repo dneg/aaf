@@ -47,10 +47,10 @@ gcov : CFLAGS+= -fprofile-arcs -ftest-coverage
 gcov : AAFAnalyzerBase
 
 .PHONY : AAFAnalyzerBase
-AAFAnalyzerBase : $(OBJDIR) $(LIBDIR) $(LIBDIR)/libAAFAnalyzerBase$(LIB)
+AAFAnalyzerBase : $(OBJDIR) $(LIBDIR) $(LIBDIR)/libAAFAnalyzerBase$(LIBEXT)
 
 
-$(LIBDIR)/libAAFAnalyzerBase$(LIB) : $(CXXOBJS)
+$(LIBDIR)/libAAFAnalyzerBase$(LIBEXT) : $(CXXOBJS)
 	$(LD_STAT_LIB) $@ $(CXXOBJS)
 
 
@@ -58,7 +58,7 @@ $(LIBDIR)/libAAFAnalyzerBase$(LIB) : $(CXXOBJS)
 clean :
 	@$(RM) $(CXXOBJS)
 	@$(RM) $(DEPS)
-	@$(RM) $(LIBDIR)/libAAFAnalyzerBase$(LIB)
+	@$(RM) $(LIBDIR)/libAAFAnalyzerBase$(LIBEXT)
 	@$(RMDIR) $(OBJDIR)/ii_files
 
 .PHONY : realclean

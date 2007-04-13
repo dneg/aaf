@@ -47,10 +47,10 @@ gcov : CFLAGS+= -fprofile-arcs -ftest-coverage
 gcov :	AnalyzerBase
 
 .PHONY : AnalyzerBase
-AnalyzerBase : $(OBJDIR) $(LIBDIR) $(LIBDIR)/libAnalyzerBase$(LIB)
+AnalyzerBase : $(OBJDIR) $(LIBDIR) $(LIBDIR)/libAnalyzerBase$(LIBEXT)
 
 
-$(LIBDIR)/libAnalyzerBase$(LIB) : $(CXXOBJS)
+$(LIBDIR)/libAnalyzerBase$(LIBEXT) : $(CXXOBJS)
 	$(LD_STAT_LIB) $@ $(CXXOBJS)
 
 
@@ -58,7 +58,7 @@ $(LIBDIR)/libAnalyzerBase$(LIB) : $(CXXOBJS)
 clean :
 	@$(RM) $(CXXOBJS)
 	@$(RM) $(DEPS)
-	@$(RM) $(LIBDIR)/libAnalyzerBase$(LIB)
+	@$(RM) $(LIBDIR)/libAnalyzerBase$(LIBEXT)
 	@$(RMDIR) $(OBJDIR)/ii_files
 
 .PHONY : realclean

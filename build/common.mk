@@ -57,16 +57,16 @@ LINK_STG=
 ifndef AAF_NO_STRUCTURED_STORAGE
 
 # check for SchemaSoft implementation libSSRW2C.a
-ifeq ($(wildcard $(AAFBUILDDIR)/sss-impl/libSSRW2C$(LIB)),$(AAFBUILDDIR)/sss-impl/libSSRW2C$(LIB))
-	STORAGE_LIBS += $(AAFBUILDDIR)/sss-impl/libSSRW2C$(LIB)
+ifeq ($(wildcard $(AAFBUILDDIR)/sss-impl/libSSRW2C$(LIBEXT)),$(AAFBUILDDIR)/sss-impl/libSSRW2C$(LIBEXT))
+	STORAGE_LIBS += $(AAFBUILDDIR)/sss-impl/libSSRW2C$(LIBEXT)
 	LINK_STG += -L$(AAFBUILDDIR)/sss-impl -lSSRW2C
 	ADD_CFLAGS += -DOM_USE_SCHEMASOFT_SS
 	USE_SS=1
 endif
 
 # Check for Microsoft Structured Storage Reference Implementation
-ifeq ($(wildcard $(AAFBUILDDIR)/ss-impl/$(AAFTARGETDIR)/librefstg$(LIB)),$(AAFBUILDDIR)/ss-impl/$(AAFTARGETDIR)/librefstg$(LIB))
-	STORAGE_LIBS += $(AAFBUILDDIR)/ss-impl/$(AAFTARGETDIR)/librefstg$(LIB)
+ifeq ($(wildcard $(AAFBUILDDIR)/ss-impl/$(AAFTARGETDIR)/librefstg$(LIBEXT)),$(AAFBUILDDIR)/ss-impl/$(AAFTARGETDIR)/librefstg$(LIBEXT))
+	STORAGE_LIBS += $(AAFBUILDDIR)/ss-impl/$(AAFTARGETDIR)/librefstg$(LIBEXT)
 	LINK_STG += -L$(AAFBUILDDIR)/ss-impl/$(AAFTARGETDIR) -lrefstg
 	ADD_CFLAGS += -DOM_USE_REFERENCE_SS
 	USE_SS=1

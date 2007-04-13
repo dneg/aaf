@@ -47,10 +47,10 @@ gcov : CFLAGS+= -fprofile-arcs -ftest-coverage
 gcov :	BaseTest
 
 .PHONY : BaseTest
-BaseTest : $(OBJDIR) $(LIBDIR) $(LIBDIR)/libBaseTest$(LIB)
+BaseTest : $(OBJDIR) $(LIBDIR) $(LIBDIR)/libBaseTest$(LIBEXT)
 
 
-$(LIBDIR)/libBaseTest$(LIB) : $(CXXOBJS)
+$(LIBDIR)/libBaseTest$(LIBEXT) : $(CXXOBJS)
 	$(LD_STAT_LIB) $@ $(CXXOBJS)
 
 
@@ -58,7 +58,7 @@ $(LIBDIR)/libBaseTest$(LIB) : $(CXXOBJS)
 clean :
 	@$(RM) $(CXXOBJS)
 	@$(RM) $(DEPS)
-	@$(RM) $(LIBDIR)/libBaseTest$(LIB)
+	@$(RM) $(LIBDIR)/libBaseTest$(LIBEXT)
 	@$(RMDIR) $(OBJDIR)/ii_files
 
 .PHONY : realclean

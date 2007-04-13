@@ -52,7 +52,7 @@ INCLUDES = -I../../include/ref-api \
 
 
 DYN_LIBTARGET = $(LIBDIR)/libcom-api$(DLL)
-STAT_LIBTARGET = $(AAFBUILDDIR)/ref-impl/$(AAFTARGETDIR)/libcom-api$(LIB)
+STAT_LIBTARGET = $(AAFBUILDDIR)/ref-impl/$(AAFTARGETDIR)/libcom-api$(LIBEXT)
 
 LIBTARGET=$(DYN_LIBTARGET)		# Default is dynamic library
 ifeq ($(AAFTARGET),Debug-static)
@@ -70,7 +70,7 @@ endif
 ifdef EXPAT_ROOT
 	EXPAT_LIB = -L$(EXPAT_ROOT)/lib -lexpat
 else
-	EXPAT_LIB = $(AAFBUILDDIR)/ref-impl/$(AAFTARGETDIR)/libexpat$(LIB)
+	EXPAT_LIB = $(AAFBUILDDIR)/ref-impl/$(AAFTARGETDIR)/libexpat$(LIBEXT)
 endif
 
 
@@ -100,15 +100,15 @@ $(STAT_LIBTARGET) : $(CXXOBJS) $(CXXOBJS2)
 # The dynamic library must link in all necessary ref-impl code
 # and the static expat library
 $(DYN_LIBTARGET) : $(CXXOBJS) $(CXXOBJS2) \
-				$(AAFBUILDDIR)/ref-impl/$(AAFTARGETDIR)/libimpl$(LIB) \
-				$(AAFBUILDDIR)/OM/$(AAFTARGETDIR)/libom$(LIB) $(STORAGE_LIBS)
+				$(AAFBUILDDIR)/ref-impl/$(AAFTARGETDIR)/libimpl$(LIBEXT) \
+				$(AAFBUILDDIR)/OM/$(AAFTARGETDIR)/libom$(LIBEXT) $(STORAGE_LIBS)
 
 	$(LD_DYN_LIB) $(CXXOBJS) $(CXXOBJS2) -o $@ \
-	$(AAFBUILDDIR)/ref-impl/$(AAFTARGETDIR)/libimpl$(LIB) \
-	$(AAFBUILDDIR)/OM/$(AAFTARGETDIR)/libom$(LIB) \
+	$(AAFBUILDDIR)/ref-impl/$(AAFTARGETDIR)/libimpl$(LIBEXT) \
+	$(AAFBUILDDIR)/OM/$(AAFTARGETDIR)/libom$(LIBEXT) \
 	$(STORAGE_LIBS) \
 	$(EXPAT_LIB) \
-	$(AAFBUILDDIR)/aaflib/$(AAFTARGETDIR)/libaaflib$(LIB) \
+	$(AAFBUILDDIR)/aaflib/$(AAFTARGETDIR)/libaaflib$(LIBEXT) \
 	-lm $(UUIDLIB) $(PLATFORMLIBS)
 
 .PHONY : clean

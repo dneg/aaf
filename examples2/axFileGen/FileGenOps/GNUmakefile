@@ -44,10 +44,10 @@ all : axFileGenOps
 
 
 .PHONY : axFileGenOps
-axFileGenOps : $(OBJDIR) $(LIBDIR) $(LIBDIR)/libaxFileGenOps$(LIB)
+axFileGenOps : $(OBJDIR) $(LIBDIR) $(LIBDIR)/libaxFileGenOps$(LIBEXT)
 
 
-$(LIBDIR)/libaxFileGenOps$(LIB) : $(CXXOBJS)
+$(LIBDIR)/libaxFileGenOps$(LIBEXT) : $(CXXOBJS)
 	$(LD_STAT_LIB) $@ $(CXXOBJS)
 
 
@@ -55,7 +55,7 @@ $(LIBDIR)/libaxFileGenOps$(LIB) : $(CXXOBJS)
 clean :
 	@$(RM) $(CXXOBJS)
 	@$(RM) $(DEPS)
-	@$(RM) $(LIBDIR)/libaxFileGenOps$(LIB)
+	@$(RM) $(LIBDIR)/libaxFileGenOps$(LIBEXT)
 	@$(RMDIR) $(OBJDIR)/ii_files
 
 .PHONY : realclean

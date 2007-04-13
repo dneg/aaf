@@ -267,16 +267,16 @@ TARGET_MIDL_FILES = \
 # Release Target Library files that need to be copied
 #
 RELEASE_LIB_FILES = \
-	$(AAFSDK_LIB)/libaafiid$(LIB) \
-	$(AAFSDK_LIB)/libaaflib$(LIB)
+	$(AAFSDK_LIB)/libaafiid$(LIBEXT) \
+	$(AAFSDK_LIB)/libaaflib$(LIBEXT)
 
 
 #
 # Debug  Library files that need to be copied
 #
 DEBUG_LIB_FILES = \
-	$(AAFSDK_LIB_DEBUG)/libaafiid$(LIB) \
-	$(AAFSDK_LIB_DEBUG)/libaaflib$(LIB)
+	$(AAFSDK_LIB_DEBUG)/libaafiid$(LIBEXT) \
+	$(AAFSDK_LIB_DEBUG)/libaaflib$(LIBEXT)
 
 
 #
@@ -576,21 +576,21 @@ $(AAFSDK_INCLUDE)/AAFPlugin_i.c : $(TOOLKIT_INCLUDE_API)/AAFPlugin_i.c
 #
 # Dependency and build rules for the release library targets.
 #
-$(AAFSDK_LIB)/libaafiid$(LIB) : $(TOOLKIT_AAFIID_RELEASE)/libaafiid$(LIB)
-	$(CP) $(CP_OPTS) $(TOOLKIT_AAFIID_RELEASE)/libaafiid$(LIB) $@
+$(AAFSDK_LIB)/libaafiid$(LIBEXT) : $(TOOLKIT_AAFIID_RELEASE)/libaafiid$(LIBEXT)
+	$(CP) $(CP_OPTS) $(TOOLKIT_AAFIID_RELEASE)/libaafiid$(LIBEXT) $@
 
-$(AAFSDK_LIB)/libaaflib$(LIB) : $(TOOLKIT_AAFLIB_RELEASE)/libaaflib$(LIB)
-	$(CP) $(CP_OPTS) $(TOOLKIT_AAFLIB_RELEASE)/libaaflib$(LIB) $@
+$(AAFSDK_LIB)/libaaflib$(LIBEXT) : $(TOOLKIT_AAFLIB_RELEASE)/libaaflib$(LIBEXT)
+	$(CP) $(CP_OPTS) $(TOOLKIT_AAFLIB_RELEASE)/libaaflib$(LIBEXT) $@
 
 
 #
 # Dependency and build rules for the debug library targets.
 #
-$(AAFSDK_LIB_DEBUG)/libaafiid$(LIB) : $(TOOLKIT_AAFIID_DEBUG)/libaafiid$(LIB)
-	$(CP) $(CP_OPTS) $(TOOLKIT_AAFIID_DEBUG)/libaafiid$(LIB) $@
+$(AAFSDK_LIB_DEBUG)/libaafiid$(LIBEXT) : $(TOOLKIT_AAFIID_DEBUG)/libaafiid$(LIBEXT)
+	$(CP) $(CP_OPTS) $(TOOLKIT_AAFIID_DEBUG)/libaafiid$(LIBEXT) $@
 
-$(AAFSDK_LIB_DEBUG)/libaaflib$(LIB) : $(TOOLKIT_AAFLIB_DEBUG)/libaaflib$(LIB)
-	$(CP) $(CP_OPTS) $(TOOLKIT_AAFLIB_DEBUG)/libaaflib$(LIB) $@
+$(AAFSDK_LIB_DEBUG)/libaaflib$(LIBEXT) : $(TOOLKIT_AAFLIB_DEBUG)/libaaflib$(LIBEXT)
+	$(CP) $(CP_OPTS) $(TOOLKIT_AAFLIB_DEBUG)/libaaflib$(LIBEXT) $@
 
 
 #

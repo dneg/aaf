@@ -38,7 +38,7 @@
 #
 # Sets:
 #	COMPILER, PLATFORM_CFLAGS, RPATH_OPT,
-#	LD, LD_STAT_LIB, LD_DYN_LIB, U_OPTS, OBJ, EXE, LIB, DLL,
+#	LD, LD_STAT_LIB, LD_DYN_LIB, U_OPTS, OBJ, EXE, LIBEXT, DLL,
 #	UUIDLIB, PLATFORMLIBS
 #
 #------------------------------------------------------------------------------
@@ -104,7 +104,7 @@ U_OPTS=no_unicode
 #------------------------------------------------------------------------------
 OBJ ?= .o
 EXE ?=
-LIB ?= .a
+LIBEXT ?= .a
 DLL ?= .dylib
 
 

@@ -41,10 +41,10 @@ all : aafiid
 
 
 .PHONY : aafiid
-aafiid : $(OBJDIR) $(LIBDIR) $(LIBDIR)/libaafiid$(LIB)
+aafiid : $(OBJDIR) $(LIBDIR) $(LIBDIR)/libaafiid$(LIBEXT)
 
 
-$(LIBDIR)/libaafiid$(LIB) : $(CXXOBJS)
+$(LIBDIR)/libaafiid$(LIBEXT) : $(CXXOBJS)
 	$(LD_STAT_LIB) $@ $(CXXOBJS)
 
 
@@ -52,7 +52,7 @@ $(LIBDIR)/libaafiid$(LIB) : $(CXXOBJS)
 clean:
 	@$(RM) $(CXXOBJS)
 	@$(RM) $(DEPS)
-	@$(RM) $(LIBDIR)/libaafiid$(LIB)
+	@$(RM) $(LIBDIR)/libaafiid$(LIBEXT)
 	@$(RMDIR) $(OBJDIR)/ii_files
 
 

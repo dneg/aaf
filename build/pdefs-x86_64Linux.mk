@@ -37,7 +37,7 @@
 #
 # Sets:
 #	MIPS_ABI, COMPILER, PLATFORM_CFLAGS, RPATH_OPT, 
-#	LD, LD_STAT_LIB, LD_DYN_LIB, U_OPTS, OBJ, EXE, LIB, DLL,
+#	LD, LD_STAT_LIB, LD_DYN_LIB, U_OPTS, OBJ, EXE, LIBEXT, DLL,
 #
 #------------------------------------------------------------------------------
 

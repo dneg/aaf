@@ -41,10 +41,10 @@ all : aaflib
 
 
 .PHONY : aaflib
-aaflib : $(OBJDIR) $(LIBDIR) $(LIBDIR)/libaaflib$(LIB)
+aaflib : $(OBJDIR) $(LIBDIR) $(LIBDIR)/libaaflib$(LIBEXT)
 
 
-$(LIBDIR)/libaaflib$(LIB) : $(CXXOBJS)
+$(LIBDIR)/libaaflib$(LIBEXT) : $(CXXOBJS)
 	$(LD_STAT_LIB) $@ $(CXXOBJS)
 
 
@@ -52,7 +52,7 @@ $(LIBDIR)/libaaflib$(LIB) : $(CXXOBJS)
 clean:
 	@$(RM) $(CXXOBJS)
 	@$(RM) $(DEPS)
-	@$(RM) $(LIBDIR)/libaaflib$(LIB)
+	@$(RM) $(LIBDIR)/libaaflib$(LIBEXT)
 	@$(RMDIR) $(OBJDIR)/ii_files
 
 

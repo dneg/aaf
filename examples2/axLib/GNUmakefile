@@ -44,10 +44,10 @@ all : axLib
 
 
 .PHONY : axLib
-axLib : $(OBJDIR) $(LIBDIR) $(LIBDIR)/libaxLib$(LIB)
+axLib : $(OBJDIR) $(LIBDIR) $(LIBDIR)/libaxLib$(LIBEXT)
 
 
-$(LIBDIR)/libaxLib$(LIB) : $(CXXOBJS)
+$(LIBDIR)/libaxLib$(LIBEXT) : $(CXXOBJS)
 	$(LD_STAT_LIB) $@ $(CXXOBJS)
 
 
@@ -55,7 +55,7 @@ $(LIBDIR)/libaxLib$(LIB) : $(CXXOBJS)
 clean :
 	@$(RM) $(CXXOBJS)
 	@$(RM) $(DEPS)
-	@$(RM) $(LIBDIR)/libaxLib$(LIB)
+	@$(RM) $(LIBDIR)/libaxLib$(LIBEXT)
 	@$(RMDIR) $(OBJDIR)/ii_files
 
 .PHONY : realclean
