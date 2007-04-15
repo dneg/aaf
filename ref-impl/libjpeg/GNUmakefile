@@ -62,10 +62,10 @@ all : jpeg
 
 
 .PHONY : jpeg
-jpeg : $(OBJDIR) $(LIBDIR) $(LIBDIR)/libjpeg$(LIB)
+jpeg : $(OBJDIR) $(LIBDIR) $(LIBDIR)/libjpeg$(LIBEXT)
 
 
-$(LIBDIR)/libjpeg$(LIB) :  $(CXXOBJS)
+$(LIBDIR)/libjpeg$(LIBEXT) :  $(CXXOBJS)
 	$(LD_STAT_LIB) $@ $(CXXOBJS)
 
 
@@ -73,7 +73,7 @@ $(LIBDIR)/libjpeg$(LIB) :  $(CXXOBJS)
 clean :
 	@$(RM) $(CXXOBJS)
 	@$(RM) $(DEPS)
-	@$(RM) $(LIBDIR)/libjpeg$(LIB)
+	@$(RM) $(LIBDIR)/libjpeg$(LIBEXT)
 
 
 .PHONY : realclean
