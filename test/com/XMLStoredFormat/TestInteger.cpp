@@ -385,7 +385,7 @@ static bool testRestore(wchar_t* fileName)
             bool localPassed = true;
             aafInt32 value;
             aafUInt32 maxValue;
-            memset(&maxValue, 0xFF, sizeof(aafUInt64));
+            memset(&maxValue, 0xFF, sizeof(aafUInt32));
 
             checkResult(pVarArrayType->GetElementValue(pPropertyValue, 0, &pIntValue));
             checkResult(pIntType->GetInteger(pIntValue, (aafUInt8*)&value, 4));
