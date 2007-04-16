@@ -117,12 +117,25 @@ void copyAndTouch(aafCharacter* inFileName, aafCharacter* outFileName)
     remove(tmp);
     
     char copyCmd[512];
+#if defined (_WIN32)
+    strcpy(copyCmd, "copy ");
+#else
     strcpy(copyCmd, "cp ");
+#endif    
     wcstombs(tmp, inFileName, 256);
     strcat(copyCmd, tmp);
     wcstombs(tmp, outFileName, 256);
     strcat(copyCmd, " ");
     strcat(copyCmd, tmp);
+#if defined (_WIN32)
+    // replace '/' separator with '\' for benefit of copy command
+    char* sep = copyCmd;
+    while ((sep = strchr(sep, '/')) != NULL)
+    {
+        *sep = '\\';
+        sep++;
+    }
+#endif
     system(copyCmd);
 
     
