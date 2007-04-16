@@ -64,14 +64,8 @@ PLATFORMLIBS += -framework CoreFoundation
 endif
 
 # AAF-XML stored format support requires the expat library which is
-# bundled with the AAF SDK.  If you wish to use a different library
-# then set EXPAT_ROOT to point to the location of lib/libexpat.a and include/expat.h
-# E.g. make EXPAT_ROOT=/usr
-ifdef EXPAT_ROOT
-	EXPAT_LIB = -L$(EXPAT_ROOT)/lib -lexpat
-else
-	EXPAT_LIB = $(AAFBUILDDIR)/ref-impl/$(AAFTARGETDIR)/libexpat$(LIBEXT)
-endif
+# bundled with the AAF SDK.
+EXPAT_LIB = $(AAFBUILDDIR)/ref-impl/$(AAFTARGETDIR)/libexpat$(LIBEXT)
 
 
 # The following two lines initialize CXXFILES2 to contain the list

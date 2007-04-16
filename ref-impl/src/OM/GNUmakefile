@@ -55,14 +55,8 @@ endif
 CFLAGS += -DOM_STACK_TRACE_ON_ASSERT
 
 # AAF-XML stored format support requires the expat library which is
-# bundled with the AAF SDK.  If you wish to use a different library
-# then set EXPAT_ROOT to point to the location of lib/libexpat.a and include/expat.h
-# E.g. make EXPAT_ROOT=/usr
-ifdef EXPAT_ROOT
-	INCLUDES += -I$(EXPAT_ROOT)/include
-else
-	INCLUDES += -I../../expat
-endif
+# bundled with the AAF SDK.
+INCLUDES += -I../../expat
 
 .PHONY : all
 all : om
