@@ -1381,17 +1381,20 @@ changing the makefiles and the #include directive for the structured
 storage reference implementation - these changes are checked in (post
 RC1) to CVS on SourceForge.
 
-<p> When I try to build AAF on RedHat
-Linux 8.0 I get compilation errors in ref/impl/src/OM/OMUtilities.cpp
-saying that uuid/uid.h can't be found. How can I fix this ?
+<p> When I try to build AAF on Linux
+I get compilation errors in ref/impl/src/OM/OMUtilities.cpp
+saying that uuid/uuid.h can't be found. How can I fix this ?
 </p>
 
-Make sure that the package e2fsprogs-devel is installed.
-
+Make sure the uuid library is installed.  For rpm based distributions the
+uuid library is in the e2fsprogs-devel package:
 <pre>
 $ rpm -q e2fsprogs-devel
 e2fsprogs-devel-1.27-9
-$
+</pre>
+For deb based ditributions such as Ubuntu:
+<pre>
+$ dpkg -p uuid-dev
 </pre>
 
 The Object Manager uses uuid_generate() from this package to create
