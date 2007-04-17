@@ -12,6 +12,8 @@ Getting Started
     - Client application builds should point their library & include paths to:
         AAFWinSDK/include/
         AAFWinSDK/lib/
+      and running client applications requires AAFCOAPI.dll so PATH must include:
+        AAFWinSDK/bin/
 
 (b) Using GNU make
     - To build the library, tests and all the examples and utilities run
@@ -19,6 +21,9 @@ Getting Started
 
     - To run the module tests
         make check
+
+    - For MacOS X, you can optionally build universal binaries using
+	    make AAFPLATFORM=UniversalDarwin <target>
 
     - To build a release version (instead of the default debug version)
         make AAFTARGET=Release <target>
@@ -32,11 +37,15 @@ Getting Started
 
     - The "install" target is the minimum needed to build and install the
       library and header files for client development.  Client application
-      builds should point their library and include paths to the following
-      (the AAF*SDK/ directory will vary by platform):
+      builds should point their compiler library and include paths to the
+	  following (each platform has its own AAF*SDK/ directory):
         AAFi686LinuxSDK/g++/include/              # all builds
-        AAFi686LinuxSDK/g++/lib/debug/            # Debug libs
-        AAFi686LinuxSDK/g++/lib/                  # Release libs
+        AAFi686LinuxSDK/g++/lib/debug/            # Debug build
+        AAFi686LinuxSDK/g++/lib/                  # Release build
+      To run client applications, libcom-api.so is required so add the
+	  bin directory to your LD_LIBRARY_PATH:
+	    AAFi686LinuxSDK/g++/bin/debug/            # Debug build
+	    AAFi686LinuxSDK/g++/bin/                  # Release build
       
 Examples
 ---------
@@ -59,10 +68,17 @@ dynamic library search path.
         env LD_LIBRARY_PATH=AAFi686LinuxSDK/g++/bin/debug AAFi686LinuxSDK/g++/bin/debug/InfoDumper test/com/ComModTestAAF/EssenceAccessCDCI_DV.aaf
         (the platform specific paths <AAF*SDK> will vary by platform)
 
-Further information
+Documentation
 --------------------
 API documentation and the AAF SDK FAQ are available from the AAF SDK home page
   http://aaf.sourceforge.net/
 
+The API documentation can also be build from the SDK source:
+  cd ref-impl/doc/com-api
+  make doc
+See ref-impl/doc/com-api/README.txt for full details.
+
+Further information
+--------------------
 If you a have query please use the AAF SDK Forums
   http://sourceforge.net/forum/?group_id=24405
