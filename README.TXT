@@ -73,7 +73,7 @@ Documentation
 API documentation and the AAF SDK FAQ are available from the AAF SDK home page
   http://aaf.sourceforge.net/
 
-The API documentation can also be build from the SDK source:
+The API documentation can also be built from the SDK source:
   cd ref-impl/doc/com-api
   make doc
 See ref-impl/doc/com-api/README.txt for full details.
