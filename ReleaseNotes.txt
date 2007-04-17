@@ -33,7 +33,6 @@ This release has been tested on the following platforms:
   MacOS X 10.4.9 PowerPC (Xcode 2.4.1, gcc 4.0.1 Apple build 5367)
   Windows 2000 SP4 32bit (Microsoft Visual C++ 7.1)
   Windows XP SP2 32bit (Microsoft Visual C++ 7.1)
-  Windows XP SP2 32bit (gcc MinGW)
   Solaris 9 (gcc 3.4.2)
   x86-Linux:
     SuSE 10.1 (gcc-4.1.0, glibc-2.4, kernel 2.6)
@@ -149,8 +148,9 @@ Portability:
   - MacOS X on Intel support added (i386Darwin AAF platform)
   - Removed requirement to have a structured storage library built
     into AAF library (make AAF_NO_STRUCTURED_STORAGE=1)
-  - Byteorder (little/bigendian) is determined at run time not compile time
-  - Support g++ on WIN32 builds to enable SDK to be used from MinGW apps
+  - Byte order (little endian/big endian) is determined at run time not compile time
+  - Initial support for g++ on WIN32 enabling MinGW apps to link to AAF
+    static libs. AAFCOAPI.dll library must still be built with MSVC.
 
 Major Changes from v1.1.0 to v1.1.1
 -----------------------------------
@@ -309,17 +309,27 @@ based on the belief that this was technically possible.
 In this release, there are a few known outstanding issues.
 
 - The AAF MetaDictionary object is written to the file on output and,
-if present, read from the file in input, in order to support reliable
+if present, read from the file on input, in order to support reliable
 parsing of any extension data in the file. This facility is not a standard
 part of MXF.
 
 - In order to read typical MXF files (which do not contain a
 MetaDictionary), the implementation can fall back to its built-in
-definitions when reading an MXF file without a MetaDictionary. This works
-unless data is encountered wthat is not defined by the built-in
-definitions. If such data is encountered (e.g. descriptive metadata
-not defined by the built-in AAF data model) then a run-time error
-occurs. (ALEXEY: what precisely happens?).
+definitions when reading an MXF file without a MetaDictionary.
+This fails when data is encountered that is not defined by the built-in
+definitions. If a property without a definition is encountered, the SDK
+cannot restore the property and the file open call will fail (although
+note below an exception to this in the case of Header::PrimaryMob). If
+an object without a definition is encountered, the SDK skips the object
+as dark. Any strong reference to the dark object will fail to resolve
+and if such a strong reference property exists in a file the file
+will fail to open. It fails at OMKLVStoredObject::restoreObject(const
+OMStrongObjectReference&), after _storage->object(id) returns NULL. An
+example of this case is DescriptiveMarker::Description, which will
+typically point to a subclass of DescriptiveFramework that is not
+defined in the built-in definitions.  Weak references to dark objects
+will trigger a similar error.  In all these cases a client will get
+AAFRESULT_UNEXPECTED_EXCEPTION returned from the toolkit file open calls.
 
 - An AAF Root object is written to the file on output, to strong
 reference the Header and MetaDictionary objects. This is not a standard
@@ -328,10 +338,10 @@ be present in order to find the Header object of a typical MXF file.
 
 - Support has been added to the SDK to process WeakReference<Mob> types,
 such as is used by the Header::PrimaryMob property. However, this property
-has not been added to the built-in data model because its presence would
+has not been added to the built-in definitions because its presence would
 have broken backwards-compatibility with AAF v1.1.0 or v1.1.1. At a future
 time, when v1.1.2 is widely deployed, there may be a case for adding
-Header::PrimaryMob to the built-in data model. In order to read typical
+Header::PrimaryMob to the built-in definitions. In order to read typical
 MXF OP Atom files (which contain a Header::PrimaryMob property),
 the implementation filters out this property so that its presence does
 not trigger a run-time error caused by the lack of a definition.
@@ -340,11 +350,21 @@ not trigger a run-time error caused by the lack of a definition.
 frequently incorrect in MXF implementations. It is often v1, instead of
 v2. The AAF KLV implementation outputs v1, and will accept v1 or v2 on input.
 
-- Edit in place. ALEXEY: you had shown this to work in a limited case -
-could you restate what that was please.
+- Modification of an existing MXF file has only been tested in a
+limited case. The successful test was to run the OpenExistingModify
+test with default parameters. The test creates a metadata-only file,
+which is then modified. The test changes values of existing properties,
+adds new objects, including an object with a stream property, and saves
+the file. This is not a typical workflow as
+metadata-only MXF files are uncommon.
 
-- Issue with extension weak references (as seen in TypedefSet
-WeakReference module test) (ALEXEY: better text please)
+- The SDK fails to open AAF KLV files that contain extension weak reference
+properties. The toolkit relies on the target path to find objects
+referenced by weak reference properties.  The target paths for built-in
+weak references are known but the paths for extensions are not and need
+to come from the file. AAF KLV files (unlike AAF Structured Storage files)
+do not store the target paths.
+
 
 
 
@@ -361,7 +381,7 @@ available, a pre-compiled Structured Storage library is provided
 (libSSRW2C.a and ssrw_c.lib) for use on the supported platforms. The
 pre-compiled Structured Storage library is licensed under an agreement
 between the AAF Association and a proprietary Structured Storage library
-vMXF.endor:
+vendor:
   http://www.aafassociation.org/html/licenses/SchemaSoftTerms.pdf
   (reproduced in text form at the end of this document)
 
