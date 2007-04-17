@@ -32,9 +32,6 @@ DOXYGEN = doxygen
 ZIP = zip
 TAR = tar
 
-# Only used for building the 'chm' (Windows Help file)
-HTMLHELP_WORKSHOP = C:/Program\ Files/HTML\ Help\ Workshop
-
 # Directory for output.  Relative paths are relative to the directory
 # containing this Makefile.
 OUTPUT_DIR = output
@@ -214,16 +211,21 @@ $(PLUGIN_HTML_HELP_PROJ): $(COMAPI_PATH)/AAFPlugin.idl \
 	  echo CHM_FILE=$(PLUGIN_HTML_HELP_MAN_FILE) \
 	) | $(DOXYGEN) -
 
-$(AAF_HTML_HELP_MAN): $(HTMLHELP_WORKSHOP)/hhc \
-                      $(AAF_HTML_HELP_PROJ)
-	# 'hhc' exits non-zero, so we have to ignore the exit status...
-	-$(HTMLHELP_WORKSHOP)/hhc $(AAF_HTML_HELP_PROJ)
+# hhc.exe is required to build the MS Compiled Help File .chm files,
+# and is found in C:/Program Files/HTML Help Workshop/hhc.exe
+ifneq ($(wildcard C:/Program\ Files/HTML\ Help\ Workshop/hhc.exe),)
+  # 'hhc' returns 1 for success, 0 for failure, so invert exit status using !
+  HHC = ! C:/Program\ Files/HTML\ Help\ Workshop/hhc.exe
+else
+  HHC = @echo "*** hhc.exe not found (required to compile .chm files) ***" ; false
+endif
+
+$(AAF_HTML_HELP_MAN): $(AAF_HTML_HELP_PROJ)
+	$(HHC) $(AAF_HTML_HELP_PROJ)
 	mv $(AAF_HTML_HELP_DIR)/$(AAF_HTML_HELP_MAN_FILE) $(AAF_HTML_HELP_MAN)
 
-$(PLUGIN_HTML_HELP_MAN): $(HTMLHELP_WORKSHOP)/hhc \
-                         $(PLUGIN_HTML_HELP_PROJ)
-	# 'hhc' exits non-zero, so we have to ignore the exit status...
-	-$(HTMLHELP_WORKSHOP)/hhc $(PLUGIN_HTML_HELP_PROJ)
+$(PLUGIN_HTML_HELP_MAN): $(PLUGIN_HTML_HELP_PROJ)
+	$(HHC) $(PLUGIN_HTML_HELP_PROJ)
 	mv $(PLUGIN_HTML_HELP_DIR)/$(PLUGIN_HTML_HELP_MAN_FILE) $(PLUGIN_HTML_HELP_MAN)
 
 
