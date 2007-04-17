@@ -42,8 +42,8 @@
 using namespace std;
 
 
-static aafUInt32 TestSourceTrackIDsVector[] = { 1, 3, 5, 7, 11 };
-static const aafUInt32 TestSourceTrackIDsVectorSize = 5;
+static aafUInt32 TestDescribedSlotIDsVector[] = { 1, 3, 5, 7, 11 };
+static const aafUInt32 TestDescribedSlotIDsVectorSize = 5;
 
 static aafSourceRef_t sourceRef; 
 static aafWChar *slotName = L"SLOT1";
@@ -141,29 +141,29 @@ static HRESULT CreateAAFFile(
 
     	// Get described slots - should not be present.
     	aafUInt32 size = 0;
-    	AAFRESULT hr = pDescClip->CountSourceTrackIDs( &size );
+    	AAFRESULT hr = pDescClip->CountDescribedSlotIDs( &size );
     	checkExpression( AAFRESULT_PROP_NOT_PRESENT == hr, AAFRESULT_TEST_FAILED );
     	
-	    // Set/Get single sourcetrack id
-	    aafUInt32 setSingleSourceTrackID = 0xdeadbeef;
-	    checkResult( pDescClip->AddSourceTrackID( setSingleSourceTrackID ) );
-	    aafUInt32 getSingleSourceTrackID = 0;
-	    checkResult( pDescClip->GetSourceTrackIDs( 1, &getSingleSourceTrackID ) );
-	    checkExpression( setSingleSourceTrackID == getSingleSourceTrackID, AAFRESULT_TEST_FAILED );
+	    // Set/Get single described slot id
+	    aafUInt32 setSingleDescribedSlotID = 0xdeadbeef;
+	    checkResult( pDescClip->AddDescribedSlotID( setSingleDescribedSlotID ) );
+	    aafUInt32 getSingleDescribedSlotID = 0;
+	    checkResult( pDescClip->GetDescribedSlotIDs( 1, &getSingleDescribedSlotID ) );
+	    checkExpression( setSingleDescribedSlotID == getSingleDescribedSlotID, AAFRESULT_TEST_FAILED );
 
 	    // Clear the ID set for the next test
-	    checkResult( pDescClip->RemoveSourceTrackID( setSingleSourceTrackID ) );
+	    checkResult( pDescClip->RemoveDescribedSlotID( setSingleDescribedSlotID ) );
 
 	    // Set the persistent described slots.
-	    for( aafUInt32 i_tid = 0; i_tid < TestSourceTrackIDsVectorSize; ++i_tid )
+	    for( aafUInt32 i_tid = 0; i_tid < TestDescribedSlotIDsVectorSize; ++i_tid )
 	    {
-		    checkResult( pDescClip->AddSourceTrackID( TestSourceTrackIDsVector[i_tid] ) );
+		    checkResult( pDescClip->AddDescribedSlotID( TestDescribedSlotIDsVector[i_tid] ) );
 	    }
 
-		aafUInt32 getSourceTrackIDsVector[TestSourceTrackIDsVectorSize];
+		aafUInt32 getDescribedSlotIDsVector[TestDescribedSlotIDsVectorSize];
 
-		checkResult( pDescClip->GetSourceTrackIDs( TestSourceTrackIDsVectorSize, getSourceTrackIDsVector ) );
-		checkExpression( 0 == memcmp( getSourceTrackIDsVector, TestSourceTrackIDsVector, sizeof(TestSourceTrackIDsVector) ),
+		checkResult( pDescClip->GetDescribedSlotIDs( TestDescribedSlotIDsVectorSize, getDescribedSlotIDsVector ) );
+		checkExpression( 0 == memcmp( getDescribedSlotIDsVector, TestDescribedSlotIDsVector, sizeof(TestDescribedSlotIDsVector) ),
 					     AAFRESULT_TEST_FAILED );
 		
 		checkResult(pDescClip->QueryInterface (IID_IAAFSegment, (void **)&seg));
@@ -262,18 +262,18 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 				checkResult(pSegment->QueryInterface(IID_IAAFDescriptiveClip, (void **) &pDescClip));
 				
 				// Get, and test, the described slots from the marker.
-			    aafUInt32 getSourceTrackIDsVector[TestSourceTrackIDsVectorSize];
-			    aafUInt32 getSourceTrackIDsVectorSize = 0;
+			    aafUInt32 getDescribedSlotIDsVector[TestDescribedSlotIDsVectorSize];
+			    aafUInt32 getDescribedSlotIDsVectorSize = 0;
 			
-			    checkResult( pDescClip->CountSourceTrackIDs( &getSourceTrackIDsVectorSize ) );
-			    checkExpression( TestSourceTrackIDsVectorSize == getSourceTrackIDsVectorSize, AAFRESULT_TEST_FAILED );
+			    checkResult( pDescClip->CountDescribedSlotIDs( &getDescribedSlotIDsVectorSize ) );
+			    checkExpression( TestDescribedSlotIDsVectorSize == getDescribedSlotIDsVectorSize, AAFRESULT_TEST_FAILED );
 			
 			    checkExpression( AAFRESULT_SMALLBUF ==
-					       pDescClip->GetSourceTrackIDs( getSourceTrackIDsVectorSize-1, getSourceTrackIDsVector ),
+					       pDescClip->GetDescribedSlotIDs( getDescribedSlotIDsVectorSize-1, getDescribedSlotIDsVector ),
 					     AAFRESULT_TEST_FAILED );
 			
-			    checkResult( pDescClip->GetSourceTrackIDs( getSourceTrackIDsVectorSize, getSourceTrackIDsVector ) );
-			    checkExpression( 0 == memcmp( getSourceTrackIDsVector, TestSourceTrackIDsVector, sizeof(TestSourceTrackIDsVector) ),
+			    checkResult( pDescClip->GetDescribedSlotIDs( getDescribedSlotIDsVectorSize, getDescribedSlotIDsVector ) );
+			    checkExpression( 0 == memcmp( getDescribedSlotIDsVector, TestDescribedSlotIDsVector, sizeof(TestDescribedSlotIDsVector) ),
 					     AAFRESULT_TEST_FAILED );
 			
 				

@@ -73,61 +73,61 @@ public:
          const aafSourceRef_t & sourceRef);
 
   //****************
-  // CountSourceTrackIDs()
+  // CountDescribedSlotIDs()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    CountSourceTrackIDs
-        // @parm [out, retval] Number of source track IDs
+    CountDescribedSlotIDs
+        // @parm [out, retval] Number of described slot IDs
         (aafUInt32*  pCount);
 
 
   //****************
-  // GetSourceTrackIDs()
+  // GetDescribedSlotIDs()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    GetSourceTrackIDs
-        (// @parm [in] The size of the given pSourceTrackIDs buffer
-         aafUInt32  maxSourceTrackIDCount,
+    GetDescribedSlotIDs
+        (// @parm [in] The size of the given pDescribedSlotIDs buffer
+         aafUInt32  maxDescribedSlotIDCount,
 
-         // @parm [out, size_is(maxSourceTrackIDsCount)] Array to hold the source track IDs
-         aafUInt32 *  pSourceTrackIDs);
+         // @parm [out, size_is(maxDescribedSlotIDsCount)] Array to hold the described slot IDs
+         aafUInt32 *  pDescribedSlotIDs);
 
 
   //****************
-  // IsSourceTrackIDPresent()
+  // IsDescribedSlotIDPresent()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    IsSourceTrackIDPresent
-        (// @parm [in, ref] Source track ID whose presence is to be queried
-         aafUInt32  sourceTrackID,
+    IsDescribedSlotIDPresent
+        (// @parm [in, ref] Described slot ID whose presence is to be queried
+         aafUInt32  describedSlotID,
 
-         // @parm [out,retval] True if sourceTrackID is present
+         // @parm [out,retval] True if describedSlotID is present
          aafBoolean_t*  pIsPresent);
 
 
   //****************
-  // AddSourceTrackID()
+  // AddDescribedSlotID()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    AddSourceTrackID
-        // @parm [in] Source track ID to add.
-        (aafUInt32  sourceTrackID);
+    AddDescribedSlotID
+        // @parm [in] Described slot ID to add
+        (aafUInt32  describedSlotID);
 
 
   //****************
-  // RemoveSourceTrackID()
+  // RemoveDescribedSlotID()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    RemoveSourceTrackID
-        // @parm [in] Source track ID to remove.
-        (aafUInt32  sourceTrackID);
+    RemoveDescribedSlotID
+        // @parm [in] Described slot ID to remove
+        (aafUInt32  describedSlotID);
 
 
 
 
 
 private:
-	OMSetProperty<aafUInt32> _sourceTrackIDs;
+	OMSetProperty<aafUInt32> _describedSlotIDs;
 	
 };
 

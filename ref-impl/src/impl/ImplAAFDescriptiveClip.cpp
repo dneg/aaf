@@ -39,9 +39,9 @@
 
 
 ImplAAFDescriptiveClip::ImplAAFDescriptiveClip ()
-: _sourceTrackIDs( PID_DescriptiveClip_SourceTrackIDs, L"SourceTrackIDs" )
+: _describedSlotIDs( PID_DescriptiveClip_DescribedSlotIDs, L"DescribedSlotIDs" )
 {
-    _persistentProperties.put( _sourceTrackIDs.address() );
+    _persistentProperties.put( _describedSlotIDs.address() );
 }
 
 
@@ -74,18 +74,18 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFDescriptiveClip::CountSourceTrackIDs (
+    ImplAAFDescriptiveClip::CountDescribedSlotIDs (
       aafUInt32*  pCount)
 {
     if (NULL == pCount) {
         return AAFRESULT_NULL_PARAM;
     }
 
-    if (!_sourceTrackIDs.isPresent()) {
+    if (!_describedSlotIDs.isPresent()) {
         return AAFRESULT_PROP_NOT_PRESENT;
     }
 
-    *pCount = _sourceTrackIDs.count();
+    *pCount = _describedSlotIDs.count();
 
     return AAFRESULT_SUCCESS;
 }
@@ -93,27 +93,27 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFDescriptiveClip::GetSourceTrackIDs (
-      aafUInt32  maxSourceTrackIDCount,
-      aafUInt32 *  pSourceTrackIDs)
+    ImplAAFDescriptiveClip::GetDescribedSlotIDs (
+      aafUInt32  maxDescribedSlotIDCount,
+      aafUInt32 *  pDescribedSlotIDs)
 {
-    if (!pSourceTrackIDs) {
+    if (!pDescribedSlotIDs) {
         return AAFRESULT_NULL_PARAM;
     }
 
-    if (_sourceTrackIDs.count() > maxSourceTrackIDCount) {
+    if (_describedSlotIDs.count() > maxDescribedSlotIDCount) {
         return AAFRESULT_SMALLBUF;
     }
 
-    if (!_sourceTrackIDs.isPresent()) {
+    if (!_describedSlotIDs.isPresent()) {
         return AAFRESULT_PROP_NOT_PRESENT;
     }
 
-    aafUInt32* pNextSourceTrackID = pSourceTrackIDs;
-    OMSetPropertyIterator<aafUInt32> iter( _sourceTrackIDs, OMBefore );
+    aafUInt32* pNextDescribedSlotID = pDescribedSlotIDs;
+    OMSetPropertyIterator<aafUInt32> iter( _describedSlotIDs, OMBefore );
     while (++iter) {
-        *pNextSourceTrackID = iter.value();
-        pNextSourceTrackID++;
+        *pNextDescribedSlotID = iter.value();
+        pNextDescribedSlotID++;
     }
 
     return AAFRESULT_SUCCESS;
@@ -122,19 +122,19 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFDescriptiveClip::IsSourceTrackIDPresent (
-      aafUInt32  sourceTrackID,
+    ImplAAFDescriptiveClip::IsDescribedSlotIDPresent (
+      aafUInt32  describedSlotID,
       aafBoolean_t*  pIsPresent)
 {
     if (NULL == pIsPresent) {
         return AAFRESULT_NULL_PARAM;
     }
 
-    if (!_sourceTrackIDs.isPresent()) {
+    if (!_describedSlotIDs.isPresent()) {
         return AAFRESULT_PROP_NOT_PRESENT;
     }
     
-    *pIsPresent = _sourceTrackIDs.contains(sourceTrackID) ? kAAFTrue :
+    *pIsPresent = _describedSlotIDs.contains(describedSlotID) ? kAAFTrue :
                                                             kAAFFalse;
 
     return AAFRESULT_SUCCESS;
@@ -143,15 +143,15 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFDescriptiveClip::AddSourceTrackID (
-      aafUInt32  sourceTrackID)
+    ImplAAFDescriptiveClip::AddDescribedSlotID (
+      aafUInt32  describedSlotID)
 {
-    if (_sourceTrackIDs.isPresent()) {
-        if (_sourceTrackIDs.contains(sourceTrackID))
+    if (_describedSlotIDs.isPresent()) {
+        if (_describedSlotIDs.contains(describedSlotID))
             return AAFRESULT_INVALID_PARAM;
     }
     
-    _sourceTrackIDs.insert(sourceTrackID);
+    _describedSlotIDs.insert(describedSlotID);
     
     return AAFRESULT_SUCCESS;
 }
@@ -159,19 +159,19 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFDescriptiveClip::RemoveSourceTrackID (
-      aafUInt32  sourceTrackID)
+    ImplAAFDescriptiveClip::RemoveDescribedSlotID (
+      aafUInt32  describedSlotID)
 {
-    if (!_sourceTrackIDs.isPresent())
+    if (!_describedSlotIDs.isPresent())
         return AAFRESULT_PROP_NOT_PRESENT;
     
-    if (!_sourceTrackIDs.contains(sourceTrackID))
+    if (!_describedSlotIDs.contains(describedSlotID))
         return AAFRESULT_INVALID_PARAM;
     
-    _sourceTrackIDs.remove(sourceTrackID);
+    _describedSlotIDs.remove(describedSlotID);
     
-    if (_sourceTrackIDs.count() == 0) {
-        _sourceTrackIDs.removeProperty();
+    if (_describedSlotIDs.count() == 0) {
+        _describedSlotIDs.removeProperty();
     }
     
     return AAFRESULT_SUCCESS;

@@ -4729,7 +4729,7 @@ AAF_CLASS(DescriptiveClip,
     0x06, 0x0E, 0x2B, 0x34, 0x02, 0x06, 0x01, 0x01),
   SourceClip,
   true)
-  AAF_PROPERTY(SourceTrackIDs,
+  AAF_PROPERTY(DescribedSlotIDs,
     // {01070106-0000-0000-060E-2B3401010105}
     // 06.0E.2B.34.01.01.01.05.01.07.01.06.00.00.00.00
     AAF_LITERAL_AUID(0x01070106,

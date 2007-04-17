@@ -327,6 +327,7 @@ public:
   // Succeeds if:
   // - Initialize() has already been called on this object.
   // - pPlainEssenceData is a valid pointer.
+  // - reserved is 0.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -340,6 +341,9 @@ public:
   //
   // AAFRESULT_NULL_PARAM
   //   - pPlainEssenceData arg is NULL.
+  ///
+  /// AAFRESULT_INVALID_PARAM
+  ///   - reserved is not 0.
   // @end
   // 
   STDMETHOD (GetPlainEssenceData)

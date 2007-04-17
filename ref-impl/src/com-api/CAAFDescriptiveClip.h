@@ -71,7 +71,7 @@ public:
   /// the given properties.  Only required properties are set.
   /// Optional properties are added with separate functions.
   ///
-  /// Succeds if:
+  /// Succeeds if:
   /// - This object has not already been Initialize()d.
   ///
   /// This method will return the following codes.  If more than one of
@@ -100,14 +100,14 @@ public:
 
   //***********************************************************
   //
-  // CountSourceTrackIDs()
+  // CountDescribedSlotIDs()
   //
-  // Gets the total number of source track IDs present in
-  /// the list of source track IDs referenced by this DescriptiveClip.
+  // Gets the total number of described slot IDs present in
+  /// the list of described slot IDs referenced by this DescriptiveClip.
   ///
   /// Succeeds if all of the following are true:
   /// - the pCount pointer is valid;
-  /// - the SourceTrackIDs property is present.
+  /// - the DescribedSlotIDs property is present.
   ///
   /// If this method fails nothing will be written to *pCount.
   ///
@@ -122,29 +122,29 @@ public:
   ///   - pCount arg is NULL.
   ///
   /// AAFRESULT_PROP_NOT_PRESENT
-  ///   - the SourceTrackIDs property is not present.
+  ///   - the DescribedSlotIDs property is not present.
   //
-  STDMETHOD (CountSourceTrackIDs) (
-    // Number of source track IDs 
+  STDMETHOD (CountDescribedSlotIDs) (
+    // Number of described slot IDs 
     /*[out, retval]*/ aafUInt32*  pCount);
 
 
   //***********************************************************
   //
-  // GetSourceTrackIDs()
+  // GetDescribedSlotIDs()
   //
-  // Gets all the source track IDs in the list of
-  /// source track IDs referenced by this DescriptiveClip.
+  // Gets all the described slot IDs in the list of
+  /// described slot IDs referenced by this DescriptiveClip.
   ///
-  /// The values are written to the array specified by pSourceTrackIDs,
-  /// which is of size maxSourceTrackIDCount. The required size may be found
-  /// by calling CountSourceTrackIDs().
+  /// The values are written to the array specified by pDescribedSlotIDs,
+  /// which is of size maxDescribedSlotIDCount. The required size may be found
+  /// by calling CountDescribedSlotIDs().
   /// 
   /// Succeeds if all of the following are true:
-  /// - pSourceTrackIDs is a valid pointer;
-  /// - maxSourceTrackIDCount indicates the array is large enough to hold the
+  /// - pDescribedSlotIDs is a valid pointer;
+  /// - maxDescribedSlotIDCount indicates the array is large enough to hold the
   ///   data;
-  /// - the SourceTrackIDs property is present.
+  /// - the DescribedSlotIDs property is present.
   /// 
   /// If this method fails, the property will not be changed.
   /// 
@@ -154,34 +154,34 @@ public:
   ///   - succeeded.  (This is the only code indicating success.)
   ///
   /// AAFRESULT_NULL_PARAM
-  ///   - pSourceTrackIDs is NULL.
+  ///   - pDescribedSlotIDs is NULL.
   ///
   /// AAFRESULT_SMALLBUF
-  ///   - maxSourceTrackIDCount indicates that the array is too small to hold
-  ///     all the referenced source track IDs.
+  ///   - maxDescribedSlotIDCount indicates that the array is too small to hold
+  ///     all the referenced described slot IDs.
   ///
   /// AAFRESULT_PROP_NOT_PRESENT
-  ///   - the SourceTrackIDs property is not present.
+  ///   - the DescribedSlotIDs property is not present.
   //
-  STDMETHOD (GetSourceTrackIDs) (
-    // The size of the given pSourceTrackIDs buffer
-    /*[in]*/ aafUInt32  maxSourceTrackIDCount,
+  STDMETHOD (GetDescribedSlotIDs) (
+    // The size of the given pDescribedSlotIDs buffer
+    /*[in]*/ aafUInt32  maxDescribedSlotIDCount,
 
-    // Array to hold the source track IDs
-    /*[out, size_is(maxSourceTrackIDCount)]*/ aafUInt32 *  pSourceTrackIDs);
+    // Array to hold the described slot IDs
+    /*[out, size_is(maxDescribedSlotIDCount)]*/ aafUInt32 *  pDescribedSlotIDs);
 
 
   //***********************************************************
   //
-  // IsSourceTrackIDPresent()
+  // IsDescribedSlotIDPresent()
   //
-  // Determines if the given source track ID is present in
-  /// the list of source track IDs referenced by this DescriptiveClip.
+  // Determines if the given described slot ID is present in
+  /// the list of described slot IDs referenced by this DescriptiveClip.
   ///
   ///
   /// Succeeds if all of the following are true:
   /// - the pIsPresent pointer is valid;
-  /// - the SourceTrackIDs property is present.
+  /// - the DescribedSlotIDs property is present.
   ///
   /// If this method fails nothing will be written to *pIsPresent.
   ///
@@ -196,26 +196,26 @@ public:
   ///   - pIsPresent arg is NULL.
   ///
   /// AAFRESULT_PROP_NOT_PRESENT
-  ///   - the SourceTrackIDs property is not present.
+  ///   - the DescribedSlotIDs property is not present.
   //
-  STDMETHOD (IsSourceTrackIDPresent) (
-    // Source track ID whose presence is to be queried
-    /*[in]*/ aafUInt32  sourceTrackID,
+  STDMETHOD (IsDescribedSlotIDPresent) (
+    // Described slot ID whose presence is to be queried
+    /*[in]*/ aafUInt32  describedSlotID,
 
-    // True if sourceTrackID is present
+    // True if describedSlotID is present
     /*[out,retval]*/ aafBoolean_t*  pIsPresent);
 
 
   //***********************************************************
   //
-  // AddSourceTrackID()
+  // AddDescribedSlotID()
   //
-  // Appends the given source track ID to the list of
-  /// source track IDs referenced by this DescriptiveClip.
+  // Appends the given described slot ID to the list of
+  /// described slot IDs referenced by this DescriptiveClip.
   ///
   /// Succeeds if all of the following are true:
-  /// - the given source track ID is not already contained in the list
-  ///   of source track IDs referenced by this DescriptiveClip.
+  /// - the given described slot ID is not already contained in the list
+  ///   of described slot IDs referenced by this DescriptiveClip.
   ///
   /// If this method fails, the property will not be changed.
   ///
@@ -225,28 +225,28 @@ public:
   ///   - succeeded.  (This is the only code indicating success.)
   ///
   /// AAFRESULT_INVALID_PARAM
-  ///   - The given source track ID is already contained in the list
-  ///     of source track IDs referenced by this DescriptiveClip.
+  ///   - The given described slot ID is already contained in the list
+  ///     of described slot IDs referenced by this DescriptiveClip.
   //
-  STDMETHOD (AddSourceTrackID) (
-    // Source track ID to add. 
-    /*[in]*/ aafUInt32  sourceTrackID);
+  STDMETHOD (AddDescribedSlotID) (
+    // Described slot ID to add. 
+    /*[in]*/ aafUInt32  describedSlotID);
 
 
   //***********************************************************
   //
-  // RemoveSourceTrackID()
+  // RemoveDescribedSlotID()
   //
-  // Removes the given source track ID from
-  /// the list of source track IDs referenced by this DescriptiveClip.
+  // Removes the given described slot ID from
+  /// the list of described slot IDs referenced by this DescriptiveClip.
   ///
   /// If the removed ID was the last ID in the list, the list is removed
   /// from this DescriptiveClip (the property is removed).
   ///
   /// Succeeds if all of the following are true:
-  /// - the SourceTrackIDs property is present;
-  /// - the given source track ID is present in the list
-  ///   of source track IDs referenced by this DescriptiveClip.
+  /// - the DescribedSlotIDs property is present;
+  /// - the given described slot ID is present in the list
+  ///   of described slot IDs referenced by this DescriptiveClip.
   ///
   /// If this method fails, the property will not be changed.
   ///
@@ -259,12 +259,12 @@ public:
   ///   - property not present.
   ///
   /// AAFRESULT_INVALID_PARAM
-  ///   - The given source track ID is not present in the list
-  ///     of source track IDs referenced by this DescriptiveClip.
+  ///   - The given described slot ID is not present in the list
+  ///     of described slot IDs referenced by this DescriptiveClip.
   //
-  STDMETHOD (RemoveSourceTrackID) (
-    // Source track ID to remove. 
-    /*[in]*/ aafUInt32  sourceTrackID);
+  STDMETHOD (RemoveDescribedSlotID) (
+    // Described slot ID to remove. 
+    /*[in]*/ aafUInt32  describedSlotID);
 
 
 
