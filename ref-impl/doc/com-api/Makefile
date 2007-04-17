@@ -54,8 +54,8 @@ PLUGIN_HTML_MAN_TITLE = "AAF Plug-In API"
 
 # The following set is just a collection of output file names
 # and paths.  All are relative to OUTPUT_DIR
-AAF_HTML_MAN_DIR_COMP = aafapiman
-AAF_HTML_MAN_DIR = $(OUTPUT_DIR)/$(AAF_HTML_MAN_DIR_COMP)
+AAF_HTML_MAN_COMP = aafapiman
+AAF_HTML_MAN_DIR = $(OUTPUT_DIR)/$(AAF_HTML_MAN_COMP)
 AAF_HTML_MAN = $(AAF_HTML_MAN_DIR)/index.html
 
 AAF_HTML_MAN_ZIP_FILE = aafapiman.zip
@@ -175,7 +175,7 @@ $(PLUGIN_HTML_MAN): $(COMAPI_PATH)/AAFPlugin.idl \
 	  cat doxygen.cfg ; \
 	  echo INPUT=$(COMAPI_PATH)/AAFPlugin.idl $(COMAPI_PATH)/AAFPluginTypes.idl ; \
 	  echo OUTPUT_DIRECTORY=$(PLUGIN_HTML_MAN_DIR) ; \
-	  echo TAGFILES=\"$(AAF_TAG_FILE)=../$(AAF_HTML_MAN_DIR_COMP)\" ; \
+	  echo TAGFILES=\"$(AAF_TAG_FILE)=../$(AAF_HTML_MAN_COMP)\" ; \
 	  echo PROJECT_NAME=\"$(PLUGIN_MAN_TITLE)\" \
 	) | $(DOXYGEN) -
 
@@ -234,22 +234,22 @@ $(PLUGIN_HTML_HELP_MAN): $(HTMLHELP_WORKSHOP)/hhc \
 $(AAF_HTML_MAN_ZIP): $(AAF_HTML_MAN)
 	rm -f $(AAF_HTML_MAN_ZIP)
 	cd $(OUTPUT_DIR) && \
-		$(ZIP) -9rq $(AAF_HTML_MAN_ZIP_FILE) $(AAF_HTML_MAN_DIR_COMP)
+		$(ZIP) -9rq $(AAF_HTML_MAN_ZIP_FILE) $(AAF_HTML_MAN_COMP)
 
 $(AAF_HTML_MAN_TGZ): $(AAF_HTML_MAN)
 	rm -f $(AAF_HTML_MAN_TGZ)
 	cd $(OUTPUT_DIR) && \
-		$(TAR) cfz $(AAF_HTML_MAN_TGZ_FILE) $(AAF_HTML_MAN_DIR_COMP)
+		$(TAR) cfz $(AAF_HTML_MAN_TGZ_FILE) $(AAF_HTML_MAN_COMP)
 
 $(PLUGIN_HTML_MAN_ZIP): $(PLUGIN_HTML_MAN)
 	rm -f $(PLUGIN_HTML_MAN_ZIP)
 	cd $(OUTPUT_DIR) && \
-		$(ZIP) -9rq $(PLUGIN_HTML_MAN_ZIP_FILE) $(PLUGIN_HTML_MAN_DIR_COMP)
+		$(ZIP) -9rq $(PLUGIN_HTML_MAN_ZIP_FILE) $(PLUGIN_HTML_MAN_COMP)
 
 $(PLUGIN_HTML_MAN_TGZ): $(PLUGIN_HTML_MAN)
 	rm -f $(PLUGIN_HTML_MAN_TGZ)
 	cd $(OUTPUT_DIR) && \
-		$(TAR) cfz $(PLUGIN_HTML_MAN_TGZ_FILE) $(PLUGIN_HTML_MAN_DIR_COMP)
+		$(TAR) cfz $(PLUGIN_HTML_MAN_TGZ_FILE) $(PLUGIN_HTML_MAN_COMP)
 
 
 ##############################################################
