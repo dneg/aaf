@@ -29,7 +29,8 @@ AAFBASE ?= ../..
 # Common definitions
 include $(AAFBASE)/build/common.mk
 
-ifeq ($(AAFPLATFORM),PPCDarwin)
+# Add -framework linker arg for all Darwin platforms (intel, ppc, universal)
+ifneq (,$(findstring Darwin,$(AAFPLATFORM)))
 PLATFORMLIBS += -framework CoreServices
 endif
 
@@ -40,7 +41,7 @@ INCLUDES = -I$(AAFSDKINCLUDEDIR)
 all : $(OBJDIR) $(AAFSDKBINDIR)/MXFDump$(EXE)
 
 $(AAFSDKBINDIR)/MXFDump$(EXE) : $(CXXOBJS)
-	$(LD) $(PLATFORMLIBS) $(CXXOBJS) $(RPATH_OPT) $(LIBCIO) -o $@
+	$(LD) $(PLATFORMLIBS) $(CXXOBJS) $(LIBCIO) -o $@
 
 .PHONY : clean
 clean :
