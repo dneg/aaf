@@ -101,10 +101,12 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="aaf.lib aafiid.lib"
 				OutputFile="../../../Release/Test/XMLStoredFormat.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories="..\..\..\lib"
+				IgnoreDefaultLibraryNames="libc.lib,libcmt.lib,libcd.lib,libcmtd.lib,msvcrtd.lib,msvcirtd.lib"
 				ProgramDatabaseFile=".\Release/XMLStoredFormat.pdb"
 				SubSystem="1"
 				TargetMachine="1"/>
