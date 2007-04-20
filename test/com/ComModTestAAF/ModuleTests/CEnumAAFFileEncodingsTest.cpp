@@ -551,7 +551,6 @@ static TESTRESULT Test_IEnumAAFFileEncodings_Reset()
     TESTRESULT          s = TR_SUCCEEDED;       // This test status.
     AAFRESULT           ar = AAFRESULT_SUCCESS; // Ret vals of AAF DM calls.
     IEnumAAFFileEncodings*  p_enum_encodings = 0;
-    IAAFFileEncoding*       p_encoding = 0;
 
 
     //
@@ -573,9 +572,12 @@ static TESTRESULT Test_IEnumAAFFileEncodings_Reset()
     assert( encodings_count > 0 );
 
 
+#ifndef NDEBUG
     // Make sure no elements left.
+    IAAFFileEncoding*       p_encoding = 0;
     assert( p_enum_encodings->NextOne( &p_encoding ) ==
             AAFRESULT_NO_MORE_OBJECTS );
+#endif
 
 
     //
