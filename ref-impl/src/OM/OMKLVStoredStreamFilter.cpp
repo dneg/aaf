@@ -126,7 +126,7 @@ void OMKLVStoredStreamFilter::write(const OMByte* data,
     OMKLVStoredStream::writeKLVKey(*_stream, key);
     _keyWritten = true;
 
-    const OMUInt64 lengthPosition =
+    ARESULT(const OMUInt64 lengthPosition)
                                  OMKLVStoredStream::reserveKLVLength(*_stream);
     ASSERT("Valid KLV length offset", _klvLengthOffset == lengthPosition);
     ASSERT("Valid KLV value offset", _klvValueOffset == _stream->position());
