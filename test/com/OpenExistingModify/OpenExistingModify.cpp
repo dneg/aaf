@@ -76,7 +76,7 @@ static aafProductVersion_t TestVersion = { 1, 1, 0, 0, kAAFVersionUnknown };
 static aafProductIdentification_t TestProductID;
 
 
-static HRESULT CreateAAFFile(aafWChar *filename)
+static HRESULT CreateAAFFile(aafWChar *filename, aafUID_constref fileKind)
 {
 	TestProductID.companyName = L"AAF Developers Desk";
 	TestProductID.productName = L"OpenExistingModify";
@@ -96,7 +96,7 @@ static HRESULT CreateAAFFile(aafWChar *filename)
 		TestProductID.productVersionString = L"CreateAAFFile";
 		checkResult( AAFFileOpenNewModifyEx(
 						filename,
-						&kAAFFileKind_Aaf4KBinary,
+						&fileKind,
 						0,
 						&TestProductID,
 						&pFile) );
@@ -306,6 +306,11 @@ void printUsage(const char *progname)
 	fprintf(stderr, "\t      2 - change AIFCDescriptor's Summary property\n");
 	fprintf(stderr, "\t      3 - replace AIFCDescriptor with WAVEDescriptor\n");
 	fprintf(stderr, "\t      4 - add EssenceData\n");
+	fprintf(stderr, "\t-e    \"encoding\" of initial test file\n");
+	fprintf(stderr, "\t      AAF-S4K - AAF 4K Structured Storage encoding (default)\n");
+	fprintf(stderr, "\t      AAF-S   - AAF Structured Storage encoding\n");
+	fprintf(stderr, "\t      KLV     - AAF KLV encoding\n");
+	fprintf(stderr, "\t      XML     - AAF XML encoding\n");
 }
 
 int main(int argc, char* argv[])
@@ -313,6 +318,7 @@ int main(int argc, char* argv[])
 	aafWChar		filename[FILENAME_MAX] = L"openExistingModify_test.aaf";
 	int				level = INT_MAX;
 	bool			create_input_file = true;
+	aafUID_t			fileKind = kAAFFileKind_Aaf4KBinary;
 
 	int i = 1;
 	if (argc > 1)
@@ -328,6 +334,26 @@ int main(int argc, char* argv[])
 			{
 				
 				level = atoi(argv[i+1]);
+				i += 2;
+			}
+			else if (!strcmp(argv[i], "-e"))
+			{
+				if (!strcmp(argv[i+1], "AAF-S4K"))
+				{
+					fileKind = kAAFFileKind_Aaf4KBinary;
+				}
+				else if (!strcmp(argv[i+1], "AAF-S"))
+				{
+					fileKind = kAAFFileKind_Aaf512Binary;
+				}
+				else if (!strcmp(argv[i+1], "KLV"))
+				{
+					fileKind = kAAFFileKind_AafKlvBinary;
+				}
+				else if (!strcmp(argv[i+1], "XML"))
+				{
+					fileKind = kAAFFileKind_AafXmlText;
+				}
 				i += 2;
 			}
 			else
@@ -356,7 +382,7 @@ int main(int argc, char* argv[])
 	{
 		if (create_input_file)
 		{
-			checkResult(CreateAAFFile(filename));
+			checkResult(CreateAAFFile(filename, fileKind));
 
 			checkResult(ModifyAAFFile(filename, level));
 
