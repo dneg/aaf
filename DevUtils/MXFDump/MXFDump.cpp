@@ -5215,7 +5215,7 @@ void checkRandomIndex(mxfRandomIndex& rip, PartitionList& partitions)
   // Check that the partitions in the random index are in the correct order.
   //
   RandomIndex::const_iterator rit;
-  mxfUInt64 previous;
+  mxfUInt64 previous = 0;
   for (rit = rip._index.begin(); rit != rip._index.end(); ++rit) {
     if ((rit != rip._index.begin()) && (rit->_offset <= previous)) {
       mxfError("Invalid random index - partitions out of order"
