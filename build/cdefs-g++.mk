@@ -75,6 +75,14 @@ DBG_FLAGS = -g -Wall -Wundef -Wno-non-virtual-dtor -Werror
 #------------------------------------------------------------------------------
 REL_FLAGS = -O2 -Wall -Wundef -Wno-non-virtual-dtor -Werror
 
+# Turn off no-strict-aliasing warning as a workaround for g++ 4.1.x and above
+# "dereferencing type-punned pointer will break strict-aliasing rules" warnings.
+# This warning is available only when optimization level -O2 or above is used.
+# g++ 4.1.x gives this warning when a pointer is cast to (void**) since
+# according to ISO C99 the two types are incompatible.  The correct fix for
+# the SDK is to change the APIs involved to pass (void*) instead of (void**).
+REL_FLAGS += -Wno-strict-aliasing
+
 #------------------------------------------------------------------------------
 # Compiler flags
 #
