@@ -163,27 +163,34 @@ static bool areAllModeFlagsSupported (aafUInt32 modeFlags)
 	}
 }
 
+//
+// Returns the hard-coded default Structured Storage encoding for the
+// given file kind.
+//
 const aafUID_t *mapStructuredStorageFileKind_DefaultToActual(const aafUID_t *fk_in)
 {
 	if (fk_in == NULL)
 		return NULL;
 
+	// When more than one encoding is enabled by defining more than one OM_USE_xxx_SS directive
+	// the default encoding is effectively hard-coded by the order of statements below.
+
 	if (*fk_in == kAAFFileKind_Aaf4KBinary)
 	{
-#if defined(OM_USE_WINDOWS_SS) || defined(OM_USE_MACINTOSH_SS) || defined(OM_USE_MACINTOSH_WRAPPED_SS) || defined(OM_USE_REFERENCE_SS)
-		return &kAAFFileKind_AafM4KBinary;
-#elif defined(OM_USE_SCHEMASOFT_SS)
+#if defined(OM_USE_SCHEMASOFT_SS)
 		return &kAAFFileKind_AafS4KBinary;
+#elif defined(OM_USE_WINDOWS_SS) || defined(OM_USE_MACINTOSH_SS) || defined(OM_USE_MACINTOSH_WRAPPED_SS) || defined(OM_USE_REFERENCE_SS)
+		return &kAAFFileKind_AafM4KBinary;
 #elif defined(OM_USE_GSF_SS)
 		return &kAAFFileKind_AafG4KBinary;
 #endif
 	}
 	else if (*fk_in == kAAFFileKind_Aaf512Binary)
     {
-#if defined(OM_USE_WINDOWS_SS) || defined(OM_USE_MACINTOSH_SS) || defined(OM_USE_MACINTOSH_WRAPPED_SS) || defined(OM_USE_REFERENCE_SS)
-		return &kAAFFileKind_AafM512Binary;
-#elif defined(OM_USE_SCHEMASOFT_SS)
+#if defined(OM_USE_SCHEMASOFT_SS)
 		return &kAAFFileKind_AafS512Binary;
+#elif defined(OM_USE_WINDOWS_SS) || defined(OM_USE_MACINTOSH_SS) || defined(OM_USE_MACINTOSH_WRAPPED_SS) || defined(OM_USE_REFERENCE_SS)
+		return &kAAFFileKind_AafM512Binary;
 #elif defined(OM_USE_GSF_SS)
 		return &kAAFFileKind_AafG512Binary;
 #endif
@@ -1664,6 +1671,10 @@ void ImplAAFFile::registerFactories(void)
 	const aafUID_t kAAFSignature_AafXmlText =
 	{ 0x00000000, 0x0000, 0x0000, { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 } };
 
+
+	// Structured Storage encodings are registered by defining the OM_USE_xxx_SS preprocessor
+	// directives and more than one can be registered and available at runtime.
+	// The default encoding is set in mapStructuredStorageFileKind_DefaultToActual().
 
 #if defined(OM_USE_WINDOWS_SS) || defined(OM_USE_MACINTOSH_SS) || defined(OM_USE_MACINTOSH_WRAPPED_SS) || defined(OM_USE_REFERENCE_SS)
 
