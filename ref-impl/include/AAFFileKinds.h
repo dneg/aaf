@@ -80,22 +80,6 @@ const aafUID_t kAAFFileKind_AafXmlText =
 const aafUID_t kAAFFileKind_AafKlvBinary =
 {0x4b464141, 0x000d, 0x4d4f, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0xff } };
 
-// the following signatures could be factored into a separate file
-
-// the signature actually stored in all AAF SS (512) files
-// note this is not a properly-formed SMPTE label, but this is legacy
-const aafUID_t kAAFSignature_Aaf512Binary = kAAFFileKind_Aaf512Binary;
-
-// the signature actually stored in all AAF SS (4096) files
-// [060e2b34.0302.0101.0d010201.02000000]
-const aafUID_t kAAFSignature_Aaf4KBinary =
-{ 0x0d010201, 0x0200, 0x0000, { 0x06, 0x0e, 0x2b, 0x34, 0x03, 0x02, 0x01, 0x01 } };
-
-// no signature is required for AAF-XML 
-const aafUID_t kAAFSignature_AafXmlText =
-{ 0x00000000, 0x0000, 0x0000, { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 } };
-
-
 // Deprecated symbols, which may be removed in a future release
 
 const aafUID_t aafFileKindDontCare = kAAFFileKind_DontCare;
@@ -108,8 +92,6 @@ const aafUID_t aafFileKindAafS4KBinary = kAAFFileKind_AafS4KBinary;
 const aafUID_t aafFileKindAafXmlText = kAAFFileKind_AafXmlText;
 const aafUID_t aafFileKindAafSSBinary = kAAFFileKind_Aaf512Binary;
 const aafUID_t aafFileKindAaf4KBinary = kAAFFileKind_Aaf4KBinary;
-const aafUID_t aafSignature_Aaf_SSBinary = kAAFSignature_Aaf512Binary;
-const aafUID_t aafSignature_Aaf_SSBin_4K = kAAFSignature_Aaf4KBinary;
 
 
 #endif // ! __AAFFileKinds_h__

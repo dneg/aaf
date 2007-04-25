@@ -1638,10 +1638,10 @@ OMRawStorage * ImplAAFFile::RawStorage ()
 #define AAFS4KEncoding ENCODING(kAAFFileKind_AafS4KBinary)
 #define AAFM4KEncoding ENCODING(kAAFFileKind_AafM4KBinary)
 #define AAFG4KEncoding ENCODING(kAAFFileKind_AafG4KBinary)
-#define AAFXMLEncoding ENCODING(kAAFFileKind_AafXmlText)
+#define AAFKLVEncoding ENCODING(kAAFFileKind_AafKlvBinary)
 
 // these are only prototype
-#define AAFKLVEncoding ENCODING(kAAFFileKind_AafKlvBinary)
+#define AAFXMLEncoding ENCODING(kAAFFileKind_AafXmlText)
 
 // signatures from the point of view of the OM
 #define Signature_SSBin_512 ENCODING(kAAFSignature_Aaf512Binary)
@@ -1650,6 +1650,20 @@ OMRawStorage * ImplAAFFile::RawStorage ()
 
 void ImplAAFFile::registerFactories(void)
 {
+
+	// the signature stored in all AAF SS (512) files
+	// note this is not a properly-formed SMPTE label, but this is legacy
+	const aafUID_t kAAFSignature_Aaf512Binary = kAAFFileKind_Aaf512Binary;
+
+	// the signature stored in all AAF SS (4096) files
+	// [060e2b34.0302.0101.0d010201.02000000]
+	const aafUID_t kAAFSignature_Aaf4KBinary =
+	{ 0x0d010201, 0x0200, 0x0000, { 0x06, 0x0e, 0x2b, 0x34, 0x03, 0x02, 0x01, 0x01 } };
+
+	// no signature is required for AAF-XML 
+	const aafUID_t kAAFSignature_AafXmlText =
+	{ 0x00000000, 0x0000, 0x0000, { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 } };
+
 
 #if defined(OM_USE_WINDOWS_SS) || defined(OM_USE_MACINTOSH_SS) || defined(OM_USE_MACINTOSH_WRAPPED_SS) || defined(OM_USE_REFERENCE_SS)
 
