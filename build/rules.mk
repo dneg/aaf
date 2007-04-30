@@ -53,17 +53,24 @@ ifeq ($(CC),g++)
   MAKE_DEPS_FLAG=-MM
 endif
 
+# To avoid "-M options are not allowed with multiple -arch flags" when building
+# UniversalDarwin, remove of the arches from "-arch ppp -arch intel".
+DEPS_CFLAGS = $(CFLAGS)
+ifeq ($(AAFPLATFORM),UniversalDarwin)
+  DEPS_CFLAGS = $(subst -arch ppc,,$(CFLAGS))
+endif
+
 $(OBJDIR)/%.d : %.c 
 	@echo Generating dependencies for $<; \
 	$(SHELL) -ec 'if [ ! -d $(OBJDIR) ]; then $(MKDIR) $(OBJDIR); fi; \
-	$(CC) $(MAKE_DEPS_FLAG) $(CFLAGS) $(INCLUDES) $< \
+	$(CC) $(MAKE_DEPS_FLAG) $(DEPS_CFLAGS) $(INCLUDES) $< \
 	| sed '\''s,\($(*F)\)\.o[ :]*,$(@D)/\1.o $@ : ,g'\'' > $@; \
 	[ -s $@ ] || rm -f $@'
 
 $(OBJDIR)/%.d : %.$(CPP_EXTENSION)
 	@echo Generating dependencies for $<; \
 	$(SHELL) -ec 'if [ ! -d $(OBJDIR) ]; then $(MKDIR) $(OBJDIR); fi; \
-	$(CC) $(MAKE_DEPS_FLAG) $(CFLAGS) $(INCLUDES) $< \
+	$(CC) $(MAKE_DEPS_FLAG) $(DEPS_CFLAGS) $(INCLUDES) $< \
 	| sed '\''s,\($(*F)\)\.o[ :]*,$(@D)/\1.o $@ : ,g'\'' > $@; \
 	[ -s $@ ] || rm -f $@'
 
