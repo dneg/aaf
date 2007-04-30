@@ -53,8 +53,9 @@ ifeq ($(CC),g++)
   MAKE_DEPS_FLAG=-MM
 endif
 
-# To avoid "-M options are not allowed with multiple -arch flags" when building
-# UniversalDarwin, remove of the arches from "-arch ppp -arch intel".
+# To avoid g++ error "-M options are not allowed with multiple -arch flags"
+# when building UniversalDarwin, remove one of the arches from CFLAGS
+# which contains "-arch ppp -arch intel" for UniversalDarwin.
 DEPS_CFLAGS = $(CFLAGS)
 ifeq ($(AAFPLATFORM),UniversalDarwin)
   DEPS_CFLAGS = $(subst -arch ppc,,$(CFLAGS))
