@@ -87,7 +87,7 @@ void Timecode::Execute( const std::vector<AxString>& argv )
 	aafTimecode_t tc;
 	tc.startFrame = AxStringUtil::strtol( startFrame );
 	tc.drop       = DropTypeParams::GetInstance().Find( *this, dropType );
-	tc.fps        = AxStringUtil::strtol( fps );
+	tc.fps        = static_cast<aafUInt16>(AxStringUtil::strtol( fps ));
 	
 	axTC.Initialize( AxStringUtil::strtol( length ), tc ) ;
 
