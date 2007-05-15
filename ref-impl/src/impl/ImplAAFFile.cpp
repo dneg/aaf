@@ -1657,7 +1657,7 @@ OMRawStorage * ImplAAFFile::RawStorage ()
 
 void ImplAAFFile::registerFactories(void)
 {
-
+#if defined(OM_USE_WINDOWS_SS) || defined(OM_USE_SCHEMASOFT_SS) || defined(OM_USE_GSF_SS)
 	// the signature stored in all AAF SS (512) files
 	// note this is not a properly-formed SMPTE label, but this is legacy
 	const aafUID_t kAAFSignature_Aaf512Binary = kAAFFileKind_Aaf512Binary;
@@ -1666,6 +1666,7 @@ void ImplAAFFile::registerFactories(void)
 	// [060e2b34.0302.0101.0d010201.02000000]
 	const aafUID_t kAAFSignature_Aaf4KBinary =
 	{ 0x0d010201, 0x0200, 0x0000, { 0x06, 0x0e, 0x2b, 0x34, 0x03, 0x02, 0x01, 0x01 } };
+#endif
 
 	// no signature is required for AAF-XML 
 	const aafUID_t kAAFSignature_AafXmlText =
