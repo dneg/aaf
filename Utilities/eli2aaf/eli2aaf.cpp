@@ -550,7 +550,7 @@ static bool addMasterMobForDVFile(
 	SET_PROPERTY_VALUE( CDCIOffsetToFrameIndexes, aafInt32, 0 );
 	SET_PROPERTY_VALUE( DIDFrameIndexByteOrder, aafUInt16, 0x4949 );
 	SET_PROPERTY_VALUE( DIDFirstFrameOffset, aafInt32, 0x0 );
-	SET_PROPERTY_VALUE( DIDImageSize, aafInt32, eslength );
+	SET_PROPERTY_VALUE( DIDImageSize, aafInt32, static_cast<aafInt32>(eslength) );
 	if (formatPAL)
 	{
 		SET_PROPERTY_VALUE( DIDResolutionID, aafUInt32, 0x8d );
