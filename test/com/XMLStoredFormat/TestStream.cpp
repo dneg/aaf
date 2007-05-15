@@ -92,7 +92,7 @@ static bool testRestore(wchar_t* fileName)
             
             aafUInt8 value[256];
             aafUInt32 numRead;
-            checkResult(pStreamType->Read(pPropertyValue, size, value, &numRead));
+            checkResult(pStreamType->Read(pPropertyValue, static_cast<aafUInt32>(size), value, &numRead));
 
             if (byteOrderValue == testByteOrderValue &&
                 size == 8 &&
