@@ -45,7 +45,7 @@ aafiid : $(OBJDIR) $(LIBDIR) $(LIBDIR)/libaafiid$(LIBEXT)
 
 
 $(LIBDIR)/libaafiid$(LIBEXT) : $(CXXOBJS)
-	$(LD_STAT_LIB) $@ $(CXXOBJS)
+	$(LD_STAT_LIB) $(LD_STAT_OUTPUT) $(CXXOBJS)
 
 
 .PHONY : clean

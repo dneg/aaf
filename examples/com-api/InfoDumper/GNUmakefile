@@ -27,7 +27,7 @@ EXAMPLE = InfoDumper
 
 include ../comexamplerules.mk
 
-TEST_CMD = env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/InfoDumper$(EXE)
+TEST_CMD = $(APP_RUN_ENV) $(AAFSDKBINDIR)/InfoDumper$(EXE)
 .PHONY : check
 check : $(AAFSDKBINDIR)/InfoDumper$(EXE)
 	for f in ../*/*.aaf ../../../test/com/*/*.aaf; do if echo $$f | grep UTF8FileNameTest > /dev/null; then echo "Skipping $$f until wctou8() et al are removed from the SDK"; else echo InfoDumper $$f; $(TEST_CMD) $$f > /dev/null || exit $$?; fi; done

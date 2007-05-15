@@ -53,6 +53,7 @@ CXXOBJS:=$(filter-out %/OMGSF_SSStoredObjectFactory.o,$(CXXOBJS))
 endif
 
 CFLAGS += -DOM_STACK_TRACE_ON_ASSERT
+CFLAGS += -DXML_STATIC
 
 # AAF-XML stored format support requires the expat library which is
 # bundled with the AAF SDK.
@@ -67,7 +68,7 @@ om : $(OBJDIR) $(LIBDIR) $(LIBDIR)/libom$(LIBEXT)
 
 
 $(LIBDIR)/libom$(LIBEXT) : $(CXXOBJS)
-	$(LD_STAT_LIB) $@ $(CXXOBJS)
+	$(LD_STAT_LIB) $(LD_STAT_OUTPUT) $(CXXOBJS)
 
 
 .PHONY : clean

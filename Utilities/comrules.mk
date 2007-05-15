@@ -48,14 +48,8 @@ BINTARGET = $(AAFSDKBINDIR)/$(UTILITY)$(EXE)
 .PHONY : all
 all : $(OBJDIR) $(BINTARGET)
 
-ifeq ($(AAFTARGET),Debug-static)
 $(BINTARGET) : $(CXXOBJS)
-	$(LD) $(CXXOBJS) $(STATIC_LINK_LINE) -o $@
-else
-$(BINTARGET) : $(CXXOBJS)
-	$(LD) $(CXXOBJS) $(RPATH_OPT) \
-	-L$(AAFSDKLIBDIR) -laaflib -laafiid $(LIBCIO) -o $@
-endif
+	$(LD) $(CXXOBJS) $(LINK_AAF_APP)
 
 
 .PHONY : clean

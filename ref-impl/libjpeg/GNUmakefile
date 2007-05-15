@@ -66,7 +66,7 @@ jpeg : $(OBJDIR) $(LIBDIR) $(LIBDIR)/libjpeg$(LIBEXT)
 
 
 $(LIBDIR)/libjpeg$(LIBEXT) :  $(CXXOBJS)
-	$(LD_STAT_LIB) $@ $(CXXOBJS)
+	$(LD_STAT_LIB) $(LD_STAT_OUTPUT) $(CXXOBJS)
 
 
 .PHONY : clean

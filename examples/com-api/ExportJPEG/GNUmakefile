@@ -27,7 +27,7 @@ EXAMPLE = ExportJPEG
 
 include ../comexamplerules.mk
 
-TEST_CMD = env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/ExportJPEG$(EXE)
+TEST_CMD = $(APP_RUN_ENV) $(AAFSDKBINDIR)/ExportJPEG$(EXE)
 .PHONY : check
 check : $(AAFSDKBINDIR)/ExportJPEG$(EXE)
 	@if [ -r 4frames.mjpeg ] ; then $(TEST_CMD) -res 15:1 -rawJPEG 4frames.mjpeg ; fi

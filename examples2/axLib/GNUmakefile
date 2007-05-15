@@ -48,7 +48,7 @@ axLib : $(OBJDIR) $(LIBDIR) $(LIBDIR)/libaxLib$(LIBEXT)
 
 
 $(LIBDIR)/libaxLib$(LIBEXT) : $(CXXOBJS)
-	$(LD_STAT_LIB) $@ $(CXXOBJS)
+	$(LD_STAT_LIB) $(LD_STAT_OUTPUT) $(CXXOBJS)
 
 
 .PHONY : clean

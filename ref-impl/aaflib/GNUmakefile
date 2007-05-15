@@ -45,7 +45,7 @@ aaflib : $(OBJDIR) $(LIBDIR) $(LIBDIR)/libaaflib$(LIBEXT)
 
 
 $(LIBDIR)/libaaflib$(LIBEXT) : $(CXXOBJS)
-	$(LD_STAT_LIB) $@ $(CXXOBJS)
+	$(LD_STAT_LIB) $(LD_STAT_OUTPUT) $(CXXOBJS)
 
 
 .PHONY : clean

@@ -36,18 +36,12 @@ INCLUDES = -I$(AAFSDKINCLUDEDIR)
 .PHONY : all
 all : $(OBJDIR) $(AAFSDKBINDIR)/XMLStoredFormatTest$(EXE)
 
-
-ifeq ($(AAFTARGET),Debug-static)
 $(AAFSDKBINDIR)/XMLStoredFormatTest$(EXE) : $(CXXOBJS)
-	$(LD) $(CXXOBJS) $(STATIC_LINK_LINE) -o $@
-else
-$(AAFSDKBINDIR)/XMLStoredFormatTest$(EXE) : $(CXXOBJS)
-	$(LD) $(CXXOBJS) -L$(AAFSDKLIBDIR) -laaflib -laafiid $(PLATFORMLIBS) -o $@ 
-endif
+	$(LD) $(CXXOBJS) $(LINK_AAF_APP)
 
 .PHONY : check
 check : $(AAFSDKBINDIR)/XMLStoredFormatTest$(EXE)
-	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/XMLStoredFormatTest$(EXE)
+	$(APP_RUN_ENV) $(AAFSDKBINDIR)/XMLStoredFormatTest$(EXE)
 
 
 .PHONY : clean

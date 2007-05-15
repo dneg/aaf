@@ -55,7 +55,7 @@ else
 all : $(OBJDIR) $(AAFSDKBINDIR)/aafdump$(EXE)
 
 $(AAFSDKBINDIR)/aafdump$(EXE) : $(CXXOBJS)
-	$(LD) $(CXXOBJS) $(RPATH_OPT) $(LIBCIO) $(PLATFORMLIBS) -o $@
+	$(LD) $(CXXOBJS) $(PLATFORMLIBS) $(LD_DYN_OUTPUT)
 
 endif
 

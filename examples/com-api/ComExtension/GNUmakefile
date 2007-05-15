@@ -51,13 +51,8 @@ CXXFILES = read.cpp \
 	   extensionUtils.cpp
 
 
-ifeq ($(AAFTARGET),Debug-static)
 $(AAFSDKBINDIR)/ComExtensionRead$(EXE) : $(CXXOBJS)
-	$(LD) $(CXXOBJS) $(STATIC_LINK_LINE) -o $@
-else
-$(AAFSDKBINDIR)/ComExtensionRead$(EXE) : $(CXXOBJS)
-	$(LD) $(CXXOBJS) -L$(AAFSDKLIBDIR) -laaflib -laafiid $(LIBCIO) -o $@
-endif
+	$(LD) $(CXXOBJS) $(LINK_AAF_APP)
 
 
 CXXFILES2 = write.cpp \
@@ -66,13 +61,8 @@ CXXFILES2 = write.cpp \
 	    extensionWrite.cpp
 
 
-ifeq ($(AAFTARGET),Debug-static)
 $(AAFSDKBINDIR)/ComExtensionWrite$(EXE) : $(CXXOBJS2)
-	$(LD) $(CXXOBJS2) $(STATIC_LINK_LINE) -o $@
-else
-$(AAFSDKBINDIR)/ComExtensionWrite$(EXE) : $(CXXOBJS2)
-	$(LD) $(CXXOBJS2) -L$(AAFSDKLIBDIR) -laaflib -laafiid $(LIBCIO) -o $@
-endif
+	$(LD) $(CXXOBJS2) $(LINK_AAF_APP)
 
 
 .PHONY : clean

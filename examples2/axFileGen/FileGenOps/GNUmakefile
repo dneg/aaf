@@ -39,6 +39,11 @@ include $(AAFBASE)/build/common.mk
 
 INCLUDES = -I../../axLib -I.. -I$(AAFSDKINCLUDEDIR)
 
+# Turn off warnings until code is fixed for truncation of values
+ifeq ($(COMPILER),cl)
+  CFLAGS:=$(filter-out %WX,$(CFLAGS))
+endif
+
 .PHONY : all
 all : axFileGenOps
 
@@ -48,7 +53,7 @@ axFileGenOps : $(OBJDIR) $(LIBDIR) $(LIBDIR)/libaxFileGenOps$(LIBEXT)
 
 
 $(LIBDIR)/libaxFileGenOps$(LIBEXT) : $(CXXOBJS)
-	$(LD_STAT_LIB) $@ $(CXXOBJS)
+	$(LD_STAT_LIB) $(LD_STAT_OUTPUT) $(CXXOBJS)
 
 
 .PHONY : clean

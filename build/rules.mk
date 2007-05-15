@@ -34,11 +34,16 @@
 # Rules to compile the source files.
 #------------------------------------------------------------------------------
 
+COMPILER_OUTPUT=-o $@
+ifeq ($(COMPILER),cl)
+  COMPILER_OUTPUT=-Fo$@
+endif
+
 $(OBJDIR)/%$(OBJ): %.c
-	$(CC) -c $(CFLAGS) $(INCLUDES) $< -o $@
+	$(CC) -c $(CFLAGS) $(INCLUDES) $< $(COMPILER_OUTPUT)
 
 $(OBJDIR)/%$(OBJ): %.$(CPP_EXTENSION)
-	$(CC) -c $(CFLAGS) $(INCLUDES) $< -o $@
+	$(CC) -c $(CFLAGS) $(INCLUDES) $< $(COMPILER_OUTPUT)
 
 
 #------------------------------------------------------------------------------

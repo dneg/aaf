@@ -28,7 +28,7 @@ expat : $(OBJDIR) $(LIBDIR) $(LIBDIR)/libexpat$(LIBEXT)
 
 
 $(LIBDIR)/libexpat$(LIBEXT) :  $(CXXOBJS)
-	$(LD_STAT_LIB) $@ $(CXXOBJS)
+	$(LD_STAT_LIB) $(LD_STAT_OUTPUT) $(CXXOBJS)
 
 
 .PHONY : clean

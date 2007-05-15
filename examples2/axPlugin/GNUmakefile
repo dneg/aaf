@@ -41,25 +41,30 @@ INCLUDES = -I. \
 		-I../axLib \
 		-I$(AAFSDKINCLUDEDIR)
 
+LIBAXPLUGIN = libaxPlugin$(DLL)
+LINK_AXLIB_APP = -L$(OBJDIR) -laxLib
+
+ifeq ($(COMPILER),cl)
+  LIBAXPLUGIN = axPlugin$(DLL)
+  LINK_AXLIB_APP = $(OBJDIR)/libaxLib$(LIBEXT) /DEF:AxPluginWin.def
+endif
+
 .PHONY : all
 all : axPlugin
 
-
 .PHONY : axPlugin
-axPlugin : $(OBJDIR) $(LIBDIR) $(LIBDIR)/libaxPlugin$(DLL)
+axPlugin : $(OBJDIR) $(LIBDIR) $(LIBDIR)/$(LIBAXPLUGIN)
 
-
-$(LIBDIR)/libaxPlugin$(DLL) : $(CXXOBJS)
-	$(LD_DYN_LIB) -o $@ $(CXXOBJS) -L$(OBJDIR) -laxLib \
-	-L$(AAFBUILDDIR)/aafiid/$(AAFTARGETDIR) -laafiid \
-	-L$(AAFBUILDDIR)/aaflib/$(AAFTARGETDIR) -laaflib
+$(LIBDIR)/$(LIBAXPLUGIN) : $(CXXOBJS)
+	$(LD_DYN_LIB) $(CXXOBJS) $(LINK_AXLIB_APP) \
+	$(LINK_AAF_APP)
 
 
 .PHONY : clean
 clean :
 	@$(RM) $(CXXOBJS)
 	@$(RM) $(DEPS)
-	@$(RM) $(LIBDIR)/libaxPlugin$(DLL)
+	@$(RM) $(LIBDIR)/$(LIBAXPLUGIN)
 	@$(RMDIR) $(OBJDIR)/ii_files
 
 .PHONY : realclean

@@ -47,8 +47,17 @@ all :
 clean :
 
 else
+
+PERSONNEL_EXTENSION_LIB = libAAFPersonnelExtension$(DLL)
+PERSONNEL_EXTENSION_DEF =
+ifeq ($(AAFPLATFORM),Win)
+  # The library has a different name under Win for historical reasons
+  PERSONNEL_EXTENSION_LIB = AAFPersonnelExtension$(DLL)
+  PERSONNEL_EXTENSION_DEF = /DEF:AAFPersonnelExtension.def
+endif
+
 all : $(OBJDIR) \
-		$(AAFSDKBINDIR)/libAAFPersonnelExtension$(DLL) \
+		$(AAFSDKBINDIR)/$(PERSONNEL_EXTENSION_LIB) \
 		$(AAFSDKBINDIR)/ComPersonnelPluginWrite$(EXE)
 
 
@@ -62,9 +71,13 @@ SUPOBJS = $(AAFBUILDDIR)/com-api/$(AAFTARGETDIR)/CAAFClassFactory$(OBJ) \
 		$(AAFBUILDDIR)/com-api/$(AAFTARGETDIR)/CAAFUnknown$(OBJ) \
 		$(OBJDIR)/extensionUtils$(OBJ)
 
+ifeq ($(COMPILER),cl)
+  # Avoid "already defined" errors using MSVC
+  CXXOBJS:=$(filter-out %/AAFPersonnelExtension_i.obj,$(CXXOBJS))
+endif
 
-$(AAFSDKBINDIR)/libAAFPersonnelExtension$(DLL) : $(CXXOBJS)
-	$(LD_DYN_LIB) $(SUPOBJS) $(CXXOBJS) -L$(AAFSDKLIBDIR) -o $@ -laaflib -laafiid
+$(AAFSDKBINDIR)/$(PERSONNEL_EXTENSION_LIB) : $(CXXOBJS)
+	$(LD_DYN_LIB) $(SUPOBJS) $(CXXOBJS) $(PERSONNEL_EXTENSION_DEF) $(LINK_AAF_APP)
 
 
 CXXFILES2 = extensionReadPlugin.cpp \
@@ -74,7 +87,7 @@ CXXFILES2 = extensionReadPlugin.cpp \
 
 $(AAFSDKBINDIR)/ComPersonnelPluginWrite$(EXE) : $(CXXOBJS2)
 	$(LD) $(CXXOBJS2) $(OBJDIR)/extensionUtils$(OBJ) \
-	-L$(AAFSDKLIBDIR) -laaflib -laafiid $(LIBCIO) -o $@
+	$(LINK_AAF_APP)
 
 
 .PHONY : clean
@@ -82,7 +95,7 @@ clean :
 	@$(RM) $(CXXOBJS)
 	@$(RM) $(CXXOBJS2)
 	@$(RM) $(DEPS)
-	@$(RM) $(AAFSDKBINDIR)/libAAFPersonnelExtension$(DLL)
+	@$(RM) $(AAFSDKBINDIR)/$(PERSONNEL_EXTENSION_LIB)
 	@$(RM) $(AAFSDKBINDIR)/ComPersonnelPluginWrite$(EXE)
 	@$(RMDIR) $(OBJDIR)/ii_files
 endif

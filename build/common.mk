@@ -64,6 +64,14 @@ ifeq ($(wildcard $(AAFBUILDDIR)/sss-impl/libSSRW2C$(LIBEXT)),$(AAFBUILDDIR)/sss-
 	USE_SS=1
 endif
 
+# On Windows the layout is /sss-impl/ssrw_c.lib (for historical reasons)
+ifeq ($(wildcard $(AAFBASE)/AAF$(AAFPLATFORM)SDK/sss-impl/ssrw_c$(LIBEXT)),$(AAFBASE)/AAF$(AAFPLATFORM)SDK/sss-impl/ssrw_c$(LIBEXT))
+	STORAGE_LIBS += $(AAFBASE)/AAF$(AAFPLATFORM)SDK/sss-impl/ssrw_c$(LIBEXT)
+	LINK_STG += -L$(AAFBASE)/AAF$(AAFPLATFORM)SDK/sss-impl -lssrw_c
+	ADD_CFLAGS += -DOM_USE_SCHEMASOFT_SS
+	USE_SS=1
+endif
+
 # Check for Microsoft Structured Storage Reference Implementation
 ifeq ($(wildcard $(AAFBUILDDIR)/ss-impl/$(AAFTARGETDIR)/librefstg$(LIBEXT)),$(AAFBUILDDIR)/ss-impl/$(AAFTARGETDIR)/librefstg$(LIBEXT))
 	STORAGE_LIBS += $(AAFBUILDDIR)/ss-impl/$(AAFTARGETDIR)/librefstg$(LIBEXT)
@@ -183,16 +191,18 @@ CFLAGS = $(DBG_FLAGS) $(ADD_CFLAGS) $(PLATFORM_CFLAGS)
 # U_OPTS should be defined as whether use_unicode or 
 # no_unicode in platform-specific .def file
 ifeq ($(U_OPTS), use_unicode)
-    CFLAGS += -D_UNICODE=1
+    CFLAGS += -D_UNICODE
 endif
 
 
 #----------------------------------------------------------
-# Dynamic library search path. Optional.
-# It allows the libraries to be found quickly.
-# By default it depends on AAFBASE value. But user can 
+# Optional. RPATH adds a directory to the runtime library search path.
+# Used when linking an AAF client program (executable).
+# It allows the libraries to be found quickly at runtime.
+# By default it depends on AAFBASE value, but user can 
 # set this variable to point to the directory where AAF 
-# libraries are installed. For example:
+# libraries are installed.
+# For example:
 #
 #	make RPATH=/usr/local/lib/aaf
 #
@@ -240,8 +250,21 @@ DEPS = $(DEPS_TMP:%.c=$(OBJDIR)/%.d)
 
 
 #----------------------------------------------------------
-# STATIC_LINK_LINE - Link line used for static builds
-# Pulls in all required static libraries to achieve a
-# statically linked executable.
+# LINK_AAF_APP - Link line args to produce an AAF client
+# application which dynamically loads the AAF libraries.
 #----------------------------------------------------------
-STATIC_LINK_LINE = -L$(AAFBUILDDIR)/ref-impl/$(AAFTARGETDIR) -L$(AAFBUILDDIR)/aaflib/$(AAFTARGETDIR) -L$(AAFBUILDDIR)/aafiid/$(AAFTARGETDIR) -L$(AAFBUILDDIR)/OM/$(AAFTARGETDIR) -lcom-api -limpl -laaflib -laafiid -lom $(PLATFORMLIBS) $(LIBCIO) $(LINK_STG) $(UUIDLIB)
+ifeq ($(AAFTARGET), Debug-static)
+	# Link line used for static builds pulls in all required
+	# static libraries to achieve a statically linked executable.
+    LINK_AAF_APP ?= -L$(AAFBUILDDIR)/ref-impl/$(AAFTARGETDIR) -L$(AAFBUILDDIR)/aaflib/$(AAFTARGETDIR) -L$(AAFBUILDDIR)/aafiid/$(AAFTARGETDIR) -L$(AAFBUILDDIR)/OM/$(AAFTARGETDIR) -lcom-api -limpl -lom -laaflib -laafiid $(PLATFORMLIBS) $(LIBCIO) $(LINK_STG) $(UUIDLIB) -o $@
+else
+	# AAF client applications need only link to aaflib and aafiid
+    LINK_AAF_APP ?= -L$(AAFSDKLIBDIR) -laaflib -laafiid $(RPATH_OPT) $(PLATFORMLIBS) $(LIBCIO) -o $@
+endif
+
+#----------------------------------------------------------
+# APP_RUN_ENV - Command to setup environment for running
+# an AAF application from the command line (by setting up
+# paths to dynamically loaded AAF libraries.
+#----------------------------------------------------------
+APP_RUN_ENV ?= env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH)

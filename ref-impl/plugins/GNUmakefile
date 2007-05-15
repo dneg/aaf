@@ -73,6 +73,20 @@ all : aafpgapi aafintp
 
 DYN_PGAPI_LIB = $(LIBDIR)/libaafpgapi$(DLL)
 DYN_INTP_LIB = $(LIBDIR)/libaafintp$(DLL)
+PGAPI_DEF=
+INTP_DEF=
+
+ifeq ($(AAFPLATFORM),Win)
+  # For historical reasons the DLLs have different names on MS Windows
+  DYN_PGAPI_LIB = $(LIBDIR)/AAFPGAPI$(DLL)
+  DYN_INTP_LIB = $(LIBDIR)/AAFINTP$(DLL)
+
+  # For MS Windows the linker must be passed the .DEF file otherwise the DLL
+  # will not contain the expected exported symbols.
+  PGAPI_DEF = /DEF:AafPlugincom.def
+  INTP_DEF = /DEF:AAFINTP.DEF
+endif
+
 STAT_PGAPI_LIB = $(AAFBUILDDIR)/ref-impl/$(AAFTARGETDIR)/libaafpgapi$(LIBEXT)
 STAT_INTP_LIB = $(AAFBUILDDIR)/ref-impl/$(AAFTARGETDIR)/libaafintp$(LIBEXT)
 
@@ -84,6 +98,8 @@ ifeq ($(AAFTARGET),Debug-static)
 	INTP_LIB = $(STAT_INTP_LIB)
 endif
 
+JPEGLIB = $(LIBDIR)/libjpeg$(LIBEXT)
+
 
 .PHONY : aafpgapi
 aafpgapi : $(OBJDIR) $(LIBDIR) $(PGAPI_LIB)
@@ -91,16 +107,16 @@ aafpgapi : $(OBJDIR) $(LIBDIR) $(PGAPI_LIB)
 .PHONY : aafintp
 aafintp : $(OBJDIR) $(LIBDIR) $(INTP_LIB)
 
-
 $(STAT_PGAPI_LIB) : $(CXXOBJS)
-	$(LD_STAT_LIB) $@ $(CXXOBJS)
+	$(LD_STAT_LIB) $(LD_STAT_OUTPUT) $(CXXOBJS)
+
 
 $(DYN_PGAPI_LIB) : $(CXXOBJS)
 	$(LD_DYN_LIB) \
-	-L$(LIBDIR) $(SUPOBJS) $(CXXOBJS) -o $@ \
+	$(SUPOBJS) $(CXXOBJS) $(LD_DYN_OUTPUT) $(PGAPI_DEF) \
 	$(AAFBUILDDIR)/aaflib/$(AAFTARGETDIR)/libaaflib$(LIBEXT) \
 	$(AAFBUILDDIR)/aafiid/$(AAFTARGETDIR)/libaafiid$(LIBEXT) \
-	-ljpeg $(OPT_CODEC_LIBS)
+	$(JPEGLIB) $(OPT_CODEC_LIBS)
 
 
 CXXFILES2 = AAFInterpCOM.cpp \
@@ -109,11 +125,11 @@ CXXFILES2 = AAFInterpCOM.cpp \
 
 
 $(STAT_INTP_LIB) : $(CXXOBJS2)
-	$(LD_STAT_LIB) $@ $(CXXOBJS2)
+	$(LD_STAT_LIB) $(LD_STAT_OUTPUT) $(CXXOBJS2)
 
 $(DYN_INTP_LIB) : $(SUPOBJS) $(CXXOBJS2)
 	$(LD_DYN_LIB) \
-	-L$(LIBDIR) $(SUPOBJS) $(CXXOBJS2) -o $@ \
+	$(SUPOBJS) $(CXXOBJS2) $(LD_DYN_OUTPUT) $(INTP_DEF) \
 	$(AAFBUILDDIR)/aaflib/$(AAFTARGETDIR)/libaaflib$(LIBEXT) \
 	$(AAFBUILDDIR)/aafiid/$(AAFTARGETDIR)/libaafiid$(LIBEXT)
 

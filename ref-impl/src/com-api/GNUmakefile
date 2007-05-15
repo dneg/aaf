@@ -52,6 +52,16 @@ INCLUDES = -I../../include/ref-api \
 
 
 DYN_LIBTARGET = $(LIBDIR)/libcom-api$(DLL)
+AAFCOM_DEF =
+ifeq ($(AAFPLATFORM),Win)
+	# For historical reasons the DLL has a different name on MS Windows
+	DYN_LIBTARGET = $(LIBDIR)/AAFCOAPI$(DLL)
+
+	# For MS Windows the linker must be passed the .DEF file otherwise the DLL
+	# will not contain the expected exported symbols.
+	AAFCOM_DEF = $(LD_DEF)com-dll/AAFCOM.DEF
+endif
+
 STAT_LIBTARGET = $(AAFBUILDDIR)/ref-impl/$(AAFTARGETDIR)/libcom-api$(LIBEXT)
 
 LIBTARGET=$(DYN_LIBTARGET)		# Default is dynamic library
@@ -87,9 +97,11 @@ com-dll :
 	cd com-dll && $(MAKE)
 
 
-# For a static build, simply archive the object files into a static library
+# For a static build, simply archive the object files into a static library.
+# The static library is intended for debugging only.
 $(STAT_LIBTARGET) : $(CXXOBJS) $(CXXOBJS2)
-	$(LD_STAT_LIB) $@ $(CXXOBJS) $(CXXOBJS2)
+	$(LD_STAT_LIB) $(LD_STAT_OUTPUT) $(CXXOBJS) $(CXXOBJS2)
+
 
 # The dynamic library must link in all necessary ref-impl code
 # and the static expat library
@@ -97,13 +109,13 @@ $(DYN_LIBTARGET) : $(CXXOBJS) $(CXXOBJS2) \
 				$(AAFBUILDDIR)/ref-impl/$(AAFTARGETDIR)/libimpl$(LIBEXT) \
 				$(AAFBUILDDIR)/OM/$(AAFTARGETDIR)/libom$(LIBEXT) $(STORAGE_LIBS)
 
-	$(LD_DYN_LIB) $(CXXOBJS) $(CXXOBJS2) -o $@ \
+	$(LD_DYN_LIB) $(CXXOBJS) $(CXXOBJS2) $(AAFCOM_DEF) $(LD_DYN_OUTPUT) \
 	$(AAFBUILDDIR)/ref-impl/$(AAFTARGETDIR)/libimpl$(LIBEXT) \
 	$(AAFBUILDDIR)/OM/$(AAFTARGETDIR)/libom$(LIBEXT) \
 	$(STORAGE_LIBS) \
 	$(EXPAT_LIB) \
 	$(AAFBUILDDIR)/aaflib/$(AAFTARGETDIR)/libaaflib$(LIBEXT) \
-	-lm $(UUIDLIB) $(PLATFORMLIBS)
+	$(UUIDLIB) $(PLATFORMLIBS)
 
 .PHONY : clean
 clean:

@@ -53,17 +53,16 @@ AXLIBDIR = $(AAFBUILDDIR)/$(AXLIBPACKAGE)/$(AAFTARGETDIR)
 
 BINTARGET = $(AAFSDKBINDIR)/$(PROGNAME)$(EXE)
 
+LINK_AXLIB_APP = -L$(AXLIBDIR) -laxLib
+ifeq ($(COMPILER),cl)
+  LINK_AXLIB_APP = $(AXLIBDIR)/libaxLib$(LIBEXT)
+endif
+
 .PHONY : all
 all : $(OBJDIR) $(BINTARGET)
 
-ifeq ($(AAFTARGET),Debug-static)
 $(BINTARGET) : $(CXXOBJS)
-	$(LD) $(CXXOBJS) -L$(AXLIBDIR) -laxLib $(STATIC_LINK_LINE) -o $@
-else
-$(BINTARGET) : $(CXXOBJS)
-	$(LD) $(CXXOBJS) $(RPATH_OPT) \
-	-L$(AAFSDKLIBDIR) -L$(OBJDIR) -L$(AXLIBDIR) -laxLib -laaflib -laafiid $(LIBCIO) -o $@
-endif
+	$(LD) $(CXXOBJS) $(LINK_AXLIB_APP) $(LINK_AAF_APP)
 
 .PHONY : clean
 clean ::
@@ -78,4 +77,3 @@ realclean :: clean
 
 
 include $(AAFBASE)/build/rules.mk
-

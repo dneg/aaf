@@ -63,7 +63,7 @@ all : $(OBJDIR) $(LIBTARGET) $(BINTARGET)
 # Build the library. Note that we use LIBCXXOBJS to not link
 # files containing main() function.
 $(LIBTARGET) : $(LIBCXXOBJS)
-	$(LD_STAT_LIB) $@ $(LIBCXXOBJS)
+	$(LD_STAT_LIB) $(LD_STAT_OUTPUT) $(LIBCXXOBJS)
 
 ifeq ($(AAFPLATFORM), MipsIrix)
 
@@ -78,8 +78,19 @@ $(BINTARGET) : $(CXXOBJS2) $(LIBTARGET)
 
 else
 
+ifeq ($(AAFPLATFORM), Win)
+$(BINTARGET) : $(CXXOBJS2) $(LIBTARGET)
+	$(LD) $(CXXOBJS2) $(LIBTARGET) \
+	../../OMF/WinLibs/omfToolkit.lib \
+	../../OMF/WinLibs/libbento.lib \
+	../../OMF/WinLibs/libjpeg.lib \
+	$(LINK_AAF_APP)
+else
+
 $(BINTARGET) : $(CXXOBJS2) $(LIBTARGET)
 	@echo "OMF library not available for $(AAFPLATFORM)."
+
+endif
 
 endif
 

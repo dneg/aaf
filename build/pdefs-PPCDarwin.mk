@@ -72,6 +72,8 @@ RPATH_OPT =
 
 # Command to link executable.
 LD = $(COMPILER)
+LD_STAT_OUTPUT = $@
+LD_DYN_OUTPUT = -o $@
 
 # Command to link static library
 ifndef LD_STAT_LIB

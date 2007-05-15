@@ -40,7 +40,7 @@ all : $(OBJDIR) $(AAFSDKBINDIR)/aafembed$(EXE)
 #	gcc -c $(CFLAGS) -Wno-error $(INCLUDES) $< -o $@
 
 $(AAFSDKBINDIR)/aafembed$(EXE) : $(CXXOBJS)
-	$(LD) $(CXXOBJS) $(RPATH_OPT) -L$(AAFSDKLIBDIR) -laaflib -laafiid $(LIBCIO) $(PLATFORMLIBS) -o $@
+	$(LD) $(CXXOBJS) $(LINK_AAF_APP)
 
 .PHONY : clean
 clean :

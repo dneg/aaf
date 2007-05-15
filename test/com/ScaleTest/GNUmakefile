@@ -45,23 +45,17 @@ INCLUDES = -I$(AAFSDKINCLUDEDIR)
 .PHONY : all
 all : $(OBJDIR) $(AAFSDKBINDIR)/ScaleTest$(EXE)
 
-
-ifeq ($(AAFTARGET),Debug-static)
 $(AAFSDKBINDIR)/ScaleTest$(EXE) : $(CXXOBJS)
-	$(LD) $(CXXOBJS) $(STATIC_LINK_LINE) -o $@
-else
-$(AAFSDKBINDIR)/ScaleTest$(EXE) : $(CXXOBJS)
-	$(LD) $(CXXOBJS) -L$(AAFSDKLIBDIR) -laaflib -laafiid $(PLATFORMLIBS) $(LIBCIO) -o $@
-endif
+	$(LD) $(CXXOBJS) $(LINK_AAF_APP)
 
 
 # Create a 30 minute DV clip (requires 6GB disk space!)
 .PHONY : check
 check : $(AAFSDKBINDIR)/ScaleTest$(EXE)
 	@echo "*** Testing EssenceData API ***"
-	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/ScaleTest$(EXE) -q -d
+	$(APP_RUN_ENV) $(AAFSDKBINDIR)/ScaleTest$(EXE) -q -d
 	@echo "*** Testing EssenceAccess API (Plugin codecs) ***"
-	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/ScaleTest$(EXE) -q -c -d
+	$(APP_RUN_ENV) $(AAFSDKBINDIR)/ScaleTest$(EXE) -q -c -d
 
 
 .PHONY : clean

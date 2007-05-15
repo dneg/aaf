@@ -41,19 +41,13 @@ INCLUDES = -I$(AAFSDKINCLUDEDIR) \
 .PHONY : all
 all : $(OBJDIR) $(AAFSDKBINDIR)/UTF8FileNameTest$(EXE)
 
-
-ifeq ($(AAFTARGET),Debug-static)
 $(AAFSDKBINDIR)/UTF8FileNameTest$(EXE) : $(CXXOBJS)
-	$(LD) $(CXXOBJS) $(STATIC_LINK_LINE) -o $@
-else
-$(AAFSDKBINDIR)/UTF8FileNameTest$(EXE) : $(CXXOBJS)
-	$(LD) $(CXXOBJS) -L$(AAFSDKLIBDIR) -laaflib -laafiid $(PLATFORMLIBS) $(LIBCIO) -o $@
-endif
+	$(LD) $(CXXOBJS) $(LINK_AAF_APP)
 
 
 .PHONY : check
 check : $(AAFSDKBINDIR)/UTF8FileNameTest$(EXE)
-	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/UTF8FileNameTest$(EXE)
+	$(APP_RUN_ENV) $(AAFSDKBINDIR)/UTF8FileNameTest$(EXE)
 
 
 .PHONY : clean

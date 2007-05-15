@@ -38,14 +38,8 @@ INCLUDES = -I$(AAFSDKINCLUDEDIR)
 .PHONY : all
 all : $(OBJDIR) $(AAFSDKBINDIR)/CreateSequence$(EXE)
 
-
-ifeq ($(AAFTARGET),Debug-static)
 $(AAFSDKBINDIR)/CreateSequence$(EXE) : $(CXXOBJS)
-	$(LD) $(CXXOBJS) $(STATIC_LINK_LINE) -o $@
-else
-$(AAFSDKBINDIR)/CreateSequence$(EXE) : $(CXXOBJS)
-	$(LD) $(CXXOBJS) -L$(AAFSDKLIBDIR) -laaflib -laafiid $(PLATFORMLIBS) -o $@ 
-endif
+	$(LD) $(CXXOBJS) $(LINK_AAF_APP)
 
 
 # Create a non-trivial Composition with 2000 elements in the sequence.
@@ -53,7 +47,7 @@ endif
 # implementation.
 .PHONY : check
 check : $(AAFSDKBINDIR)/CreateSequence$(EXE)
-	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/CreateSequence$(EXE) 2000
+	$(APP_RUN_ENV) $(AAFSDKBINDIR)/CreateSequence$(EXE) 2000
 
 
 .PHONY : clean

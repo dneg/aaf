@@ -85,10 +85,12 @@ PLATFORM_CFLAGS += -D_XOPEN_SOURCE=500
 #------------------------------------------------------------------------------
 # Linker command and options
 #------------------------------------------------------------------------------
-RPATH_OPT = $(XL)
+RPATH_OPT = $(XL)-rpath $(XL)$(RPATH)
 
 # Command to link executable.
 LD = $(CC) -g -fPIC -ldl
+LD_STAT_OUTPUT = $@
+LD_DYN_OUTPUT = -o $@
 
 # Command to link static library
 ifndef LD_STAT_LIB

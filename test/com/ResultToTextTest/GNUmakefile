@@ -38,18 +38,12 @@ INCLUDES = -I$(AAFSDKINCLUDEDIR)
 .PHONY : all
 all : $(OBJDIR) $(AAFSDKBINDIR)/ResultToTextTest$(EXE)
 
-
-ifeq ($(AAFTARGET),Debug-static)
 $(AAFSDKBINDIR)/ResultToTextTest$(EXE) : $(CXXOBJS)
-	$(LD) $(CXXOBJS) $(STATIC_LINK_LINE) -o $@
-else
-$(AAFSDKBINDIR)/ResultToTextTest$(EXE) : $(CXXOBJS)
-	$(LD) $(CXXOBJS) -L$(AAFSDKLIBDIR) -laaflib -laafiid $(PLATFORMLIBS) -o $@ 
-endif
+	$(LD) $(CXXOBJS) $(LINK_AAF_APP)
 
 .PHONY : check
 check : $(AAFSDKBINDIR)/ResultToTextTest$(EXE)
-	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/ResultToTextTest$(EXE)
+	$(APP_RUN_ENV) $(AAFSDKBINDIR)/ResultToTextTest$(EXE)
 
 
 .PHONY : clean
