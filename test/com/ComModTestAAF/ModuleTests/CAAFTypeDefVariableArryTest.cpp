@@ -919,7 +919,22 @@ static HRESULT verifyContents (testMode_t testMode, IAAFHeader* const pHeader, I
 	//VERIFY values:
 	for (i=0; i<TEST_VA_COUNT; i++)
 		checkExpression( check_va[i] == TEST_VA_VALUES[i], AAFRESULT_TEST_FAILED );
-	
+
+        //IAAFTypeDefVariableArray::GetElements() for arrays of non-scalers
+        IAAFTypeDefIntSP spTDInt_elem;
+	checkResult(spTD_elem->QueryInterface(IID_IAAFTypeDefInt, (void**)&spTDInt_elem));
+        IEnumAAFPropertyValuesSP spPropertyValues;
+	checkResult(spVA->GetElements(spPropVal, &spPropertyValues));
+	for (i=0; i<TEST_VA_COUNT; i++)
+	{
+		IAAFPropertyValueSP spElementValue;
+		checkResult(spPropertyValues->NextOne(&spElementValue));
+
+		TEST_ELEM_t int_value = -1;
+		checkResult(spTDInt_elem->GetInteger(spElementValue, (aafMemPtr_t)&int_value, sizeof (int_value)));
+		checkExpression( int_value == TEST_VA_VALUES[i], AAFRESULT_TEST_FAILED );
+        }
+
 
   aafProductVersion_t			testRev;
   checkResult(pHeader->GetRefImplVersion(&testRev));
