@@ -74,6 +74,7 @@
 extern "C" const aafClassID_t CLSID_AAFPropValData;
 extern "C" const aafClassID_t CLSID_AAFStrongRefArrayValue;
 extern "C" const aafClassID_t CLSID_AAFWeakRefArrayValue;
+extern "C" const aafClassID_t CLSID_EnumAAFPropertyValues;
 
 
 ImplAAFTypeDefVariableArray::ImplAAFTypeDefVariableArray ()
@@ -335,8 +336,26 @@ ImplAAFTypeDefVariableArray::GetElements (
   {
     return pRefArray->GetElements(ppEnum);
   }
+  else {
+    // The property value is of the "old" variety.
 
-	return AAFRESULT_NOT_IN_CURRENT_VERSION;
+    ImplEnumAAFPropertyValues* pEnum = 
+      static_cast<ImplEnumAAFPropertyValues*>( ::CreateImpl(CLSID_EnumAAFPropertyValues) );
+
+    if ( !pEnum ) {
+      return AAFRESULT_NOMEMORY;
+    }
+
+    AAFRESULT hr = pEnum->Initialize( this, pInPropVal );
+    if ( AAFRESULT_FAILED( hr ) ) {
+      return hr;
+    }
+    
+    pEnum->AcquireReference();
+    *ppEnum = pEnum;
+  
+    return AAFRESULT_SUCCESS;
+  }
 }
 
 ImplAAFTypeDefSP ImplAAFTypeDefVariableArray::BaseType() const
@@ -662,7 +681,17 @@ OMProperty * ImplAAFTypeDefVariableArray::pvtCreateOMProperty
 		
 		// Use a variable sized property so that we can allow a property value
 		// size of 0 (i.e. no elements in the array). (transdel 2000-MAR-14)
-		OMUInt32 elemSize = ptd->NativeSize();
+
+		// Oliver/Ian 2004-10-08: reinstate code to accept objects with
+		// properties of client-defined types that have not yet had
+		// their types registered.
+
+		// aafUInt32 elemSize = ptd->NativeSize();
+		aafUInt32 elemSize; 
+		if (ptd->IsRegistered()) 
+			elemSize = ptd->NativeSize (); 
+		else 
+			elemSize = ptd->PropValSize (); 
 		switch (elemSize) {
 		case 1:
 			result = new OMArrayProperty<aafUInt8> (pid, name);
