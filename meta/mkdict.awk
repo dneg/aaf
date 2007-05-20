@@ -848,13 +848,13 @@ BEGIN {
 	}
 
   # Discard Node lines (not used by MetaDictionary.h)
-  if( CC["r_nest"] == "" || CC["r_nest"] == "Node") next 
+  if( CC["r_nest"] == "" || tolower(CC["r_nest"]) == "node" ) next 
 
   # Discard lines with no symbol field
   if (CC[SYM] == "") next 
 
   # If no APP is specified, discard lines beginning #
-  if( APP == "" && 1 == index($1,"#") ) next
+  if( APP == "" && 1 == index(stripquotes($1),"#") ) next
 
   # Discard lines that don't apply to the specified application
   if( APP != "" && 0 == index(CC["r_app"], APP) ) next 
@@ -915,8 +915,13 @@ BEGIN {
   # Diagnostics
   # printf("// <%s> \n", CC["s_parent_sym"]);
 
+  # Elements Register
+  if( CC["r_reg"] == "Elements" ) {
+
+    next # not emitting any macros for Elements yet
+
   # Groups Register (SMPTE name for Classes)
-  if( CC["r_reg"] == "Groups" ){
+  } else if( CC["r_reg"] == "Groups" ){
 
     if (CC["s_type_sym"] == "AAFClass" || CC["s_type_sym"] == "Class" || CC["s_type_sym"] == "Group") { # This item is a class
 
@@ -924,21 +929,21 @@ BEGIN {
 	  # "Group" allowed so headers may be generated for classes not derived from AAF
 	  #		e.g. ASPA::TimestampedKLV
 
-	  # assert( CC["r_nest"] == "Leaf" )
+	  # assert( tolower(CC["r_nest"]) == "leaf" )
       if (CC[SYM] != class) { # This is a new class
         if (class != "" ) {
           # end the old one
           printf("AAF_CLASS_END(%s,%s,\n  %s,\n  %s)\n",
                  class, cguid, parent, concrete);
           printf("AAF_CLASS_SEPARATOR()\n");
-          parent = CC["s_parent_sym"];
+		  # use alias
+		  parent = getAlias( ALIAS, APP, APPVER, CC["q_parent_app"], CC["s_parent_sym"] );
         } else {
           parent = "Root"
         }
         
         # use alias
-        if( ALIAS != "" && CC["g_alias"] != "" ) class = CC["g_alias"];
-        else class = CC[SYM];
+		class = getAlias( ALIAS, APP, APPVER, CC["g_app"], CC[SYM] );
         
         class_s = CC["s_sym"];
         
@@ -979,8 +984,10 @@ BEGIN {
 
     } else { # this item is a property
 
-	  # assert( CC["r_nest"] == "Child" )
-      type = CC["s_type_sym"];
+	  # assert( tolower(CC["r_nest"]) == "child" )
+
+	  # use alias
+	  type = getAlias( ALIAS, APP, APPVER, CC["q_type_app"], CC["s_type_sym"] );
 
       # match reference types and separate out the target type
       target_type = type;
@@ -1055,8 +1062,7 @@ BEGIN {
       }
       
       # use alias
-      if( ALIAS != "" && CC["g_alias"] != "" ) prop = CC["g_alias"];
-      else prop = CC[SYM];
+	  prop = getAlias( ALIAS, APP, APPVER, CC["g_app"], CC[SYM] );
       
       printf("  AAF_PROPERTY(%s,%s,\n    %s,%s\n    %s,\n    %s,\n    %s,\n    %s)\n", prop, pguid, ppid, comment, type, mandatory, uid, class);
     }
@@ -1066,7 +1072,7 @@ BEGIN {
 
     if (CC["s_type_sym"] == "type" ) { # a type
 
-	  # assert( CC["r_nest"] == "Leaf" )
+	  # assert( tolower(CC["r_nest"]) == "leaf" )
       if (firstType) {
         printf("AAF_CLASS_END(%s,%s,\n  %s,\n  %s)\n",
                class, cguid, parent, concrete);
@@ -1102,12 +1108,13 @@ BEGIN {
 	  kind = CC["r_kind"];
       qualif = CC["r_qualif"];
 
-      typeName = CC[SYM];
+      # use alias
+	  typeName = getAlias( ALIAS, APP, APPVER, CC["g_app"], CC[SYM] );
 
       # diagnostic comments
       printf("\n");
       if ((qualif == "weak") || (qualif == "strong"))
-        printf("// %s<%s>\n", referenceTypeName( kind, qualif ), CC["s_target_sym"]);
+        printf("// %s<%s>\n", referenceTypeName( kind, qualif ), getAlias( ALIAS, APP, APPVER, CC["q_target_app"], CC["s_target_sym"] ));
 	  else
         printf("// %s\n", typeName);
       printf("//\n");
@@ -1119,7 +1126,8 @@ BEGIN {
         printf("AAF_TYPE_DEFINITION_INTEGER(%s, %s, %s, %s)\n", typeName, tguid, qualif, CC["r_value"]);
 
       } else if (kind == "array") {
-        elementType = CC["s_target_sym"];
+        # use alias
+		elementType = getAlias( ALIAS, APP, APPVER, CC["q_target_app"], CC["s_target_sym"] );
         if (qualif == "varying") {
           printf("AAF_TYPE_DEFINITION_VARYING_ARRAY(%s, %s,\n  AAF_TYPE(%s))\n", typeName, tguid, elementType);
 
@@ -1142,7 +1150,8 @@ BEGIN {
         }
 
       } else if (kind == "set") {
-        elementType = CC["s_target_sym"];
+        # use alias
+		elementType = getAlias( ALIAS, APP, APPVER, CC["q_target_app"], CC["s_target_sym"] );
         # Special cases for strong/weak reference sets.
         if (qualif == "strong") {
 		  typeName = referenceTypeName( kind, qualif );
@@ -1164,7 +1173,9 @@ BEGIN {
         }
 
       } else if (kind == "reference") {
-        targetType = CC["s_target_sym"];
+        # use alias
+		targetType = getAlias( ALIAS, APP, APPVER, CC["q_target_app"], CC["s_target_sym"] );
+		
         if (qualif == "strong") {
 		  typeName = referenceTypeName( kind, qualif );
           printf("AAF_TYPE_DEFINITION_STRONG_REFERENCE(\n  AAF_REFERENCE_TYPE_NAME(%s, %s), %s,\n  AAF_TYPE(%s))\n", typeName, targetType, tguid, targetType);
@@ -1186,10 +1197,14 @@ BEGIN {
         printf("AAF_TYPE_DEFINITION_RECORD(%s, %s)\n", typeName, tguid)
 		;
       } else if (kind == "rename") {
-        printf("AAF_TYPE_DEFINITION_RENAME(%s, %s, %s)\n", typeName, tguid, CC["s_target_sym"]);
+        # use alias
+		elementType = getAlias( ALIAS, APP, APPVER, CC["q_target_app"], CC["s_target_sym"] );
+        printf("AAF_TYPE_DEFINITION_RENAME(%s, %s, %s)\n", typeName, tguid, elementType);
 
       } else if (kind == "string") {
-        printf("AAF_TYPE_DEFINITION_STRING(%s, %s, %s)\n", typeName, tguid, CC["s_target_sym"]);
+        # use alias
+		elementType = getAlias( ALIAS, APP, APPVER, CC["q_target_app"], CC["s_target_sym"] );
+        printf("AAF_TYPE_DEFINITION_STRING(%s, %s, %s)\n", typeName, tguid, elementType);
 
       } else if (kind == "extendible") {
         printf("AAF_TYPE_DEFINITION_EXTENDIBLE_ENUMERATION(%s, %s)\n", typeName, tguid);
@@ -1214,9 +1229,11 @@ BEGIN {
 	  # set parentTypeName for use by members
 	  parentTypeName = typeName;
 
-    } else if( CC["r_nest"] == "Child" ) { # all "member"s of a type are Child elements
+    } else if( tolower(CC["r_nest"]) == "child" || tolower(CC["r_nest"]) == "tendril") { # all "member"s of a type are child elements
 
-      memberName = CC[SYM];
+      # use alias
+      memberName = getAlias( ALIAS, APP, APPVER, CC["g_app"], CC[SYM] );
+      
       if (kind == "enumeration" )
 	  {
 		if( CC["s_type_sym"]==etype || CC["s_type_sym"]=="member" ) # "member" is old-style, etype is new-style (!)
@@ -1230,8 +1247,8 @@ BEGIN {
       }
 	  else if (kind == "record")
 	  {
-		if( CC["s_type_sym"]=="member" ) targetType=CC["s_target_sym"]; # "member" is old-style
-		else							 targetType=CC["s_type_sym"];	# new-style
+		if( CC["s_type_sym"]=="member" ) targetType=getAlias( ALIAS, APP, APPVER, CC["q_target_app"], CC["s_target_sym"] ); # "member" is old-style
+		else							 targetType=getAlias( ALIAS, APP, APPVER, CC["q_type_app"], CC["s_type_sym"] );	# new-style
 		 
 		printf("  AAF_TYPE_DEFINITION_RECORD_FIELD(%s, AAF_TYPE(%s),\n    %s)\n", memberName, targetType, parentTypeName);
       }
@@ -1258,7 +1275,13 @@ BEGIN {
 	  {
 		if( CC["s_type_sym"]=="member" ) # "member" is old-style, no new-style yet
 		{
-			printf("  AAF_TYPE_DEFINITION_WEAK_REFERENCE_MEMBER(%s, %s,\n    AAF_REFERENCE_TYPE_NAME(%s, %s))\n", memberName, CC["s_parent_sym"], typeName, targetType);
+			# use alias
+			targetName = getAlias( ALIAS, APP, APPVER, CC["q_target_app"], CC["s_target_sym"] );
+
+			# legacy csv used s_parent_sym for WR member			
+			if( targetName == "" ) targetName=CC["s_parent_sym"];
+      
+			printf("  AAF_TYPE_DEFINITION_WEAK_REFERENCE_MEMBER(%s, %s,\n    AAF_REFERENCE_TYPE_NAME(%s, %s))\n", memberName, targetName, typeName, targetType);
 		}
 		else
 		{
@@ -1283,7 +1306,7 @@ BEGIN {
 
     if (CC["s_type_sym"] == "alias") {
 
-	  # assert( CC["r_nest"] == "Leaf" )
+	  # assert( tolower(CC["r_nest"]) == "leaf" )
       if (firstAlias) {
         if (kind == "enumeration" ) {
           printf("AAF_TYPE_DEFINITION_ENUMERATION_END(%s, %s, AAF_TYPE(%s))\n", typeName, tguid, etype);
@@ -1310,6 +1333,7 @@ BEGIN {
         printf("AAF_ALIAS_SEPARATOR()\n");
       }
 
+	  # no change to advanced alias meechanism here - this section is moribund
       aalias = CC[SYM];
       aoriginal = CC["g_alias"];
       printf("AAF_CLASS_ALIAS(%s, %s)\n", aoriginal, aalias); 
@@ -1323,11 +1347,9 @@ BEGIN {
   # Instances Register
   } else if( CC["r_reg"] == "Instances" ) {
 
-    if (CC["s_type_sym"] == "Instance" )
+    if ( tolower(CC["r_nest"]) == "stalk" )
     { 
         # a set of instances of a [subclass of] DefinitionObject
-
-        # assert( CC["r_nest"] == "Stalk" )
 
         if( firstInstance<0 )
         {
@@ -1410,7 +1432,7 @@ BEGIN {
     {
       # an instance of either a [subclass of] DefinitionObject or a property of the subclass
 
-       if( CC["r_nest"] == "Leaf" )
+       if( tolower(CC["r_nest"]) == "leaf" || tolower(CC["r_nest"]) == "frond" )
        { 
             # an instance of a [subclass of] DefinitionObject
 
@@ -1430,8 +1452,10 @@ BEGIN {
 
             iclass = CC["s_type_sym"];
             idesc = CC["r_detail"];
+            iname= CC["r_name"];
+			ialias = getAlias( ALIAS, APP, APPVER, CC["g_app"], CC[SYM] );
 
-			asym = "AAF_SYMBOL(" CC[SYM] "," CC["r_name"] ",\"" CC["g_alias"] "\",\"" CC["r_detail"] "\")"
+			asym = "AAF_SYMBOL(" isym "," iname ",\"" ialias "\",\"" idesc "\")"
 
             printf("  AAF_INSTANCE(%s, %s, %s, %s)\n", iclass, asym, iid, "\"" idesc "\"");
 
@@ -1443,7 +1467,7 @@ BEGIN {
             printf("    AAF_INSTANCE_PROPERTY(%s, %s, %s)\n", "Identification", "AUID", iid);
 
 	   }
-       else if( CC["r_nest"] == "Child" )
+       else if( tolower(CC["r_nest"]) == "child" || tolower(CC["r_nest"]) == "stipe" )
        {
             # a property of the subclass
 
@@ -1717,6 +1741,28 @@ function referenceTypeName( kind, qualif )
   } else {
 											return "ERROR";
   }
+}
+
+function getAlias( alias, app, appver, appsource, appdefault )
+{
+	# currently doesn't check app
+	nAlias = split( appsource, appfields, "~" );
+
+	if( nAlias < 2 ) ret = "" ; # no aliases are given
+	else
+	{
+		# merely return the last alias on the line
+		ret = appfields[ nAlias ] ;
+	}
+	
+	if( ALIAS == "" || ret== "" ) return appdefault; else return ret;
+	
+	# really, should:
+	# split on space
+	# split on ~
+	# split on [
+	# check app and appver
+	# return associated alias
 }
 
 function printError(message)
