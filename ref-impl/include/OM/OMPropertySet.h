@@ -87,6 +87,22 @@ public:
     //          <c OMPropertySet>.
   OMStorable* container(void) const;
 
+    // @cmember Get the dynamic built-in <c OMProperty> associated with the 
+    //          property uid <p propertyUId>.
+  OMProperty* getDynamicBuiltin(const OMUniqueObjectIdentification& propertyUId) const;
+
+    // @cmember Insert the dynamic built-in <c OMProperty> <p property> with
+    //          property uid <p propertyUId> into this <c OMPropertySet>.
+  void putDynamicBuiltin(const OMUniqueObjectIdentification& propertyUId, OMProperty* property);
+
+    // @cmember Is an dynamic built-in <c OMProperty> with property uid 
+    //          <p propertyUId> present in this <c OMPropertySet> ?
+  bool dynamicBuiltinIsPresent(const OMUniqueObjectIdentification& propertyUId) const;
+
+    // @cmember Finalise the dynamic built-in <c OMProperty> with property uid 
+    //          <p propertyUId> in this <c OMPropertySet> with the <p propertyId>.
+  void finaliseDynamicBuiltin(const OMUniqueObjectIdentification& propertyUId, const OMPropertyId propertyId);
+
 private:
 
   friend class OMPropertySetIterator;
@@ -94,12 +110,20 @@ private:
   typedef OMRedBlackTreeIterator<OMPropertyId, OMProperty*> SetIterator;
   typedef OMRedBlackTree<OMPropertyId, OMProperty*> Set;
 
+  typedef OMRedBlackTreeIterator<OMUniqueObjectIdentification, OMProperty*> DynamicSetIterator;
+  typedef OMRedBlackTree<OMUniqueObjectIdentification, OMProperty*> DynamicSet;
+
   // OMProperty with 'propertyName' or null if not found.
   //
   OMProperty* find(const wchar_t* propertyName) const;
 
   Set _set;
   const OMStorable* _container;
+  
+  // temporary set of built-in properties that are yet to have a property id 
+  // assigned to them
+  DynamicSet _dynamicSet;
+
 };
 
 #endif

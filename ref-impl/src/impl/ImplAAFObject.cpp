@@ -1244,6 +1244,26 @@ OMProperty * ImplAAFObject::InitOMProperty(ImplAAFPropertyDef * pPropertyDef, OM
   OMPropertyId defPid = pPropertyDef->OmPid ();
   // ASSERTU (ps->isAllowed (defPid));
   OMProperty * pProp = 0;
+
+  if (ps->dynamicBuiltinIsPresent(pPropertyDef->identification()))
+  {
+    // the property is a built-in dynamic property
+    
+    // the property id of the built-in property definition needs to be set to 
+    // the correct value if the property definition originated from a file
+    ASSERTU(defPid != 0);
+    HRESULT hr;
+    ImplAAFDictionary* pDictionary = 0;
+    hr = GetDictionary(&pDictionary);
+    ASSERTU(AAFRESULT_SUCCEEDED(hr) && pDictionary != 0);
+    pDictionary->associate(*reinterpret_cast<const aafUID_t*>(&pPropertyDef->identification()), 
+      defPid);
+    pDictionary->ReleaseReference();
+    
+    // the dynamic built-in property needs to be finalised with the property id
+    ps->finaliseDynamicBuiltin(pPropertyDef->identification(), defPid);
+  }
+
   if (ps->isPresent (defPid))
 	{
 	  // Defined property was already in property set.  (Most

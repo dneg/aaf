@@ -933,7 +933,20 @@ private:
   ImplAAFBuiltinTypes   * _pBuiltinTypes;
   ImplAAFBuiltinDefs    * _pBuiltinDefs;
 
-  aafInt16 _lastGeneratedPid;	// must be signed!
+  // records a sequence of dynamic property ids starting with firstPid and ending with lastPid
+  class PIDSegment
+  {
+  public:
+      bool operator==(const PIDSegment& r);
+      
+      OMPropertyId firstPid;
+      OMPropertyId lastPid;
+  };
+    
+  // maps the use of dynamic property pids to allow the generation of new values
+  // no matter what generation method was used before
+  OMVector<PIDSegment> _pidSegments;
+  bool _pidSegmentsInitialised;
 
   static const aafUID_t * sAxiomaticTypeGuids[];
   static const aafUID_t * sAxiomaticClassGuids[];

@@ -481,6 +481,14 @@ OMStoredForm OMProperty::storedForm(void) const
   return _storedForm;
 }
 
+void OMProperty::setPropertyId(OMPropertyId propertyId)
+{
+  TRACE("OMProperty::setPropertyId");
+  
+  _propertyId = propertyId;
+}
+
+
   // @mfunc The size of the raw bits of this
   //        <c OMSimpleProperty>. The size is given in bytes.
   //   @rdesc The size of the raw bits of this

@@ -34,6 +34,7 @@
 
 #include "AAFStoredObjectIDs.h"
 #include "AAFPropertyIDs.h"
+#include "AAFPropertyDefs.h"
 
 #ifndef __ImplAAFMPEGVideoDescriptor_h__
 #include "ImplAAFMPEGVideoDescriptor.h"
@@ -56,19 +57,20 @@ ImplAAFMPEGVideoDescriptor::ImplAAFMPEGVideoDescriptor ():
 	_profileAndLevel(PID_MPEGVideoDescriptor_ProfileAndLevel,				L"ProfileAndLevel")
 	
 {
-
-	_persistentProperties.put(_singleSequence.address());
-	_persistentProperties.put(_constantBPictureCount.address());
-	_persistentProperties.put(_codedContentScanning.address());
-	_persistentProperties.put(_lowDelay.address());
-	_persistentProperties.put(_closedGOP.address());
-	_persistentProperties.put(_identicalGOP.address());
-	_persistentProperties.put(_maxGOP.address());
-	_persistentProperties.put(_maxBPictureCount.address());
-	_persistentProperties.put(_bitRate.address());
-	_persistentProperties.put(_profileAndLevel.address());
-  
-  
+    
+#define OM_UID(name) \
+    *reinterpret_cast<const OMObjectIdentification *>(&kAAFPropID_MPEGVideoDescriptor_##name)
+    
+	_persistentProperties.putDynamicBuiltin(OM_UID(SingleSequence), _singleSequence.address());
+	_persistentProperties.putDynamicBuiltin(OM_UID(ConstantBPictureCount), _constantBPictureCount.address());
+	_persistentProperties.putDynamicBuiltin(OM_UID(CodedContentScanning), _codedContentScanning.address());
+	_persistentProperties.putDynamicBuiltin(OM_UID(LowDelay), _lowDelay.address());
+	_persistentProperties.putDynamicBuiltin(OM_UID(ClosedGOP), _closedGOP.address());
+	_persistentProperties.putDynamicBuiltin(OM_UID(IdenticalGOP), _identicalGOP.address());
+	_persistentProperties.putDynamicBuiltin(OM_UID(MaxGOP), _maxGOP.address());
+	_persistentProperties.putDynamicBuiltin(OM_UID(MaxBPictureCount), _maxBPictureCount.address());
+	_persistentProperties.putDynamicBuiltin(OM_UID(BitRate), _bitRate.address());
+	_persistentProperties.putDynamicBuiltin(OM_UID(ProfileAndLevel), _profileAndLevel.address());
 }
 
 
