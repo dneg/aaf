@@ -3083,7 +3083,7 @@ AAFRESULT ImplAAFDictionary::PvtIsPropertyDefDuplicate(
 }
 
 
-bool ImplAAFDictionary::PIDSegment::operator==(const ImplAAFDictionary::PIDSegment::PIDSegment& r)
+bool ImplAAFDictionary::PIDSegment::operator==(const ImplAAFDictionary::PIDSegment& r)
 {
     return firstPid == r.firstPid && lastPid == r.lastPid;
 }
