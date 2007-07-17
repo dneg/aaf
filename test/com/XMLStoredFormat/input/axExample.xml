@@ -65,6 +65,11 @@
           <LocalIdentification>0xfffb</LocalIdentification>
           <IsOptional>true</IsOptional>
         </PropertyDefinition>
+        <ExtendibleEnumerationElement>
+          <ElementOf>TransferCharacteristicType</ElementOf>
+          <Name>TransferCharacteristic_274M_296M</Name>
+          <Value>urn:x-ul:060e2b34.0401.0101.04010101.01040000</Value>
+        </ExtendibleEnumerationElement>
       </Definitions>
     </Extension>
   </Extensions>
@@ -578,7 +583,7 @@
       </Dictionary>
     </HeaderDictionary>
     <ByteOrder>LittleEndian</ByteOrder>
-    <LastModified>2007-03-16T12:51:16.00Z</LastModified>
+    <LastModified>2007-07-17T15:27:26.00Z</LastModified>
     <Content>
       <ContentStorage>
         <Mobs>
@@ -971,7 +976,7 @@
     <IdentificationList>
       <Identification>
         <CompanyName>AAF Association</CompanyName>
-        <ProductName>AAF-X Test</ProductName>
+        <ProductName>AAF Format Converter</ProductName>
         <ProductVersion>
           <major>0</major>
           <minor>1</minor>
@@ -980,8 +985,8 @@
           <type>VersionUnknown</type>
         </ProductVersion>
         <ProductVersionString>Unknown version</ProductVersionString>
-        <ProductID>urn:uuid:d3ec8680-1e79-48f9-9941-0a10a16886af</ProductID>
-        <Date>2007-03-16T12:51:16.00Z</Date>
+        <ProductID>urn:uuid:97e04c67-dbe6-4d11-bcd7-3a904253a2ef</ProductID>
+        <Date>2007-07-17T15:27:26.00Z</Date>
         <ToolkitVersion>
           <major>1</major>
           <minor>1</minor>
@@ -990,7 +995,7 @@
           <type>VersionBeta</type>
         </ToolkitVersion>
         <IdentificationPlatform>AAFSDK (Linux)</IdentificationPlatform>
-        <GenerationAUID>urn:uuid:c6119f17-69de-11d2-b6bc-fcab70ff7331</GenerationAUID>
+        <GenerationAUID>urn:uuid:c6c709c2-69de-11d2-b6bc-fcab70ff7331</GenerationAUID>
       </Identification>
       <Identification>
         <CompanyName>AAF Association</CompanyName>
@@ -1004,16 +1009,16 @@
         </ProductVersion>
         <ProductVersionString>Unknown version</ProductVersionString>
         <ProductID>urn:uuid:97e04c67-dbe6-4d11-bcd7-3a904253a2ef</ProductID>
-        <Date>2005-06-09T09:30:21.00Z</Date>
+        <Date>2007-07-17T15:12:52.00Z</Date>
         <ToolkitVersion>
           <major>1</major>
           <minor>1</minor>
-          <tertiary>0</tertiary>
+          <tertiary>2</tertiary>
           <patchLevel>0</patchLevel>
           <type>VersionBeta</type>
         </ToolkitVersion>
         <IdentificationPlatform>AAFSDK (Linux)</IdentificationPlatform>
-        <GenerationAUID>urn:uuid:5c406adf-69de-11d2-b6bc-fcab70ff7331</GenerationAUID>
+        <GenerationAUID>urn:uuid:c6c5b0e8-69de-11d2-b6bc-fcab70ff7331</GenerationAUID>
       </Identification>
       <Identification>
         <CompanyName>AAF Association Inc.</CompanyName>

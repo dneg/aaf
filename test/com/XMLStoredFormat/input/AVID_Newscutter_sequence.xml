@@ -395,6 +395,11 @@
           <Name>AvidBagOfBits</Name>
           <ElementType>UInt8</ElementType>
         </TypeDefinitionVariableArray>
+        <ExtendibleEnumerationElement>
+          <ElementOf>TransferCharacteristicType</ElementOf>
+          <Name>TransferCharacteristic_274M_296M</Name>
+          <Value>urn:x-ul:060e2b34.0401.0101.04010101.01040000</Value>
+        </ExtendibleEnumerationElement>
       </Definitions>
     </Extension>
   </Extensions>
@@ -913,7 +918,7 @@
       </Dictionary>
     </HeaderDictionary>
     <ByteOrder>LittleEndian</ByteOrder>
-    <LastModified>2007-03-16T12:35:31.00Z</LastModified>
+    <LastModified>2007-07-17T15:27:12.00Z</LastModified>
     <Content>
       <ContentStorage>
         <Mobs>
@@ -2145,7 +2150,7 @@
     <IdentificationList>
       <Identification>
         <CompanyName>AAF Association</CompanyName>
-        <ProductName>AAF-X Test</ProductName>
+        <ProductName>AAF Format Converter</ProductName>
         <ProductVersion>
           <major>0</major>
           <minor>1</minor>
@@ -2154,8 +2159,8 @@
           <type>VersionUnknown</type>
         </ProductVersion>
         <ProductVersionString>Unknown version</ProductVersionString>
-        <ProductID>urn:uuid:d3ec8680-1e79-48f9-9941-0a10a16886af</ProductID>
-        <Date>2007-03-16T12:35:31.00Z</Date>
+        <ProductID>urn:uuid:97e04c67-dbe6-4d11-bcd7-3a904253a2ef</ProductID>
+        <Date>2007-07-17T15:27:12.00Z</Date>
         <ToolkitVersion>
           <major>1</major>
           <minor>1</minor>
@@ -2164,7 +2169,7 @@
           <type>VersionBeta</type>
         </ToolkitVersion>
         <IdentificationPlatform>AAFSDK (Linux)</IdentificationPlatform>
-        <GenerationAUID>urn:uuid:c6102a2a-69de-11d2-b6bc-fcab70ff7331</GenerationAUID>
+        <GenerationAUID>urn:uuid:c6c7044f-69de-11d2-b6bc-fcab70ff7331</GenerationAUID>
       </Identification>
       <Identification>
         <CompanyName>AAF Association</CompanyName>
@@ -2178,16 +2183,16 @@
         </ProductVersion>
         <ProductVersionString>Unknown version</ProductVersionString>
         <ProductID>urn:uuid:97e04c67-dbe6-4d11-bcd7-3a904253a2ef</ProductID>
-        <Date>2005-07-04T16:55:28.00Z</Date>
+        <Date>2007-07-17T15:10:25.00Z</Date>
         <ToolkitVersion>
           <major>1</major>
           <minor>1</minor>
-          <tertiary>0</tertiary>
+          <tertiary>2</tertiary>
           <patchLevel>0</patchLevel>
           <type>VersionBeta</type>
         </ToolkitVersion>
         <IdentificationPlatform>AAFSDK (Linux)</IdentificationPlatform>
-        <GenerationAUID>urn:uuid:5c878afe-69de-11d2-b6bc-fcab70ff7331</GenerationAUID>
+        <GenerationAUID>urn:uuid:c6c576ff-69de-11d2-b6bc-fcab70ff7331</GenerationAUID>
       </Identification>
       <Identification>
         <CompanyName>Avid Technology, Inc.</CompanyName>
