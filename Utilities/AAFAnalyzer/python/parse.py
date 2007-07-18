@@ -36,16 +36,27 @@ class Requirement:
 	# requirements appear first in a requirement list.
 	def __cmp__(self, other):
 
-		if self.get_type() != other.get_type():
-			return cmp( self.typeSortOrder[self.get_type()], self.typeSortOrder[other.get_type()] )
-		elif self.get_category() != other.get_category():
-			return cmp( self.get_category(), other.get_category() )
-		elif self.get_id() != other.get_id():
-			return cmp( self.get_id(), other.get_id() )
-		elif self.get_name() != other.get_name():
-			return cmp( self.get_name(), other.get_name() )
-		else:
-			return 0
+		c = cmp(self.get_is_covered_by_test(), other.get_is_covered_by_test())
+		if c:
+			return -1*c
+
+		c = cmp(self.typeSortOrder[self.get_type()], self.typeSortOrder[other.get_type()])
+		if c:
+			return c
+
+		c = cmp(self.get_id(), other.get_id())
+		if c:
+			return c
+
+		c = cmp(self.get_name(), other.get_name())
+		if c:
+			return c
+
+		c = cmp(self.get_category(), other.get_category())
+		if c:
+			return c
+
+		return 0
 	
 	# Get a fill description fo the requirement.
 	def get_all(self):
@@ -277,12 +288,6 @@ def get_result_data(files, requirements):
 	# begin initilizing at row zero.
 	row = 0;
 
-	# (This is poor, but its the way Jesse did it. The first entry
-	# is the files vector is the set result. This code depends on
-	# this being the first column of results return by the
-	# requirment class.  Better assert that just to make it clear.
-	assert files[0] == "File Set"
-
 	# Row 0, title row
 	assert titleRow == row
 	data[titleRow][idCol] = 'ID'
@@ -290,7 +295,8 @@ def get_result_data(files, requirements):
 	data[titleRow][typeCol] = 'Type'
 	data[titleRow][categoryCol] = 'Category'
 	data[titleRow][fileSetCol] = 'File Set<br>Coverage'
-	for i in range(1, len(files)):
+
+	for i in range(0, len(files)):
 		file = files[i]
 		data[titleRow][fileSetCol+i] = os.path.basename(file)
 
@@ -400,6 +406,10 @@ def get_result_data(files, requirements):
 	return data
 
 # Writes out the table data to an HTML file
+
+# This routing will detect if only a single file is in the set and
+# skip the "File Set" column.
+
 def write_html(outputFileName, testResultData, requirements, removedFiles):
 
 	try:
@@ -422,26 +432,40 @@ def write_html(outputFileName, testResultData, requirements, removedFiles):
 			cfile.write( "</P></B>" )
 
 		cfile.write( '<TABLE BORDER="0" CELLSPACING="3" CELLPADDING="1">' )
+
 		for row in range(0, len(testResultData)):
 
+			rowhtml = "";
 			if row%2==0:
-				cfile.write('<TR bgcolor="lightgrey">\n')
+				rowhtml = '<TR bgcolor="lightgrey">\n'
 			else:
-				cfile.write('<TR bgcolor="paleturquoise">\n')
+				rowhtml = '<TR bgcolor="paleturquoise">\n'
 							
 			emphasizeNotCovered = False
-
 			if row >= firstDataRow:
 				# include the row number to ensure easy reference
-				cfile.write( '<TD>%d</TD>' % (row - firstDataRow + 1) );
-				id = testResultData[row][0]				
+				rowhtml = rowhtml + ('<TD>%d</TD>' % (row - firstDataRow + 1))
+				id = testResultData[row][0]
 				req = requirements[id]
 				if not req.get_is_covered_by_test():
 					emphasizeNotCovered = True
+
+				# Supress all def requirements and app
+				# requirements that are not covered by
+				# tests.
+				if req.get_type() == 'def' or (req.get_type() == 'app' and not req.get_is_covered_by_test()):
+				   continue
 			else:
-				cfile.write( '<TD></TD>' );
+				rowhtml = rowhtml + '<TD></TD>'
+
+			cfile.write( rowhtml );
 
 			for col in range(0, len(testResultData[row])):
+
+				# Detect if there is only one file being reported 
+				# and skip the "File Set" column if so.
+				if fileSetCol+2 == len(testResultData[row]) and col == fileSetCol:
+					continue;
 
 				TD = '<TD'
 				if testResultData[row][col] == 'Failed':

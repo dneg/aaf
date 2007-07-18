@@ -67,16 +67,27 @@ def analyze(tmpResultFile, executable, files, requirements):
 # Helper method that calculates the File Set coverage data based on
 # all the files and writes to the beginning of the file
 #
-# JPT REVIEW - This routing appends its result to the end of the file
-# it's passed as and argument. It should just return the consolidated
-# coverate result.
+# JPT REVIEW - This routine writes the summary back into the temporary
+# result file under than name "File Set". i.e. The file set is report
+# in the same way that indivual files are reported.  This is not very
+# flexible. It woudl be better to return the file set data as a value
+# (and perhaps do away completly with the temp file).
+#
 
 def filescov(openTmpResultFile, files):
+
 	passed=[]
 	warn=[]
 	fail=[]
+
+	# See to beginning. Copy the file into memory. Write the set
+	# info, then rewrite the old contents. (Yes... somewhat
+	# convoluted). This ensures the set is as the first result
+	# column.
+
 	openTmpResultFile.seek(0)
 	curfile=openTmpResultFile.readlines()
+
 	for line in curfile:
 		if 'Passing Requirements:' in line and 'None' not in line:
 			passed=passed+(line.replace('Passing Requirements: ', '').replace('\n', '')).split('; ')
