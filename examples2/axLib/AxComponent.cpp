@@ -696,6 +696,71 @@ aafUInt32 AxScopeReference::GetRelativeSlot()
 
 //=---------------------------------------------------------------------=
 
+AxEssenceGroup::AxEssenceGroup( IAAFEssenceGroupSP spIaafEssenceGroup )
+:	AxSegment( AxQueryInterface<IAAFEssenceGroup, IAAFSegment>(spIaafEssenceGroup) ),
+	_spIaafEssenceGroup( spIaafEssenceGroup )
+{}
+
+AxEssenceGroup::~AxEssenceGroup()
+{}
+
+IAAFSourceClipSP AxEssenceGroup::GetStillFrame()
+{
+  IAAFSourceClipSP spStillFrame;
+
+  CHECK_HRESULT( _spIaafEssenceGroup->GetStillFrame( &spStillFrame ) );
+
+  return spStillFrame;
+}
+
+aafUInt32 AxEssenceGroup::CountChoices()
+{
+  aafUInt32 count = 0;
+
+  CHECK_HRESULT( _spIaafEssenceGroup->CountChoices( &count ) );
+
+  return count;
+}
+
+IAAFSegmentSP AxEssenceGroup::GetChoiceAt( aafUInt32 index )
+{
+  IAAFSegmentSP spChoice;
+
+  CHECK_HRESULT( _spIaafEssenceGroup->GetChoiceAt( index, &spChoice ) );
+
+  return spChoice;
+}
+
+//=---------------------------------------------------------------------=
+
+AxSelector::AxSelector( IAAFSelectorSP spIaafSelector )
+:	AxSegment( AxQueryInterface<IAAFSelector, IAAFSegment>(spIaafSelector) ),
+	_spIaafSelector( spIaafSelector )
+{}
+
+AxSelector::~AxSelector()
+{}
+
+IAAFSegmentSP AxSelector::GetSelectedSegment()
+{
+  IAAFSegmentSP spSelectedSegment;
+
+  CHECK_HRESULT( _spIaafSelector->GetSelectedSegment( &spSelectedSegment ) );
+
+  return spSelectedSegment;
+}
+
+IEnumAAFSegmentsSP AxSelector::EnumAlternateSegments()
+{
+  IEnumAAFSegmentsSP spEnumSegments;
+
+  CHECK_HRESULT( _spIaafSelector->EnumAlternateSegments( &spEnumSegments  ) );
+
+  return spEnumSegments;
+}
+
+//=---------------------------------------------------------------------=
+
 AxEdgecode::AxEdgecode( IAAFEdgecodeSP spIaafEdgecode )
 :	AxSegment( AxQueryInterface<IAAFEdgecode, IAAFSegment>(spIaafEdgecode
 ) ),

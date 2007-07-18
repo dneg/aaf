@@ -199,8 +199,14 @@ IAAFFindSourceInfoSP AxSearchSource::SearchSource (aafSlotID_t slotID,
 //=---------------------------------------------------------------------=
 
 AxMasterMob::AxMasterMob( IAAFMasterMobSP spIaafMasterMob )
-:	AxMob( AxQueryInterface<IAAFMasterMob,IAAFMob>( spIaafMasterMob ) ),
+:	AxMob( AxQueryInterface<IAAFMasterMob,IAAFMob2>( spIaafMasterMob ) ),
     AxSearchSource( AxQueryInterface<IAAFMasterMob, IAAFSearchSource>(spIaafMasterMob) ),
+	_spIaafMasterMob( AxQueryInterface<IAAFMasterMob,IAAFMasterMob2>(spIaafMasterMob) )
+{}
+
+AxMasterMob::AxMasterMob( IAAFMasterMob2SP spIaafMasterMob )
+:	AxMob( AxQueryInterface<IAAFMasterMob2,IAAFMob2>( spIaafMasterMob ) ),
+    AxSearchSource( AxQueryInterface<IAAFMasterMob2, IAAFSearchSource>(spIaafMasterMob) ),
 	_spIaafMasterMob( spIaafMasterMob )
 {}
 
@@ -288,8 +294,15 @@ IAAFEssenceAccessSP AxMasterMob::OpenEssence( aafSlotID_t		slotId,
 }
 
 
+
 AxCompositionMob::AxCompositionMob( IAAFCompositionMobSP spIaafCompositionMob )
-:	AxMob( AxQueryInterface<IAAFCompositionMob,IAAFMob>(spIaafCompositionMob) ),
+:	AxMob( AxQueryInterface<IAAFCompositionMob,IAAFMob2>(spIaafCompositionMob) ),
+ 	_spIaafCompositionMob( AxQueryInterface<IAAFCompositionMob,IAAFCompositionMob2>(spIaafCompositionMob) )
+{}
+
+
+AxCompositionMob::AxCompositionMob( IAAFCompositionMob2SP spIaafCompositionMob )
+:	AxMob( AxQueryInterface<IAAFCompositionMob2,IAAFMob2>(spIaafCompositionMob) ),
  	_spIaafCompositionMob( spIaafCompositionMob )
 {}
 

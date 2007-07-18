@@ -56,13 +56,21 @@ template<> inline const IID& AxIID< TYPE >( TYPE * ) { return TYPEID; }
 
 
 template <class Type>
-inline const aafUID_t& AxAUID( Type* )
+inline const aafUID_t& AxAUID( Type* p )
 {
+    (void)p;
 	throw AxExBadImp( L"AxAUID()" );
 }
 
+template <class Type>
+inline const aafUID_t& AxAUID()
+{
+  Type* p = 0;
+  return AxAUID(p);
+}
+
 #define AXAUID_SPECIALIZE(TYPE, TYPEID) \
-template<> inline const aafUID_t& AxAUID< TYPE >( TYPE * ) { return TYPEID; }
+template<> inline const aafUID_t& AxAUID< TYPE >( TYPE *p ) { return TYPEID; }
 
 //
 // Macros to declare a smart pointer typedef, and to
@@ -90,12 +98,23 @@ template<> inline const aafUID_t& AxAUID< TYPE >( TYPE * ) { return TYPEID; }
   typedef IAAFSmartPointer< T >	T##SP ; \
   AXIID_SPECIALIZE( T, IID_##T )
 
+// Declare smart pointer, AxIID, and AxAUID given root
+// interface name and object name. (i.e. no prefix). This 
+// is required in order to specialize AxAUID for an extended
+// interface.  For example AxAUID<IAAFCompositionMob2>() will 
+// return AUID_COMPOSITIONMOB.
+#define AXSP_TDEF_D(T, U) \
+  typedef IAAFSmartPointer< IAAF##T >	IAAF##T##SP ; \
+  AXIID_SPECIALIZE( IAAF##T, IID_IAAF##T ) \
+  AXAUID_SPECIALIZE( IAAF##T, AUID_AAF##U )
+
 AXSP_TDEF_A( AIFCDescriptor )
 AXSP_TDEF_A( ClassDef )
 AXSP_TDEF_A( CodecDef )
 AXSP_TDEF_A( CommentMarker )
 AXSP_TDEF_A( Component )
 AXSP_TDEF_A( CompositionMob )
+AXSP_TDEF_D( CompositionMob2, CompositionMob )
 AXSP_TDEF_A( ConstantValue )
 AXSP_TDEF_A( ContainerDef )
 AXSP_TDEF_A( ContentStorage )
@@ -128,6 +147,7 @@ AXSP_TDEF_A( InterpolationDef )
 AXSP_TDEF_A( KLVData )
 AXSP_TDEF_A( Locator )
 AXSP_TDEF_A( MasterMob )
+AXSP_TDEF_D( MasterMob2, MasterMob )
 AXSP_TDEF_B( MasterMobEx )
 AXSP_TDEF_A( MetaDefinition )
 AXSP_TDEF_A( Mob )
@@ -220,7 +240,7 @@ AXSP_TDEF_A( AES3PCMDescriptor )
 AXSP_TDEF_A( AuxiliaryDescriptor )
 AXSP_TDEF_B( Component2 )
 AXSP_TDEF_B( DataDef2 )
-AXSP_TDEF_B( DataDef3 )
+AXSP_TDEF_D( DataDef3, DataDef )
 AXSP_TDEF_A( DescriptiveFramework )
 AXSP_TDEF_A( DescriptiveMarker )
 AXSP_TDEF_B( Dictionary2 )

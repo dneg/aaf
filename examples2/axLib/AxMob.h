@@ -117,6 +117,7 @@ class AxMasterMob : public AxMob, public AxSearchSource {
 
 public:
 	AxMasterMob( IAAFMasterMobSP spIaafMasterMob );
+	AxMasterMob( IAAFMasterMob2SP spIaafMasterMob );
 	
 	virtual ~AxMasterMob();
 
@@ -146,27 +147,13 @@ public:
 		const AxString&		slotName );		// Name to assign to new slot in Master Mob
 
 	inline operator IAAFMasterMobSP ()
+	{ return AxQueryInterface<IAAFMasterMob2,IAAFMasterMob>(_spIaafMasterMob); }
+
+	inline operator IAAFMasterMob2SP ()
 	{ return _spIaafMasterMob; }
 
 	AxMasterMob()
 	  {}
-
-#if 0
-	AxMasterMob( const AxMasterMob& other )
-	{
-		
-	}
-	  : _spIaafMasterMob( other._spIaafMasterMob )
-	  
-
-	AxMasterMob& operator=( const AxMasterMob& rhs )
-	{
-	  if ( &rhs != this ) {
-	    _spIaafMasterMob = rhs._spIaafMasterMob;
-	  }
-	  return *this;
-	}
-#endif
 
 private:
 
@@ -176,7 +163,7 @@ private:
 	// As soon as you attempt to implement a copy constructor,
 	// and/or operator=,  you have to deal with a const AxMasterMob&.
 	// That leads to the need to declare the smart pointer mutable.
-	mutable IAAFMasterMobSP _spIaafMasterMob;
+	mutable IAAFMasterMob2SP _spIaafMasterMob;
 };
 
 //=---------------------------------------------------------------------=
@@ -217,12 +204,16 @@ private:
 class AxCompositionMob : public AxMob {
 
 public:
-	AxCompositionMob( IAAFCompositionMobSP spIaafCompositionMob );
+    AxCompositionMob( IAAFCompositionMobSP spIaafCompositionMob );
+    AxCompositionMob( IAAFCompositionMob2SP spIaafCompositionMob );
 	virtual ~AxCompositionMob();
 	
 	void Initialize( const AxString& name );
 
 	inline operator IAAFCompositionMobSP ()
+	{ return AxQueryInterface<IAAFCompositionMob2,IAAFCompositionMob>( _spIaafCompositionMob ); }
+
+	inline operator IAAFCompositionMob2SP ()
 	{ return _spIaafCompositionMob; }
 
 private:
@@ -230,7 +221,7 @@ private:
 	AxCompositionMob( const AxCompositionMob& );
 	AxCompositionMob& operator=( const AxCompositionMob& );
 
-	IAAFCompositionMobSP _spIaafCompositionMob;
+	IAAFCompositionMob2SP _spIaafCompositionMob;
 };
 
 //=---------------------------------------------------------------------=

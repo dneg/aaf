@@ -109,7 +109,8 @@ const AxString& AxTypeCatMap::getStr( eAAFTypeCategory_t cat ) const
 
 AxCmdLineArgs::AxCmdLineArgs( int argc, char** argv )
 :	_argc( argc ),
-	_argv( argv )
+	_argv( argv ),
+	_fetchSet()
 {}
 
 AxCmdLineArgs::~AxCmdLineArgs()
@@ -125,6 +126,7 @@ std::pair<bool,int> AxCmdLineArgs::get( const char* opt, int i )
 		if ( strcmp( opt, _argv[i] ) == 0 ) {
 			result.first = true;
 			result.second = i;
+			MarkFetched(i);
 			return result;
 		}
 	}
@@ -139,9 +141,25 @@ std::pair<bool,const char*> AxCmdLineArgs::get( int n, int m )
 	if ( m <= n  &&  n < _argc ) {
 		result.first = true;
 		result.second = _argv[n];
+		MarkFetched(n);
 	}
 
 	return result;
+}
+
+bool AxCmdLineArgs::IsFetched( int n, int m )
+{
+  if ( n < m )
+  {
+    return true;
+  }
+
+  return _fetchSet.find(n) != _fetchSet.end();
+}
+
+void AxCmdLineArgs::MarkFetched( int n )
+{
+  _fetchSet.insert(n);
 }
 
 //=---------------------------------------------------------------------=
