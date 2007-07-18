@@ -1000,34 +1000,38 @@ void TestFileBuilder::UseLegacyEffectDefinitions()
 const aafMobID_t TestFileBuilder::GenerateMobId(AxString mobName)
 {
     _mobCount++;
-    aafMobID_t id;
-    id.SMPTELabel[0] = _mobCount % 233;
-    id.SMPTELabel[1] = _mobCount % 234;
-    id.SMPTELabel[2] = _mobCount % 235;
-    id.SMPTELabel[3] = _mobCount % 236;
-    id.SMPTELabel[4] = _mobCount % 237;
-    id.SMPTELabel[5] = _mobCount % 238;
-    id.SMPTELabel[6] = _mobCount % 239;
-    id.SMPTELabel[7] = _mobCount % 240;
-    id.SMPTELabel[8] = _mobCount % 241;
-    id.SMPTELabel[9] = _mobCount % 242;
-    id.SMPTELabel[10] = _mobCount % 243;
-    id.SMPTELabel[11] = _mobCount % 244;
-    id.length = _mobCount % 245;
-    id.instanceHigh = _mobCount % 246;
-    id.instanceMid = _mobCount % 247;
-    id.instanceLow = _mobCount % 248;
+
+	aafUInt8  j = static_cast<aafUInt8>( _mobCount );
+	aafUInt16 k = static_cast<aafUInt16>( _mobCount );
+
+	aafMobID_t id;
+    id.SMPTELabel[0] = j % 233;
+    id.SMPTELabel[1] = j % 234;
+    id.SMPTELabel[2] = j % 235;
+    id.SMPTELabel[3] = j % 236;
+    id.SMPTELabel[4] = j % 237;
+    id.SMPTELabel[5] = j % 238;
+    id.SMPTELabel[6] = j % 239;
+    id.SMPTELabel[7] = j % 240;
+    id.SMPTELabel[8] = j % 241;
+    id.SMPTELabel[9] = j % 242;
+    id.SMPTELabel[10] = j % 243;
+    id.SMPTELabel[11] = j % 244;
+    id.length = j % 245;
+    id.instanceHigh = j % 246;
+    id.instanceMid = j % 247;
+    id.instanceLow = j % 248;
     id.material.Data1 = _mobCount;
-    id.material.Data2 = _mobCount % 65535;
-    id.material.Data3 = _mobCount % 65536;
-    id.material.Data4[0] = _mobCount % 249;
-    id.material.Data4[1] = _mobCount % 250;
-    id.material.Data4[2] = _mobCount % 251;
-    id.material.Data4[3] = _mobCount % 252;
-    id.material.Data4[4] = _mobCount % 253;
-    id.material.Data4[5] = _mobCount % 254;
-    id.material.Data4[6] = _mobCount % 255;
-    id.material.Data4[7] = _mobCount % 256;
+    id.material.Data2 = k % 65535;
+    id.material.Data3 = k % 65536;
+    id.material.Data4[0] = j % 249;
+    id.material.Data4[1] = j % 250;
+    id.material.Data4[2] = j % 251;
+    id.material.Data4[3] = j % 252;
+    id.material.Data4[4] = j % 253;
+    id.material.Data4[5] = j % 254;
+    id.material.Data4[6] = j % 255;
+    id.material.Data4[7] = j % 256;
     
     if (mobIdMap.find(mobName)==mobIdMap.end())
     {

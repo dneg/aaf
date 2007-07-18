@@ -36,7 +36,12 @@ using namespace boost;
 class Requirement
 {
 public:
+
+    typedef map< const wstring, shared_ptr<const Requirement> > RequirementMap;
+    typedef shared_ptr<RequirementMap> RequirementMapSP;
+
     enum RequirementType {FILE, APP, DEFINITION};
+
     enum Category        {GENERAL, IMPORT_EXPORT, COMPOSITIONAL, METADATA,
                           MIXDOWN, AUXILIARY_FILE, ANNOTATIONS, EFFECT,
                           OPTIONAL_PROPERTIES, STRUCTURED_STORAGE, PROTOCOL,
@@ -44,7 +49,9 @@ public:
 
     Requirement(const wstring& id,
                 const RequirementType requirementType,
+		const wstring& requirementTypeAsString,
                 const Category category,
+		const wstring& categoryAsString,
                 const wstring& name,
                 const wstring& desc,
                 const wstring& document,
@@ -52,7 +59,8 @@ public:
                 const wstring& section);
     ~Requirement();
 
-    const wstring& GetId() const;
+    // Primary accessors
+    const wstring& GetId() const;  
     const enum RequirementType GetRequirementType() const;
     const enum Category GetCategory() const;
     const wstring& GetName() const;
@@ -61,23 +69,27 @@ public:
     const wstring& GetVersion() const;
     const wstring& GetSection() const;
 
-    typedef map< const wstring, shared_ptr<const Requirement> > RequirementMap;
-    typedef shared_ptr<RequirementMap> RequirementMapSP;
+    // Conviencie accessors
+    const wstring& GetRequirementTypeAsString() const;
+    const wstring& GetCategoryAsString() const;
 
  private:
+
     const wstring _id;
     const enum RequirementType _requirementType;
+    wstring _requirementTypeAsString;
     const enum Category _category;
+    wstring _categoryAsString;
     const wstring _name;
     const wstring _description;
     const wstring _document;
     const wstring _version;
     const wstring _section;
 
-  // prohibited
-  Requirement();
-  Requirement(const Requirement&);
-  Requirement& operator=( const Requirement& );
+    // prohibited
+    Requirement();
+    Requirement(const Requirement&);
+    Requirement& operator=( const Requirement& );
 };
 
 } // end of namespace diskstream

@@ -371,7 +371,7 @@
         </ref>
     </requirement>
 
-    <requirement type="definition" category="compositional">
+    <requirement type="def" category="compositional">
         <id>DEF_EP_034</id>
         <name>Sub-clip Composition Specification</name>
         <desc>A sub-clip composition shall be specified using a CompositionMob with Mob::UsageCode property equal to Usage_SubClip.</desc>
@@ -470,7 +470,7 @@
         </ref>
     </requirement>
 
-    <requirement type="definition" category="compositional">
+    <requirement type="def" category="compositional">
         <id>DEF_EP_043</id>
         <name>Adjusted-clip Composition Specification</name>
         <desc>An adjusted-clip composition shall be specified using a CompositionMob with Mob::UsageCode property equal to Usage_AdjustedClip.</desc>
@@ -536,7 +536,7 @@
         </ref>
     </requirement>
 
-    <requirement type="definition" category="compositional">
+    <requirement type="def" category="compositional">
         <id>DEF_EP_049</id>
         <name>Template Clip Specification</name>
         <desc>A template clip shall be specified using a MasterMob with Mob::UsageCode property equal to Usage_Template.</desc>
@@ -591,7 +591,7 @@
         </ref>
     </requirement>
 
-    <requirement type="definition" category="compositional">
+    <requirement type="def" category="compositional">
         <id>DEF_EP_054</id>
         <name>Clip Specification</name>
         <desc>A clip shall be specified using a MasterMob with no Mob::UsageCode property.</desc>
@@ -635,7 +635,7 @@
         </ref>
     </requirement>
 
-    <requirement type="definition" category="compositional">
+    <requirement type="def" category="compositional">
         <id>DEF_EP_058</id>
         <name>File Source Specification</name>
         <desc>A file source shall be specified using a SourceMob with an EssenceDescriptor that is a sub-class of FileDescriptor.</desc>
@@ -778,7 +778,7 @@
         </ref>
     </requirement>
 
-    <requirement type="definition" category="compositional">
+    <requirement type="def" category="compositional">
         <id>DEF_EP_071</id>
         <name>Recording Source Specification</name>
         <desc>A recording source shall be specified using a SourceMob with a RecordingDescriptor.  A recording source is also known as a recording SourceMob.</desc>
@@ -811,7 +811,7 @@
         </ref>
     </requirement>
 
-    <requirement type="definition" category="compositional">
+    <requirement type="def" category="compositional">
         <id>DEF_EP_074</id>
         <name>Import Source Specification</name>
         <desc>An import source shall be specified using a SourceMob with an ImportDescriptor.</desc>
@@ -877,7 +877,7 @@
         </ref>
     </requirement>
 
-    <requirement type="definition" category="compositional">
+    <requirement type="def" category="compositional">
         <id>DEF_EP_080</id>
         <name>Tape Source Specification</name>
         <desc>A tape source shall be specified using a SourceMob with a TapeDescriptor.</desc>
@@ -932,7 +932,7 @@
         </ref>
     </requirement>
 
-    <requirement type="definition" category="compositional">
+    <requirement type="def" category="compositional">
         <id>DEF_EP_085</id>
         <name>Film Source Specification</name>
         <desc>A film source shall be specified using a SourceMob with a FilmDescriptor.</desc>
@@ -1053,7 +1053,7 @@
         </ref>
     </requirement>
 
-    <requirement type="definition" category="metadata">
+    <requirement type="def" category="metadata">
         <id>DEF_EP_096</id>
         <name>Pull Up/Down Specification</name>
         <desc>Pull up and pull down shall be specified using a Pulldown object.</desc>
@@ -1405,7 +1405,7 @@
         </ref>
     </requirement>
 
-    <requirement type="definition" category="metadata">
+    <requirement type="def" category="metadata">
         <id>DEF_EP_128</id>
         <name>Edgecode Specification</name>
         <desc>A track of edgecode shall be specified using one or more Edgecode objects.</desc>
@@ -1416,7 +1416,7 @@
         </ref>
     </requirement>
 
-    <requirement type="definition" category="metadata">
+    <requirement type="def" category="metadata">
         <id>DEF_EP_129</id>
         <name>Timecode Specification</name>
         <desc>A track of timecode shall be specified using one or more Timecode objects or a TimecodeStream12M object.</desc>
@@ -1482,7 +1482,7 @@
         </ref>
     </requirement>
 
-    <requirement type="definition" category="auxiliary-file">
+    <requirement type="def" category="auxiliary-file">
         <id>DEF_EP_135</id>
         <name>Specification of Auxiliary Data</name>
         <desc>Each auxiliary file EssenceData object shall be specified using a SourceMob with an AuxiliaryDescriptor.</desc>
@@ -1581,7 +1581,7 @@
         </ref>
     </requirement>
 
-    <requirement type="definition" category="auxiliary-file">
+    <requirement type="def" category="auxiliary-file">
         <id>DEF_EP_144</id>
         <name>MIDI Mime Type</name>
         <desc>The AuxiliaryDescriptor::MimeType property for a referenced MIDI file shall be "audio/midi".</desc>
@@ -1812,7 +1812,7 @@
         </ref>
     </requirement>
 
-    <requirement type="definition" category="effect">
+    <requirement type="def" category="effect">
         <id>DEF_EP_165</id>
         <name>Effect Invokation Method</name>
         <desc>An effect shall be invoked using an OperationGroup object.</desc>
@@ -1867,7 +1867,7 @@
         </ref>
     </requirement>
 
-    <requirement type="definition" category="effect">
+    <requirement type="def" category="effect">
         <id>DEF_EP_170</id>
         <name>Invoking Effects on Multiple Layers</name>
         <desc>Effects on multiple layers shall be constructed within a NestedScope object.  The layers shall be ordered background to foreground within the Slots of the NestedScope.</desc>

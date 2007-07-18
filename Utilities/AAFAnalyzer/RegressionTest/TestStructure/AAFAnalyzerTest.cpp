@@ -576,16 +576,16 @@ void CheckRegistries()
 
     cout << "Test 1: Correct Requirement Registration" << endl;
 
-    shared_ptr<const Requirement> req01(new Requirement(L"TEST01", Requirement::APP, Requirement::ADHOC, L"TEST01", L"description", L"document", L"version", L"section") );
-    shared_ptr<const Requirement> req02(new Requirement(L"TEST02", Requirement::APP, Requirement::ADHOC, L"TEST02", L"description", L"document", L"version", L"section") );
-    shared_ptr<const Requirement> req03(new Requirement(L"TEST03", Requirement::APP, Requirement::ADHOC, L"TEST03", L"description", L"document", L"version", L"section") );
-    shared_ptr<const Requirement> req04(new Requirement(L"TEST04", Requirement::APP, Requirement::ADHOC, L"TEST04", L"description", L"document", L"version", L"section") );
-    shared_ptr<const Requirement> req05(new Requirement(L"TEST05", Requirement::APP, Requirement::ADHOC, L"TEST05", L"description", L"document", L"version", L"section") );
-    shared_ptr<const Requirement> req06(new Requirement(L"TEST06", Requirement::APP, Requirement::ADHOC, L"TEST06", L"description", L"document", L"version", L"section") );
-    shared_ptr<const Requirement> req07(new Requirement(L"TEST07", Requirement::APP, Requirement::ADHOC, L"TEST07", L"description", L"document", L"version", L"section") );
-    shared_ptr<const Requirement> req08(new Requirement(L"TEST08", Requirement::APP, Requirement::ADHOC, L"TEST08", L"description", L"document", L"version", L"section") );
-    shared_ptr<const Requirement> req09(new Requirement(L"TEST09", Requirement::APP, Requirement::ADHOC, L"TEST09", L"description", L"document", L"version", L"section") );
-    shared_ptr<const Requirement> req10(new Requirement(L"TEST10", Requirement::APP, Requirement::ADHOC, L"TEST10", L"description", L"document", L"version", L"section") );
+    shared_ptr<const Requirement> req01(new Requirement(L"TEST01", Requirement::APP, L"app", Requirement::ADHOC, L"adhoc", L"TEST01", L"description", L"document", L"version", L"section") );
+    shared_ptr<const Requirement> req02(new Requirement(L"TEST02", Requirement::APP, L"app", Requirement::ADHOC, L"adhoc", L"TEST02", L"description", L"document", L"version", L"section") );
+    shared_ptr<const Requirement> req03(new Requirement(L"TEST03", Requirement::APP, L"app", Requirement::ADHOC, L"adhoc", L"TEST03", L"description", L"document", L"version", L"section") );
+    shared_ptr<const Requirement> req04(new Requirement(L"TEST04", Requirement::APP, L"app", Requirement::ADHOC, L"adhoc", L"TEST04", L"description", L"document", L"version", L"section") );
+    shared_ptr<const Requirement> req05(new Requirement(L"TEST05", Requirement::APP, L"app", Requirement::ADHOC, L"adhoc", L"TEST05", L"description", L"document", L"version", L"section") );
+    shared_ptr<const Requirement> req06(new Requirement(L"TEST06", Requirement::APP, L"app", Requirement::ADHOC, L"adhoc", L"TEST06", L"description", L"document", L"version", L"section") );
+    shared_ptr<const Requirement> req07(new Requirement(L"TEST07", Requirement::APP, L"app", Requirement::ADHOC, L"adhoc", L"TEST07", L"description", L"document", L"version", L"section") );
+    shared_ptr<const Requirement> req08(new Requirement(L"TEST08", Requirement::APP, L"app", Requirement::ADHOC, L"adhoc", L"TEST08", L"description", L"document", L"version", L"section") );
+    shared_ptr<const Requirement> req09(new Requirement(L"TEST09", Requirement::APP, L"app", Requirement::ADHOC, L"adhoc", L"TEST09", L"description", L"document", L"version", L"section") );
+    shared_ptr<const Requirement> req10(new Requirement(L"TEST10", Requirement::APP, L"app", Requirement::ADHOC, L"adhoc", L"TEST10", L"description", L"document", L"version", L"section") );
 
     try
     {

@@ -27,134 +27,140 @@ PROGNAME = BuildTestFile
 PROGLIBS = -lexpat
 
 AAFBASE ?= ../../../..
+
+ANALYZE = $(AAFSDKBINDIR)/AAFAnalyzer$(EXE) -analyze -reqs ../../Requirements/AAFRequirements.xml
+
 include ../../aafanalyzer.mk
 
+.PHONY : clean
+clean::
+	rm -f *.aaf *.actual
+
 .PHONY : check
-check : $(AAFSDKBINDIR)/BuildTestFile$(EXE)
-	rm -f *.aaf *.temp *.results
+check : clean $(AAFSDKBINDIR)/BuildTestFile$(EXE)
+
 	env LD_LIBRARY_PATH=$(AAFSDKBINDIR) $(AAFSDKBINDIR)/BuildTestFile$(EXE) EPAcyclicTest.xml EPAcyclicTest.aaf
-	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/AAFAnalyzer$(EXE) -verbose -regressiontest EPAcyclicTest.aaf ../../Requirements/AAFRequirements.xml >> EPAcyclicTest.temp
-	grep -A `expr \`expr \\\`grep -n "Error: Load phase failed.  Further tests aborted." EPAcyclicTest.temp | sed 's_\([0-9]*\).*_\1_' \\\`\` - \`expr \\\`grep -n "Name:   Acyclic Analysis Test" EPAcyclicTest.temp | sed 's_\([0-9]*\).*_\1_'\\\`\` - 1` "Name:   Acyclic Analysis Test" EPAcyclicTest.temp >> EPAcyclicTest.results
-	@echo "Comparing EPAcyclicTest Expected Results (EPAcyclicTest.expected) to Actual Results (EPAcyclicTest.results)"
-	diff EPAcyclicTest.expected EPAcyclicTest.results
+	-env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(ANALYZE) -filter "Acyclic Analysis Test" -verbose EPAcyclicTest.aaf > EPAcyclicTest.actual
+	@echo "Comparing EPAcyclicTest Expected Results (EPAcyclicTest.expected) to Actual Results (EPAcyclicTest.actual)"
+	diff EPAcyclicTest.expected EPAcyclicTest.actual
 	@echo "End of Test"
+
 	env LD_LIBRARY_PATH=$(AAFSDKBINDIR) $(AAFSDKBINDIR)/BuildTestFile$(EXE) EPDerivationTest.xml EPDerivationTest.aaf
-	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/AAFAnalyzer$(EXE) -verbose -regressiontest EPDerivationTest.aaf ../../Requirements/AAFRequirements.xml >> EPDerivationTest.temp
-	grep -A `expr \`expr \\\`grep -n "Name:   Edit Protocol Naming Test" EPDerivationTest.temp | sed 's_\([0-9]*\).*_\1_' \\\`\` - \`expr \\\`grep -n "Name:   Mob Derivation Test" EPDerivationTest.temp | sed 's_\([0-9]*\).*_\1_'\\\`\` - 1` "Name:   Mob Derivation Test" EPDerivationTest.temp >> EPDerivationTest.results
-	@echo "Comparing EPDerivationTest Expected Results (EPDerivationTest.expected) to Actual Results (EPDerivationTest.results)"
-	diff EPDerivationTest.expected EPDerivationTest.results
+	-env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(ANALYZE) -filter "Mob Derivation Test" -verbose EPDerivationTest.aaf > EPDerivationTest.actual
+	@echo "Comparing EPDerivationTest Expected Results (EPDerivationTest.expected) to Actual Results (EPDerivationTest.actual)"
+	diff EPDerivationTest.expected EPDerivationTest.actual
 	@echo "End of Test"
+
 	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/BuildTestFile$(EXE) EPNameTest.xml EPNameTest.aaf
-	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/AAFAnalyzer$(EXE) -verbose -regressiontest EPNameTest.aaf ../../Requirements/AAFRequirements.xml >> EPNameTest.temp
-	grep -A `expr \`expr \\\`grep -n "Name:   Edit Protocol Mob Contained Tracks Test" EPNameTest.temp | sed 's_\([0-9]*\).*_\1_' \\\`\` - \`expr \\\`grep -n "Name:   Edit Protocol Naming Test" EPNameTest.temp | sed 's_\([0-9]*\).*_\1_'\\\`\` - 1` "Name:   Edit Protocol Naming Test" EPNameTest.temp >> EPNameTest.results
-	@echo "Comparing EPNameTest Expected Results (EPNameTest.expected) to Actual Results (EPNameTest.results)"
-	diff EPNameTest.expected EPNameTest.results
+	-env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(ANALYZE) -filter "Edit Protocol Naming Test" -verbose EPNameTest.aaf > EPNameTest.actual
+	@echo "Comparing EPNameTest Expected Results (EPNameTest.expected) to Actual Results (EPNameTest.actual)"
+	diff EPNameTest.expected EPNameTest.actual
 	@echo "End of Test"
+
 	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/BuildTestFile$(EXE) EPContainedTrackTest.xml EPContainedTrackTest.aaf
-	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/AAFAnalyzer$(EXE) -verbose -regressiontest EPContainedTrackTest.aaf ../../Requirements/AAFRequirements.xml >> EPContainedTrackTest.temp
-	grep -A `expr \`expr \\\`grep -n "Name:   Edit Protocol Track Contents Test" EPContainedTrackTest.temp | sed 's_\([0-9]*\).*_\1_' \\\`\` - \`expr \\\`grep -n "Name:   Edit Protocol Mob Contained Tracks Test" EPContainedTrackTest.temp | sed 's_\([0-9]*\).*_\1_'\\\`\` - 1` "Name:   Edit Protocol Mob Contained Tracks Test" EPContainedTrackTest.temp >> EPContainedTrackTest.results
-	@echo "Comparing EPContainedTrackTest Expected Results (EPContainedTrackTest.expected) to Actual Results (EPContainedTrackTest.results)"
-	diff EPContainedTrackTest.expected EPContainedTrackTest.results
+	-env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(ANALYZE) -filter "Edit Protocol Mob Contained Tracks Test" -verbose EPContainedTrackTest.aaf > EPContainedTrackTest.actual
+	@echo "Comparing EPContainedTrackTest Expected Results (EPContainedTrackTest.expected) to Actual Results (EPContainedTrackTest.actual)"
+	diff EPContainedTrackTest.expected EPContainedTrackTest.actual
 	@echo "End of Test"
+
 	env LD_LIBRARY_PATH=$(AAFSDKBINDIR) $(AAFSDKBINDIR)/BuildTestFile$(EXE) EPTrackContentsTest.xml EPTrackContentsTest.aaf
-	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/AAFAnalyzer$(EXE) -verbose -regressiontest EPTrackContentsTest.aaf ../../Requirements/AAFRequirements.xml >> EPTrackContentsTest.temp
-	grep -A `expr \`expr \\\`grep -n "Name:   Edit Protocol Edit Rate Test" EPTrackContentsTest.temp | sed 's_\([0-9]*\).*_\1_' \\\`\` - \`expr \\\`grep -n "Name:   Edit Protocol Track Contents Test" EPTrackContentsTest.temp | sed 's_\([0-9]*\).*_\1_'\\\`\` - 1` "Name:   Edit Protocol Track Contents Test" EPTrackContentsTest.temp >> EPTrackContentsTest.results
-	@echo "Comparing EPTrackContentsTest Expected Results (EPTrackContentsTest.expected) to Actual Results (EPTrackContentsTest.results)"
-	diff EPTrackContentsTest.expected EPTrackContentsTest.results
+	-env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(ANALYZE) -filter "Edit Protocol Track Contents Test" -verbose EPTrackContentsTest.aaf > EPTrackContentsTest.actual
+	@echo "Comparing EPTrackContentsTest Expected Results (EPTrackContentsTest.expected) to Actual Results (EPTrackContentsTest.actual)"
+	diff EPTrackContentsTest.expected EPTrackContentsTest.actual
 	@echo "End of Test"
+
 	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/BuildTestFile$(EXE) EPEditRateTest.xml EPEditRateTest.aaf
-	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/AAFAnalyzer$(EXE) -verbose -regressiontest EPEditRateTest.aaf ../../Requirements/AAFRequirements.xml >> EPEditRateTest.temp
-	grep -A `expr \`expr \\\`grep -n "Name:   Edit Protocol Effect Test" EPEditRateTest.temp | sed 's_\([0-9]*\).*_\1_' \\\`\` - \`expr \\\`grep -n "Name:   Edit Protocol Edit Rate Test" EPEditRateTest.temp | sed 's_\([0-9]*\).*_\1_'\\\`\` - 1` "Name:   Edit Protocol Edit Rate Test" EPEditRateTest.temp >> EPEditRateTest.results
-	@echo "Comparing EPEditRateTest Expected Results (EPEditRateTest.expected) to Actual Results (EPEditRateTest.results)"
-	diff EPEditRateTest.expected EPEditRateTest.results
+	-env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(ANALYZE) -filter "Edit Protocol Edit Rate Test" -verbose EPEditRateTest.aaf > EPEditRateTest.actual
+	@echo "Comparing EPEditRateTest Expected Results (EPEditRateTest.expected) to Actual Results (EPEditRateTest.actual)"
+	diff EPEditRateTest.expected EPEditRateTest.actual
 	@echo "End of Test"
+
 	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/BuildTestFile$(EXE) EPEditRateTest2.xml EPEditRateTest2.aaf
-	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/AAFAnalyzer$(EXE) -verbose -regressiontest EPEditRateTest2.aaf ../../Requirements/AAFRequirements.xml >> EPEditRateTest2.temp
-	grep -A `expr \`expr \\\`grep -n "Name:   Edit Protocol Effect Test" EPEditRateTest2.temp | sed 's_\([0-9]*\).*_\1_' \\\`\` - \`expr \\\`grep -n "Name:   Edit Protocol Edit Rate Test" EPEditRateTest2.temp | sed 's_\([0-9]*\).*_\1_'\\\`\` - 1` "Name:   Edit Protocol Edit Rate Test" EPEditRateTest2.temp >> EPEditRateTest2.results
-	@echo "Comparing EPEditRateTest2 Expected Results (EPEditRateTest2.expected) to Actual Results (EPEditRateTest2.results)"
-	diff EPEditRateTest2.expected EPEditRateTest2.results
+	-env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(ANALYZE) -filter "Edit Protocol Edit Rate Test" -verbose EPEditRateTest2.aaf > EPEditRateTest2.actual
+	@echo "Comparing EPEditRateTest2 Expected Results (EPEditRateTest2.expected) to Actual Results (EPEditRateTest2.actual)"
+	diff EPEditRateTest2.expected EPEditRateTest2.actual
 	@echo "End of Test"
+
 	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/BuildTestFile$(EXE) EPEditRateTest3.xml EPEditRateTest3.aaf
-	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/AAFAnalyzer$(EXE) -verbose -regressiontest EPEditRateTest3.aaf ../../Requirements/AAFRequirements.xml >> EPEditRateTest3.temp
-	grep -A `expr \`expr \\\`grep -n "Name:   Edit Protocol Effect Test" EPEditRateTest3.temp | sed 's_\([0-9]*\).*_\1_' \\\`\` - \`expr \\\`grep -n "Name:   Edit Protocol Edit Rate Test" EPEditRateTest3.temp | sed 's_\([0-9]*\).*_\1_'\\\`\` - 1` "Name:   Edit Protocol Edit Rate Test" EPEditRateTest3.temp >> EPEditRateTest3.results
-	@echo "Comparing EPEditRateTest3 Expected Results (EPEditRateTest3.expected) to Actual Results (EPEditRateTest3.results)"
-	diff EPEditRateTest3.expected EPEditRateTest3.results
+	-env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(ANALYZE) -filter "Edit Protocol Edit Rate Test" -verbose EPEditRateTest3.aaf > EPEditRateTest3.actual
+	@echo "Comparing EPEditRateTest3 Expected Results (EPEditRateTest3.expected) to Actual Results (EPEditRateTest3.actual)"
+	diff EPEditRateTest3.expected EPEditRateTest3.actual
 	@echo "End of Test"
+
 	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/BuildTestFile$(EXE) EPEditRateTest4.xml EPEditRateTest4.aaf
-	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/AAFAnalyzer$(EXE) -verbose -regressiontest EPEditRateTest4.aaf ../../Requirements/AAFRequirements.xml >> EPEditRateTest4.temp
-	grep -A `expr \`expr \\\`grep -n "Name:   Edit Protocol Effect Test" EPEditRateTest4.temp | sed 's_\([0-9]*\).*_\1_' \\\`\` - \`expr \\\`grep -n "Name:   Edit Protocol Edit Rate Test" EPEditRateTest4.temp | sed 's_\([0-9]*\).*_\1_'\\\`\` - 1` "Name:   Edit Protocol Edit Rate Test" EPEditRateTest4.temp >> EPEditRateTest4.results
-	@echo "Comparing EPEditRateTest4 Expected Results (EPEditRateTest4.expected) to Actual Results (EPEditRateTest4.results)"
-	diff EPEditRateTest4.expected EPEditRateTest4.results
+	-env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(ANALYZE) -filter "Edit Protocol Edit Rate Test" -verbose EPEditRateTest4.aaf > EPEditRateTest4.actual
+	@echo "Comparing EPEditRateTest4 Expected Results (EPEditRateTest4.expected) to Actual Results (EPEditRateTest4.actual)"
+	diff EPEditRateTest4.expected EPEditRateTest4.actual
 	@echo "End of Test"
+
 	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/BuildTestFile$(EXE) EPEditRateTest5.xml EPEditRateTest5.aaf
-	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/AAFAnalyzer$(EXE) -verbose -regressiontest EPEditRateTest5.aaf ../../Requirements/AAFRequirements.xml >> EPEditRateTest5.temp
-	grep -A `expr \`expr \\\`grep -n "Name:   Edit Protocol Effect Test" EPEditRateTest5.temp | sed 's_\([0-9]*\).*_\1_' \\\`\` - \`expr \\\`grep -n "Name:   Edit Protocol Edit Rate Test" EPEditRateTest5.temp | sed 's_\([0-9]*\).*_\1_'\\\`\` - 1` "Name:   Edit Protocol Edit Rate Test" EPEditRateTest5.temp >> EPEditRateTest5.results
-	@echo "Comparing EPEditRateTest5 Expected Results (EPEditRateTest5.expected) to Actual Results (EPEditRateTest5.results)"
-	diff EPEditRateTest5.expected EPEditRateTest5.results
+	-env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(ANALYZE) -filter "Edit Protocol Edit Rate Test" -verbose EPEditRateTest5.aaf > EPEditRateTest5.actual
+	@echo "Comparing EPEditRateTest5 Expected Results (EPEditRateTest5.expected) to Actual Results (EPEditRateTest5.actual)"
+	diff EPEditRateTest5.expected EPEditRateTest5.actual
 	@echo "End of Test"
+
 	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/BuildTestFile$(EXE) EPEditRateTest6.xml EPEditRateTest6.aaf
-	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/AAFAnalyzer$(EXE) -verbose -regressiontest EPEditRateTest6.aaf ../../Requirements/AAFRequirements.xml >> EPEditRateTest6.temp
-	grep -A `expr \`expr \\\`grep -n "Name:   Edit Protocol Effect Test" EPEditRateTest6.temp | sed 's_\([0-9]*\).*_\1_' \\\`\` - \`expr \\\`grep -n "Name:   Edit Protocol Edit Rate Test" EPEditRateTest6.temp | sed 's_\([0-9]*\).*_\1_'\\\`\` - 1` "Name:   Edit Protocol Edit Rate Test" EPEditRateTest6.temp >> EPEditRateTest6.results
-	@echo "Comparing EPEditRateTest6 Expected Results (EPEditRateTest6.expected) to Actual Results (EPEditRateTest6.results)"
-	diff EPEditRateTest6.expected EPEditRateTest6.results
+	-env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(ANALYZE) -filter "Edit Protocol Edit Rate Test" -verbose EPEditRateTest6.aaf > EPEditRateTest6.actual
+	@echo "Comparing EPEditRateTest6 Expected Results (EPEditRateTest6.expected) to Actual Results (EPEditRateTest6.actual)"
+	diff EPEditRateTest6.expected EPEditRateTest6.actual
 	@echo "End of Test"
+
 	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/BuildTestFile$(EXE) EPEffectTest.xml EPEffectTest.aaf
-	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/AAFAnalyzer$(EXE) -verbose -regressiontest EPEffectTest.aaf ../../Requirements/AAFRequirements.xml >> EPEffectTest.temp
-	grep -A `expr \`expr \\\`grep -n "Name:   Edit Protocol Annotation Test" EPEffectTest.temp | sed 's_\([0-9]*\).*_\1_' \\\`\` - \`expr \\\`grep -n "Name:   Edit Protocol Effect Test" EPEffectTest.temp | sed 's_\([0-9]*\).*_\1_'\\\`\` - 1` "Name:   Edit Protocol Effect Test" EPEffectTest.temp >> EPEffectTest.results
-	@echo "Comparing EPEffectTest Expected Results (EPEffectTest.expected) to Actual Results (EPEffectTest.results)"
-	diff EPEffectTest.expected EPEffectTest.results
+	-env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(ANALYZE) -filter "Edit Protocol Effect Test" -verbose EPEffectTest.aaf > EPEffectTest.actual
+	@echo "Comparing EPEffectTest Expected Results (EPEffectTest.expected) to Actual Results (EPEffectTest.actual)"
+	diff EPEffectTest.expected EPEffectTest.actual
 	@echo "End of Test"
+
 	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/BuildTestFile$(EXE) EPAnnotationTest.xml EPAnnotationTest.aaf
-	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/AAFAnalyzer$(EXE) -verbose -regressiontest EPAnnotationTest.aaf ../../Requirements/AAFRequirements.xml >> EPAnnotationTest.temp
-	grep -A `expr \`expr \\\`grep -n "Name:   Edit Protocol Definition Test" EPAnnotationTest.temp | sed 's_\([0-9]*\).*_\1_' \\\`\` - \`expr \\\`grep -n "Name:   Edit Protocol Annotation Test" EPAnnotationTest.temp | sed 's_\([0-9]*\).*_\1_'\\\`\` - 1` "Name:   Edit Protocol Annotation Test" EPAnnotationTest.temp >> EPAnnotationTest.results
-	@echo "Comparing EPAnnotationTest Expected Results (EPAnnotationTest.expected) to Actual Results (EPAnnotationTest.results)"
-	diff EPAnnotationTest.expected EPAnnotationTest.results
+	-env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(ANALYZE) -filter "Edit Protocol Annotation Test" -verbose EPAnnotationTest.aaf > EPAnnotationTest.actual
+	@echo "Comparing EPAnnotationTest Expected Results (EPAnnotationTest.expected) to Actual Results (EPAnnotationTest.actual)"
+	diff EPAnnotationTest.expected EPAnnotationTest.actual
 	@echo "End of Test"
+
 	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/BuildTestFile$(EXE) EPAnnotationTest2.xml EPAnnotationTest2.aaf
-	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/AAFAnalyzer$(EXE) -verbose -regressiontest EPAnnotationTest2.aaf ../../Requirements/AAFRequirements.xml >> EPAnnotationTest2.temp
-	grep -A `expr \`expr \\\`grep -n "Name:   Edit Protocol Definition Test" EPAnnotationTest2.temp | sed 's_\([0-9]*\).*_\1_' \\\`\` - \`expr \\\`grep -n "Name:   Edit Protocol Annotation Test" EPAnnotationTest2.temp | sed 's_\([0-9]*\).*_\1_'\\\`\` - 1` "Name:   Edit Protocol Annotation Test" EPAnnotationTest2.temp >> EPAnnotationTest2.results
-	@echo "Comparing EPAnnotationTest 2 Expected Results (EPAnnotationTest2.expected) to Actual Results (EPAnnotationTest2.results)"
-	diff EPAnnotationTest2.expected EPAnnotationTest2.results
+	-env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(ANALYZE) -filter "Edit Protocol Annotation Test" -verbose EPAnnotationTest2.aaf > EPAnnotationTest2.actual
+	@echo "Comparing EPAnnotationTest 2 Expected Results (EPAnnotationTest2.expected) to Actual Results (EPAnnotationTest2.actual)"
+	diff EPAnnotationTest2.expected EPAnnotationTest2.actual
 	@echo "End of Test"
+
 	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/BuildTestFile$(EXE) EPDefinitionTest.xml EPDefinitionTest.aaf
-	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/AAFAnalyzer$(EXE) -verbose -regressiontest EPDefinitionTest.aaf ../../Requirements/AAFRequirements.xml >> EPDefinitionTest.temp
-	grep -A `expr \`expr \\\`grep -n "Name:   Edit Protocol Header Test" EPDefinitionTest.temp | sed 's_\([0-9]*\).*_\1_' \\\`\` - \`expr \\\`grep -n "Name:   Edit Protocol Definition Test" EPDefinitionTest.temp | sed 's_\([0-9]*\).*_\1_'\\\`\` - 1` "Name:   Edit Protocol Definition Test" EPDefinitionTest.temp >> EPDefinitionTest.results
-	@echo "Comparing EPDefinitionTest Expected Results (EPDefinitionTest.expected) to Actual Results (EPDefinitionTest.results)"
-	diff EPDefinitionTest.expected EPDefinitionTest.results
+	-env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(ANALYZE) -filter "Edit Protocol Definition Test" -verbose EPDefinitionTest.aaf > EPDefinitionTest.actual
+	@echo "Comparing EPDefinitionTest Expected Results (EPDefinitionTest.expected) to Actual Results (EPDefinitionTest.actual)"
+	diff EPDefinitionTest.expected EPDefinitionTest.actual
 	@echo "End of Test"
+
 	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/BuildTestFile$(EXE) EPDefinitionTest2.xml EPDefinitionTest2.aaf
-	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/AAFAnalyzer$(EXE) -verbose -regressiontest EPDefinitionTest2.aaf ../../Requirements/AAFRequirements.xml >> EPDefinitionTest2.temp
-	grep -A `expr \`expr \\\`grep -n "Name:   Edit Protocol Header Test" EPDefinitionTest2.temp | sed 's_\([0-9]*\).*_\1_' \\\`\` - \`expr \\\`grep -n "Name:   Edit Protocol Definition Test" EPDefinitionTest2.temp | sed 's_\([0-9]*\).*_\1_'\\\`\` - 1` "Name:   Edit Protocol Definition Test" EPDefinitionTest2.temp >> EPDefinitionTest2.results
-	@echo "Comparing EPDefinitionTest Expected Results (EPDefinitionTest2.expected) to Actual Results (EPDefinitionTest2.results)"
-	diff EPDefinitionTest2.expected EPDefinitionTest2.results
+	-env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(ANALYZE) -filter "Edit Protocol Definition Test" -verbose EPDefinitionTest2.aaf > EPDefinitionTest2.actual
+	@echo "Comparing EPDefinitionTest Expected Results (EPDefinitionTest2.expected) to Actual Results (EPDefinitionTest2.actual)"
+	diff EPDefinitionTest2.expected EPDefinitionTest2.actual
 	@echo "End of Test"
+
 	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/BuildTestFile$(EXE) EPHeaderTest1.xml EPHeaderTest1.aaf
-	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/AAFAnalyzer$(EXE) -verbose -regressiontest EPHeaderTest1.aaf ../../Requirements/AAFRequirements.xml >> EPHeaderTest1.temp
-	grep -A `expr \`expr \\\`grep -n "Name:   Edit Protocol Parameter Test" EPHeaderTest1.temp | sed 's_\([0-9]*\).*_\1_' \\\`\` - \`expr \\\`grep -n "Name:   Edit Protocol Header Test" EPHeaderTest1.temp | sed 's_\([0-9]*\).*_\1_'\\\`\` - 1` "Name:   Edit Protocol Header Test" EPHeaderTest1.temp >> EPHeaderTest1.results
-	@echo "Comparing EPHeaderTest 1 Expected Results (EPHeaderTest1.expected) to Actual Results (EPHeaderTest1.results)"
-	diff EPHeaderTest1.expected EPHeaderTest1.results
+	-env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(ANALYZE) -filter "Edit Protocol Header Test" -verbose EPHeaderTest1.aaf > EPHeaderTest1.actual
+	@echo "Comparing EPHeaderTest 1 Expected Results (EPHeaderTest1.expected) to Actual Results (EPHeaderTest1.actual)"
+	diff EPHeaderTest1.expected EPHeaderTest1.actual
 	@echo "End of Test"
+
 	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/BuildTestFile$(EXE) EPHeaderTest2.xml EPHeaderTest2.aaf
-	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/AAFAnalyzer$(EXE) -verbose -regressiontest EPHeaderTest2.aaf ../../Requirements/AAFRequirements.xml >> EPHeaderTest2.temp
-	grep -A `expr \`expr \\\`grep -n "Name:   Edit Protocol Parameter Test" EPHeaderTest2.temp | sed 's_\([0-9]*\).*_\1_' \\\`\` - \`expr \\\`grep -n "Name:   Edit Protocol Header Test" EPHeaderTest2.temp | sed 's_\([0-9]*\).*_\1_'\\\`\` - 1` "Name:   Edit Protocol Header Test" EPHeaderTest2.temp >> EPHeaderTest2.results
-	@echo "Comparing EPHeaderTest 2 Expected Results (EPHeaderTest2.expected) to Actual Results (EPHeaderTest2.results)"
-	diff EPHeaderTest2.expected EPHeaderTest2.results
+	-env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(ANALYZE) -filter "Edit Protocol Header Test" -verbose EPHeaderTest2.aaf > EPHeaderTest2.actual
+	@echo "Comparing EPHeaderTest 2 Expected Results (EPHeaderTest2.expected) to Actual Results (EPHeaderTest2.actual)"
+	diff EPHeaderTest2.expected EPHeaderTest2.actual
 	@echo "End of Test"
+
 	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/BuildTestFile$(EXE) EPHeaderTest3.xml EPHeaderTest3.aaf
-	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/AAFAnalyzer$(EXE) -verbose -regressiontest EPHeaderTest3.aaf ../../Requirements/AAFRequirements.xml >> EPHeaderTest3.temp
-	grep -A `expr \`expr \\\`grep -n "Name:   Edit Protocol Parameter Test" EPHeaderTest3.temp | sed 's_\([0-9]*\).*_\1_' \\\`\` - \`expr \\\`grep -n "Name:   Edit Protocol Header Test" EPHeaderTest3.temp | sed 's_\([0-9]*\).*_\1_'\\\`\` - 1` "Name:   Edit Protocol Header Test" EPHeaderTest3.temp >> EPHeaderTest3.results
-	@echo "Comparing EPHeaderTest 3 Expected Results (EPHeaderTest3.expected) to Actual Results (EPHeaderTest3.results)"
-	diff EPHeaderTest3.expected EPHeaderTest3.results
+	-env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(ANALYZE) -filter "Edit Protocol Header Test" -verbose EPHeaderTest3.aaf > EPHeaderTest3.actual
+	@echo "Comparing EPHeaderTest 3 Expected Results (EPHeaderTest3.expected) to Actual Results (EPHeaderTest3.actual)"
+	diff EPHeaderTest3.expected EPHeaderTest3.actual
 	@echo "End of Test"
+
 	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/BuildTestFile$(EXE) EPParameterTest.xml EPParameterTest.aaf
-	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/AAFAnalyzer$(EXE) -verbose -regressiontest EPParameterTest.aaf ../../Requirements/AAFRequirements.xml >> EPParameterTest.temp
-	grep -A `expr \`expr \\\`grep -n "Name:   Edit Protocol Multi-Channel Audio Test" EPParameterTest.temp | sed 's_\([0-9]*\).*_\1_' \\\`\` - \`expr \\\`grep -n "Name:   Edit Protocol Parameter Test" EPParameterTest.temp | sed 's_\([0-9]*\).*_\1_'\\\`\` - 1` "Name:   Edit Protocol Parameter Test" EPParameterTest.temp >> EPParameterTest.results
-	@echo "Comparing EPParameterTest Expected Results (EPParameterTest.expected) to Actual Results (EPParameterTest.results)"
-	diff EPParameterTest.expected EPParameterTest.results
+	-env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(ANALYZE) -filter "Edit Protocol Parameter Test" -verbose EPParameterTest.aaf > EPParameterTest.actual
+	@echo "Comparing EPParameterTest Expected Results (EPParameterTest.expected) to Actual Results (EPParameterTest.actual)"
+	diff EPParameterTest.expected EPParameterTest.actual
 	@echo "End of Test"
+
 	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/BuildTestFile$(EXE) EPMultiChannelAudioTest.xml EPMultiChannelAudioTest.aaf
-	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/AAFAnalyzer$(EXE) -verbose -regressiontest EPMultiChannelAudioTest.aaf ../../Requirements/AAFRequirements.xml >> EPMultiChannelAudioTest.temp
-	grep -A `expr \`expr \\\`wc -l EPMultiChannelAudioTest.temp | sed 's_\([0-9]*\).*_\1_'\\\`\` - \`expr \\\`grep -n "Name:   Edit Protocol Multi-Channel Audio Test" EPMultiChannelAudioTest.temp | sed 's_\([0-9]*\).*_\1_'\\\`\`` "Name:   Edit Protocol Multi-Channel Audio Test" EPMultiChannelAudioTest.temp >> EPMultiChannelAudioTest.results
-	@echo "Comparing EPMultiChannelAudioTest Expected Results (EPMultiChannelAudioTest.expected) to Actual Results (EPMultiChannelAudioTest.results)"
-	diff EPMultiChannelAudioTest.expected EPMultiChannelAudioTest.results
+	-env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(ANALYZE) -filter "Edit Protocol Multi-Channel Audio Test" -verbose EPMultiChannelAudioTest.aaf > EPMultiChannelAudioTest.actual
+	@echo "Comparing EPMultiChannelAudioTest Expected Results (EPMultiChannelAudioTest.expected) to Actual Results (EPMultiChannelAudioTest.actual)"
+	diff EPMultiChannelAudioTest.expected EPMultiChannelAudioTest.actual
 	@echo "End of Test"

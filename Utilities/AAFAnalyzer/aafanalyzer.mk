@@ -42,9 +42,10 @@ INCLUDES ?= -I$(AAFSDKINCLUDEDIR) \
 	   -I../AAFAnalyzerBase \
 	   -I../EPAnalyzerBase \
 	   -I../RequirementLib \
-   	   -I../TestPhaseLib \
+	   -I../TestPhaseLib \
 	   -I../BaseTestImpl \
 	   -I../EditProtocolTestImpl \
+	   -I$(AAFBASE)/ref-impl/expat \
 	   -I$(AAFBASE)/examples2/axLib
 
 
@@ -53,6 +54,9 @@ BINTARGET = $(AAFSDKBINDIR)/$(PROGNAME)$(EXE)
 # AxLib lib directory
 AXLIBPACKAGE = axExamples
 AXLIBDIR = $(AAFBUILDDIR)/$(AXLIBPACKAGE)/$(AAFTARGETDIR)
+
+# expat static library location
+EXPATLIBDIR = $(AAFBUILDDIR)/ref-impl/$(AAFTARGETDIR)
 
 .PHONY : all
 all : $(OBJDIR) $(BINTARGET) $(LIBDIR)
@@ -63,7 +67,7 @@ gcov : $(OBJDIR) $(BINTARGET) $(LIBDIR)
 
 $(BINTARGET) : $(CXXOBJS) $(AXPROGRAM_ADDITIONAL_DEPENDS) $(LIBDIR)
 	$(LD) $(CXXOBJS) \
-	-L$(OBJDIR) -L$(AXLIBDIR) $(AXPROGRAM_LD_OPTIONS) $(PROGLIBS) -laxLib $(LINK_AAF_APP)
+	-L$(OBJDIR) -L$(EXPATLIBDIR) -L$(AXLIBDIR) $(AXPROGRAM_LD_OPTIONS) $(PROGLIBS) -laxLib $(LINK_AAF_APP)
 
 .PHONY : clean
 clean ::

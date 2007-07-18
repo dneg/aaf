@@ -68,7 +68,8 @@ class EPEffectVisitor : public EPTypedVisitor
     virtual bool PreOrderVisit( EPTypedObjNode<IAAFOperationGroup, EPSingleParameterAudioDissolveEffect>& node);
     virtual bool PreOrderVisit( EPTypedObjNode<IAAFOperationGroup, EPTwoParameterAudioDissolveEffect>& node);
     virtual bool PreOrderVisit( AAFTypedObjNode<IAAFTransition>& node );
-    
+    virtual bool PreOrderVisit( AAFTypedObjNode<IAAFOperationGroup>& node );
+
     virtual bool PostOrderVisit( AAFTypedObjNode<IAAFOperationGroup>& node );
     virtual bool PostOrderVisit( AAFTypedObjNode<IAAFTransition>& node );
     
@@ -92,6 +93,6 @@ class EPEffectVisitor : public EPTypedVisitor
   
 };
 
-} // end of namespace diskstream
+} // end of namespace aafanalyzer
 
 #endif /*__EPEffectVisitor_h_*/

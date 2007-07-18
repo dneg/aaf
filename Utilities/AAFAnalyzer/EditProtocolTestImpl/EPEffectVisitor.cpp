@@ -73,6 +73,11 @@ class TransitionInputVisitor : public TypedVisitor
         {
             AxSequence axSequence( node.GetAAFObjectOfType() );
 
+            // JPT REVIEW - What's he talking about not in order? The
+            // edge map stores vectors? Perfectly ordered.  Also, he's
+            // comparing the axSequence.GetComponentAt() value to
+            // another pointer?
+
             //The graph may not return edges in order, therefore, we need to
             //loop through and find the correct transition by address.  Use
             //this method as an iterator does not guarantee an orderd traversal.
@@ -318,7 +323,7 @@ EPEffectVisitor::EPEffectVisitor( wostream& log, shared_ptr<EdgeMap> spEdgeMap )
                                             TestRegistry::GetInstance().GetRequirementsForTest( EPEffectTest::GetTestInfo().GetName() )
                )                          )
 {
-    _isParentTransition.push( false );
+   _isParentTransition.push( false );
 }
 
 EPEffectVisitor::~EPEffectVisitor()
@@ -326,7 +331,7 @@ EPEffectVisitor::~EPEffectVisitor()
 
 bool EPEffectVisitor::PreOrderVisit( EPTypedObjNode<IAAFOperationGroup, EPEffect>& node)
 {
-    _isParentTransition.push( false );
+   _isParentTransition.push( false );
     return true;
 }
 
@@ -339,7 +344,7 @@ bool EPEffectVisitor::PreOrderVisit( EPTypedObjNode<IAAFOperationGroup, EPVideoD
     //children will not be visited and this node will not be post order visited.
     if ( testPassed )
     {
-        _isParentTransition.push( false );
+       _isParentTransition.push( false );
     }
 
     return testPassed;
@@ -354,7 +359,7 @@ bool EPEffectVisitor::PreOrderVisit( EPTypedObjNode<IAAFOperationGroup, EPSMPTEV
     //children will not be visited and this node will not be post order visited.
     if ( testPassed )
     {
-        _isParentTransition.push( false );
+       _isParentTransition.push( false );
     }
 
     return testPassed;
@@ -433,7 +438,7 @@ bool EPEffectVisitor::PreOrderVisit( EPTypedObjNode<IAAFOperationGroup, EPVideoS
     //children will not be visited and this node will not be post order visited.
     if ( testPassed )
     {
-        _isParentTransition.push( false );
+       _isParentTransition.push( false );
     }
 
     return testPassed;
@@ -448,7 +453,7 @@ bool EPEffectVisitor::PreOrderVisit( EPTypedObjNode<IAAFOperationGroup, EPVideoR
     //children will not be visited and this node will not be post order visited.
     if ( testPassed )
     {
-        _isParentTransition.push( false );
+       _isParentTransition.push( false );
     }
 
     return testPassed;
@@ -463,7 +468,7 @@ bool EPEffectVisitor::PreOrderVisit( EPTypedObjNode<IAAFOperationGroup, EPVideoF
     //children will not be visited and this node will not be post order visited.
     if ( testPassed )
     {
-        _isParentTransition.push( false );
+       _isParentTransition.push( false );
     }
 
     return testPassed;
@@ -478,7 +483,7 @@ bool EPEffectVisitor::PreOrderVisit( EPTypedObjNode<IAAFOperationGroup, EPVideoF
     //children will not be visited and this node will not be post order visited.
     if ( testPassed )
     {
-        _isParentTransition.push( false );
+       _isParentTransition.push( false );
     }
 
     return testPassed;
@@ -493,7 +498,7 @@ bool EPEffectVisitor::PreOrderVisit( EPTypedObjNode<IAAFOperationGroup, EPVideoF
     //children will not be visited and this node will not be post order visited.
     if ( testPassed )
     {
-        _isParentTransition.push( false );
+       _isParentTransition.push( false );
     }
 
     return testPassed;
@@ -508,7 +513,7 @@ bool EPEffectVisitor::PreOrderVisit( EPTypedObjNode<IAAFOperationGroup, EPVideoP
     //children will not be visited and this node will not be post order visited.
     if ( testPassed )
     {
-        _isParentTransition.push( false );
+       _isParentTransition.push( false );
     }
 
     return testPassed;
@@ -523,7 +528,7 @@ bool EPEffectVisitor::PreOrderVisit( EPTypedObjNode<IAAFOperationGroup, EPVideoC
     //children will not be visited and this node will not be post order visited.
     if ( testPassed )
     {
-        _isParentTransition.push( false );
+       _isParentTransition.push( false );
     }
 
     return testPassed;
@@ -538,7 +543,7 @@ bool EPEffectVisitor::PreOrderVisit( EPTypedObjNode<IAAFOperationGroup, EPVideoS
     //children will not be visited and this node will not be post order visited.
     if ( testPassed )
     {
-        _isParentTransition.push( false );
+       _isParentTransition.push( false );
     }
 
     return testPassed;
@@ -553,7 +558,7 @@ bool EPEffectVisitor::PreOrderVisit( EPTypedObjNode<IAAFOperationGroup, EPVideoR
     //children will not be visited and this node will not be post order visited.
     if ( testPassed )
     {
-        _isParentTransition.push( false );
+       _isParentTransition.push( false );
     }
 
     return testPassed;
@@ -568,7 +573,7 @@ bool EPEffectVisitor::PreOrderVisit( EPTypedObjNode<IAAFOperationGroup, EPVideoC
     //children will not be visited and this node will not be post order visited.
     if ( testPassed )
     {
-        _isParentTransition.push( false );
+       _isParentTransition.push( false );
     }
 
     return testPassed;
@@ -586,7 +591,7 @@ bool EPEffectVisitor::PreOrderVisit( EPTypedObjNode<IAAFOperationGroup, EPAlphaW
     //children will not be visited and this node will not be post order visited.
     if ( testPassed )
     {
-        _isParentTransition.push( false );
+       _isParentTransition.push( false );
     }
 
     return testPassed;
@@ -604,7 +609,7 @@ bool EPEffectVisitor::PreOrderVisit( EPTypedObjNode<IAAFOperationGroup, EPSepara
     //children will not be visited and this node will not be post order visited.
     if ( testPassed )
     {
-        _isParentTransition.push( false );
+       _isParentTransition.push( false );
     }
 
     return testPassed;
@@ -619,7 +624,7 @@ bool EPEffectVisitor::PreOrderVisit( EPTypedObjNode<IAAFOperationGroup, EPLumina
     //children will not be visited and this node will not be post order visited.
     if ( testPassed )
     {
-        _isParentTransition.push( false );
+       _isParentTransition.push( false );
     }
 
     return testPassed;
@@ -634,7 +639,7 @@ bool EPEffectVisitor::PreOrderVisit( EPTypedObjNode<IAAFOperationGroup, EPChroma
     //children will not be visited and this node will not be post order visited.
     if ( testPassed )
     {
-        _isParentTransition.push( false );
+       _isParentTransition.push( false );
     }
 
     return testPassed;
@@ -649,7 +654,7 @@ bool EPEffectVisitor::PreOrderVisit( EPTypedObjNode<IAAFOperationGroup, EPMonoAu
     //children will not be visited and this node will not be post order visited.
     if ( testPassed )
     {
-        _isParentTransition.push( false );
+       _isParentTransition.push( false );
     }
 
     return testPassed;
@@ -664,7 +669,7 @@ bool EPEffectVisitor::PreOrderVisit( EPTypedObjNode<IAAFOperationGroup, EPMonoAu
     //children will not be visited and this node will not be post order visited.
     if ( testPassed )
     {
-        _isParentTransition.push( false );
+       _isParentTransition.push( false );
     }
 
     return testPassed;
@@ -679,7 +684,7 @@ bool EPEffectVisitor::PreOrderVisit( EPTypedObjNode<IAAFOperationGroup, EPSingle
     //children will not be visited and this node will not be post order visited.
     if ( testPassed )
     {
-        _isParentTransition.push( false );
+       _isParentTransition.push( false );
     }
 
     return testPassed;
@@ -824,7 +829,7 @@ bool EPEffectVisitor::PreOrderVisit( EPTypedObjNode<IAAFOperationGroup, EPTwoPar
     //children will not be visited and this node will not be post order visited.
     if ( testPassed )
     {
-        _isParentTransition.push( false );
+       _isParentTransition.push( false );
     }
 
     return testPassed;
@@ -833,6 +838,16 @@ bool EPEffectVisitor::PreOrderVisit( EPTypedObjNode<IAAFOperationGroup, EPTwoPar
 bool EPEffectVisitor::PreOrderVisit( AAFTypedObjNode<IAAFTransition>& node )
 {
     _isParentTransition.push( true );
+    return true;
+}
+
+bool EPEffectVisitor::PreOrderVisit( AAFTypedObjNode<IAAFOperationGroup>& node )
+{
+    // JPT REVIEW - Andrew's original code didn't include this because
+    // it didn't anticipate effects other those above (the decorated
+    // operation group objects.  This should generate a warning
+    // because it indicates the presence of an unknown effect.
+    _isParentTransition.push(false);
     return true;
 }
 

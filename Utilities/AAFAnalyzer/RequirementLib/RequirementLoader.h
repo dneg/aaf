@@ -53,7 +53,9 @@ public:
 
     wstring _currentId;
     Requirement::RequirementType _currentType;
+    wstring _currentTypeAsString;
     Requirement::Category _currentCategory;
+    wstring _currentCategoryAsString;
     wstring _currentName;
     wstring _currentDesc;
     wstring _currentDocument;

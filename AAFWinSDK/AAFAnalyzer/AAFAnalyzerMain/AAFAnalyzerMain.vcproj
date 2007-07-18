@@ -33,8 +33,8 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="../AnalyzerBase/Debug/AnalyzerBase.lib ../RequirementLib/Debug/RequirementLib.lib ../TestPhaseLib/Debug/TestPhaseLib.lib ../AAFAnalyzerBase/Debug/AAFAnalyzerBase.lib ../BaseTestImpl/Debug/BaseTestImpl.lib ../EPAnalyzerBase/Debug/EPAnalyzerBase.lib ../EditProtocolTestImpl/Debug/EditProtocolTestImpl.lib ../../../examples2/axLib/Debug/axLib.lib ../../lib/AAFD.lib ../../lib/AAFIIDD.lib $(EXPAT_ROOT)/StaticLibs/libexpatMT.lib"
-				OutputFile="$(OutDir)/AAFAnalyzerMain.exe"
+				AdditionalDependencies="../AnalyzerBase/Debug/AnalyzerBase.lib ../RequirementLib/Debug/RequirementLib.lib ../TestPhaseLib/Debug/TestPhaseLib.lib ../AAFAnalyzerBase/Debug/AAFAnalyzerBase.lib ../BaseTestImpl/Debug/BaseTestImpl.lib ../EPAnalyzerBase/Debug/EPAnalyzerBase.lib ../EditProtocolTestImpl/Debug/EditProtocolTestImpl.lib ../../../examples2/axLib/Debug/axLib.lib ../../lib/AAFD.lib ../../lib/AAFIIDD.lib ../../ref-impl/expat/Debug/expat.lib"
+				OutputFile="$(OutDir)/AAFAnalyze.exe"
 				LinkIncremental="2"
 				IgnoreAllDefaultLibraries="FALSE"
 				IgnoreDefaultLibraryNames="MSVCRT;LIBCMT"
@@ -83,8 +83,8 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="../AnalyzerBase/Release/AnalyzerBase.lib ../RequirementLib/Release/RequirementLib.lib ../TestPhaseLib/Release/TestPhaseLib.lib ../AAFAnalyzerBase/Release/AAFAnalyzerBase.lib ../BaseTestImpl/Release/BaseTestImpl.lib ../EPAnalyzerBase/Release/EPAnalyzerBase.lib ../EditProtocolTestImpl/Release/EditProtocolTestImpl.lib ../../../examples2/axLib/Release/axLib.lib ../../lib/AAFD.lib ../../lib/AAFIIDD.lib $(EXPAT_ROOT)/StaticLibs/libexpatMT.lib"
-				OutputFile="$(OutDir)/AAFAnalyzerMain.exe"
+				AdditionalDependencies="../AnalyzerBase/Release/AnalyzerBase.lib ../RequirementLib/Release/RequirementLib.lib ../TestPhaseLib/Release/TestPhaseLib.lib ../AAFAnalyzerBase/Release/AAFAnalyzerBase.lib ../BaseTestImpl/Release/BaseTestImpl.lib ../EPAnalyzerBase/Release/EPAnalyzerBase.lib ../EditProtocolTestImpl/Release/EditProtocolTestImpl.lib ../../../examples2/axLib/Release/axLib.lib ../../lib/AAFD.lib ../../lib/AAFIIDD.lib ../../ref-impl/expat/Debug/expat.lib"
+				OutputFile="$(OutDir)/AAFAnalyzer.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
 				IgnoreDefaultLibraryNames="MSVCRTd;LIBCMT"

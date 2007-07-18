@@ -84,6 +84,7 @@ void TestRegistry::Register( const TestInfo& info )
         //exception is thrown if the requirement is not registered.
         const shared_ptr<const vector<wstring> > spRequirements = info.GetRequirementIds();
         vector<wstring>::const_iterator iter;
+
         for ( iter = spRequirements->begin(); iter != spRequirements->end(); iter++)
         {
             wstring id = *iter;
@@ -111,9 +112,11 @@ void TestRegistry::Register( const TestInfo& info )
                 if ( _useUnsafeRequirements )
                 {
                     shared_ptr<const Requirement> unsafeReq(
-                        new Requirement(id, 
-                                        Requirement::FILE, 
-                                        Requirement::ADHOC, 
+                        new Requirement(id,
+                                        Requirement::FILE,
+										L"file",
+                                        Requirement::ADHOC,
+										L"adhoc",
                                         L"Unsafe Requirement",
                                         L"This Requirement ID does not exist in the requirements file",
                                         L"None",

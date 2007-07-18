@@ -317,7 +317,7 @@ void InputParser::ParseXML( const char* filename ) const
 
         done = len < sizeof(buffer);
 
-        if ( !XML_Parse(parser, buffer, len, done) )
+        if ( !XML_Parse(parser, buffer, static_cast<int>(len), done) )
         {
             ostringstream msg;
             msg << "expat error: " << XML_ErrorString(XML_GetErrorCode(parser));
@@ -503,11 +503,11 @@ void InputParser::EndElement(const AxString& name)
             _slotStack.top().name.second,
             _slotStack.top().physicalTrackNum.first,
             _slotStack.top().physicalTrackNum.second,
-            _slotStack.top().markedInPoint.first,
-            _slotStack.top().markedInPoint.second,
-            _slotStack.top().markedOutPoint.first,
-            _slotStack.top().markedOutPoint.second,
-            _slotStack.top().orgin
+            static_cast<int>(_slotStack.top().markedInPoint.first),
+            static_cast<int>(_slotStack.top().markedInPoint.second),
+            static_cast<int>(_slotStack.top().markedOutPoint.first),
+            static_cast<int>(_slotStack.top().markedOutPoint.second),
+            static_cast<int>(_slotStack.top().orgin)
            );
         _componentStack.pop();
         _slotStack.pop();

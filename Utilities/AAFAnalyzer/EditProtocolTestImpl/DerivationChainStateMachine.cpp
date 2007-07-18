@@ -309,7 +309,7 @@ bool DerivationChainStateMachine::IsKnownEvent( const aafUID_t event ) const
 AxString DerivationChainStateMachine::Indent()
 {
 
-  unsigned int l = _currentState.size() - 1;
+  size_t l = _currentState.size() - 1;
   AxString indent;
 
   for (; l > 0 ; l-- ) 

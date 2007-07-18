@@ -32,11 +32,11 @@ all:
 gcov :	
 	cd TestFiles && $(MAKE) gcov
 	cd TestStructure && $(MAKE) gcov
-	
+
 .PHONY : RegressionTestStructure
 RegressionTestStructure :
 	cd TestStructure && $(MAKE)
-	
+
 .PHONY : RegressionTestFiles
 RegressionTestFiles :
 	cd TestFiles && $(MAKE)
