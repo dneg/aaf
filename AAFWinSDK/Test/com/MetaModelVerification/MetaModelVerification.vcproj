@@ -39,7 +39,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="aafd.lib aafiidd.lib"
-				OutputFile="../../../Debug/MetaModelVerification.exe"
+				OutputFile="../../../Debug/Test/MetaModelVerification.exe"
 				LinkIncremental="0"
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories="..\..\..\lib"
@@ -101,7 +101,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="../../../Release/MetaModelVerification.exe"
+				OutputFile="../../../Release/Test/MetaModelVerification.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories="..\..\..\lib"

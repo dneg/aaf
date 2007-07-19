@@ -38,11 +38,11 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="aafd.lib aafiidd.lib"
-				OutputFile="$(OutDir)/ResultToTextTest.exe"
+				OutputFile="../../../Debug/Test/ResultToTextTest.exe"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="..\..\..\lib"
 				GenerateDebugInformation="TRUE"
-				ProgramDatabaseFile="$(OutDir)/ResultToTextTest.pdb"
+				ProgramDatabaseFile=".\Debug/ResultToTextTest.pdb"
 				SubSystem="1"
 				TargetMachine="1"/>
 			<Tool
@@ -91,7 +91,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="aaf.lib aafiid.lib"
-				OutputFile="$(OutDir)/ResultToTextTest.exe"
+				OutputFile="../../../Release/Test/ResultToTextTest.exe"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="..\..\..\lib"
 				GenerateDebugInformation="TRUE"
