@@ -66,6 +66,7 @@
 #pragma warning( push )
 #pragma warning( disable: 4996 )
 #endif
+#include <boost/filesystem/path.hpp>
 #include <boost/format.hpp>
 
 #if defined(OS_WINDOWS)
@@ -77,6 +78,7 @@ namespace {
 using namespace aafanalyzer;
 using namespace std;
 using namespace boost;
+namespace fs = boost::filesystem;
 
 basic_string<wchar_t> LevelToIndent(unsigned int l)
 {
@@ -441,10 +443,10 @@ private:
 
 ostream& operator<<( ostream& os, const Usage& usage )
 {
-  os << "AAFAnalyzer -analyze -reqs file.xml [analysis options] filename.aaf" << endl;
+  os << "AAFAnalyzer [-reqs file.xml] [analysis options] filename.aaf" << endl;
   os << endl;
 
-  os << "AAFAnalyzer -report -reqs file.xml [requirement options]" << endl;
+  os << "AAFAnalyzer -report [-reqs file.xml] [requirement options]" << endl;
   os << endl;
 
   os << "[analysis options]    = -uncheckedrequirements"    << endl;
@@ -501,6 +503,10 @@ int main( int argc, char** argv )
 
   try
   {
+    // Figure out where the install location.
+    fs::path argvzero( argv[0] );
+    fs::path installPath = argvzero.branch_path();
+
     //
     // Process the command line arguments.
     //
@@ -511,9 +517,6 @@ int main( int argc, char** argv )
     }
 
     AxCmdLineArgs args( argc, argv );
-
-    // Analyze option
-    pair<bool,int> analyzeArg = args.get( "-analyze" );
 
     // Dump option
     pair<bool,int> dumpArg = args.get( "-dump" );
@@ -542,10 +545,10 @@ int main( int argc, char** argv )
       reqType = s;
     }
 
-    // List All Requirements option
+    // Show requirement detail options
     pair<bool, int> detailArg = args.get( "-detail" );
     
-    // List All Covered Requirements option
+    // List all requirements covered by tests
     pair<bool, int> testCoverageArg = args.get( "-testcoverage" );
     
     // Print file coverage
@@ -569,7 +572,7 @@ int main( int argc, char** argv )
       }
     }
         
-    // Requirements Filename is last argument.
+    // Requirements filename
     pair<bool,int> reqsArg = args.get( "-reqs" );
     pair<bool, const char*> requirementsFile( false, 0 );
     if ( reqsArg.first )
@@ -581,24 +584,9 @@ int main( int argc, char** argv )
       }
     }
 
-    //
-    // validate arguments (that have not been validated above) before
-        // accessing the position file parameter.
-    //
-
-    if ( !(reportArg.first || analyzeArg.first) )
-    {
-      throw Usage( "must specify either -report or -analyze" );
-    }
-
-    if ( !requirementsFile.first )
-    {
-      throw Usage( "no requirements file specified." );
-    }
-
-    // AAF Filename is the last argument.
+    // AAF Filename is the last argument if requirements report not requested.
     pair<bool,const char*> fileNameArg(false,0);
-    if ( analyzeArg.first )
+    if ( !reportArg.first )
     {
       if ( args.IsFetched( argc-1, 1 ) )
       {
@@ -608,13 +596,35 @@ int main( int argc, char** argv )
       args.MarkFetched( argc-1 );
     }
 
+    // Finally, check for unprocessed options rather than blindly
+    // allowing something that a user entered in error to pass.
+    for( int i = 1; i < argc; ++i )
+    {
+      if ( !args.IsFetched( i ) )
+      {
+	boost::format fmt( "unkown argument \"%1%\"" );
+	fmt % argv[i];
+	throw Usage( fmt.str() );
+      }
+    }
+
     //
     // load the requirements
     //
     
     RequirementLoader loader;
-    loader.ParseXML( requirementsFile.second );
-    
+    if ( requirementsFile.first )
+    {
+      loader.ParseXML( requirementsFile.second );
+    }
+    else
+    {
+      // Assume it is the same directory where the program is      
+      // executing from.
+      fs::path path = installPath / "AAFRequirements.xml";
+	  loader.ParseXML( path.string().c_str() );
+    }
+
     // If a report is requested, but it is not a test coverage report,
     // then do it before registering the tests.
     if ( reportArg.first && !testCoverageArg.first )

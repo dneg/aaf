@@ -21,7 +21,7 @@ def analyze(tmpResultFile, executable, files, requirements):
 						remove.append(filename)
 						raise IOError, filename + ' does not exist'
 					
-					args = [executable, "-analyze", "-reqs", requirements, "-filecoverage", filename]
+					args = [executable, "-reqs", requirements, "-filecoverage", filename]
 					retcode=0
 					print "Analyzing ", filename
 					if sys.platform == 'win32' or sys.platform == 'cygwin':

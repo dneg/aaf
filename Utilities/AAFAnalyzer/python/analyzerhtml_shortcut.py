@@ -43,13 +43,23 @@ if len(aaffiles) > 0:
 
     analyzerhtml.analyzerhtml( tmpfile,
                                htmlfile,
-                               "AAFAnalyzer.exe",
-                               "AAFRequirements.xml",
+                               os.path.dirname(sys.argv[0]) + "/AAFAnalyzer.exe",
+                               os.path.dirname(sys.argv[0]) + "/AAFRequirements.xml",
                                aaffiles )
 
+    msg = "Starting browswer to view %s." % htmlfile
     if sys.platform == 'win32':
-        print "Starting browswer to view %s." % htmlfile
+        print msg
         os.system ("start %s" % htmlfile )
+    elif sys.platform == 'cygwin':
+        print msg
+        # /cygdrive/c/blah/blah/blah.html to c:/blah/blah/blah.html
+        # 012345678901
+        htmlfile = htmlfile[10] + ':' + htmlfile[11:]
+        # This generates an "access denied message". How to make this
+        # work?
+        os.system ("cmd.exe /C \"start %s\"" % htmlfile )
+        
 
     # Remove the tmpfile but not the htmlfile because we have no idea
     # when the browser has finished reading it.
