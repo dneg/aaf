@@ -79,9 +79,9 @@ realclean : clean
 # NOTE: MultiGenTest is designed to be run across multiple
 # platforms and SDK versions - this test merely checks that
 # MultiGenTest is in good working order.
-TEST_LIB_NAME = libcom-api.so
-ifneq (,$(findstring Darwin,$(AAFPLATFORM)))
-  TEST_LIB_NAME = libcom-api.dylib
+TEST_LIB_NAME = libcom-api$(DLL)
+ifeq ($(AAFPLATFORM),Win)
+  TEST_LIB_NAME = AAFCOAPI$(DLL)
 endif
 
 .PHONY : check
