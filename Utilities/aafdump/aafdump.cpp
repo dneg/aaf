@@ -758,7 +758,11 @@ static char* readName(IStream* stream,
       swapOMString((OMCharacter*)buffer, characterCount);
     }
     char* name = new char[characterCount];
+#ifdef OM_UNICODE_APIS
+    convert(name, characterCount, (wchar_t*)buffer);
+#else
     convert(name, characterCount, (OMCharacter*)buffer);
+#endif
     delete [] buffer;
     result = name;
   }
