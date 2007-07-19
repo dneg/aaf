@@ -489,6 +489,7 @@ def write_html(outputFileName, testResultData, requirements, removedFiles):
 			cfile.write('</TR>\n')
 		
 		cfile.write('</TABLE>')
+		cfile.write('<P><I><FONT color=fuchsia>This text style indicates that a requirement is not covered by a test.</FONT></I></P>')
 		cfile.write( "</CENTER>" )
 		cfile.write( '</BODY>' )
 		cfile.write( '</HTML>' )
