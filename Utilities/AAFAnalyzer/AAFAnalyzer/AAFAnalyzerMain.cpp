@@ -504,7 +504,7 @@ int main( int argc, char** argv )
   try
   {
     // Figure out where the install location.
-    fs::path argvzero( argv[0] );
+    fs::path argvzero( argv[0], fs::no_check );
     fs::path installPath = argvzero.branch_path();
 
     //
@@ -622,7 +622,8 @@ int main( int argc, char** argv )
       // Assume it is the same directory where the program is      
       // executing from.
       fs::path path = installPath / "AAFRequirements.xml";
-	  loader.ParseXML( path.string().c_str() );
+      cout << "loading requirements: " << path.string() << endl;
+      loader.ParseXML( path.string().c_str() );
     }
 
     // If a report is requested, but it is not a test coverage report,
