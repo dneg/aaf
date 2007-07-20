@@ -3,7 +3,7 @@
 	ProjectType="Visual C++"
 	Version="7.10"
 	Name="MetaModelVerification"
-	ProjectGUID="{3367DC7A-7520-42D2-9734-38265B43E525}"
+	ProjectGUID="{A6218883-57B0-4346-8E96-0F679D6DC2CA}"
 	SccProjectName=""
 	SccLocalPath="">
 	<Platforms>
