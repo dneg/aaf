@@ -30,4 +30,4 @@ include ../comexamplerules.mk
 TEST_CMD = $(APP_RUN_ENV) $(AAFSDKBINDIR)/InfoDumper$(EXE)
 .PHONY : check
 check : $(AAFSDKBINDIR)/InfoDumper$(EXE)
-	for f in ../*/*.aaf ../../../test/com/*/*.aaf; do if echo $$f | grep UTF8FileNameTest > /dev/null; then echo "Skipping $$f until wctou8() et al are removed from the SDK"; else echo InfoDumper $$f; $(TEST_CMD) $$f > /dev/null || exit $$?; fi; done
+	for f in ../*/*.aaf ../../../test/com/*/*.aaf; do if echo $$f | grep UTF8FileNameTest > /dev/null; then echo "Skipping $$f until wctou8() et al are removed from the SDK"; else echo InfoDumper $$f; (cd `dirname $$f`; $(TEST_CMD) `basename $$f` > /dev/null) || exit $$?; fi; done
