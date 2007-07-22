@@ -67,7 +67,7 @@ DBG_FLAGS = /nologo /EHsc /RTC1 /MDd /W3 /WX /Z7 /Gs /GR /D "_DEBUG" /D "OM_DEBU
 #------------------------------------------------------------------------------
 # Optimisation flags when building a Release
 #------------------------------------------------------------------------------
-REL_FLAGS = /nologo /EHsc /RTC1 /MD /O2 /W3 /WX /Z7 /Gs /GR /D "NDEBUG" /D "OM_USE_SCHEMASOFT_SS" /D "OM_USE_WINDOWS_SS" /D "_WIN32" /D "WIN32" /D "_CONSOLE" -DUNICODE /D "OM_USE_STORAGE_EX" /D "COM_NO_WINDOWS_H"
+REL_FLAGS = /nologo /EHsc /MD /O2 /W3 /WX /Z7 /Gs /GR /D "NDEBUG" /D "OM_USE_SCHEMASOFT_SS" /D "OM_USE_WINDOWS_SS" /D "_WIN32" /D "WIN32" /D "_CONSOLE" -DUNICODE /D "OM_USE_STORAGE_EX" /D "COM_NO_WINDOWS_H"
 
 #------------------------------------------------------------------------------
 # Compiler flags
