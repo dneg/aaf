@@ -31,7 +31,7 @@ TEST_CMD = $(APP_RUN_ENV) $(AAFSDKBINDIR)/ExportJPEG$(EXE)
 .PHONY : check
 check : $(AAFSDKBINDIR)/ExportJPEG$(EXE)
 	@if [ -r 4frames.mjpeg ] ; then $(TEST_CMD) -res 15:1 -rawJPEG 4frames.mjpeg ; fi
-	@if [ -r sdlake_inst.uyvy ] ; then for resid in 2:1 3:1 10:1 20:1 15:1 ; do $(TEST_CMD) -res $$resid -rawUYVY sdlake_inst.uyvy -o sdlake_uyvy_$$resid.aaf || exit $$?; done ; fi
-	@if [ -r sdlake_inst.uyvy ] ; then for resid in 2:1 3:1 10:1 20:1 15:1 ; do $(TEST_CMD) -ntsc -res $$resid -rawUYVY sdlake_inst.uyvy -o sdlake_uyvy_ntsc_$$resid.aaf || exit $$?; done ; fi
-	for resid in 2:1 3:1 10:1 20:1 15:1 ; do $(TEST_CMD) -res $$resid -o colorbars_$$resid.aaf || exit $$?; done
-	for resid in 2:1 3:1 10:1 20:1 15:1 ; do $(TEST_CMD) -ntsc -res $$resid -o colorbars_ntsc_$$resid.aaf || exit $$?; done
+	@if [ -r sdlake_inst.uyvy ] ; then for resid in 2:1 3:1 10:1 20:1 15:1 ; do resname=`echo $$resid | sed 's/:/_/g'`; $(TEST_CMD) -res $$resid -rawUYVY sdlake_inst.uyvy -o sdlake_uyvy_$$resname.aaf || exit $$?; done ; fi
+	@if [ -r sdlake_inst.uyvy ] ; then for resid in 2:1 3:1 10:1 20:1 15:1 ; do resname=`echo $$resid | sed 's/:/_/g'`; $(TEST_CMD) -ntsc -res $$resid -rawUYVY sdlake_inst.uyvy -o sdlake_uyvy_ntsc_$$resname.aaf || exit $$?; done ; fi
+	for resid in 2:1 3:1 10:1 20:1 15:1 ; do resname=`echo $$resid | sed 's/:/_/g'`; $(TEST_CMD) -res $$resid -o colorbars_$$resname.aaf || exit $$?; done
+	for resid in 2:1 3:1 10:1 20:1 15:1 ; do resname=`echo $$resid | sed 's/:/_/g'`; $(TEST_CMD) -ntsc -res $$resid -o colorbars_ntsc_$$resname.aaf || exit $$?; done
