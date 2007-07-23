@@ -908,11 +908,11 @@ bool PvtIsTypePresent (
   virtual AAFRESULT MergeTo( ImplAAFDictionary* pDestDictionary );
 
 private:
-  void InitDataDef(const aafUID_t & dataDefinitionID,
+  void InitDataDefinition(const aafUID_t & dataDefinitionID,
                    const aafCharacter *name,
 				   const aafCharacter *description);
 
-  void InitContainerDef(const aafUID_t & defID,
+  void InitContainerDefinition(const aafUID_t & defID,
                         const aafCharacter *name,
 				        const aafCharacter *description);
 

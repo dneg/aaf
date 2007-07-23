@@ -24,6 +24,7 @@
 
 INSTALL_H_DIR=../../ref-impl/include
 GEN_H_DIR=./include
+INSTALL_BUILTINS_DIR=../../ref-impl/src/impl
 EXE=
 OBJ=.o
 COMPILE=c++
@@ -39,6 +40,7 @@ PROGS=classDefUid$(EXE) \
 	storedObjectUid$(EXE) \
 	typeDefUid$(EXE) \
 	genDefInstances$(EXE) \
+	genDefInstBuiltins$(EXE) \
 	result$(EXE)
 
 HEADERS=AAFClassDefUIDs.h \
@@ -60,10 +62,14 @@ HEADERS=AAFClassDefUIDs.h \
 	AAFCompressionDefs.h \
 	AAFResult.h
 
+BUILTINS=ImplAAFDictionary.cpp_ContainerDefs \
+	ImplAAFDictionary.cpp_DataDefs
+
 # main build target
 all : $(PROGS) \
 	$(GEN_H_DIR) \
-	$(addprefix $(GEN_H_DIR)/,$(HEADERS))
+	$(addprefix $(GEN_H_DIR)/,$(HEADERS)) \
+	$(addprefix $(GEN_H_DIR)/,$(BUILTINS))
 
 # utilities
 headerGenUtils$(OBJ) : headerGenUtils.cpp headerGenUtils.h
@@ -110,6 +116,12 @@ genDefInstances$(EXE) : headerGenUtils$(OBJ) genDefInstances$(OBJ)
 	$(LINK) $^ -o $@
 
 genDefInstances$(OBJ) : genDefInstances.cpp headerGenUtils.h ../AAFMetaDictionary.h
+	$(COMPILE) $(COMPILEFLAGS) -c $< -o $@
+
+genDefInstBuiltins$(EXE) : headerGenUtils$(OBJ) genDefInstBuiltins$(OBJ)
+	$(LINK) $^ -o $@
+
+genDefInstBuiltins$(OBJ) : genDefInstBuiltins.cpp headerGenUtils.h ../AAFMetaDictionary.h
 	$(COMPILE) $(COMPILEFLAGS) -c $< -o $@
 
 result$(EXE) : headerGenUtils$(OBJ) result$(OBJ)
@@ -178,6 +190,14 @@ $(GEN_H_DIR)/AAFCodecDefs.h : genDefInstances$(EXE)
 $(GEN_H_DIR)/AAFCompressionDefs.h : genDefInstances$(EXE)
 	./genDefInstances CompressionDefinition kAAF > $(GEN_H_DIR)/AAFCompressionDefs.h
 
+# targets for generated Definition Object instance builtins files
+
+$(GEN_H_DIR)/ImplAAFDictionary.cpp_DataDefs : genDefInstBuiltins$(EXE)
+	./genDefInstBuiltins DataDefinition kAAF > $(GEN_H_DIR)/ImplAAFDictionary.cpp_DataDefs
+
+$(GEN_H_DIR)/ImplAAFDictionary.cpp_ContainerDefs : genDefInstBuiltins$(EXE)
+	./genDefInstBuiltins ContainerDefinition kAAF > $(GEN_H_DIR)/ImplAAFDictionary.cpp_ContainerDefs
+
 $(GEN_H_DIR)/AAFResult.h : result$(EXE)
 	./result AAFResult > $(GEN_H_DIR)/AAFResult.h
 
@@ -239,12 +259,22 @@ $(INSTALL_H_DIR)/AAFCompressionDefs.h : $(GEN_H_DIR)/AAFCompressionDefs.h
 $(INSTALL_H_DIR)/AAFResult.h : $(GEN_H_DIR)/AAFResult.h
 	$(CP) $(GEN_H_DIR)/AAFResult.h $(INSTALL_H_DIR)/AAFResult.h
 
+# install targets for generated Definition Object instance builtins files
+
+$(INSTALL_BUILTINS_DIR)/ImplAAFDictionary.cpp_DataDefs : $(GEN_H_DIR)/ImplAAFDictionary.cpp_DataDefs
+	$(CP) $(GEN_H_DIR)/ImplAAFDictionary.cpp_DataDefs $(INSTALL_BUILTINS_DIR)/ImplAAFDictionary.cpp_DataDefs
+
+$(INSTALL_BUILTINS_DIR)/ImplAAFDictionary.cpp_ContainerDefs : $(GEN_H_DIR)/ImplAAFDictionary.cpp_ContainerDefs
+	$(CP) $(GEN_H_DIR)/ImplAAFDictionary.cpp_ContainerDefs $(INSTALL_BUILTINS_DIR)/ImplAAFDictionary.cpp_ContainerDefs
+
 # other targets
 
 clean:
 	$(RM) $(PROGS)
 	$(RM) *$(OBJ) *~
 	$(RM) $(addprefix $(GEN_H_DIR)/,$(HEADERS))
+	$(RM) $(addprefix $(GEN_H_DIR)/,$(BUILTINS))
 
-install: $(addprefix $(INSTALL_H_DIR)/,$(HEADERS))
+install: $(addprefix $(INSTALL_H_DIR)/,$(HEADERS)) \
+	$(addprefix $(INSTALL_BUILTINS_DIR)/,$(BUILTINS))
 

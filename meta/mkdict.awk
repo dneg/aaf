@@ -1056,15 +1056,27 @@ BEGIN {
                          CC["ul_13"], CC["ul_14"], CC["ul_15"], CC["ul_16"], "    ");
 	  ppid = formatTag( CC["r_tag"] );
       if (ppid == "0x0000") {
-        comment = " // dynamic";
+        pcomment = " // dynamic";
       } else {
-        comment = "";
-      }
-      
+				pcomment = "";
+			}
+
+			# PNT 2007-07-19
+			# These four props are defined as optional by SMPTE, and will need to be defined
+			# optional in AAF post-v1.1.2. However, in v1.1.2, we declare them as required
+			# in the same way they have been in previous toolkits. This hack should be removed
+			# when the toolkit is tested to work correctly with these properties as optional.			
+			if (ppid == "0x0601" || ppid == "0x2702" || ppid == "0x3001" || ppid == "0x3002") {
+				mandatory = "true";
+				mcomment = " // mkdict.awk override";
+			} else {
+				mcomment = "";
+			}
+
       # use alias
 	  prop = getAlias( ALIAS, APP, APPVER, CC["g_app"], CC[SYM] );
       
-      printf("  AAF_PROPERTY(%s,%s,\n    %s,%s\n    %s,\n    %s,\n    %s,\n    %s)\n", prop, pguid, ppid, comment, type, mandatory, uid, class);
+      printf("  AAF_PROPERTY(%s,%s,\n    %s,%s\n    %s,\n    %s,%s\n    %s,\n    %s)\n", prop, pguid, ppid, pcomment, type, mandatory, mcomment, uid, class);
     }
 
   # Types Register
@@ -1453,7 +1465,8 @@ BEGIN {
             iclass = CC["s_type_sym"];
             idesc = CC["r_detail"];
             iname= CC["r_name"];
-			ialias = getAlias( ALIAS, APP, APPVER, CC["g_app"], CC[SYM] );
+			# For instances, want getAlias to return "" not CC[SYM] if there is no alias PNT 2007-07-18 
+			ialias = getAlias( ALIAS, APP, APPVER, CC["g_app"], "" );
 
 			asym = "AAF_SYMBOL(" isym "," iname ",\"" ialias "\",\"" idesc "\")"
 
