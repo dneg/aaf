@@ -23,8 +23,8 @@
 //=---------------------------------------------------------------------=
 
 // @doc OMINTERNAL
-#ifndef OMMSSSTOREDOBJECTFACTORY_H
-#define OMMSSSTOREDOBJECTFACTORY_H
+#ifndef OMSSSTOREDOBJECTFACTORY_H
+#define OMSSSTOREDOBJECTFACTORY_H
 
 #ifndef OM_NO_STRUCTURED_STORAGE
 

@@ -76,7 +76,7 @@ endif
 ifeq ($(wildcard $(AAFBUILDDIR)/ss-impl/$(AAFTARGETDIR)/librefstg$(LIBEXT)),$(AAFBUILDDIR)/ss-impl/$(AAFTARGETDIR)/librefstg$(LIBEXT))
 	STORAGE_LIBS += $(AAFBUILDDIR)/ss-impl/$(AAFTARGETDIR)/librefstg$(LIBEXT)
 	LINK_STG += -L$(AAFBUILDDIR)/ss-impl/$(AAFTARGETDIR) -lrefstg
-	ADD_CFLAGS += -DOM_USE_REFERENCE_SS
+	ADD_CFLAGS += -DOM_USE_WINDOWS_SS
 	USE_SS=1
 endif
 
@@ -100,8 +100,9 @@ endif
 ## so compile without Structured Storage
 ifndef USE_SS
     ADD_CFLAGS += -DOM_NO_STRUCTURED_STORAGE
+else
+    ADD_CFLAGS += -DOM_STRUCTURED_STORAGE
 endif
-
 
 #--------------------------------------------------------------------------
 # Optional DV functionality requires libdv and can be turned on using e.g.

@@ -94,8 +94,15 @@ static const aafProductIdentification_t kNullIdent = { 0 };
 static const aafFileRev_t sCurrentAAFObjectModelVersion = kAAFRev2;
 
 
-// FileKind from the point of view of the OM
-#define ENCODING(x) *reinterpret_cast<const OMStoredObjectEncoding*>(&x)
+// FileKind from the point of view of the OM.
+//
+// (Note,this used to be a macro. The macro, however, allows stupid
+// erros to go undetected by the compiler. I (jpt) kept the old macro
+// name to keep diffs to a minimum.)
+OMStoredObjectEncoding ENCODING( const aafUID_t& encodingId )
+{
+  return *reinterpret_cast<const OMStoredObjectEncoding*>(&encodingId);
+}
 
 // local function for simplifying error handling.
 inline void checkResult(AAFRESULT r)
@@ -162,42 +169,6 @@ static bool areAllModeFlagsSupported (aafUInt32 modeFlags)
 	  return true;
 	}
 }
-
-//
-// Returns the hard-coded default Structured Storage encoding for the
-// given file kind.
-//
-const aafUID_t *mapStructuredStorageFileKind_DefaultToActual(const aafUID_t *fk_in)
-{
-	if (fk_in == NULL)
-		return NULL;
-
-	// When more than one encoding is enabled by defining more than one OM_USE_xxx_SS directive
-	// the default encoding is effectively hard-coded by the order of statements below.
-
-	if (*fk_in == kAAFFileKind_Aaf4KBinary)
-	{
-#if defined(OM_USE_SCHEMASOFT_SS)
-		return &kAAFFileKind_AafS4KBinary;
-#elif defined(OM_USE_WINDOWS_SS) || defined(OM_USE_MACINTOSH_SS) || defined(OM_USE_MACINTOSH_WRAPPED_SS) || defined(OM_USE_REFERENCE_SS)
-		return &kAAFFileKind_AafM4KBinary;
-#elif defined(OM_USE_GSF_SS)
-		return &kAAFFileKind_AafG4KBinary;
-#endif
-	}
-	else if (*fk_in == kAAFFileKind_Aaf512Binary)
-    {
-#if defined(OM_USE_SCHEMASOFT_SS)
-		return &kAAFFileKind_AafS512Binary;
-#elif defined(OM_USE_WINDOWS_SS) || defined(OM_USE_MACINTOSH_SS) || defined(OM_USE_MACINTOSH_WRAPPED_SS) || defined(OM_USE_REFERENCE_SS)
-		return &kAAFFileKind_AafM512Binary;
-#elif defined(OM_USE_GSF_SS)
-		return &kAAFFileKind_AafG512Binary;
-#endif
-	}
-	return (fk_in);
-}
-
 
 extern "C" const aafClassID_t CLSID_AAFDictionary;
 
@@ -376,8 +347,8 @@ ImplAAFFile::OpenExistingRead (const aafCharacter * pFileName,
 
 AAFRESULT STDMETHODCALLTYPE
 ImplAAFFile::OpenExistingModify (const aafCharacter * pFileName,
-								 aafUInt32 modeFlags,
-								 aafProductIdentification_t * pIdent)
+				 aafUInt32 modeFlags,
+				 aafProductIdentification_t * pIdent)
 {
 	OMFile::OMLoadMode	loadMode = OMFile::eagerLoad;	// The default behavior
 	AAFRESULT stat = AAFRESULT_SUCCESS;
@@ -416,16 +387,17 @@ ImplAAFFile::OpenExistingModify (const aafCharacter * pFileName,
 	// Answer: because none of them are implemented yet.
 	_modeFlags = modeFlags;
 
+	// JPT REVIEW - What purpose does this serve? None that I can see.
 	//NOTE: Depending on LARGE sectors flag set encoding 
 	if (modeFlags & AAF_FILE_MODE_USE_LARGE_SS_SECTORS)
 	{
-    	if (!OMFile::hasFactory( ENCODING( *mapStructuredStorageFileKind_DefaultToActual(&kAAFFileKind_Aaf4KBinary) )))
-      		return AAFRESULT_FILEKIND_NOT_REGISTERED;
+	  if (!OMFile::hasFactory( ENCODING(kAAFFileKind_Aaf4KBinary) ))
+	    return AAFRESULT_FILEKIND_NOT_REGISTERED;
 	}
 	else
 	{
-    	if (!OMFile::hasFactory( ENCODING( *mapStructuredStorageFileKind_DefaultToActual(&kAAFFileKind_Aaf512Binary) )))
-      		return AAFRESULT_FILEKIND_NOT_REGISTERED;
+	  if (!OMFile::hasFactory( ENCODING(kAAFFileKind_Aaf512Binary) ))
+	    return AAFRESULT_FILEKIND_NOT_REGISTERED;
 	}
 
 
@@ -433,10 +405,10 @@ ImplAAFFile::OpenExistingModify (const aafCharacter * pFileName,
 	{
 		// Ask the OM to open the file.
 		_file = OMFile::openExistingModify(pFileName,
-										   _factory,
-										   0,
-										   loadMode,
-										   _metafactory);
+						   _factory,
+						   0,
+						   loadMode,
+						   _metafactory);
 		checkExpression(NULL != _file, AAFRESULT_INTERNAL_ERROR);
 
 		// Restore the meta dictionary, it should be the same object
@@ -535,15 +507,13 @@ ImplAAFFile::OpenExistingModify (const aafCharacter * pFileName,
 
 AAFRESULT STDMETHODCALLTYPE
 ImplAAFFile::OpenNewModify (const aafCharacter * pFileName,
-							aafUID_constptr pFileKind_in,
-							aafUInt32 modeFlags,
-							aafProductIdentification_t * pIdent)
+			    aafUID_constptr pFileKind,
+			    aafUInt32 modeFlags,
+			    aafProductIdentification_t * pIdent)
 {
 	ImplAAFContentStorage	*pCStore = NULL;
 	AAFRESULT stat = AAFRESULT_SUCCESS;
 	aafVersionType_t		theVersion = { 1, 1 };
-
-	aafUID_constptr pFileKind = mapStructuredStorageFileKind_DefaultToActual(pFileKind_in);
 
 	if (! _initialized)
 		return AAFRESULT_NOT_INITIALIZED;
@@ -566,8 +536,8 @@ ImplAAFFile::OpenNewModify (const aafCharacter * pFileName,
 	if (! areAllModeFlagsSupported (modeFlags))
 	  return AAFRESULT_NOT_IN_CURRENT_VERSION;
 
-    if (!OMFile::hasFactory(ENCODING(*pFileKind)))
-      return AAFRESULT_FILEKIND_NOT_REGISTERED;
+	if (!OMFile::hasFactory(ENCODING(*pFileKind)))
+	  return AAFRESULT_FILEKIND_NOT_REGISTERED;
 
 	// modeFlags only in RawStorage API
 	// remove when implemented in NamedFile API
@@ -622,16 +592,14 @@ ImplAAFFile::OpenNewModify (const aafCharacter * pFileName,
 		pCStore = 0;
 
 		// Attempt to create the file.
-		OMStoredObjectEncoding aafFileEncoding =
-			*reinterpret_cast<const OMStoredObjectEncoding*> (pFileKind);
-
 		_file = OMFile::openNewModify(pFileName,
-									  _factory,
-									  0,
-									  byteOrder,
-									  _head,
-									  aafFileEncoding,
-									  _metafactory);
+					      _factory,
+					      0,
+					      byteOrder,
+					      _head,
+					      ENCODING(*pFileKind),
+					      _metafactory);
+
 		checkExpression(NULL != _file, AAFRESULT_INTERNAL_ERROR);
 
 		// Restore the meta dictionary, it should be the same object
@@ -775,14 +743,12 @@ ImplAAFFile::OpenTransient (aafProductIdentification_t * pIdent)
 		pCStore = 0;
 		
 		// Attempt to create the file.
-		const OMStoredObjectEncoding aafFileEncoding =  ENCODING( *mapStructuredStorageFileKind_DefaultToActual(&kAAFFileKind_Aaf512Binary) );
-		  
 		_file = OMFile::openNewModify (pOMRawStg,
 					       _factory,
 					       0,
 					       byteOrder,
 					       _head,
-					       aafFileEncoding,
+					       ENCODING(kAAFFileKind_Aaf512Binary),
 					       _metafactory);
 
 		Open();
@@ -810,7 +776,7 @@ ImplAAFFile::CreateAAFFileOnRawStorage
   (IAAFRawStorage * pRawStorage,
    aafFileExistence_t existence,
    aafFileAccess_t access,
-   aafUID_constptr pFileKind_in,
+   aafUID_constptr pFileKind,
    aafUInt32 modeFlags,
    aafProductIdentification_constptr pIdent)
 {
@@ -833,8 +799,6 @@ ImplAAFFile::CreateAAFFileOnRawStorage
 
   if (modeFlags & AAF_FILE_MODE_LAZY_LOADING)
       loadMode = OMFile::lazyLoad;
-
-    aafUID_constptr pFileKind = mapStructuredStorageFileKind_DefaultToActual(pFileKind_in);
 
   AAFRESULT hr;
   aafBoolean_t b = kAAFFalse;
@@ -1598,6 +1562,7 @@ OMFile * ImplAAFFile::omFile (void)
 void ImplAAFFile::removeFactories(void)
 {
   OMFile::removeAllFactories();
+  OMFile::removeAllDefaultEncodings();
 }
 
 bool ImplAAFFile::IsReadable () const
@@ -1637,95 +1602,128 @@ OMRawStorage * ImplAAFFile::RawStorage ()
   return r;
 }
 
+// The default structured storage encodings ids from the point of view
+// of the OM.
+#define AAF512Encoding ENCODING(kAAFFileKind_Aaf512Binary)
+#define AAF4KEncoding  ENCODING(kAAFFileKind_Aaf4KBinary)
 
-// FileKinds from the point of view of the OM
+// The implementation specific structured storage encoding ids from
+// the point of view of the OM.
 #define AAFM512Encoding ENCODING(kAAFFileKind_AafM512Binary)
 #define AAFS512Encoding ENCODING(kAAFFileKind_AafS512Binary)
 #define AAFG512Encoding ENCODING(kAAFFileKind_AafG512Binary)
-#define AAFS4KEncoding ENCODING(kAAFFileKind_AafS4KBinary)
-#define AAFM4KEncoding ENCODING(kAAFFileKind_AafM4KBinary)
-#define AAFG4KEncoding ENCODING(kAAFFileKind_AafG4KBinary)
-#define AAFKLVEncoding ENCODING(kAAFFileKind_AafKlvBinary)
 
-// these are only prototype
-#define AAFXMLEncoding ENCODING(kAAFFileKind_AafXmlText)
+#define AAFM4KEncoding  ENCODING(kAAFFileKind_AafM4KBinary)
+#define AAFS4KEncoding  ENCODING(kAAFFileKind_AafS4KBinary)
+#define AAFG4KEncoding  ENCODING(kAAFFileKind_AafG4KBinary)
 
-// signatures from the point of view of the OM
+#define AAFKLVEncoding  ENCODING(kAAFFileKind_AafKlvBinary)
+
+#define AAFXMLEncoding  ENCODING(kAAFFileKind_AafXmlText)
+
+// File signatures from the point of view of the OM.
 #define Signature_SSBin_512 ENCODING(kAAFSignature_Aaf512Binary)
-#define Signature_SSBin_4K ENCODING(kAAFSignature_Aaf4KBinary)
-#define Signature_XML ENCODING(kAAFSignature_AafXmlText)
+#define Signature_SSBin_4K  ENCODING(kAAFSignature_Aaf4KBinary)
+#define Signature_XML       ENCODING(kAAFSignature_AafXmlText)
+
+
+void ImplAAFFile::registerStructuredStorageFactories(void)
+{
+#ifdef OM_STRUCTURED_STORAGE
+  // the signature stored in all AAF SS (512) files
+  // note this is not a properly-formed SMPTE label, but this is legacy
+  const aafUID_t kAAFSignature_Aaf512Binary = kAAFFileKind_Aaf512Binary;
+  
+  // the signature stored in all AAF SS (4096) files
+  // [060e2b34.0302.0101.0d010201.02000000]
+  // This defined in one of the SMPTE specs. Don't change it.
+  const aafUID_t kAAFSignature_Aaf4KBinary =
+    { 0x0d010201, 0x0200, 0x0000, { 0x06, 0x0e, 0x2b, 0x34, 0x03, 0x02, 0x01, 0x01 } };
+
+  // Choose a default encode based on the priority given to the
+  // various implementations in the event more than one is active.
+#if defined(OM_USE_SCHEMASOFT_SS)
+  const OMStoredObjectEncoding default_Aaf512Binary = AAFS512Encoding;
+  const OMStoredObjectEncoding default_Aaf4KBinary  = AAFS4KEncoding;
+#elif defined(OM_USE_WINDOWS_SS)
+  const OMStoredObjectEncoding default_Aaf512Binary = AAFM512Encoding;
+  const OMStoredObjectEncoding default_Aaf4KBinary  = AAFM4KEncoding;
+#elif defined(OM_USE_GSF_SS)
+  const OMStoredObjectEncoding default_Aaf512Binary = AAFG512Encoding;
+  const OMStoredObjectEncoding default_Aaf4KBinary  = AAFG4KEncoding;
+#endif
+
+  // First, register the default encoding mappings.
+  OMFile::registerDefaultEncoding( AAF512Encoding, default_Aaf512Binary );
+  OMFile::registerDefaultEncoding( AAF4KEncoding,  default_Aaf4KBinary );
+
+  // Structured Storage encodings are registered by defining the OM_USE_xxx_SS preprocessor
+  // directives and more than one can be registered and available at runtime.
+  // The default encoding is set in mapStructuredStorageFileKind_DefaultToActual().
+
+#if defined(OM_USE_WINDOWS_SS)
+
+  OMFile::registerFactory( new OMMS_SSStoredObjectFactory(AAFM512Encoding,
+							  Signature_SSBin_512,
+							  L"AAF-M",
+							  L"AAF Microsoft SS"));
+  OMFile::registerFactory( new OMMS_SSStoredObjectFactory(AAFM4KEncoding,
+							  Signature_SSBin_4K,
+							  L"AAF-M4K",
+							  L"AAF Microsoft 4K"));
+
+#endif
+
+#if defined(OM_USE_SCHEMASOFT_SS)
+	// The SchemaSoft precompiled library is only available on these platforms:
+	// Microsoft, Mac OS X, Irix, Linux, and Solaris
+	OMFile::registerFactory( new OMSS_SSStoredObjectFactory(AAFS512Encoding,
+								Signature_SSBin_512,
+								L"AAF-S",
+								L"AAF SchemaSoft SS"));
+	OMFile::registerFactory( new OMSS_SSStoredObjectFactory(AAFS4KEncoding,
+								Signature_SSBin_4K,
+								L"AAF-S4K",
+								L"AAF SchemaSoft 4K"));
+#endif
+
+#if defined(OM_USE_GSF_SS)
+
+	OMFile::registerFactory( new OMGSF_SSStoredObjectFactory(AAFG512Encoding,
+								 Signature_SSBin_512,
+								 L"AAF-G",
+								 L"AAF GSF SS"));
+	OMFile::registerFactory( new OMGSF_SSStoredObjectFactory(AAFG4KEncoding,
+								 Signature_SSBin_4K,
+								 L"AAF-G4K",
+								 L"AAF GSF 4K"));
+#endif
+
+
+#endif // OM_STRUCTURED_STORAGE
+}
 
 void ImplAAFFile::registerFactories(void)
 {
-#if defined(OM_USE_WINDOWS_SS) || defined(OM_USE_SCHEMASOFT_SS) || defined(OM_USE_GSF_SS)
-	// the signature stored in all AAF SS (512) files
-	// note this is not a properly-formed SMPTE label, but this is legacy
-	const aafUID_t kAAFSignature_Aaf512Binary = kAAFFileKind_Aaf512Binary;
+  // Structured storage has numerous platform dependencies and
+  // requires conditional compilation. That is isolated in the
+  // following function.
+  registerStructuredStorageFactories();
 
-	// the signature stored in all AAF SS (4096) files
-	// [060e2b34.0302.0101.0d010201.02000000]
-	const aafUID_t kAAFSignature_Aaf4KBinary =
-	{ 0x0d010201, 0x0200, 0x0000, { 0x06, 0x0e, 0x2b, 0x34, 0x03, 0x02, 0x01, 0x01 } };
-#endif
+  // JPT REVIEW - Why is this all zeros?
+  // no signature is required for AAF-XML 
+  const aafUID_t kAAFSignature_AafXmlText =
+    { 0x00000000, 0x0000, 0x0000, { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 } };
+  
+  // The XML and KLV encodings have no platform dependencies and have
+  // single implementations, no conditional compilation required.
 
-	// no signature is required for AAF-XML 
-	const aafUID_t kAAFSignature_AafXmlText =
-	{ 0x00000000, 0x0000, 0x0000, { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 } };
-
-
-	// Structured Storage encodings are registered by defining the OM_USE_xxx_SS preprocessor
-	// directives and more than one can be registered and available at runtime.
-	// The default encoding is set in mapStructuredStorageFileKind_DefaultToActual().
-
-#if defined(OM_USE_WINDOWS_SS) || defined(OM_USE_MACINTOSH_SS) || defined(OM_USE_MACINTOSH_WRAPPED_SS) || defined(OM_USE_REFERENCE_SS)
-
-	OMFile::registerFactory(AAFM512Encoding,
-                          new OMMS_SSStoredObjectFactory(AAFM512Encoding,
-                                                       Signature_SSBin_512,
-                                                       L"AAF-M",
-                                                       L"AAF Microsoft SS"));
-	OMFile::registerFactory(AAFM4KEncoding,
-                          new OMMS_SSStoredObjectFactory(AAFM4KEncoding,
-                                                       Signature_SSBin_4K,
-                                                       L"AAF-M4K",
-                                                       L"AAF Microsoft 4K"));
-
-#endif
-#if defined(OM_USE_SCHEMASOFT_SS)
-
-	// The SchemaSoft precompiled library is only available on these platforms:
-	// Microsoft, Mac OS X, Irix, Linux, and Solaris
-	OMFile::registerFactory(AAFS512Encoding,
-                          new OMSS_SSStoredObjectFactory(AAFS512Encoding,
-                                                       Signature_SSBin_512,
-                                                       L"AAF-S",
-                                                       L"AAF SchemaSoft SS"));
-	OMFile::registerFactory(AAFS4KEncoding,
-                          new OMSS_SSStoredObjectFactory(AAFS4KEncoding,
-                                                       Signature_SSBin_4K,
-                                                       L"AAF-S4K",
-                                                       L"AAF SchemaSoft 4K"));
-#endif
-#if defined(OM_USE_GSF_SS)
-
-	OMFile::registerFactory(AAFG512Encoding,
-                          new OMGSF_SSStoredObjectFactory(AAFG512Encoding,
-                                                       Signature_SSBin_512,
-                                                       L"AAF-G",
-                                                       L"AAF GSF SS"));
-	OMFile::registerFactory(AAFG4KEncoding,
-                          new OMGSF_SSStoredObjectFactory(AAFG4KEncoding,
-                                                       Signature_SSBin_4K,
-                                                       L"AAF-G4K",
-                                                       L"AAF GSF 4K"));
-#endif
-
-	OMFile::registerFactory(AAFXMLEncoding,
+  OMFile::registerFactory(
                           new OMXMLStoredObjectFactory(AAFXMLEncoding,
                                                        Signature_XML,
                                                        L"XML",
                                                        L"AAF XML"));
-	OMFile::registerFactory(AAFKLVEncoding,
+  OMFile::registerFactory(
                           new OMKLVStoredObjectFactory(AAFKLVEncoding,
                                                        AAFKLVEncoding,
                                                        L"KLV",

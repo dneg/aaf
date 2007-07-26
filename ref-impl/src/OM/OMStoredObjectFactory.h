@@ -71,14 +71,6 @@ public:
     //         <c OMStoredObject>s created by this <c OMStoredObjectFactory>.
   virtual const wchar_t* description(void) const;
 
-    // @cmember A previouslyregistered implementation of 
-    //          <c OMStoredObject>s created by this <c OMStoredObjectFactory>.
-  virtual const OMStoredObjectFactory* better(void) const;
-
-    // @cmember Indicate a previously registered implementation of 
-    //          <c OMStoredObject>s created by this <c OMStoredObjectFactory>.
-  virtual void setBetter( OMStoredObjectFactory* const better );
-
     // @cmember Open the root <c OMStoredObject> in the raw storage
     //          <p rawStorage> for reading only.
   virtual OMStoredObject* openRead(OMRawStorage* rawStorage) = 0;
@@ -152,8 +144,6 @@ private:
   OMUniqueObjectIdentification _signature;
   wchar_t* _name;
   wchar_t* _description;
-	OMStoredObjectFactory* _better;
-
 };
 
 #endif

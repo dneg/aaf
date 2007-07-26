@@ -444,33 +444,57 @@ bool OMFile::isRecognized(const wchar_t* fileName,
                           OMStoredObjectEncoding& encoding)
 {
   TRACE("OMFile::isRecognized");
+  PRECONDITION( "Valid default encoding map",_defaultEncodings );
+  PRECONDITION( "Valid factory", _factory );
+
+  OMSet<OMStoredObjectEncoding,bool> checked;
   bool result = false;
 
-  ASSERT("Valid factory", _factory != 0);
-	// first, search for preferred factories
-  FactorySetIterator iterator(*_factory, OMBefore);
-  while (++iterator) {
-    if ( !iterator.value()->better()
-			 && iterator.value()->isRecognized(fileName)) {
-      result = true;
-      encoding = iterator.key();
-      break;
+
+  // Check the default encodings first because these have a higher
+  // priority than those registered wihout defaults. If one of the
+  // default encodings supports the file then we want it tested, and
+  // returned, before any other encodings.
+
+  DefaultEncodingsIterator defaultEncodingsIter(*_defaultEncodings, OMBefore);
+  while (++defaultEncodingsIter) {
+    OMStoredObjectEncoding actualEncoding = defaultEncodingsIter.value();
+    if ( _factory->contains(actualEncoding) ) {
+      OMStoredObjectFactory* factory = 0;
+      bool rc = _factory->find(actualEncoding, factory);
+      (void)rc; //quiet unused variable release build warning
+      ASSERT( "Valid encoding value", rc );
+      ASSERT( "Valid factory pointer", factory );
+      if ( factory->isRecognized(fileName) ) {
+	encoding = actualEncoding;
+	return true;
+      }
+    }
+    else {
+      checked.insert(actualEncoding, true);
     }
   }
-	// second, search for other factories
-	if( !result ) {
-		FactorySetIterator iterator2(*_factory, OMBefore);
-		while (++iterator2) {
-			if ( iterator2.value()->better()
-				 && iterator2.value()->isRecognized(fileName)) {
-				result = true;
-				encoding = iterator2.key();
-				break;
-			}
-		}
-	}
 
+  // Failing that, scan all factories for the first that supports the
+  // file.
+
+  FactorySetIterator iterator(*_factory, OMBefore);
+  while (++iterator) {
+
+    // Did we already check this one (above)?
+    if ( checked.contains(iterator.key()) ) {
+      continue;
+    }
+
+    ASSERT( "Valid factory pointer", iterator.value() );
+    if ( iterator.value()->isRecognized(fileName)) {
+      encoding = iterator.key();
+      return true;
+      break;
+    }
+  }  
   return result;
+
 }
 
   // @mfunc Does <p rawStorage> contain a recognized file ?
@@ -484,36 +508,46 @@ bool OMFile::isRecognized(OMRawStorage* rawStorage,
                           OMStoredObjectEncoding& encoding)
 {
   TRACE("OMFile::isRecognized");
+  PRECONDITION( "Valid default encoding map",_defaultEncodings );
+  PRECONDITION("Valid factory", _factory != 0);
+  PRECONDITION("Positionable raw storage", rawStorage->isPositionable());
+
+  OMSet<OMStoredObjectEncoding,bool> checked;
+
   bool result = false;
 
-  ASSERT("Valid factory", _factory != 0);
-  ASSERT("Positionable raw storage", rawStorage->isPositionable());
   rawStorage->setPosition(0);
 
-	// first, search for preferred factories
+  DefaultEncodingsIterator defaultEncodingsIter(*_defaultEncodings, OMBefore);
+  while (++defaultEncodingsIter)
+  {
+    OMStoredObjectEncoding actualEncoding = defaultEncodingsIter.value();
+    if ( _factory->contains(actualEncoding) ) {
+      OMStoredObjectFactory* factory = 0;
+      bool rc = _factory->find(actualEncoding, factory);
+      (void)rc; //quiet unused variable release build warning
+      ASSERT( "Valid encoding value", rc );
+      ASSERT( "Valid factory pointer", factory );
+      if ( factory->isRecognized(rawStorage) ) {
+	encoding = actualEncoding;
+	return true;
+      }
+    }
+    else {
+      checked.insert(actualEncoding, true);
+    }
+  }
+
+
   FactorySetIterator iterator(*_factory, OMBefore);
   while (++iterator) {
     ASSERT("Properly positioned raw storage", rawStorage->position() == 0);
-    if ( !iterator.value()->better()
-			 && iterator.value()->isRecognized(rawStorage)) {
+    if ( iterator.value()->isRecognized(rawStorage) ) {
       result = true;
       encoding = iterator.key();
       break;
     }
   }
-	// second, search for other factories
-	if( !result ) {
-		FactorySetIterator iterator2(*_factory, OMBefore);
-		while (++iterator2) {
-			ASSERT("Properly positioned raw storage", rawStorage->position() == 0);
-			if ( iterator2.value()->better()
-				 && iterator2.value()->isRecognized(rawStorage)) {
-				result = true;
-				encoding = iterator2.key();
-				break;
-			}
-		}
-	}
 
   ASSERT("Properly positioned raw storage", rawStorage->position() == 0);
   return result;
@@ -523,52 +557,91 @@ void OMFile::initialize(void)
 {
   TRACE("OMFile::initialize");
   PRECONDITION("No valid factory", _factory == 0);
+  PRECONDITION("No valid default encoding map", _defaultEncodings == 0);
+
 
   _factory = new OMFile::FactorySet();
+  _defaultEncodings = new OMFile::DefaultEncodings;
 
-  POSTCONDITION("Valid factory", _factory != 0);
+  POSTCONDITION("Valid factory", _factory );
+  POSTCONDITION("Valid default encoding map", _defaultEncodings );
 }
 
 void OMFile::finalize(void)
 {
   TRACE("OMFile::finalize");
 
+  POSTCONDITION("Valid factory", _factory );
+  PRECONDITION("Valid default encoding map", _defaultEncodings );
+
   delete _factory;
   _factory = 0;
+
+  delete _defaultEncodings;
+  _defaultEncodings = 0;
+
   POSTCONDITION("No valid factory", _factory == 0);
+  POSTCONDITION("No valid default encoding map", _defaultEncodings == 0);
 }
 
-void OMFile::registerFactory(const OMStoredObjectEncoding& encoding,
-                             OMStoredObjectFactory* factory)
+void OMFile::registerDefaultEncoding( const OMStoredObjectEncoding& requestedEncoding,
+				      const OMStoredObjectEncoding& actualEncoding )
+{
+  TRACE("OMFile::declareDefaultEncoding")
+  PRECONDITION("Valid default encoding map", _defaultEncodings );
+  PRECONDITION( "Requested encoding not registered", !_defaultEncodings->contains(requestedEncoding) );
+
+  _defaultEncodings->insert( requestedEncoding, actualEncoding );
+}
+
+
+void OMFile::removeAllDefaultEncodings(void)
+{
+  TRACE("OMFile::removeAllDefaultEncodings()");
+  PRECONDITION( "Valid default encoding map", _defaultEncodings );
+  _defaultEncodings->clear();
+}
+
+OMStoredObjectEncoding OMFile::mapEncodingToDefault( const OMStoredObjectEncoding& encoding )
+{
+  TRACE( "OMFile::mapEncodingToDefault()" );
+  PRECONDITION( "Valid default encoding map", _defaultEncodings );
+
+  if ( _defaultEncodings->contains(encoding) )
+  {
+    OMStoredObjectEncoding defaul;
+    bool contains = _defaultEncodings->find(encoding,defaul);
+    (void)contains; //quiet unused variable release build warning
+    ASSERT( "valid default encoding", contains );
+    return defaul;
+  }
+  else
+  {
+    return encoding;
+  }
+}
+
+void OMFile::registerFactory( OMStoredObjectFactory* factory )
 {
   TRACE("OMFile::registerFactory");
 
   PRECONDITION("Valid factory", factory != 0);
+
+  OMStoredObjectEncoding encoding = factory->encoding();
   PRECONDITION("Unique encoding", !hasFactory(encoding));
   PRECONDITION("Unique name", !hasFactory(factory->name()));
 
-  ASSERT("Valid factory", _factory != 0);
-
-	// if _factory already has any registered which do the same signature
-	// set factory._better to point to the first one found
-	OMStoredObjectFactory* better = 0;
-  FactorySetIterator iterator(*_factory, OMBefore);
-  while (++iterator) {
-    if( iterator.value()->signature() == factory->signature() ){
-      better = iterator.value();
-			factory->setBetter( better );
-      break;
-    }
-  }
-
   _factory->insert(encoding, factory);
+
   factory->initialize();
 }
 
-bool OMFile::hasFactory(const OMStoredObjectEncoding& encoding)
+bool OMFile::hasFactory(const OMStoredObjectEncoding& encoding_in)
 {
-  TRACE("OMFile::hasFactory");
+  TRACE("OMFile::hasFactory(encoding)");
   bool result = false;
+
+  const OMStoredObjectEncoding encoding = mapEncodingToDefault(encoding_in);
 
   if (_factory != 0) {
     OMStoredObjectFactory* f = 0;
@@ -582,7 +655,7 @@ bool OMFile::hasFactory(const OMStoredObjectEncoding& encoding)
 
 bool OMFile::hasFactory(const wchar_t* name)
 {
-  TRACE("OMFile::hasFactory");
+  TRACE("OMFile::hasFactory(name)");
   bool result = false;
 
   if (_factory != 0) {
@@ -597,10 +670,11 @@ bool OMFile::hasFactory(const wchar_t* name)
   return result;
 }
 
-OMStoredObjectFactory* OMFile::findFactory(
-                                        const OMStoredObjectEncoding& encoding)
+OMStoredObjectFactory* OMFile::findFactory(const OMStoredObjectEncoding& encoding_in)
 {
   TRACE("OMFile::findFactory");
+
+  const OMStoredObjectEncoding encoding = mapEncodingToDefault(encoding_in);
 
   OMStoredObjectFactory* result = 0;
   ASSERT("Valid factory", _factory != 0);
@@ -617,17 +691,8 @@ void OMFile::removeFactory(const OMStoredObjectEncoding& encoding)
 
   OMStoredObjectFactory* factory = 0;
   _factory->find(encoding, factory);
-
-	// if any other _factory thought this one was better, reeducate them
-  FactorySetIterator iterator(*_factory, OMBefore);
-  while (++iterator) {
-    if( iterator.value()->signature() == factory->signature() ){
-      iterator.value()->setBetter( 0 );
-    }
-  }
-
   _factory->remove(encoding);
-  ASSERT("Valid factory", factory != 0);
+
   factory->finalize();
   delete factory;
 }
@@ -1349,3 +1414,4 @@ OMRootStorable* OMFile::restoreRoot(void)
 }
 
 OMFile::FactorySet* OMFile::_factory;
+OMFile::DefaultEncodings* OMFile::_defaultEncodings;

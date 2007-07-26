@@ -111,6 +111,7 @@ public:
         (ImplAAFDictionary ** ppDictionary) const;  //@parm [out,retval] The AAF Dictionary
 
   static void registerFactories(void);
+  static void registerStructuredStorageFactories(void);
 
   static void removeFactories(void);
 

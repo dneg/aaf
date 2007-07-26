@@ -80,12 +80,17 @@ public:
                                     const OMLoadMode loadMode,
                                     OMDictionary* dictionary = 0);
 
-    // @cmember Open a new <c OMFile> for modify access, the
-    //          <c OMFile> is named <p fileName>, use the <c OMClassFactory>
-    //          <p factory> to create the objects. The file must not already
-    //          exist. The byte ordering on the newly created file is given
-    //          by <p byteOrder>. The client root <c OMStorable> in the newly
-    //          created file is given by <p clientRoot>.
+    // @cmember Open a new <c OMFile> for modify access, the <c
+    //          OMFile> is named <p fileName>, use the <c
+    //          OMClassFactory> <p factory> to create the objects. The
+    //          file // must not already exist. The byte ordering on
+    //          the newly created // file is given by <p
+    //          byteOrder>. The client root <c OMStorable> // in the
+    //          newly created file is given by <p clientRoot>. If a //
+    //          default (actual) encoding implentation is registered
+    //          for the // requested encoding then use the registered
+    //          default.
+
   static OMFile* openNewModify(const wchar_t* fileName,
                                const OMClassFactory* factory,
                                void* clientOnRestoreContext,
@@ -165,12 +170,31 @@ public:
 
   static void finalize(void);
 
-  typedef OMSet<OMStoredObjectEncoding, OMStoredObjectFactory*> FactorySet;
+  typedef OMStoredObjectEncoding RequestedEncoding;
+  typedef OMStoredObjectEncoding ActualEncoding;
+  typedef OMSet<RequestedEncoding, ActualEncoding> DefaultEncodings;
+  typedef OMSetIterator<OMStoredObjectEncoding, OMStoredObjectEncoding> DefaultEncodingsIterator;
+
+  typedef OMSet<OMStoredObjectEncoding, OMStoredObjectFactory* > FactorySet;
   typedef OMSetIterator<OMStoredObjectEncoding,
                         OMStoredObjectFactory*> FactorySetIterator;
 
-  static void registerFactory(const OMStoredObjectEncoding& encoding,
-                              OMStoredObjectFactory* factory);
+  // Register actualEncoding as the implementation that should be used
+  // for requestedEncoding. Double registration of requestedEncoding
+  // will fail due to an assertion failure.
+  static void registerDefaultEncoding( const OMStoredObjectEncoding& requestedEncoding,
+				       const OMStoredObjectEncoding& actualEncoding );
+  static bool hasDefaultEncoding(const OMStoredObjectEncoding& encoding);
+  static void removeAllDefaultEncodings(void);
+  static DefaultEncodings* defaultEncodings(void);
+
+
+  // Map a (requested) encoding to the default (actual) implementation
+  // registared for the encoding. If no default is registered then the
+  // value passed to the method is returned.
+  static OMStoredObjectEncoding mapEncodingToDefault( const OMStoredObjectEncoding& encoding );
+
+  static void registerFactory( OMStoredObjectFactory* factory );
 
   static bool hasFactory(const OMStoredObjectEncoding& encoding);
 
@@ -377,6 +401,7 @@ private:
   OMByteOrder _byteOrder;
   static FactorySet* _factory;
 
+  static DefaultEncodings* _defaultEncodings;
 };
 
 #endif

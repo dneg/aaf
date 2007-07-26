@@ -90,8 +90,6 @@ extern "C" const aafClassID_t CLSID_AAFCachePageAllocator;
 #include "AAF.h"
 #endif
 
-extern const aafUID_t *mapStructuredStorageFileKind_DefaultToActual(const aafUID_t *);
-
 //***********************************************************
 //
 // AAFLoad()
@@ -893,13 +891,12 @@ STDAPI ImplAAFRawStorageIsAAFFile (
 //
 STDAPI ImplAAFFileIsAAFFileKind (
   aafCharacter_constptr  pFileName,
-  aafUID_constptr pAAFFileKind_in,
+  aafUID_constptr pAAFFileKind,
   aafBool *  pFileIsAAFFile)
 {
   if (pFileName == 0)
     return AAFRESULT_NULL_PARAM;
 
-  const aafUID_t *pAAFFileKind = mapStructuredStorageFileKind_DefaultToActual(pAAFFileKind_in);
   if (pAAFFileKind == 0)
     return AAFRESULT_NULL_PARAM;
 
