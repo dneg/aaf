@@ -121,7 +121,7 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFTypeDefRecord::Initialize (
       const aafUID_t & id,
       ImplAAFTypeDef ** ppMemberTypes,
-      aafString_t * pMemberNames,
+      aafCharacter_constptr * pMemberNames,
       aafUInt32 numMembers,
       const aafCharacter * pTypeName)
 {

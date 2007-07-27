@@ -109,7 +109,7 @@ HRESULT STDMETHODCALLTYPE
        (id,
         internalpType,
         pElementValues,
-        pElementNames,
+        const_cast<aafCharacter_constptr*>(pElementNames),
         numElems,
         pTypeName);
     }

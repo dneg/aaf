@@ -95,7 +95,7 @@ ImplAAFTypeDefEnum::Initialize (
 								const aafUID_t & id,
 								ImplAAFTypeDef * pType,
 								aafInt64 * pElementValues,
-								aafString_t * pElementNames,
+								aafCharacter_constptr * pElementNames,
 								aafUInt32 numElements,
 								const wchar_t * pTypeName)
 {
@@ -127,7 +127,7 @@ ImplAAFTypeDefEnum::pvtInitialize (
 								   const aafUID_t & id,
 								   const ImplAAFTypeDef * pType,
 								   aafInt64 * pElementValues,
-								   aafString_t * pElementNames,
+								   aafCharacter_constptr * pElementNames,
 								   aafUInt32 numElements,
 								   const wchar_t * pTypeName)
 {

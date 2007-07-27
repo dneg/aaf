@@ -313,8 +313,8 @@ void OMDictionary::resolve(void)
 
 struct _properties_t {
   OMPropertyId _pid;
-  wchar_t* _name;
-  wchar_t* _description;
+  const wchar_t* _name;
+  const wchar_t* _description;
 
 } _properties[] = {
   {0x0001, L"MetaDictionary", L"MetaDictionary"},

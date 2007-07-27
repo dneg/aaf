@@ -75,11 +75,11 @@ const aafInt32			kDefaultComponentWidth = 8;
 const aafUID_t AVID_JPEG_PLUGIN = 
 { 0x28ac17ce, 0x3bac, 0x11d3, { 0xbf, 0xd6, 0x0, 0x10, 0x4b, 0xc9, 0x15, 0x6d } };
 
-static wchar_t *kManufURL = L"http://www.avid.com";
-static wchar_t *kDownloadURL = L"ftp://ftp.avid.com/pub/";
+static const wchar_t *kManufURL = L"http://www.avid.com";
+static const wchar_t *kDownloadURL = L"ftp://ftp.avid.com/pub/";
 
-static wchar_t *kManufName = L"Avid Technology, Inc.";
-static wchar_t *kManufRev = L"Rev 0.1";
+static const wchar_t *kManufName = L"Avid Technology, Inc.";
+static const wchar_t *kManufRev = L"Rev 0.1";
 
 // Should be shared by all built-in plugins created by AVID. /* TRR */
 const aafUID_t MANUF_AVID_PLUGINS = { 0xA6487F21, 0xE78F, 0x11d2, { 0x80, 0x9E, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F } };

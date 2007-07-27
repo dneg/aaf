@@ -249,8 +249,8 @@ static AAFRESULT CreateNewEnumerationType (const aafUID_t & idToCreate,
 		  aafInt64 * memberValues =	new aafInt64 [numMembers];
 		  ASSERTU (memberValues);
 	  
-		  aafString_t * memberNames = 
-			new aafString_t[numMembers];
+		  const aafCharacter* * memberNames = 
+			new const aafCharacter*[numMembers];
 		  ASSERTU (memberNames);
 
 		  // fill the types and names arrays.
@@ -459,8 +459,8 @@ static AAFRESULT CreateNewRecordType (const aafUID_t & idToCreate,
 			new ImplAAFTypeDef * [numMembers];
 		  ASSERTU (memberTypes);
 	  
-		  aafString_t * memberNames = 
-			new aafString_t[numMembers];
+		  const aafCharacter* * memberNames = 
+			new const aafCharacter*[numMembers];
 		  ASSERTU (memberNames);
 
 		  aafUInt32 * memberOffsets =

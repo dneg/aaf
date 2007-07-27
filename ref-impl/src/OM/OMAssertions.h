@@ -79,18 +79,18 @@ public:
   //         violation occurred.
   //   @parm The line number at which the assertion violation
   //         occurred.
-void reportAssertionViolation(char* assertionKind,
-                              char* assertionName,
-                              char* expressionString,
-                              char* routineName,
-                              char* fileName,
+void reportAssertionViolation(const char* assertionKind,
+                              const char* assertionName,
+                              const char* expressionString,
+                              const char* routineName,
+                              const char* fileName,
                               OMUInt32 lineNumber);
 
-void assertionViolation(char* assertionKind,
-                        char* assertionName,
-                        char* expressionString,
-                        char* routineName,
-                        char* fileName,
+void assertionViolation(const char* assertionKind,
+                        const char* assertionName,
+                        const char* expressionString,
+                        const char* routineName,
+                        const char* fileName,
                         OMUInt32 lineNumber);
 
 void handleAssertionViolation(void);
@@ -108,7 +108,7 @@ void trace(const char* routineName);
   //         member functions should be prefixed with the class name,
   //         as in className::functionName.
 #define TRACE(routine) \
-  char* currentRoutineName = routine; \
+  const char* currentRoutineName = routine; \
   trace(currentRoutineName);
 
 #else
@@ -116,7 +116,7 @@ void trace(const char* routineName);
 inline void noTrace(const char* NNAME(routine)) {}
 
 #define TRACE(routine) \
-  char* currentRoutineName; \
+  const char* currentRoutineName; \
   currentRoutineName = routine; \
   noTrace(currentRoutineName);
 

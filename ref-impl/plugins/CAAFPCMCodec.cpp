@@ -56,12 +56,12 @@ const CLSID CLSID_AAFPCMCodec = { 0x98aa902d, 0x90ce, 0x402c, { 0xa3, 0x65, 0xf3
 const aafUID_t AAFSDK_PCM_PLUGIN = { 0xbd1e9f34, 0xf509, 0x4ab9, { 0xb5, 0x4e, 0xf8, 0xb7, 0xb8, 0x46, 0xdf, 0xa2 } };
 
 
-static wchar_t *manufURL = L"http://www.aafassociation.org";
-static wchar_t *downloadURL = L"http://aaf.sourceforge.net";
+static const wchar_t *manufURL = L"http://www.aafassociation.org";
+static const wchar_t *downloadURL = L"http://aaf.sourceforge.net";
 const aafUID_t MANUF_AAFSDK_PLUGINS = { 0x4ae7f1e0, 0x2a01, 0x4209, { 0xbd, 0xe8, 0xbc, 0x11, 0x93, 0xe2, 0xec, 0x12 } };
 
-static wchar_t *manufName = L"BBC R&D";
-static wchar_t *manufRev = L"Rev 0.0";
+static const wchar_t *manufName = L"BBC R&D";
+static const wchar_t *manufRev = L"Rev 0.0";
 
 
 

@@ -401,7 +401,7 @@ void toWideString(OMUInt32 i, wchar_t* result, size_t ANAME(resultSize))
 
   // Convert remaining digits to hex characters
   //
-  wchar_t* hexDigits = L"0123456789abcdef";
+  const wchar_t* hexDigits = L"0123456789abcdef";
   wchar_t* p = result;
   while (digits > 0) {
     ASSERT("Valid nibble", ((nibble >= 0) && (nibble <= 15)));

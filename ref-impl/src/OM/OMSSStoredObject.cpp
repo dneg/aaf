@@ -3139,7 +3139,7 @@ wchar_t* OMSSStoredObject::collectionIndexStreamName(
   TRACE("OMSSStoredObject::collectionIndexStreamName");
   PRECONDITION("Valid collection name", validWideString(collectionName));
 
-  wchar_t* suffix = L" index";
+  const wchar_t* suffix = L" index";
   size_t length = lengthOfWideString(collectionName) +
                   lengthOfWideString(suffix) + 1;
   wchar_t* indexName = new wchar_t[length];

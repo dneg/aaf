@@ -580,8 +580,8 @@ AAFRESULT
 	{		
 		if(pIdent == (aafProductIdentification_t *)NULL)
 		{
-			ident.companyName = L"Unknown";
-			ident.productName = L"Unknown";
+			ident.companyName = const_cast<aafCharacter *>(L"Unknown");
+			ident.productName = const_cast<aafCharacter *>(L"Unknown");
 			ident.productVersionString = (aafWChar*)NULL;
 			ident.productID = NIL_UID;
 			ident.platform = (aafWChar*)NULL;
@@ -595,7 +595,7 @@ AAFRESULT
 	XASSERT(pIdent != NULL, AAFRESULT_NEED_PRODUCT_IDENT);
 
     if (ident.productVersionString == 0) {
-      ident.productVersionString = L"Unknown version";
+      ident.productVersionString = const_cast<aafCharacter *>(L"Unknown version");
     }
 
     // Get the dictionary so that we can use the factory

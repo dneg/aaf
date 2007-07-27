@@ -37,11 +37,11 @@
 #endif
 
 
-void reportAssertionViolation(char* assertionKind,
-                              char* assertionName,
-                              char* expressionString,
-                              char* routineName,
-                              char* fileName,
+void reportAssertionViolation(const char* assertionKind,
+                              const char* assertionName,
+                              const char* expressionString,
+                              const char* routineName,
+                              const char* fileName,
                               OMUInt32 lineNumber)
 {
   omlog << assertionKind
@@ -52,11 +52,11 @@ void reportAssertionViolation(char* assertionKind,
   omlog << "The condition \"" << expressionString << "\" was false." << endl;
 }
 
-void assertionViolation(char* assertionKind,
-                        char* assertionName,
-                        char* expressionString,
-                        char* routineName,
-                        char* fileName,
+void assertionViolation(const char* assertionKind,
+                        const char* assertionName,
+                        const char* expressionString,
+                        const char* routineName,
+                        const char* fileName,
                         OMUInt32 lineNumber)
 {
   reportAssertionViolation(assertionKind,

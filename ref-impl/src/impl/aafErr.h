@@ -52,7 +52,7 @@ AAFRESULT ResultToText (
     aafCharacter *  pResultText,
     aafUInt32  resultTextSize);
 
-char    *aafGetErrorString(aafErr_t code);
+const char    *aafGetErrorString(aafErr_t code);
 char		*aafGetExpandedErrorString(AAFFile * file,
 											aafErr_t code,
 											aafInt16 buflen,

@@ -118,7 +118,7 @@ HRESULT STDMETHODCALLTYPE
       hr = ptr->Initialize
        (id,
         internalppMemberTypes,
-        pMemberNames,
+        const_cast<aafCharacter_constptr*>(pMemberNames),
         numMembers,
         pTypeName);
     }

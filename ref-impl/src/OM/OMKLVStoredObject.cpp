@@ -352,7 +352,7 @@ OMByteOrder OMKLVStoredObject::byteOrder(void) const
 static struct {
   OMPropertyTag _tag;
   OMUInt16 _pids[4];
-  wchar_t* _path;
+  const wchar_t* _path;
 } map [] = {
   {0xffff,
    {0x0001, 0x0003},         L"/MetaDictionary/ClassDefinitions"},

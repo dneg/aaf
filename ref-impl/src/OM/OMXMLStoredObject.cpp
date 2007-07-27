@@ -3026,8 +3026,8 @@ OMXMLStoredObject::restoreString(OMByteArray& bytes, const OMList<OMXMLAttribute
         
         if (data == 0)
         {
-            wchar_t* nullData = L"\0";    
-            bytes.append(reinterpret_cast<OMByte*>(nullData), sizeof(wchar_t));
+            const wchar_t* nullData = L"\0";    
+            bytes.append(reinterpret_cast<const OMByte*>(nullData), sizeof(wchar_t));
         }
         else
         {

@@ -419,7 +419,7 @@ static bool InitializeTypeDefinitionEnumeration(
     result = pType->Initialize (*typeDefinitionEnumeration->id(),
         pElementType,
         memberValues,
-        const_cast<aafCharacter **>(memberNames), // THIS CAST SHOULD NOT BE NECESSARY!
+        memberNames,
         typeDefinitionEnumeration->memberCount(),
         typeDefinitionEnumeration->name());
     ASSERTU (AAFRESULT_SUCCEEDED(result));
@@ -649,7 +649,7 @@ static bool InitializeTypeDefinitionRecord(
     // Used the "high-level" Initialize method since the pvtInitialize is obsolete.
     result = pType->Initialize (*typeDefinitionRecord->id(),
                                 memberTypes,
-        const_cast<aafCharacter **>(memberNames), // THIS CAST SHOULD NOT BE NECESSARY!
+                                memberNames,
                                 typeDefinitionRecord->fieldCount(),
                                 typeDefinitionRecord->name());
     ASSERTU (AAFRESULT_SUCCEEDED(result));

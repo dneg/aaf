@@ -35,12 +35,12 @@
 
 #if defined(OM_OS_WINDOWS)
 #define LINKAGE __stdcall
-wchar_t* ssLibraryName = L"ole32.dll";
-wchar_t* coLibraryName = L"ole32.dll";
+const wchar_t* ssLibraryName = L"ole32.dll";
+const wchar_t* coLibraryName = L"ole32.dll";
 #elif defined(OM_OS_UNIX)
 #define LINKAGE
-wchar_t* ssLibraryName = L"librefstg.so";
-wchar_t* coLibraryName = L"librefstg.so";
+const wchar_t* ssLibraryName = L"librefstg.so";
+const wchar_t* coLibraryName = L"librefstg.so";
 #endif
 
 typedef OMInt32 (LINKAGE *pStgCreateDocfile_t)(const SSCHAR*,

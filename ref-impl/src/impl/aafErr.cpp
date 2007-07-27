@@ -31,8 +31,8 @@
 
 struct errorTableTag {
   aafUInt16 _code;
-  wchar_t* _name;
-  wchar_t* _desc;
+  const wchar_t* _name;
+  const wchar_t* _desc;
 } errorTable[] = {
 #define AAF_DEFINE_ERROR(name, val, desc) \
   {val, L ## "AAFRESULT_" L ## #name, L ## desc},
@@ -166,7 +166,7 @@ static char    *localErrorStrings[300];
  * Possible Errors:
  *		Standard errors (see top of file).
  */
-char *aafGetErrorString(
+const char *aafGetErrorString(
 		aafErr_t code)
 {
 	if (code < 300 && code >= 0 && localErrorStrings[0] != '\0')
