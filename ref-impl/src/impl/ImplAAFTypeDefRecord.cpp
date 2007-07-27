@@ -1192,7 +1192,10 @@ OMUInt32 ImplAAFTypeDefRecord::internalSize(const OMByte* /*externalBytes*/,
 
 OMUInt32 ImplAAFTypeDefRecord::internalSize(void) const
 {
-  return NativeSize();
+  if (IsRegistered ())
+	return NativeSize ();
+  else
+	return PropValSize ();
 }
 
 void ImplAAFTypeDefRecord::internalize(const OMByte* externalBytes,
