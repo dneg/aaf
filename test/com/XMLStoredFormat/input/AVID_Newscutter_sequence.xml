@@ -409,43 +409,43 @@
         <DataDefinitions>
           <DataDefinition aaf:uid="DataDef_Timecode">
             <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0101.01030201.01000000</DefinitionObjectIdentification>
-            <DefinitionObjectName>Timecode</DefinitionObjectName>
+            <DefinitionObjectName>DataDef_Timecode</DefinitionObjectName>
             <DefinitionObjectDescription>Timecode data</DefinitionObjectDescription>
           </DataDefinition>
           <DataDefinition aaf:uid="DataDef_DescriptiveMetadata">
             <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0101.01030201.10000000</DefinitionObjectIdentification>
-            <DefinitionObjectName>DescriptiveMetadata</DefinitionObjectName>
-            <DefinitionObjectDescription>Descriptive Metadata</DefinitionObjectDescription>
+            <DefinitionObjectName>DataDef_DescriptiveMetadata</DefinitionObjectName>
+            <DefinitionObjectDescription>Descriptive metadata</DefinitionObjectDescription>
           </DataDefinition>
           <DataDefinition aaf:uid="DataDef_Picture">
             <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0101.01030202.01000000</DefinitionObjectIdentification>
-            <DefinitionObjectName>Picture</DefinitionObjectName>
+            <DefinitionObjectName>DataDef_Picture</DefinitionObjectName>
             <DefinitionObjectDescription>Picture data</DefinitionObjectDescription>
           </DataDefinition>
           <DataDefinition aaf:uid="DataDef_Sound">
             <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0101.01030202.02000000</DefinitionObjectIdentification>
-            <DefinitionObjectName>Sound</DefinitionObjectName>
+            <DefinitionObjectName>DataDef_Sound</DefinitionObjectName>
             <DefinitionObjectDescription>Sound data</DefinitionObjectDescription>
           </DataDefinition>
           <DataDefinition aaf:uid="DataDef_Auxiliary">
             <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0105.01030203.01000000</DefinitionObjectIdentification>
-            <DefinitionObjectName>Auxiliary</DefinitionObjectName>
+            <DefinitionObjectName>DataDef_Auxiliary</DefinitionObjectName>
             <DefinitionObjectDescription>Auxiliary data</DefinitionObjectDescription>
           </DataDefinition>
           <DataDefinition aaf:uid="DataDef_Matte">
             <DefinitionObjectIdentification>urn:uuid:05cba731-1daa-11d3-80ad-006008143e6f</DefinitionObjectIdentification>
-            <DefinitionObjectName>Matte</DefinitionObjectName>
+            <DefinitionObjectName>DataDef_Matte</DefinitionObjectName>
             <DefinitionObjectDescription>Matte data</DefinitionObjectDescription>
           </DataDefinition>
           <DataDefinition aaf:uid="DataDef_PictureWithMatte">
             <DefinitionObjectIdentification>urn:uuid:05cba732-1daa-11d3-80ad-006008143e6f</DefinitionObjectIdentification>
-            <DefinitionObjectName>PictureWithMatte</DefinitionObjectName>
-            <DefinitionObjectDescription>PictureWithMatte data</DefinitionObjectDescription>
+            <DefinitionObjectName>DataDef_PictureWithMatte</DefinitionObjectName>
+            <DefinitionObjectDescription>Picture and Matte data</DefinitionObjectDescription>
           </DataDefinition>
           <DataDefinition aaf:uid="DataDef_LegacyTimecode">
             <DefinitionObjectIdentification>urn:uuid:7f275e81-77e5-11d2-807f-006008143e6f</DefinitionObjectIdentification>
-            <DefinitionObjectName>Timecode</DefinitionObjectName>
-            <DefinitionObjectDescription>Timecode data</DefinitionObjectDescription>
+            <DefinitionObjectName>DataDef_LegacyTimecode</DefinitionObjectName>
+            <DefinitionObjectDescription>Timecode data (legacy)</DefinitionObjectDescription>
           </DataDefinition>
           <DataDefinition aaf:uid="urn:uuid:c58ecea5-d222-4e88-9418-d8ea375d9158">
             <DefinitionObjectIdentification>urn:uuid:c58ecea5-d222-4e88-9418-d8ea375d9158</DefinitionObjectIdentification>
@@ -454,17 +454,17 @@
           </DataDefinition>
           <DataDefinition aaf:uid="DataDef_LegacyPicture">
             <DefinitionObjectIdentification>urn:uuid:6f3c8ce1-6cef-11d2-807d-006008143e6f</DefinitionObjectIdentification>
-            <DefinitionObjectName>Picture</DefinitionObjectName>
-            <DefinitionObjectDescription>Picture data</DefinitionObjectDescription>
+            <DefinitionObjectName>DataDef_LegacyPicture</DefinitionObjectName>
+            <DefinitionObjectDescription>Picture data (legacy)</DefinitionObjectDescription>
           </DataDefinition>
           <DataDefinition aaf:uid="DataDef_LegacySound">
             <DefinitionObjectIdentification>urn:uuid:78e1ebe1-6cef-11d2-807d-006008143e6f</DefinitionObjectIdentification>
-            <DefinitionObjectName>Sound</DefinitionObjectName>
-            <DefinitionObjectDescription>Sound data</DefinitionObjectDescription>
+            <DefinitionObjectName>DataDef_LegacySound</DefinitionObjectName>
+            <DefinitionObjectDescription>Sound data (legacy)</DefinitionObjectDescription>
           </DataDefinition>
           <DataDefinition aaf:uid="DataDef_Edgecode">
             <DefinitionObjectIdentification>urn:uuid:d2bb2af0-d234-11d2-89ee-006097116212</DefinitionObjectIdentification>
-            <DefinitionObjectName>Edgecode</DefinitionObjectName>
+            <DefinitionObjectName>DataDef_Edgecode</DefinitionObjectName>
             <DefinitionObjectDescription>Edgecode data</DefinitionObjectDescription>
           </DataDefinition>
         </DataDefinitions>
@@ -491,434 +491,469 @@
         <ContainerDefinitions>
           <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0401.0101.0d010301.02010101">
             <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0101.0d010301.02010101</DefinitionObjectIdentification>
-            <DefinitionObjectName>ContainerD10_50Mbps_625x50i_defined_template</DefinitionObjectName>
-            <DefinitionObjectDescription>D-10; 50Mbps 625/50i (defined template)</DefinitionObjectDescription>
+            <DefinitionObjectName>ContainerDef_MXFGC_Framewrapped_SMPTE_D10_625x50I_50Mbps_DefinedTemplate</DefinitionObjectName>
+            <DefinitionObjectDescription/>
           </ContainerDefinition>
           <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0401.0101.0d010301.02010201">
             <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0101.0d010301.02010201</DefinitionObjectIdentification>
-            <DefinitionObjectName>ContainerD10_50Mbps_525x60i_defined_template</DefinitionObjectName>
-            <DefinitionObjectDescription>D-10; 50Mbps 525/60i (defined template)</DefinitionObjectDescription>
+            <DefinitionObjectName>ContainerDef_MXFGC_Framewrapped_SMPTE_D10_525x5994I_50Mbps_DefinedTemplate</DefinitionObjectName>
+            <DefinitionObjectDescription/>
           </ContainerDefinition>
           <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0401.0101.0d010301.02010301">
             <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0101.0d010301.02010301</DefinitionObjectIdentification>
-            <DefinitionObjectName>ContainerD10_40Mbps_625x50i_defined_template</DefinitionObjectName>
-            <DefinitionObjectDescription>D-10; 40Mbps 625/50i (defined template)</DefinitionObjectDescription>
+            <DefinitionObjectName>ContainerDef_MXFGC_Framewrapped_SMPTE_D10_625x50I_40Mbps_DefinedTemplate</DefinitionObjectName>
+            <DefinitionObjectDescription/>
           </ContainerDefinition>
           <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0401.0101.0d010301.02010401">
             <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0101.0d010301.02010401</DefinitionObjectIdentification>
-            <DefinitionObjectName>ContainerD10_40Mbps_525x60i_defined_template</DefinitionObjectName>
-            <DefinitionObjectDescription>D-10; 40Mbps 525/60i (defined template)</DefinitionObjectDescription>
+            <DefinitionObjectName>ContainerDef_MXFGC_Framewrapped_SMPTE_D10_525x5994I_40Mbps_DefinedTemplate</DefinitionObjectName>
+            <DefinitionObjectDescription/>
           </ContainerDefinition>
           <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0401.0101.0d010301.02010501">
             <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0101.0d010301.02010501</DefinitionObjectIdentification>
-            <DefinitionObjectName>ContainerD10_30Mbps_625x50i_defined_template</DefinitionObjectName>
-            <DefinitionObjectDescription>D-10; 30Mbps 625/50i (defined template)</DefinitionObjectDescription>
+            <DefinitionObjectName>ContainerDef_MXFGC_Framewrapped_SMPTE_D10_625x50I_30Mbps_DefinedTemplate</DefinitionObjectName>
+            <DefinitionObjectDescription/>
           </ContainerDefinition>
           <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0401.0101.0d010301.02010601">
             <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0101.0d010301.02010601</DefinitionObjectIdentification>
-            <DefinitionObjectName>ContainerD10_30Mbps_525x60i_defined_template</DefinitionObjectName>
-            <DefinitionObjectDescription>D-10; 30Mbps 525/60i (defined template)</DefinitionObjectDescription>
+            <DefinitionObjectName>ContainerDef_MXFGC_Framewrapped_SMPTE_D10_525x5994I_30Mbps_DefinedTemplate</DefinitionObjectName>
+            <DefinitionObjectDescription/>
           </ContainerDefinition>
           <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0401.0101.0d010301.02010102">
             <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0101.0d010301.02010102</DefinitionObjectIdentification>
-            <DefinitionObjectName>ContainerD10_50Mbps_625x50i_extended_template</DefinitionObjectName>
-            <DefinitionObjectDescription>D-10; 50Mbps 625/50i (extended template)</DefinitionObjectDescription>
+            <DefinitionObjectName>ContainerDef_MXFGC_Framewrapped_SMPTE_D10_625x50I_50Mbps_ExtendedTemplate</DefinitionObjectName>
+            <DefinitionObjectDescription/>
           </ContainerDefinition>
           <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0401.0101.0d010301.02010202">
             <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0101.0d010301.02010202</DefinitionObjectIdentification>
-            <DefinitionObjectName>ContainerD10_50Mbps_525x60i_extended_template</DefinitionObjectName>
-            <DefinitionObjectDescription>D-10; 50Mbps 525/60i (extended template)</DefinitionObjectDescription>
+            <DefinitionObjectName>ContainerDef_MXFGC_Framewrapped_SMPTE_D10_525x5994I_50Mbps_ExtendedTemplate</DefinitionObjectName>
+            <DefinitionObjectDescription/>
           </ContainerDefinition>
           <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0401.0101.0d010301.02010302">
             <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0101.0d010301.02010302</DefinitionObjectIdentification>
-            <DefinitionObjectName>ContainerD10_40Mbps_625x50i_extended_template</DefinitionObjectName>
-            <DefinitionObjectDescription>D-10; 40Mbps 625/50i (extended template)</DefinitionObjectDescription>
+            <DefinitionObjectName>ContainerDef_MXFGC_Framewrapped_SMPTE_D10_625x50I_40Mbps_ExtendedTemplate</DefinitionObjectName>
+            <DefinitionObjectDescription/>
           </ContainerDefinition>
           <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0401.0101.0d010301.02010402">
             <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0101.0d010301.02010402</DefinitionObjectIdentification>
-            <DefinitionObjectName>ContainerD10_40Mbps_525x60i_extended_template</DefinitionObjectName>
-            <DefinitionObjectDescription>D-10; 40Mbps 525/60i (extended template)</DefinitionObjectDescription>
+            <DefinitionObjectName>ContainerDef_MXFGC_Framewrapped_SMPTE_D10_525x5994I_40Mbps_ExtendedTemplate</DefinitionObjectName>
+            <DefinitionObjectDescription/>
           </ContainerDefinition>
           <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0401.0101.0d010301.02010502">
             <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0101.0d010301.02010502</DefinitionObjectIdentification>
-            <DefinitionObjectName>ContainerD10_30Mbps_625x50i_extended_template</DefinitionObjectName>
-            <DefinitionObjectDescription>D-10; 30Mbps 625/50i (extended template)</DefinitionObjectDescription>
+            <DefinitionObjectName>ContainerDef_MXFGC_Framewrapped_SMPTE_D10_625x50I_30Mbps_ExtendedTemplate</DefinitionObjectName>
+            <DefinitionObjectDescription/>
           </ContainerDefinition>
           <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0401.0101.0d010301.02010602">
             <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0101.0d010301.02010602</DefinitionObjectIdentification>
-            <DefinitionObjectName>ContainerD10_30Mbps_525x60i_extended_template</DefinitionObjectName>
-            <DefinitionObjectDescription>D-10; 30Mbps 525/60i (extended template)</DefinitionObjectDescription>
+            <DefinitionObjectName>ContainerDef_MXFGC_Framewrapped_SMPTE_D10_525x5994I_30Mbps_ExtendedTemplate</DefinitionObjectName>
+            <DefinitionObjectDescription/>
           </ContainerDefinition>
-          <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0401.0101.0d010301.0201017f">
-            <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0101.0d010301.0201017f</DefinitionObjectIdentification>
-            <DefinitionObjectName>ContainerD10_50Mbps_625x50i_picture_only</DefinitionObjectName>
-            <DefinitionObjectDescription>D-10; 50Mbps 625/50i (picture only)</DefinitionObjectDescription>
+          <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0401.0102.0d010301.0201017f">
+            <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0102.0d010301.0201017f</DefinitionObjectIdentification>
+            <DefinitionObjectName>ContainerDef_MXFGC_Framewrapped_SMPTE_D10_625x50I_50Mbps_PictureOnly</DefinitionObjectName>
+            <DefinitionObjectDescription/>
           </ContainerDefinition>
-          <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0401.0101.0d010301.0201027f">
-            <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0101.0d010301.0201027f</DefinitionObjectIdentification>
-            <DefinitionObjectName>ContainerD10_50Mbps_525x60i_picture_only</DefinitionObjectName>
-            <DefinitionObjectDescription>D-10; 50Mbps 525/60i (picture only)</DefinitionObjectDescription>
+          <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0401.0102.0d010301.0201027f">
+            <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0102.0d010301.0201027f</DefinitionObjectIdentification>
+            <DefinitionObjectName>ContainerDef_MXFGC_Framewrapped_SMPTE_D10_525x5994I_50Mbps_PictureOnly</DefinitionObjectName>
+            <DefinitionObjectDescription/>
           </ContainerDefinition>
-          <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0401.0101.0d010301.0201037f">
-            <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0101.0d010301.0201037f</DefinitionObjectIdentification>
-            <DefinitionObjectName>ContainerD10_40Mbps_625x50i_picture_only</DefinitionObjectName>
-            <DefinitionObjectDescription>D-10; 40Mbps 625/50i (picture only)</DefinitionObjectDescription>
+          <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0401.0102.0d010301.0201037f">
+            <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0102.0d010301.0201037f</DefinitionObjectIdentification>
+            <DefinitionObjectName>ContainerDef_MXFGC_Framewrapped_SMPTE_D10_625x50I_40Mbps_PictureOnly</DefinitionObjectName>
+            <DefinitionObjectDescription/>
           </ContainerDefinition>
-          <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0401.0101.0d010301.0201047f">
-            <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0101.0d010301.0201047f</DefinitionObjectIdentification>
-            <DefinitionObjectName>ContainerD10_40Mbps_525x60i_picture_only</DefinitionObjectName>
-            <DefinitionObjectDescription>D-10; 40Mbps 525/60i (picture only)</DefinitionObjectDescription>
+          <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0401.0102.0d010301.0201047f">
+            <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0102.0d010301.0201047f</DefinitionObjectIdentification>
+            <DefinitionObjectName>ContainerDef_MXFGC_Framewrapped_SMPTE_D10_525x5994I_40Mbps_PictureOnly</DefinitionObjectName>
+            <DefinitionObjectDescription/>
           </ContainerDefinition>
-          <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0401.0101.0d010301.0201057f">
-            <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0101.0d010301.0201057f</DefinitionObjectIdentification>
-            <DefinitionObjectName>ContainerD10_30Mbps_625x50i_picture_only</DefinitionObjectName>
-            <DefinitionObjectDescription>D-10; 30Mbps 625/50i (picture only)</DefinitionObjectDescription>
+          <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0401.0102.0d010301.0201057f">
+            <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0102.0d010301.0201057f</DefinitionObjectIdentification>
+            <DefinitionObjectName>ContainerDef_MXFGC_Framewrapped_SMPTE_D10_625x50I_30Mbps_PictureOnly</DefinitionObjectName>
+            <DefinitionObjectDescription/>
           </ContainerDefinition>
-          <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0401.0101.0d010301.0201067f">
-            <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0101.0d010301.0201067f</DefinitionObjectIdentification>
-            <DefinitionObjectName>ContainerD10_30Mbps_525x60i_picture_only</DefinitionObjectName>
-            <DefinitionObjectDescription>D-10; 30Mbps 525/60i (picture only)</DefinitionObjectDescription>
+          <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0401.0102.0d010301.0201067f">
+            <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0102.0d010301.0201067f</DefinitionObjectIdentification>
+            <DefinitionObjectName>ContainerDef_MXFGC_Framewrapped_SMPTE_D10_525x5994I_30Mbps_PictureOnly</DefinitionObjectName>
+            <DefinitionObjectDescription/>
           </ContainerDefinition>
           <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0401.0101.0d010301.02020101">
             <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0101.0d010301.02020101</DefinitionObjectIdentification>
-            <DefinitionObjectName>ContainerDV_IEC_25Mbps_525x60i_frame_wrapped</DefinitionObjectName>
-            <DefinitionObjectDescription>DV; IEC 25Mbps 525/60i (frame wrapped)</DefinitionObjectDescription>
+            <DefinitionObjectName>ContainerDef_MXFGC_Framewrapped_IECDV_525x5994I_25Mbps</DefinitionObjectName>
+            <DefinitionObjectDescription/>
           </ContainerDefinition>
           <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0401.0101.0d010301.02020201">
             <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0101.0d010301.02020201</DefinitionObjectIdentification>
-            <DefinitionObjectName>ContainerDV_IEC_25Mbps_625x50i_frame_wrapped</DefinitionObjectName>
-            <DefinitionObjectDescription>DV; IEC 25Mbps 625/50i (frame wrapped)</DefinitionObjectDescription>
+            <DefinitionObjectName>ContainerDef_MXFGC_Framewrapped_IECDV_625x50I_25Mbps</DefinitionObjectName>
+            <DefinitionObjectDescription/>
           </ContainerDefinition>
           <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0401.0101.0d010301.02020301">
             <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0101.0d010301.02020301</DefinitionObjectIdentification>
-            <DefinitionObjectName>ContainerDV_IEC_25Mbps_525x60i_DVCAM_frame_wrapped</DefinitionObjectName>
-            <DefinitionObjectDescription>DV; IEC 25Mbps 525/60i DVCAM (frame wrapped)</DefinitionObjectDescription>
+            <DefinitionObjectName>ContainerDef_MXFGC_Framewrapped_IECDV_525x5994I_25Mbps_SMPTE322M</DefinitionObjectName>
+            <DefinitionObjectDescription/>
           </ContainerDefinition>
           <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0401.0101.0d010301.02020401">
             <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0101.0d010301.02020401</DefinitionObjectIdentification>
-            <DefinitionObjectName>ContainerDV_IEC_25Mbps_625x50i_DVCAM_frame_wrapped</DefinitionObjectName>
-            <DefinitionObjectDescription>DV; IEC 25Mbps 625/50i DVCAM (frame wrapped)</DefinitionObjectDescription>
+            <DefinitionObjectName>ContainerDef_MXFGC_Framewrapped_IECDV_625x50I_25Mbps_SMPTE322M</DefinitionObjectName>
+            <DefinitionObjectDescription/>
           </ContainerDefinition>
           <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0401.0101.0d010301.02023f01">
             <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0101.0d010301.02023f01</DefinitionObjectIdentification>
-            <DefinitionObjectName>ContainerDV_Undefined_IEC_DV_frame_wrapped</DefinitionObjectName>
-            <DefinitionObjectDescription>DV; Undefined IEC DV (frame wrapped)</DefinitionObjectDescription>
+            <DefinitionObjectName>ContainerDef_MXFGC_Framewrapped_IECDV_UndefinedSource_25Mbps</DefinitionObjectName>
+            <DefinitionObjectDescription/>
           </ContainerDefinition>
           <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0401.0101.0d010301.02024001">
             <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0101.0d010301.02024001</DefinitionObjectIdentification>
-            <DefinitionObjectName>ContainerDV_25Mbps_525x60i_frame_wrapped</DefinitionObjectName>
-            <DefinitionObjectDescription>DV; 25Mbps 525/60i (frame wrapped)</DefinitionObjectDescription>
+            <DefinitionObjectName>ContainerDef_MXFGC_Framewrapped_DVbased_525x5994I_25Mbps</DefinitionObjectName>
+            <DefinitionObjectDescription/>
           </ContainerDefinition>
           <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0401.0101.0d010301.02024101">
             <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0101.0d010301.02024101</DefinitionObjectIdentification>
-            <DefinitionObjectName>ContainerDV_25Mbps_625x50i_frame_wrapped</DefinitionObjectName>
-            <DefinitionObjectDescription>DV; 25Mbps 625/50i (frame wrapped)</DefinitionObjectDescription>
+            <DefinitionObjectName>ContainerDef_MXFGC_Framewrapped_DVbased_625x50I_25Mbps</DefinitionObjectName>
+            <DefinitionObjectDescription/>
           </ContainerDefinition>
           <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0401.0101.0d010301.02025001">
             <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0101.0d010301.02025001</DefinitionObjectIdentification>
-            <DefinitionObjectName>ContainerDV_50Mbps_525x60i_frame_wrapped</DefinitionObjectName>
-            <DefinitionObjectDescription>DV; 50Mbps 525/60i (frame wrapped)</DefinitionObjectDescription>
+            <DefinitionObjectName>ContainerDef_MXFGC_Framewrapped_DVbased_525x5994I_50Mbps</DefinitionObjectName>
+            <DefinitionObjectDescription/>
           </ContainerDefinition>
           <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0401.0101.0d010301.02025101">
             <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0101.0d010301.02025101</DefinitionObjectIdentification>
-            <DefinitionObjectName>ContainerDV_50Mbps_625x50i_frame_wrapped</DefinitionObjectName>
-            <DefinitionObjectDescription>DV; 50Mbps 625/50i (frame wrapped)</DefinitionObjectDescription>
+            <DefinitionObjectName>ContainerDef_MXFGC_Framewrapped_DVbased_625x50I_50Mbps</DefinitionObjectName>
+            <DefinitionObjectDescription/>
           </ContainerDefinition>
           <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0401.0101.0d010301.02026001">
             <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0101.0d010301.02026001</DefinitionObjectIdentification>
-            <DefinitionObjectName>ContainerDV_100Mbps_1080x60i_frame_wrapped</DefinitionObjectName>
-            <DefinitionObjectDescription>DV; 100Mbps 1080/60i (frame wrapped)</DefinitionObjectDescription>
+            <DefinitionObjectName>ContainerDef_MXFGC_Framewrapped_DVbased_1080x5994I_100Mbps</DefinitionObjectName>
+            <DefinitionObjectDescription/>
           </ContainerDefinition>
           <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0401.0101.0d010301.02026101">
             <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0101.0d010301.02026101</DefinitionObjectIdentification>
-            <DefinitionObjectName>ContainerDV_100Mbps_1080x50i_frame_wrapped</DefinitionObjectName>
-            <DefinitionObjectDescription>DV; 100Mbps 1080/50i (frame wrapped)</DefinitionObjectDescription>
+            <DefinitionObjectName>ContainerDef_MXFGC_Framewrapped_DVbased_1080x50I_100Mbps</DefinitionObjectName>
+            <DefinitionObjectDescription/>
           </ContainerDefinition>
           <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0401.0101.0d010301.02026201">
             <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0101.0d010301.02026201</DefinitionObjectIdentification>
-            <DefinitionObjectName>ContainerDV_100Mbps_720x60p_frame_wrapped</DefinitionObjectName>
-            <DefinitionObjectDescription>DV; 100Mbps 720/60p (frame wrapped)</DefinitionObjectDescription>
+            <DefinitionObjectName>ContainerDef_MXFGC_Framewrapped_DVbased_720x5994P_100Mbps</DefinitionObjectName>
+            <DefinitionObjectDescription/>
           </ContainerDefinition>
           <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0401.0101.0d010301.02026301">
             <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0101.0d010301.02026301</DefinitionObjectIdentification>
-            <DefinitionObjectName>ContainerDV_100Mbps_720x50p_frame_wrapped</DefinitionObjectName>
-            <DefinitionObjectDescription>DV; 100Mbps 720/50p (frame wrapped)</DefinitionObjectDescription>
+            <DefinitionObjectName>ContainerDef_MXFGC_Framewrapped_DVbased_720x50P_100Mbps</DefinitionObjectName>
+            <DefinitionObjectDescription/>
           </ContainerDefinition>
           <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0401.0101.0d010301.02027f01">
             <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0101.0d010301.02027f01</DefinitionObjectIdentification>
-            <DefinitionObjectName>ContainerDV_undefined_frame_wrapped</DefinitionObjectName>
-            <DefinitionObjectDescription>DV; undefined (frame wrapped)</DefinitionObjectDescription>
+            <DefinitionObjectName>ContainerDef_MXFGC_Framewrapped_DVbased_UndefinedSource</DefinitionObjectName>
+            <DefinitionObjectDescription/>
           </ContainerDefinition>
           <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0401.0101.0d010301.02020102">
             <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0101.0d010301.02020102</DefinitionObjectIdentification>
-            <DefinitionObjectName>ContainerDV_IEC_25Mbps_525x60i_clip_wrapped</DefinitionObjectName>
-            <DefinitionObjectDescription>DV; IEC 25Mbps 525/60i (clip wrapped)</DefinitionObjectDescription>
+            <DefinitionObjectName>ContainerDef_MXFGC_Clipwrapped_IECDV_525x5994I_25Mbps</DefinitionObjectName>
+            <DefinitionObjectDescription/>
           </ContainerDefinition>
           <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0401.0101.0d010301.02020202">
             <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0101.0d010301.02020202</DefinitionObjectIdentification>
-            <DefinitionObjectName>ContainerDV_IEC_25Mbps_625x50i_clip_wrapped</DefinitionObjectName>
-            <DefinitionObjectDescription>DV; IEC 25Mbps 625/50i (clip wrapped)</DefinitionObjectDescription>
+            <DefinitionObjectName>ContainerDef_MXFGC_Clipwrapped_IECDV_625x50I_25Mbps</DefinitionObjectName>
+            <DefinitionObjectDescription/>
           </ContainerDefinition>
           <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0401.0101.0d010301.02020302">
             <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0101.0d010301.02020302</DefinitionObjectIdentification>
-            <DefinitionObjectName>ContainerDV_IEC_25Mbps_525x60i_DVCAM_clip_wrapped</DefinitionObjectName>
-            <DefinitionObjectDescription>DV; IEC 25Mbps 525/60i DVCAM (clip wrapped)</DefinitionObjectDescription>
+            <DefinitionObjectName>ContainerDef_MXFGC_Clipwrapped_IECDV_525x5994I_25Mbps_SMPTE322M</DefinitionObjectName>
+            <DefinitionObjectDescription/>
           </ContainerDefinition>
           <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0401.0101.0d010301.02020402">
             <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0101.0d010301.02020402</DefinitionObjectIdentification>
-            <DefinitionObjectName>ContainerDV_IEC_25Mbps_625x50i_DVCAM_clip_wrapped</DefinitionObjectName>
-            <DefinitionObjectDescription>DV; IEC 25Mbps 625/50i DVCAM (clip wrapped)</DefinitionObjectDescription>
+            <DefinitionObjectName>ContainerDef_MXFGC_Clipwrapped_IECDV_625x50I_25Mbps_SMPTE322M</DefinitionObjectName>
+            <DefinitionObjectDescription/>
           </ContainerDefinition>
           <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0401.0101.0d010301.02023f02">
             <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0101.0d010301.02023f02</DefinitionObjectIdentification>
-            <DefinitionObjectName>ContainerDV_Undefined_IEC_DV_clip_wrapped</DefinitionObjectName>
-            <DefinitionObjectDescription>DV; Undefined IEC DV (clip wrapped)</DefinitionObjectDescription>
+            <DefinitionObjectName>ContainerDef_MXFGC_Clipwrapped_IECDV_UndefinedSource_25Mbps</DefinitionObjectName>
+            <DefinitionObjectDescription/>
           </ContainerDefinition>
           <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0401.0101.0d010301.02024002">
             <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0101.0d010301.02024002</DefinitionObjectIdentification>
-            <DefinitionObjectName>ContainerDV_25Mbps_525x60i_clip_wrapped</DefinitionObjectName>
-            <DefinitionObjectDescription>DV; 25Mbps 525/60i (clip wrapped)</DefinitionObjectDescription>
-          </ContainerDefinition>
-          <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0401.0102.0d010301.02024002">
-            <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0102.0d010301.02024002</DefinitionObjectIdentification>
-            <DefinitionObjectName>ContainerDV_25Mbps_525x60i_clip_wrapped_bogus</DefinitionObjectName>
-            <DefinitionObjectDescription>DV; 25Mbps 525/60i (clip wrapped) (bogus)</DefinitionObjectDescription>
+            <DefinitionObjectName>ContainerDef_MXFGC_Clipwrapped_DVbased_525x5994I_25Mbps</DefinitionObjectName>
+            <DefinitionObjectDescription/>
           </ContainerDefinition>
           <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0401.0101.0d010301.02024102">
             <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0101.0d010301.02024102</DefinitionObjectIdentification>
-            <DefinitionObjectName>ContainerDV_25Mbps_625x50i_clip_wrapped</DefinitionObjectName>
-            <DefinitionObjectDescription>DV; 25Mbps 625/50i (clip wrapped)</DefinitionObjectDescription>
+            <DefinitionObjectName>ContainerDef_MXFGC_Clipwrapped_DVbased_625x50I_25Mbps</DefinitionObjectName>
+            <DefinitionObjectDescription/>
           </ContainerDefinition>
           <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0401.0101.0d010301.02025002">
             <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0101.0d010301.02025002</DefinitionObjectIdentification>
-            <DefinitionObjectName>ContainerDV_50Mbps_525x60i_clip_wrapped</DefinitionObjectName>
-            <DefinitionObjectDescription>DV; 50Mbps 525/60i (clip wrapped)</DefinitionObjectDescription>
+            <DefinitionObjectName>ContainerDef_MXFGC_Clipwrapped_DVbased_525x5994I_50Mbps</DefinitionObjectName>
+            <DefinitionObjectDescription/>
           </ContainerDefinition>
           <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0401.0101.0d010301.02025102">
             <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0101.0d010301.02025102</DefinitionObjectIdentification>
-            <DefinitionObjectName>ContainerDV_50Mbps_625x50i_clip_wrapped</DefinitionObjectName>
-            <DefinitionObjectDescription>DV; 50Mbps 625/50i (clip wrapped)</DefinitionObjectDescription>
+            <DefinitionObjectName>ContainerDef_MXFGC_Clipwrapped_DVbased_625x50I_50Mbps</DefinitionObjectName>
+            <DefinitionObjectDescription/>
           </ContainerDefinition>
           <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0401.0101.0d010301.02026002">
             <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0101.0d010301.02026002</DefinitionObjectIdentification>
-            <DefinitionObjectName>ContainerDV_100Mbps_1080x60i_clip_wrapped</DefinitionObjectName>
-            <DefinitionObjectDescription>DV; 100Mbps 1080/60i (clip wrapped)</DefinitionObjectDescription>
+            <DefinitionObjectName>ContainerDef_MXFGC_Clipwrapped_DVbased_1080x5994I_100Mbps</DefinitionObjectName>
+            <DefinitionObjectDescription/>
           </ContainerDefinition>
           <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0401.0101.0d010301.02026102">
             <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0101.0d010301.02026102</DefinitionObjectIdentification>
-            <DefinitionObjectName>ContainerDV_100Mbps_1080x50i_clip_wrapped</DefinitionObjectName>
-            <DefinitionObjectDescription>DV; 100Mbps 1080/50i (clip wrapped)</DefinitionObjectDescription>
+            <DefinitionObjectName>ContainerDef_MXFGC_Clipwrapped_DVbased_1080x50I_100Mbps</DefinitionObjectName>
+            <DefinitionObjectDescription/>
           </ContainerDefinition>
           <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0401.0101.0d010301.02026202">
             <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0101.0d010301.02026202</DefinitionObjectIdentification>
-            <DefinitionObjectName>ContainerDV_100Mbps_720x60p_clip_wrapped</DefinitionObjectName>
-            <DefinitionObjectDescription>DV; 100Mbps 720/60p (clip wrapped)</DefinitionObjectDescription>
+            <DefinitionObjectName>ContainerDef_MXFGC_Clipwrapped_DVbased_720x5994P_100Mbps</DefinitionObjectName>
+            <DefinitionObjectDescription/>
           </ContainerDefinition>
           <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0401.0101.0d010301.02026302">
             <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0101.0d010301.02026302</DefinitionObjectIdentification>
-            <DefinitionObjectName>ContainerDV_100Mbps_720x50p_clip_wrapped</DefinitionObjectName>
-            <DefinitionObjectDescription>DV; 100Mbps 720/50p (clip wrapped)</DefinitionObjectDescription>
+            <DefinitionObjectName>ContainerDef_MXFGC_Clipwrapped_DVbased_720x50P_100Mbps</DefinitionObjectName>
+            <DefinitionObjectDescription/>
           </ContainerDefinition>
           <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0401.0101.0d010301.02027f02">
             <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0101.0d010301.02027f02</DefinitionObjectIdentification>
-            <DefinitionObjectName>ContainerDV_undefined_clip_wrapped</DefinitionObjectName>
-            <DefinitionObjectDescription>DV; undefined (clip wrapped)</DefinitionObjectDescription>
+            <DefinitionObjectName>ContainerDef_MXFGC_Clipwrapped_DVbased_UndefinedSource</DefinitionObjectName>
+            <DefinitionObjectDescription/>
           </ContainerDefinition>
-          <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0401.0102.0d010301.02027f02">
-            <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0102.0d010301.02027f02</DefinitionObjectIdentification>
-            <DefinitionObjectName>ContainerDV_undefined_clip_wrapped_bogus</DefinitionObjectName>
-            <DefinitionObjectDescription>DV; undefined (clip wrapped) (bogus)</DefinitionObjectDescription>
+          <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0401.0102.0d010301.02046001">
+            <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0102.0d010301.02046001</DefinitionObjectIdentification>
+            <DefinitionObjectName>ContainerDef_MXFGC_Framewrapped_MPEGES_VideoStream0_SID</DefinitionObjectName>
+            <DefinitionObjectDescription/>
           </ContainerDefinition>
-          <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0401.0101.0d010301.02046001">
-            <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0101.0d010301.02046001</DefinitionObjectIdentification>
-            <DefinitionObjectName>ContainerMPEG_Elementary_Stream_stream_id_0x60_frame_wrapped</DefinitionObjectName>
-            <DefinitionObjectDescription>MPEG Elementary Stream; stream id 0x60 (frame wrapped)</DefinitionObjectDescription>
-          </ContainerDefinition>
-          <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0401.0101.0d010301.02046107">
-            <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0101.0d010301.02046107</DefinitionObjectIdentification>
-            <DefinitionObjectName>ContainerUnknown_Sony002</DefinitionObjectName>
-            <DefinitionObjectDescription>Unknown; Sony002</DefinitionObjectDescription>
+          <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0401.0102.0d010301.02046107">
+            <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0102.0d010301.02046107</DefinitionObjectIdentification>
+            <DefinitionObjectName>ContainerDef_MXFGC_CustomClosedGOPwrapped_MPEGES_VideoStream1_SID</DefinitionObjectName>
+            <DefinitionObjectDescription/>
           </ContainerDefinition>
           <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0401.0101.0d010301.02050101">
             <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0101.0d010301.02050101</DefinitionObjectIdentification>
-            <DefinitionObjectName>ContainerUncompressed_Picture_525_60i_422_13p5MHz_frame_wrapped</DefinitionObjectName>
-            <DefinitionObjectDescription>Uncompressed Picture; 525 60i 422 13.5MHz (frame wrapped)</DefinitionObjectDescription>
+            <DefinitionObjectName>ContainerDef_MXFGC_Framewrapped_Uncompressed_525x5994I_720_422</DefinitionObjectName>
+            <DefinitionObjectDescription/>
           </ContainerDefinition>
           <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0401.0101.0d010301.02050102">
             <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0101.0d010301.02050102</DefinitionObjectIdentification>
-            <DefinitionObjectName>ContainerUncompressed_Picture_525_60i_422_13p5MHz_clip_wrapped</DefinitionObjectName>
-            <DefinitionObjectDescription>Uncompressed Picture; 525 60i 422 13.5MHz (clip wrapped)</DefinitionObjectDescription>
+            <DefinitionObjectName>ContainerDef_MXFGC_Clipwrapped_Uncompressed_525x5994I_720_422</DefinitionObjectName>
+            <DefinitionObjectDescription/>
           </ContainerDefinition>
           <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0401.0101.0d010301.02050103">
             <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0101.0d010301.02050103</DefinitionObjectIdentification>
-            <DefinitionObjectName>ContainerUncompressed_Picture_525_60i_422_13p5MHz_line_wrapped</DefinitionObjectName>
-            <DefinitionObjectDescription>Uncompressed Picture; 525 60i 422 13.5MHz (line wrapped)</DefinitionObjectDescription>
+            <DefinitionObjectName>ContainerDef_MXFGC_Linewrapped_Uncompressed_525x5994I_720_422</DefinitionObjectName>
+            <DefinitionObjectDescription/>
           </ContainerDefinition>
           <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0401.0101.0d010301.02050105">
             <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0101.0d010301.02050105</DefinitionObjectIdentification>
-            <DefinitionObjectName>ContainerUncompressed_Picture_625_50i_422_13p5MHz_frame_wrapped</DefinitionObjectName>
-            <DefinitionObjectDescription>Uncompressed Picture; 625 50i 422 13.5MHz (frame wrapped)</DefinitionObjectDescription>
+            <DefinitionObjectName>ContainerDef_MXFGC_Framewrapped_Uncompressed_625x50I_720_422</DefinitionObjectName>
+            <DefinitionObjectDescription/>
           </ContainerDefinition>
           <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0401.0101.0d010301.02050106">
             <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0101.0d010301.02050106</DefinitionObjectIdentification>
-            <DefinitionObjectName>ContainerUncompressed_Picture_625_50i_422_13p5MHz_clip_wrapped</DefinitionObjectName>
-            <DefinitionObjectDescription>Uncompressed Picture; 625 50i 422 13.5MHz (clip wrapped)</DefinitionObjectDescription>
+            <DefinitionObjectName>ContainerDef_MXFGC_Clipwrapped_Uncompressed_625x50I_720_422</DefinitionObjectName>
+            <DefinitionObjectDescription/>
           </ContainerDefinition>
           <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0401.0101.0d010301.02050107">
             <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0101.0d010301.02050107</DefinitionObjectIdentification>
-            <DefinitionObjectName>ContainerUncompressed_Picture_625_50i_422_13p5MHz_line_wrapped</DefinitionObjectName>
-            <DefinitionObjectDescription>Uncompressed Picture; 625 50i 422 13.5MHz (line wrapped)</DefinitionObjectDescription>
+            <DefinitionObjectName>ContainerDef_MXFGC_Linewrapped_Uncompressed_625x50I_720_422</DefinitionObjectName>
+            <DefinitionObjectDescription/>
           </ContainerDefinition>
           <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0401.0101.0d010301.02050119">
             <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0101.0d010301.02050119</DefinitionObjectIdentification>
-            <DefinitionObjectName>ContainerUncompressed_Picture_525_60p_422_27MHz_frame_wrapped</DefinitionObjectName>
-            <DefinitionObjectDescription>Uncompressed Picture; 525 60p 422 27MHz (frame wrapped)</DefinitionObjectDescription>
+            <DefinitionObjectName>ContainerDef_MXFGC_Framewrapped_Uncompressed_525x5994P_960_422</DefinitionObjectName>
+            <DefinitionObjectDescription/>
           </ContainerDefinition>
           <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0401.0101.0d010301.0205011a">
             <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0101.0d010301.0205011a</DefinitionObjectIdentification>
-            <DefinitionObjectName>ContainerUncompressed_Picture_525_60p_422_27MHz_clip_wrapped</DefinitionObjectName>
-            <DefinitionObjectDescription>Uncompressed Picture; 525 60p 422 27MHz (clip wrapped)</DefinitionObjectDescription>
+            <DefinitionObjectName>ContainerDef_MXFGC_Clipwrapped_Uncompressed_525x5994P_960_422</DefinitionObjectName>
+            <DefinitionObjectDescription/>
           </ContainerDefinition>
           <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0401.0101.0d010301.0205011b">
             <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0101.0d010301.0205011b</DefinitionObjectIdentification>
-            <DefinitionObjectName>ContainerUncompressed_Picture_525_60p_422_27MHz_line_wrapped</DefinitionObjectName>
-            <DefinitionObjectDescription>Uncompressed Picture; 525 60p 422 27MHz (line wrapped)</DefinitionObjectDescription>
+            <DefinitionObjectName>ContainerDef_MXFGC_Linewrapped_Uncompressed_525x5994P_960_422</DefinitionObjectName>
+            <DefinitionObjectDescription/>
           </ContainerDefinition>
           <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0401.0101.0d010301.0205011d">
             <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0101.0d010301.0205011d</DefinitionObjectIdentification>
-            <DefinitionObjectName>ContainerUncompressed_Picture_625_50p_422_27MHz_frame_wrapped</DefinitionObjectName>
-            <DefinitionObjectDescription>Uncompressed Picture; 625 50p 422 27MHz (frame wrapped)</DefinitionObjectDescription>
+            <DefinitionObjectName>ContainerDef_MXFGC_Framewrapped_Uncompressed_625x50P_960_422</DefinitionObjectName>
+            <DefinitionObjectDescription/>
           </ContainerDefinition>
           <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0401.0101.0d010301.0205011e">
             <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0101.0d010301.0205011e</DefinitionObjectIdentification>
-            <DefinitionObjectName>ContainerUncompressed_Picture_625_50p_422_27MHz_clip_wrapped</DefinitionObjectName>
-            <DefinitionObjectDescription>Uncompressed Picture; 625 50p 422 27MHz (clip wrapped)</DefinitionObjectDescription>
+            <DefinitionObjectName>ContainerDef_MXFGC_Clipwrapped_Uncompressed_625x50P_960_422</DefinitionObjectName>
+            <DefinitionObjectDescription/>
           </ContainerDefinition>
           <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0401.0101.0d010301.0205011f">
             <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0101.0d010301.0205011f</DefinitionObjectIdentification>
-            <DefinitionObjectName>ContainerUncompressed_Picture_625_50p_422_27MHz_line_wrapped</DefinitionObjectName>
-            <DefinitionObjectDescription>Uncompressed Picture; 625 50p 422 27MHz (line wrapped)</DefinitionObjectDescription>
+            <DefinitionObjectName>ContainerDef_MXFGC_Linewrapped_Uncompressed_625x50P_960_422</DefinitionObjectName>
+            <DefinitionObjectDescription/>
           </ContainerDefinition>
           <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0401.0101.0d010301.02060100">
             <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0101.0d010301.02060100</DefinitionObjectIdentification>
-            <DefinitionObjectName>ContainerAES3xBWF_BWF_frame_wrapped</DefinitionObjectName>
-            <DefinitionObjectDescription>AES3/BWF; BWF (frame wrapped)</DefinitionObjectDescription>
+            <DefinitionObjectName>ContainerDef_MXFGC_Framewrapped_Broadcast_Wave_audio_data</DefinitionObjectName>
+            <DefinitionObjectDescription/>
           </ContainerDefinition>
           <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0401.0101.0d010301.02060200">
             <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0101.0d010301.02060200</DefinitionObjectIdentification>
-            <DefinitionObjectName>ContainerAES3xBWF_BWF_clip_wrapped</DefinitionObjectName>
-            <DefinitionObjectDescription>AES3/BWF; BWF (clip wrapped)</DefinitionObjectDescription>
+            <DefinitionObjectName>ContainerDef_MXFGC_Clipwrapped_Broadcast_Wave_audio_data</DefinitionObjectName>
+            <DefinitionObjectDescription/>
           </ContainerDefinition>
           <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0401.0101.0d010301.02060300">
             <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0101.0d010301.02060300</DefinitionObjectIdentification>
-            <DefinitionObjectName>ContainerAES3xBWF_AES3_frame_wrapped</DefinitionObjectName>
-            <DefinitionObjectDescription>AES3/BWF; AES3 (frame wrapped)</DefinitionObjectDescription>
-          </ContainerDefinition>
-          <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0102.0101.0d010301.02060400">
-            <DefinitionObjectIdentification>urn:x-ul:060e2b34.0102.0101.0d010301.02060400</DefinitionObjectIdentification>
-            <DefinitionObjectName>ContainerUnknown_Panasonic001</DefinitionObjectName>
-            <DefinitionObjectDescription>Unknown; Panasonic001</DefinitionObjectDescription>
+            <DefinitionObjectName>ContainerDef_MXFGC_Framewrapped_AES3_audio_data</DefinitionObjectName>
+            <DefinitionObjectDescription/>
           </ContainerDefinition>
           <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0401.0101.0d010301.02060400">
             <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0101.0d010301.02060400</DefinitionObjectIdentification>
-            <DefinitionObjectName>ContainerAES3xBWF_AES3_clip_wrapped</DefinitionObjectName>
-            <DefinitionObjectDescription>AES3/BWF; AES3 (clip wrapped)</DefinitionObjectDescription>
+            <DefinitionObjectName>ContainerDef_MXFGC_Clipwrapped_AES3_audio_data</DefinitionObjectName>
+            <DefinitionObjectDescription/>
           </ContainerDefinition>
-          <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0401.0101.0d010301.020a0100">
-            <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0101.0d010301.020a0100</DefinitionObjectIdentification>
-            <DefinitionObjectName>ContainerALaw_Sound_Element_ALaw_Audio_frame_wrapped</DefinitionObjectName>
-            <DefinitionObjectDescription>A-Law Sound Element; A-Law Audio (frame wrapped)</DefinitionObjectDescription>
+          <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0401.0103.0d010301.020a0100">
+            <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0103.0d010301.020a0100</DefinitionObjectIdentification>
+            <DefinitionObjectName>ContainerDef_MXFGC_Framewrapped_Alaw_Audio</DefinitionObjectName>
+            <DefinitionObjectDescription/>
           </ContainerDefinition>
-          <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0401.0101.0d010301.020a0200">
-            <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0101.0d010301.020a0200</DefinitionObjectIdentification>
-            <DefinitionObjectName>ContainerALaw_Sound_Element_ALaw_Audio_clip_wrapped</DefinitionObjectName>
-            <DefinitionObjectDescription>A-Law Sound Element; A-Law Audio (clip wrapped)</DefinitionObjectDescription>
+          <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0401.0103.0d010301.020a0200">
+            <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0103.0d010301.020a0200</DefinitionObjectIdentification>
+            <DefinitionObjectName>ContainerDef_MXFGC_Clipwrapped_Alaw_Audio</DefinitionObjectName>
+            <DefinitionObjectDescription/>
           </ContainerDefinition>
-          <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0401.0101.0d010301.020a0300">
-            <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0101.0d010301.020a0300</DefinitionObjectIdentification>
-            <DefinitionObjectName>ContainerALaw_Sound_Element_ALaw_Audio_custom_wrapped</DefinitionObjectName>
-            <DefinitionObjectDescription>A-Law Sound Element; A-Law Audio (custom wrapped)</DefinitionObjectDescription>
+          <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0401.0103.0d010301.020a0300">
+            <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0103.0d010301.020a0300</DefinitionObjectIdentification>
+            <DefinitionObjectName>ContainerDef_MXFGC_Customwrapped_Alaw_Audio</DefinitionObjectName>
+            <DefinitionObjectDescription/>
           </ContainerDefinition>
-          <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0401.0104.0d010301.017f0100">
-            <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0104.0d010301.017f0100</DefinitionObjectIdentification>
-            <DefinitionObjectName>ContainerUnknown_Sony001</DefinitionObjectName>
-            <DefinitionObjectDescription>Unknown; Sony001</DefinitionObjectDescription>
+          <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0401.010a.0d010301.02106002">
+            <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.010a.0d010301.02106002</DefinitionObjectIdentification>
+            <DefinitionObjectName>ContainerDef_MXFGC_Clipwrapped_AVCbytestream_VideoStream0_SID</DefinitionObjectName>
+            <DefinitionObjectDescription/>
+          </ContainerDefinition>
+          <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0401.010a.0d010301.02110100">
+            <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.010a.0d010301.02110100</DefinitionObjectIdentification>
+            <DefinitionObjectName>ContainerDef_MXFGC_Framewrapped_VC3</DefinitionObjectName>
+            <DefinitionObjectDescription/>
+          </ContainerDefinition>
+          <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0401.010a.0d010301.02110200">
+            <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.010a.0d010301.02110200</DefinitionObjectIdentification>
+            <DefinitionObjectName>ContainerDef_MXFGC_Clipwrapped_VC3</DefinitionObjectName>
+            <DefinitionObjectDescription/>
+          </ContainerDefinition>
+          <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0401.010a.0d010301.02120100">
+            <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.010a.0d010301.02120100</DefinitionObjectIdentification>
+            <DefinitionObjectName>ContainerDef_MXFGC_Framewrapped_VC1</DefinitionObjectName>
+            <DefinitionObjectDescription/>
+          </ContainerDefinition>
+          <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0401.010a.0d010301.02120200">
+            <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.010a.0d010301.02120200</DefinitionObjectIdentification>
+            <DefinitionObjectName>ContainerDef_MXFGC_Clipwrapped_VC1</DefinitionObjectName>
+            <DefinitionObjectDescription/>
           </ContainerDefinition>
           <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0401.0103.0d010301.027f0100">
             <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0103.0d010301.027f0100</DefinitionObjectIdentification>
-            <DefinitionObjectName>ContainerGeneric_Wrapping_Generic_multiple_wrappings</DefinitionObjectName>
-            <DefinitionObjectDescription>Generic Wrapping; Generic (multiple wrappings)</DefinitionObjectDescription>
+            <DefinitionObjectName>ContainerDef_MXFGC_Generic_Essence_Multiple_Mappings</DefinitionObjectName>
+            <DefinitionObjectDescription/>
           </ContainerDefinition>
           <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0401.0101.0e040301.02060101">
             <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0101.0e040301.02060101</DefinitionObjectIdentification>
-            <DefinitionObjectName>ContainerAvidHD_X_6_1_1080p</DefinitionObjectName>
-            <DefinitionObjectDescription>AvidHD; X_6_1_1080p</DefinitionObjectDescription>
+            <DefinitionObjectName>ContainerDef_MXFGC_Avid_DNxHD_220X_1080P</DefinitionObjectName>
+            <DefinitionObjectDescription/>
           </ContainerDefinition>
           <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0401.0101.0e040301.02060201">
             <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0101.0e040301.02060201</DefinitionObjectIdentification>
-            <DefinitionObjectName>ContainerAvidHD_X_6_1_1080i</DefinitionObjectName>
-            <DefinitionObjectDescription>AvidHD; X_6_1_1080i</DefinitionObjectDescription>
+            <DefinitionObjectName>ContainerDef_MXFGC_Avid_DNxHD_220X_1080I</DefinitionObjectName>
+            <DefinitionObjectDescription/>
           </ContainerDefinition>
           <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0401.0101.0e040301.02060301">
             <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0101.0e040301.02060301</DefinitionObjectIdentification>
-            <DefinitionObjectName>ContainerAvidHD_X_5_1_720p</DefinitionObjectName>
-            <DefinitionObjectDescription>AvidHD; X_5_1_720p</DefinitionObjectDescription>
+            <DefinitionObjectName>ContainerDef_MXFGC_Avid_DNxHD_220X_720P</DefinitionObjectName>
+            <DefinitionObjectDescription/>
           </ContainerDefinition>
           <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0401.0101.0e040301.02060102">
             <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0101.0e040301.02060102</DefinitionObjectIdentification>
-            <DefinitionObjectName>ContainerAvidHD_8_7_1_1080p</DefinitionObjectName>
-            <DefinitionObjectDescription>AvidHD; 8_7_1_1080p</DefinitionObjectDescription>
+            <DefinitionObjectName>ContainerDef_MXFGC_Avid_DNxHD_145_1080P</DefinitionObjectName>
+            <DefinitionObjectDescription/>
           </ContainerDefinition>
           <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0401.0101.0e040301.02060202">
             <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0101.0e040301.02060202</DefinitionObjectIdentification>
-            <DefinitionObjectName>ContainerAvidHD_8_7_1_1080i</DefinitionObjectName>
-            <DefinitionObjectDescription>AvidHD; 8_7_1_1080i</DefinitionObjectDescription>
+            <DefinitionObjectName>ContainerDef_MXFGC_Avid_DNxHD_145_1080I</DefinitionObjectName>
+            <DefinitionObjectDescription/>
           </ContainerDefinition>
           <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0401.0101.0e040301.02060302">
             <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0101.0e040301.02060302</DefinitionObjectIdentification>
-            <DefinitionObjectName>ContainerAvidHD_8_4_1_720p</DefinitionObjectName>
-            <DefinitionObjectDescription>AvidHD; 8_4_1_720p</DefinitionObjectDescription>
+            <DefinitionObjectName>ContainerDef_MXFGC_Avid_DNxHD_220_720P</DefinitionObjectName>
+            <DefinitionObjectDescription/>
           </ContainerDefinition>
           <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0401.0101.0e040301.02060103">
             <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0101.0e040301.02060103</DefinitionObjectIdentification>
-            <DefinitionObjectName>ContainerAvidHD_8_4_1_1080p</DefinitionObjectName>
-            <DefinitionObjectDescription>AvidHD; 8_4_1_1080p</DefinitionObjectDescription>
+            <DefinitionObjectName>ContainerDef_MXFGC_Avid_DNxHD_220_1080P</DefinitionObjectName>
+            <DefinitionObjectDescription/>
           </ContainerDefinition>
           <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0401.0101.0e040301.02060203">
             <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0101.0e040301.02060203</DefinitionObjectIdentification>
-            <DefinitionObjectName>ContainerAvidHD_8_4_1_1080i</DefinitionObjectName>
-            <DefinitionObjectDescription>AvidHD; 8_4_1_1080i</DefinitionObjectDescription>
+            <DefinitionObjectName>ContainerDef_MXFGC_Avid_DNxHD_220_1080I</DefinitionObjectName>
+            <DefinitionObjectDescription/>
           </ContainerDefinition>
           <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0401.0101.0e040301.02060303">
             <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0101.0e040301.02060303</DefinitionObjectIdentification>
-            <DefinitionObjectName>ContainerAvidHD_8_6_1_720p</DefinitionObjectName>
-            <DefinitionObjectDescription>AvidHD; 8_6_1_720p</DefinitionObjectDescription>
+            <DefinitionObjectName>ContainerDef_MXFGC_Avid_DNxHD_145_720P</DefinitionObjectName>
+            <DefinitionObjectDescription/>
+          </ContainerDefinition>
+          <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0401.0101.0e040301.02060104">
+            <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0101.0e040301.02060104</DefinitionObjectIdentification>
+            <DefinitionObjectName>ContainerDef_MXFGC_Avid_DNxHD_36_1080P</DefinitionObjectName>
+            <DefinitionObjectDescription/>
           </ContainerDefinition>
           <ContainerDefinition aaf:uid="ContainerDef_RIFFWAVE">
             <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0106.0d011301.01010100</DefinitionObjectIdentification>
-            <DefinitionObjectName>RIFFWAVE</DefinitionObjectName>
-            <DefinitionObjectDescription>RIFFWAVE Container</DefinitionObjectDescription>
+            <DefinitionObjectName>ContainerDef_RIFFWAVE</DefinitionObjectName>
+            <DefinitionObjectDescription/>
+          </ContainerDefinition>
+          <ContainerDefinition aaf:uid="ContainerDef_JFIF">
+            <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0107.0d011301.01020200</DefinitionObjectIdentification>
+            <DefinitionObjectName>ContainerDef_JFIF</DefinitionObjectName>
+            <DefinitionObjectDescription/>
+          </ContainerDefinition>
+          <ContainerDefinition aaf:uid="ContainerDef_AIFFAIFC">
+            <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0106.0d011301.01040100</DefinitionObjectIdentification>
+            <DefinitionObjectName>ContainerDef_AIFFAIFC</DefinitionObjectName>
+            <DefinitionObjectDescription/>
+          </ContainerDefinition>
+          <ContainerDefinition aaf:uid="ContainerDef_AAFMSS">
+            <DefinitionObjectIdentification>urn:x-ul:060e2b34.0101.01ff.42464141.000d4d4f</DefinitionObjectIdentification>
+            <DefinitionObjectName>ContainerDef_AAFMSS</DefinitionObjectName>
+            <DefinitionObjectDescription/>
+          </ContainerDefinition>
+          <ContainerDefinition aaf:uid="ContainerDef_AAFKLV">
+            <DefinitionObjectIdentification>urn:x-ul:060e2b34.0101.01ff.4b464141.000d4d4f</DefinitionObjectIdentification>
+            <DefinitionObjectName>ContainerDef_AAFKLV</DefinitionObjectName>
+            <DefinitionObjectDescription/>
+          </ContainerDefinition>
+          <ContainerDefinition aaf:uid="ContainerDef_AAFXML">
+            <DefinitionObjectIdentification>urn:x-ul:060e2b34.0101.01ff.58464141.000d4d4f</DefinitionObjectIdentification>
+            <DefinitionObjectName>ContainerDef_AAFXML</DefinitionObjectName>
+            <DefinitionObjectDescription/>
           </ContainerDefinition>
           <ContainerDefinition aaf:uid="ContainerDef_OMF">
             <DefinitionObjectIdentification>urn:uuid:4b1c1a46-03f2-11d4-80fb-006008143e6f</DefinitionObjectIdentification>
-            <DefinitionObjectName>OMF</DefinitionObjectName>
-            <DefinitionObjectDescription>OMF Container</DefinitionObjectDescription>
+            <DefinitionObjectName>ContainerDef_OMF</DefinitionObjectName>
+            <DefinitionObjectDescription/>
           </ContainerDefinition>
           <ContainerDefinition aaf:uid="ContainerDef_AAF">
             <DefinitionObjectIdentification>urn:uuid:4313b571-d8ba-11d2-809b-006008143e6f</DefinitionObjectIdentification>
-            <DefinitionObjectName>AAF</DefinitionObjectName>
-            <DefinitionObjectDescription>AAF Container</DefinitionObjectDescription>
+            <DefinitionObjectName>ContainerDef_AAF</DefinitionObjectName>
+            <DefinitionObjectDescription/>
           </ContainerDefinition>
           <ContainerDefinition aaf:uid="ContainerDef_External">
             <DefinitionObjectIdentification>urn:uuid:4313b572-d8ba-11d2-809b-006008143e6f</DefinitionObjectIdentification>
-            <DefinitionObjectName>External</DefinitionObjectName>
-            <DefinitionObjectDescription>External Container</DefinitionObjectDescription>
+            <DefinitionObjectName>ContainerDef_External</DefinitionObjectName>
+            <DefinitionObjectDescription/>
           </ContainerDefinition>
         </ContainerDefinitions>
       </Dictionary>
     </HeaderDictionary>
     <ByteOrder>LittleEndian</ByteOrder>
-    <LastModified>2007-07-17T15:27:12.00Z</LastModified>
+    <LastModified>2007-07-27T12:14:58.00Z</LastModified>
     <Content>
       <ContentStorage>
         <Mobs>
@@ -2160,16 +2195,16 @@
         </ProductVersion>
         <ProductVersionString>Unknown version</ProductVersionString>
         <ProductID>urn:uuid:97e04c67-dbe6-4d11-bcd7-3a904253a2ef</ProductID>
-        <Date>2007-07-17T15:27:12.00Z</Date>
+        <Date>2007-07-27T12:14:58.00Z</Date>
         <ToolkitVersion>
           <major>1</major>
           <minor>1</minor>
           <tertiary>2</tertiary>
           <patchLevel>0</patchLevel>
-          <type>VersionBeta</type>
+          <type>VersionReleased</type>
         </ToolkitVersion>
         <IdentificationPlatform>AAFSDK (Linux)</IdentificationPlatform>
-        <GenerationAUID>urn:uuid:c6c7044f-69de-11d2-b6bc-fcab70ff7331</GenerationAUID>
+        <GenerationAUID>urn:uuid:c6b9c411-69de-11d2-b6bc-fcab70ff7331</GenerationAUID>
       </Identification>
       <Identification>
         <CompanyName>AAF Association</CompanyName>
@@ -2183,16 +2218,16 @@
         </ProductVersion>
         <ProductVersionString>Unknown version</ProductVersionString>
         <ProductID>urn:uuid:97e04c67-dbe6-4d11-bcd7-3a904253a2ef</ProductID>
-        <Date>2007-07-17T15:10:25.00Z</Date>
+        <Date>2007-07-27T12:14:35.00Z</Date>
         <ToolkitVersion>
           <major>1</major>
           <minor>1</minor>
           <tertiary>2</tertiary>
           <patchLevel>0</patchLevel>
-          <type>VersionBeta</type>
+          <type>VersionReleased</type>
         </ToolkitVersion>
         <IdentificationPlatform>AAFSDK (Linux)</IdentificationPlatform>
-        <GenerationAUID>urn:uuid:c6c576ff-69de-11d2-b6bc-fcab70ff7331</GenerationAUID>
+        <GenerationAUID>urn:uuid:c6b9bb0b-69de-11d2-b6bc-fcab70ff7331</GenerationAUID>
       </Identification>
       <Identification>
         <CompanyName>Avid Technology, Inc.</CompanyName>
