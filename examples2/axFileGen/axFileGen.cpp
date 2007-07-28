@@ -776,7 +776,7 @@ void ProcessCommandLineArgs( int argc, char** argv )
 
   // Verify that each option has the required minumum number of arguments.
   optionIndices.push_back( argc );
-  for(i = 0; i < optionIndices.size()-1; i++ ) {
+  for(i = 0; i < (int)optionIndices.size()-1; i++ ) {
 
     if ( optionIndices[i] + optionCmdFuncs[i]->GetMinArgs() >= optionIndices[i+1] ) {
       AxString anError( L"not enough arguments for command: " +
@@ -789,12 +789,12 @@ void ProcessCommandLineArgs( int argc, char** argv )
     }
   }
 
-  for(i = 0; i < optionCmdFuncs.size(); i++ ) {
+  for(i = 0; i < (int)optionCmdFuncs.size(); i++ ) {
       CmdFunc* cmd = optionCmdFuncs[i];
 	  cmd->Prepare();
   }
 
-  for(i = 0; i < optionCmdFuncs.size(); i++ ) {
+  for(i = 0; i < (int)optionCmdFuncs.size(); i++ ) {
 	  optionCmdFuncs[i]->Execute();
   }
 

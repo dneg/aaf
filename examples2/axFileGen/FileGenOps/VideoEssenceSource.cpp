@@ -40,9 +40,9 @@ inline aafUInt32 pack32( unsigned char a, unsigned char  b, unsigned char c, uns
 
 inline void unpack32( unsigned char& x, unsigned char& y, unsigned char& z, aafUInt32 val32)
 {
-	x = val32>>24;
-	y = val32>>16;
-	z = val32;
+	x = (unsigned char)(val32>>24);
+	y = (unsigned char)(val32>>16);
+	z = (unsigned char)(val32);
 }
 
 void  colorbars_test_pattern( void* fb_addr,
@@ -73,7 +73,7 @@ void  colorbars_test_pattern( void* fb_addr,
   for(i = 0; i < width; i++) {
     int color_index = 1 + (i / (width/7));
       assert( 32 == bpp );
-      *(unsigned char*)(fb + 4*i) = pack32( bars[color_index].r,
+      *(aafUInt32*)(fb + 4*i) = pack32( bars[color_index].r,
 								            bars[color_index].g,
 								            bars[color_index].b );
   }
