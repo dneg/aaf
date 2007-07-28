@@ -49,12 +49,14 @@ zzzzyyyy yyxxxxxx           1110zzzz 10yyyyyy 10xxxxxx
 														m[2]=(w&0x3f)|0x80;
 														m[3]='\0';
 														return 3; }
+#if WCHAR_MAX > 0xffff
 	else if( !(w&~0x1fffff) ) { m[0]=((w>>18)&0x07)|0xf0;
 															m[1]=((w>>12)&0x3f)|0x80;
 															m[2]=((w>>6)&0x3f)|0x80;
 															m[3]=(w&0x3f)|0x80;
 															m[4]='\0';
 															return 4; }
+#endif
 	else return -1;
 }
 
