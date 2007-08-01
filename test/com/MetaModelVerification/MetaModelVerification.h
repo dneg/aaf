@@ -263,7 +263,7 @@ void DebugMessage(const char *Format, ...);
 extern const aafUID_t kClassAUID_TestDef;
 
 //! Class name for TestDef class
-extern const aafString_t kClassName_TestDef;
+extern const aafWChar * const kClassName_TestDef;
 
 
 /*******************************/

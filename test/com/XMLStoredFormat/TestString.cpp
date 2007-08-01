@@ -26,7 +26,7 @@
 #include "XMLStoredFormatTest.h"
 
 
-static bool testRestore(wchar_t* fileName)
+static bool testRestore(const wchar_t* fileName)
 {
     bool passed = true;
     
@@ -72,7 +72,7 @@ static bool testRestore(wchar_t* fileName)
 
             const aafUID_t propId = 
                 {0x00000000,0x0000,0x0000,{0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00}};
-            wchar_t* testString = L"";
+            const wchar_t* testString = L"";
             
             checkResult(pMob->QueryInterface(IID_IAAFObject, (void **)&pObject));
             
@@ -115,7 +115,7 @@ static bool testRestore(wchar_t* fileName)
 
             const aafUID_t propId = 
                 {0x10000000,0x0000,0x0000,{0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00}};
-            wchar_t* testString = L"Something $ <markup>abc</markup>. A newline:\n. A newline with the carriage return escaped\r\n.";
+            const wchar_t* testString = L"Something $ <markup>abc</markup>. A newline:\n. A newline with the carriage return escaped\r\n.";
             
             checkResult(pMob->QueryInterface(IID_IAAFObject, (void **)&pObject));
             

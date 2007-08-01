@@ -179,7 +179,7 @@ enum IAAFClassDefMethodsEnum
 
 // Array of names of methods in IAFFClassDef -- constants in enum IAFFClassDefMethodsEnum are indices
 // into this array.
-char *ppIAAFMethodNames[NUM_IAAFCLASSDEF_METHODS]=
+const char *ppIAAFMethodNames[NUM_IAAFCLASSDEF_METHODS]=
 {
 	"RegisterNewPropertyDef",
 	"RegisterOptionalPropertyDef",
@@ -414,8 +414,10 @@ static void CreateAAFFile(
 	v.tertiary = 0;
 	v.patchLevel = 0;
 	v.type = kAAFVersionUnknown;
-	ProductInfo.companyName = L"AAF Developers Desk";
-	ProductInfo.productName = L"AAFClassDef Test";
+	aafCharacter companyName[] = L"AMW Association";
+	aafCharacter productName[] = L"CAAFClassDefTest";
+	ProductInfo.companyName = companyName;
+	ProductInfo.productName = productName;
 	ProductInfo.productVersion = &v;
 	ProductInfo.productVersionString = NULL;
 	ProductInfo.productID = UnitTestProductID;

@@ -38,8 +38,8 @@ using namespace std;
 
 #include "CAAFBuiltinDefs.h"
 
-static aafWChar* Manufacturer = L"Sony";
-static aafWChar* Model = L"MyModel";
+static const aafWChar* Manufacturer = L"Sony";
+static const aafWChar* Model = L"MyModel";
 static aafFilmType_t FilmFormat = kAAFFt35MM;
 static aafUInt32 FrameRate = 24;
 static aafUInt8 PerfPerFrame = 4;

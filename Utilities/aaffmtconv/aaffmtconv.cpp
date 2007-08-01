@@ -32,7 +32,7 @@
 #include <string.h>
 
 
-static void FatalErrorCode(HRESULT errcode, int line, char *file)
+static void FatalErrorCode(HRESULT errcode, int line, const char *file)
 {
     fprintf(stderr, "\nError '%0x' returned at line %d in %s\n", errcode, line, file);
     exit(1);
@@ -123,8 +123,10 @@ int main(int argc, char *argv[])
     const aafUID_t productUID = 
         {0x97e04c67, 0xdbe6, 0x4d11, {0xbc, 0xd7, 0x3a, 0x90, 0x42, 0x53, 0xa2, 0xef}};
     aafProductIdentification_t  productInfo;
-    productInfo.companyName = L"AAF Association";
-    productInfo.productName = L"AAF Format Converter";
+	aafWChar companyName[] = L"AMW Association";
+	aafWChar productName[] = L"aaffmtconv";
+    productInfo.companyName = companyName;
+    productInfo.productName = productName;
     productInfo.productVersion = &v;
     productInfo.productVersionString = 0;
     productInfo.productID = productUID;

@@ -52,10 +52,10 @@ inline void checkExpression(bool expression, HRESULT r)
     throw r;
 }
 
-static wchar_t *sName1 = L"Test Descriptor Name1";
-static wchar_t *sDescription1 = L"Test Descriptor Description1";
-static wchar_t *sName2 = L"Test Descriptor Name2";
-static wchar_t *sDescription2 = L"Test Descriptor Description2";
+static const wchar_t *sName1 = L"Test Descriptor Name1";
+static const wchar_t *sDescription1 = L"Test Descriptor Description1";
+static const wchar_t *sName2 = L"Test Descriptor Name2";
+static const wchar_t *sDescription2 = L"Test Descriptor Description2";
 
 // {81831636-EDF4-11d3-A353-009027DFCA6A}
 static const aafUID_t InterpDef1 = 

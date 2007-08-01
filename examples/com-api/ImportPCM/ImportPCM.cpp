@@ -54,7 +54,7 @@ using namespace std;
 #define aaf_assert(b, msg) \
 	if (!(b)) {fprintf(stderr, "ASSERT: %s\n\n", msg); exit(1);}
 
-static void LogError(HRESULT errcode, int line, char *file)
+static void LogError(HRESULT errcode, int line, const char *file)
 {
 	printf("Error '%0x' returned at line %d in %s\n", errcode, line, file);
 }

@@ -39,7 +39,7 @@ using namespace std;
 
 #include "CAAFBuiltinDefs.h"
 
-static aafWChar *slotNames[5] = { L"SLOT1", L"SLOT2", L"SLOT3", L"SLOT4", L"SLOT5" };
+static const aafWChar *slotNames[5] = { L"SLOT1", L"SLOT2", L"SLOT3", L"SLOT4", L"SLOT5" };
 
 static char KLVsmiley[] =        /* 16x16 smiley face */
   "      ****      "

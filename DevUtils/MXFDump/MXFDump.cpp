@@ -498,55 +498,55 @@ mxfUInt64 partitionFixedSize =
   sizeof(mxfUInt32) + // Essence container label count
   sizeof(mxfUInt32);  // Essence container label size
 
-void print(char* format, ...);
+void print(const char* format, ...);
 
-void vprint(char* format, va_list ap);
+void vprint(const char* format, va_list ap);
 
-void error(char* format, ...);
+void error(const char* format, ...);
 
-void verror(char* format, va_list ap);
+void verror(const char* format, va_list ap);
 
-void fatalError(char* format, ...);
+void fatalError(const char* format, ...);
 
-void warning(char* format, ...);
+void warning(const char* format, ...);
 
-void vwarning(char* format, va_list ap);
+void vwarning(const char* format, va_list ap);
 
-void message(char* format, ...);
+void message(const char* format, ...);
 
-void vmessage(char* format, va_list ap);
+void vmessage(const char* format, va_list ap);
 
-const char* baseName(char* fullName);
+const char* baseName(const char* fullName);
 
-void setProgramName(char* programName);
+void setProgramName(const char* programName);
 
 char* programName(void);
 
-void mxfError(char* format, ...);
+void mxfError(const char* format, ...);
 
-void vmxfError(char* format, va_list ap);
+void vmxfError(const char* format, va_list ap);
 
-void mxfWarning(char* format, ...);
+void mxfWarning(const char* format, ...);
 
-void vmxfWarning(char* format, va_list ap);
+void vmxfWarning(const char* format, va_list ap);
 
-void mxfWarning(const mxfKey& key, mxfUInt64 keyPosition, char* format, ...);
+void mxfWarning(const mxfKey& key, mxfUInt64 keyPosition, const char* format, ...);
 
 void vmxfWarning(const mxfKey& key,
                  mxfUInt64 keyPosition,
-                 char* format,
+                 const char* format,
                  va_list ap);
 
-void mxfError(const mxfKey& key, mxfUInt64 keyPosition, char* format, ...);
+void mxfError(const mxfKey& key, mxfUInt64 keyPosition, const char* format, ...);
 
 void vmxfError(const mxfKey& key,
                mxfUInt64 keyPosition,
-               char* format,
+               const char* format,
                va_list ap);
 
 void printLocation(const mxfKey& key, mxfUInt64 keyPosition);
 
-void print(char* format, ...)
+void print(const char* format, ...)
 {
   va_list ap;
   va_start(ap, format);
@@ -554,12 +554,12 @@ void print(char* format, ...)
   va_end(ap);
 }
 
-void vprint(char* format, va_list ap)
+void vprint(const char* format, va_list ap)
 {
   vfprintf(stderr, format, ap);
 }
 
-void error(char* format, ...)
+void error(const char* format, ...)
 {
   va_list ap;
   va_start(ap, format);
@@ -567,13 +567,13 @@ void error(char* format, ...)
   va_end(ap);
 }
 
-void verror(char* format, va_list ap)
+void verror(const char* format, va_list ap)
 {
   fprintf(stderr, "%s : Error : ", programName());
   vfprintf(stderr, format, ap);
 }
 
-void fatalError(char* format, ...)
+void fatalError(const char* format, ...)
 {
   va_list ap;
   va_start(ap, format);
@@ -583,7 +583,7 @@ void fatalError(char* format, ...)
   va_end(ap);
 }
 
-void warning(char* format, ...)
+void warning(const char* format, ...)
 {
   va_list ap;
   va_start(ap, format);
@@ -591,13 +591,13 @@ void warning(char* format, ...)
   va_end(ap);
 }
 
-void vwarning(char* format, va_list ap)
+void vwarning(const char* format, va_list ap)
 {
   fprintf(stderr, "%s : Warning : ", programName());
   vfprintf(stderr, format, ap);
 }
 
-void message(char* format, ...)
+void message(const char* format, ...)
 {
   va_list ap;
   va_start(ap, format);
@@ -605,7 +605,7 @@ void message(char* format, ...)
   va_end(ap);
 }
 
-void vmessage(char* format, va_list ap)
+void vmessage(const char* format, va_list ap)
 {
   fprintf(stderr, "%s : ", programName());
   vfprintf(stderr, format, ap);
@@ -613,7 +613,7 @@ void vmessage(char* format, va_list ap)
 
 char progName[FILENAME_MAX];
 
-void setProgramName(char* programName)
+void setProgramName(const char* programName)
 {
   const char* base = baseName(programName);
   const char* suffix = strrchr(base, '.');
@@ -637,7 +637,7 @@ char* programName(void)
 
 mxfUInt32 errors = 0;
 
-void mxfError(char* format, ...)
+void mxfError(const char* format, ...)
 {
   va_list ap;
   va_start(ap, format);
@@ -645,7 +645,7 @@ void mxfError(char* format, ...)
   va_end(ap);
 }
 
-void vmxfError(char* format, va_list ap)
+void vmxfError(const char* format, va_list ap)
 {
   verror(format, ap);
   errors = errors + 1;
@@ -657,7 +657,7 @@ void vmxfError(char* format, va_list ap)
 
 mxfUInt32 warnings = 0;
 
-void mxfWarning(char* format, ...)
+void mxfWarning(const char* format, ...)
 {
   va_list ap;
   va_start(ap, format);
@@ -665,13 +665,13 @@ void mxfWarning(char* format, ...)
   va_end(ap);
 }
 
-void vmxfWarning(char* format, va_list ap)
+void vmxfWarning(const char* format, va_list ap)
 {
   vwarning(format, ap);
   warnings = warnings + 1;
 }
 
-void mxfWarning(const mxfKey& key, mxfUInt64 keyPosition, char* format, ...)
+void mxfWarning(const mxfKey& key, mxfUInt64 keyPosition, const char* format, ...)
 {
   va_list ap;
   va_start(ap, format);
@@ -681,14 +681,14 @@ void mxfWarning(const mxfKey& key, mxfUInt64 keyPosition, char* format, ...)
 
 void vmxfWarning(const mxfKey& key,
                  mxfUInt64 keyPosition,
-                 char* format,
+                 const char* format,
                  va_list ap)
 {
   vmxfWarning(format, ap);
   printLocation(key, keyPosition);
 }
 
-void mxfError(const mxfKey& key, mxfUInt64 keyPosition, char* format, ...)
+void mxfError(const mxfKey& key, mxfUInt64 keyPosition, const char* format, ...)
 {
   va_list ap;
   va_start(ap, format);
@@ -698,7 +698,7 @@ void mxfError(const mxfKey& key, mxfUInt64 keyPosition, char* format, ...)
 
 void vmxfError(const mxfKey& key,
                mxfUInt64 keyPosition,
-               char* format, va_list ap)
+               const char* format, va_list ap)
 {
   vmxfError(format, ap);
   printLocation(key, keyPosition);
@@ -1942,8 +1942,8 @@ void printGeneralizedOperationalPattern(mxfKey& k, FILE* outfile)
 {
   mxfByte itemComplexity = k.octet12;
   if ((itemComplexity >= 1) && (itemComplexity <= 3)) {
-    char* number = 0;
-    char* itemCplxName;
+    const char* number = 0;
+    const char* itemCplxName;
     switch (itemComplexity) {
     case 1:
       number = "1";
@@ -1963,8 +1963,8 @@ void printGeneralizedOperationalPattern(mxfKey& k, FILE* outfile)
     }
 
     mxfByte packageComplexity = k.octet13;
-    char* letter = 0;
-    char* packageCplxName;
+    const char* letter = 0;
+    const char* packageCplxName;
     switch (packageComplexity) {
     case 1:
       letter = "a";
@@ -2054,7 +2054,7 @@ bool isPrivateLabel(mxfKey& k)
 void printPrivateLabelName(mxfKey& k, FILE* outfile)
 {
   mxfByte organization = k.octet9;
-  char* name = "Unknown organization";
+  const char* name = "Unknown organization";
   switch (organization) {
   case 1:
     name = "DOD";
@@ -2572,7 +2572,7 @@ bool findAAFKey(mxfKey& k, size_t& index, char** flag)
 {
   bool found = lookupAAFKey(k, index);
   if (found) {
-    *flag = ""; // A valid SMPTE label
+    *flag = const_cast<char*>(""); // A valid SMPTE label
   } else {
     if (aafKeysAsSets) {
       // This could be an AUID/GUID that cannot be mapped to a SMPTE label.
@@ -2582,7 +2582,7 @@ bool findAAFKey(mxfKey& k, size_t& index, char** flag)
       x.octet5 = 0x53;
       found = lookupAAFKey(x, index);
       if (found) {
-        *flag = " +"; // A valid key but not a SMPTE label
+        *flag = const_cast<char*>(" +"); // A valid key but not a SMPTE label
       } else {
         if (bogusKeysAsSets) {
           // This could be a bogus key (Intel byte order GUID)
@@ -2596,7 +2596,7 @@ bool findAAFKey(mxfKey& k, size_t& index, char** flag)
           aafUIDToMxfKey(b, a);
           found = lookupAAFKey(b, index);
           if (found) {
-            *flag = " -"; // A bogus key
+            *flag = const_cast<char*>(" -"); // A bogus key
           }
         }
       }
@@ -3105,9 +3105,9 @@ void printHelp(void)
   }
 }
 
-const char* baseName(char* fullName)
+const char* baseName(const char* fullName)
 {
-  char* result;
+  const char* result;
 #if defined(MXF_OS_WINDOWS)
   const int delimiter = '\\';
 #elif defined(MXF_OS_MACOS)
@@ -3494,11 +3494,11 @@ void printRunIn(mxfUInt64& headerPosition,
   }
 }
 
-char* itemTypeName(mxfByte itemTypeId);
+const char* itemTypeName(mxfByte itemTypeId);
 
-char* itemTypeName(mxfByte itemTypeId)
+const char* itemTypeName(mxfByte itemTypeId)
 {
-  char* result;
+  const char* result;
   switch (itemTypeId) {
   case 0x05:
     result = "CP Picture";
@@ -3528,11 +3528,11 @@ char* itemTypeName(mxfByte itemTypeId)
   return result;
 }
 
-char* CPPictureElementTypeName(mxfByte type);
+const char* CPPictureElementTypeName(mxfByte type);
 
-char* CPPictureElementTypeName(mxfByte type)
+const char* CPPictureElementTypeName(mxfByte type)
 {
-  char* result = "Unknown Picture";
+  const char* result = "Unknown Picture";
   if (type == 0x01) {
     result = "MPEG-2 (D10)";
   } else if (type == 0x41) {
@@ -3545,11 +3545,11 @@ char* CPPictureElementTypeName(mxfByte type)
   return result;
 }
 
-char* CPSoundElementTypeName(mxfByte type);
+const char* CPSoundElementTypeName(mxfByte type);
 
-char* CPSoundElementTypeName(mxfByte type)
+const char* CPSoundElementTypeName(mxfByte type)
 {
-  char* result = "Unknown Sound";
+  const char* result = "Unknown Sound";
   if (type == 0x10) {
     result = "AES3";
   } else if (type == 0x40) {
@@ -3560,22 +3560,22 @@ char* CPSoundElementTypeName(mxfByte type)
   return result;
 }
 
-char* CPDataElementTypeName(mxfByte type);
+const char* CPDataElementTypeName(mxfByte type);
 
-char* CPDataElementTypeName(mxfByte type)
+const char* CPDataElementTypeName(mxfByte type)
 {
-  char* result = "Unknown Data";
+  const char* result = "Unknown Data";
   if ((type < 0x01) || (type > 0x7f)) {
     result = "Illegal";
   }
   return result;
 }
 
-char* GCPictureElementTypeName(mxfByte type);
+const char* GCPictureElementTypeName(mxfByte type);
 
-char* GCPictureElementTypeName(mxfByte type)
+const char* GCPictureElementTypeName(mxfByte type)
 {
-  char* result = "Unknown Picture";
+  const char* result = "Unknown Picture";
   if (type == 0x01) {
     result = "Compressed HD (D11)";
   } else if (type == 0x02) {
@@ -3590,11 +3590,11 @@ char* GCPictureElementTypeName(mxfByte type)
   return result;
 }
 
-char* avidPictureElementTypeName(mxfByte type);
+const char* avidPictureElementTypeName(mxfByte type);
 
-char* avidPictureElementTypeName(mxfByte type)
+const char* avidPictureElementTypeName(mxfByte type)
 {
-  char* result = "Unknown Picture";
+  const char* result = "Unknown Picture";
   if (type == 0x01) {
     result = "Avid JFIF";
   } else if (type == 0x02) {
@@ -3617,11 +3617,11 @@ char* avidPictureElementTypeName(mxfByte type)
   return result;
 }
 
-char* GCSoundElementTypeName(mxfByte type);
+const char* GCSoundElementTypeName(mxfByte type);
 
-char* GCSoundElementTypeName(mxfByte type)
+const char* GCSoundElementTypeName(mxfByte type)
 {
-  char* result = "Unknown Sound";
+  const char* result = "Unknown Sound";
   if (type == 0x01) {
     result = "Broadcast Wave (Frame Wrapped)";
   } else if (type == 0x02) {
@@ -3636,33 +3636,33 @@ char* GCSoundElementTypeName(mxfByte type)
   return result;
 }
 
-char* avidSoundElementTypeName(mxfByte type);
+const char* avidSoundElementTypeName(mxfByte type);
 
-char* avidSoundElementTypeName(mxfByte type)
+const char* avidSoundElementTypeName(mxfByte type)
 {
-  char* result = "Unknown Sound";
+  const char* result = "Unknown Sound";
   if (type == 0x20) {
     result = "Avid Sound";
   }
   return result;
 }
 
-char* GCDataElementTypeName(mxfByte type);
+const char* GCDataElementTypeName(mxfByte type);
 
-char* GCDataElementTypeName(mxfByte type)
+const char* GCDataElementTypeName(mxfByte type)
 {
-  char* result = "Unknown Data";
+  const char* result = "Unknown Data";
   if ((type < 0x01) || (type > 0x7f)) {
     result = "Illegal";
   }
   return result;
 }
 
-char* GCCompoundElementTypeName(mxfByte type);
+const char* GCCompoundElementTypeName(mxfByte type);
 
-char* GCCompoundElementTypeName(mxfByte type)
+const char* GCCompoundElementTypeName(mxfByte type)
 {
-  char* result = "Unknown Compound";
+  const char* result = "Unknown Compound";
   if (type == 0x01) {
     result = "DV-DIF (Frame Wrapped)";
   } else if (type == 0x02) {
@@ -3673,11 +3673,11 @@ char* GCCompoundElementTypeName(mxfByte type)
   return result;
 }
 
-char* elementTypeName(mxfByte itemTypeId, mxfByte type);
+const char* elementTypeName(mxfByte itemTypeId, mxfByte type);
 
-char* elementTypeName(mxfByte itemTypeId, mxfByte type)
+const char* elementTypeName(mxfByte itemTypeId, mxfByte type)
 {
-  char* result = "Unknown";
+  const char* result = "Unknown";
   switch (itemTypeId) {
   case 0x05: // "CP Picture"
     result = CPPictureElementTypeName(type);
@@ -3706,11 +3706,11 @@ char* elementTypeName(mxfByte itemTypeId, mxfByte type)
   return result;
 }
 
-char* avidElementTypeName(mxfByte itemTypeId, mxfByte type);
+const char* avidElementTypeName(mxfByte itemTypeId, mxfByte type);
 
-char* avidElementTypeName(mxfByte itemTypeId, mxfByte type)
+const char* avidElementTypeName(mxfByte itemTypeId, mxfByte type)
 {
-  char* result = "Unknown";
+  const char* result = "Unknown";
   switch (itemTypeId) {
   case 0x15: // "GC Picture"
     result = avidPictureElementTypeName(type);
@@ -3809,8 +3809,8 @@ void printEssenceKL(mxfKey& k, mxfLength& /* len */)
   mxfByte itemTypeId = k.octet12;
   mxfByte elementTypeId = k.octet14;
 
-  char* itemTypeIdName = itemTypeName(itemTypeId);
-  char* elementTypeIdName;
+  const char* itemTypeIdName = itemTypeName(itemTypeId);
+  const char* elementTypeIdName;
   if (isAvidEssenceElement(k)) {
     elementTypeIdName = avidElementTypeName(itemTypeId, elementTypeId);
   } else {
@@ -4690,13 +4690,13 @@ void checkField(mxfUInt64 expected,
                 mxfUInt64 actual,
                 const mxfKey& key,
                 mxfUInt64 keyAddress,
-                char* label);
+                const char* label);
 
 void checkField(mxfUInt64 expected,
                 mxfUInt64 actual,
                 const mxfKey& key,
                 mxfUInt64 keyAddress,
-                char* label)
+                const char* label)
 {
   if (actual != expected) {
     if (actual == 0) {
@@ -4722,15 +4722,15 @@ void checkSID(Segment* seg,
               mxfUInt32 actual,
               const mxfKey& key,
               mxfUInt64 keyAddress,
-              char* label,
-              char* kind);
+              const char* label,
+              const char* kind);
 
 void checkSID(Segment* seg,
               mxfUInt32 actual,
               const mxfKey& key,
               mxfUInt64 keyAddress,
-              char* label,
-              char* kind)
+              const char* label,
+              const char* kind)
 {
   if (seg != 0) {
     if (actual == 0) {
@@ -5611,13 +5611,13 @@ void validateArray(mxfUInt32 defaultSize,
                    mxfUInt32 expectedSize,
                    mxfUInt32 actualSize,
                    mxfUInt32 elementCount,
-                   char* arrayName);
+                   const char* arrayName);
 
 void validateArray(mxfUInt32 defaultSize,
                    mxfUInt32 expectedSize,
                    mxfUInt32 actualSize,
                    mxfUInt32 elementCount,
-                   char* arrayName)
+                   const char* arrayName)
 {
   if (expectedSize == 0) {
     expectedSize = defaultSize;

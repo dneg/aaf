@@ -30,7 +30,7 @@ bool testExampleFiles()
 {
     printf("\nExample Files:\n\n");
     
-    wchar_t* exampleFiles[2] = 
+    const wchar_t* exampleFiles[2] = 
     {
         L"input/axExample.xml",
         L"input/AVID_Newscutter_sequence.xml"

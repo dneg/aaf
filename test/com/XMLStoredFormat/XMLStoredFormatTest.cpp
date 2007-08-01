@@ -59,7 +59,7 @@ void report(bool passed)
     }
 }
 
-IAAFFile* openFileForReading(aafCharacter* fileName)
+IAAFFile* openFileForReading(const aafCharacter* fileName)
 {
     IAAFFile* file = 0;
     checkResult(AAFFileOpenExistingRead(fileName, 0, &file));
@@ -72,7 +72,10 @@ void replaceCharacter(wchar_t* str, wchar_t c, wchar_t r)
     *tmp = r;
 }
 
-void saveCopy(aafCharacter* inFileName, aafCharacter* outFileName)
+static aafCharacter companyName[] = L"AMW Association";
+static aafCharacter productName[] = L"XMLStoredFormatTest";
+
+void saveCopy(const aafCharacter* inFileName, const aafCharacter* outFileName)
 {
     char tmp[256];
     wcstombs(tmp, outFileName, 256);
@@ -93,8 +96,8 @@ void saveCopy(aafCharacter* inFileName, aafCharacter* outFileName)
     const aafUID_t productUID = 
         {0xd3ec8680, 0x1e79, 0x48f9, {0x99, 0x41, 0x0a, 0x10, 0xa1, 0x68, 0x86, 0xaf}};
     aafProductIdentification_t  productInfo;
-    productInfo.companyName = L"AAF Association";
-    productInfo.productName = L"AAF-X Test";
+    productInfo.companyName = companyName;
+    productInfo.productName = productName;
     productInfo.productVersion = &v;
     productInfo.productVersionString = 0;
     productInfo.productID = productUID;
@@ -110,7 +113,7 @@ void saveCopy(aafCharacter* inFileName, aafCharacter* outFileName)
     release(inFile);
 }
 
-void copyAndTouch(aafCharacter* inFileName, aafCharacter* outFileName)
+void copyAndTouch(const aafCharacter* inFileName, const aafCharacter* outFileName)
 {
     char tmp[256];
     wcstombs(tmp, outFileName, 256);
@@ -151,8 +154,8 @@ void copyAndTouch(aafCharacter* inFileName, aafCharacter* outFileName)
     const aafUID_t productUID = 
         {0xd3ec8680, 0x1e79, 0x48f9, {0x99, 0x41, 0x0a, 0x10, 0xa1, 0x68, 0x86, 0xaf}};
     aafProductIdentification_t  productInfo;
-    productInfo.companyName = L"AAF Association";
-    productInfo.productName = L"AAF-X Test";
+    productInfo.companyName = companyName;
+    productInfo.productName = productName;
     productInfo.productVersion = &v;
     productInfo.productVersionString = 0;
     productInfo.productID = productUID;
@@ -169,7 +172,7 @@ void copyAndTouch(aafCharacter* inFileName, aafCharacter* outFileName)
 //
 // NOTE: this diff breaks very easily !!
 //
-bool diff(aafCharacter* fileNameA, aafCharacter* fileNameB)
+bool diff(const aafCharacter* fileNameA, const aafCharacter* fileNameB)
 {
     char tmp[256];
     wcstombs(tmp, fileNameA, 256);
@@ -271,7 +274,7 @@ int main(int argc, char *argv[])
 
     bool result[15];
     memset(result, false, sizeof(result));
-    char* tests[15] = 
+    const char* tests[15] = 
     {
         "Character ",
         "Enum      ",

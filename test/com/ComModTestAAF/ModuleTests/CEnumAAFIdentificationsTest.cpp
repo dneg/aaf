@@ -73,14 +73,14 @@ inline void PrintTestResult(char *testName, HRESULT localhr, HRESULT *phr)
 #define MOB_NAME_TEST L"MOBTest"
 #define MOB_NAME_SIZE 16
 
-#define COMPANY_NAME		L"AAF Developers Desk"
-#define PRODUCT_NAME		L"AAFIdentification Test"
-#define PRODUCT_NAME1		L"AAFIdentification Test1"
-#define PRODUCT_NAME2		L"AAFIdentification Test2"
-#define PRODUCT_NAME3		L"AAFIdentification Test3"
-#define PRODUCT_NAME4		L"AAFIdentification Test4"
-#define TEST_VERSION		L"TEST VERSION"
-#define TEST_PLATFORM		L"TEST PLATFORM"
+#define COMPANY_NAME		const_cast<aafWChar*>(L"AAF Developers Desk")
+#define PRODUCT_NAME		const_cast<aafWChar*>(L"AAFIdentification Test")
+#define PRODUCT_NAME1		const_cast<aafWChar*>(L"AAFIdentification Test1")
+#define PRODUCT_NAME2		const_cast<aafWChar*>(L"AAFIdentification Test2")
+#define PRODUCT_NAME3		const_cast<aafWChar*>(L"AAFIdentification Test3")
+#define PRODUCT_NAME4		const_cast<aafWChar*>(L"AAFIdentification Test4")
+#define TEST_VERSION		const_cast<aafWChar*>(L"TEST VERSION")
+#define TEST_PLATFORM		const_cast<aafWChar*>(L"TEST PLATFORM")
 
 static aafProductVersion_t			testVersion =  { 1, 0, 0, 0, kAAFVersionUnknown };
 

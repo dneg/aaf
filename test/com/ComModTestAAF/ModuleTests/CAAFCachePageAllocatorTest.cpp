@@ -162,7 +162,7 @@ HRESULT CAAFCachePageAllocator_test(testMode_t /* mode */,
     testRawStorageType_t /* rawStorageType */,
     aafProductIdentification_t productID)
 {
-  aafCharacter * pFileName = L"CAAFCachePageAllocatorTest.aaf";
+  const aafCharacter * pFileName = L"CAAFCachePageAllocatorTest.aaf";
 
   (void)RemoveTestFile(pFileName );
 

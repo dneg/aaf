@@ -56,16 +56,16 @@ const aafUID_t kClassID_ConcreteEvent =
 { 0xe6ab4ee8, 0x33f2, 0x4bea, { 0xa5, 0xac, 0xa2, 0x80, 0xb9, 0x31, 0x46, 0xe9 } };
 
 
-static aafWChar *slotNames[10] = { L"SLOT1", L"SLOT2", L"SLOT3", L"SLOT4",
-								  L"SLOT5", L"SLOT6", L"SLOT7",  L"SLOTSTATIC" , L"SLOTEVENT"  };
+static const aafWChar *slotNames[10] = { L"SLOT1", L"SLOT2", L"SLOT3", L"SLOT4",
+                                         L"SLOT5", L"SLOT6", L"SLOT7",  L"SLOTSTATIC" , L"SLOTEVENT"  };
 
-static aafWChar *mobName = L"MOBTest";
+static const aafWChar *mobName = L"MOBTest";
 
-static aafWChar *pComment[5] = { L"TestComment1", L"TestComment2", 
-								  L"TestComment3", L"TestComment4", L"TestComment5"}; 
+static const aafWChar *pComment[5] = { L"TestComment1", L"TestComment2", 
+                                       L"TestComment3", L"TestComment4", L"TestComment5"}; 
 
-static aafWChar *pCategory[5] = { L"TestCategory1", L"TestCategory2", 
-								  L"TestCategory3", L"TestCategory4", L"TestCategory5"}; 
+static const aafWChar *pCategory[5] = { L"TestCategory1", L"TestCategory2", 
+                                        L"TestCategory3", L"TestCategory4", L"TestCategory5"}; 
 
 static const aafTimeStamp_t creationTimeStamp = { {1941, 12, 7}, {5, 31, 12, 1} };
 static const aafTimeStamp_t modificationTimeStamp = { {1941, 12, 7}, {5, 31, 12, 2} };
@@ -565,11 +565,11 @@ static HRESULT CreateAAFFile(
 		// Check AppendComments()
 		checkExpression(pMob->AppendComment(NULL, pComment[0]) == AAFRESULT_NULL_PARAM,
 																	AAFRESULT_TEST_FAILED);
-		checkExpression(pMob->AppendComment(pCategory[0], NULL) == AAFRESULT_NULL_PARAM,
+		checkExpression(pMob->AppendComment(const_cast<aafWChar*>(pCategory[0]), NULL) == AAFRESULT_NULL_PARAM,
 																	AAFRESULT_TEST_FAILED);
 		for (i = 0; i < 5; ++i)
 		{
-		checkResult(pMob->AppendComment(pCategory[i], pComment[i]));
+		checkResult(pMob->AppendComment(const_cast<aafWChar*>(pCategory[i]), pComment[i]));
 		}
 
 		checkResult(pMob->CountComments(&numComments));

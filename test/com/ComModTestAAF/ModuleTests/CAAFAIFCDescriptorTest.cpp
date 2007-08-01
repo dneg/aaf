@@ -151,7 +151,7 @@ static HRESULT CreateAAFFile(
 		unsigned char	writeBuf[SUMMARY_SIZE], *writePtr;
 		aafUInt32		longVal, lZero = 0, n;
 		aafUInt16		shortVal;
-		static char *compressionName = "Not compressed";
+		static const char *compressionName = "Not compressed";
 		// Form Header
 		// typedef struct tAIFCFORMATCHUNK
 		// {

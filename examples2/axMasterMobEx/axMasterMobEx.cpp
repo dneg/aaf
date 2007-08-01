@@ -472,7 +472,7 @@ private:
 	std::string _source;
 
 	int _multiplier;
-	char* _symbol;
+	const char* _symbol;
 };
 
 CmdLineParser::CmdLineParser( AxCmdLineArgs& args )
@@ -795,7 +795,7 @@ void open_mastermob_and_read_essence( AxHeader& axHeader,
 	aafLength_t maxSize = axEssenceAccess.GetLargestSampleSize( axDataDef );
 
 	unsigned int divisor;
-	char* symbol;
+	const char* symbol;
 	if ( maxSize > 1024*1024 ) {
 		symbol = "M";
 		divisor = 1024/1024;

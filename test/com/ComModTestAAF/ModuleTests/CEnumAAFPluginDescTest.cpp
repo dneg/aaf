@@ -32,7 +32,7 @@ using namespace std;
 
 
 //static wchar_t *manuf1URL = L"www.microsoft.com";
-static wchar_t *manuf2URL = L"www.avid.com";
+static const wchar_t *manuf2URL = L"www.avid.com";
 
 #include <iostream>
 using namespace std;
@@ -63,8 +63,8 @@ static aafVersionType_t sampleMaxAPIVersion = { 40, 41 };//, 42, 43, kAAFVersion
 #define	MobName			L"MasterMOBTest"
 #define	NumMobSlots		3
 
-static wchar_t *manufName[] = { L"A test plugin manufacturer", L"Another test plugin manufacturer" };
-static wchar_t *manufRev = L"Rev0.0.0a0";
+static const wchar_t *manufName[] = { L"A test plugin manufacturer", L"Another test plugin manufacturer" };
+static const wchar_t *manufRev = L"Rev0.0.0a0";
 
 
 // convenient error handlers.

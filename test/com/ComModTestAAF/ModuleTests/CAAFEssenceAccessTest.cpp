@@ -328,7 +328,7 @@ static void unescapeURI(char *str)
     *q++ = 0;
 }
 
-static void wcsconvertURLtoFilepath(wchar_t *url, wchar_t *filepath)
+static void wcsconvertURLtoFilepath(const wchar_t *url, wchar_t *filepath)
 {
 	// Convert to char* for ease of processing.
 	// (wcsncasecmp and similiar are not available everywhere)
@@ -401,7 +401,7 @@ static void wcsconvertFilepathtoURL(wchar_t *filepath, wchar_t *url)
 
 // Assumes the file passed in is a relative filepath to the current
 // directory e.g. "test.aaf".
-static aafWChar *makeURLfromFileInCwd(aafWChar *file, aafWChar *url)
+static aafWChar *makeURLfromFileInCwd(const aafWChar *file, aafWChar *url)
 {
 	char		cwd[FILENAME_MAX];
 	if (getcwd(cwd, sizeof(cwd)) == NULL)
@@ -2276,10 +2276,10 @@ HRESULT CAAFEssenceAccess_test(
 	aafWChar	tmpURL[FILENAME_MAX];
 
 	const size_t	fileNameBufLen = 128;
-	aafWChar	metadataFileName[ fileNameBufLen ] = L"";
-	aafWChar	mediaFileName[ fileNameBufLen ] = L"";
-	aafWChar *	rawDataWave = L"EssenceAccessExtRaw.wav";
-	aafWChar *	rawDataAifc = L"EssenceAccessExtRaw.aif";
+	aafWChar		metadataFileName[ fileNameBufLen ] = L"";
+	aafWChar		mediaFileName[ fileNameBufLen ] = L"";
+	const aafWChar *rawDataWave = L"EssenceAccessExtRaw.wav";
+	const aafWChar *rawDataAifc = L"EssenceAccessExtRaw.aif";
 	testDataFile_t	dataFile;
 
 	cout << endl << endl;

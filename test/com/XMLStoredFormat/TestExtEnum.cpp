@@ -26,7 +26,7 @@
 #include "XMLStoredFormatTest.h"
 
 
-static bool testRestore(wchar_t* fileName)
+static bool testRestore(const wchar_t* fileName)
 {
     bool passed = true;
     
@@ -74,7 +74,7 @@ static bool testRestore(wchar_t* fileName)
                 {0x00000000,0x0000,0x0000,{0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00}};
             aafUID_t testValue = 
                 {0x0D010102,0x0101,0x0500,{0x06,0x0E,0x2B,0x34,0x04,0x01,0x01,0x01}};
-            wchar_t* testName = L"Usage_SubClip";
+            const wchar_t* testName = L"Usage_SubClip";
             
             checkResult(pMob->QueryInterface(IID_IAAFObject, (void **)&pObject));
             
@@ -121,7 +121,7 @@ static bool testRestore(wchar_t* fileName)
                 {0x10000000,0x0000,0x0000,{0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00}};
             aafUID_t testValue = 
                 {0x6f9685a4,0x0a0d,0x447b,{0x89,0xf3,0x1b,0x75,0x0b,0xc5,0xc7,0xde}};
-            wchar_t* testName = L"AAA";
+            const wchar_t* testName = L"AAA";
             
             checkResult(pMob->QueryInterface(IID_IAAFObject, (void **)&pObject));
             
@@ -168,7 +168,7 @@ static bool testRestore(wchar_t* fileName)
                 {0x20000000,0x0000,0x0000,{0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00}};
             aafUID_t testValue = 
                 {0x197e78ac,0xb464,0x4bd1,{0x86,0x11,0xb6,0xf2,0xdf,0x0d,0x03,0xfe}};
-            wchar_t* testName = L"MyUsage";
+            const wchar_t* testName = L"MyUsage";
             
             checkResult(pMob->QueryInterface(IID_IAAFObject, (void **)&pObject));
             
@@ -215,7 +215,7 @@ static bool testRestore(wchar_t* fileName)
                 {0x30000000,0x0000,0x0000,{0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00}};
             aafUID_t testValue = 
                 {0xe54f0efa,0x15c1,0x468f,{0xb7,0x43,0x9b,0xfd,0x12,0x94,0x04,0x49}};
-            wchar_t* testName = L"CCC";
+            const wchar_t* testName = L"CCC";
             
             checkResult(pMob->QueryInterface(IID_IAAFObject, (void **)&pObject));
             

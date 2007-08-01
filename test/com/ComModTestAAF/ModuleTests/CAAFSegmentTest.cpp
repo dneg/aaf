@@ -36,7 +36,7 @@ using namespace std;
 
 #include "CAAFBuiltinDefs.h"
 
-static aafWChar *slotName = L"SLOT1";
+static const aafWChar *slotName = L"SLOT1";
 //static aafInt32 fadeInLen  = 1000;
 //static aafInt32 fadeOutLen = 2000;
 //static aafFadeType_t fadeInType = kAAFFadeLinearAmp;

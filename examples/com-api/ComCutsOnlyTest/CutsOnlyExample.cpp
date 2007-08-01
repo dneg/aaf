@@ -64,8 +64,10 @@ static const aafMobID_t kACompositionMobID =
 { { 0x06, 0x0c, 0x2b, 0x34, 0x02, 0x05, 0x11, 0x01, 0x01, 0x04, 0x10, 0x00}, 0x13, 0x00, 0x00, 0x00,
   { 0x041a3300, 0x9331, 0x0004, { 0x06, 0x0e, 0x2b, 0x34, 0x7f, 0x7f, 0x2a, 0x80}}};
  
- 
-static aafWChar *slotName = L"SLOT1";
+
+static aafCharacter companyName[] = L"AMW Association";
+static aafCharacter productName[] = L"CutsOnlyExample";
+static const aafWChar *slotName = L"SLOT1";
 static aafSourceRef_t sourceRef; 
 
 
@@ -78,7 +80,7 @@ static aafSourceRef_t sourceRef;
 #define assert(b, msg) \
   if (!(b)) {fprintf(stderr, "ASSERT: %s\n\n", msg); exit(1);}
 
-static void     LogError(HRESULT errcode, int line, char *file)
+static void     LogError(HRESULT errcode, int line, const char *file)
 {
   printf("Error '%0x' returned at line %d in %s\n", errcode, line, file);
 }
@@ -142,7 +144,7 @@ static HRESULT convert(char* cName, size_t length, const wchar_t* name)
 
 const aafUID_t NIL_UID = { 0, 0, 0, { 0, 0, 0, 0, 0, 0, 0, 0 } };
 
-static HRESULT CreateAAFFile(aafWChar * pFileName)
+static HRESULT CreateAAFFile(const aafWChar * pFileName)
 {
 	IAAFFile*					pFile = NULL;
 	IAAFHeader*					pHeader = NULL;
@@ -196,8 +198,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	v.patchLevel = 0;
 	v.type = kAAFVersionUnknown;
 	
-	ProductInfo.companyName = L"Company Name";
-	ProductInfo.productName = L"Cuts Only Composition Example";
+	ProductInfo.companyName = companyName;
+	ProductInfo.productName = productName;
 	ProductInfo.productVersion = &v;
 	ProductInfo.productVersionString = NULL;
 	ProductInfo.productID = NIL_UID;
@@ -565,7 +567,7 @@ cleanup:
 	return moduleErrorTmp;
 }
 
-static HRESULT ReadAAFFile(aafWChar * pFileName)
+static HRESULT ReadAAFFile(const aafWChar * pFileName)
 {
 	IAAFFile *					pFile = NULL;
 	IAAFHeader *				pHeader = NULL;
@@ -968,7 +970,7 @@ cleanup:
 
 int main(int argc, char *argv[])
 {
-  aafWChar * pwFileName = L"CutsOnly.aaf";
+  const aafWChar * pwFileName = L"CutsOnly.aaf";
   const char * pFileName = "CutsOnly .aaf";
 
   printf("***Creating file %s\n", pFileName);

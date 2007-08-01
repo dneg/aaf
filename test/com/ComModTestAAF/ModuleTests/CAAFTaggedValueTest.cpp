@@ -42,14 +42,14 @@ using namespace std;
 #include "AAFSmartPointer.h"
 typedef IAAFSmartPointer<IAAFDataDef> IAAFDataDefSP;
 
-static aafWChar *slotNames[5] = { L"SLOT1", L"SLOT2", L"SLOT3", L"SLOT4", L"SLOT5" };
+static const aafWChar *slotNames[5] = { L"SLOT1", L"SLOT2", L"SLOT3", L"SLOT4", L"SLOT5" };
 static const aafUID_t *	slotDDefs[5] = {&kAAFDataDef_Picture, &kAAFDataDef_Sound, &kAAFDataDef_Sound, &kAAFDataDef_Picture, &kAAFDataDef_Picture};
 static aafLength_t	slotsLength[5] = { 297, 44100, 44100, 44100, 44100};
 
 static aafSourceRef_t sourceRef; 
-static aafWChar* TagNames =  L"TAG01";
-static aafWChar* Comments =  L"Comment 1";	
-static aafWChar* AltComment = L"Alternate Comment";
+static const aafWChar* TagNames =  L"TAG01";
+static const aafWChar* Comments =  L"Comment 1";	
+static const aafWChar* AltComment = L"Alternate Comment";
 
 static const 	aafMobID_t	TEST_MobID =
 {{0x06, 0x0c, 0x2b, 0x34, 0x02, 0x05, 0x11, 0x01, 0x01, 0x00, 0x10, 0x00},
@@ -123,9 +123,9 @@ static HRESULT CreateAAFFile(
 		checkResult(pMob->SetName(L"AAFTaggedValuesTest"));
 
 		// append a comment to this mob !!
-		checkResult(pMob->AppendComment(TagNames, Comments));
+		checkResult(pMob->AppendComment(const_cast<aafWChar*>(TagNames), Comments));
 	  
-		checkResult(pMob->AppendComment(TagNames, AltComment));
+		checkResult(pMob->AppendComment(const_cast<aafWChar*>(TagNames), AltComment));
 
 		// Create a master mob to be referenced
 		checkResult(defs.cdMasterMob()->

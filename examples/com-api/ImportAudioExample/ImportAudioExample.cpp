@@ -48,8 +48,8 @@
 // The static variables are here so they can be referenced throughout the whole program.
 
 // Filename variables
-aafWChar *	pwFileName; 
-char *	pFileName; 
+const aafWChar *	pwFileName; 
+const char *	pFileName; 
 
 #define assert(b, msg) \
   if (!(b)) {fprintf(stderr, "ASSERT: %s\n\n", msg); exit(1);}
@@ -58,7 +58,7 @@ char *	pFileName;
 
 #define TEST_PATH	L"SomeFile.dat"
 
-static void     LogError(HRESULT errcode, int line, char *file)
+static void     LogError(HRESULT errcode, int line, const char *file)
 {
   printf("Error '%0x' returned at line %d in %s\n", errcode, line, file);
 }
@@ -154,7 +154,7 @@ void doSomethingWithAudioFile()
 
 //const aafUID_t NIL_UID = { 0, 0, 0, { 0, 0, 0, 0, 0, 0, 0, 0 } };
 
-static HRESULT ReadAAFFile(aafWChar * pFileName, testType_t testType)
+static HRESULT ReadAAFFile(const aafWChar * pFileName, testType_t testType)
 {
 	IAAFFile *					pFile = NULL;
 	IAAFHeader *				pHeader = NULL;

@@ -89,7 +89,7 @@ bool deleteFiles = false;
 
 #define aaf_simple_assert(x) aaf_assert( (x), #x );
 
-static void LogError(HRESULT errcode, int line, char *file)
+static void LogError(HRESULT errcode, int line, const char *file)
 {
 	printf("Error '%0x' returned at line %d in %s\n", errcode, line, file);
 }
@@ -224,15 +224,17 @@ const aafUID_t NIL_UID = { 0, 0, 0, { 0, 0, 0, 0, 0, 0, 0, 0 } };
 static const   aafMobID_t  TEST_MobID = {{0x06, 0x0c, 0x2b, 0x34, 0x02, 0x05, 0x11, 0x01, 0x01, 0x00, 0x10, 0x00}, 0x13, 0x00, 0x00, 0x00, {0xfd3cc302, 0x03fe, 0x11d4, {0x8e, 0x3d, 0x00, 0x90, 0x27, 0xdf, 0xca, 0x7c}}};
 static const   aafMobID_t  TEST_SourceMobID = {{0x06, 0x0c, 0x2b, 0x34, 0x02, 0x05, 0x11, 0x01, 0x01, 0x00, 0x10, 0x00}, 0x13, 0x00, 0x00, 0x00, {0xfd3cc402, 0x03fe, 0x11d4, {0x8e, 0x3d, 0x00, 0x90, 0x27, 0xdf, 0xca, 0x7c}}};
 
+static aafCharacter companyName[] = L"AMW Association";
+static aafCharacter productName[] = L"ScaleTest";
 static aafProductVersion_t TestVersion = { 1, 1, 0, 0, kAAFVersionUnknown };
 static aafProductIdentification_t TestProductID;
 
-static HRESULT CreateAAFFileEssenceData(aafWChar *pFileName, bool useRawStorage,
+static HRESULT CreateAAFFileEssenceData(const aafWChar *pFileName, bool useRawStorage,
 									aafLength_t frame_limit,
 									aafLength_t *p_totalbytes)
 {
-	TestProductID.companyName = L"AAF Association";
-	TestProductID.productName = L"ScaleTest";
+	TestProductID.companyName = companyName;
+	TestProductID.productName = productName;
 	TestProductID.productVersionString = NULL;
 	TestProductID.productID = UnitTestProductID;
 	TestProductID.platform = NULL;
@@ -249,7 +251,6 @@ static HRESULT CreateAAFFileEssenceData(aafWChar *pFileName, bool useRawStorage,
 
 		// Open new file
 		IAAFFile		*pFile = NULL;
-		TestProductID.productVersionString = L"ScaleTest EssenceData";
 
 		// AAFFileOpenNewModifyEx() uses RawStorage internally while
 		// AAFFileOpenNewModify() does not.  Since libgsf doesn't yet
@@ -374,7 +375,7 @@ static HRESULT CreateAAFFileEssenceData(aafWChar *pFileName, bool useRawStorage,
 	return hr;
 }
 
-static HRESULT ReadAAFFileEssenceData(aafWChar *pFileName, aafLength_t frame_limit, aafLength_t bytes)
+static HRESULT ReadAAFFileEssenceData(const aafWChar *pFileName, aafLength_t frame_limit, aafLength_t bytes)
 {
 	HRESULT			hr = S_OK;
 
@@ -460,7 +461,7 @@ static void deleteTestFile(const aafWChar *pFileName)
 	remove(cFileName);
 }
 
-static HRESULT ReadAAFFileCodec(aafWChar *pFileName, aafLength_t frame_limit, aafLength_t bytes)
+static HRESULT ReadAAFFileCodec(const aafWChar *pFileName, aafLength_t frame_limit, aafLength_t bytes)
 {
 	HRESULT			hr = S_OK;
 
@@ -617,7 +618,7 @@ static HRESULT ReadAAFFileCodec(aafWChar *pFileName, aafLength_t frame_limit, aa
 }
 
 #ifndef AAF_TOOLKIT_V1_0
-static HRESULT CreateAAFFileCodec(aafWChar * pFileName, bool useRawStorage, bool comp_enable,
+static HRESULT CreateAAFFileCodec(const aafWChar * pFileName, bool useRawStorage, bool comp_enable,
 								aafUID_t codec, aafUID_t container,
 								aafLength_t size_limit, aafLength_t *p_totalbytes)
 {
@@ -643,10 +644,10 @@ static HRESULT CreateAAFFileCodec(aafWChar * pFileName, bool useRawStorage, bool
 	remove(cFileName);
 
 	aafProductVersion_t ver = {1, 0, 0, 0, kAAFVersionBeta};
-	TestProductID.companyName = L"none";
-	TestProductID.productName = L"AAF SDK";
+	TestProductID.companyName = companyName;
+	TestProductID.productName = productName;
 	TestProductID.productVersion = &ver;
-	TestProductID.productVersionString = L"1.0.0.0 Beta";
+	TestProductID.productVersionString = NULL;
 	TestProductID.productID = NIL_UID;
 	TestProductID.platform = NULL;		// Set by SDK when saving
 
@@ -977,7 +978,7 @@ extern int main(int argc, char *argv[])
 
 	if (testEssenceData)
 	{
-		aafWChar *		pwFileName	= L"TestEssData.aaf";
+		const aafWChar *		pwFileName	= L"TestEssData.aaf";
 		aafLength_t bytes = 0;
 
 		checkFatal(CreateAAFFileEssenceData(pwFileName, false, frame_limit, &bytes));
@@ -1004,7 +1005,7 @@ extern int main(int argc, char *argv[])
 		//		external ContainerAAF, ContainerFile
 		//		(note internal/external ContainerRIFFWAVE must be 2GB limited)
 
-		aafWChar			*CDCIName = L"TestCDCI.aaf",
+		const aafWChar		*CDCIName = L"TestCDCI.aaf",
 							*PCMName = L"TestPCM.aaf";
 		aafLength_t bytes = 0;
 

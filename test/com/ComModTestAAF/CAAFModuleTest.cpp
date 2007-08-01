@@ -67,7 +67,7 @@ typedef HRESULT (*AAFModuleTestProc)(testMode_t mode,
 
 struct AAFObjectTestInfo
 {
-  wchar_t* pClassName;
+  const wchar_t* pClassName;
   AAFModuleTestProc pfnTestProc;
 
   // Encapsulate the test proc so that we can trap exceptions

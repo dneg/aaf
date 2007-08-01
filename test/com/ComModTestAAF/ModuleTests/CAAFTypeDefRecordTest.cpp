@@ -174,9 +174,11 @@ static HRESULT WriteRecord (
 	  IAAFTypeDef* tdr8MemberTypes[] =
 	  {defs.tdInt8(),
 	   defs.tdUInt8()};
+	  aafWChar numerator[] = L"Numerator";
+	  aafWChar denominator[] = L"Denominator";
 	  aafString_t tdr8MemberNames[] =
-	  {L"Numerator",
-	   L"Denominator"};
+	  {numerator,
+	   denominator};
 	  IAAFTypeDefRecordSP ptdr8;
 	  checkResult (pDict->
 				   CreateMetaInstance (kAAFClassID_TypeDefRecord,
@@ -220,9 +222,11 @@ static HRESULT WriteRecord (
 	  IAAFTypeDef* tdr8pMemberTypes[] =
 	  {pTempTd,
 	   pTempTd};
+	  aafWChar xpos[] = L"X Position";
+	  aafWChar ypos[] = L"Y Position";
 	  aafString_t tdr8pMemberNames[] =
-	  {L"X Position",
-	   L"Y Position"};
+	  {xpos,
+	   ypos};
 	  checkResult (ptdr8p->Initialize (sTypeId_Rational8_pair,
 									   tdr8pMemberTypes,
 									   tdr8pMemberNames,

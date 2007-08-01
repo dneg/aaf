@@ -97,6 +97,8 @@ static const   aafMobID_t  TEST_MobID =
 {{0x06, 0x0c, 0x2b, 0x34, 0x02, 0x05, 0x11, 0x01, 0x01, 0x00, 0x10, 0x00},
 0x13, 0x00, 0x00, 0x00,
 {0xfd3cc302, 0x03fe, 0x11d4, {0x8e, 0x3d, 0x00, 0x90, 0x27, 0xdf, 0xca, 0x7c}}};
+static aafCharacter companyName[] = L"AMW Association";
+static aafCharacter productName[] = L"UTF8FileNameTest";
 
 
 static HRESULT CreateAAFFile(aafWChar * pFileName,
@@ -112,8 +114,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName,
   v.tertiary = 0;
   v.patchLevel = 0;
   v.type = kAAFVersionUnknown;
-  ProductInfo.companyName = L"AAF Developers Desk";
-  ProductInfo.productName = L"ComFileKindTest";
+  ProductInfo.companyName = companyName;
+  ProductInfo.productName = productName;
   ProductInfo.productVersion = &v;
   ProductInfo.productVersionString = NULL;
   ProductInfo.productID = UnitTestProductID;
@@ -169,7 +171,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName,
 
 typedef IAAFSmartPointer<IAAFEssenceFormat> IAAFEssenceFormatSP;
 
-static HRESULT WriteAAFFile(IAAFFile* pFile, aafWChar *pExternalFilename)
+static HRESULT WriteAAFFile(IAAFFile* pFile, const aafWChar *pExternalFilename)
 {
   IAAFHeader* pHeader = NULL;
   IAAFDictionary* pDictionary = NULL;
@@ -364,14 +366,14 @@ static HRESULT ReadAAFFile(aafWChar * pFileName,
 }
 
 struct _fileinfo_t {
-  wchar_t* name;
-	bool createex;
-	bool createraw;
+  const wchar_t* name;
+  bool createex;
+  bool createraw;
   const aafUID_t* kind;
-  char* type;
+  const char* type;
   bool read;
   const aafUID_t* rkind;
-  char* rtype;
+  const char* rtype;
 } fileinfo[] = {
   {
     L"CFKT-S512.aaf",

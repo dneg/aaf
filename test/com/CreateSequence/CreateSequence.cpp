@@ -59,7 +59,7 @@ STDAPI MemoryFileSaveToDisk(
 const int MAX = 80;
 static char niceFileName[FILENAME_MAX];
 static void usage(void);
-static aafWChar* slotName = L"SLOT1";
+static const aafWChar* slotName = L"SLOT1";
 //static aafInt32 fadeInLen  = 1000;
 //static aafInt32 fadeOutLen = 2000;
 //static aafFadeType_t fadeInType = kAAFFadeLinearAmp;
@@ -76,7 +76,7 @@ static aafSourceRef_t sourceRef;
 #define assert(b, msg) \
   if (!(b)) {fprintf(stderr, "ASSERT: %s\n", msg); exit(1);}
 
-static void     LogError(HRESULT errcode, int line, char *file)
+static void     LogError(HRESULT errcode, int line, const char *file)
 {
   printf("Error '%0x' returned at line %d in %s\n", errcode, line, file);
 }
@@ -115,6 +115,8 @@ static HRESULT convert(char* cName, size_t length, const wchar_t* name)
 }
 
 const aafUID_t NIL_UID = { 0, 0, 0, { 0, 0, 0, 0, 0, 0, 0, 0 } };
+static aafCharacter companyName[] = L"AMW Association";
+static aafCharacter productName[] = L"CreateSequence";
 
 static HRESULT CreateAAFFile(aafWChar * pFileName, long int N)
 {
@@ -173,8 +175,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, long int N)
   v.tertiary = 0;
   v.patchLevel = 0;
   v.type = kAAFVersionUnknown;
-  ProductInfo.companyName = L"Company Name";
-  ProductInfo.productName = L"Scalability Test 1:";
+  ProductInfo.companyName = companyName;
+  ProductInfo.productName = productName;
   ProductInfo.productVersion = &v;
   ProductInfo.productVersionString = NULL;
   ProductInfo.productID = NIL_UID;

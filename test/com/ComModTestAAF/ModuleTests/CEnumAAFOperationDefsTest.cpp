@@ -90,8 +90,8 @@ static const aafUID_t TEST_CATEGORY =
 #define TEST_BYPASS			1
 #define TEST_PARAM_NAME		L"A TestEffect parameter"
 #define TEST_PARAM_DESC		L"A longer description of the TestEffect parameter"
-static wchar_t *sName[2] = { L"Test Descriptor Name1", L"Test Descriptor Name2" };
-static wchar_t *sDescription[2] = { L"Test Descriptor Description1", L"Test Descriptor Description2" };
+static const wchar_t *sName[2] = { L"Test Descriptor Name1", L"Test Descriptor Name2" };
+static const wchar_t *sDescription[2] = { L"Test Descriptor Description1", L"Test Descriptor Description2" };
 
 #define TEST_EFFECT_NAME	L"A TestEffect"
 #define TEST_EFFECT_DESC	L"A longer description of the TestEffect"

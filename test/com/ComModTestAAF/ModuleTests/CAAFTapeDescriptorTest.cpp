@@ -37,8 +37,8 @@ using namespace std;
 
 #include "CAAFBuiltinDefs.h"
 
-static aafWChar* Manufacturer = L"Sony";
-static aafWChar* Model = L"MyModel";
+static const aafWChar* Manufacturer = L"Sony";
+static const aafWChar* Model = L"MyModel";
 static aafTapeCaseType_t FormFactor = kAAFVHSVideoTape;
 static aafVideoSignalType_t VideoSignalType = kAAFPALSignal;
 static aafTapeFormatType_t TapeFormat = kAAFVHSFormat;

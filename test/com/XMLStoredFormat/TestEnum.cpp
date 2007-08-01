@@ -26,7 +26,7 @@
 #include "XMLStoredFormatTest.h"
 
 
-static bool testRestore(wchar_t* fileName)
+static bool testRestore(const wchar_t* fileName)
 {
     bool passed = true;
     
@@ -72,7 +72,7 @@ static bool testRestore(wchar_t* fileName)
             const aafUID_t propId = 
                 {0x00000000,0x0000,0x0000,{0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00}};
             aafUInt8 testValue = 5;
-            wchar_t* testName = L"VersionPrivateBuild";
+            const wchar_t* testName = L"VersionPrivateBuild";
             
             checkResult(pMob->QueryInterface(IID_IAAFObject, (void **)&pObject));
             
@@ -117,7 +117,7 @@ static bool testRestore(wchar_t* fileName)
             const aafUID_t propId = 
                 {0x10000000,0x0000,0x0000,{0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00}};
             aafUInt8 testValue = 1;
-            wchar_t* testName = L"AAA";
+            const wchar_t* testName = L"AAA";
             
             checkResult(pMob->QueryInterface(IID_IAAFObject, (void **)&pObject));
             
@@ -162,7 +162,7 @@ static bool testRestore(wchar_t* fileName)
             const aafUID_t propId = 
                 {0x20000000,0x0000,0x0000,{0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00}};
             aafUInt8 testValue = 2;
-            wchar_t* testName = L"BBB";
+            const wchar_t* testName = L"BBB";
             
             checkResult(pMob->QueryInterface(IID_IAAFObject, (void **)&pObject));
             
@@ -207,7 +207,7 @@ static bool testRestore(wchar_t* fileName)
             const aafUID_t propId = 
                 {0x30000000,0x0000,0x0000,{0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00}};
             aafUInt8 testValue = 1;
-            wchar_t* testName = L"AAA";
+            const wchar_t* testName = L"AAA";
             
             checkResult(pMob->QueryInterface(IID_IAAFObject, (void **)&pObject));
             
@@ -252,7 +252,7 @@ static bool testRestore(wchar_t* fileName)
             const aafUID_t propId = 
                 {0x40000000,0x0000,0x0000,{0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00}};
             aafUInt8 testValue = 2;
-            wchar_t* testName = L"BBB";
+            const wchar_t* testName = L"BBB";
             
             checkResult(pMob->QueryInterface(IID_IAAFObject, (void **)&pObject));
             

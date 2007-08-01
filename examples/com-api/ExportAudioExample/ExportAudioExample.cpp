@@ -55,7 +55,7 @@
 
 #define TEST_PATH	L"SomeFile.dat"
 
-static void     LogError(HRESULT errcode, int line, char *file)
+static void     LogError(HRESULT errcode, int line, const char *file)
 {
   printf("Error '%0x' returned at line %d in %s\n", errcode, line, file);
 }
@@ -121,8 +121,10 @@ typedef struct
 testDataFile_t;
 
 const aafUID_t NIL_UID = { 0, 0, 0, { 0, 0, 0, 0, 0, 0, 0, 0 } };
+static aafCharacter companyName[] = L"AMW Association";
+static aafCharacter productName[] = L"ExportAudioExample";
 
-static HRESULT CreateAAFFile(aafWChar * pFileName, testDataFile_t *dataFile, testType_t testType)
+static HRESULT CreateAAFFile(const aafWChar * pFileName, testDataFile_t *dataFile, testType_t testType)
 {
 	IAAFFile*					pFile = NULL;
 	IAAFHeader*					pHeader = NULL;
@@ -167,8 +169,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testDataFile_t *dataFile, tes
 	v.tertiary = 0;
 	v.patchLevel = 0;
 	v.type = kAAFVersionUnknown;
-	ProductInfo.companyName = L"AAF-East: Avid Technology";
-	ProductInfo.productName = L"Export Audio Example";
+	ProductInfo.companyName = companyName;
+	ProductInfo.productName = productName;
 	ProductInfo.productVersion = &v;
 	ProductInfo.productVersionString = NULL;
 	ProductInfo.productID = NIL_UID;
@@ -579,7 +581,7 @@ int main()
 {
 	CAAFInitialize aafInit;
 	
-	aafWChar *		pwFileName	= L"ExportAudioExample.aaf";
+	const aafWChar *		pwFileName	= L"ExportAudioExample.aaf";
 	const char *	pFileName	= "ExportAudioExample.aaf";
 	
   // Make sure all of our required plugins have been registered.

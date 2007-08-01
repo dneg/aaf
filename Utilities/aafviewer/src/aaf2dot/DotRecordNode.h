@@ -83,8 +83,8 @@ class DotRecordNode : public DotElement, public DotThingWithID
 typedef std::vector< DotRecordNode* > DotRecordNodeVector;
 
 
-extern char* nullMobID;
-extern char* nullUID;
+extern const char* nullMobID;
+extern const char* nullUID;
 
 
 #endif	//__DOTRECORDNODE_H__

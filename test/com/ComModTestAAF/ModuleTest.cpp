@@ -368,10 +368,10 @@ aafProductIdentification_t MakeProductID()
     product_version.type = kAAFVersionUnknown;
 
 
-    static aafCharacter*    company_name = L"AAF Developers Desk";
-    static aafCharacter*    product_name = L"ComModTestAAF";
-    static aafCharacter*    product_version_string = L"1.0.0.0";
-    static aafCharacter*    platform = TEST_PLATFORM_NAME;
+    static aafCharacter    company_name[] = L"AAF Developers Desk";
+    static aafCharacter    product_name[] = L"ComModTestAAF";
+    static aafCharacter    product_version_string[] = L"1.0.0.0";
+    static aafCharacter    platform[] = TEST_PLATFORM_NAME;
     aafProductIdentification_t  product_identification;
  
     product_identification.companyName = company_name;

@@ -57,11 +57,11 @@ if (p != 0) \
 
 
 void report(bool passed);
-IAAFFile* openFileForReading(aafCharacter* fileName);
+IAAFFile* openFileForReading(const aafCharacter* fileName);
 void replaceCharacter(wchar_t* str, wchar_t c, wchar_t r);
-void saveCopy(aafCharacter* inFileName, aafCharacter* outFileName);
-void copyAndTouch(aafCharacter* inFileName, aafCharacter* outFileName);
-bool diff(aafCharacter* fileNameA, aafCharacter* fileNameB);
+void saveCopy(const aafCharacter* inFileName, const aafCharacter* outFileName);
+void copyAndTouch(const aafCharacter* inFileName, const aafCharacter* outFileName);
+bool diff(const aafCharacter* fileNameA, const aafCharacter* fileNameB);
 
 
 // the tests

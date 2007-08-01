@@ -26,9 +26,9 @@
 #include "AAF.h"
 #include "AAFPluginDefs.h"
 
-static wchar_t *manuf1URL = L"www.microsoft.com";
-static wchar_t *manuf2URL = L"www.avid.com";
-static wchar_t *manuf3URL = L"www.softimage.com";
+static const wchar_t *manuf1URL = L"www.microsoft.com";
+static const wchar_t *manuf2URL = L"www.avid.com";
+static const wchar_t *manuf3URL = L"www.softimage.com";
 
 #include <iostream>
 using namespace std;
@@ -62,8 +62,8 @@ aafVersionType_t sampleMaxAPIVersion = { 40, 41 };//, 42, 43, kAAFVersionBeta };
 #define	MobName			L"MasterMOBTest"
 #define	NumMobSlots		3
 
-static wchar_t *manufName = L"Jeff's Plugin-O-Rama";
-static wchar_t *manufRev = L"Rev0.0.0a0";
+static const wchar_t *manufName = L"Jeff's Plugin-O-Rama";
+static const wchar_t *manufRev = L"Rev0.0.0a0";
 
 static aafBool	EqualVersion(aafVersionType_t *vers1, aafVersionType_t *vers2)
 {

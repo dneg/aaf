@@ -47,7 +47,7 @@ void WriteEssence::Execute( const std::vector<AxString>& argv )
 	AxString essenceSrcName    = argv[1];
 	AxString essenceAccessName = argv[2];
 
-	char *busy[4] = { "-", "\\", "|", "/" };
+	const char *busy[4] = { "-", "\\", "|", "/" };
 
 	IAAFEssenceAccessSP spAccess;
 	GetInstance( essenceAccessName ).GetCOM( spAccess );

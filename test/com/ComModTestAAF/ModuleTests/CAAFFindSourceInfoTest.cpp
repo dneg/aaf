@@ -45,11 +45,11 @@ typedef IAAFSmartPointer<IAAFDataDef> IAAFDataDefSP;
 #define	MobName			L"MasterMOBTest"
 #define	NumMobSlots		3
 
-static aafWChar *		slotNames[NumMobSlots] = { L"VIDEO SLOT", L"AUDIO SLOT1", L"AUDIO SLOT2"};
+static const aafWChar *	slotNames[NumMobSlots] = { L"VIDEO SLOT", L"AUDIO SLOT1", L"AUDIO SLOT2"};
 static const aafUID_t *	slotDDefs[NumMobSlots] = {&kAAFDataDef_Picture, &kAAFDataDef_Sound, &kAAFDataDef_Sound};
 static aafRational_t	slotRates[NumMobSlots] = { {2997,100}, {44100, 1}, {48000, 1}};
-static aafWChar* Manufacturer = L"Sony";
-static aafWChar* Model = L"MyModel";
+static const aafWChar* Manufacturer = L"Sony";
+static const aafWChar* Model = L"MyModel";
 static aafTapeCaseType_t FormFactor = kAAFVHSVideoTape;
 static aafVideoSignalType_t VideoSignalType = kAAFPALSignal;
 static aafTapeFormatType_t TapeFormat = kAAFVHSFormat;

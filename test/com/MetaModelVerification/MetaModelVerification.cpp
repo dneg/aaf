@@ -44,9 +44,12 @@
 
 
 //! Product identification structure
+static aafCharacter companyName[] = L"freeMXF.org";
+static aafCharacter productName[] = L"MetaModelVerification";
+static aafCharacter productVersionString[] = L"2.71828182818";
 aafProductIdentification_t TestIdent =
 { 
-	L"freeMXF.org", L"TypeDef Tests", L"2.71828182818",
+	companyName, productName, productVersionString,
 	{  0x87ba485e, 0x51db, 0x8ce5,	{0x8b, 0xd9, 0x26, 0xa3, 0xfc, 0xfe, 0x3d, 0xe1}},	0, 0
 };
 
@@ -58,25 +61,25 @@ aafProductIdentification_t TestIdent =
 const aafUID_t TestReferencePropID =  { 0x87ba465e, 0x25db, 0x8ce5, {0x8b, 0xd9, 0x26, 0xa3, 0xfc, 0xfe, 0x4d, 0xdf}};
 
 //! Name of the header property which is a strong reference to the test description object
-const aafString_t TestReferencePropName = L"Strong Reference to TypeDef Test Description Object";
+const aafWChar* TestReferencePropName = L"Strong Reference to TypeDef Test Description Object";
 
 //! Class ID for the test description class
 const aafUID_t TestDescriptionClassID = { 0x87ba465e, 0x25db, 0x8ce5, {0x8b, 0xd9, 0x26, 0xa3, 0xfc, 0xfe, 0x4d, 0xe0}};
 
 //! Name of the test description class
-const aafString_t TestDescriptionClassName = L"TypeDef Test Property Description Class";
+const aafWChar* TestDescriptionClassName = L"TypeDef Test Property Description Class";
 
 //! Property ID of test version number
 const aafUID_t TestVersionPropID =  { 0x87ba465e, 0x25db, 0x8ce5, {0x8b, 0xd9, 0x26, 0xa3, 0xfc, 0xfe, 0x4d, 0xe1}};
 
 //! Name of the test version number
-const aafString_t TestVersionPropName = L"TypeDef Test Description Class Version Number";
+const aafWChar* TestVersionPropName = L"TypeDef Test Description Class Version Number";
 
 //! Property ID of array of test property IDs
 const aafUID_t TestPropsPropID =  { 0x87ba465e, 0x25db, 0x8ce5, {0x8b, 0xd9, 0x26, 0xa3, 0xfc, 0xfe, 0x4d, 0xe2}};
 
 //! Name of the array of test property IDs
-const aafString_t TestPropsPropName = L"List of IDs of properties added";
+const aafWChar* TestPropsPropName = L"List of IDs of properties added";
 
 //! Property ID of test descriptions list string, each entry separated by TestStringSeparator
 /*! /note The string starts with a TestStringSeparator character to show the reader what separation character is in use
@@ -84,7 +87,7 @@ const aafString_t TestPropsPropName = L"List of IDs of properties added";
 const aafUID_t TestNamesPropID =  { 0x87ba465e, 0x25db, 0x8ce5, {0x8b, 0xd9, 0x26, 0xa3, 0xfc, 0xfe, 0x4d, 0xe3}};
 
 //! Name of the test descriptions list string
-const aafString_t TestNamesPropName = L"List of names of properties added";
+const aafWChar* TestNamesPropName = L"List of names of properties added";
 
 
 //! Our test version number
@@ -829,7 +832,10 @@ HRESULT RegisterType(IAAFDictionary *Dict, const aafUID_t &kNewTypeID, const aaf
 		else if(kTypeToDefine == AUID_AAFTypeDefEnum)
 		{
 			aafInt64 Vals[3] = { 1, 2, 42 };
-			aafString_t Names[3] = { L"One", L"Two", L"Valid" };
+			aafWChar one[] = L"One";
+			aafWChar two[] = L"Two";
+			aafWChar valid[] = L"Valid";
+			aafString_t Names[3] = { one, two, valid };
 			hr = reinterpret_cast<IAAFTypeDefEnum*>(Interface)->Initialize(kNewTypeID, tdSubType, Vals, Names, 3, L"Test for TypeDefEnum");
 		}
 		else if(kTypeToDefine == AUID_AAFTypeDefFixedArray)
@@ -840,7 +846,8 @@ HRESULT RegisterType(IAAFDictionary *Dict, const aafUID_t &kNewTypeID, const aaf
 		{
 			IAAFTypeDef *Types[1];
 			Types[0] = tdSubType;
-			aafString_t Names[1] = { L"Test" };
+			aafWChar test[] = L"Test";
+			aafString_t Names[1] = { test };
 
 			hr = reinterpret_cast<IAAFTypeDefRecord*>(Interface)->Initialize(kNewTypeID, Types, Names, 1, L"Test for TypeDefRecord");
 		}
@@ -969,7 +976,10 @@ HRESULT RegisterType(IAAFDictionary *Dict, const aafUID_t &kNewTypeID, const aaf
 			if(FAILED(hr)) throw HRError(hr, "Cannot locate kAAFTypeID_Int64 " + AUIDtoString(kAAFTypeID_Int64));
 			
 			aafInt64 Vals[3] = { 1, 2, 42 };
-			aafString_t Names[3] = { L"One", L"Two", L"Valid" };
+			aafWChar one[] = L"One";
+			aafWChar two[] = L"Two";
+			aafWChar valid[] = L"Valid";
+			aafString_t Names[3] = { one, two, valid };
 			hr = reinterpret_cast<IAAFTypeDefEnum*>(Interface)->Initialize(kNewTypeID, tdSubType, Vals, Names, 3, L"Test for TypeDefEnum");
 		}
 		else if(kTypeToDefine == AUID_AAFTypeDefExtEnum)
@@ -1027,7 +1037,8 @@ HRESULT RegisterType(IAAFDictionary *Dict, const aafUID_t &kNewTypeID, const aaf
 
 			IAAFTypeDef *Types[1];
 			Types[0] = tdSubType;
-			aafString_t Names[1] = { L"Integer" };
+			aafWChar integer[] = L"Integer";
+			aafString_t Names[1] = { integer };
 
 			hr = reinterpret_cast<IAAFTypeDefRecord*>(Interface)->Initialize(kNewTypeID, Types, Names, 1, L"Test for TypeDefRecord");
 
@@ -3614,7 +3625,7 @@ std::list<PropertyInfo> PropertyList;
 const aafUID_t kClassAUID_TestDef = { 0x848735e1, 0x1d3b, 0x8b23, {0x8e, 0xe7, 0x32, 0x45, 0xfe, 0x34, 0x29, 0x1e}};
 
 //! Class name for TestDef class
-const aafString_t kClassName_TestDef = L"Simple definition type for TypeDef tests";
+const aafWChar * const kClassName_TestDef = L"Simple definition type for TypeDef tests";
 
 
 /******************/

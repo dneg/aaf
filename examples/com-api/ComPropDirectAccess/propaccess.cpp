@@ -215,10 +215,14 @@ HRESULT createRational16Type (IAAFDictionary * pDict)
 	pTDInt16,
 	pTDInt16
   };
+
+  // Initialize() requires array of strings, not const strings
+  aafCharacter numeratorStr[] = L"numerator";
+  aafCharacter denominatorStr[] = L"denominator";
   aafString_t memberNames[kNumMembers] =
   {
-	L"numerator",
-	L"denominator"
+	numeratorStr,
+	denominatorStr
   };
 
   // Allocate a new typedef which will represent a 16-bit rational
@@ -500,7 +504,7 @@ HRESULT checkStinkyFiller (IAAFDictionary * pDict,
 using namespace std;
 #include <stdio.h>
 
-static void     FatalErrorCode(HRESULT errcode, int line, char *file)
+static void     FatalErrorCode(HRESULT errcode, int line, const char *file)
 {
   cerr << "\nError \'" << errcode
 	   << "\' returned at line " << line
@@ -532,7 +536,7 @@ static void convert(char* cName, size_t length, const wchar_t* name)
 }
 
 
-static void ReadAAFFile(aafWChar * pFileName,
+static void ReadAAFFile(const aafWChar * pFileName,
 						/*[in]*/ aafMobID_constref createdMobID)
 {
   IAAFFileSP spFile;
@@ -582,11 +586,13 @@ static void ReadAAFFile(aafWChar * pFileName,
 }
 
 const aafUID_t NIL_UID = { 0 };
+static aafCharacter companyName[] = L"AMW Association";
+static aafCharacter productName[] = L"propaccess";
 
 // Creates a file and adds a mob, containing a slot, containing a Fill
 // clip augmented with our optional property.  The resulting generated
 // mob ID is returned via the createdMobID argument.
-static void CreateAAFFile(aafWChar * pFileName,
+static void CreateAAFFile(const aafWChar * pFileName,
 						  /*[out]*/ aafMobID_t & createdMobID)
 {
   aafProductIdentification_t  ProductInfo;
@@ -603,8 +609,8 @@ static void CreateAAFFile(aafWChar * pFileName,
   v.tertiary = 0;
   v.patchLevel = 0;
   v.type = kAAFVersionUnknown;
-  ProductInfo.companyName = L"AAF Developers Desk";
-  ProductInfo.productName = L"Property Access Example";
+  ProductInfo.companyName = companyName;
+  ProductInfo.productName = productName;
   ProductInfo.productVersion = &v;
   ProductInfo.productVersionString = NULL;
   ProductInfo.productID = NIL_UID;
@@ -705,7 +711,7 @@ int main(int /* argc */, char** /* argv */)
 {
   CAAFInitialize aafInit;
 
-  aafWChar * pwFileName = L"PropAccess.aaf";
+  const aafWChar * pwFileName = L"PropAccess.aaf";
   const char * pFileName = "PropAccess.aaf";
 
   aafMobID_t createdMobID;

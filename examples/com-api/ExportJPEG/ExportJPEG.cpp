@@ -64,7 +64,7 @@ aafUID_t kAAFOpDef_Atom = { 0x0d010201, 0x1000, 0x0000, { 0x06, 0x0e, 0x2b, 0x34
 #define aaf_assert(b, msg) \
 	if (!(b)) {fprintf(stderr, "ASSERT: %s\n\n", msg); exit(1);}
 
-static void LogError(HRESULT errcode, int line, char *file)
+static void LogError(HRESULT errcode, int line, const char *file)
 {
 	printf("Error '%0x' returned at line %d in %s\n", errcode, line, file);
 }
@@ -168,6 +168,8 @@ static void separate_fields(aafUInt8 *src, aafUInt8 *dest, int width, int field_
 }
 
 const aafUID_t NIL_UID = { 0, 0, 0, { 0, 0, 0, 0, 0, 0, 0, 0 } };
+static aafCharacter companyName[] = L"AMW Association";
+static aafCharacter productName[] = L"ExportJPEG";
 
 static char *input_video = NULL;
 static FILE *input;
@@ -200,10 +202,10 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, bool comp_enable)
 		(comp_enable ? "CompressionEnable" : "CompressionDisable") << endl;
 
 	aafProductVersion_t ver = {1, 0, 0, 0, kAAFVersionBeta};
-	ProductInfo.companyName = L"none";
-	ProductInfo.productName = L"AAF SDK";
+	ProductInfo.companyName = companyName;
+	ProductInfo.productName = productName;
 	ProductInfo.productVersion = &ver;
-	ProductInfo.productVersionString = L"1.0.0.0 Beta";
+	ProductInfo.productVersionString = NULL;
 	ProductInfo.productID = NIL_UID;
 	ProductInfo.platform = NULL;		// Set by SDK when saving
 

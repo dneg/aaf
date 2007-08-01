@@ -26,7 +26,7 @@
 #include "XMLStoredFormatTest.h"
 
 
-static bool testRestore(wchar_t* fileName)
+static bool testRestore(const wchar_t* fileName)
 {
     bool passed = true;
     
@@ -128,7 +128,7 @@ static bool testRestore(wchar_t* fileName)
             const aafUID_t propId = 
                 {0x10000000,0x0000,0x0000,{0x80,0x00,0x00,0x00,0x00,0x00,0x00,0x00}};
             aafUInt8 testValue = 1;
-            wchar_t* testName = L"AAA";
+            const wchar_t* testName = L"AAA";
             
             checkResult(pMob->QueryInterface(IID_IAAFObject, (void **)&pObject));
             

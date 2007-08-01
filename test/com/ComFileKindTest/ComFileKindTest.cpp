@@ -525,15 +525,17 @@ static HRESULT CreateAAFFile(api_info_t info, bool testLargeNames)
 	return hr;
 }
 
+static aafCharacter companyName[] = L"AMW Association";
+static aafCharacter productName[] = L"ComFileKindTest";
 
 int main(void)
 {
-	TestProductID.companyName = L"AAF Developers Desk";
-	TestProductID.productName = L"ComFileKindTest";
+	TestProductID.companyName = companyName;
+	TestProductID.productName = productName;
 	TestProductID.productVersion = &TestVersion;
 	TestProductID.productVersionString = NULL;
 	TestProductID.productID = UnitTestProductID;
-	TestProductID.platform = L"Test OS";
+	TestProductID.platform = NULL;
 
 	try
 	{

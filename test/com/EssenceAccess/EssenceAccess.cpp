@@ -62,7 +62,7 @@
 
 #define TEST_PATH	L"SomeFile.dat"
 
-static void     LogError(HRESULT errcode, int line, char *file)
+static void     LogError(HRESULT errcode, int line, const char *file)
 {
   printf("Error '%0x' returned at line %d in %s\n", errcode, line, file);
 }
@@ -132,20 +132,22 @@ AAFRESULT loadWAVEHeader(aafUInt8 *buf,
 
 typedef struct
 {
-	aafWChar	*dataFilename;
-	aafUID_t	dataFormat;
+	const aafWChar	*dataFilename;
+	aafUID_t		dataFormat;
 } testDataFile_t;
 
 const aafUID_t NIL_UID = { 0, 0, 0, { 0, 0, 0, 0, 0, 0, 0, 0 } };
+static aafCharacter companyName[] = L"AMW Association";
+static aafCharacter productName[] = L"EssenceAccess";
 
 //  These fudgy bits are needed to get correct output...
-char* externalkind = "";
-char* kind = "";
-char* location = "";
+const char* externalkind = "";
+const char* kind = "";
+const char* location = "";
 
 
 //  Note: function modified to take N as an argument
-static HRESULT CreateAAFFile(aafWChar * pFileName, testDataFile_t *dataFile, testType_t testType, long int N)
+static HRESULT CreateAAFFile(const aafWChar * pFileName, testDataFile_t *dataFile, testType_t testType, long int N)
 {
 	IAAFFile*					pFile = NULL;
 	IAAFHeader*					pHeader = NULL;
@@ -194,8 +196,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testDataFile_t *dataFile, tes
 	v.tertiary = 0;
 	v.patchLevel = 0;
 	v.type = kAAFVersionUnknown;
-	ProductInfo.companyName = L"AAF-East Avid@Tewksbury";
-	ProductInfo.productName = L"Essence Data Transfer Rate Test";
+	ProductInfo.companyName = companyName;
+	ProductInfo.productName = productName;
 	ProductInfo.productVersion = &v;
 	ProductInfo.productVersionString = NULL;
 	ProductInfo.productID = NIL_UID;
@@ -462,7 +464,7 @@ cleanup:
 	return moduleErrorTmp;
 }
 
-static HRESULT ReadAAFFile(aafWChar * pFileName, testType_t testType)
+static HRESULT ReadAAFFile(const aafWChar * pFileName, testType_t testType)
 {
 	IAAFFile *					pFile = NULL;
 	IAAFHeader *				pHeader = NULL;
@@ -974,9 +976,9 @@ int main(int argumentCount, char *argumentVector[])
 
 	//  first, for the write calls, creating 6 different files, one for each test type
 
-	aafWChar *		pwFileName = L"";
-	char *	pFileName = "";
-	aafWChar *	externalAAF = L"ExternalAAFEssence.aaf";
+	const aafWChar *		pwFileName = L"";
+	const char *	pFileName = "";
+	const aafWChar *	externalAAF = L"ExternalAAFEssence.aaf";
 	testDataFile_t	dataFile;
 	
 	

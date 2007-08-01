@@ -70,7 +70,7 @@ public:
   void Close();
 
   IAAFEvent *CreateAnEvent(aafPosition_t* position, 
-                           wchar_t *comment, 
+                           const wchar_t *comment, 
                            IAAFSequence *pSequence = NULL);
 
   void CreateEventMobSlot();
@@ -260,7 +260,7 @@ void EventMobSlotTest::Close()
 
 
 IAAFEvent *EventMobSlotTest::CreateAnEvent(aafPosition_t* position,
-                                           wchar_t *comment,
+                                           const wchar_t *comment,
                                            IAAFSequence *pSequence)
 {
   assert(_pHeader && _pDictionary);

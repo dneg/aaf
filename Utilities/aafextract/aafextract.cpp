@@ -38,7 +38,7 @@ using namespace std;
 
 static bool verbose = false;
 
-static void LogError(HRESULT errcode, int line, char *file)
+static void LogError(HRESULT errcode, int line, const char *file)
 {
 	fprintf(stderr, "Error '%0x' returned at line %d in %s\n", errcode, line, file);
 }
@@ -234,7 +234,7 @@ static int DumpEssence(const char *file, bool mobIDfilename)
 		IAAFMob*				pMob = NULL;
 		aafWChar				namebuf[1024] = L"";
 		char					mobName[1024], mobIDstr[1024];
-		char					*name = "Unknown";
+		const char				*name = "Unknown";
 		int						kcount = 0;
 		aafNumSlots_t			numSlots;
 		IAAFSourceMob			*pSourceMob;

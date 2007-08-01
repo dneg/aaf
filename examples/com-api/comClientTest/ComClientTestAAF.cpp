@@ -67,7 +67,7 @@ static const aafMobID_t TEST_MobID[5] = {
 
 }; // TEST_MobID[]
 
-static void     FatalErrorCode(HRESULT errcode, int line, char *file)
+static void     FatalErrorCode(HRESULT errcode, int line, const char *file)
 {
   printf("\nError '%0x' returned at line %d in %s\n", errcode, line, file);
   exit(1);
@@ -191,7 +191,7 @@ static void printIdentification(IAAFIdentification* pIdent)
   printf("Platform             = \"%s\"\n", chName);
 }
 
-static void ReadAAFFile(aafWChar * pFileName)
+static void ReadAAFFile(const aafWChar * pFileName)
 {
   HRESULT hr = S_OK;
   IAAFFile * pFile = NULL;
@@ -408,8 +408,10 @@ static void ReadAAFFile(aafWChar * pFileName)
 }
 
 const aafUID_t NIL_UID = { 0, 0, 0, { 0, 0, 0, 0, 0, 0, 0, 0 } };
+static aafCharacter companyName[] = L"AMW Association";
+static aafCharacter productName[] = L"ComClientTestAAF";
 
-static void CreateAAFFile(aafWChar * pFileName)
+static void CreateAAFFile(const aafWChar * pFileName)
 {
   IAAFFile *          pFile = NULL;
   IAAFHeader *        pHeader = NULL;
@@ -429,8 +431,8 @@ static void CreateAAFFile(aafWChar * pFileName)
   v.patchLevel = 0;
   v.type = kAAFVersionUnknown;
 
-  ProductInfo.companyName = L"AAF Developers Desk";
-  ProductInfo.productName = L"Make AVR Example";
+  ProductInfo.companyName = companyName;
+  ProductInfo.productName = productName;
   ProductInfo.productVersion = &v;
   ProductInfo.productVersionString = NULL;
   ProductInfo.productID = NIL_UID;
@@ -446,14 +448,14 @@ static void CreateAAFFile(aafWChar * pFileName)
 //Make the first mob
   IAAFMob            *pMob = NULL;
   long  test;
-  aafWChar    *names[5] = { L"FOOBAR1", L"FOOBAR2", L"FOOBAR3", L"FOOBAR4", L"FOOBAR5" };
+  const aafWChar    *names[5] = { L"FOOBAR1", L"FOOBAR2", L"FOOBAR3", L"FOOBAR4", L"FOOBAR5" };
   aafRational_t  editRate = { 2997, 100 };
   IAAFTimelineMobSlot    *newSlot = NULL;
   IAAFSegment    *seg = NULL;
   IAAFSourceClip  *sclp = NULL;
   IAAFSourceMob  *smob = NULL;
   aafInt32    testSlot;
-  aafWChar    *slotNames[5] = { L"SLOT1", L"SLOT2", L"SLOT3", L"SLOT4", L"SLOT5" };
+  const aafWChar    *slotNames[5] = { L"SLOT1", L"SLOT2", L"SLOT3", L"SLOT4", L"SLOT5" };
   IAAFFileDescriptor  *fileDesc = NULL;
   IAAFEssenceDescriptor *essenceDesc = NULL;
   aafRational_t  audioRate = { 44100, 1 };
@@ -588,7 +590,7 @@ int main(int argc, char *argv[])
 {
   CAAFInitialize aafInit;
 
-  aafWChar * pwFileName = L"Foo.aaf";
+  const aafWChar * pwFileName = L"Foo.aaf";
   const char * pFileName = "Foo.aaf";
 
   printf("***Creating file %s\n", pFileName);

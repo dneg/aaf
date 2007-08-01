@@ -44,7 +44,7 @@ using namespace std;
 
 static aafMobID_t	zeroMobID = { {0,0,0,0,0,0,0,0,0,0,0,0},0,0,0,0,
 					{0,0,0,{0,0,0,0,0,0,0,0}} };
-static aafWChar *slotNames[5] = { L"SLOT1", L"SLOT2", L"SLOT3", L"SLOT4", L"SLOT5" };
+static const aafWChar *slotNames[5] = { L"SLOT1", L"SLOT2", L"SLOT3", L"SLOT4", L"SLOT5" };
 
 // convenient error handlers.
 inline void checkResult(HRESULT r)
@@ -70,10 +70,10 @@ const aafUID_t kTestParmID = { 0xC7265931, 0xFE57, 0x11d2, { 0x80, 0xA5, 0x00, 0
 const aafRational_t kTestLevel = { 1, 2 };
 const aafRational_t kTestLevel2 = { 22, 7 };
 
-const aafString_t  TEST_PARAM_NAME [2]	=	{L"A TestEffect parameter", L"aprox PI"};
-const aafString_t  TEST_PARAM_DESC [2]	=	{L"A longer description of the TestEffect parameter",
+const aafWChar * const  TEST_PARAM_NAME [2]	=	{L"A TestEffect parameter", L"aprox PI"};
+const aafWChar * const  TEST_PARAM_DESC [2]	=	{L"A longer description of the TestEffect parameter",
 												L"An aproximation of PI"};
-const aafString_t  TEST_PARAM_UNITS[2]	=   {L"Furlongs per Fortnight", L"PI fractional members"};
+const aafWChar * const  TEST_PARAM_UNITS[2]	=   {L"Furlongs per Fortnight", L"PI fractional members"};
 
 static const 	aafUID_t	kTestParm2ID =
 { 0x47240c2b, 0x19d, 0x11d4, { 0x8e, 0x3d, 0x0, 0x90, 0x27, 0xdf, 0xca, 0x7c } };

@@ -122,7 +122,7 @@ static HRESULT checkModeFlag (
     HRESULT expectedResult)
 {
   // Check mod flags
-  aafWChar * pFileName = L"ModeTestF.ile";
+  const aafWChar * pFileName = L"ModeTestF.ile";
   RemoveTestFile(pFileName);
   HRESULT temphr;
   IAAFFile * pFile = 0;
@@ -230,7 +230,7 @@ static const 	aafMobID_t	TEST_MobID =
 
 
 static HRESULT CreateAAFFile(
-    aafWChar * pFileName,
+    const aafWChar * pFileName,
     aafUID_constref fileKind,
     testRawStorageType_t rawStorageType,
     aafProductIdentification_constref productID)
@@ -425,7 +425,7 @@ TestProgress::~TestProgress()
   assert(_referenceCount == 0);
 }
 
-static HRESULT ReadAAFFile(aafWChar * pFileName)
+static HRESULT ReadAAFFile(const aafWChar * pFileName)
 {
   IAAFFile *					pFile = NULL;
   bool bFileOpen = false;
@@ -544,7 +544,7 @@ static int ExpectFalse(HRESULT hr, aafBool b)
   return result;
 }
 
-static HRESULT CreateEmptyFile(wchar_t* pFileName)
+static HRESULT CreateEmptyFile(const wchar_t* pFileName)
 {
   HRESULT hr;
   const size_t size = wcslen(pFileName) + 1;
@@ -602,7 +602,7 @@ static HRESULT ComprehensiveOpenTest(testMode_t /* mode */,
   
   // Open Test file present for functions that require one
   //
-  aafWChar * pFileName = L"OpenTestF.ile";
+  const aafWChar * pFileName = L"OpenTestF.ile";
   RemoveTestFile(pFileName);
 
   /* **************************************************************************
@@ -686,7 +686,7 @@ static HRESULT ComprehensiveOpenTest(testMode_t /* mode */,
   ************************************************************************** */
   {
 	  std::cout << "\tExecuting ComprehensiveOpenTest A4." << std::endl;
-	  aafWChar* pBadVersionFileName = L"./my_second_aaf_f.ile";
+	  const aafWChar* pBadVersionFileName = L"./my_second_aaf_f.ile";
 	  RemoveTestFile(pBadVersionFileName);
 
 	  char cBadVersionFileName[FILENAME_MAX];
@@ -1130,8 +1130,8 @@ static HRESULT ComprehensiveSaveCopyAsTest(testMode_t /* mode */,
   
   // SaveCopyAs Test file present for functions that require one
   //
-  aafWChar * pFileName = L"SaveCopyAsTestF.ile";
-  aafWChar * pCopyName = L"CopyTestF.ile";
+  const aafWChar * pFileName = L"SaveCopyAsTestF.ile";
+  const aafWChar * pCopyName = L"CopyTestF.ile";
   RemoveTestFile(pFileName);
   RemoveTestFile(pCopyName);
 
@@ -1478,7 +1478,7 @@ static HRESULT NegativeTestPublicGlobalFunctions(
 
   // no file present for functions that require one
   //
-  aafWChar* pFileName = L"NoSuchF.ile";
+  const aafWChar* pFileName = L"NoSuchF.ile";
 
   /* **************************************************************************
      HACK ALERT -- temporarily remove non-existing file and already existing

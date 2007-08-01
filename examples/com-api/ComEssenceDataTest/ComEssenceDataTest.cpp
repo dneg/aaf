@@ -53,7 +53,7 @@
 
 #define TEST_PATH	L"SomeFile.dat"
 
-static void     LogError(HRESULT errcode, int line, char *file)
+static void     LogError(HRESULT errcode, int line, const char *file)
 {
   printf("Error '%0x' returned at line %d in %s\n", errcode, line, file);
 }
@@ -149,13 +149,16 @@ AAFRESULT loadWAVEHeader(aafUInt8 *buf,
 
 typedef struct
 {
-	aafWChar	*dataFilename;
-	aafUID_t	dataFormat;
+	const aafWChar	*dataFilename;
+	aafUID_t		dataFormat;
 } testDataFile_t;
+
+static aafCharacter companyName[] = L"AMW Association";
+static aafCharacter productName[] = L"ComEssenceDataTest";
 
 const aafUID_t NIL_UID = { 0, 0, 0, { 0, 0, 0, 0, 0, 0, 0, 0 } };
 
-static HRESULT CreateAAFFile(aafWChar * pFileName, testDataFile_t *dataFile, testType_t testType)
+static HRESULT CreateAAFFile(const aafWChar * pFileName, testDataFile_t *dataFile, testType_t testType)
 {
 	IAAFFile*					pFile = NULL;
 	IAAFHeader*					pHeader = NULL;
@@ -203,8 +206,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testDataFile_t *dataFile, tes
 	v.patchLevel = 0;
 	v.type = kAAFVersionUnknown;
 
-	ProductInfo.companyName = L"AAF Developers Desk";
-	ProductInfo.productName = L"Essence Data Test";
+	ProductInfo.companyName = companyName;
+	ProductInfo.productName = productName;
 	ProductInfo.productVersion = &v;
 	ProductInfo.productVersionString = NULL;
 	ProductInfo.productID = NIL_UID;
@@ -424,7 +427,7 @@ cleanup:
 	return moduleErrorTmp;
 }
 
-static HRESULT ReadAAFFile(aafWChar * pFileName, testType_t testType)
+static HRESULT ReadAAFFile(const aafWChar * pFileName, testType_t testType)
 {
 	IAAFFile *					pFile = NULL;
 	IAAFHeader *				pHeader = NULL;
@@ -833,10 +836,10 @@ int main(int argc, char *argv[])
 {
   CAAFInitialize aafInit;
 
-  aafWChar *		pwFileName = L"EssenceTest.aaf";
+	const aafWChar *		pwFileName = L"EssenceTest.aaf";
 	const char *	pFileName = "EssenceTest.aaf";
-	aafWChar *	rawData = L"EssenceTestRaw.wav";
-	aafWChar *	externalAAF = L"ExternalAAFEssence.aaf";
+	const aafWChar *	rawData = L"EssenceTestRaw.wav";
+	const aafWChar *	externalAAF = L"ExternalAAFEssence.aaf";
 	testDataFile_t	dataFile;
 
   // Make sure all of our required plugins have been registered.
@@ -854,7 +857,7 @@ int main(int argc, char *argv[])
 	ReadAAFFile(pwFileName, testMultiCalls);
 	/**/
 
-  dataFile.dataFilename = rawData;
+	dataFile.dataFilename = rawData;
 	dataFile.dataFormat = ContainerFile;
 	printf("***Creating file %s using WriteSamples (External Media)\n", pFileName);
 	checkFatal(CreateAAFFile(pwFileName, &dataFile, testStandardCalls));

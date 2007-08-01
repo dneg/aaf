@@ -160,6 +160,9 @@ IAAFSmartPointer<IAAFFile> CreateFileOfKind( const std::string& fileName,
 }
 #endif
 
+static aafCharacter companyName[] = L"AMW Association";
+static aafCharacter productName[] = L"FileOp";
+
 void FileOp::RunTest( CmdState& state, int argc, char** argv )
 {
   using namespace std;
@@ -173,8 +176,8 @@ void FileOp::RunTest( CmdState& state, int argc, char** argv )
   v.tertiary = 0;
   v.patchLevel = 0;
   v.type = kAAFVersionUnknown;
-  productInfo.companyName = L"AAF Developers Desk";
-  productInfo.productName = L"AAF MultiGenTest";
+  productInfo.companyName = companyName;
+  productInfo.productName = productName;
   productInfo.productVersion = &v;
   productInfo.productVersionString = NULL;
   productInfo.productID = UnitTestProductID;

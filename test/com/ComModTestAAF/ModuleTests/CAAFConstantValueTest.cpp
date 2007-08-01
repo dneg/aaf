@@ -44,7 +44,7 @@ using namespace std;
 
 static aafMobID_t	zeroMobID = {{0,0,0,0,0,0,0,0,0,0,0,0},0,0,0,0,
 					{0,0,0,{0,0,0,0,0,0,0,0}}};
-static aafWChar *slotNames[5] = { L"SLOT1", L"SLOT2", L"SLOT3", L"SLOT4", L"SLOT5" };
+static const aafWChar *slotNames[5] = { L"SLOT1", L"SLOT2", L"SLOT3", L"SLOT4", L"SLOT5" };
 
 // convenient error handlers.
 inline void checkResult(HRESULT r)

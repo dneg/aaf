@@ -81,7 +81,7 @@ static  const aafUID_t					TEST_EXTENUM_TYPE_ID =
 #define TEST_KAAF_SYMBOL L"Friday"
 #define TEST_NONKAAF_SYMBOL L"Saturday"
 
-static const aafString_t				TEST_EXTENUM_NAMES[TEST_EXTENUM_COUNT] = 
+static const aafWChar * const			TEST_EXTENUM_NAMES[TEST_EXTENUM_COUNT] = 
 						{L"Sunday", L"Monday", L"Tuesday", L"Wednesday", L"Thursday",
 						L"kAAF" TEST_KAAF_SYMBOL, TEST_NONKAAF_SYMBOL };
 static const aafUID_t					TEST_EXTENUM_VALUES[TEST_EXTENUM_COUNT] = {
@@ -94,7 +94,7 @@ static const aafUID_t					TEST_EXTENUM_VALUES[TEST_EXTENUM_COUNT] = {
 { 0x47b3df47, 0x5370, 0x11d4, { 0x8e, 0x57, 0x0, 0x90, 0x27, 0xdf, 0xcc, 0x26 } } };
 
 
-static const aafString_t				TEST_EXTENUM_SOME_SYMBOL = TEST_EXTENUM_NAMES[3];
+static const aafWChar * const				TEST_EXTENUM_SOME_SYMBOL = TEST_EXTENUM_NAMES[3];
 static const aafUID_t					TEST_EXTENUM_SOME_VALUE = TEST_EXTENUM_VALUES[3];
 
 // Enum PROPERTY id

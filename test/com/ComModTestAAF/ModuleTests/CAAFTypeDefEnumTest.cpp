@@ -82,13 +82,20 @@ static const aafUID_t					TEST_ELEM_TYPE_ID =	kAAFTypeID_Int32;
 #define TEST_KAAF_SYMBOL L"Friday"
 #define TEST_NONKAAF_SYMBOL L"Saturday"
 
+static aafWChar sSunday[] = L"Sunday";
+static aafWChar sMonday[] = L"Monday";
+static aafWChar sTuesday[] = L"Tuesday";
+static aafWChar sWednesday[] = L"Wednesday";
+static aafWChar sThursday[] = L"Thursday";
+static aafWChar skAAFFriday[] = L"kAAF" TEST_KAAF_SYMBOL;
+static aafWChar sNonkAAF_Symbol[] = TEST_NONKAAF_SYMBOL;
 static aafString_t				TEST_ENUM_NAMES[TEST_ENUM_COUNT] = 
-						{L"Sunday", L"Monday", L"Tuesday", L"Wednesday", L"Thursday",
-						 L"kAAF" TEST_KAAF_SYMBOL, TEST_NONKAAF_SYMBOL };
+						{ sSunday, sMonday, sTuesday, sWednesday, sThursday,
+							skAAFFriday, sNonkAAF_Symbol };
 static aafInt64					TEST_ENUM_VALUES[TEST_ENUM_COUNT] = 
 											{-1, 15, -20, 33, -2, 0xaaf };
 
-static const aafString_t				TEST_ENUM_SOME_SYMBOL = TEST_ENUM_NAMES[3];
+static aafString_t				TEST_ENUM_SOME_SYMBOL = TEST_ENUM_NAMES[3];
 static const aafInt64					TEST_ENUM_SOME_VALUE = TEST_ENUM_VALUES[3];
 
 // Enum PROPERTY id

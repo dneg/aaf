@@ -157,10 +157,10 @@ static HRESULT CreateAAFFile(
 	aafUInt32 					bufSize2 = 0;
 
 	aafProductIdentification_t	ProductInfo;
-  memset(&ProductInfo, 0, sizeof(ProductInfo));
-	ProductInfo.companyName = COMPANY_NAME;
-	ProductInfo.productName = PRODUCT_NAME;
-	ProductInfo.productVersionString = TEST_VERSION;
+	memset(&ProductInfo, 0, sizeof(ProductInfo));
+	ProductInfo.companyName = const_cast<aafWChar*>(COMPANY_NAME);
+	ProductInfo.productName = const_cast<aafWChar*>(PRODUCT_NAME);
+	ProductInfo.productVersionString = const_cast<aafWChar*>(TEST_VERSION);
 	ProductInfo.productID = UnitTestProductID;
 	ProductInfo.productVersion = &testVersion;
 	hr = S_OK;

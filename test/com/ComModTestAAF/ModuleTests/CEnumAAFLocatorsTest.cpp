@@ -43,8 +43,8 @@ static const 	aafMobID_t	TEST_MobID =
 {0x53c55746, 0x0406, 0x11d4, {0x8e, 0x3d, 0x00, 0x90, 0x27, 0xdf, 0xca, 0x7c}}};
 
 
-wchar_t *locator1 = L"First Locator";
-wchar_t *locator2 = L"Second Locator";
+static const wchar_t *locator1 = L"First Locator";
+static const wchar_t *locator2 = L"Second Locator";
 
 // convenient error handlers.
 inline void checkResult(HRESULT r)

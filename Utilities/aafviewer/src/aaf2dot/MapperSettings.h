@@ -28,8 +28,8 @@
 
 typedef struct
 {
-      char *objectName;
-      char *propertyName;
+      const char *objectName;
+      const char *propertyName;
       bool displayHex;
 } IntegerMapSetting;
 

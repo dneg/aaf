@@ -75,7 +75,7 @@ static const aafInt32 int32Data=2000;
 
 #define TEST_PATH	L"SomeFile.dat"
 
-static void     LogError(HRESULT errcode, int line, char *file)
+static void     LogError(HRESULT errcode, int line, const char *file)
 {
   printf("Error '%0x' returned at line %d in %s\n", errcode, line, file);
 }
@@ -163,8 +163,10 @@ typedef struct
 } testDataFile_t;
 
 const aafUID_t NIL_UID = { 0, 0, 0, { 0, 0, 0, 0, 0, 0, 0, 0 } };
+static aafCharacter companyName[] = L"AMW Association";
+static aafCharacter productName[] = L"MetadataExample";
 
-static HRESULT CreateAAFFile(aafWChar * pFileName, testDataFile_t *dataFile, testType_t /* testType */)
+static HRESULT CreateAAFFile(const aafWChar * pFileName, testDataFile_t *dataFile, testType_t /* testType */)
 {
   IAAFFile*					pFile = NULL;
   IAAFHeader*					pHeader = NULL;
@@ -231,8 +233,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testDataFile_t *dataFile, tes
   v.patchLevel = 0;
   v.type = kAAFVersionUnknown;
 
-  ProductInfo.companyName = L"AAF Association";
-  ProductInfo.productName = L"Metadata example";
+  ProductInfo.companyName = companyName;
+  ProductInfo.productName = productName;
   ProductInfo.productVersion = &v;
   ProductInfo.productVersionString = NULL;
   ProductInfo.productID = NIL_UID;
@@ -596,7 +598,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testDataFile_t *dataFile, tes
   return moduleErrorTmp;
 }
 
-static HRESULT ReadAAFFile(aafWChar * pFileName, testType_t testType)
+static HRESULT ReadAAFFile(const aafWChar * pFileName, testType_t testType)
 {
   IAAFFile *					pFile = NULL;
   IAAFHeader *				pHeader = NULL;
@@ -1011,8 +1013,8 @@ int main(int /*argc*/, char** /*argv*/)
 {
   CAAFInitialize aafInit;
 
-  aafWChar* pwFileName = L"MetadataTest.aaf";
-  char* pFileName = "";
+  const aafWChar* pwFileName = L"MetadataTest.aaf";
+  const char* pFileName = "";
 
   // Make sure all of our required plugins have been registered.
   checkFatal(RegisterRequiredPlugins());

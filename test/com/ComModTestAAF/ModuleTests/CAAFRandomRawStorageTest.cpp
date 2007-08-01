@@ -865,12 +865,12 @@ struct fileInfo_t
 	, kStgTypeCustomStg
 	, kStgTypeCachedCustomStg
   }              storageType;
-  wchar_t *      fileName;
-  char *         description;
-  fileCrtnFunc_t openWriteFunc;
-  fileMgmtFunc_t openReadFunc;
-  fileMgmtFunc_t closeWriteFunc;
-  fileMgmtFunc_t closeReadFunc;
+  const wchar_t * fileName;
+  const char *    description;
+  fileCrtnFunc_t  openWriteFunc;
+  fileMgmtFunc_t  openReadFunc;
+  fileMgmtFunc_t  closeWriteFunc;
+  fileMgmtFunc_t  closeReadFunc;
 
 };
 //

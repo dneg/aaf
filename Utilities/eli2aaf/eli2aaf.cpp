@@ -913,11 +913,15 @@ static bool createAAFFileForEditDecisions(const char *output_aaf_file,
 			v.patchLevel = 1;
 			v.type = kAAFVersionReleased;
 
-			ProductInfo.companyName = L"This property intentionally left blank";
-			ProductInfo.productName = L"Kino";
+			aafWChar companyName[] = L"This property intentionally left blank";
+			aafWChar productName[] = L"Kino";
+			aafWChar productVersionString[] = L"0.6.4 BBC R&D patch 1";
+
+			ProductInfo.companyName = companyName;
+			ProductInfo.productName = productName;
 			ProductInfo.productVersion = &v;
-			ProductInfo.productVersionString = L"0.6.4 BBC R&D patch 1";
-			ProductInfo.platform = L"i386-redhat-linux";		// has no effect
+			ProductInfo.productVersionString = productVersionString;
+			ProductInfo.platform = NULL;
 
 			// Remove existing file if any
 			if (remove(output_aaf_file) == 0)

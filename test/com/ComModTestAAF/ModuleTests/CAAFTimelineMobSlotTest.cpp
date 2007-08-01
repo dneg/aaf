@@ -41,7 +41,7 @@ using namespace std;
 
 #include "CAAFBuiltinDefs.h"
 
-static aafWChar *slotNames[5] = { L"SLOT1", L"SLOT2", L"SLOT3", L"SLOT4", L"SLOT5" };
+static const aafWChar *slotNames[5] = { L"SLOT1", L"SLOT2", L"SLOT3", L"SLOT4", L"SLOT5" };
 
 static aafPosition_t markInTestData[5] = { 0, 1, -3, AAFCONSTINT64(0x7ffffffffffffffd), AAFCONSTINT64(0x8000000000000000) };
 static aafPosition_t userPosTestData[5] = { 0, 2, -2, AAFCONSTINT64(0x7ffffffffffffffe), AAFCONSTINT64(0x8000000000000001) };

@@ -79,7 +79,7 @@ aafUID_t kIEC_DV_525_60 = { 0x04010202, 0x0201, 0x0100, { 0x06, 0x0e, 0x2b, 0x34
 #define aaf_assert(b, msg) \
 	if (!(b)) {fprintf(stderr, "ASSERT: %s\n\n", msg); exit(1);}
 
-static void LogError(HRESULT errcode, int line, char *file)
+static void LogError(HRESULT errcode, int line, const char *file)
 {
 	printf("Error '%0x' returned at line %d in %s\n", errcode, line, file);
 }
@@ -119,10 +119,12 @@ static bool operator == (const aafUID_t a, const aafUID_t b)
 }
 
 const aafUID_t NIL_UID = { 0, 0, 0, { 0, 0, 0, 0, 0, 0, 0, 0 } };
+static aafCharacter companyName[] = L"AMW Association";
+static aafCharacter productName[] = L"ExportPCM";
 
 static char *input_video = NULL;
 
-static HRESULT CreateAAFFile(aafWChar * pFileName, aafUID_t container)
+static HRESULT CreateAAFFile(const aafWChar * pFileName, aafUID_t container)
 {
 	IAAFFile*					pFile = NULL;
 	IAAFHeader*					pHeader = NULL;
@@ -146,10 +148,10 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, aafUID_t container)
 	remove(cFileName);
 
 	aafProductVersion_t ver = {1, 0, 0, 0, kAAFVersionBeta};
-	ProductInfo.companyName = L"none";
-	ProductInfo.productName = L"AAF SDK";
+	ProductInfo.companyName = companyName;
+	ProductInfo.productName = productName;
 	ProductInfo.productVersion = &ver;
-	ProductInfo.productVersionString = L"1.0.0.0 Beta";
+	ProductInfo.productVersionString = NULL;
 	ProductInfo.productID = NIL_UID;
 	ProductInfo.platform = NULL;		// Set by SDK when saving
 
@@ -339,7 +341,7 @@ void printUsage(const char *progname)
 extern int main(int argc, char *argv[])
 {
 	aafUID_t		container = kAAFContainerDef_RIFFWAVE;
-	aafWChar		*pwFileName	= L"ExportPCM.aaf";
+	const aafWChar		*pwFileName	= L"ExportPCM.aaf";
 
 	int i = 1;
 	if (argc > 1)

@@ -96,8 +96,8 @@ inline void checkExpression(bool expression, HRESULT r)
     throw r;
 }
 
-static wchar_t *sName = L"Test Descriptor Name";
-static wchar_t *sDescription = L"Test Descriptor Description";
+static const wchar_t *sName = L"Test Descriptor Name";
+static const wchar_t *sDescription = L"Test Descriptor Description";
 
 
 static HRESULT CreateAAFFile(
