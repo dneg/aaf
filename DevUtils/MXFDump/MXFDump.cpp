@@ -3750,9 +3750,25 @@ bool isPredefinedEssenceElement(mxfKey& k)
 {
   // Prefix for MXF predefined MXF essence element labels
   mxfKey pe = {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x02, 0x01, 0x01,
-               0x0d, 0x01, 0x03, 0x01, 0xff, 0xff, 0xff, 0xff};
+               0x0d, 0x01, 0x03, 0x01, 0x00, 0x00, 0x00, 0x00};
   bool result;
   if (memcmp(&k, &pe, 12) == 0) {
+    result = true;
+  } else {
+    result = false;
+  }
+  return result;
+}
+
+bool isLegacyPredefinedEssenceElement(mxfKey& k);
+
+bool isLegacyPredefinedEssenceElement(mxfKey& k)
+{
+  // Legacy Prefix for MXF predefined MXF essence element labels
+  mxfKey lpe = {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x02, 0x01, 0x01,
+               0x0d, 0x01, 0x03, 0x01, 0xff, 0xff, 0xff, 0xff};
+  bool result;
+  if (memcmp(&k, &lpe, 12) == 0) {
     result = true;
   } else {
     result = false;
@@ -3780,6 +3796,8 @@ bool isEssenceElement(mxfKey& k)
 {
   bool result;
   if (isPredefinedEssenceElement(k)) {
+    result = true;
+  } else if (isLegacyPredefinedEssenceElement(k)) {
     result = true;
   } else if (isAvidEssenceElement(k)) {
     result = true;
