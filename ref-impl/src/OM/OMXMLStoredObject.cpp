@@ -1699,7 +1699,7 @@ OMXMLStoredObject::saveEnum(const OMByte* internalBytes, OMUInt32 internalSize,
             value = (OMInt64)*((OMInt32*)internalBytes);
             break;
         case sizeof(OMInt64):
-            value = (OMInt64)*(internalBytes);
+            value = (OMInt64)*((OMInt64*)internalBytes);
             break;
         default:
             ASSERT("Valid integer size", false);
