@@ -260,7 +260,7 @@ static bool testRestore(const wchar_t* fileName)
 }
 
 
-bool testSet()
+int testSet()
 {
     printf("Rule 5.10: Set\n");
     
@@ -286,7 +286,7 @@ bool testSet()
 
     printf("\n");
     
-    return passed;
+    return passed ? 0 : 2;
 }
 
 

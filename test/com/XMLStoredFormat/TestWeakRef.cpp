@@ -506,7 +506,7 @@ static bool testRestore(const wchar_t* fileName)
 }
 
 
-bool testWeakRef()
+int testWeakRef()
 {
     printf("Rule 5.15: Weak Object Reference\n");
     
@@ -532,7 +532,7 @@ bool testWeakRef()
 
     printf("\n");
     
-    return passed;
+    return passed ? 0 : 2;
 }
 
 

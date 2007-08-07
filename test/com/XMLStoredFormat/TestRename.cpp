@@ -191,7 +191,7 @@ static bool testRestore(const wchar_t* fileName)
 }
 
 
-bool testRename()
+int testRename()
 {
     printf("Rule 5.9: Rename\n");
     
@@ -217,7 +217,7 @@ bool testRename()
 
     printf("\n");
     
-    return passed;
+    return passed ? 0 : 2;
 }
 
 

@@ -65,22 +65,23 @@ bool diff(const aafCharacter* fileNameA, const aafCharacter* fileNameB);
 
 
 // the tests
-bool testCharacter();
-bool testEnum();
-bool testExtEnum();
-bool testFixedArray();
-bool testIndirect();
-bool testInteger();
-bool testOpaque();
-bool testRecord();
-bool testRename();
-bool testSet();
-bool testStream();
-bool testString();
-bool testVarArray();
-bool testWeakRef();
+// returns 0 when passed, 1 when there are expected failures only, otherwise 2 when there are failures
+int testCharacter();
+int testEnum();
+int testExtEnum();
+int testFixedArray();
+int testIndirect();
+int testInteger();
+int testOpaque();
+int testRecord();
+int testRename();
+int testSet();
+int testStream();
+int testString();
+int testVarArray();
+int testWeakRef();
 
-bool testExampleFiles();
+int testExampleFiles();
 
 #endif
 

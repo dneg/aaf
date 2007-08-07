@@ -264,7 +264,7 @@ static bool testRestore(const wchar_t* fileName)
 }
 
 
-bool testString()
+int testString()
 {
     printf("Rule 5.12: String\n");
     
@@ -290,7 +290,7 @@ bool testString()
 
     printf("\n");
     
-    return passed;
+    return passed ? 0 : 2;
 }
 
 

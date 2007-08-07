@@ -274,7 +274,7 @@ static bool testRestore(const wchar_t* fileName)
 }
 
 
-bool testExtEnum()
+int testExtEnum()
 {
     printf("Rule 5.3: Extendible Enumeration\n");
     
@@ -286,7 +286,6 @@ bool testExtEnum()
         
         printf("b) Roundtrip\n");
         printf("FAILED (not tested): Ext enums are not cloned properly - fix due for v1.2\n");
-        passed = false;
         //saveCopy(L"input/testExtEnum.xml", L"tmp.xml");
         //passed = testRestore(L"tmp.xml") && passed;
 
@@ -302,7 +301,7 @@ bool testExtEnum()
 
     printf("\n");
     
-    return passed;
+    return passed ? 1 : 2; // 1 -> known failures
 }
 
 

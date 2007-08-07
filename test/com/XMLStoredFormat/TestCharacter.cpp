@@ -259,7 +259,7 @@ static bool testRestore(const wchar_t* fileName)
 }
 
 
-bool testCharacter()
+int testCharacter()
 {
     printf("Rule 5.1: Character\n");
     
@@ -285,7 +285,7 @@ bool testCharacter()
 
     printf("\n");
     
-    return passed;
+    return passed ? 0 : 2;
 }
 
 

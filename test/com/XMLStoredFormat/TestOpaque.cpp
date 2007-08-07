@@ -198,7 +198,7 @@ static bool testRestore(const wchar_t* fileName)
 }
 
 
-bool testOpaque()
+int testOpaque()
 {
     printf("Rule 5.7: Opaque\n");
     
@@ -224,7 +224,7 @@ bool testOpaque()
 
     printf("\n");
     
-    return passed;
+    return passed ? 0 : 2;
 }
 
 

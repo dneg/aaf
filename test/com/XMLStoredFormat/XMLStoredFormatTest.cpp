@@ -272,8 +272,8 @@ int main(int argc, char *argv[])
 {
     CAAFInitialize aafInit;
 
-    bool result[15];
-    memset(result, false, sizeof(result));
+    int result[15];
+    memset(result, 0, sizeof(result));
     const char* tests[15] = 
     {
         "Character ",
@@ -316,19 +316,25 @@ int main(int argc, char *argv[])
     result[14] = testExampleFiles();
 
     printf("\nResults summary:\n");
+    bool passed = true;
     for (unsigned int i = 0; i < sizeof(tests) / sizeof(char*); i++)
     {
         printf("  %s", tests[i]);
-        if (result[i])
+        if (result[i] == 0)
         {
             printf("\t\tpassed\n");
+        }
+        else if (result[i] == 1)
+        {
+            printf("\t\tpassed (with known FAILURES)\n");
         }
         else
         {
             printf("\t\tFAILED\n");
+            passed = false;
         }
     }
     
-    return 0;
+    return passed ? 0 : 1;
 }
 

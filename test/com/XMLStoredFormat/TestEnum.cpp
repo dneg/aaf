@@ -312,7 +312,7 @@ static bool testRestore(const wchar_t* fileName)
 }
 
 
-bool testEnum()
+int testEnum()
 {
     printf("Rule 5.2: Enumeration\n");
     
@@ -338,7 +338,7 @@ bool testEnum()
 
     printf("\n");
     
-    return passed;
+    return passed ? 0 : 2;
 }
 
 

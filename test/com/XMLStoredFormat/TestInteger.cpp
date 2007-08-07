@@ -565,7 +565,7 @@ static bool testRestore(const wchar_t* fileName)
 }
 
 
-bool testInteger()
+int testInteger()
 {
     printf("Rule 5.6: Integer\n");
     
@@ -591,7 +591,7 @@ bool testInteger()
 
     printf("\n");
     
-    return passed;
+    return passed ? 0 : 2;
 }
 
 

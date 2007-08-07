@@ -196,7 +196,7 @@ static bool testRestore(const wchar_t* fileName)
 }
 
 
-bool testFixedArray()
+int testFixedArray()
 {
     printf("Rule 5.4: FixedArray\n");
     
@@ -222,7 +222,7 @@ bool testFixedArray()
 
     printf("\n");
     
-    return passed;
+    return passed ? 0 : 2;
 }
 
 

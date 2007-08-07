@@ -26,7 +26,7 @@
 #include "XMLStoredFormatTest.h"
 
 
-bool testExampleFiles()
+int testExampleFiles()
 {
     printf("\nExample Files:\n\n");
     
@@ -88,7 +88,7 @@ bool testExampleFiles()
 
     printf("\n");
     
-    return passed;
+    return passed ? 0 : 2;
 }
 
 

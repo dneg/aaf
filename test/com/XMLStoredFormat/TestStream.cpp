@@ -198,7 +198,7 @@ static bool testRestore(const wchar_t* fileName)
 }
 
 
-bool testStream()
+int testStream()
 {
     printf("Rule 5.11: Stream\n");
     
@@ -224,7 +224,7 @@ bool testStream()
 
     printf("\n");
     
-    return passed;
+    return passed ? 0 : 2;
 }
 
 

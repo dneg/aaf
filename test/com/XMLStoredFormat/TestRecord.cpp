@@ -619,7 +619,7 @@ static bool testRestore(const wchar_t* fileName)
 }
 
 
-bool testRecord()
+int testRecord()
 {
     printf("Rule 5.8: Record\n");
     
@@ -645,7 +645,7 @@ bool testRecord()
 
     printf("\n");
     
-    return passed;
+    return passed ? 0 : 2;
 }
 
 

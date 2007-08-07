@@ -364,7 +364,7 @@ static bool testRestore(const wchar_t* fileName)
 }
 
 
-bool testVarArray()
+int testVarArray()
 {
     printf("Rule 5.14: VariableArray\n");
     
@@ -390,7 +390,7 @@ bool testVarArray()
 
     printf("\n");
     
-    return passed;
+    return passed ? 0 : 2;
 }
 
 
