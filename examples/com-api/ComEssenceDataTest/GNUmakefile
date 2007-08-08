@@ -26,3 +26,8 @@
 EXAMPLE = ComEssenceDataTest
 
 include ../comexamplerules.mk
+
+.PHONY : check
+check : $(AAFSDKBINDIR)/ComEssenceDataTest$(EXE)
+	@if [ ! -r Laser.wav ]; then cp ../../../test/com/ComModTestAAF/Laser.wav .; fi
+	$(APP_RUN_ENV) $(AAFSDKBINDIR)/ComEssenceDataTest$(EXE)

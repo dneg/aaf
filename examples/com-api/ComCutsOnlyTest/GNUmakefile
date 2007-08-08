@@ -26,3 +26,7 @@
 EXAMPLE = ComCutsTestAAF
 
 include ../comexamplerules.mk
+
+.PHONY : check
+check : $(AAFSDKBINDIR)/ComCutsTestAAF$(EXE)
+	$(APP_RUN_ENV) $(AAFSDKBINDIR)/ComCutsTestAAF$(EXE)

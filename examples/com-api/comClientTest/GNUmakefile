@@ -50,6 +50,10 @@ CXXFILES2 = ComClientTestAAF.cpp
 $(AAFSDKBINDIR)/ComClientAAF$(EXE) : $(CXXOBJS2)
 	$(LD) $(CXXOBJS2) $(LINK_AAF_APP)
 
+.PHONY : check
+check : $(AAFSDKBINDIR)/ComClientAAF$(EXE) $(AAFSDKBINDIR)/ComAAFInfo$(EXE)
+	$(APP_RUN_ENV) $(AAFSDKBINDIR)/ComClientAAF$(EXE)
+	for f in ../*/*.aaf ../../../test/com/*/*.aaf; do if echo $$f | grep UTF8FileNameTest > /dev/null; then echo "Skipping $$f until wctou8() et al are removed from the SDK"; else echo ComAAFInfo $$f; (cd `dirname $$f`; $(APP_RUN_ENV) $(AAFSDKBINDIR)/ComAAFInfo$(EXE) `basename $$f` > /dev/null) || exit $$?; fi; done
 
 .PHONY : clean
 clean :

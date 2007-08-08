@@ -26,3 +26,7 @@
 EXAMPLE = ComPropDirectAccess
 
 include ../comexamplerules.mk
+
+.PHONY : check
+check : $(AAFSDKBINDIR)/ComPropDirectAccess$(EXE)
+	$(APP_RUN_ENV) $(AAFSDKBINDIR)/ComPropDirectAccess$(EXE)

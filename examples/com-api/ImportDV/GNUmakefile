@@ -26,3 +26,21 @@
 EXAMPLE = ImportDV
 
 include ../comexamplerules.mk
+
+TEST_CMD = $(APP_RUN_ENV) $(AAFSDKBINDIR)/ImportDV$(EXE)
+.PHONY : check
+check : $(AAFSDKBINDIR)/ImportDV$(EXE)
+	@# Only run libdv compression tests if libdv available
+ifdef LIBDV_PATH
+	@rm -f raw.yuv
+	$(TEST_CMD) -compressionEnable ../ExportDV/ExportDV.aaf && test -f raw.yuv
+	@rm -f raw.yuv
+	$(TEST_CMD) -compressionEnable ../ExportDV/ExportDV.mxf && test -f raw.yuv
+	@rm -f raw.yuv
+	$(TEST_CMD) -compressionEnable ../ExportDV/ExportDV_legacyDV.aaf && test -f raw.yuv
+	@rm -f raw.yuv
+	$(TEST_CMD) -compressionEnable ../ExportDV/ExportDV_DVBased.aaf && test -f raw.yuv
+endif
+	@# Always run test using DV-compressed frame (doesn't require libdv)
+	@rm -f raw.dv
+	$(TEST_CMD) ../ExportDV/ExportDV_NoCompression.aaf && test -f raw.dv

@@ -26,3 +26,7 @@
 EXAMPLE = ComPropDirectDump
 
 include ../comexamplerules.mk
+
+.PHONY : check
+check : $(AAFSDKBINDIR)/ComPropDirectDump$(EXE)
+	for f in ../*/*.aaf ../../../test/com/*/*.aaf; do if echo $$f | grep UTF8FileNameTest > /dev/null; then echo "Skipping $$f until wctou8() et al are removed from the SDK"; else echo ComPropDirectDump $$f; (cd `dirname $$f`; $(APP_RUN_ENV) $(AAFSDKBINDIR)/ComPropDirectDump$(EXE) `basename $$f` > /dev/null) || exit $$?; fi; done

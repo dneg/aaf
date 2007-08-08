@@ -64,6 +64,15 @@ CXXFILES2 = write.cpp \
 $(AAFSDKBINDIR)/ComExtensionWrite$(EXE) : $(CXXOBJS2)
 	$(LD) $(CXXOBJS2) $(LINK_AAF_APP)
 
+# Steps for testing taken from RunModTestAndExamples.bash
+.PHONY : check
+check : $(AAFSDKBINDIR)/ComExtensionWrite$(EXE) $(AAFSDKBINDIR)/ComExtensionRead$(EXE)
+	$(APP_RUN_ENV) $(AAFSDKBINDIR)/ComExtensionWrite$(EXE) > ComExtensionWrite.txt
+	$(APP_RUN_ENV) $(AAFSDKBINDIR)/ComPersonnelPluginWrite$(EXE) > ComPersonnelPluginWrite.txt
+	cat ComExtensionWrite.txt | grep -v 'extension\.aaf' > ComExtensionWrite1.txt
+	cat ComPersonnelPluginWrite.txt | grep -v 'extensionPlugin\.aaf' > ComPersonnelPluginWrite1.txt
+	diff ComExtensionWrite1.txt ComPersonnelPluginWrite1.txt
+
 
 .PHONY : clean
 clean :

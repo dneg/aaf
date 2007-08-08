@@ -25,5 +25,17 @@ EXAMPLE = ExportPCM
 
 include ../comexamplerules.mk
 
-# Add include path to EssenceTestData.h
+# Add include path to EssenceTestData.h for Laser audio samples
 INCLUDES += -I../../../test/com/ComModTestAAF/ModuleTests
+
+TEST_CMD = $(APP_RUN_ENV) $(AAFSDKBINDIR)/ExportPCM$(EXE)
+.PHONY : check
+check : $(AAFSDKBINDIR)/ExportPCM$(EXE)
+	@rm -f ExportPCM.aaf Laser.wav Laser.pcm Laser.aaf
+	$(TEST_CMD) && test -f ExportPCM.aaf && test -f Laser.wav
+	@rm -f ExportPCM.aaf Laser.wav Laser.pcm Laser.aaf
+	$(TEST_CMD) -File && test -f ExportPCM.aaf && test -f Laser.pcm
+	@rm -f ExportPCM.aaf Laser.wav Laser.pcm Laser.aaf
+	$(TEST_CMD) -AAF && test -f ExportPCM.aaf && test -f Laser.aaf
+	@rm -f ExportPCM.aaf Laser.wav Laser.pcm Laser.aaf
+	$(TEST_CMD) -embed && test -f ExportPCM.aaf

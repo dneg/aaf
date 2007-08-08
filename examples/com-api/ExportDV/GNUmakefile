@@ -26,3 +26,16 @@
 EXAMPLE = ExportDV
 
 include ../comexamplerules.mk
+
+TEST_CMD = $(APP_RUN_ENV) $(AAFSDKBINDIR)/ExportDV$(EXE)
+.PHONY : check
+check : $(AAFSDKBINDIR)/ExportDV$(EXE)
+	# Only run libdv compression tests if libdv available
+ifdef LIBDV_PATH
+	$(TEST_CMD)
+	$(TEST_CMD) -o ExportDV.mxf -mxf
+	$(TEST_CMD) -o ExportDV_legacyDV.aaf -legacyDV
+	$(TEST_CMD) -o ExportDV_DVBased.aaf -DVBased
+endif
+	# Always run test using DV-compressed frame
+	$(TEST_CMD) -o ExportDV_NoCompression.aaf -rawDV ../../../test/com/ScaleTest/1frame.dv

@@ -96,11 +96,26 @@ ExportPCM :
 ImportPCM :
 	cd ImportPCM && $(MAKE)
 
-# Run InfoDumper check last since all generated AAF files will be available to test
+# Run ComPropDirectDump, comClientTest and InfoDumper checks last since all
+# generated AAF files will be available to be read and tested
 .PHONY : check
 check : all
+	cd ComCutsOnlyTest && $(MAKE) $@
+	cd ComEssenceDataTest && $(MAKE) $@
+	cd ComExtension && $(MAKE) $@
+	cd ComPropDirectAccess && $(MAKE) $@
+	cd ExportSimpleComposition && $(MAKE) $@
+	cd ExportAudioExample && $(MAKE) $@
+	cd ImportAudioExample && $(MAKE) $@
+	cd MetadataExample && $(MAKE) $@
+	cd ExportDV && $(MAKE) $@
+	cd ImportDV && $(MAKE) $@
 	cd ExportJPEG && $(MAKE) $@
 	cd ImportJPEG && $(MAKE) $@
+	cd ExportPCM && $(MAKE) $@
+	cd ImportPCM && $(MAKE) $@
+	cd ComPropDirectDump && $(MAKE) $@
+	cd comClientTest && $(MAKE) $@
 	cd InfoDumper && $(MAKE) $@
 
 .PHONY : clean
