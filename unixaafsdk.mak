@@ -127,7 +127,6 @@ endif
 #
 AAFSDK_BIN            = $(AAFSDK)/bin
 AAFSDK_BIN_DEBUG      = $(AAFSDK_BIN)/debug
-AAFSDK_HELP           = $(AAFSDK)/help
 AAFSDK_INCLUDE        = $(AAFSDK)/include
 AAFSDK_LIB            = $(AAFSDK)/lib
 AAFSDK_LIB_DEBUG      = $(AAFSDK_LIB)/debug
@@ -189,12 +188,10 @@ ifneq ($(AAFSDK), ".")
     TARGET_DIRS = \
        	$(AAFSDK) \
        	$(CONFIG_DIRS) \
-       	$(AAFSDK_HELP) \
        	$(AAFSDK_INCLUDE)
 else
     TARGET_DIRS = \
        	$(CONFIG_DIRS) \
-       	$(AAFSDK_HELP) \
        	$(AAFSDK_INCLUDE)
 endif
 
@@ -359,7 +356,6 @@ TARGET_DIRS_TO_REMOVE = \
 	$(AAFSDK_BIN_DEBUG) \
 	$(AAFSDK_BIN_EXT) \
 	$(AAFSDK_BIN) \
-	$(AAFSDK_HELP) \
 	$(AAFSDK_INCLUDE) \
 
 #
@@ -408,12 +404,6 @@ $(AAFSDK_BIN_DEBUG_EXT) : $(AAFSDK_BIN_DEBUG)
 		$(MKDIR) $(MKDIR_OPTS) $@; \
 	fi
 endif
-
-$(AAFSDK_HELP) :
-	@$(ECHO) Skipping $(AAFSDK_HELP) 
-	#@if [ ! -d $@ ]; then \
-	#	$(MKDIR) $(MKDIR_OPTS) $@; \
-	#fi
 
 $(AAFSDK_INCLUDE) :
 	@if [ ! -d $@ ]; then \

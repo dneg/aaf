@@ -174,7 +174,6 @@ AAFSDK_CFG=$(AAFSDK)\config.mk
 #
 AAFSDK_BIN     = $(AAFSDK)\bin
 AAFSDK_DEBUG   = $(AAFSDK_BIN)\debug
-AAFSDK_HELP    = $(AAFSDK)\help
 AAFSDK_INCLUDE = $(AAFSDK)\include
 AAFSDK_LIB     = $(AAFSDK)\lib
 AAFSDK_BIN_EXT = $(AAFSDK_BIN)\aafext
@@ -225,7 +224,6 @@ TARGET_DIRS = \
 	$(AAFSDK_DEBUG) \
 	$(AAFSDK_DEBUG_EXT) \
 !endif
-	$(AAFSDK_HELP) \
 	$(AAFSDK_INCLUDE) \
 	$(AAFSDK_LIB)
 
@@ -396,7 +394,6 @@ TARGET_DIRS_TO_REMOVE = \
 	$(AAFSDK_DEBUG) \
 	$(AAFSDK_BIN_EXT) \
 	$(AAFSDK_BIN) \
-	$(AAFSDK_HELP) \
 	$(AAFSDK_INCLUDE) \
 !if "$(AAFSDK)"=="."
 	$(AAFSDK_LIB)
@@ -465,10 +462,6 @@ $(AAFSDK_DEBUG) : $(AAFSDK_BIN)
 $(AAFSDK_DEBUG_EXT) : $(AAFSDK_DEBUG)
 	if not exist $(AAFSDK_DEBUG_EXT) \
 	    md $(AAFSDK_DEBUG_EXT)
-
-$(AAFSDK_HELP) :
-	if not exist $(AAFSDK_HELP) \
-	    md $(AAFSDK_HELP)
 
 $(AAFSDK_INCLUDE) :
 	if not exist $(AAFSDK_INCLUDE) \
