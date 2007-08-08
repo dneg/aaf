@@ -53,7 +53,7 @@ SHELL = /bin/sh
 #------------------------------------------------------------------------------
 # Compiler-specific definitions
 #------------------------------------------------------------------------------
-COMPILER ?= g++
+COMPILER ?= cl
 include $(AAFBASE)/build/cdefs-$(COMPILER).mk
 
 
