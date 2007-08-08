@@ -85,7 +85,8 @@ PLATFORM_CFLAGS += -D_XOPEN_SOURCE=500
 #------------------------------------------------------------------------------
 # Linker command and options
 #------------------------------------------------------------------------------
-RPATH_OPT = $(XL)-rpath $(XL)$(RPATH)
+# Option to place library search path in executable for use by runtime linker
+RPATH_OPT = $(XL)-R $(XL)$(RPATH)
 
 # Command to link executable.
 LD = $(CC) -g -fPIC -ldl
