@@ -208,9 +208,9 @@ endif
 #	make RPATH=/usr/local/lib/aaf
 #
 #----------------------------------------------------------
-#RPATH ?= $(LIBDIR)  <-- this doesnt work
+# Set RPATH only if it was never defined
 ifeq ($(origin RPATH), undefined)
-    RPATH = $(LIBDIR)
+    RPATH = $(AAFSDKBINDIR)
 endif
 
 
