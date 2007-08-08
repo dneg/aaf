@@ -30,11 +30,33 @@ int testExampleFiles()
 {
     printf("\nExample Files:\n\n");
     
-    const wchar_t* exampleFiles[2] = 
+    const wchar_t* exampleFilesLE[2] = 
     {
-        L"input/axExample.xml",
-        L"input/AVID_Newscutter_sequence.xml"
+        L"input/axExample_le.xml",
+        L"input/AVID_Newscutter_sequence_le.xml"
     };
+    const wchar_t* exampleFilesBE[2] = 
+    {
+        L"input/axExample_be.xml",
+        L"input/AVID_Newscutter_sequence_be.xml"
+    };
+    const wchar_t** exampleFiles;
+    
+    // the examples file are chosen based on the host byte order because
+    // machines with different host byte orders were found to output the 
+    // AAF XML elements in a different order and this caused the basic
+    // diff function below to fail
+    aafUInt32 longWord = 0x12345678;
+    aafUInt8 byte = *((aafUInt8*)&longWord);
+    if (byte == 0x12) 
+    {
+        exampleFiles = exampleFilesBE;
+    }
+    else
+    {
+        exampleFiles = exampleFilesLE;
+    }
+    
     
     bool passed = true;
     try
