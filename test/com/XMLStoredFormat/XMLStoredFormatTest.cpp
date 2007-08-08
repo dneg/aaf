@@ -139,7 +139,13 @@ void copyAndTouch(const aafCharacter* inFileName, const aafCharacter* outFileNam
         sep++;
     }
 #endif
-    system(copyCmd);
+    int result = system(copyCmd);
+    if (result != 0)
+    {
+        fprintf(stderr, "\nSystem copy command returned '%0x', at line %d in %s\n", result,
+            __LINE__, __FILE__);
+        throw "System copy command failed";
+    }
 
     
     IAAFFile* outFile = 0;
