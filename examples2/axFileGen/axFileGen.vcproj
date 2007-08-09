@@ -106,7 +106,7 @@
 				OutputFile=".\Release/axFileGen.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
-				AdditionalLibraryDirectories="../axLib/Release,../../AAFWinSDK/Release/Refimpl"
+				AdditionalLibraryDirectories="../axLib/Release,../../AAFWinSDK/Release/RefImpl"
 				ProgramDatabaseFile=".\Release/axFileGen.pdb"
 				SubSystem="1"
 				TargetMachine="1"/>

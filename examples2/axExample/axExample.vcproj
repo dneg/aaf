@@ -106,7 +106,7 @@
 				OutputFile=".\Release/axExample.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
-				AdditionalLibraryDirectories="../axLib/Release,../../AAFWinSDK/lib"
+				AdditionalLibraryDirectories="../axLib/Release,../../AAFWinSDK/Release/RefImpl"
 				IgnoreDefaultLibraryNames="MSVCRTD"
 				ProgramDatabaseFile=".\Release/axExample.pdb"
 				SubSystem="1"

@@ -42,7 +42,7 @@
 				OutputFile=".\Debug/axPluginInfo.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
-				AdditionalLibraryDirectories="../axLib/Debug,../../AAFWinSDK/Debug/Refimpl,../../AAFWinSDK/lib"
+				AdditionalLibraryDirectories="../axLib/Debug,../../AAFWinSDK/Debug/Refimpl"
 				GenerateDebugInformation="TRUE"
 				ProgramDatabaseFile=".\Debug/axPluginInfo.pdb"
 				SubSystem="1"
@@ -105,7 +105,7 @@
 				OutputFile=".\Release/axPluginInfo.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
-				AdditionalLibraryDirectories="../axLib/Release,../../AAFWinSDK/lib"
+				AdditionalLibraryDirectories="../axLib/Release,../../AAFWinSDK/Release/RefImpl"
 				ProgramDatabaseFile=".\Release/axPluginInfo.pdb"
 				SubSystem="1"
 				TargetMachine="1"/>

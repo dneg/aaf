@@ -44,7 +44,7 @@
 				OutputFile=".\Release/axPlugin.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
-				AdditionalLibraryDirectories="../axLib/Debug,../../AAFWinSDK/lib"
+				AdditionalLibraryDirectories="../axLib/Release,../../AAFWinSDK/Release/RefImpl"
 				ModuleDefinitionFile=".\AxPluginWin.def"
 				ProgramDatabaseFile=".\Release/axPlugin.pdb"
 				ImportLibrary=".\Release/axPlugin.lib"

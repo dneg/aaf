@@ -106,7 +106,7 @@
 				OutputFile=".\Release/axDump.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
-				AdditionalLibraryDirectories="../axLib/Release,../../AAFWinSDK/lib"
+				AdditionalLibraryDirectories="../axLib/Release;../../AAFWinSDK/Release/RefImpl"
 				IgnoreDefaultLibraryNames="MSVCRTD"
 				ProgramDatabaseFile=".\Release/axDump.pdb"
 				SubSystem="1"
