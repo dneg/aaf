@@ -390,8 +390,8 @@ std::auto_ptr< SampleSrcBuffer > BarsSource::GetNext()
 	// The component width is enforced in the Execute method.
 	create_rgbx_bars_image( _width, _height, rgbBufStride, rgbBufSize, rgbBuf );
 	
-	int convertedBufSize;
-	aafUInt8* convertedBuf;
+	int convertedBufSize = 0;
+	aafUInt8* convertedBuf = NULL;
 		
 	// Next, perform color space conversion and resampling.
 	switch ( _format ) {
