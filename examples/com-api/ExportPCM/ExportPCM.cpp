@@ -124,7 +124,9 @@ static aafCharacter productName[] = L"ExportPCM";
 
 static char *input_video = NULL;
 
-static HRESULT CreateAAFFile(const aafWChar * pFileName, aafUID_t container)
+static aafUID_t container = kAAFContainerDef_RIFFWAVE;
+
+static HRESULT CreateAAFFile(const aafWChar * pFileName)
 {
 	IAAFFile*					pFile = NULL;
 	IAAFHeader*					pHeader = NULL;
@@ -340,7 +342,6 @@ void printUsage(const char *progname)
 
 extern int main(int argc, char *argv[])
 {
-	aafUID_t		container = kAAFContainerDef_RIFFWAVE;
 	const aafWChar		*pwFileName	= L"ExportPCM.aaf";
 
 	int i = 1;
@@ -379,7 +380,7 @@ extern int main(int argc, char *argv[])
 	// Make sure all of our required plugins have been registered.
 	checkFatal(RegisterRequiredPlugins());
 
-	checkFatal(CreateAAFFile(pwFileName, container));
+	checkFatal(CreateAAFFile(pwFileName));
 
 	return(0);
 }
