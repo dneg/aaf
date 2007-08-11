@@ -870,6 +870,26 @@ AAFRESULT STDMETHODCALLTYPE
   hr = pvdOut->GetBits (&pOutBits);
   if (AAFRESULT_FAILED(hr)) return hr;
 
+	// OFM 2007-08-09 merge forward
+	/*	
+		this seems areasonable and worthwhile defensive addition
+
+		but whence comes the real problem?
+
+		pOutBits will be 0 if the PropValData has not been initialized
+		which will be the case if the ImplAAFProperty for the member believes it is Optional
+		which of course record members are not - they are mandatory
+
+		perhaps this is the real bug?
+	*/
+	if( !pOutBits )
+	{
+		aafUInt32 bitsSize; pvdOut->GetBitsSize( &bitsSize );
+
+		hr = pvdOut->AllocateBits ( bitsSize, &pOutBits);
+		if (AAFRESULT_FAILED(hr)) return hr;
+	}
+
   memcpy (pOutBits+offset, pInBits, ptd->PropValSize());
 
   return AAFRESULT_SUCCESS;
