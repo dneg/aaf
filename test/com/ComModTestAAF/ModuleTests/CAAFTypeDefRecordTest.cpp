@@ -50,7 +50,18 @@ typedef IAAFSmartPointer<IAAFPropertyValue>  IAAFPropertyValueSP;
 typedef IAAFSmartPointer<IAAFTypeDef>        IAAFTypeDefSP;
 typedef IAAFSmartPointer<IAAFTypeDefInt>     IAAFTypeDefIntSP;
 typedef IAAFSmartPointer<IAAFTypeDefRecord>  IAAFTypeDefRecordSP;
+typedef IAAFSmartPointer<IAAFTypeDefVariableArray>		IAAFTypeDefVariableArraySP;
 typedef IAAFSmartPointer<IEnumAAFMobs>       IEnumAAFMobsSP;
+
+// convenient version manipulater
+inline aafUInt32 versionUInt( aafProductVersion_t testRev )
+{
+	return ((testRev.major*100 + testRev.minor)*100 + testRev.tertiary)*100 + testRev.patchLevel;
+}
+inline aafUInt32 versionUInt( aafUInt16 major, aafUInt16 minor, aafUInt16 tertiary =0, aafUInt16 patchLevel =0 )
+{
+	return ((major*100 + minor)*100 + tertiary)*100 + patchLevel;
+}
 
 // convenient error handlers.
 inline void checkResult(HRESULT r)
@@ -80,6 +91,12 @@ static const aafUID_t sTypeId_Rational8_pair =
 { 0x5bc8a141, 0x2be4, 0x11d4,
   { 0xb8, 0xd, 0x0, 0x0, 0x86, 0x3f, 0x2c, 0x27 }
 };
+//
+// {2FB711E7-35DA-4722-9F3E-B3130CD57AC3}
+static const aafUID_t sTypeId_Rational8_array = 
+{ 0x2fb711e7, 0x35da, 0x4722, 
+  { 0x9f, 0x3e, 0xb3, 0x13, 0xc, 0xd5, 0x7a, 0xc3 }
+};
 
 //
 // Property IDs
@@ -100,6 +117,12 @@ static const aafUID_t sPropertyId_positionB =
 static const aafUID_t sPropertyId_positionC = 
 { 0x11ddab4a, 0x371d, 0x11d4,
   { 0x93, 0x5e, 0x0, 0x60, 0x94, 0xeb, 0x75, 0xcb }
+};
+//
+// {0B876F07-EA1B-4c78-A4BF-EDC35E583F29}
+static const aafUID_t sPropertyId_positionN = 
+{ 0xb876f07, 0xea1b, 0x4c78, 
+  { 0xa4, 0xbf, 0xed, 0xc3, 0x5e, 0x58, 0x3f, 0x29 } 
 };
 
 
@@ -168,6 +191,9 @@ static HRESULT WriteRecord (
 	  checkResult (pHeader->GetDictionary(&pDict));
 	  CAAFBuiltinDefs defs(pDict);
 
+	  // get the SDK version against which we are testing
+      aafProductVersion_t			testVer;
+      checkResult(pHeader->GetRefImplVersion(&testVer));
 
 	  // Create, initialize, and register the Rational8 type, to
 	  // consist of an Int8 numerator and a UInt8 denominator.
@@ -257,6 +283,23 @@ static HRESULT WriteRecord (
 	  checkResult (RegisterRational8Offsets (ptdr8));
 	  checkResult (RegisterRational8PairOffsets (ptdr8p));
 
+	  // register variable array of Rational8Pair records
+	  IAAFTypeDefVariableArraySP ptdvaarpr;
+	  IAAFTypeDefSP ptdarpr;
+	  // perform this part only for specified versions
+	  if( versionUInt(testVer) >= versionUInt(1,1,1,0) )
+	  {
+		//Create a Variable Array
+		checkResult(pDict->CreateMetaInstance (AUID_AAFTypeDefVariableArray, IID_IAAFTypeDefVariableArray, (IUnknown **) &ptdvaarpr));
+		
+		//IAAFTypeDefVariableArray::Initialize
+		checkResult(ptdvaarpr->Initialize(sTypeId_Rational8_array, ptd, L"Rational8PairArray"));
+		
+		//  Register our new VA type def :
+		checkResult(ptdvaarpr->QueryInterface(IID_IAAFTypeDef, (void**)&ptdarpr));
+		checkResult(pDict->RegisterTypeDef(ptdarpr));
+	  }
+
 	  // Create a new property on Composition mob (called Position)
 	  // whose type is rational8_pair.
 	  checkResult (ptdr8p->QueryInterface (IID_IAAFTypeDef,
@@ -279,6 +322,18 @@ static HRESULT WriteRecord (
 					L"PositionC",
 					ptd,
 					&pPropDefPosC));
+
+	  // register property of type variable array of Rational8Pair records
+	  IAAFPropertyDefSP pPropDefPosN;
+	  // perform this part only for specified versions
+	  if( versionUInt(testVer) >= versionUInt(1,1,1,0) )
+	  {
+		checkResult (defs.cdCompositionMob()->RegisterOptionalPropertyDef
+					(sPropertyId_positionN,
+						L"PositionN",
+						ptdarpr,
+						&pPropDefPosN));
+	  }
 
 	  // Create one of our new CompositionMobs, and add a values for
 	  // the Position property.
@@ -404,6 +459,24 @@ static HRESULT WriteRecord (
 	  checkResult (pObj->SetPropertyValue (pPropDefPosC,
 										   pRat8PairVal_9abc));
 
+	  // add a value of PropertyN
+	  IAAFPropertyValueSP spArrayPropertyValue;
+	  // perform this part only for specified versions
+	  if( versionUInt(testVer) >= versionUInt(1,1,1,0) )
+	  {
+	    // Create an empty array and then fill it by appending elements...
+  		checkResult( ptdvaarpr->CreateEmptyValue (&spArrayPropertyValue) );
+		
+	    // intentionally in permuted order
+		checkResult( ptdvaarpr->AppendElement(spArrayPropertyValue, pRat8PairVal_5678) );
+
+		checkResult( ptdvaarpr->AppendElement(spArrayPropertyValue, pRat8PairVal_9abc) );
+
+		checkResult( ptdvaarpr->AppendElement(spArrayPropertyValue, pRat8PairVal_1234) );
+
+		// set PropertyN
+		checkResult ( pObj->SetPropertyValue( pPropDefPosN, spArrayPropertyValue ) );
+	  }
 
 	  //Put the modified comp mob into the file.
 	  IAAFMobSP pMob;
@@ -453,6 +526,10 @@ static HRESULT ReadRecord (const aafWChar * pFileName)
 	  IAAFDictionarySP pDict;
 	  checkResult (pHeader->GetDictionary(&pDict));
 	  CAAFBuiltinDefs defs(pDict);
+
+	  // get the SDK version against which we are testing
+      aafProductVersion_t			testVer;
+      checkResult(pHeader->GetRefImplVersion(&testVer));
 
 	  // Get the type definitions for our new types.
 	  IAAFTypeDefSP ptd;
@@ -564,6 +641,16 @@ static HRESULT ReadRecord (const aafWChar * pFileName)
 	  temphr = ptdr8p->GetMemberType (2, &pMemberTd);
 	  checkExpression (temphr == AAFRESULT_ILLEGAL_VALUE,
 					   AAFRESULT_TEST_FAILED);
+
+	  // register variable array of Rational8Pair records
+	  IAAFTypeDefVariableArraySP ptdvaarpr;
+	  IAAFTypeDefSP ptdarpr;
+	  // perform this part only for specified versions
+	  if( versionUInt(testVer) >= versionUInt(1,1,1,0) )
+	  {
+		checkResult (pDict->LookupTypeDef (sTypeId_Rational8_array,&ptdarpr));
+		checkResult (ptdarpr->QueryInterface (IID_IAAFTypeDefVariableArray,(void**) &ptdvaarpr));
+	  }
 
 	  // Now read the CompositionMob to which we added some optional
 	  // properties.
@@ -706,6 +793,34 @@ static HRESULT ReadRecord (const aafWChar * pFileName)
 	  checkExpression (12 == valC.Y_Position.Denominator,
 					   AAFRESULT_TEST_FAILED);
 
+	  // test variable array of records
+	  // perform this part only for specified versions
+	  if( versionUInt(testVer) >= versionUInt(1,1,1,0) )
+	  {
+		IAAFPropertyDefSP pPdPosN;
+		checkResult (defs.cdCompositionMob()->LookupPropertyDef (sPropertyId_positionN,	&pPdPosN));
+		IAAFPropertyValueSP pPVN;
+		checkResult (pObj->GetPropertyValue (pPdPosN, &pPVN));
+
+		// get the middle element of the array, 9abc
+		IAAFPropertyValueSP pPVN1;
+		checkResult (ptdvaarpr->GetElementValue (pPVN, 1, &pPVN1));
+
+		// Read the value with GetStruct
+		rational8pair_t valN1 = { {0,0},{0,0} };
+		checkResult (ptdr8p->GetStruct (pPVN1,
+										(aafMemPtr_t) &valN1,
+										sizeof (valN1)));
+		checkExpression (9 == valN1.X_Position.Numerator,
+						AAFRESULT_TEST_FAILED);
+		checkExpression (10 == valN1.X_Position.Denominator,
+						AAFRESULT_TEST_FAILED);
+		checkExpression (11 == valN1.Y_Position.Numerator,
+						AAFRESULT_TEST_FAILED);
+		checkExpression (12 == valN1.Y_Position.Denominator,
+						AAFRESULT_TEST_FAILED);
+	  }
+
 	  // Attempt to close the file.
 	  checkResult(pFile->Close());
 	  IAAFFileSP nullFile;
@@ -748,7 +863,7 @@ extern "C" HRESULT CAAFTypeDefRecord_test(
     {
       if(mode == kAAFUnitTestReadWrite)
 		hr =  WriteRecord(pFileName, fileKind, rawStorageType, productID);
-	  if (SUCCEEDED (hr) || mode != mode == kAAFUnitTestReadWrite)
+	  if (SUCCEEDED (hr) || mode == kAAFUnitTestReadOnly)
 		{
 		  hr = AAFRESULT_TEST_FAILED;
 		  hr = ReadRecord(pFileName);
