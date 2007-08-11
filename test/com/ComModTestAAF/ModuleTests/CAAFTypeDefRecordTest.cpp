@@ -81,19 +81,19 @@ inline void checkExpression(bool expression, HRESULT r)
 //
 //
 // {5BC8A140-2BE4-11d4-B80D-0000863F2C27}
-static const aafUID_t sTypeId_Rational8 = 
+static const aafUID_t sTypeId_Rational16 = 
 { 0x5bc8a140, 0x2be4, 0x11d4,
   { 0xb8, 0xd, 0x0, 0x0, 0x86, 0x3f, 0x2c, 0x27 }
 };
 //
 // {5BC8A141-2BE4-11d4-B80D-0000863F2C27}
-static const aafUID_t sTypeId_Rational8_pair = 
+static const aafUID_t sTypeId_Rational16_pair = 
 { 0x5bc8a141, 0x2be4, 0x11d4,
   { 0xb8, 0xd, 0x0, 0x0, 0x86, 0x3f, 0x2c, 0x27 }
 };
 //
 // {2FB711E7-35DA-4722-9F3E-B3130CD57AC3}
-static const aafUID_t sTypeId_Rational8_array = 
+static const aafUID_t sTypeId_Rational16_array = 
 { 0x2fb711e7, 0x35da, 0x4722, 
   { 0x9f, 0x3e, 0xb3, 0x13, 0xc, 0xd5, 0x7a, 0xc3 }
 };
@@ -126,44 +126,44 @@ static const aafUID_t sPropertyId_positionN =
 };
 
 
-struct rational8_t
+struct Rational16_t
 {
-  aafInt8  Numerator;
-  aafUInt8 Denominator;
+  aafInt16  Numerator;
+  aafUInt16 Denominator;
 };
 
-struct rational8pair_t
+struct Rational16pair_t
 {
-  rational8_t X_Position;
-  rational8_t Y_Position;
+  Rational16_t X_Position;
+  Rational16_t Y_Position;
 };
 
 
-static HRESULT RegisterRational8Offsets (IAAFTypeDefRecord * ptd)
+static HRESULT RegisterRational16Offsets (IAAFTypeDefRecord * ptd)
 {
   assert (ptd);
   aafUInt32 offsets[] =
   {
-	offsetof (rational8_t, Numerator),
-	offsetof (rational8_t, Denominator)
+	offsetof (Rational16_t, Numerator),
+	offsetof (Rational16_t, Denominator)
   };
   return ptd->RegisterMembers (offsets,
 							   2,
-							   sizeof (rational8_t));
+							   sizeof (Rational16_t));
 }
 
 
-static HRESULT RegisterRational8PairOffsets (IAAFTypeDefRecord * ptd)
+static HRESULT RegisterRational16PairOffsets (IAAFTypeDefRecord * ptd)
 {
   assert (ptd);
   aafUInt32 offsets[] =
   {
-	offsetof (rational8pair_t, X_Position),
-	offsetof (rational8pair_t, Y_Position)
+	offsetof (Rational16pair_t, X_Position),
+	offsetof (Rational16pair_t, Y_Position)
   };
   return ptd->RegisterMembers (offsets,
 							   2,
-							   sizeof (rational8pair_t));
+							   sizeof (Rational16pair_t));
 }
 
 
@@ -195,95 +195,95 @@ static HRESULT WriteRecord (
       aafProductVersion_t			testVer;
       checkResult(pHeader->GetRefImplVersion(&testVer));
 
-	  // Create, initialize, and register the Rational8 type, to
-	  // consist of an Int8 numerator and a UInt8 denominator.
-	  IAAFTypeDef* tdr8MemberTypes[] =
-	  {defs.tdInt8(),
-	   defs.tdUInt8()};
+	  // Create, initialize, and register the Rational16 type, to
+	  // consist of an Int16 numerator and a UInt16 denominator.
+	  IAAFTypeDef* tdr16MemberTypes[] =
+	  {defs.tdInt16(),
+	   defs.tdUInt16()};
 	  aafWChar numerator[] = L"Numerator";
 	  aafWChar denominator[] = L"Denominator";
-	  aafString_t tdr8MemberNames[] =
+	  aafString_t tdr16MemberNames[] =
 	  {numerator,
 	   denominator};
-	  IAAFTypeDefRecordSP ptdr8;
+	  IAAFTypeDefRecordSP ptdr16;
 	  checkResult (pDict->
 				   CreateMetaInstance (kAAFClassID_TypeDefRecord,
 									   IID_IAAFTypeDefRecord,
-									   (IUnknown**) &ptdr8));
+									   (IUnknown**) &ptdr16));
 
-	  checkResult (ptdr8->Initialize (sTypeId_Rational8,
-									  tdr8MemberTypes,
-									  tdr8MemberNames,
+	  checkResult (ptdr16->Initialize (sTypeId_Rational16,
+									  tdr16MemberTypes,
+									  tdr16MemberNames,
 									  2,
-									  L"Rational8"));
+									  L"Rational16"));
 
 	  // check for duplicate initialization
-	  temphr = ptdr8->Initialize (sTypeId_Rational8,
-								  tdr8MemberTypes,
-								  tdr8MemberNames,
+	  temphr = ptdr16->Initialize (sTypeId_Rational16,
+								  tdr16MemberTypes,
+								  tdr16MemberNames,
 								  2,
-								  L"Rational8");
+								  L"Rational16");
 	  checkExpression (AAFRESULT_ALREADY_INITIALIZED == temphr,
 					   AAFRESULT_TEST_FAILED);
 
 	  IAAFTypeDefSP ptd;
-	  checkResult (ptdr8->QueryInterface (IID_IAAFTypeDef, (void**) &ptd));
+	  checkResult (ptdr16->QueryInterface (IID_IAAFTypeDef, (void**) &ptd));
 	  checkResult (pDict->RegisterTypeDef (ptd));
 
-	  // Create, initialize, and register the Rational8Position type,
-	  // to consist of a Rational8 X and Rational8 Y coordinates.
+	  // Create, initialize, and register the Rational16Position type,
+	  // to consist of a Rational16 X and Rational16 Y coordinates.
 
-	  IAAFTypeDefRecordSP ptdr8p;
+	  IAAFTypeDefRecordSP ptdr16p;
 	  //checkResult (defs.cdTypeDefRecord()->
 	  // CreateInstance (IID_IAAFTypeDefRecord,
-	  // (IUnknown**)&ptdr8p));
+	  // (IUnknown**)&ptdr16p));
 	  checkResult (pDict->
 				   CreateMetaInstance (kAAFClassID_TypeDefRecord,
 									   IID_IAAFTypeDefRecord,
-									   (IUnknown**) &ptdr8p));
+									   (IUnknown**) &ptdr16p));
 
 	  IAAFTypeDef * pTempTd = 0;
-	  checkResult (ptdr8->QueryInterface (IID_IAAFTypeDef,
+	  checkResult (ptdr16->QueryInterface (IID_IAAFTypeDef,
 										  (void**) &pTempTd));	  
-	  IAAFTypeDef* tdr8pMemberTypes[] =
+	  IAAFTypeDef* tdr16pMemberTypes[] =
 	  {pTempTd,
 	   pTempTd};
 	  aafWChar xpos[] = L"X Position";
 	  aafWChar ypos[] = L"Y Position";
-	  aafString_t tdr8pMemberNames[] =
+	  aafString_t tdr16pMemberNames[] =
 	  {xpos,
 	   ypos};
-	  checkResult (ptdr8p->Initialize (sTypeId_Rational8_pair,
-									   tdr8pMemberTypes,
-									   tdr8pMemberNames,
+	  checkResult (ptdr16p->Initialize (sTypeId_Rational16_pair,
+									   tdr16pMemberTypes,
+									   tdr16pMemberNames,
 									   2,
-									   L"Rational8Pair"));
+									   L"Rational16Pair"));
 	  // check for duplicate initialization
-	  temphr = ptdr8p->Initialize (sTypeId_Rational8,
-								   tdr8pMemberTypes,
-								   tdr8pMemberNames,
+	  temphr = ptdr16p->Initialize (sTypeId_Rational16,
+								   tdr16pMemberTypes,
+								   tdr16pMemberNames,
 								   2,
-								   L"Rational8Pair");
+								   L"Rational16Pair");
 	  checkExpression (AAFRESULT_ALREADY_INITIALIZED == temphr,
 					   AAFRESULT_TEST_FAILED);
 
 	  pTempTd->Release ();
 	  pTempTd = 0;
-	  checkResult (ptdr8p->QueryInterface (IID_IAAFTypeDef, (void**) &ptd));
+	  checkResult (ptdr16p->QueryInterface (IID_IAAFTypeDef, (void**) &ptd));
 	  checkResult (pDict->RegisterTypeDef (ptd));
 
-	  // Now attempt to register offsets of rational8_pair.  This
+	  // Now attempt to register offsets of Rational16_pair.  This
 	  // should fail, because offsets of its members (of type
-	  // rational8) have not yet been registered.
-	  temphr = RegisterRational8PairOffsets (ptdr8p);
+	  // Rational16) have not yet been registered.
+	  temphr = RegisterRational16PairOffsets (ptdr16p);
 	  checkExpression (temphr == AAFRESULT_NOT_REGISTERED,
 					   AAFRESULT_TEST_FAILED);
 
 	  // Now let's attempt registration the right way.
-	  checkResult (RegisterRational8Offsets (ptdr8));
-	  checkResult (RegisterRational8PairOffsets (ptdr8p));
+	  checkResult (RegisterRational16Offsets (ptdr16));
+	  checkResult (RegisterRational16PairOffsets (ptdr16p));
 
-	  // register variable array of Rational8Pair records
+	  // register variable array of Rational16Pair records
 	  IAAFTypeDefVariableArraySP ptdvaarpr;
 	  IAAFTypeDefSP ptdarpr;
 	  // perform this part only for specified versions
@@ -293,7 +293,7 @@ static HRESULT WriteRecord (
 		checkResult(pDict->CreateMetaInstance (AUID_AAFTypeDefVariableArray, IID_IAAFTypeDefVariableArray, (IUnknown **) &ptdvaarpr));
 		
 		//IAAFTypeDefVariableArray::Initialize
-		checkResult(ptdvaarpr->Initialize(sTypeId_Rational8_array, ptd, L"Rational8PairArray"));
+		checkResult(ptdvaarpr->Initialize(sTypeId_Rational16_array, ptd, L"Rational16PairArray"));
 		
 		//  Register our new VA type def :
 		checkResult(ptdvaarpr->QueryInterface(IID_IAAFTypeDef, (void**)&ptdarpr));
@@ -301,8 +301,8 @@ static HRESULT WriteRecord (
 	  }
 
 	  // Create a new property on Composition mob (called Position)
-	  // whose type is rational8_pair.
-	  checkResult (ptdr8p->QueryInterface (IID_IAAFTypeDef,
+	  // whose type is Rational16_pair.
+	  checkResult (ptdr16p->QueryInterface (IID_IAAFTypeDef,
 										   (void**) &ptd));
 	  IAAFPropertyDefSP pPropDefPosA;
 	  IAAFPropertyDefSP pPropDefPosB;
@@ -323,7 +323,7 @@ static HRESULT WriteRecord (
 					ptd,
 					&pPropDefPosC));
 
-	  // register property of type variable array of Rational8Pair records
+	  // register property of type variable array of Rational16Pair records
 	  IAAFPropertyDefSP pPropDefPosN;
 	  // perform this part only for specified versions
 	  if( versionUInt(testVer) >= versionUInt(1,1,1,0) )
@@ -346,41 +346,41 @@ static HRESULT WriteRecord (
 	  // methods.  The constituent property values will be created
 	  // from CreateValueFromStruct, and from SetValueFromStruct.
 
-	  const rational8_t v_12 = {1, 2};
-	  const rational8_t v_34 = {3, 4};
+	  const Rational16_t v_12 = {1, 2};
+	  const Rational16_t v_34 = {3, 4};
 	  IAAFPropertyValue * pValRat[2] = { 0 };
 
-	  checkResult (ptdr8->
+	  checkResult (ptdr16->
 				   CreateValueFromStruct ((aafMemPtr_t) &v_12,
 										  sizeof (v_12),
 										  &pValRat[0]));
 	  // create it with wrong data, and use SetStruct to give it right
 	  // data
-	  checkResult (ptdr8->
+	  checkResult (ptdr16->
 				   CreateValueFromStruct ((aafMemPtr_t) &v_12,
 										  sizeof (v_12),
 										  &pValRat[1]));
-	  checkResult (ptdr8->
+	  checkResult (ptdr16->
 				   SetStruct (pValRat[1],
 							  (aafMemPtr_t) &v_34,
 							  sizeof (v_34)));
 
-	  // Create the rational8_pair property value from the
-	  // rational8 property values.
-	  IAAFPropertyValueSP pRat8PairVal_1234;
-	  temphr = ptdr8p->CreateValueFromValues (0,
+	  // Create the Rational16_pair property value from the
+	  // Rational16 property values.
+	  IAAFPropertyValueSP pRat16PairVal_1234;
+	  temphr = ptdr16p->CreateValueFromValues (0,
 											  2,
-											  &pRat8PairVal_1234);
+											  &pRat16PairVal_1234);
 	  checkExpression (AAFRESULT_NULL_PARAM == temphr,
 					   AAFRESULT_TEST_FAILED);
-	  temphr = ptdr8p->CreateValueFromValues (pValRat,
+	  temphr = ptdr16p->CreateValueFromValues (pValRat,
 											  1,
-											  &pRat8PairVal_1234);
+											  &pRat16PairVal_1234);
 	  checkExpression (AAFRESULT_ILLEGAL_VALUE == temphr,
 					   AAFRESULT_TEST_FAILED);
-	  checkResult (ptdr8p->CreateValueFromValues (pValRat,
+	  checkResult (ptdr16p->CreateValueFromValues (pValRat,
 												  2,
-												  &pRat8PairVal_1234));
+												  &pRat16PairVal_1234));
 	  pValRat[0]->Release ();
 	  pValRat[0] = 0;
 	  pValRat[1]->Release ();
@@ -390,74 +390,74 @@ static HRESULT WriteRecord (
 	  checkResult (pcm->QueryInterface (IID_IAAFObject,
 										(void**) &pObj));
 	  checkResult (pObj->SetPropertyValue (pPropDefPosA,
-										   pRat8PairVal_1234));
+										   pRat16PairVal_1234));
 
 
 	  // Add property value for PositionB using CreateValueFromStruct
 	  // methods.
-	  const rational8_t r8_56 = {5, 6};
-	  const rational8_t r8_78 = {7, 8};
-	  rational8pair_t r8p_5678;
-	  r8p_5678.X_Position = r8_56;
-	  r8p_5678.Y_Position = r8_78;
-	  IAAFPropertyValueSP pRat8PairVal_5678;
-	  temphr = ptdr8p->
+	  const Rational16_t r16_56 = {5, 6};
+	  const Rational16_t r16_78 = {7, 8};
+	  Rational16pair_t r16p_5678;
+	  r16p_5678.X_Position = r16_56;
+	  r16p_5678.Y_Position = r16_78;
+	  IAAFPropertyValueSP pRat16PairVal_5678;
+	  temphr = ptdr16p->
 		CreateValueFromStruct (0,
-							   sizeof (r8p_5678),
-							   &pRat8PairVal_5678);
+							   sizeof (r16p_5678),
+							   &pRat16PairVal_5678);
 	  checkExpression (AAFRESULT_NULL_PARAM == temphr,
 					   AAFRESULT_TEST_FAILED);
-	  temphr = ptdr8p->
-		CreateValueFromStruct ((aafMemPtr_t) &r8p_5678,
-							   sizeof (r8p_5678),
+	  temphr = ptdr16p->
+		CreateValueFromStruct ((aafMemPtr_t) &r16p_5678,
+							   sizeof (r16p_5678),
 							   0);
 	  checkExpression (AAFRESULT_NULL_PARAM == temphr,
 					   AAFRESULT_TEST_FAILED);
-	  temphr = ptdr8p->
-		CreateValueFromStruct ((aafMemPtr_t) &r8p_5678,
-							   sizeof (r8p_5678)+1,
-							   &pRat8PairVal_5678);
+	  temphr = ptdr16p->
+		CreateValueFromStruct ((aafMemPtr_t) &r16p_5678,
+							   sizeof (r16p_5678)+1,
+							   &pRat16PairVal_5678);
 	  checkExpression (AAFRESULT_ILLEGAL_VALUE == temphr,
 					   AAFRESULT_TEST_FAILED);
-	  checkResult (ptdr8p->
-				   CreateValueFromStruct ((aafMemPtr_t) &r8p_5678,
-										  sizeof (r8p_5678),
-										  &pRat8PairVal_5678));
+	  checkResult (ptdr16p->
+				   CreateValueFromStruct ((aafMemPtr_t) &r16p_5678,
+										  sizeof (r16p_5678),
+										  &pRat16PairVal_5678));
 	  checkResult (pObj->SetPropertyValue (pPropDefPosB,
-										   pRat8PairVal_5678));
+										   pRat16PairVal_5678));
 
 	  // Add property value for PositionC using CreateValueFromStruct
 	  // methods, and then use SetStruct to set the value.
-	  const rational8_t r8_9a = {9, 10};
-	  const rational8_t r8_bc = {11, 12};
-	  rational8pair_t r8p_9abc;
-	  r8p_9abc.X_Position = r8_9a;
-	  r8p_9abc.Y_Position = r8_bc;
-	  IAAFPropertyValueSP pRat8PairVal_9abc;
-	  checkResult (ptdr8p->
-				   CreateValueFromStruct ((aafMemPtr_t) &r8p_5678,
-										  sizeof (r8p_5678),
-										  &pRat8PairVal_9abc));
-	  temphr = ptdr8p->SetStruct (0,
-								  (aafMemPtr_t) &r8p_9abc,
-								  sizeof (r8p_9abc));
+	  const Rational16_t r16_9a = {9, 10};
+	  const Rational16_t r16_bc = {11, 12};
+	  Rational16pair_t r16p_9abc;
+	  r16p_9abc.X_Position = r16_9a;
+	  r16p_9abc.Y_Position = r16_bc;
+	  IAAFPropertyValueSP pRat16PairVal_9abc;
+	  checkResult (ptdr16p->
+				   CreateValueFromStruct ((aafMemPtr_t) &r16p_5678,
+										  sizeof (r16p_5678),
+										  &pRat16PairVal_9abc));
+	  temphr = ptdr16p->SetStruct (0,
+								  (aafMemPtr_t) &r16p_9abc,
+								  sizeof (r16p_9abc));
 	  checkExpression (AAFRESULT_NULL_PARAM == temphr,
 					   AAFRESULT_TEST_FAILED);
-	  temphr = ptdr8p->SetStruct (pRat8PairVal_9abc,
+	  temphr = ptdr16p->SetStruct (pRat16PairVal_9abc,
 								  0,
-								  sizeof (r8p_9abc));
+								  sizeof (r16p_9abc));
 	  checkExpression (AAFRESULT_NULL_PARAM == temphr,
 					   AAFRESULT_TEST_FAILED);
-	  temphr = ptdr8p->SetStruct (pRat8PairVal_9abc,
-								  (aafMemPtr_t) &r8p_9abc,
-								  sizeof (r8p_9abc)-1);
+	  temphr = ptdr16p->SetStruct (pRat16PairVal_9abc,
+								  (aafMemPtr_t) &r16p_9abc,
+								  sizeof (r16p_9abc)-1);
 	  checkExpression (AAFRESULT_ILLEGAL_VALUE == temphr,
 					   AAFRESULT_TEST_FAILED);
-	  checkResult (ptdr8p->SetStruct (pRat8PairVal_9abc,
-									  (aafMemPtr_t) &r8p_9abc,
-										  sizeof (r8p_9abc)));
+	  checkResult (ptdr16p->SetStruct (pRat16PairVal_9abc,
+									  (aafMemPtr_t) &r16p_9abc,
+										  sizeof (r16p_9abc)));
 	  checkResult (pObj->SetPropertyValue (pPropDefPosC,
-										   pRat8PairVal_9abc));
+										   pRat16PairVal_9abc));
 
 	  // add a value of PropertyN
 	  IAAFPropertyValueSP spArrayPropertyValue;
@@ -468,11 +468,11 @@ static HRESULT WriteRecord (
   		checkResult( ptdvaarpr->CreateEmptyValue (&spArrayPropertyValue) );
 		
 	    // intentionally in permuted order
-		checkResult( ptdvaarpr->AppendElement(spArrayPropertyValue, pRat8PairVal_5678) );
+		checkResult( ptdvaarpr->AppendElement(spArrayPropertyValue, pRat16PairVal_5678) );
 
-		checkResult( ptdvaarpr->AppendElement(spArrayPropertyValue, pRat8PairVal_9abc) );
+		checkResult( ptdvaarpr->AppendElement(spArrayPropertyValue, pRat16PairVal_9abc) );
 
-		checkResult( ptdvaarpr->AppendElement(spArrayPropertyValue, pRat8PairVal_1234) );
+		checkResult( ptdvaarpr->AppendElement(spArrayPropertyValue, pRat16PairVal_1234) );
 
 		// set PropertyN
 		checkResult ( pObj->SetPropertyValue( pPropDefPosN, spArrayPropertyValue ) );
@@ -533,16 +533,16 @@ static HRESULT ReadRecord (const aafWChar * pFileName)
 
 	  // Get the type definitions for our new types.
 	  IAAFTypeDefSP ptd;
-	  checkResult (pDict->LookupTypeDef (sTypeId_Rational8,
+	  checkResult (pDict->LookupTypeDef (sTypeId_Rational16,
 										 &ptd));
-	  IAAFTypeDefRecordSP ptdr8;
+	  IAAFTypeDefRecordSP ptdr16;
 	  checkResult (ptd->QueryInterface (IID_IAAFTypeDefRecord,
-										(void**) &ptdr8));
+										(void**) &ptdr16));
 
 	  // check for duplicate initialization
 	  aafUID_t nullUid = { 0 };
 	  HRESULT temphr;
-	  temphr = ptdr8->Initialize (nullUid,
+	  temphr = ptdr16->Initialize (nullUid,
 								  0,
 								  0,
 								  1,
@@ -551,53 +551,53 @@ static HRESULT ReadRecord (const aafWChar * pFileName)
 					   AAFRESULT_TEST_FAILED);
 
 	  aafUInt32 count = 0;
-	  checkResult (ptdr8->GetCount (&count));
+	  checkResult (ptdr16->GetCount (&count));
 	  checkExpression (2 == count, AAFRESULT_TEST_FAILED);
 
 	  aafUInt32  nameLen = 0;
 	  aafCharacter nameBuf [100];
-	  checkResult (ptdr8->GetMemberNameBufLen (0, &nameLen));
+	  checkResult (ptdr16->GetMemberNameBufLen (0, &nameLen));
 	  checkExpression (((wcslen(L"Numerator")+1)*sizeof(aafCharacter))
 					   == nameLen,
 					   AAFRESULT_TEST_FAILED);
 	  checkExpression (nameLen < 100,
 					   AAFRESULT_TEST_FAILED);
-	  checkResult (ptdr8->GetMemberName (0,
+	  checkResult (ptdr16->GetMemberName (0,
 										 nameBuf,
 										 sizeof (nameBuf)));
 	  checkExpression (0 == wcscmp (L"Numerator", nameBuf),
 					   AAFRESULT_TEST_FAILED);
 
-	  checkResult (ptdr8->GetMemberNameBufLen (1, &nameLen));
+	  checkResult (ptdr16->GetMemberNameBufLen (1, &nameLen));
 	  checkExpression (((wcslen(L"Denominator")+1)*sizeof (aafCharacter))
 					   == nameLen,
 					   AAFRESULT_TEST_FAILED);
 	  checkExpression (nameLen < 100,
 					   AAFRESULT_TEST_FAILED);
-	  checkResult (ptdr8->GetMemberName (1,
+	  checkResult (ptdr16->GetMemberName (1,
 										 nameBuf,
 										 sizeof (nameBuf)));
 	  checkExpression (0 == wcscmp (L"Denominator", nameBuf),
 					   AAFRESULT_TEST_FAILED);
 
-	  temphr = ptdr8->GetMemberNameBufLen (2, &nameLen);
+	  temphr = ptdr16->GetMemberNameBufLen (2, &nameLen);
 	  checkExpression (AAFRESULT_ILLEGAL_VALUE == temphr,
 					   AAFRESULT_TEST_FAILED);
 
-	  temphr = ptdr8->GetMemberName (2,
+	  temphr = ptdr16->GetMemberName (2,
 									 nameBuf,
 									 sizeof (nameBuf));
 	  checkExpression (AAFRESULT_ILLEGAL_VALUE == temphr,
 					   AAFRESULT_TEST_FAILED);
 
-	  checkResult (pDict->LookupTypeDef (sTypeId_Rational8_pair,
+	  checkResult (pDict->LookupTypeDef (sTypeId_Rational16_pair,
 										 &ptd));
-	  IAAFTypeDefRecordSP ptdr8p;
+	  IAAFTypeDefRecordSP ptdr16p;
 	  checkResult (ptd->QueryInterface (IID_IAAFTypeDefRecord,
-										(void**) &ptdr8p));
+										(void**) &ptdr16p));
 
 	  // check for duplicate initialization
-	  temphr = ptdr8p->Initialize (nullUid,
+	  temphr = ptdr16p->Initialize (nullUid,
 								   0,
 								   0,
 								   1,
@@ -606,31 +606,31 @@ static HRESULT ReadRecord (const aafWChar * pFileName)
 					   AAFRESULT_TEST_FAILED);
 
 	  count = 0;
-	  checkResult (ptdr8p->GetCount (&count));
+	  checkResult (ptdr16p->GetCount (&count));
 	  checkExpression (2 == count, AAFRESULT_TEST_FAILED);
 
-	  // Now attempt to register offsets of rational8_pair.  This
+	  // Now attempt to register offsets of Rational16_pair.  This
 	  // should fail, because offsets of its members (of type
-	  // rational8) have not yet been registered.
-	  temphr = RegisterRational8PairOffsets (ptdr8p);
+	  // Rational16) have not yet been registered.
+	  temphr = RegisterRational16PairOffsets (ptdr16p);
 	  checkExpression (temphr == AAFRESULT_NOT_REGISTERED,
 					   AAFRESULT_TEST_FAILED);
 
 	  // Now let's attempt registration the right way.
-	  checkResult (RegisterRational8Offsets (ptdr8));
-	  checkResult (RegisterRational8PairOffsets (ptdr8p));
+	  checkResult (RegisterRational16Offsets (ptdr16));
+	  checkResult (RegisterRational16PairOffsets (ptdr16p));
 		
 	  IAAFTypeDef * pMemberTd = 0;
 	  IAAFTypeDef * pTempTd = 0;
-	  checkResult (ptdr8->QueryInterface (IID_IAAFTypeDef,
+	  checkResult (ptdr16->QueryInterface (IID_IAAFTypeDef,
 										(void**) &pTempTd));
-	  checkResult (ptdr8p->GetMemberType (0, &pMemberTd));
+	  checkResult (ptdr16p->GetMemberType (0, &pMemberTd));
 	  checkExpression (pMemberTd == pTempTd,
 					   AAFRESULT_TEST_FAILED);
 	  pMemberTd->Release ();
 	  pMemberTd = 0;
 
-	  checkResult (ptdr8p->GetMemberType (1, &pMemberTd));
+	  checkResult (ptdr16p->GetMemberType (1, &pMemberTd));
 	  checkExpression (pMemberTd == pTempTd,
 					   AAFRESULT_TEST_FAILED);
 	  pMemberTd->Release ();
@@ -638,17 +638,17 @@ static HRESULT ReadRecord (const aafWChar * pFileName)
 	  pTempTd->Release ();
 	  pTempTd = 0;
 
-	  temphr = ptdr8p->GetMemberType (2, &pMemberTd);
+	  temphr = ptdr16p->GetMemberType (2, &pMemberTd);
 	  checkExpression (temphr == AAFRESULT_ILLEGAL_VALUE,
 					   AAFRESULT_TEST_FAILED);
 
-	  // register variable array of Rational8Pair records
+	  // register variable array of Rational16Pair records
 	  IAAFTypeDefVariableArraySP ptdvaarpr;
 	  IAAFTypeDefSP ptdarpr;
 	  // perform this part only for specified versions
 	  if( versionUInt(testVer) >= versionUInt(1,1,1,0) )
 	  {
-		checkResult (pDict->LookupTypeDef (sTypeId_Rational8_array,&ptdarpr));
+		checkResult (pDict->LookupTypeDef (sTypeId_Rational16_array,&ptdarpr));
 		checkResult (ptdarpr->QueryInterface (IID_IAAFTypeDefVariableArray,(void**) &ptdvaarpr));
 	  }
 
@@ -685,8 +685,8 @@ static HRESULT ReadRecord (const aafWChar * pFileName)
 	  checkResult (pObj->GetPropertyValue (pPdPosC, &pPVc));
 
 	  // Try to read the first one with GetStruct.
-	  rational8pair_t valA = { {0,0},{0,0} };
-	  checkResult (ptdr8p->GetStruct (pPVa,
+	  Rational16pair_t valA = { {0,0},{0,0} };
+	  checkResult (ptdr16p->GetStruct (pPVa,
 									  (aafMemPtr_t) &valA,
 									  sizeof (valA)));
 	  checkExpression (1 == valA.X_Position.Numerator,
@@ -700,88 +700,88 @@ static HRESULT ReadRecord (const aafWChar * pFileName)
 
 	  // Try to read the second one by decomposing with GetValue.
 	  IAAFPropertyValueSP pPvX;
-	  checkResult (ptdr8p->GetValue (pPVb,
+	  checkResult (ptdr16p->GetValue (pPVb,
 									 0,
 									 &pPvX));
 	  IAAFPropertyValueSP pPvY;
-	  checkResult (ptdr8p->GetValue (pPVb,
+	  checkResult (ptdr16p->GetValue (pPVb,
 									 1,
 									 &pPvY));
 
 	  IAAFPropertyValueSP pPvXn;
-	  checkResult (ptdr8->GetValue (pPvX,
+	  checkResult (ptdr16->GetValue (pPvX,
 									0,
 									&pPvXn));
 	  IAAFPropertyValueSP pPvXd;
-	  checkResult (ptdr8->GetValue (pPvX,
+	  checkResult (ptdr16->GetValue (pPvX,
 									1,
 									&pPvXd));
 	  IAAFPropertyValueSP pPvYn;
-	  checkResult (ptdr8->GetValue (pPvY,
+	  checkResult (ptdr16->GetValue (pPvY,
 									0,
 									&pPvYn));
 	  IAAFPropertyValueSP pPvYd;
-	  checkResult (ptdr8->GetValue (pPvY,
+	  checkResult (ptdr16->GetValue (pPvY,
 									1,
 									&pPvYd));
 	  IAAFPropertyValueSP junkPv;
-	  temphr = ptdr8->GetValue (pPvY,
+	  temphr = ptdr16->GetValue (pPvY,
 								2,
 								&junkPv);
 	  checkExpression (AAFRESULT_ILLEGAL_VALUE == temphr,
 					   AAFRESULT_TEST_FAILED);
-	  temphr = ptdr8->GetValue (0,
+	  temphr = ptdr16->GetValue (0,
 								1,
 								&junkPv);
 	  checkExpression (AAFRESULT_NULL_PARAM == temphr,
 					   AAFRESULT_TEST_FAILED);
-	  temphr = ptdr8->GetValue (pPvY,
+	  temphr = ptdr16->GetValue (pPvY,
 								1,
 								0);
 	  checkExpression (AAFRESULT_NULL_PARAM == temphr,
 					   AAFRESULT_TEST_FAILED);
 
-	  // Get type def for uint8; use it to read the individual values
-	  IAAFTypeDefIntSP ptdui8;
-	  checkResult (defs.tdUInt8()->
+	  // Get type def for UInt16; use it to read the individual values
+	  IAAFTypeDefIntSP ptdUInt16;
+	  checkResult (defs.tdUInt16()->
 				   QueryInterface (IID_IAAFTypeDefInt,
-								   (void**) &ptdui8));
+								   (void**) &ptdUInt16));
 	  aafUInt32 val;
-	  checkResult (ptdui8->GetInteger (pPvXn,
+	  checkResult (ptdUInt16->GetInteger (pPvXn,
 									   (aafMemPtr_t) &val,
 									   sizeof (val)));
 	  checkExpression (5 == val, AAFRESULT_TEST_FAILED);
-	  checkResult (ptdui8->GetInteger (pPvXd,
+	  checkResult (ptdUInt16->GetInteger (pPvXd,
 									   (aafMemPtr_t) &val,
 									   sizeof (val)));
 	  checkExpression (6 == val, AAFRESULT_TEST_FAILED);
-	  checkResult (ptdui8->GetInteger (pPvYn,
+	  checkResult (ptdUInt16->GetInteger (pPvYn,
 									   (aafMemPtr_t) &val,
 									   sizeof (val)));
 	  checkExpression (7 == val, AAFRESULT_TEST_FAILED);
-	  checkResult (ptdui8->GetInteger (pPvYd,
+	  checkResult (ptdUInt16->GetInteger (pPvYd,
 									   (aafMemPtr_t) &val,
 									   sizeof (val)));
 	  checkExpression (8 == val, AAFRESULT_TEST_FAILED);
 
 	  // Read the last two with GetStruct just to get it over with. ;)
-	  rational8pair_t valC = { {0,0},{0,0} };
-	  temphr = ptdr8p->GetStruct (pPVc,
+	  Rational16pair_t valC = { {0,0},{0,0} };
+	  temphr = ptdr16p->GetStruct (pPVc,
 								  (aafMemPtr_t) &valC,
 								  sizeof (valC)-1);
 	  checkExpression (AAFRESULT_ILLEGAL_VALUE == temphr,
 					   AAFRESULT_TEST_FAILED);
-	  temphr = ptdr8p->GetStruct (0,
+	  temphr = ptdr16p->GetStruct (0,
 								  (aafMemPtr_t) &valC,
 								  sizeof (valC));
 	  checkExpression (AAFRESULT_NULL_PARAM == temphr,
 					   AAFRESULT_TEST_FAILED);
-	  temphr = ptdr8p->GetStruct (pPVc,
+	  temphr = ptdr16p->GetStruct (pPVc,
 								  0,
 								  sizeof (valC));
 	  checkExpression (AAFRESULT_NULL_PARAM == temphr,
 					   AAFRESULT_TEST_FAILED);
-	  checkResult (ptdr8p->GetStruct (pPVc,
+	  checkResult (ptdr16p->GetStruct (pPVc,
 									  (aafMemPtr_t) &valC,
 									  sizeof (valC)));
 	  checkExpression (9 == valC.X_Position.Numerator,
@@ -807,8 +807,8 @@ static HRESULT ReadRecord (const aafWChar * pFileName)
 		checkResult (ptdvaarpr->GetElementValue (pPVN, 1, &pPVN1));
 
 		// Read the value with GetStruct
-		rational8pair_t valN1 = { {0,0},{0,0} };
-		checkResult (ptdr8p->GetStruct (pPVN1,
+		Rational16pair_t valN1 = { {0,0},{0,0} };
+		checkResult (ptdr16p->GetStruct (pPVN1,
 										(aafMemPtr_t) &valN1,
 										sizeof (valN1)));
 		checkExpression (9 == valN1.X_Position.Numerator,
