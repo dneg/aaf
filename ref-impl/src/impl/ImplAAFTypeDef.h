@@ -72,6 +72,41 @@ public:
         // @parm [out] the raw access type definition
         (ImplAAFTypeDef ** ppRawTypeDef);
 
+  //*************************************************************
+  //
+  // Overrides from OMType
+  //
+  //*************************************************************
+
+  virtual bool isFixedSize(void) const;
+
+  virtual void reorder(OMByte* externalBytes,
+                       OMUInt32 externalBytesSize) const;
+
+  virtual OMUInt32 externalSize(const OMByte* internalBytes,
+								OMUInt32 internalBytesSize) const;
+
+  virtual OMUInt32 externalSize(void) const;
+
+  virtual void externalize(const OMByte* internalBytes,
+                           OMUInt32 internalBytesSize,
+                           OMByte* externalBytes,
+                           OMUInt32 externalBytesSize,
+                           OMByteOrder byteOrder) const;
+
+  virtual OMUInt32 internalSize(const OMByte* externalBytes,
+								OMUInt32 externalBytesSize) const;
+
+  virtual OMUInt32 internalSize(void) const;
+
+  virtual void internalize(const OMByte* externalBytes,
+                           OMUInt32 externalBytesSize,
+                           OMByte* internalBytes,
+                           OMUInt32 internalBytesSize,
+                           OMByteOrder byteOrder) const;
+
+  virtual void accept(OMTypeVisitor& visitor) const;
+
 
   //
   // non-published methods
