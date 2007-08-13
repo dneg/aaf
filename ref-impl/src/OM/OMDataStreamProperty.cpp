@@ -549,6 +549,18 @@ void OMDataStreamProperty::deepCopyTo(OMProperty* destination,
   // Restore current position of source
   setPosition(savedPosition);
   dest->setPosition(0);
+
+  // Close the destination stream if the source was empty  
+  // Most data stream functions, used directly or in ASSERTs, have the side-effect of 
+  // creating the data stream. This was an issue for the XML stored format because an empty
+  // source data stream resulted in an destination data stream file which was not closed 
+  // when the AAF file is closed because dest->isPresent() is false - an optional and empty 
+  // source data stream results in a "not present" destination data stream. Subsequent attempts 
+  // to open the same data stream file resulted in an exception.
+  if (dest->isOptional() && !dest->isPresent())
+  {
+      dest->close();
+  }
 }
 
 void OMDataStreamProperty::setStreamAccess(OMDataStreamAccess* streamAccess)
