@@ -196,11 +196,15 @@ bool diff(const aafCharacter* fileNameA, const aafCharacter* fileNameB)
         return true;
     }
     
-    char bufferA[1048576];
-    char bufferB[1048576];
+    char* bufferA = 0;
+    char* bufferB = 0;
     bool diff = false;
     size_t checkSize;
+    
+    bufferA = new char[1048576];
+    bufferB = new char[1048576];
 
+    
     // read into memory
     size_t numReadA = fread(bufferA, 1, 1048575, fileA);
     bufferA[numReadA] = '\0';
@@ -208,7 +212,9 @@ bool diff(const aafCharacter* fileNameA, const aafCharacter* fileNameB)
     bufferB[numReadB] = '\0';
     if (numReadA == 1048575 || numReadB == 1048575)
     {
-        throw "Diff buffer too small - update required";
+        delete [] bufferA;
+        delete [] bufferB;
+        throw "Diff buffer too small - test update required";
     }
 
     checkSize = numReadA;
@@ -246,6 +252,8 @@ bool diff(const aafCharacter* fileNameA, const aafCharacter* fileNameB)
     char* rootB = strstr(bufferB, "<AAF");
     if (rootA == 0 || rootB == 0)
     {
+        delete [] bufferA;
+        delete [] bufferB;
         throw "No root element found";
     }
     
@@ -264,7 +272,10 @@ bool diff(const aafCharacter* fileNameA, const aafCharacter* fileNameB)
     }
     
     diff = diff || memcmp(rootA, rootB, checkSize) != 0;
+
     
+    delete [] bufferA;
+    delete [] bufferB;
     
     fclose(fileA);
     fclose(fileB);
