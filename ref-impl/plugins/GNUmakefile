@@ -83,8 +83,14 @@ ifeq ($(AAFPLATFORM),Win)
 
   # For MS Windows the linker must be passed the .DEF file otherwise the DLL
   # will not contain the expected exported symbols.
-  PGAPI_DEF = /DEF:AafPlugincom.def
-  INTP_DEF = /DEF:AAFINTP.DEF
+  PGAPI_DEF = $(LD_DEF)AafPlugincom.def
+  INTP_DEF = $(LD_DEF)AAFINTP.DEF
+
+  ifeq ($(CC),g++)
+    # g++ on Windows needs extra libs for IID_IUnknown and CoCreateGuid symbols
+    PGAPI_DEF += -lole32 -luuid
+    INTP_DEF += -lole32 -luuid
+  endif
 endif
 
 STAT_PGAPI_LIB = $(AAFBUILDDIR)/ref-impl/$(AAFTARGETDIR)/libaafpgapi$(LIBEXT)
