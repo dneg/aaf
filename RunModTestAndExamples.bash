@@ -263,7 +263,7 @@ RunMainScript ()
 		cd Test
 		cp ../../Test/Com/ComModTestAAF/Laser.wav .
 		echo PWD is $PWD
-		./COMModAAF
+		./ComModAAF
 		CheckExitCode $? "ComModAAF"
 		
 		VerifyFiles "`ls *.aaf`"
