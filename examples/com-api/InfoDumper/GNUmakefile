@@ -28,6 +28,8 @@ EXAMPLE = InfoDumper
 include ../comexamplerules.mk
 
 TEST_CMD = $(APP_RUN_ENV) $(AAFSDKBINDIR)/InfoDumper$(EXE)
+TEST_ARGS = -meta -dict -allheader -types
 .PHONY : check
 check : $(AAFSDKBINDIR)/InfoDumper$(EXE)
-	for f in ../*/*.aaf ../../../test/com/*/*.aaf; do if echo $$f | grep UTF8FileNameTest > /dev/null; then echo "Skipping $$f until wctou8() et al are removed from the SDK"; else echo InfoDumper $$f; (cd `dirname $$f`; $(TEST_CMD) `basename $$f` > /dev/null) || exit $$?; fi; done
+	for f in ../*/*.aaf ../../../test/com/*/*.aaf; do if echo $$f | grep UTF8FileNameTest > /dev/null; then echo "Skipping $$f until wctou8() et al are removed from the SDK"; else echo InfoDumper $(TEST_ARGS) $$f; (cd `dirname $$f`; $(TEST_CMD) $(TEST_ARGS) `basename $$f` > /dev/null) || exit $$?; fi; done
+	for f in ../*/*.aaf ../../../test/com/*/*.aaf; do if echo $$f | grep UTF8FileNameTest > /dev/null; then echo "Skipping $$f until wctou8() et al are removed from the SDK"; else echo InfoDumper $(TEST_ARGS) -lazyLoad $$f; (cd `dirname $$f`; $(TEST_CMD) $(TEST_ARGS) -lazyLoad `basename $$f` > /dev/null) || exit $$?; fi; done
