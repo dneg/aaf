@@ -59,17 +59,22 @@ static int win_fseeko(FILE *fp, off_t off, int whence)
                 fpos_t pos = off;
                 return fsetpos(fp, &pos);
         }
-        if (whence == SEEK_CUR) {
-                // First get current pos, then add required offset
-                fpos_t pos = 0;
-                if (0 != fgetpos(fp, &pos))
-                        return -1;
-                pos += off;
-                return fsetpos(fp, &pos);
+
+        if (whence == SEEK_END) {
+        // Seek to end-of-file using non-64bit fseek
+            if (0 != fseek(fp, 0, SEEK_END))
+            return -1;
+        // Handle any offset from end-of-file by falling through
+        // to 64bit capable relative seek below
         }
 
-        // To reach here, whence is SEEK_END
-        return fseek(fp, off, whence);
+        // To reach here whence is SEEK_CUR
+        // First get current pos, then add required offset
+        fpos_t pos = 0;
+        if (0 != fgetpos(fp, &pos))
+                        return -1;
+        pos += off;
+        return fsetpos(fp, &pos);
 }
 
 #define ftello(fp) win_ftello(fp)
