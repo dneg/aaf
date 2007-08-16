@@ -441,52 +441,52 @@ InitContainerDefinition (
   L"");
 
 InitContainerDefinition (
-  kAAFContainerDef_MXFGC_Avid_DNxHD_220X_1080P, 
-  L"ContainerDef_MXFGC_Avid_DNxHD_220X_1080P", 
+  kAAFContainerDef_MXFGC_Avid_DNX_220X_1080p, 
+  L"ContainerDef_MXFGC_Avid_DNX_220X_1080p", 
   L"");
 
 InitContainerDefinition (
-  kAAFContainerDef_MXFGC_Avid_DNxHD_145_1080P, 
-  L"ContainerDef_MXFGC_Avid_DNxHD_145_1080P", 
+  kAAFContainerDef_MXFGC_Avid_DNX_145_1080p, 
+  L"ContainerDef_MXFGC_Avid_DNX_145_1080p", 
   L"");
 
 InitContainerDefinition (
-  kAAFContainerDef_MXFGC_Avid_DNxHD_220_1080P, 
-  L"ContainerDef_MXFGC_Avid_DNxHD_220_1080P", 
+  kAAFContainerDef_MXFGC_Avid_DNX_220_1080p, 
+  L"ContainerDef_MXFGC_Avid_DNX_220_1080p", 
   L"");
 
 InitContainerDefinition (
-  kAAFContainerDef_MXFGC_Avid_DNxHD_36_1080P, 
-  L"ContainerDef_MXFGC_Avid_DNxHD_36_1080P", 
+  kAAFContainerDef_MXFGC_Avid_DNX_36_1080p, 
+  L"ContainerDef_MXFGC_Avid_DNX_36_1080p", 
   L"");
 
 InitContainerDefinition (
-  kAAFContainerDef_MXFGC_Avid_DNxHD_220X_1080I, 
-  L"ContainerDef_MXFGC_Avid_DNxHD_220X_1080I", 
+  kAAFContainerDef_MXFGC_Avid_DNX_220X_1080i, 
+  L"ContainerDef_MXFGC_Avid_DNX_220X_1080i", 
   L"");
 
 InitContainerDefinition (
-  kAAFContainerDef_MXFGC_Avid_DNxHD_145_1080I, 
-  L"ContainerDef_MXFGC_Avid_DNxHD_145_1080I", 
+  kAAFContainerDef_MXFGC_Avid_DNX_145_1080i, 
+  L"ContainerDef_MXFGC_Avid_DNX_145_1080i", 
   L"");
 
 InitContainerDefinition (
-  kAAFContainerDef_MXFGC_Avid_DNxHD_220_1080I, 
-  L"ContainerDef_MXFGC_Avid_DNxHD_220_1080I", 
+  kAAFContainerDef_MXFGC_Avid_DNX_220_1080i, 
+  L"ContainerDef_MXFGC_Avid_DNX_220_1080i", 
   L"");
 
 InitContainerDefinition (
-  kAAFContainerDef_MXFGC_Avid_DNxHD_220X_720P, 
-  L"ContainerDef_MXFGC_Avid_DNxHD_220X_720P", 
+  kAAFContainerDef_MXFGC_Avid_DNX_220X_720p, 
+  L"ContainerDef_MXFGC_Avid_DNX_220X_720p", 
   L"");
 
 InitContainerDefinition (
-  kAAFContainerDef_MXFGC_Avid_DNxHD_220_720P, 
-  L"ContainerDef_MXFGC_Avid_DNxHD_220_720P", 
+  kAAFContainerDef_MXFGC_Avid_DNX_220_720p, 
+  L"ContainerDef_MXFGC_Avid_DNX_220_720p", 
   L"");
 
 InitContainerDefinition (
-  kAAFContainerDef_MXFGC_Avid_DNxHD_145_720P, 
-  L"ContainerDef_MXFGC_Avid_DNxHD_145_720P", 
+  kAAFContainerDef_MXFGC_Avid_DNX_145_720p, 
+  L"ContainerDef_MXFGC_Avid_DNX_145_720p", 
   L"");
 
