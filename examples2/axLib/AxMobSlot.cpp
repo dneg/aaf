@@ -61,6 +61,11 @@ AxString AxMobSlot::GetName( const AxString& defaul )
 	return AxNameToString< IAAFMobSlot >( _spIaafMobSlot, defaul );
 }
 
+std::pair<bool,AxString> AxMobSlot::ExistsName()
+{
+  return AxExistsNameToString< IAAFMobSlot >( _spIaafMobSlot );
+}
+
 aafUInt32 AxMobSlot::GetPhysicalNum()
 {
 	aafUInt32 num;

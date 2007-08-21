@@ -41,7 +41,9 @@ public:
 	void SetSlotID( aafSlotID_t val );
 
 	AxString GetName();
-	AxString GetName( const AxString& deafault );
+	AxString GetName( const AxString& defaul );
+	std::pair<bool,AxString> ExistsName();
+
 	IAAFSegmentSP GetSegment();
 	aafUInt32 GetPhysicalNum();
 	aafSlotID_t GetSlotID();

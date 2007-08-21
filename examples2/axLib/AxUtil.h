@@ -188,6 +188,28 @@ AxString AxNameToString( IAAFSmartPointer< Type >& sp, const AxString& defaul )
 	}
 }
 
+
+template <class Type>
+std::pair<bool,AxString> AxExistsNameToString( IAAFSmartPointer< Type >& sp )
+{
+	std::pair<bool,AxString> result(false,L"");
+
+  try
+  {
+    result.second = AxNameToString<Type>(sp);
+    result.first = true;
+  }
+  catch ( const AxExHResult& ex )
+  {
+    if ( AAFRESULT_PROP_NOT_PRESENT != ex.getHResult() )
+    {
+      throw;
+    }
+  }
+
+  return result;
+}
+
 AxString AxTaggedValueToString( IAAFTaggedValueSP& sp );
 
 // Function template that will return a description given a smart
