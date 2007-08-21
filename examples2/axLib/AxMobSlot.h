@@ -25,6 +25,8 @@
 #include "AxSmartPointer.h"
 #include "AxObject.h"
 
+#include <utility>
+
 //=---------------------------------------------------------------------=
 
 class AxMobSlot : public AxObject {
@@ -39,6 +41,7 @@ public:
 	void SetSlotID( aafSlotID_t val );
 
 	AxString GetName();
+	AxString GetName( const AxString& deafault );
 	IAAFSegmentSP GetSegment();
 	aafUInt32 GetPhysicalNum();
 	aafSlotID_t GetSlotID();
@@ -78,10 +81,15 @@ public:
 
 	aafPosition_t GetOrigin();
 	aafRational_t GetEditRate();
-    aafPosition_t GetMarkIn();
-    aafPosition_t GetMarkOut();
     aafPosition_t GetUserPos();
-   
+
+	aafPosition_t GetMarkIn();
+    aafPosition_t GetMarkOut();
+
+	// Return true and value if mark in/out exists.
+	std::pair<bool,aafPosition_t> ExistsMarkIn();
+	std::pair<bool,aafPosition_t> ExistsMarkOut();
+
     inline operator IAAFTimelineMobSlotSP ()
     { return AxQueryInterface<IAAFTimelineMobSlot2,IAAFTimelineMobSlot>( _spIaafTimelineMobSlot ); }
 

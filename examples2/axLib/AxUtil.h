@@ -25,6 +25,7 @@
 #include "AxSmartPointer.h"
 
 #include <AAFTypes.h>
+#include <AAFResult.h>
 
 #include <vector>
 #include <memory>
@@ -38,6 +39,7 @@ class AxConstants
 {
  public:
   static const aafMobID_t NULL_MOBID;
+  static const aafUID_t   NULL_UID;
 };
 
 // Map eAAFTypeCategory_t to string
@@ -164,6 +166,26 @@ AxString AxNameToString( IAAFSmartPointer< Type >& sp )
 	AxString name( &buf[0] );
 
 	return name;
+}
+
+template <class Type>
+AxString AxNameToString( IAAFSmartPointer< Type >& sp, const AxString& defaul )
+{
+	try
+	{
+		return AxNameToString<Type>(sp);
+	}
+	catch ( const AxExHResult& ex )
+	{
+		if ( AAFRESULT_PROP_NOT_PRESENT == ex.getHResult() )
+		{
+			return defaul;
+		}
+		else
+		{
+			throw;
+		}
+	}
 }
 
 AxString AxTaggedValueToString( IAAFTaggedValueSP& sp );

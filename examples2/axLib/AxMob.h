@@ -38,6 +38,7 @@ public:
 	void SetMobID( const aafMobID_t& mobID );
 	
 	AxString GetName();
+	AxString GetName( const AxString& defaul );
 	void SetName( const AxString& name );
 	
 	aafNumSlots_t CountSlots();
@@ -68,6 +69,7 @@ public:
 
 	void SetUsageCode( const aafUID_t& usageCode );
 	aafUID_t GetUsageCode();
+	aafUID_t GetUsageCode( const aafUID_t& defaul );
 
 	inline operator IAAFMobSP ()
 	{ return AxQueryInterface<IAAFMob2,IAAFMob>( _spIaafMob ); }

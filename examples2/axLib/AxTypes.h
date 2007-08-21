@@ -164,7 +164,6 @@ private:
 	int _size;
 };
 
-
 #endif
 
 

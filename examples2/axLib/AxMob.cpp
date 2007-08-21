@@ -67,19 +67,12 @@ void AxMob::SetMobID( const aafMobID_t& mobID )
 	
 AxString AxMob::GetName()
 {
-	// FIXME - This pattern appears in several places, it should be factored out.
-	
-	aafUInt32 sizeInBytes;
+	return AxNameToString<IAAFMob2>( _spIaafMob );	
+}
 
-	CHECK_HRESULT( _spIaafMob->GetNameBufLen( &sizeInBytes ) );
-
-	int sizeInChars = sizeInBytes/sizeof( aafCharacter ) + 1;
-
-	std::vector< aafCharacter > buf( sizeInChars );
-
-	CHECK_HRESULT( _spIaafMob->GetName( &buf[0], sizeInBytes ) );
-
-	return AxString( &buf[0] );
+AxString AxMob::GetName( const AxString& defaul )
+{
+	return AxNameToString<IAAFMob2>( _spIaafMob, defaul );
 }
 
 void AxMob::SetName( const AxString& name )
@@ -146,7 +139,25 @@ void AxMob::SetUsageCode( const aafUID_t& usageCode )
 aafUID_t AxMob::GetUsageCode()
 {
   aafUID_t usageCode;
+
   CHECK_HRESULT( _spIaafMob->GetUsageCode( &usageCode ) );
+
+  return usageCode;
+}
+
+aafUID_t AxMob::GetUsageCode( const aafUID_t& defaul )
+{
+  aafUID_t usageCode;
+
+  const AAFRESULT hr = _spIaafMob->GetUsageCode( &usageCode );
+
+  if ( AAFRESULT_PROP_NOT_PRESENT == hr )
+  {
+    return defaul;
+  }
+
+  CHECK_HRESULT(hr);
+
   return usageCode;
 }
 
