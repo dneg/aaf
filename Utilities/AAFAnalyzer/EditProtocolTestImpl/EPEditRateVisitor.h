@@ -44,7 +44,7 @@ namespace aafanalyzer {
 
 using namespace boost;
 
-class DetailLevelTestResult;
+class TestLevelTestResult;
 class EPAudioTrack;
 class EPVideoTrack;
 
@@ -53,7 +53,9 @@ class EPEditRateVisitor : public EPTypedVisitor
 
   public:
 
-    EPEditRateVisitor( wostream& log, shared_ptr<EdgeMap> spEdgeMap );
+    EPEditRateVisitor( wostream& log,
+		       shared_ptr<EdgeMap> spEdgeMap,
+		       shared_ptr<TestLevelTestResult> spTestResult );
     
     virtual ~EPEditRateVisitor();
 
@@ -72,16 +74,19 @@ class EPEditRateVisitor : public EPTypedVisitor
     
     void CheckAudioSampleRates();
     
-    shared_ptr<DetailLevelTestResult> GetResult();
-    
   private:
    
+    // prohibited
+    EPEditRateVisitor();
+    EPEditRateVisitor( const EPEditRateVisitor& );
+    EPEditRateVisitor& operator=( const EPEditRateVisitor& );
+  
     typedef pair<aafInt32, aafInt32> RationalKey;
     typedef map<RationalKey, unsigned int> RateMap;
    
     wostream& _log;
     shared_ptr<EdgeMap> _spEdgeMap;
-    shared_ptr<DetailLevelTestResult> _spResult;
+    shared_ptr<TestLevelTestResult> _spTestResult;
     AllowedEditRateTable _erTable;
   
     RateMap _audioEditRates;
@@ -92,12 +97,6 @@ class EPEditRateVisitor : public EPTypedVisitor
     bool TestEditRate( aafRational_t editRate, AxMobSlot& axMobSlot, const AxString& mobName );
     void VisitAudioTrack( shared_ptr<EPAudioTrack> spTrack, aafRational_t editRate );
     bool VisitVideoTrack( shared_ptr<EPVideoTrack> spTrack, aafRational_t editRate );
-
-    // prohibited
-    EPEditRateVisitor();
-    EPEditRateVisitor( const EPEditRateVisitor& );
-    EPEditRateVisitor& operator=( const EPEditRateVisitor& );
-  
 };
 
 } // end of namespace diskstream

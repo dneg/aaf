@@ -39,6 +39,7 @@ class RefResolver : public Test
 {
  public:
   RefResolver(wostream& os, shared_ptr<const TestGraph> spGraph);
+
   ~RefResolver();
 
   shared_ptr<TestLevelTestResult> Execute();

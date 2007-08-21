@@ -30,7 +30,7 @@
 
 namespace aafanalyzer {
 
-class DetailLevelTestResult;
+class TestLevelTestResult;
 
 using namespace boost;
 using namespace std;
@@ -40,27 +40,26 @@ class EPParameterVisitor : public EPTypedVisitor
 
   public:
   
-    EPParameterVisitor( wostream& log, shared_ptr<EdgeMap> spEdgeMap );
+    EPParameterVisitor( wostream& log,
+			shared_ptr<EdgeMap> spEdgeMap,
+			shared_ptr<TestLevelTestResult> spTestResult );
 
     virtual ~EPParameterVisitor();
 
     virtual bool PreOrderVisit( AAFTypedObjNode<IAAFParameter>& node );
     virtual bool PreOrderVisit( AAFTypedObjNode<IAAFVaryingValue>& node );
     
-    shared_ptr<DetailLevelTestResult> GetResult();
-    
   private:
   
-    wostream& _log;
-    shared_ptr<EdgeMap> _spEdgeMap;
-    shared_ptr<DetailLevelTestResult> _spResult;
-    set<aafUID_t> _validInterpolationDefs;
-       
     // prohibited
     EPParameterVisitor();
     EPParameterVisitor( const EPParameterVisitor& );
     EPParameterVisitor& operator=( const EPParameterVisitor& );
-  
+
+    wostream& _log;
+    shared_ptr<EdgeMap> _spEdgeMap;
+    shared_ptr<TestLevelTestResult> _spTestResult;
+    set<aafUID_t> _validInterpolationDefs;         
 };
 
 } // end of namespace diskstream

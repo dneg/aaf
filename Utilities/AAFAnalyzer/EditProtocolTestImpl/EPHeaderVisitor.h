@@ -32,31 +32,28 @@ namespace aafanalyzer {
 
 using namespace boost;
 
-class DetailLevelTestResult;
+class TestLevelTestResult;
 
 class EPHeaderVisitor : public TypedVisitor
 {
-
-  public:
+ public:
   
-    EPHeaderVisitor( wostream& log );
+  EPHeaderVisitor( wostream& log,
+		   shared_ptr<TestLevelTestResult> spTestResult );
     
-    virtual ~EPHeaderVisitor();
-   
-    virtual bool PreOrderVisit( AAFTypedObjNode<IAAFHeader>& node );
-       
-    shared_ptr<DetailLevelTestResult> GetResult();
-    
-  private:
-   
-    wostream& _log;
-    shared_ptr<DetailLevelTestResult> _spResult;
-
-    // prohibited
-    EPHeaderVisitor();
-    EPHeaderVisitor( const EPHeaderVisitor& );
-    EPHeaderVisitor& operator=( const EPHeaderVisitor& );
+  virtual ~EPHeaderVisitor();
   
+  virtual bool PreOrderVisit( AAFTypedObjNode<IAAFHeader>& node );
+    
+ private:
+   
+  wostream& _log;
+  shared_ptr<TestLevelTestResult> _spTestResult;
+  
+  // prohibited
+  EPHeaderVisitor();
+  EPHeaderVisitor( const EPHeaderVisitor& );
+  EPHeaderVisitor& operator=( const EPHeaderVisitor& );
 };
 
 } // end of namespace diskstream

@@ -37,23 +37,39 @@ using namespace std;
 using namespace boost;
 
 class TestGraph;
+class Node;
 
 class DumpPhase : public TestPhase
 {
  public:
+
+  // Use the root node contained by the TestGraph. Only follow edges
+  // that model contaiment. (i.e. for AAF file this dumps the header
+  // and all contained objects)
   DumpPhase(wostream& os, shared_ptr<const TestGraph> spGraph);
+
+  // Use alternate root node.
+  // This is used to dump the top level composition in an aaf file. It
+  // will configure the visitor to follow references such that the
+  // entire composition graph, including resolved mob references, is
+  // dumped.
+  DumpPhase(wostream& os, shared_ptr<const TestGraph> spGraph, shared_ptr<Node> spRoot);
+
   ~DumpPhase();
 
   shared_ptr<const TestGraph> GetTestGraph();
   shared_ptr<TestPhaseLevelTestResult> Execute();
 
  private:
-  shared_ptr<const TestGraph> _spGraph;
-
   // prohibited
   DumpPhase();
   DumpPhase( const DumpPhase& );
   DumpPhase& operator=( const DumpPhase& );
+
+  shared_ptr<const TestGraph> _spGraph;
+  shared_ptr<Node> _spRoot;
+
+  bool _followReferences;
 };
 
 } // end of namespace diskstream

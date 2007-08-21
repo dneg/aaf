@@ -18,58 +18,43 @@
 //
 //=---------------------------------------------------------------------=
 
-#ifndef __ACYCLICVISITOR_h__
-#define __ACYCLICVISITOR_h__
+#ifndef __DUMPVISITOR_h__
+#define __DUMPVISITOR_h__
 
-//Analyzer Base files
 #include <Visitor.h>
-#include <Node.h>
+#include <Edge.h>
 
 //STL files
-#include <vector>
-#include <set>
+#include <string>
+#include <deque>
 
 namespace aafanalyzer {
 
 using namespace std;
-using namespace boost;
 
-class DetailLevelTestResult;
-class TestLevelTestResult;
-
-class AcyclicVisitor : public Visitor
+class DumpVisitor : public Visitor
 {
  public:
 
-  AcyclicVisitor(wostream& os,
-		         shared_ptr<TestLevelTestResult> spTestResult);
+  // Uses Visitor::FOLLOW_ALL by default
+  DumpVisitor();
 
-  virtual ~AcyclicVisitor();
+  DumpVisitor( Visitor::Follow_e follow );
 
+  virtual ~DumpVisitor();
+  
   virtual bool PreOrderVisit(Node& node);
   virtual bool PostOrderVisit(Node& node);
 
  private:
- 
+  
+  std::wstring LevelToIndent(size_t l);
+
   // prohibited
-  AcyclicVisitor();
-  AcyclicVisitor( const AcyclicVisitor& );
-  AcyclicVisitor& operator=( const AcyclicVisitor& );
-
-  bool IsPresent(Node::LID lid);
-  void Erase(Node::LID lid);
-
-  //typedef vector<Node::LID> Vector;
-  typedef vector<shared_ptr<Node> > NodeVector;
-  typedef set<Node::LID> NodeSet;
- 
-  NodeVector _nodeVector;
-  NodeSet _nodeSet;
-
-  wostream& _os;
-  shared_ptr<TestLevelTestResult> _spTestResult;
+  DumpVisitor( const DumpVisitor& );
+  DumpVisitor& operator=( const DumpVisitor& );
 };
 
 } // end of namespace diskstream
 
-#endif
+#endif/*__DumpVisitor_h__*/

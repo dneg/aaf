@@ -32,6 +32,8 @@
 //Analyzer Base files
 #include <DepthFirstTraversal.h>
 
+#include <sstream>
+
 namespace {
 
 using namespace aafanalyzer;
@@ -61,41 +63,50 @@ CompMobDependency::~CompMobDependency()
 
 shared_ptr<TestLevelTestResult> CompMobDependency::Execute()
 {
+  // Execute NodeRefCountVisitor<IAAFCompositionMob> to the number of
+  // references to composition mobs that exist in the graph.
 
-  shared_ptr<NodeRefCountVisitor<IAAFCompositionMob> > spVisitor(
-       new NodeRefCountVisitor<IAAFCompositionMob>( GetOutStream() ) );
+  shared_ptr<NodeRefCountVisitor<IAAFCompositionMob> >
+    spVisitor( new NodeRefCountVisitor<IAAFCompositionMob>( GetOutStream() ) );
 
   DepthFirstTraversal dfs(GetTestGraph()->GetEdgeMap(), GetTestGraph()->GetRootNode());
 
-  //output to screen
-  //GetOutStream() << GetName() << endl << GetDescription() << endl << endl;
-
-  //set result properties
-  const shared_ptr<const Test> me = this->shared_from_this();
-  Requirement::RequirementMapSP spMyReqs(new Requirement::RequirementMap(this->GetCoveredRequirements()));
-  shared_ptr<TestLevelTestResult> spResult(new TestLevelTestResult( me, spMyReqs ) );
-  spResult->SetName(GetName());
-  spResult->SetDescription(GetDescription());
-
-  dfs.TraverseDown(spVisitor, GetTestGraph()->GetRootNode()); 
+  dfs.TraverseDown(spVisitor, GetTestGraph()->GetRootNode());
   
+  // This currently can't fail. We create a result object to append
+  // some details that are useful and because we have to return
+  // through this interface.
+  shared_ptr<TestLevelTestResult> spTestLevelResult = CreateTestResult( L"", // explain
+									TestResult::PASS );
+
+  // Pull out, and save, the unreferenced composition mobs.
   _spRootCompMobs = spVisitor->GetNodesWithCount(0);
 
-  spResult->AppendSubtestResult( spVisitor->GetTestResult() );
-  spResult->SetResult(spResult->GetAggregateResult());
+  // Record the result as test detail for reference purposes.
+  wstringstream ss;
+  // (static_cast is there to quiet compiler warning)
+  ss << L"found " << static_cast<unsigned int>(_spRootCompMobs->size())
+	 << L" unreferenced composition mob";
+  if ( _spRootCompMobs->size() > 1 )
+  {
+    ss << L"s";
+  }
 
-  return spResult;
+  spTestLevelResult->AddDetail( ss.str() );
+
+  return spTestLevelResult;
 }
 
 AxString CompMobDependency::GetName() const
 {
-  AxString name = L"CompositionMob Dependency Test";
+  AxString name = L"CompositionMob Dependency Analysis";
   return name;
 }
 
 AxString CompMobDependency::GetDescription() const
 {
-  AxString description = L"Traverse the directed graph and count composition mob references.";
+  AxString description = L"Traverse the directed graph, count composition mob references, "
+                         L"and identify the unreferenced composition mobs.";
   return description;
 }
 
@@ -107,8 +118,11 @@ CompMobDependency::CompMobNodeVectorSP CompMobDependency::GetRootCompMobNodes()
 const TestInfo CompMobDependency::GetTestInfo()
 {
     shared_ptr<vector<AxString> > spReqIds(new vector<AxString>);
-    //TODO: Push actual requirements.
-//    spReqIds->push_back(L"Requirement Id");
+
+    // No requirements are actually tested here. This test is simply
+    // used within the load phase to isolate the graph roots for a
+    // later mob dependency test.
+
     return TestInfo(L"CompMobDependency", spReqIds);
 }
 

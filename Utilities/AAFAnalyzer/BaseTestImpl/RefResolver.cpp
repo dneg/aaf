@@ -59,45 +59,49 @@ RefResolver::~RefResolver()
 
 shared_ptr<TestLevelTestResult> RefResolver::Execute()
 {
-  //TestResult visitorResult;
-  shared_ptr<ResolveRefVisitor> spVisitor(new ResolveRefVisitor(GetOutStream(), GetTestGraph()->GetEdgeMap()));
-  DepthFirstTraversal dfs(GetTestGraph()->GetEdgeMap(), GetTestGraph()->GetRootNode());
+  shared_ptr<TestLevelTestResult> spTestResult = this->CreateTestResult();
 
+  shared_ptr<ResolveRefVisitor>
+    spVisitor(new ResolveRefVisitor(GetOutStream(),
+                                    GetTestGraph()->GetEdgeMap(),
+                                    spTestResult ));
+
+  DepthFirstTraversal dfs( GetTestGraph()->GetEdgeMap(), GetTestGraph()->GetRootNode() );
+
+  // Traverse the data structure resolving source clip references as
+  // they're found. The visitor adds detailed test results as along
+  // the way.
   dfs.TraverseDown(spVisitor, GetTestGraph()->GetRootNode());
 
-  const shared_ptr<const Test> me = this->shared_from_this();
-  Requirement::RequirementMapSP spMyReqs(new Requirement::RequirementMap(this->GetCoveredRequirements()));
-  shared_ptr<TestLevelTestResult> spResult(
-            new TestLevelTestResult( L"ReferenceResolver",
-                                     L"Resolves source references in an AAF file.",
-                                     spVisitor->GetTestResult()->GetExplanation(),
-                                     L"-", //DOCREF
-                                     spVisitor->GetTestResult()->GetResult(),
-                                     me, 
-                                     spMyReqs ) ); 
-  shared_ptr<const DetailLevelTestResult> spVisitorResult( spVisitor->GetTestResult() );
-  spResult->AppendSubtestResult(spVisitorResult);
-
-  return spResult;
+  return spTestResult;
 }
 
 AxString RefResolver::GetName() const
 {
-  AxString name = L"--- Reference Resolver Test ---";
+  AxString name = L"Reference Resolver Test";
   return name;
 }
 
 AxString RefResolver::GetDescription() const
 {
-  AxString description = L"Test Description: Resolve all source clip references.";
+  AxString description = L"Resolve source clip references.";
   return description;
 }
 
 const TestInfo RefResolver::GetTestInfo()
 {
     shared_ptr<vector<AxString> > spReqIds(new vector<AxString>);
-    //TODO: Push actual requirements.
-//    spReqIds->push_back(L"Requirement Id");
+
+    // Export Mobs for Entire Derivation Chain
+    // (Warn if source references exists for mobs that are not in the
+    // file.)
+    spReqIds->push_back( L"REQ_EP_016" );
+
+    // Slot Must Exist In Referenced Mob
+    // (Fail if a source reference does indentfy a mob in the file but
+    // identifies a slot that does not exist in that mob.)
+    spReqIds->push_back( L"REQ_EP_257" );
+
     return TestInfo(L"RefResolver", spReqIds);
 }
 

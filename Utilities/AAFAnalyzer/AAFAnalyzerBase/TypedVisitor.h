@@ -40,13 +40,21 @@ class AAFSlotReference;
 class TypedVisitor : public Visitor
 {
   public:
+
+    // Default constructor uses the default Visitor construct
+    // (i.e. uses Visitor::FOLLOW_CONTAINED)
     TypedVisitor();
+
+
+    // Specialize the traversal by using this constructor.
+    TypedVisitor( Visitor::Follow_e follow );
+
     virtual ~TypedVisitor();
 
-    virtual bool EdgeVisit(AAFContainment& edge) { return true; }
-    virtual bool EdgeVisit(AAFComponentReference& edge) { return false; }
-    virtual bool EdgeVisit(AAFMobReference& edge) { return false; }
-    virtual bool EdgeVisit(AAFSlotReference& edge) { return false; }
+    virtual bool EdgeVisit(AAFContainment& edge);
+    virtual bool EdgeVisit(AAFComponentReference& edge);
+    virtual bool EdgeVisit(AAFMobReference& edge);
+    virtual bool EdgeVisit(AAFSlotReference& edge);
 
 #include "TypedVisitor.h.gen"
 

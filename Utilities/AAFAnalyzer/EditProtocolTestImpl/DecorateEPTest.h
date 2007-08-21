@@ -39,7 +39,7 @@ class DecorateEPTest : public Test
  public:
 
   DecorateEPTest( wostream& log,
-		    shared_ptr<const TestGraph> spGraphInfo );
+		  shared_ptr<const TestGraph> spGraphInfo );
   virtual ~DecorateEPTest();
 
   virtual shared_ptr<TestLevelTestResult> Execute();
@@ -53,7 +53,6 @@ class DecorateEPTest : public Test
   DecorateEPTest();
   DecorateEPTest( const DecorateEPTest& );
   DecorateEPTest& operator=( const DecorateEPTest& );
-
 };
 
 } // end of namespace aafanalyzer

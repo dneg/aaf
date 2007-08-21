@@ -36,18 +36,20 @@ class TopLevelTestResult : public HighLevelTestResult
  public:
 
   TopLevelTestResult();
-  TopLevelTestResult( const wstring& name, const wstring& desc,
-                      const wstring& explain, const wstring& docRef,
-                      Result defaultResult );
-  ~TopLevelTestResult();
 
-  void AppendSubtestResult( const shared_ptr<const TestPhaseLevelTestResult>& subtestResult );
+  TopLevelTestResult( const wstring& name, const wstring& desc,
+                      const wstring& explain );
+
+  virtual ~TopLevelTestResult();
+
+  void AppendSubtestResult( shared_ptr<TestPhaseLevelTestResult> subtestResult );
+
   const enum ResultLevel GetResultType() const;
 
+ private:
   // prohibited
   TopLevelTestResult( const TopLevelTestResult& );
   TopLevelTestResult& operator=( const TopLevelTestResult& );
-  
 };
 
 } // end of namespace diskstream

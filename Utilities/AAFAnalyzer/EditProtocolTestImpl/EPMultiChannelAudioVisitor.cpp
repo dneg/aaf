@@ -41,15 +41,10 @@ namespace aafanalyzer {
 
 using namespace boost;
  
-EPMultiChannelAudioVisitor::EPMultiChannelAudioVisitor( wostream& log )
-    : _log(log),
-      _spResult( new DetailLevelTestResult( L"Edit Protocol Multi-Channel Audio Visitor",
-                                            L"Visits object in the AAF file to ensure Multi-Channel Audio is used properly.",
-                                            L"", // explain
-                                            L"", // DOCREF REQUIRED
-                                            TestResult::PASS,
-                                            TestRegistry::GetInstance().GetRequirementsForTest( EPMultiChannelAudioTest::GetTestInfo().GetName() )
-               )                          ),
+  EPMultiChannelAudioVisitor::EPMultiChannelAudioVisitor( wostream& log,
+							  shared_ptr<TestLevelTestResult> spTestResult )
+    : _log( log ),
+      _spTestResult( spTestResult ),
       _level( 0 )
 {}
     
@@ -70,7 +65,7 @@ bool EPMultiChannelAudioVisitor::PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EP
     //ancestor that is a master mob or a composition mob, therefore REQ_EP_110
     //has been violated.
     AxSourceMob axMob( node.GetAAFObjectOfType() );
-    _spResult->AddInformationResult(
+    _spTestResult->AddSingleResult(
         L"REQ_EP_110", 
         this->GetMobName( axMob, EPMultiChannelAudioFileSource::GetName() ) +
             L" is referenced from a Composition or Master Mob.",
@@ -81,7 +76,6 @@ bool EPMultiChannelAudioVisitor::PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EP
 
     //The test failed, so stop the traversal
     return false;
-    
 }
 
 bool EPMultiChannelAudioVisitor::PreOrderVisit( AAFTypedObjNode<IAAFCompositionMob>& node )
@@ -154,11 +148,6 @@ bool EPMultiChannelAudioVisitor::EdgeVisit( AAFMobReference& edge )
     //Must follow Mob References to verify multi-channel audio is not
     //incorrectly used.
     return true;
-}
-
-shared_ptr<DetailLevelTestResult> EPMultiChannelAudioVisitor::GetResult()
-{
-    return _spResult;
 }
    
 } // end of namespace aafanalyzer

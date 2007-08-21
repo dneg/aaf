@@ -38,15 +38,23 @@ namespace aafanalyzer {
 
 using namespace boost;
 
-Edge::Edge(shared_ptr<Node> spParent, shared_ptr<Node> spChild)
+Edge::Edge(shared_ptr<Node> spParent, shared_ptr<Node> spChild )
   : _spParentNode( spParent ),
-    _spChildNode( spChild )
-{
-}
+    _spChildNode( spChild ),
+    _kind( EDGE_KIND_UNDEFINED ),
+    _tag( 0 )
+{}
+
+Edge::Edge(shared_ptr<Node> spParent, shared_ptr<Node> spChild,
+	   EdgeKind_e kind, Node::LID tag)
+  : _spParentNode( spParent ),
+    _spChildNode( spChild ),
+    _kind( kind ),
+    _tag( tag )
+{}
 
 Edge::~Edge()
-{
-}
+{}
 
 bool Edge::Visit(shared_ptr<Visitor> spVisitor)
 {
@@ -65,8 +73,24 @@ shared_ptr<Node> Edge::GetChildNode() const
 
 shared_ptr<Edge> Edge::CreateNewEdge( shared_ptr<Node> spParent, shared_ptr<Node> spChild ) const
 {
-    shared_ptr<Edge> spNewEdge( new Edge( spParent, spChild ) );
-    return spNewEdge;
+  shared_ptr<Edge> spNewEdge( new Edge( spParent, spChild, _kind, _tag ) );
+  return spNewEdge;
+}
+
+const std::wstring& Edge::GetTypeName() const
+{
+  static std::wstring name( L"edge" );
+  return name;
+}
+
+Edge::EdgeKind_e Edge::GetKind() const
+{
+  return _kind;
+}
+
+Node::LID Edge::GetTag() const
+{
+  return _tag;
 }
 
 } // end of namespace diskstream

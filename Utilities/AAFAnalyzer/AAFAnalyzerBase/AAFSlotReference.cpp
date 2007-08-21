@@ -38,8 +38,8 @@ namespace aafanalyzer
 
 using namespace boost;
 
-AAFSlotReference::AAFSlotReference(shared_ptr<Node> spParent, shared_ptr<Node> spChild)
-  : Edge(spParent, spChild)
+AAFSlotReference::AAFSlotReference(shared_ptr<Node> spParent, shared_ptr<Node> spChild, Node::LID tag)
+  : Edge(spParent, spChild, Edge::EDGE_KIND_REFERENCE, tag)
 {
 }
 
@@ -60,8 +60,15 @@ bool AAFSlotReference::Visit(shared_ptr<Visitor> spVisitor)
 
 shared_ptr<Edge> AAFSlotReference::CreateNewEdge( shared_ptr<Node> spParent, shared_ptr<Node> spChild ) const
 {
-    shared_ptr<Edge> spNewEdge( new AAFSlotReference( spParent, spChild ) );
-    return spNewEdge;
+  shared_ptr<Edge> spNewEdge( new AAFSlotReference( spParent, spChild, GetTag() ) );
+  return spNewEdge;
 }
+
+const wstring& AAFSlotReference::GetTypeName() const
+{
+  return typeName;
+}
+
+const wstring AAFSlotReference::typeName = L"slot reference";
 
 } // end of namespace diskstream

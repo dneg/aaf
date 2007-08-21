@@ -57,7 +57,13 @@ class EPTypedVisitor : public TypedVisitor
 
     typedef set<shared_ptr<AAFObjNode> > MobSlotNodeSet;
 
+    // Default constructor traverse uses the default TypedVisitor also
+    // (i.e. uses Visitor::FOLLOW_CONTAINED).
     EPTypedVisitor();
+
+    // Specialize the traversal by using this constructor.
+    EPTypedVisitor( Visitor::Follow_e follow );
+
     virtual ~EPTypedVisitor();
 
     #include <EPTypedVisitor.h.gen>

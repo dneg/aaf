@@ -21,12 +21,35 @@
 //Test/Result files
 #include "TestResult.h"
 
+#include <iostream>
+
 namespace {
 
 using namespace aafanalyzer;
+using namespace std;
+
+void DumpRequirementSet( const wstring& what,
+                         const wstring& prefix,
+                         wostream& os,
+                         Requirement::RequirementMapSP spReqMap )
+{
+  os << prefix << what << L": ";
+  for( Requirement::RequirementMap::iterator iter = spReqMap->begin();
+        iter != spReqMap->end();
+        ++iter )
+  {
+    os << iter->first;
+    ++iter;
+    if ( iter != spReqMap->end() )
+    {
+      os << L", ";
+    }
+    --iter;
+  }
+  os << endl;
+}
 
 } // end of namespace
-
 
 //======================================================================
 //======================================================================
@@ -38,60 +61,27 @@ namespace aafanalyzer
 using namespace std;
 using namespace boost;
 
-// Default result is FAIL.
-// Test implementations must explicity indicate success.
-// Default result of subtests is PASS, it is updated whenever a new subtest is
-// attached to the worst result.  It does not affect the result unless it is
-// done explicitly outside of this file.
 TestResult::TestResult()
-  : _result( FAIL ),
+  : _result( UNDEFINED ),
     _spSubtestResults(new SubtestResultVector()),
-    _aggregateEnumResult( PASS ),
     _spPassedRequirements( new Requirement::RequirementMap() ),
     _spWarnedRequirements( new Requirement::RequirementMap() ),
-    _spFailedRequirements( new Requirement::RequirementMap() )
+    _spFailedRequirements( new Requirement::RequirementMap() ),
+    _spUndefinedRequirements( new Requirement::RequirementMap() )
 {}
 
 TestResult::TestResult( const wstring& name,
-			const wstring& desc,
-			const wstring& explain,
-			const wstring& docRef,
-			Result defaultResult )
+                        const wstring& desc,
+                        const wstring& explain )
   : _name( name ),
     _desc( desc ),
     _expl( explain ),
-    _docRef( docRef ),
-    _result( defaultResult ),
+    _result( UNDEFINED ),
     _spSubtestResults(new SubtestResultVector()),
-    _aggregateEnumResult( PASS ),
     _spPassedRequirements( new Requirement::RequirementMap() ),
     _spWarnedRequirements( new Requirement::RequirementMap() ),
-    _spFailedRequirements( new Requirement::RequirementMap() )
-{}
-
-TestResult::TestResult ( const Requirement::RequirementMapSP& requirements )
-  : _result( FAIL ), 
-    _spSubtestResults(new SubtestResultVector()),
-    _aggregateEnumResult( PASS ),
-    _spPassedRequirements( requirements ),
-    _spWarnedRequirements( new Requirement::RequirementMap() ),
-    _spFailedRequirements( new Requirement::RequirementMap() )
-{}
-    
-TestResult::TestResult (const wstring& name, const wstring& desc,
-                        const wstring& explain, const wstring& docRef,
-                        Result defaultResult,
-                        const Requirement::RequirementMapSP& requirements)
-  : _name( name ),
-    _desc( desc ),
-    _expl( explain ),
-    _docRef( docRef ),
-    _result( defaultResult ),
-    _spSubtestResults(new SubtestResultVector()),
-    _aggregateEnumResult( PASS ),
-    _spPassedRequirements( requirements ),
-    _spWarnedRequirements( new Requirement::RequirementMap() ),
-    _spFailedRequirements( new Requirement::RequirementMap() )
+    _spFailedRequirements( new Requirement::RequirementMap() ),
+    _spUndefinedRequirements( new Requirement::RequirementMap() )
 {}
 
 TestResult::~TestResult()
@@ -100,11 +90,6 @@ TestResult::~TestResult()
 const wstring& TestResult::GetExplanation() const
 {
   return _expl;
-}
-
-const wstring& TestResult::GetDocumentRef() const
-{
-  return _docRef;
 }
 
 const wstring& TestResult::GetName() const
@@ -137,19 +122,9 @@ void TestResult::SetDescription(const wstring& desc)
   _desc = desc;
 }
 
-void TestResult::SetResult(Result result)
+const TestResult::SubtestResultVector& TestResult::GetSubtestResults() const
 {
-  //can only be set to success, warning, or failure
-  _result = result;
-}
-
-const TestResult::SubtestResultVector& TestResult::GetSubtestResults() const {
     return *_spSubtestResults;
-}
-
-enum TestResult::Result TestResult::GetAggregateResult() const 
-{
-    return _aggregateEnumResult;
 }
 
 bool TestResult::ContainsSubtests() const {
@@ -158,18 +133,21 @@ bool TestResult::ContainsSubtests() const {
 
 const Requirement::RequirementMap& TestResult::GetRequirements( Result type ) const
 {
-    switch (type)
-    {
-        case PASS:
-            return *_spPassedRequirements;
-            break;
-        case WARN:
-            return *_spWarnedRequirements;
-            break;
-        default:
-            return *_spFailedRequirements;
-    }
-    
+  switch (type)
+  {
+  case PASS:
+    return *_spPassedRequirements;
+    break;
+  case WARN:
+    return *_spWarnedRequirements;
+    break;
+  case FAIL:
+    return *_spFailedRequirements;
+    break;
+  default:
+    assert( type == UNDEFINED );
+    return *_spUndefinedRequirements;
+  }
 }
 
 void TestResult::AddDetail( const wstring& detail )
@@ -182,17 +160,15 @@ const vector<wstring>& TestResult::GetDetails() const
   return _details;
 }
 
-void TestResult::AddSubtestResult( shared_ptr<const TestResult> subtestResult )
+void TestResult::AddSubtestResult( shared_ptr<TestResult> subtestResult )
 {
+  //Don't allow a test result to append itself
+  assert( subtestResult.get() != this );
+
   _spSubtestResults->push_back( subtestResult );
 }
 
-void TestResult::SetEnumResult( Result enumResult )
-{
-  _aggregateEnumResult = enumResult;
-}
-
-bool TestResult::ContainsRequirment( const wstring& id, Result& outContainedIn )
+bool TestResult::ContainsRequirement( const wstring& id, Result& outContainedIn )
 {
     if ( _spPassedRequirements->find(id) != _spPassedRequirements->end() ) {
         outContainedIn = PASS;
@@ -203,9 +179,32 @@ bool TestResult::ContainsRequirment( const wstring& id, Result& outContainedIn )
     } else if ( _spFailedRequirements->find(id) != _spFailedRequirements->end() ) {
         outContainedIn = FAIL;
         return true;
+    } else if ( _spUndefinedRequirements->find(id) != _spUndefinedRequirements->end() ) {
+        outContainedIn = UNDEFINED;
+        return true;
     } else {
         return false;
     }
+}
+
+bool TestResult::HasResult( const wstring& id, Result result ) const
+{
+  switch ( result )
+  {
+    case UNDEFINED:
+      return _spUndefinedRequirements->find(id) != _spUndefinedRequirements->end();
+    case FAIL:
+      return _spFailedRequirements->find(id) != _spFailedRequirements->end();
+    case WARN:
+      return _spWarnedRequirements->find(id) != _spWarnedRequirements->end();
+    case PASS:
+      return _spPassedRequirements->find(id) != _spPassedRequirements->end();
+    default:
+      assert(0);
+  }
+
+  // Keep the compiler happy.
+  return false;
 }
 
 void TestResult::ClearRequirements()
@@ -213,6 +212,8 @@ void TestResult::ClearRequirements()
     _spPassedRequirements->clear();
     _spWarnedRequirements->clear();
     _spFailedRequirements->clear();
+    _spUndefinedRequirements->clear();
+    _result = UNDEFINED;
 }
 
 void TestResult::AddRequirement( Result type, const shared_ptr<const Requirement>& req )
@@ -226,22 +227,103 @@ void TestResult::RemoveRequirement( const wstring& id )
     _spPassedRequirements->erase(id);
     _spWarnedRequirements->erase(id);
     _spFailedRequirements->erase(id);
+    _spUndefinedRequirements->erase(id);
 }
 
 const Requirement::RequirementMapSP& TestResult::GetMyRequirements( Result type )
 {
-    switch (type)
-    {
-        case PASS:
-            return _spPassedRequirements;
-            break;
-        case WARN:
-            return _spWarnedRequirements;
-            break;
-        default:
-            return _spFailedRequirements;
-    }
+  switch (type)
+  {
+    case PASS:
+      return _spPassedRequirements;
+      break;
+    case WARN:
+      return _spWarnedRequirements;
+      break;
+    case FAIL:
+      return _spFailedRequirements;
+      break;
+    default:
+      assert( type == UNDEFINED );
+      return _spUndefinedRequirements;
+  }
+}
+
+void TestResult::ConsolidateResults()
+{
+  // If this is not a leaf node then we will be aggregating the child
+  // results. Clear the existing results before doing so to avoid
+  // merging new results into the old, stale, results. We don't clear
+  // leave nodes because those are not aggregate results - they are
+  // the individual test results. If we clear'ed them there would be
+  // nothing left to aggregate.
+  if ( !_spSubtestResults->empty() )
+  {
+    this->ClearRequirements();
+  }
+
+  this->InitConsolidateResults();
+
+  for( SubtestResultVector::iterator iter = _spSubtestResults->begin();
+       iter != _spSubtestResults->end();
+       ++iter )
+  {
+    shared_ptr<TestResult> spSubTestResult = *iter;
     
+    spSubTestResult->ConsolidateResults();
+
+    //Properly set the status of requirements based on the status of
+    //the new child requirements.
+    for (int curReqLevel = UNDEFINED; curReqLevel <= FAIL; curReqLevel++)
+    {
+      //Find all the requirements and loop through them.
+      Requirement::RequirementMap requirements = spSubTestResult->GetRequirements((Result)curReqLevel);
+      Requirement::RequirementMap::iterator iter;
+      for ( iter = requirements.begin(); iter != requirements.end(); iter++ )
+      {
+        //If the requirement was already in a map store it in the map
+        //with the worst possible status.  Otherwise, add the
+        //requirement to the map that it is in, in the child subtest.
+        Result oldReqLevel;
+        if ( this->ContainsRequirement( iter->first, oldReqLevel ) )
+        {
+          if (oldReqLevel < curReqLevel)
+          {
+            this->RemoveRequirement(iter->first);
+            this->AddRequirement((Result)curReqLevel, iter->second);
+          }
+        }
+        else
+        {
+          this->AddRequirement((Result)curReqLevel, iter->second);
+        }
+      }
+    }
+
+    // Update _result if the subtest is worse than the results
+    // consolidated so far.
+    if ( spSubTestResult->GetResult() > _result )
+    {
+      _result = spSubTestResult->GetResult();
+    }
+  }
+}
+
+void TestResult::InitConsolidateResults()
+{}
+
+void TestResult::ProtectedSetResult( Result result )
+{
+  _result = result;
+}
+
+void TestResult::Dump( const wstring& prefix, wostream& os ) const
+{
+  os << prefix << _name << L":" << endl;
+  DumpRequirementSet( L"pass",      prefix, os, _spPassedRequirements );
+  DumpRequirementSet( L"warn",      prefix, os, _spWarnedRequirements );
+  DumpRequirementSet( L"fail",      prefix, os, _spFailedRequirements );
+  DumpRequirementSet( L"undefined", prefix, os, _spUndefinedRequirements );
 }
 
 } // end of namespace diskstream

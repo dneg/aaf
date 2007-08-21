@@ -32,7 +32,7 @@ class AxOperationGroup;
 
 namespace aafanalyzer {
 
-class DetailLevelTestResult;
+class TestLevelTestResult;
 
 using namespace boost;
 using namespace std;
@@ -42,8 +42,9 @@ class EPEffectVisitor : public EPTypedVisitor
 
   public:
   
-    EPEffectVisitor( wostream& log, shared_ptr<EdgeMap> spEdgeMap );
-
+    EPEffectVisitor( wostream& log,
+		     shared_ptr<EdgeMap> spEdgeMap,
+		     shared_ptr<TestLevelTestResult> spTestResult );
     virtual ~EPEffectVisitor();
 
     virtual bool PreOrderVisit( EPTypedObjNode<IAAFOperationGroup, EPEffect>& node);
@@ -73,24 +74,29 @@ class EPEffectVisitor : public EPTypedVisitor
     virtual bool PostOrderVisit( AAFTypedObjNode<IAAFOperationGroup>& node );
     virtual bool PostOrderVisit( AAFTypedObjNode<IAAFTransition>& node );
     
-    shared_ptr<DetailLevelTestResult> GetResult();
-    
   private:
   
-    wostream& _log;
-    shared_ptr<EdgeMap> _spEdgeMap;
-    stack<bool> _isParentTransition;
-    
-    shared_ptr<DetailLevelTestResult> _spResult;
-    
-    bool VeirfyTransitionRequirement( AAFTypedObjNode<IAAFOperationGroup>& node, bool withinTransition, const AxString& reqId, const AxString& type );
-    bool VerifyAlphaRequirements( AxOperationGroup& axOpGroup, const AxString& effectType, aafUInt32 expectedInputs, const AxString& descriptorReq, const AxString& alphaReq, const AxString& slotName );
-    
     // prohibited
     EPEffectVisitor();
     EPEffectVisitor( const EPEffectVisitor& );
     EPEffectVisitor& operator=( const EPEffectVisitor& );
-  
+
+    bool VeirfyTransitionRequirement( AAFTypedObjNode<IAAFOperationGroup>& node,
+				      bool withinTransition,
+				      const AxString& reqId,
+				      const AxString& type );
+
+    bool VerifyAlphaRequirements( AxOperationGroup& axOpGroup,
+				  const AxString& effectType,
+				  aafUInt32 expectedInputs,
+				  const AxString& descriptorReq,
+				  const AxString& alphaReq,
+				  const AxString& slotName );
+
+    wostream& _log;
+    shared_ptr<EdgeMap> _spEdgeMap;
+    stack<bool> _isParentTransition;
+    shared_ptr<TestLevelTestResult> _spTestResult;
 };
 
 } // end of namespace aafanalyzer

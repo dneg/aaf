@@ -63,45 +63,17 @@ EPEffectTest::~EPEffectTest()
 
 shared_ptr<TestLevelTestResult> EPEffectTest::Execute()
 {
+  shared_ptr<TestLevelTestResult> spTestResult = CreateTestResult();
     
-    shared_ptr<EPEffectVisitor> spVisitor(new EPEffectVisitor( GetOutStream(), GetTestGraph()->GetEdgeMap() ) );
+  shared_ptr<EPEffectVisitor>
+    spVisitor( new EPEffectVisitor( GetOutStream(),
+				    GetTestGraph()->GetEdgeMap(),
+				    spTestResult ) );
+  
+  DepthFirstTraversal dfs(GetTestGraph()->GetEdgeMap(), GetTestGraph()->GetRootNode());
+  dfs.TraverseDown( spVisitor, GetTestGraph()->GetRootNode() );
 
-    DepthFirstTraversal dfs(GetTestGraph()->GetEdgeMap(), GetTestGraph()->GetRootNode());
-    
-    const shared_ptr<const Test> me = this->shared_from_this();
-    Requirement::RequirementMapSP spMyReqs(new Requirement::RequirementMap(this->GetCoveredRequirements()));
-    shared_ptr<TestLevelTestResult> spResult( new TestLevelTestResult(TEST_NAME,
-                                 TEST_DESC,
-                                 L"-", // explain
-                                 L"-",  // DOCREF REQUIRED
-                                 TestResult::PASS,
-                                 me, 
-                                 spMyReqs ) );
-
-    dfs.TraverseDown( spVisitor, GetTestGraph()->GetRootNode() );
-
-    spResult->AppendSubtestResult( spVisitor->GetResult() );
-
-    spResult->SetResult( spResult->GetAggregateResult() );
-    if ( spResult->GetResult() == TestResult::FAIL )
-    {
-        spResult->SetExplanation(L"Test Failed - See \"Edit Protocol Effect Visitor\" Visitor for details");
-    }
-    
-    //Update the requirement status based upon the status of the requirements in
-    //the visitor.
-    for (int reqLevel = TestResult::PASS; reqLevel <= TestResult::FAIL; reqLevel++)
-    {
-      Requirement::RequirementMap childReqs = spVisitor->GetResult()->GetRequirements( (TestResult::Result)reqLevel );
-      Requirement::RequirementMap::const_iterator iter;
-      for( iter = childReqs.begin(); iter != childReqs.end(); ++iter )
-      {
-        spResult->SetRequirementStatus( (TestResult::Result)reqLevel, iter->second );
-      }
-    }
-
-    return spResult;
-
+  return spTestResult;
 }
 
 AxString EPEffectTest::GetName() const

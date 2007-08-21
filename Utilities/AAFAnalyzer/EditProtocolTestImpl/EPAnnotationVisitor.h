@@ -33,7 +33,7 @@ class AxComponent;
 
 namespace aafanalyzer {
 
-class DetailLevelTestResult;
+class TestLevelTestResult;
 
 using namespace boost;
 using namespace std;
@@ -43,7 +43,9 @@ class EPAnnotationVisitor : public EPTypedVisitor
 
   public:
   
-    EPAnnotationVisitor( wostream& log, shared_ptr<EdgeMap> spEdgeMap );
+    EPAnnotationVisitor( wostream& log,
+			 shared_ptr<EdgeMap> spEdgeMap,
+			 shared_ptr<TestLevelTestResult> _spTestResult );
     virtual ~EPAnnotationVisitor();
 
     virtual bool PreOrderVisit( AAFTypedObjNode<IAAFComponent>& node );
@@ -125,7 +127,6 @@ class EPAnnotationVisitor : public EPTypedVisitor
     virtual bool PostOrderVisit( AAFTypedObjNode<IAAFEventMobSlot>& node );
     virtual bool PostOrderVisit( AAFTypedObjNode<IAAFMobSlot>& node );
     
-    shared_ptr<DetailLevelTestResult> GetResult();
     void CheckForTaggedValueDefinitions();
     void CheckForKLVValueDefinitions();
     
@@ -133,7 +134,7 @@ class EPAnnotationVisitor : public EPTypedVisitor
   
     wostream& _log;
     shared_ptr<EdgeMap> _spEdgeMap;
-    shared_ptr<DetailLevelTestResult> _spResult;
+    shared_ptr<TestLevelTestResult> _spTestResult;
     
     stack<bool> _isAncestorEssenceTrack;
     stack<bool> _isAncestorEventMobSlot;

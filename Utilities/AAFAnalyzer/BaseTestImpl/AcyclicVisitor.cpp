@@ -24,6 +24,7 @@
 
 //Test/Result files
 #include <DetailLevelTestResult.h>
+#include <TestLevelTestResult.h>
 #include <TestRegistry.h>
 
 //Requirement files
@@ -61,97 +62,137 @@ namespace aafanalyzer {
 using namespace std;
 using namespace boost;
 
-AcyclicVisitor::  AcyclicVisitor(wostream& os)
+AcyclicVisitor::AcyclicVisitor( wostream& os,
+                                shared_ptr<TestLevelTestResult> spTestResult )
   : _os(os),
-    _spResult( new DetailLevelTestResult(L"AcyclicVisitor",
-                                         L"Detects cycles in an AAF object graph.",
-                                         L"No cycles found.",
-                                         L"", // DOCREF REQUIRED
-                                         TestResult::PASS,
-                                         //*(new Requirement::RequirementMapSP(new Requirement::RequirementMap()))
-                                         TestRegistry::GetInstance().GetRequirementsForTest( AcyclicAnalysis::GetTestInfo().GetName() )
-             )                         )
+    _spTestResult( spTestResult )
 {}
 
 AcyclicVisitor::~AcyclicVisitor()
-{
-}
+{}
 
 bool AcyclicVisitor::IsPresent(unsigned int lid)
 {
-  return ( _Set.find( lid ) != _Set.end() );
+  return ( _nodeSet.find( lid ) != _nodeSet.end() );
 }
 
 bool AcyclicVisitor::PreOrderVisit(Node& node)
 {
   Node::LID lid = node.GetLID();
 
-  if ( _Set.insert(lid).second )
+  // JPT REVIEW - This alogrithm is not adequate.  A source clip can
+  // legally reference another slot in it's parent mob. (Also, it can
+  // possible reference a different region on the same slot if it is a
+  // timeline.)  That will cause the parent mob to be pre-order
+  // visited twice during a travesal down a branch.  This case,
+  // however, isn't currently handled (resolved) by the reference
+  // resolve so it is necessary to handle it here.  Identification of
+  // the cycle requires examanination of the node, and the reason we
+  // are visiting it (i.e. the edge).
+
+  // std::set.insert() returns a pair.second value that is a bool
+  // indicating whether the value was already exists in the set. Its
+  // precense in the set indicates that the node has been pre-visited
+  // during the traversal down the branch. If it has been visited then
+  // we cycled back to this node and we reject it.
+
+  if ( _nodeSet.insert(lid).second )
   {
-    
-    //The node was properly inserted into the set, therefore, a cycle has
-    //not yet been detected.  If this node has already been visited, that means
-    //that there are no cycles down this sub-branch, so the node can be removed
-    //from the set and the traversal of this sub-branch can be halted.
+    // JPT REVIEW - This is a valid optimization, but it's confusing
+    // for maintainers.  We are not shooting for all out performance
+    // here so I'm disabling it and will remove later when I confirm
+    // removing it has no side effect.  Also, review the HaveVisited
+    // and RecordVisited calls. Those are an optimization that I
+    // believe can be removed to make this easier to understand.
+
+    // The node was properly inserted into the set, therefore, a cycle
+    // has not yet been detected.  If this node has already been
+    // visited, that means that there are no cycles down this
+    // sub-branch, so the node can be removed from the set and the
+    // traversal of this sub-branch can be halted.
+
     if ( this->HaveVisited( lid ) )
     {
-        _Set.erase( lid );
+        _nodeSet.erase( lid );
         return false;
     }
     
-    //add node into the vector since it was visited on this sub-branch's traversal
-    _Vector.push_back(node.GetSharedPointerToNode());
+    // Add node into the vector since it was visited on this
+    // sub-branch's traversal
+    _nodeVector.push_back(node.GetSharedPointerToNode());
+
     this->RecordVisit( lid );
+
     return true;
   }
 
-  // a cycle was detected
-  
-  wstring newl=wstring(L"\n");
-  wstring cycle=wstring(L"Nodes of the cycle:") + newl ;
+  // A cycle was detected, add failure result and add details showing
+  // the location in the chain of references.
 
-  _Vector.push_back(node.GetSharedPointerToNode());
+  shared_ptr<DetailLevelTestResult>
+    spCycleResult = _spTestResult->AddSingleResult( L"REQ_EP_256",
+                                                    TestResult::FAIL,
+                                                    L"Reference Cycle Detected",
+                                                    L"",
+                                                    L"A cycle was detected in the derivation chain." );
   
-  for(unsigned int i = 0; i < _Vector.size(); i++)
+  spCycleResult->AddDetail( L"Nodes involved in the cycle:" );
+
+  _nodeVector.push_back(node.GetSharedPointerToNode());
+  
+  for(unsigned int i = 0; i < _nodeVector.size(); i++)
   {
-	  cycle+=wstring(L"Node: ") + wstring(AxStringUtil::int2Str(_Vector.at(i)->GetLID())) + wstring(L"  Object - ") + wstring( _Vector.at(i)->GetName()) +newl;
-    //_os <<"Node: "<< _Vector.at(i)->GetLID() <<"  Object - "<< _Vector.at(i)->GetName()<<endl;
-  	AAFObjNode& a=static_cast<AAFObjNode&>(*(_Vector.at(i)));
-  	AxObject axObj( a.GetAAFObject() );
-  	
-	IAAFMobSP spMob;
-	IAAFMobSlotSP spMobS;
-	IAAFSourceReferenceSP spSR;
-	
-	if (AxIsA(axObj, spMobS)){
-		AxMobSlot axMobS(spMobS);
-		cycle+= wstring(L"         SlotID - ") + wstring(AxStringUtil::int2Str(axMobS.GetSlotID())) + newl;
-		//_os<<"         SlotID - "<<axMobS.GetSlotID()<<endl;
-	}
-  	else if(AxIsA(axObj, spMob)){
-    	AxMob axMob(spMob);
-    	cycle += wstring( L"           Name - ") + wstring(axMob.GetName()) + newl;
-		cycle +=wstring( L"          MobID - " + AxStringUtil::mobid2Str(axMob.GetMobID())) + newl;
-    	//_os<<"           Name - "<<axMob.GetName()<<endl;
-    	//_os<<"          MobID - "<<au.mobid2Str(axMob.GetMobID())<<endl;
-  	}
-  	else if (AxIsA(axObj,spSR)){
-  		AxSourceReference axSR(spSR);
-		cycle+= wstring(L"       SourceID - " + AxStringUtil::mobid2Str(axSR.GetSourceID())) +newl;
-  		//_os<<"       SourceID - "<<au.mobid2Str(axSR.GetSourceID())<<endl;
-	}
-  
+    wstring detail;
+
+    detail = wstring(L"Node: ") +
+             wstring(AxStringUtil::int2Str(_nodeVector.at(i)->GetLID())) +
+             wstring(L"  Object - ") +
+             wstring( _nodeVector.at(i)->GetName());
+
+    spCycleResult->AddDetail( detail );
+
+    AAFObjNode& aafNode = dynamic_cast<AAFObjNode&>(*(_nodeVector.at(i)));
+    AxObject axObj( aafNode.GetAAFObject() );
+    
+    IAAFMobSP spMob;
+    IAAFMobSlotSP spMobS;
+    IAAFSourceReferenceSP spSR;
+    
+    if ( AxIsA(axObj, spMobS) )
+    {
+      AxMobSlot axMobS(spMobS);
+
+      detail = wstring(L"         SlotID - ") +
+               AxStringUtil::int2Str(axMobS.GetSlotID());
+
+      spCycleResult->AddDetail( detail );
+    }
+    else if( AxIsA(axObj, spMob) )
+    {
+      AxMob axMob(spMob);
+
+      detail = wstring( L"           Name - ") +
+               wstring( axMob.GetName() );
+
+      spCycleResult->AddDetail( detail );
+      detail = wstring( L"          MobID - " ) +
+               AxStringUtil::mobid2Str(axMob.GetMobID());
+
+      spCycleResult->AddDetail( detail );
+    }
+    else if ( AxIsA(axObj,spSR) )
+    {
+      AxSourceReference axSR(spSR);
+
+      detail = wstring(L"       SourceID - ") +
+               AxStringUtil::mobid2Str( axSR.GetSourceID() );
+
+      spCycleResult->AddDetail( detail );
+    }
   }
   
-  _spResult->SetExplanation(L"Cycle(s) detected!");
-  _spResult->SetResult(TestResult::FAIL);
-  _spResult->AddInformationResult(
-            L"REQ_EP_256",
-            cycle,
-            TestResult::FAIL );
-  _Vector.pop_back();
+  _nodeVector.pop_back();
   
-
   return false;
 }
 
@@ -166,22 +207,16 @@ bool AcyclicVisitor::PostOrderVisit(Node& node)
     return true;
   }
 
-  //an unkown error occured
-  _spResult->SetExplanation(L"Error: Unknown error occured during postorder visit!");
-  _spResult->SetResult(TestResult::FAIL);
+  // Should never arrive here if everything is working correctly.
+  assert(0);  
 
   return false;
 }
 
 void AcyclicVisitor::Erase(unsigned int lid)
 {
-  _Vector.pop_back();
-  _Set.erase( lid );
-}
-
-shared_ptr<const DetailLevelTestResult> AcyclicVisitor::GetTestResult() const
-{
-  return _spResult; 
+  _nodeVector.pop_back();
+  _nodeSet.erase( lid );
 }
 
 } // end of namespace aafanalyzer

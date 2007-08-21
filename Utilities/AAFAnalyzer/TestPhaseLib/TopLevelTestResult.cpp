@@ -45,48 +45,16 @@ TopLevelTestResult::TopLevelTestResult()
 
 TopLevelTestResult:: TopLevelTestResult( const wstring& name, 
                                          const wstring& desc,
-                                         const wstring& explain,
-                                         const wstring& docRef,
-                                         Result defaultResult )
-  : HighLevelTestResult( name, desc, explain, docRef, defaultResult )
+                                         const wstring& explain )
+  : HighLevelTestResult( name, desc, explain )
 {}
 
 TopLevelTestResult::~TopLevelTestResult()
 {}
 
-void TopLevelTestResult::AppendSubtestResult( const shared_ptr<const TestPhaseLevelTestResult>& subtestResult )
+void TopLevelTestResult::AppendSubtestResult( shared_ptr<TestPhaseLevelTestResult> spSubtestResult )
 {
-    this->AddSubtestResult( subtestResult );
-
-    //Properly set the status of requirements based on the status of the new
-    //child requirements.
-    for (int curReqLevel = PASS; curReqLevel <= FAIL; curReqLevel++)
-    {
-      //Find all the requirements and loop through them.
-      Requirement::RequirementMap requirements = subtestResult->GetRequirements((Result)curReqLevel);           
-      Requirement::RequirementMap::iterator iter;
-      for ( iter = requirements.begin(); iter != requirements.end(); iter++ )
-      {
-          //If the requirement was already in a map store it in the map with
-          //the worst possible status.  Otherwise, add the requirement to the
-          //map that it is in, in the child subtest.
-          Result oldReqLevel;
-          if ( this->ContainsRequirment( iter->first, oldReqLevel ) ) {
-              if (oldReqLevel < curReqLevel)
-              {
-                  this->RemoveRequirement(iter->first);
-                  this->AddRequirement((Result)curReqLevel, iter->second);
-              }
-          } else {
-              this->AddRequirement((Result)curReqLevel, iter->second);
-          }
-      }
-    }
-    //If the result of the appended test is worse than any other subtest then
-    //update the aggregate result.
-    if ( subtestResult->GetResult() > this->GetAggregateResult() ) {
-        this->SetEnumResult(subtestResult->GetResult());
-    }
+  this->AddSubtestResult( spSubtestResult );
 }
 
 const enum TestResult::ResultLevel TopLevelTestResult::GetResultType() const

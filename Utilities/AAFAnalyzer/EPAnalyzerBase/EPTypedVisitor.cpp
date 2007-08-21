@@ -480,6 +480,12 @@ using namespace std;
 using namespace boost;
 
 EPTypedVisitor::EPTypedVisitor()
+  : TypedVisitor()
+{
+}
+
+EPTypedVisitor::EPTypedVisitor( Visitor::Follow_e follow )
+  : TypedVisitor( follow )
 {
 }
 
@@ -493,7 +499,7 @@ AxString EPTypedVisitor::GetMobName( AxMob& axMob, const AxString& type )
     AxString nodeName;
     try
     {
-        nodeName = type + L": \"" + axMob.GetName() + L"\"";
+        nodeName = type + L" \"" + axMob.GetName() + L"\"";
     }
     catch ( const AxExHResult& ex )
     {

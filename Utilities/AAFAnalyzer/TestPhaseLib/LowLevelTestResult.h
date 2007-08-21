@@ -26,8 +26,16 @@
 
 namespace aafanalyzer {
 
+class Test;
+
 using namespace std;
 using namespace boost;
+
+// A LowLevelTestResult is test result that is associated with (i.e
+// reported against) as particular test.  TestLevelResult is an
+// instance of LowLevelTestResult the collects the results for a
+// single test.  DetailLevelTestResult is a result against (generally)
+// a single requirement registered for the assocaited test.
 
 class LowLevelTestResult : public TestResult
 {
@@ -35,25 +43,26 @@ class LowLevelTestResult : public TestResult
 
   virtual ~LowLevelTestResult();
 
-  //This must be called to change the status of a requirement.  The status of
-  //requirements are not updated when another LowLevelTestResult is appended
-  //as a subtest result.
-  void SetRequirementStatus( TestResult::Result level, const shared_ptr<const Requirement>& req);
+  virtual const enum ResultLevel GetResultType() const = 0;
 
-  virtual const enum ResultLevel GetResultType() const =0;
+  const shared_ptr<const Test> GetAssociatedTest() const;
 
  protected:
 
-  LowLevelTestResult( const Requirement::RequirementMapSP& requirements ) ;
-  LowLevelTestResult( const wstring& name, const wstring& desc,
-                      const wstring& explain, const wstring& docRef,
-                      Result defaultResult,
-                      const Requirement::RequirementMapSP& requirements );
- 
-   // prohibited
-   LowLevelTestResult( const LowLevelTestResult& );
-   LowLevelTestResult& operator=( const LowLevelTestResult& );
-  
+  LowLevelTestResult( const shared_ptr<const Test> associatedTest );
+
+  LowLevelTestResult( const shared_ptr<const Test> associatedTest,
+		      const wstring& name, const wstring& desc,
+                      const wstring& explain ); 
+ private:
+
+  // prohibited
+  LowLevelTestResult( const LowLevelTestResult& );
+  LowLevelTestResult& operator=( const LowLevelTestResult& );
+
+  void LowLevelTestResult::SetRequirementStatus( TestResult::Result level, const shared_ptr<const Requirement>& req);
+
+  const shared_ptr<const Test> _spAssociatedTest;
 };
 
 } // end of namespace diskstream

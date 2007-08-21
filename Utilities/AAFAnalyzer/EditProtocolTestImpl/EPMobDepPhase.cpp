@@ -43,10 +43,13 @@ namespace aafanalyzer {
     
 using namespace boost;
 
-EPMobDepPhase::EPMobDepPhase( wostream& log, shared_ptr<const TestGraph> spGraph )
+EPMobDepPhase::EPMobDepPhase( wostream& log,
+			      shared_ptr<const TestGraph> spGraph,
+			      CompMobDependency::CompMobNodeVectorSP spCompMobRoots )
   : TestPhase( log ),
     _log( log ),
-    _spGraph( spGraph )
+    _spGraph( spGraph ),
+    _spCompMobRoots( spCompMobRoots )
 {}
 
 EPMobDepPhase::~EPMobDepPhase()
@@ -64,39 +67,34 @@ AxString EPMobDepPhase::GetName() const
 
 shared_ptr<TestPhaseLevelTestResult> EPMobDepPhase::Execute()
 {
-  shared_ptr<TestPhaseLevelTestResult> spPhaseResult( new TestPhaseLevelTestResult( PHASE_NAME,        // name
-						       PHASE_DESC,        // desc
-						       L"",               // explain
-						       L"",               // DOCREF REQUIRED
-						       TestResult::PASS ) );
+  shared_ptr<TestPhaseLevelTestResult>
+    spPhaseResult( new TestPhaseLevelTestResult( PHASE_NAME,        // name
+						 PHASE_DESC,        // desc
+						 L"" ) );           // explain
+                                                                                    
   // First, decorate all mob nodes with an EPTypedObjNode decoration.
   shared_ptr<DecorateEPTest> decorator( new DecorateEPTest( _log, _spGraph ) );
   spPhaseResult->AppendSubtestResult( decorator->Execute() );
-  spPhaseResult->SetResult( spPhaseResult->GetAggregateResult() );
 
-  // Second, compute the composition mob dependencies.
-  shared_ptr<CompMobDependency> depTest( new CompMobDependency(_log, _spGraph ) );
-  spPhaseResult->AppendSubtestResult( depTest->Execute() );
+  // Second, compute the composition mob dependencies.  NOTE - This is
+  // necessary because when the nodes are decorated new objects are
+  // inserted that wrap the old root nodes (amount others) in the
+  // _spCompMobRoots vector. We need pointers to the new, decorated,
+  // root nodes.  A faster implementation would pass _spCompMobRoots
+  // to DecorateEPTest and it would map the nodes on the file as it
+  // decorates them.  I (jpt) don't want to make such an intrusive
+  // change right now.
+  shared_ptr<CompMobDependency> spDepTest( new CompMobDependency(_log, _spGraph ) );
+  spPhaseResult->AppendSubtestResult( spDepTest->Execute() );
+  CompMobDependency::CompMobNodeVectorSP spPostDecorateRoots = spDepTest->GetRootCompMobNodes();
 
-  spPhaseResult->SetResult( spPhaseResult->GetAggregateResult() );
-
-  CompMobDependency::CompMobNodeVectorSP spRootNodes = depTest->GetRootCompMobNodes();
-  wstringstream ss;
-  ss << spRootNodes->size() << L" unreferenced composition ";
-  if ( spRootNodes->size() == 1 )
-  {
-    ss << L"mob ";
-  }
-  else
-  {
-    ss << L"mobs ";
-  }
-  ss << "found.";
-  spPhaseResult->AddDetail( ss.str() );
+  // JPT REVIEW - A sanity check to ensure the spPostDecoratedRoots
+  // and _spCompMobRoots identify the same underly node would be wise
+  // at this point.
 
   // Third, run the dependency test to verify the chains starting
   // with the identified root compositions.
-  shared_ptr<EPDerivationTest> derivationTest( new EPDerivationTest(_log, _spGraph, spRootNodes) );
+  shared_ptr<EPDerivationTest> derivationTest( new EPDerivationTest(_log, _spGraph, spPostDecorateRoots) );
   spPhaseResult->AppendSubtestResult( derivationTest->Execute() );
   
   // Fourth, run the naming test
@@ -125,8 +123,8 @@ shared_ptr<TestPhaseLevelTestResult> EPMobDepPhase::Execute()
   spPhaseResult->AppendSubtestResult( effectTest->Execute() );
   
   // Tenth, run the annotation test
-  shared_ptr<EPAnnotationTest> annotationTest( new EPAnnotationTest( _log, _spGraph ) );
-  spPhaseResult->AppendSubtestResult( annotationTest->Execute() );
+  // shared_ptr<EPAnnotationTest> annotationTest( new EPAnnotationTest( _log, _spGraph ) );
+  // spPhaseResult->AppendSubtestResult( annotationTest->Execute() );
   
   // Eleventh, run the definition test
   shared_ptr<EPDefinitionTest> definitionTest( new EPDefinitionTest( _log, _spGraph ) );
@@ -143,8 +141,6 @@ shared_ptr<TestPhaseLevelTestResult> EPMobDepPhase::Execute()
   // Fourteenth, run the multi-channel audio test
   shared_ptr<EPMultiChannelAudioTest> mcaTest( new EPMultiChannelAudioTest( _log, _spGraph ) );
   spPhaseResult->AppendSubtestResult( mcaTest->Execute() );
-
-  spPhaseResult->SetResult( spPhaseResult->GetAggregateResult() );
 
   return spPhaseResult;
 }

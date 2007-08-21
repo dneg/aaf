@@ -136,12 +136,14 @@ void ListRequirements( const AxString& title, const Requirement::RequirementMap&
 //======================================================================
 
 // Recursively output result messages if active is true.  If the
-// result name is equal to "filter" then force active to true.
+// result name is equal to "filter" then force active to true.  The
+// caller is responsible for consolidating results before calling this
+// function.
 
-void OutputVerboseResultMsgs( shared_ptr<const TestResult> res,
-                              unsigned int level,
-                              const wstring& filter,
-                              bool active )
+void RecursiveOutputVerboseResultMsgs( shared_ptr<TestResult> res,
+                                       unsigned int level,
+                                       const wstring& filter,
+                                       bool active )
 {
   if ( filter == res->GetName() )
   {
@@ -160,26 +162,31 @@ void OutputVerboseResultMsgs( shared_ptr<const TestResult> res,
     }
 
     wcout << LevelToIndent(level) << "Result: ";
-    if(res->GetResult() == TestResult::PASS) {
-      wcout << L"Passed" << endl;
+    wstring result;
+    if (res->GetResult() == TestResult::PASS) {
+      result = L"Passed";
     }
-
-    else if(res->GetResult() == TestResult::WARN)
+    else if (res->GetResult() == TestResult::WARN)
     {
-      wcout << L"Passed, but with warnings." << endl;
-      wcout << LevelToIndent(level) << "Reason: " << res->GetExplanation() << endl;
+      result = L"Passed, but with warnings.";
     }
-
-    else if(res->GetResult() == TestResult::FAIL)
+    else if (res->GetResult() == TestResult::FAIL)
     {
-      wcout << L"Failed" << endl;
-      wcout << LevelToIndent(level) << "Reason: " << res->GetExplanation() << endl;
+      result = L"Failed";
     }
     else
     {
-      assert(0);
+          assert(res->GetResult() == TestResult::UNDEFINED);
+      result = L"Undefined";
     }
-  
+
+    wcout << result << endl;
+
+    if ( res->GetResult() != TestResult::PASS )
+    {
+      wcout << LevelToIndent(level) << "Reason: " << res->GetExplanation() << endl;
+    }
+
     ListRequirements( L"Passing Requirements", res->GetRequirements(TestResult::PASS), level);
     ListRequirements( L"Warning Requirements", res->GetRequirements(TestResult::WARN), level);
     ListRequirements( L"Failing Requirements", res->GetRequirements(TestResult::FAIL), level);
@@ -191,23 +198,32 @@ void OutputVerboseResultMsgs( shared_ptr<const TestResult> res,
   {
     TestResult::SubtestResultVector subResults = res->GetSubtestResults();
     for (unsigned int i = 0; i < subResults.size(); i++) {
-        OutputVerboseResultMsgs(subResults.at(i), level + 1, filter, active);
+        RecursiveOutputVerboseResultMsgs(subResults.at(i), level + 1, filter, active);
     }
   }
 }
 
-void OutputVerboseResultMsgs( shared_ptr<const TestResult> res,
+
+void OutputVerboseResultMsgs( shared_ptr<TestResult> res,
+                              unsigned int level,
+                              const wstring& filter,
+                              bool active )
+{
+  RecursiveOutputVerboseResultMsgs( res, level, filter, active );
+}
+
+void OutputVerboseResultMsgs( shared_ptr<TestResult> res,
                               unsigned int level )
 {
   wstring empty;
-  OutputVerboseResultMsgs( res,level, empty, true );
+  RecursiveOutputVerboseResultMsgs( res,level, empty, true );
 }
 
-void OutputVerboseResultMsgs( shared_ptr<const TestResult> res,
+void OutputVerboseResultMsgs( shared_ptr<TestResult> res,
                               unsigned int level,
                               wstring filter )
 {
-  OutputVerboseResultMsgs( res,level, filter, false );
+  RecursiveOutputVerboseResultMsgs( res,level, filter, false );
 }
 
 //======================================================================
@@ -273,6 +289,48 @@ void OutputFileCoverage(shared_ptr<const TestResult> res, const basic_string<wch
   wcout << endl;
 }
 
+
+void CollectReasons( shared_ptr<const TestResult> res,
+                     const wstring& reqId,
+                     TestResult::Result result,
+					 set<wstring>& reasonSet )
+{
+  // Recurse down to leaf (ie. single) results to find the detailed
+  // result explanations. The higher level
+  // agregate results do not contain useful explanations.
+  if ( res->ContainsSubtests() )
+  {
+    const TestResult::SubtestResultVector&
+      subResults = res->GetSubtestResults();
+    for( size_t i = 0; i < subResults.size(); ++i )
+    {
+      CollectReasons( subResults[i], reqId, result, reasonSet );
+    }
+	return;
+  }
+
+  // This is a leaf result. If it matches the reqId and result we are
+  // looking for then output the explanation.
+  if ( res->HasResult( reqId, result ) )
+  {
+	reasonSet.insert( res->GetExplanation() );
+  }
+}
+
+void OutputReasons( shared_ptr<const TestResult> res,
+                    const wstring& reqId,
+                    TestResult::Result result )
+{
+	set<wstring> reasonSet;
+	CollectReasons( res, reqId, result, reasonSet );
+	for( set<wstring>::const_iterator iter = reasonSet.begin();
+		 iter != reasonSet.end();
+		 ++iter )
+	{
+		wcout << "Reason : " << *iter << endl;
+	}
+}
+
 void OutputSimpleResultMsgs( shared_ptr<const TestResult> res )
 {
   Requirement::RequirementMap::const_iterator iter;
@@ -281,35 +339,53 @@ void OutputSimpleResultMsgs( shared_ptr<const TestResult> res )
   for ( iter = failures.begin(); iter != failures.end(); iter++ )
   {
     shared_ptr<const Requirement> req = iter->second;
-    wcout << req->GetId() << L": \"" << req->GetName() << L"\" caused a failure." << endl;
-    wcout << L"Description: " << req->GetDescription() << endl;
-    wcout << L"See " << req->GetDocument() << L"(" << req->GetVersion()
-          << L") Section " << req->GetSection() << endl;
-        wcout << endl;
+    wcout << "FAIL   : " << req->GetId() << L", " << req->GetName() << endl;
+    wcout << L"Desc   : " << req->GetDescription() << endl;
+
+    if ( req->GetDocument().size() > 0 )
+    {
+      wcout << L"Doc    : " << req->GetDocument() << L" (" << req->GetVersion()
+            << L") Section " << req->GetSection() << endl;
+    }
+
+    OutputReasons( res, req->GetId(), TestResult::FAIL );
+
+    wcout << endl;
   }
     
   const Requirement::RequirementMap& warnings = res->GetRequirements( TestResult::WARN );
   for ( iter = warnings.begin(); iter != warnings.end(); iter++ )
   {
     shared_ptr<const Requirement> req = iter->second;
-    wcout << req->GetId() << L": \"" << req->GetName() << L"\" caused a warning." << endl;
-    wcout << L"Description: " << req->GetDescription() << endl;
-    wcout << L"See " << req->GetDocument() << L"(" << req->GetVersion()
-          << L") Section " << req->GetSection() << endl;
+    wcout << "WARN   : " << req->GetId() << L", " << req->GetName() << endl;
+	wcout << L"Desc   : " << req->GetDescription() << endl;
+
+    if ( req->GetDocument().size() > 0 )
+    {
+      wcout << L"Doc    : " << req->GetDocument() << L" (" << req->GetVersion()
+            << L") Section " << req->GetSection() << endl;
+    }
+
+    OutputReasons( res, req->GetId(), TestResult::WARN );
+
     wcout << endl;
   }   
 }
 
 void RegisterTests()
 {
-  //Register Load Phase tests.
+  // Register Load Phase tests.
   TestInfoRegistrar<FileLoad> fileLoad;
   TestInfoRegistrar<RefResolver> refResolver;
   TestInfoRegistrar<AcyclicAnalysis> acyclicAnalysis;
+  TestInfoRegistrar<CompMobDependency> compMobDependency;
+
+  // Register file dumper. It is not really a test but is implemented
+  // using the test interface so should registered.
+  TestInfoRegistrar<FileDumper> fileDumper;   
   
   //Register Edit Protocol Mob Dependency Phase tests.
   TestInfoRegistrar<DecorateEPTest> decorateEPTest;
-  TestInfoRegistrar<CompMobDependency> compMobDependency;
   TestInfoRegistrar<EPDerivationTest> epDerivationTest;
   TestInfoRegistrar<EPNameTest> epNameTest;
   TestInfoRegistrar<EPContainedTrackTest> epTrackTest;
@@ -324,9 +400,6 @@ void RegisterTests()
   TestInfoRegistrar<EPHeaderTest> epHeaderTest;
   TestInfoRegistrar<EPParameterTest> epParameterTest;
   TestInfoRegistrar<EPMultiChannelAudioTest> epMultiChannelAudioTest;
-  
-  //Register Dump Phase tests.
-  TestInfoRegistrar<FileDumper> fileDumper;   
 }
 
 class PrintRequirement
@@ -453,7 +526,7 @@ ostream& operator<<( ostream& os, const Usage& usage )
   os << "                      | -verbose"                  << endl;
   os << "                      | -filter <result name>"     << endl;
   os << "                      | -filecoverage"             << endl;
-  os << "                      | -dump"                     << endl;
+  os << "                      | -dump {header | comp}"     << endl;
   os << endl;
 
   os << "[requirement options] = -type all|file|app|def"    << endl;
@@ -461,7 +534,8 @@ ostream& operator<<( ostream& os, const Usage& usage )
   os << "                      | -testcoverage"             << endl;
   os << endl;
 
-  os << "-dump:                  output graph of AAF file"                                        << endl;
+  os << "-dump header:           dump contained objects beginning with header"                    << endl;
+  os << "-dump comp:             dump the top level composition, including resolved references"   << endl;
   os << "-filecoverage:          output the file's requirement coverage data"                     << endl;
   os << "-uncheckedrequirements: allow tests to use unloaded requirements and test"               << endl;
   os << "                        results to use unassociated requirements"                        << endl;
@@ -504,7 +578,7 @@ int main( int argc, char** argv )
   try
   {
     // Figure out where the install location.
-    fs::path argvzero( argv[0], fs::no_check );
+    fs::path argvzero( argv[0] );
     fs::path installPath = argvzero.branch_path();
 
     //
@@ -520,6 +594,23 @@ int main( int argc, char** argv )
 
     // Dump option
     pair<bool,int> dumpArg = args.get( "-dump" );
+    pair<bool,const char*> dumpOption( false, 0 );
+    if ( dumpArg.first )
+    {
+      dumpOption = args.get( dumpArg.second + 1 );
+      if ( !dumpOption.first )
+      {
+        throw Usage( "-dump must be followed by an argument specifying what to dump" );
+      }
+
+      if ( !(dumpOption.second == string("header") ||
+             dumpOption.second == string("comp") ) )
+      {
+        boost::format fmt( "unkown -dump option: \"%1%\"" );
+        fmt % dumpOption.second;
+        throw Usage( fmt.str() );
+      }
+   }
     
     // List All Requirements option
     pair<bool, int> reportArg = args.get( "-report" );
@@ -590,7 +681,7 @@ int main( int argc, char** argv )
     {
       if ( args.IsFetched( argc-1, 1 ) )
       {
-	throw Usage( "last argument should be an AAF file" );
+        throw Usage( "last argument should be an AAF file" );
       }
       fileNameArg = args.get( argc-1, 1 );
       args.MarkFetched( argc-1 );
@@ -602,9 +693,9 @@ int main( int argc, char** argv )
     {
       if ( !args.IsFetched( i ) )
       {
-	boost::format fmt( "unkown argument \"%1%\"" );
-	fmt % argv[i];
-	throw Usage( fmt.str() );
+        boost::format fmt( "unkown argument \"%1%\"" );
+        fmt % argv[i];
+        throw Usage( fmt.str() );
       }
     }
 
@@ -622,8 +713,7 @@ int main( int argc, char** argv )
       // Assume it is the same directory where the program is      
       // executing from.
       fs::path path = installPath / "AAFRequirements.xml";
-      cout << "loading requirements: " << path.string() << endl;
-      loader.ParseXML( path.string().c_str() );
+          loader.ParseXML( path.string().c_str() );
     }
 
     // If a report is requested, but it is not a test coverage report,
@@ -671,53 +761,57 @@ int main( int argc, char** argv )
     spResult->SetName( L"AAF Analyzer" );
     spResult->SetDescription( L"AAF Edit Protocol compliance test." );
 
-    // first phase
+    // First phase - load all objects and resolve references.
     LoadPhase load( wcout, fileName );
-    shared_ptr<const TestPhaseLevelTestResult> spSubResult( load.Execute() );
+    shared_ptr<TestPhaseLevelTestResult> spSubResult( load.Execute() );
     spResult->AppendSubtestResult(spSubResult);
-    if (spSubResult->GetResult()==TestResult::FAIL)
+    
+    // Store the test graph info so the AAF file is not inadvertantley
+    // closed.
+    shared_ptr<const AAFGraphInfo> graphInfo = load.GetTestGraphInfo();
+
+    // The source references are resolved as part of the LoadPhase
+    // test. We can dump the composition after that test runs.  This
+    // tells us what the data structure looks like going into the more
+    // detailed edit protocol (e.g. mob dependency) tests.
+    vector<shared_ptr<Node> > roots = load.GetRoots();
+    if ( dumpArg.first )
     {
-      if ( verboseOutput.first )
+      if ( dumpOption.second == string("header") )
       {
-        if ( filterByNameArg.first )
-        {
-          OutputVerboseResultMsgs( spResult, 0, AxStringUtil::mbtowc(filterByNameArg.second) );
-        }
-        else
-        {
-          OutputVerboseResultMsgs( spResult, 0 );
-        }
-      }
-      else if (fileCoverageArg.first)
-      {
-        OutputFileCoverage(spResult, fileName, 0);
+        wcout << L"header dump:" << endl;
+        DumpPhase dump( wcout, graphInfo->GetGraph() );
+        spSubResult = dump.Execute();
+        spResult->AppendSubtestResult(spSubResult);
       }
       else
       {
-        OutputSimpleResultMsgs( spResult );
+        assert( dumpOption.second == string( "comp" ) );
+        wcout << "composition dump:" << endl;
+        wcout << L"found " <<  static_cast<unsigned int>(roots.size()) << L" unreferenced object";
+        if ( roots.size() > 1 )
+        {
+          wcout << "s";
+        }
+        wcout << endl;
+
+        for( size_t i = 0; i < roots.size(); ++i )
+        {
+          wcout << L"root object " << static_cast<unsigned int>(i) << L": " << roots[i]->GetName() << endl;
+          DumpPhase dump( wcout, graphInfo->GetGraph(), roots[i] );
+          spSubResult = dump.Execute();
+          spResult->AppendSubtestResult(spSubResult);
+        }
       }
-
-      throw AnalyzerException(L"Load phase failed. Further tests aborted.");
     }
-    
-    //Store the test graph info so the AAF file is not inadvertantley closed.
-    shared_ptr<const AAFGraphInfo> graphInfo = load.GetTestGraphInfo();
 
-    // Second phase: execute the edit protocol mob dependency tests.
-    EPMobDepPhase mobDepPhase( wcout, graphInfo->GetGraph() );
+    // Second phase: determine the edit protocol types of the loaded
+    // objects, analyze EP dependencies, and numerous finer grain
+    // tests.
+    EPMobDepPhase mobDepPhase( wcout, graphInfo->GetGraph(), load.GetCompMobRoots() );
     spResult->AppendSubtestResult( mobDepPhase.Execute() );
+    spResult->ConsolidateResults();
 
-    // More test phases go here...
-    
-    // optional dump phase
-    if ( dumpArg.first )
-    {
-      DumpPhase dump( wcout, graphInfo->GetGraph() );
-      spSubResult = dump.Execute();
-      spResult->AppendSubtestResult(spSubResult);
-    }
-
-    spResult->SetResult(spResult->GetAggregateResult());
     if ( verboseOutput.first )
     {
       if ( filterByNameArg.first )
@@ -737,7 +831,7 @@ int main( int argc, char** argv )
     {
         OutputSimpleResultMsgs( spResult );
     }
-    
+
     TestResult::Result exitCode = spResult->GetResult();
     if ( exitCode == TestResult::FAIL )
     {

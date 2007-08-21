@@ -21,10 +21,11 @@
 #ifndef __EPMobDepPhase_h__
 #define __EPMobDepPhase_h__
 
-//Edit Protocol Test files (included so the application only needs to include
-//the Test Phase and not individual tests in order to register tests).
+// Edit Protocol Test files (included so the application only needs to
+// include the Test Phase and not individual tests in order to
+// register tests).
+
 #include <DecorateEPTest.h>
-#include <CompMobDependency.h>
 #include <EPDerivationTest.h>
 #include <EPNameTest.h>
 #include <EPContainedTrackTest.h>
@@ -37,6 +38,9 @@
 #include <EPHeaderTest.h>
 #include <EPParameterTest.h>
 #include <EPMultiChannelAudioTest.h>
+
+//Base test files
+#include <CompMobDependency.h>
 
 //Test/Result files
 #include <TestPhase.h>
@@ -54,7 +58,9 @@ class TestGraph;
 class EPMobDepPhase : public TestPhase
 {
  public:
-  EPMobDepPhase( wostream& log, shared_ptr<const TestGraph> spGraph );
+  EPMobDepPhase( wostream& log,
+		 shared_ptr<const TestGraph> spGraph,
+		 CompMobDependency::CompMobNodeVectorSP spCompMobRoots );
   virtual ~EPMobDepPhase();
 
   virtual AxString GetDescription() const;
@@ -70,6 +76,7 @@ class EPMobDepPhase : public TestPhase
 
   wostream& _log;
   shared_ptr<const TestGraph> _spGraph;
+  CompMobDependency::CompMobNodeVectorSP _spCompMobRoots;
 };
 
 } // end of namespace aafanalyzer

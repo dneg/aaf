@@ -41,14 +41,16 @@ namespace aafanalyzer {
 
 using namespace boost;
 
-class DetailLevelTestResult;
+class TestLevelTestResult;
 
 class EPDefinitionVisitor : public EPTypedVisitor
 {
 
   public:
   
-    EPDefinitionVisitor( wostream& log, shared_ptr<EdgeMap> spEdgeMap );
+    EPDefinitionVisitor( wostream& log,
+			 shared_ptr<EdgeMap> spEdgeMap,
+			 shared_ptr<TestLevelTestResult> spTestResult );
     
     virtual ~EPDefinitionVisitor();
    
@@ -60,24 +62,23 @@ class EPDefinitionVisitor : public EPTypedVisitor
     
     void CheckForUnusedOperationDefinitions();
     void CheckLegacyData();
-    
-    shared_ptr<DetailLevelTestResult> GetResult();
-    
+      
   private:
    
+    // prohibited
+    EPDefinitionVisitor();
+    EPDefinitionVisitor( const EPDefinitionVisitor& );
+    EPDefinitionVisitor& operator=( const EPDefinitionVisitor& );
+
     wostream& _log;
     shared_ptr<EdgeMap> _spEdgeMap;
-    shared_ptr<DetailLevelTestResult> _spResult;
+    shared_ptr<TestLevelTestResult> _spTestResult;
     set<aafUID_t> _usedDefinitions;
     map<aafUID_t, AxString> _registeredDefinitions;
     set<AxString> _opDataDefCurrent;
     set<AxString> _opDataDefLegacy;
     aafProductVersion_t _fileVersion;
 
-    // prohibited
-    EPDefinitionVisitor();
-    EPDefinitionVisitor( const EPDefinitionVisitor& );
-    EPDefinitionVisitor& operator=( const EPDefinitionVisitor& );
   
 };
 

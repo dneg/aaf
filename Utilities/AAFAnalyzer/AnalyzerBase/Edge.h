@@ -21,6 +21,10 @@
 #ifndef __EDGE_h__
 #define __EDGE_h__
 
+#include <Node.h>
+
+#include <string>
+
 //Boost files
 #include <boost/shared_ptr.hpp>
 
@@ -29,27 +33,49 @@ namespace aafanalyzer {
 using namespace boost;
 
 class Visitor;
-class Node;
 
 class Edge
 {
  public:
+
+  enum EdgeKind_e { EDGE_KIND_CONTAINMENT,
+                    EDGE_KIND_REFERENCE,
+                    EDGE_KIND_LAST_REFERENCE,
+                    EDGE_KIND_UNDEFINED };
+
+  // undefined kind and zero valued tag
   Edge( shared_ptr<Node> spParent, shared_ptr<Node> spChild );
+
+  Edge( shared_ptr<Node> spParent, shared_ptr<Node> spChild,
+        EdgeKind_e kind, Node::LID tag );
+
   virtual ~Edge();
 
   virtual bool Visit(shared_ptr<Visitor> spVisitor);
   shared_ptr<Node> GetParentNode() const;
   shared_ptr<Node> GetChildNode() const;
+
+  // virtual constructor
+  // uses the existing kind and tag values
   virtual shared_ptr<Edge> CreateNewEdge( shared_ptr<Node> spParent, shared_ptr<Node> spChild ) const;
 
+  // custom type information
+  virtual const std::wstring& GetTypeName() const;
+
+  EdgeKind_e GetKind() const;
+  Node::LID GetTag() const;
+
  private:
-  shared_ptr<Node> _spParentNode;
-  shared_ptr<Node> _spChildNode;
 
   // prohibited
   Edge();
   Edge( const Edge& );
   Edge& operator=( const Edge& );
+
+  shared_ptr<Node> _spParentNode;
+  shared_ptr<Node> _spChildNode;
+  EdgeKind_e _kind;
+  Node::LID _tag;
 };
 
 } // end of namespace diskstream

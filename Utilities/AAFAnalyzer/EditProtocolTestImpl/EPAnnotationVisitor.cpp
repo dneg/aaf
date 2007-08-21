@@ -24,6 +24,7 @@
 
 //Test/Result files
 #include <DetailLevelTestResult.h>
+#include <TestLevelTestResult.h>
 #include <TestRegistry.h>
 
 //Ax files
@@ -46,16 +47,12 @@ namespace aafanalyzer {
 
 using namespace boost;
  
-EPAnnotationVisitor::EPAnnotationVisitor( wostream& log, shared_ptr<EdgeMap> spEdgeMap )
+EPAnnotationVisitor::EPAnnotationVisitor( wostream& log,
+                                          shared_ptr<EdgeMap> spEdgeMap,
+                                          shared_ptr<TestLevelTestResult> spTestResult )
     : _log(log),
       _spEdgeMap( spEdgeMap ),
-      _spResult( new DetailLevelTestResult( L"Edit Protocol Annotation Visitor",
-                                            L"Visit components to make sure they do not have illegal annotations.",
-                                            L"", // explain
-                                            L"", // DOCREF REQUIRED
-                                            TestResult::PASS,
-                                            TestRegistry::GetInstance().GetRequirementsForTest( EPAnnotationTest::GetTestInfo().GetName() )
-               )                          )
+      _spTestResult( spTestResult )
 {
     _isAncestorEssenceTrack.push( false );
     _isAncestorEventMobSlot.push( false );
@@ -197,14 +194,20 @@ bool EPAnnotationVisitor::PreOrderVisit( AAFTypedObjNode<IAAFCommentMarker>& nod
     if ( _isAncestorEssenceTrack.top() )
     {
         //Ancestor is an essence track
-        _spResult->AddInformationResult( L"REQ_EP_149", this->GetMobSlotName( _spEdgeMap, node) + L" is an essence track and uses CommentMarkers for annotations.", TestResult::FAIL );
-        testPassed = false;
+      _spTestResult->AddSingleResult(
+          L"REQ_EP_149",
+          this->GetMobSlotName( _spEdgeMap, node) + L" is an essence track and uses CommentMarkers for annotations.",
+          TestResult::FAIL );
+      testPassed = false;
     }
     
     //Need to ensure that parent is event mob slot
     if ( !_isAncestorEventMobSlot.top() )
     {
-        _spResult->AddInformationResult( L"REQ_EP_150", this->GetMobSlotName( _spEdgeMap, node) + L" is not an Event Mob Slot but contains a CommentMarker.", TestResult::FAIL );
+        _spTestResult->AddSingleResult(
+            L"REQ_EP_150",
+            this->GetMobSlotName( _spEdgeMap, node) + L" is not an Event Mob Slot but contains a CommentMarker.",
+            TestResult::FAIL );
         testPassed = false;
     }
     
@@ -233,7 +236,10 @@ bool EPAnnotationVisitor::PreOrderVisit( AAFTypedObjNode<IAAFComponent>& node )
         {
             //Parent is not a MobSlot and this is not a CommentMarker so fail
             //the test.
-            _spResult->AddInformationResult( L"REQ_EP_147", this->GetMobSlotName( _spEdgeMap, node ) + L" contains a Component that illegally uses the Component::UserComments property.", TestResult::FAIL );
+            _spTestResult->AddSingleResult(
+                L"REQ_EP_147",
+                this->GetMobSlotName( _spEdgeMap, node ) + L" contains a Component that illegally uses the Component::UserComments property.",
+                TestResult::FAIL );
             return false;
         }
     }
@@ -622,7 +628,7 @@ void EPAnnotationVisitor::CheckForTaggedValueDefinitions()
     set<AxString>::const_iterator uIter;
     for ( uIter = _taggedValueNames.begin(); uIter != _taggedValueNames.end(); uIter++ )
     {
-        _spResult->AddInformationResult(
+        _spTestResult->AddSingleResult(
             L"REQ_EP_151",
             L"TaggedValue \"" + *uIter + L"\" is not documented in the dictionary.",
             TestResult::FAIL );
@@ -642,22 +648,11 @@ void EPAnnotationVisitor::CheckForKLVValueDefinitions()
     set<aafUID_t>::const_iterator uIter;
     for ( uIter = _klvDataKeys.begin(); uIter != _klvDataKeys.end(); uIter++ )
     {
-        _spResult->AddInformationResult(
+        _spTestResult->AddSingleResult(
             L"REQ_EP_152",
             L"KLVData with key " + AxStringUtil::uid2Str(*uIter) + L" is not documented in the dictionary.",
             TestResult::FAIL );
     }
-}
-
-/*
- * 
- * Accessors
- * 
- */
-
-shared_ptr<DetailLevelTestResult> EPAnnotationVisitor::GetResult()
-{
-    return _spResult;
 }
    
 } // end of namespace aafanalyzer

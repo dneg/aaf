@@ -64,43 +64,14 @@ AcyclicAnalysis::~AcyclicAnalysis()
 
 shared_ptr<TestLevelTestResult> AcyclicAnalysis::Execute()
 {
+  shared_ptr<TestLevelTestResult> spTestResult = this->CreateTestResult();
 
-  shared_ptr<AcyclicVisitor> spVisitor(new AcyclicVisitor(GetOutStream()));
+  shared_ptr<AcyclicVisitor> spVisitor( new AcyclicVisitor(GetOutStream(), spTestResult) );
   DepthFirstTraversal dfs(GetTestGraph()->GetEdgeMap(), GetTestGraph()->GetRootNode());
-
-  //output to screen
-  //GetOutStream() << GetName() << endl << GetDescription() << endl << endl;
-
-  //set result properties
-
-  const shared_ptr<const Test> me = this->shared_from_this();
-  Requirement::RequirementMapSP spMyReqs(new Requirement::RequirementMap(this->GetCoveredRequirements()));
-  shared_ptr<TestLevelTestResult> spResult(new TestLevelTestResult(me, spMyReqs ));
-  spResult->SetName(GetName());
-  spResult->SetDescription(GetDescription());
-  spResult->SetExplanation(L"Test Failed - See \"AcyclicVisitor\" for details");
 
   dfs.TraverseDown(spVisitor, GetTestGraph()->GetRootNode()); 
   
-  shared_ptr<const DetailLevelTestResult> spVisitorResult( spVisitor->GetTestResult() );
-
-  //Store sub results.
-  spResult->AppendSubtestResult(spVisitorResult);
-  spResult->SetResult( spResult->GetAggregateResult() );
-  
-  //Update the requirement status based upon the status of the requirements in
-  //the visitor.
-  for (int reqLevel = TestResult::PASS; reqLevel <= TestResult::FAIL; reqLevel++)
-  {
-    Requirement::RequirementMap childReqs = spVisitor->GetTestResult()->GetRequirements( (TestResult::Result)reqLevel );
-    Requirement::RequirementMap::const_iterator iter;
-    for( iter = childReqs.begin(); iter != childReqs.end(); ++iter )
-    {
-      spResult->SetRequirementStatus( (TestResult::Result)reqLevel, iter->second );
-    }
-  }
-  
-  return spResult;
+  return spTestResult;
 }
 
 AxString AcyclicAnalysis::GetName() const
@@ -118,8 +89,10 @@ AxString AcyclicAnalysis::GetDescription() const
 const TestInfo AcyclicAnalysis::GetTestInfo()
 {
     shared_ptr<vector<AxString> > spReqIds(new vector<AxString>);
-    //TODO: Push actual requirements.
-    spReqIds->push_back(L"REQ_EP_256");  // Acyclic graph requirement
+
+    // Acyclic Derivation Chain
+    spReqIds->push_back(L"REQ_EP_256");  
+
     return TestInfo(L"AcyclicAnalysis", spReqIds);
 }
 

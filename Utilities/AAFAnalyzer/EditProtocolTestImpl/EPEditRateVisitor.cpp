@@ -26,6 +26,7 @@
 #include <EPTrack.h>
 
 //Test/Result files
+#include <TestLevelTestResult.h>
 #include <DetailLevelTestResult.h>
 #include <TestRegistry.h>
 
@@ -56,24 +57,18 @@ namespace aafanalyzer {
 
 using namespace boost;
 
-EPEditRateVisitor::EPEditRateVisitor( wostream& log, shared_ptr<EdgeMap> spEdgeMap )
+EPEditRateVisitor::EPEditRateVisitor( wostream& log,
+				      shared_ptr<EdgeMap> spEdgeMap,
+				      shared_ptr<TestLevelTestResult> spTestResult )
     : _log(log),
       _spEdgeMap( spEdgeMap ),
-      _spResult( new DetailLevelTestResult( L"Edit Protocol Edit Rate Visitor",
-                                            L"Ensure all essence tracks have valid edit rates.",
-                                            L"", // explain
-                                            L"", // DOCREF REQUIRED
-                                            TestResult::PASS,
-                                            TestRegistry::GetInstance().GetRequirementsForTest( EPEditRateTest::GetTestInfo().GetName() )
-               )                          ),
+      _spTestResult( spTestResult ),
       _staticAudioTracks( 0 ),
       _unknownAudioTracks( 0 )
-{
-}
+{}
 
 EPEditRateVisitor::~EPEditRateVisitor()
-{
-}
+{}
 
 bool EPEditRateVisitor::PreOrderVisit( EPTypedObjNode<IAAFTimelineMobSlot, EPAudioTrack>& node )
 {
@@ -130,7 +125,7 @@ bool EPEditRateVisitor::PreOrderVisit( EPTypedObjNode<IAAFStaticMobSlot, EPVideo
 
     ss << L"Video Track in MobSlot with ID = " << slotId << L" of " << mobName
        << L" is in a StaticMobSlot and does not have an edit rate to compare with a sample rate.";
-    _spResult->AddInformationResult( L"REQ_EP_100", ss.str().c_str(), TestResult::FAIL );
+    _spTestResult->AddSingleResult( L"REQ_EP_100", ss.str().c_str(), TestResult::FAIL );
 
     //General Processing
     shared_ptr<EPTypedObjNode<IAAFStaticMobSlot, EPEssenceTrack> > spGeneric( node.DownCast<IAAFStaticMobSlot, EPEssenceTrack>() );
@@ -149,7 +144,7 @@ bool EPEditRateVisitor::PreOrderVisit( EPTypedObjNode<IAAFStaticMobSlot, EPEssen
 
     ss << L"Mob Slot with ID = " << slotId << L" of " << mobName
        << L" is a StaticMobSlot and does not have an edit rate.";
-    _spResult->AddInformationResult( L"REQ_EP_091", ss.str().c_str(), TestResult::FAIL );
+    _spTestResult->AddSingleResult( L"REQ_EP_091", ss.str().c_str(), TestResult::FAIL );
     return false;
 }
 
@@ -208,7 +203,7 @@ bool EPEditRateVisitor::PreOrderVisit( EPTypedObjNode<IAAFMobSlot, EPVideoTrack>
 
     ss << L"Video Track in MobSlot with ID = " << slotId << L" of " << mobName
        << L" is in an unknown type of MobSlot and does not have an edit rate that can be accessed to compare with a sample rate.";
-    _spResult->AddInformationResult( L"REQ_EP_100", ss.str().c_str(), TestResult::FAIL );
+    _spTestResult->AddSingleResult( L"REQ_EP_100", ss.str().c_str(), TestResult::FAIL );
 
     //General Processing
     shared_ptr<EPTypedObjNode<IAAFMobSlot, EPEssenceTrack> > spGeneric( node.DownCast<IAAFMobSlot, EPEssenceTrack>() );
@@ -227,14 +222,9 @@ bool EPEditRateVisitor::PreOrderVisit( EPTypedObjNode<IAAFMobSlot, EPEssenceTrac
 
     ss << L"Mob Slot with ID = " << slotId << L" of " << mobName
        << L" is not a known type of MobSlot and its edit rate cannot be accessed.";
-    _spResult->AddInformationResult( L"REQ_EP_091", ss.str().c_str(), TestResult::FAIL );
+    _spTestResult->AddSingleResult( L"REQ_EP_091", ss.str().c_str(), TestResult::FAIL );
     return false;
 }
-
- shared_ptr<DetailLevelTestResult> EPEditRateVisitor::GetResult()
- {
-    return _spResult;
- }
 
 bool EPEditRateVisitor::TestEditRate( aafRational_t editRate, AxMobSlot& axMobSlot, const AxString& mobName )
 {
@@ -251,28 +241,28 @@ bool EPEditRateVisitor::TestEditRate( aafRational_t editRate, AxMobSlot& axMobSl
     {
         ss << L"has an edit rate with a negative numerator (" << editRate.numerator
            << L"/" << editRate.denominator << L").";
-        _spResult->AddInformationResult( L"REQ_EP_092", ss.str().c_str(), TestResult::FAIL );
+        _spTestResult->AddSingleResult( L"REQ_EP_092", ss.str().c_str(), TestResult::FAIL );
         return false;
     }
     else if ( editRate.denominator < 0 )
     {
         ss << L"has an edit rate with a negative denominator (" << editRate.numerator
            << L"/" << editRate.denominator << L").";
-        _spResult->AddInformationResult( L"REQ_EP_092", ss.str().c_str(), TestResult::FAIL );
+        _spTestResult->AddSingleResult( L"REQ_EP_092", ss.str().c_str(), TestResult::FAIL );
         return false;
     }
     else if ( editRate.numerator == 0 )
     {
         ss << L"has an edit rate with a zero numerator (" << editRate.numerator
            << L"/" << editRate.denominator << L").";
-        _spResult->AddInformationResult( L"REQ_EP_092", ss.str().c_str(), TestResult::FAIL );
+        _spTestResult->AddSingleResult( L"REQ_EP_092", ss.str().c_str(), TestResult::FAIL );
         return false;
     }
     else if ( editRate.denominator == 0 )
     {
         ss << L"has an edit rate with a zero denominator (" << editRate.numerator
            << L"/" << editRate.denominator << L").";
-        _spResult->AddInformationResult( L"REQ_EP_092", ss.str().c_str(), TestResult::FAIL );
+        _spTestResult->AddSingleResult( L"REQ_EP_092", ss.str().c_str(), TestResult::FAIL );
         return false;
     }
     else if ( !_erTable.IsInTable( editRate, axDataDef.IsPictureKind() ) )
@@ -290,7 +280,7 @@ bool EPEditRateVisitor::TestEditRate( aafRational_t editRate, AxMobSlot& axMobSl
            << L" = "
            << _erTable.Round( (double)editRate.numerator/(double)editRate.denominator)
            << L").";
-        _spResult->AddInformationResult( L"REQ_EP_091", ss.str().c_str(), TestResult::FAIL );
+        _spTestResult->AddSingleResult( L"REQ_EP_091", ss.str().c_str(), TestResult::FAIL );
         return false;
     }
 
@@ -349,7 +339,7 @@ bool EPEditRateVisitor::VisitVideoTrack( shared_ptr<EPVideoTrack> spTrack, aafRa
            << L") that is greater than its sample rate ("
            << sampleRate.numerator << L"/" << sampleRate.denominator
            << L").";
-        _spResult->AddInformationResult( L"REQ_EP_100", ss.str().c_str(), TestResult::FAIL );
+        _spTestResult->AddSingleResult( L"REQ_EP_100", ss.str().c_str(), TestResult::FAIL );
         return false;
     }
 
@@ -359,87 +349,58 @@ bool EPEditRateVisitor::VisitVideoTrack( shared_ptr<EPVideoTrack> spTrack, aafRa
 
 void EPEditRateVisitor::CheckAudioSampleRates()
 {
+  //If there is more than 1 edit rate or sample rate or if there are edit
+  //rates mixed with static or unknown MobSlots or there are a mixture of
+  //static and unknown MobSlots the test must fail.
 
-    //If there is more than 1 edit rate or sample rate or if there are edit
-    //rates mixed with static or unknown MobSlots or there are a mixture of
-    //static and unknown MobSlots the test must fail.
-
-    if ( _audioEditRates.size() > 1 ||
-         (_audioEditRates.size() > 0 && _staticAudioTracks > 0 ) ||
-         (_audioEditRates.size() > 0 && _unknownAudioTracks > 0 ) ||
-         (_staticAudioTracks > 0 && _unknownAudioTracks > 0 )
+  if ( _audioEditRates.size() > 1 ||
+       (_audioEditRates.size() > 0 && _staticAudioTracks > 0 ) ||
+       (_audioEditRates.size() > 0 && _unknownAudioTracks > 0 ) ||
+       (_staticAudioTracks > 0 && _unknownAudioTracks > 0 )
        )
+  {
+    shared_ptr<DetailLevelTestResult> spSubResult =
+      _spTestResult->AddSingleResult( L"REQ_EP_099",
+				      L"All audio tracks within the file do not have the same edit rate.",
+				      TestResult::FAIL );
+    
+    RateMap::const_iterator iter;
+    
+    for ( iter = _audioEditRates.begin(); iter != _audioEditRates.end(); iter++ )
     {
-
-        Requirement::RequirementMapSP reqMapSP(new Requirement::RequirementMap);
-        shared_ptr<const Requirement> requirement = RequirementRegistry::GetInstance().GetRequirement(L"REQ_EP_099");
-        (*reqMapSP)[L"REQ_EP_099"] = requirement;
-
-        shared_ptr<DetailLevelTestResult> spSubResult( new DetailLevelTestResult(
-                                    _spResult->GetName(),
-                                    L"-", // desc
-                                    L"All audio tracks within the file do not have the same edit rate.",
-                                    L"-", // docref
-                                    TestResult::FAIL,
-                                    reqMapSP ) );
-        spSubResult->SetRequirementStatus( TestResult::FAIL, requirement );
-
-        RateMap::const_iterator iter;
-
-        for ( iter = _audioEditRates.begin(); iter != _audioEditRates.end(); iter++ )
-        {
-            wstringstream ss;
-            ss << iter->second << L" audio track(s) have an edit rate of " << iter->first.first << L"/" << iter->first.second << L".";
-            spSubResult->AddDetail( ss.str().c_str() );
-        }
-        if ( _staticAudioTracks > 0 )
-        {
-            wstringstream ss;
-            ss << _staticAudioTracks << L" audio track(s) are static and have no edit rate.";
-            spSubResult->AddDetail( ss.str().c_str() );
-        }
-        if ( _unknownAudioTracks > 0 )
-        {
-            wstringstream ss;
-            ss << _unknownAudioTracks << L" audio track(s) are of an unknown type for which an edit rate cannot be accessed.";
-            spSubResult->AddDetail( ss.str().c_str() );
-        }
-
-        _spResult->AppendSubtestResult( spSubResult );
-        _spResult->SetResult( _spResult->GetAggregateResult() );
-        _spResult->SetRequirementStatus( TestResult::FAIL, requirement );
-
+      wstringstream ss;
+      ss << iter->second << L" audio track(s) have an edit rate of " << iter->first.first << L"/" << iter->first.second << L".";
+      spSubResult->AddDetail( ss.str().c_str() );
     }
-    else if ( _audioSampleRates.size() > 1 )
+    
+    if ( _staticAudioTracks > 0 )
     {
-
-        Requirement::RequirementMapSP reqMapSP(new Requirement::RequirementMap);
-        shared_ptr<const Requirement> requirement = RequirementRegistry::GetInstance().GetRequirement(L"REQ_EP_099");
-        (*reqMapSP)[L"REQ_EP_099"] = requirement;
-
-        shared_ptr<DetailLevelTestResult> spSubResult( new DetailLevelTestResult(
-                                    _spResult->GetName(),
-                                    L"-", // desc
-                                    L"All audio tracks within the file do not have the same sample rate.",
-                                    L"-", // docref
-                                    TestResult::FAIL,
-                                    reqMapSP ) );
-        spSubResult->SetRequirementStatus( TestResult::FAIL, requirement );
-
-        RateMap::const_iterator iter;
-
-        for ( iter = _audioSampleRates.begin(); iter != _audioSampleRates.end(); iter++ )
-        {
-            wstringstream ss;
-            ss << iter->second << L" audio track(s) have an sample rate of " << iter->first.first << L"/" << iter->first.second << L".";
-            spSubResult->AddDetail( ss.str().c_str() );
-        }
-
-        _spResult->AppendSubtestResult( spSubResult );
-        _spResult->SetResult( _spResult->GetAggregateResult() );
-        _spResult->SetRequirementStatus( TestResult::FAIL, requirement );
-
+      wstringstream ss;
+      ss << _staticAudioTracks << L" audio track(s) are static and have no edit rate.";
+      spSubResult->AddDetail( ss.str().c_str() );
     }
+    
+    if ( _unknownAudioTracks > 0 )
+    {
+      wstringstream ss;
+      ss << _unknownAudioTracks << L" audio track(s) are of an unknown type for which an edit rate cannot be accessed.";
+      spSubResult->AddDetail( ss.str().c_str() );
+    }
+  }
+  else if ( _audioSampleRates.size() > 1 )
+  {
+    shared_ptr<DetailLevelTestResult> spSubResult =
+      _spTestResult->AddSingleResult( L"REQ_EP_099",
+				      L"All audio tracks within the file do not have the same sample rate.",
+				      TestResult::FAIL );
+    
+    for ( RateMap::const_iterator iter = _audioSampleRates.begin(); iter != _audioSampleRates.end(); iter++ )
+    {
+      wstringstream ss;
+      ss << iter->second << L" audio track(s) have an sample rate of " << iter->first.first << L"/" << iter->first.second << L".";
+      spSubResult->AddDetail( ss.str().c_str() );
+    }
+  }
 }
 
 } // end of namespace aafanalyzer

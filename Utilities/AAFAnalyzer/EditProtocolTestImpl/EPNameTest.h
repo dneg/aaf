@@ -38,7 +38,7 @@ class EPNameTest : public Test
  public:
 
   EPNameTest( wostream& log,
-            shared_ptr<const TestGraph> spGraph );
+	      shared_ptr<const TestGraph> spGraph );
   virtual ~EPNameTest();
 
   virtual shared_ptr<TestLevelTestResult> Execute();
@@ -52,7 +52,6 @@ class EPNameTest : public Test
   EPNameTest();
   EPNameTest( const EPNameTest& );
   EPNameTest& operator=( const EPNameTest& );
-
 };
 
 } // end of namespace diskstream

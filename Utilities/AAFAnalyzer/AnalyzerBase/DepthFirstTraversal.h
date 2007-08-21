@@ -36,6 +36,7 @@ class Edge;
 class DepthFirstTraversal
 {
  public:
+
   DepthFirstTraversal(shared_ptr<EdgeMap> spEdgeMap, shared_ptr<Node> spStartNode);
   ~DepthFirstTraversal();
 

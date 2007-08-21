@@ -38,14 +38,12 @@ namespace aafanalyzer
     
 using namespace boost;
 
-AAFMobReference::AAFMobReference(shared_ptr<Node> spParent, shared_ptr<Node> spChild)
-  : Edge(spParent, spChild)
-{
-}
+AAFMobReference::AAFMobReference(shared_ptr<Node> spParent, shared_ptr<Node> spChild, Node::LID tag )
+  : Edge(spParent, spChild, Edge::EDGE_KIND_REFERENCE, tag)
+{}
 
 AAFMobReference::~AAFMobReference()
-{
-}
+{}
 
 bool AAFMobReference::Visit(shared_ptr<Visitor> spVisitor)
 {
@@ -59,9 +57,16 @@ bool AAFMobReference::Visit(shared_ptr<Visitor> spVisitor)
 }
 
 shared_ptr<Edge> AAFMobReference::CreateNewEdge( shared_ptr<Node> spParent, shared_ptr<Node> spChild ) const
-{
-    shared_ptr<Edge> spNewEdge( new AAFMobReference( spParent, spChild ) );
-    return spNewEdge;
+{  
+  shared_ptr<Edge> spNewEdge( new AAFMobReference( spParent, spChild, GetTag() ) );
+  return spNewEdge;
 }
+
+const std::wstring& AAFMobReference::GetTypeName() const
+{
+  return typeName;
+}
+
+const std::wstring AAFMobReference::typeName = L"mob reference";
 
 } // end of namespace diskstream

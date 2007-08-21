@@ -24,6 +24,7 @@
 
 //Test/Result files
 #include <DetailLevelTestResult.h>
+#include <TestLevelTestResult.h>
 #include <TestRegistry.h>
 
 //Requirement files
@@ -34,7 +35,7 @@
 #include <AxUtil.h>
 #include <AxMobSlot.h>
 #include <AxDefObject.h>
-#include <AxDictionary.h>
+#include <AxIterator.h>
 
 //AAF files
 #include <AAFResult.h>
@@ -52,17 +53,13 @@ namespace aafanalyzer {
 
 using namespace boost;
 
-EPNameVisitor::EPNameVisitor( wostream& log, shared_ptr<EdgeMap> spEdgeMap )
+EPNameVisitor::EPNameVisitor( wostream& log,
+                              shared_ptr<EdgeMap> spEdgeMap,
+                              shared_ptr<TestLevelTestResult> spTestResult )
     : EPTypedVisitor(),
       _log( log ),
       _spEdgeMap( spEdgeMap ),
-      _spResult( new DetailLevelTestResult( L"Edit Protocol Naming Visitor",
-                                            L"Visit derivation chain mobs and verify they have valid names.",
-                                            L"", // explain
-                                            L"", // DOCREF REQUIRED
-                                            TestResult::PASS,
-                                            TestRegistry::GetInstance().GetRequirementsForTest( EPNameTest::GetTestInfo().GetName() )
-               )                          )
+      _spTestResult( spTestResult )
 {}
 
 EPNameVisitor::~EPNameVisitor()
@@ -74,6 +71,7 @@ EPNameVisitor::~EPNameVisitor()
 bool EPNameVisitor::PreOrderVisit( EPTypedObjNode<IAAFCompositionMob, EPTopLevelComposition>& node )
 {
     AxCompositionMob axCompMob( node.GetAAFObjectOfType() );
+    CheckForUniqueSlotNamesInMob( axCompMob );
     if ( !this->VisitComposition( EPTopLevelComposition::GetName(), L"REQ_EP_027", axCompMob ) )
     {
         return false;
@@ -85,6 +83,7 @@ bool EPNameVisitor::PreOrderVisit( EPTypedObjNode<IAAFCompositionMob, EPTopLevel
 bool EPNameVisitor::PreOrderVisit( EPTypedObjNode<IAAFCompositionMob, EPLowerLevelComposition>& node )
 {
     AxCompositionMob axCompMob( node.GetAAFObjectOfType() );
+    CheckForUniqueSlotNamesInMob( axCompMob );
     if ( !this->VisitComposition( EPLowerLevelComposition::GetName(), L"REQ_EP_032", axCompMob ) )
     {
         return false;
@@ -96,150 +95,122 @@ bool EPNameVisitor::PreOrderVisit( EPTypedObjNode<IAAFCompositionMob, EPLowerLev
 bool EPNameVisitor::PreOrderVisit( EPTypedObjNode<IAAFCompositionMob, EPSubClipComposition>& node )
 {
     AxCompositionMob axCompMob( node.GetAAFObjectOfType() );
+    CheckForUniqueSlotNamesInMob( axCompMob );
     return this->VisitComposition( EPSubClipComposition::GetName(), L"REQ_EP_038", axCompMob );
 }
 
 bool EPNameVisitor::PreOrderVisit( EPTypedObjNode<IAAFCompositionMob, EPAdjustedClipComposition>& node )
 {
     AxCompositionMob axCompMob( node.GetAAFObjectOfType() );
+    CheckForUniqueSlotNamesInMob( axCompMob );
     return this->VisitComposition( EPAdjustedClipComposition::GetName(), L"REQ_EP_047", axCompMob );
 }
 
 bool EPNameVisitor::PreOrderVisit( EPTypedObjNode<IAAFMasterMob, EPTemplateClip>& node )
 {
     AxMasterMob axMastMob( node.GetAAFObjectOfType() );
+    CheckForUniqueSlotNamesInMob( axMastMob );
     return this->VisitNonComposition( EPTemplateClip::GetName(), L"REQ_EP_052", axMastMob );
 }
 
 bool EPNameVisitor::PreOrderVisit( EPTypedObjNode<IAAFMasterMob, EPClip>& node )
 {
     AxMasterMob axMastMob( node.GetAAFObjectOfType() );
+    CheckForUniqueSlotNamesInMob( axMastMob );
     return this->VisitNonComposition( EPClip::GetName(), L"REQ_EP_057", axMastMob );
 }
 
 bool EPNameVisitor::PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPRecordingSource>& node )
 {
     AxSourceMob axSrcMob( node.GetAAFObjectOfType() );
+    CheckForUniqueSlotNamesInMob( axSrcMob );
     return this->VisitNonComposition( EPRecordingSource::GetName(), L"REQ_EP_073", axSrcMob );
 }
 
 bool EPNameVisitor::PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPTapeSource>& node )
 {
     AxSourceMob axSrcMob( node.GetAAFObjectOfType() );
+    CheckForUniqueSlotNamesInMob( axSrcMob );
     return this->VisitNonComposition( EPTapeSource::GetName(), L"REQ_EP_081", axSrcMob );
 }
 
 bool EPNameVisitor::PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPFilmSource>& node )
 {
     AxSourceMob axSrcMob( node.GetAAFObjectOfType() );
+    CheckForUniqueSlotNamesInMob( axSrcMob );
     return this->VisitNonComposition( EPFilmSource::GetName(), L"REQ_EP_086", axSrcMob );
 }
 
-/*
- * Essence Track Visitors:
- *      The behaviour is the same regardless of the type of essence track,
- *      so cast the node to a base essence track (IAAFMobSlot, EPEssenceTrack)
- *      and call the PreOrderVisit on it.
- */
-bool EPNameVisitor::PreOrderVisit( EPTypedObjNode<IAAFTimelineMobSlot, EPAudioTrack>& node )
+bool EPNameVisitor::PreOrderVisit( AAFTypedObjNode<IAAFCompositionMob>& node)
 {
-    shared_ptr<EPTypedObjNode<IAAFMobSlot, EPEssenceTrack> > spGeneric( node.DownCast<IAAFMobSlot, EPEssenceTrack>() );
-    return this->PreOrderVisit( *spGeneric );
+  AxCompositionMob axMob( node.GetAAFObjectOfType() );
+  CheckForUniqueSlotNamesInMob( axMob );
+  return false;
 }
 
-bool EPNameVisitor::PreOrderVisit( EPTypedObjNode<IAAFTimelineMobSlot, EPVideoTrack>& node )
+bool EPNameVisitor::PreOrderVisit( AAFTypedObjNode<IAAFMasterMob>& node)
 {
-    shared_ptr<EPTypedObjNode<IAAFMobSlot, EPEssenceTrack> > spGeneric( node.DownCast<IAAFMobSlot, EPEssenceTrack>() );
-    return this->PreOrderVisit( *spGeneric );
+  AxMasterMob axMob( node.GetAAFObjectOfType() );
+  CheckForUniqueSlotNamesInMob( axMob );
+  return false;
 }
 
-bool EPNameVisitor::PreOrderVisit( EPTypedObjNode<IAAFTimelineMobSlot, EPEssenceTrack>& node )
+bool EPNameVisitor::PreOrderVisit( AAFTypedObjNode<IAAFSourceMob>& node)
 {
-    shared_ptr<EPTypedObjNode<IAAFMobSlot, EPEssenceTrack> > spGeneric( node.DownCast<IAAFMobSlot, EPEssenceTrack>() );
-    return this->PreOrderVisit( *spGeneric );
+  AxSourceMob axMob( node.GetAAFObjectOfType() );
+  CheckForUniqueSlotNamesInMob( axMob );
+  return false;
 }
 
-bool EPNameVisitor::PreOrderVisit( EPTypedObjNode<IAAFStaticMobSlot, EPAudioTrack>& node )
-{
-    shared_ptr<EPTypedObjNode<IAAFMobSlot, EPEssenceTrack> > spGeneric( node.DownCast<IAAFMobSlot, EPEssenceTrack>() );
-    return this->PreOrderVisit( *spGeneric );
-}
 
-bool EPNameVisitor::PreOrderVisit( EPTypedObjNode<IAAFStaticMobSlot, EPVideoTrack>& node )
+void EPNameVisitor::CheckForUniqueSlotNamesInMob( IAAFMobSP spMob )
 {
-    shared_ptr<EPTypedObjNode<IAAFMobSlot, EPEssenceTrack> > spGeneric( node.DownCast<IAAFMobSlot, EPEssenceTrack>() );
-    return this->PreOrderVisit( *spGeneric );
-}
+  set<AxString> slotNameSet;
+  AxMob axMob( spMob );
+  AxMobSlotIter axSlotIter( axMob.GetSlots() );
+  IAAFSmartPointer2<IAAFMobSlot> spNextSlot;
+  while( axSlotIter.NextOne( spNextSlot ) )
+  {
+    AxMobSlot axMobSlot( spNextSlot );
+    pair<bool,AxString> slotName = axMobSlot.ExistsName();
 
-bool EPNameVisitor::PreOrderVisit( EPTypedObjNode<IAAFStaticMobSlot, EPEssenceTrack>& node )
-{
-    shared_ptr<EPTypedObjNode<IAAFMobSlot, EPEssenceTrack> > spGeneric( node.DownCast<IAAFMobSlot, EPEssenceTrack>() );
-    return this->PreOrderVisit( *spGeneric );
-}
-
-bool EPNameVisitor::PreOrderVisit( EPTypedObjNode<IAAFEventMobSlot, EPAudioTrack>& node )
-{
-    shared_ptr<EPTypedObjNode<IAAFMobSlot, EPEssenceTrack> > spGeneric( node.DownCast<IAAFMobSlot, EPEssenceTrack>() );
-    return this->PreOrderVisit( *spGeneric );
-}
-
-bool EPNameVisitor::PreOrderVisit( EPTypedObjNode<IAAFEventMobSlot, EPVideoTrack>& node )
-{
-    shared_ptr<EPTypedObjNode<IAAFMobSlot, EPEssenceTrack> > spGeneric( node.DownCast<IAAFMobSlot, EPEssenceTrack>() );
-    return this->PreOrderVisit( *spGeneric );
-}
-
-bool EPNameVisitor::PreOrderVisit( EPTypedObjNode<IAAFEventMobSlot, EPEssenceTrack>& node )
-{
-    shared_ptr<EPTypedObjNode<IAAFMobSlot, EPEssenceTrack> > spGeneric( node.DownCast<IAAFMobSlot, EPEssenceTrack>() );
-    return this->PreOrderVisit( *spGeneric );
-}
-
-bool EPNameVisitor::PreOrderVisit( EPTypedObjNode<IAAFMobSlot, EPAudioTrack>& node )
-{
-    shared_ptr<EPTypedObjNode<IAAFMobSlot, EPEssenceTrack> > spGeneric( node.DownCast<IAAFMobSlot, EPEssenceTrack>() );
-    return this->PreOrderVisit( *spGeneric );
-}
-
-bool EPNameVisitor::PreOrderVisit( EPTypedObjNode<IAAFMobSlot, EPVideoTrack>& node )
-{
-    shared_ptr<EPTypedObjNode<IAAFMobSlot, EPEssenceTrack> > spGeneric( node.DownCast<IAAFMobSlot, EPEssenceTrack>() );
-    return this->PreOrderVisit( *spGeneric );
-}
-
-bool EPNameVisitor::PreOrderVisit( EPTypedObjNode<IAAFMobSlot, EPEssenceTrack>& node )
-{
-    AxMobSlot axMobSlot( node.GetAAFObjectOfType() );
-    
-    try
+    // If it does have a name...
+    if ( !slotName.first )
     {
-        AxString trackName = axMobSlot.GetName();
-        if ( _essenceTrackNames.find( trackName ) == _essenceTrackNames.end() )
-        {
-            _essenceTrackNames[trackName] = 1;
-        }
-        else
-        {
-            _essenceTrackNames[trackName] = _essenceTrackNames[trackName] + 1;
-        }
+      AxString mobName = axMob.GetName( L"<unnamed>" );
+      aafSlotID_t slotId = axMobSlot.GetSlotID();
+      wstringstream ss;
+      ss << L"MobSlot with ID = " << slotId << L" in " << axMob.GetClassName() << L" named \""
+	 << mobName << L"\" does not have a valid name.";
+      _spTestResult->AddSingleResult( L"REQ_EP_101",
+				      ss.str(),
+				      TestResult::FAIL );      
+      continue;
     }
-    catch ( const AxExHResult& ex )
+    else
     {
-        if ( ex.getHResult() == AAFRESULT_PROP_NOT_PRESENT )
-        {
-            AxString mobName = GetMobName( _spEdgeMap, node );
-            aafSlotID_t slotId = axMobSlot.GetSlotID();
-            wstringstream ss;
-            ss << L"MobSlot with ID = " << slotId << L" of " << mobName << L" does not have a valid name.";
-            _spResult->AddInformationResult( L"REQ_EP_101", ss.str().c_str(), TestResult::FAIL );
-            return false;
-        }
-        else
-        {
-            throw ex;
-        }
+      // Else, it does have name. Make sure that name is unique.
+
+      if ( slotNameSet.find(slotName.second) != slotNameSet.end() )
+      {
+	// It's already in the set therefore is not unique within the mob.
+	AxString mobName = axMob.GetName( L"<unnamed>" );
+	aafSlotID_t slotId = axMobSlot.GetSlotID();
+	wstringstream ss;
+	ss << L"MobSlot with ID = " << slotId << L" named \"" << slotName.second
+           << "\" in " << axMob.GetClassName() << L" named \"" << mobName
+	   << L"\" is not uniquely named within the mob.";
+	_spTestResult->AddSingleResult( L"REQ_EP_101",
+					ss.str(),
+					TestResult::FAIL );
+	continue;
+      }
+      else
+      {
+	slotNameSet.insert(slotName.second);
+      }
     }
-    return true;
+  } // end while
 }
 
 /*
@@ -311,25 +282,15 @@ bool EPNameVisitor::PreOrderVisit( AAFTypedObjNode<IAAFDefObject>& node )
     catch ( const AxExHResult& ex )
     {
         if ( ex.getHResult() == AAFRESULT_PROP_NOT_PRESENT )
-        {
-        
-            shared_ptr<const Requirement> failingReq = RequirementRegistry::GetInstance().GetRequirement( L"REQ_EP_161" );
-            Requirement::RequirementMapSP reqMapSP(new Requirement::RequirementMap);
-            (*reqMapSP)[L"REQ_EP_161"] = failingReq;
-        
+        {       
             AxString explain( L"DefinitionObject does not have a valid name." );
-            shared_ptr<DetailLevelTestResult> spFailure( new DetailLevelTestResult( _spResult->GetName(),
-                                        L"-", // desc
-                                        explain,
-                                        L"-", // docref
-                                        TestResult::FAIL,
-                                        reqMapSP ) );
+
+            shared_ptr<DetailLevelTestResult>
+              spFailure = _spTestResult->AddSingleResult( L"REQ_EP_161",
+							  explain,
+							  TestResult::FAIL );
+
             spFailure->AddDetail( L"AUID: " + AxStringUtil::uid2Str( axDefObj.GetAUID() ) );
-            spFailure->SetRequirementStatus( TestResult::FAIL, failingReq );
-        
-            _spResult->AppendSubtestResult( spFailure );
-            _spResult->SetResult( _spResult->GetAggregateResult() );
-            _spResult->SetRequirementStatus( TestResult::FAIL, failingReq );
         
             return false;
         }
@@ -339,11 +300,6 @@ bool EPNameVisitor::PreOrderVisit( AAFTypedObjNode<IAAFDefObject>& node )
         }
     }
     return true;
-}
-
-shared_ptr<DetailLevelTestResult> EPNameVisitor::GetResult()
-{
-    return _spResult;
 }
 
 bool EPNameVisitor::VisitComposition( const AxString& type, const AxString& reqId, AxCompositionMob& axCompMob )
@@ -358,24 +314,14 @@ bool EPNameVisitor::VisitComposition( const AxString& type, const AxString& reqI
     {
         if ( ex.getHResult() == AAFRESULT_PROP_NOT_PRESENT )
         {
-            
-            shared_ptr<const Requirement> failingReq = RequirementRegistry::GetInstance().GetRequirement( reqId );
-            Requirement::RequirementMapSP reqMapSP(new Requirement::RequirementMap);
-            (*reqMapSP)[reqId] = failingReq;
-            
             AxString explain( type + L" does not have a valid name." );
-            shared_ptr<DetailLevelTestResult> spFailure( new DetailLevelTestResult( _spResult->GetName(),
-                                        L"-", // desc
-                                        explain,
-                                        L"-", // docref
-                                        TestResult::FAIL,
-                                        reqMapSP ) );
-            spFailure->AddDetail( L"Mob ID: " + AxStringUtil::mobid2Str( axCompMob.GetMobID() ) );
-            spFailure->SetRequirementStatus( TestResult::FAIL, failingReq );
+
+            shared_ptr<DetailLevelTestResult>
+              spFailure = _spTestResult->AddSingleResult( reqId,
+							  explain,
+							  TestResult::FAIL );
             
-            _spResult->AppendSubtestResult( spFailure );
-            _spResult->SetResult( _spResult->GetAggregateResult() );
-            _spResult->SetRequirementStatus( TestResult::FAIL, failingReq );
+            spFailure->AddDetail( L"Mob ID: " + AxStringUtil::mobid2Str( axCompMob.GetMobID() ) );
             
             return false;
         }
@@ -410,27 +356,16 @@ bool EPNameVisitor::VisitNonComposition( const AxString& type, const AxString& r
     {
         if ( ex.getHResult() == AAFRESULT_PROP_NOT_PRESENT )
         {
-            
-            shared_ptr<const Requirement> failingReq = RequirementRegistry::GetInstance().GetRequirement( reqId );
-            Requirement::RequirementMapSP reqMapSP(new Requirement::RequirementMap);
-            (*reqMapSP)[reqId] = failingReq;
-            
-            AxString explain( type + L" does not have a valid name." );
-            shared_ptr<DetailLevelTestResult> spFailure( new DetailLevelTestResult( _spResult->GetName(),
-                                        L"-", // desc
-                                        explain,
-                                        L"-", // docref
-                                        TestResult::FAIL,
-                                        reqMapSP ) );
+          AxString explain( type + L" does not have a valid name." );
+
+          shared_ptr<DetailLevelTestResult>
+            spFailure = _spTestResult->AddSingleResult( reqId,
+							explain,
+							TestResult::FAIL );
+
             spFailure->AddDetail( L"Mob ID: " + AxStringUtil::mobid2Str( axMob.GetMobID() ) );
-            spFailure->SetRequirementStatus( TestResult::FAIL, failingReq );
-            
-            _spResult->AppendSubtestResult( spFailure );
-            _spResult->SetResult( _spResult->GetAggregateResult() );
-            _spResult->SetRequirementStatus( TestResult::FAIL, failingReq );
-            
+
             return false;
-            
         }
         else
         {
@@ -439,7 +374,6 @@ bool EPNameVisitor::VisitNonComposition( const AxString& type, const AxString& r
     }
     
     return true;
-    
 }
 
 void EPNameVisitor::CheckForUniqueNames()
@@ -447,17 +381,6 @@ void EPNameVisitor::CheckForUniqueNames()
     //Check composition names for uniqueness
     this->CheckForUniqueNames( _topLevelNames, L"REQ_EP_027", EPTopLevelComposition::GetName() );
     this->CheckForUniqueNames( _lowerLevelNames, L"REQ_EP_032", EPLowerLevelComposition::GetName() );
-    
-    //Check essence track names for uniqueness
-    NameMap::const_iterator iter;
-    for ( iter = _essenceTrackNames.begin(); iter != _essenceTrackNames.end(); iter++ )
-    {
-        if ( iter->second != 1 )
-        {
-            AxString explain( L"Essence Track \"" + iter->first + L"\" does not have a unique essence track name." );
-            _spResult->AddInformationResult( L"REQ_EP_101", explain, TestResult::FAIL );
-        }
-    }
 }
 
 void EPNameVisitor::CheckForUniqueNames( NameSet& names, const AxString& reqId, const AxString& type )
@@ -468,7 +391,7 @@ void EPNameVisitor::CheckForUniqueNames( NameSet& names, const AxString& reqId, 
         if ( _compositionNames[*iter] != 1 )
         {
             AxString explain( type + L" \"" + *iter + L"\" does not have a unique composition name." );
-            _spResult->AddInformationResult( reqId, explain, TestResult::FAIL );
+            _spTestResult->AddSingleResult( reqId, explain, TestResult::FAIL );
         }
     }
 }

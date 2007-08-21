@@ -22,28 +22,40 @@
 #define __VISITOR_h__
 
 //Analyzer Base files
-#include "Node.h"
+#include <Node.h>
+#include <Edge.h>
 
 //Boost files
 #include <boost/shared_ptr.hpp>
 
 //STL files
 #include <set>
+#include <deque>
 
 namespace aafanalyzer {
-
-class Edge;
 
 class Visitor
 {
  public:
  
+  enum Follow_e { FOLLOW_CONTAINED,
+		  FOLLOW_REFERENCES,
+		  FOLLOW_ALL,
+		  FOLLOW_UNDEFINED };
+
+  // Default ctor uses FOLLOW_CONTAINED
   Visitor();
+
+  Visitor( Follow_e follow );
+
   virtual ~Visitor();
 
   virtual bool PreOrderVisit(Node& node);
   virtual bool PostOrderVisit(Node& node);
   virtual bool EdgeVisit(Edge& edge);
+
+  unsigned int GetLevel() const;
+  Edge::EdgeKind_e GetLastEdgeKind() const;
   
  protected:
  
@@ -52,11 +64,36 @@ class Visitor
 
  private:
 
-  set<Node::LID> _visitedNodes;
+  // Non virtual pre/post order visit that must be called by traversal
+  // implementations in order to support reference following.  There
+  // will never me many traversal implementations. It could simple be
+  // caused by a derived classes PostOrderVisit override but that just
+  // one more thing to remember. This works too and simpler for
+  // visitor implementors.
+
+  friend class DepthFirstTraversal;
+  bool TraversalPreEdgeVisit(const Edge& edge);
+  void TraversalPostEdgeVisit(const Edge& edge);
+  void TraversalStopVisit( const Node& node );
 
   // prohibited
   Visitor( const Visitor& );
   Visitor& operator=( const Visitor& );
+
+  bool FollowContained( const Edge& edge );
+  bool FollowReferences( const Edge &edge );
+
+  bool RealFollowReferences( const Edge &edge );
+
+  set<Node::LID> _visitedNodes;
+
+  // What to do when following edges.
+  const Follow_e _follow;
+
+  typedef pair<Edge::EdgeKind_e, Node::LID> EdgeDetailsType;
+  std::deque<EdgeDetailsType>  _edgeDetailsStack;
+
+  pair<bool,Node::LID> _sourceTag;
 };
 
 } // end of namespace diskstream

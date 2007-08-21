@@ -52,16 +52,12 @@ namespace aafanalyzer {
 
 using namespace boost;
  
-EPDefinitionVisitor::EPDefinitionVisitor( wostream& log, shared_ptr<EdgeMap> spEdgeMap )
+EPDefinitionVisitor::EPDefinitionVisitor( wostream& log,
+					  shared_ptr<EdgeMap> spEdgeMap,
+					  shared_ptr<TestLevelTestResult> spTestResult )
     : _log(log),
       _spEdgeMap( spEdgeMap ),
-      _spResult( new DetailLevelTestResult( L"Edit Protocol Definition Visitor",
-                                            L"Visit Data Definitions and Components to make sure all Data Definitions are valid.",
-                                            L"", // explain
-                                            L"", // DOCREF REQUIRED
-                                            TestResult::PASS,
-                                            TestRegistry::GetInstance().GetRequirementsForTest( EPDefinitionTest::GetTestInfo().GetName() )
-               )                          )
+      _spTestResult( spTestResult )
 {}
     
 EPDefinitionVisitor::~EPDefinitionVisitor()
@@ -90,7 +86,6 @@ bool EPDefinitionVisitor::PreOrderVisit( EPTypedObjNode<IAAFOperationDef, EPEffe
     
     shared_ptr<AAFTypedObjNode<IAAFOperationDef> > spGeneric( node.DownCastToAAF<IAAFOperationDef>() );
     return this->PreOrderVisit( *spGeneric );
-    
 }
 
 bool EPDefinitionVisitor::PreOrderVisit( AAFTypedObjNode<IAAFOperationDef>& node )
@@ -136,7 +131,7 @@ bool EPDefinitionVisitor::PreOrderVisit( AAFTypedObjNode<IAAFOperationGroup>& no
             defLegacy = L"Legacy ";
         }        
         
-        _spResult->AddInformationResult( 
+        _spTestResult->AddSingleResult( 
             L"REQ_EP_162", 
             L"OperationGroup in " + this->GetMobSlotName( _spEdgeMap, node ) + 
                 L" has data definition value \"" + groupLegacy + axOpGroupDDef.GetName() + 
@@ -163,10 +158,10 @@ void EPDefinitionVisitor::CheckForUnusedOperationDefinitions()
     map<aafUID_t, AxString>::const_iterator mIter;
     for ( mIter = _registeredDefinitions.begin(); mIter != _registeredDefinitions.end(); mIter++ )
     {
-        _spResult->AddInformationResult(
-            L"REQ_EP_162",
-            L"OperationDefinition \"" + mIter->second + L"\" is not referenced.",
-            TestResult::WARN );
+      _spTestResult->AddSingleResult(
+         L"REQ_EP_162",
+	 L"OperationDefinition \"" + mIter->second + L"\" is not referenced.",
+	 TestResult::WARN );
     }
     
 }
@@ -183,7 +178,7 @@ void EPDefinitionVisitor::CheckLegacyData()
             wstringstream ss;
             ss << *iter << L" in an AAF Version " << _fileVersion.major
                << L"." << _fileVersion.minor << L" file.";
-            _spResult->AddInformationResult( L"REQ_EP_163", ss.str().c_str(), TestResult::WARN );
+            _spTestResult->AddSingleResult( L"REQ_EP_163", ss.str().c_str(), TestResult::WARN );
         }
     }
     else
@@ -195,14 +190,9 @@ void EPDefinitionVisitor::CheckLegacyData()
             wstringstream ss;
             ss << *iter << L" in an AAF Version " << _fileVersion.major
                << L"." << _fileVersion.minor << L" file.";
-            _spResult->AddInformationResult( L"REQ_EP_163", ss.str().c_str(), TestResult::FAIL );
+            _spTestResult->AddSingleResult( L"REQ_EP_163", ss.str().c_str(), TestResult::FAIL );
         }
     }
-}
-
-shared_ptr<DetailLevelTestResult> EPDefinitionVisitor::GetResult()
-{
-    return _spResult;
 }
 
 } // end of namespace aafanalyzer

@@ -49,18 +49,37 @@ public:
 
  private:
 
-    wstring _currentData;
+    struct Current
+    {
+      Current()
+      : Data(),
+        Id(),
+        Type(Requirement::REQ_TYPE_UNDEFINED),
+        TypeAsString(),
+        Category(Requirement::CAT_UNDEFINED),
+        CategoryAsString(),
+        Name(),
+        Desc(),
+        Document(),
+        Version(),
+        Section()
+      {}
+      
+      wstring Data;
+      
+      wstring Id;
+      Requirement::RequirementType Type;
+      wstring TypeAsString;
+      Requirement::Category Category;
+      wstring CategoryAsString;
+      wstring Name;
+      wstring Desc;
+      wstring Document;
+      wstring Version;
+      wstring Section;
+    };
 
-    wstring _currentId;
-    Requirement::RequirementType _currentType;
-    wstring _currentTypeAsString;
-    Requirement::Category _currentCategory;
-    wstring _currentCategoryAsString;
-    wstring _currentName;
-    wstring _currentDesc;
-    wstring _currentDocument;
-    wstring _currentVersion;
-    wstring _currentSection;
+    Current _current;
 
     map<wstring, Requirement::Category> _categoryMap;
 

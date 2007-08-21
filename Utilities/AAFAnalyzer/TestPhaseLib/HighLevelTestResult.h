@@ -33,24 +33,17 @@ class HighLevelTestResult : public TestResult
  public:
 
   virtual ~HighLevelTestResult();
-
-  //This function only needs to be called if direct child test results have
-  //their requirement status modified after they are appended to this test.
-  //Requirements are automatically updated when a subtest is appended,
-  void UpdateRequirementStatus();
   
-  virtual const enum ResultLevel GetResultType() const =0;
+  virtual const enum ResultLevel GetResultType() const = 0;
 
  protected:
   HighLevelTestResult();
   HighLevelTestResult( const wstring& name, const wstring& desc,
-                       const wstring& explain, const wstring& docRef,
-                       Result defaultResult );
+                       const wstring& explain );
 
   // prohibited
   HighLevelTestResult( const HighLevelTestResult& );
   HighLevelTestResult& operator=( const HighLevelTestResult& );
-  
 };
 
 } // end of namespace diskstream

@@ -31,11 +31,16 @@ using namespace boost;
 class AAFComponentReference : public Edge
 {
  public:
-  AAFComponentReference(shared_ptr<Node> spParent, shared_ptr<Node> spChild);
+
+  static const std::wstring typeName;
+
+  AAFComponentReference(shared_ptr<Node> spParent, shared_ptr<Node> spChild, Node::LID tag, bool isLast );
   ~AAFComponentReference();
 
   bool Visit(shared_ptr<Visitor> spVisitor);
   virtual shared_ptr<Edge> CreateNewEdge( shared_ptr<Node> spParent, shared_ptr<Node> spChild ) const;
+
+  virtual const std::wstring& GetTypeName() const;
 
  private:
 

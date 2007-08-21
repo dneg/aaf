@@ -55,6 +55,7 @@
 
 //STL files
 #include <set>
+#include <map>
 
 namespace {
 
@@ -72,16 +73,10 @@ const wchar_t* TEST_DESC = L"Decorate the nodes of the graph with their edit pro
 class EPDecoratorVisitor : public TypedVisitor
 {
 public:
-  EPDecoratorVisitor( wostream& log, shared_ptr<const TestGraph> spTestGraph )
+  EPDecoratorVisitor( wostream& log,
+                      shared_ptr<const TestGraph> spTestGraph )
     : TypedVisitor(),
       _log( log ),
-      _spResult( new DetailLevelTestResult( L"EPDecoratorVisitor",
-                                            L"Visit mobs and decorate them with their derivation chain material types.",
-                                            L"", // explain
-                                            L"", // DOCREF REQUIRED
-                                            TestResult::PASS,
-                                            TestRegistry::GetInstance().GetRequirementsForTest( DecorateEPTest::GetTestInfo().GetName() )
-               )                          ),
       _spGraph( spTestGraph )
   {
     //Setup the list of effects defined by the Edit Protocol
@@ -443,12 +438,7 @@ public:
     
     return true;
   }
-  
-  shared_ptr<DetailLevelTestResult> GetResult()
-  {
-    return _spResult;
-  }
-  
+    
 private:
 
   // prohibited
@@ -537,10 +527,9 @@ private:
   }
 
   wostream& _log;
-  shared_ptr<DetailLevelTestResult> _spResult;
   shared_ptr<const TestGraph> _spGraph;
   set<aafUID_t> _editProtocolEffects;
-  
+
 };
 
 //======================================================================
@@ -554,7 +543,7 @@ namespace aafanalyzer {
 using namespace std;
 
 DecorateEPTest::DecorateEPTest( wostream& log,
-				    shared_ptr<const TestGraph> spGraph )
+                                shared_ptr<const TestGraph> spGraph )
   : Test( log, GetTestInfo() )
 {
     SetTestGraph( spGraph );
@@ -570,18 +559,9 @@ shared_ptr<TestLevelTestResult> DecorateEPTest::Execute()
 
   DepthFirstTraversal dfs(GetTestGraph()->GetEdgeMap(), GetTestGraph()->GetRootNode());
 
-  //set result properties
-  const shared_ptr<const Test> me = this->shared_from_this();
-  Requirement::RequirementMapSP spMyReqs( new Requirement::RequirementMap( this->GetCoveredRequirements() ) );
-  shared_ptr<TestLevelTestResult> spResult( new TestLevelTestResult( me, spMyReqs ) );
-  spResult->SetName( GetName() );
-  spResult->SetDescription( GetDescription() );
-
   dfs.TraverseDown( spVisitor, GetTestGraph()->GetRootNode() );  
-  spResult->AppendSubtestResult( spVisitor->GetResult() );
-  spResult->SetResult( spResult->GetAggregateResult() );
 
-  return spResult;
+  return CreatePassTestResult();
 }
 
 AxString DecorateEPTest::GetName() const
@@ -597,7 +577,10 @@ AxString DecorateEPTest::GetDescription() const
 const TestInfo DecorateEPTest::GetTestInfo()
 {
     shared_ptr<vector<AxString> > spReqIds(new vector<AxString>);
-    //TODO: Push any requirements that exist (AK - I don't think there are any, this can't fail).
+
+    // This test prepares the graph for later tests. It can't fail on
+    // a requirement, hence non are registered.
+
     return TestInfo(L"DecorateEPTest", spReqIds);
 }
 

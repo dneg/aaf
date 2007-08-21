@@ -52,7 +52,7 @@ namespace aafanalyzer {
 using namespace std;
 
 EPDefinitionTest::EPDefinitionTest( wostream& log,
-                                            shared_ptr<const TestGraph> spGraph )
+				    shared_ptr<const TestGraph> spGraph )
   : Test( log, GetTestInfo() )
 {
     SetTestGraph(spGraph);
@@ -63,47 +63,19 @@ EPDefinitionTest::~EPDefinitionTest()
 
 shared_ptr<TestLevelTestResult> EPDefinitionTest::Execute()
 {
+  shared_ptr<TestLevelTestResult> spTestResult = CreateTestResult();
     
-    shared_ptr<EPDefinitionVisitor> spVisitor(new EPDefinitionVisitor( GetOutStream(), GetTestGraph()->GetEdgeMap() ) );
-
-    DepthFirstTraversal dfs(GetTestGraph()->GetEdgeMap(), GetTestGraph()->GetRootNode());
-    
-    const shared_ptr<const Test> me = this->shared_from_this();
-    Requirement::RequirementMapSP spMyReqs(new Requirement::RequirementMap(this->GetCoveredRequirements()));
-    shared_ptr<TestLevelTestResult> spResult( new TestLevelTestResult(TEST_NAME,
-                                 TEST_DESC,
-                                 L"-", // explain
-                                 L"-",  // DOCREF REQUIRED
-                                 TestResult::PASS,
-                                 me, 
-                                 spMyReqs ) );
-
-    dfs.TraverseDown( spVisitor, GetTestGraph()->GetRootNode() );
-    spVisitor->CheckForUnusedOperationDefinitions();
-    spVisitor->CheckLegacyData();
-
-    spResult->AppendSubtestResult( spVisitor->GetResult() );
-
-    spResult->SetResult( spResult->GetAggregateResult() );
-    if ( spResult->GetResult() == TestResult::FAIL )
-    {
-        spResult->SetExplanation(L"Test Failed - See \"Edit Protocol Track Contents Visitor\" Visitor for details");
-    }
-    
-    //Update the requirement status based upon the status of the requirements in
-    //the visitor.
-    for (int reqLevel = TestResult::PASS; reqLevel <= TestResult::FAIL; reqLevel++)
-    {
-      Requirement::RequirementMap childReqs = spVisitor->GetResult()->GetRequirements( (TestResult::Result)reqLevel );
-      Requirement::RequirementMap::const_iterator iter;
-      for( iter = childReqs.begin(); iter != childReqs.end(); ++iter )
-      {
-        spResult->SetRequirementStatus( (TestResult::Result)reqLevel, iter->second );
-      }
-    }
-
-    return spResult;
-
+  shared_ptr<EPDefinitionVisitor> spVisitor(new EPDefinitionVisitor( GetOutStream(),
+								     GetTestGraph()->GetEdgeMap(),
+								     spTestResult ) );
+  
+  DepthFirstTraversal dfs(GetTestGraph()->GetEdgeMap(), GetTestGraph()->GetRootNode());
+  
+  dfs.TraverseDown( spVisitor, GetTestGraph()->GetRootNode() );
+  spVisitor->CheckForUnusedOperationDefinitions();
+  spVisitor->CheckLegacyData();
+  
+  return spTestResult;
 }
 
 AxString EPDefinitionTest::GetName() const

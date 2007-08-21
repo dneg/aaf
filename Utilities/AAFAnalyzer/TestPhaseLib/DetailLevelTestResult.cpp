@@ -19,8 +19,14 @@
 //=---------------------------------------------------------------------=
 
 //Test/Result files
-#include "DetailLevelTestResult.h"
-#include "RequirementMismatchException.h"
+#include <DetailLevelTestResult.h>
+
+#include <Test.h>
+
+#include <Requirement.h>
+#include <RequirementMismatchException.h>
+
+#include <iostream>
 
 namespace {
 
@@ -39,37 +45,82 @@ namespace aafanalyzer
 using namespace std;
 using namespace boost;
 
-DetailLevelTestResult::DetailLevelTestResult( const Requirement::RequirementMapSP& requirements )
-  : LowLevelTestResult( requirements )
-{}
+DetailLevelTestResult::DetailLevelTestResult( const shared_ptr<const Test> associatedTest,
+                                              const wstring& explain,
+                                              const wstring& reqId,
+                                              Result result )
+  : LowLevelTestResult( associatedTest, L"", L"", explain ),
+    _reqId( reqId )
+{
+  shared_ptr<const Requirement> spReq = GetRequirement();
+  SetName( spReq->GetName() );
+  SetDescription( spReq->GetDescription() );
+  SetResult( _reqId, result );
+}
 
-DetailLevelTestResult::DetailLevelTestResult( const wstring& name, 
+DetailLevelTestResult::DetailLevelTestResult( const shared_ptr<const Test> associatedTest,
+                                              const wstring& name,
                                               const wstring& desc,
                                               const wstring& explain,
-                                              const wstring& docRef,
-                                              Result defaultResult, 
-                                              const Requirement::RequirementMapSP& requirements )
-  : LowLevelTestResult( name, desc, explain, docRef, defaultResult, requirements )
-{}
+                                              const wstring& reqId,
+                                              Result result )
+  : LowLevelTestResult( associatedTest, name, desc, explain ),
+    _reqId( reqId )
+{
+  SetResult( _reqId, result );
+}
 
 DetailLevelTestResult::~DetailLevelTestResult()
 {}
 
-void DetailLevelTestResult::AppendSubtestResult( const shared_ptr<const DetailLevelTestResult>& subtestResult )
+void DetailLevelTestResult::SetResult( const wstring& reqId, Result result )
 {
-    //Don't allow a test result to append itself
-    if (subtestResult.get() == this)
-    {
-        return;
-    }
-    
-    this->AddSubtestResult( subtestResult );
+  // Some data structure maintenance:
+  //
+  // This result object should never store the result for more than
+  // one requirement and reqId should always match that used to
+  // construct the object and if a requirement is mapped then it
+  // should be reqId.  Any of these invariants could be violated as a
+  // result of a programming error, therefore, assert these
+  // conditions.
+  //
+  {
+    // Requirement should match.
+    assert( reqId == _reqId );
 
-    //If the result of the appended test is worse than any other subtest then
-    //update the aggregate result.
-    if ( subtestResult->GetResult() > this->GetAggregateResult() ) {
-        this->SetEnumResult(subtestResult->GetResult());
+    // There should only be one (or zero, if this is called from the
+    // constructor) mapped requirement...
+    size_t reqCount = this->GetRequirements(FAIL).size() +
+                      this->GetRequirements(WARN).size() +
+                      this->GetRequirements(PASS).size();
+    assert( reqCount <= 1 );
+  
+    // .. and if there is one, it should be reqId
+    if ( reqCount )
+    {
+      Result containedIn = UNDEFINED;
+      assert( this->ContainsRequirement( reqId, containedIn ) );
+
+      // .. and the map it is stored in should match the individual
+      // result value for this object.
+      assert( containedIn == this->GetResult() );
     }
+  }
+
+  // Everything is as it should be therefore place the reqId in the
+  // appropriate result map and set the result value (on the base
+  // class) for this result object instance.
+  this->AddRequirement( result, this->GetRequirement() );
+    
+  // Call down to the base class to set the result value for this
+  // object.
+  this->ProtectedSetResult(result);
+
+  // That's it. We now have the result value recorded against it's
+  // requirement in the appropriate requirement map and the actual
+  // result value is set (yes, it's redundant).  These will be
+  // propogated up to the higher level result objects when the result
+  // tree is consolidated.
 }
 
 const enum TestResult::ResultLevel DetailLevelTestResult::GetResultType() const
@@ -77,31 +128,23 @@ const enum TestResult::ResultLevel DetailLevelTestResult::GetResultType() const
   return TestResult::DETAIL;
 }
 
-void DetailLevelTestResult::AddInformationResult( const wstring& reqId, const wstring& explain, Result result )
+shared_ptr<const Requirement> DetailLevelTestResult::GetRequirement() const
 {
-    Result reqStatus;
-    if ( !this->ContainsRequirment( reqId, reqStatus ) )
-    {
-        wstring msg;
-        msg = L"Cannot add information result for requirement: " + reqId + L" because it is not in the DetailLevelTestResult " + this->GetName();
-        throw RequirementMismatchException ( msg.c_str() );
-    }
-    
-    Requirement::RequirementMapSP reqMapSP(new Requirement::RequirementMap);
-    shared_ptr<const Requirement> requirement = (*(this->GetMyRequirements( reqStatus )))[reqId];
-    (*reqMapSP)[reqId] = requirement;
-    
-    shared_ptr<DetailLevelTestResult> spResult( new DetailLevelTestResult( this->GetName(),
-                                L"-", // desc
-                                explain,
-                                L"-", // docref
-                                result,
-                                reqMapSP ) );
-    spResult->SetRequirementStatus( result, requirement );
-    
-    this->AppendSubtestResult( spResult );
-    this->SetResult( this->GetAggregateResult() );
-    this->SetRequirementStatus( result, requirement );
+  // Confirm that reqId is registered against the associated test.  We
+  // don't want to report test results for requirments that are not
+  // registered for the test because we depend on the registered
+  // requirements to report accurate information regarding which
+  // requirements are covered by which test.
+  if ( !this->GetAssociatedTest()->IsRequirementRegistered( _reqId ) )
+  {
+    wstring msg;
+    msg = L"Cannot set result for requirement \"" + _reqId +
+          L"\" because it is not registered against test \"" + this->GetName() + L"\"";
+    throw RequirementMismatchException ( msg.c_str() );
+  }
+
+  // Look up and return the requirement.
+  return this->GetAssociatedTest()->GetRequirement( _reqId );
 }
 
 } // end of namespace diskstream

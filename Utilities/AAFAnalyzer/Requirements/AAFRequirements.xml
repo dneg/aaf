@@ -264,7 +264,7 @@
     <requirement type="app" category="compositional">
         <id>REQ_EP_024</id>
         <name>Search for Source</name>
-        <desc>For SourceMob references that remain unresolved, the importing application shall search the part of the derivation chain that is avaliable to find a source it may support.  If no supported source is found, some placeholder exxence shall be substituted.</desc>
+        <desc>For SourceMob references that remain unresolved, the importing application shall search the part of the derivation chain that is avaliable to find a source it may support.  If no supported source is found, some placeholder essence shall be substituted.</desc>
         <ref>
             <doc>&DOC_AAF_EP;</doc>
             <version>&VER_EP_1.0;</version>
@@ -2817,6 +2817,18 @@
         <id>REQ_EP_256</id>
         <name>Acyclic Derivation Chain</name>
         <desc>The AAF derivation chain of the AAF file shall not contain any cycles.</desc>
+    </requirement>
+
+    <requirement type="file" category="ad-hoc">
+        <id>REQ_EP_257</id>
+        <name>Slot Must Exist In Referenced Mob</name>
+        <desc>A source reference must specify a Slot ID that exists in the referenced Mob.</desc>
+    </requirement>
+
+    <requirement type="file" category="ad-hoc">
+        <id>REQ_EP_258</id>
+        <name>Valid Mob Type</name>
+	<desc>All Mob objects in a derivation chain shall have a have a known Edit Protocol material type.</desc>
     </requirement>
 
 </requirement-set>

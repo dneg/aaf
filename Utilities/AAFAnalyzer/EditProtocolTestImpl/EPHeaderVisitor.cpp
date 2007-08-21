@@ -23,7 +23,7 @@
 #include "EPHeaderTest.h"
 
 //Test/Result files
-#include <DetailLevelTestResult.h>
+#include <TestLevelTestResult.h>
 #include <TestRegistry.h>
 
 //Requirement files
@@ -47,15 +47,10 @@ namespace aafanalyzer {
 
 using namespace boost;
  
-EPHeaderVisitor::EPHeaderVisitor( wostream& log )
-    : _log(log),
-      _spResult( new DetailLevelTestResult( L"Edit Protocol Header Visitor",
-                                            L"Visit the AAF File Header and verify it meets the Edit Protocol requirements.",
-                                            L"", // explain
-                                            L"", // DOCREF REQUIRED
-                                            TestResult::PASS,
-                                            TestRegistry::GetInstance().GetRequirementsForTest( EPHeaderTest::GetTestInfo().GetName() )
-               )                          )
+EPHeaderVisitor::EPHeaderVisitor( wostream& log,
+				  shared_ptr<TestLevelTestResult> spTestResult )
+  : _log(log),
+    _spTestResult( spTestResult )
 {}
     
 EPHeaderVisitor::~EPHeaderVisitor()
@@ -63,38 +58,35 @@ EPHeaderVisitor::~EPHeaderVisitor()
 
 bool EPHeaderVisitor::PreOrderVisit( AAFTypedObjNode<IAAFHeader>& node )
 {
+  AxHeader axHeader( node.GetAAFObjectOfType() );
     
-    AxHeader axHeader( node.GetAAFObjectOfType() );
-    
-    try
+  try
+  {
+    aafUID_t opPattern = axHeader.GetOperationalPattern();
+    if ( opPattern != kAAFOPDef_EditProtocol )
     {
-        aafUID_t opPattern = axHeader.GetOperationalPattern();
-        if ( opPattern != kAAFOPDef_EditProtocol )
-        {
-            _spResult->SetRequirementStatus( TestResult::FAIL, RequirementRegistry::GetInstance().GetRequirement( L"REQ_EP_255" ) );
-            _spResult->SetExplanation( L"Header::OperationalPattern property is not equal to OpEditProtocol." );
-            _spResult->SetResult( TestResult::FAIL );
-        }
+      _spTestResult->AddSingleResult( L"REQ_EP_255",
+				      L"Header::OperationalPattern property is not equal to OpEditProtocol.",
+				      TestResult::FAIL );
     }
-    catch ( const AxExHResult& ex )
+  }
+  catch ( const AxExHResult& ex )
+  {
+    if ( ex.getHResult() == AAFRESULT_PROP_NOT_PRESENT )
     {
-        if ( ex.getHResult() == AAFRESULT_PROP_NOT_PRESENT )
-        {
-            _spResult->SetRequirementStatus( TestResult::FAIL, RequirementRegistry::GetInstance().GetRequirement( L"REQ_EP_255" ) );
-            _spResult->SetExplanation( L"Header::OperationalPattern property is not present." );
-            _spResult->SetResult( TestResult::FAIL );
-        }
-        else
-        {
-            throw ex;
-        }
+      _spTestResult->AddSingleResult( L"REQ_EP_255",
+				      L"Header::OperationalPattern property is not present.",
+				      TestResult::FAIL );
     }
-    return false;
-}
+    else
+    {
+      throw;
+    }
+  }
 
-shared_ptr<DetailLevelTestResult> EPHeaderVisitor::GetResult()
-{
-    return _spResult;
+  // There is no need to continue the traversal further, thefore,
+  // return false.
+  return false;
 }
 
 } // end of namespace aafanalyzer

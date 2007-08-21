@@ -24,6 +24,7 @@
 
 //Test/Result files
 #include <DetailLevelTestResult.h>
+#include <TestLevelTestResult.h>
 #include <TestRegistry.h>
 
 //Analyzer Base files
@@ -138,16 +139,12 @@ namespace aafanalyzer {
 
 using namespace boost;
  
-EPTrackContentsVisitor::EPTrackContentsVisitor( wostream& log, shared_ptr<EdgeMap> spEdgeMap )
+EPTrackContentsVisitor::EPTrackContentsVisitor( wostream& log,
+                                                shared_ptr<EdgeMap> spEdgeMap,
+                                                shared_ptr<TestLevelTestResult> spTestResult )
     : _log(log),
       _spEdgeMap( spEdgeMap ),
-      _spResult( new DetailLevelTestResult( L"Edit Protocol Track Contents Visitor",
-                                            L"Visit derivation chain material and make sure that their tracks contain the necessary data.",
-                                            L"", // explain
-                                            L"", // DOCREF REQUIRED
-                                            TestResult::PASS,
-                                            TestRegistry::GetInstance().GetRequirementsForTest( EPTrackContentsTest::GetTestInfo().GetName() )
-               )                          )
+      _spTestResult( spTestResult )
 {}
     
 EPTrackContentsVisitor::~EPTrackContentsVisitor()
@@ -185,81 +182,42 @@ bool EPTrackContentsVisitor::PreOrderVisit( EPTypedObjNode<IAAFTimelineMobSlot, 
 
 bool EPTrackContentsVisitor::PreOrderVisit( AAFTypedObjNode<IAAFTimelineMobSlot>& node )
 {
-    
-    bool hasIn;
-    bool hasOut;
-    aafPosition_t markIn = 0;
-    aafPosition_t markOut = 0;
-    
     AxTimelineMobSlot axMobSlot( node.GetAAFObjectOfType() );
-        
-    //Get the marked IN position.
-    try
+
+    pair<bool,aafPosition_t> markIn  = axMobSlot.ExistsMarkIn();
+    pair<bool,aafPosition_t> markOut = axMobSlot.ExistsMarkOut();
+            
+    if ( markIn.first && markOut.first )
     {
-        markIn = axMobSlot.GetMarkIn();
-        hasIn = true;
-    }
-    catch ( const AxExHResult& ex )
-    {
-        if ( ex.getHResult() == AAFRESULT_PROP_NOT_PRESENT )
-        {
-            hasIn = false;
-        }
-        else
-        {
-            throw ex;
-        }
-    }
-    
-    //Get the marked OUT position.
-    try
-    {
-        markOut = axMobSlot.GetMarkOut();
-        hasOut = true;
-    }
-    catch ( const AxExHResult& ex )
-    {
-        if ( ex.getHResult() == AAFRESULT_PROP_NOT_PRESENT )
-        {
-            hasOut = false;
-        }
-        else
-        {
-            throw ex;
-        }
-    }
-    
-    if ( hasIn == hasOut )
-    {
-        if ( markOut < markIn )
+        if ( markOut.second < markIn.second )
         {
             wstringstream ss;
             ss << this->GetMobSlotName( _spEdgeMap, node )
                << L" has a marked in point that occurs after the marked out point (IN = "
-               << markIn << L"; OUT = " << markOut << ").";
-            _spResult->AddInformationResult( L"REQ_EP_108", ss.str().c_str(), TestResult::WARN ); 
+               << markIn.second << L"; OUT = " << markOut.second << ").";
+            _spTestResult->AddSingleResult( L"REQ_EP_108", ss.str().c_str(), TestResult::WARN ); 
             return false;
         }
     }
     else
     {
         AxString explain;
-        if ( hasIn )
+        if ( markIn.first )
         {
             explain = this->GetMobSlotName( _spEdgeMap, node ) +
                       L" has a marked in point but no marked out point.";
         }
         else
         {
-            explain = this->GetMobSlotName( _spEdgeMap, node ) +
-                      L" has a marked out point but no marked in point.";
+          assert( !markOut.first );
+          explain = this->GetMobSlotName( _spEdgeMap, node ) +
+                    L" has a marked out point but no marked in point.";
         }
-        _spResult->AddInformationResult( L"REQ_EP_108", explain, TestResult::WARN );
+        _spTestResult->AddSingleResult( L"REQ_EP_108", explain, TestResult::WARN );
         return false;
     }
     
-    return true;
-    
+    return true;    
 }
 
 bool EPTrackContentsVisitor::PreOrderVisit( EPTypedObjNode<IAAFStaticMobSlot, EPAudioTrack>& node )
@@ -343,21 +301,13 @@ bool EPTrackContentsVisitor::PreOrderVisit( EPTypedObjNode<IAAFMobSlot, EPEssenc
             ss << axMobSlot.GetSlotID();
             ss << L" in " << mobName << L" does not have a MobSlot::PhysicalTrackNumber property.";
             
-            _spResult->AddInformationResult( L"REQ_EP_103", ss.str().c_str(), TestResult::FAIL );
+            _spTestResult->AddSingleResult( L"REQ_EP_103", ss.str().c_str(), TestResult::FAIL );
          
             return false;
-            
         }
-        
     }
     
     return true;
-    
-}
-
-shared_ptr<DetailLevelTestResult> EPTrackContentsVisitor::GetResult()
-{
-    return _spResult;
 }
 
 } // end of namespace aafanalyzer

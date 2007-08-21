@@ -40,14 +40,15 @@ namespace aafanalyzer {
 
 using namespace boost;
 
-class DetailLevelTestResult;
+class TestLevelTestResult;
 
 class EPTrackContentsVisitor : public EPTypedVisitor
 {
-
   public:
   
-    EPTrackContentsVisitor( wostream& log, shared_ptr<EdgeMap> spEdgeMap );
+    EPTrackContentsVisitor( wostream& log,
+			    shared_ptr<EdgeMap> spEdgeMap,
+			    shared_ptr<TestLevelTestResult> spTestResult );
     
     virtual ~EPTrackContentsVisitor();
    
@@ -66,20 +67,18 @@ class EPTrackContentsVisitor : public EPTypedVisitor
     
     virtual bool PreOrderVisit( AAFTypedObjNode<IAAFTimelineMobSlot>& node );
     
-    shared_ptr<DetailLevelTestResult> GetResult();
-    
   private:
    
     wostream& _log;
     shared_ptr<EdgeMap> _spEdgeMap;
-    shared_ptr<DetailLevelTestResult> _spResult;
+    shared_ptr<TestLevelTestResult> _spTestResult;
 
     // prohibited
     EPTrackContentsVisitor();
     EPTrackContentsVisitor( const EPTrackContentsVisitor& );
     EPTrackContentsVisitor& operator=( const EPTrackContentsVisitor& );
-  
 };
+
 
 } // end of namespace diskstream
 

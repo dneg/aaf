@@ -39,14 +39,15 @@ namespace aafanalyzer {
 
 using namespace boost;
 
-class DetailLevelTestResult;
+class TestLevelTestResult;
 
 class EPLocatorVisitor : public EPTypedVisitor
 {
 
   public:
   
-    EPLocatorVisitor( wostream& log );
+  EPLocatorVisitor( wostream& log,
+		    shared_ptr<TestLevelTestResult> spTestResult );
     
     virtual ~EPLocatorVisitor();
 
@@ -58,12 +59,10 @@ class EPLocatorVisitor : public EPTypedVisitor
     virtual bool PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPFileSource>& node );
     virtual bool PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPImportSource>& node );
     
-    shared_ptr<DetailLevelTestResult> GetResult();
-    
   private:
    
     wostream& _log;
-    shared_ptr<DetailLevelTestResult> _spResult;
+    shared_ptr<TestLevelTestResult> _spTestResult;
 
     bool CheckNetworkLocator( AxNetworkLocator& axNetLocator );
 

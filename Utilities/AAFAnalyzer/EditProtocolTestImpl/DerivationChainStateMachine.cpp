@@ -29,6 +29,13 @@
 #include <AAFExtEnum.h>
 #include <AAFClassDefUIDs.h>
 
+#include <sstream>
+
+#include <iostream>
+
+// set to 1 to activate debug output
+#define DEBUG_OUT 0
+
 namespace {
 
 using namespace aafanalyzer;
@@ -49,7 +56,8 @@ DerivationChainStateMachine::DerivationChainStateMachine( wostream& log )
     this->SetTransitions();
     this->SetEvents();
     this->SetFailures();
-    
+    this->SetStateNames();
+
     _currentState.push( INITIAL );
    
 }
@@ -183,14 +191,36 @@ void DerivationChainStateMachine::SetFailures()
 
 }
 
+void DerivationChainStateMachine::SetStateNames()
+{
+#define STATE_NAME( X ) _stateNameMap[ X ] = L#X ;
+#define STATE_NAME_XY( X, Y ) _stateNameMap[ X ] = Y ;
+
+  STATE_NAME( INITIAL );
+  STATE_NAME( TOP_LEVEL );
+  STATE_NAME( LOWER_LEVEL );
+  STATE_NAME( SUB_CLIP );
+  STATE_NAME( ADJUSTED_CLIP );
+  STATE_NAME( TEMPLATE_CLIP );
+  STATE_NAME( CLIP );
+  STATE_NAME( FILE_SOURCE );
+  STATE_NAME( RECORDING_SOURCE );
+  STATE_NAME( IMPORT_SOURCE );
+  STATE_NAME( TAPE_SOURCE );
+  STATE_NAME( FILM_SOURCE );
+  STATE_NAME_XY( EOC, L"END OF CHAIN" );
+  STATE_NAME_XY( OOF, L"OUT OF FILE"  );
+}
+
 DerivationChainStateMachine::~DerivationChainStateMachine()
 {
 }
   
-bool DerivationChainStateMachine::Transition( aafUID_t event, const AxString& nextName, AxString& detail, vector<shared_ptr<const Requirement> >& requirements )
+bool DerivationChainStateMachine::Transition( const EventID& event,
+					      const AxString& nextName,
+					      AxString& detail, vector<shared_ptr<const Requirement> >& requirements )
 {
-
-    //Currently traversing down the tree.
+    //Currently traversing down the derivation chain (not reversing).
     _reversing = false;
 
     EventMap::const_iterator nameIter = _eventMap.find( event );
@@ -204,8 +234,16 @@ bool DerivationChainStateMachine::Transition( aafUID_t event, const AxString& ne
 
     TransitionMap::const_iterator transIter = _transitionMap.find( make_pair( currentState, event ) );
     
-//    detail = Indent() + L"Transition to " + nameIter->second + L" (" + nextName + L")";
-    detail = Indent() + L"Transition to " + nextName;
+    std::wstringstream ss;
+    ss << Indent() << L"Transition event " << nameIter->second << L" (" << nextName 
+       << L"), from state " << _stateNameMap[currentState]
+       << L", to state " << _stateNameMap[transIter->second];
+    detail = ss.str();
+
+#if DEBUG_OUT
+    // useful debug output
+    std::wcout << detail << std::endl;
+#endif
 
     if ( transIter != _transitionMap.end() )
     {
@@ -217,7 +255,7 @@ bool DerivationChainStateMachine::Transition( aafUID_t event, const AxString& ne
         detail = L"FAIL - " + detail;
         
         //Populate the failing requirement vector, End of Chain and Out of File
-        //events require special processing.
+        //vents require special processing.
         if ( event == kAAFClassID_SourceClip )
         {
             if ( currentState == FILE_SOURCE )
@@ -278,27 +316,39 @@ bool DerivationChainStateMachine::Transition( aafUID_t event, const AxString& ne
     }
     
     return true;
-
 }
 
-bool DerivationChainStateMachine::TransitionBack()
+bool DerivationChainStateMachine::TransitionBack( AxString& detail )
 {
-    
-    bool successfulTransition = true;
-    State current = _currentState.top();
-    _currentState.pop();
-    
-    //If the direction of tree traversal has changed at a point that is not the
-    //end of the derivation chain or a reference out of the file, report an
-    //error.
-    if ( !_reversing && (current != EOC || current != OOF) )
-    {
-        successfulTransition = false;
-    }
-    
-    _reversing = true;
-    return successfulTransition;
-    
+  bool successfulTransition = true;
+  State current = _currentState.top();
+  _currentState.pop();
+  
+  // If we are traversing down (i.e !reversing) the derivation
+  // chain and we are transitioning back at a point that is
+  // not EOF or OOF then this is an error.
+  if ( !_reversing && !(current == EOC || current == OOF) )
+  {
+    std::wstringstream ss;
+    ss << L"FAIL - " << Indent() << L"Incorrect end of chain reached while in state " << _stateNameMap[current];
+    detail = ss.str();
+
+#if DEBUG_OUT
+    // TEMP debug output
+    std::wcout << detail << std::endl;
+#endif
+
+    successfulTransition = false;
+  }
+  else
+  {
+	std::wstringstream ss;
+    ss << L"OK - " << Indent() << L"Backup from " << _stateNameMap[current] << L" to " << _stateNameMap[_currentState.top()];
+    detail = ss.str();
+  }
+  
+  _reversing = true;
+  return successfulTransition;
 }
 
 bool DerivationChainStateMachine::IsKnownEvent( const aafUID_t event ) const

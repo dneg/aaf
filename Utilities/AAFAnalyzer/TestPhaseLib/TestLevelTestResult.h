@@ -36,27 +36,51 @@ class TestLevelTestResult : public LowLevelTestResult
 {
  public:
 
-  TestLevelTestResult( const shared_ptr<const Test>& associatedTest,
-                       const Requirement::RequirementMapSP& requirements );
-  TestLevelTestResult( const wstring& name, const wstring& desc,
-                       const wstring& explain, const wstring& docRef,
-                       Result defaultResult,
-                       const shared_ptr<const Test>& associatedTest,
-                       const Requirement::RequirementMapSP& requirements );
+  TestLevelTestResult( const shared_ptr<const Test> associatedTest );
+
+  // Use this constructor to create a test result that is not intended
+  // to parent a set of sub results.  If detailed results are added
+  // then there aggregate test result will replace the result value
+  // passed to the constructor.
+  TestLevelTestResult( const wstring& name,
+		       const wstring& desc,
+                       const wstring& explain,
+		       Result result,
+                       const shared_ptr<const Test> associatedTest );
+
+  // Use this constructor if you will be adding DetailLevelTestResult
+  // objects (in which case this objects result is the aggregate of the 
+  // sub results).
+  TestLevelTestResult( const wstring& name,
+		       const wstring& desc,
+                       const shared_ptr<const Test> associatedTest );
+
   ~TestLevelTestResult();
 
-  void AppendSubtestResult( const shared_ptr<const DetailLevelTestResult>& subtestResult );
   const enum ResultLevel GetResultType() const;
+
+  // Add a single result for one requirement.
+  shared_ptr<DetailLevelTestResult> AddSingleResult( const wstring& reqId,
+						     Result result,
+						     const wstring& resultName,
+						     const wstring& resultDesc,
+						     const wstring& resultExplain );
+
+
+  // Add a single result for one requirement. Result name
+  // and description are those of the requirment. Call must explain
+  // the result.
+  shared_ptr<DetailLevelTestResult> AddSingleResult( const wstring& reqId,
+                                                     const wstring& resultExplain,
+                                                     Result result );
+
  private:
- 
-  const shared_ptr<const Test> _spAssociatedTest;
-   
-  void FindRequirementMismatch( const Requirement::RequirementMap& source,
-                                const Requirement::RequirementMap& matchWith,
-                                const wstring& sourceName,
-                                const wstring& matchName ) const;
-  void CheckDescendantRequirements( const shared_ptr<const TestResult>& subtestResult, const wstring& name );
-   
+
+  // Override consildate results so that the associated test results
+  // can be used to initialized the passing requirements (i.e. assume
+  // all tests pass to begin with.)
+  virtual void InitConsolidateResults();
+    
   // prohibited
   TestLevelTestResult( const TestLevelTestResult& );
   TestLevelTestResult operator=( const TestLevelTestResult& );

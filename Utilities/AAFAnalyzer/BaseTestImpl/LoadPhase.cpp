@@ -19,7 +19,9 @@
 //=---------------------------------------------------------------------=
 
 //Base Test files
-#include "LoadPhase.h"
+#include <LoadPhase.h>
+
+#include <CompMobDependency.h>
 
 //Test/Result files
 #include <TestGraph.h>
@@ -29,12 +31,15 @@
 //AAF Analyzer Base files
 #include <AAFGraphInfo.h>
 
+#include <sstream>
+
 namespace {
 
 using namespace aafanalyzer;
 
 const wchar_t* PHASE_NAME = L"Load Phase";
-const wchar_t* PHASE_DESC = L"Load an AAF file, reslove references, and ensure the graph is acyclic.";
+const wchar_t* PHASE_DESC = L"Load an AAF file, resolve references, "
+                            L"and ensure the graph is acyclic.";
 
 } // end of namespace
 
@@ -51,7 +56,8 @@ using namespace boost;
 
 LoadPhase::LoadPhase(wostream& os, const basic_string<wchar_t> AAFFile) 
   : TestPhase(os),
-    _FileName(AAFFile)
+    _FileName(AAFFile),
+    _spRootsVector()
 {}
 
 LoadPhase::~LoadPhase()
@@ -64,34 +70,54 @@ shared_ptr<const AAFGraphInfo> LoadPhase::GetTestGraphInfo()
 
 shared_ptr<TestPhaseLevelTestResult> LoadPhase::Execute() 
 {
-
   shared_ptr<TestPhaseLevelTestResult> spLoadTest(
                             new TestPhaseLevelTestResult( PHASE_NAME,
                                                           PHASE_DESC,
-                                                          L"", // explain
-                                                          L"", // docref
-                                                          TestResult::PASS ));
+                                                          L"" ));   // explain
 
-  //load the AAF file and create the graph
+  // Load the AAF file and create the graph.
   shared_ptr<FileLoad> load(new FileLoad(GetOutStream(), _FileName));
-  shared_ptr<const TestLevelTestResult> spTestResult( load->Execute() );
+  shared_ptr<TestLevelTestResult> spTestResult( load->Execute() );
   spLoadTest->AppendSubtestResult(spTestResult);
 
-  //get the TestGraph object we need for other tests
+  // Get the TestGraph object we need for other tests.
   _spGraphInfo = load->GetTestGraphInfo();
-  //resolve all the references in the AAF graph
+
+  // Resolve all the references in the AAF graph.
   shared_ptr<RefResolver> ref(new RefResolver(GetOutStream(), _spGraphInfo->GetGraph()));
   spTestResult = ref->Execute();
   spLoadTest->AppendSubtestResult(spTestResult);
 
-  //ensure the AAF file graph is acyclic
+  // Ensure the AAF file graph is acyclic.
   shared_ptr<AcyclicAnalysis> acy(new AcyclicAnalysis(GetOutStream(), _spGraphInfo->GetGraph()));
   spTestResult = acy->Execute();
   spLoadTest->AppendSubtestResult(spTestResult);
 
-  spLoadTest->SetResult(spLoadTest->GetAggregateResult());
+  // Perform dependency analysis to identify unreferenced (root)
+  // composition mobs.
+  shared_ptr<CompMobDependency> depTest( new CompMobDependency(GetOutStream(), _spGraphInfo->GetGraph() ) );
+  spLoadTest->AppendSubtestResult( depTest->Execute() );
+
+  _spRootsVector = depTest->GetRootCompMobNodes();
 
   return spLoadTest;
+}
+
+vector<shared_ptr<Node> > LoadPhase::GetRoots() const
+{
+  vector<shared_ptr<Node> > roots;
+
+  for( size_t i = 0; i < _spRootsVector->size(); ++i )
+  {
+    roots.push_back( (*_spRootsVector)[i] );
+  }
+
+  return roots;
+}
+
+CompMobDependency::CompMobNodeVectorSP LoadPhase::GetCompMobRoots()
+{
+  return _spRootsVector;
 }
 
 } // end of namespace diskstream

@@ -42,33 +42,46 @@ using namespace boost;
 
 class DerivationChainStateMachine
 {
+  typedef aafUID_t EventID;
+
  public:
 
   DerivationChainStateMachine( wostream& log );
   ~DerivationChainStateMachine();
   
-  bool Transition( aafUID_t event, const AxString& nextName, AxString& detail, vector<shared_ptr<const Requirement> >& requirements );
-  bool TransitionBack();
+  bool Transition( const EventID& event,
+                   const AxString& nextName,
+                   AxString& detail,
+                   vector<shared_ptr<const Requirement> >& requirements );
+
+  bool TransitionBack( AxString& detail );
+
   bool IsKnownEvent( const aafUID_t event ) const;
 
  private:
  
-  enum State {INITIAL, TOP_LEVEL, LOWER_LEVEL, SUB_CLIP, ADJUSTED_CLIP,
-              TEMPLATE_CLIP, CLIP, FILE_SOURCE, RECORDING_SOURCE, IMPORT_SOURCE,
-              TAPE_SOURCE, FILM_SOURCE, EOC, OOF};
+  enum State { INITIAL, TOP_LEVEL, LOWER_LEVEL, SUB_CLIP, ADJUSTED_CLIP,
+               TEMPLATE_CLIP, CLIP, FILE_SOURCE, RECORDING_SOURCE, IMPORT_SOURCE,
+               TAPE_SOURCE, FILM_SOURCE,
+               EOC, // End Of Chain (zero valued source clip mob id)
+               OOF  // Out Of File  (out of file reference)
+             };
  
   void SetTransitions();
   void SetEvents();
   void SetFailures();
+  void SetStateNames();
   AxString Indent();
 
-  typedef map<pair<const State, const aafUID_t>, State> TransitionMap;
-  typedef map<aafUID_t, AxString> EventMap;
+  typedef map<pair<const State, const EventID>, State> TransitionMap;
+  typedef map<EventID, AxString> EventMap;
   typedef map<State, vector<shared_ptr<const Requirement > > > FailureMap;
+  typedef map<State, AxString> StateNameMap;
 
   TransitionMap _transitionMap;
   EventMap _eventMap;
   FailureMap _failureMap;
+  StateNameMap _stateNameMap;
   stack<State> _currentState;
   wostream& _log;
   bool _reversing;

@@ -19,7 +19,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=".;../../../Utilities/AAFAnalyzer/AnalyzerBase;../../../Utilities/AAFAnalyzer/RequirementLib;../../../Utilities/AAFAnalyzer/TestPhaseLib;../../../Utilities/AAFAnalyzer/AAFAnalyzerBase;../../../Utilities/AAFAnalyzer/EPAnalyzerBase;../../../Utilities/AAFAnalyzer/EditProtocolTestImpl;../../include;../../../examples2/axLib;&quot;$(BOOSTINC)&quot;"
+				AdditionalIncludeDirectories=".;../../../Utilities/AAFAnalyzer/AnalyzerBase;../../../Utilities/AAFAnalyzer/RequirementLib;../../../Utilities/AAFAnalyzer/TestPhaseLib;../../../Utilities/AAFAnalyzer/AAFAnalyzerBase;../../../Utilities/AAFAnalyzer/EPAnalyzerBase;../../../Utilities/AAFAnalyzer/EditProtocolTestImpl;../../../Utilities/AAFAnalyzer/BaseTestImpl;../../include;../../../examples2/axLib;&quot;$(BOOSTINC)&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_LIB"
 				MinimalRebuild="TRUE"
 				BasicRuntimeChecks="3"
@@ -62,7 +62,7 @@
 			CharacterSet="2">
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories=".;../../../Utilities/AAFAnalyzer/AnalyzerBase;../../../Utilities/AAFAnalyzer/RequirementLib;../../../Utilities/AAFAnalyzer/TestPhaseLib;../../../Utilities/AAFAnalyzer/AAFAnalyzerBase;../../../Utilities/AAFAnalyzer/EPAnalyzerBase;../../../Utilities/AAFAnalyzer/EditProtocolTestImpl;../../include;../../../examples2/axLib;&quot;$(BOOSTINC)&quot;"
+				AdditionalIncludeDirectories=".;../../../Utilities/AAFAnalyzer/AnalyzerBase;../../../Utilities/AAFAnalyzer/RequirementLib;../../../Utilities/AAFAnalyzer/TestPhaseLib;../../../Utilities/AAFAnalyzer/AAFAnalyzerBase;../../../Utilities/AAFAnalyzer/EPAnalyzerBase;../../../Utilities/AAFAnalyzer/EditProtocolTestImpl;../../../Utilities/AAFAnalyzer/BaseTestImpl;../../include;../../../examples2/axLib;&quot;$(BOOSTINC)&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB"
 				RuntimeLibrary="2"
 				RuntimeTypeInfo="TRUE"
@@ -104,9 +104,6 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}">
 			<File
 				RelativePath="..\..\..\Utilities\AAFAnalyzer\EditProtocolTestImpl\AllowedEditRateTable.cpp">
-			</File>
-			<File
-				RelativePath="..\..\..\Utilities\AAFAnalyzer\EditProtocolTestImpl\CompMobDependency.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\Utilities\AAFAnalyzer\EditProtocolTestImpl\DecorateEPTest.cpp">
@@ -187,9 +184,6 @@
 				RelativePath="..\..\..\Utilities\AAFAnalyzer\EditProtocolTestImpl\EPTrackContentsVisitor.cpp">
 			</File>
 			<File
-				RelativePath="..\..\..\Utilities\AAFAnalyzer\EditProtocolTestImpl\NodeRefCountVisitor.cpp">
-			</File>
-			<File
 				RelativePath="..\..\..\Utilities\AAFAnalyzer\EditProtocolTestImpl\StateMachineException.cpp">
 			</File>
 		</Filter>
@@ -199,9 +193,6 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}">
 			<File
 				RelativePath="..\..\..\Utilities\AAFAnalyzer\EditProtocolTestImpl\AllowedEditRateTable.h">
-			</File>
-			<File
-				RelativePath="..\..\..\Utilities\AAFAnalyzer\EditProtocolTestImpl\CompMobDependency.h">
 			</File>
 			<File
 				RelativePath="..\..\..\Utilities\AAFAnalyzer\EditProtocolTestImpl\DecorateEPTest.h">
@@ -280,9 +271,6 @@
 			</File>
 			<File
 				RelativePath="..\..\..\Utilities\AAFAnalyzer\EditProtocolTestImpl\EPTrackContentsVisitor.h">
-			</File>
-			<File
-				RelativePath="..\..\..\Utilities\AAFAnalyzer\EditProtocolTestImpl\NodeRefCountVisitor.h">
 			</File>
 			<File
 				RelativePath="..\..\..\Utilities\AAFAnalyzer\EditProtocolTestImpl\StateMachineException.h">

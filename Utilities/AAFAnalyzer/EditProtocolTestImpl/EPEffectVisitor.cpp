@@ -71,12 +71,11 @@ class TransitionInputVisitor : public TypedVisitor
 
         bool PreOrderVisit( AAFTypedObjNode<IAAFSequence>& node )
         {
-            AxSequence axSequence( node.GetAAFObjectOfType() );
+	    AxSequence axSequence( node.GetAAFObjectOfType() );
 
-            // JPT REVIEW - What's he talking about not in order? The
-            // edge map stores vectors? Perfectly ordered.  Also, he's
-            // comparing the axSequence.GetComponentAt() value to
-            // another pointer?
+	    // JPT REVIEW - The order issue has been resolved.  Review
+	    // the code to determine the the reordering code below can
+	    // be removed.
 
             //The graph may not return edges in order, therefore, we need to
             //loop through and find the correct transition by address.  Use
@@ -144,11 +143,14 @@ template<typename EffectType>
 class AlphaEffectVisitor : public EPTypedVisitor
 {
     public:
-        AlphaEffectVisitor( const AxString& descriptorReq, const AxString& alphaReq, const AxString& slotName, shared_ptr<DetailLevelTestResult> spResult )
+        AlphaEffectVisitor( const AxString& descriptorReq,
+			    const AxString& alphaReq,
+			    const AxString& slotName,
+			    shared_ptr<TestLevelTestResult> spTestResult )
             : _descriptorReq( descriptorReq ),
               _alphaReq( alphaReq ),
               _slotName( slotName ),
-              _spResult( spResult ),
+              _spTestResult( spTestResult ),
               _testPassed( true )
         {}
 
@@ -166,7 +168,8 @@ class AlphaEffectVisitor : public EPTypedVisitor
             AxSourceMob axMob( node.GetAAFObjectOfType() );
             AxString mobName = this->GetMobName( axMob, EPRGBAImageFileSource::GetName() );
             AxEssenceDescriptor axDescriptor( axMob.GetEssenceDescriptor() );
-            AxDigitalImageDescriptor axImageDesc( AxQueryInterface<IAAFEssenceDescriptor, IAAFDigitalImageDescriptor>( axDescriptor ) );
+            AxDigitalImageDescriptor axImageDesc( AxQueryInterface<IAAFEssenceDescriptor,
+						  IAAFDigitalImageDescriptor>( axDescriptor ) );
             CheckTransparency( axImageDesc, mobName );
             return false;
         }
@@ -190,7 +193,7 @@ class AlphaEffectVisitor : public EPTypedVisitor
             AxSourceMob axMob( node.GetAAFObjectOfType() );
             AxString mobName = this->GetMobName( axMob, EPCDCIImageFileSource::GetName() );
 
-            _spResult->AddInformationResult(
+            _spTestResult->AddSingleResult(
                 _descriptorReq,
                 L"Input " + mobName + L" to " + EffectType::GetName() + L" in " +
                      _slotName + L" does not have a RGBADescriptor or a CDCIDescriptor.",
@@ -261,7 +264,7 @@ class AlphaEffectVisitor : public EPTypedVisitor
             {
                 if ( ex.getHResult() == AAFRESULT_PROP_NOT_PRESENT )
                 {
-                    _spResult->AddInformationResult(
+                    _spTestResult->AddSingleResult(
                         _alphaReq,
                         L"Input " + inputName + L" to " + EffectType::GetName() +
                              L" in " + _slotName +
@@ -280,11 +283,11 @@ class AlphaEffectVisitor : public EPTypedVisitor
         {
             AxString ident = L"Input " + inputName + L" to " + EffectType::GetName() + L" in " + _slotName;
 
-            _spResult->AddInformationResult(
+            _spTestResult->AddSingleResult(
                 _descriptorReq,
                 ident + L" does not have a RGBADescriptor or a CDCIDescriptor.",
                 TestResult::FAIL );
-            _spResult->AddInformationResult(
+            _spTestResult->AddSingleResult(
                 _alphaReq,
                 ident + L" does not have the DigitalImageDescriptor::AlphaTransparency property.",
                 TestResult::FAIL );
@@ -295,7 +298,7 @@ class AlphaEffectVisitor : public EPTypedVisitor
         const AxString _descriptorReq;
         const AxString _alphaReq;
         const AxString _slotName;
-        shared_ptr<DetailLevelTestResult> _spResult;
+        shared_ptr<TestLevelTestResult> _spTestResult;
         bool _testPassed;
 
         // prohibited
@@ -312,16 +315,12 @@ namespace aafanalyzer {
 
 using namespace boost;
 
-EPEffectVisitor::EPEffectVisitor( wostream& log, shared_ptr<EdgeMap> spEdgeMap )
+EPEffectVisitor::EPEffectVisitor( wostream& log,
+				  shared_ptr<EdgeMap> spEdgeMap,
+				  shared_ptr<TestLevelTestResult> spTestResult )
     : _log(log),
       _spEdgeMap( spEdgeMap ),
-      _spResult( new DetailLevelTestResult( L"Edit Protocol Effect Visitor",
-                                            L"Visit effects and make sure they are valid.",
-                                            L"", // explain
-                                            L"", // DOCREF REQUIRED
-                                            TestResult::PASS,
-                                            TestRegistry::GetInstance().GetRequirementsForTest( EPEffectTest::GetTestInfo().GetName() )
-               )                          )
+      _spTestResult( spTestResult )
 {
    _isParentTransition.push( false );
 }
@@ -393,7 +392,7 @@ bool EPEffectVisitor::PreOrderVisit( EPTypedObjNode<IAAFOperationGroup, EPVideoS
                        << parameter.numerator << L"/" << parameter.denominator
                        << L").";
 
-                    _spResult->AddInformationResult( L"REQ_EP_187", ss.str().c_str(), TestResult::WARN );
+                    _spTestResult->AddSingleResult( L"REQ_EP_187", ss.str().c_str(), TestResult::WARN );
 
                     testPassed = false;
                 }
@@ -403,7 +402,7 @@ bool EPEffectVisitor::PreOrderVisit( EPTypedObjNode<IAAFOperationGroup, EPVideoS
                        << parameter.numerator << L"/" << parameter.denominator
                        << L").";
 
-                    _spResult->AddInformationResult( L"REQ_EP_187", ss.str().c_str(), TestResult::FAIL );
+                    _spTestResult->AddSingleResult( L"REQ_EP_187", ss.str().c_str(), TestResult::FAIL );
 
                     testPassed = false;
                 }
@@ -411,14 +410,14 @@ bool EPEffectVisitor::PreOrderVisit( EPTypedObjNode<IAAFOperationGroup, EPVideoS
             catch ( const AxEx& )
             {
                 ss << L" has a Speed Ratio parameter that does not have a rational value.";
-                _spResult->AddInformationResult( L"REQ_EP_187", ss.str().c_str(), TestResult::FAIL );
+                _spTestResult->AddSingleResult( L"REQ_EP_187", ss.str().c_str(), TestResult::FAIL );
                 testPassed = false;
             }
         }
         else
         {
             ss << L" has a Speed Ratio parameter that is not constant";
-            _spResult->AddInformationResult( L"REQ_EP_187", ss.str().c_str(), TestResult::FAIL );
+            _spTestResult->AddSingleResult( L"REQ_EP_187", ss.str().c_str(), TestResult::FAIL );
             testPassed = false;
         }
     }
@@ -430,7 +429,7 @@ bool EPEffectVisitor::PreOrderVisit( EPTypedObjNode<IAAFOperationGroup, EPVideoS
         }
 
         ss << L" does not have a Speed Ratio parameter.";
-        _spResult->AddInformationResult( L"REQ_EP_187", ss.str().c_str(), TestResult::FAIL );
+        _spTestResult->AddSingleResult( L"REQ_EP_187", ss.str().c_str(), TestResult::FAIL );
         testPassed = false;
     }
 
@@ -700,8 +699,8 @@ bool EPEffectVisitor::PreOrderVisit( EPTypedObjNode<IAAFOperationGroup, EPTwoPar
     {
         //Parent is not a transition, so, we can't check REQ_EP_249.
         AxString explain = name + L" is not within a Transition object.";
-        _spResult->AddInformationResult( L"REQ_EP_248", explain, TestResult::FAIL );
-        _spResult->AddInformationResult( L"REQ_EP_249", explain, TestResult::FAIL );
+        _spTestResult->AddSingleResult( L"REQ_EP_248", explain, TestResult::FAIL );
+        _spTestResult->AddSingleResult( L"REQ_EP_249", explain, TestResult::FAIL );
     }
     else
     {
@@ -725,8 +724,8 @@ bool EPEffectVisitor::PreOrderVisit( EPTypedObjNode<IAAFOperationGroup, EPTwoPar
             {
                 AxString explain = L"Transition object of " + name
                                  + L" does not have a length property.";
-                _spResult->AddInformationResult( L"REQ_EP_248", explain, TestResult::FAIL );
-                _spResult->AddInformationResult( L"REQ_EP_249", explain, TestResult::FAIL );
+                _spTestResult->AddSingleResult( L"REQ_EP_248", explain, TestResult::FAIL );
+                _spTestResult->AddSingleResult( L"REQ_EP_249", explain, TestResult::FAIL );
                 incomingPassed = false;
                 outgoingPassed = false;
             }
@@ -750,8 +749,8 @@ bool EPEffectVisitor::PreOrderVisit( EPTypedObjNode<IAAFOperationGroup, EPTwoPar
                 {
                     AxString explain = L"Incoming segment of " + name
                                      + L" does not have a length property.";
-                    _spResult->AddInformationResult( L"REQ_EP_248", explain, TestResult::FAIL );
-                    _spResult->AddInformationResult( L"REQ_EP_249", explain, TestResult::FAIL );
+                    _spTestResult->AddSingleResult( L"REQ_EP_248", explain, TestResult::FAIL );
+                    _spTestResult->AddSingleResult( L"REQ_EP_249", explain, TestResult::FAIL );
                     incomingPassed = false;
                 }
                 else
@@ -767,16 +766,16 @@ bool EPEffectVisitor::PreOrderVisit( EPTypedObjNode<IAAFOperationGroup, EPTwoPar
                 ss << name << L" has an incoming segment with length = "
                    << incomingLen << L" and a transition with length = "
                    << transitionLen << L".";
-                _spResult->AddInformationResult( L"REQ_EP_248", ss.str().c_str(), TestResult::FAIL );
-                _spResult->AddInformationResult( L"REQ_EP_249", ss.str().c_str(), TestResult::FAIL );
+                _spTestResult->AddSingleResult( L"REQ_EP_248", ss.str().c_str(), TestResult::FAIL );
+                _spTestResult->AddSingleResult( L"REQ_EP_249", ss.str().c_str(), TestResult::FAIL );
                 incomingPassed = false;
             }
         }
         else
         {
             AxString explain = name + L" does not have an incoming segment.";
-            _spResult->AddInformationResult( L"REQ_EP_248", explain, TestResult::FAIL );
-            _spResult->AddInformationResult( L"REQ_EP_249", explain, TestResult::FAIL );
+            _spTestResult->AddSingleResult( L"REQ_EP_248", explain, TestResult::FAIL );
+            _spTestResult->AddSingleResult( L"REQ_EP_249", explain, TestResult::FAIL );
             testPassed = false;
         }
 
@@ -794,7 +793,7 @@ bool EPEffectVisitor::PreOrderVisit( EPTypedObjNode<IAAFOperationGroup, EPTwoPar
                 {
                     AxString explain = L"Outgoing segment of " + name
                                      + L" does not have a length property.";
-                    _spResult->AddInformationResult( L"REQ_EP_249", explain, TestResult::FAIL );
+                    _spTestResult->AddSingleResult( L"REQ_EP_249", explain, TestResult::FAIL );
                     outgoingPassed = false;
                 }
                 else
@@ -810,14 +809,14 @@ bool EPEffectVisitor::PreOrderVisit( EPTypedObjNode<IAAFOperationGroup, EPTwoPar
                 ss << name << L" has an outgoing segment with length = "
                    << outgoingLen << L" and a transition with length = "
                    << transitionLen << L".";
-                _spResult->AddInformationResult( L"REQ_EP_249", ss.str().c_str(), TestResult::FAIL );
+                _spTestResult->AddSingleResult( L"REQ_EP_249", ss.str().c_str(), TestResult::FAIL );
                 outgoingPassed = false;
             }
         }
         else
         {
             AxString explain = name + L" does not have an outgoing segment.";
-            _spResult->AddInformationResult( L"REQ_EP_249", explain, TestResult::FAIL );
+            _spTestResult->AddSingleResult( L"REQ_EP_249", explain, TestResult::FAIL );
             testPassed = false;
         }
 
@@ -863,11 +862,6 @@ bool EPEffectVisitor::PostOrderVisit( AAFTypedObjNode<IAAFTransition>& node )
     return true;
 }
 
-shared_ptr<DetailLevelTestResult> EPEffectVisitor::GetResult()
-{
-    return _spResult;
-}
-
 bool EPEffectVisitor::VeirfyTransitionRequirement( AAFTypedObjNode<IAAFOperationGroup>& node, bool withinTransition, const AxString& reqId, const AxString& type )
 {
     if ( withinTransition != _isParentTransition.top() )
@@ -881,13 +875,13 @@ bool EPEffectVisitor::VeirfyTransitionRequirement( AAFTypedObjNode<IAAFOperation
         explain += L"within a Transition object.";
         if ( withinTransition )
         {
-            _spResult->AddInformationResult( L"REQ_EP_163", explain, TestResult::FAIL );
+            _spTestResult->AddSingleResult( L"REQ_EP_163", explain, TestResult::FAIL );
         }
         else
         {
-            _spResult->AddInformationResult( L"REQ_EP_164", explain, TestResult::FAIL );
+            _spTestResult->AddSingleResult( L"REQ_EP_164", explain, TestResult::FAIL );
         }
-        _spResult->AddInformationResult( reqId, explain, TestResult::FAIL );
+        _spTestResult->AddSingleResult( reqId, explain, TestResult::FAIL );
         return false;
     }
     return true;
@@ -910,11 +904,11 @@ bool EPEffectVisitor::VerifyAlphaRequirements( AxOperationGroup& axOpGroup, cons
             if ( AxConstants::NULL_MOBID == mobid )
             {
                 //Not a valid mob so fail
-                _spResult->AddInformationResult(
+                _spTestResult->AddSingleResult(
                     descriptorReq,
                     L"Input to " + effectType +  L" in " + slotName + L" is a null source reference.",
                     TestResult::FAIL );
-                _spResult->AddInformationResult(
+                _spTestResult->AddSingleResult(
                     alphaReq,
                     L"Input to " + effectType +  L" in " + slotName + L" is a null source reference.",
                     TestResult::FAIL );
@@ -926,11 +920,11 @@ bool EPEffectVisitor::VerifyAlphaRequirements( AxOperationGroup& axOpGroup, cons
             if ( !spInputNode )
             {
                 //Out of File reference so warn.
-                _spResult->AddInformationResult(
+                _spTestResult->AddSingleResult(
                     descriptorReq,
                     L"Input to " + effectType +  L" in " + slotName + L" is an out-of-file reference.",
                     TestResult::WARN );
-                _spResult->AddInformationResult(
+                _spTestResult->AddSingleResult(
                     alphaReq,
                     L"Input to " + effectType +  L" in " + slotName + L" is an out-of-file reference.",
                     TestResult::WARN );
@@ -938,7 +932,7 @@ bool EPEffectVisitor::VerifyAlphaRequirements( AxOperationGroup& axOpGroup, cons
             }
 
             //Verify the Alpha Requirements.
-            shared_ptr<AlphaEffectVisitor<EPAlphaWithVideoKeyEffect> > spVisitor( new AlphaEffectVisitor<EPAlphaWithVideoKeyEffect>( descriptorReq, alphaReq, slotName, _spResult ) );
+            shared_ptr<AlphaEffectVisitor<EPAlphaWithVideoKeyEffect> > spVisitor( new AlphaEffectVisitor<EPAlphaWithVideoKeyEffect>( descriptorReq, alphaReq, slotName, _spTestResult ) );
             DepthFirstTraversal dft( _spEdgeMap, spInputNode );
             dft.TraverseDown( spVisitor );
             return spVisitor->GetTestResult();
@@ -946,11 +940,11 @@ bool EPEffectVisitor::VerifyAlphaRequirements( AxOperationGroup& axOpGroup, cons
         else
         {
             //The input is not a source reference so fail
-            _spResult->AddInformationResult(
+            _spTestResult->AddSingleResult(
                 descriptorReq,
                 L"Input to " + effectType +  L" in " + slotName + L" is not a SourceReference.",
                 TestResult::FAIL );
-            _spResult->AddInformationResult(
+            _spTestResult->AddSingleResult(
                 alphaReq,
                 L"Input to " + effectType +  L" in " + slotName + L" is not a SourceReference.",
                 TestResult::FAIL );
@@ -965,12 +959,12 @@ bool EPEffectVisitor::VerifyAlphaRequirements( AxOperationGroup& axOpGroup, cons
         ss << expectedInputs << L" segments and found "
            << axOpGroup.CountSourceSegments() << L" segments.";
 
-        _spResult->AddInformationResult(
+        _spTestResult->AddSingleResult(
             descriptorReq,
             effectType +  L" in " + slotName + L" has an incorrect number of input segments. " +
                 + L"Expecting " + ss.str().c_str(),
             TestResult::FAIL );
-        _spResult->AddInformationResult(
+        _spTestResult->AddSingleResult(
             alphaReq,
             effectType +  L" in " + slotName + L" has an incorrect number of input segments. " +
                 + L"Expecting " + ss.str().c_str(),

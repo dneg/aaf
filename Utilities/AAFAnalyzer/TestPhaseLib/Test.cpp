@@ -43,19 +43,18 @@ using namespace std;
 using namespace boost;
 
 Test::Test(wostream& os, const TestInfo& info)
-: _os(os), _spCoveredRequirements(InitializeRequirements(info.GetName()))
-{
-}
+  : _os(os),
+    _spCoveredRequirements(InitializeRequirements(info.GetName()))
+{}
 
 const Test::ConstRequirementMapSP Test::InitializeRequirements(const wstring& name)
 {
-    TestRegistry& reg = TestRegistry::GetInstance();
-    return reg.GetConstRequirementsForTest(name);
+  TestRegistry& reg = TestRegistry::GetInstance();
+  return reg.GetConstRequirementsForTest(name);
 }
 
 Test::~Test()
-{
-}
+{}
 
 wstring Test::GetName() const
 {
@@ -84,9 +83,49 @@ void Test::SetTestGraph(shared_ptr<const TestGraph> spGraph)
   _spGraph = spGraph;
 }
 
+shared_ptr<TestLevelTestResult> Test::CreateTestResult() const
+{
+  shared_ptr<TestLevelTestResult>
+    spTestResult( new TestLevelTestResult( GetName(),
+                                           GetDescription(),
+                                           this->shared_from_this() ) );
+  return spTestResult;
+}
+
+shared_ptr<TestLevelTestResult> Test::CreateTestResult( const wstring& explain,
+                                                        TestResult::Result result ) const
+{
+  shared_ptr<TestLevelTestResult>
+    spTestResult( new TestLevelTestResult( GetName(),
+                                           GetDescription(),
+                                           explain,
+                                           result,
+                                           this->shared_from_this() ) );
+  return spTestResult;
+}
+
+shared_ptr<TestLevelTestResult> Test::CreatePassTestResult() const
+{
+  return CreateTestResult( L"", TestResult::PASS );
+}
+
 const Requirement::RequirementMap& Test::GetCoveredRequirements() const
 {
-    return *_spCoveredRequirements;
+  return *_spCoveredRequirements;
+}
+
+// Get a single requirement that is registered against this test.
+// Throws xxx if reqId is not registered.
+shared_ptr<const Requirement> Test::GetRequirement( const wstring& reqId ) const
+{
+  Requirement::RequirementMap::const_iterator iter = _spCoveredRequirements->find(reqId);
+  assert( iter != _spCoveredRequirements->end() );
+  return iter->second;
+}
+
+bool Test::IsRequirementRegistered( const wstring& reqId ) const
+{
+  return _spCoveredRequirements->find(reqId) != _spCoveredRequirements->end();
 }
 
 } // end of namespace diskstream

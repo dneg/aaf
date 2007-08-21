@@ -40,9 +40,9 @@ public:
     typedef map< const wstring, shared_ptr<const Requirement> > RequirementMap;
     typedef shared_ptr<RequirementMap> RequirementMapSP;
 
-    enum RequirementType {FILE, APP, DEFINITION};
+    enum RequirementType {REQ_TYPE_UNDEFINED, FILE, APP, DEFINITION};
 
-    enum Category        {GENERAL, IMPORT_EXPORT, COMPOSITIONAL, METADATA,
+    enum Category        {CAT_UNDEFINED, GENERAL, IMPORT_EXPORT, COMPOSITIONAL, METADATA,
                           MIXDOWN, AUXILIARY_FILE, ANNOTATIONS, EFFECT,
                           OPTIONAL_PROPERTIES, STRUCTURED_STORAGE, PROTOCOL,
                           ADHOC};
@@ -69,7 +69,7 @@ public:
     const wstring& GetVersion() const;
     const wstring& GetSection() const;
 
-    // Conviencie accessors
+    // Convenience accessors
     const wstring& GetRequirementTypeAsString() const;
     const wstring& GetCategoryAsString() const;
 

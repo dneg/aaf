@@ -21,8 +21,8 @@
 #ifndef __EPDerivatinTest_h__
 #define __EPDerivatinTest_h__
 
-//Edit Protocol Test files
-#include "CompMobDependency.h"
+//Base Test files
+#include <CompMobDependency.h>
 
 //Test/Result files
 #include <Test.h>

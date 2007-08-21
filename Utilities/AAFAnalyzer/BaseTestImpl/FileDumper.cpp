@@ -20,7 +20,7 @@
 
 //Base Test files
 #include "FileDumper.h"
-#include "TestVisitor.h"
+#include "DumpVisitor.h"
 
 //Test/Result files
 #include <TestLevelTestResult.h>
@@ -46,53 +46,58 @@ namespace aafanalyzer
 using namespace std;
 using namespace boost;
 
-FileDumper::FileDumper(wostream& os, shared_ptr<const TestGraph> spGraph)
-: Test(os, GetTestInfo())
+FileDumper::FileDumper( wostream& os,
+			shared_ptr<const TestGraph> spGraph,
+			shared_ptr<Node> spRoot,
+			bool followReferences )
+  : Test(os, GetTestInfo()),
+    _spRoot(spRoot),
+    _followReferences(followReferences)
 {
   SetTestGraph(spGraph);
 }
 
 FileDumper::~FileDumper()
-{
-}
+{}
 
 shared_ptr<TestLevelTestResult> FileDumper::Execute()
 {
-  shared_ptr<TestVisitor> spVisitor(new TestVisitor());
-  DepthFirstTraversal dfs(GetTestGraph()->GetEdgeMap(), GetTestGraph()->GetRootNode());
+  shared_ptr<DumpVisitor>
+    spVisitor( new DumpVisitor( _followReferences ? Visitor::FOLLOW_REFERENCES : Visitor::FOLLOW_CONTAINED ) );
 
-  //output to screen
-  //GetOutStream() << GetName() << endl << GetDescription() << endl << endl;
+  DepthFirstTraversal dfs(GetTestGraph()->GetEdgeMap(), _spRoot);
 
-  const shared_ptr<const Test> me = this->shared_from_this();
-  Requirement::RequirementMapSP spMyReqs(new Requirement::RequirementMap(this->GetCoveredRequirements()));
-  shared_ptr<TestLevelTestResult> spResult(new TestLevelTestResult(me, spMyReqs ));
+  dfs.TraverseDown(spVisitor);
 
-  //set result properties
-  spResult->SetName(GetName());
-  spResult->SetDescription(GetDescription());
-
-  dfs.TraverseDown(spVisitor, GetTestGraph()->GetRootNode()); 
+  // This is just a file dump. It can't fail. We don't really even
+  // care about the return, since it is implemented as a test it is
+  // necessary to return a result.
+  shared_ptr<TestLevelTestResult>
+    spResult( new TestLevelTestResult( GetName(),
+				       GetDescription(),
+				       L"",
+				       TestResult::PASS,
+				       this->shared_from_this() ) );
   return spResult;
 }
 
 AxString FileDumper::GetName() const
 {
-  AxString name = L"File Dump";
-  return name;
+  return L"File Dump";
 }
 
 AxString FileDumper::GetDescription() const
 {
-  AxString description = L"Dump an dobject graph..";
-  return description;
+  return L"Dump the analyzer\'s internal data structure.";
 }
 
 const TestInfo FileDumper::GetTestInfo()
 {
     shared_ptr<vector<AxString> > spReqIds(new vector<AxString>);
-    //TODO: Push actual requirements.
-//    spReqIds->push_back(L"Requirement Id");
+
+    // No requirements to register here. This is just a debug utility
+    // that happens to be wrapped up as a test.
+
     return TestInfo(L"FileDumper", spReqIds);
 }
 

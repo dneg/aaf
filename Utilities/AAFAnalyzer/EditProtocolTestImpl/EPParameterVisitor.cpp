@@ -51,16 +51,12 @@ namespace aafanalyzer {
 
 using namespace boost;
  
-EPParameterVisitor::EPParameterVisitor( wostream& log, shared_ptr<EdgeMap> spEdgeMap )
+EPParameterVisitor::EPParameterVisitor( wostream& log,
+                                        shared_ptr<EdgeMap> spEdgeMap,
+                                        shared_ptr<TestLevelTestResult> spTestResult )
     : _log(log),
       _spEdgeMap( spEdgeMap ),
-      _spResult( new DetailLevelTestResult( L"Edit Protocol Parameter Visitor",
-                                            L"Visit parameters and make sure they are valid.",
-                                            L"", // explain
-                                            L"", // DOCREF REQUIRED
-                                            TestResult::PASS,
-                                            TestRegistry::GetInstance().GetRequirementsForTest( EPParameterTest::GetTestInfo().GetName() )
-               )                          )
+      _spTestResult( spTestResult )
 {
     _validInterpolationDefs.insert( kAAFInterpolationDef_Constant );
     _validInterpolationDefs.insert( kAAFInterpolationDef_Linear );
@@ -74,10 +70,24 @@ EPParameterVisitor::~EPParameterVisitor()
 
 bool EPParameterVisitor::PreOrderVisit( AAFTypedObjNode<IAAFParameter>& node )
 {
-    //Parameter isn't constant or varying so fail 174.
-    AxString name = this->GetMobSlotName( _spEdgeMap, node );
-    _spResult->AddInformationResult( L"REQ_EP_174", L"Parameter within " + name + L" is not a ConstantValue or VaryingValue.", TestResult::FAIL );
-    return false;
+  // JPT REVIEW - Review the value of this. There isn't anything other
+  // than constant and varying values in the AAF object model so why
+  // at is REQ_EP_174 all about.  I think Andrew misinterpreted the
+  // requirement. Since there is no option to use anything other than
+  // those it is really a definition, or application
+  // requirement. (e.g. to ensure that developer don't start cooking
+  // up their own schemes using tagged values or extended types.  But
+  // then, if an extended parameter type was created that could cause
+  // this code to execute and would correctly fail requirement
+  // 174... but that's a remote case.
+
+  //Parameter isn't constant or varying so fail 174.
+  AxString name = this->GetMobSlotName( _spEdgeMap, node );
+
+  _spTestResult->AddSingleResult( L"REQ_EP_174",
+                                  L"Parameter within " + name + L" is not a ConstantValue or VaryingValue.",
+                                  TestResult::FAIL );
+  return false;
 }
 
 bool EPParameterVisitor::PreOrderVisit( AAFTypedObjNode<IAAFVaryingValue>& node )
@@ -87,21 +97,17 @@ bool EPParameterVisitor::PreOrderVisit( AAFTypedObjNode<IAAFVaryingValue>& node 
     if ( _validInterpolationDefs.find( axIntDef.GetAUID() ) == _validInterpolationDefs.end() )
     {
         AxString name = this->GetMobSlotName( _spEdgeMap, node );
-        _spResult->AddInformationResult(
+
+        shared_ptr<DetailLevelTestResult> spFailure = _spTestResult->AddSingleResult(
             L"REQ_EP_175",
-            L"VaryingValue object in " + name + L" has an illegal interpolation definition (AUID = " +
-                AxStringUtil::uid2Str( axIntDef.GetAUID() ) + L").",
-            TestResult::FAIL
-        );
+            L"VaryingValue object in " + name + L" has an illegal interpolation definition.",
+            TestResult::FAIL );
+
+        spFailure->AddDetail( L"AUID = " + AxStringUtil::uid2Str( axIntDef.GetAUID() ) + L")." );
     }
 
     //Regardless of pass/fail, there is no need to traverse further.
     return false;
-}
-
-shared_ptr<DetailLevelTestResult> EPParameterVisitor::GetResult()
-{
-    return _spResult;
 }
 
 } // end of namespace aafanalyzer

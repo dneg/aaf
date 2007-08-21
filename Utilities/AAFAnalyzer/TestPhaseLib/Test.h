@@ -22,7 +22,8 @@
 #define __TEST_h__
 
 //Test/Result files
-#include "TestInfo.h"
+#include <TestInfo.h>
+#include <TestLevelTestResult.h>
 
 //Requirement files
 #include <Requirement.h>
@@ -40,7 +41,6 @@ namespace aafanalyzer {
 using namespace std;
 using namespace boost;
 
-class TestLevelTestResult;
 class TestGraph;
 
 class Test : public enable_shared_from_this<Test>
@@ -55,12 +55,44 @@ class Test : public enable_shared_from_this<Test>
   wostream& GetOutStream() const;
   shared_ptr<const TestGraph> GetTestGraph();
 
+  // Get the requirements registered against this test.
   const Requirement::RequirementMap& GetCoveredRequirements() const;
 
+  // Get a single requirement that is registered against this test.
+  // The call asserts that reqId is registered.
+  shared_ptr<const Requirement> GetRequirement( const wstring& reqId ) const;
+
+  // Is reqId registered against this test.
+  bool IsRequirementRegistered( const wstring& reqId ) const;
+
 protected:
+
   void SetTestGraph(shared_ptr<const TestGraph> spGraph);
 
+  // Create a result for the purpose of add sub results.
+  // The result name and description come from this test.
+  // The default result value is that provided by the TestResult
+  // constructor.
+  shared_ptr<TestLevelTestResult> CreateTestResult() const;
+
+  // Create a result for tests that don't add sub results (hence must
+  // provide the test result value and an explanation).
+  // The result name and description come from this test.
+  shared_ptr<TestLevelTestResult> CreateTestResult( const wstring& explain,
+                                                    TestResult::Result result ) const;
+
+  // Same as above, but the result is PASS and has no explanation.
+  // This is common for test that are simply used to wrap up some processing
+  // in a standard interface, can't fail on (and don't register any requirements),
+  // either pass or fail fatally (throw an exception).
+  shared_ptr<TestLevelTestResult> CreatePassTestResult() const;
+
  private:
+  // prohibited
+  Test();
+  Test(const Test&);
+  Test& operator=( const Test& );
+
   wostream& _os;
   shared_ptr<const TestGraph> _spGraph;
   
@@ -68,11 +100,6 @@ protected:
   const ConstRequirementMapSP _spCoveredRequirements;
 
   const ConstRequirementMapSP InitializeRequirements(const wstring& name);
-
-  // prohibited
-  Test();
-  Test(const Test&);
-  Test& operator=( const Test& );
 };
 
 } // end of namespace diskstream

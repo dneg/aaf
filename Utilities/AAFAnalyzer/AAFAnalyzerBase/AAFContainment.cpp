@@ -22,6 +22,8 @@
 #include "AAFContainment.h"
 #include "TypedVisitor.h"
 
+#include <assert.h>
+
 namespace {
 
 using namespace aafanalyzer;
@@ -39,13 +41,11 @@ namespace aafanalyzer
 using namespace boost;
 
 AAFContainment::AAFContainment(shared_ptr<Node> spParent, shared_ptr<Node> spChild)
-  : Edge(spParent, spChild)
-{
-}
+  : Edge(spParent, spChild, Edge::EDGE_KIND_CONTAINMENT, spParent->GetLID() )
+{}
 
 AAFContainment::~AAFContainment()
-{
-}
+{}
 
 bool AAFContainment::Visit(shared_ptr<Visitor> spVisitor)
 {
@@ -60,8 +60,15 @@ bool AAFContainment::Visit(shared_ptr<Visitor> spVisitor)
 
 shared_ptr<Edge> AAFContainment::CreateNewEdge( shared_ptr<Node> spParent, shared_ptr<Node> spChild ) const
 {
-    shared_ptr<Edge> spNewEdge( new AAFContainment( spParent, spChild ) );
-    return spNewEdge;
+  shared_ptr<Edge> spNewEdge( new AAFContainment( spParent, spChild ) );
+  return spNewEdge;
 }
+
+const std::wstring& AAFContainment::GetTypeName() const
+{
+  return typeName;
+}
+
+const std::wstring AAFContainment::typeName = L"containment";
 
 } // end of namespace diskstream

@@ -36,12 +36,14 @@ class TestPhaseLevelTestResult : public HighLevelTestResult
  public:
 
   TestPhaseLevelTestResult();
-  TestPhaseLevelTestResult( const wstring& name, const wstring& desc,
-                            const wstring& explain, const wstring& docRef,
-                            Result defaultResult );
-  ~TestPhaseLevelTestResult();
 
-  void AppendSubtestResult( const shared_ptr<const TestLevelTestResult>& subtestResult );
+  TestPhaseLevelTestResult( const wstring& name, const wstring& desc,
+                            const wstring& explain );
+
+  virtual ~TestPhaseLevelTestResult();
+
+  void AppendSubtestResult( shared_ptr<TestLevelTestResult> subtestResult );
+
   const enum ResultLevel GetResultType() const;
 
   // prohibited

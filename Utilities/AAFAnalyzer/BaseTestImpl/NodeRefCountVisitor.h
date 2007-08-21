@@ -22,10 +22,9 @@
 #define __NODEREFCOUNTVISITOR_h__
 
 //Edit Protocol Test files
-#include "CompMobDependency.h"
+#include <CompMobDependency.h>
 
 //Test/Result files
-#include <DetailLevelTestResult.h>
 #include <TestRegistry.h>
 
 //AAF Analyzer Base files
@@ -50,7 +49,9 @@ using namespace boost;
 // node in a graph. Simply instantiate it on the desired node type and
 // execute a traversal over the graph.
 //
-// This was originally created to count references to composition mobs.
+// This was originally created to count references to composition
+// mobs.
+//
 // To do that, instantiate:
 //
 //        NodeRefCountVisitor<IAAFCompsitionMob>
@@ -63,7 +64,7 @@ class NodeRefCountVisitor : public TypedVisitor
 {
  public:
 
-  // Map Node::LID to a reference count for that node.
+  // Map node instance pointer to a reference count for that node.
   typedef map<shared_ptr<Node>, int> NodeMap;
 
   // Map a reference count value to a vector of all nodes with that
@@ -75,23 +76,16 @@ class NodeRefCountVisitor : public TypedVisitor
   typedef vector<ReferencedNodeSP> ReferencedNodeVector;
   typedef shared_ptr<ReferencedNodeVector> ReferencedNodeVectorSP;
 
-  NodeRefCountVisitor(wostream& os)
-    : _os(os),
-      _spResult( new DetailLevelTestResult( L"Edit Protocol Contained Track Visitor",
-                                            L"Visit derivation chain mateiral and ensure they contain the required tracks.",
-                                            L"", // explain
-                                            L"", // DOCREF REQUIRED
-                                            TestResult::PASS,
-                                            TestRegistry::GetInstance().GetRequirementsForTest( CompMobDependency::GetTestInfo().GetName() )
-               )                          )
+  NodeRefCountVisitor( wostream& os )
+    : TypedVisitor( Visitor::FOLLOW_REFERENCES ),
+    _os(os)
   {}
 
   virtual ~NodeRefCountVisitor()
   {}
 
-  bool PreOrderVisit(AAFTypedObjNode<AAFObjType>& node)
+  bool PreOrderVisit( AAFTypedObjNode<AAFObjType>& node )
   {
-    
     shared_ptr<Node> spNode = node.GetSharedPointerToNode();
     
     if ( IsPresent( spNode ) )
@@ -100,20 +94,22 @@ class NodeRefCountVisitor : public TypedVisitor
     }
     else
     {
+      // We start the count at zero even though, strictly speaking,
+      // this map entry is created as a result of the first entry not
+      // the zeroeth. A ref count of zero implies that the object is
+      // only referenced via a containment edge which implies it has
+      // not external references. From that perspective zero makes
+      // sense.
       _nodeMap[spNode] = 0;
     }
 
     return true;
   }
   
-  virtual bool EdgeVisit(AAFComponentReference& edge) { return true; }
-  virtual bool EdgeVisit(AAFMobReference& edge) { return true; }
-  virtual bool EdgeVisit(AAFSlotReference& edge) { return true; }
-
   // Returns a map that maps ref counts to all nodes with that ref count.
-  // i.e. map[0] = vector<Node::LID> // a vector of unreferenced nodes
-  // i.e. map[1] = vector<Node::LID> // a vector of nodes with one reference
-  // i.e. map[2] = vector<Node::LID> // a vector of nodes with three references
+  // i.e. map[1] = vector<Node::LID> // a vector of unreferenced nodes
+  // i.e. map[2] = vector<Node::LID> // a vector of nodes with one reference
+  // i.e. map[3] = vector<Node::LID> // a vector of nodes with three references
   shared_ptr<RefCountMap> GetRefCountMap()
   {
     shared_ptr<RefCountMap> spRefCountMap( new RefCountMap );
@@ -141,7 +137,7 @@ class NodeRefCountVisitor : public TypedVisitor
     {
       if ( iter->second == refCount )
       {
-    shared_ptr<Node> spNode = iter->first;
+	shared_ptr<Node> spNode = iter->first;
     
 	ReferencedNodeSP spRefNode = dynamic_pointer_cast<ReferencedNode>( spNode );
 	assert( spRefNode );
@@ -150,11 +146,6 @@ class NodeRefCountVisitor : public TypedVisitor
     }
     
     return spNodes;
-  }
-
-  shared_ptr<DetailLevelTestResult> GetTestResult() const
-  {
-    return _spResult;
   }
 
  private:
@@ -166,13 +157,12 @@ class NodeRefCountVisitor : public TypedVisitor
 
   bool IsPresent(shared_ptr<Node>& spNode)
   {
-    NodeMap::const_iterator iter = _nodeMap.find(spNode);  
+    NodeMap::const_iterator iter = _nodeMap.find(spNode);
     return iter != _nodeMap.end();
   }
 
   wostream& _os;
-  shared_ptr<DetailLevelTestResult> _spResult;
-  NodeMap _nodeMap;   //<LID, ref count>
+  NodeMap _nodeMap;
 };
 
 } // end of namespace diskstream

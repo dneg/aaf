@@ -19,11 +19,8 @@
 //=---------------------------------------------------------------------=
 
 //Test/Result files
-#include "LowLevelTestResult.h"
-#include "TestRegistry.h"
-
-//Requirement files
-#include <RequirementMismatchException.h>
+#include <LowLevelTestResult.h>
+#include <Test.h>
 
 namespace {
 
@@ -42,44 +39,24 @@ namespace aafanalyzer
 using namespace std;
 using namespace boost;
 
-LowLevelTestResult::LowLevelTestResult( const Requirement::RequirementMapSP& requirements ) 
-    : TestResult (requirements)
+LowLevelTestResult::LowLevelTestResult( const shared_ptr<const Test> associatedTest )
+  : TestResult(),
+    _spAssociatedTest( associatedTest )
 {}
 
-LowLevelTestResult::LowLevelTestResult( const wstring& name, const wstring& desc,
-                                        const wstring& explain, const wstring& docRef,
-                                        Result defaultResult,
-                                        const Requirement::RequirementMapSP& requirements )
-    : TestResult (name, desc, explain, docRef, defaultResult, requirements)
+LowLevelTestResult::LowLevelTestResult( const shared_ptr<const Test> associatedTest,
+                                        const wstring& name, const wstring& desc,
+                                        const wstring& explain )
+  : TestResult( name, desc, explain ),
+    _spAssociatedTest( associatedTest )
 {}
 
 LowLevelTestResult::~LowLevelTestResult()
 {}
 
-void LowLevelTestResult::SetRequirementStatus( TestResult::Result level, const shared_ptr<const Requirement>& req)
+const shared_ptr<const Test> LowLevelTestResult::GetAssociatedTest() const
 {
-    //If the requirement was already in a map store it in the map with
-    //the worst possible status.  Otherwise, the requirement should not be
-    //set because it is not part of this test result.
-    Result oldReqLevel;
-    if ( this->ContainsRequirment( req->GetId(), oldReqLevel ) ) {
-        if ( level > oldReqLevel )
-        {
-            this->RemoveRequirement(req->GetId());
-            this->AddRequirement(level, req);
-        }
-    } else if ( TestRegistry::GetInstance().IsUnsafeRequirements() ) {
-        //If unsafe requirements are being used, then go ahead and add it to the
-        //list of requirements stored by this test.  Do not register the 
-        //requirement - it should not be reported as being covered by the 
-        //associated test (although it is possible that it has been loaded).
-        this->AddRequirement(level, req);
-    } else {
-            wstring msg;
-            msg = L"Attempting to set status of " + req->GetId() + L" which does not exist in " + this->GetName();
-            throw RequirementMismatchException ( msg.c_str() );
-
-    }
+  return _spAssociatedTest;
 }
 
 } // end of namespace diskstream

@@ -62,47 +62,36 @@ shared_ptr<TestLevelTestResult> FileLoad::Execute()
   GraphBuilder graphBuild;
   shared_ptr<NodeFactory> spFactory(new NodeFactoryImpl());
 
-  //output to screen
-  //GetOutStream() << GetName() << endl << GetDescription() << endl << endl;
-
-  //build the graph and initialize TestGraph 
+  // Build the graph and initialize TestGraph.
   shared_ptr<const AAFGraphInfo> spGraphInfo( graphBuild.CreateGraph(_File, spFactory) );
   SetTestGraph(spGraphInfo->GetGraph());
   _spGraphInfo = spGraphInfo;
   
-  // Set result properties.
-  // If the graph builder did not through an exception, then
-  // it succeeded, therefore, result is PASS.
-  const shared_ptr<const Test> me = this->shared_from_this();
-  Requirement::RequirementMapSP spMyReqs(new Requirement::RequirementMap(this->GetCoveredRequirements()));
-  shared_ptr<TestLevelTestResult> spResult(
-            new TestLevelTestResult( L"FileLoad",
-                                     L"Loads and AAF file and builds the test graph.",
-                                     L"File loaded correctly.",
-                                     L"-", // DOCREF
-                                     TestResult::PASS,
-                                     me, 
-                                     spMyReqs ) );
-  return spResult;
+  // If the graph builder did not through an exception, then it
+  // succeeded, therefore, result is PASS.
+  return CreateTestResult( L"File loaded correctly.", TestResult::PASS );
 }
 
 AxString FileLoad::GetName() const
 {
-  AxString name = L"File Load Test";
+  AxString name = L"File Load";
   return name;
 }
 
 AxString FileLoad::GetDescription() const
 {
-  AxString description = L"Load an AAF file and build a graph of contained AAF objects.";
+  AxString description = L"Load all objects in the AAF file.";
   return description;
 }
 
 const TestInfo FileLoad::GetTestInfo()
 {
     shared_ptr<vector<AxString> > spReqIds(new vector<AxString>);
-    //TODO: Push actual requirements.
-//    spReqIds->push_back(L"Requirement Id");
+
+    // There are no requirements to associate with this test.  Either
+    // it passes, and the program continues, or the graph builder
+    // throws an exception that stops the program.
+
     return TestInfo(L"FileLoad", spReqIds);
 }
 

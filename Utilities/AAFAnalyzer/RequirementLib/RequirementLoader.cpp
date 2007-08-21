@@ -57,6 +57,8 @@ using namespace std;
 using namespace boost;
 
 RequirementLoader::RequirementLoader()
+  : _current(),
+    _categoryMap()
 {
     _categoryMap[L"general"]             = Requirement::GENERAL;
     _categoryMap[L"import-export"]       = Requirement::IMPORT_EXPORT;
@@ -132,6 +134,9 @@ void RequirementLoader::StartElement(const wstring& name, const char** attribs)
 
     if ( name == L"requirement" )
     {
+        // Reset _current by assigning a new, empty, Current object.
+        _current = RequirementLoader::Current();
+
         wostringstream msg;
         msg << attribs[1];
         wstring type(msg.str().c_str() );
@@ -141,15 +146,15 @@ void RequirementLoader::StartElement(const wstring& name, const char** attribs)
 
         if ( type == L"app" )
         {
-            _currentType = Requirement::APP;
+            _current.Type = Requirement::APP;
         }
         else if ( type == L"file" )
         {
-            _currentType = Requirement::FILE;
+            _current.Type = Requirement::FILE;
         }
         else if ( type == L"def" )
         {
-            _currentType = Requirement::DEFINITION;
+            _current.Type = Requirement::DEFINITION;
         }
         else
         {
@@ -157,12 +162,12 @@ void RequirementLoader::StartElement(const wstring& name, const char** attribs)
             msg << L"Unknown requirement type: " << type;
             throw RequirementXMLException(msg.str().c_str() );
         }
-	_currentTypeAsString = type;
+        _current.TypeAsString = type;
 
         if ( _categoryMap.find( category ) != _categoryMap.end() )
         {
-            _currentCategory = _categoryMap[category];
-	    _currentCategoryAsString = category;
+            _current.Category = _categoryMap[category];
+            _current.CategoryAsString = category;
         }
         else
         {
@@ -174,43 +179,43 @@ void RequirementLoader::StartElement(const wstring& name, const char** attribs)
     }
     else if ( name == L"id" )
     {
-        _currentData = L"";
+        _current.Data = L"";
     }
     else if ( name == L"name" )
     {
-        _currentData = L"";
+        _current.Data = L"";
     }
     else if ( name == L"desc" )
     {
-        _currentData = L"";
+        _current.Data = L"";
     }
     else if ( name == L"doc" )
     {
-        _currentData = L"";
+        _current.Data = L"";
     }
     else if ( name == L"version" )
     {
-        _currentData = L"";
+        _current.Data = L"";
     }
     else if ( name == L"section" )
     {
-        _currentData = L"";
+        _current.Data = L"";
     }
     else if ( name == L"ref" )
     {
-        _currentData = L"";
+        _current.Data = L"";
     }
     else if ( name == L"requirement-set" )
     {
-        _currentData = L"";
+        _current.Data = L"";
     }
     else if ( name == L"requirement-set-name" )
     {
-        _currentData = L"";
+        _current.Data = L"";
     }
     else if ( name == L"requirement-set-version" )
     {
-        _currentData = L"";
+        _current.Data = L"";
     }
     else
     {
@@ -227,35 +232,35 @@ void RequirementLoader::EndElement(const wstring& name)
     if ( name == L"requirement" )
     {
         shared_ptr<const Requirement> req(new Requirement(
-	    _currentId, _currentType, _currentTypeAsString,
-            _currentCategory, _currentCategoryAsString,
-            _currentName,
-            _currentDesc, _currentDocument, _currentVersion, _currentSection ));
+            _current.Id, _current.Type, _current.TypeAsString,
+            _current.Category, _current.CategoryAsString,
+            _current.Name,
+            _current.Desc, _current.Document, _current.Version, _current.Section ));
         RequirementRegistry::GetInstance().Register( req );
     }
     else if ( name == L"id" )
     {
-        _currentId = _currentData;
+        _current.Id = _current.Data;
     }
     else if ( name == L"name" )
     {
-        _currentName = _currentData;
+        _current.Name = _current.Data;
     }
     else if ( name == L"desc" )
     {
-        _currentDesc = _currentData;
+        _current.Desc = _current.Data;
     }
     else if ( name == L"doc" )
     {
-        _currentDocument = _currentData;
+        _current.Document = _current.Data;
     }
     else if ( name == L"version" )
     {
-        _currentVersion = _currentData;
+        _current.Version = _current.Data;
     }
     else if ( name == L"section" )
     {
-        _currentSection = _currentData;
+        _current.Section = _current.Data;
     }
     else if ( name == L"ref" )
     {
@@ -285,7 +290,7 @@ void RequirementLoader::EndElement(const wstring& name)
 //Called after a string of data (between tags) has been loaded.
 void RequirementLoader::EndData(const wstring& contents)
 {
-    _currentData += contents;
+    _current.Data += contents;
 }
 
 //These three static functions are the callback functions called by the expat

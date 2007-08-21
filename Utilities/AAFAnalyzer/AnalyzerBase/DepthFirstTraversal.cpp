@@ -25,6 +25,8 @@
 #include "EdgeMap.h"
 #include "Edge.h"
 
+#include <iostream>
+
 namespace {
 
 using namespace aafanalyzer;
@@ -44,27 +46,30 @@ using namespace boost;
 DepthFirstTraversal::DepthFirstTraversal(shared_ptr<EdgeMap> spEdgeMap, shared_ptr<Node> spStartNode)
   : _spEdgeMap( spEdgeMap ),
     _spStartNode( spStartNode )
-{
-}
+{}
 
 DepthFirstTraversal::~DepthFirstTraversal()
-{
-}
+{}
 
 void DepthFirstTraversal::TraverseDown(shared_ptr<Visitor> spVisitor, shared_ptr<Node> spNode)
 {
-  EdgeMap::ConstEdgeVectorSP theChildren = _spEdgeMap->GetChildren(spNode);  
-  if(!spNode->PreOrderVisit(spVisitor))
-  { //method failed, do not proceed further with tests
+  if( !spNode->PreOrderVisit(spVisitor) )
+  {
+    spVisitor->TraversalStopVisit(*spNode);
     return;
   }
     
+  EdgeMap::ConstEdgeVectorSP theChildren = _spEdgeMap->GetChildren(spNode);  
   for(unsigned int i = 0; i < theChildren->size(); i++)
   {
-    if(theChildren->at(i)->Visit(spVisitor))
+    if ( spVisitor->TraversalPreEdgeVisit( *theChildren->at(i) ) )
     {
-      TraverseDown(spVisitor, theChildren->at(i)->GetChildNode());
+      if(theChildren->at(i)->Visit(spVisitor))
+      {
+        TraverseDown( spVisitor, theChildren->at(i)->GetChildNode() );
+      }
     }
+    spVisitor->TraversalPostEdgeVisit( *theChildren->at(i) );
   }
 
   spNode->PostOrderVisit(spVisitor);
@@ -77,18 +82,23 @@ void DepthFirstTraversal::TraverseDown(shared_ptr<Visitor> spVisitor )
 
 void DepthFirstTraversal::TraverseUp(shared_ptr<Visitor> spVisitor, shared_ptr<Node> spNode)
 {
-  EdgeMap::ConstEdgeVectorSP theParents = _spEdgeMap->GetParents(spNode);  
-  if(!spNode->PreOrderVisit(spVisitor))
-  { //method failed, do not proceed further with tests
+  if( !spNode->PreOrderVisit(spVisitor) )
+  {
+    spVisitor->TraversalStopVisit(*spNode);
     return;
   }
   
+  EdgeMap::ConstEdgeVectorSP theParents = _spEdgeMap->GetParents(spNode);  
   for(unsigned int i = 0; i < theParents->size(); i++)
   {
-    if(theParents->at(i)->Visit(spVisitor))
+    if ( spVisitor->TraversalPreEdgeVisit( *theParents->at(i) ) )
     {
-      TraverseUp(spVisitor, theParents->at(i)->GetParentNode());
+      if(theParents->at(i)->Visit(spVisitor))
+      {
+        TraverseUp(spVisitor, theParents->at(i)->GetParentNode());
+      }
     }
+    spVisitor->TraversalPostEdgeVisit( *theParents->at(i) );
   }
 
   spNode->PostOrderVisit(spVisitor);

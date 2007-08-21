@@ -21,6 +21,9 @@
 #ifndef __RESOLVEREFVISITOR_h__
 #define __RESOLVEREFVISITOR_h__
 
+//TestPhaseLib files
+#include <TestLevelTestResult.h>
+
 //AAF Analyzer Base files
 #include <TypedVisitor.h>
 
@@ -28,8 +31,7 @@
 #include <AAFSmartPointer2.h>
 
 //STL files
-#include <set>
-#include <stack>
+#include <vector>
 
 class AxSourceClip;
 class AxSegment;
@@ -50,38 +52,32 @@ class DetailLevelTestResult;
 class ResolveRefVisitor : public TypedVisitor
 {
  public:
-  ResolveRefVisitor(wostream& os, shared_ptr<EdgeMap> spEdgeMap);
+  ResolveRefVisitor(wostream& os,
+		    shared_ptr<EdgeMap> spEdgeMap,
+		    shared_ptr<TestLevelTestResult> spTestLevelResult );
   virtual ~ResolveRefVisitor();
 
-  virtual bool PreOrderVisit(AAFTypedObjNode<IAAFTimelineMobSlot>& node);
-  virtual bool PreOrderVisit(AAFTypedObjNode<IAAFEventMobSlot>& node);
-  virtual bool PreOrderVisit(AAFTypedObjNode<IAAFStaticMobSlot>& node);
-  virtual bool PreOrderVisit(AAFTypedObjNode<IAAFMobSlot>& node);
-
   virtual bool PostOrderVisit(AAFTypedObjNode<IAAFSourceClip>& node);
-  virtual bool PostOrderVisit(AAFTypedObjNode<IAAFTimelineMobSlot>& node);
-  virtual bool PostOrderVisit(AAFTypedObjNode<IAAFEventMobSlot>& node);
-  virtual bool PostOrderVisit(AAFTypedObjNode<IAAFStaticMobSlot>& node);
-  virtual bool PostOrderVisit(AAFTypedObjNode<IAAFMobSlot>& node);
-
-  shared_ptr<const DetailLevelTestResult> GetTestResult() const;
 
  private:
 
-  shared_ptr<set<IAAFSmartPointer2<IAAFComponent> > > GetComponentsInRange( shared_ptr<Node> spMobSlotNode, AxSourceClip& axSrcClp );
-  shared_ptr<set<IAAFSmartPointer2<IAAFComponent> > > GetComponentsToTimelineSlot( AxTimelineMobSlot& axMobSlot, AxSourceClip& axSrcClp, AxSegment& asSegment, double startTime );
-  shared_ptr<set<IAAFSmartPointer2<IAAFComponent> > > GetComponentsToEventSlot( AxEventMobSlot& axMobSlot, AxSourceClip& axSrcClp );
-  shared_ptr<set<IAAFSmartPointer2<IAAFComponent> > > GetComponentsToFromGenericSlot( AxSegment& axSegment );
+  shared_ptr<Node> ResolveChildSlotNode( shared_ptr<EdgeMap> spEdgeMap,
+					 shared_ptr<Node> spParentMobNode,
+					 IAAFMobSP spParentIaafMob,
+					 const aafSlotID_t slotId );
+
+  shared_ptr<vector<shared_ptr<Node> > > GetChildComponents( shared_ptr<Node> spMobSlotNode );
 
   wostream& _os;
   shared_ptr<EdgeMap> _spEdgeMap;
-  shared_ptr< DetailLevelTestResult > _spResult;
-  stack<pair<aafUID_t, aafRational_t> > _parentSlots;
+  shared_ptr<DetailLevelTestResult> _spResult;
 
   // prohibited
   ResolveRefVisitor();
   ResolveRefVisitor( const ResolveRefVisitor& );
   ResolveRefVisitor& operator=( const ResolveRefVisitor& );
+
+  shared_ptr<TestLevelTestResult> _spTestLevelResult;
 };
 
 } // end of namespace diskstream

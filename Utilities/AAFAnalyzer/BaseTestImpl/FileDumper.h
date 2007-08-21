@@ -34,11 +34,14 @@ using namespace boost;
 
 class TestLevelTestResult;
 class TestGraph;
+class Node;
 
 class FileDumper : public Test
 {
  public:
-  FileDumper(wostream& os, shared_ptr<const TestGraph> spGraph);
+
+  FileDumper(wostream& os, shared_ptr<const TestGraph> spGraph, shared_ptr<Node> spRoot, bool followReferences );
+
   ~FileDumper();
 
   virtual shared_ptr<TestLevelTestResult> Execute();
@@ -52,6 +55,9 @@ class FileDumper : public Test
   FileDumper();
   FileDumper(const FileDumper&);
   FileDumper& operator=( const FileDumper& );
+
+  shared_ptr<Node> _spRoot;
+  bool _followReferences;
 };
 
 } // end of namespace diskstream
