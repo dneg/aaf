@@ -47,10 +47,12 @@ using namespace aafanalyzer;
 using namespace std;
 
 
+#define _LSTRING(X,Y) X##Y
+#define TOLSTRING(S) _LSTRING(L,#S)
+#define COMPARE(WHAT,X) WHAT ( id == X ) return make_pair(true, TOLSTRING(X) )
 
 pair<bool,wstring> UsageCodeToString( const aafUID_t& id )
 {
-#define COMPARE(WHAT,X) WHAT ( id == X ) return make_pair(true, L#X)
 
   COMPARE(     if, kAAFUsage_SubClip);
   COMPARE(else if, kAAFUsage_AdjustedClip);
@@ -58,9 +60,12 @@ pair<bool,wstring> UsageCodeToString( const aafUID_t& id )
   COMPARE(else if, kAAFUsage_LowerLevel);
   COMPARE(else if, kAAFUsage_Template);
   else return make_pair( false, wstring() );
-
-#undef COMPARE
 }
+
+#undef _LSTRING
+#undef TOLSTRING
+#undef COMPARE
+
 
 pair<bool,wstring> GetAAFInfo( AAFObjNode& aafNode )
 {

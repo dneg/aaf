@@ -168,7 +168,6 @@ bool Visitor::RealFollowReferences( const Edge& edge )
   _edgeDetailsStack.pop_back();
 
   const Edge::EdgeKind_e backKind = _edgeDetailsStack.back().first;
-  const Node::LID backTag         = _edgeDetailsStack.back().second;
   const Edge::EdgeKind_e kind     = edge.GetKind();
   const Node::LID tag             = edge.GetTag();
 

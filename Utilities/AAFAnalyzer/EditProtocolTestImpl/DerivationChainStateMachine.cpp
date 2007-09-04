@@ -193,7 +193,9 @@ void DerivationChainStateMachine::SetFailures()
 
 void DerivationChainStateMachine::SetStateNames()
 {
-#define STATE_NAME( X ) _stateNameMap[ X ] = L#X ;
+#define _LSTRING(X,Y) X##Y
+#define TOLSTRING(S) _LSTRING(L,#S)
+#define STATE_NAME( X ) _stateNameMap[ X ] = TOLSTRING(X) ;
 #define STATE_NAME_XY( X, Y ) _stateNameMap[ X ] = Y ;
 
   STATE_NAME( INITIAL );
@@ -210,6 +212,11 @@ void DerivationChainStateMachine::SetStateNames()
   STATE_NAME( FILM_SOURCE );
   STATE_NAME_XY( EOC, L"END OF CHAIN" );
   STATE_NAME_XY( OOF, L"OUT OF FILE"  );
+
+#undef _LSTRING
+#undef TOLSTRING
+#undef STATE_NAME
+#undef STATE_NAME_XY
 }
 
 DerivationChainStateMachine::~DerivationChainStateMachine()
