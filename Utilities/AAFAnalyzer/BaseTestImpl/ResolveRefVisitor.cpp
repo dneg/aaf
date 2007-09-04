@@ -51,6 +51,15 @@
 
 #include <sstream>
 
+// Set to 1 to activate debug code in this file.
+// The debug code will show details of the objects that have been
+// resolved.
+#if 0
+#define RESOLVE_DEBUG( EXP ) EXP
+#else
+#define RESOLVE_DEBUG( EXP )
+#endif
+
 namespace {
 
 using namespace aafanalyzer;
@@ -69,8 +78,8 @@ using namespace std;
 using namespace boost;
 
 ResolveRefVisitor::ResolveRefVisitor( wostream& os,
-				      shared_ptr<EdgeMap> spEdgeMap,
-				      shared_ptr<TestLevelTestResult> spTestLevelResult )
+                                      shared_ptr<EdgeMap> spEdgeMap,
+                                      shared_ptr<TestLevelTestResult> spTestLevelResult )
 : _os(os),
   _spEdgeMap(spEdgeMap),
   _spTestLevelResult( spTestLevelResult )
@@ -81,31 +90,41 @@ ResolveRefVisitor::~ResolveRefVisitor()
 
 bool ResolveRefVisitor::PostOrderVisit(AAFTypedObjNode<IAAFSourceClip>& node)
 {
+  RESOLVE_DEBUG( wcout << L"RESOLVE src clip " << node.GetLID() << endl; )
+
   bool fullyResolvedFlag = false;
 
   // This is the tag we use for all the graph edges we create in order
   // to fully resolve this source reference.
   Node::LID tag = node.GetLID();
 
+
+  // Get the underlying AAFSourceClip object and extract the source
+  // reference.
   AxSourceClip axSrcClp(node.GetAAFObjectOfType());
 
   aafSourceRef_t srcRef = axSrcClp.GetSourceReference();
   aafMobID_t mobid = srcRef.sourceID;
 
+  // If it is null (zero valued) then we are at the end of mob chain.
   if ( AxConstants::NULL_MOBID == mobid )
   {
     return true;
   }
 
+  // Else, resolve the mobid.  We want to get a pointer to the node
+  // that has already been created for the mob.
   shared_ptr<Node> spMobNode;
   spMobNode = MobNodeMap::GetInstance().GetMobNode(mobid);
 
   // Assert it really is a mob. (i.e. to verify the MobNodeMap is
-  // delivering good data.)  Then resolve the reference.
-
+  // delivering good data) Then resolve the reference to the the slot.
   if(spMobNode)
   {
-    //verify mob
+    RESOLVE_DEBUG( wcout << L"\t -> Mob " << spMobNode->GetLID() << endl; )
+
+    // Verify that the mob node contains an AAFMob object (to ensure
+    // our data structure is sane.)
     IAAFMobSP spIaafMob;
     shared_ptr<AAFObjNode> spObjNode;
     spObjNode = dynamic_pointer_cast<AAFObjNode>(spMobNode);
@@ -116,12 +135,14 @@ bool ResolveRefVisitor::PostOrderVisit(AAFTypedObjNode<IAAFSourceClip>& node)
       assert(0);
     }
 
-    //mob has been verified, proceed to the sourceclip
-    shared_ptr<AAFTypedObjNode<IAAFSourceClip> > spSrcClp;
+    // Before proceeding, we need to get a shared pointer to the
+    // source clip node that was passed to this method as a reference.
+    shared_ptr<AAFTypedObjNode<IAAFSourceClip> > spSrcClip;
     shared_ptr<Node> temp = node.GetSharedPointerToNode();
-    spSrcClp = dynamic_pointer_cast<AAFTypedObjNode<IAAFSourceClip> >( temp );
+    spSrcClip = dynamic_pointer_cast<AAFTypedObjNode<IAAFSourceClip> >( temp );
+    assert( spSrcClip );
 
-    if(spSrcClp)
+    if(spSrcClip)
     {
       // Now find the referenced slot (a child of the referenced mob)
       // and extend the graph by adding a slot edge from the
@@ -134,6 +155,8 @@ bool ResolveRefVisitor::PostOrderVisit(AAFTypedObjNode<IAAFSourceClip>& node)
 
       if ( spMobSlotNode )
       {
+        RESOLVE_DEBUG( wcout << L"\t\t -> Slot " << spMobSlotNode->GetLID() << endl; )
+
         // Now make a reference from the src clip to the all the
         // components in the referenced mob that are within the range
         // of the reference.  We add references edges to the graph as
@@ -155,10 +178,12 @@ bool ResolveRefVisitor::PostOrderVisit(AAFTypedObjNode<IAAFSourceClip>& node)
         // Find all components below the MobSlot that need to be
         // included as part of the source reference.
         shared_ptr<vector<shared_ptr<Node> > >  componentsToReference =
-          GetChildComponents( spMobSlotNode );
+          GetContainedChildComponents( spMobSlotNode );
 
         for ( size_t i = 0 ; i < componentsToReference->size(); ++i )
         {
+          RESOLVE_DEBUG( wcout << L"\t\t\t -> Component " << (*componentsToReference)[i]->GetLID() << endl; )
+
           fullyResolvedFlag = true;
           shared_ptr<AAFComponentReference> spCompEdge( new AAFComponentReference(spMobSlotNode,
                                                                                   (*componentsToReference)[i],
@@ -172,7 +197,7 @@ bool ResolveRefVisitor::PostOrderVisit(AAFTypedObjNode<IAAFSourceClip>& node)
 
         if ( fullyResolvedFlag )
         {
-          shared_ptr<AAFMobReference> spMobRefEdge( new AAFMobReference(spSrcClp, spMobNode, tag) );
+          shared_ptr<AAFMobReference> spMobRefEdge( new AAFMobReference(spSrcClip, spMobNode, tag) );
           _spEdgeMap->AddEdge( spMobRefEdge );
 
           shared_ptr<AAFSlotReference> spSlotEdge( new AAFSlotReference(spMobNode, spMobSlotNode,tag) );
@@ -190,16 +215,17 @@ bool ResolveRefVisitor::PostOrderVisit(AAFTypedObjNode<IAAFSourceClip>& node)
     explain += AxStringUtil::mobid2Str( mobid );
 
     _spTestLevelResult->AddSingleResult( L"REQ_EP_016",
-					 TestResult::WARN,
-					 L"Mob Resolve",
-					 L"Resolve source clip mob reference.",
-					 explain );
+                                         TestResult::WARN,
+                                         L"Mob Resolve",
+                                         L"Resolve source clip mob reference.",
+                                         explain );
   }
 
   return true;
 }
 
-shared_ptr<vector<shared_ptr<Node> > > ResolveRefVisitor::GetChildComponents( shared_ptr<Node> spMobSlotNode )
+shared_ptr<vector<shared_ptr<Node> > >
+ResolveRefVisitor::GetContainedChildComponents( shared_ptr<Node> spMobSlotNode )
 {
   shared_ptr<vector<shared_ptr<Node> > > spChildren( new vector<shared_ptr<Node> > );
 
@@ -210,7 +236,11 @@ shared_ptr<vector<shared_ptr<Node> > > ResolveRefVisitor::GetChildComponents( sh
         iter != spChildEdges->end();
         ++iter )
   {
-    spChildren->push_back( (*iter)->GetChildNode() );
+    shared_ptr<Edge> spEdge( *iter );
+    if ( spEdge->GetKind() == Edge::EDGE_KIND_CONTAINMENT )
+    {
+      spChildren->push_back( (*iter)->GetChildNode() );
+    }
   }
 
   return spChildren;
@@ -259,10 +289,10 @@ shared_ptr<Node> ResolveRefVisitor::ResolveChildSlotNode( shared_ptr<EdgeMap> sp
      << L" with id " << AxStringUtil::mobid2Str( axParentMob.GetMobID() );
 
   _spTestLevelResult->AddSingleResult( L"REQ_EP_257",
-				       TestResult::FAIL,
-				       L"Slot Resolve",
-				       L"Lookup slot in resolved mob.",
-				       ss.str() );
+                                       TestResult::FAIL,
+                                       L"Slot Resolve",
+                                       L"Lookup slot in resolved mob.",
+                                       ss.str() );
 
   return shared_ptr<Node>();
 }

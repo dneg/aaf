@@ -66,7 +66,7 @@ class ResolveRefVisitor : public TypedVisitor
 					 IAAFMobSP spParentIaafMob,
 					 const aafSlotID_t slotId );
 
-  shared_ptr<vector<shared_ptr<Node> > > GetChildComponents( shared_ptr<Node> spMobSlotNode );
+  shared_ptr<vector<shared_ptr<Node> > > GetContainedChildComponents( shared_ptr<Node> spMobSlotNode );
 
   wostream& _os;
   shared_ptr<EdgeMap> _spEdgeMap;
