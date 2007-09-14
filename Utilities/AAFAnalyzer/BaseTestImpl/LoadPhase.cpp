@@ -57,7 +57,8 @@ using namespace boost;
 LoadPhase::LoadPhase(wostream& os, const basic_string<wchar_t> AAFFile) 
   : TestPhase(os),
     _FileName(AAFFile),
-    _spRootsVector()
+    _spRootsVector( new CompMobDependency::CompMobNodeVector ),
+    _isCyclic(true)
 {}
 
 LoadPhase::~LoadPhase()
@@ -89,9 +90,21 @@ shared_ptr<TestPhaseLevelTestResult> LoadPhase::Execute()
   spLoadTest->AppendSubtestResult(spTestResult);
 
   // Ensure the AAF file graph is acyclic.
+  //
+
+  // If it fails then there is a cycle and further processing cannot
+  // continue (because subsequent visitor implementations are not
+  // cycle aware. They will end up in an infinite loop.)
   shared_ptr<AcyclicAnalysis> acy(new AcyclicAnalysis(GetOutStream(), _spGraphInfo->GetGraph()));
   spTestResult = acy->Execute();
   spLoadTest->AppendSubtestResult(spTestResult);
+
+  _isCyclic = acy->IsCyclic();
+
+  if ( _isCyclic )
+  {
+    return spLoadTest;
+  }
 
   // Perform dependency analysis to identify unreferenced (root)
   // composition mobs.
@@ -118,6 +131,11 @@ vector<shared_ptr<Node> > LoadPhase::GetRoots() const
 CompMobDependency::CompMobNodeVectorSP LoadPhase::GetCompMobRoots()
 {
   return _spRootsVector;
+}
+
+bool LoadPhase::IsCyclic() const
+{
+  return _isCyclic;
 }
 
 } // end of namespace diskstream

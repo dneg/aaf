@@ -56,8 +56,7 @@ Test2Stub::~Test2Stub()
 shared_ptr<TestLevelTestResult> Test2Stub::Execute()
 {
   const shared_ptr<const Test> me = this->shared_from_this();
-  Requirement::RequirementMapSP spMyReqs(new Requirement::RequirementMap(this->GetCoveredRequirements()));
-  shared_ptr<TestLevelTestResult> spResult(new TestLevelTestResult(me, spMyReqs ));
+  shared_ptr<TestLevelTestResult> spResult(new TestLevelTestResult(me));
   spResult->SetName(GetName());
   spResult->SetDescription(GetDescription());
 

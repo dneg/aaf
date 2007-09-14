@@ -22,9 +22,14 @@
 ###############################################################################
 
 
-PROGNAME = RegressionTest
+PROGNAME = AAFAnalyzerRegressionTest
 
-PROGLIBS = -lBaseTest -lTestPhase -lRequirement -lAAFAnalyzerBase -lAnalyzerBase
+PROGLIBS = -lBaseTest \
+           -lTestPhase \
+           -lRequirement \
+           -lAAFAnalyzerBase \
+           -lAnalyzerBase \
+           -lexpat
 
 AAFBASE ?= ../../../..
 INCLUDES ?= -I$(AAFSDKINCLUDEDIR) \
@@ -39,7 +44,11 @@ INCLUDES ?= -I$(AAFSDKINCLUDEDIR) \
 include ../../aafanalyzer.mk
 
 .PHONY : check
-check : $(AAFSDKBINDIR)/RegressionTest$(EXE)
+check : $(AAFSDKBINDIR)/AAFAnalyzerRegressionTest$(EXE)
 	rm -f *.aaf
 	$(APP_RUN_ENV) $(AAFSDKBINDIR)/BuildTestFile$(EXE) GraphBuilder-ResolveRefTest.xml GraphBuilder-ResolveRefTest.aaf
-	$(APP_RUN_ENV) $(AAFSDKBINDIR)/RegressionTest$(EXE) GraphBuilder-ResolveRefTest.aaf
+	$(APP_RUN_ENV) $(AAFSDKBINDIR)/AAFAnalyzerRegressionTest$(EXE) \
+				-reqs $(AAFBASE)/Utilities/AAFAnalyzer/Requirements/AAFRequirements.xml \
+                                -file GraphBuilder-ResolveRefTest.aaf > /tmp/AAFAnalyzerRegressionTest.actual
+	diff /tmp/AAFAnalyzerRegressionTest.actual $(AAFBASE)/Utilities/AAFAnalyzer/RegressionTest/TestStructure/AAFAnalyzerRegressionTest.expected > /dev/null
+	@echo Analyzer regression test expected versus actual output compared correctly.

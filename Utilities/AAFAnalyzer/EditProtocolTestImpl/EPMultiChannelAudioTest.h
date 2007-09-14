@@ -21,6 +21,9 @@
 #ifndef __EPMultiChannelAudioTest_h_
 #define __EPMultiChannelAudioTest_h_
 
+//Base files
+#include <CompMobDependency.h>
+
 //Test/Result files
 #include <Test.h>
 
@@ -38,7 +41,8 @@ class EPMultiChannelAudioTest : public Test
  public:
 
   EPMultiChannelAudioTest( wostream& log,
-                        shared_ptr<const TestGraph> spGraph );
+			   shared_ptr<const TestGraph> spGraph,
+			   CompMobDependency::CompMobNodeVectorSP spTopLevelCompMobs );
   virtual ~EPMultiChannelAudioTest();
 
   virtual shared_ptr<TestLevelTestResult> Execute();
@@ -53,6 +57,7 @@ class EPMultiChannelAudioTest : public Test
   EPMultiChannelAudioTest( const EPMultiChannelAudioTest& );
   EPMultiChannelAudioTest& operator=( const EPMultiChannelAudioTest& );
 
+  CompMobDependency::CompMobNodeVectorSP _spTopLevelCompMobs;
 };
 
 } // end of namespace diskstream

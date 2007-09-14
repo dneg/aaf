@@ -196,27 +196,27 @@ bool EPTrackContentsVisitor::PreOrderVisit( AAFTypedObjNode<IAAFTimelineMobSlot>
                << L" has a marked in point that occurs after the marked out point (IN = "
                << markIn.second << L"; OUT = " << markOut.second << ").";
             _spTestResult->AddSingleResult( L"REQ_EP_108", ss.str().c_str(), TestResult::WARN ); 
-            return false;
         }
+    }
+    else if ( markIn.first && !markOut.first )
+    {
+      AxString explain;
+      explain = this->GetMobSlotName( _spEdgeMap, node ) +
+	L" has a marked in point but no marked out point.";
+      _spTestResult->AddSingleResult( L"REQ_EP_108", explain, TestResult::WARN );
+    }
+    else if ( !markIn.first && markOut.first )
+    {
+      AxString explain;
+      explain = this->GetMobSlotName( _spEdgeMap, node ) +
+	L" has a marked out point but no marked in point.";
+      _spTestResult->AddSingleResult( L"REQ_EP_108", explain, TestResult::WARN );
     }
     else
     {
-        AxString explain;
-        if ( markIn.first )
-        {
-            explain = this->GetMobSlotName( _spEdgeMap, node ) +
-                      L" has a marked in point but no marked out point.";
-        }
-        else
-        {
-          assert( !markOut.first );
-          explain = this->GetMobSlotName( _spEdgeMap, node ) +
-                    L" has a marked out point but no marked in point.";
-        }
-        _spTestResult->AddSingleResult( L"REQ_EP_108", explain, TestResult::WARN );
-        return false;
+      assert( !markIn.first && !markOut.first );
     }
-    
+
     return true;    
 }
 

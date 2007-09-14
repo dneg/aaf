@@ -110,9 +110,9 @@ shared_ptr<TestPhaseLevelTestResult> EPMobDepPhase::Execute()
   spPhaseResult->AppendSubtestResult( trackContentsTest->Execute() );
   
   // Seventh, run the locator test
-//TODO: Uncomment this line when the test is running properly.
-//  shared_ptr<EPLocatorTest> locatorTest( new EPLocatorTest( _log, _spGraph ) );
-//  spPhaseResult->AppendSubtestResult( locatorTest->Execute() );
+  // TODO: Uncomment this line when the test is running properly.
+  // shared_ptr<EPLocatorTest> locatorTest( new EPLocatorTest( _log, _spGraph ) );
+  // spPhaseResult->AppendSubtestResult( locatorTest->Execute() );
 
   // Eighth, run the edit rate test
   shared_ptr<EPEditRateTest> editRateTest( new EPEditRateTest( _log, _spGraph ) );
@@ -123,8 +123,8 @@ shared_ptr<TestPhaseLevelTestResult> EPMobDepPhase::Execute()
   spPhaseResult->AppendSubtestResult( effectTest->Execute() );
   
   // Tenth, run the annotation test
-  // shared_ptr<EPAnnotationTest> annotationTest( new EPAnnotationTest( _log, _spGraph ) );
-  // spPhaseResult->AppendSubtestResult( annotationTest->Execute() );
+  shared_ptr<EPAnnotationTest> annotationTest( new EPAnnotationTest( _log, _spGraph ) );
+  spPhaseResult->AppendSubtestResult( annotationTest->Execute() );
   
   // Eleventh, run the definition test
   shared_ptr<EPDefinitionTest> definitionTest( new EPDefinitionTest( _log, _spGraph ) );
@@ -139,7 +139,7 @@ shared_ptr<TestPhaseLevelTestResult> EPMobDepPhase::Execute()
   spPhaseResult->AppendSubtestResult( parameterTest->Execute() );
   
   // Fourteenth, run the multi-channel audio test
-  shared_ptr<EPMultiChannelAudioTest> mcaTest( new EPMultiChannelAudioTest( _log, _spGraph ) );
+  shared_ptr<EPMultiChannelAudioTest> mcaTest( new EPMultiChannelAudioTest( _log, _spGraph, spPostDecorateRoots ) );
   spPhaseResult->AppendSubtestResult( mcaTest->Execute() );
 
   return spPhaseResult;

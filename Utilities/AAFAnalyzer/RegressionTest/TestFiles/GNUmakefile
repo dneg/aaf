@@ -28,7 +28,7 @@ PROGLIBS = -lexpat
 
 AAFBASE ?= ../../../..
 
-ANALYZE = $(AAFSDKBINDIR)/AAFAnalyzer$(EXE) -analyze -reqs ../../Requirements/AAFRequirements.xml
+ANALYZE = $(AAFSDKBINDIR)/AAFAnalyzer$(EXE) -reqs ../../Requirements/AAFRequirements.xml
 
 include ../../aafanalyzer.mk
 
@@ -61,12 +61,6 @@ check : clean $(AAFSDKBINDIR)/BuildTestFile$(EXE)
 	-env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(ANALYZE) -filter "Edit Protocol Mob Contained Tracks Test" -verbose EPContainedTrackTest.aaf > EPContainedTrackTest.actual
 	@echo "Comparing EPContainedTrackTest Expected Results (EPContainedTrackTest.expected) to Actual Results (EPContainedTrackTest.actual)"
 	diff EPContainedTrackTest.expected EPContainedTrackTest.actual
-	@echo "End of Test"
-
-	env LD_LIBRARY_PATH=$(AAFSDKBINDIR) $(AAFSDKBINDIR)/BuildTestFile$(EXE) EPTrackContentsTest.xml EPTrackContentsTest.aaf
-	-env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(ANALYZE) -filter "Edit Protocol Track Contents Test" -verbose EPTrackContentsTest.aaf > EPTrackContentsTest.actual
-	@echo "Comparing EPTrackContentsTest Expected Results (EPTrackContentsTest.expected) to Actual Results (EPTrackContentsTest.actual)"
-	diff EPTrackContentsTest.expected EPTrackContentsTest.actual
 	@echo "End of Test"
 
 	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/BuildTestFile$(EXE) EPEditRateTest.xml EPEditRateTest.aaf
@@ -111,18 +105,6 @@ check : clean $(AAFSDKBINDIR)/BuildTestFile$(EXE)
 	diff EPEffectTest.expected EPEffectTest.actual
 	@echo "End of Test"
 
-	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/BuildTestFile$(EXE) EPAnnotationTest.xml EPAnnotationTest.aaf
-	-env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(ANALYZE) -filter "Edit Protocol Annotation Test" -verbose EPAnnotationTest.aaf > EPAnnotationTest.actual
-	@echo "Comparing EPAnnotationTest Expected Results (EPAnnotationTest.expected) to Actual Results (EPAnnotationTest.actual)"
-	diff EPAnnotationTest.expected EPAnnotationTest.actual
-	@echo "End of Test"
-
-	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/BuildTestFile$(EXE) EPAnnotationTest2.xml EPAnnotationTest2.aaf
-	-env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(ANALYZE) -filter "Edit Protocol Annotation Test" -verbose EPAnnotationTest2.aaf > EPAnnotationTest2.actual
-	@echo "Comparing EPAnnotationTest 2 Expected Results (EPAnnotationTest2.expected) to Actual Results (EPAnnotationTest2.actual)"
-	diff EPAnnotationTest2.expected EPAnnotationTest2.actual
-	@echo "End of Test"
-
 	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/BuildTestFile$(EXE) EPDefinitionTest.xml EPDefinitionTest.aaf
 	-env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(ANALYZE) -filter "Edit Protocol Definition Test" -verbose EPDefinitionTest.aaf > EPDefinitionTest.actual
 	@echo "Comparing EPDefinitionTest Expected Results (EPDefinitionTest.expected) to Actual Results (EPDefinitionTest.actual)"
@@ -159,8 +141,26 @@ check : clean $(AAFSDKBINDIR)/BuildTestFile$(EXE)
 	diff EPParameterTest.expected EPParameterTest.actual
 	@echo "End of Test"
 
+	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/BuildTestFile$(EXE) EPAnnotationTest.xml EPAnnotationTest.aaf
+	-env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(ANALYZE) -filter "Edit Protocol Annotation Test" -verbose EPAnnotationTest.aaf > EPAnnotationTest.actual
+	@echo "Comparing EPAnnotationTest Expected Results (EPAnnotationTest.expected) to Actual Results (EPAnnotationTest.actual)"
+	diff EPAnnotationTest.expected EPAnnotationTest.actual
+	@echo "End of Test"
+
+	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/BuildTestFile$(EXE) EPAnnotationTest2.xml EPAnnotationTest2.aaf
+	-env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(ANALYZE) -filter "Edit Protocol Annotation Test" -verbose EPAnnotationTest2.aaf > EPAnnotationTest2.actual
+	@echo "Comparing EPAnnotationTest 2 Expected Results (EPAnnotationTest2.expected) to Actual Results (EPAnnotationTest2.actual)"
+	diff EPAnnotationTest2.expected EPAnnotationTest2.actual
+	@echo "End of Test"
+
 	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/BuildTestFile$(EXE) EPMultiChannelAudioTest.xml EPMultiChannelAudioTest.aaf
 	-env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(ANALYZE) -filter "Edit Protocol Multi-Channel Audio Test" -verbose EPMultiChannelAudioTest.aaf > EPMultiChannelAudioTest.actual
 	@echo "Comparing EPMultiChannelAudioTest Expected Results (EPMultiChannelAudioTest.expected) to Actual Results (EPMultiChannelAudioTest.actual)"
 	diff EPMultiChannelAudioTest.expected EPMultiChannelAudioTest.actual
+	@echo "End of Test"
+
+	env LD_LIBRARY_PATH=$(AAFSDKBINDIR) $(AAFSDKBINDIR)/BuildTestFile$(EXE) EPTrackContentsTest.xml EPTrackContentsTest.aaf
+	-env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(ANALYZE) -filter "Edit Protocol Track Contents Test" -verbose EPTrackContentsTest.aaf > EPTrackContentsTest.actual
+	@echo "Comparing EPTrackContentsTest Expected Results (EPTrackContentsTest.expected) to Actual Results (EPTrackContentsTest.actual)"
+	diff EPTrackContentsTest.expected EPTrackContentsTest.actual
 	@echo "End of Test"

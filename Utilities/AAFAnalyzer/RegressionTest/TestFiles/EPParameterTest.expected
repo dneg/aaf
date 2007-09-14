@@ -1,24 +1,17 @@
         Name:   Edit Protocol Parameter Test
         Desc:   Verify that all parameters in the AAF file are valid.
         Result: Failed
-        Reason: Test Failed - See "Edit Protocol Parameter Visitor" Visitor for details
+        Reason: 
         Passing Requirements: REQ_EP_174
         Warning Requirements: None
         Failing Requirements: REQ_EP_175
 
-            Name:   Edit Protocol Parameter Visitor
-            Desc:   Visit parameters and make sure they are valid.
+            Name:   Interpolation for Time-Varying Parameters
+            Desc:   Interpolation between ControlPoints within VaryingValue objects shall be specified as one of the following: ConstantInterpolator, LinearInterpolator, LogInterpolator, PowerInterpolator, BSplineInterpolator.
             Result: Failed
-            Reason: 
-            Passing Requirements: REQ_EP_174
+            Reason: VaryingValue object in Mob slot with ID = 1 of Top-Level Composition "None Interpolator" has an illegal interpolation definition.
+            Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_175
-
-                Name:   Edit Protocol Parameter Visitor
-                Desc:   -
-                Result: Failed
-                Reason: VaryingValue object in Mob slot with ID = 1 of Top-Level Composition: "None Interpolator" has an illegal interpolation definition (AUID = 5b6c85a3-0ede-11d3-80a9006008143e6f).
-                Passing Requirements: None
-                Warning Requirements: None
-                Failing Requirements: REQ_EP_175
+            Detail: AUID = 5b6c85a3-0ede-11d3-80a9006008143e6f).
 

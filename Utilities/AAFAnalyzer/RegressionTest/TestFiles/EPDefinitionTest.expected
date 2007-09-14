@@ -1,24 +1,16 @@
         Name:   Edit Protocol Definition Test
         Desc:   Verify the use of DataDefinition objects throught the file.
         Result: Failed
-        Reason: Test Failed - See "Edit Protocol Track Contents Visitor" Visitor for details
+        Reason: 
         Passing Requirements: REQ_EP_163
         Warning Requirements: None
         Failing Requirements: REQ_EP_162
 
-            Name:   Edit Protocol Definition Visitor
-            Desc:   Visit Data Definitions and Components to make sure all Data Definitions are valid.
+            Name:   OperationDefinition Data Definition Value
+            Desc:   An OperationDefinition object in an AAF file shall have a data definition value consistent with the data definition of an OperationGroup object that references it.
             Result: Failed
-            Reason: 
-            Passing Requirements: REQ_EP_163
+            Reason: OperationGroup in Mob slot with ID = 1 of Top-Level Composition "Invalid OperationGroup/OperationDefinition" has data definition value "Sound" and references OperationDefinition "Chroma Key" with data definition value "Picture".
+            Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_162
-
-                Name:   Edit Protocol Definition Visitor
-                Desc:   -
-                Result: Failed
-                Reason: OperationGroup in Mob slot with ID = 1 of Top-Level Composition: "Invalid OperationGroup/OperationDefinition" has data definition value "Sound" and references OperationDefinition "Chroma Key" with data definition value "Picture".
-                Passing Requirements: None
-                Warning Requirements: None
-                Failing Requirements: REQ_EP_162
 

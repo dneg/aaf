@@ -58,8 +58,14 @@ class LoadPhase : public TestPhase
   vector<shared_ptr<Node> > GetRoots() const;
 
   // The same set of roots, but returned as as ComMobNodeVector (to
-  // pass on to the EPMobDepPhase).
+  // pass on to the EPMobDepPhase).  Returns and empty vector
+  // if IsCyclic() returns true;
   CompMobDependency::CompMobNodeVectorSP GetCompMobRoots();
+
+  // True if the graph is determined to by cyclic after resolving
+  // references. The dependency analysis is not executed if this
+  // is true.
+  bool IsCyclic() const;
 
  private:
 
@@ -72,6 +78,7 @@ class LoadPhase : public TestPhase
   const basic_string<wchar_t> _FileName;
 
   CompMobDependency::CompMobNodeVectorSP _spRootsVector;
+  bool _isCyclic;
 };
 
 } // end of namespace diskstream

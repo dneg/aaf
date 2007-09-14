@@ -46,12 +46,16 @@ class AcyclicAnalysis : public Test
   AxString GetDescription() const;
   static const TestInfo GetTestInfo();
 
+  bool IsCyclic() const;
+
  private:
 
   // prohibited
   AcyclicAnalysis();
   AcyclicAnalysis(const AcyclicAnalysis&);
   AcyclicAnalysis& operator=( const AcyclicAnalysis& );
+
+  bool _isCyclic;
 };
 
 } // end of namespace diskstream

@@ -38,10 +38,49 @@
 //STL files
 #include <vector>
 
+#include <iostream>
+
 namespace {
+
+using namespace std;
+using namespace boost;
+using namespace aafanalyzer;
 
 const wchar_t* TEST_NAME = L"Edit Protocol Multi-Channel Audio Test";
 const wchar_t* TEST_DESC = L"Verify that multi-channel audio is used correctly within the AAF file.";
+
+//======================================================================
+
+class Analyzer
+{
+public:
+  Analyzer( wostream& os,
+            shared_ptr<const TestGraph> spGraph,
+            shared_ptr<TestLevelTestResult> spTestResult )
+    : _os( os ),
+      _spGraph( spGraph ),
+      _spTestResult( spTestResult )
+  {}
+
+  void operator () ( const CompMobDependency::CompMobNodeSP& spRootComposition )
+  {
+    shared_ptr<EPMultiChannelAudioVisitor>
+      spVisitor( new EPMultiChannelAudioVisitor( _os, _spTestResult ) );
+
+    DepthFirstTraversal dfs( _spGraph->GetEdgeMap(), spRootComposition );
+    dfs.TraverseDown( spVisitor );
+  }
+
+private:
+  wostream& _os;
+  shared_ptr<const TestGraph> _spGraph;
+  shared_ptr<TestLevelTestResult> _spTestResult;
+  
+  // prohibited
+  Analyzer();
+  Analyzer& operator=( const Analyzer& );
+};
+
 
 } // end of namespace
 
@@ -52,10 +91,12 @@ namespace aafanalyzer {
 using namespace std;
 
 EPMultiChannelAudioTest::EPMultiChannelAudioTest( wostream& log,
-                                            shared_ptr<const TestGraph> spGraph )
-  : Test( log, GetTestInfo() )
+						  shared_ptr<const TestGraph> spGraph,
+						  CompMobDependency::CompMobNodeVectorSP spTopLevelCompMobs )
+  : Test( log, GetTestInfo() ),
+    _spTopLevelCompMobs( spTopLevelCompMobs )
 {
-    SetTestGraph(spGraph);
+  SetTestGraph(spGraph);
 }
 
 EPMultiChannelAudioTest::~EPMultiChannelAudioTest()
@@ -65,11 +106,9 @@ shared_ptr<TestLevelTestResult> EPMultiChannelAudioTest::Execute()
 {
   shared_ptr<TestLevelTestResult> spTestResult = CreateTestResult();
 
-  shared_ptr<EPMultiChannelAudioVisitor>
-	  spVisitor( new EPMultiChannelAudioVisitor( GetOutStream(), spTestResult ) );
+  Analyzer analyzer( GetOutStream(), GetTestGraph(), spTestResult );
 
-  DepthFirstTraversal dfs(GetTestGraph()->GetEdgeMap(), GetTestGraph()->GetRootNode());
-  dfs.TraverseDown( spVisitor, GetTestGraph()->GetRootNode() );
+  for_each( _spTopLevelCompMobs->begin(), _spTopLevelCompMobs->end(), analyzer );
 
   return spTestResult;
 }

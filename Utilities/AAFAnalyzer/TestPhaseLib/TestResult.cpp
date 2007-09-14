@@ -262,6 +262,11 @@ void TestResult::ConsolidateResults()
     this->ClearRequirements();
   }
 
+  // This exists to provide TestLevelTestResult an opportunity to
+  // initialize its set of passing requirements to those of the
+  // associated test (i.e. they are assumed to all pass). These are
+  // updated to reflect failed requires when the DetelLevelTestResults
+  // (i.e. sub results) are consolidated.
   this->InitConsolidateResults();
 
   for( SubtestResultVector::iterator iter = _spSubtestResults->begin();

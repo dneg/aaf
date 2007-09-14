@@ -41,11 +41,12 @@ namespace aafanalyzer {
 
 using namespace boost;
  
-  EPMultiChannelAudioVisitor::EPMultiChannelAudioVisitor( wostream& log,
-							  shared_ptr<TestLevelTestResult> spTestResult )
-    : _log( log ),
-      _spTestResult( spTestResult ),
-      _level( 0 )
+EPMultiChannelAudioVisitor::EPMultiChannelAudioVisitor( wostream& log,
+							shared_ptr<TestLevelTestResult> spTestResult )
+  : EPTypedVisitor( Visitor::FOLLOW_REFERENCES ),
+    _log( log ),
+    _spTestResult( spTestResult ),
+    _level( 0 )
 {}
     
 EPMultiChannelAudioVisitor::~EPMultiChannelAudioVisitor()
@@ -53,18 +54,21 @@ EPMultiChannelAudioVisitor::~EPMultiChannelAudioVisitor()
 
 bool EPMultiChannelAudioVisitor::PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPMultiChannelAudioFileSource>& node )
 {
-    //Do not continue this traversal if the path has already been traversed from
-    //a ancestor composition or master mob OR if the parent of this node does
-    //not fall under a composition or master mob in the current traversal path.
+    // Do not continue this traversal if the path has already been
+    // traversed from a ancestor composition or master mob OR if the
+    // parent of this node does not fall under a composition or master
+    // mob in the current traversal path.
     if ( this->HaveVisited( node.GetLID() )  || _level == 0 )
     {
         return false;
     }
     
-    //This node has not yet been visited, but is now being visited and has an
-    //ancestor that is a master mob or a composition mob, therefore REQ_EP_110
-    //has been violated.
+    // This node has not yet been visited, but is now being visited
+    // and has an ancestor that is a master mob or a composition mob,
+    // therefore REQ_EP_110 has been violated.
+
     AxSourceMob axMob( node.GetAAFObjectOfType() );
+
     _spTestResult->AddSingleResult(
         L"REQ_EP_110", 
         this->GetMobName( axMob, EPMultiChannelAudioFileSource::GetName() ) +
@@ -142,12 +146,5 @@ bool EPMultiChannelAudioVisitor::PostOrderVisit( AAFTypedObjNode<IAAFMasterMob>&
     _level--;
     return true;
 }
-    
-bool EPMultiChannelAudioVisitor::EdgeVisit( AAFMobReference& edge )
-{
-    //Must follow Mob References to verify multi-channel audio is not
-    //incorrectly used.
-    return true;
-}
-   
+
 } // end of namespace aafanalyzer

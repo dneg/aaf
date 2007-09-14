@@ -71,10 +71,6 @@ TestPhaseLib: AnalyzerBase RequirementLib
 BaseTestImpl: AnalyzerBase AAFAnalyzerBase RequirementLib TestPhaseLib
 	cd BaseTestImpl && $(MAKE) $(GCOV)
 
-#.PHONY: RegressionTestStructure
-#RegressionTestStructure: AnalyzerBase AAFAnalyzerBase RequirementLib TestPhaseLib BaseTestImpl
-#	cd RegressionTest && $(MAKE) $(GCOV) $@
-
 .PHONY: EditProtocolTestImpl
 EditProtocolTestImpl: AnalyzerBase AAFAnalyzerBase EPAnalyzerBase RequirementLib TestPhaseLib
 	cd EditProtocolTestImpl && $(MAKE) $(GCOV)
@@ -83,18 +79,17 @@ EditProtocolTestImpl: AnalyzerBase AAFAnalyzerBase EPAnalyzerBase RequirementLib
 AAFAnalyzer: AAFAnalyzerBase RequirementLib TestPhaseLib BaseTestImpl EditProtocolTestImpl
 	cd AAFAnalyzer && $(MAKE) $(GCOV)
 
-#.PHONY: RegressionTestFiles
-#RegressionTestFiles: AAFAnalyzerBase RequirementLib TestPhaseLib BaseTestImpl EditProtocolTestImpl AAFAnalyzer
-#	cd RegressionTest && $(MAKE) $(GCOV) $@
+.PHONY: RegressionTestStructure
+RegressionTestStructure: AnalyzerBase AAFAnalyzerBase RequirementLib TestPhaseLib BaseTestImpl
+	cd RegressionTest && $(MAKE) $(GCOV) $@
 
-#.PHONY : check
-#check : RegressionTestStructure RegressionTestFiles AAFAnalyzer
-#	cd RegressionTest && $(MAKE) $(GCOV) $@
+.PHONY: RegressionTestFiles
+RegressionTestFiles: AAFAnalyzerBase RequirementLib TestPhaseLib BaseTestImpl EditProtocolTestImpl AAFAnalyzer
+	cd RegressionTest && $(MAKE) $(GCOV) $@
 
-# Fake target pending reactivation of regression tests.
 .PHONY : check
-check :
-	echo AAFAnalyzer check disabled.
+check : RegressionTestStructure RegressionTestFiles AAFAnalyzer
+	cd RegressionTest && $(MAKE) $(GCOV) $@
 
 .PHONY: clean
 clean:

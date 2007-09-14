@@ -53,14 +53,14 @@ using namespace std;
 using namespace boost;
 
 AcyclicAnalysis::AcyclicAnalysis(wostream& os, shared_ptr<const TestGraph> spGraph)
-: Test(os, GetTestInfo())
+  : Test(os, GetTestInfo()),
+    _isCyclic(false)
 {
   SetTestGraph(spGraph);
 }
 
 AcyclicAnalysis::~AcyclicAnalysis()
-{
-}
+{}
 
 shared_ptr<TestLevelTestResult> AcyclicAnalysis::Execute()
 {
@@ -70,6 +70,8 @@ shared_ptr<TestLevelTestResult> AcyclicAnalysis::Execute()
   DepthFirstTraversal dfs(GetTestGraph()->GetEdgeMap(), GetTestGraph()->GetRootNode());
 
   dfs.TraverseDown(spVisitor, GetTestGraph()->GetRootNode()); 
+
+  _isCyclic = spVisitor->IsCycleDetected();
   
   return spTestResult;
 }
@@ -94,6 +96,11 @@ const TestInfo AcyclicAnalysis::GetTestInfo()
     spReqIds->push_back(L"REQ_EP_256");  
 
     return TestInfo(L"AcyclicAnalysis", spReqIds);
+}
+
+bool AcyclicAnalysis::IsCyclic() const
+{
+  return _isCyclic;
 }
 
 } // end of namespace aafanalyzer

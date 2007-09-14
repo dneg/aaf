@@ -155,12 +155,6 @@ void RecursiveOutputVerboseResultMsgs( shared_ptr<TestResult> res,
     wcout << LevelToIndent(level) << "Name:   " << res->GetName() << endl;
     wcout << LevelToIndent(level) << "Desc:   " << res->GetDescription() << endl;
   
-    const vector<AxString>& details = res->GetDetails();
-    if ( !details.empty() )
-    {
-      for_each( details.begin(), details.end(), OutputDetail( level ) );
-    }
-
     wcout << LevelToIndent(level) << "Result: ";
     wstring result;
     if (res->GetResult() == TestResult::PASS) {
@@ -190,6 +184,12 @@ void RecursiveOutputVerboseResultMsgs( shared_ptr<TestResult> res,
     ListRequirements( L"Passing Requirements", res->GetRequirements(TestResult::PASS), level);
     ListRequirements( L"Warning Requirements", res->GetRequirements(TestResult::WARN), level);
     ListRequirements( L"Failing Requirements", res->GetRequirements(TestResult::FAIL), level);
+
+    const vector<AxString>& details = res->GetDetails();
+    if ( !details.empty() )
+    {
+      for_each( details.begin(), details.end(), OutputDetail( level ) );
+    }
 
     wcout << endl;
   }
@@ -578,7 +578,7 @@ int main( int argc, char** argv )
   try
   {
     // Figure out where the install location.
-    fs::path argvzero( argv[0] );
+    fs::path argvzero( argv[0], fs::native );
     fs::path installPath = argvzero.branch_path();
 
     //
@@ -648,7 +648,7 @@ int main( int argc, char** argv )
     // Allow test to register with unregistered requirements
     pair<bool, int> unsafeRegistryArg = args.get ( "-uncheckedrequirements" );
     
-    // Show verbose output
+    // Show verbose result output
     pair<bool, int> verboseOutput = args.get( "-verbose" );
 
     // Filter output by result name.
@@ -788,6 +788,13 @@ int main( int argc, char** argv )
       {
         assert( dumpOption.second == string( "comp" ) );
         wcout << "composition dump:" << endl;
+
+	if ( load.IsCyclic() )
+	{
+	  assert( roots.empty() );
+	  wcout << L"Note: The reference graph is cyclic. No composotion root was determined." << endl;
+	}
+
         wcout << L"found " <<  static_cast<unsigned int>(roots.size()) << L" unreferenced object";
         if ( roots.size() > 1 )
         {
@@ -808,8 +815,15 @@ int main( int argc, char** argv )
     // Second phase: determine the edit protocol types of the loaded
     // objects, analyze EP dependencies, and numerous finer grain
     // tests.
-    EPMobDepPhase mobDepPhase( wcout, graphInfo->GetGraph(), load.GetCompMobRoots() );
-    spResult->AppendSubtestResult( mobDepPhase.Execute() );
+    if ( !load.IsCyclic() )
+    {
+      EPMobDepPhase mobDepPhase( wcout, graphInfo->GetGraph(), load.GetCompMobRoots() );
+      spResult->AppendSubtestResult( mobDepPhase.Execute() );
+    }
+
+    // Consildate the results before reporting or else the top level
+    // status, and requirement sets, will not reflect the low level
+    // results.
     spResult->ConsolidateResults();
 
     if ( verboseOutput.first )

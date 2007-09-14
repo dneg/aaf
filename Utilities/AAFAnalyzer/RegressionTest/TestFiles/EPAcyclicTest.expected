@@ -1,98 +1,36 @@
         Name:   Acyclic Analysis Test
         Desc:   Verify that source references are not cyclic.
         Result: Failed
-        Reason: Test Failed - See "AcyclicVisitor" for details
+        Reason: 
         Passing Requirements: None
         Warning Requirements: None
         Failing Requirements: REQ_EP_256
 
-            Name:   AcyclicVisitor
-            Desc:   Detects cycles in an AAF object graph.
+            Name:   Reference Cycle Detected
+            Desc:   
             Result: Failed
-            Reason: Cycle(s) detected!
+            Reason: A cycle was detected in the derivation chain.
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_256
-
-                Name:   AcyclicVisitor
-                Desc:   -
-                Result: Failed
-                Reason: Nodes of the cycle:
-Node: 1  Object - Header
-Node: 2  Object - ContentStorage
-Node: 3  Object - MasterMob
-           Name - MasterMob1
-          MobID - 01010101010101010101010101010101-00000001-0001-0001-0101010101010101
-Node: 4  Object - StaticMobSlot
-         SlotID - 1
-Node: 5  Object - SourceClip
-       SourceID - 02020202020202020202020202020202-00000002-0002-0002-0202020202020202
-Node: 6  Object - SourceMob
-           Name - File Source 1
-          MobID - 02020202020202020202020202020202-00000002-0002-0002-0202020202020202
-Node: 7  Object - TimelineMobSlot
-         SlotID - 1
-Node: 8  Object - SourceClip
-       SourceID - 01010101010101010101010101010101-00000001-0001-0001-0101010101010101
-Node: 3  Object - MasterMob
-           Name - MasterMob1
-          MobID - 01010101010101010101010101010101-00000001-0001-0001-0101010101010101
-
-                Passing Requirements: None
-                Warning Requirements: None
-                Failing Requirements: REQ_EP_256
-
-                Name:   AcyclicVisitor
-                Desc:   -
-                Result: Failed
-                Reason: Nodes of the cycle:
-Node: 1  Object - Header
-Node: 2  Object - ContentStorage
-Node: 3  Object - MasterMob
-           Name - MasterMob1
-          MobID - 01010101010101010101010101010101-00000001-0001-0001-0101010101010101
-Node: 4  Object - StaticMobSlot
-         SlotID - 1
-Node: 5  Object - SourceClip
-       SourceID - 02020202020202020202020202020202-00000002-0002-0002-0202020202020202
-Node: 6  Object - SourceMob
-           Name - File Source 1
-          MobID - 02020202020202020202020202020202-00000002-0002-0002-0202020202020202
-Node: 7  Object - TimelineMobSlot
-         SlotID - 1
-Node: 8  Object - SourceClip
-       SourceID - 01010101010101010101010101010101-00000001-0001-0001-0101010101010101
-Node: 4  Object - StaticMobSlot
-         SlotID - 1
-
-                Passing Requirements: None
-                Warning Requirements: None
-                Failing Requirements: REQ_EP_256
-
-                Name:   AcyclicVisitor
-                Desc:   -
-                Result: Failed
-                Reason: Nodes of the cycle:
-Node: 1  Object - Header
-Node: 2  Object - ContentStorage
-Node: 3  Object - MasterMob
-           Name - MasterMob1
-          MobID - 01010101010101010101010101010101-00000001-0001-0001-0101010101010101
-Node: 4  Object - StaticMobSlot
-         SlotID - 1
-Node: 5  Object - SourceClip
-       SourceID - 02020202020202020202020202020202-00000002-0002-0002-0202020202020202
-Node: 6  Object - SourceMob
-           Name - File Source 1
-          MobID - 02020202020202020202020202020202-00000002-0002-0002-0202020202020202
-Node: 7  Object - TimelineMobSlot
-         SlotID - 1
-Node: 8  Object - SourceClip
-       SourceID - 01010101010101010101010101010101-00000001-0001-0001-0101010101010101
-Node: 5  Object - SourceClip
-       SourceID - 02020202020202020202020202020202-00000002-0002-0002-0202020202020202
-
-                Passing Requirements: None
-                Warning Requirements: None
-                Failing Requirements: REQ_EP_256
+            Detail: Nodes involved in the cycle:
+            Detail: Node: 1  Object - Header
+            Detail: Node: 2  Object - ContentStorage
+            Detail: Node: 3  Object - MasterMob
+            Detail: 	Name - MasterMob1
+            Detail: 	MobID - 01010101010101010101010101010101-00000001-0001-0001-0101010101010101
+            Detail: Node: 4  Object - StaticMobSlot
+            Detail: 	SlotID - 1
+            Detail: Node: 5  Object - SourceClip
+            Detail: 	SourceID - 02020202020202020202020202020202-00000002-0002-0002-0202020202020202
+            Detail: Node: 6  Object - SourceMob
+            Detail: 	Name - File Source 1
+            Detail: 	MobID - 02020202020202020202020202020202-00000002-0002-0002-0202020202020202
+            Detail: Node: 7  Object - TimelineMobSlot
+            Detail: 	SlotID - 1
+            Detail: Node: 8  Object - SourceClip
+            Detail: 	SourceID - 01010101010101010101010101010101-00000001-0001-0001-0101010101010101
+            Detail: Node: 3  Object - MasterMob
+            Detail: 	Name - MasterMob1
+            Detail: 	MobID - 01010101010101010101010101010101-00000001-0001-0001-0101010101010101
 

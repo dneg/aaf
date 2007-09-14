@@ -53,8 +53,6 @@ class EPMultiChannelAudioVisitor : public EPTypedVisitor
     virtual bool PostOrderVisit( AAFTypedObjNode<IAAFCompositionMob>& node );
     virtual bool PostOrderVisit( AAFTypedObjNode<IAAFMasterMob>& node );
     
-    virtual bool EdgeVisit( AAFMobReference& edge );
-    
   private:
 
     wostream& _log;

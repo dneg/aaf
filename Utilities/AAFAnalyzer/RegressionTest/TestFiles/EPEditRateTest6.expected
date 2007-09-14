@@ -5,10 +5,3 @@
         Warning Requirements: None
         Failing Requirements: None
 
-            Name:   Edit Protocol Edit Rate Visitor
-            Desc:   Ensure all essence tracks have valid edit rates.
-            Result: Passed
-            Passing Requirements: REQ_EP_091; REQ_EP_092; REQ_EP_099; REQ_EP_100
-            Warning Requirements: None
-            Failing Requirements: None
-

@@ -1,24 +1,16 @@
         Name:   Edit Protocol Multi-Channel Audio Test
         Desc:   Verify that multi-channel audio is used correctly within the AAF file.
         Result: Failed
-        Reason: Test Failed - See "Edit Protocol Multi-Channel Audio Visitor" Visitor for details
+        Reason: 
         Passing Requirements: None
         Warning Requirements: None
         Failing Requirements: REQ_EP_110
 
-            Name:   Edit Protocol Multi-Channel Audio Visitor
-            Desc:   Visits object in the AAF file to ensure Multi-Channel Audio is used properly.
+            Name:   Multi-Channel Audio Representation in CompositionMobs and MasterMobs
+            Desc:   Within a CompositionMob or MasterMob, multi-channel audio shall be represented using multiple tracks with mono sound Data Definition.  Within a CompositionMob or MasterMob, a multi-channel sound Data Definition shall not be used.
             Result: Failed
-            Reason: 
+            Reason: Multi-Channel Audio File Source "Multi-Channel Audio in Composition and Master" is referenced from a Composition or Master Mob.
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_110
-
-                Name:   Edit Protocol Multi-Channel Audio Visitor
-                Desc:   -
-                Result: Failed
-                Reason: Multi-Channel Audio File Source: "Multi-Channel Audio in Composition and Master" is referenced from a Composition or Master Mob.
-                Passing Requirements: None
-                Warning Requirements: None
-                Failing Requirements: REQ_EP_110
 

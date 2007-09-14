@@ -49,7 +49,9 @@ using namespace boost;
 
 TestLevelTestResult::TestLevelTestResult( const shared_ptr<const Test> associatedTest )
   : LowLevelTestResult( associatedTest )
-{}
+{
+  ProtectedSetResult(PASS);
+}
 
 TestLevelTestResult::TestLevelTestResult( const wstring& name,
                                           const wstring& desc,
@@ -58,14 +60,16 @@ TestLevelTestResult::TestLevelTestResult( const wstring& name,
                                           const shared_ptr<const Test> associatedTest )
   : LowLevelTestResult( associatedTest, name, desc, explain )
 {
-  this->ProtectedSetResult(result);
+  ProtectedSetResult(result);
 }
 
 TestLevelTestResult::TestLevelTestResult( const wstring& name,
                                           const wstring& desc,
                                           const shared_ptr<const Test> associatedTest )
   : LowLevelTestResult( associatedTest, name, desc, L"" )
-{}
+{
+  ProtectedSetResult(PASS);
+}
 
 TestLevelTestResult::~TestLevelTestResult()
 {}
@@ -113,12 +117,18 @@ void TestLevelTestResult::InitConsolidateResults()
 {
   const Requirement::RequirementMap& coveredReqs = GetAssociatedTest()->GetCoveredRequirements();
 
+  // We start by with each test requirement assigned a PASS result.
+  // If/when the individual test add PASS detail results explicitely
+  // then this will have to be removed.
   for( Requirement::RequirementMap::const_iterator iter = coveredReqs.begin();
        iter != coveredReqs.end();
        ++iter )
   {
     this->AddRequirement( PASS, iter->second );
   }
+
+  // And set the overall result to pass.
+  ProtectedSetResult( PASS );
 }
 
 } // end of namespace diskstream

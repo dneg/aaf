@@ -1,88 +1,80 @@
         Name:   Edit Protocol Annotation Test
         Desc:   Verify that all annotations in an AAF file are legal.
         Result: Failed
-        Reason: Test Failed - See "Edit Protocol Annotation Visitor" Visitor for details
+        Reason: 
         Passing Requirements: None
         Warning Requirements: None
         Failing Requirements: REQ_EP_147; REQ_EP_149; REQ_EP_150; REQ_EP_151; REQ_EP_152
 
-            Name:   Edit Protocol Annotation Visitor
-            Desc:   Visit components to make sure they do not have illegal annotations.
+            Name:   Use of Component::UserComments
+            Desc:   Component::UserComments shall only be used on: the Segment of a MobSlot or a CommentMarker (or its subclasses).
             Result: Failed
-            Reason: 
+            Reason: Mob slot with ID = 1 of Top-Level Composition "Illegal User Comments" contains a Component that illegally uses the Component::UserComments property.
             Passing Requirements: None
             Warning Requirements: None
-            Failing Requirements: REQ_EP_147; REQ_EP_149; REQ_EP_150; REQ_EP_151; REQ_EP_152
+            Failing Requirements: REQ_EP_147
 
-                Name:   Edit Protocol Annotation Visitor
-                Desc:   -
-                Result: Failed
-                Reason: Mob slot with ID = 1 of Top-Level Composition: "Illegal User Comments" contains a Component that illegally uses the Component::UserComments property.
-                Passing Requirements: None
-                Warning Requirements: None
-                Failing Requirements: REQ_EP_147
+            Name:   Use of CommentMarkers for Annotations
+            Desc:   CommentMarkers may be used for annotations that are not associated with a specific essence track; otherwise DescriptiveMarkers (or its subclasses) shall be used.
+            Result: Failed
+            Reason: Mob slot with ID = 1 of Top-Level Composition "CommentMarker in Essence Track" is an essence track and uses CommentMarkers for annotations.
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: REQ_EP_149
 
-                Name:   Edit Protocol Annotation Visitor
-                Desc:   -
-                Result: Failed
-                Reason: Mob slot with ID = 1 of Top-Level Composition: "CommentMarker in Essence Track" is an essence track and uses CommentMarkers for annotations.
-                Passing Requirements: None
-                Warning Requirements: None
-                Failing Requirements: REQ_EP_149
+            Name:   Comment Marker Placement
+            Desc:   CommentMarkers shall be placed only in EventMobSlots.  DescriptiveMarkers may be placed in any kind of MobSlot (e.g. TimelineMobSlot, EventMobSlot, StaticMobSlot).
+            Result: Failed
+            Reason: Mob slot with ID = 1 of Top-Level Composition "CommentMarker nested in Timeline Mob Slot" is not an Event Mob Slot but contains a CommentMarker.
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: REQ_EP_150
 
-                Name:   Edit Protocol Annotation Visitor
-                Desc:   -
-                Result: Failed
-                Reason: Mob slot with ID = 1 of Top-Level Composition: "CommentMarker nested in Timeline Mob Slot" is not an Event Mob Slot but contains a CommentMarker.
-                Passing Requirements: None
-                Warning Requirements: None
-                Failing Requirements: REQ_EP_150
+            Name:   Comment Marker Placement
+            Desc:   CommentMarkers shall be placed only in EventMobSlots.  DescriptiveMarkers may be placed in any kind of MobSlot (e.g. TimelineMobSlot, EventMobSlot, StaticMobSlot).
+            Result: Failed
+            Reason: Mob slot with ID = 1 of Top-Level Composition "CommentMarker in Timeline Mob Slot" is not an Event Mob Slot but contains a CommentMarker.
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: REQ_EP_150
 
-                Name:   Edit Protocol Annotation Visitor
-                Desc:   -
-                Result: Failed
-                Reason: Mob slot with ID = 1 of Top-Level Composition: "CommentMarker in Timeline Mob Slot" is not an Event Mob Slot but contains a CommentMarker.
-                Passing Requirements: None
-                Warning Requirements: None
-                Failing Requirements: REQ_EP_150
+            Name:   Comment Marker Placement
+            Desc:   CommentMarkers shall be placed only in EventMobSlots.  DescriptiveMarkers may be placed in any kind of MobSlot (e.g. TimelineMobSlot, EventMobSlot, StaticMobSlot).
+            Result: Failed
+            Reason: Mob slot with ID = 1 of Top-Level Composition "CommentMarker nested in Static Mob Slot" is not an Event Mob Slot but contains a CommentMarker.
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: REQ_EP_150
 
-                Name:   Edit Protocol Annotation Visitor
-                Desc:   -
-                Result: Failed
-                Reason: Mob slot with ID = 1 of Top-Level Composition: "CommentMarker nested in Static Mob Slot" is not an Event Mob Slot but contains a CommentMarker.
-                Passing Requirements: None
-                Warning Requirements: None
-                Failing Requirements: REQ_EP_150
+            Name:   Comment Marker Placement
+            Desc:   CommentMarkers shall be placed only in EventMobSlots.  DescriptiveMarkers may be placed in any kind of MobSlot (e.g. TimelineMobSlot, EventMobSlot, StaticMobSlot).
+            Result: Failed
+            Reason: Mob slot with ID = 1 of Top-Level Composition "CommentMarker in Static Mob Slot" is not an Event Mob Slot but contains a CommentMarker.
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: REQ_EP_150
 
-                Name:   Edit Protocol Annotation Visitor
-                Desc:   -
-                Result: Failed
-                Reason: Mob slot with ID = 1 of Top-Level Composition: "CommentMarker in Static Mob Slot" is not an Event Mob Slot but contains a CommentMarker.
-                Passing Requirements: None
-                Warning Requirements: None
-                Failing Requirements: REQ_EP_150
+            Name:   Documenting TaggedValues
+            Desc:   Exporting applications shall document all TaggedValues in use using TaggedValueDefinition objects in the Dictionary::TaggedValueDefinitions property.
+            Result: Failed
+            Reason: TaggedValue "Test Case 1" is not documented in the dictionary.
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: REQ_EP_151
 
-                Name:   Edit Protocol Annotation Visitor
-                Desc:   -
-                Result: Failed
-                Reason: TaggedValue "Test Case 1" is not documented in the dictionary.
-                Passing Requirements: None
-                Warning Requirements: None
-                Failing Requirements: REQ_EP_151
+            Name:   Documenting TaggedValues
+            Desc:   Exporting applications shall document all TaggedValues in use using TaggedValueDefinition objects in the Dictionary::TaggedValueDefinitions property.
+            Result: Failed
+            Reason: TaggedValue "Test Case 2" is not documented in the dictionary.
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: REQ_EP_151
 
-                Name:   Edit Protocol Annotation Visitor
-                Desc:   -
-                Result: Failed
-                Reason: TaggedValue "Test Case 2" is not documented in the dictionary.
-                Passing Requirements: None
-                Warning Requirements: None
-                Failing Requirements: REQ_EP_151
-
-                Name:   Edit Protocol Annotation Visitor
-                Desc:   -
-                Result: Failed
-                Reason: KLVData with key 00000012-0012-0012-1212121212121212 is not documented in the dictionary.
-                Passing Requirements: None
-                Warning Requirements: None
-                Failing Requirements: REQ_EP_152
+            Name:   Documenting KLVData
+            Desc:   Exporting applications shall document all KLVData in use in KLVDataDefinition objects in the Dictionary::KLVDefinitions property.
+            Result: Failed
+            Reason: KLVData with key 00000012-0012-0012-1212121212121212 is not documented in the dictionary.
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: REQ_EP_152
 

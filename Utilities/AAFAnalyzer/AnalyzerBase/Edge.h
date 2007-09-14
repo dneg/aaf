@@ -43,7 +43,7 @@ class Edge
                     EDGE_KIND_LAST_REFERENCE,
                     EDGE_KIND_UNDEFINED };
 
-  // undefined kind and zero valued tag
+  // containment kind and tag value equal to parent lid
   Edge( shared_ptr<Node> spParent, shared_ptr<Node> spChild );
 
   Edge( shared_ptr<Node> spParent, shared_ptr<Node> spChild,

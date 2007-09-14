@@ -41,8 +41,8 @@ using namespace boost;
 Edge::Edge(shared_ptr<Node> spParent, shared_ptr<Node> spChild )
   : _spParentNode( spParent ),
     _spChildNode( spChild ),
-    _kind( EDGE_KIND_UNDEFINED ),
-    _tag( 0 )
+    _kind( EDGE_KIND_CONTAINMENT ),
+    _tag( spParent->GetLID() )
 {}
 
 Edge::Edge(shared_ptr<Node> spParent, shared_ptr<Node> spChild,
