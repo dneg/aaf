@@ -157,7 +157,14 @@ void RecursiveOutputVerboseResultMsgs( shared_ptr<TestResult> res,
   
     wcout << LevelToIndent(level) << "Result: ";
     wstring result;
-    if (res->GetResult() == TestResult::PASS) {
+
+    if (res->GetResult() == TestResult::COVERED) {
+      result = L"Covered";
+    }
+    else if (res->GetResult() == TestResult::NOTED) {
+      result = L"Noted";
+    }
+    else if (res->GetResult() == TestResult::PASS) {
       result = L"Passed";
     }
     else if (res->GetResult() == TestResult::WARN)
@@ -170,7 +177,7 @@ void RecursiveOutputVerboseResultMsgs( shared_ptr<TestResult> res,
     }
     else
     {
-          assert(res->GetResult() == TestResult::UNDEFINED);
+      assert(res->GetResult() == TestResult::UNDEFINED);
       result = L"Undefined";
     }
 
@@ -181,9 +188,11 @@ void RecursiveOutputVerboseResultMsgs( shared_ptr<TestResult> res,
       wcout << LevelToIndent(level) << "Reason: " << res->GetExplanation() << endl;
     }
 
-    ListRequirements( L"Passing Requirements", res->GetRequirements(TestResult::PASS), level);
-    ListRequirements( L"Warning Requirements", res->GetRequirements(TestResult::WARN), level);
-    ListRequirements( L"Failing Requirements", res->GetRequirements(TestResult::FAIL), level);
+    ListRequirements( L"Covered Requirements", res->GetRequirements(TestResult::COVERED), level);
+    ListRequirements( L"Noted Requirements",   res->GetRequirements(TestResult::NOTED),   level);
+    ListRequirements( L"Passing Requirements", res->GetRequirements(TestResult::PASS),    level);
+    ListRequirements( L"Warning Requirements", res->GetRequirements(TestResult::WARN),    level);
+    ListRequirements( L"Failing Requirements", res->GetRequirements(TestResult::FAIL),    level);
 
     const vector<AxString>& details = res->GetDetails();
     if ( !details.empty() )
@@ -262,38 +271,47 @@ void OutputFileCoverage(shared_ptr<const TestResult> res, const basic_string<wch
   }
 
   wcout  << "Result:    ";
-  if(res->GetResult() == TestResult::PASS) {
+
+  if (res->GetResult() == TestResult::COVERED)
+  {
+    wcout << L"Covered" << endl;
+  }
+  else if (res->GetResult() == TestResult::NOTED)
+  {
+    wcout << L"Noted" << endl;
+  }
+  else if (res->GetResult() == TestResult::PASS)
+  {
     wcout << L"Passed" << endl;
   }
-
-  else if(res->GetResult() == TestResult::WARN)
+  else if (res->GetResult() == TestResult::WARN)
   {
-    wcout << L"Passed, but with warnings." << endl;
-    wcout << "Reason:    " << res->GetExplanation() << endl;
+    wcout << L"Warned" << endl;
   }
-
-  else if(res->GetResult() == TestResult::FAIL)
+  else if (res->GetResult() == TestResult::FAIL)
   {
     wcout << L"Failed" << endl;
-    wcout << "Reason:    " << res->GetExplanation() << endl;
   }
   else
   {
     assert(0);
   }
+
+  wcout << "Reason:    " << res->GetExplanation() << endl;
   
-  ListRequirements( L"Passing Requirements", res->GetRequirements(TestResult::PASS), level);
-  ListRequirements( L"Warning Requirements", res->GetRequirements(TestResult::WARN), level);
-  ListRequirements( L"Failing Requirements", res->GetRequirements(TestResult::FAIL), level);
+  ListRequirements( L"Covered Requirements", res->GetRequirements(TestResult::COVERED), level );
+  ListRequirements( L"Noted Requirements",   res->GetRequirements(TestResult::NOTED),   level );
+  ListRequirements( L"Passing Requirements", res->GetRequirements(TestResult::PASS),    level );
+  ListRequirements( L"Warning Requirements", res->GetRequirements(TestResult::WARN),    level );
+  ListRequirements( L"Failing Requirements", res->GetRequirements(TestResult::FAIL),    level );
 
   wcout << endl;
 }
 
-
 void CollectReasons( shared_ptr<const TestResult> res,
                      const wstring& reqId,
                      TestResult::Result result,
-					 set<wstring>& reasonSet )
+                     set<wstring>& reasonSet )
 {
   // Recurse down to leaf (ie. single) results to find the detailed
   // result explanations. The higher level
@@ -306,14 +324,14 @@ void CollectReasons( shared_ptr<const TestResult> res,
     {
       CollectReasons( subResults[i], reqId, result, reasonSet );
     }
-	return;
+        return;
   }
 
   // This is a leaf result. If it matches the reqId and result we are
   // looking for then output the explanation.
   if ( res->HasResult( reqId, result ) )
   {
-	reasonSet.insert( res->GetExplanation() );
+        reasonSet.insert( res->GetExplanation() );
   }
 }
 
@@ -321,19 +339,41 @@ void OutputReasons( shared_ptr<const TestResult> res,
                     const wstring& reqId,
                     TestResult::Result result )
 {
-	set<wstring> reasonSet;
-	CollectReasons( res, reqId, result, reasonSet );
-	for( set<wstring>::const_iterator iter = reasonSet.begin();
-		 iter != reasonSet.end();
-		 ++iter )
-	{
-		wcout << "Reason : " << *iter << endl;
-	}
+        set<wstring> reasonSet;
+        CollectReasons( res, reqId, result, reasonSet );
+        for( set<wstring>::const_iterator iter = reasonSet.begin();
+                 iter != reasonSet.end();
+                 ++iter )
+        {
+                wcout << "Reason : " << *iter << endl;
+        }
 }
 
 void OutputSimpleResultMsgs( shared_ptr<const TestResult> res )
 {
   Requirement::RequirementMap::const_iterator iter;
+
+#if 1
+  // This should not be output in a summary genally, but it is useful
+  // to activate for debug. Hence conditional compile.
+  const Requirement::RequirementMap& noted = res->GetRequirements( TestResult::NOTED );
+  for ( iter = noted.begin(); iter != noted.end(); iter++ )
+  {
+    shared_ptr<const Requirement> req = iter->second;
+    wcout << "NOTE   : " << req->GetId() << L", " << req->GetName() << endl;
+    wcout << L"Desc   : " << req->GetDescription() << endl;
+
+    if ( req->GetDocument().size() > 0 )
+    {
+      wcout << L"Doc    : " << req->GetDocument() << L" (" << req->GetVersion()
+            << L") Section " << req->GetSection() << endl;
+    }
+
+    OutputReasons( res, req->GetId(), TestResult::NOTED );
+
+    wcout << endl;
+  }
+#endif
 
   const Requirement::RequirementMap& failures = res->GetRequirements( TestResult::FAIL );
   for ( iter = failures.begin(); iter != failures.end(); iter++ )
@@ -358,7 +398,7 @@ void OutputSimpleResultMsgs( shared_ptr<const TestResult> res )
   {
     shared_ptr<const Requirement> req = iter->second;
     wcout << "WARN   : " << req->GetId() << L", " << req->GetName() << endl;
-	wcout << L"Desc   : " << req->GetDescription() << endl;
+        wcout << L"Desc   : " << req->GetDescription() << endl;
 
     if ( req->GetDocument().size() > 0 )
     {
@@ -448,14 +488,18 @@ public:
     if ( _type == L"all" ||
          _type == entry.second->GetRequirementTypeAsString() )
     {
-      wcout << L"ID:          " << entry.first << endl;
-      wcout << L"Name:        " << entry.second->GetName() << endl;
+      wcout << L"ID:          " << entry.first                                << endl;
+      wcout << L"Name:        " << entry.second->GetName()                    << endl;
       wcout << L"Type:        " << entry.second->GetRequirementTypeAsString() << endl;
-      wcout << L"Category:    " << entry.second->GetCategoryAsString() << endl;
-      wcout << L"Description: " << entry.second->GetDescription()<<endl;
-      wcout << L"Document:    " << entry.second->GetDocument()<<endl;
-      wcout << L"Version:     " << entry.second->GetVersion()<<endl;
-      wcout << L"Section:     " << entry.second->GetSection()<<endl<<endl;
+      wcout << L"Category:    " << entry.second->GetCategoryAsString()        << endl;
+      wcout << L"Action:      " << entry.second->GetAction()                  << endl;
+      wcout << L"Description: " << entry.second->GetDescription()             << endl;
+      wcout << L"Annotation:  " << entry.second->GetAnnotation()              << endl;
+      wcout << L"Note: "        << entry.second->GetNote()                    << endl;
+      wcout << L"Document:    " << entry.second->GetDocument()                << endl;
+      wcout << L"Version:     " << entry.second->GetVersion()                 << endl;
+      wcout << L"Section:     " << entry.second->GetSection()                 << endl;
+      wcout << endl;
     }
   }
 
@@ -789,11 +833,11 @@ int main( int argc, char** argv )
         assert( dumpOption.second == string( "comp" ) );
         wcout << "composition dump:" << endl;
 
-	if ( load.IsCyclic() )
-	{
-	  assert( roots.empty() );
-	  wcout << L"Note: The reference graph is cyclic. No composotion root was determined." << endl;
-	}
+        if ( load.IsCyclic() )
+        {
+          assert( roots.empty() );
+          wcout << L"Note: The reference graph is cyclic. No composotion root was determined." << endl;
+        }
 
         wcout << L"found " <<  static_cast<unsigned int>(roots.size()) << L" unreferenced object";
         if ( roots.size() > 1 )

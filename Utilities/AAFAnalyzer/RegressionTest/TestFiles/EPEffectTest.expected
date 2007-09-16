@@ -2,6 +2,8 @@
         Desc:   Verify that all effects in the AAF file are valid.
         Result: Failed
         Reason: 
+        Covered Requirements: None
+        Noted Requirements: None
         Passing Requirements: None
         Warning Requirements: None
         Failing Requirements: REQ_EP_163; REQ_EP_164; REQ_EP_180; REQ_EP_183; REQ_EP_186; REQ_EP_187; REQ_EP_190; REQ_EP_194; REQ_EP_197; REQ_EP_200; REQ_EP_203; REQ_EP_206; REQ_EP_209; REQ_EP_212; REQ_EP_215; REQ_EP_218; REQ_EP_219; REQ_EP_220; REQ_EP_223; REQ_EP_224; REQ_EP_225; REQ_EP_228; REQ_EP_231; REQ_EP_234; REQ_EP_240; REQ_EP_244; REQ_EP_247; REQ_EP_248; REQ_EP_249
@@ -10,6 +12,8 @@
             Desc:   The effects defined in the Edit Protocol should be used with the AAF v1.1 data definition values of DataDef_Picture and DataDef_Sound.  The deprecated data definition values of DataDef_LegacyPicture and DataDef_LegacySound should only be used when working with legacy AAF v1.0 files.
             Result: Failed
             Reason: Video Dissolve Effect in Mob slot with ID = 1 of Top-Level Composition "Video Dissolve not in Transition" is not within a Transition object.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_163
@@ -18,6 +22,8 @@
             Desc:   The Video Dissolve effect shall only be used by an OperationGroup within a Transition object.
             Result: Failed
             Reason: Video Dissolve Effect in Mob slot with ID = 1 of Top-Level Composition "Video Dissolve not in Transition" is not within a Transition object.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_180
@@ -26,6 +32,8 @@
             Desc:   The effects defined in the Edit Protocol should be used with the AAF v1.1 data definition values of DataDef_Picture and DataDef_Sound.  The deprecated data definition values of DataDef_LegacyPicture and DataDef_LegacySound should only be used when working with legacy AAF v1.0 files.
             Result: Failed
             Reason: SMPTE Video Wipe Effect in Mob slot with ID = 1 of Top-Level Composition "SMPTE Video Wipe not in Transition" is not within a Transition object.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_163
@@ -34,6 +42,8 @@
             Desc:   The SMPTE Video Wipe effect shall only be used by an OperationGroup within a Transition object.
             Result: Failed
             Reason: SMPTE Video Wipe Effect in Mob slot with ID = 1 of Top-Level Composition "SMPTE Video Wipe not in Transition" is not within a Transition object.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_183
@@ -42,6 +52,8 @@
             Desc:   In an Alpha With Video Key effect the alpha channel shall be contained within a channel of the foreground video essence, using either RGBA or YUVA.  The essence descriptor shall be an RGBADescriptor object (or a sub-class) for RGBA, or a CDCIDescriptor object (or a sub-class) for CDCI.  The alpha channel shall be indicated by the essence descriptor.
             Result: Failed
             Reason: Alpha With Video Key Effect in Mob slot with ID = 1 of Top-Level Composition "Alpha With Video Key not in Transition" has an incorrect number of input segments. Expecting 2 segments and found 0 segments.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_218
@@ -50,6 +62,8 @@
             Desc:   In an Alpha With Video Key effect the DigitalImageDescriptor::AlphaTransparency property shall be present and specify whether the minimum Alpha value or the maximum Alpha value indicates complete transparency.  The ParameterDef_AlphaKeyInvertAlpha parameter indicates wheter the transparency indicated by the DigitalImageDescriptor::AlphaTransparency property should be inverted.
             Result: Failed
             Reason: Alpha With Video Key Effect in Mob slot with ID = 1 of Top-Level Composition "Alpha With Video Key not in Transition" has an incorrect number of input segments. Expecting 2 segments and found 0 segments.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_219
@@ -58,6 +72,8 @@
             Desc:   In a Separate-Alpha Key effect the alpha channel shall be contained within a channel of separate essence, using either RGBA or YUVA.  The essence descriptor shall be an RGBADescriptor object (or a sub-class) for RGBA, or a CDCIDescriptor object (or a sub-class) for CDCI.  Where the alpha channel is indicated by the essence descriptor, the channel shall be used as the alpha channel.  Where the alpha channel is not indicated by the essence descriptor, the luminance value of essence shall be used as the alpha channel.
             Result: Failed
             Reason: Separate Alpha Key Effect in Mob slot with ID = 1 of Top-Level Composition "Separate Alpha Key not in Transition" has an incorrect number of input segments. Expecting 3 segments and found 0 segments.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_223
@@ -66,6 +82,8 @@
             Desc:   In a Separate-Alpha Key effect the DigitalImageDescriptor::AlphaTransparency property shall be present and specify whether the minimum Alpha value or the maximum Alpha value indicates complete transparency.  The ParameterDef_AlphaKeyInvertAlpha parameter indicates whether the transparency indicated by the DigitalImageDescriptor::AlphaTransparency property should be inverted.
             Result: Failed
             Reason: Separate Alpha Key Effect in Mob slot with ID = 1 of Top-Level Composition "Separate Alpha Key not in Transition" has an incorrect number of input segments. Expecting 3 segments and found 0 segments.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_224
@@ -74,6 +92,8 @@
             Desc:   The effects defined in the Edit Protocol should be used with the AAF v1.1 data definition values of DataDef_Picture and DataDef_Sound.  The deprecated data definition values of DataDef_LegacyPicture and DataDef_LegacySound should only be used when working with legacy AAF v1.0 files.
             Result: Failed
             Reason: Single-Parameter Audio Dissolve Effect in Mob slot with ID = 1 of Top-Level Composition "Mono Audio Dissolve not in Transition" is not within a Transition object.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_163
@@ -82,6 +102,8 @@
             Desc:   The Single-Parameter Mono Audio Dissolve effect shall only be used by an OperationGroup within a Transition object.
             Result: Failed
             Reason: Single-Parameter Audio Dissolve Effect in Mob slot with ID = 1 of Top-Level Composition "Mono Audio Dissolve not in Transition" is not within a Transition object.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_244
@@ -90,6 +112,8 @@
             Desc:   The effects defined in the Edit Protocol should be used with the AAF v1.1 data definition values of DataDef_Picture and DataDef_Sound.  The deprecated data definition values of DataDef_LegacyPicture and DataDef_LegacySound should only be used when working with legacy AAF v1.0 files.
             Result: Failed
             Reason: Two-Parameter Audio Dissolve Effect in Mob slot with ID = 1 of Top-Level Composition "Two Parameter Mobo Audio Dissolve not in Transition" is not within a Transition object.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_163
@@ -98,6 +122,8 @@
             Desc:   The Two-Parameter Mono Audio Dissolve effect shall only be used by an OperationGroup within a Transition object.
             Result: Failed
             Reason: Two-Parameter Audio Dissolve Effect in Mob slot with ID = 1 of Top-Level Composition "Two Parameter Mobo Audio Dissolve not in Transition" is not within a Transition object.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_247
@@ -106,6 +132,8 @@
             Desc:   In a Two-Parameter Mono Audio Dissolve effect, although the incoming segment is first faded up only at a point X, the incoming segment must be specified from the begining of the Transition.
             Result: Failed
             Reason: Two-Parameter Audio Dissolve Effect in Mob slot with ID = 1 of Top-Level Composition "Two Parameter Mobo Audio Dissolve not in Transition" is not within a Transition object.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_248
@@ -114,6 +142,8 @@
             Desc:   In a Two-Parameter Mono Audio Dissolve effect, although the incomming segment is first faded up only at a point X, the incoming segment must be specified from the beginning of the Transition.  Similarily, although the outgoing segment is completely faded down at point Y, the outgoing segment must be specified to the end of the Transition.
             Result: Failed
             Reason: Two-Parameter Audio Dissolve Effect in Mob slot with ID = 1 of Top-Level Composition "Two Parameter Mobo Audio Dissolve not in Transition" is not within a Transition object.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_249
@@ -122,6 +152,8 @@
             Desc:   If an importing application does not support an effect or parameter, it may be ignored.  This fallback behaviour shall be logged, including the DefinitionObject::Name and DefinitionObject::Description (if present) of the unsupported effect or parameter, to provide the user with an indication of the intended effect.
             Result: Failed
             Reason: Video Speed Control Effect in Mob slot with ID = 1 of Top-Level Composition "Video Speed Control child of Transition" is within a Transition object.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_164
@@ -130,6 +162,8 @@
             Desc:   The Video Speed Control effect shall only be used by an OperationGroup not contained withing a Transition object.
             Result: Failed
             Reason: Video Speed Control Effect in Mob slot with ID = 1 of Top-Level Composition "Video Speed Control child of Transition" is within a Transition object.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_186
@@ -138,6 +172,8 @@
             Desc:   If an importing application does not support an effect or parameter, it may be ignored.  This fallback behaviour shall be logged, including the DefinitionObject::Name and DefinitionObject::Description (if present) of the unsupported effect or parameter, to provide the user with an indication of the intended effect.
             Result: Failed
             Reason: Video Repeat Effect in Mob slot with ID = 1 of Top-Level Composition "Video Repeat child of Transition" is within a Transition object.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_164
@@ -146,6 +182,8 @@
             Desc:   The Video Repeat effect shall only be used by an OperationGroup not contained within a Transition object.
             Result: Failed
             Reason: Video Repeat Effect in Mob slot with ID = 1 of Top-Level Composition "Video Repeat child of Transition" is within a Transition object.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_190
@@ -154,6 +192,8 @@
             Desc:   If an importing application does not support an effect or parameter, it may be ignored.  This fallback behaviour shall be logged, including the DefinitionObject::Name and DefinitionObject::Description (if present) of the unsupported effect or parameter, to provide the user with an indication of the intended effect.
             Result: Failed
             Reason: Video Flip Effect in Mob slot with ID = 1 of Top-Level Composition "Video Flip child of Transition" is within a Transition object.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_164
@@ -162,6 +202,8 @@
             Desc:   The Video Flip effect shall only be used by an OperationGroup not contained within a Transition object.
             Result: Failed
             Reason: Video Flip Effect in Mob slot with ID = 1 of Top-Level Composition "Video Flip child of Transition" is within a Transition object.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_194
@@ -170,6 +212,8 @@
             Desc:   If an importing application does not support an effect or parameter, it may be ignored.  This fallback behaviour shall be logged, including the DefinitionObject::Name and DefinitionObject::Description (if present) of the unsupported effect or parameter, to provide the user with an indication of the intended effect.
             Result: Failed
             Reason: Video Flop Effect in Mob slot with ID = 1 of Top-Level Composition "Video Flop child of Transition" is within a Transition object.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_164
@@ -178,6 +222,8 @@
             Desc:   The Video Flop effect shall only be used by an OperationGroup not contained within a Transition object.
             Result: Failed
             Reason: Video Flop Effect in Mob slot with ID = 1 of Top-Level Composition "Video Flop child of Transition" is within a Transition object.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_197
@@ -186,6 +232,8 @@
             Desc:   If an importing application does not support an effect or parameter, it may be ignored.  This fallback behaviour shall be logged, including the DefinitionObject::Name and DefinitionObject::Description (if present) of the unsupported effect or parameter, to provide the user with an indication of the intended effect.
             Result: Failed
             Reason: Video Flip-Flop Effect in Mob slot with ID = 1 of Top-Level Composition "Video Flip-Flop child of Transition" is within a Transition object.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_164
@@ -194,6 +242,8 @@
             Desc:   The Video Flip-Flop effect shall only be used by an OperationGroup not contained within a Transition object.
             Result: Failed
             Reason: Video Flip-Flop Effect in Mob slot with ID = 1 of Top-Level Composition "Video Flip-Flop child of Transition" is within a Transition object.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_200
@@ -202,6 +252,8 @@
             Desc:   If an importing application does not support an effect or parameter, it may be ignored.  This fallback behaviour shall be logged, including the DefinitionObject::Name and DefinitionObject::Description (if present) of the unsupported effect or parameter, to provide the user with an indication of the intended effect.
             Result: Failed
             Reason: Video Position Effect in Mob slot with ID = 1 of Top-Level Composition "Video Position child of Transition" is within a Transition object.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_164
@@ -210,6 +262,8 @@
             Desc:   The Video Position effect shall only be used by an OperationGroup not contained within a Transition object.
             Result: Failed
             Reason: Video Position Effect in Mob slot with ID = 1 of Top-Level Composition "Video Position child of Transition" is within a Transition object.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_203
@@ -218,6 +272,8 @@
             Desc:   If an importing application does not support an effect or parameter, it may be ignored.  This fallback behaviour shall be logged, including the DefinitionObject::Name and DefinitionObject::Description (if present) of the unsupported effect or parameter, to provide the user with an indication of the intended effect.
             Result: Failed
             Reason: Video Crop Effect in Mob slot with ID = 1 of Top-Level Composition "Video Crop child of Transition" is within a Transition object.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_164
@@ -226,6 +282,8 @@
             Desc:   The Video Crop Effect shall only be used by an OperationGroup not contained within a Transition object.
             Result: Failed
             Reason: Video Crop Effect in Mob slot with ID = 1 of Top-Level Composition "Video Crop child of Transition" is within a Transition object.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_206
@@ -234,6 +292,8 @@
             Desc:   If an importing application does not support an effect or parameter, it may be ignored.  This fallback behaviour shall be logged, including the DefinitionObject::Name and DefinitionObject::Description (if present) of the unsupported effect or parameter, to provide the user with an indication of the intended effect.
             Result: Failed
             Reason: Video Scale Effect in Mob slot with ID = 1 of Top-Level Composition "Video Scale child of Transition" is within a Transition object.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_164
@@ -242,6 +302,8 @@
             Desc:   The Video Scale effect shall only be used by an OperationGroup not contained within a Transition object.
             Result: Failed
             Reason: Video Scale Effect in Mob slot with ID = 1 of Top-Level Composition "Video Scale child of Transition" is within a Transition object.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_209
@@ -250,6 +312,8 @@
             Desc:   If an importing application does not support an effect or parameter, it may be ignored.  This fallback behaviour shall be logged, including the DefinitionObject::Name and DefinitionObject::Description (if present) of the unsupported effect or parameter, to provide the user with an indication of the intended effect.
             Result: Failed
             Reason: Video Rotate Effect in Mob slot with ID = 1 of Top-Level Composition "Video Rotate child of Transition" is within a Transition object.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_164
@@ -258,6 +322,8 @@
             Desc:   The Video Rotate effect shall only be used by an OperationGroup not contained within a Transition object.
             Result: Failed
             Reason: Video Rotate Effect in Mob slot with ID = 1 of Top-Level Composition "Video Rotate child of Transition" is within a Transition object.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_212
@@ -266,6 +332,8 @@
             Desc:   If an importing application does not support an effect or parameter, it may be ignored.  This fallback behaviour shall be logged, including the DefinitionObject::Name and DefinitionObject::Description (if present) of the unsupported effect or parameter, to provide the user with an indication of the intended effect.
             Result: Failed
             Reason: Video Corner Pinning Effect in Mob slot with ID = 1 of Top-Level Composition "Video Corner Pinning child of Transition" is within a Transition object.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_164
@@ -274,6 +342,8 @@
             Desc:   The Video Corner Pinning effect shall only be used by an OperationGroup not contained within a Transition object.
             Result: Failed
             Reason: Video Corner Pinning Effect in Mob slot with ID = 1 of Top-Level Composition "Video Corner Pinning child of Transition" is within a Transition object.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_215
@@ -282,6 +352,8 @@
             Desc:   If an importing application does not support an effect or parameter, it may be ignored.  This fallback behaviour shall be logged, including the DefinitionObject::Name and DefinitionObject::Description (if present) of the unsupported effect or parameter, to provide the user with an indication of the intended effect.
             Result: Failed
             Reason: Alpha With Video Key Effect in Mob slot with ID = 1 of Top-Level Composition "Alpha With Video Key child of Transition" is within a Transition object.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_164
@@ -290,6 +362,8 @@
             Desc:   The Alpha With Video Key effect shall only be used by an OperationGroup not contained within a Transition object.
             Result: Failed
             Reason: Alpha With Video Key Effect in Mob slot with ID = 1 of Top-Level Composition "Alpha With Video Key child of Transition" is within a Transition object.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_220
@@ -298,6 +372,8 @@
             Desc:   In an Alpha With Video Key effect the alpha channel shall be contained within a channel of the foreground video essence, using either RGBA or YUVA.  The essence descriptor shall be an RGBADescriptor object (or a sub-class) for RGBA, or a CDCIDescriptor object (or a sub-class) for CDCI.  The alpha channel shall be indicated by the essence descriptor.
             Result: Failed
             Reason: Alpha With Video Key Effect in Mob slot with ID = 1 of Top-Level Composition "Alpha With Video Key child of Transition" has an incorrect number of input segments. Expecting 2 segments and found 0 segments.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_218
@@ -306,6 +382,8 @@
             Desc:   In an Alpha With Video Key effect the DigitalImageDescriptor::AlphaTransparency property shall be present and specify whether the minimum Alpha value or the maximum Alpha value indicates complete transparency.  The ParameterDef_AlphaKeyInvertAlpha parameter indicates wheter the transparency indicated by the DigitalImageDescriptor::AlphaTransparency property should be inverted.
             Result: Failed
             Reason: Alpha With Video Key Effect in Mob slot with ID = 1 of Top-Level Composition "Alpha With Video Key child of Transition" has an incorrect number of input segments. Expecting 2 segments and found 0 segments.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_219
@@ -314,6 +392,8 @@
             Desc:   If an importing application does not support an effect or parameter, it may be ignored.  This fallback behaviour shall be logged, including the DefinitionObject::Name and DefinitionObject::Description (if present) of the unsupported effect or parameter, to provide the user with an indication of the intended effect.
             Result: Failed
             Reason: Separate Alpha Key Effect in Mob slot with ID = 1 of Top-Level Composition "Separate Alpha Key child of Transition" is within a Transition object.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_164
@@ -322,6 +402,8 @@
             Desc:   The Separate Alpha Key effect shall only be used by an OperationGroup not contained within a Transition object.
             Result: Failed
             Reason: Separate Alpha Key Effect in Mob slot with ID = 1 of Top-Level Composition "Separate Alpha Key child of Transition" is within a Transition object.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_225
@@ -330,6 +412,8 @@
             Desc:   In a Separate-Alpha Key effect the alpha channel shall be contained within a channel of separate essence, using either RGBA or YUVA.  The essence descriptor shall be an RGBADescriptor object (or a sub-class) for RGBA, or a CDCIDescriptor object (or a sub-class) for CDCI.  Where the alpha channel is indicated by the essence descriptor, the channel shall be used as the alpha channel.  Where the alpha channel is not indicated by the essence descriptor, the luminance value of essence shall be used as the alpha channel.
             Result: Failed
             Reason: Separate Alpha Key Effect in Mob slot with ID = 1 of Top-Level Composition "Separate Alpha Key child of Transition" has an incorrect number of input segments. Expecting 3 segments and found 0 segments.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_223
@@ -338,6 +422,8 @@
             Desc:   In a Separate-Alpha Key effect the DigitalImageDescriptor::AlphaTransparency property shall be present and specify whether the minimum Alpha value or the maximum Alpha value indicates complete transparency.  The ParameterDef_AlphaKeyInvertAlpha parameter indicates whether the transparency indicated by the DigitalImageDescriptor::AlphaTransparency property should be inverted.
             Result: Failed
             Reason: Separate Alpha Key Effect in Mob slot with ID = 1 of Top-Level Composition "Separate Alpha Key child of Transition" has an incorrect number of input segments. Expecting 3 segments and found 0 segments.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_224
@@ -346,6 +432,8 @@
             Desc:   If an importing application does not support an effect or parameter, it may be ignored.  This fallback behaviour shall be logged, including the DefinitionObject::Name and DefinitionObject::Description (if present) of the unsupported effect or parameter, to provide the user with an indication of the intended effect.
             Result: Failed
             Reason: Luminance Key Effect in Mob slot with ID = 1 of Top-Level Composition "Luminance Key child of Transition" is within a Transition object.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_164
@@ -354,6 +442,8 @@
             Desc:   The Luminance Key effect shall only be used by an OperationGroup not contained within a Transition object.
             Result: Failed
             Reason: Luminance Key Effect in Mob slot with ID = 1 of Top-Level Composition "Luminance Key child of Transition" is within a Transition object.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_228
@@ -362,6 +452,8 @@
             Desc:   If an importing application does not support an effect or parameter, it may be ignored.  This fallback behaviour shall be logged, including the DefinitionObject::Name and DefinitionObject::Description (if present) of the unsupported effect or parameter, to provide the user with an indication of the intended effect.
             Result: Failed
             Reason: Chroma Key Effect in Mob slot with ID = 1 of Top-Level Composition "Chroma Key child of Transition" is within a Transition object.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_164
@@ -370,6 +462,8 @@
             Desc:   The Chroma Key effect shall only be used by an OperationGroup not contained within a Transition object.
             Result: Failed
             Reason: Chroma Key Effect in Mob slot with ID = 1 of Top-Level Composition "Chroma Key child of Transition" is within a Transition object.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_231
@@ -378,6 +472,8 @@
             Desc:   If an importing application does not support an effect or parameter, it may be ignored.  This fallback behaviour shall be logged, including the DefinitionObject::Name and DefinitionObject::Description (if present) of the unsupported effect or parameter, to provide the user with an indication of the intended effect.
             Result: Failed
             Reason: Mono Audio Gain Effect in Mob slot with ID = 1 of Top-Level Composition "Mono Audio Gain child of Transition" is within a Transition object.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_164
@@ -386,6 +482,8 @@
             Desc:   The Mono Audio Gain effect shall only be used by an OperationGroup not contained within a Transition object.
             Result: Failed
             Reason: Mono Audio Gain Effect in Mob slot with ID = 1 of Top-Level Composition "Mono Audio Gain child of Transition" is within a Transition object.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_234
@@ -394,6 +492,8 @@
             Desc:   If an importing application does not support an effect or parameter, it may be ignored.  This fallback behaviour shall be logged, including the DefinitionObject::Name and DefinitionObject::Description (if present) of the unsupported effect or parameter, to provide the user with an indication of the intended effect.
             Result: Failed
             Reason: Mono Audio Pan Effect in Mob slot with ID = 1 of Top-Level Composition "Mono Audio Pan child of Transition" is within a Transition object.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_164
@@ -402,6 +502,8 @@
             Desc:   The Mono Audio Pan effect shall only be used by an OperationGroup not contained within a Transition object.
             Result: Failed
             Reason: Mono Audio Pan Effect in Mob slot with ID = 1 of Top-Level Composition "Mono Audio Pan child of Transition" is within a Transition object.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_240
@@ -410,6 +512,8 @@
             Desc:   The effects defined in the Edit Protocol should be used with the AAF v1.1 data definition values of DataDef_Picture and DataDef_Sound.  The deprecated data definition values of DataDef_LegacyPicture and DataDef_LegacySound should only be used when working with legacy AAF v1.0 files.
             Result: Failed
             Reason: Video Dissolve Effect in Mob slot with ID = 1 of Top-Level Composition "Video Dissolve grandchild of Transition" is not within a Transition object.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_163
@@ -418,6 +522,8 @@
             Desc:   The Video Dissolve effect shall only be used by an OperationGroup within a Transition object.
             Result: Failed
             Reason: Video Dissolve Effect in Mob slot with ID = 1 of Top-Level Composition "Video Dissolve grandchild of Transition" is not within a Transition object.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_180
@@ -426,6 +532,8 @@
             Desc:   The effects defined in the Edit Protocol should be used with the AAF v1.1 data definition values of DataDef_Picture and DataDef_Sound.  The deprecated data definition values of DataDef_LegacyPicture and DataDef_LegacySound should only be used when working with legacy AAF v1.0 files.
             Result: Failed
             Reason: SMPTE Video Wipe Effect in Mob slot with ID = 1 of Top-Level Composition "SMPTE Video Wipe grandchild of Transition" is not within a Transition object.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_163
@@ -434,6 +542,8 @@
             Desc:   The SMPTE Video Wipe effect shall only be used by an OperationGroup within a Transition object.
             Result: Failed
             Reason: SMPTE Video Wipe Effect in Mob slot with ID = 1 of Top-Level Composition "SMPTE Video Wipe grandchild of Transition" is not within a Transition object.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_183
@@ -442,6 +552,8 @@
             Desc:   In an Alpha With Video Key effect the alpha channel shall be contained within a channel of the foreground video essence, using either RGBA or YUVA.  The essence descriptor shall be an RGBADescriptor object (or a sub-class) for RGBA, or a CDCIDescriptor object (or a sub-class) for CDCI.  The alpha channel shall be indicated by the essence descriptor.
             Result: Failed
             Reason: Alpha With Video Key Effect in Mob slot with ID = 1 of Top-Level Composition "Alpha With Video Key grandchild of Transition" has an incorrect number of input segments. Expecting 2 segments and found 0 segments.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_218
@@ -450,6 +562,8 @@
             Desc:   In an Alpha With Video Key effect the DigitalImageDescriptor::AlphaTransparency property shall be present and specify whether the minimum Alpha value or the maximum Alpha value indicates complete transparency.  The ParameterDef_AlphaKeyInvertAlpha parameter indicates wheter the transparency indicated by the DigitalImageDescriptor::AlphaTransparency property should be inverted.
             Result: Failed
             Reason: Alpha With Video Key Effect in Mob slot with ID = 1 of Top-Level Composition "Alpha With Video Key grandchild of Transition" has an incorrect number of input segments. Expecting 2 segments and found 0 segments.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_219
@@ -458,6 +572,8 @@
             Desc:   In a Separate-Alpha Key effect the alpha channel shall be contained within a channel of separate essence, using either RGBA or YUVA.  The essence descriptor shall be an RGBADescriptor object (or a sub-class) for RGBA, or a CDCIDescriptor object (or a sub-class) for CDCI.  Where the alpha channel is indicated by the essence descriptor, the channel shall be used as the alpha channel.  Where the alpha channel is not indicated by the essence descriptor, the luminance value of essence shall be used as the alpha channel.
             Result: Failed
             Reason: Separate Alpha Key Effect in Mob slot with ID = 1 of Top-Level Composition "Separate Alpha Key grandchild of Transition" has an incorrect number of input segments. Expecting 3 segments and found 0 segments.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_223
@@ -466,6 +582,8 @@
             Desc:   In a Separate-Alpha Key effect the DigitalImageDescriptor::AlphaTransparency property shall be present and specify whether the minimum Alpha value or the maximum Alpha value indicates complete transparency.  The ParameterDef_AlphaKeyInvertAlpha parameter indicates whether the transparency indicated by the DigitalImageDescriptor::AlphaTransparency property should be inverted.
             Result: Failed
             Reason: Separate Alpha Key Effect in Mob slot with ID = 1 of Top-Level Composition "Separate Alpha Key grandchild of Transition" has an incorrect number of input segments. Expecting 3 segments and found 0 segments.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_224
@@ -474,6 +592,8 @@
             Desc:   The effects defined in the Edit Protocol should be used with the AAF v1.1 data definition values of DataDef_Picture and DataDef_Sound.  The deprecated data definition values of DataDef_LegacyPicture and DataDef_LegacySound should only be used when working with legacy AAF v1.0 files.
             Result: Failed
             Reason: Single-Parameter Audio Dissolve Effect in Mob slot with ID = 1 of Top-Level Composition "Mono Audio Dissolve grandchild of Transition" is not within a Transition object.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_163
@@ -482,6 +602,8 @@
             Desc:   The Single-Parameter Mono Audio Dissolve effect shall only be used by an OperationGroup within a Transition object.
             Result: Failed
             Reason: Single-Parameter Audio Dissolve Effect in Mob slot with ID = 1 of Top-Level Composition "Mono Audio Dissolve grandchild of Transition" is not within a Transition object.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_244
@@ -490,6 +612,8 @@
             Desc:   The effects defined in the Edit Protocol should be used with the AAF v1.1 data definition values of DataDef_Picture and DataDef_Sound.  The deprecated data definition values of DataDef_LegacyPicture and DataDef_LegacySound should only be used when working with legacy AAF v1.0 files.
             Result: Failed
             Reason: Two-Parameter Audio Dissolve Effect in Mob slot with ID = 1 of Top-Level Composition "Two Parameter Mobo Audio Dissolve grandchild of Transition" is not within a Transition object.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_163
@@ -498,6 +622,8 @@
             Desc:   The Two-Parameter Mono Audio Dissolve effect shall only be used by an OperationGroup within a Transition object.
             Result: Failed
             Reason: Two-Parameter Audio Dissolve Effect in Mob slot with ID = 1 of Top-Level Composition "Two Parameter Mobo Audio Dissolve grandchild of Transition" is not within a Transition object.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_247
@@ -506,6 +632,8 @@
             Desc:   In a Two-Parameter Mono Audio Dissolve effect, although the incoming segment is first faded up only at a point X, the incoming segment must be specified from the begining of the Transition.
             Result: Failed
             Reason: Two-Parameter Audio Dissolve Effect in Mob slot with ID = 1 of Top-Level Composition "Two Parameter Mobo Audio Dissolve grandchild of Transition" is not within a Transition object.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_248
@@ -514,6 +642,8 @@
             Desc:   In a Two-Parameter Mono Audio Dissolve effect, although the incomming segment is first faded up only at a point X, the incoming segment must be specified from the beginning of the Transition.  Similarily, although the outgoing segment is completely faded down at point Y, the outgoing segment must be specified to the end of the Transition.
             Result: Failed
             Reason: Two-Parameter Audio Dissolve Effect in Mob slot with ID = 1 of Top-Level Composition "Two Parameter Mobo Audio Dissolve grandchild of Transition" is not within a Transition object.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_249
@@ -522,6 +652,8 @@
             Desc:   A ratio value of 0 shall not be used for the Speed Ratio paremeter of a Video Speed Control effect.
             Result: Passed, but with warnings.
             Reason: Video Speed Control Effect in Mob slot with ID = 1 of Top-Level Composition "Speed Ratio Zero Denominator" has a Speed Ratio parameter with a 0 denominator (1/0).
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: REQ_EP_187
             Failing Requirements: None
@@ -530,6 +662,8 @@
             Desc:   A ratio value of 0 shall not be used for the Speed Ratio paremeter of a Video Speed Control effect.
             Result: Failed
             Reason: Video Speed Control Effect in Mob slot with ID = 1 of Top-Level Composition "Speed Ratio of Zero" has a Speed Ratio parameter with a ratio value of 0 (0/1).
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_187
@@ -538,6 +672,8 @@
             Desc:   A ratio value of 0 shall not be used for the Speed Ratio paremeter of a Video Speed Control effect.
             Result: Failed
             Reason: Video Speed Control Effect in Mob slot with ID = 1 of Top-Level Composition "Speed Ratio Missing" does not have a Speed Ratio parameter.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_187
@@ -546,6 +682,8 @@
             Desc:   A ratio value of 0 shall not be used for the Speed Ratio paremeter of a Video Speed Control effect.
             Result: Failed
             Reason: Video Speed Control Effect in Mob slot with ID = 1 of Top-Level Composition "Varying Speed Ration" has a Speed Ratio parameter that is not constant
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_187
@@ -554,6 +692,8 @@
             Desc:   In a Two-Parameter Mono Audio Dissolve effect, although the incoming segment is first faded up only at a point X, the incoming segment must be specified from the begining of the Transition.
             Result: Failed
             Reason: Two-Parameter Audio Dissolve Effect in Mob slot with ID = 1 of Top-Level Composition "Two-Parameter Mono Audio Dissolve - No Incoming Segment" does not have an incoming segment.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_248
@@ -562,6 +702,8 @@
             Desc:   In a Two-Parameter Mono Audio Dissolve effect, although the incomming segment is first faded up only at a point X, the incoming segment must be specified from the beginning of the Transition.  Similarily, although the outgoing segment is completely faded down at point Y, the outgoing segment must be specified to the end of the Transition.
             Result: Failed
             Reason: Two-Parameter Audio Dissolve Effect in Mob slot with ID = 1 of Top-Level Composition "Two-Parameter Mono Audio Dissolve - No Incoming Segment" does not have an incoming segment.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_249
@@ -570,6 +712,8 @@
             Desc:   In an Alpha With Video Key effect the alpha channel shall be contained within a channel of the foreground video essence, using either RGBA or YUVA.  The essence descriptor shall be an RGBADescriptor object (or a sub-class) for RGBA, or a CDCIDescriptor object (or a sub-class) for CDCI.  The alpha channel shall be indicated by the essence descriptor.
             Result: Failed
             Reason: Alpha With Video Key Effect in Mob slot with ID = 1 of Top-Level Composition "Alpha With Video Key - Too Few Inputs" has an incorrect number of input segments. Expecting 2 segments and found 1 segments.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_218
@@ -578,6 +722,8 @@
             Desc:   In an Alpha With Video Key effect the DigitalImageDescriptor::AlphaTransparency property shall be present and specify whether the minimum Alpha value or the maximum Alpha value indicates complete transparency.  The ParameterDef_AlphaKeyInvertAlpha parameter indicates wheter the transparency indicated by the DigitalImageDescriptor::AlphaTransparency property should be inverted.
             Result: Failed
             Reason: Alpha With Video Key Effect in Mob slot with ID = 1 of Top-Level Composition "Alpha With Video Key - Too Few Inputs" has an incorrect number of input segments. Expecting 2 segments and found 1 segments.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_219
@@ -586,6 +732,8 @@
             Desc:   In an Alpha With Video Key effect the alpha channel shall be contained within a channel of the foreground video essence, using either RGBA or YUVA.  The essence descriptor shall be an RGBADescriptor object (or a sub-class) for RGBA, or a CDCIDescriptor object (or a sub-class) for CDCI.  The alpha channel shall be indicated by the essence descriptor.
             Result: Failed
             Reason: Alpha With Video Key Effect in Mob slot with ID = 1 of Top-Level Composition "Alpha With Video Key - Too Many Inputs" has an incorrect number of input segments. Expecting 2 segments and found 3 segments.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_218
@@ -594,6 +742,8 @@
             Desc:   In an Alpha With Video Key effect the DigitalImageDescriptor::AlphaTransparency property shall be present and specify whether the minimum Alpha value or the maximum Alpha value indicates complete transparency.  The ParameterDef_AlphaKeyInvertAlpha parameter indicates wheter the transparency indicated by the DigitalImageDescriptor::AlphaTransparency property should be inverted.
             Result: Failed
             Reason: Alpha With Video Key Effect in Mob slot with ID = 1 of Top-Level Composition "Alpha With Video Key - Too Many Inputs" has an incorrect number of input segments. Expecting 2 segments and found 3 segments.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_219
@@ -602,6 +752,8 @@
             Desc:   In an Alpha With Video Key effect the alpha channel shall be contained within a channel of the foreground video essence, using either RGBA or YUVA.  The essence descriptor shall be an RGBADescriptor object (or a sub-class) for RGBA, or a CDCIDescriptor object (or a sub-class) for CDCI.  The alpha channel shall be indicated by the essence descriptor.
             Result: Failed
             Reason: Input to Alpha With Video Key Effect in Mob slot with ID = 1 of Top-Level Composition "Alpha With Video Key - Foreground is EOC" is a null source reference.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_218
@@ -610,6 +762,8 @@
             Desc:   In an Alpha With Video Key effect the DigitalImageDescriptor::AlphaTransparency property shall be present and specify whether the minimum Alpha value or the maximum Alpha value indicates complete transparency.  The ParameterDef_AlphaKeyInvertAlpha parameter indicates wheter the transparency indicated by the DigitalImageDescriptor::AlphaTransparency property should be inverted.
             Result: Failed
             Reason: Input to Alpha With Video Key Effect in Mob slot with ID = 1 of Top-Level Composition "Alpha With Video Key - Foreground is EOC" is a null source reference.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_219
@@ -618,6 +772,8 @@
             Desc:   In an Alpha With Video Key effect the alpha channel shall be contained within a channel of the foreground video essence, using either RGBA or YUVA.  The essence descriptor shall be an RGBADescriptor object (or a sub-class) for RGBA, or a CDCIDescriptor object (or a sub-class) for CDCI.  The alpha channel shall be indicated by the essence descriptor.
             Result: Passed, but with warnings.
             Reason: Input to Alpha With Video Key Effect in Mob slot with ID = 1 of Top-Level Composition "Alpha With Video Key - Input is out of file" is an out-of-file reference.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: REQ_EP_218
             Failing Requirements: None
@@ -626,6 +782,8 @@
             Desc:   In an Alpha With Video Key effect the DigitalImageDescriptor::AlphaTransparency property shall be present and specify whether the minimum Alpha value or the maximum Alpha value indicates complete transparency.  The ParameterDef_AlphaKeyInvertAlpha parameter indicates wheter the transparency indicated by the DigitalImageDescriptor::AlphaTransparency property should be inverted.
             Result: Passed, but with warnings.
             Reason: Input to Alpha With Video Key Effect in Mob slot with ID = 1 of Top-Level Composition "Alpha With Video Key - Input is out of file" is an out-of-file reference.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: REQ_EP_219
             Failing Requirements: None
@@ -634,6 +792,8 @@
             Desc:   In an Alpha With Video Key effect the alpha channel shall be contained within a channel of the foreground video essence, using either RGBA or YUVA.  The essence descriptor shall be an RGBADescriptor object (or a sub-class) for RGBA, or a CDCIDescriptor object (or a sub-class) for CDCI.  The alpha channel shall be indicated by the essence descriptor.
             Result: Failed
             Reason: Input to Alpha With Video Key Effect in Mob slot with ID = 1 of Top-Level Composition "Alpha With Video Key - Input is not Source Reference" is not a SourceReference.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_218
@@ -642,6 +802,8 @@
             Desc:   In an Alpha With Video Key effect the DigitalImageDescriptor::AlphaTransparency property shall be present and specify whether the minimum Alpha value or the maximum Alpha value indicates complete transparency.  The ParameterDef_AlphaKeyInvertAlpha parameter indicates wheter the transparency indicated by the DigitalImageDescriptor::AlphaTransparency property should be inverted.
             Result: Failed
             Reason: Input to Alpha With Video Key Effect in Mob slot with ID = 1 of Top-Level Composition "Alpha With Video Key - Input is not Source Reference" is not a SourceReference.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_219
@@ -650,6 +812,8 @@
             Desc:   In an Alpha With Video Key effect the alpha channel shall be contained within a channel of the foreground video essence, using either RGBA or YUVA.  The essence descriptor shall be an RGBADescriptor object (or a sub-class) for RGBA, or a CDCIDescriptor object (or a sub-class) for CDCI.  The alpha channel shall be indicated by the essence descriptor.
             Result: Failed
             Reason: Input Unnamed Composition Mob to Alpha With Video Key Effect in Mob slot with ID = 1 of Top-Level Composition "Alpha With Video Key - Input is Composition" does not have a RGBADescriptor or a CDCIDescriptor.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_218
@@ -658,6 +822,8 @@
             Desc:   In an Alpha With Video Key effect the DigitalImageDescriptor::AlphaTransparency property shall be present and specify whether the minimum Alpha value or the maximum Alpha value indicates complete transparency.  The ParameterDef_AlphaKeyInvertAlpha parameter indicates wheter the transparency indicated by the DigitalImageDescriptor::AlphaTransparency property should be inverted.
             Result: Failed
             Reason: Input Unnamed Composition Mob to Alpha With Video Key Effect in Mob slot with ID = 1 of Top-Level Composition "Alpha With Video Key - Input is Composition" does not have the DigitalImageDescriptor::AlphaTransparency property.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_219
@@ -666,6 +832,8 @@
             Desc:   In an Alpha With Video Key effect the alpha channel shall be contained within a channel of the foreground video essence, using either RGBA or YUVA.  The essence descriptor shall be an RGBADescriptor object (or a sub-class) for RGBA, or a CDCIDescriptor object (or a sub-class) for CDCI.  The alpha channel shall be indicated by the essence descriptor.
             Result: Failed
             Reason: Input Unnamed Master Mob to Alpha With Video Key Effect in Mob slot with ID = 1 of Top-Level Composition "Alpha With Video Key - Input is Master" does not have a RGBADescriptor or a CDCIDescriptor.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_218
@@ -674,6 +842,8 @@
             Desc:   In an Alpha With Video Key effect the DigitalImageDescriptor::AlphaTransparency property shall be present and specify whether the minimum Alpha value or the maximum Alpha value indicates complete transparency.  The ParameterDef_AlphaKeyInvertAlpha parameter indicates wheter the transparency indicated by the DigitalImageDescriptor::AlphaTransparency property should be inverted.
             Result: Failed
             Reason: Input Unnamed Master Mob to Alpha With Video Key Effect in Mob slot with ID = 1 of Top-Level Composition "Alpha With Video Key - Input is Master" does not have the DigitalImageDescriptor::AlphaTransparency property.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_219
@@ -682,6 +852,8 @@
             Desc:   In an Alpha With Video Key effect the alpha channel shall be contained within a channel of the foreground video essence, using either RGBA or YUVA.  The essence descriptor shall be an RGBADescriptor object (or a sub-class) for RGBA, or a CDCIDescriptor object (or a sub-class) for CDCI.  The alpha channel shall be indicated by the essence descriptor.
             Result: Failed
             Reason: Input Unnamed Source Mob to Alpha With Video Key Effect in Mob slot with ID = 1 of Top-Level Composition "Alpha With Video Key - Input is Illegal Source" does not have a RGBADescriptor or a CDCIDescriptor.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_218
@@ -690,6 +862,8 @@
             Desc:   In an Alpha With Video Key effect the DigitalImageDescriptor::AlphaTransparency property shall be present and specify whether the minimum Alpha value or the maximum Alpha value indicates complete transparency.  The ParameterDef_AlphaKeyInvertAlpha parameter indicates wheter the transparency indicated by the DigitalImageDescriptor::AlphaTransparency property should be inverted.
             Result: Failed
             Reason: Input Unnamed Source Mob to Alpha With Video Key Effect in Mob slot with ID = 1 of Top-Level Composition "Alpha With Video Key - Input is Illegal Source" does not have the DigitalImageDescriptor::AlphaTransparency property.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_219
@@ -698,6 +872,8 @@
             Desc:   In an Alpha With Video Key effect the DigitalImageDescriptor::AlphaTransparency property shall be present and specify whether the minimum Alpha value or the maximum Alpha value indicates complete transparency.  The ParameterDef_AlphaKeyInvertAlpha parameter indicates wheter the transparency indicated by the DigitalImageDescriptor::AlphaTransparency property should be inverted.
             Result: Failed
             Reason: Input Unnamed CDCI Digital Image File Source to Alpha With Video Key Effect in Mob slot with ID = 1 of Top-Level Composition "Alpha With Video Key - Input is CDIC Source without Alpha Transparency Set" does not have the DigitalImageDescriptor::AlphaTransparency property.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_219
@@ -706,6 +882,8 @@
             Desc:   In an Alpha With Video Key effect the DigitalImageDescriptor::AlphaTransparency property shall be present and specify whether the minimum Alpha value or the maximum Alpha value indicates complete transparency.  The ParameterDef_AlphaKeyInvertAlpha parameter indicates wheter the transparency indicated by the DigitalImageDescriptor::AlphaTransparency property should be inverted.
             Result: Failed
             Reason: Input Unnamed RGBA Digital Image File Source to Alpha With Video Key Effect in Mob slot with ID = 1 of Top-Level Composition "Alpha With Video Key - Input is RGBA Source without Alpha Transparency Set" does not have the DigitalImageDescriptor::AlphaTransparency property.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_219
@@ -714,6 +892,8 @@
             Desc:   In a Separate-Alpha Key effect the alpha channel shall be contained within a channel of separate essence, using either RGBA or YUVA.  The essence descriptor shall be an RGBADescriptor object (or a sub-class) for RGBA, or a CDCIDescriptor object (or a sub-class) for CDCI.  Where the alpha channel is indicated by the essence descriptor, the channel shall be used as the alpha channel.  Where the alpha channel is not indicated by the essence descriptor, the luminance value of essence shall be used as the alpha channel.
             Result: Failed
             Reason: Separate Alpha Key Effect in Mob slot with ID = 1 of Top-Level Composition "Seperate Alpha Key - Too Few Inputs" has an incorrect number of input segments. Expecting 3 segments and found 2 segments.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_223
@@ -722,6 +902,8 @@
             Desc:   In a Separate-Alpha Key effect the DigitalImageDescriptor::AlphaTransparency property shall be present and specify whether the minimum Alpha value or the maximum Alpha value indicates complete transparency.  The ParameterDef_AlphaKeyInvertAlpha parameter indicates whether the transparency indicated by the DigitalImageDescriptor::AlphaTransparency property should be inverted.
             Result: Failed
             Reason: Separate Alpha Key Effect in Mob slot with ID = 1 of Top-Level Composition "Seperate Alpha Key - Too Few Inputs" has an incorrect number of input segments. Expecting 3 segments and found 2 segments.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_224
@@ -730,6 +912,8 @@
             Desc:   In a Separate-Alpha Key effect the alpha channel shall be contained within a channel of separate essence, using either RGBA or YUVA.  The essence descriptor shall be an RGBADescriptor object (or a sub-class) for RGBA, or a CDCIDescriptor object (or a sub-class) for CDCI.  Where the alpha channel is indicated by the essence descriptor, the channel shall be used as the alpha channel.  Where the alpha channel is not indicated by the essence descriptor, the luminance value of essence shall be used as the alpha channel.
             Result: Failed
             Reason: Separate Alpha Key Effect in Mob slot with ID = 1 of Top-Level Composition "Seperate Alpha Key - Too Many Inputs" has an incorrect number of input segments. Expecting 3 segments and found 4 segments.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_223
@@ -738,6 +922,8 @@
             Desc:   In a Separate-Alpha Key effect the DigitalImageDescriptor::AlphaTransparency property shall be present and specify whether the minimum Alpha value or the maximum Alpha value indicates complete transparency.  The ParameterDef_AlphaKeyInvertAlpha parameter indicates whether the transparency indicated by the DigitalImageDescriptor::AlphaTransparency property should be inverted.
             Result: Failed
             Reason: Separate Alpha Key Effect in Mob slot with ID = 1 of Top-Level Composition "Seperate Alpha Key - Too Many Inputs" has an incorrect number of input segments. Expecting 3 segments and found 4 segments.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_224
@@ -746,6 +932,8 @@
             Desc:   In a Separate-Alpha Key effect the alpha channel shall be contained within a channel of separate essence, using either RGBA or YUVA.  The essence descriptor shall be an RGBADescriptor object (or a sub-class) for RGBA, or a CDCIDescriptor object (or a sub-class) for CDCI.  Where the alpha channel is indicated by the essence descriptor, the channel shall be used as the alpha channel.  Where the alpha channel is not indicated by the essence descriptor, the luminance value of essence shall be used as the alpha channel.
             Result: Failed
             Reason: Input to Separate Alpha Key Effect in Mob slot with ID = 1 of Top-Level Composition "Seperate Alpha Key - Foreground is EOC" is a null source reference.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_223
@@ -754,6 +942,8 @@
             Desc:   In a Separate-Alpha Key effect the DigitalImageDescriptor::AlphaTransparency property shall be present and specify whether the minimum Alpha value or the maximum Alpha value indicates complete transparency.  The ParameterDef_AlphaKeyInvertAlpha parameter indicates whether the transparency indicated by the DigitalImageDescriptor::AlphaTransparency property should be inverted.
             Result: Failed
             Reason: Input to Separate Alpha Key Effect in Mob slot with ID = 1 of Top-Level Composition "Seperate Alpha Key - Foreground is EOC" is a null source reference.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_224
@@ -762,6 +952,8 @@
             Desc:   In a Separate-Alpha Key effect the alpha channel shall be contained within a channel of separate essence, using either RGBA or YUVA.  The essence descriptor shall be an RGBADescriptor object (or a sub-class) for RGBA, or a CDCIDescriptor object (or a sub-class) for CDCI.  Where the alpha channel is indicated by the essence descriptor, the channel shall be used as the alpha channel.  Where the alpha channel is not indicated by the essence descriptor, the luminance value of essence shall be used as the alpha channel.
             Result: Passed, but with warnings.
             Reason: Input to Separate Alpha Key Effect in Mob slot with ID = 1 of Top-Level Composition "Seperate Alpha Key - Input is out of file" is an out-of-file reference.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: REQ_EP_223
             Failing Requirements: None
@@ -770,6 +962,8 @@
             Desc:   In a Separate-Alpha Key effect the DigitalImageDescriptor::AlphaTransparency property shall be present and specify whether the minimum Alpha value or the maximum Alpha value indicates complete transparency.  The ParameterDef_AlphaKeyInvertAlpha parameter indicates whether the transparency indicated by the DigitalImageDescriptor::AlphaTransparency property should be inverted.
             Result: Passed, but with warnings.
             Reason: Input to Separate Alpha Key Effect in Mob slot with ID = 1 of Top-Level Composition "Seperate Alpha Key - Input is out of file" is an out-of-file reference.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: REQ_EP_224
             Failing Requirements: None
@@ -778,6 +972,8 @@
             Desc:   In a Separate-Alpha Key effect the alpha channel shall be contained within a channel of separate essence, using either RGBA or YUVA.  The essence descriptor shall be an RGBADescriptor object (or a sub-class) for RGBA, or a CDCIDescriptor object (or a sub-class) for CDCI.  Where the alpha channel is indicated by the essence descriptor, the channel shall be used as the alpha channel.  Where the alpha channel is not indicated by the essence descriptor, the luminance value of essence shall be used as the alpha channel.
             Result: Failed
             Reason: Separate Alpha Key Effect in Mob slot with ID = 1 of Top-Level Composition "Seperate Alpha Key - Input is not Source Reference" has an incorrect number of input segments. Expecting 3 segments and found 2 segments.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_223
@@ -786,6 +982,8 @@
             Desc:   In a Separate-Alpha Key effect the DigitalImageDescriptor::AlphaTransparency property shall be present and specify whether the minimum Alpha value or the maximum Alpha value indicates complete transparency.  The ParameterDef_AlphaKeyInvertAlpha parameter indicates whether the transparency indicated by the DigitalImageDescriptor::AlphaTransparency property should be inverted.
             Result: Failed
             Reason: Separate Alpha Key Effect in Mob slot with ID = 1 of Top-Level Composition "Seperate Alpha Key - Input is not Source Reference" has an incorrect number of input segments. Expecting 3 segments and found 2 segments.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_224
@@ -794,6 +992,8 @@
             Desc:   In a Separate-Alpha Key effect the alpha channel shall be contained within a channel of separate essence, using either RGBA or YUVA.  The essence descriptor shall be an RGBADescriptor object (or a sub-class) for RGBA, or a CDCIDescriptor object (or a sub-class) for CDCI.  Where the alpha channel is indicated by the essence descriptor, the channel shall be used as the alpha channel.  Where the alpha channel is not indicated by the essence descriptor, the luminance value of essence shall be used as the alpha channel.
             Result: Failed
             Reason: Input Unnamed Composition Mob to Alpha With Video Key Effect in Mob slot with ID = 1 of Top-Level Composition "Seperate Alpha Key - Input is Composition" does not have a RGBADescriptor or a CDCIDescriptor.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_223
@@ -802,6 +1002,8 @@
             Desc:   In a Separate-Alpha Key effect the DigitalImageDescriptor::AlphaTransparency property shall be present and specify whether the minimum Alpha value or the maximum Alpha value indicates complete transparency.  The ParameterDef_AlphaKeyInvertAlpha parameter indicates whether the transparency indicated by the DigitalImageDescriptor::AlphaTransparency property should be inverted.
             Result: Failed
             Reason: Input Unnamed Composition Mob to Alpha With Video Key Effect in Mob slot with ID = 1 of Top-Level Composition "Seperate Alpha Key - Input is Composition" does not have the DigitalImageDescriptor::AlphaTransparency property.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_224
@@ -810,6 +1012,8 @@
             Desc:   In a Separate-Alpha Key effect the alpha channel shall be contained within a channel of separate essence, using either RGBA or YUVA.  The essence descriptor shall be an RGBADescriptor object (or a sub-class) for RGBA, or a CDCIDescriptor object (or a sub-class) for CDCI.  Where the alpha channel is indicated by the essence descriptor, the channel shall be used as the alpha channel.  Where the alpha channel is not indicated by the essence descriptor, the luminance value of essence shall be used as the alpha channel.
             Result: Failed
             Reason: Input Unnamed Master Mob to Alpha With Video Key Effect in Mob slot with ID = 1 of Top-Level Composition "Seperate Alpha Key - Input is Master" does not have a RGBADescriptor or a CDCIDescriptor.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_223
@@ -818,6 +1022,8 @@
             Desc:   In a Separate-Alpha Key effect the DigitalImageDescriptor::AlphaTransparency property shall be present and specify whether the minimum Alpha value or the maximum Alpha value indicates complete transparency.  The ParameterDef_AlphaKeyInvertAlpha parameter indicates whether the transparency indicated by the DigitalImageDescriptor::AlphaTransparency property should be inverted.
             Result: Failed
             Reason: Input Unnamed Master Mob to Alpha With Video Key Effect in Mob slot with ID = 1 of Top-Level Composition "Seperate Alpha Key - Input is Master" does not have the DigitalImageDescriptor::AlphaTransparency property.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_224
@@ -826,6 +1032,8 @@
             Desc:   In a Separate-Alpha Key effect the alpha channel shall be contained within a channel of separate essence, using either RGBA or YUVA.  The essence descriptor shall be an RGBADescriptor object (or a sub-class) for RGBA, or a CDCIDescriptor object (or a sub-class) for CDCI.  Where the alpha channel is indicated by the essence descriptor, the channel shall be used as the alpha channel.  Where the alpha channel is not indicated by the essence descriptor, the luminance value of essence shall be used as the alpha channel.
             Result: Failed
             Reason: Input Unnamed Source Mob to Alpha With Video Key Effect in Mob slot with ID = 1 of Top-Level Composition "Seperate Alpha Key - Input is Illegal Source" does not have a RGBADescriptor or a CDCIDescriptor.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_223
@@ -834,6 +1042,8 @@
             Desc:   In a Separate-Alpha Key effect the DigitalImageDescriptor::AlphaTransparency property shall be present and specify whether the minimum Alpha value or the maximum Alpha value indicates complete transparency.  The ParameterDef_AlphaKeyInvertAlpha parameter indicates whether the transparency indicated by the DigitalImageDescriptor::AlphaTransparency property should be inverted.
             Result: Failed
             Reason: Input Unnamed Source Mob to Alpha With Video Key Effect in Mob slot with ID = 1 of Top-Level Composition "Seperate Alpha Key - Input is Illegal Source" does not have the DigitalImageDescriptor::AlphaTransparency property.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_224
@@ -842,6 +1052,8 @@
             Desc:   In a Separate-Alpha Key effect the DigitalImageDescriptor::AlphaTransparency property shall be present and specify whether the minimum Alpha value or the maximum Alpha value indicates complete transparency.  The ParameterDef_AlphaKeyInvertAlpha parameter indicates whether the transparency indicated by the DigitalImageDescriptor::AlphaTransparency property should be inverted.
             Result: Failed
             Reason: Input Unnamed CDCI Digital Image File Source to Alpha With Video Key Effect in Mob slot with ID = 1 of Top-Level Composition "Seperate Alpha Key - Input is CDIC Source without Alpha Transparency Set" does not have the DigitalImageDescriptor::AlphaTransparency property.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_224
@@ -850,6 +1062,8 @@
             Desc:   In a Separate-Alpha Key effect the DigitalImageDescriptor::AlphaTransparency property shall be present and specify whether the minimum Alpha value or the maximum Alpha value indicates complete transparency.  The ParameterDef_AlphaKeyInvertAlpha parameter indicates whether the transparency indicated by the DigitalImageDescriptor::AlphaTransparency property should be inverted.
             Result: Failed
             Reason: Input Unnamed RGBA Digital Image File Source to Alpha With Video Key Effect in Mob slot with ID = 1 of Top-Level Composition "Seperate Alpha Key - Input is RGBA Source without Alpha Transparency Set" does not have the DigitalImageDescriptor::AlphaTransparency property.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_224
@@ -858,6 +1072,8 @@
             Desc:   The effects defined in the Edit Protocol should be used with the AAF v1.1 data definition values of DataDef_Picture and DataDef_Sound.  The deprecated data definition values of DataDef_LegacyPicture and DataDef_LegacySound should only be used when working with legacy AAF v1.0 files.
             Result: Failed
             Reason: Single-Parameter Audio Dissolve Effect in Mob slot with ID = 1 of Top-Level Composition "Heredity Test" is not within a Transition object.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_163
@@ -866,6 +1082,8 @@
             Desc:   The Single-Parameter Mono Audio Dissolve effect shall only be used by an OperationGroup within a Transition object.
             Result: Failed
             Reason: Single-Parameter Audio Dissolve Effect in Mob slot with ID = 1 of Top-Level Composition "Heredity Test" is not within a Transition object.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_244

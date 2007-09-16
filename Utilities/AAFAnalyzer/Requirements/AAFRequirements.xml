@@ -1185,16 +1185,61 @@
         </ref>
     </requirement>
 
-    <requirement type="file" category="metadata">
-        <id>REQ_EP_108</id>
-        <name>IN, OUT and User Position Point Specification</name>
-        <desc>The marked IN and OUT points and user position shall be specified using the TimelineMobSlot::MarkIn, TimelineMobSlot::MarkOut and TimelineMobSlot::UserPos optional properties respectively.</desc>
+
+
+    <!-- start REQ_EP_108_X -->
+
+    <requirement type="file" category="metadata" action="reconcile">
+        <id>REQ_EP_108.1</id>
+        <name>Mark IN Position</name>
+        <desc>The mark IN point shall be specified using the TimelineMobSlot::MarkIn optional property.</desc>
+	<annotate>If mark IN is not specified then the beginning of the seqment is implied.</annotate>
+	<note></note>
         <ref>
             <doc>&DOC_AAF_EP;</doc>
             <version>&VER_EP_1.0;</version>
             <section>7.7</section>
         </ref>
     </requirement>
+
+    <requirement type="file" category="metadata" action="reconcile">
+        <id>REQ_EP_108.2</id>
+        <name>Mark OUT Position</name>
+        <desc>The mark OUT point shall be specified using the TimelineMobSlot::MarkOut optional property.</desc>
+	<annotate>If mark OUT is not specified then the end the seqment is implied.</annotate>
+	<note></note>
+        <ref>
+            <doc>&DOC_AAF_EP;</doc>
+            <version>&VER_EP_1.0;</version>
+            <section>7.7</section>
+        </ref>
+    </requirement>
+
+    <requirement type="file" category="metadata" action="reconcile">
+        <id>REQ_EP_108.3</id>
+        <name>Marked Region Length</name>
+        <desc>The length of the marked region is OUT-IN. OUT shall be greater than IN.</desc>
+	<note>This is coded to FAIL, formerly it warned because this wasn't stated in the EP spec. This should be clear in the specification to avoid off by one errors, and to avoid the assumption that OUT equals IN is acceptable.</note>
+        <ref>
+            <doc>&DOC_AAF_EP;</doc>
+            <version>&VER_EP_1.0;</version>
+            <section>7.7</section>
+        </ref>
+    </requirement>
+
+    <requirement type="file" category="metadata" action="reconcile">
+        <id>REQ_EP_108.4</id>
+        <name>User Position</name>
+        <desc>The user position shall be specified using the TimelineMobSlot::UserPosition optional property.</desc>
+	<note></note>
+        <ref>
+            <doc>&DOC_AAF_EP;</doc>
+            <version>&VER_EP_1.0;</version>
+            <section>7.7</section>
+        </ref>
+    </requirement>
+
+    <!-- end REQ_EP_108.X -->
 
     <requirement type="app" category="metadata">
         <id>REQ_EP_109</id>

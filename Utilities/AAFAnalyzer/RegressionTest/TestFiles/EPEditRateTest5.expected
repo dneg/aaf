@@ -2,7 +2,9 @@
         Desc:   Verify that all essence tracks have valid edit rates.
         Result: Failed
         Reason: 
-        Passing Requirements: REQ_EP_092; REQ_EP_099; REQ_EP_100
+        Covered Requirements: REQ_EP_092; REQ_EP_099; REQ_EP_100
+        Noted Requirements: None
+        Passing Requirements: None
         Warning Requirements: None
         Failing Requirements: REQ_EP_091
 
@@ -10,6 +12,8 @@
             Desc:   The edit rate value shall be equivalent to the values in the table in Section 7.1 of the AAF Edit Protocol.
             Result: Failed
             Reason: Mob Slot with ID = 1 of Clip "Clip 1" is a StaticMobSlot and does not have an edit rate.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_091
@@ -18,6 +22,8 @@
             Desc:   The edit rate value shall be equivalent to the values in the table in Section 7.1 of the AAF Edit Protocol.
             Result: Failed
             Reason: Mob Slot with ID = 1 of Clip "Clip 2" is a StaticMobSlot and does not have an edit rate.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_091

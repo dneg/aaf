@@ -58,8 +58,11 @@ public:
         TypeAsString(),
         Category(Requirement::CAT_UNDEFINED),
         CategoryAsString(),
+        Action(),
         Name(),
         Desc(),
+        Annotate(),
+        Note(),
         Document(),
         Version(),
         Section()
@@ -72,8 +75,11 @@ public:
       wstring TypeAsString;
       Requirement::Category Category;
       wstring CategoryAsString;
+      wstring Action;
       wstring Name;
       wstring Desc;
+      wstring Annotate;
+      wstring Note;
       wstring Document;
       wstring Version;
       wstring Section;

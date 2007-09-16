@@ -52,8 +52,11 @@ public:
 		const wstring& requirementTypeAsString,
                 const Category category,
 		const wstring& categoryAsString,
+		const wstring& action,
                 const wstring& name,
                 const wstring& desc,
+                const wstring& annotation,
+                const wstring& note,
                 const wstring& document,
                 const wstring& version,
                 const wstring& section);
@@ -63,8 +66,11 @@ public:
     const wstring& GetId() const;  
     const enum RequirementType GetRequirementType() const;
     const enum Category GetCategory() const;
+    const wstring& GetAction() const;
     const wstring& GetName() const;
     const wstring& GetDescription() const;
+    const wstring& GetAnnotation() const;
+    const wstring& GetNote() const;
     const wstring& GetDocument() const;
     const wstring& GetVersion() const;
     const wstring& GetSection() const;
@@ -80,8 +86,11 @@ public:
     wstring _requirementTypeAsString;
     const enum Category _category;
     wstring _categoryAsString;
+    const wstring _action;
     const wstring _name;
     const wstring _description;
+    const wstring _annotation;
+    const wstring _note;
     const wstring _document;
     const wstring _version;
     const wstring _section;

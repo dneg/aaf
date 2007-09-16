@@ -857,7 +857,7 @@ void TestFileBuilder::AddKLVData( shared_ptr<AxComponent> axComponent, const AxS
  *
  */
 
-void TestFileBuilder::AttachTimelineSlot( AxMob& parent, AxSegment& axSegment, aafRational_t editRate, const AxString& name, bool isNamed, int physicalTrackNum, bool isNumbered, int markedIn, bool isMarkedIn, int markedOut, bool isMarkedOut, int orgin )
+void TestFileBuilder::AttachTimelineSlot( AxMob& parent, AxSegment& axSegment, aafRational_t editRate, const AxString& name, bool isNamed, int physicalTrackNum, bool isNumbered, int markedIn, bool isMarkedIn, int markedOut, bool isMarkedOut, int userPos, bool isUserPos, int origin )
 {
 
     AxHeader axHeader( _axFile.getHeader() );
@@ -868,7 +868,7 @@ void TestFileBuilder::AttachTimelineSlot( AxMob& parent, AxSegment& axSegment, a
     axTimelineMobSlot.SetEditRate( editRate );
     axTimelineMobSlot.SetSegment( axSegment );
     axTimelineMobSlot.SetSlotID( parent.CountSlots() + 1 );
-    axTimelineMobSlot.SetOrigin( orgin );
+    axTimelineMobSlot.SetOrigin( origin );
     if ( isNamed )
     {
         axTimelineMobSlot.SetName( name );
@@ -885,12 +885,16 @@ void TestFileBuilder::AttachTimelineSlot( AxMob& parent, AxSegment& axSegment, a
     {
         axTimelineMobSlot.SetMarkOut( markedOut );
     }
+    if ( isUserPos )
+    {
+      axTimelineMobSlot.SetUserPos( userPos );
+    }
 
     parent.AppendSlot( axTimelineMobSlot );
 
 }
 
-void TestFileBuilder::AttachEventSlot( AxMob& parent, AxSegment& axSegment, aafRational_t editRate, const AxString& name, bool isNamed, int physicalTrackNum, bool isNumbered, int intNothing1, bool boolNothing1, int intNothing2, bool boolNothing2, int intNothing3 )
+void TestFileBuilder::AttachEventSlot( AxMob& parent, AxSegment& axSegment, aafRational_t editRate, const AxString& name, bool isNamed, int physicalTrackNum, bool isNumbered, int intNothing1, bool boolNothing1, int intNothing2, bool boolNothing2, int intNothing3, bool boolNothing3, int intNothing4 )
 {
 
     AxHeader axHeader( _axFile.getHeader() );
@@ -914,7 +918,7 @@ void TestFileBuilder::AttachEventSlot( AxMob& parent, AxSegment& axSegment, aafR
 
 }
 
-void TestFileBuilder::AttachStaticSlot( AxMob& parent, AxSegment& axSegment, aafRational_t editRate, const AxString& name, bool isNamed, int physicalTrackNum, bool isNumbered, int intNothing1, bool boolNothing1, int intNothing2, bool boolNothing2, int intNothing3 )
+void TestFileBuilder::AttachStaticSlot( AxMob& parent, AxSegment& axSegment, aafRational_t editRate, const AxString& name, bool isNamed, int physicalTrackNum, bool isNumbered, int intNothing1, bool boolNothing1, int intNothing2, bool boolNothing2,  int intNothing3, bool boolNothing3, int intNothing4 )
 {
     AxHeader axHeader( _axFile.getHeader() );
     AxDictionary axDictionary( axHeader.GetDictionary() );

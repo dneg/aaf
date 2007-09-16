@@ -2,6 +2,8 @@
         Desc:   Verify the use of DataDefinition objects throught the file.
         Result: Failed
         Reason: 
+        Covered Requirements: None
+        Noted Requirements: None
         Passing Requirements: None
         Warning Requirements: None
         Failing Requirements: REQ_EP_162; REQ_EP_163
@@ -10,6 +12,8 @@
             Desc:   An OperationDefinition object in an AAF file shall have a data definition value consistent with the data definition of an OperationGroup object that references it.
             Result: Failed
             Reason: OperationGroup in Mob slot with ID = 1 of Top-Level Composition "Video Dissolve not in Transition" has data definition value "Picture" and references OperationDefinition "Video Dissolve" with data definition value "Legacy Picture".
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_162
@@ -18,6 +22,8 @@
             Desc:   An OperationDefinition object in an AAF file shall have a data definition value consistent with the data definition of an OperationGroup object that references it.
             Result: Failed
             Reason: OperationGroup in Mob slot with ID = 1 of Top-Level Composition "SMPTE Video Wipe not in Transition" has data definition value "Picture" and references OperationDefinition "SMPTE Video Wipe" with data definition value "Legacy Picture".
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_162
@@ -26,6 +32,8 @@
             Desc:   An OperationDefinition object in an AAF file shall have a data definition value consistent with the data definition of an OperationGroup object that references it.
             Result: Failed
             Reason: OperationGroup in Mob slot with ID = 1 of Top-Level Composition "Video Speed Control not in Transition" has data definition value "Picture" and references OperationDefinition "Video Speed Control" with data definition value "Legacy Picture".
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_162
@@ -34,6 +42,8 @@
             Desc:   An OperationDefinition object in an AAF file shall have a data definition value consistent with the data definition of an OperationGroup object that references it.
             Result: Failed
             Reason: OperationGroup in Mob slot with ID = 1 of Top-Level Composition "Video Repeat not in Transition" has data definition value "Picture" and references OperationDefinition "Video Repeat" with data definition value "Legacy Picture".
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_162
@@ -42,6 +52,8 @@
             Desc:   An OperationDefinition object in an AAF file shall have a data definition value consistent with the data definition of an OperationGroup object that references it.
             Result: Failed
             Reason: OperationGroup in Mob slot with ID = 1 of Top-Level Composition "Video Flip not in Transition" has data definition value "Picture" and references OperationDefinition "Video Flip" with data definition value "Legacy Picture".
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_162
@@ -50,6 +62,8 @@
             Desc:   An OperationDefinition object in an AAF file shall have a data definition value consistent with the data definition of an OperationGroup object that references it.
             Result: Failed
             Reason: OperationGroup in Mob slot with ID = 1 of Top-Level Composition "Video Flop not in Transition" has data definition value "Picture" and references OperationDefinition "Video Flop" with data definition value "Legacy Picture".
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_162
@@ -58,6 +72,8 @@
             Desc:   An OperationDefinition object in an AAF file shall have a data definition value consistent with the data definition of an OperationGroup object that references it.
             Result: Failed
             Reason: OperationGroup in Mob slot with ID = 1 of Top-Level Composition "Video Flip-Flop not in Transition" has data definition value "Picture" and references OperationDefinition "Video Flip Flop" with data definition value "Legacy Picture".
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_162
@@ -66,6 +82,8 @@
             Desc:   An OperationDefinition object in an AAF file shall have a data definition value consistent with the data definition of an OperationGroup object that references it.
             Result: Failed
             Reason: OperationGroup in Mob slot with ID = 1 of Top-Level Composition "Video Position not in Transition" has data definition value "Picture" and references OperationDefinition "Video Position" with data definition value "Legacy Picture".
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_162
@@ -74,6 +92,8 @@
             Desc:   An OperationDefinition object in an AAF file shall have a data definition value consistent with the data definition of an OperationGroup object that references it.
             Result: Failed
             Reason: OperationGroup in Mob slot with ID = 1 of Top-Level Composition "Video Crop not in Transition" has data definition value "Picture" and references OperationDefinition "Video Crop" with data definition value "Legacy Picture".
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_162
@@ -82,6 +102,8 @@
             Desc:   An OperationDefinition object in an AAF file shall have a data definition value consistent with the data definition of an OperationGroup object that references it.
             Result: Failed
             Reason: OperationGroup in Mob slot with ID = 1 of Top-Level Composition "Video Scale not in Transition" has data definition value "Picture" and references OperationDefinition "Video Scale" with data definition value "Legacy Picture".
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_162
@@ -90,6 +112,8 @@
             Desc:   An OperationDefinition object in an AAF file shall have a data definition value consistent with the data definition of an OperationGroup object that references it.
             Result: Failed
             Reason: OperationGroup in Mob slot with ID = 1 of Top-Level Composition "Video Rotate not in Transition" has data definition value "Picture" and references OperationDefinition "Video Rotate" with data definition value "Legacy Picture".
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_162
@@ -98,6 +122,8 @@
             Desc:   An OperationDefinition object in an AAF file shall have a data definition value consistent with the data definition of an OperationGroup object that references it.
             Result: Failed
             Reason: OperationGroup in Mob slot with ID = 1 of Top-Level Composition "Video Corner Pinning not in Transition" has data definition value "Picture" and references OperationDefinition "Video Corner Pinning" with data definition value "Legacy Picture".
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_162
@@ -106,6 +132,8 @@
             Desc:   An OperationDefinition object in an AAF file shall have a data definition value consistent with the data definition of an OperationGroup object that references it.
             Result: Failed
             Reason: OperationGroup in Mob slot with ID = 1 of Top-Level Composition "Alpha With Video Key not in Transition" has data definition value "Picture" and references OperationDefinition "Alpha With Video Key effect" with data definition value "Legacy Picture".
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_162
@@ -114,6 +142,8 @@
             Desc:   An OperationDefinition object in an AAF file shall have a data definition value consistent with the data definition of an OperationGroup object that references it.
             Result: Failed
             Reason: OperationGroup in Mob slot with ID = 1 of Top-Level Composition "Separate Alpha Key not in Transition" has data definition value "Picture" and references OperationDefinition "Separate Alpha Key effect" with data definition value "Legacy Picture".
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_162
@@ -122,6 +152,8 @@
             Desc:   An OperationDefinition object in an AAF file shall have a data definition value consistent with the data definition of an OperationGroup object that references it.
             Result: Failed
             Reason: OperationGroup in Mob slot with ID = 1 of Top-Level Composition "Luminance Key not in Transition" has data definition value "Picture" and references OperationDefinition "Luminance Key" with data definition value "Legacy Picture".
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_162
@@ -130,6 +162,8 @@
             Desc:   An OperationDefinition object in an AAF file shall have a data definition value consistent with the data definition of an OperationGroup object that references it.
             Result: Failed
             Reason: OperationGroup in Mob slot with ID = 1 of Top-Level Composition "Chroma Key not in Transition" has data definition value "Picture" and references OperationDefinition "Chroma Key" with data definition value "Legacy Picture".
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_162
@@ -138,6 +172,8 @@
             Desc:   An OperationDefinition object in an AAF file shall have a data definition value consistent with the data definition of an OperationGroup object that references it.
             Result: Failed
             Reason: OperationGroup in Mob slot with ID = 1 of Top-Level Composition "Mono Audio Gain not in Transition" has data definition value "Sound" and references OperationDefinition "Mono Audio Gain" with data definition value "Legacy Sound".
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_162
@@ -146,6 +182,8 @@
             Desc:   An OperationDefinition object in an AAF file shall have a data definition value consistent with the data definition of an OperationGroup object that references it.
             Result: Failed
             Reason: OperationGroup in Mob slot with ID = 1 of Top-Level Composition "Mono Audio Pan not in Transition" has data definition value "Sound" and references OperationDefinition "Mono Audio Pan" with data definition value "Legacy Sound".
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_162
@@ -154,6 +192,8 @@
             Desc:   An OperationDefinition object in an AAF file shall have a data definition value consistent with the data definition of an OperationGroup object that references it.
             Result: Failed
             Reason: OperationGroup in Mob slot with ID = 1 of Top-Level Composition "Mono Audio Dissolve not in Transition" has data definition value "Sound" and references OperationDefinition "Mono Audio Dissolve" with data definition value "Legacy Sound".
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_162
@@ -162,6 +202,8 @@
             Desc:   An OperationDefinition object in an AAF file shall have a data definition value consistent with the data definition of an OperationGroup object that references it.
             Result: Failed
             Reason: OperationGroup in Mob slot with ID = 1 of Top-Level Composition "Two Parameter Mobo Audio Dissolve not in Transition" has data definition value "Sound" and references OperationDefinition "Two-Parameter Mono Audio Dissolve" with data definition value "Legacy Sound".
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_162
@@ -170,6 +212,8 @@
             Desc:   The effects defined in the Edit Protocol should be used with the AAF v1.1 data definition values of DataDef_Picture and DataDef_Sound.  The deprecated data definition values of DataDef_LegacyPicture and DataDef_LegacySound should only be used when working with legacy AAF v1.0 files.
             Result: Failed
             Reason: OperationDefinition "Alpha With Video Key effect" has DataDefinition = DataDef_LegacyPicture. in an AAF Version 1.1 file.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_163
@@ -178,6 +222,8 @@
             Desc:   The effects defined in the Edit Protocol should be used with the AAF v1.1 data definition values of DataDef_Picture and DataDef_Sound.  The deprecated data definition values of DataDef_LegacyPicture and DataDef_LegacySound should only be used when working with legacy AAF v1.0 files.
             Result: Failed
             Reason: OperationDefinition "Chroma Key" has DataDefinition = DataDef_LegacyPicture. in an AAF Version 1.1 file.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_163
@@ -186,6 +232,8 @@
             Desc:   The effects defined in the Edit Protocol should be used with the AAF v1.1 data definition values of DataDef_Picture and DataDef_Sound.  The deprecated data definition values of DataDef_LegacyPicture and DataDef_LegacySound should only be used when working with legacy AAF v1.0 files.
             Result: Failed
             Reason: OperationDefinition "Luminance Key" has DataDefinition = DataDef_LegacyPicture. in an AAF Version 1.1 file.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_163
@@ -194,6 +242,8 @@
             Desc:   The effects defined in the Edit Protocol should be used with the AAF v1.1 data definition values of DataDef_Picture and DataDef_Sound.  The deprecated data definition values of DataDef_LegacyPicture and DataDef_LegacySound should only be used when working with legacy AAF v1.0 files.
             Result: Failed
             Reason: OperationDefinition "Mono Audio Dissolve" has DataDefinition = DataDef_LegacySound. in an AAF Version 1.1 file.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_163
@@ -202,6 +252,8 @@
             Desc:   The effects defined in the Edit Protocol should be used with the AAF v1.1 data definition values of DataDef_Picture and DataDef_Sound.  The deprecated data definition values of DataDef_LegacyPicture and DataDef_LegacySound should only be used when working with legacy AAF v1.0 files.
             Result: Failed
             Reason: OperationDefinition "Mono Audio Gain" has DataDefinition = DataDef_LegacySound. in an AAF Version 1.1 file.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_163
@@ -210,6 +262,8 @@
             Desc:   The effects defined in the Edit Protocol should be used with the AAF v1.1 data definition values of DataDef_Picture and DataDef_Sound.  The deprecated data definition values of DataDef_LegacyPicture and DataDef_LegacySound should only be used when working with legacy AAF v1.0 files.
             Result: Failed
             Reason: OperationDefinition "Mono Audio Pan" has DataDefinition = DataDef_LegacySound. in an AAF Version 1.1 file.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_163
@@ -218,6 +272,8 @@
             Desc:   The effects defined in the Edit Protocol should be used with the AAF v1.1 data definition values of DataDef_Picture and DataDef_Sound.  The deprecated data definition values of DataDef_LegacyPicture and DataDef_LegacySound should only be used when working with legacy AAF v1.0 files.
             Result: Failed
             Reason: OperationDefinition "SMPTE Video Wipe" has DataDefinition = DataDef_LegacyPicture. in an AAF Version 1.1 file.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_163
@@ -226,6 +282,8 @@
             Desc:   The effects defined in the Edit Protocol should be used with the AAF v1.1 data definition values of DataDef_Picture and DataDef_Sound.  The deprecated data definition values of DataDef_LegacyPicture and DataDef_LegacySound should only be used when working with legacy AAF v1.0 files.
             Result: Failed
             Reason: OperationDefinition "Separate Alpha Key effect" has DataDefinition = DataDef_LegacyPicture. in an AAF Version 1.1 file.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_163
@@ -234,6 +292,8 @@
             Desc:   The effects defined in the Edit Protocol should be used with the AAF v1.1 data definition values of DataDef_Picture and DataDef_Sound.  The deprecated data definition values of DataDef_LegacyPicture and DataDef_LegacySound should only be used when working with legacy AAF v1.0 files.
             Result: Failed
             Reason: OperationDefinition "Two-Parameter Mono Audio Dissolve" has DataDefinition = DataDef_LegacySound. in an AAF Version 1.1 file.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_163
@@ -242,6 +302,8 @@
             Desc:   The effects defined in the Edit Protocol should be used with the AAF v1.1 data definition values of DataDef_Picture and DataDef_Sound.  The deprecated data definition values of DataDef_LegacyPicture and DataDef_LegacySound should only be used when working with legacy AAF v1.0 files.
             Result: Failed
             Reason: OperationDefinition "Video Corner Pinning" has DataDefinition = DataDef_LegacyPicture. in an AAF Version 1.1 file.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_163
@@ -250,6 +312,8 @@
             Desc:   The effects defined in the Edit Protocol should be used with the AAF v1.1 data definition values of DataDef_Picture and DataDef_Sound.  The deprecated data definition values of DataDef_LegacyPicture and DataDef_LegacySound should only be used when working with legacy AAF v1.0 files.
             Result: Failed
             Reason: OperationDefinition "Video Crop" has DataDefinition = DataDef_LegacyPicture. in an AAF Version 1.1 file.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_163
@@ -258,6 +322,8 @@
             Desc:   The effects defined in the Edit Protocol should be used with the AAF v1.1 data definition values of DataDef_Picture and DataDef_Sound.  The deprecated data definition values of DataDef_LegacyPicture and DataDef_LegacySound should only be used when working with legacy AAF v1.0 files.
             Result: Failed
             Reason: OperationDefinition "Video Dissolve" has DataDefinition = DataDef_LegacyPicture. in an AAF Version 1.1 file.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_163
@@ -266,6 +332,8 @@
             Desc:   The effects defined in the Edit Protocol should be used with the AAF v1.1 data definition values of DataDef_Picture and DataDef_Sound.  The deprecated data definition values of DataDef_LegacyPicture and DataDef_LegacySound should only be used when working with legacy AAF v1.0 files.
             Result: Failed
             Reason: OperationDefinition "Video Flip Flop" has DataDefinition = DataDef_LegacyPicture. in an AAF Version 1.1 file.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_163
@@ -274,6 +342,8 @@
             Desc:   The effects defined in the Edit Protocol should be used with the AAF v1.1 data definition values of DataDef_Picture and DataDef_Sound.  The deprecated data definition values of DataDef_LegacyPicture and DataDef_LegacySound should only be used when working with legacy AAF v1.0 files.
             Result: Failed
             Reason: OperationDefinition "Video Flip" has DataDefinition = DataDef_LegacyPicture. in an AAF Version 1.1 file.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_163
@@ -282,6 +352,8 @@
             Desc:   The effects defined in the Edit Protocol should be used with the AAF v1.1 data definition values of DataDef_Picture and DataDef_Sound.  The deprecated data definition values of DataDef_LegacyPicture and DataDef_LegacySound should only be used when working with legacy AAF v1.0 files.
             Result: Failed
             Reason: OperationDefinition "Video Flop" has DataDefinition = DataDef_LegacyPicture. in an AAF Version 1.1 file.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_163
@@ -290,6 +362,8 @@
             Desc:   The effects defined in the Edit Protocol should be used with the AAF v1.1 data definition values of DataDef_Picture and DataDef_Sound.  The deprecated data definition values of DataDef_LegacyPicture and DataDef_LegacySound should only be used when working with legacy AAF v1.0 files.
             Result: Failed
             Reason: OperationDefinition "Video Position" has DataDefinition = DataDef_LegacyPicture. in an AAF Version 1.1 file.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_163
@@ -298,6 +372,8 @@
             Desc:   The effects defined in the Edit Protocol should be used with the AAF v1.1 data definition values of DataDef_Picture and DataDef_Sound.  The deprecated data definition values of DataDef_LegacyPicture and DataDef_LegacySound should only be used when working with legacy AAF v1.0 files.
             Result: Failed
             Reason: OperationDefinition "Video Repeat" has DataDefinition = DataDef_LegacyPicture. in an AAF Version 1.1 file.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_163
@@ -306,6 +382,8 @@
             Desc:   The effects defined in the Edit Protocol should be used with the AAF v1.1 data definition values of DataDef_Picture and DataDef_Sound.  The deprecated data definition values of DataDef_LegacyPicture and DataDef_LegacySound should only be used when working with legacy AAF v1.0 files.
             Result: Failed
             Reason: OperationDefinition "Video Rotate" has DataDefinition = DataDef_LegacyPicture. in an AAF Version 1.1 file.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_163
@@ -314,6 +392,8 @@
             Desc:   The effects defined in the Edit Protocol should be used with the AAF v1.1 data definition values of DataDef_Picture and DataDef_Sound.  The deprecated data definition values of DataDef_LegacyPicture and DataDef_LegacySound should only be used when working with legacy AAF v1.0 files.
             Result: Failed
             Reason: OperationDefinition "Video Scale" has DataDefinition = DataDef_LegacyPicture. in an AAF Version 1.1 file.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_163
@@ -322,6 +402,8 @@
             Desc:   The effects defined in the Edit Protocol should be used with the AAF v1.1 data definition values of DataDef_Picture and DataDef_Sound.  The deprecated data definition values of DataDef_LegacyPicture and DataDef_LegacySound should only be used when working with legacy AAF v1.0 files.
             Result: Failed
             Reason: OperationDefinition "Video Speed Control" has DataDefinition = DataDef_LegacyPicture. in an AAF Version 1.1 file.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_163

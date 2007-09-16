@@ -64,6 +64,8 @@ using namespace boost;
 TestResult::TestResult()
   : _result( UNDEFINED ),
     _spSubtestResults(new SubtestResultVector()),
+    _spCoveredRequirements( new Requirement::RequirementMap() ),
+    _spNotedRequirements( new Requirement::RequirementMap() ),
     _spPassedRequirements( new Requirement::RequirementMap() ),
     _spWarnedRequirements( new Requirement::RequirementMap() ),
     _spFailedRequirements( new Requirement::RequirementMap() ),
@@ -78,6 +80,8 @@ TestResult::TestResult( const wstring& name,
     _expl( explain ),
     _result( UNDEFINED ),
     _spSubtestResults(new SubtestResultVector()),
+    _spCoveredRequirements( new Requirement::RequirementMap() ),
+    _spNotedRequirements( new Requirement::RequirementMap() ),
     _spPassedRequirements( new Requirement::RequirementMap() ),
     _spWarnedRequirements( new Requirement::RequirementMap() ),
     _spFailedRequirements( new Requirement::RequirementMap() ),
@@ -135,6 +139,12 @@ const Requirement::RequirementMap& TestResult::GetRequirements( Result type ) co
 {
   switch (type)
   {
+  case COVERED:
+    return *_spCoveredRequirements;
+    break;
+  case NOTED:
+    return *_spNotedRequirements;
+    break;
   case PASS:
     return *_spPassedRequirements;
     break;
@@ -170,7 +180,15 @@ void TestResult::AddSubtestResult( shared_ptr<TestResult> subtestResult )
 
 bool TestResult::ContainsRequirement( const wstring& id, Result& outContainedIn )
 {
-    if ( _spPassedRequirements->find(id) != _spPassedRequirements->end() ) {
+    if ( _spCoveredRequirements->find(id) != _spCoveredRequirements->end() ) {
+        outContainedIn = COVERED;
+        return true;
+    }
+    else if ( _spNotedRequirements->find(id) != _spNotedRequirements->end() ) {
+        outContainedIn = NOTED;
+        return true;
+    }
+    else if ( _spPassedRequirements->find(id) != _spPassedRequirements->end() ) {
         outContainedIn = PASS;
         return true;
     } else if ( _spWarnedRequirements->find(id) != _spWarnedRequirements->end() ) {
@@ -199,6 +217,10 @@ bool TestResult::HasResult( const wstring& id, Result result ) const
       return _spWarnedRequirements->find(id) != _spWarnedRequirements->end();
     case PASS:
       return _spPassedRequirements->find(id) != _spPassedRequirements->end();
+    case NOTED:
+      return _spNotedRequirements->find(id) != _spNotedRequirements->end();
+    case COVERED:
+      return _spCoveredRequirements->find(id) != _spCoveredRequirements->end();
     default:
       assert(0);
   }
@@ -209,6 +231,8 @@ bool TestResult::HasResult( const wstring& id, Result result ) const
 
 void TestResult::ClearRequirements()
 {
+    _spCoveredRequirements->clear();
+    _spNotedRequirements->clear();
     _spPassedRequirements->clear();
     _spWarnedRequirements->clear();
     _spFailedRequirements->clear();
@@ -224,6 +248,8 @@ void TestResult::AddRequirement( Result type, const shared_ptr<const Requirement
 
 void TestResult::RemoveRequirement( const wstring& id )
 {
+    _spCoveredRequirements->erase(id);
+    _spNotedRequirements->erase(id);
     _spPassedRequirements->erase(id);
     _spWarnedRequirements->erase(id);
     _spFailedRequirements->erase(id);
@@ -234,6 +260,12 @@ const Requirement::RequirementMapSP& TestResult::GetMyRequirements( Result type 
 {
   switch (type)
   {
+    case COVERED:
+      return _spCoveredRequirements;
+      break;
+    case NOTED:
+      return _spNotedRequirements;
+      break;
     case PASS:
       return _spPassedRequirements;
       break;
@@ -325,9 +357,11 @@ void TestResult::ProtectedSetResult( Result result )
 void TestResult::Dump( const wstring& prefix, wostream& os ) const
 {
   os << prefix << _name << L":" << endl;
-  DumpRequirementSet( L"pass",      prefix, os, _spPassedRequirements );
-  DumpRequirementSet( L"warn",      prefix, os, _spWarnedRequirements );
-  DumpRequirementSet( L"fail",      prefix, os, _spFailedRequirements );
+  DumpRequirementSet( L"covered",   prefix, os, _spCoveredRequirements   );
+  DumpRequirementSet( L"noted",     prefix, os, _spNotedRequirements     );
+  DumpRequirementSet( L"pass",      prefix, os, _spPassedRequirements    );
+  DumpRequirementSet( L"warn",      prefix, os, _spWarnedRequirements    );
+  DumpRequirementSet( L"fail",      prefix, os, _spFailedRequirements    );
   DumpRequirementSet( L"undefined", prefix, os, _spUndefinedRequirements );
 }
 

@@ -38,6 +38,7 @@
 //STL files
 #include <fstream>
 #include <sstream>
+#include <iostream>
 
 namespace {
 
@@ -137,12 +138,20 @@ void RequirementLoader::StartElement(const wstring& name, const char** attribs)
         // Reset _current by assigning a new, empty, Current object.
         _current = RequirementLoader::Current();
 
-        wostringstream msg;
-        msg << attribs[1];
-        wstring type(msg.str().c_str() );
-        msg.str(L"");
-        msg << attribs[3];
-        wstring category(msg.str().c_str() );
+	//
+	// type attribute
+	//
+
+	int i = 0;
+	wstring type;
+	if ( attribs[i] && "type" == string(attribs[i] ) )
+	{
+	  i++;
+	  assert( attribs[i] );
+	  wostringstream msg;
+	  msg << attribs[i];
+	  type = msg.str();
+	}
 
         if ( type == L"app" )
         {
@@ -164,6 +173,22 @@ void RequirementLoader::StartElement(const wstring& name, const char** attribs)
         }
         _current.TypeAsString = type;
 
+
+	//
+	// category attribute
+	//
+
+	i++;
+	wstring category;
+	if ( attribs[i] && "category" == string(attribs[i]) )
+	{
+	  i++;
+	  assert( attribs[i] );
+	  wostringstream msg;
+	  msg << attribs[i];
+	  category = msg.str().c_str();
+	}
+
         if ( _categoryMap.find( category ) != _categoryMap.end() )
         {
             _current.Category = _categoryMap[category];
@@ -176,46 +201,32 @@ void RequirementLoader::StartElement(const wstring& name, const char** attribs)
             throw RequirementXMLException(msg.str().c_str() );
         }
 
+	// action attribute
+	i++;
+	if ( attribs[i] && "action" == string(attribs[i]) )
+	{
+	  i++;
+	  assert( attribs[i] );
+	  wostringstream msg;
+	  msg << attribs[i];
+	  _current.Action = msg.str();
+	}
+
     }
-    else if ( name == L"id" )
+    else if ( name == L"id"                         ||
+              name == L"name"                       ||
+              name == L"desc"                       ||
+              name == L"annotate"                   ||
+              name == L"note"                       ||
+              name == L"doc"                        ||
+              name == L"version"                    ||
+              name == L"section"                    ||
+              name == L"ref"                        ||
+              name == L"requirement-set"            ||
+              name == L"requirement-set-name"       ||
+              name == L"requirement-set-version" )
     {
-        _current.Data = L"";
-    }
-    else if ( name == L"name" )
-    {
-        _current.Data = L"";
-    }
-    else if ( name == L"desc" )
-    {
-        _current.Data = L"";
-    }
-    else if ( name == L"doc" )
-    {
-        _current.Data = L"";
-    }
-    else if ( name == L"version" )
-    {
-        _current.Data = L"";
-    }
-    else if ( name == L"section" )
-    {
-        _current.Data = L"";
-    }
-    else if ( name == L"ref" )
-    {
-        _current.Data = L"";
-    }
-    else if ( name == L"requirement-set" )
-    {
-        _current.Data = L"";
-    }
-    else if ( name == L"requirement-set-name" )
-    {
-        _current.Data = L"";
-    }
-    else if ( name == L"requirement-set-version" )
-    {
-        _current.Data = L"";
+      _current.Data = wstring();
     }
     else
     {
@@ -223,7 +234,6 @@ void RequirementLoader::StartElement(const wstring& name, const char** attribs)
         msg << L"Unknown tag: " << name;
         throw RequirementXMLException(msg.str().c_str() );
     }
-
 }
 
 //Called when a close tag is encountered.
@@ -232,10 +242,15 @@ void RequirementLoader::EndElement(const wstring& name)
     if ( name == L"requirement" )
     {
         shared_ptr<const Requirement> req(new Requirement(
-            _current.Id, _current.Type, _current.TypeAsString,
+            _current.Id,
+	    _current.Type, _current.TypeAsString,
             _current.Category, _current.CategoryAsString,
+	    _current.Action,
             _current.Name,
-            _current.Desc, _current.Document, _current.Version, _current.Section ));
+            _current.Desc,
+	    _current.Annotate,
+	    _current.Note,
+	    _current.Document, _current.Version, _current.Section ));
         RequirementRegistry::GetInstance().Register( req );
     }
     else if ( name == L"id" )
@@ -249,6 +264,14 @@ void RequirementLoader::EndElement(const wstring& name)
     else if ( name == L"desc" )
     {
         _current.Desc = _current.Data;
+    }
+    else if ( name == L"annotate" )
+    {
+        _current.Annotate = _current.Data;
+    }
+    else if ( name == L"note" )
+    {
+        _current.Note = _current.Data;
     }
     else if ( name == L"doc" )
     {

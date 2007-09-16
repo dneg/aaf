@@ -186,35 +186,61 @@ bool EPTrackContentsVisitor::PreOrderVisit( AAFTypedObjNode<IAAFTimelineMobSlot>
 
     pair<bool,aafPosition_t> markIn  = axMobSlot.ExistsMarkIn();
     pair<bool,aafPosition_t> markOut = axMobSlot.ExistsMarkOut();
+    pair<bool,aafPosition_t> userPos  = axMobSlot.ExistsUserPos();
+
+    //
+    // Add notation result indicating presence of mark in or mark out.
+    //
             
+    if ( markIn.first )
+    {
+      wstringstream ss;
+      ss << this->GetMobSlotName( _spEdgeMap, node ) << " has a MarkIn property.";
+      _spTestResult->AddSingleResult( L"REQ_EP_108.1", ss.str(), TestResult::NOTED );
+    }
+
+    if ( markOut.first )
+    {
+      wstringstream ss;
+      ss << this->GetMobSlotName( _spEdgeMap, node ) << " has a MarkOut property.";
+      _spTestResult->AddSingleResult( L"REQ_EP_108.2", ss.str(), TestResult::NOTED );
+    }
+
+    //
+    // In both mark in and mark out exist then validate that out is
+    // greater than in.
+    // 
+
     if ( markIn.first && markOut.first )
     {
-        if ( markOut.second < markIn.second )
-        {
-            wstringstream ss;
-            ss << this->GetMobSlotName( _spEdgeMap, node )
-               << L" has a marked in point that occurs after the marked out point (IN = "
-               << markIn.second << L"; OUT = " << markOut.second << ").";
-            _spTestResult->AddSingleResult( L"REQ_EP_108", ss.str().c_str(), TestResult::WARN ); 
-        }
+      TestResult::Result result = TestResult::UNDEFINED;
+      wstringstream ss;
+      ss << this->GetMobSlotName( _spEdgeMap, node );
+
+      if ( markOut.second < markIn.second )
+      {
+	ss << L" has a marked in point that occurs after the marked out point (IN = "
+	   << markIn.second << L"; OUT = " << markOut.second << ").";
+	result = TestResult::FAIL;
+      }
+      else
+      {
+	ss << L" has valid mark in and mark out points (IN = "
+	   << markIn.second << L"; OUT = " << markOut.second << ").";
+	result = TestResult::NOTED;
+      }
+
+      _spTestResult->AddSingleResult( L"REQ_EP_108.3", ss.str(), result );
     }
-    else if ( markIn.first && !markOut.first )
+
+    //
+    // Check for UserPos, add notational result if it exists.
+    //
+    if ( userPos.first )
     {
-      AxString explain;
-      explain = this->GetMobSlotName( _spEdgeMap, node ) +
-	L" has a marked in point but no marked out point.";
-      _spTestResult->AddSingleResult( L"REQ_EP_108", explain, TestResult::WARN );
-    }
-    else if ( !markIn.first && markOut.first )
-    {
-      AxString explain;
-      explain = this->GetMobSlotName( _spEdgeMap, node ) +
-	L" has a marked out point but no marked in point.";
-      _spTestResult->AddSingleResult( L"REQ_EP_108", explain, TestResult::WARN );
-    }
-    else
-    {
-      assert( !markIn.first && !markOut.first );
+      wstringstream ss;
+      ss << this->GetMobSlotName( _spEdgeMap, node ) << " has a TimelineMobSlot::UserPos = " << userPos.second;
+      _spTestResult->AddSingleResult( L"REQ_EP_108.4", ss.str(), TestResult::NOTED );
     }
 
     return true;    
@@ -270,44 +296,52 @@ bool EPTrackContentsVisitor::PreOrderVisit( EPTypedObjNode<IAAFMobSlot, EPVideoT
 
 bool EPTrackContentsVisitor::PreOrderVisit( EPTypedObjNode<IAAFMobSlot, EPEssenceTrack>& node )
 {
+  // JPT REVIEW - This is awkward way to implement this. There isn't a
+  // need to to search up the graph for the parent. Just keep track of
+  // in on the way down.  Or, in the mob visitor, check the child
+  // slots.Consider rewrite if the ParentMobVisitor ever needs work.
+
+  // Find the parent of this mob slot, if it is a File Source mob
+  // slot (or an unknown type), there is no requirement that it has a
+  // PhysicalTrackNumber.
+  
+  shared_ptr<Node> spNode = dynamic_pointer_cast<Node>( node.GetSharedPointerToNode() );
+  DepthFirstTraversal dfs( _spEdgeMap, spNode );
+  shared_ptr<ParentMobVisitor> spVisitor( new ParentMobVisitor );
+  
+  dfs.TraverseUp( spVisitor );
+  
+  if ( spVisitor->NeedsPhysicalTrackNum() )
+  {
+    AxString mobName = this->GetMobName( _spEdgeMap, node );   
+
+    AxMobSlot axMobSlot( node.GetAAFObjectOfType() );
+
+    wstringstream ss;
+
+    ss << L"Slot with ID ";
+    ss << axMobSlot.GetSlotID();
+    ss << L" in " << mobName;
     
-    //Find the parent of this mob slot, if it is a File Source mob slot (or
-    //an unknown type), there is no requirement that it has a PhysicalTrackNumber.
-    shared_ptr<Node> spNode = dynamic_pointer_cast<Node>( node.GetSharedPointerToNode() );
-    DepthFirstTraversal dfs( _spEdgeMap, spNode );
-    shared_ptr<ParentMobVisitor> spVisitor( new ParentMobVisitor );
-    
-    dfs.TraverseUp( spVisitor );
-    
-    if ( spVisitor->NeedsPhysicalTrackNum() )
+    pair<bool,aafUInt32> physNum = axMobSlot.ExistsPhysicalNum();
+      
+    TestResult::Result result(TestResult::UNDEFINED);
+
+    if ( physNum.first )
     {
-    
-        AxMobSlot axMobSlot( node.GetAAFObjectOfType() );
-        
-        try
-        {
-            axMobSlot.GetPhysicalNum();
-        }
-        catch ( const AxExHResult& ex )
-        {
-            if ( ex.getHResult() != AAFRESULT_PROP_NOT_PRESENT )
-            {
-                throw ex;
-            }
-            AxString mobName = this->GetMobName( _spEdgeMap, node );
-    
-            wstringstream ss;
-            ss << L"Slot with ID ";
-            ss << axMobSlot.GetSlotID();
-            ss << L" in " << mobName << L" does not have a MobSlot::PhysicalTrackNumber property.";
-            
-            _spTestResult->AddSingleResult( L"REQ_EP_103", ss.str().c_str(), TestResult::FAIL );
-         
-            return false;
-        }
+      ss << L" has MobSlot::PhysicalTrackNumber = " << physNum.second;
+      result = TestResult::NOTED;
     }
-    
-    return true;
+    else
+    {
+      ss << L" does not have a MobSlot::PhysicalTrackNumber property.";
+      result = TestResult::FAIL;
+    }
+
+    _spTestResult->AddSingleResult( L"REQ_EP_103", ss.str(), result );
+  }
+  
+  return true;
 }
 
 } // end of namespace aafanalyzer

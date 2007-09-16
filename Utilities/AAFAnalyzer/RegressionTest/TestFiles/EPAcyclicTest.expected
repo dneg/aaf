@@ -2,6 +2,8 @@
         Desc:   Verify that source references are not cyclic.
         Result: Failed
         Reason: 
+        Covered Requirements: None
+        Noted Requirements: None
         Passing Requirements: None
         Warning Requirements: None
         Failing Requirements: REQ_EP_256
@@ -10,6 +12,8 @@
             Desc:   
             Result: Failed
             Reason: A cycle was detected in the derivation chain.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_256

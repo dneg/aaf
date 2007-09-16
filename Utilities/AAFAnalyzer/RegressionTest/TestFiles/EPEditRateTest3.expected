@@ -2,7 +2,9 @@
         Desc:   Verify that all essence tracks have valid edit rates.
         Result: Failed
         Reason: 
-        Passing Requirements: REQ_EP_091; REQ_EP_092; REQ_EP_100
+        Covered Requirements: REQ_EP_091; REQ_EP_092; REQ_EP_100
+        Noted Requirements: None
+        Passing Requirements: None
         Warning Requirements: None
         Failing Requirements: REQ_EP_099
 
@@ -10,6 +12,8 @@
             Desc:   All audio tracks within a file shall have the same edit rate and sample rate.
             Result: Failed
             Reason: All audio tracks within the file do not have the same sample rate.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_099

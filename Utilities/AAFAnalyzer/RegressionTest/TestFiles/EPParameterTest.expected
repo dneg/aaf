@@ -2,7 +2,9 @@
         Desc:   Verify that all parameters in the AAF file are valid.
         Result: Failed
         Reason: 
-        Passing Requirements: REQ_EP_174
+        Covered Requirements: REQ_EP_174
+        Noted Requirements: None
+        Passing Requirements: None
         Warning Requirements: None
         Failing Requirements: REQ_EP_175
 
@@ -10,6 +12,8 @@
             Desc:   Interpolation between ControlPoints within VaryingValue objects shall be specified as one of the following: ConstantInterpolator, LinearInterpolator, LogInterpolator, PowerInterpolator, BSplineInterpolator.
             Result: Failed
             Reason: VaryingValue object in Mob slot with ID = 1 of Top-Level Composition "None Interpolator" has an illegal interpolation definition.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_175

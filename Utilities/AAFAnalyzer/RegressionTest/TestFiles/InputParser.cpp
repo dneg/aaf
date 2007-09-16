@@ -427,8 +427,9 @@ void InputParser::StartElement(const AxString& name, const char** attribs)
         SlotInfo::OptionalIntAttrib physicalTrackNum = GetOptionalIntAttribValue( L"physical-track-number", attribs, 14, 1 );
         SlotInfo::OptionalIntAttrib markedInPoint = GetOptionalIntAttribValue( L"marked-in-point", attribs, 14, 0 );
         SlotInfo::OptionalIntAttrib markedOutPoint = GetOptionalIntAttribValue( L"marked-out-point", attribs, 14, 0 );
-        int orgin = GetIntAtribValue( L"orgin", attribs, 14, 0 );
-        _slotStack.push( SlotInfo( name, editRate, segName, physicalTrackNum, markedInPoint, markedOutPoint, orgin ) );
+	SlotInfo::OptionalIntAttrib userPos = GetOptionalIntAttribValue( L"user-pos-point", attribs, 14, 0 );
+        int origin = GetIntAtribValue( L"origin", attribs, 14, 0 );
+        _slotStack.push( SlotInfo( name, editRate, segName, physicalTrackNum, markedInPoint, markedOutPoint, userPos, origin ) );
     }
     else if ( _attachParameterMap.find( name ) != _attachParameterMap.end() )
     {
@@ -507,7 +508,9 @@ void InputParser::EndElement(const AxString& name)
             static_cast<int>(_slotStack.top().markedInPoint.second),
             static_cast<int>(_slotStack.top().markedOutPoint.first),
             static_cast<int>(_slotStack.top().markedOutPoint.second),
-            static_cast<int>(_slotStack.top().orgin)
+            static_cast<int>(_slotStack.top().userPos.first),
+            static_cast<int>(_slotStack.top().userPos.second),
+            static_cast<int>(_slotStack.top().origin)
            );
         _componentStack.pop();
         _slotStack.pop();
@@ -757,13 +760,16 @@ int main( int argc, char** argv )
 
     //Input file is the second last argument.
     pair<bool,const char*> inputArg = args.get( argc-2, 1 );
+    assert( inputArg.first );
 
     //Requirements Filename is last argument.
     pair<bool, const char*> outputArg = args.get( argc-1, 2 );
+    assert( outputArg.first );
 
     //Convert the XML file to an AAF file.
     try
     {
+        unlink( outputArg.second );
         InputParser parser( outputArg.second );
         parser.ParseXML( inputArg.second );
     }

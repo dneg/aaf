@@ -2,6 +2,8 @@
         Desc:   Verify the AAF file header is valid.
         Result: Failed
         Reason: 
+        Covered Requirements: None
+        Noted Requirements: None
         Passing Requirements: None
         Warning Requirements: None
         Failing Requirements: REQ_EP_255
@@ -10,6 +12,8 @@
             Desc:   Header::OperationalPattern should be equal to OpEditProtocol.
             Result: Failed
             Reason: Header::OperationalPattern property is not equal to OpEditProtocol.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_255

@@ -2,7 +2,9 @@
         Desc:   Verify the correctness of mob names.
         Result: Failed
         Reason: 
-        Passing Requirements: REQ_EP_161
+        Covered Requirements: REQ_EP_161
+        Noted Requirements: None
+        Passing Requirements: None
         Warning Requirements: None
         Failing Requirements: REQ_EP_027; REQ_EP_032; REQ_EP_038; REQ_EP_047; REQ_EP_052; REQ_EP_057; REQ_EP_073; REQ_EP_081; REQ_EP_086; REQ_EP_101
 
@@ -10,6 +12,8 @@
             Desc:   The MobSlot::Name property shall be a valid name identifying the essence track.  Where multiple essence tracks are exported, each shall have a different Name.
             Result: Failed
             Reason: MobSlot with ID = 1 in CompositionMob named "Named Top-Level" does not have a valid name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_101
@@ -18,6 +22,8 @@
             Desc:   The MobSlot::Name property shall be a valid name identifying the essence track.  Where multiple essence tracks are exported, each shall have a different Name.
             Result: Failed
             Reason: MobSlot with ID = 1 in CompositionMob named "<unnamed>" does not have a valid name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_101
@@ -26,6 +32,8 @@
             Desc:   The top-level composition Mob::Name property shall be a valid name identifying the composition.  Where multiple compositions are exported, each shall have a different name.
             Result: Failed
             Reason: Top-Level Composition does not have a valid name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_027
@@ -35,6 +43,8 @@
             Desc:   The MobSlot::Name property shall be a valid name identifying the essence track.  Where multiple essence tracks are exported, each shall have a different Name.
             Result: Failed
             Reason: MobSlot with ID = 1 in CompositionMob named "Named Lower-Level" does not have a valid name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_101
@@ -43,6 +53,8 @@
             Desc:   The MobSlot::Name property shall be a valid name identifying the essence track.  Where multiple essence tracks are exported, each shall have a different Name.
             Result: Failed
             Reason: MobSlot with ID = 1 in CompositionMob named "<unnamed>" does not have a valid name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_101
@@ -51,6 +63,8 @@
             Desc:   The lower-level composition Mob::Name property shall be a valid name identifying the composition.  Where multiple compositions are exported, each shall have a different name.
             Result: Failed
             Reason: Lower-Level Composition does not have a valid name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_032
@@ -60,6 +74,8 @@
             Desc:   The MobSlot::Name property shall be a valid name identifying the essence track.  Where multiple essence tracks are exported, each shall have a different Name.
             Result: Failed
             Reason: MobSlot with ID = 1 in CompositionMob named "Named Sub-Clip" does not have a valid name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_101
@@ -68,6 +84,8 @@
             Desc:   The MobSlot::Name property shall be a valid name identifying the essence track.  Where multiple essence tracks are exported, each shall have a different Name.
             Result: Failed
             Reason: MobSlot with ID = 1 in CompositionMob named "<unnamed>" does not have a valid name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_101
@@ -76,6 +94,8 @@
             Desc:   The sub-clip Mob::Name property shall be a valid name identifying the sub-clip.
             Result: Failed
             Reason: Sub-Clip Composition does not have a valid name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_038
@@ -85,6 +105,8 @@
             Desc:   The MobSlot::Name property shall be a valid name identifying the essence track.  Where multiple essence tracks are exported, each shall have a different Name.
             Result: Failed
             Reason: MobSlot with ID = 1 in CompositionMob named "Named Adjusted Clip" does not have a valid name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_101
@@ -93,6 +115,8 @@
             Desc:   The MobSlot::Name property shall be a valid name identifying the essence track.  Where multiple essence tracks are exported, each shall have a different Name.
             Result: Failed
             Reason: MobSlot with ID = 1 in CompositionMob named "<unnamed>" does not have a valid name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_101
@@ -101,6 +125,8 @@
             Desc:   The adjusted-clip Mob::Name property shall be a valid name identifying the adjusted-clip.
             Result: Failed
             Reason: Adjusted-Clip Composition does not have a valid name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_047
@@ -110,6 +136,8 @@
             Desc:   The MobSlot::Name property shall be a valid name identifying the essence track.  Where multiple essence tracks are exported, each shall have a different Name.
             Result: Failed
             Reason: MobSlot with ID = 1 in MasterMob named "Named Template Clip" does not have a valid name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_101
@@ -118,6 +146,8 @@
             Desc:   The MobSlot::Name property shall be a valid name identifying the essence track.  Where multiple essence tracks are exported, each shall have a different Name.
             Result: Failed
             Reason: MobSlot with ID = 1 in MasterMob named "<unnamed>" does not have a valid name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_101
@@ -126,6 +156,8 @@
             Desc:   The template clip Mob::Name property shall be a valid name identifying the template clip.
             Result: Failed
             Reason: Template Clip does not have a valid name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_052
@@ -135,6 +167,8 @@
             Desc:   The MobSlot::Name property shall be a valid name identifying the essence track.  Where multiple essence tracks are exported, each shall have a different Name.
             Result: Failed
             Reason: MobSlot with ID = 1 in MasterMob named "Named Clip" does not have a valid name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_101
@@ -143,6 +177,8 @@
             Desc:   The MobSlot::Name property shall be a valid name identifying the essence track.  Where multiple essence tracks are exported, each shall have a different Name.
             Result: Failed
             Reason: MobSlot with ID = 1 in MasterMob named "<unnamed>" does not have a valid name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_101
@@ -151,6 +187,8 @@
             Desc:   The clip Mob::Name property shall be a valid name identifying the clip.
             Result: Failed
             Reason: Clip does not have a valid name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_057
@@ -160,6 +198,8 @@
             Desc:   The MobSlot::Name property shall be a valid name identifying the essence track.  Where multiple essence tracks are exported, each shall have a different Name.
             Result: Failed
             Reason: MobSlot with ID = 1 in SourceMob named "Named File Source" does not have a valid name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_101
@@ -168,6 +208,8 @@
             Desc:   The MobSlot::Name property shall be a valid name identifying the essence track.  Where multiple essence tracks are exported, each shall have a different Name.
             Result: Failed
             Reason: MobSlot with ID = 1 in SourceMob named "<unnamed>" does not have a valid name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_101
@@ -176,6 +218,8 @@
             Desc:   The MobSlot::Name property shall be a valid name identifying the essence track.  Where multiple essence tracks are exported, each shall have a different Name.
             Result: Failed
             Reason: MobSlot with ID = 1 in SourceMob named "Named Recording Source" does not have a valid name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_101
@@ -184,6 +228,8 @@
             Desc:   The MobSlot::Name property shall be a valid name identifying the essence track.  Where multiple essence tracks are exported, each shall have a different Name.
             Result: Failed
             Reason: MobSlot with ID = 1 in SourceMob named "<unnamed>" does not have a valid name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_101
@@ -192,6 +238,8 @@
             Desc:   The recording source Mob::Name property shall be a valid name identifying the source, e.g. a name describing a recording session.
             Result: Failed
             Reason: Recording Source does not have a valid name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_073
@@ -201,6 +249,8 @@
             Desc:   The MobSlot::Name property shall be a valid name identifying the essence track.  Where multiple essence tracks are exported, each shall have a different Name.
             Result: Failed
             Reason: MobSlot with ID = 1 in SourceMob named "Named Import Source" does not have a valid name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_101
@@ -209,6 +259,8 @@
             Desc:   The MobSlot::Name property shall be a valid name identifying the essence track.  Where multiple essence tracks are exported, each shall have a different Name.
             Result: Failed
             Reason: MobSlot with ID = 1 in SourceMob named "<unnamed>" does not have a valid name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_101
@@ -217,6 +269,8 @@
             Desc:   The MobSlot::Name property shall be a valid name identifying the essence track.  Where multiple essence tracks are exported, each shall have a different Name.
             Result: Failed
             Reason: MobSlot with ID = 1 in SourceMob named "Named Tape Source" does not have a valid name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_101
@@ -225,6 +279,8 @@
             Desc:   The MobSlot::Name property shall be a valid name identifying the essence track.  Where multiple essence tracks are exported, each shall have a different Name.
             Result: Failed
             Reason: MobSlot with ID = 1 in SourceMob named "<unnamed>" does not have a valid name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_101
@@ -233,6 +289,8 @@
             Desc:   The tape source Mob::Name property shall be a valid name identifying the tape name.
             Result: Failed
             Reason: Tape Source does not have a valid name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_081
@@ -242,6 +300,8 @@
             Desc:   The MobSlot::Name property shall be a valid name identifying the essence track.  Where multiple essence tracks are exported, each shall have a different Name.
             Result: Failed
             Reason: MobSlot with ID = 1 in SourceMob named "Named Film Source" does not have a valid name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_101
@@ -250,6 +310,8 @@
             Desc:   The MobSlot::Name property shall be a valid name identifying the essence track.  Where multiple essence tracks are exported, each shall have a different Name.
             Result: Failed
             Reason: MobSlot with ID = 1 in SourceMob named "<unnamed>" does not have a valid name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_101
@@ -258,6 +320,8 @@
             Desc:   The film source Mob::Name property shall be a valid name identifying the film reel name.
             Result: Failed
             Reason: Film Source does not have a valid name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_086
@@ -267,6 +331,8 @@
             Desc:   The MobSlot::Name property shall be a valid name identifying the essence track.  Where multiple essence tracks are exported, each shall have a different Name.
             Result: Failed
             Reason: MobSlot with ID = 1 in CompositionMob named "Duplicate: Top-Level/Lower-Level" does not have a valid name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_101
@@ -275,6 +341,8 @@
             Desc:   The MobSlot::Name property shall be a valid name identifying the essence track.  Where multiple essence tracks are exported, each shall have a different Name.
             Result: Failed
             Reason: MobSlot with ID = 1 in CompositionMob named "Duplicate: Top-Level/Lower-Level" does not have a valid name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_101
@@ -283,6 +351,8 @@
             Desc:   The MobSlot::Name property shall be a valid name identifying the essence track.  Where multiple essence tracks are exported, each shall have a different Name.
             Result: Failed
             Reason: MobSlot with ID = 1 in CompositionMob named "Duplicate: Top-Level" does not have a valid name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_101
@@ -291,6 +361,8 @@
             Desc:   The MobSlot::Name property shall be a valid name identifying the essence track.  Where multiple essence tracks are exported, each shall have a different Name.
             Result: Failed
             Reason: MobSlot with ID = 1 in CompositionMob named "Duplicate: Top-Level" does not have a valid name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_101
@@ -299,6 +371,8 @@
             Desc:   The MobSlot::Name property shall be a valid name identifying the essence track.  Where multiple essence tracks are exported, each shall have a different Name.
             Result: Failed
             Reason: MobSlot with ID = 1 in CompositionMob named "Duplicate: Top-Level/Sub-Clip" does not have a valid name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_101
@@ -307,6 +381,8 @@
             Desc:   The MobSlot::Name property shall be a valid name identifying the essence track.  Where multiple essence tracks are exported, each shall have a different Name.
             Result: Failed
             Reason: MobSlot with ID = 1 in CompositionMob named "Duplicate: Top-Level/Sub-Clip" does not have a valid name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_101
@@ -315,6 +391,8 @@
             Desc:   The MobSlot::Name property shall be a valid name identifying the essence track.  Where multiple essence tracks are exported, each shall have a different Name.
             Result: Failed
             Reason: MobSlot with ID = 1 in CompositionMob named "Duplicate: Top-Level/Adjusted Clip" does not have a valid name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_101
@@ -323,6 +401,8 @@
             Desc:   The MobSlot::Name property shall be a valid name identifying the essence track.  Where multiple essence tracks are exported, each shall have a different Name.
             Result: Failed
             Reason: MobSlot with ID = 1 in CompositionMob named "Duplicate: Top-Level/Adjusted Clip" does not have a valid name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_101
@@ -331,6 +411,8 @@
             Desc:   The MobSlot::Name property shall be a valid name identifying the essence track.  Where multiple essence tracks are exported, each shall have a different Name.
             Result: Failed
             Reason: MobSlot with ID = 1 in CompositionMob named "Duplicate: Top-Level/Template Clip" does not have a valid name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_101
@@ -339,6 +421,8 @@
             Desc:   The MobSlot::Name property shall be a valid name identifying the essence track.  Where multiple essence tracks are exported, each shall have a different Name.
             Result: Failed
             Reason: MobSlot with ID = 1 in MasterMob named "Duplicate: Top-Level/Template Clip" does not have a valid name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_101
@@ -347,6 +431,8 @@
             Desc:   The MobSlot::Name property shall be a valid name identifying the essence track.  Where multiple essence tracks are exported, each shall have a different Name.
             Result: Failed
             Reason: MobSlot with ID = 1 in CompositionMob named "Duplicate: Top-Level/Clip" does not have a valid name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_101
@@ -355,6 +441,8 @@
             Desc:   The MobSlot::Name property shall be a valid name identifying the essence track.  Where multiple essence tracks are exported, each shall have a different Name.
             Result: Failed
             Reason: MobSlot with ID = 1 in MasterMob named "Duplicate: Top-Level/Clip" does not have a valid name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_101
@@ -363,6 +451,8 @@
             Desc:   The MobSlot::Name property shall be a valid name identifying the essence track.  Where multiple essence tracks are exported, each shall have a different Name.
             Result: Failed
             Reason: MobSlot with ID = 1 in CompositionMob named "Duplicate: Top-Level/File Source" does not have a valid name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_101
@@ -371,6 +461,8 @@
             Desc:   The MobSlot::Name property shall be a valid name identifying the essence track.  Where multiple essence tracks are exported, each shall have a different Name.
             Result: Failed
             Reason: MobSlot with ID = 1 in SourceMob named "Duplicate: Top-Level/File Source" does not have a valid name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_101
@@ -379,6 +471,8 @@
             Desc:   The MobSlot::Name property shall be a valid name identifying the essence track.  Where multiple essence tracks are exported, each shall have a different Name.
             Result: Failed
             Reason: MobSlot with ID = 1 in CompositionMob named "Duplicate: Top-Level/Recording Source" does not have a valid name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_101
@@ -387,6 +481,8 @@
             Desc:   The MobSlot::Name property shall be a valid name identifying the essence track.  Where multiple essence tracks are exported, each shall have a different Name.
             Result: Failed
             Reason: MobSlot with ID = 1 in SourceMob named "Duplicate: Top-Level/Recording Source" does not have a valid name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_101
@@ -395,6 +491,8 @@
             Desc:   The MobSlot::Name property shall be a valid name identifying the essence track.  Where multiple essence tracks are exported, each shall have a different Name.
             Result: Failed
             Reason: MobSlot with ID = 1 in CompositionMob named "Duplicate: Top-Level/Import Source" does not have a valid name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_101
@@ -403,6 +501,8 @@
             Desc:   The MobSlot::Name property shall be a valid name identifying the essence track.  Where multiple essence tracks are exported, each shall have a different Name.
             Result: Failed
             Reason: MobSlot with ID = 1 in SourceMob named "Duplicate: Top-Level/Import Source" does not have a valid name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_101
@@ -411,6 +511,8 @@
             Desc:   The MobSlot::Name property shall be a valid name identifying the essence track.  Where multiple essence tracks are exported, each shall have a different Name.
             Result: Failed
             Reason: MobSlot with ID = 1 in CompositionMob named "Duplicate: Top-Level/Tape Source" does not have a valid name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_101
@@ -419,6 +521,8 @@
             Desc:   The MobSlot::Name property shall be a valid name identifying the essence track.  Where multiple essence tracks are exported, each shall have a different Name.
             Result: Failed
             Reason: MobSlot with ID = 1 in SourceMob named "Duplicate: Top-Level/Tape Source" does not have a valid name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_101
@@ -427,6 +531,8 @@
             Desc:   The MobSlot::Name property shall be a valid name identifying the essence track.  Where multiple essence tracks are exported, each shall have a different Name.
             Result: Failed
             Reason: MobSlot with ID = 1 in CompositionMob named "Duplicate: Top-Level/Film Source" does not have a valid name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_101
@@ -435,6 +541,8 @@
             Desc:   The MobSlot::Name property shall be a valid name identifying the essence track.  Where multiple essence tracks are exported, each shall have a different Name.
             Result: Failed
             Reason: MobSlot with ID = 1 in SourceMob named "Duplicate: Top-Level/Film Source" does not have a valid name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_101
@@ -443,6 +551,8 @@
             Desc:   The MobSlot::Name property shall be a valid name identifying the essence track.  Where multiple essence tracks are exported, each shall have a different Name.
             Result: Failed
             Reason: MobSlot with ID = 1 in CompositionMob named "Duplicate: Lower-Level" does not have a valid name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_101
@@ -451,6 +561,8 @@
             Desc:   The MobSlot::Name property shall be a valid name identifying the essence track.  Where multiple essence tracks are exported, each shall have a different Name.
             Result: Failed
             Reason: MobSlot with ID = 1 in CompositionMob named "Duplicate: Lower-Level" does not have a valid name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_101
@@ -459,6 +571,8 @@
             Desc:   The MobSlot::Name property shall be a valid name identifying the essence track.  Where multiple essence tracks are exported, each shall have a different Name.
             Result: Failed
             Reason: MobSlot with ID = 1 in CompositionMob named "Duplicate: Lower-Level/Sub-Clip" does not have a valid name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_101
@@ -467,6 +581,8 @@
             Desc:   The MobSlot::Name property shall be a valid name identifying the essence track.  Where multiple essence tracks are exported, each shall have a different Name.
             Result: Failed
             Reason: MobSlot with ID = 1 in CompositionMob named "Duplicate: Lower-Level/Sub-Clip" does not have a valid name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_101
@@ -475,6 +591,8 @@
             Desc:   The MobSlot::Name property shall be a valid name identifying the essence track.  Where multiple essence tracks are exported, each shall have a different Name.
             Result: Failed
             Reason: MobSlot with ID = 1 in CompositionMob named "Duplicate: Lower-Level/Adjusted Clip" does not have a valid name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_101
@@ -483,6 +601,8 @@
             Desc:   The MobSlot::Name property shall be a valid name identifying the essence track.  Where multiple essence tracks are exported, each shall have a different Name.
             Result: Failed
             Reason: MobSlot with ID = 1 in CompositionMob named "Duplicate: Lower-Level/Adjusted Clip" does not have a valid name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_101
@@ -491,6 +611,8 @@
             Desc:   The MobSlot::Name property shall be a valid name identifying the essence track.  Where multiple essence tracks are exported, each shall have a different Name.
             Result: Failed
             Reason: MobSlot with ID = 1 in CompositionMob named "Duplicate: Lower-Level/Template Clip" does not have a valid name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_101
@@ -499,6 +621,8 @@
             Desc:   The MobSlot::Name property shall be a valid name identifying the essence track.  Where multiple essence tracks are exported, each shall have a different Name.
             Result: Failed
             Reason: MobSlot with ID = 1 in MasterMob named "Duplicate: Lower-Level/Template Clip" does not have a valid name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_101
@@ -507,6 +631,8 @@
             Desc:   The MobSlot::Name property shall be a valid name identifying the essence track.  Where multiple essence tracks are exported, each shall have a different Name.
             Result: Failed
             Reason: MobSlot with ID = 1 in CompositionMob named "Duplicate: Lower-Level/Clip" does not have a valid name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_101
@@ -515,6 +641,8 @@
             Desc:   The MobSlot::Name property shall be a valid name identifying the essence track.  Where multiple essence tracks are exported, each shall have a different Name.
             Result: Failed
             Reason: MobSlot with ID = 1 in MasterMob named "Duplicate: Lower-Level/Clip" does not have a valid name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_101
@@ -523,6 +651,8 @@
             Desc:   The MobSlot::Name property shall be a valid name identifying the essence track.  Where multiple essence tracks are exported, each shall have a different Name.
             Result: Failed
             Reason: MobSlot with ID = 1 in CompositionMob named "Duplicate: Lower-Level/File Source" does not have a valid name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_101
@@ -531,6 +661,8 @@
             Desc:   The MobSlot::Name property shall be a valid name identifying the essence track.  Where multiple essence tracks are exported, each shall have a different Name.
             Result: Failed
             Reason: MobSlot with ID = 1 in SourceMob named "Duplicate: Lower-Level/File Source" does not have a valid name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_101
@@ -539,6 +671,8 @@
             Desc:   The MobSlot::Name property shall be a valid name identifying the essence track.  Where multiple essence tracks are exported, each shall have a different Name.
             Result: Failed
             Reason: MobSlot with ID = 1 in CompositionMob named "Duplicate: Lower-Level/Recording Source" does not have a valid name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_101
@@ -547,6 +681,8 @@
             Desc:   The MobSlot::Name property shall be a valid name identifying the essence track.  Where multiple essence tracks are exported, each shall have a different Name.
             Result: Failed
             Reason: MobSlot with ID = 1 in SourceMob named "Duplicate: Lower-Level/Recording Source" does not have a valid name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_101
@@ -555,6 +691,8 @@
             Desc:   The MobSlot::Name property shall be a valid name identifying the essence track.  Where multiple essence tracks are exported, each shall have a different Name.
             Result: Failed
             Reason: MobSlot with ID = 1 in CompositionMob named "Duplicate: Lower-Level/Import Source" does not have a valid name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_101
@@ -563,6 +701,8 @@
             Desc:   The MobSlot::Name property shall be a valid name identifying the essence track.  Where multiple essence tracks are exported, each shall have a different Name.
             Result: Failed
             Reason: MobSlot with ID = 1 in SourceMob named "Duplicate: Lower-Level/Import Source" does not have a valid name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_101
@@ -571,6 +711,8 @@
             Desc:   The MobSlot::Name property shall be a valid name identifying the essence track.  Where multiple essence tracks are exported, each shall have a different Name.
             Result: Failed
             Reason: MobSlot with ID = 1 in CompositionMob named "Duplicate: Lower-Level/Tape Source" does not have a valid name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_101
@@ -579,6 +721,8 @@
             Desc:   The MobSlot::Name property shall be a valid name identifying the essence track.  Where multiple essence tracks are exported, each shall have a different Name.
             Result: Failed
             Reason: MobSlot with ID = 1 in SourceMob named "Duplicate: Lower-Level/Tape Source" does not have a valid name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_101
@@ -587,6 +731,8 @@
             Desc:   The MobSlot::Name property shall be a valid name identifying the essence track.  Where multiple essence tracks are exported, each shall have a different Name.
             Result: Failed
             Reason: MobSlot with ID = 1 in CompositionMob named "Duplicate: Lower-Level/Film Source" does not have a valid name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_101
@@ -595,6 +741,8 @@
             Desc:   The MobSlot::Name property shall be a valid name identifying the essence track.  Where multiple essence tracks are exported, each shall have a different Name.
             Result: Failed
             Reason: MobSlot with ID = 1 in SourceMob named "Duplicate: Lower-Level/Film Source" does not have a valid name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_101
@@ -603,6 +751,8 @@
             Desc:   The MobSlot::Name property shall be a valid name identifying the essence track.  Where multiple essence tracks are exported, each shall have a different Name.
             Result: Failed
             Reason: MobSlot with ID = 1 in MasterMob named "Essence - Static Audio - Template A" does not have a valid name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_101
@@ -611,6 +761,8 @@
             Desc:   The MobSlot::Name property shall be a valid name identifying the essence track.  Where multiple essence tracks are exported, each shall have a different Name.
             Result: Failed
             Reason: MobSlot with ID = 1 in CompositionMob named "Essence - Static Audio - Top-Level B" does not have a valid name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_101
@@ -619,6 +771,8 @@
             Desc:   The MobSlot::Name property shall be a valid name identifying the essence track.  Where multiple essence tracks are exported, each shall have a different Name.
             Result: Failed
             Reason: MobSlot with ID = 1 in MasterMob named "Essence - Static Audio - Template B" does not have a valid name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_101
@@ -627,6 +781,8 @@
             Desc:   The MobSlot::Name property shall be a valid name identifying the essence track.  Where multiple essence tracks are exported, each shall have a different Name.
             Result: Failed
             Reason: MobSlot with ID = 2 named "Same Mob Duplicate Static Audio" in CompositionMob named "Essence - Static Audio - Top-Level C" is not uniquely named within the mob.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_101
@@ -635,6 +791,8 @@
             Desc:   The MobSlot::Name property shall be a valid name identifying the essence track.  Where multiple essence tracks are exported, each shall have a different Name.
             Result: Failed
             Reason: MobSlot with ID = 1 in MasterMob named "Essence - Static Audio - Template C1" does not have a valid name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_101
@@ -643,6 +801,8 @@
             Desc:   The MobSlot::Name property shall be a valid name identifying the essence track.  Where multiple essence tracks are exported, each shall have a different Name.
             Result: Failed
             Reason: MobSlot with ID = 1 in MasterMob named "Essence - Static Audio - Template C2" does not have a valid name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_101
@@ -651,6 +811,8 @@
             Desc:   The MobSlot::Name property shall be a valid name identifying the essence track.  Where multiple essence tracks are exported, each shall have a different Name.
             Result: Failed
             Reason: MobSlot with ID = 1 in SourceMob named "Essence - Static Audio Film Source D1" does not have a valid name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_101
@@ -659,6 +821,8 @@
             Desc:   The MobSlot::Name property shall be a valid name identifying the essence track.  Where multiple essence tracks are exported, each shall have a different Name.
             Result: Failed
             Reason: MobSlot with ID = 1 in SourceMob named "Essence - Static Audio Film Source D2" does not have a valid name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_101
@@ -667,6 +831,8 @@
             Desc:   The MobSlot::Name property shall be a valid name identifying the essence track.  Where multiple essence tracks are exported, each shall have a different Name.
             Result: Failed
             Reason: MobSlot with ID = 1 in MasterMob named "Essence - Static Picture - Template A" does not have a valid name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_101
@@ -675,6 +841,8 @@
             Desc:   The MobSlot::Name property shall be a valid name identifying the essence track.  Where multiple essence tracks are exported, each shall have a different Name.
             Result: Failed
             Reason: MobSlot with ID = 1 in CompositionMob named "Essence - Static Picture - Top-Level B" does not have a valid name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_101
@@ -683,6 +851,8 @@
             Desc:   The MobSlot::Name property shall be a valid name identifying the essence track.  Where multiple essence tracks are exported, each shall have a different Name.
             Result: Failed
             Reason: MobSlot with ID = 1 in MasterMob named "Essence - Static Picture - Template B" does not have a valid name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_101
@@ -691,6 +861,8 @@
             Desc:   The MobSlot::Name property shall be a valid name identifying the essence track.  Where multiple essence tracks are exported, each shall have a different Name.
             Result: Failed
             Reason: MobSlot with ID = 2 named "Same Mob Duplicate Static Picture" in CompositionMob named "Essence - Static Picture - Top-Level C" is not uniquely named within the mob.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_101
@@ -699,6 +871,8 @@
             Desc:   The MobSlot::Name property shall be a valid name identifying the essence track.  Where multiple essence tracks are exported, each shall have a different Name.
             Result: Failed
             Reason: MobSlot with ID = 1 in MasterMob named "Essence - Static Picture - Template C1" does not have a valid name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_101
@@ -707,6 +881,8 @@
             Desc:   The MobSlot::Name property shall be a valid name identifying the essence track.  Where multiple essence tracks are exported, each shall have a different Name.
             Result: Failed
             Reason: MobSlot with ID = 1 in MasterMob named "Essence - Static Picture - Template C2" does not have a valid name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_101
@@ -715,6 +891,8 @@
             Desc:   The MobSlot::Name property shall be a valid name identifying the essence track.  Where multiple essence tracks are exported, each shall have a different Name.
             Result: Failed
             Reason: MobSlot with ID = 1 in SourceMob named "Essence - Static Picture Film Source D1" does not have a valid name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_101
@@ -723,6 +901,8 @@
             Desc:   The MobSlot::Name property shall be a valid name identifying the essence track.  Where multiple essence tracks are exported, each shall have a different Name.
             Result: Failed
             Reason: MobSlot with ID = 1 in SourceMob named "Essence - Static Picture Film Source D2" does not have a valid name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_101
@@ -731,6 +911,8 @@
             Desc:   The MobSlot::Name property shall be a valid name identifying the essence track.  Where multiple essence tracks are exported, each shall have a different Name.
             Result: Failed
             Reason: MobSlot with ID = 1 in MasterMob named "Essence - Timeline Audio - Template A" does not have a valid name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_101
@@ -739,6 +921,8 @@
             Desc:   The MobSlot::Name property shall be a valid name identifying the essence track.  Where multiple essence tracks are exported, each shall have a different Name.
             Result: Failed
             Reason: MobSlot with ID = 1 in CompositionMob named "Essence - Timeline Audio - Top-Level B" does not have a valid name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_101
@@ -747,6 +931,8 @@
             Desc:   The MobSlot::Name property shall be a valid name identifying the essence track.  Where multiple essence tracks are exported, each shall have a different Name.
             Result: Failed
             Reason: MobSlot with ID = 1 in MasterMob named "Essence - Timeline Audio - Template B" does not have a valid name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_101
@@ -755,6 +941,8 @@
             Desc:   The MobSlot::Name property shall be a valid name identifying the essence track.  Where multiple essence tracks are exported, each shall have a different Name.
             Result: Failed
             Reason: MobSlot with ID = 2 named "Same Mob Duplicate Timeline Audio" in CompositionMob named "Essence - Timeline Audio - Top-Level C" is not uniquely named within the mob.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_101
@@ -763,6 +951,8 @@
             Desc:   The MobSlot::Name property shall be a valid name identifying the essence track.  Where multiple essence tracks are exported, each shall have a different Name.
             Result: Failed
             Reason: MobSlot with ID = 1 in MasterMob named "Essence - Timeline Audio - Template C1" does not have a valid name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_101
@@ -771,6 +961,8 @@
             Desc:   The MobSlot::Name property shall be a valid name identifying the essence track.  Where multiple essence tracks are exported, each shall have a different Name.
             Result: Failed
             Reason: MobSlot with ID = 1 in MasterMob named "Essence - Timeline Audio - Template C2" does not have a valid name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_101
@@ -779,6 +971,8 @@
             Desc:   The MobSlot::Name property shall be a valid name identifying the essence track.  Where multiple essence tracks are exported, each shall have a different Name.
             Result: Failed
             Reason: MobSlot with ID = 1 in SourceMob named "Essence - Timeline Audio Film Source D1" does not have a valid name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_101
@@ -787,6 +981,8 @@
             Desc:   The MobSlot::Name property shall be a valid name identifying the essence track.  Where multiple essence tracks are exported, each shall have a different Name.
             Result: Failed
             Reason: MobSlot with ID = 1 in SourceMob named "Essence - Timeline Audio Film Source D2" does not have a valid name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_101
@@ -795,6 +991,8 @@
             Desc:   The MobSlot::Name property shall be a valid name identifying the essence track.  Where multiple essence tracks are exported, each shall have a different Name.
             Result: Failed
             Reason: MobSlot with ID = 1 in MasterMob named "Essence - Timeline Picture - Template A" does not have a valid name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_101
@@ -803,6 +1001,8 @@
             Desc:   The MobSlot::Name property shall be a valid name identifying the essence track.  Where multiple essence tracks are exported, each shall have a different Name.
             Result: Failed
             Reason: MobSlot with ID = 1 in CompositionMob named "Essence - Timeline Picture - Top-Level B" does not have a valid name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_101
@@ -811,6 +1011,8 @@
             Desc:   The MobSlot::Name property shall be a valid name identifying the essence track.  Where multiple essence tracks are exported, each shall have a different Name.
             Result: Failed
             Reason: MobSlot with ID = 1 in MasterMob named "Essence - Timeline Picture - Template B" does not have a valid name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_101
@@ -819,6 +1021,8 @@
             Desc:   The MobSlot::Name property shall be a valid name identifying the essence track.  Where multiple essence tracks are exported, each shall have a different Name.
             Result: Failed
             Reason: MobSlot with ID = 2 named "Same Mob Duplicate Timeline Picture" in CompositionMob named "Essence - Timeline Picture - Top-Level C" is not uniquely named within the mob.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_101
@@ -827,6 +1031,8 @@
             Desc:   The MobSlot::Name property shall be a valid name identifying the essence track.  Where multiple essence tracks are exported, each shall have a different Name.
             Result: Failed
             Reason: MobSlot with ID = 1 in MasterMob named "Essence - Timeline Picture - Template C1" does not have a valid name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_101
@@ -835,6 +1041,8 @@
             Desc:   The MobSlot::Name property shall be a valid name identifying the essence track.  Where multiple essence tracks are exported, each shall have a different Name.
             Result: Failed
             Reason: MobSlot with ID = 1 in MasterMob named "Essence - Timeline Picture - Template C2" does not have a valid name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_101
@@ -843,6 +1051,8 @@
             Desc:   The MobSlot::Name property shall be a valid name identifying the essence track.  Where multiple essence tracks are exported, each shall have a different Name.
             Result: Failed
             Reason: MobSlot with ID = 1 in SourceMob named "Essence - Timeline Picture Film Source D1" does not have a valid name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_101
@@ -851,6 +1061,8 @@
             Desc:   The MobSlot::Name property shall be a valid name identifying the essence track.  Where multiple essence tracks are exported, each shall have a different Name.
             Result: Failed
             Reason: MobSlot with ID = 1 in SourceMob named "Essence - Timeline Picture Film Source D2" does not have a valid name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_101
@@ -859,6 +1071,8 @@
             Desc:   The MobSlot::Name property shall be a valid name identifying the essence track.  Where multiple essence tracks are exported, each shall have a different Name.
             Result: Failed
             Reason: MobSlot with ID = 1 in CompositionMob named "Non-Essence Without Name Top-Level" does not have a valid name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_101
@@ -867,6 +1081,8 @@
             Desc:   The MobSlot::Name property shall be a valid name identifying the essence track.  Where multiple essence tracks are exported, each shall have a different Name.
             Result: Failed
             Reason: MobSlot with ID = 1 in MasterMob named "Non-Essence Without Name Template" does not have a valid name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_101
@@ -875,6 +1091,8 @@
             Desc:   The MobSlot::Name property shall be a valid name identifying the essence track.  Where multiple essence tracks are exported, each shall have a different Name.
             Result: Failed
             Reason: MobSlot with ID = 1 in MasterMob named "Non-Essence Duplicate Names Template A" does not have a valid name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_101
@@ -883,6 +1101,8 @@
             Desc:   The MobSlot::Name property shall be a valid name identifying the essence track.  Where multiple essence tracks are exported, each shall have a different Name.
             Result: Failed
             Reason: MobSlot with ID = 1 in MasterMob named "Non-Essence Duplicate Names Template B" does not have a valid name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_101
@@ -891,6 +1111,8 @@
             Desc:   The MobSlot::Name property shall be a valid name identifying the essence track.  Where multiple essence tracks are exported, each shall have a different Name.
             Result: Failed
             Reason: MobSlot with ID = 1 in MasterMob named "Non-Essence Duplicate Names (with Essence) Template" does not have a valid name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_101
@@ -899,6 +1121,8 @@
             Desc:   The top-level composition Mob::Name property shall be a valid name identifying the composition.  Where multiple compositions are exported, each shall have a different name.
             Result: Failed
             Reason: Top-Level Composition "Duplicate: Top-Level" does not have a unique composition name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_027
@@ -907,6 +1131,8 @@
             Desc:   The top-level composition Mob::Name property shall be a valid name identifying the composition.  Where multiple compositions are exported, each shall have a different name.
             Result: Failed
             Reason: Top-Level Composition "Duplicate: Top-Level/Adjusted Clip" does not have a unique composition name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_027
@@ -915,6 +1141,8 @@
             Desc:   The top-level composition Mob::Name property shall be a valid name identifying the composition.  Where multiple compositions are exported, each shall have a different name.
             Result: Failed
             Reason: Top-Level Composition "Duplicate: Top-Level/Lower-Level" does not have a unique composition name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_027
@@ -923,6 +1151,8 @@
             Desc:   The top-level composition Mob::Name property shall be a valid name identifying the composition.  Where multiple compositions are exported, each shall have a different name.
             Result: Failed
             Reason: Top-Level Composition "Duplicate: Top-Level/Sub-Clip" does not have a unique composition name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_027
@@ -931,6 +1161,8 @@
             Desc:   The lower-level composition Mob::Name property shall be a valid name identifying the composition.  Where multiple compositions are exported, each shall have a different name.
             Result: Failed
             Reason: Lower-Level Composition "Duplicate: Lower-Level" does not have a unique composition name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_032
@@ -939,6 +1171,8 @@
             Desc:   The lower-level composition Mob::Name property shall be a valid name identifying the composition.  Where multiple compositions are exported, each shall have a different name.
             Result: Failed
             Reason: Lower-Level Composition "Duplicate: Lower-Level/Adjusted Clip" does not have a unique composition name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_032
@@ -947,6 +1181,8 @@
             Desc:   The lower-level composition Mob::Name property shall be a valid name identifying the composition.  Where multiple compositions are exported, each shall have a different name.
             Result: Failed
             Reason: Lower-Level Composition "Duplicate: Lower-Level/Sub-Clip" does not have a unique composition name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_032
@@ -955,6 +1191,8 @@
             Desc:   The lower-level composition Mob::Name property shall be a valid name identifying the composition.  Where multiple compositions are exported, each shall have a different name.
             Result: Failed
             Reason: Lower-Level Composition "Duplicate: Top-Level/Lower-Level" does not have a unique composition name.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_032

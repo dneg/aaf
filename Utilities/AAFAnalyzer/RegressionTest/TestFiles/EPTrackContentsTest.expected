@@ -2,367 +2,1109 @@
         Desc:   Verify the correctness of data within the tracks of Edit Protocol mobs.
         Result: Failed
         Reason: 
+        Covered Requirements: None
+        Noted Requirements: REQ_EP_108.1; REQ_EP_108.2; REQ_EP_108.4
         Passing Requirements: None
-        Warning Requirements: REQ_EP_108
-        Failing Requirements: REQ_EP_103
+        Warning Requirements: None
+        Failing Requirements: REQ_EP_103; REQ_EP_108.3
+
+            Name:   Physical Track Number Specification
+            Desc:   The MobSlot::PhysicalTrackNumber property shall be specified for essence MobSlots within the following kinds of Mobs: CompositionMob, MasterMob, recording SourceMob, import SourceMob, tape SourceMob, film SourceMob.
+            Result: Noted
+            Reason: Slot with ID 1 in Top-Level Composition "Top-Level Essence With Physical Track Number" has MobSlot::PhysicalTrackNumber = 1
+            Covered Requirements: None
+            Noted Requirements: REQ_EP_103
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: None
 
             Name:   Physical Track Number Specification
             Desc:   The MobSlot::PhysicalTrackNumber property shall be specified for essence MobSlots within the following kinds of Mobs: CompositionMob, MasterMob, recording SourceMob, import SourceMob, tape SourceMob, film SourceMob.
             Result: Failed
             Reason: Slot with ID 1 in Top-Level Composition "Top-Level Essence Without Physical Track Number" does not have a MobSlot::PhysicalTrackNumber property.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_103
+
+            Name:   Physical Track Number Specification
+            Desc:   The MobSlot::PhysicalTrackNumber property shall be specified for essence MobSlots within the following kinds of Mobs: CompositionMob, MasterMob, recording SourceMob, import SourceMob, tape SourceMob, film SourceMob.
+            Result: Noted
+            Reason: Slot with ID 1 in Lower-Level Composition "Lower-Level Essence With Physical Track Number" has MobSlot::PhysicalTrackNumber = 1
+            Covered Requirements: None
+            Noted Requirements: REQ_EP_103
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: None
 
             Name:   Physical Track Number Specification
             Desc:   The MobSlot::PhysicalTrackNumber property shall be specified for essence MobSlots within the following kinds of Mobs: CompositionMob, MasterMob, recording SourceMob, import SourceMob, tape SourceMob, film SourceMob.
             Result: Failed
             Reason: Slot with ID 1 in Lower-Level Composition "Lower-Level Essence Without Physical Track Number" does not have a MobSlot::PhysicalTrackNumber property.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_103
+
+            Name:   Physical Track Number Specification
+            Desc:   The MobSlot::PhysicalTrackNumber property shall be specified for essence MobSlots within the following kinds of Mobs: CompositionMob, MasterMob, recording SourceMob, import SourceMob, tape SourceMob, film SourceMob.
+            Result: Noted
+            Reason: Slot with ID 1 in Adjusted-Clip Composition "Adjusted Clip Essence With Physical Track Number" has MobSlot::PhysicalTrackNumber = 1
+            Covered Requirements: None
+            Noted Requirements: REQ_EP_103
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: None
 
             Name:   Physical Track Number Specification
             Desc:   The MobSlot::PhysicalTrackNumber property shall be specified for essence MobSlots within the following kinds of Mobs: CompositionMob, MasterMob, recording SourceMob, import SourceMob, tape SourceMob, film SourceMob.
             Result: Failed
             Reason: Slot with ID 1 in Adjusted-Clip Composition "Adjusted Clip Essence Without Physical Track Number" does not have a MobSlot::PhysicalTrackNumber property.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_103
+
+            Name:   Physical Track Number Specification
+            Desc:   The MobSlot::PhysicalTrackNumber property shall be specified for essence MobSlots within the following kinds of Mobs: CompositionMob, MasterMob, recording SourceMob, import SourceMob, tape SourceMob, film SourceMob.
+            Result: Noted
+            Reason: Slot with ID 1 in Sub-Clip Composition "Sub-Clip Essence With Physical Track Number" has MobSlot::PhysicalTrackNumber = 1
+            Covered Requirements: None
+            Noted Requirements: REQ_EP_103
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: None
 
             Name:   Physical Track Number Specification
             Desc:   The MobSlot::PhysicalTrackNumber property shall be specified for essence MobSlots within the following kinds of Mobs: CompositionMob, MasterMob, recording SourceMob, import SourceMob, tape SourceMob, film SourceMob.
             Result: Failed
             Reason: Slot with ID 1 in Sub-Clip Composition "Sub-Clip Essence Without Physical Track Number" does not have a MobSlot::PhysicalTrackNumber property.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_103
+
+            Name:   Physical Track Number Specification
+            Desc:   The MobSlot::PhysicalTrackNumber property shall be specified for essence MobSlots within the following kinds of Mobs: CompositionMob, MasterMob, recording SourceMob, import SourceMob, tape SourceMob, film SourceMob.
+            Result: Noted
+            Reason: Slot with ID 1 in Template Clip "Template Essence With Physical Track Number" has MobSlot::PhysicalTrackNumber = 1
+            Covered Requirements: None
+            Noted Requirements: REQ_EP_103
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: None
 
             Name:   Physical Track Number Specification
             Desc:   The MobSlot::PhysicalTrackNumber property shall be specified for essence MobSlots within the following kinds of Mobs: CompositionMob, MasterMob, recording SourceMob, import SourceMob, tape SourceMob, film SourceMob.
             Result: Failed
             Reason: Slot with ID 1 in Template Clip "Template Essence Without Physical Track Number" does not have a MobSlot::PhysicalTrackNumber property.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_103
+
+            Name:   Physical Track Number Specification
+            Desc:   The MobSlot::PhysicalTrackNumber property shall be specified for essence MobSlots within the following kinds of Mobs: CompositionMob, MasterMob, recording SourceMob, import SourceMob, tape SourceMob, film SourceMob.
+            Result: Noted
+            Reason: Slot with ID 1 in Clip "Clip Essence With Physical Track Number" has MobSlot::PhysicalTrackNumber = 1
+            Covered Requirements: None
+            Noted Requirements: REQ_EP_103
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: None
 
             Name:   Physical Track Number Specification
             Desc:   The MobSlot::PhysicalTrackNumber property shall be specified for essence MobSlots within the following kinds of Mobs: CompositionMob, MasterMob, recording SourceMob, import SourceMob, tape SourceMob, film SourceMob.
             Result: Failed
             Reason: Slot with ID 1 in Clip "Clip Essence Without Physical Track Number" does not have a MobSlot::PhysicalTrackNumber property.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_103
+
+            Name:   Physical Track Number Specification
+            Desc:   The MobSlot::PhysicalTrackNumber property shall be specified for essence MobSlots within the following kinds of Mobs: CompositionMob, MasterMob, recording SourceMob, import SourceMob, tape SourceMob, film SourceMob.
+            Result: Noted
+            Reason: Slot with ID 1 in Recording Source "Recording Source Essence With Physical Track Number" has MobSlot::PhysicalTrackNumber = 1
+            Covered Requirements: None
+            Noted Requirements: REQ_EP_103
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: None
 
             Name:   Physical Track Number Specification
             Desc:   The MobSlot::PhysicalTrackNumber property shall be specified for essence MobSlots within the following kinds of Mobs: CompositionMob, MasterMob, recording SourceMob, import SourceMob, tape SourceMob, film SourceMob.
             Result: Failed
             Reason: Slot with ID 1 in Recording Source "Recording Source Essence Without Physical Track Number" does not have a MobSlot::PhysicalTrackNumber property.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_103
+
+            Name:   Physical Track Number Specification
+            Desc:   The MobSlot::PhysicalTrackNumber property shall be specified for essence MobSlots within the following kinds of Mobs: CompositionMob, MasterMob, recording SourceMob, import SourceMob, tape SourceMob, film SourceMob.
+            Result: Noted
+            Reason: Slot with ID 1 in Import Source "Import Source Essence With Physical Track Number" has MobSlot::PhysicalTrackNumber = 1
+            Covered Requirements: None
+            Noted Requirements: REQ_EP_103
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: None
 
             Name:   Physical Track Number Specification
             Desc:   The MobSlot::PhysicalTrackNumber property shall be specified for essence MobSlots within the following kinds of Mobs: CompositionMob, MasterMob, recording SourceMob, import SourceMob, tape SourceMob, film SourceMob.
             Result: Failed
             Reason: Slot with ID 1 in Import Source "Import Source Essence Without Physical Track Number" does not have a MobSlot::PhysicalTrackNumber property.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_103
+
+            Name:   Physical Track Number Specification
+            Desc:   The MobSlot::PhysicalTrackNumber property shall be specified for essence MobSlots within the following kinds of Mobs: CompositionMob, MasterMob, recording SourceMob, import SourceMob, tape SourceMob, film SourceMob.
+            Result: Noted
+            Reason: Slot with ID 1 in Tape Source "Tape Source Essence With Physical Track Number" has MobSlot::PhysicalTrackNumber = 1
+            Covered Requirements: None
+            Noted Requirements: REQ_EP_103
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: None
 
             Name:   Physical Track Number Specification
             Desc:   The MobSlot::PhysicalTrackNumber property shall be specified for essence MobSlots within the following kinds of Mobs: CompositionMob, MasterMob, recording SourceMob, import SourceMob, tape SourceMob, film SourceMob.
             Result: Failed
             Reason: Slot with ID 1 in Tape Source "Tape Source Essence Without Physical Track Number" does not have a MobSlot::PhysicalTrackNumber property.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_103
+
+            Name:   Physical Track Number Specification
+            Desc:   The MobSlot::PhysicalTrackNumber property shall be specified for essence MobSlots within the following kinds of Mobs: CompositionMob, MasterMob, recording SourceMob, import SourceMob, tape SourceMob, film SourceMob.
+            Result: Noted
+            Reason: Slot with ID 1 in Film Source "Film Source Essence With Physical Track Number" has MobSlot::PhysicalTrackNumber = 1
+            Covered Requirements: None
+            Noted Requirements: REQ_EP_103
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: None
 
             Name:   Physical Track Number Specification
             Desc:   The MobSlot::PhysicalTrackNumber property shall be specified for essence MobSlots within the following kinds of Mobs: CompositionMob, MasterMob, recording SourceMob, import SourceMob, tape SourceMob, film SourceMob.
             Result: Failed
             Reason: Slot with ID 1 in Film Source "Film Source Essence Without Physical Track Number" does not have a MobSlot::PhysicalTrackNumber property.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_103
 
             Name:   Physical Track Number Specification
             Desc:   The MobSlot::PhysicalTrackNumber property shall be specified for essence MobSlots within the following kinds of Mobs: CompositionMob, MasterMob, recording SourceMob, import SourceMob, tape SourceMob, film SourceMob.
-            Result: Failed
-            Reason: Slot with ID 1 in Top-Level Composition "Audio Timeline Slot - No IN; No OUT" does not have a MobSlot::PhysicalTrackNumber property.
+            Result: Noted
+            Reason: Slot with ID 1 in Top-Level Composition "Audio Timeline Slot - No IN; No OUT" has MobSlot::PhysicalTrackNumber = 1
+            Covered Requirements: None
+            Noted Requirements: REQ_EP_103
             Passing Requirements: None
             Warning Requirements: None
-            Failing Requirements: REQ_EP_103
-
-            Name:   Physical Track Number Specification
-            Desc:   The MobSlot::PhysicalTrackNumber property shall be specified for essence MobSlots within the following kinds of Mobs: CompositionMob, MasterMob, recording SourceMob, import SourceMob, tape SourceMob, film SourceMob.
-            Result: Failed
-            Reason: Slot with ID 1 in Top-Level Composition "Audio Timeline Slot - No IN; OUT" does not have a MobSlot::PhysicalTrackNumber property.
-            Passing Requirements: None
-            Warning Requirements: None
-            Failing Requirements: REQ_EP_103
-
-            Name:   IN, OUT and User Position Point Specification
-            Desc:   The marked IN and OUT points and user position shall be specified using the TimelineMobSlot::MarkIn, TimelineMobSlot::MarkOut and TimelineMobSlot::UserPos optional properties respectively.
-            Result: Passed, but with warnings.
-            Reason: Mob slot with ID = 1 of Top-Level Composition "Audio Timeline Slot - No IN; OUT" has a marked out point but no marked in point.
-            Passing Requirements: None
-            Warning Requirements: REQ_EP_108
             Failing Requirements: None
 
             Name:   Physical Track Number Specification
             Desc:   The MobSlot::PhysicalTrackNumber property shall be specified for essence MobSlots within the following kinds of Mobs: CompositionMob, MasterMob, recording SourceMob, import SourceMob, tape SourceMob, film SourceMob.
-            Result: Failed
-            Reason: Slot with ID 1 in Top-Level Composition "Audio Timeline Slot - IN; No OUT" does not have a MobSlot::PhysicalTrackNumber property.
+            Result: Noted
+            Reason: Slot with ID 1 in Top-Level Composition "Audio Timeline Slot - No IN; OUT" has MobSlot::PhysicalTrackNumber = 1
+            Covered Requirements: None
+            Noted Requirements: REQ_EP_103
             Passing Requirements: None
             Warning Requirements: None
-            Failing Requirements: REQ_EP_103
+            Failing Requirements: None
 
-            Name:   IN, OUT and User Position Point Specification
-            Desc:   The marked IN and OUT points and user position shall be specified using the TimelineMobSlot::MarkIn, TimelineMobSlot::MarkOut and TimelineMobSlot::UserPos optional properties respectively.
-            Result: Passed, but with warnings.
-            Reason: Mob slot with ID = 1 of Top-Level Composition "Audio Timeline Slot - IN; No OUT" has a marked in point but no marked out point.
+            Name:   Mark OUT Position
+            Desc:   The mark OUT point shall be specified using the TimelineMobSlot::MarkOut optional property.
+            Result: Noted
+            Reason: Mob slot with ID = 1 of Top-Level Composition "Audio Timeline Slot - No IN; OUT" has a MarkOut property.
+            Covered Requirements: None
+            Noted Requirements: REQ_EP_108.2
             Passing Requirements: None
-            Warning Requirements: REQ_EP_108
+            Warning Requirements: None
             Failing Requirements: None
 
             Name:   Physical Track Number Specification
             Desc:   The MobSlot::PhysicalTrackNumber property shall be specified for essence MobSlots within the following kinds of Mobs: CompositionMob, MasterMob, recording SourceMob, import SourceMob, tape SourceMob, film SourceMob.
-            Result: Failed
-            Reason: Slot with ID 1 in Top-Level Composition "Audio Timeline Slot - IN after OUT" does not have a MobSlot::PhysicalTrackNumber property.
+            Result: Noted
+            Reason: Slot with ID 1 in Top-Level Composition "Audio Timeline Slot - IN; No OUT" has MobSlot::PhysicalTrackNumber = 1
+            Covered Requirements: None
+            Noted Requirements: REQ_EP_103
             Passing Requirements: None
             Warning Requirements: None
-            Failing Requirements: REQ_EP_103
+            Failing Requirements: None
 
-            Name:   IN, OUT and User Position Point Specification
-            Desc:   The marked IN and OUT points and user position shall be specified using the TimelineMobSlot::MarkIn, TimelineMobSlot::MarkOut and TimelineMobSlot::UserPos optional properties respectively.
-            Result: Passed, but with warnings.
+            Name:   Mark IN Position
+            Desc:   The mark IN point shall be specified using the TimelineMobSlot::MarkIn optional property.
+            Result: Noted
+            Reason: Mob slot with ID = 1 of Top-Level Composition "Audio Timeline Slot - IN; No OUT" has a MarkIn property.
+            Covered Requirements: None
+            Noted Requirements: REQ_EP_108.1
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Physical Track Number Specification
+            Desc:   The MobSlot::PhysicalTrackNumber property shall be specified for essence MobSlots within the following kinds of Mobs: CompositionMob, MasterMob, recording SourceMob, import SourceMob, tape SourceMob, film SourceMob.
+            Result: Noted
+            Reason: Slot with ID 1 in Top-Level Composition "Audio Timeline Slot - IN after OUT" has MobSlot::PhysicalTrackNumber = 1
+            Covered Requirements: None
+            Noted Requirements: REQ_EP_103
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Mark IN Position
+            Desc:   The mark IN point shall be specified using the TimelineMobSlot::MarkIn optional property.
+            Result: Noted
+            Reason: Mob slot with ID = 1 of Top-Level Composition "Audio Timeline Slot - IN after OUT" has a MarkIn property.
+            Covered Requirements: None
+            Noted Requirements: REQ_EP_108.1
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Mark OUT Position
+            Desc:   The mark OUT point shall be specified using the TimelineMobSlot::MarkOut optional property.
+            Result: Noted
+            Reason: Mob slot with ID = 1 of Top-Level Composition "Audio Timeline Slot - IN after OUT" has a MarkOut property.
+            Covered Requirements: None
+            Noted Requirements: REQ_EP_108.2
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Marked Region Length
+            Desc:   The length of the marked region is OUT-IN. OUT shall be greater than IN.
+            Result: Failed
             Reason: Mob slot with ID = 1 of Top-Level Composition "Audio Timeline Slot - IN after OUT" has a marked in point that occurs after the marked out point (IN = 10; OUT = 5).
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
-            Warning Requirements: REQ_EP_108
+            Warning Requirements: None
+            Failing Requirements: REQ_EP_108.3
+
+            Name:   Physical Track Number Specification
+            Desc:   The MobSlot::PhysicalTrackNumber property shall be specified for essence MobSlots within the following kinds of Mobs: CompositionMob, MasterMob, recording SourceMob, import SourceMob, tape SourceMob, film SourceMob.
+            Result: Noted
+            Reason: Slot with ID 1 in Top-Level Composition "Audio Timeline Slot - IN at OUT" has MobSlot::PhysicalTrackNumber = 1
+            Covered Requirements: None
+            Noted Requirements: REQ_EP_103
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Mark IN Position
+            Desc:   The mark IN point shall be specified using the TimelineMobSlot::MarkIn optional property.
+            Result: Noted
+            Reason: Mob slot with ID = 1 of Top-Level Composition "Audio Timeline Slot - IN at OUT" has a MarkIn property.
+            Covered Requirements: None
+            Noted Requirements: REQ_EP_108.1
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Mark OUT Position
+            Desc:   The mark OUT point shall be specified using the TimelineMobSlot::MarkOut optional property.
+            Result: Noted
+            Reason: Mob slot with ID = 1 of Top-Level Composition "Audio Timeline Slot - IN at OUT" has a MarkOut property.
+            Covered Requirements: None
+            Noted Requirements: REQ_EP_108.2
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Marked Region Length
+            Desc:   The length of the marked region is OUT-IN. OUT shall be greater than IN.
+            Result: Noted
+            Reason: Mob slot with ID = 1 of Top-Level Composition "Audio Timeline Slot - IN at OUT" has valid mark in and mark out points (IN = 10; OUT = 10).
+            Covered Requirements: None
+            Noted Requirements: REQ_EP_108.3
+            Passing Requirements: None
+            Warning Requirements: None
             Failing Requirements: None
 
             Name:   Physical Track Number Specification
             Desc:   The MobSlot::PhysicalTrackNumber property shall be specified for essence MobSlots within the following kinds of Mobs: CompositionMob, MasterMob, recording SourceMob, import SourceMob, tape SourceMob, film SourceMob.
-            Result: Failed
-            Reason: Slot with ID 1 in Top-Level Composition "Audio Timeline Slot - IN at OUT" does not have a MobSlot::PhysicalTrackNumber property.
+            Result: Noted
+            Reason: Slot with ID 1 in Top-Level Composition "Audio Timeline Slot - IN before OUT" has MobSlot::PhysicalTrackNumber = 1
+            Covered Requirements: None
+            Noted Requirements: REQ_EP_103
             Passing Requirements: None
             Warning Requirements: None
-            Failing Requirements: REQ_EP_103
+            Failing Requirements: None
 
-            Name:   Physical Track Number Specification
-            Desc:   The MobSlot::PhysicalTrackNumber property shall be specified for essence MobSlots within the following kinds of Mobs: CompositionMob, MasterMob, recording SourceMob, import SourceMob, tape SourceMob, film SourceMob.
-            Result: Failed
-            Reason: Slot with ID 1 in Top-Level Composition "Audio Timeline Slot - IN before OUT" does not have a MobSlot::PhysicalTrackNumber property.
+            Name:   Mark IN Position
+            Desc:   The mark IN point shall be specified using the TimelineMobSlot::MarkIn optional property.
+            Result: Noted
+            Reason: Mob slot with ID = 1 of Top-Level Composition "Audio Timeline Slot - IN before OUT" has a MarkIn property.
+            Covered Requirements: None
+            Noted Requirements: REQ_EP_108.1
             Passing Requirements: None
             Warning Requirements: None
-            Failing Requirements: REQ_EP_103
-
-            Name:   IN, OUT and User Position Point Specification
-            Desc:   The marked IN and OUT points and user position shall be specified using the TimelineMobSlot::MarkIn, TimelineMobSlot::MarkOut and TimelineMobSlot::UserPos optional properties respectively.
-            Result: Passed, but with warnings.
-            Reason: Mob slot with ID = 1 of Top-Level Composition "Auxiliary Timeline Slot - No IN; OUT" has a marked out point but no marked in point.
-            Passing Requirements: None
-            Warning Requirements: REQ_EP_108
             Failing Requirements: None
 
-            Name:   IN, OUT and User Position Point Specification
-            Desc:   The marked IN and OUT points and user position shall be specified using the TimelineMobSlot::MarkIn, TimelineMobSlot::MarkOut and TimelineMobSlot::UserPos optional properties respectively.
-            Result: Passed, but with warnings.
-            Reason: Mob slot with ID = 1 of Top-Level Composition "Auxiliary Timeline Slot - IN; No OUT" has a marked in point but no marked out point.
+            Name:   Mark OUT Position
+            Desc:   The mark OUT point shall be specified using the TimelineMobSlot::MarkOut optional property.
+            Result: Noted
+            Reason: Mob slot with ID = 1 of Top-Level Composition "Audio Timeline Slot - IN before OUT" has a MarkOut property.
+            Covered Requirements: None
+            Noted Requirements: REQ_EP_108.2
             Passing Requirements: None
-            Warning Requirements: REQ_EP_108
+            Warning Requirements: None
             Failing Requirements: None
 
-            Name:   IN, OUT and User Position Point Specification
-            Desc:   The marked IN and OUT points and user position shall be specified using the TimelineMobSlot::MarkIn, TimelineMobSlot::MarkOut and TimelineMobSlot::UserPos optional properties respectively.
-            Result: Passed, but with warnings.
+            Name:   Marked Region Length
+            Desc:   The length of the marked region is OUT-IN. OUT shall be greater than IN.
+            Result: Noted
+            Reason: Mob slot with ID = 1 of Top-Level Composition "Audio Timeline Slot - IN before OUT" has valid mark in and mark out points (IN = 10; OUT = 20).
+            Covered Requirements: None
+            Noted Requirements: REQ_EP_108.3
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Mark OUT Position
+            Desc:   The mark OUT point shall be specified using the TimelineMobSlot::MarkOut optional property.
+            Result: Noted
+            Reason: Mob slot with ID = 1 of Top-Level Composition "Auxiliary Timeline Slot - No IN; OUT" has a MarkOut property.
+            Covered Requirements: None
+            Noted Requirements: REQ_EP_108.2
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Mark IN Position
+            Desc:   The mark IN point shall be specified using the TimelineMobSlot::MarkIn optional property.
+            Result: Noted
+            Reason: Mob slot with ID = 1 of Top-Level Composition "Auxiliary Timeline Slot - IN; No OUT" has a MarkIn property.
+            Covered Requirements: None
+            Noted Requirements: REQ_EP_108.1
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Mark IN Position
+            Desc:   The mark IN point shall be specified using the TimelineMobSlot::MarkIn optional property.
+            Result: Noted
+            Reason: Mob slot with ID = 1 of Top-Level Composition "Auxiliary Timeline Slot - IN after OUT" has a MarkIn property.
+            Covered Requirements: None
+            Noted Requirements: REQ_EP_108.1
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Mark OUT Position
+            Desc:   The mark OUT point shall be specified using the TimelineMobSlot::MarkOut optional property.
+            Result: Noted
+            Reason: Mob slot with ID = 1 of Top-Level Composition "Auxiliary Timeline Slot - IN after OUT" has a MarkOut property.
+            Covered Requirements: None
+            Noted Requirements: REQ_EP_108.2
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Marked Region Length
+            Desc:   The length of the marked region is OUT-IN. OUT shall be greater than IN.
+            Result: Failed
             Reason: Mob slot with ID = 1 of Top-Level Composition "Auxiliary Timeline Slot - IN after OUT" has a marked in point that occurs after the marked out point (IN = 10; OUT = 5).
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
-            Warning Requirements: REQ_EP_108
+            Warning Requirements: None
+            Failing Requirements: REQ_EP_108.3
+
+            Name:   Mark IN Position
+            Desc:   The mark IN point shall be specified using the TimelineMobSlot::MarkIn optional property.
+            Result: Noted
+            Reason: Mob slot with ID = 1 of Top-Level Composition "Auxiliary Timeline Slot - IN at OUT" has a MarkIn property.
+            Covered Requirements: None
+            Noted Requirements: REQ_EP_108.1
+            Passing Requirements: None
+            Warning Requirements: None
             Failing Requirements: None
 
-            Name:   IN, OUT and User Position Point Specification
-            Desc:   The marked IN and OUT points and user position shall be specified using the TimelineMobSlot::MarkIn, TimelineMobSlot::MarkOut and TimelineMobSlot::UserPos optional properties respectively.
-            Result: Passed, but with warnings.
-            Reason: Mob slot with ID = 1 of Top-Level Composition "Edgecode Timeline Slot - No IN; OUT" has a marked out point but no marked in point.
+            Name:   Mark OUT Position
+            Desc:   The mark OUT point shall be specified using the TimelineMobSlot::MarkOut optional property.
+            Result: Noted
+            Reason: Mob slot with ID = 1 of Top-Level Composition "Auxiliary Timeline Slot - IN at OUT" has a MarkOut property.
+            Covered Requirements: None
+            Noted Requirements: REQ_EP_108.2
             Passing Requirements: None
-            Warning Requirements: REQ_EP_108
+            Warning Requirements: None
             Failing Requirements: None
 
-            Name:   IN, OUT and User Position Point Specification
-            Desc:   The marked IN and OUT points and user position shall be specified using the TimelineMobSlot::MarkIn, TimelineMobSlot::MarkOut and TimelineMobSlot::UserPos optional properties respectively.
-            Result: Passed, but with warnings.
-            Reason: Mob slot with ID = 1 of Top-Level Composition "Edgecode Timeline Slot - IN; No OUT" has a marked in point but no marked out point.
+            Name:   Marked Region Length
+            Desc:   The length of the marked region is OUT-IN. OUT shall be greater than IN.
+            Result: Noted
+            Reason: Mob slot with ID = 1 of Top-Level Composition "Auxiliary Timeline Slot - IN at OUT" has valid mark in and mark out points (IN = 10; OUT = 10).
+            Covered Requirements: None
+            Noted Requirements: REQ_EP_108.3
             Passing Requirements: None
-            Warning Requirements: REQ_EP_108
+            Warning Requirements: None
             Failing Requirements: None
 
-            Name:   IN, OUT and User Position Point Specification
-            Desc:   The marked IN and OUT points and user position shall be specified using the TimelineMobSlot::MarkIn, TimelineMobSlot::MarkOut and TimelineMobSlot::UserPos optional properties respectively.
-            Result: Passed, but with warnings.
+            Name:   Mark IN Position
+            Desc:   The mark IN point shall be specified using the TimelineMobSlot::MarkIn optional property.
+            Result: Noted
+            Reason: Mob slot with ID = 1 of Top-Level Composition "Auxiliary Timeline Slot - IN before OUT" has a MarkIn property.
+            Covered Requirements: None
+            Noted Requirements: REQ_EP_108.1
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Mark OUT Position
+            Desc:   The mark OUT point shall be specified using the TimelineMobSlot::MarkOut optional property.
+            Result: Noted
+            Reason: Mob slot with ID = 1 of Top-Level Composition "Auxiliary Timeline Slot - IN before OUT" has a MarkOut property.
+            Covered Requirements: None
+            Noted Requirements: REQ_EP_108.2
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Marked Region Length
+            Desc:   The length of the marked region is OUT-IN. OUT shall be greater than IN.
+            Result: Noted
+            Reason: Mob slot with ID = 1 of Top-Level Composition "Auxiliary Timeline Slot - IN before OUT" has valid mark in and mark out points (IN = 10; OUT = 20).
+            Covered Requirements: None
+            Noted Requirements: REQ_EP_108.3
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Mark OUT Position
+            Desc:   The mark OUT point shall be specified using the TimelineMobSlot::MarkOut optional property.
+            Result: Noted
+            Reason: Mob slot with ID = 1 of Top-Level Composition "Edgecode Timeline Slot - No IN; OUT" has a MarkOut property.
+            Covered Requirements: None
+            Noted Requirements: REQ_EP_108.2
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Mark IN Position
+            Desc:   The mark IN point shall be specified using the TimelineMobSlot::MarkIn optional property.
+            Result: Noted
+            Reason: Mob slot with ID = 1 of Top-Level Composition "Edgecode Timeline Slot - IN; No OUT" has a MarkIn property.
+            Covered Requirements: None
+            Noted Requirements: REQ_EP_108.1
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Mark IN Position
+            Desc:   The mark IN point shall be specified using the TimelineMobSlot::MarkIn optional property.
+            Result: Noted
+            Reason: Mob slot with ID = 1 of Top-Level Composition "Edgecode Timeline Slot - IN after OUT" has a MarkIn property.
+            Covered Requirements: None
+            Noted Requirements: REQ_EP_108.1
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Mark OUT Position
+            Desc:   The mark OUT point shall be specified using the TimelineMobSlot::MarkOut optional property.
+            Result: Noted
+            Reason: Mob slot with ID = 1 of Top-Level Composition "Edgecode Timeline Slot - IN after OUT" has a MarkOut property.
+            Covered Requirements: None
+            Noted Requirements: REQ_EP_108.2
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Marked Region Length
+            Desc:   The length of the marked region is OUT-IN. OUT shall be greater than IN.
+            Result: Failed
             Reason: Mob slot with ID = 1 of Top-Level Composition "Edgecode Timeline Slot - IN after OUT" has a marked in point that occurs after the marked out point (IN = 10; OUT = 5).
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
-            Warning Requirements: REQ_EP_108
+            Warning Requirements: None
+            Failing Requirements: REQ_EP_108.3
+
+            Name:   Mark IN Position
+            Desc:   The mark IN point shall be specified using the TimelineMobSlot::MarkIn optional property.
+            Result: Noted
+            Reason: Mob slot with ID = 1 of Top-Level Composition "Edgecode Timeline Slot - IN at OUT" has a MarkIn property.
+            Covered Requirements: None
+            Noted Requirements: REQ_EP_108.1
+            Passing Requirements: None
+            Warning Requirements: None
             Failing Requirements: None
 
-            Name:   IN, OUT and User Position Point Specification
-            Desc:   The marked IN and OUT points and user position shall be specified using the TimelineMobSlot::MarkIn, TimelineMobSlot::MarkOut and TimelineMobSlot::UserPos optional properties respectively.
-            Result: Passed, but with warnings.
-            Reason: Mob slot with ID = 1 of Top-Level Composition "Unknown Timeline Slot - No IN; OUT" has a marked out point but no marked in point.
+            Name:   Mark OUT Position
+            Desc:   The mark OUT point shall be specified using the TimelineMobSlot::MarkOut optional property.
+            Result: Noted
+            Reason: Mob slot with ID = 1 of Top-Level Composition "Edgecode Timeline Slot - IN at OUT" has a MarkOut property.
+            Covered Requirements: None
+            Noted Requirements: REQ_EP_108.2
             Passing Requirements: None
-            Warning Requirements: REQ_EP_108
+            Warning Requirements: None
             Failing Requirements: None
 
-            Name:   IN, OUT and User Position Point Specification
-            Desc:   The marked IN and OUT points and user position shall be specified using the TimelineMobSlot::MarkIn, TimelineMobSlot::MarkOut and TimelineMobSlot::UserPos optional properties respectively.
-            Result: Passed, but with warnings.
-            Reason: Mob slot with ID = 1 of Top-Level Composition "Unknown Timeline Slot - IN; No OUT" has a marked in point but no marked out point.
+            Name:   Marked Region Length
+            Desc:   The length of the marked region is OUT-IN. OUT shall be greater than IN.
+            Result: Noted
+            Reason: Mob slot with ID = 1 of Top-Level Composition "Edgecode Timeline Slot - IN at OUT" has valid mark in and mark out points (IN = 10; OUT = 10).
+            Covered Requirements: None
+            Noted Requirements: REQ_EP_108.3
             Passing Requirements: None
-            Warning Requirements: REQ_EP_108
+            Warning Requirements: None
             Failing Requirements: None
 
-            Name:   IN, OUT and User Position Point Specification
-            Desc:   The marked IN and OUT points and user position shall be specified using the TimelineMobSlot::MarkIn, TimelineMobSlot::MarkOut and TimelineMobSlot::UserPos optional properties respectively.
-            Result: Passed, but with warnings.
+            Name:   Mark IN Position
+            Desc:   The mark IN point shall be specified using the TimelineMobSlot::MarkIn optional property.
+            Result: Noted
+            Reason: Mob slot with ID = 1 of Top-Level Composition "Edgecode Timeline Slot - IN before OUT" has a MarkIn property.
+            Covered Requirements: None
+            Noted Requirements: REQ_EP_108.1
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Mark OUT Position
+            Desc:   The mark OUT point shall be specified using the TimelineMobSlot::MarkOut optional property.
+            Result: Noted
+            Reason: Mob slot with ID = 1 of Top-Level Composition "Edgecode Timeline Slot - IN before OUT" has a MarkOut property.
+            Covered Requirements: None
+            Noted Requirements: REQ_EP_108.2
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Marked Region Length
+            Desc:   The length of the marked region is OUT-IN. OUT shall be greater than IN.
+            Result: Noted
+            Reason: Mob slot with ID = 1 of Top-Level Composition "Edgecode Timeline Slot - IN before OUT" has valid mark in and mark out points (IN = 10; OUT = 20).
+            Covered Requirements: None
+            Noted Requirements: REQ_EP_108.3
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Mark OUT Position
+            Desc:   The mark OUT point shall be specified using the TimelineMobSlot::MarkOut optional property.
+            Result: Noted
+            Reason: Mob slot with ID = 1 of Top-Level Composition "Unknown Timeline Slot - No IN; OUT" has a MarkOut property.
+            Covered Requirements: None
+            Noted Requirements: REQ_EP_108.2
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Mark IN Position
+            Desc:   The mark IN point shall be specified using the TimelineMobSlot::MarkIn optional property.
+            Result: Noted
+            Reason: Mob slot with ID = 1 of Top-Level Composition "Unknown Timeline Slot - IN; No OUT" has a MarkIn property.
+            Covered Requirements: None
+            Noted Requirements: REQ_EP_108.1
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Mark IN Position
+            Desc:   The mark IN point shall be specified using the TimelineMobSlot::MarkIn optional property.
+            Result: Noted
+            Reason: Mob slot with ID = 1 of Top-Level Composition "Unknown Timeline Slot - IN after OUT" has a MarkIn property.
+            Covered Requirements: None
+            Noted Requirements: REQ_EP_108.1
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Mark OUT Position
+            Desc:   The mark OUT point shall be specified using the TimelineMobSlot::MarkOut optional property.
+            Result: Noted
+            Reason: Mob slot with ID = 1 of Top-Level Composition "Unknown Timeline Slot - IN after OUT" has a MarkOut property.
+            Covered Requirements: None
+            Noted Requirements: REQ_EP_108.2
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Marked Region Length
+            Desc:   The length of the marked region is OUT-IN. OUT shall be greater than IN.
+            Result: Failed
             Reason: Mob slot with ID = 1 of Top-Level Composition "Unknown Timeline Slot - IN after OUT" has a marked in point that occurs after the marked out point (IN = 10; OUT = 5).
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
-            Warning Requirements: REQ_EP_108
+            Warning Requirements: None
+            Failing Requirements: REQ_EP_108.3
+
+            Name:   Mark IN Position
+            Desc:   The mark IN point shall be specified using the TimelineMobSlot::MarkIn optional property.
+            Result: Noted
+            Reason: Mob slot with ID = 1 of Top-Level Composition "Unknown Timeline Slot - IN at OUT" has a MarkIn property.
+            Covered Requirements: None
+            Noted Requirements: REQ_EP_108.1
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Mark OUT Position
+            Desc:   The mark OUT point shall be specified using the TimelineMobSlot::MarkOut optional property.
+            Result: Noted
+            Reason: Mob slot with ID = 1 of Top-Level Composition "Unknown Timeline Slot - IN at OUT" has a MarkOut property.
+            Covered Requirements: None
+            Noted Requirements: REQ_EP_108.2
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Marked Region Length
+            Desc:   The length of the marked region is OUT-IN. OUT shall be greater than IN.
+            Result: Noted
+            Reason: Mob slot with ID = 1 of Top-Level Composition "Unknown Timeline Slot - IN at OUT" has valid mark in and mark out points (IN = 10; OUT = 10).
+            Covered Requirements: None
+            Noted Requirements: REQ_EP_108.3
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Mark IN Position
+            Desc:   The mark IN point shall be specified using the TimelineMobSlot::MarkIn optional property.
+            Result: Noted
+            Reason: Mob slot with ID = 1 of Top-Level Composition "Unknown Timeline Slot - IN before OUT" has a MarkIn property.
+            Covered Requirements: None
+            Noted Requirements: REQ_EP_108.1
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Mark OUT Position
+            Desc:   The mark OUT point shall be specified using the TimelineMobSlot::MarkOut optional property.
+            Result: Noted
+            Reason: Mob slot with ID = 1 of Top-Level Composition "Unknown Timeline Slot - IN before OUT" has a MarkOut property.
+            Covered Requirements: None
+            Noted Requirements: REQ_EP_108.2
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Marked Region Length
+            Desc:   The length of the marked region is OUT-IN. OUT shall be greater than IN.
+            Result: Noted
+            Reason: Mob slot with ID = 1 of Top-Level Composition "Unknown Timeline Slot - IN before OUT" has valid mark in and mark out points (IN = 10; OUT = 20).
+            Covered Requirements: None
+            Noted Requirements: REQ_EP_108.3
+            Passing Requirements: None
+            Warning Requirements: None
             Failing Requirements: None
 
             Name:   Physical Track Number Specification
             Desc:   The MobSlot::PhysicalTrackNumber property shall be specified for essence MobSlots within the following kinds of Mobs: CompositionMob, MasterMob, recording SourceMob, import SourceMob, tape SourceMob, film SourceMob.
-            Result: Failed
-            Reason: Slot with ID 1 in Top-Level Composition "Video Timeline Slot - No IN; No OUT" does not have a MobSlot::PhysicalTrackNumber property.
+            Result: Noted
+            Reason: Slot with ID 1 in Top-Level Composition "Video Timeline Slot - No IN; No OUT" has MobSlot::PhysicalTrackNumber = 1
+            Covered Requirements: None
+            Noted Requirements: REQ_EP_103
             Passing Requirements: None
             Warning Requirements: None
-            Failing Requirements: REQ_EP_103
-
-            Name:   Physical Track Number Specification
-            Desc:   The MobSlot::PhysicalTrackNumber property shall be specified for essence MobSlots within the following kinds of Mobs: CompositionMob, MasterMob, recording SourceMob, import SourceMob, tape SourceMob, film SourceMob.
-            Result: Failed
-            Reason: Slot with ID 1 in Top-Level Composition "Video Timeline Slot - No IN; OUT" does not have a MobSlot::PhysicalTrackNumber property.
-            Passing Requirements: None
-            Warning Requirements: None
-            Failing Requirements: REQ_EP_103
-
-            Name:   IN, OUT and User Position Point Specification
-            Desc:   The marked IN and OUT points and user position shall be specified using the TimelineMobSlot::MarkIn, TimelineMobSlot::MarkOut and TimelineMobSlot::UserPos optional properties respectively.
-            Result: Passed, but with warnings.
-            Reason: Mob slot with ID = 1 of Top-Level Composition "Video Timeline Slot - No IN; OUT" has a marked out point but no marked in point.
-            Passing Requirements: None
-            Warning Requirements: REQ_EP_108
             Failing Requirements: None
 
             Name:   Physical Track Number Specification
             Desc:   The MobSlot::PhysicalTrackNumber property shall be specified for essence MobSlots within the following kinds of Mobs: CompositionMob, MasterMob, recording SourceMob, import SourceMob, tape SourceMob, film SourceMob.
-            Result: Failed
-            Reason: Slot with ID 1 in Top-Level Composition "Video Timeline Slot - IN; No OUT" does not have a MobSlot::PhysicalTrackNumber property.
+            Result: Noted
+            Reason: Slot with ID 1 in Top-Level Composition "Video Timeline Slot - No IN; OUT" has MobSlot::PhysicalTrackNumber = 1
+            Covered Requirements: None
+            Noted Requirements: REQ_EP_103
             Passing Requirements: None
             Warning Requirements: None
-            Failing Requirements: REQ_EP_103
+            Failing Requirements: None
 
-            Name:   IN, OUT and User Position Point Specification
-            Desc:   The marked IN and OUT points and user position shall be specified using the TimelineMobSlot::MarkIn, TimelineMobSlot::MarkOut and TimelineMobSlot::UserPos optional properties respectively.
-            Result: Passed, but with warnings.
-            Reason: Mob slot with ID = 1 of Top-Level Composition "Video Timeline Slot - IN; No OUT" has a marked in point but no marked out point.
+            Name:   Mark OUT Position
+            Desc:   The mark OUT point shall be specified using the TimelineMobSlot::MarkOut optional property.
+            Result: Noted
+            Reason: Mob slot with ID = 1 of Top-Level Composition "Video Timeline Slot - No IN; OUT" has a MarkOut property.
+            Covered Requirements: None
+            Noted Requirements: REQ_EP_108.2
             Passing Requirements: None
-            Warning Requirements: REQ_EP_108
+            Warning Requirements: None
             Failing Requirements: None
 
             Name:   Physical Track Number Specification
             Desc:   The MobSlot::PhysicalTrackNumber property shall be specified for essence MobSlots within the following kinds of Mobs: CompositionMob, MasterMob, recording SourceMob, import SourceMob, tape SourceMob, film SourceMob.
-            Result: Failed
-            Reason: Slot with ID 1 in Top-Level Composition "Video Timeline Slot - IN after OUT" does not have a MobSlot::PhysicalTrackNumber property.
+            Result: Noted
+            Reason: Slot with ID 1 in Top-Level Composition "Video Timeline Slot - IN; No OUT" has MobSlot::PhysicalTrackNumber = 1
+            Covered Requirements: None
+            Noted Requirements: REQ_EP_103
             Passing Requirements: None
             Warning Requirements: None
-            Failing Requirements: REQ_EP_103
+            Failing Requirements: None
 
-            Name:   IN, OUT and User Position Point Specification
-            Desc:   The marked IN and OUT points and user position shall be specified using the TimelineMobSlot::MarkIn, TimelineMobSlot::MarkOut and TimelineMobSlot::UserPos optional properties respectively.
-            Result: Passed, but with warnings.
+            Name:   Mark IN Position
+            Desc:   The mark IN point shall be specified using the TimelineMobSlot::MarkIn optional property.
+            Result: Noted
+            Reason: Mob slot with ID = 1 of Top-Level Composition "Video Timeline Slot - IN; No OUT" has a MarkIn property.
+            Covered Requirements: None
+            Noted Requirements: REQ_EP_108.1
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Physical Track Number Specification
+            Desc:   The MobSlot::PhysicalTrackNumber property shall be specified for essence MobSlots within the following kinds of Mobs: CompositionMob, MasterMob, recording SourceMob, import SourceMob, tape SourceMob, film SourceMob.
+            Result: Noted
+            Reason: Slot with ID 1 in Top-Level Composition "Video Timeline Slot - IN after OUT" has MobSlot::PhysicalTrackNumber = 1
+            Covered Requirements: None
+            Noted Requirements: REQ_EP_103
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Mark IN Position
+            Desc:   The mark IN point shall be specified using the TimelineMobSlot::MarkIn optional property.
+            Result: Noted
+            Reason: Mob slot with ID = 1 of Top-Level Composition "Video Timeline Slot - IN after OUT" has a MarkIn property.
+            Covered Requirements: None
+            Noted Requirements: REQ_EP_108.1
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Mark OUT Position
+            Desc:   The mark OUT point shall be specified using the TimelineMobSlot::MarkOut optional property.
+            Result: Noted
+            Reason: Mob slot with ID = 1 of Top-Level Composition "Video Timeline Slot - IN after OUT" has a MarkOut property.
+            Covered Requirements: None
+            Noted Requirements: REQ_EP_108.2
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Marked Region Length
+            Desc:   The length of the marked region is OUT-IN. OUT shall be greater than IN.
+            Result: Failed
             Reason: Mob slot with ID = 1 of Top-Level Composition "Video Timeline Slot - IN after OUT" has a marked in point that occurs after the marked out point (IN = 10; OUT = 5).
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
-            Warning Requirements: REQ_EP_108
+            Warning Requirements: None
+            Failing Requirements: REQ_EP_108.3
+
+            Name:   Physical Track Number Specification
+            Desc:   The MobSlot::PhysicalTrackNumber property shall be specified for essence MobSlots within the following kinds of Mobs: CompositionMob, MasterMob, recording SourceMob, import SourceMob, tape SourceMob, film SourceMob.
+            Result: Noted
+            Reason: Slot with ID 1 in Top-Level Composition "Video Timeline Slot - IN at OUT" has MobSlot::PhysicalTrackNumber = 1
+            Covered Requirements: None
+            Noted Requirements: REQ_EP_103
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Mark IN Position
+            Desc:   The mark IN point shall be specified using the TimelineMobSlot::MarkIn optional property.
+            Result: Noted
+            Reason: Mob slot with ID = 1 of Top-Level Composition "Video Timeline Slot - IN at OUT" has a MarkIn property.
+            Covered Requirements: None
+            Noted Requirements: REQ_EP_108.1
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Mark OUT Position
+            Desc:   The mark OUT point shall be specified using the TimelineMobSlot::MarkOut optional property.
+            Result: Noted
+            Reason: Mob slot with ID = 1 of Top-Level Composition "Video Timeline Slot - IN at OUT" has a MarkOut property.
+            Covered Requirements: None
+            Noted Requirements: REQ_EP_108.2
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Marked Region Length
+            Desc:   The length of the marked region is OUT-IN. OUT shall be greater than IN.
+            Result: Noted
+            Reason: Mob slot with ID = 1 of Top-Level Composition "Video Timeline Slot - IN at OUT" has valid mark in and mark out points (IN = 10; OUT = 10).
+            Covered Requirements: None
+            Noted Requirements: REQ_EP_108.3
+            Passing Requirements: None
+            Warning Requirements: None
             Failing Requirements: None
 
             Name:   Physical Track Number Specification
             Desc:   The MobSlot::PhysicalTrackNumber property shall be specified for essence MobSlots within the following kinds of Mobs: CompositionMob, MasterMob, recording SourceMob, import SourceMob, tape SourceMob, film SourceMob.
-            Result: Failed
-            Reason: Slot with ID 1 in Top-Level Composition "Video Timeline Slot - IN at OUT" does not have a MobSlot::PhysicalTrackNumber property.
+            Result: Noted
+            Reason: Slot with ID 1 in Top-Level Composition "Video Timeline Slot - IN before OUT" has MobSlot::PhysicalTrackNumber = 1
+            Covered Requirements: None
+            Noted Requirements: REQ_EP_103
             Passing Requirements: None
             Warning Requirements: None
-            Failing Requirements: REQ_EP_103
+            Failing Requirements: None
 
-            Name:   Physical Track Number Specification
-            Desc:   The MobSlot::PhysicalTrackNumber property shall be specified for essence MobSlots within the following kinds of Mobs: CompositionMob, MasterMob, recording SourceMob, import SourceMob, tape SourceMob, film SourceMob.
-            Result: Failed
-            Reason: Slot with ID 1 in Top-Level Composition "Video Timeline Slot - IN before OUT" does not have a MobSlot::PhysicalTrackNumber property.
+            Name:   Mark IN Position
+            Desc:   The mark IN point shall be specified using the TimelineMobSlot::MarkIn optional property.
+            Result: Noted
+            Reason: Mob slot with ID = 1 of Top-Level Composition "Video Timeline Slot - IN before OUT" has a MarkIn property.
+            Covered Requirements: None
+            Noted Requirements: REQ_EP_108.1
             Passing Requirements: None
             Warning Requirements: None
-            Failing Requirements: REQ_EP_103
+            Failing Requirements: None
 
-            Name:   Physical Track Number Specification
-            Desc:   The MobSlot::PhysicalTrackNumber property shall be specified for essence MobSlots within the following kinds of Mobs: CompositionMob, MasterMob, recording SourceMob, import SourceMob, tape SourceMob, film SourceMob.
-            Result: Failed
-            Reason: Slot with ID 1 in Top-Level Composition "Timecode Timeline Slot - No IN; OUT" does not have a MobSlot::PhysicalTrackNumber property.
+            Name:   Mark OUT Position
+            Desc:   The mark OUT point shall be specified using the TimelineMobSlot::MarkOut optional property.
+            Result: Noted
+            Reason: Mob slot with ID = 1 of Top-Level Composition "Video Timeline Slot - IN before OUT" has a MarkOut property.
+            Covered Requirements: None
+            Noted Requirements: REQ_EP_108.2
             Passing Requirements: None
             Warning Requirements: None
-            Failing Requirements: REQ_EP_103
+            Failing Requirements: None
 
-            Name:   IN, OUT and User Position Point Specification
-            Desc:   The marked IN and OUT points and user position shall be specified using the TimelineMobSlot::MarkIn, TimelineMobSlot::MarkOut and TimelineMobSlot::UserPos optional properties respectively.
-            Result: Passed, but with warnings.
-            Reason: Mob slot with ID = 1 of Top-Level Composition "Timecode Timeline Slot - No IN; OUT" has a marked out point but no marked in point.
+            Name:   Marked Region Length
+            Desc:   The length of the marked region is OUT-IN. OUT shall be greater than IN.
+            Result: Noted
+            Reason: Mob slot with ID = 1 of Top-Level Composition "Video Timeline Slot - IN before OUT" has valid mark in and mark out points (IN = 10; OUT = 20).
+            Covered Requirements: None
+            Noted Requirements: REQ_EP_108.3
             Passing Requirements: None
-            Warning Requirements: REQ_EP_108
+            Warning Requirements: None
             Failing Requirements: None
 
             Name:   Physical Track Number Specification
             Desc:   The MobSlot::PhysicalTrackNumber property shall be specified for essence MobSlots within the following kinds of Mobs: CompositionMob, MasterMob, recording SourceMob, import SourceMob, tape SourceMob, film SourceMob.
-            Result: Failed
-            Reason: Slot with ID 1 in Top-Level Composition "Timecode Timeline Slot - IN; No OUT" does not have a MobSlot::PhysicalTrackNumber property.
+            Result: Noted
+            Reason: Slot with ID 1 in Top-Level Composition "Timecode Timeline Slot - No IN; OUT" has MobSlot::PhysicalTrackNumber = 1
+            Covered Requirements: None
+            Noted Requirements: REQ_EP_103
             Passing Requirements: None
             Warning Requirements: None
-            Failing Requirements: REQ_EP_103
+            Failing Requirements: None
 
-            Name:   IN, OUT and User Position Point Specification
-            Desc:   The marked IN and OUT points and user position shall be specified using the TimelineMobSlot::MarkIn, TimelineMobSlot::MarkOut and TimelineMobSlot::UserPos optional properties respectively.
-            Result: Passed, but with warnings.
-            Reason: Mob slot with ID = 1 of Top-Level Composition "Timecode Timeline Slot - IN; No OUT" has a marked in point but no marked out point.
+            Name:   Mark OUT Position
+            Desc:   The mark OUT point shall be specified using the TimelineMobSlot::MarkOut optional property.
+            Result: Noted
+            Reason: Mob slot with ID = 1 of Top-Level Composition "Timecode Timeline Slot - No IN; OUT" has a MarkOut property.
+            Covered Requirements: None
+            Noted Requirements: REQ_EP_108.2
             Passing Requirements: None
-            Warning Requirements: REQ_EP_108
+            Warning Requirements: None
             Failing Requirements: None
 
             Name:   Physical Track Number Specification
             Desc:   The MobSlot::PhysicalTrackNumber property shall be specified for essence MobSlots within the following kinds of Mobs: CompositionMob, MasterMob, recording SourceMob, import SourceMob, tape SourceMob, film SourceMob.
-            Result: Failed
-            Reason: Slot with ID 1 in Top-Level Composition "Timecode Timeline Slot - IN after OUT" does not have a MobSlot::PhysicalTrackNumber property.
+            Result: Noted
+            Reason: Slot with ID 1 in Top-Level Composition "Timecode Timeline Slot - IN; No OUT" has MobSlot::PhysicalTrackNumber = 1
+            Covered Requirements: None
+            Noted Requirements: REQ_EP_103
             Passing Requirements: None
             Warning Requirements: None
-            Failing Requirements: REQ_EP_103
+            Failing Requirements: None
 
-            Name:   IN, OUT and User Position Point Specification
-            Desc:   The marked IN and OUT points and user position shall be specified using the TimelineMobSlot::MarkIn, TimelineMobSlot::MarkOut and TimelineMobSlot::UserPos optional properties respectively.
-            Result: Passed, but with warnings.
+            Name:   Mark IN Position
+            Desc:   The mark IN point shall be specified using the TimelineMobSlot::MarkIn optional property.
+            Result: Noted
+            Reason: Mob slot with ID = 1 of Top-Level Composition "Timecode Timeline Slot - IN; No OUT" has a MarkIn property.
+            Covered Requirements: None
+            Noted Requirements: REQ_EP_108.1
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Physical Track Number Specification
+            Desc:   The MobSlot::PhysicalTrackNumber property shall be specified for essence MobSlots within the following kinds of Mobs: CompositionMob, MasterMob, recording SourceMob, import SourceMob, tape SourceMob, film SourceMob.
+            Result: Noted
+            Reason: Slot with ID 1 in Top-Level Composition "Timecode Timeline Slot - IN after OUT" has MobSlot::PhysicalTrackNumber = 1
+            Covered Requirements: None
+            Noted Requirements: REQ_EP_103
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Mark IN Position
+            Desc:   The mark IN point shall be specified using the TimelineMobSlot::MarkIn optional property.
+            Result: Noted
+            Reason: Mob slot with ID = 1 of Top-Level Composition "Timecode Timeline Slot - IN after OUT" has a MarkIn property.
+            Covered Requirements: None
+            Noted Requirements: REQ_EP_108.1
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Mark OUT Position
+            Desc:   The mark OUT point shall be specified using the TimelineMobSlot::MarkOut optional property.
+            Result: Noted
+            Reason: Mob slot with ID = 1 of Top-Level Composition "Timecode Timeline Slot - IN after OUT" has a MarkOut property.
+            Covered Requirements: None
+            Noted Requirements: REQ_EP_108.2
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Marked Region Length
+            Desc:   The length of the marked region is OUT-IN. OUT shall be greater than IN.
+            Result: Failed
             Reason: Mob slot with ID = 1 of Top-Level Composition "Timecode Timeline Slot - IN after OUT" has a marked in point that occurs after the marked out point (IN = 10; OUT = 5).
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
-            Warning Requirements: REQ_EP_108
+            Warning Requirements: None
+            Failing Requirements: REQ_EP_108.3
+
+            Name:   Physical Track Number Specification
+            Desc:   The MobSlot::PhysicalTrackNumber property shall be specified for essence MobSlots within the following kinds of Mobs: CompositionMob, MasterMob, recording SourceMob, import SourceMob, tape SourceMob, film SourceMob.
+            Result: Noted
+            Reason: Slot with ID 1 in Top-Level Composition "Timecode Timeline Slot - IN at OUT" has MobSlot::PhysicalTrackNumber = 1
+            Covered Requirements: None
+            Noted Requirements: REQ_EP_103
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Mark IN Position
+            Desc:   The mark IN point shall be specified using the TimelineMobSlot::MarkIn optional property.
+            Result: Noted
+            Reason: Mob slot with ID = 1 of Top-Level Composition "Timecode Timeline Slot - IN at OUT" has a MarkIn property.
+            Covered Requirements: None
+            Noted Requirements: REQ_EP_108.1
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Mark OUT Position
+            Desc:   The mark OUT point shall be specified using the TimelineMobSlot::MarkOut optional property.
+            Result: Noted
+            Reason: Mob slot with ID = 1 of Top-Level Composition "Timecode Timeline Slot - IN at OUT" has a MarkOut property.
+            Covered Requirements: None
+            Noted Requirements: REQ_EP_108.2
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Marked Region Length
+            Desc:   The length of the marked region is OUT-IN. OUT shall be greater than IN.
+            Result: Noted
+            Reason: Mob slot with ID = 1 of Top-Level Composition "Timecode Timeline Slot - IN at OUT" has valid mark in and mark out points (IN = 10; OUT = 10).
+            Covered Requirements: None
+            Noted Requirements: REQ_EP_108.3
+            Passing Requirements: None
+            Warning Requirements: None
             Failing Requirements: None
 
             Name:   Physical Track Number Specification
             Desc:   The MobSlot::PhysicalTrackNumber property shall be specified for essence MobSlots within the following kinds of Mobs: CompositionMob, MasterMob, recording SourceMob, import SourceMob, tape SourceMob, film SourceMob.
-            Result: Failed
-            Reason: Slot with ID 1 in Top-Level Composition "Timecode Timeline Slot - IN at OUT" does not have a MobSlot::PhysicalTrackNumber property.
+            Result: Noted
+            Reason: Slot with ID 1 in Top-Level Composition "Timecode Timeline Slot - IN before OUT" has MobSlot::PhysicalTrackNumber = 1
+            Covered Requirements: None
+            Noted Requirements: REQ_EP_103
             Passing Requirements: None
             Warning Requirements: None
-            Failing Requirements: REQ_EP_103
+            Failing Requirements: None
+
+            Name:   Mark IN Position
+            Desc:   The mark IN point shall be specified using the TimelineMobSlot::MarkIn optional property.
+            Result: Noted
+            Reason: Mob slot with ID = 1 of Top-Level Composition "Timecode Timeline Slot - IN before OUT" has a MarkIn property.
+            Covered Requirements: None
+            Noted Requirements: REQ_EP_108.1
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Mark OUT Position
+            Desc:   The mark OUT point shall be specified using the TimelineMobSlot::MarkOut optional property.
+            Result: Noted
+            Reason: Mob slot with ID = 1 of Top-Level Composition "Timecode Timeline Slot - IN before OUT" has a MarkOut property.
+            Covered Requirements: None
+            Noted Requirements: REQ_EP_108.2
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Marked Region Length
+            Desc:   The length of the marked region is OUT-IN. OUT shall be greater than IN.
+            Result: Noted
+            Reason: Mob slot with ID = 1 of Top-Level Composition "Timecode Timeline Slot - IN before OUT" has valid mark in and mark out points (IN = 10; OUT = 20).
+            Covered Requirements: None
+            Noted Requirements: REQ_EP_108.3
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: None
 
             Name:   Physical Track Number Specification
             Desc:   The MobSlot::PhysicalTrackNumber property shall be specified for essence MobSlots within the following kinds of Mobs: CompositionMob, MasterMob, recording SourceMob, import SourceMob, tape SourceMob, film SourceMob.
-            Result: Failed
-            Reason: Slot with ID 1 in Top-Level Composition "Timecode Timeline Slot - IN before OUT" does not have a MobSlot::PhysicalTrackNumber property.
+            Result: Noted
+            Reason: Slot with ID 1 in Top-Level Composition "Timecode Timeline Slot - UserPos" has MobSlot::PhysicalTrackNumber = 1
+            Covered Requirements: None
+            Noted Requirements: REQ_EP_103
             Passing Requirements: None
             Warning Requirements: None
-            Failing Requirements: REQ_EP_103
+            Failing Requirements: None
+
+            Name:   User Position
+            Desc:   The user position shall be specified using the TimelineMobSlot::UserPosition optional property.
+            Result: Noted
+            Reason: Mob slot with ID = 1 of Top-Level Composition "Timecode Timeline Slot - UserPos" has a TimelineMobSlot::UserPos = 30
+            Covered Requirements: None
+            Noted Requirements: REQ_EP_108.4
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Physical Track Number Specification
+            Desc:   The MobSlot::PhysicalTrackNumber property shall be specified for essence MobSlots within the following kinds of Mobs: CompositionMob, MasterMob, recording SourceMob, import SourceMob, tape SourceMob, film SourceMob.
+            Result: Noted
+            Reason: Slot with ID 1 in Top-Level Composition "Audio Timeline Slot - UserPos" has MobSlot::PhysicalTrackNumber = 1
+            Covered Requirements: None
+            Noted Requirements: REQ_EP_103
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   User Position
+            Desc:   The user position shall be specified using the TimelineMobSlot::UserPosition optional property.
+            Result: Noted
+            Reason: Mob slot with ID = 1 of Top-Level Composition "Audio Timeline Slot - UserPos" has a TimelineMobSlot::UserPos = 31
+            Covered Requirements: None
+            Noted Requirements: REQ_EP_108.4
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   User Position
+            Desc:   The user position shall be specified using the TimelineMobSlot::UserPosition optional property.
+            Result: Noted
+            Reason: Mob slot with ID = 1 of Top-Level Composition "Auxilliary Timeline Slot - UserPos" has a TimelineMobSlot::UserPos = 32
+            Covered Requirements: None
+            Noted Requirements: REQ_EP_108.4
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   User Position
+            Desc:   The user position shall be specified using the TimelineMobSlot::UserPosition optional property.
+            Result: Noted
+            Reason: Mob slot with ID = 1 of Top-Level Composition "Edgecode Timeline Slot - UserPos" has a TimelineMobSlot::UserPos = 33
+            Covered Requirements: None
+            Noted Requirements: REQ_EP_108.4
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   User Position
+            Desc:   The user position shall be specified using the TimelineMobSlot::UserPosition optional property.
+            Result: Noted
+            Reason: Mob slot with ID = 1 of Top-Level Composition "Unknown Timeline Slot - UserPos" has a TimelineMobSlot::UserPos = 34
+            Covered Requirements: None
+            Noted Requirements: REQ_EP_108.4
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: None
 

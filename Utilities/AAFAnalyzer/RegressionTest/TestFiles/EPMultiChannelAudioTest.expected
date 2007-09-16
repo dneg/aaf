@@ -2,6 +2,8 @@
         Desc:   Verify that multi-channel audio is used correctly within the AAF file.
         Result: Failed
         Reason: 
+        Covered Requirements: None
+        Noted Requirements: None
         Passing Requirements: None
         Warning Requirements: None
         Failing Requirements: REQ_EP_110
@@ -10,6 +12,8 @@
             Desc:   Within a CompositionMob or MasterMob, multi-channel audio shall be represented using multiple tracks with mono sound Data Definition.  Within a CompositionMob or MasterMob, a multi-channel sound Data Definition shall not be used.
             Result: Failed
             Reason: Multi-Channel Audio File Source "Multi-Channel Audio in Composition and Master" is referenced from a Composition or Master Mob.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_110

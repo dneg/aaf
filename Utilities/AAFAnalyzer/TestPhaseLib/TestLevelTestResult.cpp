@@ -124,10 +124,11 @@ void TestLevelTestResult::InitConsolidateResults()
        iter != coveredReqs.end();
        ++iter )
   {
-    this->AddRequirement( PASS, iter->second );
+    this->AddRequirement( COVERED, iter->second );
   }
 
-  // And set the overall result to pass.
+  // And set the overall result to pass. If any test add WARN, or
+  // FAIL, results this will be reset.
   ProtectedSetResult( PASS );
 }
 

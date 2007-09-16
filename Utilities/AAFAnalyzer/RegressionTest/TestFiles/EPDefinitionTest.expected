@@ -2,7 +2,9 @@
         Desc:   Verify the use of DataDefinition objects throught the file.
         Result: Failed
         Reason: 
-        Passing Requirements: REQ_EP_163
+        Covered Requirements: REQ_EP_163
+        Noted Requirements: None
+        Passing Requirements: None
         Warning Requirements: None
         Failing Requirements: REQ_EP_162
 
@@ -10,6 +12,8 @@
             Desc:   An OperationDefinition object in an AAF file shall have a data definition value consistent with the data definition of an OperationGroup object that references it.
             Result: Failed
             Reason: OperationGroup in Mob slot with ID = 1 of Top-Level Composition "Invalid OperationGroup/OperationDefinition" has data definition value "Sound" and references OperationDefinition "Chroma Key" with data definition value "Picture".
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_162

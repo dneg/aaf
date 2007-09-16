@@ -42,8 +42,11 @@ Requirement::Requirement(const wstring& id,
 			 const wstring& requirementTypeAsString,
                          const Category category,
 			 const wstring& categoryAsString,
+			 const wstring& action,
 			 const wstring& name,
                          const wstring& desc,
+			 const wstring& annotation,
+			 const wstring& note,
 			 const wstring& document,
                          const wstring& version,
 			 const wstring& section):
@@ -52,8 +55,11 @@ Requirement::Requirement(const wstring& id,
     _requirementTypeAsString( requirementTypeAsString ),
     _category( category ),
     _categoryAsString( categoryAsString ),
+    _action( action ),
     _name( name ),
     _description( desc ),
+    _annotation( annotation ),
+    _note( note ),
     _document( document ),
     _version( version ),
     _section( section )
@@ -77,6 +83,11 @@ const enum Requirement::Category Requirement::GetCategory() const
     return _category;
 }
 
+const wstring& Requirement::GetAction() const
+{
+    return _action;
+}
+
 const wstring& Requirement::GetName() const
 {
     return _name;
@@ -85,6 +96,16 @@ const wstring& Requirement::GetName() const
 const wstring& Requirement::GetDescription() const
 {
     return _description;
+}
+
+const wstring& Requirement::GetAnnotation() const
+{
+    return _annotation;
+}
+
+const wstring& Requirement::GetNote() const
+{
+    return _note;
 }
 
 const wstring& Requirement::GetDocument() const

@@ -2,6 +2,8 @@
         Desc:   Verify the correctness of track types within Edit Protocol mobs.
         Result: Failed
         Reason: 
+        Covered Requirements: None
+        Noted Requirements: None
         Passing Requirements: None
         Warning Requirements: None
         Failing Requirements: REQ_EP_028; REQ_EP_037; REQ_EP_046; REQ_EP_082; REQ_EP_087; REQ_EP_131; REQ_EP_136
@@ -10,6 +12,8 @@
             Desc:   A top-level composition shall contain one or more timecode tracks and include a Primary timecode track.  Timecode tracks shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in Section 6.3 of the AAF Edit Protocol.
             Result: Failed
             Reason: Top-Level Composition "Two Primary" has more than one Primary Timecode track.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_028
@@ -18,6 +22,8 @@
             Desc:   A top-level composition shall contain one or more timecode tracks and include a Primary timecode track.  Timecode tracks shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in Section 6.3 of the AAF Edit Protocol.
             Result: Failed
             Reason: Top-Level Composition "One Alternative" does not have a Primary Timecode track.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_028
@@ -26,6 +32,8 @@
             Desc:   A top-level composition shall contain one or more timecode tracks and include a Primary timecode track.  Timecode tracks shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in Section 6.3 of the AAF Edit Protocol.
             Result: Failed
             Reason: Top-Level Composition "One Primary, Two Alternative" has more than one Alternative Timecode track.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_028
@@ -34,6 +42,8 @@
             Desc:   A top-level composition shall contain one or more timecode tracks and include a Primary timecode track.  Timecode tracks shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in Section 6.3 of the AAF Edit Protocol.
             Result: Failed
             Reason: Top-Level Composition "One Primary, One Reserved(3)" has a Reserved Timecode track (MobSlot::PhysicalTrackNumber = 3).
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_028
@@ -42,6 +52,8 @@
             Desc:   A top-level composition shall contain one or more timecode tracks and include a Primary timecode track.  Timecode tracks shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in Section 6.3 of the AAF Edit Protocol.
             Result: Failed
             Reason: Top-Level Composition "One Primary, One Reserved(4)" has a Reserved Timecode track (MobSlot::PhysicalTrackNumber = 4).
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_028
@@ -50,6 +62,8 @@
             Desc:   A top-level composition shall contain one or more timecode tracks and include a Primary timecode track.  Timecode tracks shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in Section 6.3 of the AAF Edit Protocol.
             Result: Failed
             Reason: Top-Level Composition "One Primary, One Reserved(5)" has a Reserved Timecode track (MobSlot::PhysicalTrackNumber = 5).
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_028
@@ -58,6 +72,8 @@
             Desc:   A top-level composition shall contain one or more timecode tracks and include a Primary timecode track.  Timecode tracks shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in Section 6.3 of the AAF Edit Protocol.
             Result: Failed
             Reason: Top-Level Composition "One Primary, One Reserved(6)" has a Reserved Timecode track (MobSlot::PhysicalTrackNumber = 6).
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_028
@@ -66,6 +82,8 @@
             Desc:   A top-level composition shall contain one or more timecode tracks and include a Primary timecode track.  Timecode tracks shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in Section 6.3 of the AAF Edit Protocol.
             Result: Failed
             Reason: Top-Level Composition "One Reserved(3)" has a Reserved Timecode track (MobSlot::PhysicalTrackNumber = 3).
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_028
@@ -74,6 +92,8 @@
             Desc:   A top-level composition shall contain one or more timecode tracks and include a Primary timecode track.  Timecode tracks shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in Section 6.3 of the AAF Edit Protocol.
             Result: Failed
             Reason: Top-Level Composition "One Reserved(3)" does not have a Primary Timecode track.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_028
@@ -82,6 +102,8 @@
             Desc:   A top-level composition shall contain one or more timecode tracks and include a Primary timecode track.  Timecode tracks shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in Section 6.3 of the AAF Edit Protocol.
             Result: Failed
             Reason: Top-Level Composition "One Reserved(4)" has a Reserved Timecode track (MobSlot::PhysicalTrackNumber = 4).
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_028
@@ -90,6 +112,8 @@
             Desc:   A top-level composition shall contain one or more timecode tracks and include a Primary timecode track.  Timecode tracks shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in Section 6.3 of the AAF Edit Protocol.
             Result: Failed
             Reason: Top-Level Composition "One Reserved(4)" does not have a Primary Timecode track.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_028
@@ -98,6 +122,8 @@
             Desc:   A top-level composition shall contain one or more timecode tracks and include a Primary timecode track.  Timecode tracks shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in Section 6.3 of the AAF Edit Protocol.
             Result: Failed
             Reason: Top-Level Composition "One Reserved(5)" has a Reserved Timecode track (MobSlot::PhysicalTrackNumber = 5).
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_028
@@ -106,6 +132,8 @@
             Desc:   A top-level composition shall contain one or more timecode tracks and include a Primary timecode track.  Timecode tracks shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in Section 6.3 of the AAF Edit Protocol.
             Result: Failed
             Reason: Top-Level Composition "One Reserved(5)" does not have a Primary Timecode track.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_028
@@ -114,6 +142,8 @@
             Desc:   A top-level composition shall contain one or more timecode tracks and include a Primary timecode track.  Timecode tracks shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in Section 6.3 of the AAF Edit Protocol.
             Result: Failed
             Reason: Top-Level Composition "One Reserved(6)" has a Reserved Timecode track (MobSlot::PhysicalTrackNumber = 6).
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_028
@@ -122,6 +152,8 @@
             Desc:   A top-level composition shall contain one or more timecode tracks and include a Primary timecode track.  Timecode tracks shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in Section 6.3 of the AAF Edit Protocol.
             Result: Failed
             Reason: Top-Level Composition "One Reserved(6)" does not have a Primary Timecode track.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_028
@@ -130,6 +162,8 @@
             Desc:   A top-level composition shall contain one or more timecode tracks and include a Primary timecode track.  Timecode tracks shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in Section 6.3 of the AAF Edit Protocol.
             Result: Failed
             Reason: Top-Level Composition "One Primary, One Illegal" has a illegal Timecode track (MobSlot::PhysicalTrackNumber = 7).
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_028
@@ -138,6 +172,8 @@
             Desc:   A top-level composition shall contain one or more timecode tracks and include a Primary timecode track.  Timecode tracks shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in Section 6.3 of the AAF Edit Protocol.
             Result: Failed
             Reason: Top-Level Composition "One Illegal" has a illegal Timecode track (MobSlot::PhysicalTrackNumber = 9).
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_028
@@ -146,6 +182,8 @@
             Desc:   A top-level composition shall contain one or more timecode tracks and include a Primary timecode track.  Timecode tracks shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in Section 6.3 of the AAF Edit Protocol.
             Result: Failed
             Reason: Top-Level Composition "One Illegal" does not have a Primary Timecode track.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_028
@@ -154,6 +192,8 @@
             Desc:   A top-level composition shall contain one or more timecode tracks and include a Primary timecode track.  Timecode tracks shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in Section 6.3 of the AAF Edit Protocol.
             Result: Failed
             Reason: Top-Level Composition "One Primary, One Unknown" has 1 Timecode tracks with no MobSlot::PhysicalTrackNumber property.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_028
@@ -162,6 +202,8 @@
             Desc:   A top-level composition shall contain one or more timecode tracks and include a Primary timecode track.  Timecode tracks shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in Section 6.3 of the AAF Edit Protocol.
             Result: Failed
             Reason: Top-Level Composition "One Unknown" has 1 Timecode tracks with no MobSlot::PhysicalTrackNumber property.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_028
@@ -170,6 +212,8 @@
             Desc:   A top-level composition shall contain one or more timecode tracks and include a Primary timecode track.  Timecode tracks shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in Section 6.3 of the AAF Edit Protocol.
             Result: Failed
             Reason: Top-Level Composition "One Unknown" does not have a Primary Timecode track.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_028
@@ -178,6 +222,8 @@
             Desc:   Timecode tracks in a tape SourceMob shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in the table in Section 6.12 of the AAF Edit Protocol.
             Result: Failed
             Reason: Tape Source "Two Primary" has more than one Primary timecode track.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_082
@@ -186,6 +232,8 @@
             Desc:   Timecode tracks in a tape SourceMob shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in the table in Section 6.12 of the AAF Edit Protocol.
             Result: Failed
             Reason: Tape Source "Two Aux1" has more than one Aux1 Timecode track.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_082
@@ -194,6 +242,8 @@
             Desc:   Timecode tracks in a tape SourceMob shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in the table in Section 6.12 of the AAF Edit Protocol.
             Result: Failed
             Reason: Tape Source "Two Aux2" has more than one Aux2 Timecode track.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_082
@@ -202,6 +252,8 @@
             Desc:   Timecode tracks in a tape SourceMob shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in the table in Section 6.12 of the AAF Edit Protocol.
             Result: Failed
             Reason: Tape Source "Two Aux3" has more than one Aux3 Timecode track.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_082
@@ -210,6 +262,8 @@
             Desc:   Timecode tracks in a tape SourceMob shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in the table in Section 6.12 of the AAF Edit Protocol.
             Result: Failed
             Reason: Tape Source "Two Aux4" has more than one Aux4 Timecode track.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_082
@@ -218,6 +272,8 @@
             Desc:   Timecode tracks in a tape SourceMob shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in the table in Section 6.12 of the AAF Edit Protocol.
             Result: Failed
             Reason: Tape Source "Two Aux5" has more than one Aux5 Timecode track.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_082
@@ -226,6 +282,8 @@
             Desc:   Timecode tracks in a tape SourceMob shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in the table in Section 6.12 of the AAF Edit Protocol.
             Result: Failed
             Reason: Tape Source "Reserved(2)" has a Reserved Timecode track (MobSlot::PhysicalTrackNumber = 2).
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_082
@@ -234,6 +292,8 @@
             Desc:   Timecode tracks in a tape SourceMob shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in the table in Section 6.12 of the AAF Edit Protocol.
             Result: Failed
             Reason: Tape Source "Reserved(8)" has a Reserved Timecode track (MobSlot::PhysicalTrackNumber = 8).
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_082
@@ -242,6 +302,8 @@
             Desc:   Timecode tracks in a tape SourceMob shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in the table in Section 6.12 of the AAF Edit Protocol.
             Result: Failed
             Reason: Tape Source "Reserved(9)" has a Reserved Timecode track (MobSlot::PhysicalTrackNumber = 9).
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_082
@@ -250,6 +312,8 @@
             Desc:   Timecode tracks in a tape SourceMob shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in the table in Section 6.12 of the AAF Edit Protocol.
             Result: Failed
             Reason: Tape Source "Reserved(10)" has a Reserved Timecode track (MobSlot::PhysicalTrackNumber = 10).
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_082
@@ -258,6 +322,8 @@
             Desc:   Timecode tracks in a tape SourceMob shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in the table in Section 6.12 of the AAF Edit Protocol.
             Result: Failed
             Reason: Tape Source "Reserved(11)" has a Reserved Timecode track (MobSlot::PhysicalTrackNumber = 11).
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_082
@@ -266,6 +332,8 @@
             Desc:   Timecode tracks in a tape SourceMob shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in the table in Section 6.12 of the AAF Edit Protocol.
             Result: Failed
             Reason: Tape Source "Reserved(12)" has a Reserved Timecode track (MobSlot::PhysicalTrackNumber = 12).
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_082
@@ -274,6 +342,8 @@
             Desc:   Timecode tracks in a tape SourceMob shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in the table in Section 6.12 of the AAF Edit Protocol.
             Result: Failed
             Reason: Tape Source "Illegal" has a illegal Timecode track (MobSlot::PhysicalTrackNumber = 17).
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_082
@@ -282,6 +352,8 @@
             Desc:   Timecode tracks in a tape SourceMob shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in the table in Section 6.12 of the AAF Edit Protocol.
             Result: Failed
             Reason: Tape Source "One Primary, One Unknown" has 1 Timecode tracks with no MobSlot::PhysicalTrackNumber property.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_082
@@ -290,6 +362,8 @@
             Desc:   Timecode tracks in a tape SourceMob shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in the table in Section 6.12 of the AAF Edit Protocol.
             Result: Failed
             Reason: Tape Source "One Unknown" has 1 Timecode tracks with no MobSlot::PhysicalTrackNumber property.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_082
@@ -298,6 +372,8 @@
             Desc:   A film SourceMob may contain one or more edgecode tracks.  Edgecode tracks shall use the MobSlot::PhysicalTrackNumber property to distinguish their type as shown in Section 6.13 of the AAF Edit Protocol.
             Result: Failed
             Reason: Film Source "One Illegal" has a illegal Edgecode track (MobSlot::PhysicalTrackNumber = 4).
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_087
@@ -306,6 +382,8 @@
             Desc:   A film SourceMob may contain one or more edgecode tracks.  Edgecode tracks shall use the MobSlot::PhysicalTrackNumber property to distinguish their type as shown in Section 6.13 of the AAF Edit Protocol.
             Result: Failed
             Reason: Film Source "One Keycode, One Illegal" has a illegal Edgecode track (MobSlot::PhysicalTrackNumber = 7).
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_087
@@ -314,6 +392,8 @@
             Desc:   A film SourceMob may contain one or more edgecode tracks.  Edgecode tracks shall use the MobSlot::PhysicalTrackNumber property to distinguish their type as shown in Section 6.13 of the AAF Edit Protocol.
             Result: Failed
             Reason: Film Source "Two Keycodes" has more than one Keycode Number Edgecode track.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_087
@@ -322,6 +402,8 @@
             Desc:   A film SourceMob may contain one or more edgecode tracks.  Edgecode tracks shall use the MobSlot::PhysicalTrackNumber property to distinguish their type as shown in Section 6.13 of the AAF Edit Protocol.
             Result: Failed
             Reason: Film Source "Two Inks" has more than one Ink Number Edgecode track.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_087
@@ -330,6 +412,8 @@
             Desc:   A film SourceMob may contain one or more edgecode tracks.  Edgecode tracks shall use the MobSlot::PhysicalTrackNumber property to distinguish their type as shown in Section 6.13 of the AAF Edit Protocol.
             Result: Failed
             Reason: Film Source "Two Aux Inks" has more than one Aux. Ink Number Edgecode track.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_087
@@ -338,6 +422,8 @@
             Desc:   A film SourceMob may contain one or more edgecode tracks.  Edgecode tracks shall use the MobSlot::PhysicalTrackNumber property to distinguish their type as shown in Section 6.13 of the AAF Edit Protocol.
             Result: Failed
             Reason: Film Source "One Unknown" has 1 Edgecode tracks with no MobSlot::PhysicalTrackNumber property.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_087
@@ -346,6 +432,8 @@
             Desc:   Each essence track of a sub-clip composition shall contain exactly one SourceClip.
             Result: Failed
             Reason: Slot with ID 1 in Sub-Clip Composition "Sub-Clip - Audio Timeline Operation Group" does not have exactly one SourceClip.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_037
@@ -354,6 +442,8 @@
             Desc:   Each essence track of a sub-clip composition shall contain exactly one SourceClip.
             Result: Failed
             Reason: Slot with ID 1 in Sub-Clip Composition "Sub-Clip - Audio Static Operation Group" does not have exactly one SourceClip.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_037
@@ -362,6 +452,8 @@
             Desc:   Each essence track of a sub-clip composition shall contain exactly one SourceClip.
             Result: Failed
             Reason: Slot with ID 1 in Sub-Clip Composition "Sub-Clip - Video Timeline Operation Group" does not have exactly one SourceClip.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_037
@@ -370,6 +462,8 @@
             Desc:   Each essence track of a sub-clip composition shall contain exactly one SourceClip.
             Result: Failed
             Reason: Slot with ID 1 in Sub-Clip Composition "Sub-Clip - Video Static Operation Group" does not have exactly one SourceClip.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_037
@@ -378,6 +472,8 @@
             Desc:   Each essence track of a sub-clip composition shall contain exactly one SourceClip.
             Result: Failed
             Reason: Slot with ID 1 in Sub-Clip Composition "Sub-Clip - Sequence of 2 SourceClips" does not have exactly one SourceClip.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_037
@@ -386,6 +482,8 @@
             Desc:   Each essence track of a sub-clip composition shall contain exactly one SourceClip.
             Result: Failed
             Reason: Slot with ID 1 in Sub-Clip Composition "Sub-Clip - Sequence of SourceClip/OperationGroup" does not have exactly one SourceClip.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_037
@@ -394,6 +492,8 @@
             Desc:   Each essence track of an adjusted-clip composition shall contain exactly one OperationGroup.
             Result: Failed
             Reason: Slot with ID 1 in Adjusted-Clip Composition "Adjusted Clip - Audio Timeline Source Clip" does not have exactly one OperationGroup.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_046
@@ -402,6 +502,8 @@
             Desc:   Each essence track of an adjusted-clip composition shall contain exactly one OperationGroup.
             Result: Failed
             Reason: Slot with ID 1 in Adjusted-Clip Composition "Adjusted Clip - Audio Static Source Clip" does not have exactly one OperationGroup.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_046
@@ -410,6 +512,8 @@
             Desc:   Each essence track of an adjusted-clip composition shall contain exactly one OperationGroup.
             Result: Failed
             Reason: Slot with ID 1 in Adjusted-Clip Composition "Adjusted Clip - Video Timeline Source Clip" does not have exactly one OperationGroup.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_046
@@ -418,6 +522,8 @@
             Desc:   Each essence track of an adjusted-clip composition shall contain exactly one OperationGroup.
             Result: Failed
             Reason: Slot with ID 1 in Adjusted-Clip Composition "Adjusted Clip - Video Static Source Clip" does not have exactly one OperationGroup.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_046
@@ -426,6 +532,8 @@
             Desc:   Each essence track of an adjusted-clip composition shall contain exactly one OperationGroup.
             Result: Failed
             Reason: Slot with ID 1 in Adjusted-Clip Composition "Adjusted-Clip - Sequence of 2 OperationGroups" does not have exactly one OperationGroup.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_046
@@ -434,6 +542,8 @@
             Desc:   Each essence track of an adjusted-clip composition shall contain exactly one OperationGroup.
             Result: Failed
             Reason: Slot with ID 1 in Adjusted-Clip Composition "Adjusted-Clip - Sequence of SourceClip/OperationGroup" does not have exactly one OperationGroup.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_046
@@ -442,6 +552,8 @@
             Desc:   A Primary timecode track (see Section 6.3 of the AAF Edit Protocol) in a top-level or lower-level composition shall consist of a single Timecode object.
             Result: Failed
             Reason: Mob slot with ID = 1 of Top-Level Composition "Top Level - Incorrect Primary Timecode" is a timecode track that does not consist of a single Timecode object.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_131
@@ -450,6 +562,8 @@
             Desc:   A Primary timecode track (see Section 6.3 of the AAF Edit Protocol) in a top-level or lower-level composition shall consist of a single Timecode object.
             Result: Failed
             Reason: Mob slot with ID = 1 of Top-Level Composition "Top-Level - Sequence of 2 Timecodes" is a timecode track that does not consist of a single Timecode object.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_131
@@ -458,6 +572,8 @@
             Desc:   A Primary timecode track (see Section 6.3 of the AAF Edit Protocol) in a top-level or lower-level composition shall consist of a single Timecode object.
             Result: Failed
             Reason: Mob slot with ID = 1 of Top-Level Composition "Top-Level - Sequence of Timecode/TimecodeStream" is a timecode track that does not consist of a single Timecode object.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_131
@@ -466,6 +582,8 @@
             Desc:   A Primary timecode track (see Section 6.3 of the AAF Edit Protocol) in a top-level or lower-level composition shall consist of a single Timecode object.
             Result: Failed
             Reason: Mob slot with ID = 1 of Lower-Level Composition "Lower Level - Incorrect Primary Timecode" is a timecode track that does not consist of a single Timecode object.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_131
@@ -474,6 +592,8 @@
             Desc:   A Primary timecode track (see Section 6.3 of the AAF Edit Protocol) in a top-level or lower-level composition shall consist of a single Timecode object.
             Result: Failed
             Reason: Mob slot with ID = 1 of Lower-Level Composition "Lower-Level - Sequence of 2 Timecodes" is a timecode track that does not consist of a single Timecode object.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_131
@@ -482,6 +602,8 @@
             Desc:   A Primary timecode track (see Section 6.3 of the AAF Edit Protocol) in a top-level or lower-level composition shall consist of a single Timecode object.
             Result: Failed
             Reason: Mob slot with ID = 1 of Lower-Level Composition "Lower-Level - Sequence of Timecode/TimecodeStream" is a timecode track that does not consist of a single Timecode object.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_131
@@ -490,6 +612,8 @@
             Desc:   An auxiliary SourceMob shall contain at least one Slot, which may be a TimelineMobSlot, EventMobSlot or StaticMobSlot as appropriate.  The Data Definition of the Segment within the Slot shall be DataDef_Auxiliary.
             Result: Failed
             Reason: Auxiliary Source "Aux. Source No Mob Slot" does not have any mob slots.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_136
@@ -498,6 +622,8 @@
             Desc:   An auxiliary SourceMob shall contain at least one Slot, which may be a TimelineMobSlot, EventMobSlot or StaticMobSlot as appropriate.  The Data Definition of the Segment within the Slot shall be DataDef_Auxiliary.
             Result: Failed
             Reason: Mob slot with ID = 1 of Auxiliary Source "Aux. Source Timeline Mob Slot with Bad Segment" has a segment with a Data Definition that is not DataDef_Auxiliary.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_136
@@ -506,6 +632,8 @@
             Desc:   An auxiliary SourceMob shall contain at least one Slot, which may be a TimelineMobSlot, EventMobSlot or StaticMobSlot as appropriate.  The Data Definition of the Segment within the Slot shall be DataDef_Auxiliary.
             Result: Failed
             Reason: Mob slot with ID = 1 of Auxiliary Source "Aux. Source Static Mob Slot with Bad Segment" has a segment with a Data Definition that is not DataDef_Auxiliary.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_136
@@ -514,6 +642,8 @@
             Desc:   An auxiliary SourceMob shall contain at least one Slot, which may be a TimelineMobSlot, EventMobSlot or StaticMobSlot as appropriate.  The Data Definition of the Segment within the Slot shall be DataDef_Auxiliary.
             Result: Failed
             Reason: Mob slot with ID = 1 of Auxiliary Source "Aux. Source 2 Good Segments, 2 Bad Segments" has a segment with a Data Definition that is not DataDef_Auxiliary.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_136
@@ -522,6 +652,8 @@
             Desc:   An auxiliary SourceMob shall contain at least one Slot, which may be a TimelineMobSlot, EventMobSlot or StaticMobSlot as appropriate.  The Data Definition of the Segment within the Slot shall be DataDef_Auxiliary.
             Result: Failed
             Reason: Mob slot with ID = 2 of Auxiliary Source "Aux. Source 2 Good Segments, 2 Bad Segments" has a segment with a Data Definition that is not DataDef_Auxiliary.
+            Covered Requirements: None
+            Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_136

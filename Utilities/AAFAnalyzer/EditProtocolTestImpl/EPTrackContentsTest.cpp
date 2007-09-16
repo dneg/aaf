@@ -89,8 +89,11 @@ AxString EPTrackContentsTest::GetDescription() const
 const TestInfo EPTrackContentsTest::GetTestInfo()
 {
     shared_ptr<vector<AxString> > spReqIds(new vector<AxString>);
-    spReqIds->push_back(L"REQ_EP_103");     //Physical Track Numbers
-    spReqIds->push_back(L"REQ_EP_108");     //Marked IN, OUT and UserPos
+    spReqIds->push_back(L"REQ_EP_103");       // Physical Track Numbers
+    spReqIds->push_back(L"REQ_EP_108.1");     // Marked IN exists
+    spReqIds->push_back(L"REQ_EP_108.2");     // Marked OUT exists
+    spReqIds->push_back(L"REQ_EP_108.3");     // assert mark OUT > IN 
+    spReqIds->push_back(L"REQ_EP_108.4");     // UsePosition exists
     return TestInfo(L"EPTrackContentsTest", spReqIds);
 }
 
