@@ -50,6 +50,9 @@ public:
 
 	IAAFDataDefSP GetDataDef();
 
+	// Return true and value if property exists.
+	std::pair<bool,aafUInt32> ExistsPhysicalNum();
+
 	// Allow typecast to internal type.  This seems to be needed for the
 	// AxString AxNameToString( IAAFSmartPointer< Type >& sp ) in
 	// AxUtil.h to work on Ax objects that don't have a get. Maybe there
@@ -69,40 +72,40 @@ private:
 
 class AxTimelineMobSlot : public AxMobSlot {
 public:
-	AxTimelineMobSlot( IAAFTimelineMobSlotSP spIaafTimelineMobSlot );
-    AxTimelineMobSlot( IAAFTimelineMobSlot2SP spIaafTimelineMobSlot );
+        AxTimelineMobSlot( IAAFTimelineMobSlotSP spIaafTimelineMobSlot );
+	AxTimelineMobSlot( IAAFTimelineMobSlot2SP spIaafTimelineMobSlot );
 	~AxTimelineMobSlot();
 
 	void Initialize();
-
+  
 	void SetOrigin( aafPosition_t origin );
 	void SetEditRate( const aafRational_t& rate );
-    void SetMarkIn( aafPosition_t value );
-    void SetMarkOut( aafPosition_t value );
-    void SetUserPos ( aafPosition_t value );
-
+	void SetMarkIn( aafPosition_t value );
+	void SetMarkOut( aafPosition_t value );
+	void SetUserPos ( aafPosition_t value );
+	
 	aafPosition_t GetOrigin();
 	aafRational_t GetEditRate();
-    aafPosition_t GetUserPos();
-
+	aafPosition_t GetUserPos();
 	aafPosition_t GetMarkIn();
-    aafPosition_t GetMarkOut();
-
-	// Return true and value if mark in/out exists.
+	aafPosition_t GetMarkOut();
+	
+	// Return true and value if property exists.
 	std::pair<bool,aafPosition_t> ExistsMarkIn();
 	std::pair<bool,aafPosition_t> ExistsMarkOut();
-
-    inline operator IAAFTimelineMobSlotSP ()
-    { return AxQueryInterface<IAAFTimelineMobSlot2,IAAFTimelineMobSlot>( _spIaafTimelineMobSlot ); }
-
-    inline operator IAAFTimelineMobSlot2SP ()
-    { return _spIaafTimelineMobSlot; }
-
-private:
+	std::pair<bool,aafPosition_t> ExistsUserPos();
+	
+	inline operator IAAFTimelineMobSlotSP ()
+	  { return AxQueryInterface<IAAFTimelineMobSlot2,IAAFTimelineMobSlot>( _spIaafTimelineMobSlot ); }
+	
+	inline operator IAAFTimelineMobSlot2SP ()
+	  { return _spIaafTimelineMobSlot; }
+	
+ private:
 	AxTimelineMobSlot();
 	AxTimelineMobSlot( const AxTimelineMobSlot& );
 	AxTimelineMobSlot& operator=( const AxTimelineMobSlot& );
-
+	
 	IAAFTimelineMobSlot2SP _spIaafTimelineMobSlot;
 };
 
