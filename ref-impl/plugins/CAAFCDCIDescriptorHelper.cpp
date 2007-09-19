@@ -591,37 +591,41 @@ HRESULT STDMETHODCALLTYPE
 		kAAFPropID_DigitalImageDescriptor_FieldDominance, 
 		&p_propdef));
 
-	    checkResult( p_obj->GetPropertyValue( p_propdef, &p_propval));
 
-	    checkResult( p_propval->GetType( &p_typedef ) );
+		hr=p_obj->GetPropertyValue( p_propdef, &p_propval);
 
-	    checkResult( p_typedef->GetTypeCategory( &type_category ) );
+		if(SUCCEEDED(hr)) //this is an optional property so don't deliberately throw an exception
+		{
+			checkResult( p_propval->GetType( &p_typedef ) );
 
-	    // @@@Warning
-	    // enumTypedef::createValue has a bug in it. Instead of
-	    // creating enum value it creates an integer. That's why here 
-	    // we have to query for integer interface to get around 
-	    // this problem.
-	    if( type_category == kAAFTypeCatInt )
-	    {
-		checkResult( p_typedef->QueryInterface( IID_IAAFTypeDefInt, 
-		    (void**)&p_typedef_int ) );
+			checkResult( p_typedef->GetTypeCategory( &type_category ) );
 
-		checkResult( p_typedef_int->GetInteger( p_propval, 
-		    reinterpret_cast<aafMemPtr_t>(pFieldDominance), 
-		    sizeof(*pFieldDominance) ) );
-	    }
-	    else
-	    {
-		aafInt64	int64_val = 0;
+			// @@@Warning
+			// enumTypedef::createValue has a bug in it. Instead of
+			// creating enum value it creates an integer. That's why here 
+			// we have to query for integer interface to get around 
+			// this problem.
+			if( type_category == kAAFTypeCatInt )
+			{
+				checkResult( p_typedef->QueryInterface( IID_IAAFTypeDefInt, 
+					(void**)&p_typedef_int ) );
 
-		checkResult( p_typedef->QueryInterface( IID_IAAFTypeDefEnum, 
-		    (void**)&p_typedef_enum ) );
+				checkResult( p_typedef_int->GetInteger( p_propval, 
+					reinterpret_cast<aafMemPtr_t>(pFieldDominance), 
+					sizeof(*pFieldDominance) ) );
+			}
+			else
+			{
+				aafInt64	int64_val = 0;
 
-		checkResult( p_typedef_enum->GetIntegerValue( p_propval, 
-		    &int64_val ) );
-		*pFieldDominance = static_cast<aafFieldNumber_t>( int64_val );
-	    }
+				checkResult( p_typedef->QueryInterface( IID_IAAFTypeDefEnum, 
+					(void**)&p_typedef_enum ) );
+
+				checkResult( p_typedef_enum->GetIntegerValue( p_propval, 
+					&int64_val ) );
+				*pFieldDominance = static_cast<aafFieldNumber_t>( int64_val );
+			}
+		}
 	}
 	catch (HRESULT& rhr)
 	{
@@ -1202,6 +1206,61 @@ HRESULT STDMETHODCALLTYPE
 
 	return hr;
 }
+
+
+HRESULT STDMETHODCALLTYPE
+CAAFCDCIDescriptorHelper::GetFrameSampleSize (aafUInt32 *  pframeSampleSize)
+{
+	IAAFClassDef		*pClassDef = NULL;
+	IAAFObject			*pObj = NULL;
+	IAAFPropertyDef		*pPropertyDef = NULL;
+	IAAFPropertyValue	*pPropValue = NULL;
+	IAAFTypeDef			*pTypeDef = NULL;
+	IAAFTypeDefInt		*pTypeDefInt = NULL;
+	aafInt32			val;
+
+	HRESULT				hr = S_OK;
+
+	checkAssertion(NULL != _dides);
+	checkAssertion(NULL != pframeSampleSize);
+	try
+	{
+		checkResult(_dides->QueryInterface(IID_IAAFObject, (void **)&pObj));
+		checkResult(pObj->GetDefinition (&pClassDef));
+		checkResult(pClassDef->LookupPropertyDef(kAAFPropID_DIDFrameSampleSize, &pPropertyDef));
+		checkResult(pObj->GetPropertyValue (pPropertyDef, &pPropValue));
+		checkResult(pPropValue->GetType(&pTypeDef));
+		checkResult(pTypeDef->QueryInterface(IID_IAAFTypeDefInt, (void**)&pTypeDefInt));
+		checkResult(pTypeDefInt->GetInteger(pPropValue, (aafMemPtr_t) &val, sizeof (val)));
+		*pframeSampleSize  = val;
+	}
+	catch (HRESULT& rhr)
+	{
+		hr = rhr; // return thrown error code.
+	}
+	catch (...)
+	{
+		// We CANNOT throw an exception out of a COM interface method!
+		// Return a reasonable exception code.
+		hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+	}
+
+	if( pClassDef != NULL )
+		pClassDef->Release();
+	if( pObj != NULL )
+		pObj->Release();
+	if( pPropertyDef != NULL )
+		pPropertyDef->Release();
+	if( pPropValue != NULL )
+		pPropValue->Release();
+	if( pTypeDef != NULL )
+		pTypeDef->Release();
+	if( pTypeDefInt != NULL )
+		pTypeDefInt->Release();
+
+	return hr;
+}
+
 
 
 

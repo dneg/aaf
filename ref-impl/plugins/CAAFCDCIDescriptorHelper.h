@@ -135,6 +135,7 @@ public:
 
 	STDMETHOD (SetResolutionID) ( aafInt32  resolutionID );
 	STDMETHOD (SetFrameSampleSize) ( aafInt32 frameSampleSize );
+	STDMETHOD (GetFrameSampleSize) ( aafUInt32 * frameSampleSize );
 
 	STDMETHOD (SetOffsetToFrameIndexes) ( aafInt32  offsetToFrameIndexes );
 	STDMETHOD (SetFrameIndexByteOrder) ( aafInt16 frameIndexByteOrder );
