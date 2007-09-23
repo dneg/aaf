@@ -20,8 +20,7 @@
 
 //Edit Protocol Test files
 #include "EPDerivationTest.h"
-#include "DerivationChainStateMachine.h"
-#include "StateMachineException.h"
+#include "DerivationChainParser.h"
 
 //Test/Result files
 #include <TestLevelTestResult.h>
@@ -37,7 +36,7 @@
 #include <EPTypedObjNode.h>
 
 //AAF Analyzer Base files
-#include <MobNodeMap.h>
+#include <AAFTypedObjNode.h>
 
 //Analyzer Base files
 #include <DepthFirstTraversal.h>
@@ -56,8 +55,10 @@
 
 //STL files
 #include <vector>
+#include <deque>
 
 #include <iostream>
+#include <sstream>
 
 // set to 1 to activate debug output
 #define DEBUG_OUT 0
@@ -88,227 +89,445 @@ const wchar_t* TEST_DESC = L"Verify the correctness of mob derivation chains.";
 // conventions specified by the Edit Protocol.
 //
 // These conventions are implemented using the (state machine based)
-// parser implemented by DerivationChainStateMachine.
+// parser implemented by DerivationChainParser.
+//
+// It does this by building a stack of visited mobs. When the leaf
+// object on a particular branch of the source tree is reached
+// (normally this is a source clip object) the list of objects is
+// parsed to determine if their ordering meets the EP spec.
 
 class MobChainVisitor : public EPTypedVisitor
 {
 public:
+
   MobChainVisitor( wostream& log,
                    shared_ptr<TestLevelTestResult> spTestResult )
     : EPTypedVisitor( Visitor::FOLLOW_REFERENCES ),
       _log( log ),
       _spTestResult( spTestResult ),
-      _stateMachine( log ),
-      _level( 0 )
+      _level( 0 ),
+      _parseArgs(),
+      _spLastPreVisitNode()
   {}
 
   virtual ~MobChainVisitor()
   {}
 
+  //
+  // Generic mob visit methods.
+  //
+
+  template <class IAAFType, class AxWrapperType, class EPType>
+  bool PreOrderVisitMob( EPTypedObjNode<IAAFType, EPType>& node )
+  {
+    PreTrace( node, EPType::GetName() );
+    AxWrapperType axMob( node.GetAAFObjectOfType() );
+    AxString nodeName = this->GetMobName( axMob,EPType::GetName() );
+
+    // If the mob has a usage code then we use it for the event id,
+    // else, we use the class id (e.g. EPClip is a plain master mob
+    // without a usage code).
+    pair<bool,aafUID_t> usageCode = axMob.ExistsUsageCode();
+    if ( usageCode.first )
+    {
+      ParseArgs parseArgs( usageCode.second, nodeName );
+      _parseArgs.push_back( parseArgs );
+    }
+    else
+    {
+      AxClassDef axClassDef( axMob.GetDefinition() );
+      ParseArgs parseArgs( axClassDef.GetAUID(), nodeName );
+      _parseArgs.push_back( parseArgs );
+    }
+
+    _spLastPreVisitNode = node.GetSharedPointerToNode();
+
+    return true;
+  }
+
+  template <class IAAFType, class AxWrapperType, class EPType>
+  bool PostOrderVisitMob( EPTypedObjNode<IAAFType, EPType>& node )
+  {
+    ParseStackIfLeafNode( node );
+
+    _parseArgs.pop_back();
+
+    return true;
+  }
+
+  template <class EPType>
+  bool PreOrderVisitSourceWithDescriptor( EPTypedObjNode<IAAFSourceMob, EPType>& node )
+  {
+    AxSourceMob axSrcMob( node.GetAAFObjectOfType() );
+    AxString nodeName = this->GetMobName( axSrcMob, EPType::GetName() );
+
+    AxEssenceDescriptor descriptor( axSrcMob.GetEssenceDescriptor() );
+    AxClassDef clsDef( descriptor.GetDefinition() );
+
+    ParseArgs parseArgs( GetAcceptedAUID(clsDef), nodeName );
+
+    _parseArgs.push_back( parseArgs );
+
+    _spLastPreVisitNode = node.GetSharedPointerToNode();
+
+    return true;
+  }
+
+  template <class EPType>
+  bool PostOrderVisitSourceWithDescriptor( EPTypedObjNode<IAAFSourceMob, EPType>& node )
+  {
+    ParseStackIfLeafNode( node );
+
+    _parseArgs.pop_back();
+
+    return true;
+  }
+
+  // 
+  // Composition types
+  // 
+
   virtual bool PreOrderVisit( EPTypedObjNode<IAAFCompositionMob, EPTopLevelComposition>& node )
   {
-    PreTrace(node, EPTopLevelComposition::GetName());
-    AxCompositionMob axCompMob( node.GetAAFObjectOfType() );
-    return this->VisitMobWithUsageCode( axCompMob, node.GetLID(), EPTopLevelComposition::GetName() );
+    return PreOrderVisitMob<IAAFCompositionMob, AxCompositionMob, EPTopLevelComposition>( node );
   }
+
+  virtual bool PostOrderVisit( EPTypedObjNode<IAAFCompositionMob, EPTopLevelComposition>& node )
+  {
+    return PostOrderVisitMob<IAAFCompositionMob, AxCompositionMob, EPTopLevelComposition>( node );
+  }
+
+  //========================================
   
   virtual bool PreOrderVisit( EPTypedObjNode<IAAFCompositionMob, EPLowerLevelComposition>& node )
   {
-    PreTrace(node, EPLowerLevelComposition::GetName());
-    AxCompositionMob axCompMob( node.GetAAFObjectOfType() );
-    return this->VisitMobWithUsageCode( axCompMob, node.GetLID(), EPLowerLevelComposition::GetName() );
+    return PreOrderVisitMob<IAAFCompositionMob, AxCompositionMob, EPLowerLevelComposition>( node );
+  }
+
+  virtual bool PostOrderVisit( EPTypedObjNode<IAAFCompositionMob, EPLowerLevelComposition>& node )
+  {
+    return PostOrderVisitMob<IAAFCompositionMob, AxCompositionMob, EPLowerLevelComposition>( node );
   }
   
+  //========================================
+
   virtual bool PreOrderVisit( EPTypedObjNode<IAAFCompositionMob, EPSubClipComposition>& node )
   {
-    PreTrace(node,EPSubClipComposition::GetName());
-    AxCompositionMob axCompMob( node.GetAAFObjectOfType() );
-    return this->VisitMobWithUsageCode( axCompMob, node.GetLID(), EPSubClipComposition::GetName() );
+    return PreOrderVisitMob<IAAFCompositionMob, AxCompositionMob, EPSubClipComposition>( node );
+  }
+
+  virtual bool PostOrderVisit( EPTypedObjNode<IAAFCompositionMob, EPSubClipComposition>& node )
+  {
+    return PostOrderVisitMob<IAAFCompositionMob, AxCompositionMob, EPSubClipComposition>( node );
   }
   
+  //========================================
+
   virtual bool PreOrderVisit( EPTypedObjNode<IAAFCompositionMob, EPAdjustedClipComposition>& node )
   {
-    PreTrace(node,  EPAdjustedClipComposition::GetName());
-    AxCompositionMob axCompMob( node.GetAAFObjectOfType() );
-    return this->VisitMobWithUsageCode( axCompMob, node.GetLID(), EPAdjustedClipComposition::GetName() );
+    return PreOrderVisitMob<IAAFCompositionMob, AxCompositionMob, EPAdjustedClipComposition>( node );
   }
+
+  virtual bool PostOrderVisit( EPTypedObjNode<IAAFCompositionMob, EPAdjustedClipComposition>& node )
+  {
+    return PostOrderVisitMob<IAAFCompositionMob, AxCompositionMob, EPAdjustedClipComposition>( node );
+  }
+
+  //========================================
+  //
+  // MasterMob types
   
   virtual bool PreOrderVisit( EPTypedObjNode<IAAFMasterMob, EPTemplateClip>& node )
   {
-    PreTrace(node, EPTemplateClip::GetName());
-    AxMasterMob axMastMob( node.GetAAFObjectOfType() );
-    return this->VisitMobWithUsageCode( axMastMob, node.GetLID(), EPTemplateClip::GetName() );
+    return PreOrderVisitMob<IAAFMasterMob, AxMasterMob, EPTemplateClip>( node );
+  }
+
+  virtual bool PostOrderVisit( EPTypedObjNode<IAAFMasterMob, EPTemplateClip>& node )
+  {
+    return PostOrderVisitMob<IAAFMasterMob, AxMasterMob, EPTemplateClip>( node );
   }
   
+  //========================================
+
   virtual bool PreOrderVisit( EPTypedObjNode<IAAFMasterMob, EPClip>& node )
   {
-    PreTrace(node, EPClip::GetName() );
-    AxMasterMob axMastMob( node.GetAAFObjectOfType() );
-    
-    AxString nodeName = this->GetMobName( axMastMob, EPClip::GetName() );
-    
-    AxString detailMsg;
-    bool successfulTransition = false;
-    vector<shared_ptr<const Requirement> > failingReqIds;
-
-    successfulTransition = _stateMachine.Transition( kAAFClassID_MasterMob, nodeName, detailMsg, failingReqIds );
-    _spTestResult->AddDetail( detailMsg );
-
-    if ( !successfulTransition )
-    {
-      for ( unsigned int i = 0; i < failingReqIds.size(); i++ )
-      {
-        _spTestResult->AddSingleResult( failingReqIds[i]->GetId(),
-                                        nodeName + L" is out of place in the derivation chain.",
-                                        TestResult::FAIL );
-      }
-
-      return false;
-    }
-    
-    return true;
+    return PreOrderVisitMob<IAAFMasterMob, AxMasterMob, EPClip>( node );    
   }
+
+  virtual bool PostOrderVisit( EPTypedObjNode<IAAFMasterMob, EPClip>& node )
+  {
+    return PostOrderVisitMob<IAAFMasterMob, AxMasterMob, EPClip>( node );    
+  }
+
+  //========================================
+  //
+  // SourceMob types
 
   virtual bool PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPRGBAImageFileSource>& node )
   {
-    shared_ptr<EPTypedObjNode<IAAFSourceMob, EPFileSource> > spGeneric( node.DownCast<IAAFSourceMob, EPFileSource>() );
-    return this->PreOrderVisit( *spGeneric );
+    return PreOrderVisitSourceWithDescriptor<EPRGBAImageFileSource>( node );
+  }
+
+  virtual bool PostOrderVisit( EPTypedObjNode<IAAFSourceMob, EPRGBAImageFileSource>& node )
+  {
+    return PostOrderVisitSourceWithDescriptor<EPRGBAImageFileSource>( node );
   }
   
+  //========================================
+
   virtual bool PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPCDCIImageFileSource>& node )
   {
-    shared_ptr<EPTypedObjNode<IAAFSourceMob, EPFileSource> > spGeneric( node.DownCast<IAAFSourceMob, EPFileSource>() );
-    return this->PreOrderVisit( *spGeneric );
+    return PreOrderVisitSourceWithDescriptor<EPCDCIImageFileSource>( node );
+  }
+
+  virtual bool PostOrderVisit( EPTypedObjNode<IAAFSourceMob, EPCDCIImageFileSource>& node )
+  {
+    return PostOrderVisitSourceWithDescriptor<EPCDCIImageFileSource>( node );
   }
   
+  //========================================
+
   virtual bool PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPImageFileSource>& node )
   {
-    shared_ptr<EPTypedObjNode<IAAFSourceMob, EPFileSource> > spGeneric( node.DownCast<IAAFSourceMob, EPFileSource>() );
-    return this->PreOrderVisit( *spGeneric );
+    return PreOrderVisitSourceWithDescriptor<EPImageFileSource>( node );
+  }
+
+  virtual bool PostOrderVisit( EPTypedObjNode<IAAFSourceMob, EPImageFileSource>& node )
+  {
+    return PostOrderVisitSourceWithDescriptor<EPImageFileSource>( node );
   }
   
+  //========================================
+
   virtual bool PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPMonoAudioFileSource>& node )
   {
-    shared_ptr<EPTypedObjNode<IAAFSourceMob, EPFileSource> > spGeneric( node.DownCast<IAAFSourceMob, EPFileSource>() );
-    return this->PreOrderVisit( *spGeneric );
+    return PreOrderVisitSourceWithDescriptor<EPMonoAudioFileSource>( node );
+  }
+
+  virtual bool PostOrderVisit( EPTypedObjNode<IAAFSourceMob, EPMonoAudioFileSource>& node )
+  {
+    return PostOrderVisitSourceWithDescriptor<EPMonoAudioFileSource>( node );
   }
   
+  //========================================
+
   virtual bool PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPMultiChannelAudioFileSource>& node )
   {
-    shared_ptr<EPTypedObjNode<IAAFSourceMob, EPFileSource> > spGeneric( node.DownCast<IAAFSourceMob, EPFileSource>() );
-    return this->PreOrderVisit( *spGeneric );
+    return PreOrderVisitSourceWithDescriptor<EPMultiChannelAudioFileSource>( node );
   }
+
+  virtual bool PostOrderVisit( EPTypedObjNode<IAAFSourceMob, EPMultiChannelAudioFileSource>& node )
+  {
+    return PostOrderVisitSourceWithDescriptor<EPMultiChannelAudioFileSource>( node );
+  }
+
+  //========================================
 
   virtual bool PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPFileSource>& node )
   {
-    PreTrace(node,EPFileSource::GetName());
-    return this->VisitMobWithDescriptor( node, EPFileSource::GetName() );
+    return PreOrderVisitSourceWithDescriptor<EPFileSource>( node );
+  }
+
+  virtual bool PostOrderVisit( EPTypedObjNode<IAAFSourceMob, EPFileSource>& node )
+  {
+    return PostOrderVisitSourceWithDescriptor<EPFileSource>( node );
   }
   
+  //========================================
+
   virtual bool PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPRecordingSource>& node )
   {
-    PreTrace(node, EPRecordingSource::GetName());
-    return this->VisitMobWithDescriptor( node, EPRecordingSource::GetName() );
+    return PreOrderVisitSourceWithDescriptor<EPRecordingSource>( node );
+  }
+
+  virtual bool PostOrderVisit( EPTypedObjNode<IAAFSourceMob, EPRecordingSource>& node )
+  {
+    return PostOrderVisitSourceWithDescriptor<EPRecordingSource>( node );
   }
   
+  //========================================
+
   virtual bool PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPImportSource>& node )
   {
-    PreTrace(node,EPImportSource::GetName());
-    return this->VisitMobWithDescriptor( node, EPImportSource::GetName() );
+    return PreOrderVisitSourceWithDescriptor<EPImportSource>( node );
+  }
+
+  virtual bool PostOrderVisit( EPTypedObjNode<IAAFSourceMob, EPImportSource>& node )
+  {
+    return PostOrderVisitSourceWithDescriptor<EPImportSource>( node );
   }
   
+  //========================================
+
   virtual bool PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPTapeSource>& node )
   {
-    PreTrace(node, EPTapeSource::GetName());
-    return this->VisitMobWithDescriptor( node, EPTapeSource::GetName() );
+    return PreOrderVisitSourceWithDescriptor<EPTapeSource>( node );
+  }
+
+  virtual bool PostOrderVisit( EPTypedObjNode<IAAFSourceMob, EPTapeSource>& node )
+  {
+    return PostOrderVisitSourceWithDescriptor<EPTapeSource>( node );
   }
   
+  //========================================
+
   virtual bool PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPFilmSource>& node )
   {
-    PreTrace(node, EPFilmSource::GetName() );
-    return this->VisitMobWithDescriptor( node, EPFilmSource::GetName() );
+    return PreOrderVisitSourceWithDescriptor<EPFilmSource>( node );
   }
+
+  virtual bool PostOrderVisit( EPTypedObjNode<IAAFSourceMob, EPFilmSource>& node )
+  {
+    return PostOrderVisitSourceWithDescriptor<EPFilmSource>( node );
+  }
+
+  //========================================
+  //
+  // Visit a should clip. We must visit this, in addition to the the
+  // mobs, because the means by which the mob chain is terminated is
+  // significations. In some places it can be terminated by either a
+  // zero valued source clip or and out of file reference, in other
+  // places on one of those is valid.
 
   virtual bool PreOrderVisit( AAFTypedObjNode<IAAFSourceClip>& node )
   {
-    PreTrace(node, L"source clip" );
-    AxSourceClip axSrcClip( node.GetAAFObjectOfType() );
-    AxString detailMsg;
-    bool successfulTransition = false;
-    vector<shared_ptr<const Requirement> > failingReqIds;
- 
-    try
-    {
+    // The source clip was already resolved in
+    // ResolveRefVisitor.cpp. A kind was assigned at that time to let
+    // us know where it is an end of chain, out of file, or in file
+    // reference.
 
-      aafMobID_t srcID = axSrcClip.GetSourceReference().sourceID;
-      shared_ptr<Node> spNode;
-      spNode = MobNodeMap::GetInstance().GetMobNode(srcID);
-    
-      if ( srcID == AxConstants::NULL_MOBID )
-      {
-        successfulTransition = _stateMachine.Transition( kAAFClassID_SourceClip, L"Source Clip", detailMsg, failingReqIds );
-      }
-      else if ( !spNode )
-      {
-        successfulTransition = _stateMachine.Transition( kAAFClassID_SourceMob, L"Source Clip", detailMsg, failingReqIds );
-      }
-      else
-      {
-        //This is a source clip that is not null and referencing another mob in
-        //this file so just continue on.
-        return true;
-      }
-    }
-    catch ( const AxExHResult& )
-    {
-      successfulTransition = false;
-      detailMsg = L"Source Clip does not have a Source Reference property.";
-    }
-    
-    _spTestResult->AddDetail( detailMsg );
-    if ( !successfulTransition )
-    {
-      for ( unsigned int i = 0; i < failingReqIds.size(); i++ )
-      {
-        //If the Requirement is REQ_EP_019, then, it should present a warning,
-        //not a failure.
-        if ( failingReqIds.at( i ) == RequirementRegistry::GetInstance().GetRequirement( L"REQ_EP_019" ) )
-        {
-          // JPT REVIEW - More info required. What mob? Name? MobID?
-          _spTestResult->AddSingleResult( L"REQ_EP_019",
-                                          L"Out of file mob reference.",
-                                          TestResult::WARN );
-        }
-        else
-        {
-          // JPT REVIEW - No explanation provided.
-          _spTestResult->AddSingleResult( failingReqIds[i]->GetId(),
-                                          L"",
-                                          TestResult::FAIL );
-        }
-      }
-    
-#if 0
-      // JPT REVIEW - Must review this. It doesn't fit well with the
-      // "single result" approach.
 
-      //TODO: This should not be necessary.  There needs to be a requirement
-      //      that fails on an illegal End Of Chain.  Until something fails,
-      //      this code must be here to ensure a failure is reported.
-      if ( _spResult->GetResult() == TestResult::PASS )
-      {
-          _spResult->SetResult( TestResult::FAIL );
-      }
-      
-      _spResult->SetExplanation( L"Source Clip is out of place in the derrivation chain." );
-#endif
-
-      return false;
+    if ( node.GetKind() == AAFTypedObjNode<IAAFSourceClip>::AAFNODE_KIND_OUT_OF_FILE_REF )
+    {
+      ParseArgs parseArgs( DerivationChainParser::OOF_EVENT_ID, L"Out Of File Reference" );
+      _parseArgs.push_back( parseArgs );
+      _spLastPreVisitNode = node.GetSharedPointerToNode();
     }
+    else if ( node.GetKind() == AAFTypedObjNode<IAAFSourceClip>::AAFNODE_KIND_END_OF_CHAIN_REF )
+    {
+      ParseArgs parseArgs( DerivationChainParser::EOC_EVENT_ID, L"End Of Chain" );
+      _parseArgs.push_back( parseArgs );
+      _spLastPreVisitNode = node.GetSharedPointerToNode();
+    }
+
+    // Else, it is a resolved references and we don't care about it,
+    // or it is an undefined reference in which case we also don't
+    // care (and the derivation chain parser will detect the
+    // mal-terminated chain).
 
     return true;
   }
 
+  virtual bool PostOrderVisit( AAFTypedObjNode<IAAFSourceClip>& node )
+  {
+    ParseStackIfLeafNode( node );
+
+    // This condition must match the pre order visit method conditions
+    // that caused a ParseArgs to be pushed onto the _parseArgs stack.
+    if ( node.GetKind() == AAFTypedObjNode<IAAFSourceClip>::AAFNODE_KIND_OUT_OF_FILE_REF  ||
+         node.GetKind() == AAFTypedObjNode<IAAFSourceClip>::AAFNODE_KIND_END_OF_CHAIN_REF )
+    {
+      _parseArgs.pop_back();
+    }
+
+    return true;
+  }
+ 
+  //========================================
+
+  // 
+  // Unspecialized mob types.
+  //
+  //
+  // The following "bare" node types should not be encoutered in a
+  // correctly constructed derivation chain. These indicate a mob was
+  // used that does not have a usage code, or a decriptor, that could
+  // be interpreted to create a more speciallized EP node type.
+  //
+  // They generate a failure and stop the traversal. Since we don't
+  // put any parse args on the stack we don't need to work about a
+  // post order visit method.
+
+  virtual bool PreOrderVisit( AAFTypedObjNode<IAAFCompositionMob>& node )
+  {
+    PreTrace(node, L"composition");
+    AxCompositionMob axCompMob( node.GetAAFObjectOfType() );
+    AxString nodeName = this->GetMobName( axCompMob, L"Composition Mob" ); 
+    REQ_EP_258_Failure( L"Composition Mob", axCompMob );
+    return false;
+  }
+  
+  //========================================
+
+  virtual bool PreOrderVisit( AAFTypedObjNode<IAAFMasterMob>& node )
+  {
+    PreTrace(node, L"master" );
+    AxMasterMob axMastMob( node.GetAAFObjectOfType() );
+    REQ_EP_258_Failure( L"Master Mob", axMastMob );
+    return false;
+  }
+
+  //========================================
+
+  virtual bool PreOrderVisit( AAFTypedObjNode<IAAFSourceMob>& node )
+  {
+    PreTrace(node, L"source" );
+    AxSourceMob axSrcMob( node.GetAAFObjectOfType() );
+    REQ_EP_258_Failure( L"Source Mob", axSrcMob );
+    return false;
+  }
+  
+private:
+
+  // prohibited
+  MobChainVisitor();
+  MobChainVisitor( const MobChainVisitor& );
+  MobChainVisitor& operator=( const MobChainVisitor& );
+
+  void ParseStackIfLeafNode( Node& node )
+  {
+    // This function is called from post order visit methods.  If the
+    // last node that was pre order visited is that same as this node
+    // then this node is a leaf node.
+    if ( node.GetSharedPointerToNode() == _spLastPreVisitNode )
+    {
+      DerivationChainParser parser( _log, _spTestResult );
+
+      deque<ParseArgs>::const_iterator iter;
+      for ( iter  = _parseArgs.begin();
+            iter != _parseArgs.end();
+	    ++iter )
+      {
+	if ( !parser.Transition( iter->event, iter->nodeName ) )
+	{
+	  break;
+	}
+      }
+
+      // If we parsed all tokens then as a final step we need to check
+      // the parser was left in a valid end state.
+      if ( iter == _parseArgs.end() )
+      {
+	parser.CheckEndState();
+      }
+    }
+  }
+
+  // Return a AUID that is in the state machines Event map.  If the
+  // clsDef is not in the map, recursively try the parent class id.
+  aafUID_t GetAcceptedAUID( AxClassDef& clsDef ) const
+  {
+    aafUID_t auid = clsDef.GetAUID();
+    
+    if ( DerivationChainParser::IsKnownEvent( auid ) )
+    {
+        return auid;
+    }
+
+    AxClassDef parentDef( clsDef.GetParent() );
+    return GetAcceptedAUID( parentDef );
+  }
+  
   void REQ_EP_258_Failure( const wstring& mobTypeName,
                           AxMob& mob )
   {
@@ -320,176 +539,6 @@ public:
                                                   explain,
                                                   TestResult::FAIL );
     spFailure->AddDetail( L"Does not have an Edit Protocol material type." );
-  }
-
-  virtual bool PreOrderVisit( AAFTypedObjNode<IAAFCompositionMob>& node )
-  {
-    PreTrace(node, L"composition");
-    AxCompositionMob axCompMob( node.GetAAFObjectOfType() );
-    AxString nodeName = this->GetMobName( axCompMob, L"Composition Mob" ); 
-    REQ_EP_258_Failure( L"Composition Mob", axCompMob );
-    return false;
-  }
-  
-  virtual bool PreOrderVisit( AAFTypedObjNode<IAAFMasterMob>& node )
-  {
-    PreTrace(node, L"master" );
-    AxMasterMob axMastMob( node.GetAAFObjectOfType() );
-    REQ_EP_258_Failure( L"Master Mob", axMastMob );
-    return false;
-  }
-
-  virtual bool PreOrderVisit( AAFTypedObjNode<IAAFSourceMob>& node )
-  {
-    PreTrace(node, L"source" );
-    AxSourceMob axSrcMob( node.GetAAFObjectOfType() );
-    REQ_EP_258_Failure( L"Source Mob", axSrcMob );
-    return false;
-  }
-  
-  virtual bool PostOrderVisit( AAFTypedObjNode<IAAFCompositionMob>& node )
-  {
-    PostTrace(node);
-    AxCompositionMob axCompMob( node.GetAAFObjectOfType() );
-    return this->PostVisitMob( axCompMob, L"Composition Mob");
-  }
-  
-  virtual bool PostOrderVisit( AAFTypedObjNode<IAAFMasterMob>& node )
-  {
-    PostTrace(node);
-    AxMasterMob axMastMob( node.GetAAFObjectOfType() );
-    return this->PostVisitMob( axMastMob, L"Master Mob");
-  }
-  
-  virtual bool PostOrderVisit( AAFTypedObjNode<IAAFSourceMob>& node )
-  {
-    PostTrace(node);
-    AxSourceMob axSrcMob( node.GetAAFObjectOfType() );
-    return this->PostVisitMob( axSrcMob, L"Source Mob");
-  }
-
-  virtual bool PostOrderVisit( AAFTypedObjNode<IAAFSourceClip>& node )
-  {
-    PostTrace(node);
-    AxSourceClip axSrcClip( node.GetAAFObjectOfType() );
-
-    aafMobID_t srcID = axSrcClip.GetSourceReference().sourceID;
-    shared_ptr<Node> spNode;
-    spNode = MobNodeMap::GetInstance().GetMobNode(srcID);
-    
-    // Only pop the current state of the stack if this is an End of
-    // Chain or Out of File source reference.
-    if ( srcID == AxConstants::NULL_MOBID || !spNode )
-    {
-      AxString detailMsg;
-      bool successfulTransition = _stateMachine.TransitionBack(detailMsg);
-
-      // JPT REVIEW - Is there any case where this would fail and that
-      // is an error?  e.g. what if a zero, or out of file, reference
-      // is found inside a composition?
-      assert( successfulTransition );
-
-      if ( !detailMsg.empty() )
-      {
-        _spTestResult->AddDetail( detailMsg );
-      }
-    }
-    
-    return true;
-  }
- 
-private:
-
-  // prohibited
-  MobChainVisitor();
-  MobChainVisitor( const MobChainVisitor& );
-  MobChainVisitor& operator=( const MobChainVisitor& );
-
-  //Return a AUID that is in the state machines Event map.
-  aafUID_t GetAcceptedAUID( AxClassDef& clsDef ) const
-  {
-    aafUID_t auid = clsDef.GetAUID();
-    
-    if ( _stateMachine.IsKnownEvent( auid ) )
-    {
-        return auid;
-    }
-
-    AxClassDef parentDef( clsDef.GetParent() );
-    return GetAcceptedAUID( parentDef );
-  }
-  
-  bool VisitMobWithUsageCode( AxMob& axMob, Node::LID lid, const AxString& type )
-  {
-    AxString nodeName = this->GetMobName( axMob, type );
-
-    AxString detailMsg;
-    bool successfulTransition = false;
-    vector<shared_ptr<const Requirement> > failingReqIds;
-
-    successfulTransition = _stateMachine.Transition( axMob.GetUsageCode(), nodeName, detailMsg, failingReqIds );
-    _spTestResult->AddDetail( detailMsg );
-    if ( !successfulTransition )
-    {
-      for ( unsigned int i = 0; i < failingReqIds.size(); i++ )
-      {
-        _spTestResult->AddSingleResult( failingReqIds[i]->GetId(),
-                                        nodeName + L" is out of place in the derrivation chain.",
-                                        TestResult::FAIL );
-      }
-      return false;
-    }
-    
-    return true;
-  }
-  
-  bool VisitMobWithDescriptor( AAFTypedObjNode<IAAFSourceMob>& node, const AxString& type )
-  {
-    AxSourceMob axSrcMob( node.GetAAFObjectOfType() );
-    AxString nodeName = this->GetMobName( axSrcMob, type );
-
-    AxString detailMsg;
-    bool successfulTransition = false;
-    vector<shared_ptr<const Requirement> > failingReqIds;
-
-    AxEssenceDescriptor descriptor( axSrcMob.GetEssenceDescriptor() );
-    AxClassDef clsDef( descriptor.GetDefinition() );
-    aafUID_t descriptorAUID = GetAcceptedAUID( clsDef );
-    successfulTransition = _stateMachine.Transition( descriptorAUID, nodeName, detailMsg, failingReqIds );   
-    _spTestResult->AddDetail( detailMsg );
-    if ( !successfulTransition )
-    {
-      for ( unsigned int i = 0; i < failingReqIds.size(); i++ )
-      {
-        _spTestResult->AddSingleResult( failingReqIds[i]->GetId(),
-                                        nodeName + L" is out of place in the derrivation chain.",
-                                        TestResult::FAIL );
-      }
-      return false;
-    }
-
-    return true;
-  }
-
-  bool PostVisitMob( AxMob& axMob, const AxString& type )
-  {
-    AxString detailMsg;
-    bool successfulTransition = _stateMachine.TransitionBack( detailMsg );
-    if ( !detailMsg.empty() )
-    {
-      _spTestResult->AddDetail( detailMsg );
-    }
-
-    AxString nodeName = this->GetMobName( axMob, type );
-
-    if ( !successfulTransition )
-    {
-      _spTestResult->AddSingleResult( L"REQ_EP_017",
-                                      L"End of derivation chain encountered without a zero-valued "
-                                      L"source clip or out of file reference at " + nodeName,
-                                      TestResult::FAIL );
-    }
-    return successfulTransition;
   }
 
   void PreTrace( const AAFObjNode& node, const wstring& what )
@@ -521,9 +570,23 @@ private:
 
   wostream& _log;
   shared_ptr<TestLevelTestResult> _spTestResult;
-  DerivationChainStateMachine _stateMachine;
 
   unsigned int _level;
+  
+  struct ParseArgs
+  {
+    ParseArgs( DerivationChainParser::EventID e,
+	       AxString n )
+      : event(e),
+	nodeName(n)
+    {}
+
+    DerivationChainParser::EventID event;
+    AxString nodeName;
+  };
+  
+  deque<ParseArgs> _parseArgs;
+  shared_ptr<Node> _spLastPreVisitNode;
 };
 
 //======================================================================
@@ -564,6 +627,7 @@ public:
   }
 
 private:
+
   wostream& _log;
   shared_ptr<const TestGraph> _spGraph;
   shared_ptr<TestLevelTestResult> _spTestResult;
@@ -621,33 +685,34 @@ const TestInfo EPDerivationTest::GetTestInfo()
 {
     shared_ptr<vector<AxString> > spReqIds(new vector<AxString>);
 
-    spReqIds->push_back(L"REQ_EP_017");     // Derivation Chain ends with zero-value source clip.
-    spReqIds->push_back(L"REQ_EP_018");     // Reference to Master or Composition mob cannot be out of file.
-    spReqIds->push_back(L"REQ_EP_019");     // Reference to Source mob should not be out of file.
-    spReqIds->push_back(L"REQ_EP_025");     // Only valid transition to Top-Level is from Initial.
-    spReqIds->push_back(L"REQ_EP_026");     // Valid transitions from Top-Level.
-    spReqIds->push_back(L"REQ_EP_030");     // Only Top-Level and Lower-Level may reference Lower-Level.
-    spReqIds->push_back(L"REQ_EP_031");     // Valid transitions from Lower-Level ~ The specification does not
-                                            // allow Lower-Level to Lower-Level but the test does.
-    spReqIds->push_back(L"REQ_EP_036");     // Valid transitions from Sub-Clip.
-    spReqIds->push_back(L"REQ_EP_045");     // Valid transitions from Adjusted Clip.
-    spReqIds->push_back(L"REQ_EP_050");     // Template Clip must end chain.
-    spReqIds->push_back(L"REQ_EP_055");     // Valid transitions from Clip.
-    spReqIds->push_back(L"REQ_EP_063");     // Valid transitions from File Source ~ transitions are not actually
-                                            // specified, also, a transition to another File Source is assumed valid.
-    spReqIds->push_back(L"REQ_EP_064");     // Transition from File Source to: Recording Source is valid, End of Chain
-                                            // is invalid ~ with 063 implies if a File Source reference another
-                                            // File Source a Recording Source is required, this is not implemented.
-    spReqIds->push_back(L"REQ_EP_072");     // Recording source must end chain.
-    spReqIds->push_back(L"REQ_EP_076");     // Valid Transitions from Import Source ~ not actually specified.
-    spReqIds->push_back(L"REQ_EP_083");     // Valid Transitions from Tape Source ~ not actually specified.
+    // * - Means the the requirement was reviewed and is being used correctly in this test.
+    // (JPT - 21 Sept 2007).
 
-    // JPT REVIEW - I added these two requirements to cover two cases
-    // where failures results were being set on a result without a
-    // clear requirement. They should be reviewed.
-    spReqIds->push_back(L"REQ_EP_258");      // All Mob objects shall have a have a known Edit Protocol material type.
+    spReqIds->push_back(L"REQ_EP_017");     // * Derivation Chain ends with zero-value source clip.
+    spReqIds->push_back(L"REQ_EP_026");     // * Valid transitions from Top-Level.
+    spReqIds->push_back(L"REQ_EP_031");     // * Valid transitions from Lower-Level.
+    spReqIds->push_back(L"REQ_EP_036");     // * Valid transitions from Sub-Clip.
+    spReqIds->push_back(L"REQ_EP_045");     // * Valid transitions from Adjusted Clip.
+    spReqIds->push_back(L"REQ_EP_050");     // * Template Clip must end chain.
+    spReqIds->push_back(L"REQ_EP_055");     // * Valid transitions from Clip.
+    spReqIds->push_back(L"REQ_EP_063");     // * Valid transitions from File Source.
+    spReqIds->push_back(L"REQ_EP_072");     // * Recording source must end chain.
+    spReqIds->push_back(L"REQ_EP_076");     // * Valid Transitions from Import Source.
+    spReqIds->push_back(L"REQ_EP_083");     // * Valid Transitions from Tape Source.
+    spReqIds->push_back(L"REQ_EP_258");     // * All Mob objects shall have a have a known Edit Protocol material type.
+    spReqIds->push_back(L"REQ_EP_259");     // * Film source shall not reference anything.
+    spReqIds->push_back(L"REQ_EP_260");     // * Top-level is first object in derivation chain.
+    spReqIds->push_back(L"REQ_EP_261");     // * Unresolved references in derivation chain.
+    spReqIds->push_back(L"REQ_EP_262");     // * Valid Derivation Chain Termination
 
-    //TODO: Push an item for valid transitions from Film Source.
+    // Use 25.2 instead of 260 if there is agreement that no other mob
+    // type, other than top level, can start the derivatino chain.  If
+    // there is not agreement on that point then This may not be the
+    // best test to this at all.... Must reconcile REQ_EP_260 to know
+    // the answer.
+    // spReqIds->push_back(L"REQ_EP_025.2"); // Top-level composition shall not be referenced by another Mob in the AAF file.
+
+    // TODO: Push an item for valid transitions from Film Source.
     return TestInfo(L"EPDerivationTest", spReqIds);
 }
 

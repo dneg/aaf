@@ -183,10 +183,7 @@ void RecursiveOutputVerboseResultMsgs( shared_ptr<TestResult> res,
 
     wcout << result << endl;
 
-    if ( res->GetResult() != TestResult::PASS )
-    {
-      wcout << LevelToIndent(level) << "Reason: " << res->GetExplanation() << endl;
-    }
+    wcout << LevelToIndent(level) << "Reason: " << res->GetExplanation() << endl;
 
     ListRequirements( L"Covered Requirements", res->GetRequirements(TestResult::COVERED), level);
     ListRequirements( L"Noted Requirements",   res->GetRequirements(TestResult::NOTED),   level);
@@ -621,7 +618,7 @@ int main( int argc, char** argv )
 
   try
   {
-    // Figure out where the install location.
+    // Figure out the install location.
     fs::path argvzero( argv[0], fs::native );
     fs::path installPath = argvzero.branch_path();
 

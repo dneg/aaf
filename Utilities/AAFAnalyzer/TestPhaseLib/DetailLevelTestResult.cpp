@@ -99,11 +99,13 @@ void DetailLevelTestResult::SetResult( const wstring& reqId, Result result )
     if ( reqCount )
     {
       Result containedIn = UNDEFINED;
+
       assert( this->ContainsRequirement( reqId, containedIn ) );
 
       // .. and the map it is stored in should match the individual
       // result value for this object.
       assert( containedIn == this->GetResult() );
+      (void)containedIn;
     }
   }
 

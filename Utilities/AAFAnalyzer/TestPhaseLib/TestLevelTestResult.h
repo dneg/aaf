@@ -60,6 +60,8 @@ class TestLevelTestResult : public LowLevelTestResult
   const enum ResultLevel GetResultType() const;
 
   // Add a single result for one requirement.
+  // DEPRECATED - use the version below that doesn't take result
+  // name/desc arguments.
   shared_ptr<DetailLevelTestResult> AddSingleResult( const wstring& reqId,
 						     Result result,
 						     const wstring& resultName,

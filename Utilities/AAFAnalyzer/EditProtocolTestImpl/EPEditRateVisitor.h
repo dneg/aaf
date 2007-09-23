@@ -62,9 +62,6 @@ class EPEditRateVisitor : public EPTypedVisitor
     virtual bool PreOrderVisit( EPTypedObjNode<IAAFTimelineMobSlot, EPAudioTrack>& node );
     virtual bool PreOrderVisit( EPTypedObjNode<IAAFTimelineMobSlot, EPVideoTrack>& node );
     virtual bool PreOrderVisit( EPTypedObjNode<IAAFTimelineMobSlot, EPEssenceTrack>& node );
-    virtual bool PreOrderVisit( EPTypedObjNode<IAAFStaticMobSlot, EPAudioTrack>& node );
-    virtual bool PreOrderVisit( EPTypedObjNode<IAAFStaticMobSlot, EPVideoTrack>& node );
-    virtual bool PreOrderVisit( EPTypedObjNode<IAAFStaticMobSlot, EPEssenceTrack>& node );
     virtual bool PreOrderVisit( EPTypedObjNode<IAAFEventMobSlot, EPAudioTrack>& node );
     virtual bool PreOrderVisit( EPTypedObjNode<IAAFEventMobSlot, EPVideoTrack>& node );
     virtual bool PreOrderVisit( EPTypedObjNode<IAAFEventMobSlot, EPEssenceTrack>& node );
@@ -88,10 +85,10 @@ class EPEditRateVisitor : public EPTypedVisitor
     shared_ptr<EdgeMap> _spEdgeMap;
     shared_ptr<TestLevelTestResult> _spTestResult;
     AllowedEditRateTable _erTable;
-  
+
     RateMap _audioEditRates;
     RateMap _audioSampleRates;
-    unsigned int _staticAudioTracks;
+
     unsigned int _unknownAudioTracks;
 
     bool TestEditRate( aafRational_t editRate, AxMobSlot& axMobSlot, const AxString& mobName );

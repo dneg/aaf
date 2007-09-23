@@ -1,150 +1,130 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE aaf-file SYSTEM "EPDerivationChain.dtd">
-
 <aaf-file>
-
-    <!-- This test is the same as EPAnnotationTest, but, does not have any
+<!-- This test is the same as EPAnnotationTest, but, does not have any
          dictionary entries so it should result in extra failures -->
-
-    <!-- Test UserComments property -->
-    <top-level name="User Comments in Mob Slot Segment">
-        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <source-clip length="0" track-type="none">
-                <comment value="Should Pass" name="Test Case 1"/>
-                <lower-level>
-                    <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-                        <eoc length="0" track-type="none"/>
-                    </timeline-mob-slot>
-                </lower-level>
-            </source-clip>
-        </timeline-mob-slot>
-    </top-level>
-
-    <top-level name="User Comments in CommentMarker">
-        <event-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence length="0" track-type="none">
-                <comment-marker track-type="none" length="1">
-                    <comment value="Should Pass" name="Test Case 2"/>
-                </comment-marker>
-            </sequence>
-        </event-mob-slot>
-    </top-level>
-
-    <!-- NOTE: Currently this test case is not causing an error because the
+<!-- Test UserComments property -->
+ <top-level name="User Comments in Mob Slot Segment">
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <source-clip length="0" track-type="none">
+    <comment value="Should Pass" name="Test Case 1"/>
+    <lower-level>
+     <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+      <eoc length="0" track-type="none"/>
+     </timeline-mob-slot>
+    </lower-level>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="User Comments in CommentMarker">
+  <event-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <sequence length="0" track-type="none">
+    <comment-marker track-type="none" length="1">
+     <comment value="Should Pass" name="Test Case 2"/>
+    </comment-marker>
+   </sequence>
+  </event-mob-slot>
+ </top-level>
+<!-- NOTE: Currently this test case is not causing an error because the
                comment is not in the dictionary.  This is occuring because
                the traversal ends when a UserComment is detected in the second
                sequence.  If the traversal is made to continue, this test case
                will fail -->
-    <top-level name="Illegal User Comments">
-        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence length="0" track-type="none">
-                <sequence track-type="none"  length="1">
-                    <comment value="Should Fail" name="Test Case 3"/>
-                    <eoc track-type="none" length="1"/>
-                </sequence>
-            </sequence>
-        </timeline-mob-slot>
-    </top-level>
-
-    <!-- Test CommentMarkes in essence/non-essence tracks -->
-    <!-- Note: Case 2 above tests CommentMarkers in non-essence tracks -->
-    <top-level name="CommentMarker in Essence Track">
-        <event-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence length="0" track-type="audio">
-                <comment-marker track-type="audio" length="1"/>
-            </sequence>
-        </event-mob-slot>
-    </top-level>
-
-    <top-level name="DescriptiveMarker in Essence Track">
-        <event-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence length="0" track-type="audio">
-                <descriptive-marker track-type="audio" length="1"/>
-            </sequence>
-        </event-mob-slot>
-    </top-level>
-
-    <!-- NEED TO TEST A DESCRIPTIVE MARKER IN AN ESSENCE TRACK -->
-
-    <!-- Test CommentMarkes in Mob Slots (and nested in mob slots) -->
-    <!-- Note: "CommentMarker in Essence Track" above test tests nested in an event mob slot -->
-    <top-level name="CommentMarker in Event Mob Slot">
-        <event-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <comment-marker length="0" track-type="none"/>
-        </event-mob-slot>
-    </top-level>
-
-    <top-level name="CommentMarker nested in Timeline Mob Slot">
-        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence length="0" track-type="none">
-                <comment-marker length="0" track-type="none"/>
-            </sequence>
-        </timeline-mob-slot>
-    </top-level>
-
-    <top-level name="CommentMarker in Timeline Mob Slot">
-        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <comment-marker length="0" track-type="none"/>
-        </timeline-mob-slot>
-    </top-level>
-
-    <top-level name="CommentMarker nested in Static Mob Slot">
-        <static-mob-slot>
-            <sequence length="0" track-type="none">
-                <comment-marker length="0" track-type="none"/>
-            </sequence>
-        </static-mob-slot>
-    </top-level>
-
-    <top-level name="CommentMarker in Static Mob Slot">
-        <static-mob-slot>
-            <comment-marker length="0" track-type="none"/>
-        </static-mob-slot>
-    </top-level>
-
-    <!-- Note: "DescriptiveMarker in Essence Track" above test tests nested in an event mob slot -->
-    <top-level name="DescriptiveMarker in Event Mob Slot">
-        <event-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <descriptive-marker length="0" track-type="none"/>
-        </event-mob-slot>
-    </top-level>
-
-    <top-level name="DescriptiveMarker nested in Timeline Mob Slot">
-        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence length="0" track-type="none">
-                <descriptive-marker track-type="none" length="1"/>
-            </sequence>
-        </timeline-mob-slot>
-    </top-level>
-
-    <top-level name="DescriptiveMarker in Timeline Mob Slot">
-        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <descriptive-marker length="0" track-type="none"/>
-        </timeline-mob-slot>
-    </top-level>
-
-    <top-level name="DescriptiveMarker nested in Static Mob Slot">
-        <static-mob-slot>
-            <sequence length="0" track-type="none">
-                <descriptive-marker track-type="none" length="1"/>
-            </sequence>
-        </static-mob-slot>
-    </top-level>
-
-    <top-level name="DescriptiveMarker in Static Mob Slot">
-        <static-mob-slot>
-            <descriptive-marker length="0" track-type="none"/>
-        </static-mob-slot>
-    </top-level>
-
-    <!-- Test a registered KLV Data -->
-    <top-level name="Registered KLV Data">
-        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence length="0" track-type="audio">
-                <klv-data value="Should Pass" key-name="KLV Test"/>
-                <eoc track-type="audio" length="1"/>
-            </sequence>
-        </timeline-mob-slot>
-    </top-level>
-
+ <top-level name="Illegal User Comments">
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <sequence length="0" track-type="none">
+    <sequence track-type="none"  length="1">
+     <comment value="Should Fail" name="Test Case 3"/>
+     <eoc track-type="none" length="1"/>
+    </sequence>
+   </sequence>
+  </timeline-mob-slot>
+ </top-level>
+<!-- Test CommentMarkes in essence/non-essence tracks -->
+<!-- Note: Case 2 above tests CommentMarkers in non-essence tracks -->
+ <top-level name="CommentMarker in Essence Track">
+  <event-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <sequence length="0" track-type="audio">
+    <comment-marker track-type="audio" length="1"/>
+   </sequence>
+  </event-mob-slot>
+ </top-level>
+ <top-level name="DescriptiveMarker in Essence Track">
+  <event-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <sequence length="0" track-type="audio">
+    <descriptive-marker track-type="audio" length="1"/>
+   </sequence>
+  </event-mob-slot>
+ </top-level>
+<!-- NEED TO TEST A DESCRIPTIVE MARKER IN AN ESSENCE TRACK -->
+<!-- Test CommentMarkes in Mob Slots (and nested in mob slots) -->
+<!-- Note: "CommentMarker in Essence Track" above test tests nested in an event mob slot -->
+ <top-level name="CommentMarker in Event Mob Slot">
+  <event-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <comment-marker length="0" track-type="none"/>
+  </event-mob-slot>
+ </top-level>
+ <top-level name="CommentMarker nested in Timeline Mob Slot">
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <sequence length="0" track-type="none">
+    <comment-marker length="0" track-type="none"/>
+   </sequence>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="CommentMarker in Timeline Mob Slot">
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <comment-marker length="0" track-type="none"/>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="CommentMarker nested in Static Mob Slot">
+  <static-mob-slot>
+   <sequence length="0" track-type="none">
+    <comment-marker length="0" track-type="none"/>
+   </sequence>
+  </static-mob-slot>
+ </top-level>
+ <top-level name="CommentMarker in Static Mob Slot">
+  <static-mob-slot>
+   <comment-marker length="0" track-type="none"/>
+  </static-mob-slot>
+ </top-level>
+<!-- Note: "DescriptiveMarker in Essence Track" above test tests nested in an event mob slot -->
+ <top-level name="DescriptiveMarker in Event Mob Slot">
+  <event-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <descriptive-marker length="0" track-type="none"/>
+  </event-mob-slot>
+ </top-level>
+ <top-level name="DescriptiveMarker nested in Timeline Mob Slot">
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <sequence length="0" track-type="none">
+    <descriptive-marker track-type="none" length="1"/>
+   </sequence>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="DescriptiveMarker in Timeline Mob Slot">
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <descriptive-marker length="0" track-type="none"/>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="DescriptiveMarker nested in Static Mob Slot">
+  <static-mob-slot>
+   <sequence length="0" track-type="none">
+    <descriptive-marker track-type="none" length="1"/>
+   </sequence>
+  </static-mob-slot>
+ </top-level>
+ <top-level name="DescriptiveMarker in Static Mob Slot">
+  <static-mob-slot>
+   <descriptive-marker length="0" track-type="none"/>
+  </static-mob-slot>
+ </top-level>
+<!-- Test a registered KLV Data -->
+ <top-level name="Registered KLV Data">
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <sequence length="0" track-type="audio">
+    <klv-data value="Should Pass" key-name="KLV Test"/>
+    <eoc track-type="audio" length="1"/>
+   </sequence>
+  </timeline-mob-slot>
+ </top-level>
 </aaf-file>

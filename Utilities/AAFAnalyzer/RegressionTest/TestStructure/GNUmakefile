@@ -49,6 +49,6 @@ check : $(AAFSDKBINDIR)/AAFAnalyzerRegressionTest$(EXE)
 	$(APP_RUN_ENV) $(AAFSDKBINDIR)/BuildTestFile$(EXE) GraphBuilder-ResolveRefTest.xml GraphBuilder-ResolveRefTest.aaf
 	$(APP_RUN_ENV) $(AAFSDKBINDIR)/AAFAnalyzerRegressionTest$(EXE) \
 				-reqs $(AAFBASE)/Utilities/AAFAnalyzer/Requirements/AAFRequirements.xml \
-                                -file GraphBuilder-ResolveRefTest.aaf > /tmp/AAFAnalyzerRegressionTest.actual
-	diff /tmp/AAFAnalyzerRegressionTest.actual $(AAFBASE)/Utilities/AAFAnalyzer/RegressionTest/TestStructure/AAFAnalyzerRegressionTest.expected > /dev/null
+                                -file GraphBuilder-ResolveRefTest.aaf > AAFAnalyzerRegressionTest.actual
+	diff AAFAnalyzerRegressionTest.actual AAFAnalyzerRegressionTest.expected > /dev/null
 	@echo Analyzer regression test expected versus actual output compared correctly.

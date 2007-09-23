@@ -40,10 +40,34 @@ template<typename AAFObjType>
 class AAFTypedObjNode : public AAFObjNode
 {
  public:
+
+  // Category is initialized to AAFNODE_UNDEFINED at construct time.
+  // During reference resolutin it s changed to end of chain, or out
+  // of file.  other's remain undefined.
+  enum Kind_e { AAFNODE_KIND_END_OF_CHAIN_REF,
+		AAFNODE_KIND_IN_FILE_REF,
+		AAFNODE_KIND_OUT_OF_FILE_REF,
+		AAFNODE_KIND_UNDEFINED };
+
   ~AAFTypedObjNode();
   
   virtual IAAFSmartPointer<AAFObjType> GetAAFObjectOfType() const =0;
-  
+
+  Kind_e GetKind() const
+  {
+    return _kind;
+  }
+
+  void SetKind( Kind_e kind )
+  {
+    // Normal usage of this routing would not require that the result
+    // be changed once it has been set to something other than
+    // undefined.
+    assert( AAFNODE_KIND_UNDEFINED == _kind );
+
+    _kind = kind;
+  }
+
   //This function will return a new node and all type information about the
   //actual type of the templated parameter will be lost.  Therefore, this node
   //should not be stored anywhere unless it is acceptable to use the node
@@ -87,6 +111,7 @@ class AAFTypedObjNode : public AAFObjNode
   AAFTypedObjNode( const AAFTypedObjNode& );
   AAFTypedObjNode& operator=( const AAFTypedObjNode& );
 
+  Kind_e _kind;
 };
 
 } // end of namespace diskstream

@@ -1,42 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE aaf-file SYSTEM "EPDerivationChain.dtd">
-
 <aaf-file>
-
-    <top-level>
-
+ <top-level>
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <source-clip length="0" track-type="audio">
+    <clip>
+     <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+      <source-clip length="0" track-type="audio">
+       <mono-audio name="Mono Audio in Composition and Master" sample-rate-denominator="1" sample-rate-numerator="1">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <source-clip length="0" track-type="audio">
-                <clip>
-                    <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-                        <source-clip length="0" track-type="audio">
-                            <mono-audio name="Mono Audio in Composition and Master" sample-rate-denominator="1" sample-rate-numerator="1">
-                   			<timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-		                       			 <eoc length="0" track-type="audio"/>
-		  			</timeline-mob-slot>
-                            </mono-audio>
-                        </source-clip>
-                    </timeline-mob-slot>
-                </clip>
-            </source-clip>
+         <eoc length="0" track-type="audio"/>
         </timeline-mob-slot>
-
+       </mono-audio>
+      </source-clip>
+     </timeline-mob-slot>
+    </clip>
+   </source-clip>
+  </timeline-mob-slot>
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <source-clip length="0" track-type="audio">
+    <clip>
+     <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+      <source-clip length="0" track-type="audio">
+       <multi-channel-audio name="Multi-Channel Audio in Composition and Master" sample-rate-denominator="1" sample-rate-numerator="1">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <source-clip length="0" track-type="audio">
-                <clip>
-                    <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-                        <source-clip length="0" track-type="audio">
-			    <multi-channel-audio name="Multi-Channel Audio in Composition and Master" sample-rate-denominator="1" sample-rate-numerator="1">
-				    	<timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-		                       			 <eoc length="0" track-type="audio"/>
-		  			</timeline-mob-slot>
-                            </multi-channel-audio>
-                        </source-clip>
-                    </timeline-mob-slot>
-                </clip>
-            </source-clip>
+         <eoc length="0" track-type="audio"/>
         </timeline-mob-slot>
-
-    </top-level>
-
+       </multi-channel-audio>
+      </source-clip>
+     </timeline-mob-slot>
+    </clip>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
 </aaf-file>

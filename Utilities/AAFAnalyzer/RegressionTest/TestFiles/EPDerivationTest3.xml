@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE aaf-file SYSTEM "EPDerivationChain.dtd">
+<aaf-file>
+<!-- The following test cases should not cause failures because they are not composition Mobs.-->
+ <clip name="Initial->Clip">
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <eoc length="0" track-type="none"/>
+  </timeline-mob-slot>
+ </clip>
+ <file-source sample-rate-numerator="1" sample-rate-denominator="1" name="Initial->File Source">
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <eoc length="0" track-type="none"/>
+  </timeline-mob-slot>
+ </file-source>
+ <recording-source name="Initial->Recording Source">
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <eoc length="0" track-type="none"/>
+  </timeline-mob-slot>
+ </recording-source>
+ <import-source name="Initial->Import Source">
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <eoc length="0" track-type="none"/>
+  </timeline-mob-slot>
+ </import-source>
+ <tape-source name="Initial->Tape Source">
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <eoc length="0" track-type="none"/>
+  </timeline-mob-slot>
+ </tape-source>
+ <film-source name="Initial-Film Source">
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <eoc length="0" track-type="none"/>
+  </timeline-mob-slot>
+ </film-source>
+</aaf-file>

@@ -10,13 +10,34 @@
 
             Name:   Top-Level Composition Contents
             Desc:   A top-level composition shall contain one or more timecode tracks and include a Primary timecode track.  Timecode tracks shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in Section 6.3 of the AAF Edit Protocol.
+            Result: Passed
+            Reason: Top-Level Composition "One Primary" has valid physical track numbers.
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: REQ_EP_028
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Top-Level Composition Contents
+            Desc:   A top-level composition shall contain one or more timecode tracks and include a Primary timecode track.  Timecode tracks shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in Section 6.3 of the AAF Edit Protocol.
+            Result: Passed
+            Reason: Top-Level Composition "One Primary, One Alternative" has valid physical track numbers.
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: REQ_EP_028
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Top-Level Composition Contents
+            Desc:   A top-level composition shall contain one or more timecode tracks and include a Primary timecode track.  Timecode tracks shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in Section 6.3 of the AAF Edit Protocol.
             Result: Failed
-            Reason: Top-Level Composition "Two Primary" has more than one Primary Timecode track.
+            Reason: Top-Level Composition "Two Primary" has 2 time code tracks with a MobSlot::PhysicalTrackNumber value of 1.
             Covered Requirements: None
             Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_028
+            Detail: Physical track number must be unique within a Mob.
 
             Name:   Top-Level Composition Contents
             Desc:   A top-level composition shall contain one or more timecode tracks and include a Primary timecode track.  Timecode tracks shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in Section 6.3 of the AAF Edit Protocol.
@@ -31,77 +52,58 @@
             Name:   Top-Level Composition Contents
             Desc:   A top-level composition shall contain one or more timecode tracks and include a Primary timecode track.  Timecode tracks shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in Section 6.3 of the AAF Edit Protocol.
             Result: Failed
-            Reason: Top-Level Composition "One Primary, Two Alternative" has more than one Alternative Timecode track.
+            Reason: Top-Level Composition "One Primary, Two Alternative" has 2 time code tracks with a MobSlot::PhysicalTrackNumber value of 2.
             Covered Requirements: None
             Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_028
+            Detail: Physical track number must be unique within a Mob.
 
             Name:   Top-Level Composition Contents
             Desc:   A top-level composition shall contain one or more timecode tracks and include a Primary timecode track.  Timecode tracks shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in Section 6.3 of the AAF Edit Protocol.
-            Result: Failed
-            Reason: Top-Level Composition "One Primary, One Reserved(3)" has a Reserved Timecode track (MobSlot::PhysicalTrackNumber = 3).
+            Result: Passed
+            Reason: Top-Level Composition "One Primary, One Reserved(3)" has valid physical track numbers.
             Covered Requirements: None
             Noted Requirements: None
-            Passing Requirements: None
+            Passing Requirements: REQ_EP_028
             Warning Requirements: None
-            Failing Requirements: REQ_EP_028
+            Failing Requirements: None
 
             Name:   Top-Level Composition Contents
             Desc:   A top-level composition shall contain one or more timecode tracks and include a Primary timecode track.  Timecode tracks shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in Section 6.3 of the AAF Edit Protocol.
-            Result: Failed
-            Reason: Top-Level Composition "One Primary, One Reserved(4)" has a Reserved Timecode track (MobSlot::PhysicalTrackNumber = 4).
+            Result: Passed
+            Reason: Top-Level Composition "One Primary, One Reserved(4)" has valid physical track numbers.
             Covered Requirements: None
             Noted Requirements: None
-            Passing Requirements: None
+            Passing Requirements: REQ_EP_028
             Warning Requirements: None
-            Failing Requirements: REQ_EP_028
+            Failing Requirements: None
 
             Name:   Top-Level Composition Contents
             Desc:   A top-level composition shall contain one or more timecode tracks and include a Primary timecode track.  Timecode tracks shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in Section 6.3 of the AAF Edit Protocol.
-            Result: Failed
-            Reason: Top-Level Composition "One Primary, One Reserved(5)" has a Reserved Timecode track (MobSlot::PhysicalTrackNumber = 5).
+            Result: Passed
+            Reason: Top-Level Composition "One Primary, One Reserved(5)" has valid physical track numbers.
             Covered Requirements: None
             Noted Requirements: None
-            Passing Requirements: None
+            Passing Requirements: REQ_EP_028
             Warning Requirements: None
-            Failing Requirements: REQ_EP_028
+            Failing Requirements: None
 
             Name:   Top-Level Composition Contents
             Desc:   A top-level composition shall contain one or more timecode tracks and include a Primary timecode track.  Timecode tracks shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in Section 6.3 of the AAF Edit Protocol.
-            Result: Failed
-            Reason: Top-Level Composition "One Primary, One Reserved(6)" has a Reserved Timecode track (MobSlot::PhysicalTrackNumber = 6).
+            Result: Passed
+            Reason: Top-Level Composition "One Primary, One Reserved(6)" has valid physical track numbers.
             Covered Requirements: None
             Noted Requirements: None
-            Passing Requirements: None
+            Passing Requirements: REQ_EP_028
             Warning Requirements: None
-            Failing Requirements: REQ_EP_028
-
-            Name:   Top-Level Composition Contents
-            Desc:   A top-level composition shall contain one or more timecode tracks and include a Primary timecode track.  Timecode tracks shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in Section 6.3 of the AAF Edit Protocol.
-            Result: Failed
-            Reason: Top-Level Composition "One Reserved(3)" has a Reserved Timecode track (MobSlot::PhysicalTrackNumber = 3).
-            Covered Requirements: None
-            Noted Requirements: None
-            Passing Requirements: None
-            Warning Requirements: None
-            Failing Requirements: REQ_EP_028
+            Failing Requirements: None
 
             Name:   Top-Level Composition Contents
             Desc:   A top-level composition shall contain one or more timecode tracks and include a Primary timecode track.  Timecode tracks shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in Section 6.3 of the AAF Edit Protocol.
             Result: Failed
             Reason: Top-Level Composition "One Reserved(3)" does not have a Primary Timecode track.
-            Covered Requirements: None
-            Noted Requirements: None
-            Passing Requirements: None
-            Warning Requirements: None
-            Failing Requirements: REQ_EP_028
-
-            Name:   Top-Level Composition Contents
-            Desc:   A top-level composition shall contain one or more timecode tracks and include a Primary timecode track.  Timecode tracks shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in Section 6.3 of the AAF Edit Protocol.
-            Result: Failed
-            Reason: Top-Level Composition "One Reserved(4)" has a Reserved Timecode track (MobSlot::PhysicalTrackNumber = 4).
             Covered Requirements: None
             Noted Requirements: None
             Passing Requirements: None
@@ -121,27 +123,7 @@
             Name:   Top-Level Composition Contents
             Desc:   A top-level composition shall contain one or more timecode tracks and include a Primary timecode track.  Timecode tracks shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in Section 6.3 of the AAF Edit Protocol.
             Result: Failed
-            Reason: Top-Level Composition "One Reserved(5)" has a Reserved Timecode track (MobSlot::PhysicalTrackNumber = 5).
-            Covered Requirements: None
-            Noted Requirements: None
-            Passing Requirements: None
-            Warning Requirements: None
-            Failing Requirements: REQ_EP_028
-
-            Name:   Top-Level Composition Contents
-            Desc:   A top-level composition shall contain one or more timecode tracks and include a Primary timecode track.  Timecode tracks shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in Section 6.3 of the AAF Edit Protocol.
-            Result: Failed
             Reason: Top-Level Composition "One Reserved(5)" does not have a Primary Timecode track.
-            Covered Requirements: None
-            Noted Requirements: None
-            Passing Requirements: None
-            Warning Requirements: None
-            Failing Requirements: REQ_EP_028
-
-            Name:   Top-Level Composition Contents
-            Desc:   A top-level composition shall contain one or more timecode tracks and include a Primary timecode track.  Timecode tracks shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in Section 6.3 of the AAF Edit Protocol.
-            Result: Failed
-            Reason: Top-Level Composition "One Reserved(6)" has a Reserved Timecode track (MobSlot::PhysicalTrackNumber = 6).
             Covered Requirements: None
             Noted Requirements: None
             Passing Requirements: None
@@ -161,7 +143,18 @@
             Name:   Top-Level Composition Contents
             Desc:   A top-level composition shall contain one or more timecode tracks and include a Primary timecode track.  Timecode tracks shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in Section 6.3 of the AAF Edit Protocol.
             Result: Failed
-            Reason: Top-Level Composition "One Primary, One Illegal" has a illegal Timecode track (MobSlot::PhysicalTrackNumber = 7).
+            Reason: Top-Level Composition "Duplicate Reserved(6)" has 2 time code tracks with a MobSlot::PhysicalTrackNumber value of 6.
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: REQ_EP_028
+            Detail: Physical track number must be unique within a Mob.
+
+            Name:   Top-Level Composition Contents
+            Desc:   A top-level composition shall contain one or more timecode tracks and include a Primary timecode track.  Timecode tracks shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in Section 6.3 of the AAF Edit Protocol.
+            Result: Failed
+            Reason: Top-Level Composition "Duplicate Reserved(6)" does not have a Primary Timecode track.
             Covered Requirements: None
             Noted Requirements: None
             Passing Requirements: None
@@ -171,12 +164,24 @@
             Name:   Top-Level Composition Contents
             Desc:   A top-level composition shall contain one or more timecode tracks and include a Primary timecode track.  Timecode tracks shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in Section 6.3 of the AAF Edit Protocol.
             Result: Failed
-            Reason: Top-Level Composition "One Illegal" has a illegal Timecode track (MobSlot::PhysicalTrackNumber = 9).
+            Reason: Top-Level Composition "One Primary, One Illegal" has a timecode track with an illegal MobSlot::PhysicalTrackNumber value of 7
             Covered Requirements: None
             Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_028
+            Detail: Valid values are 1 <= PhysicalTrackNumber <= 6.
+
+            Name:   Top-Level Composition Contents
+            Desc:   A top-level composition shall contain one or more timecode tracks and include a Primary timecode track.  Timecode tracks shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in Section 6.3 of the AAF Edit Protocol.
+            Result: Failed
+            Reason: Top-Level Composition "One Illegal" has a timecode track with an illegal MobSlot::PhysicalTrackNumber value of 9
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: REQ_EP_028
+            Detail: Valid values are 1 <= PhysicalTrackNumber <= 6.
 
             Name:   Top-Level Composition Contents
             Desc:   A top-level composition shall contain one or more timecode tracks and include a Primary timecode track.  Timecode tracks shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in Section 6.3 of the AAF Edit Protocol.
@@ -191,7 +196,7 @@
             Name:   Top-Level Composition Contents
             Desc:   A top-level composition shall contain one or more timecode tracks and include a Primary timecode track.  Timecode tracks shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in Section 6.3 of the AAF Edit Protocol.
             Result: Failed
-            Reason: Top-Level Composition "One Primary, One Unknown" has 1 Timecode tracks with no MobSlot::PhysicalTrackNumber property.
+            Reason: Top-Level Composition "One Primary, One Unknown" has 1 timecode tracks with no MobSlot::PhysicalTrackNumber property.
             Covered Requirements: None
             Noted Requirements: None
             Passing Requirements: None
@@ -201,7 +206,7 @@
             Name:   Top-Level Composition Contents
             Desc:   A top-level composition shall contain one or more timecode tracks and include a Primary timecode track.  Timecode tracks shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in Section 6.3 of the AAF Edit Protocol.
             Result: Failed
-            Reason: Top-Level Composition "One Unknown" has 1 Timecode tracks with no MobSlot::PhysicalTrackNumber property.
+            Reason: Top-Level Composition "One Unknown" has 1 timecode tracks with no MobSlot::PhysicalTrackNumber property.
             Covered Requirements: None
             Noted Requirements: None
             Passing Requirements: None
@@ -220,8 +225,328 @@
 
             Name:   Tape Source Timecode Tracks
             Desc:   Timecode tracks in a tape SourceMob shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in the table in Section 6.12 of the AAF Edit Protocol.
+            Result: Passed
+            Reason: Tape Source "One Primary" has valid physical track numbers.
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: REQ_EP_082
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Tape Source Timecode Tracks
+            Desc:   Timecode tracks in a tape SourceMob shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in the table in Section 6.12 of the AAF Edit Protocol.
+            Result: Passed
+            Reason: Tape Source "One Primary, One Aux1" has valid physical track numbers.
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: REQ_EP_082
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Tape Source Timecode Tracks
+            Desc:   Timecode tracks in a tape SourceMob shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in the table in Section 6.12 of the AAF Edit Protocol.
+            Result: Passed
+            Reason: Tape Source "One Primary, One Aux2" has valid physical track numbers.
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: REQ_EP_082
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Tape Source Timecode Tracks
+            Desc:   Timecode tracks in a tape SourceMob shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in the table in Section 6.12 of the AAF Edit Protocol.
+            Result: Passed
+            Reason: Tape Source "One Primary, One Aux3" has valid physical track numbers.
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: REQ_EP_082
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Tape Source Timecode Tracks
+            Desc:   Timecode tracks in a tape SourceMob shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in the table in Section 6.12 of the AAF Edit Protocol.
+            Result: Passed
+            Reason: Tape Source "One Primary, One Aux4" has valid physical track numbers.
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: REQ_EP_082
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Tape Source Timecode Tracks
+            Desc:   Timecode tracks in a tape SourceMob shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in the table in Section 6.12 of the AAF Edit Protocol.
+            Result: Passed
+            Reason: Tape Source "One Primary, One Aux5" has valid physical track numbers.
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: REQ_EP_082
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Tape Source Timecode Tracks
+            Desc:   Timecode tracks in a tape SourceMob shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in the table in Section 6.12 of the AAF Edit Protocol.
+            Result: Passed
+            Reason: Tape Source "One Primary, One Aux1, One Aux2" has valid physical track numbers.
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: REQ_EP_082
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Tape Source Timecode Tracks
+            Desc:   Timecode tracks in a tape SourceMob shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in the table in Section 6.12 of the AAF Edit Protocol.
+            Result: Passed
+            Reason: Tape Source "One Primary, One Aux1, One Aux3" has valid physical track numbers.
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: REQ_EP_082
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Tape Source Timecode Tracks
+            Desc:   Timecode tracks in a tape SourceMob shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in the table in Section 6.12 of the AAF Edit Protocol.
+            Result: Passed
+            Reason: Tape Source "One Primary, One Aux1, One Aux4" has valid physical track numbers.
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: REQ_EP_082
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Tape Source Timecode Tracks
+            Desc:   Timecode tracks in a tape SourceMob shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in the table in Section 6.12 of the AAF Edit Protocol.
+            Result: Passed
+            Reason: Tape Source "One Primary, One Aux1, One Aux5" has valid physical track numbers.
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: REQ_EP_082
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Tape Source Timecode Tracks
+            Desc:   Timecode tracks in a tape SourceMob shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in the table in Section 6.12 of the AAF Edit Protocol.
+            Result: Passed
+            Reason: Tape Source "One Primary, One Aux2, One Aux3" has valid physical track numbers.
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: REQ_EP_082
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Tape Source Timecode Tracks
+            Desc:   Timecode tracks in a tape SourceMob shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in the table in Section 6.12 of the AAF Edit Protocol.
+            Result: Passed
+            Reason: Tape Source "One Primary, One Aux2, One Aux4" has valid physical track numbers.
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: REQ_EP_082
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Tape Source Timecode Tracks
+            Desc:   Timecode tracks in a tape SourceMob shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in the table in Section 6.12 of the AAF Edit Protocol.
+            Result: Passed
+            Reason: Tape Source "One Primary, One Aux2, One Aux5" has valid physical track numbers.
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: REQ_EP_082
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Tape Source Timecode Tracks
+            Desc:   Timecode tracks in a tape SourceMob shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in the table in Section 6.12 of the AAF Edit Protocol.
+            Result: Passed
+            Reason: Tape Source "One Primary, One Aux3, One Aux4" has valid physical track numbers.
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: REQ_EP_082
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Tape Source Timecode Tracks
+            Desc:   Timecode tracks in a tape SourceMob shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in the table in Section 6.12 of the AAF Edit Protocol.
+            Result: Passed
+            Reason: Tape Source "One Primary, One Aux3, One Aux5" has valid physical track numbers.
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: REQ_EP_082
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Tape Source Timecode Tracks
+            Desc:   Timecode tracks in a tape SourceMob shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in the table in Section 6.12 of the AAF Edit Protocol.
+            Result: Passed
+            Reason: Tape Source "One Primary, One Aux4, One Aux5" has valid physical track numbers.
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: REQ_EP_082
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Tape Source Timecode Tracks
+            Desc:   Timecode tracks in a tape SourceMob shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in the table in Section 6.12 of the AAF Edit Protocol.
+            Result: Passed
+            Reason: Tape Source "One Primary, One Aux1, One Aux2, One Aux3" has valid physical track numbers.
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: REQ_EP_082
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Tape Source Timecode Tracks
+            Desc:   Timecode tracks in a tape SourceMob shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in the table in Section 6.12 of the AAF Edit Protocol.
+            Result: Passed
+            Reason: Tape Source "One Primary, One Aux1, One Aux2, One Aux4" has valid physical track numbers.
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: REQ_EP_082
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Tape Source Timecode Tracks
+            Desc:   Timecode tracks in a tape SourceMob shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in the table in Section 6.12 of the AAF Edit Protocol.
+            Result: Passed
+            Reason: Tape Source "One Primary, One Aux1, One Aux2, One Aux5" has valid physical track numbers.
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: REQ_EP_082
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Tape Source Timecode Tracks
+            Desc:   Timecode tracks in a tape SourceMob shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in the table in Section 6.12 of the AAF Edit Protocol.
+            Result: Passed
+            Reason: Tape Source "One Primary, One Aux1, One Aux3, One Aux4" has valid physical track numbers.
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: REQ_EP_082
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Tape Source Timecode Tracks
+            Desc:   Timecode tracks in a tape SourceMob shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in the table in Section 6.12 of the AAF Edit Protocol.
+            Result: Passed
+            Reason: Tape Source "One Primary, One Aux1, One Aux3, One Aux5" has valid physical track numbers.
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: REQ_EP_082
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Tape Source Timecode Tracks
+            Desc:   Timecode tracks in a tape SourceMob shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in the table in Section 6.12 of the AAF Edit Protocol.
+            Result: Passed
+            Reason: Tape Source "One Primary, One Aux1, One Aux4, One Aux5" has valid physical track numbers.
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: REQ_EP_082
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Tape Source Timecode Tracks
+            Desc:   Timecode tracks in a tape SourceMob shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in the table in Section 6.12 of the AAF Edit Protocol.
+            Result: Passed
+            Reason: Tape Source "One Primary, One Aux2, One Aux3, One Aux4" has valid physical track numbers.
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: REQ_EP_082
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Tape Source Timecode Tracks
+            Desc:   Timecode tracks in a tape SourceMob shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in the table in Section 6.12 of the AAF Edit Protocol.
+            Result: Passed
+            Reason: Tape Source "One Primary, One Aux2, One Aux3, One Aux5" has valid physical track numbers.
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: REQ_EP_082
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Tape Source Timecode Tracks
+            Desc:   Timecode tracks in a tape SourceMob shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in the table in Section 6.12 of the AAF Edit Protocol.
+            Result: Passed
+            Reason: Tape Source "One Primary, One Aux2, One Aux4, One Aux5" has valid physical track numbers.
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: REQ_EP_082
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Tape Source Timecode Tracks
+            Desc:   Timecode tracks in a tape SourceMob shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in the table in Section 6.12 of the AAF Edit Protocol.
+            Result: Passed
+            Reason: Tape Source "One Primary, One Aux3, One Aux4, One Aux5" has valid physical track numbers.
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: REQ_EP_082
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Tape Source Timecode Tracks
+            Desc:   Timecode tracks in a tape SourceMob shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in the table in Section 6.12 of the AAF Edit Protocol.
+            Result: Passed
+            Reason: Tape Source "One Primary, One Aux1, One Aux2, One Aux3, One Aux4" has valid physical track numbers.
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: REQ_EP_082
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Tape Source Timecode Tracks
+            Desc:   Timecode tracks in a tape SourceMob shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in the table in Section 6.12 of the AAF Edit Protocol.
+            Result: Passed
+            Reason: Tape Source "One Primary, One Aux1, One Aux2, One Aux3, One Aux5" has valid physical track numbers.
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: REQ_EP_082
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Tape Source Timecode Tracks
+            Desc:   Timecode tracks in a tape SourceMob shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in the table in Section 6.12 of the AAF Edit Protocol.
+            Result: Passed
+            Reason: Tape Source "One Primary, One Aux1, One Aux2, One Aux4, One Aux5" has valid physical track numbers.
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: REQ_EP_082
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Tape Source Timecode Tracks
+            Desc:   Timecode tracks in a tape SourceMob shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in the table in Section 6.12 of the AAF Edit Protocol.
+            Result: Passed
+            Reason: Tape Source "One Primary, One Aux1, One Aux3, One Aux4, One Aux5" has valid physical track numbers.
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: REQ_EP_082
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Tape Source Timecode Tracks
+            Desc:   Timecode tracks in a tape SourceMob shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in the table in Section 6.12 of the AAF Edit Protocol.
+            Result: Passed
+            Reason: Tape Source "One Primary, One Aux2, One Aux3, One Aux4, One Aux5" has valid physical track numbers.
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: REQ_EP_082
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Tape Source Timecode Tracks
+            Desc:   Timecode tracks in a tape SourceMob shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in the table in Section 6.12 of the AAF Edit Protocol.
+            Result: Passed
+            Reason: Tape Source "One Primary, One Aux1, One Aux2, One Aux3, One Aux4, One Aux5" has valid physical track numbers.
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: REQ_EP_082
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Tape Source Timecode Tracks
+            Desc:   Timecode tracks in a tape SourceMob shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in the table in Section 6.12 of the AAF Edit Protocol.
             Result: Failed
-            Reason: Tape Source "Two Primary" has more than one Primary timecode track.
+            Reason: Tape Source "One Aux1" does not have a Primary Timecode track.
             Covered Requirements: None
             Noted Requirements: None
             Passing Requirements: None
@@ -231,7 +556,7 @@
             Name:   Tape Source Timecode Tracks
             Desc:   Timecode tracks in a tape SourceMob shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in the table in Section 6.12 of the AAF Edit Protocol.
             Result: Failed
-            Reason: Tape Source "Two Aux1" has more than one Aux1 Timecode track.
+            Reason: Tape Source "One Aux2" does not have a Primary Timecode track.
             Covered Requirements: None
             Noted Requirements: None
             Passing Requirements: None
@@ -241,7 +566,7 @@
             Name:   Tape Source Timecode Tracks
             Desc:   Timecode tracks in a tape SourceMob shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in the table in Section 6.12 of the AAF Edit Protocol.
             Result: Failed
-            Reason: Tape Source "Two Aux2" has more than one Aux2 Timecode track.
+            Reason: Tape Source "One Aux3" does not have a Primary Timecode track.
             Covered Requirements: None
             Noted Requirements: None
             Passing Requirements: None
@@ -251,7 +576,7 @@
             Name:   Tape Source Timecode Tracks
             Desc:   Timecode tracks in a tape SourceMob shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in the table in Section 6.12 of the AAF Edit Protocol.
             Result: Failed
-            Reason: Tape Source "Two Aux3" has more than one Aux3 Timecode track.
+            Reason: Tape Source "One Aux4" does not have a Primary Timecode track.
             Covered Requirements: None
             Noted Requirements: None
             Passing Requirements: None
@@ -261,7 +586,7 @@
             Name:   Tape Source Timecode Tracks
             Desc:   Timecode tracks in a tape SourceMob shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in the table in Section 6.12 of the AAF Edit Protocol.
             Result: Failed
-            Reason: Tape Source "Two Aux4" has more than one Aux4 Timecode track.
+            Reason: Tape Source "One Aux5" does not have a Primary Timecode track.
             Covered Requirements: None
             Noted Requirements: None
             Passing Requirements: None
@@ -271,7 +596,7 @@
             Name:   Tape Source Timecode Tracks
             Desc:   Timecode tracks in a tape SourceMob shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in the table in Section 6.12 of the AAF Edit Protocol.
             Result: Failed
-            Reason: Tape Source "Two Aux5" has more than one Aux5 Timecode track.
+            Reason: Tape Source "One Aux1, One Aux2" does not have a Primary Timecode track.
             Covered Requirements: None
             Noted Requirements: None
             Passing Requirements: None
@@ -281,7 +606,7 @@
             Name:   Tape Source Timecode Tracks
             Desc:   Timecode tracks in a tape SourceMob shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in the table in Section 6.12 of the AAF Edit Protocol.
             Result: Failed
-            Reason: Tape Source "Reserved(2)" has a Reserved Timecode track (MobSlot::PhysicalTrackNumber = 2).
+            Reason: Tape Source "One Aux1, One Aux3" does not have a Primary Timecode track.
             Covered Requirements: None
             Noted Requirements: None
             Passing Requirements: None
@@ -291,7 +616,7 @@
             Name:   Tape Source Timecode Tracks
             Desc:   Timecode tracks in a tape SourceMob shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in the table in Section 6.12 of the AAF Edit Protocol.
             Result: Failed
-            Reason: Tape Source "Reserved(8)" has a Reserved Timecode track (MobSlot::PhysicalTrackNumber = 8).
+            Reason: Tape Source "One Aux1, One Aux4" does not have a Primary Timecode track.
             Covered Requirements: None
             Noted Requirements: None
             Passing Requirements: None
@@ -301,7 +626,7 @@
             Name:   Tape Source Timecode Tracks
             Desc:   Timecode tracks in a tape SourceMob shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in the table in Section 6.12 of the AAF Edit Protocol.
             Result: Failed
-            Reason: Tape Source "Reserved(9)" has a Reserved Timecode track (MobSlot::PhysicalTrackNumber = 9).
+            Reason: Tape Source "One Aux1, One Aux5" does not have a Primary Timecode track.
             Covered Requirements: None
             Noted Requirements: None
             Passing Requirements: None
@@ -311,7 +636,7 @@
             Name:   Tape Source Timecode Tracks
             Desc:   Timecode tracks in a tape SourceMob shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in the table in Section 6.12 of the AAF Edit Protocol.
             Result: Failed
-            Reason: Tape Source "Reserved(10)" has a Reserved Timecode track (MobSlot::PhysicalTrackNumber = 10).
+            Reason: Tape Source "One Aux2, One Aux3" does not have a Primary Timecode track.
             Covered Requirements: None
             Noted Requirements: None
             Passing Requirements: None
@@ -321,7 +646,7 @@
             Name:   Tape Source Timecode Tracks
             Desc:   Timecode tracks in a tape SourceMob shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in the table in Section 6.12 of the AAF Edit Protocol.
             Result: Failed
-            Reason: Tape Source "Reserved(11)" has a Reserved Timecode track (MobSlot::PhysicalTrackNumber = 11).
+            Reason: Tape Source "One Aux2, One Aux4" does not have a Primary Timecode track.
             Covered Requirements: None
             Noted Requirements: None
             Passing Requirements: None
@@ -331,7 +656,7 @@
             Name:   Tape Source Timecode Tracks
             Desc:   Timecode tracks in a tape SourceMob shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in the table in Section 6.12 of the AAF Edit Protocol.
             Result: Failed
-            Reason: Tape Source "Reserved(12)" has a Reserved Timecode track (MobSlot::PhysicalTrackNumber = 12).
+            Reason: Tape Source "One Aux2, One Aux5" does not have a Primary Timecode track.
             Covered Requirements: None
             Noted Requirements: None
             Passing Requirements: None
@@ -341,7 +666,7 @@
             Name:   Tape Source Timecode Tracks
             Desc:   Timecode tracks in a tape SourceMob shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in the table in Section 6.12 of the AAF Edit Protocol.
             Result: Failed
-            Reason: Tape Source "Illegal" has a illegal Timecode track (MobSlot::PhysicalTrackNumber = 17).
+            Reason: Tape Source "One Aux3, One Aux4" does not have a Primary Timecode track.
             Covered Requirements: None
             Noted Requirements: None
             Passing Requirements: None
@@ -351,7 +676,7 @@
             Name:   Tape Source Timecode Tracks
             Desc:   Timecode tracks in a tape SourceMob shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in the table in Section 6.12 of the AAF Edit Protocol.
             Result: Failed
-            Reason: Tape Source "One Primary, One Unknown" has 1 Timecode tracks with no MobSlot::PhysicalTrackNumber property.
+            Reason: Tape Source "One Aux3, One Aux5" does not have a Primary Timecode track.
             Covered Requirements: None
             Noted Requirements: None
             Passing Requirements: None
@@ -361,12 +686,469 @@
             Name:   Tape Source Timecode Tracks
             Desc:   Timecode tracks in a tape SourceMob shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in the table in Section 6.12 of the AAF Edit Protocol.
             Result: Failed
-            Reason: Tape Source "One Unknown" has 1 Timecode tracks with no MobSlot::PhysicalTrackNumber property.
+            Reason: Tape Source "One Aux4, One Aux5" does not have a Primary Timecode track.
             Covered Requirements: None
             Noted Requirements: None
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_082
+
+            Name:   Tape Source Timecode Tracks
+            Desc:   Timecode tracks in a tape SourceMob shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in the table in Section 6.12 of the AAF Edit Protocol.
+            Result: Failed
+            Reason: Tape Source "One Aux1, One Aux2, One Aux3" does not have a Primary Timecode track.
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: REQ_EP_082
+
+            Name:   Tape Source Timecode Tracks
+            Desc:   Timecode tracks in a tape SourceMob shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in the table in Section 6.12 of the AAF Edit Protocol.
+            Result: Failed
+            Reason: Tape Source "One Aux1, One Aux2, One Aux4" does not have a Primary Timecode track.
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: REQ_EP_082
+
+            Name:   Tape Source Timecode Tracks
+            Desc:   Timecode tracks in a tape SourceMob shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in the table in Section 6.12 of the AAF Edit Protocol.
+            Result: Failed
+            Reason: Tape Source "One Aux1, One Aux2, One Aux5" does not have a Primary Timecode track.
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: REQ_EP_082
+
+            Name:   Tape Source Timecode Tracks
+            Desc:   Timecode tracks in a tape SourceMob shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in the table in Section 6.12 of the AAF Edit Protocol.
+            Result: Failed
+            Reason: Tape Source "One Aux1, One Aux3, One Aux4" does not have a Primary Timecode track.
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: REQ_EP_082
+
+            Name:   Tape Source Timecode Tracks
+            Desc:   Timecode tracks in a tape SourceMob shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in the table in Section 6.12 of the AAF Edit Protocol.
+            Result: Failed
+            Reason: Tape Source "One Aux1, One Aux3, One Aux5" does not have a Primary Timecode track.
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: REQ_EP_082
+
+            Name:   Tape Source Timecode Tracks
+            Desc:   Timecode tracks in a tape SourceMob shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in the table in Section 6.12 of the AAF Edit Protocol.
+            Result: Failed
+            Reason: Tape Source "One Aux1, One Aux4, One Aux5" does not have a Primary Timecode track.
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: REQ_EP_082
+
+            Name:   Tape Source Timecode Tracks
+            Desc:   Timecode tracks in a tape SourceMob shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in the table in Section 6.12 of the AAF Edit Protocol.
+            Result: Failed
+            Reason: Tape Source "One Aux2, One Aux3, One Aux4" does not have a Primary Timecode track.
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: REQ_EP_082
+
+            Name:   Tape Source Timecode Tracks
+            Desc:   Timecode tracks in a tape SourceMob shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in the table in Section 6.12 of the AAF Edit Protocol.
+            Result: Failed
+            Reason: Tape Source "One Aux2, One Aux3, One Aux5" does not have a Primary Timecode track.
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: REQ_EP_082
+
+            Name:   Tape Source Timecode Tracks
+            Desc:   Timecode tracks in a tape SourceMob shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in the table in Section 6.12 of the AAF Edit Protocol.
+            Result: Failed
+            Reason: Tape Source "One Aux3, One Aux4, One Aux5" does not have a Primary Timecode track.
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: REQ_EP_082
+
+            Name:   Tape Source Timecode Tracks
+            Desc:   Timecode tracks in a tape SourceMob shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in the table in Section 6.12 of the AAF Edit Protocol.
+            Result: Failed
+            Reason: Tape Source "One Aux1, One Aux2, One Aux3, One Aux4" does not have a Primary Timecode track.
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: REQ_EP_082
+
+            Name:   Tape Source Timecode Tracks
+            Desc:   Timecode tracks in a tape SourceMob shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in the table in Section 6.12 of the AAF Edit Protocol.
+            Result: Failed
+            Reason: Tape Source "One Aux1, One Aux2, One Aux3, One Aux5" does not have a Primary Timecode track.
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: REQ_EP_082
+
+            Name:   Tape Source Timecode Tracks
+            Desc:   Timecode tracks in a tape SourceMob shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in the table in Section 6.12 of the AAF Edit Protocol.
+            Result: Failed
+            Reason: Tape Source "One Aux1, One Aux2, One Aux4, One Aux5" does not have a Primary Timecode track.
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: REQ_EP_082
+
+            Name:   Tape Source Timecode Tracks
+            Desc:   Timecode tracks in a tape SourceMob shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in the table in Section 6.12 of the AAF Edit Protocol.
+            Result: Failed
+            Reason: Tape Source "One Aux1, One Aux3, One Aux4, One Aux5" does not have a Primary Timecode track.
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: REQ_EP_082
+
+            Name:   Tape Source Timecode Tracks
+            Desc:   Timecode tracks in a tape SourceMob shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in the table in Section 6.12 of the AAF Edit Protocol.
+            Result: Failed
+            Reason: Tape Source "One Aux2, One Aux3, One Aux4, One Aux5" does not have a Primary Timecode track.
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: REQ_EP_082
+
+            Name:   Tape Source Timecode Tracks
+            Desc:   Timecode tracks in a tape SourceMob shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in the table in Section 6.12 of the AAF Edit Protocol.
+            Result: Failed
+            Reason: Tape Source "One Aux1, One Aux2, One Aux3, One Aux4, One Aux5" does not have a Primary Timecode track.
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: REQ_EP_082
+
+            Name:   Tape Source Timecode Tracks
+            Desc:   Timecode tracks in a tape SourceMob shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in the table in Section 6.12 of the AAF Edit Protocol.
+            Result: Failed
+            Reason: Tape Source "Two Primary" has 2 time code tracks with a MobSlot::PhysicalTrackNumber value of 1.
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: REQ_EP_082
+            Detail: Physical track number must be unique within a Mob.
+
+            Name:   Tape Source Timecode Tracks
+            Desc:   Timecode tracks in a tape SourceMob shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in the table in Section 6.12 of the AAF Edit Protocol.
+            Result: Failed
+            Reason: Tape Source "Two Aux1" has 2 time code tracks with a MobSlot::PhysicalTrackNumber value of 3.
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: REQ_EP_082
+            Detail: Physical track number must be unique within a Mob.
+
+            Name:   Tape Source Timecode Tracks
+            Desc:   Timecode tracks in a tape SourceMob shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in the table in Section 6.12 of the AAF Edit Protocol.
+            Result: Failed
+            Reason: Tape Source "Two Aux1" does not have a Primary Timecode track.
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: REQ_EP_082
+
+            Name:   Tape Source Timecode Tracks
+            Desc:   Timecode tracks in a tape SourceMob shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in the table in Section 6.12 of the AAF Edit Protocol.
+            Result: Failed
+            Reason: Tape Source "Two Aux2" has 2 time code tracks with a MobSlot::PhysicalTrackNumber value of 4.
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: REQ_EP_082
+            Detail: Physical track number must be unique within a Mob.
+
+            Name:   Tape Source Timecode Tracks
+            Desc:   Timecode tracks in a tape SourceMob shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in the table in Section 6.12 of the AAF Edit Protocol.
+            Result: Failed
+            Reason: Tape Source "Two Aux2" does not have a Primary Timecode track.
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: REQ_EP_082
+
+            Name:   Tape Source Timecode Tracks
+            Desc:   Timecode tracks in a tape SourceMob shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in the table in Section 6.12 of the AAF Edit Protocol.
+            Result: Failed
+            Reason: Tape Source "Two Aux3" has 2 time code tracks with a MobSlot::PhysicalTrackNumber value of 5.
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: REQ_EP_082
+            Detail: Physical track number must be unique within a Mob.
+
+            Name:   Tape Source Timecode Tracks
+            Desc:   Timecode tracks in a tape SourceMob shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in the table in Section 6.12 of the AAF Edit Protocol.
+            Result: Failed
+            Reason: Tape Source "Two Aux3" does not have a Primary Timecode track.
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: REQ_EP_082
+
+            Name:   Tape Source Timecode Tracks
+            Desc:   Timecode tracks in a tape SourceMob shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in the table in Section 6.12 of the AAF Edit Protocol.
+            Result: Failed
+            Reason: Tape Source "Two Aux4" has 2 time code tracks with a MobSlot::PhysicalTrackNumber value of 6.
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: REQ_EP_082
+            Detail: Physical track number must be unique within a Mob.
+
+            Name:   Tape Source Timecode Tracks
+            Desc:   Timecode tracks in a tape SourceMob shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in the table in Section 6.12 of the AAF Edit Protocol.
+            Result: Failed
+            Reason: Tape Source "Two Aux4" does not have a Primary Timecode track.
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: REQ_EP_082
+
+            Name:   Tape Source Timecode Tracks
+            Desc:   Timecode tracks in a tape SourceMob shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in the table in Section 6.12 of the AAF Edit Protocol.
+            Result: Failed
+            Reason: Tape Source "Two Aux5" has 2 time code tracks with a MobSlot::PhysicalTrackNumber value of 7.
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: REQ_EP_082
+            Detail: Physical track number must be unique within a Mob.
+
+            Name:   Tape Source Timecode Tracks
+            Desc:   Timecode tracks in a tape SourceMob shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in the table in Section 6.12 of the AAF Edit Protocol.
+            Result: Failed
+            Reason: Tape Source "Two Aux5" does not have a Primary Timecode track.
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: REQ_EP_082
+
+            Name:   Tape Source Timecode Tracks
+            Desc:   Timecode tracks in a tape SourceMob shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in the table in Section 6.12 of the AAF Edit Protocol.
+            Result: Failed
+            Reason: Tape Source "Reserved(2)" does not have a Primary Timecode track.
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: REQ_EP_082
+
+            Name:   Tape Source Timecode Tracks
+            Desc:   Timecode tracks in a tape SourceMob shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in the table in Section 6.12 of the AAF Edit Protocol.
+            Result: Failed
+            Reason: Tape Source "Reserved(8)" does not have a Primary Timecode track.
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: REQ_EP_082
+
+            Name:   Tape Source Timecode Tracks
+            Desc:   Timecode tracks in a tape SourceMob shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in the table in Section 6.12 of the AAF Edit Protocol.
+            Result: Failed
+            Reason: Tape Source "Reserved(9)" does not have a Primary Timecode track.
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: REQ_EP_082
+
+            Name:   Tape Source Timecode Tracks
+            Desc:   Timecode tracks in a tape SourceMob shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in the table in Section 6.12 of the AAF Edit Protocol.
+            Result: Failed
+            Reason: Tape Source "Reserved(10)" does not have a Primary Timecode track.
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: REQ_EP_082
+
+            Name:   Tape Source Timecode Tracks
+            Desc:   Timecode tracks in a tape SourceMob shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in the table in Section 6.12 of the AAF Edit Protocol.
+            Result: Failed
+            Reason: Tape Source "Reserved(11)" does not have a Primary Timecode track.
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: REQ_EP_082
+
+            Name:   Tape Source Timecode Tracks
+            Desc:   Timecode tracks in a tape SourceMob shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in the table in Section 6.12 of the AAF Edit Protocol.
+            Result: Failed
+            Reason: Tape Source "Reserved(12)" does not have a Primary Timecode track.
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: REQ_EP_082
+
+            Name:   Tape Source Timecode Tracks
+            Desc:   Timecode tracks in a tape SourceMob shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in the table in Section 6.12 of the AAF Edit Protocol.
+            Result: Failed
+            Reason: Tape Source "Illegal" has a timecode track with an illegal MobSlot::PhysicalTrackNumber value of 17
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: REQ_EP_082
+            Detail: Valid values are 1 <= PhysicalTrackNumber <= 12.
+
+            Name:   Tape Source Timecode Tracks
+            Desc:   Timecode tracks in a tape SourceMob shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in the table in Section 6.12 of the AAF Edit Protocol.
+            Result: Failed
+            Reason: Tape Source "Illegal" does not have a Primary Timecode track.
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: REQ_EP_082
+
+            Name:   Tape Source Timecode Tracks
+            Desc:   Timecode tracks in a tape SourceMob shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in the table in Section 6.12 of the AAF Edit Protocol.
+            Result: Failed
+            Reason: Tape Source "No Timecodes" does not have a Primary Timecode track.
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: REQ_EP_082
+
+            Name:   Tape Source Timecode Tracks
+            Desc:   Timecode tracks in a tape SourceMob shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in the table in Section 6.12 of the AAF Edit Protocol.
+            Result: Failed
+            Reason: Tape Source "One Primary, One Unknown" has 1 timecode tracks with no MobSlot::PhysicalTrackNumber property.
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: REQ_EP_082
+
+            Name:   Tape Source Timecode Tracks
+            Desc:   Timecode tracks in a tape SourceMob shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in the table in Section 6.12 of the AAF Edit Protocol.
+            Result: Failed
+            Reason: Tape Source "One Unknown" has 1 timecode tracks with no MobSlot::PhysicalTrackNumber property.
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: REQ_EP_082
+
+            Name:   Tape Source Timecode Tracks
+            Desc:   Timecode tracks in a tape SourceMob shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in the table in Section 6.12 of the AAF Edit Protocol.
+            Result: Failed
+            Reason: Tape Source "One Unknown" does not have a Primary Timecode track.
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: None
+            Warning Requirements: None
+            Failing Requirements: REQ_EP_082
+
+            Name:   Film Source Edgecodes
+            Desc:   A film SourceMob may contain one or more edgecode tracks.  Edgecode tracks shall use the MobSlot::PhysicalTrackNumber property to distinguish their type as shown in Section 6.13 of the AAF Edit Protocol.
+            Result: Passed
+            Reason: Film Source "One Keycode" has valid physical track numbers.
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: REQ_EP_087
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Film Source Edgecodes
+            Desc:   A film SourceMob may contain one or more edgecode tracks.  Edgecode tracks shall use the MobSlot::PhysicalTrackNumber property to distinguish their type as shown in Section 6.13 of the AAF Edit Protocol.
+            Result: Passed
+            Reason: Film Source "One Ink" has valid physical track numbers.
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: REQ_EP_087
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Film Source Edgecodes
+            Desc:   A film SourceMob may contain one or more edgecode tracks.  Edgecode tracks shall use the MobSlot::PhysicalTrackNumber property to distinguish their type as shown in Section 6.13 of the AAF Edit Protocol.
+            Result: Passed
+            Reason: Film Source "One Aux. Ink" has valid physical track numbers.
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: REQ_EP_087
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Film Source Edgecodes
+            Desc:   A film SourceMob may contain one or more edgecode tracks.  Edgecode tracks shall use the MobSlot::PhysicalTrackNumber property to distinguish their type as shown in Section 6.13 of the AAF Edit Protocol.
+            Result: Passed
+            Reason: Film Source "One Keycode, One Ink" has valid physical track numbers.
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: REQ_EP_087
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Film Source Edgecodes
+            Desc:   A film SourceMob may contain one or more edgecode tracks.  Edgecode tracks shall use the MobSlot::PhysicalTrackNumber property to distinguish their type as shown in Section 6.13 of the AAF Edit Protocol.
+            Result: Passed
+            Reason: Film Source "One Keycode, One Aux. Ink" has valid physical track numbers.
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: REQ_EP_087
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Film Source Edgecodes
+            Desc:   A film SourceMob may contain one or more edgecode tracks.  Edgecode tracks shall use the MobSlot::PhysicalTrackNumber property to distinguish their type as shown in Section 6.13 of the AAF Edit Protocol.
+            Result: Passed
+            Reason: Film Source "One Ink, One Aux. Ink" has valid physical track numbers.
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: REQ_EP_087
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Film Source Edgecodes
+            Desc:   A film SourceMob may contain one or more edgecode tracks.  Edgecode tracks shall use the MobSlot::PhysicalTrackNumber property to distinguish their type as shown in Section 6.13 of the AAF Edit Protocol.
+            Result: Passed
+            Reason: Film Source "One Keycode, One Ink, One Aux. Ink" has valid physical track numbers.
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: REQ_EP_087
+            Warning Requirements: None
+            Failing Requirements: None
 
             Name:   Film Source Edgecodes
             Desc:   A film SourceMob may contain one or more edgecode tracks.  Edgecode tracks shall use the MobSlot::PhysicalTrackNumber property to distinguish their type as shown in Section 6.13 of the AAF Edit Protocol.
@@ -548,6 +1330,16 @@
             Warning Requirements: None
             Failing Requirements: REQ_EP_046
 
+            Name:   Top-Level Composition Contents
+            Desc:   A top-level composition shall contain one or more timecode tracks and include a Primary timecode track.  Timecode tracks shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in Section 6.3 of the AAF Edit Protocol.
+            Result: Passed
+            Reason: Top-Level Composition "Top Level - Correct Primary Timecode" has valid physical track numbers.
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: REQ_EP_028
+            Warning Requirements: None
+            Failing Requirements: None
+
             Name:   Primary Timecode Track
             Desc:   A Primary timecode track (see Section 6.3 of the AAF Edit Protocol) in a top-level or lower-level composition shall consist of a single Timecode object.
             Result: Failed
@@ -557,6 +1349,26 @@
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_131
+
+            Name:   Top-Level Composition Contents
+            Desc:   A top-level composition shall contain one or more timecode tracks and include a Primary timecode track.  Timecode tracks shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in Section 6.3 of the AAF Edit Protocol.
+            Result: Passed
+            Reason: Top-Level Composition "Top-Level - Sequence of 1 Timecode" has valid physical track numbers.
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: REQ_EP_028
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Top-Level Composition Contents
+            Desc:   A top-level composition shall contain one or more timecode tracks and include a Primary timecode track.  Timecode tracks shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in Section 6.3 of the AAF Edit Protocol.
+            Result: Passed
+            Reason: Top-Level Composition "Top-Level - Double Sequence of 1 Timecode" has valid physical track numbers.
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: REQ_EP_028
+            Warning Requirements: None
+            Failing Requirements: None
 
             Name:   Primary Timecode Track
             Desc:   A Primary timecode track (see Section 6.3 of the AAF Edit Protocol) in a top-level or lower-level composition shall consist of a single Timecode object.
@@ -637,6 +1449,26 @@
             Passing Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_136
+
+            Name:   Auxiliary SourceMob Contents
+            Desc:   An auxiliary SourceMob shall contain at least one Slot, which may be a TimelineMobSlot, EventMobSlot or StaticMobSlot as appropriate.  The Data Definition of the Segment within the Slot shall be DataDef_Auxiliary.
+            Result: Passed
+            Reason: Auxiliary Source "Aux. Source Timeline Mob Slot with Good Segment" is a valid auxiliary source.
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: REQ_EP_136
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Auxiliary SourceMob Contents
+            Desc:   An auxiliary SourceMob shall contain at least one Slot, which may be a TimelineMobSlot, EventMobSlot or StaticMobSlot as appropriate.  The Data Definition of the Segment within the Slot shall be DataDef_Auxiliary.
+            Result: Passed
+            Reason: Auxiliary Source "Aux. Source Static Mob Slot with Good Segment" is a valid auxiliary source.
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: REQ_EP_136
+            Warning Requirements: None
+            Failing Requirements: None
 
             Name:   Auxiliary SourceMob Contents
             Desc:   An auxiliary SourceMob shall contain at least one Slot, which may be a TimelineMobSlot, EventMobSlot or StaticMobSlot as appropriate.  The Data Definition of the Segment within the Slot shall be DataDef_Auxiliary.

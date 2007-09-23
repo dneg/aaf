@@ -92,7 +92,6 @@ const TestInfo EPAnnotationTest::GetTestInfo()
 {
     shared_ptr<vector<AxString> > spReqIds(new vector<AxString>);
     spReqIds->push_back(L"REQ_EP_147");     //UserComments property.
-    spReqIds->push_back(L"REQ_EP_149");     //CommentMarker in Essence Tracks.
     spReqIds->push_back(L"REQ_EP_150");     //CommentMarker in EventMob Slots.
     spReqIds->push_back(L"REQ_EP_151");     //TaggedValues registered.
     spReqIds->push_back(L"REQ_EP_152");     //KLVData registered.

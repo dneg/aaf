@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE aaf-file SYSTEM "EPDerivationChain.dtd">
-
 <aaf-file operational-pattern="invalid">
-
-    <!-- Make sure the file is not empty -->
-    <top-level name="Invalid Header">
-        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <eoc length="0" track-type="none"/>
-        </timeline-mob-slot>
-    </top-level>
-
+<!-- Make sure the file is not empty -->
+ <top-level name="Invalid Header">
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <eoc length="0" track-type="none"/>
+  </timeline-mob-slot>
+ </top-level>
 </aaf-file>

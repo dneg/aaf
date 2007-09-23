@@ -352,7 +352,7 @@
     physical-track-number CDATA #IMPLIED
     marked-in-point CDATA #IMPLIED
     marked-out-point CDATA #IMPLIED
-    orgin CDATA #IMPLIED
+    origin CDATA #IMPLIED
 >
 
 <!ELEMENT static-mob-slot ( %SEGMENT; )>

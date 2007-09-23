@@ -176,7 +176,7 @@
     <requirement type="app" category="compositional">
         <id>REQ_EP_016</id>
         <name>Export Mobs for Entire Derivation Chain</name>
-        <desc>An exporting application should include and reference the Mobs for the entire derivation chain to the extent that it is aware of it</desc>
+        <desc>An exporting application should include and reference the Mobs for the entire derivation chain to the extent that it is aware of it.</desc>
         <ref>
             <doc>&DOC_AAF_EP;</doc>
             <version>&VER_EP_1.0;</version>
@@ -184,10 +184,12 @@
         </ref>
     </requirement>
 
-    <requirement type="file" category="compositional">
+    <requirement type="file" category="compositional" action="reconcile">
         <id>REQ_EP_017</id>
         <name>End of Derivation Chain</name>
         <desc>The end of the derivation change (i.e. the original material), to the extent an application is aware of it, shall be specified using a zero-value SourceClip object.</desc>
+	<annotate>Template Clip, Import Source, File Source, Tape Source, File Source, and Recording Source may terminate with zero-value Sourceclip object.</annotate>
+	<note>The spec needs to be explicit, hence the annotation. It is not just SourceMob that can zero-terminate. A template clip (Master Mob) can also do so.</note>
         <ref>
             <doc>&DOC_AAF_EP;</doc>
             <version>&VER_EP_1.0;</version>
@@ -195,10 +197,11 @@
         </ref>
     </requirement>
 
-    <requirement type="file" category="compositional">
+    <requirement type="file" category="compositional" action="reconcile">
         <id>REQ_EP_018</id>
         <name>Include CompositionMob or MasterMob</name>
         <desc>If a reference is made to a CompositionMob or MasterMob, that Mob shall be included in the AAF file.</desc>
+	<note>THIS IS NOT TESTED because: see note on REQ_EP_019.</note>
         <ref>
             <doc>&DOC_AAF_EP;</doc>
             <version>&VER_EP_1.0;</version>
@@ -206,10 +209,11 @@
         </ref>
     </requirement>
 
-    <requirement type="file" category="compositional">
+    <requirement type="file" category="compositional" action="reconcile">
         <id>REQ_EP_019</id>
         <name>Include SourceMob</name>
         <desc>If a reference is made to a SourceMob, that Mob should be included in the AAF file.</desc>
+	<note>THIS IS NOT TESTED because: separating this form the description of the requirements on individual node types is not desirable. Move this into the requirements for each node type. e.g. a Clip references a File Source, an Import Source, etc. The referenced mob should be in file. The derivation chain cannot be terminated at the Clip.</note>
         <ref>
             <doc>&DOC_AAF_EP;</doc>
             <version>&VER_EP_1.0;</version>
@@ -272,10 +276,22 @@
         </ref>
     </requirement>
 
-    <requirement type="file" category="compositional">
-        <id>REQ_EP_025</id>
-        <name>Top-level Composition Specification</name>
-        <desc>A top-level composition shall be specified using a CompositionMob with Mob::UsageCode property equal to Usage_TopLevel.  A top-level composition shall not be referenced by another Mob in the AAF file.</desc>
+    <requirement type="def" category="compositional">
+        <id>REQ_EP_025.1</id>
+        <name>Top-level Composition Definition</name>
+        <desc>A top-level composition shall be specified using a CompositionMob with Mob::UsageCode property equal to Usage_TopLevel.</desc>
+        <ref>
+            <doc>&DOC_AAF_EP;</doc>
+            <version>&VER_EP_1.0;</version>
+            <section>6.3</section>
+        </ref>
+    </requirement>
+
+    <requirement type="file" category="compositional" action="reconcile">
+        <id>REQ_EP_025.2</id>
+        <name>Top-level Composition Unreferenced</name>
+        <desc>A top-level composition shall not be referenced by another Mob in the AAF file.</desc>
+	<note>This must be reconciled with REQ_EP_260.</note>
         <ref>
             <doc>&DOC_AAF_EP;</doc>
             <version>&VER_EP_1.0;</version>
@@ -305,10 +321,12 @@
         </ref>
     </requirement>
 
-    <requirement type="file" category="compositional">
+    <requirement type="file" category="compositional" action="reconcile">
         <id>REQ_EP_028</id>
         <name>Top-Level Composition Contents</name>
         <desc>A top-level composition shall contain one or more timecode tracks and include a Primary timecode track.  Timecode tracks shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in Section 6.3 of the AAF Edit Protocol.</desc>
+	<annotate>Any physical track number from section 6.3 is valid, including the reserved values.</annotate>
+	<note>The test checks that each track has a unique physical track number property. Physical track number values are specified as follows in sectin 6.3: 1 = primary timecode, 2 = alternative timecode, e.g. film, 3 to 6 = reserved.</note>
         <ref>
             <doc>&DOC_AAF_EP;</doc>
             <version>&VER_EP_1.0;</version>
@@ -327,10 +345,10 @@
         </ref>
     </requirement>
 
-    <requirement type="file" category="compositional">
-        <id>REQ_EP_030</id>
+    <requirement type="def" category="compositional">
+        <id>REQ_EP_030.1</id>
         <name>Lower_Level Composition Specification</name>
-        <desc>A lower-level composition shall be specified using a CompositionMob with Mob::UsageCode property equal to Usage_LowerLevel.  A lower-level composition shall be referenced by a top-level or lower-level composition in the AAF file.</desc>
+        <desc>A lower-level composition shall be specified using a CompositionMob with Mob::UsageCode property equal to Usage_LowerLevel.</desc>
         <ref>
             <doc>&DOC_AAF_EP;</doc>
             <version>&VER_EP_1.0;</version>
@@ -338,10 +356,24 @@
         </ref>
     </requirement>
 
-    <requirement type="file" category="compositional">
+    <requirement type="file" category="compositional" action="deprecate">
+        <id>REQ_EP_030.2</id>
+        <name>Lower_Level Composition Specification</name>
+        <desc>A lower-level composition shall be referenced by a top-level or lower-level composition in the AAF file.</desc>
+	<note>This is the only case where the EP specifies what a mob shall be referenced by, rather than what it can reference. It is inconsistent, and redundant.</note>
+        <ref>
+            <doc>&DOC_AAF_EP;</doc>
+            <version>&VER_EP_1.0;</version>
+            <section>6.4</section>
+        </ref>
+    </requirement>
+
+    <requirement type="file" category="compositional" action="reconcile">
         <id>REQ_EP_031</id>
         <name>Lower-level Composition May Reference</name>
         <desc>A lower-level composition shall only reference the following kinds of material: a sub-clip composition, an adjusted-clip composition, a template clip, or a clip.</desc>
+	<annotate>A lower-level composition can also reference another lower-level composition.</annotate>
+	<note>The diagram in section 6.1 shows the lower-level self reference but the text does not state this.</note>
         <ref>
             <doc>&DOC_AAF_EP;</doc>
             <version>&VER_EP_1.0;</version>
@@ -550,7 +582,7 @@
     <requirement type="file" category="compositional">
         <id>REQ_EP_050</id>
         <name>Template Clip Contents</name>
-        <desc>Each essence track of a template clip shall contain exactly one SourceClip.  The SourceClip shall have zero-value to denote the end of the known derivation chain.</desc>
+        <desc>Each essence track of a template clip shall contain exactly one SourceClip. The SourceClip shall have zero-value to denote the end of the known derivation chain.</desc>
         <ref>
             <doc>&DOC_AAF_EP;</doc>
             <version>&VER_EP_1.0;</version>
@@ -690,10 +722,11 @@
         </ref>
     </requirement>
 
-    <requirement type="app" category="compositional">
+    <requirement type="file" category="compositional" action="reconcile">
         <id>REQ_EP_063</id>
-        <name>Include Source Mobs when Exporting File Source</name>
-        <desc>If a file source has any of the following sources, then those source mobs should be included and referenced by the file source: an import source, a tape source, or a film source.</desc>
+        <name>File Source References Import, Tape, or Film Source</name>
+        <desc>If a file source has any of the following sources, then those source mobs should be included and referenced by the file source: an import source, a tape source, or a film source. If a file source does not have an import source, a tape source or a film source, then it shall reference and include a recording source.</desc>
+	<annotate>A file source may also reference another file source. If no recording source is available then a file source may end the derivation chain.</annotate>
         <ref>
             <doc>&DOC_AAF_EP;</doc>
             <version>&VER_EP_1.0;</version>
@@ -701,16 +734,7 @@
         </ref>
     </requirement>
 
-    <requirement type="file" category="compositional">
-        <id>REQ_EP_064</id>
-        <name>File Source Must Refernce a Source</name>
-        <desc>If a file source does not have an import source, a tape source or a film source, then it shall reference and include a recording source.</desc>
-        <ref>
-            <doc>&DOC_AAF_EP;</doc>
-            <version>&VER_EP_1.0;</version>
-            <section>6.9</section>
-        </ref>
-    </requirement>
+    <!-- REQ_EP_064 intentionally removed -->
 
     <requirement type="app" category="compositional">
         <id>REQ_EP_065</id>
@@ -833,9 +857,9 @@
         </ref>
     </requirement>
 
-    <requirement type="app" category="compositional">
+    <requirement type="file" category="compositional">
         <id>REQ_EP_076</id>
-        <name>Include Sources When Importing Import Source </name>
+        <name>Import Source References Tape or Film Sources</name>
         <desc>If an import source has any of the following source, then those source mobs should be included and referenced by the import source: a tape source or a film source.</desc>
         <ref>
             <doc>&DOC_AAF_EP;</doc>
@@ -899,10 +923,12 @@
         </ref>
     </requirement>
 
-    <requirement type="file" category="compositional">
+    <requirement type="file" category="compositional" action="reconcile">
         <id>REQ_EP_082</id>
         <name>Tape Source Timecode Tracks</name>
         <desc>Timecode tracks in a tape SourceMob shall use the MobSlot::PhysicalTrackNumber property to distinguish their type, as shown in the table in Section 6.12 of the AAF Edit Protocol.</desc>
+	<annotate>Any physical track number from section 6.12 is valid, including the reserved values.</annotate>
+	<note>The test checks that each track has a unique physical track number property. Physical track number values are specified as follows in sectin 6.12: 1 = primary timecode, 2 = reserved timecode, 3 to 7 = Aux1 to Aux5, 8 to 12 = reserved.</note>
         <ref>
             <doc>&DOC_AAF_EP;</doc>
             <version>&VER_EP_1.0;</version>
@@ -910,9 +936,9 @@
         </ref>
     </requirement>
 
-    <requirement type="app" category="compositional">
+    <requirement type="file" category="compositional">
         <id>REQ_EP_083</id>
-        <name>Tape Source with Film Source</name>
+        <name>Tape Source References Film Source</name>
         <desc>If a tape has a film source, then it should be included and referenced by the tape source.</desc>
         <ref>
             <doc>&DOC_AAF_EP;</doc>
@@ -1086,10 +1112,11 @@
         </ref>
     </requirement>
 
-    <requirement type="file" category="metadata">
+    <requirement type="file" category="metadata" action="reconcile">
         <id>REQ_EP_099</id>
         <name>Audio Track Rates</name>
         <desc>All audio tracks within a file shall have the same edit rate and sample rate.</desc>
+	<annotate>Audio track is defined to be a TimelineMobSlot that contains compontents with a sound data definition.</annotate>
         <ref>
             <doc>&DOC_AAF_EP;</doc>
             <version>&VER_EP_1.0;</version>
@@ -1538,10 +1565,11 @@
         </ref>
     </requirement>
 
-    <requirement type="file" category="auxiliary-file">
+    <requirement type="file" category="auxiliary-file" action="reconcile">
         <id>REQ_EP_136</id>
         <name>Auxiliary SourceMob Contents</name>
         <desc>An auxiliary SourceMob shall contain at least one Slot, which may be a TimelineMobSlot, EventMobSlot or StaticMobSlot as appropriate.  The Data Definition of the Segment within the Slot shall be DataDef_Auxiliary.</desc>
+	<annotate>The spec should read: ... which *shall* be a TimelineMobSlot, EventMobSlot or StaticMobSlot as appropriate.</annotate>
         <ref>
             <doc>&DOC_AAF_EP;</doc>
             <version>&VER_EP_1.0;</version>
@@ -1681,10 +1709,12 @@
         </ref>
     </requirement>
 
-    <requirement type="file" category="annotations">
+    <requirement type="app" category="annotations" action="reconcile">
         <id>REQ_EP_149</id>
         <name>Use of CommentMarkers for Annotations</name>
         <desc>CommentMarkers may be used for annotations that are not associated with a specific essence track; otherwise DescriptiveMarkers (or its subclasses) shall be used.</desc>
+	<annotate>The associated essence track is idenfited by the CommenMarker::Annotation source reference property.</annotate>
+	<note>The source reference must be a resolved in the file. The condition is not currently tested. If the there is agreement in regard to the annotation then this should be implemented in the test and the requirement type changed to file.</note>
         <ref>
             <doc>&DOC_AAF_EP;</doc>
             <version>&VER_EP_1.0;</version>
@@ -2858,22 +2888,52 @@
         </ref>
     </requirement>
     
-    <requirement type="file" category="ad-hoc">
+    <requirement type="file" category="ad-hoc" action="reconcile">
         <id>REQ_EP_256</id>
         <name>Acyclic Derivation Chain</name>
         <desc>The AAF derivation chain of the AAF file shall not contain any cycles.</desc>
     </requirement>
 
-    <requirement type="file" category="ad-hoc">
+    <requirement type="file" category="ad-hoc" action="reconcile">
         <id>REQ_EP_257</id>
         <name>Slot Must Exist In Referenced Mob</name>
         <desc>A source reference must specify a Slot ID that exists in the referenced Mob.</desc>
+	<note>This requirement does not currently exist in the EP specification or 1.1 object model spec.</note>
     </requirement>
 
-    <requirement type="file" category="ad-hoc">
+    <requirement type="file" category="compositional" action="reconcile">
         <id>REQ_EP_258</id>
         <name>Valid Mob Type</name>
 	<desc>All Mob objects in a derivation chain shall have a have a known Edit Protocol material type.</desc>
+	<note>This requirement does not currently exist in the EP specification.</note>
+    </requirement>
+
+    <requirement type="file" category="compositional" action="reconcile">
+        <id>REQ_EP_259</id>
+        <name>Film Source References No Other Sources</name>
+	<desc>A film source shall not reference any other type of material.</desc>
+	<note>This requirement does not currently exist in the EP specification.</note>
+    </requirement>
+
+    <requirement type="file" category="compositional" action="reconcile">
+        <id>REQ_EP_260</id>
+        <name>Start Of Derivation Chain</name>
+	<desc>A Top-Level CompositionMob is always the first mob in a derivation chain.</desc>
+	<note>This requirement does not currently exist in the EP specification. REQ_EP_025.2 may be sufficient if there is agreement that no other mobs can start the mob derivation chain.</note>
+    </requirement>
+
+    <requirement type="file" category="compositional" action="reconcile">
+      <id>REQ_EP_261</id>
+      <name>Unresolved References In Derivation Chain</name>
+      <desc>Import Source, Tape Source, File Source, and Clip can terminate the derivation chain with an unresolved source reference that exists outside the file.</desc>
+      <note>This requirement does not currently stated explicitly in the EP specification.</note>
+    </requirement>
+
+    <requirement type="file" category="ad-hoc" >
+      <id>REQ_EP_262</id>
+      <name>Valid Derivation Chain Termination</name>
+      <desc>The derivation must have a valid end state.</desc>
+      <note>This is a generic error reported if the derivation chain parser encounters no errors but runs out of objects to parse before reaching a valid end state.</note>
     </requirement>
 
 </requirement-set>

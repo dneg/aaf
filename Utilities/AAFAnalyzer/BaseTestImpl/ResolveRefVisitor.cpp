@@ -109,6 +109,7 @@ bool ResolveRefVisitor::PostOrderVisit(AAFTypedObjNode<IAAFSourceClip>& node)
   // If it is null (zero valued) then we are at the end of mob chain.
   if ( AxConstants::NULL_MOBID == mobid )
   {
+    node.SetKind( AAFTypedObjNode<IAAFSourceClip>::AAFNODE_KIND_END_OF_CHAIN_REF );
     return true;
   }
 
@@ -202,23 +203,27 @@ bool ResolveRefVisitor::PostOrderVisit(AAFTypedObjNode<IAAFSourceClip>& node)
 
           shared_ptr<AAFSlotReference> spSlotEdge( new AAFSlotReference(spMobNode, spMobSlotNode,tag) );
           _spEdgeMap->AddEdge( spSlotEdge );
+
+	  node.SetKind( AAFTypedObjNode<IAAFSourceClip>::AAFNODE_KIND_IN_FILE_REF );
         }
 
       } // if (spMobSlotNode)
     } // if (spSrcClip)
   } // if (spMobNode)
 
-  // Else, the mob was not found. Issue a warning.
+  // Else, the mob was not found. The referenced object is assumed to
+  // be outside of the file.  Issue a warning.
   else
   {
+    node.SetKind( AAFTypedObjNode<IAAFSourceClip>::AAFNODE_KIND_OUT_OF_FILE_REF );
+
     AxString explain( L"Out of file mob referenced. ID = " );
     explain += AxStringUtil::mobid2Str( mobid );
 
     _spTestLevelResult->AddSingleResult( L"REQ_EP_016",
-                                         TestResult::WARN,
-                                         L"Mob Resolve",
-                                         L"Resolve source clip mob reference.",
-                                         explain );
+                                         explain,
+					 TestResult::WARN );
+
   }
 
   return true;

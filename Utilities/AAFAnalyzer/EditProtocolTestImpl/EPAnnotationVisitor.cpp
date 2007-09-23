@@ -191,18 +191,15 @@ bool EPAnnotationVisitor::PreOrderVisit( AAFTypedObjNode<IAAFCommentMarker>& nod
     
     bool testPassed = true;
     
-    if ( _isAncestorEssenceTrack.top() )
-    {
-        //Ancestor is an essence track
-      _spTestResult->AddSingleResult(
-          L"REQ_EP_149",
-          this->GetMobSlotName( _spEdgeMap, node) + L" is an essence track and uses CommentMarkers for annotations.",
-          TestResult::FAIL );
-      testPassed = false;
-    }
-    
     //Need to ensure that parent is event mob slot
-    if ( !_isAncestorEventMobSlot.top() )
+    if ( _isAncestorEventMobSlot.top() )
+    {
+        _spTestResult->AddSingleResult(
+            L"REQ_EP_150",
+            this->GetMobSlotName( _spEdgeMap, node) + L" is an Event Mob Slot that contains a CommentMarker.",
+            TestResult::PASS );
+    }
+    else
     {
         _spTestResult->AddSingleResult(
             L"REQ_EP_150",

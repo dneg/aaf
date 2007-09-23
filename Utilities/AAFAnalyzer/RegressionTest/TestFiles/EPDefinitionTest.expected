@@ -11,7 +11,7 @@
             Name:   OperationDefinition Data Definition Value
             Desc:   An OperationDefinition object in an AAF file shall have a data definition value consistent with the data definition of an OperationGroup object that references it.
             Result: Failed
-            Reason: OperationGroup in Mob slot with ID = 1 of Top-Level Composition "Invalid OperationGroup/OperationDefinition" has data definition value "Sound" and references OperationDefinition "Chroma Key" with data definition value "Picture".
+            Reason: OperationGroup in Mob slot with ID = 1 of Top-Level Composition "Invalid OperationGroup/OperationDefinition" has data definition value "DataDef_Sound" and references OperationDefinition "Chroma Key" with data definition value "DataDef_Picture".
             Covered Requirements: None
             Noted Requirements: None
             Passing Requirements: None

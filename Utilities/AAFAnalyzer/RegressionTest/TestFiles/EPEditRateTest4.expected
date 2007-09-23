@@ -1,32 +1,10 @@
         Name:   Edit Protocol Edit Rate Test
         Desc:   Verify that all essence tracks have valid edit rates.
-        Result: Failed
+        Result: Passed
         Reason: 
-        Covered Requirements: REQ_EP_092; REQ_EP_100
+        Covered Requirements: REQ_EP_091; REQ_EP_092; REQ_EP_099; REQ_EP_100
         Noted Requirements: None
         Passing Requirements: None
         Warning Requirements: None
-        Failing Requirements: REQ_EP_091; REQ_EP_099
-
-            Name:   Edit Rate Value
-            Desc:   The edit rate value shall be equivalent to the values in the table in Section 7.1 of the AAF Edit Protocol.
-            Result: Failed
-            Reason: Mob Slot with ID = 1 of Clip "Clip 2" is a StaticMobSlot and does not have an edit rate.
-            Covered Requirements: None
-            Noted Requirements: None
-            Passing Requirements: None
-            Warning Requirements: None
-            Failing Requirements: REQ_EP_091
-
-            Name:   Audio Track Rates
-            Desc:   All audio tracks within a file shall have the same edit rate and sample rate.
-            Result: Failed
-            Reason: All audio tracks within the file do not have the same edit rate.
-            Covered Requirements: None
-            Noted Requirements: None
-            Passing Requirements: None
-            Warning Requirements: None
-            Failing Requirements: REQ_EP_099
-            Detail: 1 audio track(s) have an edit rate of 600/24.
-            Detail: 1 audio track(s) are static and have no edit rate.
+        Failing Requirements: None
 

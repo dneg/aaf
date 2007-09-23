@@ -107,89 +107,59 @@ public:
  
   virtual bool PreOrderVisit( AAFTypedObjNode<IAAFCompositionMob>& node )
   {
-    
     AxCompositionMob axCompMob( node.GetAAFObjectOfType() );
 
-    try
+    //Find the usage code to find the proper type of decoration for the node.
+    pair<bool,aafUID_t> usageCode = axCompMob.ExistsUsageCode();
+    if ( usageCode.first )
     {
-      //Find the usage code to find the proper type of decoration for the node.
-      aafUID_t usageCode = axCompMob.GetUsageCode();
-      if ( usageCode == kAAFUsage_TopLevel )
+      if ( usageCode.second == kAAFUsage_TopLevel )
       {
-          this->DecorateNode<IAAFCompositionMob, EPTopLevelComposition>( node );
+	this->DecorateNode<IAAFCompositionMob, EPTopLevelComposition>( node );
       }
-      else if ( usageCode == kAAFUsage_LowerLevel )
+      else if ( usageCode.second == kAAFUsage_LowerLevel )
       {
-          this->DecorateNode<IAAFCompositionMob, EPLowerLevelComposition>( node );
+	this->DecorateNode<IAAFCompositionMob, EPLowerLevelComposition>( node );
       }
-      else if ( usageCode == kAAFUsage_SubClip )
+      else if ( usageCode.second == kAAFUsage_SubClip )
       {
-          this->DecorateNode<IAAFCompositionMob, EPSubClipComposition>( node );
+	this->DecorateNode<IAAFCompositionMob, EPSubClipComposition>( node );
       }
-      else if ( usageCode == kAAFUsage_AdjustedClip )
+      else if ( usageCode.second == kAAFUsage_AdjustedClip )
       {
-          this->DecorateNode<IAAFCompositionMob, EPAdjustedClipComposition>( node );
-      }
-      //There are no other valid composition mob/usage code combinations.  That
-      //means that the material type for the derivation chain is unknown,
-      //however, the edit protocol does not state that all mobs must be in the
-      //derivation chain.
-    }
-    catch ( const AxExHResult& ex )
-    {
-      //If the exception is that the property is not present, this means that
-      //the meterial type for the derivation chain is unknown, however, the
-      //edit protocol does not state that all mobs must be in the derivation
-      //chain, so, continue without decorating the object.
-      if ( ex.getHResult() != AAFRESULT_PROP_NOT_PRESENT )
-      {
-        throw ex;
+	this->DecorateNode<IAAFCompositionMob, EPAdjustedClipComposition>( node );
       }
     }
-    
-    return true;
-
+    // else
+    // There are no other valid composition mob/usage code
+    // combinations.  That means that the material type for the
+    // derivation chain is unknown, however, the edit protocol does
+    // not state that all mobs must be in the derivation chain.
+  
+    return true;  
   }
 
   virtual bool PreOrderVisit( AAFTypedObjNode<IAAFMasterMob>& node )
   {
-    
     AxMasterMob axMastMob( node.GetAAFObjectOfType() );
 
-    try
+    //If this is a template clip, decorate it.
+    pair<bool,aafUID_t> usageCode = axMastMob.ExistsUsageCode();
+    
+    if ( usageCode.first && usageCode.second == kAAFUsage_Template )
     {
-      //If this is a template clip, decorate it.
-      aafUID_t usageCode = axMastMob.GetUsageCode();
-
-      if ( usageCode == kAAFUsage_Template )
-      {
-        this->DecorateNode<IAAFMasterMob, EPTemplateClip>( node );
-      }
-      //There are no other valid composition mob/usage code combinations.  That
-      //means that the material type for the derivation chain is unknown,
-      //however, the edit protocol does not state that all mobs must be in the
-      //derivation chain.
+      this->DecorateNode<IAAFMasterMob, EPTemplateClip>( node );
     }
-    catch ( const AxExHResult& ex )
+    else
     {
-      //If this is a clip, then decorate it.
-      if ( ex.getHResult() == AAFRESULT_PROP_NOT_PRESENT )
-      {
-        this->DecorateNode<IAAFMasterMob, EPClip>( node );
-      }
-      else
-      {
-        throw ex;
-      }
+      this->DecorateNode<IAAFMasterMob, EPClip>( node );
     }
     
     return true;
-
   }
 
   virtual bool PreOrderVisit( AAFTypedObjNode<IAAFSourceMob>& node )
   {
-    
     AxSourceMob axSrcMob( node.GetAAFObjectOfType() );
 
     try
@@ -302,38 +272,30 @@ public:
 
   virtual bool PreOrderVisit( AAFTypedObjNode<IAAFTimelineMobSlot>& node )
   {
-    
     AxTimelineMobSlot axMobSlot( node.GetAAFObjectOfType() );
     DecorateMobSlot<IAAFTimelineMobSlot>( axMobSlot, node );
     return true;
-    
   }
   
   virtual bool PreOrderVisit( AAFTypedObjNode<IAAFStaticMobSlot>& node )
   {
-    
     AxStaticMobSlot axMobSlot( node.GetAAFObjectOfType() );
     DecorateMobSlot<IAAFStaticMobSlot>( axMobSlot, node );
     return true;
-    
   }
   
   virtual bool PreOrderVisit( AAFTypedObjNode<IAAFEventMobSlot>& node )
   {
-    
     AxEventMobSlot axMobSlot( node.GetAAFObjectOfType() );
     DecorateMobSlot<IAAFEventMobSlot>( axMobSlot, node );
     return true;
-    
   }
   
   virtual bool PreOrderVisit( AAFTypedObjNode<IAAFMobSlot>& node )
   {
-    
     AxMobSlot axMobSlot( node.GetAAFObjectOfType() );
     DecorateMobSlot<IAAFMobSlot>( axMobSlot, node );    
     return true;
-    
   }
   
   virtual bool PreOrderVisit( AAFTypedObjNode<IAAFOperationGroup>& node )

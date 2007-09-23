@@ -1,722 +1,673 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE aaf-file SYSTEM "EPDerivationChain.dtd">
-
 <aaf-file>
-
-    <!-- Test named/unamed mobs -->
-
-    <top-level name="Named Top-Level">
-        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <eoc length="0" track-type="none"/>
-        </timeline-mob-slot>
-    </top-level>
-    <top-level>
-        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <eoc length="0" track-type="none"/>
-        </timeline-mob-slot>
-    </top-level>
-
-    <lower-level name="Named Lower-Level">
-        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <eoc length="0" track-type="none"/>
-        </timeline-mob-slot>
-    </lower-level>
-    <lower-level>
-        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <eoc length="0" track-type="none"/>
-        </timeline-mob-slot>
-    </lower-level>
-
-    <sub-clip name="Named Sub-Clip">
-        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <eoc length="0" track-type="none"/>
-        </timeline-mob-slot>
-    </sub-clip>
-    <sub-clip>
-        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <eoc length="0" track-type="none"/>
-        </timeline-mob-slot>
-    </sub-clip>
-
-    <adjusted-clip name="Named Adjusted Clip">
-        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <eoc length="0" track-type="none"/>
-        </timeline-mob-slot>
-    </adjusted-clip>
-    <adjusted-clip>
-        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <eoc length="0" track-type="none"/>
-        </timeline-mob-slot>
-    </adjusted-clip>
-
-    <template-clip name="Named Template Clip">
-        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <eoc length="0" track-type="none"/>
-        </timeline-mob-slot>
+<!-- Test named/unamed mobs -->
+ <top-level name="Named Top-Level">
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <eoc length="0" track-type="none"/>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level>
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <eoc length="0" track-type="none"/>
+  </timeline-mob-slot>
+ </top-level>
+ <lower-level name="Named Lower-Level">
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <eoc length="0" track-type="none"/>
+  </timeline-mob-slot>
+ </lower-level>
+ <lower-level>
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <eoc length="0" track-type="none"/>
+  </timeline-mob-slot>
+ </lower-level>
+ <sub-clip name="Named Sub-Clip">
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <eoc length="0" track-type="none"/>
+  </timeline-mob-slot>
+ </sub-clip>
+ <sub-clip>
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <eoc length="0" track-type="none"/>
+  </timeline-mob-slot>
+ </sub-clip>
+ <adjusted-clip name="Named Adjusted Clip">
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <eoc length="0" track-type="none"/>
+  </timeline-mob-slot>
+ </adjusted-clip>
+ <adjusted-clip>
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <eoc length="0" track-type="none"/>
+  </timeline-mob-slot>
+ </adjusted-clip>
+ <template-clip name="Named Template Clip">
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <eoc length="0" track-type="none"/>
+  </timeline-mob-slot>
+ </template-clip>
+ <template-clip>
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <eoc length="0" track-type="none"/>
+  </timeline-mob-slot>
+ </template-clip>
+ <clip name="Named Clip">
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <eoc length="0" track-type="none"/>
+  </timeline-mob-slot>
+ </clip>
+ <clip>
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <eoc length="0" track-type="none"/>
+  </timeline-mob-slot>
+ </clip>
+ <file-source name="Named File Source" sample-rate-numerator="1" sample-rate-denominator="1">
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <eoc length="0" track-type="none"/>
+  </timeline-mob-slot>
+ </file-source>
+ <file-source sample-rate-numerator="1" sample-rate-denominator="1">
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <eoc length="0" track-type="none"/>
+  </timeline-mob-slot>
+ </file-source>
+ <recording-source name="Named Recording Source">
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <eoc length="0" track-type="none"/>
+  </timeline-mob-slot>
+ </recording-source>
+ <recording-source>
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <eoc length="0" track-type="none"/>
+  </timeline-mob-slot>
+ </recording-source>
+ <import-source name="Named Import Source">
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <eoc length="0" track-type="none"/>
+  </timeline-mob-slot>
+ </import-source>
+ <import-source>
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <eoc length="0" track-type="none"/>
+  </timeline-mob-slot>
+ </import-source>
+ <tape-source name="Named Tape Source">
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <eoc length="0" track-type="none"/>
+  </timeline-mob-slot>
+ </tape-source>
+ <tape-source>
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <eoc length="0" track-type="none"/>
+  </timeline-mob-slot>
+ </tape-source>
+ <film-source name="Named Film Source">
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <eoc length="0" track-type="none"/>
+  </timeline-mob-slot>
+ </film-source>
+ <film-source>
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <eoc length="0" track-type="none"/>
+  </timeline-mob-slot>
+ </film-source>
+<!-- Test non-unique Top-Level/Lower Level -->
+ <top-level name="Duplicate: Top-Level/Lower-Level">
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <eoc length="0" track-type="none"/>
+  </timeline-mob-slot>
+ </top-level>
+ <lower-level name="Duplicate: Top-Level/Lower-Level">
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <eoc length="0" track-type="none"/>
+  </timeline-mob-slot>
+ </lower-level>
+<!-- Test non-unique Top-Level -->
+ <top-level name="Duplicate: Top-Level">
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <eoc length="0" track-type="none"/>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Duplicate: Top-Level">
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <eoc length="0" track-type="none"/>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Duplicate: Top-Level/Sub-Clip">
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <eoc length="0" track-type="none"/>
+  </timeline-mob-slot>
+ </top-level>
+ <sub-clip name="Duplicate: Top-Level/Sub-Clip">
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <eoc length="0" track-type="none"/>
+  </timeline-mob-slot>
+ </sub-clip>
+ <top-level name="Duplicate: Top-Level/Adjusted Clip">
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <eoc length="0" track-type="none"/>
+  </timeline-mob-slot>
+ </top-level>
+ <adjusted-clip name="Duplicate: Top-Level/Adjusted Clip">
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <eoc length="0" track-type="none"/>
+  </timeline-mob-slot>
+ </adjusted-clip>
+ <top-level name="Duplicate: Top-Level/Template Clip">
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <eoc length="0" track-type="none"/>
+  </timeline-mob-slot>
+ </top-level>
+ <template-clip name="Duplicate: Top-Level/Template Clip">
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <eoc length="0" track-type="none"/>
+  </timeline-mob-slot>
+ </template-clip>
+ <top-level name="Duplicate: Top-Level/Clip">
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <eoc length="0" track-type="none"/>
+  </timeline-mob-slot>
+ </top-level>
+ <clip name="Duplicate: Top-Level/Clip">
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <eoc length="0" track-type="none"/>
+  </timeline-mob-slot>
+ </clip>
+ <top-level name="Duplicate: Top-Level/File Source">
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <eoc length="0" track-type="none"/>
+  </timeline-mob-slot>
+ </top-level>
+ <file-source name="Duplicate: Top-Level/File Source" sample-rate-numerator="1" sample-rate-denominator="1">
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <eoc length="0" track-type="none"/>
+  </timeline-mob-slot>
+ </file-source>
+ <top-level name="Duplicate: Top-Level/Recording Source">
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <eoc length="0" track-type="none"/>
+  </timeline-mob-slot>
+ </top-level>
+ <recording-source name="Duplicate: Top-Level/Recording Source">
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <eoc length="0" track-type="none"/>
+  </timeline-mob-slot>
+ </recording-source>
+ <top-level name="Duplicate: Top-Level/Import Source">
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <eoc length="0" track-type="none"/>
+  </timeline-mob-slot>
+ </top-level>
+ <import-source name="Duplicate: Top-Level/Import Source">
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <eoc length="0" track-type="none"/>
+  </timeline-mob-slot>
+ </import-source>
+ <top-level name="Duplicate: Top-Level/Tape Source">
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <eoc length="0" track-type="none"/>
+  </timeline-mob-slot>
+ </top-level>
+ <tape-source name="Duplicate: Top-Level/Tape Source">
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <eoc length="0" track-type="none"/>
+  </timeline-mob-slot>
+ </tape-source>
+ <top-level name="Duplicate: Top-Level/Film Source">
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <eoc length="0" track-type="none"/>
+  </timeline-mob-slot>
+ </top-level>
+ <film-source name="Duplicate: Top-Level/Film Source">
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <eoc length="0" track-type="none"/>
+  </timeline-mob-slot>
+ </film-source>
+<!-- Test non-unique Lower-Level -->
+ <lower-level name="Duplicate: Lower-Level">
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <eoc length="0" track-type="none"/>
+  </timeline-mob-slot>
+ </lower-level>
+ <lower-level name="Duplicate: Lower-Level">
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <eoc length="0" track-type="none"/>
+  </timeline-mob-slot>
+ </lower-level>
+ <lower-level name="Duplicate: Lower-Level/Sub-Clip">
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <eoc length="0" track-type="none"/>
+  </timeline-mob-slot>
+ </lower-level>
+ <sub-clip name="Duplicate: Lower-Level/Sub-Clip">
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <eoc length="0" track-type="none"/>
+  </timeline-mob-slot>
+ </sub-clip>
+ <lower-level name="Duplicate: Lower-Level/Adjusted Clip">
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <eoc length="0" track-type="none"/>
+  </timeline-mob-slot>
+ </lower-level>
+ <adjusted-clip name="Duplicate: Lower-Level/Adjusted Clip">
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <eoc length="0" track-type="none"/>
+  </timeline-mob-slot>
+ </adjusted-clip>
+ <lower-level name="Duplicate: Lower-Level/Template Clip">
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <eoc length="0" track-type="none"/>
+  </timeline-mob-slot>
+ </lower-level>
+ <template-clip name="Duplicate: Lower-Level/Template Clip">
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <eoc length="0" track-type="none"/>
+  </timeline-mob-slot>
+ </template-clip>
+ <lower-level name="Duplicate: Lower-Level/Clip">
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <eoc length="0" track-type="none"/>
+  </timeline-mob-slot>
+ </lower-level>
+ <clip name="Duplicate: Lower-Level/Clip">
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <eoc length="0" track-type="none"/>
+  </timeline-mob-slot>
+ </clip>
+ <lower-level name="Duplicate: Lower-Level/File Source">
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <eoc length="0" track-type="none"/>
+  </timeline-mob-slot>
+ </lower-level>
+ <file-source name="Duplicate: Lower-Level/File Source" sample-rate-numerator="1" sample-rate-denominator="1">
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <eoc length="0" track-type="none"/>
+  </timeline-mob-slot>
+ </file-source>
+ <lower-level name="Duplicate: Lower-Level/Recording Source">
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <eoc length="0" track-type="none"/>
+  </timeline-mob-slot>
+ </lower-level>
+ <recording-source name="Duplicate: Lower-Level/Recording Source">
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <eoc length="0" track-type="none"/>
+  </timeline-mob-slot>
+ </recording-source>
+ <lower-level name="Duplicate: Lower-Level/Import Source">
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <eoc length="0" track-type="none"/>
+  </timeline-mob-slot>
+ </lower-level>
+ <import-source name="Duplicate: Lower-Level/Import Source">
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <eoc length="0" track-type="none"/>
+  </timeline-mob-slot>
+ </import-source>
+ <lower-level name="Duplicate: Lower-Level/Tape Source">
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <eoc length="0" track-type="none"/>
+  </timeline-mob-slot>
+ </lower-level>
+ <tape-source name="Duplicate: Lower-Level/Tape Source">
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <eoc length="0" track-type="none"/>
+  </timeline-mob-slot>
+ </tape-source>
+ <lower-level name="Duplicate: Lower-Level/Film Source">
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <eoc length="0" track-type="none"/>
+  </timeline-mob-slot>
+ </lower-level>
+ <film-source name="Duplicate: Lower-Level/Film Source">
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <eoc length="0" track-type="none"/>
+  </timeline-mob-slot>
+ </film-source>
+<!-- Test Essence Track names (Static Audio) -->
+ <top-level name="Essence - Static Audio - Top-Level A">
+  <static-mob-slot name="Named Static Audio">
+   <source-clip length="0" track-type="audio">
+    <template-clip name="Essence - Static Audio - Template A">
+     <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+      <eoc length="0" track-type="none"/>
+     </timeline-mob-slot>
     </template-clip>
-    <template-clip>
-        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <eoc length="0" track-type="none"/>
-        </timeline-mob-slot>
+   </source-clip>
+  </static-mob-slot>
+ </top-level>
+ <top-level name="Essence - Static Audio - Top-Level B">
+  <static-mob-slot>
+   <source-clip length="0" track-type="audio">
+    <template-clip name="Essence - Static Audio - Template B">
+     <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+      <eoc length="0" track-type="none"/>
+     </timeline-mob-slot>
     </template-clip>
-
-    <clip name="Named Clip">
-        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <eoc length="0" track-type="none"/>
-        </timeline-mob-slot>
-    </clip>
-    <clip>
-        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <eoc length="0" track-type="none"/>
-        </timeline-mob-slot>
-    </clip>
-
-    <file-source name="Named File Source" sample-rate-numerator="1" sample-rate-denominator="1">
-        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <eoc length="0" track-type="none"/>
-        </timeline-mob-slot>
-    </file-source>
-    <file-source sample-rate-numerator="1" sample-rate-denominator="1">
-        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <eoc length="0" track-type="none"/>
-        </timeline-mob-slot>
-    </file-source>
-
-    <recording-source name="Named Recording Source">
-        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <eoc length="0" track-type="none"/>
-        </timeline-mob-slot>
-    </recording-source>
-    <recording-source>
-        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <eoc length="0" track-type="none"/>
-        </timeline-mob-slot>
-    </recording-source>
-
-    <import-source name="Named Import Source">
-        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <eoc length="0" track-type="none"/>
-        </timeline-mob-slot>
-    </import-source>
-    <import-source>
-        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <eoc length="0" track-type="none"/>
-        </timeline-mob-slot>
-    </import-source>
-
-    <tape-source name="Named Tape Source">
-        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <eoc length="0" track-type="none"/>
-        </timeline-mob-slot>
-    </tape-source>
-    <tape-source>
-        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <eoc length="0" track-type="none"/>
-        </timeline-mob-slot>
-    </tape-source>
-
-    <film-source name="Named Film Source">
-        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <eoc length="0" track-type="none"/>
-        </timeline-mob-slot>
-    </film-source>
-    <film-source>
-        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <eoc length="0" track-type="none"/>
-        </timeline-mob-slot>
-    </film-source>
-
-    <!-- Test non-unique Top-Level/Lower Level -->
-
-    <top-level name="Duplicate: Top-Level/Lower-Level">
-        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <eoc length="0" track-type="none"/>
-        </timeline-mob-slot>
-    </top-level>
-    <lower-level name="Duplicate: Top-Level/Lower-Level">
-        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <eoc length="0" track-type="none"/>
-        </timeline-mob-slot>
-    </lower-level>
-
-    <!-- Test non-unique Top-Level -->
-
-    <top-level name="Duplicate: Top-Level">
-        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <eoc length="0" track-type="none"/>
-        </timeline-mob-slot>
-    </top-level>
-    <top-level name="Duplicate: Top-Level">
-        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <eoc length="0" track-type="none"/>
-        </timeline-mob-slot>
-    </top-level>
-
-    <top-level name="Duplicate: Top-Level/Sub-Clip">
-        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <eoc length="0" track-type="none"/>
-        </timeline-mob-slot>
-    </top-level>
-    <sub-clip name="Duplicate: Top-Level/Sub-Clip">
-        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <eoc length="0" track-type="none"/>
-        </timeline-mob-slot>
-    </sub-clip>
-
-    <top-level name="Duplicate: Top-Level/Adjusted Clip">
-        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <eoc length="0" track-type="none"/>
-        </timeline-mob-slot>
-    </top-level>
-    <adjusted-clip name="Duplicate: Top-Level/Adjusted Clip">
-        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <eoc length="0" track-type="none"/>
-        </timeline-mob-slot>
-    </adjusted-clip>
-
-    <top-level name="Duplicate: Top-Level/Template Clip">
-        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <eoc length="0" track-type="none"/>
-        </timeline-mob-slot>
-    </top-level>
-    <template-clip name="Duplicate: Top-Level/Template Clip">
-        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <eoc length="0" track-type="none"/>
-        </timeline-mob-slot>
+   </source-clip>
+  </static-mob-slot>
+ </top-level>
+ <top-level name="Essence - Static Audio - Top-Level C">
+  <static-mob-slot name="Same Mob Duplicate Static Audio">
+   <source-clip length="0" track-type="audio">
+    <template-clip name="Essence - Static Audio - Template C1">
+     <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+      <eoc length="0" track-type="none"/>
+     </timeline-mob-slot>
     </template-clip>
-
-    <top-level name="Duplicate: Top-Level/Clip">
-        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <eoc length="0" track-type="none"/>
-        </timeline-mob-slot>
-    </top-level>
-    <clip name="Duplicate: Top-Level/Clip">
-        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <eoc length="0" track-type="none"/>
-        </timeline-mob-slot>
-    </clip>
-
-    <top-level name="Duplicate: Top-Level/File Source">
-        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <eoc length="0" track-type="none"/>
-        </timeline-mob-slot>
-    </top-level>
-    <file-source name="Duplicate: Top-Level/File Source" sample-rate-numerator="1" sample-rate-denominator="1">
-        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <eoc length="0" track-type="none"/>
-        </timeline-mob-slot>
-    </file-source>
-
-    <top-level name="Duplicate: Top-Level/Recording Source">
-        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <eoc length="0" track-type="none"/>
-        </timeline-mob-slot>
-    </top-level>
-    <recording-source name="Duplicate: Top-Level/Recording Source">
-        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <eoc length="0" track-type="none"/>
-        </timeline-mob-slot>
-    </recording-source>
-
-    <top-level name="Duplicate: Top-Level/Import Source">
-        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <eoc length="0" track-type="none"/>
-        </timeline-mob-slot>
-    </top-level>
-    <import-source name="Duplicate: Top-Level/Import Source">
-        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <eoc length="0" track-type="none"/>
-        </timeline-mob-slot>
-    </import-source>
-
-    <top-level name="Duplicate: Top-Level/Tape Source">
-        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <eoc length="0" track-type="none"/>
-        </timeline-mob-slot>
-    </top-level>
-    <tape-source name="Duplicate: Top-Level/Tape Source">
-        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <eoc length="0" track-type="none"/>
-        </timeline-mob-slot>
-    </tape-source>
-
-    <top-level name="Duplicate: Top-Level/Film Source">
-        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <eoc length="0" track-type="none"/>
-        </timeline-mob-slot>
-    </top-level>
-    <film-source name="Duplicate: Top-Level/Film Source">
-        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <eoc length="0" track-type="none"/>
-        </timeline-mob-slot>
-    </film-source>
-
-    <!-- Test non-unique Lower-Level -->
-
-    <lower-level name="Duplicate: Lower-Level">
-        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <eoc length="0" track-type="none"/>
-        </timeline-mob-slot>
-    </lower-level>
-    <lower-level name="Duplicate: Lower-Level">
-        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <eoc length="0" track-type="none"/>
-        </timeline-mob-slot>
-    </lower-level>
-
-    <lower-level name="Duplicate: Lower-Level/Sub-Clip">
-        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <eoc length="0" track-type="none"/>
-        </timeline-mob-slot>
-    </lower-level>
-    <sub-clip name="Duplicate: Lower-Level/Sub-Clip">
-        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <eoc length="0" track-type="none"/>
-        </timeline-mob-slot>
-    </sub-clip>
-
-    <lower-level name="Duplicate: Lower-Level/Adjusted Clip">
-        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <eoc length="0" track-type="none"/>
-        </timeline-mob-slot>
-    </lower-level>
-    <adjusted-clip name="Duplicate: Lower-Level/Adjusted Clip">
-        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <eoc length="0" track-type="none"/>
-        </timeline-mob-slot>
-    </adjusted-clip>
-
-    <lower-level name="Duplicate: Lower-Level/Template Clip">
-        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <eoc length="0" track-type="none"/>
-        </timeline-mob-slot>
-    </lower-level>
-    <template-clip name="Duplicate: Lower-Level/Template Clip">
-        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <eoc length="0" track-type="none"/>
-        </timeline-mob-slot>
+   </source-clip>
+  </static-mob-slot>
+  <static-mob-slot name="Same Mob Duplicate Static Audio">
+   <source-clip length="0" track-type="audio">
+    <template-clip name="Essence - Static Audio - Template C2">
+     <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+      <eoc length="0" track-type="none"/>
+     </timeline-mob-slot>
     </template-clip>
-
-    <lower-level name="Duplicate: Lower-Level/Clip">
+   </source-clip>
+  </static-mob-slot>
+ </top-level>
+ <top-level name="Essence - Static Audio - Top-Level D">
+  <static-mob-slot name="Different Mob Duplicate Static Audio Outer 1">
+   <source-clip length="0" track-type="audio">
+    <clip name="Essence - Static Audio - Clip D1">
+     <static-mob-slot name="Different Mob Duplicate Static Audio">
+      <source-clip length="0" track-type="audio">
+       <film-source name="Essence - Static Audio Film Source D1">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <eoc length="0" track-type="none"/>
+         <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
-    </lower-level>
-    <clip name="Duplicate: Lower-Level/Clip">
-        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <eoc length="0" track-type="none"/>
-        </timeline-mob-slot>
+       </film-source>
+      </source-clip>
+     </static-mob-slot>
     </clip>
-
-    <lower-level name="Duplicate: Lower-Level/File Source">
+   </source-clip>
+  </static-mob-slot>
+  <static-mob-slot name="Different Mob Duplicate Static Audio Outer 2">
+   <source-clip length="0" track-type="audio">
+    <clip name="Essence - Static Audio - Clip D2">
+     <static-mob-slot name="Different Mob Duplicate Static Audio">
+      <source-clip length="0" track-type="audio">
+       <film-source name="Essence - Static Audio Film Source D2">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <eoc length="0" track-type="none"/>
+         <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
-    </lower-level>
-    <file-source name="Duplicate: Lower-Level/File Source" sample-rate-numerator="1" sample-rate-denominator="1">
+       </film-source>
+      </source-clip>
+     </static-mob-slot>
+    </clip>
+   </source-clip>
+  </static-mob-slot>
+ </top-level>
+<!-- Test Essence Track names (Static Picture) -->
+ <top-level name="Essence - Static Picture - Top-Level A">
+  <static-mob-slot name="Named Static Picture">
+   <source-clip length="0" track-type="picture">
+    <template-clip name="Essence - Static Picture - Template A">
+     <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+      <eoc length="0" track-type="none"/>
+     </timeline-mob-slot>
+    </template-clip>
+   </source-clip>
+  </static-mob-slot>
+ </top-level>
+ <top-level name="Essence - Static Picture - Top-Level B">
+  <static-mob-slot>
+   <source-clip length="0" track-type="picture">
+    <template-clip name="Essence - Static Picture - Template B">
+     <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+      <eoc length="0" track-type="none"/>
+     </timeline-mob-slot>
+    </template-clip>
+   </source-clip>
+  </static-mob-slot>
+ </top-level>
+ <top-level name="Essence - Static Picture - Top-Level C">
+  <static-mob-slot name="Same Mob Duplicate Static Picture">
+   <source-clip length="0" track-type="picture">
+    <template-clip name="Essence - Static Picture - Template C1">
+     <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+      <eoc length="0" track-type="none"/>
+     </timeline-mob-slot>
+    </template-clip>
+   </source-clip>
+  </static-mob-slot>
+  <static-mob-slot name="Same Mob Duplicate Static Picture">
+   <source-clip length="0" track-type="picture">
+    <template-clip name="Essence - Static Picture - Template C2">
+     <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+      <eoc length="0" track-type="none"/>
+     </timeline-mob-slot>
+    </template-clip>
+   </source-clip>
+  </static-mob-slot>
+ </top-level>
+ <top-level name="Essence - Static Picture - Top-Level D">
+  <static-mob-slot name="Different Mob Duplicate Static Picture Outer 1">
+   <source-clip length="0" track-type="picture">
+    <clip name="Essence - Static Picture - Clip D1">
+     <static-mob-slot name="Different Mob Duplicate Static Picture">
+      <source-clip length="0" track-type="picture">
+       <film-source name="Essence - Static Picture Film Source D1">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <eoc length="0" track-type="none"/>
+         <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
-    </file-source>
-
-    <lower-level name="Duplicate: Lower-Level/Recording Source">
+       </film-source>
+      </source-clip>
+     </static-mob-slot>
+    </clip>
+   </source-clip>
+  </static-mob-slot>
+  <static-mob-slot name="Different Mob Duplicate Static Picture Outer 2">
+   <source-clip length="0" track-type="picture">
+    <clip name="Essence - Static Picture - Clip D2">
+     <static-mob-slot name="Different Mob Duplicate Static Picture">
+      <source-clip length="0" track-type="picture">
+       <film-source name="Essence - Static Picture Film Source D2">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <eoc length="0" track-type="none"/>
+         <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
-    </lower-level>
-    <recording-source name="Duplicate: Lower-Level/Recording Source">
+       </film-source>
+      </source-clip>
+     </static-mob-slot>
+    </clip>
+   </source-clip>
+  </static-mob-slot>
+ </top-level>
+<!-- Test Essence Track names (Timeline Audio) -->
+ <top-level name="Essence - Timeline Audio - Top-Level A">
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Named Timeline Audio">
+   <source-clip length="0" track-type="audio">
+    <template-clip name="Essence - Timeline Audio - Template A">
+     <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+      <eoc length="0" track-type="none"/>
+     </timeline-mob-slot>
+    </template-clip>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Essence - Timeline Audio - Top-Level B">
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <source-clip length="0" track-type="audio">
+    <template-clip name="Essence - Timeline Audio - Template B">
+     <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+      <eoc length="0" track-type="none"/>
+     </timeline-mob-slot>
+    </template-clip>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Essence - Timeline Audio - Top-Level C">
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Same Mob Duplicate Timeline Audio">
+   <source-clip length="0" track-type="audio">
+    <template-clip name="Essence - Timeline Audio - Template C1">
+     <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+      <eoc length="0" track-type="none"/>
+     </timeline-mob-slot>
+    </template-clip>
+   </source-clip>
+  </timeline-mob-slot>
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Same Mob Duplicate Timeline Audio">
+   <source-clip length="0" track-type="audio">
+    <template-clip name="Essence - Timeline Audio - Template C2">
+     <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+      <eoc length="0" track-type="none"/>
+     </timeline-mob-slot>
+    </template-clip>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Essence - Timeline Audio - Top-Level D">
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Different Mob Duplicate Timeline Audio Outer 1">
+   <source-clip length="0" track-type="audio">
+    <clip name="Essence - Timeline Audio - Clip D1">
+     <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Different Mob Duplicate Timeline Audio">
+      <source-clip length="0" track-type="audio">
+       <film-source name="Essence - Timeline Audio Film Source D1">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <eoc length="0" track-type="none"/>
+         <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
-    </recording-source>
-
-    <lower-level name="Duplicate: Lower-Level/Import Source">
+       </film-source>
+      </source-clip>
+     </timeline-mob-slot>
+    </clip>
+   </source-clip>
+  </timeline-mob-slot>
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Different Mob Duplicate Timeline Audio Outer 2">
+   <source-clip length="0" track-type="audio">
+    <clip name="Essence - Timeline Audio - Clip D2">
+     <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Different Mob Duplicate Timeline Audio">
+      <source-clip length="0" track-type="audio">
+       <film-source name="Essence - Timeline Audio Film Source D2">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <eoc length="0" track-type="none"/>
+         <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
-    </lower-level>
-    <import-source name="Duplicate: Lower-Level/Import Source">
+       </film-source>
+      </source-clip>
+     </timeline-mob-slot>
+    </clip>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+<!-- Test Essence Track names (Timeline Picture) -->
+ <top-level name="Essence - Timeline Picture - Top-Level A">
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Named Timeline Picture">
+   <source-clip length="0" track-type="picture">
+    <template-clip name="Essence - Timeline Picture - Template A">
+     <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+      <eoc length="0" track-type="none"/>
+     </timeline-mob-slot>
+    </template-clip>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Essence - Timeline Picture - Top-Level B">
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <source-clip length="0" track-type="picture">
+    <template-clip name="Essence - Timeline Picture - Template B">
+     <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+      <eoc length="0" track-type="none"/>
+     </timeline-mob-slot>
+    </template-clip>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Essence - Timeline Picture - Top-Level C">
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Same Mob Duplicate Timeline Picture">
+   <source-clip length="0" track-type="picture">
+    <template-clip name="Essence - Timeline Picture - Template C1">
+     <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+      <eoc length="0" track-type="none"/>
+     </timeline-mob-slot>
+    </template-clip>
+   </source-clip>
+  </timeline-mob-slot>
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Same Mob Duplicate Timeline Picture">
+   <source-clip length="0" track-type="picture">
+    <template-clip name="Essence - Timeline Picture - Template C2">
+     <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+      <eoc length="0" track-type="none"/>
+     </timeline-mob-slot>
+    </template-clip>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Essence - Timeline Picture - Top-Level D">
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Different Mob Duplicate Timeline Picture Outer 1">
+   <source-clip length="0" track-type="picture">
+    <clip name="Essence - Timeline Picture - Clip D1">
+     <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Different Mob Duplicate Timeline Picture">
+      <source-clip length="0" track-type="picture">
+       <film-source name="Essence - Timeline Picture Film Source D1">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <eoc length="0" track-type="none"/>
+         <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
-    </import-source>
-
-    <lower-level name="Duplicate: Lower-Level/Tape Source">
+       </film-source>
+      </source-clip>
+     </timeline-mob-slot>
+    </clip>
+   </source-clip>
+  </timeline-mob-slot>
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Different Mob Duplicate Timeline Picture Outer 2">
+   <source-clip length="0" track-type="picture">
+    <clip name="Essence - Timeline Picture - Clip D2">
+     <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Different Mob Duplicate Timeline Picture">
+      <source-clip length="0" track-type="picture">
+       <film-source name="Essence - Timeline Picture Film Source D2">
         <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <eoc length="0" track-type="none"/>
+         <eoc length="0" track-type="none"/>
         </timeline-mob-slot>
-    </lower-level>
-    <tape-source name="Duplicate: Lower-Level/Tape Source">
-        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <eoc length="0" track-type="none"/>
-        </timeline-mob-slot>
-    </tape-source>
-
-    <lower-level name="Duplicate: Lower-Level/Film Source">
-        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <eoc length="0" track-type="none"/>
-        </timeline-mob-slot>
-    </lower-level>
-    <film-source name="Duplicate: Lower-Level/Film Source">
-        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <eoc length="0" track-type="none"/>
-        </timeline-mob-slot>
-    </film-source>
-
-    <!-- Test Essence Track names (Static Audio) -->
-
-    <top-level name="Essence - Static Audio - Top-Level A">
-        <static-mob-slot name="Named Static Audio">
-            <source-clip length="0" track-type="audio">
-                <template-clip name="Essence - Static Audio - Template A">
-                    <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-                        <eoc length="0" track-type="none"/>
-                    </timeline-mob-slot>
-                </template-clip>
-            </source-clip>
-        </static-mob-slot>
-    </top-level>
-    <top-level name="Essence - Static Audio - Top-Level B">
-        <static-mob-slot>
-            <source-clip length="0" track-type="audio">
-                <template-clip name="Essence - Static Audio - Template B">
-                    <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-                        <eoc length="0" track-type="none"/>
-                    </timeline-mob-slot>
-                </template-clip>
-            </source-clip>
-        </static-mob-slot>
-    </top-level>
-    <top-level name="Essence - Static Audio - Top-Level C">
-        <static-mob-slot name="Same Mob Duplicate Static Audio">
-            <source-clip length="0" track-type="audio">
-                <template-clip name="Essence - Static Audio - Template C1">
-                    <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-                        <eoc length="0" track-type="none"/>
-                    </timeline-mob-slot>
-                </template-clip>
-            </source-clip>
-        </static-mob-slot>
-        <static-mob-slot name="Same Mob Duplicate Static Audio">
-            <source-clip length="0" track-type="audio">
-                <template-clip name="Essence - Static Audio - Template C2">
-                    <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-                        <eoc length="0" track-type="none"/>
-                    </timeline-mob-slot>
-                </template-clip>
-            </source-clip>
-        </static-mob-slot>
-    </top-level>
-    <top-level name="Essence - Static Audio - Top-Level D">
-        <static-mob-slot name="Different Mob Duplicate Static Audio Outer 1">
-            <source-clip length="0" track-type="audio">
-                <clip name="Essence - Static Audio - Clip D1">
-                    <static-mob-slot name="Different Mob Duplicate Static Audio">
-                        <source-clip length="0" track-type="audio">
-                            <film-source name="Essence - Static Audio Film Source D1">
-                                <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-                                    <eoc length="0" track-type="none"/>
-                                </timeline-mob-slot>
-                            </film-source>
-                        </source-clip>
-                    </static-mob-slot>
-                </clip>
-            </source-clip>
-        </static-mob-slot>
-        <static-mob-slot name="Different Mob Duplicate Static Audio Outer 2">
-            <source-clip length="0" track-type="audio">
-                <clip name="Essence - Static Audio - Clip D2">
-                    <static-mob-slot name="Different Mob Duplicate Static Audio">
-                        <source-clip length="0" track-type="audio">
-                            <film-source name="Essence - Static Audio Film Source D2">
-                                <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-                                    <eoc length="0" track-type="none"/>
-                                </timeline-mob-slot>
-                            </film-source>
-                        </source-clip>
-                    </static-mob-slot>
-                </clip>
-            </source-clip>
-        </static-mob-slot>
-    </top-level>
-
-    <!-- Test Essence Track names (Static Picture) -->
-
-    <top-level name="Essence - Static Picture - Top-Level A">
-        <static-mob-slot name="Named Static Picture">
-            <source-clip length="0" track-type="picture">
-                <template-clip name="Essence - Static Picture - Template A">
-                    <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-                        <eoc length="0" track-type="none"/>
-                    </timeline-mob-slot>
-                </template-clip>
-            </source-clip>
-        </static-mob-slot>
-    </top-level>
-    <top-level name="Essence - Static Picture - Top-Level B">
-        <static-mob-slot>
-            <source-clip length="0" track-type="picture">
-                <template-clip name="Essence - Static Picture - Template B">
-                    <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-                        <eoc length="0" track-type="none"/>
-                    </timeline-mob-slot>
-                </template-clip>
-            </source-clip>
-        </static-mob-slot>
-    </top-level>
-    <top-level name="Essence - Static Picture - Top-Level C">
-        <static-mob-slot name="Same Mob Duplicate Static Picture">
-            <source-clip length="0" track-type="picture">
-                <template-clip name="Essence - Static Picture - Template C1">
-                    <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-                        <eoc length="0" track-type="none"/>
-                    </timeline-mob-slot>
-                </template-clip>
-            </source-clip>
-        </static-mob-slot>
-        <static-mob-slot name="Same Mob Duplicate Static Picture">
-            <source-clip length="0" track-type="picture">
-                <template-clip name="Essence - Static Picture - Template C2">
-                    <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-                        <eoc length="0" track-type="none"/>
-                    </timeline-mob-slot>
-                </template-clip>
-            </source-clip>
-        </static-mob-slot>
-    </top-level>
-    <top-level name="Essence - Static Picture - Top-Level D">
-        <static-mob-slot name="Different Mob Duplicate Static Picture Outer 1">
-            <source-clip length="0" track-type="picture">
-                <clip name="Essence - Static Picture - Clip D1">
-                    <static-mob-slot name="Different Mob Duplicate Static Picture">
-                        <source-clip length="0" track-type="picture">
-                            <film-source name="Essence - Static Picture Film Source D1">
-                                <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-                                    <eoc length="0" track-type="none"/>
-                                </timeline-mob-slot>
-                            </film-source>
-                        </source-clip>
-                    </static-mob-slot>
-                </clip>
-            </source-clip>
-        </static-mob-slot>
-        <static-mob-slot name="Different Mob Duplicate Static Picture Outer 2">
-            <source-clip length="0" track-type="picture">
-                <clip name="Essence - Static Picture - Clip D2">
-                    <static-mob-slot name="Different Mob Duplicate Static Picture">
-                        <source-clip length="0" track-type="picture">
-                            <film-source name="Essence - Static Picture Film Source D2">
-                                <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-                                    <eoc length="0" track-type="none"/>
-                                </timeline-mob-slot>
-                            </film-source>
-                        </source-clip>
-                    </static-mob-slot>
-                </clip>
-            </source-clip>
-        </static-mob-slot>
-    </top-level>
-
-    <!-- Test Essence Track names (Timeline Audio) -->
-
-    <top-level name="Essence - Timeline Audio - Top-Level A">
-        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Named Timeline Audio">
-            <source-clip length="0" track-type="audio">
-                <template-clip name="Essence - Timeline Audio - Template A">
-                    <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-                        <eoc length="0" track-type="none"/>
-                    </timeline-mob-slot>
-                </template-clip>
-            </source-clip>
-        </timeline-mob-slot>
-    </top-level>
-    <top-level name="Essence - Timeline Audio - Top-Level B">
-        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <source-clip length="0" track-type="audio">
-                <template-clip name="Essence - Timeline Audio - Template B">
-                    <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-                        <eoc length="0" track-type="none"/>
-                    </timeline-mob-slot>
-                </template-clip>
-            </source-clip>
-        </timeline-mob-slot>
-    </top-level>
-    <top-level name="Essence - Timeline Audio - Top-Level C">
-        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Same Mob Duplicate Timeline Audio">
-            <source-clip length="0" track-type="audio">
-                <template-clip name="Essence - Timeline Audio - Template C1">
-                    <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-                        <eoc length="0" track-type="none"/>
-                    </timeline-mob-slot>
-                </template-clip>
-            </source-clip>
-        </timeline-mob-slot>
-        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Same Mob Duplicate Timeline Audio">
-            <source-clip length="0" track-type="audio">
-                <template-clip name="Essence - Timeline Audio - Template C2">
-                    <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-                        <eoc length="0" track-type="none"/>
-                    </timeline-mob-slot>
-                </template-clip>
-            </source-clip>
-        </timeline-mob-slot>
-    </top-level>
-    <top-level name="Essence - Timeline Audio - Top-Level D">
-        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Different Mob Duplicate Timeline Audio Outer 1">
-            <source-clip length="0" track-type="audio">
-                <clip name="Essence - Timeline Audio - Clip D1">
-                    <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Different Mob Duplicate Timeline Audio">
-                        <source-clip length="0" track-type="audio">
-                            <film-source name="Essence - Timeline Audio Film Source D1">
-                                <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-                                    <eoc length="0" track-type="none"/>
-                                </timeline-mob-slot>
-                            </film-source>
-                        </source-clip>
-                    </timeline-mob-slot>
-                </clip>
-            </source-clip>
-        </timeline-mob-slot>
-        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Different Mob Duplicate Timeline Audio Outer 2">
-            <source-clip length="0" track-type="audio">
-                <clip name="Essence - Timeline Audio - Clip D2">
-                    <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Different Mob Duplicate Timeline Audio">
-                        <source-clip length="0" track-type="audio">
-                            <film-source name="Essence - Timeline Audio Film Source D2">
-                                <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-                                    <eoc length="0" track-type="none"/>
-                                </timeline-mob-slot>
-                            </film-source>
-                        </source-clip>
-                    </timeline-mob-slot>
-                </clip>
-            </source-clip>
-        </timeline-mob-slot>
-    </top-level>
-
-    <!-- Test Essence Track names (Timeline Picture) -->
-
-    <top-level name="Essence - Timeline Picture - Top-Level A">
-        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Named Timeline Picture">
-            <source-clip length="0" track-type="picture">
-                <template-clip name="Essence - Timeline Picture - Template A">
-                    <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-                        <eoc length="0" track-type="none"/>
-                    </timeline-mob-slot>
-                </template-clip>
-            </source-clip>
-        </timeline-mob-slot>
-    </top-level>
-    <top-level name="Essence - Timeline Picture - Top-Level B">
-        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <source-clip length="0" track-type="picture">
-                <template-clip name="Essence - Timeline Picture - Template B">
-                    <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-                        <eoc length="0" track-type="none"/>
-                    </timeline-mob-slot>
-                </template-clip>
-            </source-clip>
-        </timeline-mob-slot>
-    </top-level>
-    <top-level name="Essence - Timeline Picture - Top-Level C">
-        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Same Mob Duplicate Timeline Picture">
-            <source-clip length="0" track-type="picture">
-                <template-clip name="Essence - Timeline Picture - Template C1">
-                    <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-                        <eoc length="0" track-type="none"/>
-                    </timeline-mob-slot>
-                </template-clip>
-            </source-clip>
-        </timeline-mob-slot>
-        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Same Mob Duplicate Timeline Picture">
-            <source-clip length="0" track-type="picture">
-                <template-clip name="Essence - Timeline Picture - Template C2">
-                    <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-                        <eoc length="0" track-type="none"/>
-                    </timeline-mob-slot>
-                </template-clip>
-            </source-clip>
-        </timeline-mob-slot>
-    </top-level>
-    <top-level name="Essence - Timeline Picture - Top-Level D">
-        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Different Mob Duplicate Timeline Picture Outer 1">
-            <source-clip length="0" track-type="picture">
-                <clip name="Essence - Timeline Picture - Clip D1">
-                    <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Different Mob Duplicate Timeline Picture">
-                        <source-clip length="0" track-type="picture">
-                            <film-source name="Essence - Timeline Picture Film Source D1">
-                                <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-                                    <eoc length="0" track-type="none"/>
-                                </timeline-mob-slot>
-                            </film-source>
-                        </source-clip>
-                    </timeline-mob-slot>
-                </clip>
-            </source-clip>
-        </timeline-mob-slot>
-        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Different Mob Duplicate Timeline Picture Outer 2">
-            <source-clip length="0" track-type="picture">
-                <clip name="Essence - Timeline Picture - Clip D2">
-                    <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1" name="Different Mob Duplicate Timeline Picture">
-                        <source-clip length="0" track-type="picture">
-                            <film-source name="Essence - Timeline Picture Film Source D2">
-                                <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-                                    <eoc length="0" track-type="none"/>
-                                </timeline-mob-slot>
-                            </film-source>
-                        </source-clip>
-                    </timeline-mob-slot>
-                </clip>
-            </source-clip>
-        </timeline-mob-slot>
-    </top-level>
-
-    <!-- Test non-Essence Track names -->
-
-    <top-level name="Non-Essence Without Name Top-Level">
-        <static-mob-slot>
-            <source-clip length="0" track-type="none">
-                <template-clip name="Non-Essence Without Name Template">
-                    <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-                        <eoc length="0" track-type="none"/>
-                    </timeline-mob-slot>
-                </template-clip>
-            </source-clip>
-        </static-mob-slot>
-    </top-level>
-
-    <top-level name="Non-Essence Duplicate Names Top-Level A">
-        <static-mob-slot name="Duplicate Non-Essence">
-            <source-clip length="0" track-type="none">
-                <template-clip name="Non-Essence Duplicate Names Template A">
-                    <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-                        <eoc length="0" track-type="none"/>
-                    </timeline-mob-slot>
-                </template-clip>
-            </source-clip>
-        </static-mob-slot>
-    </top-level>
-    <top-level name="Non-Essence Duplicate Names Top-Level B">
-        <static-mob-slot name="Duplicate Non-Essence">
-            <source-clip length="0" track-type="none">
-                <template-clip name="Non-Essence Duplicate Names Template B">
-                    <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-                        <eoc length="0" track-type="none"/>
-                    </timeline-mob-slot>
-                </template-clip>
-            </source-clip>
-        </static-mob-slot>
-    </top-level>
-    <top-level name="Non-Essence Duplicate Names (with Essence) Top-Level">
-        <static-mob-slot name="Duplicate Non-Essence">
-            <source-clip length="0" track-type="audio">
-                <template-clip name="Non-Essence Duplicate Names (with Essence) Template">
-                    <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-                        <eoc length="0" track-type="none"/>
-                    </timeline-mob-slot>
-                </template-clip>
-            </source-clip>
-        </static-mob-slot>
-    </top-level>
-
+       </film-source>
+      </source-clip>
+     </timeline-mob-slot>
+    </clip>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+<!-- Test non-Essence Track names -->
+ <top-level name="Non-Essence Without Name Top-Level">
+  <static-mob-slot>
+   <source-clip length="0" track-type="none">
+    <template-clip name="Non-Essence Without Name Template">
+     <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+      <eoc length="0" track-type="none"/>
+     </timeline-mob-slot>
+    </template-clip>
+   </source-clip>
+  </static-mob-slot>
+ </top-level>
+ <top-level name="Non-Essence Duplicate Names Top-Level A">
+  <static-mob-slot name="Duplicate Non-Essence">
+   <source-clip length="0" track-type="none">
+    <template-clip name="Non-Essence Duplicate Names Template A">
+     <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+      <eoc length="0" track-type="none"/>
+     </timeline-mob-slot>
+    </template-clip>
+   </source-clip>
+  </static-mob-slot>
+ </top-level>
+ <top-level name="Non-Essence Duplicate Names Top-Level B">
+  <static-mob-slot name="Duplicate Non-Essence">
+   <source-clip length="0" track-type="none">
+    <template-clip name="Non-Essence Duplicate Names Template B">
+     <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+      <eoc length="0" track-type="none"/>
+     </timeline-mob-slot>
+    </template-clip>
+   </source-clip>
+  </static-mob-slot>
+ </top-level>
+ <top-level name="Non-Essence Duplicate Names (with Essence) Top-Level">
+  <static-mob-slot name="Duplicate Non-Essence">
+   <source-clip length="0" track-type="audio">
+    <template-clip name="Non-Essence Duplicate Names (with Essence) Template">
+     <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+      <eoc length="0" track-type="none"/>
+     </timeline-mob-slot>
+    </template-clip>
+   </source-clip>
+  </static-mob-slot>
+ </top-level>
 </aaf-file>

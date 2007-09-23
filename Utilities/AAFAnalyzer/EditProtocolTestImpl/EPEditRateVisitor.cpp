@@ -63,7 +63,6 @@ EPEditRateVisitor::EPEditRateVisitor( wostream& log,
     : _log(log),
       _spEdgeMap( spEdgeMap ),
       _spTestResult( spTestResult ),
-      _staticAudioTracks( 0 ),
       _unknownAudioTracks( 0 )
 {}
 
@@ -104,50 +103,6 @@ bool EPEditRateVisitor::PreOrderVisit( EPTypedObjNode<IAAFTimelineMobSlot, EPEss
     return TestEditRate( editRate, axMobSlot, mobName );
 }
 
-bool EPEditRateVisitor::PreOrderVisit( EPTypedObjNode<IAAFStaticMobSlot, EPAudioTrack>& node )
-{
-    //Audio Specific Processing
-    _staticAudioTracks++;
-
-    //General Processing
-    shared_ptr<EPTypedObjNode<IAAFStaticMobSlot, EPEssenceTrack> > spGeneric( node.DownCast<IAAFStaticMobSlot, EPEssenceTrack>() );
-    return this->PreOrderVisit( *spGeneric );
-}
-
-bool EPEditRateVisitor::PreOrderVisit( EPTypedObjNode<IAAFStaticMobSlot, EPVideoTrack>& node )
-{
-    //Video Specific Processing
-    wstringstream ss;
-
-    AxStaticMobSlot axMobSlot( node.GetAAFObjectOfType() );
-    aafSlotID_t slotId = axMobSlot.GetSlotID();
-    AxString mobName = this->GetMobName( _spEdgeMap, node );
-
-    ss << L"Video Track in MobSlot with ID = " << slotId << L" of " << mobName
-       << L" is in a StaticMobSlot and does not have an edit rate to compare with a sample rate.";
-    _spTestResult->AddSingleResult( L"REQ_EP_100", ss.str().c_str(), TestResult::FAIL );
-
-    //General Processing
-    shared_ptr<EPTypedObjNode<IAAFStaticMobSlot, EPEssenceTrack> > spGeneric( node.DownCast<IAAFStaticMobSlot, EPEssenceTrack>() );
-    return this->PreOrderVisit( *spGeneric );
-}
-
-bool EPEditRateVisitor::PreOrderVisit( EPTypedObjNode<IAAFStaticMobSlot, EPEssenceTrack>& node )
-{
-    //Don't bother getting the static mob slot because it does not have
-    //an edit rate.
-    wstringstream ss;
-
-    AxStaticMobSlot axMobSlot( node.GetAAFObjectOfType() );
-    aafSlotID_t slotId = axMobSlot.GetSlotID();
-    AxString mobName = this->GetMobName( _spEdgeMap, node );
-
-    ss << L"Mob Slot with ID = " << slotId << L" of " << mobName
-       << L" is a StaticMobSlot and does not have an edit rate.";
-    _spTestResult->AddSingleResult( L"REQ_EP_091", ss.str().c_str(), TestResult::FAIL );
-    return false;
-}
-
 bool EPEditRateVisitor::PreOrderVisit( EPTypedObjNode<IAAFEventMobSlot, EPAudioTrack>& node )
 {
     //Video Specific Processing
@@ -184,9 +139,6 @@ bool EPEditRateVisitor::PreOrderVisit( EPTypedObjNode<IAAFEventMobSlot, EPEssenc
 
 bool EPEditRateVisitor::PreOrderVisit( EPTypedObjNode<IAAFMobSlot, EPAudioTrack>& node )
 {
-    //Audio Specific Processing
-    _staticAudioTracks++;
-
     //General Processing
     shared_ptr<EPTypedObjNode<IAAFMobSlot, EPEssenceTrack> > spGeneric( node.DownCast<IAAFMobSlot, EPEssenceTrack>() );
     return this->PreOrderVisit( *spGeneric );
@@ -354,9 +306,8 @@ void EPEditRateVisitor::CheckAudioSampleRates()
   //static and unknown MobSlots the test must fail.
 
   if ( _audioEditRates.size() > 1 ||
-       (_audioEditRates.size() > 0 && _staticAudioTracks > 0 ) ||
-       (_audioEditRates.size() > 0 && _unknownAudioTracks > 0 ) ||
-       (_staticAudioTracks > 0 && _unknownAudioTracks > 0 )
+       ( _audioEditRates.size() > 0 && _unknownAudioTracks > 0 ) ||
+       ( _unknownAudioTracks > 0 )
        )
   {
     shared_ptr<DetailLevelTestResult> spSubResult =
@@ -370,13 +321,6 @@ void EPEditRateVisitor::CheckAudioSampleRates()
     {
       wstringstream ss;
       ss << iter->second << L" audio track(s) have an edit rate of " << iter->first.first << L"/" << iter->first.second << L".";
-      spSubResult->AddDetail( ss.str().c_str() );
-    }
-    
-    if ( _staticAudioTracks > 0 )
-    {
-      wstringstream ss;
-      ss << _staticAudioTracks << L" audio track(s) are static and have no edit rate.";
       spSubResult->AddDetail( ss.str().c_str() );
     }
     

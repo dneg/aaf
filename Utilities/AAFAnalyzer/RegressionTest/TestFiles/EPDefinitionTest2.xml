@@ -1,210 +1,188 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE aaf-file SYSTEM "EPDerivationChain.dtd">
-
 <aaf-file effect-data-definitions="legacy">
-
-    <!-- Test every operation defined in the edit protocol with legacy Data
+<!-- Test every operation defined in the edit protocol with legacy Data
          Definition values -->
-    <top-level name="Video Dissolve not in Transition">
-        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence length="0" track-type="picture">
-                <eoc track-type="picture" length="1"/>
-                <video-dissolve track-type="picture" length="1"/>
-                <eoc track-type="picture" length="1"/>
-            </sequence>
-        </timeline-mob-slot>
-    </top-level>
-
-    <top-level name="SMPTE Video Wipe not in Transition">
-        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence length="0" track-type="picture">
-                <eoc track-type="picture" length="1"/>
-                <smpte-video-wipe track-type="picture" length="1"/>
-                <eoc track-type="picture" length="1"/>
-            </sequence>
-        </timeline-mob-slot>
-    </top-level>
-
-    <top-level name="Video Speed Control not in Transition">
-        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence length="0" track-type="picture">
-                <eoc track-type="picture" length="1"/>
-                <video-speed-control track-type="picture" length="1">
-                    <constant-speed-ratio denominator="1" numerator="1"/>
-                </video-speed-control>
-                <eoc track-type="picture" length="1"/>
-            </sequence>
-        </timeline-mob-slot>
-    </top-level>
-
-    <top-level name="Video Repeat not in Transition">
-        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence length="0" track-type="picture">
-                <eoc track-type="picture" length="1"/>
-                <video-repeat track-type="picture" length="1"/>
-                <eoc track-type="picture" length="1"/>
-            </sequence>
-        </timeline-mob-slot>
-    </top-level>
-
-    <top-level name="Video Flip not in Transition">
-        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence length="0" track-type="picture">
-                <eoc track-type="picture" length="1"/>
-                <video-flip track-type="picture" length="1"/>
-                <eoc track-type="picture" length="1"/>
-            </sequence>
-        </timeline-mob-slot>
-    </top-level>
-
-    <top-level name="Video Flop not in Transition">
-        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence length="0" track-type="picture">
-                <eoc track-type="picture" length="1"/>
-                <video-flop track-type="picture" length="1"/>
-                <eoc track-type="picture" length="1"/>
-            </sequence>
-        </timeline-mob-slot>
-    </top-level>
-
-    <top-level name="Video Flip-Flop not in Transition">
-        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence length="0" track-type="picture">
-                <eoc track-type="picture" length="1"/>
-                <video-flip-flop track-type="picture" length="1"/>
-                <eoc track-type="picture" length="1"/>
-            </sequence>
-        </timeline-mob-slot>
-    </top-level>
-
-    <top-level name="Video Position not in Transition">
-        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence length="0" track-type="picture">
-                <eoc track-type="picture" length="1"/>
-                <video-position track-type="picture" length="1"/>
-                <eoc track-type="picture" length="1"/>
-            </sequence>
-        </timeline-mob-slot>
-    </top-level>
-
-    <top-level name="Video Crop not in Transition">
-        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence length="0" track-type="picture">
-                <eoc track-type="picture" length="1"/>
-                <video-crop track-type="picture" length="1"/>
-                <eoc track-type="picture" length="1"/>
-            </sequence>
-        </timeline-mob-slot>
-    </top-level>
-
-    <top-level name="Video Scale not in Transition">
-        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence length="0" track-type="picture">
-                <eoc track-type="picture" length="1"/>
-                <video-scale track-type="picture" length="1"/>
-                <eoc track-type="picture" length="1"/>
-            </sequence>
-        </timeline-mob-slot>
-    </top-level>
-
-    <top-level name="Video Rotate not in Transition">
-        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence length="0" track-type="picture">
-                <eoc track-type="picture" length="1"/>
-                <video-rotate track-type="picture" length="1"/>
-                <eoc track-type="picture" length="1"/>
-            </sequence>
-        </timeline-mob-slot>
-    </top-level>
-
-    <top-level name="Video Corner Pinning not in Transition">
-        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence length="0" track-type="picture">
-                <eoc track-type="picture" length="1"/>
-                <video-corner-pinning track-type="picture" length="1"/>
-                <eoc track-type="picture" length="1"/>
-            </sequence>
-        </timeline-mob-slot>
-    </top-level>
-
-    <top-level name="Alpha With Video Key not in Transition">
-        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence length="0" track-type="picture">
-                <eoc track-type="picture" length="1"/>
-                <alpha-with-video-key track-type="picture" length="1"/>
-                <eoc track-type="picture" length="1"/>
-            </sequence>
-        </timeline-mob-slot>
-    </top-level>
-
-    <top-level name="Separate Alpha Key not in Transition">
-        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence length="0" track-type="picture">
-                <eoc track-type="picture" length="1"/>
-                <separate-alpha-key track-type="picture" length="1"/>
-                <eoc track-type="picture" length="1"/>
-            </sequence>
-        </timeline-mob-slot>
-    </top-level>
-
-    <top-level name="Luminance Key not in Transition">
-        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence length="0" track-type="picture">
-                <eoc track-type="picture" length="1"/>
-                <luminance-key track-type="picture" length="1"/>
-                <eoc track-type="picture" length="1"/>
-            </sequence>
-        </timeline-mob-slot>
-    </top-level>
-
-    <top-level name="Chroma Key not in Transition">
-        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence length="0" track-type="picture">
-                <eoc track-type="picture" length="1"/>
-                <chroma-key track-type="picture" length="1"/>
-                <eoc track-type="picture" length="1"/>
-            </sequence>
-        </timeline-mob-slot>
-    </top-level>
-
-    <top-level name="Mono Audio Gain not in Transition">
-        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence length="0" track-type="audio">
-                <eoc track-type="audio" length="1"/>
-                <mono-audio-gain track-type="audio" length="1"/>
-                <eoc track-type="audio" length="1"/>
-            </sequence>
-        </timeline-mob-slot>
-    </top-level>
-
-    <top-level name="Mono Audio Pan not in Transition">
-        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence length="0" track-type="audio">
-                <eoc track-type="audio" length="1"/>
-                <mono-audio-pan track-type="audio" length="1"/>
-                <eoc track-type="audio" length="1"/>
-            </sequence>
-        </timeline-mob-slot>
-    </top-level>
-
-    <top-level name="Mono Audio Dissolve not in Transition">
-        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence length="0" track-type="audio">
-                <eoc track-type="audio" length="1"/>
-                <mono-audio-dissolve track-type="audio" length="1"/>
-                <eoc track-type="audio" length="1"/>
-            </sequence>
-        </timeline-mob-slot>
-    </top-level>
-
-    <top-level name="Two Parameter Mobo Audio Dissolve not in Transition">
-        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
-            <sequence length="0" track-type="audio">
-                <eoc track-type="audio" length="1"/>
-                <two-parameter-mono-audio-dissolve track-type="audio" length="1"/>
-                <eoc track-type="audio" length="1"/>
-            </sequence>
-        </timeline-mob-slot>
-    </top-level>
-
+ <top-level name="Video Dissolve not in Transition">
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <sequence length="0" track-type="picture">
+    <eoc track-type="picture" length="1"/>
+    <video-dissolve track-type="picture" length="1"/>
+    <eoc track-type="picture" length="1"/>
+   </sequence>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="SMPTE Video Wipe not in Transition">
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <sequence length="0" track-type="picture">
+    <eoc track-type="picture" length="1"/>
+    <smpte-video-wipe track-type="picture" length="1"/>
+    <eoc track-type="picture" length="1"/>
+   </sequence>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Video Speed Control not in Transition">
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <sequence length="0" track-type="picture">
+    <eoc track-type="picture" length="1"/>
+    <video-speed-control track-type="picture" length="1">
+     <constant-speed-ratio denominator="1" numerator="1"/>
+    </video-speed-control>
+    <eoc track-type="picture" length="1"/>
+   </sequence>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Video Repeat not in Transition">
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <sequence length="0" track-type="picture">
+    <eoc track-type="picture" length="1"/>
+    <video-repeat track-type="picture" length="1"/>
+    <eoc track-type="picture" length="1"/>
+   </sequence>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Video Flip not in Transition">
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <sequence length="0" track-type="picture">
+    <eoc track-type="picture" length="1"/>
+    <video-flip track-type="picture" length="1"/>
+    <eoc track-type="picture" length="1"/>
+   </sequence>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Video Flop not in Transition">
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <sequence length="0" track-type="picture">
+    <eoc track-type="picture" length="1"/>
+    <video-flop track-type="picture" length="1"/>
+    <eoc track-type="picture" length="1"/>
+   </sequence>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Video Flip-Flop not in Transition">
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <sequence length="0" track-type="picture">
+    <eoc track-type="picture" length="1"/>
+    <video-flip-flop track-type="picture" length="1"/>
+    <eoc track-type="picture" length="1"/>
+   </sequence>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Video Position not in Transition">
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <sequence length="0" track-type="picture">
+    <eoc track-type="picture" length="1"/>
+    <video-position track-type="picture" length="1"/>
+    <eoc track-type="picture" length="1"/>
+   </sequence>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Video Crop not in Transition">
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <sequence length="0" track-type="picture">
+    <eoc track-type="picture" length="1"/>
+    <video-crop track-type="picture" length="1"/>
+    <eoc track-type="picture" length="1"/>
+   </sequence>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Video Scale not in Transition">
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <sequence length="0" track-type="picture">
+    <eoc track-type="picture" length="1"/>
+    <video-scale track-type="picture" length="1"/>
+    <eoc track-type="picture" length="1"/>
+   </sequence>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Video Rotate not in Transition">
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <sequence length="0" track-type="picture">
+    <eoc track-type="picture" length="1"/>
+    <video-rotate track-type="picture" length="1"/>
+    <eoc track-type="picture" length="1"/>
+   </sequence>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Video Corner Pinning not in Transition">
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <sequence length="0" track-type="picture">
+    <eoc track-type="picture" length="1"/>
+    <video-corner-pinning track-type="picture" length="1"/>
+    <eoc track-type="picture" length="1"/>
+   </sequence>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Alpha With Video Key not in Transition">
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <sequence length="0" track-type="picture">
+    <eoc track-type="picture" length="1"/>
+    <alpha-with-video-key track-type="picture" length="1"/>
+    <eoc track-type="picture" length="1"/>
+   </sequence>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Separate Alpha Key not in Transition">
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <sequence length="0" track-type="picture">
+    <eoc track-type="picture" length="1"/>
+    <separate-alpha-key track-type="picture" length="1"/>
+    <eoc track-type="picture" length="1"/>
+   </sequence>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Luminance Key not in Transition">
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <sequence length="0" track-type="picture">
+    <eoc track-type="picture" length="1"/>
+    <luminance-key track-type="picture" length="1"/>
+    <eoc track-type="picture" length="1"/>
+   </sequence>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Chroma Key not in Transition">
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <sequence length="0" track-type="picture">
+    <eoc track-type="picture" length="1"/>
+    <chroma-key track-type="picture" length="1"/>
+    <eoc track-type="picture" length="1"/>
+   </sequence>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Mono Audio Gain not in Transition">
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <sequence length="0" track-type="audio">
+    <eoc track-type="audio" length="1"/>
+    <mono-audio-gain track-type="audio" length="1"/>
+    <eoc track-type="audio" length="1"/>
+   </sequence>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Mono Audio Pan not in Transition">
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <sequence length="0" track-type="audio">
+    <eoc track-type="audio" length="1"/>
+    <mono-audio-pan track-type="audio" length="1"/>
+    <eoc track-type="audio" length="1"/>
+   </sequence>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Mono Audio Dissolve not in Transition">
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <sequence length="0" track-type="audio">
+    <eoc track-type="audio" length="1"/>
+    <mono-audio-dissolve track-type="audio" length="1"/>
+    <eoc track-type="audio" length="1"/>
+   </sequence>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Two Parameter Mobo Audio Dissolve not in Transition">
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <sequence length="0" track-type="audio">
+    <eoc track-type="audio" length="1"/>
+    <two-parameter-mono-audio-dissolve track-type="audio" length="1"/>
+    <eoc track-type="audio" length="1"/>
+   </sequence>
+  </timeline-mob-slot>
+ </top-level>
 </aaf-file>

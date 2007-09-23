@@ -47,44 +47,50 @@ class TestLevelTestResult;
 class EPContainedTrackVisitor : public EPTypedVisitor
 {
 
-  public:
+ public:
 
-    EPContainedTrackVisitor( wostream& log,
-			     shared_ptr<EdgeMap> spEdgeMap,
-			     shared_ptr<TestLevelTestResult> spTestResult );
+  EPContainedTrackVisitor( wostream& log,
+			   shared_ptr<EdgeMap> spEdgeMap,
+			   shared_ptr<TestLevelTestResult> spTestResult );
+  
+  virtual ~EPContainedTrackVisitor();
+  
+  virtual bool PreOrderVisit( EPTypedObjNode<IAAFCompositionMob, EPTopLevelComposition>& node );
+  virtual bool PreOrderVisit( EPTypedObjNode<IAAFCompositionMob, EPLowerLevelComposition>& node );
+  virtual bool PreOrderVisit( EPTypedObjNode<IAAFCompositionMob, EPSubClipComposition>& node );
+  virtual bool PreOrderVisit( EPTypedObjNode<IAAFCompositionMob, EPAdjustedClipComposition>& node );
+  virtual bool PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPTapeSource>& node );
+  virtual bool PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPFilmSource>& node );
+  virtual bool PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPAuxiliarySource>& node );
+  
+ private:
+  
+  // prohibited
+  EPContainedTrackVisitor();
+  EPContainedTrackVisitor( const EPContainedTrackVisitor& );
+  EPContainedTrackVisitor& operator=( const EPContainedTrackVisitor& );
+  
+  typedef map<aafUInt32, aafUInt32> TrackNumberMap;
+  
+  shared_ptr<TrackNumberMap> CountTrackCodes( shared_ptr<EPTypedVisitor::MobSlotNodeSet> tracks,
+					      unsigned int& unnumberedTracks );
 
-    virtual ~EPContainedTrackVisitor();
-
-    virtual bool PreOrderVisit( EPTypedObjNode<IAAFCompositionMob, EPTopLevelComposition>& node );
-    virtual bool PreOrderVisit( EPTypedObjNode<IAAFCompositionMob, EPLowerLevelComposition>& node );
-    virtual bool PreOrderVisit( EPTypedObjNode<IAAFCompositionMob, EPSubClipComposition>& node );
-    virtual bool PreOrderVisit( EPTypedObjNode<IAAFCompositionMob, EPAdjustedClipComposition>& node );
-    virtual bool PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPTapeSource>& node );
-    virtual bool PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPFilmSource>& node );
-    virtual bool PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPAuxiliarySource>& node );
-
-  private:
-
-    // prohibited
-    EPContainedTrackVisitor();
-    EPContainedTrackVisitor( const EPContainedTrackVisitor& );
-    EPContainedTrackVisitor& operator=( const EPContainedTrackVisitor& );
-
-   typedef map<aafUInt32, aafUInt32> TrackNumberMap;
-
-   shared_ptr<TrackNumberMap> CountTrackCodes( shared_ptr<EPTypedVisitor::MobSlotNodeSet> tracks,
-						unsigned int& unnumberedTracks );
-
-    template<typename SegmentTypeSP>
+  // This is used to check top level composition, and tape source,
+  // time code tracks.
+  bool CheckTimecodeTrackPhysicalNumbers( Node& node,
+					  unsigned int maxPhysTrackNum,
+					  wstring nodeName, wstring reqId );
+  
+  template<typename SegmentTypeSP>
     bool CheckForSingleSegment( Node& mobSlotNode );
 
-    bool CheckPrimaryTimecodeTracks( shared_ptr<EPTypedVisitor::MobSlotNodeSet> tracks,
-				     Node& node );
-
- 
-    wostream& _log;
-    shared_ptr<EdgeMap> _spEdgeMap;
-    shared_ptr<TestLevelTestResult> _spTestResult;
+  bool CheckPrimaryTimecodeTracks( shared_ptr<EPTypedVisitor::MobSlotNodeSet> tracks,
+				   Node& node );
+  
+  
+  wostream& _log;
+  shared_ptr<EdgeMap> _spEdgeMap;
+  shared_ptr<TestLevelTestResult> _spTestResult;
 };
 
 } // end of namespace diskstream

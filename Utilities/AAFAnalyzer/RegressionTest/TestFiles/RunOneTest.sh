@@ -33,10 +33,6 @@ fi
 echo "${ANALYZE} -filter \"$2\" -verbose $1.aaf > $1.actual"
 ${ANALYZE} -filter "$2" -verbose $1.aaf > $1.actual
 
-echo "Comparing $1 Expected Results ($1.expected) to Actual Results ($1.actual)"
-diff $1.expected $1.actual
-diffstatus=$?
-echo "End of Test $1"
-echo ""
-exit $diffstatus
+echo diff $1.expected $1.actual
+diff $1.expected $1.actual > /dev/null
 

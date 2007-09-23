@@ -1,6 +1,7 @@
         Name:   Edit Protocol Header Test
         Desc:   Verify the AAF file header is valid.
         Result: Passed
+        Reason: 
         Covered Requirements: REQ_EP_255
         Noted Requirements: None
         Passing Requirements: None

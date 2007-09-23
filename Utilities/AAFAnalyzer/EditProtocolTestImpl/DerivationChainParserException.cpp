@@ -1,6 +1,6 @@
 //=---------------------------------------------------------------------=
 //
-// $Id$
+// $Id$ $Name$
 //
 // The contents of this file are subject to the AAF SDK Public
 // Source License Agreement (the "License"); You may not use this file
@@ -18,12 +18,15 @@
 //
 //=---------------------------------------------------------------------=
 
-//AAF Analyzer Base files
-#include "AAFTypedObjNode.h"
+//Edit Protocol Test files
+#include "DerivationChainParserException.h"
+
+//Ax files
+#include <AxUtil.h>
 
 namespace {
 
-using namespace aafanalyzer;
+//using namespace aafanalyzer;
 
 } // end of namespace
 
@@ -32,30 +35,14 @@ using namespace aafanalyzer;
 //======================================================================
 //======================================================================
 
-namespace aafanalyzer {
+namespace aafanalyzer 
+{
 
-using namespace std;
-using namespace boost;
-
-template<typename AAFObjType>
-AAFTypedObjNode<AAFObjType>::AAFTypedObjNode(IAAFSmartPointer<AAFObjType> spObject,
-					     const basic_string<wchar_t>& name)
-  : AAFObjNode(AxQueryInterface<AAFObjType,IAAFObject>( spObject ), name ),
-    _kind( AAFNODE_KIND_UNDEFINED )
+DerivationChainParserException::DerivationChainParserException( const wchar_t* what )
+  : AxEx( AxString(AxString(L"Derivation Chain Parser Error: ") + AxString(what)).c_str() )
 {}
 
-template<typename AAFObjType>
-AAFTypedObjNode<AAFObjType>::AAFTypedObjNode( IAAFSmartPointer<AAFObjType> spObject,
-                         shared_ptr<Node> spExistingNode )
-  : AAFObjNode( AxQueryInterface<AAFObjType,IAAFObject>( spObject ),
-                spExistingNode->GetName(),
-                spExistingNode->GetLID() )
+DerivationChainParserException::~DerivationChainParserException() throw()
 {}
-
-template<typename AAFObjType>
-AAFTypedObjNode<AAFObjType>::~AAFTypedObjNode()
-{}
-
-#include "TypedNodeTemplate.cpp.gen"
 
 } // end of namespace diskstream

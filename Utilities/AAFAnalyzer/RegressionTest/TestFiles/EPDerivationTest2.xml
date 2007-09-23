@@ -1,0 +1,2203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE aaf-file SYSTEM "EPDerivationChain.dtd">
+<aaf-file>
+<!-- Invalid transitions out of the initial state -->
+ <lower-level name="Initial->Lower-Level">
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <eoc length="0" track-type="none"/>
+  </timeline-mob-slot>
+ </lower-level>
+ <sub-clip name="Initial->Sub-Clip">
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <eoc length="0" track-type="none"/>
+  </timeline-mob-slot>
+ </sub-clip>
+ <adjusted-clip name="Initial->Adjusted Clip">
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <eoc length="0" track-type="none"/>
+  </timeline-mob-slot>
+ </adjusted-clip>
+ <template-clip name="Initial->Template Clip">
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <eoc length="0" track-type="none"/>
+  </timeline-mob-slot>
+ </template-clip>
+<!-- Invalid transitions out of the Top-Level state -->
+ <top-level name="Invalid out of Top-Level: Top-Level A">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <top-level name="Top-Level->Top-Level">
+     <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+      <eoc length="0" track-type="none"/>
+     </timeline-mob-slot>
+    </top-level>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Invalid out of Top-Level: Top-Level B">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <file-source sample-rate-numerator="1" sample-rate-denominator="1" name="Top-Level->File Source">
+     <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+      <eoc length="0" track-type="none"/>
+     </timeline-mob-slot>
+    </file-source>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Invalid out of Top-Level: Top-Level C">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <recording-source name="Top-Level->Recording Source">
+     <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+      <eoc length="0" track-type="none"/>
+     </timeline-mob-slot>
+    </recording-source>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Invalid out of Top-Level: Top-Level D">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <import-source name="Top-Level->Import Source">
+     <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+      <eoc length="0" track-type="none"/>
+     </timeline-mob-slot>
+    </import-source>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Invalid out of Top-Level: Top-Level E">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <tape-source name="Top-Level->Tape Source">
+     <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+      <eoc length="0" track-type="none"/>
+     </timeline-mob-slot>
+    </tape-source>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Invalid out of Top-Level: Top-Level F">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <film-source name="Top-Level->Film Source">
+     <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+      <eoc length="0" track-type="none"/>
+     </timeline-mob-slot>
+    </film-source>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Invalid out of Top-Level: End of Chain">
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <eoc length="0" track-type="none"/>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Invalid out of Top-Level: Out of File">
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <oof length="0" track-type="none"/>
+  </timeline-mob-slot>
+ </top-level>
+<!-- Invalid transitions out of the Lower-Level state -->
+ <top-level name="Invalid out of Lower-Level: Top-Level A">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <lower-level name="Invalid out of Lower-Level: Lower-Level A">
+     <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+      <source-clip length="0" track-type="none">
+       <top-level name="Lower-Level->Top-Level">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+         <eoc length="0" track-type="none"/>
+        </timeline-mob-slot>
+       </top-level>
+      </source-clip>
+     </timeline-mob-slot>
+    </lower-level>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Invalid out of Lower-Level: Top-Level B">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <lower-level name="Invalid out of Lower-Level: Lower-Level B">
+     <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+      <source-clip length="0" track-type="none">
+       <file-source sample-rate-numerator="1" sample-rate-denominator="1" name="Lower-Level->File Source">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+         <eoc length="0" track-type="none"/>
+        </timeline-mob-slot>
+       </file-source>
+      </source-clip>
+     </timeline-mob-slot>
+    </lower-level>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Invalid out of Lower-Level: Top-Level C">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <lower-level name="Invalid out of Lower-Level: Lower-Level C">
+     <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+      <source-clip length="0" track-type="none">
+       <recording-source name="Lower-Level->Recording Source">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+         <eoc length="0" track-type="none"/>
+        </timeline-mob-slot>
+       </recording-source>
+      </source-clip>
+     </timeline-mob-slot>
+    </lower-level>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Invalid out of Lower-Level: Top-Level D">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <lower-level name="Invalid out of Lower-Level: Lower-Level D">
+     <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+      <source-clip length="0" track-type="none">
+       <import-source name="Lower-Level->Import Source">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+         <eoc length="0" track-type="none"/>
+        </timeline-mob-slot>
+       </import-source>
+      </source-clip>
+     </timeline-mob-slot>
+    </lower-level>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Invalid out of Lower-Level: Top-Level E">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <lower-level name="Invalid out of Lower-Level: Lower-Level E">
+     <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+      <source-clip length="0" track-type="none">
+       <tape-source name="Lower-Level->Tape Source">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+         <eoc length="0" track-type="none"/>
+        </timeline-mob-slot>
+       </tape-source>
+      </source-clip>
+     </timeline-mob-slot>
+    </lower-level>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Invalid out of Lower-Level: Top-Level F">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <lower-level name="Invalid out of Lower-Level: Lower-Level F">
+     <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+      <source-clip length="0" track-type="none">
+       <film-source name="Lower-Level->Film Source">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+         <eoc length="0" track-type="none"/>
+        </timeline-mob-slot>
+       </film-source>
+      </source-clip>
+     </timeline-mob-slot>
+    </lower-level>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Invalid out of Lower-Level: Top Level G">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <lower-level name="Invalid out of Lower-Level: End of Chain">
+     <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+      <eoc length="0" track-type="none"/>
+     </timeline-mob-slot>
+    </lower-level>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Invalid out of Lower-Level: Top Level H">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <lower-level name="Invalid out of Lower-Level: Out of File">
+     <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+      <oof length="0" track-type="none"/>
+     </timeline-mob-slot>
+    </lower-level>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+<!-- Invalid transitions out of the Sub-Clip state -->
+ <top-level name="Invalid out of Sub-Clip: Top Level A">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <sub-clip name="Invalid out of Sub-Clip: Sub-Clip A">
+     <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+      <source-clip length="0" track-type="none">
+       <top-level name="Sub-Clip->Top-Level">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+         <eoc length="0" track-type="none"/>
+        </timeline-mob-slot>
+       </top-level>
+      </source-clip>
+     </timeline-mob-slot>
+    </sub-clip>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Invalid out of Sub-Clip: Top Level B">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <sub-clip name="Invalid out of Sub-Clip: Sub-Clip B">
+     <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+      <source-clip length="0" track-type="none">
+       <lower-level name="Sub-Clip->Lower-Level">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+         <eoc length="0" track-type="none"/>
+        </timeline-mob-slot>
+       </lower-level>
+      </source-clip>
+     </timeline-mob-slot>
+    </sub-clip>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Invalid out of Sub-Clip: Top Level C">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <sub-clip name="Invalid out of Sub-Clip: Sub-Clip C">
+     <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+      <source-clip length="0" track-type="none">
+       <sub-clip name="Sub-Clip->Sub-Clip">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+         <eoc length="0" track-type="none"/>
+        </timeline-mob-slot>
+       </sub-clip>
+      </source-clip>
+     </timeline-mob-slot>
+    </sub-clip>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Invalid out of Sub-Clip: Top Level D">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <sub-clip name="Invalid out of Sub-Clip: Sub-Clip D">
+     <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+      <source-clip length="0" track-type="none">
+       <file-source sample-rate-numerator="1" sample-rate-denominator="1" name="Sub-Clip->File Source">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+         <eoc length="0" track-type="none"/>
+        </timeline-mob-slot>
+       </file-source>
+      </source-clip>
+     </timeline-mob-slot>
+    </sub-clip>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Invalid out of Sub-Clip: Top Level E">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <sub-clip name="Invalid out of Sub-Clip: Sub-Clip E">
+     <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+      <source-clip length="0" track-type="none">
+       <recording-source name="Sub-Clip->Recording Source">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+         <eoc length="0" track-type="none"/>
+        </timeline-mob-slot>
+       </recording-source>
+      </source-clip>
+     </timeline-mob-slot>
+    </sub-clip>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Invalid out of Sub-Clip: Top Level F">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <sub-clip name="Invalid out of Sub-Clip: Sub-Clip F">
+     <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+      <source-clip length="0" track-type="none">
+       <import-source name="Sub-Clip->Import Source">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+         <eoc length="0" track-type="none"/>
+        </timeline-mob-slot>
+       </import-source>
+      </source-clip>
+     </timeline-mob-slot>
+    </sub-clip>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Invalid out of Sub-Clip: Top Level G">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <sub-clip name="Invalid out of Sub-Clip: Sub-Clip G">
+     <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+      <source-clip length="0" track-type="none">
+       <tape-source name="Sub-Clip->Tape Source">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+         <eoc length="0" track-type="none"/>
+        </timeline-mob-slot>
+       </tape-source>
+      </source-clip>
+     </timeline-mob-slot>
+    </sub-clip>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Invalid out of Sub-Clip: Top Level H">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <sub-clip name="Invalid out of Sub-Clip: Sub-Clip H">
+     <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+      <source-clip length="0" track-type="none">
+       <film-source name="Sub-Clip->Film Source">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+         <eoc length="0" track-type="none"/>
+        </timeline-mob-slot>
+       </film-source>
+      </source-clip>
+     </timeline-mob-slot>
+    </sub-clip>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Invalid out of Sub-Clip: Top Level I">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <sub-clip name="Invalid out of Sub-Clip: End of Chain">
+     <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+      <eoc length="0" track-type="none"/>
+     </timeline-mob-slot>
+    </sub-clip>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Invalid out of Sub-Clip: Top Level J">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <sub-clip name="Invalid out of Sub-Clip: Out of File">
+     <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+      <oof length="0" track-type="none"/>
+     </timeline-mob-slot>
+    </sub-clip>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+<!-- Invalid transitions out of the Adjusted Clip state -->
+ <top-level name="Invalid out of Adjusted Clip: Top Level A">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <adjusted-clip name="Invalid out of Adjusted Clip: Adjusted Clip A">
+     <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+      <source-clip length="0" track-type="none">
+       <top-level name="Adjusted Clip->Top-Level">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+         <eoc length="0" track-type="none"/>
+        </timeline-mob-slot>
+       </top-level>
+      </source-clip>
+     </timeline-mob-slot>
+    </adjusted-clip>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Invalid out of Adjusted Clip: Top Level B">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <adjusted-clip name="Invalid out of Adjusted Clip: Adjusted Clip B">
+     <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+      <source-clip length="0" track-type="none">
+       <lower-level name="Adjusted Clip->Lower-Level">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+         <eoc length="0" track-type="none"/>
+        </timeline-mob-slot>
+       </lower-level>
+      </source-clip>
+     </timeline-mob-slot>
+    </adjusted-clip>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Invalid out of Adjusted Clip: Top Level C">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <adjusted-clip name="Invalid out of Adjusted Clip: Adjusted Clip C">
+     <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+      <source-clip length="0" track-type="none">
+       <sub-clip name="Adjusted Clip->Sub-Clip">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+         <eoc length="0" track-type="none"/>
+        </timeline-mob-slot>
+       </sub-clip>
+      </source-clip>
+     </timeline-mob-slot>
+    </adjusted-clip>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Invalid out of Adjusted Clip: Top Level D">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <adjusted-clip name="Invalid out of Adjusted Clip: Adjusted Clip D">
+     <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+      <source-clip length="0" track-type="none">
+       <adjusted-clip name="Adjusted Clip->Adjusted Clip">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+         <eoc length="0" track-type="none"/>
+        </timeline-mob-slot>
+       </adjusted-clip>
+      </source-clip>
+     </timeline-mob-slot>
+    </adjusted-clip>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Invalid out of Adjusted Clip: Top Level E">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <adjusted-clip name="Invalid out of Adjusted Clip: Adjusted Clip E">
+     <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+      <source-clip length="0" track-type="none">
+       <file-source sample-rate-numerator="1" sample-rate-denominator="1" name="Adjusted Clip->File Source">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+         <eoc length="0" track-type="none"/>
+        </timeline-mob-slot>
+       </file-source>
+      </source-clip>
+     </timeline-mob-slot>
+    </adjusted-clip>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Invalid out of Adjusted Clip: Top Level F">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <adjusted-clip name="Invalid out of Adjusted Clip: Adjusted Clip F">
+     <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+      <source-clip length="0" track-type="none">
+       <recording-source name="Adjusted Clip->Recording Source">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+         <eoc length="0" track-type="none"/>
+        </timeline-mob-slot>
+       </recording-source>
+      </source-clip>
+     </timeline-mob-slot>
+    </adjusted-clip>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Invalid out of Adjusted Clip: Top Level G">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <adjusted-clip name="Invalid out of Adjusted Clip: Adjusted Clip G">
+     <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+      <source-clip length="0" track-type="none">
+       <import-source name="Adjusted Clip->Import Source">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+         <eoc length="0" track-type="none"/>
+        </timeline-mob-slot>
+       </import-source>
+      </source-clip>
+     </timeline-mob-slot>
+    </adjusted-clip>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Invalid out of Adjusted Clip: Top Level H">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <adjusted-clip name="Invalid out of Adjusted Clip: Adjusted Clip H">
+     <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+      <source-clip length="0" track-type="none">
+       <tape-source name="Adjusted Clip->Tape Source">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+         <eoc length="0" track-type="none"/>
+        </timeline-mob-slot>
+       </tape-source>
+      </source-clip>
+     </timeline-mob-slot>
+    </adjusted-clip>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Invalid out of Adjusted Clip: Top Level I">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <adjusted-clip name="Invalid out of Adjusted Clip: Adjusted Clip I">
+     <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+      <source-clip length="0" track-type="none">
+       <film-source name="Adjusted Clip->Film Source">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+         <eoc length="0" track-type="none"/>
+        </timeline-mob-slot>
+       </film-source>
+      </source-clip>
+     </timeline-mob-slot>
+    </adjusted-clip>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Invalid out of Adjusted Clip: Top Level J">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <adjusted-clip name="Invalid out of Adjusted Clip: End of Chain">
+     <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+      <eoc length="0" track-type="none"/>
+     </timeline-mob-slot>
+    </adjusted-clip>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Invalid out of Adjusted Clip: Top Level K">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <adjusted-clip name="Invalid out of Adjusted Clip: Out of File">
+     <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+      <oof length="0" track-type="none"/>
+     </timeline-mob-slot>
+    </adjusted-clip>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+<!-- Invalid transitions out of the Template Clip state -->
+ <top-level name="Invalid out of Template Clip: Top Level A">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <template-clip name="Invalid out of Template Clip: Template Clip A">
+     <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+      <source-clip length="0" track-type="none">
+       <top-level name="Template Clip->Top-Level">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+         <eoc length="0" track-type="none"/>
+        </timeline-mob-slot>
+       </top-level>
+      </source-clip>
+     </timeline-mob-slot>
+    </template-clip>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Invalid out of Template Clip: Top Level B">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <template-clip name="Invalid out of Template Clip: Template Clip B">
+     <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+      <source-clip length="0" track-type="none">
+       <lower-level name="Template Clip->Lower-Level">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+         <eoc length="0" track-type="none"/>
+        </timeline-mob-slot>
+       </lower-level>
+      </source-clip>
+     </timeline-mob-slot>
+    </template-clip>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Invalid out of Template Clip: Top Level C">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <template-clip name="Invalid out of Template Clip: Template Clip C">
+     <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+      <source-clip length="0" track-type="none">
+       <sub-clip name="Template Clip->Sub-Clip">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+         <eoc length="0" track-type="none"/>
+        </timeline-mob-slot>
+       </sub-clip>
+      </source-clip>
+     </timeline-mob-slot>
+    </template-clip>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Invalid out of Template Clip: Top Level D">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <template-clip name="Invalid out of Template Clip: Template Clip D">
+     <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+      <source-clip length="0" track-type="none">
+       <adjusted-clip name="Template Clip->Adjusted Clip">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+         <eoc length="0" track-type="none"/>
+        </timeline-mob-slot>
+       </adjusted-clip>
+      </source-clip>
+     </timeline-mob-slot>
+    </template-clip>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Invalid out of Template Clip: Top Level E">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <template-clip name="Invalid out of Template Clip: Template Clip E">
+     <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+      <source-clip length="0" track-type="none">
+       <template-clip name="Template Clip->Template Clip">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+         <eoc length="0" track-type="none"/>
+        </timeline-mob-slot>
+       </template-clip>
+      </source-clip>
+     </timeline-mob-slot>
+    </template-clip>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Invalid out of Template Clip: Top Level F">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <template-clip name="Invalid out of Template Clip: Template Clip F">
+     <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+      <source-clip length="0" track-type="none">
+       <clip name="Template Clip->Clip">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+         <eoc length="0" track-type="none"/>
+        </timeline-mob-slot>
+       </clip>
+      </source-clip>
+     </timeline-mob-slot>
+    </template-clip>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Invalid out of Template Clip: Top Level G">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <template-clip name="Invalid out of Template Clip: Template Clip G">
+     <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+      <source-clip length="0" track-type="none">
+       <file-source sample-rate-numerator="1" sample-rate-denominator="1" name="Template Clip->File Source">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+         <eoc length="0" track-type="none"/>
+        </timeline-mob-slot>
+       </file-source>
+      </source-clip>
+     </timeline-mob-slot>
+    </template-clip>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Invalid out of Template Clip: Top Level H">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <template-clip name="Invalid out of Template Clip: Template Clip H">
+     <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+      <source-clip length="0" track-type="none">
+       <recording-source name="Template Clip->Recording Source">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+         <eoc length="0" track-type="none"/>
+        </timeline-mob-slot>
+       </recording-source>
+      </source-clip>
+     </timeline-mob-slot>
+    </template-clip>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Invalid out of Template Clip: Top Level I">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <template-clip name="Invalid out of Template Clip: Template Clip I">
+     <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+      <source-clip length="0" track-type="none">
+       <import-source name="Template Clip->Import Source">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+         <eoc length="0" track-type="none"/>
+        </timeline-mob-slot>
+       </import-source>
+      </source-clip>
+     </timeline-mob-slot>
+    </template-clip>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Invalid out of Template Clip: Top Level J">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <template-clip name="Invalid out of Template Clip: Template Clip J">
+     <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+      <source-clip length="0" track-type="none">
+       <tape-source name="Template Clip->Tape Source">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+         <eoc length="0" track-type="none"/>
+        </timeline-mob-slot>
+       </tape-source>
+      </source-clip>
+     </timeline-mob-slot>
+    </template-clip>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Invalid out of Template Clip: Top Level K">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <template-clip name="Invalid out of Template Clip: Template Clip K">
+     <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+      <source-clip length="0" track-type="none">
+       <film-source name="Template Clip->Film Source">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+         <eoc length="0" track-type="none"/>
+        </timeline-mob-slot>
+       </film-source>
+      </source-clip>
+     </timeline-mob-slot>
+    </template-clip>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Invalid out of Template Clip: Top Level L">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <template-clip name="Invalid out of Template Clip: Out of File">
+     <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+      <oof length="0" track-type="none"/>
+     </timeline-mob-slot>
+    </template-clip>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+<!-- Invalid transitions out of the Clip state -->
+ <top-level name="Invalid out of Clip: Top Level A">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <clip name="Invalid out of Clip: Clip A">
+     <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+      <source-clip length="0" track-type="none">
+       <top-level name="Clip->Top-Level">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+         <eoc length="0" track-type="none"/>
+        </timeline-mob-slot>
+       </top-level>
+      </source-clip>
+     </timeline-mob-slot>
+    </clip>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Invalid out of Clip: Top Level B">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <clip name="Invalid out of Clip: Clip B">
+     <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+      <source-clip length="0" track-type="none">
+       <lower-level name="Clip->Lower-Level">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+         <eoc length="0" track-type="none"/>
+        </timeline-mob-slot>
+       </lower-level>
+      </source-clip>
+     </timeline-mob-slot>
+    </clip>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Invalid out of Clip: Top Level C">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <clip name="Invalid out of Clip: Clip C">
+     <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+      <source-clip length="0" track-type="none">
+       <sub-clip name="Clip->Sub-Clip">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+         <eoc length="0" track-type="none"/>
+        </timeline-mob-slot>
+       </sub-clip>
+      </source-clip>
+     </timeline-mob-slot>
+    </clip>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Invalid out of Clip: Top Level D">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <clip name="Invalid out of Clip: Clip D">
+     <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+      <source-clip length="0" track-type="none">
+       <adjusted-clip name="Clip->Adjusted Clip">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+         <eoc length="0" track-type="none"/>
+        </timeline-mob-slot>
+       </adjusted-clip>
+      </source-clip>
+     </timeline-mob-slot>
+    </clip>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Invalid out of Clip: Top Level E">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <clip name="Invalid out of Clip: Clip E">
+     <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+      <source-clip length="0" track-type="none">
+       <template-clip name="Clip->Template Clip">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+         <eoc length="0" track-type="none"/>
+        </timeline-mob-slot>
+       </template-clip>
+      </source-clip>
+     </timeline-mob-slot>
+    </clip>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Invalid out of Clip: Top Level F">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <clip name="Invalid out of Clip: Clip F">
+     <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+      <source-clip length="0" track-type="none">
+       <clip name="Clip->Clip">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+         <eoc length="0" track-type="none"/>
+        </timeline-mob-slot>
+       </clip>
+      </source-clip>
+     </timeline-mob-slot>
+    </clip>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Invalid out of Clip: Top Level G">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <clip name="Invalid out of Clip: Clip G">
+     <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+      <source-clip length="0" track-type="none">
+       <recording-source name="Clip->Recording Source">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+         <eoc length="0" track-type="none"/>
+        </timeline-mob-slot>
+       </recording-source>
+      </source-clip>
+     </timeline-mob-slot>
+    </clip>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+<!-- Invalid transitions out of the File Source state -->
+ <top-level name="Invalid out of File Source: Top Level A">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <clip name="Invalid out of File Source: Clip A">
+     <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+      <source-clip length="0" track-type="none">
+       <file-source sample-rate-numerator="1" sample-rate-denominator="1" name="Invalid out of File Source: File Source A">
+        <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+         <source-clip length="0" track-type="none">
+          <top-level name="File Source->Top-Level">
+           <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+            <eoc length="0" track-type="none"/>
+           </timeline-mob-slot>
+          </top-level>
+         </source-clip>
+        </timeline-mob-slot>
+       </file-source>
+      </source-clip>
+     </timeline-mob-slot>
+    </clip>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Invalid out of File Source: Top Level B">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <clip name="Invalid out of File Source: Clip B">
+     <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+      <source-clip length="0" track-type="none">
+       <file-source sample-rate-numerator="1" sample-rate-denominator="1" name="Invalid out of File Source: File Source B">
+        <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+         <source-clip length="0" track-type="none">
+          <lower-level name="File Source->Lower-Level">
+           <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+            <eoc length="0" track-type="none"/>
+           </timeline-mob-slot>
+          </lower-level>
+         </source-clip>
+        </timeline-mob-slot>
+       </file-source>
+      </source-clip>
+     </timeline-mob-slot>
+    </clip>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Invalid out of File Source: Top Level C">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <clip name="Invalid out of File Source: Clip C">
+     <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+      <source-clip length="0" track-type="none">
+       <file-source sample-rate-numerator="1" sample-rate-denominator="1" name="Invalid out of File Source: File Source C">
+        <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+         <source-clip length="0" track-type="none">
+          <sub-clip name="File Source->Sub-Clip">
+           <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+            <eoc length="0" track-type="none"/>
+           </timeline-mob-slot>
+          </sub-clip>
+         </source-clip>
+        </timeline-mob-slot>
+       </file-source>
+      </source-clip>
+     </timeline-mob-slot>
+    </clip>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Invalid out of File Source: Top Level D">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <clip name="Invalid out of File Source: Clip D">
+     <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+      <source-clip length="0" track-type="none">
+       <file-source sample-rate-numerator="1" sample-rate-denominator="1" name="Invalid out of File Source: File Source D">
+        <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+         <source-clip length="0" track-type="none">
+          <adjusted-clip name="File Source->Adjusted Clip">
+           <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+            <eoc length="0" track-type="none"/>
+           </timeline-mob-slot>
+          </adjusted-clip>
+         </source-clip>
+        </timeline-mob-slot>
+       </file-source>
+      </source-clip>
+     </timeline-mob-slot>
+    </clip>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Invalid out of File Source: Top Level E">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <clip name="Invalid out of File Source: Clip E">
+     <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+      <source-clip length="0" track-type="none">
+       <file-source sample-rate-numerator="1" sample-rate-denominator="1" name="Invalid out of File Source: File Source E">
+        <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+         <source-clip length="0" track-type="none">
+          <template-clip name="File Source->Template Clip">
+           <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+            <eoc length="0" track-type="none"/>
+           </timeline-mob-slot>
+          </template-clip>
+         </source-clip>
+        </timeline-mob-slot>
+       </file-source>
+      </source-clip>
+     </timeline-mob-slot>
+    </clip>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Invalid out of File Source: Top Level F">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <clip name="Invalid out of File Source: Clip F">
+     <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+      <source-clip length="0" track-type="none">
+       <file-source sample-rate-numerator="1" sample-rate-denominator="1" name="Invalid out of File Source: File Source F">
+        <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+         <source-clip length="0" track-type="none">
+          <clip name="File Source->Clip">
+           <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+            <eoc length="0" track-type="none"/>
+           </timeline-mob-slot>
+          </clip>
+         </source-clip>
+        </timeline-mob-slot>
+       </file-source>
+      </source-clip>
+     </timeline-mob-slot>
+    </clip>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+<!-- Invalid transition out of the Recording Source state -->
+ <top-level name="Invalid out of Recording Source: Top Level A">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <clip name="Invalid out of Recording Source: Clip A">
+     <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+      <source-clip length="0" track-type="none">
+       <file-source sample-rate-numerator="1" sample-rate-denominator="1" name="Invalid out of Recording Source: File Source A">
+        <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+         <source-clip length="0" track-type="none">
+          <recording-source name="Invalid out of Recording Source: Recording Source A">
+           <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+            <source-clip length="0" track-type="none">
+             <top-level name="Recording Source->Top-Level">
+              <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+               <eoc length="0" track-type="none"/>
+              </timeline-mob-slot>
+             </top-level>
+            </source-clip>
+           </timeline-mob-slot>
+          </recording-source>
+         </source-clip>
+        </timeline-mob-slot>
+       </file-source>
+      </source-clip>
+     </timeline-mob-slot>
+    </clip>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Invalid out of Recording Source: Top Level B">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <clip name="Invalid out of Recording Source: Clip B">
+     <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+      <source-clip length="0" track-type="none">
+       <file-source sample-rate-numerator="1" sample-rate-denominator="1" name="Invalid out of Recording Source: File Source B">
+        <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+         <source-clip length="0" track-type="none">
+          <recording-source name="Invalid out of Recording Source: Recording Source B">
+           <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+            <source-clip length="0" track-type="none">
+             <lower-level name="Recording Source->Lower-Level">
+              <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+               <eoc length="0" track-type="none"/>
+              </timeline-mob-slot>
+             </lower-level>
+            </source-clip>
+           </timeline-mob-slot>
+          </recording-source>
+         </source-clip>
+        </timeline-mob-slot>
+       </file-source>
+      </source-clip>
+     </timeline-mob-slot>
+    </clip>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Invalid out of Recording Source: Top Level C">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <clip name="Invalid out of Recording Source: Clip C">
+     <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+      <source-clip length="0" track-type="none">
+       <file-source sample-rate-numerator="1" sample-rate-denominator="1" name="Invalid out of Recording Source: File Source C">
+        <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+         <source-clip length="0" track-type="none">
+          <recording-source name="Invalid out of Recording Source: Recording Source C">
+           <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+            <source-clip length="0" track-type="none">
+             <sub-clip name="Recording Source->Sub-Clip">
+              <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+               <eoc length="0" track-type="none"/>
+              </timeline-mob-slot>
+             </sub-clip>
+            </source-clip>
+           </timeline-mob-slot>
+          </recording-source>
+         </source-clip>
+        </timeline-mob-slot>
+       </file-source>
+      </source-clip>
+     </timeline-mob-slot>
+    </clip>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Invalid out of Recording Source: Top Level D">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <clip name="Invalid out of Recording Source: Clip D">
+     <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+      <source-clip length="0" track-type="none">
+       <file-source sample-rate-numerator="1" sample-rate-denominator="1" name="Invalid out of Recording Source: File Source D">
+        <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+         <source-clip length="0" track-type="none">
+          <recording-source name="Invalid out of Recording Source: Recording Source D">
+           <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+            <source-clip length="0" track-type="none">
+             <adjusted-clip name="Recording Source->Adjusted Clip">
+              <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+               <eoc length="0" track-type="none"/>
+              </timeline-mob-slot>
+             </adjusted-clip>
+            </source-clip>
+           </timeline-mob-slot>
+          </recording-source>
+         </source-clip>
+        </timeline-mob-slot>
+       </file-source>
+      </source-clip>
+     </timeline-mob-slot>
+    </clip>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Invalid out of Recording Source: Top Level E">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <clip name="Invalid out of Recording Source: Clip E">
+     <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+      <source-clip length="0" track-type="none">
+       <file-source sample-rate-numerator="1" sample-rate-denominator="1" name="Invalid out of Recording Source: File Source E">
+        <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+         <source-clip length="0" track-type="none">
+          <recording-source name="Invalid out of Recording Source: Recording Source E">
+           <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+            <source-clip length="0" track-type="none">
+             <template-clip name="Recording Source->Template Clip">
+              <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+               <eoc length="0" track-type="none"/>
+              </timeline-mob-slot>
+             </template-clip>
+            </source-clip>
+           </timeline-mob-slot>
+          </recording-source>
+         </source-clip>
+        </timeline-mob-slot>
+       </file-source>
+      </source-clip>
+     </timeline-mob-slot>
+    </clip>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Invalid out of Recording Source: Top Level F">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <clip name="Invalid out of Recording Source: Clip F">
+     <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+      <source-clip length="0" track-type="none">
+       <file-source sample-rate-numerator="1" sample-rate-denominator="1" name="Invalid out of Recording Source: File Source F">
+        <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+         <source-clip length="0" track-type="none">
+          <recording-source name="Invalid out of Recording Source: Recording Source F">
+           <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+            <source-clip length="0" track-type="none">
+             <clip name="Recording Source->Clip">
+              <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+               <eoc length="0" track-type="none"/>
+              </timeline-mob-slot>
+             </clip>
+            </source-clip>
+           </timeline-mob-slot>
+          </recording-source>
+         </source-clip>
+        </timeline-mob-slot>
+       </file-source>
+      </source-clip>
+     </timeline-mob-slot>
+    </clip>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Invalid out of Recording Source: Top Level G">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <clip name="Invalid out of Recording Source: Clip G">
+     <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+      <source-clip length="0" track-type="none">
+       <file-source sample-rate-numerator="1" sample-rate-denominator="1" name="Invalid out of Recording Source: File Source G">
+        <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+         <source-clip length="0" track-type="none">
+          <recording-source name="Invalid out of Recording Source: Recording Source G">
+           <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+            <source-clip length="0" track-type="none">
+             <file-source sample-rate-numerator="1" sample-rate-denominator="1" name="Recording Source->File Source">
+              <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+               <eoc length="0" track-type="none"/>
+              </timeline-mob-slot>
+             </file-source>
+            </source-clip>
+           </timeline-mob-slot>
+          </recording-source>
+         </source-clip>
+        </timeline-mob-slot>
+       </file-source>
+      </source-clip>
+     </timeline-mob-slot>
+    </clip>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Invalid out of Recording Source: Top Level H">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <clip name="Invalid out of Recording Source: Clip H">
+     <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+      <source-clip length="0" track-type="none">
+       <file-source sample-rate-numerator="1" sample-rate-denominator="1" name="Invalid out of Recording Source: File Source H">
+        <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+         <source-clip length="0" track-type="none">
+          <recording-source name="Invalid out of Recording Source: Recording Source H">
+           <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+            <source-clip length="0" track-type="none">
+             <recording-source name="Recording Source->Recording Source">
+              <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+               <eoc length="0" track-type="none"/>
+              </timeline-mob-slot>
+             </recording-source>
+            </source-clip>
+           </timeline-mob-slot>
+          </recording-source>
+         </source-clip>
+        </timeline-mob-slot>
+       </file-source>
+      </source-clip>
+     </timeline-mob-slot>
+    </clip>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Invalid out of Recording Source: Top Level I">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <clip name="Invalid out of Recording Source: Clip I">
+     <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+      <source-clip length="0" track-type="none">
+       <file-source sample-rate-numerator="1" sample-rate-denominator="1" name="Invalid out of Recording Source: File Source I">
+        <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+         <source-clip length="0" track-type="none">
+          <recording-source name="Invalid out of Recording Source: Recording Source I">
+           <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+            <source-clip length="0" track-type="none">
+             <import-source name="Recording Source->Import Source">
+              <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+               <eoc length="0" track-type="none"/>
+              </timeline-mob-slot>
+             </import-source>
+            </source-clip>
+           </timeline-mob-slot>
+          </recording-source>
+         </source-clip>
+        </timeline-mob-slot>
+       </file-source>
+      </source-clip>
+     </timeline-mob-slot>
+    </clip>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Invalid out of Recording Source: Top Level J">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <clip name="Invalid out of Recording Source: Clip J">
+     <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+      <source-clip length="0" track-type="none">
+       <file-source sample-rate-numerator="1" sample-rate-denominator="1" name="Invalid out of Recording Source: File Source J">
+        <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+         <source-clip length="0" track-type="none">
+          <recording-source name="Invalid out of Recording Source: Recording Source J">
+           <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+            <source-clip length="0" track-type="none">
+             <tape-source name="Recording Source->Tape Source">
+              <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+               <eoc length="0" track-type="none"/>
+              </timeline-mob-slot>
+             </tape-source>
+            </source-clip>
+           </timeline-mob-slot>
+          </recording-source>
+         </source-clip>
+        </timeline-mob-slot>
+       </file-source>
+      </source-clip>
+     </timeline-mob-slot>
+    </clip>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Invalid out of Recording Source: Top Level K">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <clip name="Invalid out of Recording Source: Clip K">
+     <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+      <source-clip length="0" track-type="none">
+       <file-source sample-rate-numerator="1" sample-rate-denominator="1" name="Invalid out of Recording Source: File Source K">
+        <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+         <source-clip length="0" track-type="none">
+          <recording-source name="Invalid out of Recording Source: Recording Source K">
+           <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+            <source-clip length="0" track-type="none">
+             <film-source name="Recording Source->Film Source">
+              <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+               <eoc length="0" track-type="none"/>
+              </timeline-mob-slot>
+             </film-source>
+            </source-clip>
+           </timeline-mob-slot>
+          </recording-source>
+         </source-clip>
+        </timeline-mob-slot>
+       </file-source>
+      </source-clip>
+     </timeline-mob-slot>
+    </clip>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Invalid out of Recording Source: Top Level L">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <clip name="Invalid out of Recording Source: Clip L">
+     <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+      <source-clip length="0" track-type="none">
+       <file-source sample-rate-numerator="1" sample-rate-denominator="1" name="Invalid out of Recording Source: File Source L">
+        <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+         <source-clip length="0" track-type="none">
+          <recording-source name="Invalid out of Recording Source: Out of File">
+           <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+            <oof length="0" track-type="none"/>
+           </timeline-mob-slot>
+          </recording-source>
+         </source-clip>
+        </timeline-mob-slot>
+       </file-source>
+      </source-clip>
+     </timeline-mob-slot>
+    </clip>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+<!-- Invalid transitions out of the Import Source state -->
+ <top-level name="Invalid out of Import Source: Top Level A">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <clip name="Invalid out of Import Source: Clip A">
+     <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+      <source-clip length="0" track-type="none">
+       <import-source name="Invalid out of Import Source: Import Source A">
+        <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+         <source-clip length="0" track-type="none">
+          <top-level name="Import Source->Top-Level">
+           <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+            <eoc length="0" track-type="none"/>
+           </timeline-mob-slot>
+          </top-level>
+         </source-clip>
+        </timeline-mob-slot>
+       </import-source>
+      </source-clip>
+     </timeline-mob-slot>
+    </clip>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Invalid out of Import Source: Top Level B">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <clip name="Invalid out of Import Source: Clip B">
+     <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+      <source-clip length="0" track-type="none">
+       <import-source name="Invalid out of Import Source: Import Source B">
+        <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+         <source-clip length="0" track-type="none">
+          <lower-level name="Import Source->Lower-Level">
+           <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+            <eoc length="0" track-type="none"/>
+           </timeline-mob-slot>
+          </lower-level>
+         </source-clip>
+        </timeline-mob-slot>
+       </import-source>
+      </source-clip>
+     </timeline-mob-slot>
+    </clip>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Invalid out of Import Source: Top Level C">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <clip name="Invalid out of Import Source: Clip C">
+     <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+      <source-clip length="0" track-type="none">
+       <import-source name="Invalid out of Import Source: Import Source C">
+        <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+         <source-clip length="0" track-type="none">
+          <sub-clip name="Import Source->Sub-Clip">
+           <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+            <eoc length="0" track-type="none"/>
+           </timeline-mob-slot>
+          </sub-clip>
+         </source-clip>
+        </timeline-mob-slot>
+       </import-source>
+      </source-clip>
+     </timeline-mob-slot>
+    </clip>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Invalid out of Import Source: Top Level D">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <clip name="Invalid out of Import Source: Clip D">
+     <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+      <source-clip length="0" track-type="none">
+       <import-source name="Invalid out of Import Source: Import Source D">
+        <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+         <source-clip length="0" track-type="none">
+          <adjusted-clip name="Import Source->Adjusted Clip">
+           <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+            <eoc length="0" track-type="none"/>
+           </timeline-mob-slot>
+          </adjusted-clip>
+         </source-clip>
+        </timeline-mob-slot>
+       </import-source>
+      </source-clip>
+     </timeline-mob-slot>
+    </clip>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Invalid out of Import Source: Top Level E">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <clip name="Invalid out of Import Source: Clip E">
+     <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+      <source-clip length="0" track-type="none">
+       <import-source name="Invalid out of Import Source: Import Source E">
+        <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+         <source-clip length="0" track-type="none">
+          <template-clip name="Import Source->Template Clip">
+           <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+            <eoc length="0" track-type="none"/>
+           </timeline-mob-slot>
+          </template-clip>
+         </source-clip>
+        </timeline-mob-slot>
+       </import-source>
+      </source-clip>
+     </timeline-mob-slot>
+    </clip>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Invalid out of Import Source: Top Level F">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <clip name="Invalid out of Import Source: Clip F">
+     <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+      <source-clip length="0" track-type="none">
+       <import-source name="Invalid out of Import Source: Import Source F">
+        <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+         <source-clip length="0" track-type="none">
+          <clip name="Import Source->Clip">
+           <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+            <eoc length="0" track-type="none"/>
+           </timeline-mob-slot>
+          </clip>
+         </source-clip>
+        </timeline-mob-slot>
+       </import-source>
+      </source-clip>
+     </timeline-mob-slot>
+    </clip>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Invalid out of Import Source: Top Level G">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <clip name="Invalid out of Import Source: Clip G">
+     <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+      <source-clip length="0" track-type="none">
+       <import-source name="Invalid out of Import Source: Import Source G">
+        <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+         <source-clip length="0" track-type="none">
+          <file-source sample-rate-numerator="1" sample-rate-denominator="1" name="Import Source->File Source">
+           <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+            <eoc length="0" track-type="none"/>
+           </timeline-mob-slot>
+          </file-source>
+         </source-clip>
+        </timeline-mob-slot>
+       </import-source>
+      </source-clip>
+     </timeline-mob-slot>
+    </clip>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Invalid out of Import Source: Top Level H">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <clip name="Invalid out of Import Source: Clip H">
+     <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+      <source-clip length="0" track-type="none">
+       <import-source name="Invalid out of Import Source: Import Source H">
+        <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+         <source-clip length="0" track-type="none">
+          <recording-source name="Import Source->Recording Source">
+           <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+            <eoc length="0" track-type="none"/>
+           </timeline-mob-slot>
+          </recording-source>
+         </source-clip>
+        </timeline-mob-slot>
+       </import-source>
+      </source-clip>
+     </timeline-mob-slot>
+    </clip>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Invalid out of Import Source: Top Level I">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <clip name="Invalid out of Import Source: Clip I">
+     <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+      <source-clip length="0" track-type="none">
+       <import-source name="Invalid out of Import Source: Import Source I">
+        <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+         <source-clip length="0" track-type="none">
+          <import-source name="Import Source->Import Source">
+           <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+            <eoc length="0" track-type="none"/>
+           </timeline-mob-slot>
+          </import-source>
+         </source-clip>
+        </timeline-mob-slot>
+       </import-source>
+      </source-clip>
+     </timeline-mob-slot>
+    </clip>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+<!-- Invalid transitions out of the Tape Source state -->
+ <top-level name="Invalid out of Tape Source: Top Level A">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <clip name="Invalid out of Tape Source: Clip A">
+     <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+      <source-clip length="0" track-type="none">
+       <tape-source name="Invalid out of Tape Source: Tape Source A">
+        <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+         <source-clip length="0" track-type="none">
+          <top-level name="Tape Source->Top-Level">
+           <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+            <eoc length="0" track-type="none"/>
+           </timeline-mob-slot>
+          </top-level>
+         </source-clip>
+        </timeline-mob-slot>
+       </tape-source>
+      </source-clip>
+     </timeline-mob-slot>
+    </clip>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Invalid out of Tape Source: Top Level B">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <clip name="Invalid out of Tape Source: Clip B">
+     <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+      <source-clip length="0" track-type="none">
+       <tape-source name="Invalid out of Tape Source: Tape Source B">
+        <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+         <source-clip length="0" track-type="none">
+          <lower-level name="Tape Source->Lower-Level">
+           <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+            <eoc length="0" track-type="none"/>
+           </timeline-mob-slot>
+          </lower-level>
+         </source-clip>
+        </timeline-mob-slot>
+       </tape-source>
+      </source-clip>
+     </timeline-mob-slot>
+    </clip>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Invalid out of Tape Source: Top Level C">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <clip name="Invalid out of Tape Source: Clip C">
+     <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+      <source-clip length="0" track-type="none">
+       <tape-source name="Invalid out of Tape Source: Tape Source C">
+        <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+         <source-clip length="0" track-type="none">
+          <sub-clip name="Tape Source->Sub-Clip">
+           <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+            <eoc length="0" track-type="none"/>
+           </timeline-mob-slot>
+          </sub-clip>
+         </source-clip>
+        </timeline-mob-slot>
+       </tape-source>
+      </source-clip>
+     </timeline-mob-slot>
+    </clip>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Invalid out of Tape Source: Top Level D">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <clip name="Invalid out of Tape Source: Clip D">
+     <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+      <source-clip length="0" track-type="none">
+       <tape-source name="Invalid out of Tape Source: Tape Source D">
+        <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+         <source-clip length="0" track-type="none">
+          <adjusted-clip name="Tape Source->Adjusted Clip">
+           <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+            <eoc length="0" track-type="none"/>
+           </timeline-mob-slot>
+          </adjusted-clip>
+         </source-clip>
+        </timeline-mob-slot>
+       </tape-source>
+      </source-clip>
+     </timeline-mob-slot>
+    </clip>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Invalid out of Tape Source: Top Level E">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <clip name="Invalid out of Tape Source: Clip E">
+     <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+      <source-clip length="0" track-type="none">
+       <tape-source name="Invalid out of Tape Source: Tape Source E">
+        <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+         <source-clip length="0" track-type="none">
+          <template-clip name="Tape Source->Template Clip">
+           <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+            <eoc length="0" track-type="none"/>
+           </timeline-mob-slot>
+          </template-clip>
+         </source-clip>
+        </timeline-mob-slot>
+       </tape-source>
+      </source-clip>
+     </timeline-mob-slot>
+    </clip>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Invalid out of Tape Source: Top Level F">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <clip name="Invalid out of Tape Source: Clip F">
+     <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+      <source-clip length="0" track-type="none">
+       <tape-source name="Invalid out of Tape Source: Tape Source F">
+        <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+         <source-clip length="0" track-type="none">
+          <clip name="Tape Source->Clip">
+           <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+            <eoc length="0" track-type="none"/>
+           </timeline-mob-slot>
+          </clip>
+         </source-clip>
+        </timeline-mob-slot>
+       </tape-source>
+      </source-clip>
+     </timeline-mob-slot>
+    </clip>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Invalid out of Tape Source: Top Level G">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <clip name="Invalid out of Tape Source: Clip G">
+     <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+      <source-clip length="0" track-type="none">
+       <tape-source name="Invalid out of Tape Source: Tape Source G">
+        <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+         <source-clip length="0" track-type="none">
+          <file-source sample-rate-numerator="1" sample-rate-denominator="1" name="Tape Source->File Source">
+           <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+            <eoc length="0" track-type="none"/>
+           </timeline-mob-slot>
+          </file-source>
+         </source-clip>
+        </timeline-mob-slot>
+       </tape-source>
+      </source-clip>
+     </timeline-mob-slot>
+    </clip>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Invalid out of Tape Source: Top Level H">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <clip name="Invalid out of Tape Source: Clip H">
+     <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+      <source-clip length="0" track-type="none">
+       <tape-source name="Invalid out of Tape Source: Tape Source H">
+        <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+         <source-clip length="0" track-type="none">
+          <recording-source name="Tape Source->Recording Source">
+           <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+            <eoc length="0" track-type="none"/>
+           </timeline-mob-slot>
+          </recording-source>
+         </source-clip>
+        </timeline-mob-slot>
+       </tape-source>
+      </source-clip>
+     </timeline-mob-slot>
+    </clip>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Invalid out of Tape Source: Top Level I">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <clip name="Invalid out of Tape Source: Clip I">
+     <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+      <source-clip length="0" track-type="none">
+       <tape-source name="Invalid out of Tape Source: Tape Source I">
+        <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+         <source-clip length="0" track-type="none">
+          <import-source name="Tape Source->Import Source">
+           <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+            <eoc length="0" track-type="none"/>
+           </timeline-mob-slot>
+          </import-source>
+         </source-clip>
+        </timeline-mob-slot>
+       </tape-source>
+      </source-clip>
+     </timeline-mob-slot>
+    </clip>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Invalid out of Tape Source: Top Level J">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <clip name="Invalid out of Tape Source: Clip J">
+     <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+      <source-clip length="0" track-type="none">
+       <tape-source name="Invalid out of Tape Source: Tape Source I">
+        <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+         <source-clip length="0" track-type="none">
+          <tape-source name="Tape Source->Tape Source">
+           <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+            <eoc length="0" track-type="none"/>
+           </timeline-mob-slot>
+          </tape-source>
+         </source-clip>
+        </timeline-mob-slot>
+       </tape-source>
+      </source-clip>
+     </timeline-mob-slot>
+    </clip>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+<!-- Invalid transitions out of the Film Source state -->
+ <top-level name="Invalid out of Film Source: Top Level A">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <clip name="Invalid out of Film Source: Clip A">
+     <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+      <source-clip length="0" track-type="none">
+       <film-source name="Invalid out of Film Source: Film Source A">
+        <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+         <source-clip length="0" track-type="none">
+          <top-level name="Film Source->Top-Level">
+           <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+            <eoc length="0" track-type="none"/>
+           </timeline-mob-slot>
+          </top-level>
+         </source-clip>
+        </timeline-mob-slot>
+       </film-source>
+      </source-clip>
+     </timeline-mob-slot>
+    </clip>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Invalid out of Film Source: Top Level B">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <clip name="Invalid out of Film Source: Clip B">
+     <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+      <source-clip length="0" track-type="none">
+       <film-source name="Invalid out of Film Source: Film Source B">
+        <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+         <source-clip length="0" track-type="none">
+          <lower-level name="Film Source->Lower-Level">
+           <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+            <eoc length="0" track-type="none"/>
+           </timeline-mob-slot>
+          </lower-level>
+         </source-clip>
+        </timeline-mob-slot>
+       </film-source>
+      </source-clip>
+     </timeline-mob-slot>
+    </clip>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Invalid out of Film Source: Top Level C">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <clip name="Invalid out of Film Source: Clip C">
+     <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+      <source-clip length="0" track-type="none">
+       <film-source name="Invalid out of Film Source: Film Source C">
+        <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+         <source-clip length="0" track-type="none">
+          <sub-clip name="Film Source->Sub-Clip">
+           <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+            <eoc length="0" track-type="none"/>
+           </timeline-mob-slot>
+          </sub-clip>
+         </source-clip>
+        </timeline-mob-slot>
+       </film-source>
+      </source-clip>
+     </timeline-mob-slot>
+    </clip>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Invalid out of Film Source: Top Level D">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <clip name="Invalid out of Film Source: Clip D">
+     <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+      <source-clip length="0" track-type="none">
+       <film-source name="Invalid out of Film Source: Film Source D">
+        <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+         <source-clip length="0" track-type="none">
+          <adjusted-clip name="Film Source->Adjusted Clip">
+           <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+            <eoc length="0" track-type="none"/>
+           </timeline-mob-slot>
+          </adjusted-clip>
+         </source-clip>
+        </timeline-mob-slot>
+       </film-source>
+      </source-clip>
+     </timeline-mob-slot>
+    </clip>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Invalid out of Film Source: Top Level E">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <clip name="Invalid out of Film Source: Clip E">
+     <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+      <source-clip length="0" track-type="none">
+       <film-source name="Invalid out of Film Source: Film Source E">
+        <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+         <source-clip length="0" track-type="none">
+          <template-clip name="Film Source->Template Clip">
+           <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+            <eoc length="0" track-type="none"/>
+           </timeline-mob-slot>
+          </template-clip>
+         </source-clip>
+        </timeline-mob-slot>
+       </film-source>
+      </source-clip>
+     </timeline-mob-slot>
+    </clip>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Invalid out of Film Source: Top Level F">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <clip name="Invalid out of Film Source: Clip F">
+     <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+      <source-clip length="0" track-type="none">
+       <film-source name="Invalid out of Film Source: Film Source F">
+        <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+         <source-clip length="0" track-type="none">
+          <clip name="Film Source->Film Source">
+           <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+            <eoc length="0" track-type="none"/>
+           </timeline-mob-slot>
+          </clip>
+         </source-clip>
+        </timeline-mob-slot>
+       </film-source>
+      </source-clip>
+     </timeline-mob-slot>
+    </clip>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Invalid out of Film Source: Top Level G">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <clip name="Invalid out of Film Source: Clip G">
+     <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+      <source-clip length="0" track-type="none">
+       <film-source name="Invalid out of Film Source: Film Source G">
+        <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+         <source-clip length="0" track-type="none">
+          <file-source sample-rate-numerator="1" sample-rate-denominator="1" name="Film Source->File Source">
+           <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+            <eoc length="0" track-type="none"/>
+           </timeline-mob-slot>
+          </file-source>
+         </source-clip>
+        </timeline-mob-slot>
+       </film-source>
+      </source-clip>
+     </timeline-mob-slot>
+    </clip>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Invalid out of Film Source: Top Level H">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <clip name="Invalid out of Film Source: Clip H">
+     <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+      <source-clip length="0" track-type="none">
+       <film-source name="Invalid out of Film Source: Film Source H">
+        <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+         <source-clip length="0" track-type="none">
+          <recording-source name="Film Source->Recording Source">
+           <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+            <eoc length="0" track-type="none"/>
+           </timeline-mob-slot>
+          </recording-source>
+         </source-clip>
+        </timeline-mob-slot>
+       </film-source>
+      </source-clip>
+     </timeline-mob-slot>
+    </clip>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Invalid out of Film Source: Top Level I">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <clip name="Invalid out of Film Source: Clip I">
+     <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+      <source-clip length="0" track-type="none">
+       <film-source name="Invalid out of Film Source: Film Source I">
+        <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+         <source-clip length="0" track-type="none">
+          <import-source name="Film Source->Import Source">
+           <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+            <eoc length="0" track-type="none"/>
+           </timeline-mob-slot>
+          </import-source>
+         </source-clip>
+        </timeline-mob-slot>
+       </film-source>
+      </source-clip>
+     </timeline-mob-slot>
+    </clip>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Invalid out of Film Source: Top Level J">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <clip name="Invalid out of Film Source: Clip J">
+     <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+      <source-clip length="0" track-type="none">
+       <film-source name="Invalid out of Film Source: Film Source J">
+        <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+         <source-clip length="0" track-type="none">
+          <tape-source name="Film Source->Tape Source">
+           <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+            <eoc length="0" track-type="none"/>
+           </timeline-mob-slot>
+          </tape-source>
+         </source-clip>
+        </timeline-mob-slot>
+       </film-source>
+      </source-clip>
+     </timeline-mob-slot>
+    </clip>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Invalid out of Film Source: Top Level K">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <clip name="Invalid out of Film Source: Clip K">
+     <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+      <source-clip length="0" track-type="none">
+       <film-source name="Invalid out of Film Source: Film Source K">
+        <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+         <source-clip length="0" track-type="none">
+          <film-source name="Film Source->Film Source">
+           <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+            <eoc length="0" track-type="none"/>
+           </timeline-mob-slot>
+          </film-source>
+         </source-clip>
+        </timeline-mob-slot>
+       </film-source>
+      </source-clip>
+     </timeline-mob-slot>
+    </clip>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Invalid out of Film Source: Top Level L">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <clip name="Invalid out of Film Source: Clip L">
+     <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+      <source-clip length="0" track-type="none">
+       <film-source name="Invalid out of Film Source: Out of File">
+        <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+         <oof length="0" track-type="none"/>
+        </timeline-mob-slot>
+       </film-source>
+      </source-clip>
+     </timeline-mob-slot>
+    </clip>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+<!-- Missing end of chains -->
+ <top-level name="Missing EOC Top-Level">
+  <bad-eoc/>
+ </top-level>
+ <top-level name="Missing EOC Lower-Level: Top-Level">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <lower-level name="Missing EOC Lower-Level">
+     <bad-eoc/>
+    </lower-level>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Missing EOC Sub-Clip: Top-Level">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <sub-clip name="Missing EOC Sub-Clip">
+     <bad-eoc/>
+    </sub-clip>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Missing EOC Adjusted Clip: Top-Level">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <adjusted-clip name="Missing EOC Adjusted Clip">
+     <bad-eoc/>
+    </adjusted-clip>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Missing EOC Template Clip: Top-Level">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <template-clip name="Missing EOC Template Clip">
+     <bad-eoc/>
+    </template-clip>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Missing EOC Clip: Top-Level">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <clip name="Missing EOC Clip">
+     <bad-eoc/>
+    </clip>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Missing EOC File Source: Top-Level">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <clip name ="Missing EOC File Source: Clip">
+     <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+      <source-clip length="0" track-type="none">
+       <file-source sample-rate-numerator="1" sample-rate-denominator="1" name="Missing EOC File Source">
+        <bad-eoc/>
+       </file-source>
+      </source-clip>
+     </timeline-mob-slot>
+    </clip>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Missing EOC Recording Source: Top-Level">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <clip name ="Missing EOC Recording Source: Clip">
+     <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+      <source-clip length="0" track-type="none">
+       <file-source sample-rate-numerator="1" sample-rate-denominator="1" name="Missing EOC Recording Source: File Source">
+        <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+         <source-clip length="0" track-type="none">
+          <recording-source name="Missing EOC Recording Source">
+           <bad-eoc/>
+          </recording-source>
+         </source-clip>
+        </timeline-mob-slot>
+       </file-source>
+      </source-clip>
+     </timeline-mob-slot>
+    </clip>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Missing EOC Import Source: Top-Level">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <clip name ="Missing EOC Import Source: Clip">
+     <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+      <source-clip length="0" track-type="none">
+       <import-source name="Missing EOC Import Source">
+        <bad-eoc/>
+       </import-source>
+      </source-clip>
+     </timeline-mob-slot>
+    </clip>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Missing EOC Tape Source: Top-Level">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <clip name ="Missing EOC Tape Source: Clip">
+     <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+      <source-clip length="0" track-type="none">
+       <tape-source name="Missing EOC Tape Source">
+        <bad-eoc/>
+       </tape-source>
+      </source-clip>
+     </timeline-mob-slot>
+    </clip>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+ <top-level name="Missing EOC Film Source: Top-Level">
+  <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+   <source-clip length="0" track-type="none">
+    <clip name ="Missing EOC Film Source: Clip">
+     <timeline-mob-slot edit-rate-numerator="1" edit-rate-denominator="1">
+      <source-clip length="0" track-type="none">
+       <film-source name="Missing EOC Film Source">
+        <bad-eoc/>
+       </film-source>
+      </source-clip>
+     </timeline-mob-slot>
+    </clip>
+   </source-clip>
+  </timeline-mob-slot>
+ </top-level>
+</aaf-file>

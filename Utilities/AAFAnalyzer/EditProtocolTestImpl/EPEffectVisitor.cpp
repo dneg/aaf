@@ -712,7 +712,7 @@ bool EPEffectVisitor::PreOrderVisit( EPTypedObjNode<IAAFOperationGroup, EPTwoPar
         bool incomingPassed = true;
         bool outgoingPassed = true;
 
-        aafLength_t transitionLen;
+        aafLength_t transitionLen = 0;
         AxTransition axTransition( spVisitor->GetTransition() );
         try
         {

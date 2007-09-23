@@ -2,14 +2,18 @@
 <!ELEMENT requirement-set (requirement-set-name, requirement-set-version, requirement+)>
 <!ELEMENT requirement-set-name (#PCDATA)>
 <!ELEMENT requirement-set-version (#PCDATA)>
-<!ELEMENT requirement (id, name, desc, ref)>
+<!ELEMENT requirement (id, name, desc, annotate, note, action, ref)>
 <!ATTLIST requirement
 	type ( app | file | definition ) #REQUIRED
 	category ( general | import-export | compositional | metadata | mixdown | auxiliary-file | annotations | effect | optional-properties | structured-storage | protocol | ad-hoc ) #REQUIRED
+        action ( reconcile )
 >
 <!ELEMENT id (#PCDATA)>
 <!ELEMENT name (#PCDATA)>
 <!ELEMENT desc (#PCDATA)>
+<!ELEMENT annotate (#PCDATA)>
+<!ELEMENT note (#PCDATA)>
+<!ELEMENT action (#PCDATA)>
 <!ELEMENT ref (doc, version, section)>
 <!ELEMENT doc (#PCDATA)>
 <!ELEMENT version (#PCDATA)>
