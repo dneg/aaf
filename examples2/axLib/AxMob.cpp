@@ -161,6 +161,24 @@ aafUID_t AxMob::GetUsageCode( const aafUID_t& defaul )
   return usageCode;
 }
 
+std::pair<bool,aafUID_t> AxMob::ExistsUsageCode()
+{
+  std::pair<bool,aafUID_t> usageCode(false, AxConstants::NULL_UID);
+
+  const AAFRESULT hr = _spIaafMob->GetUsageCode( &usageCode.second );
+
+  if ( AAFRESULT_PROP_NOT_PRESENT == hr )
+  {
+    return usageCode;
+  }
+
+  CHECK_HRESULT(hr);
+
+  usageCode.first = true;
+
+  return usageCode;
+}
+
 IAAFMobSP AxMob::Copy( const AxString& newMobName )
 {
 	IAAFMobSP spNewMob;

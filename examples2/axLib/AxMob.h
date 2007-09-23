@@ -70,6 +70,7 @@ public:
 	void SetUsageCode( const aafUID_t& usageCode );
 	aafUID_t GetUsageCode();
 	aafUID_t GetUsageCode( const aafUID_t& defaul );
+	std::pair<bool,aafUID_t> ExistsUsageCode();
 
 	inline operator IAAFMobSP ()
 	{ return AxQueryInterface<IAAFMob2,IAAFMob>( _spIaafMob ); }
