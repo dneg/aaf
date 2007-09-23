@@ -302,7 +302,7 @@ bool DerivationChainParser::Transition( const EventID& event,
   if ( eventNameIter == _eventMap.end() )
   {
     throw DerivationChainParserException( L"Attempting to transition in the "
-					  "Derivation Chain State Machine with an unknown event." );
+					  L"Derivation Chain Parser with an unknown event." );
   }
 
   State currentState = _currentState.top();

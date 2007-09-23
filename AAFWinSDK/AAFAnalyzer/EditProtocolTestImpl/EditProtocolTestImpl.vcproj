@@ -109,7 +109,10 @@
 				RelativePath="..\..\..\Utilities\AAFAnalyzer\EditProtocolTestImpl\DecorateEPTest.cpp">
 			</File>
 			<File
-				RelativePath="..\..\..\Utilities\AAFAnalyzer\EditProtocolTestImpl\DerivationChainStateMachine.cpp">
+				RelativePath="..\..\..\Utilities\AAFAnalyzer\EditProtocolTestImpl\DerivationChainParser.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\Utilities\AAFAnalyzer\EditProtocolTestImpl\DerivationChainParserException.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\Utilities\AAFAnalyzer\EditProtocolTestImpl\EPAnnotationTest.cpp">
@@ -183,9 +186,6 @@
 			<File
 				RelativePath="..\..\..\Utilities\AAFAnalyzer\EditProtocolTestImpl\EPTrackContentsVisitor.cpp">
 			</File>
-			<File
-				RelativePath="..\..\..\Utilities\AAFAnalyzer\EditProtocolTestImpl\StateMachineException.cpp">
-			</File>
 		</Filter>
 		<Filter
 			Name="Header Files"
@@ -198,7 +198,10 @@
 				RelativePath="..\..\..\Utilities\AAFAnalyzer\EditProtocolTestImpl\DecorateEPTest.h">
 			</File>
 			<File
-				RelativePath="..\..\..\Utilities\AAFAnalyzer\EditProtocolTestImpl\DerivationChainStateMachine.h">
+				RelativePath="..\..\..\Utilities\AAFAnalyzer\EditProtocolTestImpl\DerivationChainParser.h">
+			</File>
+			<File
+				RelativePath="..\..\..\Utilities\AAFAnalyzer\EditProtocolTestImpl\DerivationChainParserException.h">
 			</File>
 			<File
 				RelativePath="..\..\..\Utilities\AAFAnalyzer\EditProtocolTestImpl\EPAnnotationTest.h">
@@ -271,9 +274,6 @@
 			</File>
 			<File
 				RelativePath="..\..\..\Utilities\AAFAnalyzer\EditProtocolTestImpl\EPTrackContentsVisitor.h">
-			</File>
-			<File
-				RelativePath="..\..\..\Utilities\AAFAnalyzer\EditProtocolTestImpl\StateMachineException.h">
 			</File>
 		</Filter>
 	</Files>
