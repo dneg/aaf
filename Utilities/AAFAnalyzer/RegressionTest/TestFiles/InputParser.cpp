@@ -769,7 +769,8 @@ int main( int argc, char** argv )
     //Convert the XML file to an AAF file.
     try
     {
-        unlink( outputArg.second );
+        int rc = _unlink( outputArg.second );
+		assert( rc == 0 );
         InputParser parser( outputArg.second );
         parser.ParseXML( inputArg.second );
     }

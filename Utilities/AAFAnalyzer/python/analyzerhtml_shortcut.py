@@ -11,8 +11,9 @@ import analyzerhtml
 # more than a list of aaf files.  It executes the analzyerhtml by
 # assuming the following:
 #
-# 1) The temp output files and html file should be written to the present
-# working directory and given temporary names.
+# 1) The temp output files and html file should be written to the
+# system's standard tempory file location as reported by the python
+# tempfile module.
 # 2) The requirents file is in the present working directory.
 # 3) The analyzer executable is the in the present working directory.
 #
@@ -71,10 +72,9 @@ else:
     print "\nDrop some files on this shortcut!\n"
 
 # Give people 5 seconds to see what just happened.
-os.write(1,"closing in ")
 for i in range(5,0,-1):
-    n = os.write(1, "%d seconds" % i )
+    n = os.write(1, "closing in %d seconds" % i )
     time.sleep(1)
-    if i > 1:
-        for j in range(0,n):
-            os.write(1, "\b")
+    os.write(1, n*"\b")
+os.write(1, n*" ")
+

@@ -61,12 +61,12 @@ class Requirement:
 	# Get a fill description fo the requirement.
 	def get_all(self):
 	
-		all=self.get_id()+': '+self.get_name()+ '\n\n'
+		all=self.get_id()+':  ' +self.get_name()+ '\n\n'
 		all=all+'Description: ' +self.get_details() + '\n\n' 
-		all=all+'Type:				 ' +self.get_type() + '\n'
-		all=all+'Document:	' +self.get_document() + '\n' 
-		all=all+'Section:			' +self.get_section() + '\n' 
-		all=all+'Version:			' +self.get_version() 
+		all=all+'Type:	      ' +self.get_type() + '\n'
+		all=all+'Document:    ' +self.get_document() + '\n' 
+		all=all+'Section:     ' +self.get_section() + '\n' 
+		all=all+'Version:     ' +self.get_version() 
 		
 		return all
 				
@@ -198,9 +198,8 @@ def parse_requirements(detailedReqListFile, coveredReqListFile):
 
 	return (reqs)
 
-# This function parses 
-# Method parses requirement coverage data from file created by the
-# analyzer.py script
+# This function parses requirement coverage data from file created by
+# the analyzer.py script
 
 def parse_file_coverage(filename, requirements):
 	
@@ -217,15 +216,26 @@ def parse_file_coverage(filename, requirements):
 					else:
 						filen=line.strip('File Name: ').strip().split('/')[-1]
 			
-			# Update the Pass/Fail/Warn status on each requirement for each
-			# file via a dictionary stored in the Requirement object
+			# Update the Covered/Noted/Pass/Fail/Warn
+			# status on each requirement for each file via
+			# a dictionary stored in the Requirement
+			# object
+
+			elif 'Covered Requirements:' in line and 'None' not in line:
+				for req in line.strip().replace('Covered Requirements: ','').split('; '):
+					requirements[req].set_file_test_result_for_file(filen,'Covered')
+	
+			elif 'Noted Requirements:' in line and 'None' not in line:
+				for req in line.strip().replace('Noted Requirements: ','').split('; '):
+					requirements[req].set_file_test_result_for_file(filen,'Noted')
+	
 			elif 'Passing Requirements:' in line and 'None' not in line:
 				for req in line.strip().replace('Passing Requirements: ','').split('; '):
 					requirements[req].set_file_test_result_for_file(filen,'Passed')
 	
 			elif 'Warning Requirements:' in line and 'None' not in line: 
 				for req in line.replace('Warning Requirements:','').strip().split('; '):
-					requirements[req].set_file_test_result_for_file(filen, 'Passed with Warning')
+					requirements[req].set_file_test_result_for_file(filen, 'Warned')
 	
 			elif 'Failing Requirements:' in line and 'None' not in line: 
 				for req in line.replace('Failing Requirements:','').strip().split('; '):
@@ -312,9 +322,11 @@ def get_result_data(files, requirements):
 	types = {}
 
 	# Temporary dictionaries to store pass/warn/fail result counts per file.
-	fails  = {} 
-	warns  = {}
-	passes = {}
+	covers  = {} 
+	notes   = {} 
+	fails   = {} 
+	warns   = {}
+	passes  = {}
 
 	# Sort requirements for display
 	sortedReqs = requirements.values()
@@ -364,6 +376,10 @@ def get_result_data(files, requirements):
 			data[row][fileSetCol+i] = testResult
 
 			# update summary counts
+			if file not in covers:
+				covers[file] = 0
+			if file not in notes:
+				notes[file] = 0
 			if file not in fails:
 				fails[file] = 0
 			if file not in warns:
@@ -373,10 +389,14 @@ def get_result_data(files, requirements):
 
 			if testResult == 'Failed':
 				fails[file] = fails[file] + 1
-			elif testResult == 'Passed with Warning':
+			elif testResult == 'Warned':
 				warns[file] = warns[file] + 1
 			elif testResult == 'Passed':
 				passes[file] = passes[file] + 1
+			elif testResult == 'Noted':
+				notes[file] = notes[file] + 1
+			elif testResult == 'Covered':
+				covers[file] = covers[file] + 1
 			else:
 				assert False, "unkown test result"
 	
@@ -399,8 +419,11 @@ def get_result_data(files, requirements):
 	if len(files) > 1:
 		for i in range(0,len(files)):
 			file = files[i]
-			data[summaryRow][fileSetCol+i] = str(passes[file]) + ' passed<br>' \
-			    + str(warns[file])  + ' warned<br>' \
+			data[summaryRow][fileSetCol+i] = \
+			      str(covers[file]) + ' covered<br>' \
+			    + str(notes[file])  + ' noted<br>'   \
+			    + str(passes[file]) + ' passed<br>'  \
+			    + str(warns[file])  + ' warned<br>'  \
 			    + str(fails[file])  + ' failed<br>'
 
 	return data
@@ -470,7 +493,7 @@ def write_html(outputFileName, testResultData, requirements, removedFiles):
 				TD = '<TD'
 				if testResultData[row][col] == 'Failed':
 					TD = TD + ' bgcolor="#CC0000"'
-				elif testResultData[row][col] == 'Passed with Warning':
+				elif testResultData[row][col] == 'Warned':
 					TD = TD + ' bgcolor="#FFCC00"'
 				if col > 0:
 					TD = TD + ' NOWRAP=1 ALIGN="center"'

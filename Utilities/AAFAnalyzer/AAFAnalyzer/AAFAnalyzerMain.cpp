@@ -350,28 +350,6 @@ void OutputSimpleResultMsgs( shared_ptr<const TestResult> res )
 {
   Requirement::RequirementMap::const_iterator iter;
 
-#if 1
-  // This should not be output in a summary genally, but it is useful
-  // to activate for debug. Hence conditional compile.
-  const Requirement::RequirementMap& noted = res->GetRequirements( TestResult::NOTED );
-  for ( iter = noted.begin(); iter != noted.end(); iter++ )
-  {
-    shared_ptr<const Requirement> req = iter->second;
-    wcout << "NOTE   : " << req->GetId() << L", " << req->GetName() << endl;
-    wcout << L"Desc   : " << req->GetDescription() << endl;
-
-    if ( req->GetDocument().size() > 0 )
-    {
-      wcout << L"Doc    : " << req->GetDocument() << L" (" << req->GetVersion()
-            << L") Section " << req->GetSection() << endl;
-    }
-
-    OutputReasons( res, req->GetId(), TestResult::NOTED );
-
-    wcout << endl;
-  }
-#endif
-
   const Requirement::RequirementMap& failures = res->GetRequirements( TestResult::FAIL );
   for ( iter = failures.begin(); iter != failures.end(); iter++ )
   {

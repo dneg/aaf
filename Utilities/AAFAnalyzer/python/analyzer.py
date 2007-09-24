@@ -70,12 +70,14 @@ def analyze(tmpResultFile, executable, files, requirements):
 # JPT REVIEW - This routine writes the summary back into the temporary
 # result file under than name "File Set". i.e. The file set is report
 # in the same way that indivual files are reported.  This is not very
-# flexible. It woudl be better to return the file set data as a value
+# flexible. It would be better to return the file set data as a value
 # (and perhaps do away completly with the temp file).
 #
 
 def filescov(openTmpResultFile, files):
 
+	covered=[]
+	noted=[]
 	passed=[]
 	warn=[]
 	fail=[]
@@ -89,6 +91,10 @@ def filescov(openTmpResultFile, files):
 	curfile=openTmpResultFile.readlines()
 
 	for line in curfile:
+		if 'Covered Requirements:' in line and 'None' not in line:
+			covered=covered+(line.replace('Covered Requirements: ', '').replace('\n', '')).split('; ')
+		if 'Noted Requirements:' in line and 'None' not in line:
+			noted=passed+(line.replace('Noted Requirements: ', '').replace('\n', '')).split('; ')
 		if 'Passing Requirements:' in line and 'None' not in line:
 			passed=passed+(line.replace('Passing Requirements: ', '').replace('\n', '')).split('; ')
 		if 'Warning Requirements:' in line and 'None' not in line:
@@ -97,26 +103,47 @@ def filescov(openTmpResultFile, files):
 			fail=fail+(line.replace('Failing Requirements: ', '').replace('\n', '')).split('; ')
 	
 	openTmpResultFile.seek(0)
-	passed=list(set(passed).difference(set(warn)).difference(set(fail)))
-	passed.sort()
-	warn=list(set(warn).difference(set(fail)))
-	warn.sort()
-	fail=list(set(fail))
+
+	failSet = set(fail)
+	fail = list(failSet)
 	fail.sort()
-	openTmpResultFile.write('File Set:\n')
-	
-	if passed==[]:
-		passed.append('None')
-	if warn==[]:
-		warn.append('None')
 	if fail==[]:
 		fail.append('None') 
+
+	warnSet = set(warn).difference(failSet)
+	warn =list(warnSet)
+	warn.sort()
+	if warn==[]:
+		warn.append('None')
+
+	passedSet = set(passed).difference(warnSet).difference(failSet)
+	passed = list(passedSet)
+	passed.sort()
+	if passed==[]:
+		passed.append('None')
+
+	notedSet = set(noted).difference(passedSet).difference(warnSet).difference(failSet)
+	noted = list(notedSet)
+	noted.sort()
+	if noted==[]:
+		noted.append('None')
+
+	coveredSet = set(covered).difference(notedSet).difference(passedSet).difference(warnSet).difference(failSet)
+	covered= list( coveredSet )
+	covered.sort()
+	if covered==[]:
+		covered.append('None')
+
+	openTmpResultFile.write('File Set:\n')
 	
 	for f in files:
 		openTmpResultFile.write('\t%s\n' % f)
-	openTmpResultFile.write('Passing Requirements: ' + '; '.join(passed) +'\n')
-	openTmpResultFile.write('Warning Requirements: ' + '; '.join(warn) +'\n')
-	openTmpResultFile.write('Failing Requirements: ' + '; '.join(fail) +'\n\n')
+
+	openTmpResultFile.write('Covered Requirements: ' + '; '.join(covered) + '\n')
+	openTmpResultFile.write('Noted Requirements: '   + '; '.join(noted)   + '\n')
+	openTmpResultFile.write('Passing Requirements: ' + '; '.join(passed)  + '\n')
+	openTmpResultFile.write('Warning Requirements: ' + '; '.join(warn)    + '\n')
+	openTmpResultFile.write('Failing Requirements: ' + '; '.join(fail)    + '\n\n')
 	openTmpResultFile.writelines(curfile)
 
 # END
