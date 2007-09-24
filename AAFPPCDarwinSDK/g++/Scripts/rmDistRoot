@@ -1,7 +1,0 @@
-#!/bin/sh
-#
-# This script is used for Darwin builds of the "release-dist" and "sdk-dist" targets. 
-# The root directory for PackageMaker is deleted.
-#
-
-cd $1 && rm -rf Dist/root
