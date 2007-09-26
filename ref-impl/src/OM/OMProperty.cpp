@@ -51,7 +51,11 @@ OMProperty::OMProperty(const OMPropertyId propertyId,
   _name(name),
   _propertySet(0),
   _definition(0),
+#if 0 // HACK4MEIP2
+  _isOptional(true),
+#else
   _isOptional(false),
+#endif
   _isPresent(false)
 {
   TRACE("OMProperty::OMProperty");
