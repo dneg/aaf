@@ -1,0 +1,99 @@
+digraph G {
+
+# Basic containment graph
+
+Header -> ContentStorage
+ContentStorage -> TopLevelComposition
+ContentStorage -> SubComposition
+ContentStorage -> Master
+ContentStorage -> FileSource
+ContentStorage -> TapeSource
+
+# Cluster the mobs so that they appear in a single horizontal line and
+# add (invisible) edges to cause them to be ordered left to right as
+# desired.
+subgraph cluster_mobs {
+  color=white
+
+  {rank=same
+  TopLevelComposition
+  SubComposition
+  Master
+  FileSource
+  TapeSource}
+
+  TopLevelComposition->SubComposition->Master->FileSource->TapeSource [color=white]
+}
+
+# Label nodes to normalize naming.
+Slot_1 [label=Slot]
+Slot_2 [label=Slot]
+Slot_4 [label=Slot]
+Slot_5 [label=Slot]
+Slot_6 [label=Slot]
+Slot_7 [label=Slot]
+Slot_8 [label=Slot]
+Slot_9 [label=Slot]
+
+SourceClip_1 [label=SourceClip]
+SourceClip_2 [label=SourceClip]
+SourceClip_3 [label=SourceClip]
+SourceClip_5 [label=SourceClip]
+SourceClip_6 [label=SourceClip]
+SourceClip_7 [label=SourceClip]
+SourceClip_8 [label=SourceClip]
+SourceClip_9 [label=SourceClip]
+SourceClip_10 [label=SourceClip]
+
+SubOperationGroup [label=OperationGroup]
+SubSequence [label=Sequence]
+
+TopLevelComposition -> Slot_1
+SubComposition -> Slot_2
+Master -> Slot_4
+Master -> Slot_5
+FileSource -> Slot_6
+FileSource -> Slot_7
+TapeSource -> Slot_8
+TapeSource -> Slot_9
+
+Slot_1 -> Sequence
+Sequence -> OperationGroup
+OperationGroup -> SourceClip_2
+OperationGroup -> SourceClip_1
+
+Slot_2 -> SubSequence
+SubSequence -> SubOperationGroup
+SubOperationGroup -> SourceClip_3
+
+Slot_4 -> SourceClip_5
+Slot_5 -> SourceClip_6
+Slot_6 -> SourceClip_7
+Slot_7 -> SourceClip_8
+Slot_8 -> SourceClip_9
+Slot_9 -> SourceClip_10
+
+edge [color=red]
+SourceClip_2 -> SubComposition
+SubComposition -> Slot_2
+Slot_2 -> SubSequence;
+
+
+edge [color=green]
+SourceClip_3 -> Master
+Master -> Slot_4
+Slot_4 -> SourceClip_5;
+
+
+edge [color=blue]
+SourceClip_5 -> FileSource
+FileSource -> Slot_6
+Slot_6 -> SourceClip_7;
+
+
+edge [color=purple]
+SourceClip_7 -> TapeSource
+TapeSource -> Slot_8
+Slot_8 -> SourceClip_9;
+
+}

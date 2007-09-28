@@ -1,0 +1,86 @@
+digraph G {
+
+concentrate=true
+
+start -> TopLevelComp
+
+TopLevelComp -> LowLevelComp
+TopLevelComp -> SubClipComp
+TopLevelComp -> AdjustedClipComp
+TopLevelComp -> TemplateClip
+TopLevelComp -> Clip
+
+LowLevelComp -> LowLevelComp
+LowLevelComp -> SubClipComp
+LowLevelComp -> AdjustedClipComp
+LowLevelComp -> TemplateClip
+LowLevelComp -> Clip
+
+SubClipComp -> AdjustedClipComp
+SubClipComp -> TemplateClip
+SubClipComp -> Clip
+
+AdjustedClipComp -> TemplateClip
+AdjustedClipComp -> Clip
+
+TemplateClip -> eoc0
+eoc0 -> end0
+
+Clip -> FileSource
+Clip -> ImportSource
+Clip -> TapeSource
+Clip -> FilmSource
+Clip -> oof1
+oof1 -> end1
+
+FileSource -> FileSource
+FileSource -> RecordingSource
+FileSource -> ImportSource
+FileSource -> TapeSource
+FileSource -> FilmSource
+FileSource -> eoc5
+FileSource -> oof5
+eoc5 -> end5
+oof5 -> end5
+
+RecordingSource -> eoc2
+eoc2 -> end2
+
+ImportSource -> TapeSource
+ImportSource -> FilmSource
+ImportSource -> oof3
+ImportSource -> eoc3
+oof3 -> end3
+eoc3 -> end3
+
+TapeSource -> FilmSource
+TapeSource -> oof4
+TapeSource -> eoc4
+oof4 -> end4
+eoc4 -> end4
+
+FilmSource -> eoc6
+eoc6 -> end6
+
+start [shape=circle label="" fillcolor=black style=filled height=.2 fixedsize=true]
+end0 [shape=doublecircle label="" fillcolor=black style=filled height=.2 fixedsize=true]
+end1 [shape=doublecircle label="" fillcolor=black style=filled height=.2 fixedsize=true]
+end2 [shape=doublecircle label="" fillcolor=black style=filled height=.2 fixedsize=true]
+end3 [shape=doublecircle label="" fillcolor=black style=filled height=.2 fixedsize=true]
+end4 [shape=doublecircle label="" fillcolor=black style=filled height=.2 fixedsize=true]
+end5 [shape=doublecircle label="" fillcolor=black style=filled height=.2 fixedsize=true]
+end6 [shape=doublecircle label="" fillcolor=black style=filled height=.2 fixedsize=true]
+
+eoc0 [shape=circle fontsize=12 label="EOC" height=.5 fixedsize=true]
+eoc2 [shape=circle fontsize=12 label="EOC" height=.5 fixedsize=true]
+eoc3 [shape=circle fontsize=12 label="EOC" height=.5 fixedsize=true]
+eoc4 [shape=circle fontsize=12 label="EOC" height=.5 fixedsize=true]
+eoc5 [shape=circle fontsize=12 label="EOC" height=.5 fixedsize=true]
+eoc6 [shape=circle fontsize=12 label="EOC" height=.5 fixedsize=true]
+
+oof1 [shape=circle fontsize=12 label="OOF" height=.5 fixedsize=true]
+oof3 [shape=circle fontsize=12 label="OOF" height=.5 fixedsize=true]
+oof4 [shape=circle fontsize=12 label="OOF" height=.5 fixedsize=true]
+oof5 [shape=circle fontsize=12 label="OOF" height=.5 fixedsize=true]
+
+}
