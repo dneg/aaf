@@ -51,13 +51,11 @@ using namespace aafanalyzer;
 
 void RemoveFile( const char* name )
 {
-  int rc = -1;
 #if defined(OS_WINDOWS)
-  rc = _unlink( name );
+  _unlink( name );
 #else
-  rc = unlink( name );
+  unlink( name );
 #endif
-  assert( rc == 0 );
 }
 
 } // end of namespace
