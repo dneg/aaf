@@ -49,6 +49,17 @@ namespace {
 
 using namespace aafanalyzer;
 
+void RemoveFile( const char* name )
+{
+  int rc = -1;
+#if defined(OS_WINDOWS)
+  rc = _unlink( name );
+#else
+  rc = unlink( name );
+#endif
+  assert( rc == 0 );
+}
+
 } // end of namespace
 
 
@@ -769,10 +780,9 @@ int main( int argc, char** argv )
     //Convert the XML file to an AAF file.
     try
     {
-        int rc = _unlink( outputArg.second );
-		assert( rc == 0 );
-        InputParser parser( outputArg.second );
-        parser.ParseXML( inputArg.second );
+      RemoveFile( outputArg.second );
+      InputParser parser( outputArg.second );
+      parser.ParseXML( inputArg.second );
     }
     catch (AxString ex)
     {
