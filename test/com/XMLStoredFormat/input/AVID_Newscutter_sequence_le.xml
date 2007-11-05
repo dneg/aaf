@@ -856,52 +856,52 @@
           </ContainerDefinition>
           <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0401.0101.0e040301.02060101">
             <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0101.0e040301.02060101</DefinitionObjectIdentification>
-            <DefinitionObjectName>ContainerDef_MXFGC_Avid_DNxHD_220X_1080P</DefinitionObjectName>
+            <DefinitionObjectName>ContainerDef_MXFGC_Avid_DNX_220X_1080p</DefinitionObjectName>
             <DefinitionObjectDescription/>
           </ContainerDefinition>
           <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0401.0101.0e040301.02060201">
             <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0101.0e040301.02060201</DefinitionObjectIdentification>
-            <DefinitionObjectName>ContainerDef_MXFGC_Avid_DNxHD_220X_1080I</DefinitionObjectName>
+            <DefinitionObjectName>ContainerDef_MXFGC_Avid_DNX_220X_1080i</DefinitionObjectName>
             <DefinitionObjectDescription/>
           </ContainerDefinition>
           <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0401.0101.0e040301.02060301">
             <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0101.0e040301.02060301</DefinitionObjectIdentification>
-            <DefinitionObjectName>ContainerDef_MXFGC_Avid_DNxHD_220X_720P</DefinitionObjectName>
+            <DefinitionObjectName>ContainerDef_MXFGC_Avid_DNX_220X_720p</DefinitionObjectName>
             <DefinitionObjectDescription/>
           </ContainerDefinition>
           <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0401.0101.0e040301.02060102">
             <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0101.0e040301.02060102</DefinitionObjectIdentification>
-            <DefinitionObjectName>ContainerDef_MXFGC_Avid_DNxHD_145_1080P</DefinitionObjectName>
+            <DefinitionObjectName>ContainerDef_MXFGC_Avid_DNX_145_1080p</DefinitionObjectName>
             <DefinitionObjectDescription/>
           </ContainerDefinition>
           <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0401.0101.0e040301.02060202">
             <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0101.0e040301.02060202</DefinitionObjectIdentification>
-            <DefinitionObjectName>ContainerDef_MXFGC_Avid_DNxHD_145_1080I</DefinitionObjectName>
+            <DefinitionObjectName>ContainerDef_MXFGC_Avid_DNX_145_1080i</DefinitionObjectName>
             <DefinitionObjectDescription/>
           </ContainerDefinition>
           <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0401.0101.0e040301.02060302">
             <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0101.0e040301.02060302</DefinitionObjectIdentification>
-            <DefinitionObjectName>ContainerDef_MXFGC_Avid_DNxHD_220_720P</DefinitionObjectName>
+            <DefinitionObjectName>ContainerDef_MXFGC_Avid_DNX_220_720p</DefinitionObjectName>
             <DefinitionObjectDescription/>
           </ContainerDefinition>
           <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0401.0101.0e040301.02060103">
             <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0101.0e040301.02060103</DefinitionObjectIdentification>
-            <DefinitionObjectName>ContainerDef_MXFGC_Avid_DNxHD_220_1080P</DefinitionObjectName>
+            <DefinitionObjectName>ContainerDef_MXFGC_Avid_DNX_220_1080p</DefinitionObjectName>
             <DefinitionObjectDescription/>
           </ContainerDefinition>
           <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0401.0101.0e040301.02060203">
             <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0101.0e040301.02060203</DefinitionObjectIdentification>
-            <DefinitionObjectName>ContainerDef_MXFGC_Avid_DNxHD_220_1080I</DefinitionObjectName>
+            <DefinitionObjectName>ContainerDef_MXFGC_Avid_DNX_220_1080i</DefinitionObjectName>
             <DefinitionObjectDescription/>
           </ContainerDefinition>
           <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0401.0101.0e040301.02060303">
             <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0101.0e040301.02060303</DefinitionObjectIdentification>
-            <DefinitionObjectName>ContainerDef_MXFGC_Avid_DNxHD_145_720P</DefinitionObjectName>
+            <DefinitionObjectName>ContainerDef_MXFGC_Avid_DNX_145_720p</DefinitionObjectName>
             <DefinitionObjectDescription/>
           </ContainerDefinition>
           <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0401.0101.0e040301.02060104">
             <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0101.0e040301.02060104</DefinitionObjectIdentification>
-            <DefinitionObjectName>ContainerDef_MXFGC_Avid_DNxHD_36_1080P</DefinitionObjectName>
+            <DefinitionObjectName>ContainerDef_MXFGC_Avid_DNX_36_1080p</DefinitionObjectName>
             <DefinitionObjectDescription/>
           </ContainerDefinition>
           <ContainerDefinition aaf:uid="ContainerDef_RIFFWAVE">
