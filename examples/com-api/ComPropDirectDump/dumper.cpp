@@ -151,6 +151,20 @@ static char * make_mbstring(size_t length, const aafCharacter* name)
 	return mbStr;
 }
 
+static void convertAUIDtoString(const aafUID_t &auid, char *buf)
+{
+	int pos = sprintf(buf, "{ 0x%08x, 0x%04x, 0x%04x, { ",
+				auid.Data1, auid.Data2, auid.Data3);
+	int i;
+	for (i = 0; i < 8; i++)
+	{
+		pos += sprintf(&buf[pos], "0x%x", auid.Data4[i]);
+		if (i < 7)
+			pos += sprintf(&buf[pos], ", ");
+	}
+	sprintf(&buf[pos], " } }");
+}
+
 static void printTimeStamp (const aafTimeStamp_t & ts,
 							ostream & os)
 {
@@ -384,7 +398,6 @@ HRESULT dumpWeakObject(IUnknown * pContainer,
   return returnHr;
 }
 
-
 HRESULT dumpPropertyValue (IAAFPropertyValueSP pPVal,
 						   IAAFDictionary * pDict,
 						   int indent,
@@ -582,26 +595,38 @@ HRESULT dumpPropertyValue (IAAFPropertyValueSP pPVal,
 				aafUID_t enumValue;
 				checkResult(pTDE->GetAUIDValue(pPVal, &enumValue));
 				
-				// now, get the text tag for that value.  Start with name
-				// buf len, and allocating a buffer to hold the name
-				aafCharacter * nameBuf;
+				// Now, get the text tag for that value.  Start with name
+				// buf len, and allocating a buffer to hold the name.
+				// For ExtEnum properties the Name may not be present so handle
+				// failure to lookup Name or Name's length.
 				aafUInt32 nameBufLen;
-				checkResult(pTDE->GetNameBufLenFromAUID(enumValue, &nameBufLen));
-				// don't forget NameBufLen is in bytes, not aafCharacters
-				nameBuf = (aafCharacter*) new aafUInt8[nameBufLen];
-				
-				// and now get the name itself
-				checkResult(pTDE->GetNameFromAUID(enumValue, nameBuf, nameBufLen));
-				
-				// Print the contents
-				char *mbBuf = make_mbstring(nameBufLen, nameBuf); // create an ansi/asci
-				checkExpression(NULL != mbBuf, AAFRESULT_NOMEMORY);
-				os << "Value: " << mbBuf << endl;
-				delete[] mbBuf;
-				mbBuf = 0;
-				delete[] nameBuf;
-				nameBuf = 0;
-				
+				HRESULT getlen_result = pTDE->GetNameBufLenFromAUID(enumValue, &nameBufLen);
+				if (getlen_result == AAFRESULT_ILLEGAL_VALUE) {
+					char buf[100];
+					convertAUIDtoString(enumValue, buf);
+					os << "Value: *unknown name for ExtEnum* (AUID = " << buf << ")" << endl;
+				}
+				else if SUCCEEDED(getlen_result) {
+					// don't forget NameBufLen is in bytes, not aafCharacters
+					aafCharacter * nameBuf;
+					nameBuf = (aafCharacter*) new aafUInt8[nameBufLen];
+
+					// and now get the name itself
+					checkResult(pTDE->GetNameFromAUID(enumValue, nameBuf, nameBufLen));
+
+					// Print the contents
+					char *mbBuf = make_mbstring(nameBufLen, nameBuf); // create an ansi/asci
+					checkExpression(NULL != mbBuf, AAFRESULT_NOMEMORY);
+					os << "Value: " << mbBuf << endl;
+					delete[] mbBuf;
+					mbBuf = 0;
+					delete[] nameBuf;
+					nameBuf = 0;
+				}
+				else {
+					checkResult(getlen_result);
+				}
+
 				break;
 			}
 			
@@ -835,18 +860,8 @@ HRESULT dumpPropertyValue (IAAFPropertyValueSP pPVal,
 						(aafMemPtr_t) &auidVal,
 						sizeof (auidVal)));
 					char buf[100];
-					sprintf (buf, "{ 0x%08x, 0x%04x, 0x%04x, ",
-						auidVal.Data1, auidVal.Data2, auidVal.Data3);
-					
-					os << "Value: " << buf << "{ ";
-					for (i = 0; i < 8; i++)
-					{
-						sprintf (buf, "0x%x", auidVal.Data4[i]);
-						os << buf;
-						if (i != 7)
-							os << ", ";
-					}
-					os << " } }" << endl;
+					convertAUIDtoString(auidVal, buf);
+					os << "Value: " << buf << endl;
 				}
 				
 				else if (pUnkTest == pUnkTimeStamp)
