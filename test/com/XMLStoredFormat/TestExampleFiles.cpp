@@ -71,9 +71,8 @@ int testExampleFiles()
             saveCopy(exampleFiles[i], L"tmp.xml");
             if (diff(exampleFiles[i], L"tmp.xml"))
             {
-                printf("%ls <-> %ls FAILED\n", exampleFiles[i], L"tmp.xml");
+                printf("FAILED\n");
                 thisFilePassed = false;
-				exit(1);
             }
             else
             {
