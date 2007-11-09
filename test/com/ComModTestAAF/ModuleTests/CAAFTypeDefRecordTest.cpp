@@ -97,6 +97,12 @@ static const aafUID_t sTypeId_Rational16_array =
 { 0x2fb711e7, 0x35da, 0x4722, 
   { 0x9f, 0x3e, 0xb3, 0x13, 0xc, 0xd5, 0x7a, 0xc3 }
 };
+//
+// {ed9cbe2f-1a42-420c-952e-7b23adbbc479}
+static const aafUID_t sTypeId_Mixed = 
+{ 0xed9cbe2f, 0x1a42, 0x420c, 
+  { 0x95, 0x2e, 0x7b, 0x23, 0xad, 0xbb, 0xc4, 0x79 }
+};
 
 //
 // Property IDs
@@ -124,6 +130,12 @@ static const aafUID_t sPropertyId_positionN =
 { 0xb876f07, 0xea1b, 0x4c78, 
   { 0xa4, 0xbf, 0xed, 0xc3, 0x5e, 0x58, 0x3f, 0x29 } 
 };
+//
+// {08dc656c-de12-4dfb-a047-bb687bda41da}
+static const aafUID_t sPropertyId_velocity = 
+{ 0x08dc656c, 0xde12, 0x4dfb, 
+  { 0xa0, 0x47, 0xbb, 0x68, 0x7b, 0xda, 0x41, 0xda } 
+};
 
 
 struct Rational16_t
@@ -136,6 +148,12 @@ struct Rational16pair_t
 {
   Rational16_t X_Position;
   Rational16_t Y_Position;
+};
+
+struct Mixed_t
+{
+  aafInt8	angle;
+  aafUInt32	speed;
 };
 
 
@@ -166,6 +184,18 @@ static HRESULT RegisterRational16PairOffsets (IAAFTypeDefRecord * ptd)
 							   sizeof (Rational16pair_t));
 }
 
+static HRESULT RegisterMixedOffsets (IAAFTypeDefRecord * ptd)
+{
+  assert (ptd);
+  aafUInt32 offsets[] =
+  {
+	offsetof (Mixed_t, angle),
+	offsetof (Mixed_t, speed)
+  };
+  return ptd->RegisterMembers (offsets,
+							   2,
+							   sizeof (Mixed_t));
+}
 
 static HRESULT WriteRecord (
     const aafWChar * pFileName,
@@ -335,6 +365,29 @@ static HRESULT WriteRecord (
 						&pPropDefPosN));
 	  }
 
+
+	  // Register the Mixed_t type
+	  IAAFTypeDef* tdMixedMemberTypes[] = {defs.tdInt8(), defs.tdUInt32()};
+	  aafWChar str_angle[] = L"Angle";
+	  aafWChar str_speed[] = L"Speed";
+	  aafString_t tdMixedMemberNames[] = {str_angle, str_speed};
+	  IAAFTypeDefRecordSP ptdrmixed;
+	  checkResult(pDict->CreateMetaInstance(kAAFClassID_TypeDefRecord, IID_IAAFTypeDefRecord, (IUnknown**) &ptdrmixed));
+	  checkResult(ptdrmixed->Initialize(sTypeId_Mixed, tdMixedMemberTypes, tdMixedMemberNames, 2, L"Mixed"));
+	  //  Register Mixed type def
+	  IAAFTypeDefSP ptdmixed;
+	  checkResult(ptdrmixed->QueryInterface(IID_IAAFTypeDef, (void**)&ptdmixed));
+	  checkResult(pDict->RegisterTypeDef(ptdmixed));
+	  checkResult(RegisterMixedOffsets(ptdrmixed));
+	  // Added Velocity property to Composition Mob
+	  IAAFPropertyDefSP pPropDefVelocity;
+	  checkResult (defs.cdCompositionMob()->RegisterOptionalPropertyDef
+				   (sPropertyId_velocity,
+					L"Velocity",
+					ptdmixed,
+					&pPropDefVelocity));
+
+
 	  // Create one of our new CompositionMobs, and add a values for
 	  // the Position property.
 	  IAAFCompositionMobSP pcm;
@@ -478,6 +531,13 @@ static HRESULT WriteRecord (
 		checkResult ( pObj->SetPropertyValue( pPropDefPosN, spArrayPropertyValue ) );
 	  }
 
+	  // Set the value on the new Velocity property (of Mixed_t type)
+	  const Mixed_t velocty = {15, 2001};
+	  IAAFPropertyValueSP pVelocity;
+	  checkResult (ptdrmixed->CreateValueFromStruct((aafMemPtr_t) &velocty, sizeof(velocty), &pVelocity));
+	  checkResult (pObj->SetPropertyValue(pPropDefVelocity, pVelocity));
+
+
 	  //Put the modified comp mob into the file.
 	  IAAFMobSP pMob;
 	  checkResult (pcm->QueryInterface (IID_IAAFMob,
@@ -620,6 +680,12 @@ static HRESULT ReadRecord (const aafWChar * pFileName)
 	  checkResult (RegisterRational16Offsets (ptdr16));
 	  checkResult (RegisterRational16PairOffsets (ptdr16p));
 		
+	  // Setup to read the Velocity property which is of typed Mixed_t
+	  checkResult (pDict->LookupTypeDef (sTypeId_Mixed, &ptd));
+	  IAAFTypeDefRecordSP ptdrmixed;
+	  checkResult (ptd->QueryInterface (IID_IAAFTypeDefRecord, (void**) &ptdrmixed));
+	  checkResult (RegisterMixedOffsets (ptdrmixed));
+
 	  IAAFTypeDef * pMemberTd = 0;
 	  IAAFTypeDef * pTempTd = 0;
 	  checkResult (ptdr16->QueryInterface (IID_IAAFTypeDef,
@@ -683,6 +749,16 @@ static HRESULT ReadRecord (const aafWChar * pFileName)
 	  checkResult (pObj->GetPropertyValue (pPdPosB, &pPVb));
 	  IAAFPropertyValueSP pPVc;
 	  checkResult (pObj->GetPropertyValue (pPdPosC, &pPVc));
+
+	  // Read back the value of the Velocity property
+	  IAAFPropertyDefSP pPdvelocity;
+	  checkResult (defs.cdCompositionMob()->LookupPropertyDef(sPropertyId_velocity, &pPdvelocity));
+	  IAAFPropertyValueSP pPVvelocity;
+	  checkResult (pObj->GetPropertyValue (pPdvelocity, &pPVvelocity));
+	  Mixed_t velocity = {0, 0};
+	  checkResult (ptdrmixed->GetStruct (pPVvelocity, (aafMemPtr_t) &velocity, sizeof (velocity)));
+	  checkExpression (15 == velocity.angle, AAFRESULT_TEST_FAILED);
+	  checkExpression (2001 == velocity.speed, AAFRESULT_TEST_FAILED);
 
 	  // Try to read the first one with GetStruct.
 	  Rational16pair_t valA = { {0,0},{0,0} };
