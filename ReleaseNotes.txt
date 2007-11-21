@@ -1,7 +1,7 @@
-AAF SDK v1.1.2 Developer Release 2
+AAF SDK v1.1.2 Release Candidate 1
 ==================================
 
-2007-08-03
+2007-11-21
 
 This SDK is the reference implementation of the Advanced
 Authoring Format (AAF) version 1.1. See doc/aafeditprotocol.pdf,
@@ -48,6 +48,28 @@ CREATE AND DISTRIBUTE AAF COMPLIANT PRODUCTS.  PLEASE CONTACT THE AAF
 ASSOCIATION, INC. FOR MORE INFORMATION ABOUT ANY ADDITIONAL LICENSES
 THAT MAY BE REQUIRED TO CREATE AND DISTRIBUTE AAF COMPLIANT PRODUCTS
 (HTTP://WWW.AAFASSOCIATION.ORG/POLICIES).
+
+Changes from v1.1.2 DR2 to v1.1.2 RC1
+-------------------------------------
+
+- XMLStoredFormat test clean ups & portability bug fixes
+- Extend support for g++ on Windows build
+- Add more "make check" tests
+- Changes to TypeDefRecord implementation to reinstate v1.1.1 behaviour
+  (incomplete - see next item)
+- Changes to TypeDefRecord module test to test v1.1.1 behaviour
+  (currently this test fails)
+- Use known OperationCategoryType in module tests so InfoDumper &
+ComPropDirectDump dump OK
+- Update ContainerDef symbols to match DNxHD codec
+- Increase axLib API coverage
+- Major update to aafanalyzer and documentation
+- Add workaround for case when a built-in property definition is not in
+the file's metadictionary (KLV encoding specific issue). Workaround is
+to make property optional by default to prevent an attempt to retrieve
+the value of a property that doesn't exist in the file.
+- Change ComPropDirectDump/dumper to not exit when dumping ExtEnum
+properties with non-existant names
 
 Changes from v1.1.2 DR1 to v1.1.2 DR2
 -------------------------------------
