@@ -48,7 +48,7 @@
 //
 // AAFMetaDict.csv 
 //
-// This file was generated on Mon Jul 23 15:51:09 BST 2007
+// This file was generated on Thu Nov 22 12:19:31 GMT 2007
 // by user phil on system pilot16.
 //
 // Key to macros.
@@ -12205,200 +12205,200 @@ AAF_INSTANCE_GROUP(ContainerDefinitionInstances, ContainerDefinition)
         0x0104, 0x0100,
         0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x06))
   AAF_INSTANCE_SEPARATOR()
-  AAF_INSTANCE(ContainerDefinition, AAF_SYMBOL(ContainerDef_MXFGC_Avid_DNxHD_220X_1080P,ContainerDef_MXFGC_Avid_DNxHD_220X_1080P,"",""), 
+  AAF_INSTANCE(ContainerDefinition, AAF_SYMBOL(ContainerDef_MXFGC_Avid_DNX_220X_1080p,ContainerDef_MXFGC_Avid_DNX_220X_1080p,"",""), 
       // {0E040301-0206-0101-060E-2B3404010101}
       // 06.0E.2B.34.04.01.01.01.0E.04.03.01.02.06.01.01
       AAF_LITERAL_AUID(0x0E040301,
         0x0206, 0x0101,
         0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x01), "")
-    AAF_INSTANCE_PROPERTY(Name, String, "ContainerDef_MXFGC_Avid_DNxHD_220X_1080P")
+    AAF_INSTANCE_PROPERTY(Name, String, "ContainerDef_MXFGC_Avid_DNX_220X_1080p")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
       // {0E040301-0206-0101-060E-2B3404010101}
       // 06.0E.2B.34.04.01.01.01.0E.04.03.01.02.06.01.01
       AAF_LITERAL_AUID(0x0E040301,
         0x0206, 0x0101,
         0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x01))
-  AAF_INSTANCE_END(ContainerDefinition, AAF_SYMBOL(ContainerDef_MXFGC_Avid_DNxHD_220X_1080P,ContainerDef_MXFGC_Avid_DNxHD_220X_1080P,"",""), 
+  AAF_INSTANCE_END(ContainerDefinition, AAF_SYMBOL(ContainerDef_MXFGC_Avid_DNX_220X_1080p,ContainerDef_MXFGC_Avid_DNX_220X_1080p,"",""), 
       // {0E040301-0206-0101-060E-2B3404010101}
       // 06.0E.2B.34.04.01.01.01.0E.04.03.01.02.06.01.01
       AAF_LITERAL_AUID(0x0E040301,
         0x0206, 0x0101,
         0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x01))
   AAF_INSTANCE_SEPARATOR()
-  AAF_INSTANCE(ContainerDefinition, AAF_SYMBOL(ContainerDef_MXFGC_Avid_DNxHD_145_1080P,ContainerDef_MXFGC_Avid_DNxHD_145_1080P,"",""), 
+  AAF_INSTANCE(ContainerDefinition, AAF_SYMBOL(ContainerDef_MXFGC_Avid_DNX_145_1080p,ContainerDef_MXFGC_Avid_DNX_145_1080p,"",""), 
       // {0E040301-0206-0102-060E-2B3404010101}
       // 06.0E.2B.34.04.01.01.01.0E.04.03.01.02.06.01.02
       AAF_LITERAL_AUID(0x0E040301,
         0x0206, 0x0102,
         0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x01), "")
-    AAF_INSTANCE_PROPERTY(Name, String, "ContainerDef_MXFGC_Avid_DNxHD_145_1080P")
+    AAF_INSTANCE_PROPERTY(Name, String, "ContainerDef_MXFGC_Avid_DNX_145_1080p")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
       // {0E040301-0206-0102-060E-2B3404010101}
       // 06.0E.2B.34.04.01.01.01.0E.04.03.01.02.06.01.02
       AAF_LITERAL_AUID(0x0E040301,
         0x0206, 0x0102,
         0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x01))
-  AAF_INSTANCE_END(ContainerDefinition, AAF_SYMBOL(ContainerDef_MXFGC_Avid_DNxHD_145_1080P,ContainerDef_MXFGC_Avid_DNxHD_145_1080P,"",""), 
+  AAF_INSTANCE_END(ContainerDefinition, AAF_SYMBOL(ContainerDef_MXFGC_Avid_DNX_145_1080p,ContainerDef_MXFGC_Avid_DNX_145_1080p,"",""), 
       // {0E040301-0206-0102-060E-2B3404010101}
       // 06.0E.2B.34.04.01.01.01.0E.04.03.01.02.06.01.02
       AAF_LITERAL_AUID(0x0E040301,
         0x0206, 0x0102,
         0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x01))
   AAF_INSTANCE_SEPARATOR()
-  AAF_INSTANCE(ContainerDefinition, AAF_SYMBOL(ContainerDef_MXFGC_Avid_DNxHD_220_1080P,ContainerDef_MXFGC_Avid_DNxHD_220_1080P,"",""), 
+  AAF_INSTANCE(ContainerDefinition, AAF_SYMBOL(ContainerDef_MXFGC_Avid_DNX_220_1080p,ContainerDef_MXFGC_Avid_DNX_220_1080p,"",""), 
       // {0E040301-0206-0103-060E-2B3404010101}
       // 06.0E.2B.34.04.01.01.01.0E.04.03.01.02.06.01.03
       AAF_LITERAL_AUID(0x0E040301,
         0x0206, 0x0103,
         0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x01), "")
-    AAF_INSTANCE_PROPERTY(Name, String, "ContainerDef_MXFGC_Avid_DNxHD_220_1080P")
+    AAF_INSTANCE_PROPERTY(Name, String, "ContainerDef_MXFGC_Avid_DNX_220_1080p")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
       // {0E040301-0206-0103-060E-2B3404010101}
       // 06.0E.2B.34.04.01.01.01.0E.04.03.01.02.06.01.03
       AAF_LITERAL_AUID(0x0E040301,
         0x0206, 0x0103,
         0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x01))
-  AAF_INSTANCE_END(ContainerDefinition, AAF_SYMBOL(ContainerDef_MXFGC_Avid_DNxHD_220_1080P,ContainerDef_MXFGC_Avid_DNxHD_220_1080P,"",""), 
+  AAF_INSTANCE_END(ContainerDefinition, AAF_SYMBOL(ContainerDef_MXFGC_Avid_DNX_220_1080p,ContainerDef_MXFGC_Avid_DNX_220_1080p,"",""), 
       // {0E040301-0206-0103-060E-2B3404010101}
       // 06.0E.2B.34.04.01.01.01.0E.04.03.01.02.06.01.03
       AAF_LITERAL_AUID(0x0E040301,
         0x0206, 0x0103,
         0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x01))
   AAF_INSTANCE_SEPARATOR()
-  AAF_INSTANCE(ContainerDefinition, AAF_SYMBOL(ContainerDef_MXFGC_Avid_DNxHD_36_1080P,ContainerDef_MXFGC_Avid_DNxHD_36_1080P,"",""), 
+  AAF_INSTANCE(ContainerDefinition, AAF_SYMBOL(ContainerDef_MXFGC_Avid_DNX_36_1080p,ContainerDef_MXFGC_Avid_DNX_36_1080p,"",""), 
       // {0E040301-0206-0104-060E-2B3404010101}
       // 06.0E.2B.34.04.01.01.01.0E.04.03.01.02.06.01.04
       AAF_LITERAL_AUID(0x0E040301,
         0x0206, 0x0104,
         0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x01), "")
-    AAF_INSTANCE_PROPERTY(Name, String, "ContainerDef_MXFGC_Avid_DNxHD_36_1080P")
+    AAF_INSTANCE_PROPERTY(Name, String, "ContainerDef_MXFGC_Avid_DNX_36_1080p")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
       // {0E040301-0206-0104-060E-2B3404010101}
       // 06.0E.2B.34.04.01.01.01.0E.04.03.01.02.06.01.04
       AAF_LITERAL_AUID(0x0E040301,
         0x0206, 0x0104,
         0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x01))
-  AAF_INSTANCE_END(ContainerDefinition, AAF_SYMBOL(ContainerDef_MXFGC_Avid_DNxHD_36_1080P,ContainerDef_MXFGC_Avid_DNxHD_36_1080P,"",""), 
+  AAF_INSTANCE_END(ContainerDefinition, AAF_SYMBOL(ContainerDef_MXFGC_Avid_DNX_36_1080p,ContainerDef_MXFGC_Avid_DNX_36_1080p,"",""), 
       // {0E040301-0206-0104-060E-2B3404010101}
       // 06.0E.2B.34.04.01.01.01.0E.04.03.01.02.06.01.04
       AAF_LITERAL_AUID(0x0E040301,
         0x0206, 0x0104,
         0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x01))
   AAF_INSTANCE_SEPARATOR()
-  AAF_INSTANCE(ContainerDefinition, AAF_SYMBOL(ContainerDef_MXFGC_Avid_DNxHD_220X_1080I,ContainerDef_MXFGC_Avid_DNxHD_220X_1080I,"",""), 
+  AAF_INSTANCE(ContainerDefinition, AAF_SYMBOL(ContainerDef_MXFGC_Avid_DNX_220X_1080i,ContainerDef_MXFGC_Avid_DNX_220X_1080i,"",""), 
       // {0E040301-0206-0201-060E-2B3404010101}
       // 06.0E.2B.34.04.01.01.01.0E.04.03.01.02.06.02.01
       AAF_LITERAL_AUID(0x0E040301,
         0x0206, 0x0201,
         0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x01), "")
-    AAF_INSTANCE_PROPERTY(Name, String, "ContainerDef_MXFGC_Avid_DNxHD_220X_1080I")
+    AAF_INSTANCE_PROPERTY(Name, String, "ContainerDef_MXFGC_Avid_DNX_220X_1080i")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
       // {0E040301-0206-0201-060E-2B3404010101}
       // 06.0E.2B.34.04.01.01.01.0E.04.03.01.02.06.02.01
       AAF_LITERAL_AUID(0x0E040301,
         0x0206, 0x0201,
         0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x01))
-  AAF_INSTANCE_END(ContainerDefinition, AAF_SYMBOL(ContainerDef_MXFGC_Avid_DNxHD_220X_1080I,ContainerDef_MXFGC_Avid_DNxHD_220X_1080I,"",""), 
+  AAF_INSTANCE_END(ContainerDefinition, AAF_SYMBOL(ContainerDef_MXFGC_Avid_DNX_220X_1080i,ContainerDef_MXFGC_Avid_DNX_220X_1080i,"",""), 
       // {0E040301-0206-0201-060E-2B3404010101}
       // 06.0E.2B.34.04.01.01.01.0E.04.03.01.02.06.02.01
       AAF_LITERAL_AUID(0x0E040301,
         0x0206, 0x0201,
         0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x01))
   AAF_INSTANCE_SEPARATOR()
-  AAF_INSTANCE(ContainerDefinition, AAF_SYMBOL(ContainerDef_MXFGC_Avid_DNxHD_145_1080I,ContainerDef_MXFGC_Avid_DNxHD_145_1080I,"",""), 
+  AAF_INSTANCE(ContainerDefinition, AAF_SYMBOL(ContainerDef_MXFGC_Avid_DNX_145_1080i,ContainerDef_MXFGC_Avid_DNX_145_1080i,"",""), 
       // {0E040301-0206-0202-060E-2B3404010101}
       // 06.0E.2B.34.04.01.01.01.0E.04.03.01.02.06.02.02
       AAF_LITERAL_AUID(0x0E040301,
         0x0206, 0x0202,
         0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x01), "")
-    AAF_INSTANCE_PROPERTY(Name, String, "ContainerDef_MXFGC_Avid_DNxHD_145_1080I")
+    AAF_INSTANCE_PROPERTY(Name, String, "ContainerDef_MXFGC_Avid_DNX_145_1080i")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
       // {0E040301-0206-0202-060E-2B3404010101}
       // 06.0E.2B.34.04.01.01.01.0E.04.03.01.02.06.02.02
       AAF_LITERAL_AUID(0x0E040301,
         0x0206, 0x0202,
         0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x01))
-  AAF_INSTANCE_END(ContainerDefinition, AAF_SYMBOL(ContainerDef_MXFGC_Avid_DNxHD_145_1080I,ContainerDef_MXFGC_Avid_DNxHD_145_1080I,"",""), 
+  AAF_INSTANCE_END(ContainerDefinition, AAF_SYMBOL(ContainerDef_MXFGC_Avid_DNX_145_1080i,ContainerDef_MXFGC_Avid_DNX_145_1080i,"",""), 
       // {0E040301-0206-0202-060E-2B3404010101}
       // 06.0E.2B.34.04.01.01.01.0E.04.03.01.02.06.02.02
       AAF_LITERAL_AUID(0x0E040301,
         0x0206, 0x0202,
         0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x01))
   AAF_INSTANCE_SEPARATOR()
-  AAF_INSTANCE(ContainerDefinition, AAF_SYMBOL(ContainerDef_MXFGC_Avid_DNxHD_220_1080I,ContainerDef_MXFGC_Avid_DNxHD_220_1080I,"",""), 
+  AAF_INSTANCE(ContainerDefinition, AAF_SYMBOL(ContainerDef_MXFGC_Avid_DNX_220_1080i,ContainerDef_MXFGC_Avid_DNX_220_1080i,"",""), 
       // {0E040301-0206-0203-060E-2B3404010101}
       // 06.0E.2B.34.04.01.01.01.0E.04.03.01.02.06.02.03
       AAF_LITERAL_AUID(0x0E040301,
         0x0206, 0x0203,
         0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x01), "")
-    AAF_INSTANCE_PROPERTY(Name, String, "ContainerDef_MXFGC_Avid_DNxHD_220_1080I")
+    AAF_INSTANCE_PROPERTY(Name, String, "ContainerDef_MXFGC_Avid_DNX_220_1080i")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
       // {0E040301-0206-0203-060E-2B3404010101}
       // 06.0E.2B.34.04.01.01.01.0E.04.03.01.02.06.02.03
       AAF_LITERAL_AUID(0x0E040301,
         0x0206, 0x0203,
         0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x01))
-  AAF_INSTANCE_END(ContainerDefinition, AAF_SYMBOL(ContainerDef_MXFGC_Avid_DNxHD_220_1080I,ContainerDef_MXFGC_Avid_DNxHD_220_1080I,"",""), 
+  AAF_INSTANCE_END(ContainerDefinition, AAF_SYMBOL(ContainerDef_MXFGC_Avid_DNX_220_1080i,ContainerDef_MXFGC_Avid_DNX_220_1080i,"",""), 
       // {0E040301-0206-0203-060E-2B3404010101}
       // 06.0E.2B.34.04.01.01.01.0E.04.03.01.02.06.02.03
       AAF_LITERAL_AUID(0x0E040301,
         0x0206, 0x0203,
         0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x01))
   AAF_INSTANCE_SEPARATOR()
-  AAF_INSTANCE(ContainerDefinition, AAF_SYMBOL(ContainerDef_MXFGC_Avid_DNxHD_220X_720P,ContainerDef_MXFGC_Avid_DNxHD_220X_720P,"",""), 
+  AAF_INSTANCE(ContainerDefinition, AAF_SYMBOL(ContainerDef_MXFGC_Avid_DNX_220X_720p,ContainerDef_MXFGC_Avid_DNX_220X_720p,"",""), 
       // {0E040301-0206-0301-060E-2B3404010101}
       // 06.0E.2B.34.04.01.01.01.0E.04.03.01.02.06.03.01
       AAF_LITERAL_AUID(0x0E040301,
         0x0206, 0x0301,
         0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x01), "")
-    AAF_INSTANCE_PROPERTY(Name, String, "ContainerDef_MXFGC_Avid_DNxHD_220X_720P")
+    AAF_INSTANCE_PROPERTY(Name, String, "ContainerDef_MXFGC_Avid_DNX_220X_720p")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
       // {0E040301-0206-0301-060E-2B3404010101}
       // 06.0E.2B.34.04.01.01.01.0E.04.03.01.02.06.03.01
       AAF_LITERAL_AUID(0x0E040301,
         0x0206, 0x0301,
         0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x01))
-  AAF_INSTANCE_END(ContainerDefinition, AAF_SYMBOL(ContainerDef_MXFGC_Avid_DNxHD_220X_720P,ContainerDef_MXFGC_Avid_DNxHD_220X_720P,"",""), 
+  AAF_INSTANCE_END(ContainerDefinition, AAF_SYMBOL(ContainerDef_MXFGC_Avid_DNX_220X_720p,ContainerDef_MXFGC_Avid_DNX_220X_720p,"",""), 
       // {0E040301-0206-0301-060E-2B3404010101}
       // 06.0E.2B.34.04.01.01.01.0E.04.03.01.02.06.03.01
       AAF_LITERAL_AUID(0x0E040301,
         0x0206, 0x0301,
         0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x01))
   AAF_INSTANCE_SEPARATOR()
-  AAF_INSTANCE(ContainerDefinition, AAF_SYMBOL(ContainerDef_MXFGC_Avid_DNxHD_220_720P,ContainerDef_MXFGC_Avid_DNxHD_220_720P,"",""), 
+  AAF_INSTANCE(ContainerDefinition, AAF_SYMBOL(ContainerDef_MXFGC_Avid_DNX_220_720p,ContainerDef_MXFGC_Avid_DNX_220_720p,"",""), 
       // {0E040301-0206-0302-060E-2B3404010101}
       // 06.0E.2B.34.04.01.01.01.0E.04.03.01.02.06.03.02
       AAF_LITERAL_AUID(0x0E040301,
         0x0206, 0x0302,
         0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x01), "")
-    AAF_INSTANCE_PROPERTY(Name, String, "ContainerDef_MXFGC_Avid_DNxHD_220_720P")
+    AAF_INSTANCE_PROPERTY(Name, String, "ContainerDef_MXFGC_Avid_DNX_220_720p")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
       // {0E040301-0206-0302-060E-2B3404010101}
       // 06.0E.2B.34.04.01.01.01.0E.04.03.01.02.06.03.02
       AAF_LITERAL_AUID(0x0E040301,
         0x0206, 0x0302,
         0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x01))
-  AAF_INSTANCE_END(ContainerDefinition, AAF_SYMBOL(ContainerDef_MXFGC_Avid_DNxHD_220_720P,ContainerDef_MXFGC_Avid_DNxHD_220_720P,"",""), 
+  AAF_INSTANCE_END(ContainerDefinition, AAF_SYMBOL(ContainerDef_MXFGC_Avid_DNX_220_720p,ContainerDef_MXFGC_Avid_DNX_220_720p,"",""), 
       // {0E040301-0206-0302-060E-2B3404010101}
       // 06.0E.2B.34.04.01.01.01.0E.04.03.01.02.06.03.02
       AAF_LITERAL_AUID(0x0E040301,
         0x0206, 0x0302,
         0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x01))
   AAF_INSTANCE_SEPARATOR()
-  AAF_INSTANCE(ContainerDefinition, AAF_SYMBOL(ContainerDef_MXFGC_Avid_DNxHD_145_720P,ContainerDef_MXFGC_Avid_DNxHD_145_720P,"",""), 
+  AAF_INSTANCE(ContainerDefinition, AAF_SYMBOL(ContainerDef_MXFGC_Avid_DNX_145_720p,ContainerDef_MXFGC_Avid_DNX_145_720p,"",""), 
       // {0E040301-0206-0303-060E-2B3404010101}
       // 06.0E.2B.34.04.01.01.01.0E.04.03.01.02.06.03.03
       AAF_LITERAL_AUID(0x0E040301,
         0x0206, 0x0303,
         0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x01), "")
-    AAF_INSTANCE_PROPERTY(Name, String, "ContainerDef_MXFGC_Avid_DNxHD_145_720P")
+    AAF_INSTANCE_PROPERTY(Name, String, "ContainerDef_MXFGC_Avid_DNX_145_720p")
     AAF_INSTANCE_PROPERTY(Identification, AUID, 
       // {0E040301-0206-0303-060E-2B3404010101}
       // 06.0E.2B.34.04.01.01.01.0E.04.03.01.02.06.03.03
       AAF_LITERAL_AUID(0x0E040301,
         0x0206, 0x0303,
         0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x01))
-  AAF_INSTANCE_END(ContainerDefinition, AAF_SYMBOL(ContainerDef_MXFGC_Avid_DNxHD_145_720P,ContainerDef_MXFGC_Avid_DNxHD_145_720P,"",""), 
+  AAF_INSTANCE_END(ContainerDefinition, AAF_SYMBOL(ContainerDef_MXFGC_Avid_DNX_145_720p,ContainerDef_MXFGC_Avid_DNX_145_720p,"",""), 
       // {0E040301-0206-0303-060E-2B3404010101}
       // 06.0E.2B.34.04.01.01.01.0E.04.03.01.02.06.03.03
       AAF_LITERAL_AUID(0x0E040301,
