@@ -825,7 +825,9 @@ OMRootStorable* OMKLVStoredObject::restore(OMFile& file)
     _storage->removeObject(*root);
     // restore the meta object directory
     //
-    _storage->restoreObjectDirectory(headerPosition);
+    if (_storage->objectDirectoryOffset() != 0) {
+      _storage->restoreObjectDirectory(headerPosition);
+    }
     _storage->readKLVKey(k);
     convert(cid, k);
   } else {
