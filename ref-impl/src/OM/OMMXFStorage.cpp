@@ -1560,6 +1560,12 @@ void OMMXFStorage::setObjectDirectoryOffset(OMUInt64 objectDirectoryOffset)
   _objectDirectoryOffset = objectDirectoryOffset;
 }
 
+OMUInt64 OMMXFStorage::objectDirectoryOffset(void) const
+{
+  TRACE("OMMXFStorage::objectDirectoryOffset");
+  return _objectDirectoryOffset;
+}
+
 OMMXFStorage::ObjectDirectory* OMMXFStorage::instanceIdToObject(void)
 {
   TRACE("OMMXFStorage::instanceIdToObject");

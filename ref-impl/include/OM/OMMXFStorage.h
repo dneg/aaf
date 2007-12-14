@@ -422,6 +422,8 @@ public:
 
   virtual void setObjectDirectoryOffset(OMUInt64 objectDirectoryOffset);
 
+  virtual OMUInt64 objectDirectoryOffset(void) const;
+
   virtual OMUInt32 addStream(OMDataStream* stream);
 
   virtual OMUInt32 streamIdentification(OMDataStream* stream);
