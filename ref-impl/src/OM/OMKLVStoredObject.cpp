@@ -79,6 +79,9 @@
 
 #define USETAGTABLE 1
 //#define OM_EXTENSIONSONLY 1
+// If defined, OM_SAVEOBJECTDIRECTORY causes Object Directory
+// to be written to a file.
+#define OM_SAVEOBJECTDIRECTORY 1
 
 #include "OMTypeVisitor.h"
 
@@ -434,8 +437,10 @@ void OMKLVStoredObject::save(OMFile& file)
   file.root()->save();
 #endif
 
+#if defined(OM_SAVEOBJECTDIRECTORY)
   // Save the meta object directory
   _storage->saveObjectDirectory();
+#endif
 
   // Save streams
   //
@@ -1405,8 +1410,11 @@ void OMKLVStoredObject::flatSave(const OMPropertySet& properties) const
 
   if (properties.container()->classId() == Class_Root) {
     OMKLVStoredObject* This = const_cast<OMKLVStoredObject*>(this);
+
+#if defined(OM_SAVEOBJECTDIRECTORY)
     OMUniqueObjectIdentification id = _storage->generation();
     This->saveObjectDirectoryReference(id);
+#endif
 
     OMPropertyId pid = PID_Root_FormatVersion;
     OMUInt32 version = formatVersion;
