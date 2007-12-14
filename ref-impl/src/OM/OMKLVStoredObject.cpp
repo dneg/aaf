@@ -89,6 +89,10 @@ OMKLVKey metaDictionaryKey =
   {0x8A, 0xE5, 0x95, 0x9D, 0x57, 0xB3, 0xDA, 0x33,
    0x8A, 0x5F, 0xB4, 0x11, 0x4D, 0x66, 0x4B, 0x40};
 
+// {0D010101-0300-0000-060E-2B3402060101}
+const OMClassId SMPTERootClassId =
+{0x0d010101, 0x0300, 0x0000, {0x06, 0x0e, 0x2b, 0x34, 0x02, 0x06, 0x01, 0x01}};
+
   // @mfunc Open the root <c OMKLVStoredObject> in the raw storage
   //        <p rawStorage> for reading only.
   //   @parm The raw storage in which to open the file.
@@ -825,7 +829,8 @@ OMRootStorable* OMKLVStoredObject::restore(OMFile& file)
   root->setStore(file.rootStore());
   root->setClassFactory(metaDictionary);
   // HACK4MEIP2
-  if (cid == OMRootStorable::_rootClassId) {
+  if (cid == OMRootStorable::_rootClassId ||
+      cid == SMPTERootClassId) {
     flatRestore(*root->propertySet());
     _storage->removeObject(*root);
     // restore the meta object directory
