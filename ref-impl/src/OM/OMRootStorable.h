@@ -82,7 +82,6 @@ public:
   OMDictionary* dictionary(void) const;
 
   static const OMClassId _rootClassId;
-  static const OMClassId _SMPTERootClassId;
 
   void setDictionary(OMDictionary* dictionary);
   
