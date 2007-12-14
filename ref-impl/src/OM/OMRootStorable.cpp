@@ -54,6 +54,10 @@ OMRootStorable::~OMRootStorable(void)
 const OMClassId OMRootStorable::_rootClassId =
 { 0xb3b398a5, 0x1c90, 0x11d4, { 0x80, 0x53, 0x8, 0x0, 0x36, 0x21, 0x8, 0x4 } };
 
+// {0D010101-0300-0000-060E-2B3402060101}
+const OMClassId OMRootStorable::_SMPTERootClassId =
+{ 0x0d010101, 0x0300, 0x0000, { 0x06, 0x0e, 0x2b, 0x34, 0x02, 0x06, 0x01, 0x01 } };
+
 const OMClassId& OMRootStorable::classId(void) const
 {
   return _rootClassId;
