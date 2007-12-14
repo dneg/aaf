@@ -82,6 +82,9 @@
 // If defined, OM_SAVEOBJECTDIRECTORY causes Object Directory
 // to be written to a file.
 #define OM_SAVEOBJECTDIRECTORY 1
+// If defined, OM_WRITELEGACYROOTCLASSID causes the SMPTE Root class ID
+// to be written to a file, otherwise the internal legacy GUID is used.
+#define OM_WRITELEGACYROOTCLASSID 1
 
 #include "OMTypeVisitor.h"
 
@@ -460,7 +463,13 @@ void OMKLVStoredObject::save(OMStorable& object)
   OMUInt64 position = _storage->position();
   _storage->enterObject(object, position);
 
-  save(object.classId());
+  OMClassId classId = object.classId();
+#if !defined (OM_WRITELEGACYROOTCLASSID)
+  if (classId == OMRootStorable::_rootClassId) {
+    classId = SMPTERootClassId;
+  }
+#endif
+  save(classId);
   save(*object.propertySet());
 }
 
