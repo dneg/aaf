@@ -1015,7 +1015,7 @@ AAFRESULT STDMETHODCALLTYPE
 		  if (AAFRESULT_SUCCEEDED (hr))
 			{
 			  hr = AAFRESULT_SUCCESS;
-			  if (_internalSizes[i] != ptd->ActualSize ())
+			  if (_internalSizes[i] != ptd->PropValSize ())
 				{
 				  hr = AAFRESULT_DEFAULT_ALREADY_USED;
 				}
@@ -1043,12 +1043,18 @@ AAFRESULT STDMETHODCALLTYPE
   for (i = 0; i < numMembers; i++)
 	{
 	  _registeredOffsets[i] = pOffsets[i];
-
-	  ImplAAFTypeDefSP ptd;
-	  GetMemberType (i, &ptd);
-	  ASSERTU (AAFRESULT_SUCCEEDED (hr));
-	  ASSERTU (ptd);
-	  _internalSizes[i] = ptd->ActualSize ();
+	  if ((numMembers-1) == i)
+		{
+		  // Last (or perhaps only) member; take total struct size and
+		  // subtract last offset for this size
+		  _internalSizes[i] = structSize - pOffsets[i];
+		}
+	  else
+		{
+		  // We know it's not the last member, so it's safe to index
+		  // to the next element in pOffsets array.
+		  _internalSizes[i] = pOffsets[i+1] - pOffsets[i];
+		}
 	}
 
   _registeredSize = structSize;
