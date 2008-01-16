@@ -570,7 +570,84 @@ static HRESULT WriteRecord (
 }
 
 
-static HRESULT ReadRecord (const aafWChar * pFileName)
+/* throws on error */
+static void CheckMemberTypeEqual (IAAFTypeDefRecordSP rec, 
+                                     int member, IAAFTypeDef *td)
+{
+  IAAFTypeDef * pMemberTd = 0;
+  checkResult (rec->GetMemberType (member, &pMemberTd));
+  checkExpression (pMemberTd == td,
+				   AAFRESULT_TEST_FAILED);
+  pMemberTd->Release ();
+}
+
+
+
+/* Throws on error */
+static void CheckRational16ByValues 
+         (IAAFTypeDefRecordSP pTDr16,
+          IAAFPropertyValueSP pv,    
+          Rational16_t expected)
+{
+  IAAFPropertyValueSP pvMemNum, pvMemDen;
+  IAAFPropertyValueSP junkPv;
+  checkResult (pTDr16->GetValue (pv, 0, &pvMemNum));
+  checkResult (pTDr16->GetValue (pv, 1, &pvMemDen));
+
+  // Check that there are no more members
+  checkExpression (
+    pTDr16->GetValue (pv, 2, &junkPv) == AAFRESULT_ILLEGAL_VALUE,
+    AAFRESULT_TEST_FAILED
+  );
+
+
+  IAAFTypeDefSP td;
+  IAAFTypeDefInt *tdint;
+  aafInt16  num;
+  aafUInt16 den;
+    
+  checkResult (pTDr16->GetMemberType (0, &td));
+  checkResult (td->QueryInterface (IID_IAAFTypeDefInt,
+                              (void **) &tdint));
+  checkResult (tdint->GetInteger (pvMemNum, 
+                               (aafMemPtr_t)(&num), sizeof(num)));
+
+  checkResult (pTDr16->GetMemberType (1, &td));
+  checkResult (td->QueryInterface (IID_IAAFTypeDefInt,
+                              (void **) &tdint));
+  checkResult (tdint->GetInteger (pvMemDen, 
+                               (aafMemPtr_t)(&den), sizeof(den)));
+  
+  checkExpression(expected.Numerator == num && expected.Denominator == den,
+                  AAFRESULT_TEST_FAILED);
+}
+
+
+/* Throws on error */
+static void CheckRational16PairByValues 
+         (IAAFTypeDefRecordSP pTDr16pair,
+          IAAFTypeDefRecordSP pTDr16,
+          IAAFPropertyValueSP pv, 
+          Rational16pair_t expected)
+{
+  IAAFPropertyValueSP pvMemX, pvMemY;
+  IAAFPropertyValueSP junkPv;
+  
+  checkResult (pTDr16pair->GetValue (pv, 0, &pvMemX));
+  checkResult (pTDr16pair->GetValue (pv, 1, &pvMemY));
+
+  // Check that there are no more members
+  checkExpression (
+    pTDr16pair->GetValue (pv, 2, &junkPv) == AAFRESULT_ILLEGAL_VALUE,
+    AAFRESULT_TEST_FAILED
+  );
+  
+  CheckRational16ByValues(pTDr16, pvMemX, expected.X_Position);
+  CheckRational16ByValues(pTDr16, pvMemY, expected.Y_Position);
+}
+
+
+static HRESULT ReadRecord (const aafWChar * pFileName, int loadingMode)
 {
   HRESULT hr = E_FAIL;
   IAAFFileSP   pFile;
@@ -578,9 +655,7 @@ static HRESULT ReadRecord (const aafWChar * pFileName)
   try 
 	{
 	  // Open the file, and get the dictionary.
-	  // Test fails when openened in default loading mode. So set mode to
-	  // lazy loading
-	  checkResult(AAFFileOpenExistingRead(pFileName, AAF_FILE_MODE_LAZY_LOADING, &pFile));
+	  checkResult(AAFFileOpenExistingRead(pFileName, loadingMode, &pFile));
 	  IAAFHeaderSP pHeader;
 	  checkResult(pFile->GetHeader(&pHeader));
 	  IAAFDictionarySP pDict;
@@ -588,8 +663,8 @@ static HRESULT ReadRecord (const aafWChar * pFileName)
 	  CAAFBuiltinDefs defs(pDict);
 
 	  // get the SDK version against which we are testing
-      aafProductVersion_t			testVer;
-      checkResult(pHeader->GetRefImplVersion(&testVer));
+	  aafProductVersion_t			testVer;
+	  checkResult(pHeader->GetRefImplVersion(&testVer));
 
 	  // Get the type definitions for our new types.
 	  IAAFTypeDefSP ptd;
@@ -684,27 +759,27 @@ static HRESULT ReadRecord (const aafWChar * pFileName)
 	  checkResult (pDict->LookupTypeDef (sTypeId_Mixed, &ptd));
 	  IAAFTypeDefRecordSP ptdrmixed;
 	  checkResult (ptd->QueryInterface (IID_IAAFTypeDefRecord, (void**) &ptdrmixed));
-	  checkResult (RegisterMixedOffsets (ptdrmixed));
+	  temphr = RegisterMixedOffsets(ptdrmixed);
+	  /* It is ok to return default already used due to current limitation
+           * in implementation that default registration may occur and tie us
+           * to a specific structural layout before we get the ability to
+           * register own offsets/layout. This is slated for fixing in
+           * future rev of the SDK.
+           */
+	  if (temphr == AAFRESULT_DEFAULT_ALREADY_USED)
+	      throw AAFRESULT_SUCCESS;
 
-	  IAAFTypeDef * pMemberTd = 0;
+	  checkResult (temphr);
+
 	  IAAFTypeDef * pTempTd = 0;
 	  checkResult (ptdr16->QueryInterface (IID_IAAFTypeDef,
 										(void**) &pTempTd));
-	  checkResult (ptdr16p->GetMemberType (0, &pMemberTd));
-	  checkExpression (pMemberTd == pTempTd,
-					   AAFRESULT_TEST_FAILED);
-	  pMemberTd->Release ();
-	  pMemberTd = 0;
-
-	  checkResult (ptdr16p->GetMemberType (1, &pMemberTd));
-	  checkExpression (pMemberTd == pTempTd,
-					   AAFRESULT_TEST_FAILED);
-	  pMemberTd->Release ();
-	  pMemberTd = 0;
+	  CheckMemberTypeEqual (ptdr16p, 0, pTempTd);
+	  CheckMemberTypeEqual (ptdr16p, 1, pTempTd);
 	  pTempTd->Release ();
 	  pTempTd = 0;
 
-	  temphr = ptdr16p->GetMemberType (2, &pMemberTd);
+	  temphr = ptdr16p->GetMemberType (2, &pTempTd);
 	  checkExpression (temphr == AAFRESULT_ILLEGAL_VALUE,
 					   AAFRESULT_TEST_FAILED);
 
@@ -775,70 +850,8 @@ static HRESULT ReadRecord (const aafWChar * pFileName)
 					   AAFRESULT_TEST_FAILED);
 
 	  // Try to read the second one by decomposing with GetValue.
-	  IAAFPropertyValueSP pPvX;
-	  checkResult (ptdr16p->GetValue (pPVb,
-									 0,
-									 &pPvX));
-	  IAAFPropertyValueSP pPvY;
-	  checkResult (ptdr16p->GetValue (pPVb,
-									 1,
-									 &pPvY));
-
-	  IAAFPropertyValueSP pPvXn;
-	  checkResult (ptdr16->GetValue (pPvX,
-									0,
-									&pPvXn));
-	  IAAFPropertyValueSP pPvXd;
-	  checkResult (ptdr16->GetValue (pPvX,
-									1,
-									&pPvXd));
-	  IAAFPropertyValueSP pPvYn;
-	  checkResult (ptdr16->GetValue (pPvY,
-									0,
-									&pPvYn));
-	  IAAFPropertyValueSP pPvYd;
-	  checkResult (ptdr16->GetValue (pPvY,
-									1,
-									&pPvYd));
-	  IAAFPropertyValueSP junkPv;
-	  temphr = ptdr16->GetValue (pPvY,
-								2,
-								&junkPv);
-	  checkExpression (AAFRESULT_ILLEGAL_VALUE == temphr,
-					   AAFRESULT_TEST_FAILED);
-	  temphr = ptdr16->GetValue (0,
-								1,
-								&junkPv);
-	  checkExpression (AAFRESULT_NULL_PARAM == temphr,
-					   AAFRESULT_TEST_FAILED);
-	  temphr = ptdr16->GetValue (pPvY,
-								1,
-								0);
-	  checkExpression (AAFRESULT_NULL_PARAM == temphr,
-					   AAFRESULT_TEST_FAILED);
-
-	  // Get type def for UInt16; use it to read the individual values
-	  IAAFTypeDefIntSP ptdUInt16;
-	  checkResult (defs.tdUInt16()->
-				   QueryInterface (IID_IAAFTypeDefInt,
-								   (void**) &ptdUInt16));
-	  aafUInt32 val;
-	  checkResult (ptdUInt16->GetInteger (pPvXn,
-									   (aafMemPtr_t) &val,
-									   sizeof (val)));
-	  checkExpression (5 == val, AAFRESULT_TEST_FAILED);
-	  checkResult (ptdUInt16->GetInteger (pPvXd,
-									   (aafMemPtr_t) &val,
-									   sizeof (val)));
-	  checkExpression (6 == val, AAFRESULT_TEST_FAILED);
-	  checkResult (ptdUInt16->GetInteger (pPvYn,
-									   (aafMemPtr_t) &val,
-									   sizeof (val)));
-	  checkExpression (7 == val, AAFRESULT_TEST_FAILED);
-	  checkResult (ptdUInt16->GetInteger (pPvYd,
-									   (aafMemPtr_t) &val,
-									   sizeof (val)));
-	  checkExpression (8 == val, AAFRESULT_TEST_FAILED);
+	  Rational16pair_t valB = { {5, 6}, {7, 8} };
+	  CheckRational16PairByValues (ptdr16p, ptdr16, pPVb, valB);
 
 	  // Read the last two with GetStruct just to get it over with. ;)
 	  Rational16pair_t valC = { {0,0},{0,0} };
@@ -918,6 +931,189 @@ static HRESULT ReadRecord (const aafWChar * pFileName)
   return hr;
 }
 
+static HRESULT ReadRecordNoStructs (const aafWChar * pFileName, int loadingMode)
+{
+  HRESULT hr = E_FAIL;
+  HRESULT temphr;
+  IAAFFileSP   pFile;
+
+  try 
+	{
+	  // Open the file, and get the dictionary.
+	  checkResult(AAFFileOpenExistingRead(pFileName, loadingMode, &pFile));
+	  IAAFHeaderSP pHeader;
+	  checkResult(pFile->GetHeader(&pHeader));
+	  IAAFDictionarySP pDict;
+	  checkResult (pHeader->GetDictionary(&pDict));
+	  CAAFBuiltinDefs defs(pDict);
+
+	  // get the SDK version against which we are testing
+	  aafProductVersion_t			testVer;
+	  checkResult(pHeader->GetRefImplVersion(&testVer));
+
+	  // Get the type definitions for our new types.
+	  IAAFTypeDefSP ptd;
+	  checkResult (pDict->LookupTypeDef (sTypeId_Rational16,
+										 &ptd));
+	  IAAFTypeDefRecordSP ptdr16;
+	  checkResult (ptd->QueryInterface (IID_IAAFTypeDefRecord,
+										(void**) &ptdr16));
+
+	  checkResult (pDict->LookupTypeDef (sTypeId_Rational16_pair,
+										 &ptd));
+	  IAAFTypeDefRecordSP ptdr16p;
+	  checkResult (ptd->QueryInterface (IID_IAAFTypeDefRecord,
+										(void**) &ptdr16p));
+
+	  // Setup to read the Velocity property which is of typed Mixed_t
+	  checkResult (pDict->LookupTypeDef (sTypeId_Mixed, &ptd));
+	  IAAFTypeDefRecordSP ptdrmixed;
+	  checkResult (ptd->QueryInterface (IID_IAAFTypeDefRecord, (void**) &ptdrmixed));
+
+	  IAAFTypeDef * pTempTd = 0;
+	  checkResult (ptdr16->QueryInterface (IID_IAAFTypeDef,
+										(void**) &pTempTd));
+	  CheckMemberTypeEqual (ptdr16p, 0, pTempTd);
+          CheckMemberTypeEqual (ptdr16p, 1, pTempTd);
+	  pTempTd->Release ();
+	  pTempTd = 0;
+
+	  temphr = ptdr16p->GetMemberType (2, &pTempTd);
+	  checkExpression (temphr == AAFRESULT_ILLEGAL_VALUE,
+					   AAFRESULT_TEST_FAILED);
+
+	  // register variable array of Rational16Pair records
+	  IAAFTypeDefVariableArraySP ptdvaarpr;
+	  IAAFTypeDefSP ptdarpr;
+	  // perform this part only for specified versions
+	  if( versionUInt(testVer) >= versionUInt(1,1,1,0) )
+	  {
+		checkResult (pDict->LookupTypeDef (sTypeId_Rational16_array,&ptdarpr));
+		checkResult (ptdarpr->QueryInterface (IID_IAAFTypeDefVariableArray,(void**) &ptdvaarpr));
+	  }
+
+	  // Now read the CompositionMob to which we added some optional
+	  // properties.
+	  IEnumAAFMobsSP pEnumMobs;
+	  checkResult (pHeader->GetMobs (0, &pEnumMobs));
+
+	  IAAFMobSP pMob;
+	  checkResult (pEnumMobs->NextOne (&pMob));
+	  IAAFObjectSP pObj;
+	  checkResult (pMob->QueryInterface (IID_IAAFObject,
+										 (void**) &pObj));
+
+	  // get the property definitions for the added properties
+	  IAAFPropertyDefSP pPdPosA;
+	  checkResult (defs.cdCompositionMob()->
+				   LookupPropertyDef (sPropertyId_positionA,
+									  &pPdPosA));
+	  IAAFPropertyDefSP pPdPosB;
+	  checkResult (defs.cdCompositionMob()->
+				   LookupPropertyDef (sPropertyId_positionB,
+									  &pPdPosB));
+	  IAAFPropertyDefSP pPdPosC;
+	  checkResult (defs.cdCompositionMob()->
+				   LookupPropertyDef (sPropertyId_positionC,
+									  &pPdPosC));
+
+	  IAAFPropertyValueSP pPVa;
+	  checkResult (pObj->GetPropertyValue (pPdPosA, &pPVa));
+	  IAAFPropertyValueSP pPVb;
+	  checkResult (pObj->GetPropertyValue (pPdPosB, &pPVb));
+	  IAAFPropertyValueSP pPVc;
+	  checkResult (pObj->GetPropertyValue (pPdPosC, &pPVc));
+
+	  // Read back the value of the Velocity property
+	  IAAFPropertyDefSP pPdvelocity;
+	  checkResult (defs.cdCompositionMob()->LookupPropertyDef(sPropertyId_velocity, &pPdvelocity));
+	  IAAFPropertyValueSP pPVvelocity;
+	  checkResult (pObj->GetPropertyValue (pPdvelocity, &pPVvelocity));
+
+	  IAAFPropertyValueSP pPVvelocityAngle, pPVvelocitySpeed;
+	  checkResult (ptdrmixed->GetValue (pPVvelocity, 0, &pPVvelocityAngle));
+	  checkResult (ptdrmixed->GetValue (pPVvelocity, 1, &pPVvelocitySpeed));
+      
+	  Mixed_t velocity = {0, 0};
+	  IAAFTypeDefSP pTDmem;
+	  IAAFTypeDefIntSP pTDIntMem;
+	  checkResult (ptdrmixed->GetMemberType (0, &pTDmem));
+	  checkResult (pTDmem->QueryInterface (IID_IAAFTypeDefInt,
+                                  (void **) &pTDIntMem));
+	  checkResult (pTDIntMem->GetInteger (pPVvelocityAngle, 
+                                   (aafMemPtr_t)(&velocity.angle), 
+                                   sizeof(velocity.angle)));
+	  checkResult (ptdrmixed->GetMemberType (1, &pTDmem));
+	  checkResult (pTDmem->QueryInterface (IID_IAAFTypeDefInt,
+                                      (void **) &pTDIntMem));
+	  checkResult (pTDIntMem->GetInteger (pPVvelocitySpeed, 
+	                           (aafMemPtr_t)(&velocity.speed),
+	                           sizeof(velocity.speed)));
+
+	  checkExpression (15 == velocity.angle, AAFRESULT_TEST_FAILED);
+	  checkExpression (2001 == velocity.speed, AAFRESULT_TEST_FAILED);
+
+	  // Try to read the first one
+	  Rational16pair_t valA = { {1, 2}, {3, 4} };
+	  CheckRational16PairByValues (ptdr16p, ptdr16, pPVa, valA);
+
+
+	  // Try to read the second one
+	  Rational16pair_t valB = { {5, 6}, {7, 8} };
+	  CheckRational16PairByValues (ptdr16p, ptdr16, pPVb, valB);
+
+          // Check misc. error return conditions for TypeDefRecord GetValue
+          IAAFPropertyValueSP junkPv;
+	  temphr = ptdr16->GetValue (0, 1, &junkPv);
+	  checkExpression (AAFRESULT_NULL_PARAM == temphr,
+					   AAFRESULT_TEST_FAILED);
+	  temphr = ptdr16p->GetValue (pPVb, 1, 0);
+	  checkExpression (AAFRESULT_NULL_PARAM == temphr,
+					   AAFRESULT_TEST_FAILED);
+
+	  // Read the last two with GetStruct just to get it over with. ;)
+	  Rational16pair_t valC = { {9, 10}, {11, 12} };
+	  CheckRational16PairByValues (ptdr16p, ptdr16, pPVc, valC);
+
+	  // test variable array of records
+	  // perform this part only for specified versions
+	  if( versionUInt(testVer) >= versionUInt(1,1,1,0) )
+	  {
+		IAAFPropertyDefSP pPdPosN;
+		checkResult (defs.cdCompositionMob()->LookupPropertyDef (sPropertyId_positionN,	&pPdPosN));
+		IAAFPropertyValueSP pPVN;
+		checkResult (pObj->GetPropertyValue (pPdPosN, &pPVN));
+
+		// get the middle element of the array, 9abc
+		IAAFPropertyValueSP pPVN1;
+		checkResult (ptdvaarpr->GetElementValue (pPVN, 1, &pPVN1));
+
+		// Read the value with GetStruct
+		Rational16pair_t valN1 = { {9,10},{11,12} };
+		CheckRational16PairByValues (ptdr16p, ptdr16, pPVN1, valN1);
+	  }
+
+	  // Attempt to close the file.
+	  checkResult(pFile->Close());
+	  IAAFFileSP nullFile;
+	  pFile = nullFile;  // zeros the pFile, and releases it.
+
+	  hr = AAFRESULT_SUCCESS;
+	}
+  catch (HRESULT& rResult)
+	{
+	  hr = rResult;
+	}
+	
+  // cleanup
+  if (pFile)
+	{
+	  pFile->Close();
+	}
+	
+  return hr;
+}
+
 
 extern "C" HRESULT CAAFTypeDefRecord_test(
     testMode_t mode,
@@ -942,7 +1138,26 @@ extern "C" HRESULT CAAFTypeDefRecord_test(
 	  if (SUCCEEDED (hr) || mode == kAAFUnitTestReadOnly)
 		{
 		  hr = AAFRESULT_TEST_FAILED;
-		  hr = ReadRecord(pFileName);
+		  // Read back using only GetValue()-style reading since
+		  // default record offsets registered during file loading
+		  // may preclude us from being able to register our native
+		  // struct representations (see notes in ReadRecord())
+		  hr = ReadRecordNoStructs(pFileName, AAF_FILE_MODE_LAZY_LOADING);
+		  
+		  // Try again with eager loading
+		  if (SUCCEEDED(hr))
+		      hr = ReadRecordNoStructs(pFileName, AAF_FILE_MODE_LAZY_LOADING);
+		  
+		  
+		  // Test first in lazy loading mode. Lazy loading with SS
+		  // avoids default offset registration during file loading,
+		  // allowing us to test GetStruct method.
+		  if (SUCCEEDED(hr))
+		      hr = ReadRecord(pFileName, AAF_FILE_MODE_LAZY_LOADING);
+
+		  // Again with eager loading
+		  if (SUCCEEDED(hr))
+		      hr = ReadRecord(pFileName, 0);
 		}
 	}
   catch (...)
