@@ -81,10 +81,10 @@
 //#define OM_EXTENSIONSONLY 1
 // If defined, OM_SAVEOBJECTDIRECTORY causes Object Directory
 // to be written to a file.
-//#define OM_SAVEOBJECTDIRECTORY 1
+#define OM_SAVEOBJECTDIRECTORY 1
 // If defined, OM_WRITELEGACYROOTCLASSID causes the SMPTE Root class ID
 // to be written to a file, otherwise the internal legacy GUID is used.
-//#define OM_WRITELEGACYROOTCLASSID 1
+#define OM_WRITELEGACYROOTCLASSID 1
 
 #include "OMTypeVisitor.h"
 
