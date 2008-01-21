@@ -766,8 +766,10 @@ static HRESULT ReadRecord (const aafWChar * pFileName, int loadingMode)
            * register own offsets/layout. This is slated for fixing in
            * future rev of the SDK.
            */
-	  if (temphr == AAFRESULT_DEFAULT_ALREADY_USED)
-	      throw AAFRESULT_SUCCESS;
+	  if (temphr == AAFRESULT_DEFAULT_ALREADY_USED) {
+	      temphr = AAFRESULT_SUCCESS;
+	      throw temphr;
+	  }
 
 	  checkResult (temphr);
 
