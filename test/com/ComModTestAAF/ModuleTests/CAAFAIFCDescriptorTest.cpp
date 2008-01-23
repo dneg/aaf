@@ -61,31 +61,30 @@ static const aafMobID_t	TEST_MobID =
 0x13, 0x00, 0x00, 0x00,
 {0x1f64f50a, 0x03fd, 0x11d4, {0x8e, 0x3d, 0x00, 0x90, 0x27, 0xdf, 0xca, 0x7c}}};
 
+// Simple utilities to swap bytes.
+static void SwapBytes(void *buffer, size_t count)
+{
+  unsigned char *pBuffer = (unsigned char *)buffer;
+  unsigned char tmp;
+  int front = 0;
+  int back = count - 1;
 
-#if defined(_WIN32)
-  // Simple utilities to swap bytes.
-  static void SwapBytes(void *buffer, size_t count)
+  for (front = 0, back = count - 1; front < back; ++front, --back)
   {
-    unsigned char *pBuffer = (unsigned char *)buffer;
-    unsigned char tmp;
-    int front = 0;
-    int back = count - 1;
-  
-    for (front = 0, back = count - 1; front < back; ++front, --back)
-    {
-      tmp = pBuffer[front];
-      pBuffer[front] = pBuffer[back];
-      pBuffer[back] = tmp;
-    }
+    tmp = pBuffer[front];
+    pBuffer[front] = pBuffer[back];
+    pBuffer[back] = tmp;
   }
-  #define WRITE_LONG(ptr, val) { memcpy(ptr, val, 4); SwapBytes(ptr,4); ptr += 4; }
-  #define WRITE_SHORT(ptr, val) { memcpy(ptr, val, 4); SwapBytes(ptr,2); ptr += 2; }
-  #define WRITE_CHARS(ptr, val, len) { memcpy(ptr, val, len); ptr += len; }
-#else
-  #define WRITE_LONG(ptr, val) { memcpy(ptr, val, 4); ptr += 4; }
-  #define WRITE_SHORT(ptr, val) { memcpy(ptr, val, 4); ptr += 2; }
-  #define WRITE_CHARS(ptr, val, len) { memcpy(ptr, val, len); ptr += len; }
-#endif
+}
+
+// The AIFC header is stored on disk in big endian byte order
+// so provide some macros to swap byte order when necessary
+#define BE_WRITE_LONG(bo, ptr, val) { memcpy(ptr, val, 4); if (bo == kAAFByteOrderLittle) SwapBytes(ptr,4); ptr += 4; }
+#define BE_WRITE_SHORT(bo, ptr, val) { memcpy(ptr, val, 2); if (bo == kAAFByteOrderLittle) SwapBytes(ptr,2); ptr += 2; }
+#define BE_READ_LONG(bo, ptr, val) { memcpy(val, ptr, 4); if (bo == kAAFByteOrderLittle) SwapBytes(ptr,4); ptr += 4; }
+#define BE_READ_SHORT(bo, ptr, val) { memcpy(val, ptr, 2); if (bo == kAAFByteOrderLittle) SwapBytes(ptr,2); ptr += 2; }
+#define BE_WRITE_CHARS(bo, ptr, val, len) { memcpy(ptr, val, len); ptr += len; }
+
 
 // convenient error handlers.
 inline void checkResult(HRESULT r)
@@ -147,6 +146,12 @@ static HRESULT CreateAAFFile(
 					CreateInstance(IID_IAAFAIFCDescriptor, 
 								   (IUnknown **)&pAIFCDesc));		
 
+		// Get Endianness so we can store the corrent binary sequence to disk
+		IAAFEndian* pEndian = NULL;
+		checkResult(pHeader->QueryInterface(IID_IAAFEndian, (void **)&pEndian));
+		eAAFByteOrder_t byteorder;
+		checkResult(pEndian->GetNativeByteOrder(&byteorder));
+
 //		AIFCSummary summary;
 		unsigned char	writeBuf[SUMMARY_SIZE], *writePtr;
 		aafUInt32		longVal, lZero = 0, n;
@@ -160,10 +165,10 @@ static HRESULT CreateAAFFile(
 		// 		char	formType[4];	// "AIFC"
 		// } FormAIFCChunk;
 		writePtr = writeBuf;
-		WRITE_CHARS(writePtr, "FORM", 4);
-		WRITE_CHARS(writePtr, "AIFC", 4);
+		BE_WRITE_CHARS(byteorder, writePtr, "FORM", 4);
+		BE_WRITE_CHARS(byteorder, writePtr, "AIFC", 4);
 		longVal = sizeof(writeBuf) - 8;
-		WRITE_LONG(writePtr, &longVal);
+		BE_WRITE_LONG(byteorder, writePtr, &longVal);
 
 		// COMM Chunk
 		// typedef struct tCommonChunk
@@ -178,14 +183,14 @@ static HRESULT CreateAAFFile(
 		// 		unsigned char	compNameLength;
 		// 		char			compressionName[15];
 		// } CommonChunk;
-		WRITE_CHARS(writePtr, "COMM", 4);	// ckID
+		BE_WRITE_CHARS(byteorder, writePtr, "COMM", 4);	// ckID
 		longVal = 46;	// sizeof(CommonChunk) with no padding
-		WRITE_LONG(writePtr, &longVal);		// ckDataSize
+		BE_WRITE_LONG(byteorder, writePtr, &longVal);		// ckDataSize
 		shortVal = 1;
-		WRITE_SHORT(writePtr, &shortVal);	// numChannels
-		WRITE_LONG(writePtr, &lZero);		// numSampleFrames
+		BE_WRITE_SHORT(byteorder, writePtr, &shortVal);	// numChannels
+		BE_WRITE_LONG(byteorder, writePtr, &lZero);		// numSampleFrames
 		shortVal = 16;
-		WRITE_SHORT(writePtr, &shortVal);	// sampleSize
+		BE_WRITE_SHORT(byteorder, writePtr, &shortVal);	// sampleSize
 		*writePtr++ = 0x40;					// SampleRate
 		*writePtr++ = 0x0E;
 		*writePtr++ = (char)0xac;
@@ -196,9 +201,9 @@ static HRESULT CreateAAFFile(
 		*writePtr++ = 0x0;
 		*writePtr++ = 0x0;
 		*writePtr++ = 0x0;
-		WRITE_CHARS(writePtr, "NONE", 4);	// CompressionType
+		BE_WRITE_CHARS(byteorder, writePtr, "NONE", 4);	// CompressionType
 		*writePtr++ = strlen(compressionName);
-		WRITE_CHARS(writePtr, compressionName, strlen(compressionName)); // compressionName
+		BE_WRITE_CHARS(byteorder, writePtr, compressionName, strlen(compressionName)); // compressionName
 		for(n = 15 - strlen(compressionName); n >= 1; n--)
 			*writePtr++ = 0;	// Chunks must not be an odd length
 
@@ -211,10 +216,10 @@ static HRESULT CreateAAFFile(
 		// 	unsigned long	blockSize;
 		// 	char			soundData;
 		// } SoundDataChunk;
-		WRITE_CHARS(writePtr, "SSND", 4);		// ckID
-		WRITE_LONG(writePtr, &lZero);			// ckDataSize
-		WRITE_LONG(writePtr, &lZero);			// offset
-		WRITE_LONG(writePtr, &lZero);			// blockSize
+		BE_WRITE_CHARS(byteorder, writePtr, "SSND", 4);		// ckID
+		BE_WRITE_LONG(byteorder, writePtr, &lZero);			// ckDataSize
+		BE_WRITE_LONG(byteorder, writePtr, &lZero);			// offset
+		BE_WRITE_LONG(byteorder, writePtr, &lZero);			// blockSize
 		// Check that writePtr-writeBuf == sizeof(writeBuf);
 
 		// NOTE: The elements in the summary structure need to be byte swapped

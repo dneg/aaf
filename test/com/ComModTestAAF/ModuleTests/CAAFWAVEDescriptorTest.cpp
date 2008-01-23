@@ -62,39 +62,28 @@ using namespace std;
 #endif  // !defined( OS_WINDOWS )
 
 
-  // Simple utilities to swap bytes.
-  static void SwapBytes(void *buffer, size_t count)
+// Simple utilities to swap bytes.
+static void SwapBytes(void *buffer, size_t count)
+{
+  unsigned char *pBuffer = (unsigned char *)buffer;
+  unsigned char tmp;
+  int front = 0;
+  int back = count - 1;
+
+  for (front = 0, back = count - 1; front < back; ++front, --back)
   {
-    unsigned char *pBuffer = (unsigned char *)buffer;
-    unsigned char tmp;
-    int front = 0;
-    int back = count - 1;
-  
-    for (front = 0, back = count - 1; front < back; ++front, --back)
-    {
-      tmp = pBuffer[front];
-      pBuffer[front] = pBuffer[back];
-      pBuffer[back] = tmp;
-    }
+    tmp = pBuffer[front];
+    pBuffer[front] = pBuffer[back];
+    pBuffer[back] = tmp;
   }
+}
 
-
-#if defined(_WIN32)
-#define WRITE_LONG(ptr, val) { memcpy(ptr, val, 4); ptr += 4; }
-#define WRITE_SHORT(ptr, val) { memcpy(ptr, val, 2); ptr += 2; }
-#define WRITE_CHARS(ptr, val, len) { memcpy(ptr, val, len); ptr += len; }
-#define READ_LONG(ptr, val) { memcpy(val, ptr, 4); ptr += 4; }
-#define READ_SHORT(ptr, val) { memcpy(val, ptr, 2); ptr += 2; }
-#define READ_CHARS(ptr, val, len) { memcpy(val, ptr, len); ptr += len; }
-#else
-#define WRITE_LONG(ptr, val) { memcpy(ptr, val, 4); SwapBytes(ptr,4); ptr += 4; }
-#define WRITE_SHORT(ptr, val) { memcpy(ptr, val, 2); SwapBytes(ptr,2); ptr += 2; }
-#define WRITE_CHARS(ptr, val, len) { memcpy(ptr, val, len); ptr += len; }
-#define READ_LONG(ptr, val) { memcpy(val, ptr, 4); SwapBytes(val,4); ptr += 4; }
-#define READ_SHORT(ptr, val) { memcpy(val, ptr, 2); SwapBytes(val,2); ptr += 2; }
-#define READ_CHARS(ptr, val, len) { memcpy(val, ptr, len); ptr += len; }
-#endif
-
+// The WAVE header is stored on disk in little endian byte order
+// so provide some macros to swap byte order when necessary
+#define LE_WRITE_LONG(bo, ptr, val) { memcpy(ptr, val, 4); if (bo == kAAFByteOrderBig) SwapBytes(ptr,4); ptr += 4; }
+#define LE_WRITE_SHORT(bo, ptr, val) { memcpy(ptr, val, 2); if (bo == kAAFByteOrderBig) SwapBytes(ptr,2); ptr += 2; }
+#define LE_READ_LONG(bo, ptr, val) { memcpy(val, ptr, 4); if (bo == kAAFByteOrderBig) SwapBytes(ptr,4); ptr += 4; }
+#define LE_READ_SHORT(bo, ptr, val) { memcpy(val, ptr, 2); if (bo == kAAFByteOrderBig) SwapBytes(ptr,2); ptr += 2; }
 
 static const 	aafMobID_t	TEST_MobID =
 {{0x06, 0x0c, 0x2b, 0x34, 0x02, 0x05, 0x11, 0x01, 0x01, 0x00, 0x10, 0x00},
@@ -134,21 +123,21 @@ static HRESULT CreateAAFFile(
 
   try
   {
-    // Remove the previous test file if any.
-    RemoveTestFile(pFileName);
+		// Remove the previous test file if any.
+		RemoveTestFile(pFileName);
 
 
-	  // Create the AAF file
-	  checkResult(CreateTestFile( pFileName, fileKind, rawStorageType, productID, &pFile ));
+		// Create the AAF file
+		checkResult(CreateTestFile( pFileName, fileKind, rawStorageType, productID, &pFile ));
 
-	  // We can't really do anthing in AAF without the header.
-	  checkResult(pFile->GetHeader(&pHeader));
+		// We can't really do anthing in AAF without the header.
+		checkResult(pFile->GetHeader(&pHeader));
 
-    // Get the AAF Dictionary so that we can create valid AAF objects.
-    checkResult(pHeader->GetDictionary(&pDictionary));
-	CAAFBuiltinDefs defs (pDictionary);
- 		
-	  // Create a source mob
+		// Get the AAF Dictionary so that we can create valid AAF objects.
+		checkResult(pHeader->GetDictionary(&pDictionary));
+		CAAFBuiltinDefs defs (pDictionary);
+
+		// Create a source mob
 		checkResult(defs.cdSourceMob()->
 					CreateInstance(IID_IAAFSourceMob, 
 								   (IUnknown **)&pSourceMob));
@@ -159,6 +148,12 @@ static HRESULT CreateAAFFile(
 		checkResult(defs.cdWAVEDescriptor()->
 					CreateInstance(IID_IAAFWAVEDescriptor, 
 								   (IUnknown **)&pWAVEDesc));		
+
+		// Get Endianness so we can store the corrent binary sequence to disk
+		IAAFEndian* pEndian = NULL;
+		checkResult(pHeader->QueryInterface(IID_IAAFEndian, (void **)&pEndian));
+		eAAFByteOrder_t byteorder;
+		checkResult(pEndian->GetNativeByteOrder(&byteorder));
 
 		unsigned char writeBuf[18], *writePtr;
 		aafInt16	shortVal;
@@ -178,19 +173,19 @@ static HRESULT CreateAAFFile(
 
 		writePtr = writeBuf;
 		shortVal = WAVE_FORMAT_PCM;
-		WRITE_SHORT(writePtr, &shortVal);	// wFormatTag
+		LE_WRITE_SHORT(byteorder, writePtr, &shortVal);	// wFormatTag
 		shortVal = 1;
-		WRITE_SHORT(writePtr, &shortVal);	// nChannels
+		LE_WRITE_SHORT(byteorder, writePtr, &shortVal);	// nChannels
 		longVal = 44100;
-		WRITE_LONG(writePtr, &longVal);	// nSamplesPerSec
+		LE_WRITE_LONG(byteorder, writePtr, &longVal);	// nSamplesPerSec
 		longVal = 88200;
-		WRITE_LONG(writePtr, &longVal);	// nAvgBytesPerSec
+		LE_WRITE_LONG(byteorder, writePtr, &longVal);	// nAvgBytesPerSec
 		shortVal = 2;
-		WRITE_SHORT(writePtr, &shortVal);	// nBlockAlign
+		LE_WRITE_SHORT(byteorder, writePtr, &shortVal);	// nBlockAlign
 		shortVal = 16;
-		WRITE_SHORT(writePtr, &shortVal);	// wBitsPerSample
+		LE_WRITE_SHORT(byteorder, writePtr, &shortVal);	// wBitsPerSample
 		shortVal = 0;
-		WRITE_SHORT(writePtr, &shortVal);	// cbSize
+		LE_WRITE_SHORT(byteorder, writePtr, &shortVal);	// cbSize
 
 		checkResult(pWAVEDesc->SetSummary(sizeof(writeBuf), (aafDataValue_t)writeBuf));
 
@@ -279,21 +274,27 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 
 		checkResult(pWAVEDesc->GetSummary(sizeof(readBuf), (aafDataValue_t)readBuf));
 
+		// Get Endianness so we can read the corrent binary sequence from disk
+		IAAFEndian* pEndian = NULL;
+		checkResult(pHeader->QueryInterface(IID_IAAFEndian, (void **)&pEndian));
+		eAAFByteOrder_t byteorder;
+		checkResult(pEndian->GetNativeByteOrder(&byteorder));
+
 
 		readPtr = readBuf;
-		READ_SHORT(readPtr, &shortVal);	// wFormatTag
+		LE_READ_SHORT(byteorder, readPtr, &shortVal);	// wFormatTag
 		checkExpression(shortVal == WAVE_FORMAT_PCM, AAFRESULT_TEST_FAILED);
-		READ_SHORT(readPtr, &shortVal);	// nChannels
+		LE_READ_SHORT(byteorder, readPtr, &shortVal);	// nChannels
 		checkExpression(shortVal == 1, AAFRESULT_TEST_FAILED);
-		READ_LONG(readPtr, &longVal);	// nSamplesPerSec
+		LE_READ_LONG(byteorder, readPtr, &longVal);	// nSamplesPerSec
 		checkExpression(longVal == 44100, AAFRESULT_TEST_FAILED);
-		READ_LONG(readPtr, &longVal);	// nAvgBytesPerSec
+		LE_READ_LONG(byteorder, readPtr, &longVal);	// nAvgBytesPerSec
 		checkExpression(longVal == 88200, AAFRESULT_TEST_FAILED);
-		READ_SHORT(readPtr, &shortVal);	// nBlockAlign
+		LE_READ_SHORT(byteorder, readPtr, &shortVal);	// nBlockAlign
 		checkExpression(shortVal == 2, AAFRESULT_TEST_FAILED);
-		READ_SHORT(readPtr, &shortVal);	// wBitsPerSample
+		LE_READ_SHORT(byteorder, readPtr, &shortVal);	// wBitsPerSample
 		checkExpression(shortVal == 16, AAFRESULT_TEST_FAILED);
-		READ_SHORT(readPtr, &shortVal);	// cbSize
+		LE_READ_SHORT(byteorder, readPtr, &shortVal);	// cbSize
 		checkExpression(shortVal == 0, AAFRESULT_TEST_FAILED);
 	}
   catch (HRESULT& rResult)
