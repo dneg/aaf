@@ -82,8 +82,8 @@ static void SwapBytes(void *buffer, size_t count)
 // so provide some macros to swap byte order when necessary
 #define LE_WRITE_LONG(bo, ptr, val) { memcpy(ptr, val, 4); if (bo == kAAFByteOrderBig) SwapBytes(ptr,4); ptr += 4; }
 #define LE_WRITE_SHORT(bo, ptr, val) { memcpy(ptr, val, 2); if (bo == kAAFByteOrderBig) SwapBytes(ptr,2); ptr += 2; }
-#define LE_READ_LONG(bo, ptr, val) { memcpy(val, ptr, 4); if (bo == kAAFByteOrderBig) SwapBytes(ptr,4); ptr += 4; }
-#define LE_READ_SHORT(bo, ptr, val) { memcpy(val, ptr, 2); if (bo == kAAFByteOrderBig) SwapBytes(ptr,2); ptr += 2; }
+#define LE_READ_LONG(bo, ptr, val) { memcpy(val, ptr, 4); if (bo == kAAFByteOrderBig) SwapBytes(val,4); ptr += 4; }
+#define LE_READ_SHORT(bo, ptr, val) { memcpy(val, ptr, 2); if (bo == kAAFByteOrderBig) SwapBytes(val,2); ptr += 2; }
 
 static const 	aafMobID_t	TEST_MobID =
 {{0x06, 0x0c, 0x2b, 0x34, 0x02, 0x05, 0x11, 0x01, 0x01, 0x00, 0x10, 0x00},
