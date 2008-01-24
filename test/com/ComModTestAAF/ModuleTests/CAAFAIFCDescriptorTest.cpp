@@ -81,9 +81,10 @@ static void SwapBytes(void *buffer, size_t count)
 // so provide some macros to swap byte order when necessary
 #define BE_WRITE_LONG(bo, ptr, val) { memcpy(ptr, val, 4); if (bo == kAAFByteOrderLittle) SwapBytes(ptr,4); ptr += 4; }
 #define BE_WRITE_SHORT(bo, ptr, val) { memcpy(ptr, val, 2); if (bo == kAAFByteOrderLittle) SwapBytes(ptr,2); ptr += 2; }
-#define BE_READ_LONG(bo, ptr, val) { memcpy(val, ptr, 4); if (bo == kAAFByteOrderLittle) SwapBytes(ptr,4); ptr += 4; }
-#define BE_READ_SHORT(bo, ptr, val) { memcpy(val, ptr, 2); if (bo == kAAFByteOrderLittle) SwapBytes(ptr,2); ptr += 2; }
 #define BE_WRITE_CHARS(bo, ptr, val, len) { memcpy(ptr, val, len); ptr += len; }
+#define BE_READ_LONG(bo, ptr, val) { memcpy(val, ptr, 4); if (bo == kAAFByteOrderLittle) SwapBytes(val,4); ptr += 4; }
+#define BE_READ_SHORT(bo, ptr, val) { memcpy(val, ptr, 2); if (bo == kAAFByteOrderLittle) SwapBytes(val,2); ptr += 2; }
+#define BE_READ_CHARS(bo, ptr, val, len) { memcpy(val, ptr, len); ptr += len; }
 
 
 // convenient error handlers.
@@ -221,10 +222,8 @@ static HRESULT CreateAAFFile(
 		BE_WRITE_LONG(byteorder, writePtr, &lZero);			// offset
 		BE_WRITE_LONG(byteorder, writePtr, &lZero);			// blockSize
 		// Check that writePtr-writeBuf == sizeof(writeBuf);
+		checkExpression(writePtr - writeBuf == sizeof(writeBuf), AAFRESULT_TEST_FAILED);
 
-		// NOTE: The elements in the summary structure need to be byte swapped
-		// on Big Endian system (i.e. the MAC).
-//		SWAPSUMMARY(summary)
 		checkResult(pAIFCDesc->SetSummary(SUMMARY_SIZE, (aafDataValue_t)writeBuf));
 
 		checkResult(pAIFCDesc->QueryInterface(IID_IAAFEssenceDescriptor, (void **)&pEssDesc));
@@ -302,7 +301,9 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 		// if there is an Essence Descriptor then it MUST be an (essence) AIFC Descriptor
 		checkResult(pEssDesc->QueryInterface(IID_IAAFAIFCDescriptor, (void **) &pAIFCDesc));
 
-		unsigned char summary[SUMMARY_SIZE];
+		unsigned char summary[SUMMARY_SIZE], tmp[SUMMARY_SIZE], *readPtr;
+		aafInt32		longVal;
+		aafInt16		shortVal;
 	    aafUInt32		size = 0;
 
 		checkResult(pAIFCDesc->GetSummaryBufferSize(&size));
@@ -310,11 +311,57 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 
 
 		checkResult(pAIFCDesc->GetSummary(size, (aafDataValue_t)&summary));
-	
+
+		// Get Endianness so we can read the corrent binary sequence from disk
+		IAAFEndian* pEndian = NULL;
+		checkResult(pHeader->QueryInterface(IID_IAAFEndian, (void **)&pEndian));
+		eAAFByteOrder_t byteorder;
+		checkResult(pEndian->GetNativeByteOrder(&byteorder));
+
 		checkExpression((strncmp((char*)summary+FORM_HDR_SIZE, "COMM", 4) == 0) &&
 						(strncmp((char*)summary, "FORM", 4) == 0) &&
 						(strncmp((char*)summary+FORM_HDR_SIZE+COMM_CHUNK_SIZE, "SSND", 4) == 0),
 		                AAFRESULT_TEST_FAILED);
+
+		readPtr = summary;
+		BE_READ_CHARS(byteorder, readPtr, tmp, 4);
+		checkExpression(strncmp((char*)tmp, "FORM", 4) == 0, AAFRESULT_TEST_FAILED);
+		BE_READ_CHARS(byteorder, readPtr, tmp, 4);
+		checkExpression(strncmp((char*)tmp, "AIFC", 4) == 0, AAFRESULT_TEST_FAILED);
+		BE_READ_LONG(byteorder, readPtr, &longVal);
+		checkExpression((unsigned)longVal == size - 8, AAFRESULT_TEST_FAILED);
+		BE_READ_CHARS(byteorder, readPtr, tmp, 4);
+		checkExpression(strncmp((char*)tmp, "COMM", 4) == 0, AAFRESULT_TEST_FAILED);
+		BE_READ_LONG(byteorder, readPtr, &longVal);
+		checkExpression(longVal == 46, AAFRESULT_TEST_FAILED);
+		BE_READ_SHORT(byteorder, readPtr, &shortVal);
+		checkExpression(shortVal == 1, AAFRESULT_TEST_FAILED);
+		BE_READ_LONG(byteorder, readPtr, &longVal);
+		checkExpression(longVal == 0, AAFRESULT_TEST_FAILED);
+		BE_READ_SHORT(byteorder, readPtr, &shortVal);
+		checkExpression(shortVal == 16, AAFRESULT_TEST_FAILED);
+
+		char floatingSampleSize[] = { 0x40, 0x0E, 0xac, 0x44, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+		BE_READ_CHARS(byteorder, readPtr, tmp, 10);
+		checkExpression(memcmp(tmp, floatingSampleSize, sizeof(floatingSampleSize)) == 0, AAFRESULT_TEST_FAILED);
+		BE_READ_CHARS(byteorder, readPtr, tmp, 4);
+		checkExpression(strncmp((char*)tmp, "NONE", 4) == 0, AAFRESULT_TEST_FAILED);
+		BE_READ_CHARS(byteorder, readPtr, tmp, 1);
+		unsigned compNameLength = tmp[0];
+		BE_READ_CHARS(byteorder, readPtr, tmp, compNameLength);
+		const char *compressionName = "Not compressed";
+		checkExpression(strncmp((char*)tmp, compressionName, strlen(compressionName)) == 0, AAFRESULT_TEST_FAILED);
+		checkExpression(compNameLength == strlen(compressionName), AAFRESULT_TEST_FAILED);
+		BE_READ_CHARS(byteorder, readPtr, tmp, (1 + compNameLength) % 2);	// discard padding to even boundary
+
+		BE_READ_CHARS(byteorder, readPtr, tmp, 4);
+		checkExpression(strncmp((char*)tmp, "SSND", 4) == 0, AAFRESULT_TEST_FAILED);
+		BE_READ_LONG(byteorder, readPtr, &longVal);
+		checkExpression(longVal == 0, AAFRESULT_TEST_FAILED);
+		BE_READ_LONG(byteorder, readPtr, &longVal);
+		checkExpression(longVal == 0, AAFRESULT_TEST_FAILED);
+		BE_READ_LONG(byteorder, readPtr, &longVal);
+		checkExpression(longVal == 0, AAFRESULT_TEST_FAILED);
 	}
 	catch (HRESULT& rResult)
 	{
