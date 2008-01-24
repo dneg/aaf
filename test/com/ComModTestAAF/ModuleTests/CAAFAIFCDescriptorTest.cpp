@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2005, Licensor of the
+// The Original Code of this file is Copyright 1998-2008, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -341,7 +341,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 		BE_READ_SHORT(byteorder, readPtr, &shortVal);
 		checkExpression(shortVal == 16, AAFRESULT_TEST_FAILED);
 
-		char floatingSampleSize[] = { 0x40, 0x0E, 0xac, 0x44, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+		unsigned char floatingSampleSize[] = { 0x40, 0x0E, 0xac, 0x44, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
 		BE_READ_CHARS(byteorder, readPtr, tmp, 10);
 		checkExpression(memcmp(tmp, floatingSampleSize, sizeof(floatingSampleSize)) == 0, AAFRESULT_TEST_FAILED);
 		BE_READ_CHARS(byteorder, readPtr, tmp, 4);
