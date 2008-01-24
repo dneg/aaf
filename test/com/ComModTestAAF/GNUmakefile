@@ -75,7 +75,7 @@ realclean : clean
 
 
 .PHONY : check
-check : $(AAFSDKBINDIR)/ComModAAF$(EXE)
+check : all
 	$(APP_RUN_ENV) $(AAFSDKBINDIR)/ComModAAF$(EXE)
 
 
