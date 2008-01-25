@@ -1,4 +1,4 @@
-AAF SDK v1.1.2 Release Candidate 1
+AAF SDK v1.1.2 Release Candidate 2
 ==================================
 
 2007-11-21
@@ -48,6 +48,25 @@ CREATE AND DISTRIBUTE AAF COMPLIANT PRODUCTS.  PLEASE CONTACT THE AAF
 ASSOCIATION, INC. FOR MORE INFORMATION ABOUT ANY ADDITIONAL LICENSES
 THAT MAY BE REQUIRED TO CREATE AND DISTRIBUTE AAF COMPLIANT PRODUCTS
 (HTTP://WWW.AAFASSOCIATION.ORG/POLICIES).
+
+Changes from v1.1.2 RC1 to v1.1.2 RC2
+-------------------------------------
+
+- Fix regression in TypeDefRecord implementation since v1.1.1
+  (handling of user-registered struct offsets)
+- Refactor TypeDefRecord module test to separate GetValue() and
+  GetStruct() type calls to improve level of testing across different
+  storage formats
+- Fix WAVEDescriptor & AIFCDescriptor module tests to handle foreign
+  endian files
+- Saving of Object Directory is now optional (compiler option
+  OM_SAVEOBJECTDIRECTORY). On reading, Object Direcory is no longer
+  required to be present.
+- Root object class ID can now be written as a SMPTE UL or as the
+  legacy UUID (compiler option OM_WRITELEGACYROOTCLASSID). Both
+  values are recognised when reading. Default is to use legacy
+  UUID value, for backwards compatibility.
+- Fix display of Int64 property values in dumper
 
 Changes from v1.1.2 DR2 to v1.1.2 RC1
 -------------------------------------
