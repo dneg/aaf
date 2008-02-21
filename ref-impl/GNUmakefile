@@ -42,6 +42,7 @@ clean :
 	cd aaflib && $(MAKE) GENDEPS=0 $@
 	cd aafiid && $(MAKE) GENDEPS=0 $@
 	cd src && $(MAKE) GENDEPS=0 $@
+	cd expat && $(MAKE) GENDEPS=0 $@
 
 .PHONY : realclean
 realclean :
@@ -50,3 +51,4 @@ realclean :
 	cd aaflib && $(MAKE) GENDEPS=0 $@
 	cd aafiid && $(MAKE) GENDEPS=0 $@
 	cd src && $(MAKE) GENDEPS=0 $@
+	cd expat && $(MAKE) GENDEPS=0 $@
