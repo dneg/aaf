@@ -350,10 +350,12 @@ static HRESULT CreateAAFFile(
 		{
 			pLocator = NULL;
 			if (edesc->GetLocatorAt(i, &pLocator) != AAFRESULT_SUCCESS)
+			{
 				if (pLocator == NULL)
 					localhr = AAFRESULT_TEST_FAILED;
 				else
 					pLocator->Release();
+			}
 		}
 			
 		if (localhr == AAFRESULT_SUCCESS)
@@ -680,10 +682,12 @@ static HRESULT CreateAAFFile(
 		{
 			pSubDescriptor = NULL;
 			if (edesc2->GetSubDescriptorAt(i, &pSubDescriptor) != AAFRESULT_SUCCESS)
+			{
 				if (pSubDescriptor == NULL)
 					localhr = AAFRESULT_TEST_FAILED;
 				else
 					pSubDescriptor->Release();
+			}
 		}
 			
 		if (localhr == AAFRESULT_SUCCESS)
