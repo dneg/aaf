@@ -146,8 +146,8 @@ OMSSStoredObject* OMSSStoredObject::open(IStorage *in_storage, OMFile::OMAccessM
   HRESULT status = in_storage->Stat(&statstg, STATFLAG_NONAME);
   checkStatus(status);
   PRECONDITION ("Valid root storage access mode: ", 
-  		((mode == OMFile::modifyMode && (statstg.grfMode & (STGM_READWRITE)) ||
-		(mode == OMFile::readOnlyMode && (statstg.grfMode & STGM_READ) == 0))));
+  		((mode == OMFile::modifyMode && (statstg.grfMode & (STGM_READWRITE))) ||
+		(mode == OMFile::readOnlyMode && (statstg.grfMode & STGM_READ) == 0)));
 
   OMSSStoredObject* newStore = new OMSSStoredObject(in_storage);
   ASSERT("Valid heap pointer", newStore != 0);

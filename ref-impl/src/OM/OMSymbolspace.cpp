@@ -942,8 +942,8 @@ OMSymbolspace::registerDeferredDefs(OMDictionary* dictionary)
             count = dependencies->count();
             for (j = 0; j < count; j++)
             {
-                if (typeForReg->dependsOnAType() && !dictionary->registerTypeDef(dependencies->getAt(j)) ||
-                    !typeForReg->dependsOnAType() && !dictionary->registerClassDef(dependencies->getAt(j)))
+                if ((typeForReg->dependsOnAType() && !dictionary->registerTypeDef(dependencies->getAt(j))) ||
+                    (!typeForReg->dependsOnAType() && !dictionary->registerClassDef(dependencies->getAt(j))))
                 {
                     dependenciesSatified = false;
                     break;
@@ -953,8 +953,8 @@ OMSymbolspace::registerDeferredDefs(OMDictionary* dictionary)
         else
         {
             dependenciesSatified = true;
-            if (typeForReg->dependsOnAType() && !dictionary->registerTypeDef(*typeForReg->dependsOn()) ||
-                !typeForReg->dependsOnAType() && !dictionary->registerClassDef(*typeForReg->dependsOn()))
+            if ((typeForReg->dependsOnAType() && !dictionary->registerTypeDef(*typeForReg->dependsOn())) ||
+                (!typeForReg->dependsOnAType() && !dictionary->registerClassDef(*typeForReg->dependsOn())))
             {
                 dependenciesSatified = false;
             }

@@ -216,9 +216,9 @@ AAFRESULT ImplAAFDataDef::IsDataDefEquivalentOf (
 			aafBool	argIsTimecode = kAAFFalse;
 			CHECK(pDataDef->IsTimecodeKind (&argIsTimecode));
 
-			if((thisIsPicture == kAAFTrue) && (argIsPicture == kAAFTrue)
-					|| (thisIsSound == kAAFTrue) && (argIsSound == kAAFTrue)
-					|| (thisIsTimecode == kAAFTrue) && (argIsTimecode == kAAFTrue))
+			if(((thisIsPicture == kAAFTrue) && (argIsPicture == kAAFTrue))
+					|| ((thisIsSound == kAAFTrue) && (argIsSound == kAAFTrue))
+					|| ((thisIsTimecode == kAAFTrue) && (argIsTimecode == kAAFTrue)))
 				result = kAAFTrue;
 		}
 
