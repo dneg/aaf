@@ -28,6 +28,7 @@
 #include <iostream>
 #include <sstream>
 #include <assert.h>
+#include <stdlib.h>
 #include <fstream>
 using namespace std;
 

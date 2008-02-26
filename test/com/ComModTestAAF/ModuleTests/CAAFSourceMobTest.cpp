@@ -28,6 +28,7 @@
 #include <iostream>
 using namespace std;
 #include <stdlib.h>
+#include <string.h>
 
 #include "AAFStoredObjectIDs.h"
 #include "AAFResult.h"

@@ -32,6 +32,7 @@
 #include <iomanip>
 #include <stddef.h>
 #include <stdlib.h>
+#include <string.h>
 
 #ifndef __AAF_h__
 #include "AAF.h"

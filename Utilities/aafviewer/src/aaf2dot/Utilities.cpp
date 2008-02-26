@@ -27,6 +27,7 @@
 
 #include <iostream>
 #include <assert.h>
+#include <string.h>
 using namespace std;
 
 #include <ctype.h>

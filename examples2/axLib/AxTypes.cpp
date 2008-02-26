@@ -36,6 +36,7 @@
 
 
 #include <string>
+#include <string.h>
 #include <assert.h>
 
 namespace {

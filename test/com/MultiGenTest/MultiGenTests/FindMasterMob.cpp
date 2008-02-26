@@ -25,6 +25,7 @@
 #include <AAFStoredObjectIDs.h>
 
 #include <memory>
+#include <string.h>
 
 namespace {
 
