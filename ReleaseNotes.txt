@@ -1,7 +1,7 @@
-AAF SDK v1.1.2 Release Candidate 3
-==================================
+AAF SDK v1.1.2
+==============
 
-2008-02-06
+2008-04-29
 
 This SDK is the reference implementation of the Advanced
 Authoring Format (AAF) version 1.1. See doc/aafeditprotocol.pdf,
@@ -49,93 +49,8 @@ ASSOCIATION, INC. FOR MORE INFORMATION ABOUT ANY ADDITIONAL LICENSES
 THAT MAY BE REQUIRED TO CREATE AND DISTRIBUTE AAF COMPLIANT PRODUCTS
 (HTTP://WWW.AAFASSOCIATION.ORG/POLICIES).
 
-Changes from v1.1.2 RC2 to v1.1.2 RC3
--------------------------------------
-
-- Revert IAAFMasterMob::AddMasterSlot change of behaviour made on 2 Nov 2005.
-  SourceClip is once again contained directly by MobSlot, and not within
-  a Sequence. This is not strictly valid for MXF.
-
-Changes from v1.1.2 RC1 to v1.1.2 RC2
--------------------------------------
-
-- Fix regression in TypeDefRecord implementation since v1.1.1
-  (handling of user-registered struct offsets)
-- Refactor TypeDefRecord module test to separate GetValue() and
-  GetStruct() type calls to improve level of testing across different
-  storage formats
-- Fix WAVEDescriptor & AIFCDescriptor module tests to handle foreign
-  endian files
-- Saving of Object Directory is now optional (compiler option
-  OM_SAVEOBJECTDIRECTORY). On reading, Object Direcory is no longer
-  required to be present.
-- Root object class ID can now be written as a SMPTE UL or as the
-  legacy UUID (compiler option OM_WRITELEGACYROOTCLASSID). Both
-  values are recognised when reading. Default is to use legacy
-  UUID value, for backwards compatibility.
-- Fix display of Int64 property values in dumper
-
-Changes from v1.1.2 DR2 to v1.1.2 RC1
--------------------------------------
-
-- XMLStoredFormat test clean ups & portability bug fixes
-- Extend support for g++ on Windows build
-- Add more "make check" tests
-- Changes to TypeDefRecord implementation to reinstate v1.1.1 behaviour
-  (incomplete - see next item)
-- Changes to TypeDefRecord module test to test v1.1.1 behaviour
-  (currently this test fails)
-- Use known OperationCategoryType in module tests so InfoDumper &
-ComPropDirectDump dump OK
-- Update ContainerDef symbols to match DNxHD codec
-- Increase axLib API coverage
-- Major update to aafanalyzer and documentation
-- Add workaround for case when a built-in property definition is not in
-the file's metadictionary (KLV encoding specific issue). Workaround is
-to make property optional by default to prevent an attempt to retrieve
-the value of a property that doesn't exist in the file.
-- Change ComPropDirectDump/dumper to not exit when dumping ExtEnum
-properties with non-existant names
-
-Changes from v1.1.2 DR1 to v1.1.2 DR2
--------------------------------------
-
-- Correct property name: DescriptiveClip::SourceTrackIDs to
-  DescriptiveClip::DescribedSlotIDs 
-- Add encoding switch to OpenExistingModify test
-- Refactor kAAFSignature_* from AAFFileKinds.h to ImplAAFFile.cpp to address
-  bug on MacOS 10.4.9 gcc 4.0.1 in which kAAFSignature_Aaf512Binary was not
-  correctly statically initialised before user code was executed.
-- Improve methods used to register structured storage OMStoredObjectFactory
-  implementations, and to declare the default for each encoding type. Restore
-  Schemasoft implementation as default on Windows.
-- Add test of IAAFTypeDefVariableArray::GetElements() for arrays of non-objects
-  (scalars)
-- Reinstate code to allow not-yet-registered custom types in
-  pvtCreateOMProperty() as added in v1.1.1
-- Add support for built-in dynamic properties; made the dynamic generation of
-  property IDs more robust
-- Updates and additions to AxLib
-- AAF Analyzer clean and polish; update UML diagram
-- Support for running make under MinGW environment using MSVC's cl compiler
-- Addition of nightly build and test script which generates static web page
-  results
-- Add MetaModelVerification to MakeSDKExamples project where COM tests reside
-- Use current SMPTE metadata spreadsheet and agreed list of v1.1.2 built-in
-  DefinitionObject Instances (ContainerDefinitions and DataDefinition) in
-  AAFMetaDict.xls. Extend headergen to create built-in Dictionary
-  DefinitionObject Instances.
-- Additional build clean-up:
-  MXFDump on i386Darwin and SparcSolaris
-  XMLStoredFormat release build
-  Dependency generation for AAFPLATFORM=UniversalDarwin
-  Refactor makefiles to enable make driven MSVC++ build
-  Fix linker errors when building MetaModelVerification release
-- Additional compiler warning clean-up:
-  Fix gcc 4.2.x deprecated conversion from string constant warnings
-
-Major Changes from v1.1.1 to v1.1.2 DR1
----------------------------------------
+Major Changes from v1.1.1 to v1.1.2
+-----------------------------------
 
 New stored format support:
   AAF-KLV (create file with file kind = kAAFFileKind_AafKlvBinary)
@@ -193,6 +108,12 @@ New built-in stored object property definitions:
   RIFFChunk::
     ChunkData, ChunkID, ChunkLength
 
+Revise AAFMetaDict.xls to track SMPTE metadata registers
+  Build-in agreed list of DefinitionObject Instances
+    (ContainerDefinitions and DataDefinition).
+  Extend headergen to create built-in Dictionary DefinitionObject
+    Instances.
+
 New stream access APIs:
   IAAFPlainStreamData and IAAFPlainEssenceData provide access to the
   value of the stream, independent of the stored format. For AAF-KLV,
@@ -206,19 +127,65 @@ Plugin Codec changes:
 
 New Examples:
   ExportJPEG, ImportJPEG
+  Updates and additions to AxLib
 
 New Utilities:
   aaffmtconv - Convert between structured storage and XML stored formats
   AAFAnalyzer - AAF file compliance analyzer tool (under development)
   MXFDump - Dump MXF files in excruciating detail
 
+Enhanced Tests:
+  - Add encoding switch to OpenExistingModify test
+  - Add test of IAAFTypeDefVariableArray::GetElements() for arrays of
+    non-objects (scalars)
+  - Add MetaModelVerification to MakeSDKExamples project where COM tests reside
+  - Changes to TypeDefRecord module test to test v1.1.1 behaviour
+  - Refactor TypeDefRecord module test to separate GetValue() and
+    GetStruct() type calls to improve level of testing across different
+    storage formats
+  - Fix WAVEDescriptor & AIFCDescriptor module tests to handle foreign
+    endian files
+  - Include additional tests in "make check"
+  - Use known OperationCategoryType in module tests so InfoDumper &
+    ComPropDirectDump dump OK
+  - Change ComPropDirectDump/dumper to not exit when dumping ExtEnum
+    properties with non-existant names
+  - Addition of nightly build and test script which generates static web page
+    results
+
+Other Enhancements:
+  - Improve methods used to register structured storage OMStoredObjectFactory
+    implementations, and to declare the default for each encoding type. Restore
+    Schemasoft implementation as default on Windows.
+  - Refactor kAAFSignature_* from AAFFileKinds.h to ImplAAFFile.cpp to address
+    bug on MacOS 10.4.9 gcc 4.0.1 in which kAAFSignature_Aaf512Binary was not
+    correctly statically initialised before user code was executed.
+
+Build Options:
+  - Saving of Object Directory is now optional (compiler option
+    OM_SAVEOBJECTDIRECTORY). On reading, Object Direcory is no longer
+    required to be present.
+  - Root object class ID can now be written as a SMPTE UL or as the
+    legacy UUID (compiler option OM_WRITELEGACYROOTCLASSID). Both
+    values are recognised when reading. Default is to use legacy
+    UUID value, for backwards compatibility.
+
 Portability:
   - MacOS X on Intel support added (i386Darwin AAF platform)
   - Removed requirement to have a structured storage library built
     into AAF library (make AAF_NO_STRUCTURED_STORAGE=1)
-  - Byte order (little endian/big endian) is determined at run time not compile time
+  - Byte order (little endian/big endian) is determined at run time not compile
+    time
   - Initial support for g++ on WIN32 enabling MinGW apps to link to AAF
     static libs. AAFCOAPI.dll library must still be built with MSVC.
+    Refactor makefiles to enable make driven MSVC++ build
+  - Additional compiler warning clean-up:
+    Fix gcc 4.2.x deprecated conversion from string constant warnings.
+    Fix gcc 4.3 warning for missing declarations. In gcc 4.3 the C++ header
+    dependencies have been cleaned up so code cannot rely on indirect inclusion.
+  - Build MXFDump on i386Darwin and SparcSolaris
+  - Dependency generation for AAFPLATFORM=UniversalDarwin
+
 
 Major Changes from v1.1.0 to v1.1.1
 -----------------------------------
@@ -440,6 +407,14 @@ value used is that of the essence element node defined by the MXF Generic
 Container (SMPTE 379M). The correct essence element key can be specified by
 client code creating the MXF essence stream directly.
 
+- IAAFMasterMob::AddMasterSlot creates a SourceClip contained directly by
+a MobSlot, and not within a Sequence. This is not strictly valid for MXF.
+
+- A workaround is used to deal with opening files in which a built-in
+property definition is not in the file's metadictionary. The workaround is
+to make the property optional by default to prevent an attempt to retrieve
+the value of a property that doesn't exist in the file.
+
 
 Structured Storage implementation (where applicable)
 ----------------------------------------------------
@@ -536,9 +511,6 @@ Known Issues
   spreadsheet (AAFMetaDict.xls) and AAFMetaDictionary.h. These divergences
   are applied in mkdict.awk as AAFMetaDictionary.h is generated from
   AAFMetaDict.csv. See "mkdict.awk override" comments in AAFMetaDictionary.h.
-
-- A regression in behaviour for IAAFTypeDefRecord has occurred between v1.1.1
-  and v1.1.2 DR1 and DR2. This is being looked at prior to final release.
 
 
 SchemaSoft license agreement
