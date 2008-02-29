@@ -1,7 +1,7 @@
 AAF SDK v1.1.2
 ==============
 
-2008-04-29
+2008-02-29
 
 This SDK is the reference implementation of the Advanced
 Authoring Format (AAF) version 1.1. See doc/aafeditprotocol.pdf,
