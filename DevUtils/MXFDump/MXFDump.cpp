@@ -42,6 +42,9 @@
 #elif defined (_MSC_VER) && defined(_M_X64) && defined(_WIN32)
 #define MXF_COMPILER_MSC_X64_WINDOWS
 #define MXF_OS_WINDOWS
+#elif defined(__GNUC__) && defined(__i386__) && defined(_WIN32)
+#define MXF_COMPILER_GCC_INTEL_WINDOWS
+#define MXF_OS_WINDOWS
 #elif defined(__GNUC__) && defined(__i386__) && defined(__linux__)
 #define MXF_COMPILER_GCC_INTEL_LINUX
 #define MXF_OS_UNIX
@@ -115,6 +118,20 @@ typedef unsigned __int64       mxfUInt64;
 #define MXFPRIx16 "hx"
 #define MXFPRIx32 "x"
 #define MXFPRIx64 "I64x"
+#elif defined(MXF_COMPILER_GCC_INTEL_WINDOWS)
+typedef unsigned char          mxfUInt08;
+typedef unsigned short int     mxfUInt16;
+typedef unsigned long int      mxfUInt32;
+typedef unsigned long long int mxfUInt64;
+
+#define MXFPRIu08 "u"
+#define MXFPRIu16 "hu"
+#define MXFPRIu32 "lu"
+#define MXFPRIu64 "llu"
+#define MXFPRIx08 "x"
+#define MXFPRIx16 "hx"
+#define MXFPRIx32 "lx"
+#define MXFPRIx64 "llx"
 #elif defined(MXF_COMPILER_GCC_INTEL_LINUX)
 typedef unsigned char          mxfUInt08;
 typedef unsigned short int     mxfUInt16;
@@ -826,7 +843,7 @@ void setPosition(mxfFile infile, const mxfUInt64 position)
   LARGE_INTEGER li;
   li.QuadPart = position;
   li.LowPart = SetFilePointer(infile, li.LowPart, &li.HighPart, FILE_BEGIN);
-  if ((li.LowPart == -1) && GetLastError() != NO_ERROR) {
+  if ((li.LowPart == INVALID_SET_FILE_POINTER) && GetLastError() != NO_ERROR) {
     fatalError("SetFilePointer() failed.\n");
   }
 }
@@ -847,7 +864,7 @@ mxfUInt64 position(mxfFile infile)
   LARGE_INTEGER li;
   li.QuadPart = 0;
   li.LowPart = SetFilePointer(infile, li.LowPart, &li.HighPart, FILE_CURRENT);
-  if ((li.LowPart == -1) && GetLastError() != NO_ERROR) {
+  if ((li.LowPart == INVALID_SET_FILE_POINTER) && GetLastError() != NO_ERROR) {
     fatalError("SetFilePointer() failed.\n");
   }
   result = li.QuadPart;
@@ -859,7 +876,7 @@ mxfUInt64 size(mxfFile infile)
   mxfUInt64 result;
   ULARGE_INTEGER li;
   li.LowPart = GetFileSize(infile, &li.HighPart);
-  if ((li.LowPart == -1) && GetLastError() != NO_ERROR) {
+  if ((li.LowPart == INVALID_FILE_SIZE) && GetLastError() != NO_ERROR) {
     fatalError("GetFileSize() failed.\n");
   }
   result = li.QuadPart;
