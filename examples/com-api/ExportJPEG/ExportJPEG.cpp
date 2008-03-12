@@ -339,7 +339,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, bool comp_enable)
 			sampled_rect.xSize = 720;
 			sampled_rect.ySize = 248;
 			display_rect.xSize = 720;
-			display_rect.ySize = 240;
+			display_rect.ySize = 243;
 			line_map[0] = 16;		// TODO: fix line_map guesses
 			line_map[1] = 328;
 		}
