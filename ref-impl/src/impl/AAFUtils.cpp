@@ -799,7 +799,7 @@ void AAFByteSwap64(
 // NB. ':' is acceptable unescaped in the fpath component
 
 #ifdef _MSC_VER			// MS VC++ dosen't provide POSIX strncasecmp
-#define strncasecmp(s1, s2, n) strnicmp(s1, s2, n)
+#define strncasecmp(s1, s2, n) _strnicmp(s1, s2, n)
 #else
 #include <strings.h>	// strncasecmp()
 #endif

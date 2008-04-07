@@ -179,6 +179,10 @@ const char * AAFGetLibrarySharedDirectoryName()
 {
     static char g_SharedDirectoryName[260];
 
+#ifdef _MSC_VER
+#pragma warning (disable:4996)
+#endif
+
     strcpy(g_SharedDirectoryName, "aafext");
     
     return g_SharedDirectoryName;
@@ -189,6 +193,8 @@ const char * AAFGetLibraryPluginPrefix()
 {
 #ifdef OS_WINDOWS
     static char g_PluginPrefix[4];
+
+#pragma warning (disable:4996)
 
     strcpy(g_PluginPrefix, "aaf");
 #else

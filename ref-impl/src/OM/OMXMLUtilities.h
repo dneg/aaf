@@ -53,7 +53,7 @@
 
 // MS Run-Time dosen't have POSIX strncasecmp, but provides stricmp
 #if defined (_WIN32)
-#define strncasecmp(s1, s2, n) strnicmp(s1, s2, n)
+#define strncasecmp(s1, s2, n) _strnicmp(s1, s2, n)
 #else
 #include <strings.h>	// strncasecmp()
 #endif

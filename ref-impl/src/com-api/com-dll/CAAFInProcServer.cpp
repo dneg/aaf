@@ -386,6 +386,8 @@ const char* CAAFInProcServer::GetServerDirectory() const
 //
 #if defined( OS_WINDOWS )
 
+#pragma warning (disable:4996)
+
 HRESULT AAFGetLibraryInfo(HINSTANCE hInstance, char **pServerPath, char **pServerDirectory)
 {
 	HRESULT rc = S_OK;

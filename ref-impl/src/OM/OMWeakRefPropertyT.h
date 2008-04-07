@@ -720,7 +720,8 @@ OMStorable* OMWeakReferenceProperty<Key, ReferencedObject>::getReferencedValue(v
     ASSERT("Referenced object ID can be a label",
                         keySize() == sizeof(OMUniqueObjectIdentification));
     OMUniqueObjectIdentification bid;
-    *reinterpret_cast<Key*>(&bid) = identification();
+	const Key& key = identification();
+	memcpy( reinterpret_cast<void*>(&bid), reinterpret_cast<const void*>(&key), sizeof(bid) );
     if (hostByteOrder() != bigEndian) {
 	  OMUniqueObjectIdentificationType::instance()->reorder(
                                                reinterpret_cast<OMByte*>(&bid),
