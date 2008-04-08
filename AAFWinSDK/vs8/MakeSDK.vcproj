@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="Windows-1252"?>
+<VisualStudioProject
+	ProjectType="Visual C++"
+	Version="8.00"
+	Name="MakeSDK"
+	ProjectGUID="{08296C77-388B-42C6-BF97-B06B9796985A}"
+	RootNamespace="MakeSDK"
+	Keyword="MakeFileProj"
+	>
+	<Platforms>
+		<Platform
+			Name="Win32"
+		/>
+	</Platforms>
+	<ToolFiles>
+	</ToolFiles>
+	<Configurations>
+		<Configuration
+			Name="Release|Win32"
+			OutputDirectory=".\Release"
+			IntermediateDirectory=".\Release"
+			ConfigurationType="0"
+			InheritedPropertySheets="$(SolutionDir)NoVS8Warnings.vsprops"
+			ATLMinimizesCRunTimeLibraryUsage="false"
+			>
+			<Tool
+				Name="VCNMakeTool"
+				BuildCommandLine="NMAKE /f win32aafsdk.mak CFG=Release"
+				ReBuildCommandLine="NMAKE /f win32aafsdk.mak CFG=Release /a"
+				CleanCommandLine="NMAKE /f win32aafsdk.mak CFG=Release clean"
+				Output="MakeSDK"
+				PreprocessorDefinitions=""
+				IncludeSearchPath=""
+				ForcedIncludes=""
+				AssemblySearchPath=""
+				ForcedUsingAssemblies=""
+				CompileAsManaged=""
+			/>
+		</Configuration>
+		<Configuration
+			Name="Debug|Win32"
+			OutputDirectory=".\Debug"
+			IntermediateDirectory=".\Debug"
+			ConfigurationType="0"
+			InheritedPropertySheets="$(SolutionDir)NoVS8Warnings.vsprops"
+			ATLMinimizesCRunTimeLibraryUsage="false"
+			>
+			<Tool
+				Name="VCNMakeTool"
+				BuildCommandLine="NMAKE /f win32aafsdk.mak CFG=Debug"
+				ReBuildCommandLine="NMAKE /f win32aafsdk.mak CFG=Debug /a"
+				CleanCommandLine="NMAKE /f win32aafsdk.mak CFG=Debug clean"
+				Output="MakeSDK"
+				PreprocessorDefinitions=""
+				IncludeSearchPath=""
+				ForcedIncludes=""
+				AssemblySearchPath=""
+				ForcedUsingAssemblies=""
+				CompileAsManaged=""
+			/>
+		</Configuration>
+	</Configurations>
+	<References>
+	</References>
+	<Files>
+		<File
+			RelativePath="MakeSDK.bsc"
+			>
+		</File>
+		<File
+			RelativePath="win32aafsdk.mak"
+			>
+		</File>
+	</Files>
+	<Globals>
+	</Globals>
+</VisualStudioProject>

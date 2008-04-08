@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<VisualStudioPropertySheet 
+	ProjectType="Visual C++" 
+	Version="8.00" 
+	Name="No VS8 Warnings">
+	<Tool
+		Name="VCCLCompilerTool"
+		PreprocessorDefinitions="_CRT_SECURE_NO_DEPRECATE;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;_SECURE_SCL=0"
+            WarnAsError="true"
+	/>
+</VisualStudioPropertySheet>
