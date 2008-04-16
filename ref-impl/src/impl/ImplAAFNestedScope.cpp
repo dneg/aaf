@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2006, Licensor of the
+// The Original Code of this file is Copyright 1998-2008, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -235,8 +235,6 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT ImplAAFNestedScope::ChangeContainedReferences(aafMobID_constref from,
 														aafMobID_constref to)
 {
-	ImplAAFComponent	*comp = NULL;
-	
 	XPROTECT()
 	{
 		aafUInt32 count = _slots.count();
@@ -249,9 +247,6 @@ AAFRESULT ImplAAFNestedScope::ChangeContainedReferences(aafMobID_constref from,
 	}
 	XEXCEPT
 	{
-		if(comp != NULL)
-		  comp->ReleaseReference();
-		comp = 0;
 	}
 	XEND;
 
