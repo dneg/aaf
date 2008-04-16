@@ -245,8 +245,6 @@ AAFRESULT ImplAAFNestedScope::ChangeContainedReferences(aafMobID_constref from,
 			ImplAAFSegment	*pSegment;
 			_slots.getValueAt(pSegment, n);
 			CHECK(pSegment->ChangeContainedReferences(from, to));
-			pSegment->ReleaseReference();
-			pSegment = NULL;
 		}
 	}
 	XEXCEPT
