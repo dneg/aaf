@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2008, Licensor of the
+// The Original Code of this file is Copyright 1998-2006, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -116,7 +116,7 @@ OMFixedSizeProperty<PropertyType>::operator PropertyType() const
 template <typename PropertyType>
 PropertyType* OMFixedSizeProperty<PropertyType>::operator &(void)
 {
-  return reinterpret_cast<PropertyType*>(bits());
+  return reinterpret_cast<PropertyType*>(_bits);
 }
 
   // @mfunc Const "Address of" operator.
@@ -127,7 +127,7 @@ PropertyType* OMFixedSizeProperty<PropertyType>::operator &(void)
 template <typename PropertyType>
 const PropertyType* OMFixedSizeProperty<PropertyType>::operator &(void) const
 {
-  return reinterpret_cast<const PropertyType*>(bits());
+  return reinterpret_cast<const PropertyType*>(_bits);
 }
 
   // @mfunc Convert this <c OMFixedSizeProperty> into a const
@@ -140,7 +140,7 @@ const PropertyType* OMFixedSizeProperty<PropertyType>::operator &(void) const
 template <typename PropertyType>
 const PropertyType& OMFixedSizeProperty<PropertyType>::reference(void) const
 {
-  return *reinterpret_cast<const PropertyType*>(bits());
+  return *reinterpret_cast<const PropertyType*>(_bits);
 }
 
   // @mfunc Restore this <c OMFixedSizeProperty>, the external (persisted)

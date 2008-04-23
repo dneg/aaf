@@ -54,14 +54,6 @@
 #undef _WINDEF_
 #endif
 
-#if defined(OS_WINDOWS) && !defined(NDEBUG)
-#include <windows.h>
-#define CHECKLEAKS 1
-#if defined(CHECKLEAKS)
-#include <crtdbg.h>
-#endif
-#endif
-
 #include "CAAFModuleTest.h"
 #include "ModuleTest.h"
 
@@ -206,21 +198,10 @@ struct CAAFInitialize
 // simple helper class to initialize and cleanup AAF library.
 class CAAFInitializePlugins
 {
-	#if defined(CHECKLEAKS)
-	_CrtMemState	_memoryState;
-#endif
-
 public:
   CAAFInitializePlugins() :
     pPluginMgr(NULL)
   {
-#if defined(CHECKLEAKS)
-	// Send	all	reports	to STDOUT
-	_CrtSetReportMode( _CRT_WARN, _CRTDBG_MODE_FILE	);
-	_CrtSetReportFile( _CRT_WARN, _CRTDBG_FILE_STDOUT );
-	_CrtMemCheckpoint( &_memoryState );
-#endif
-
     throwIfError(AAFGetPluginManager(&pPluginMgr));
     throwIfError(pPluginMgr->RegisterSharedPlugins());
     pPluginMgr->Release();
@@ -231,15 +212,6 @@ public:
   {
     if (pPluginMgr)
       pPluginMgr->Release();
-#if defined(CHECKLEAKS)
-		//_CrtMemDumpAllObjectsSince( &_memoryState );
-		_CrtMemState memNow;
-		_CrtMemCheckpoint(&memNow);
-		_CrtMemState memDiff;
-		std::string leakMsg = (_CrtMemDifference(&memDiff, &_memoryState, &memNow)==0)?"No leak.":"Leak!";
-		std::wcout << "_CrtMemDifference says " << leakMsg.c_str() << std::endl;
-		_CrtMemDumpStatistics( &memDiff );
-#endif
   }
 
   // cached for error cleanup.

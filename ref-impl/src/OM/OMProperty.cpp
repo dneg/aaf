@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2008, Licensor of the
+// The Original Code of this file is Copyright 1998-2006, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -287,7 +287,11 @@ OMSimpleProperty::OMSimpleProperty(const OMPropertyId propertyId,
   PRECONDITION("Valid size", (valueSize > 0));
 
   setSize(valueSize);
+  for (size_t i = 0; i < _size; i++) {
+    _bits[i] = 0;
+  }
 
+  POSTCONDITION("Valid bits", _bits != 0 );
 }
 
   // @mfunc Destructor.
@@ -327,13 +331,10 @@ void OMSimpleProperty::setSize(OMPropertySize newSize)
   PRECONDITION("Valid size", newSize > 0);
 
   if (newSize != _size) {
-    if (_bits != 0)
-    {
       delete [] _bits;
       _bits = 0; // for BoundsChecker
       _bits = new unsigned char[newSize];
       ASSERT("Valid heap pointer", _bits != 0);
-    }
     _size = newSize;
   }
 }
@@ -361,7 +362,7 @@ void OMSimpleProperty::shallowCopyTo(OMProperty* destination) const
   ASSERT("Destination is correct type", dest != 0);
   ASSERT("Valid destination", dest != this);
 
-  dest->set(bits(), _size);
+  dest->set(_bits, _size);
 }
 
 void OMSimpleProperty::deepCopyTo(OMProperty* /* destination */,
@@ -383,7 +384,7 @@ void OMSimpleProperty::get(void* value, OMPropertySize ANAME(valueSize)) const
   PRECONDITION("Optional property is present",
                                            IMPLIES(isOptional(), isPresent()));
 
-  memcpy(value, bits(), _size);
+  memcpy(value, _bits, _size);
 }
 
   // @mfunc Set the value of this <c OMSimpleProperty>.
@@ -397,7 +398,7 @@ void OMSimpleProperty::set(const void* value, OMPropertySize valueSize)
   PRECONDITION("Valid size", valueSize > 0);
 
   setSize(valueSize);
-  memcpy(bits(), value, _size);
+  memcpy(_bits, value, _size);
   setPresent();
 }
 
@@ -507,16 +508,7 @@ OMUInt32 OMSimpleProperty::bitsSize(void) const
 OMByte* OMSimpleProperty::bits(void) const
 {
   TRACE("OMSimpleProperty::bits");
-  if (_bits == 0) {
-    if (_size > 0) {
-      OMSimpleProperty* nonConstThis = const_cast<OMSimpleProperty*>(this);
-      nonConstThis->_bits = new unsigned char[_size];
-      ASSERT("Valid heap pointer", _bits != 0);
-      for (size_t i = 0; i < _size; i++) {
-        _bits[i] = 0;
-      }
-    }
-  }
+
   return _bits;
 }
 
@@ -535,7 +527,7 @@ void OMSimpleProperty::getBits(OMByte* bits,
   PRECONDITION("Valid bits", bits != 0);
   PRECONDITION("Valid size", bitsSize >= _size);
 
-  memcpy(bits, this->bits(), _size);
+  memcpy(bits, _bits, _size);
 }
 
   // @mfunc Set the raw bits of this <c OMSimpleProperty>.
