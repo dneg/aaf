@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2008, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -27,6 +27,7 @@
 
 #include "OMPropertySetIterator.h"
 #include "OMPropertySet.h"
+#include "OMProperty.h"
 
 #include "OMAssertions.h"
 
@@ -195,6 +196,7 @@ OMPropertyId OMPropertySetIterator::propertyId(void) const
 
   PRECONDITION("Valid iterator", _iterator.valid());
 
-  return _iterator.key();
+  const OMProperty* p = _iterator.value();
+  return p->propertyId();
 }
 

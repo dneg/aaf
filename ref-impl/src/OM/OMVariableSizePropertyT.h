@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2006, Licensor of the
+// The Original Code of this file is Copyright 1998-2008, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -122,7 +122,7 @@ void OMVariableSizeProperty<PropertyType>::getValueAt(
   PRECONDITION("Valid index", index < count());
   PRECONDITION("Valid value", value != 0);
 
-  *value = ((PropertyType*)_bits)[index];
+  *value = ((PropertyType*)bits())[index];
 }
 
   // @mfunc Set the value of the item at position <p index> in this
@@ -143,7 +143,7 @@ void OMVariableSizeProperty<PropertyType>::setValueAt(
   PRECONDITION("Valid index", index < count());
   PRECONDITION("Valid value", value != 0);
 
-  ((PropertyType*)_bits)[index] = *value;
+  ((PropertyType*)bits())[index] = *value;
 }
 
   // @mfunc Set the value of the item at the last position in this

@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2008, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -40,6 +40,8 @@ public:
 
     // @cmember Constructor.
   OMDataStreamAccess(void* context);
+  // @cmember Destructor.
+  virtual ~OMDataStreamAccess() {}
 
     // @cmember Save data to the given <c OMDataStream> object.
     //          This is a call back function supplied by the client.
