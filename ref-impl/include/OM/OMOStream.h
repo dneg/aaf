@@ -40,6 +40,9 @@ public:
     // @cmember Constructor.
   OMOStream(void);
 
+    // @cmember Destructor.
+  virtual ~OMOStream(void);
+
     // @cmember Insert a character string.
   OMOStream& operator << (const char* string);
 
