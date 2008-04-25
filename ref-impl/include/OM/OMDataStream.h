@@ -41,7 +41,7 @@ public:
                const wchar_t* name);
 
     // @cmember Destructor.
-  ~OMDataStream(void);
+  virtual ~OMDataStream(void);
 
     // @cmember The size, in bytes, of the data in this
     //          <c OMDataStreamProperty>.

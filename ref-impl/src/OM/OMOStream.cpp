@@ -44,6 +44,11 @@ OMOStream::OMOStream(void)
 {
 }
 
+  // @mfunc Destructor.
+OMOStream::~OMOStream(void)
+{
+}
+
   // @mfunc Insert a character string.
   //   @parm The string to insert.
   //   @rdesc The modified <c OMOStream>
