@@ -200,7 +200,7 @@ OMMS_SSStoredObjectFactory::createFile (OMRawStorage* rawStorage,
 				(void**)&storage);
 
 	checkStatus(status);
-
+	iLockBytes->Release();
 	ASSERT("StgOpenStorageOnILockBytes() succeeded", SUCCEEDED(status));
 #endif //OM_USE_STORAGE_EX
 
