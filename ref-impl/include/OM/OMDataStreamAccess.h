@@ -40,6 +40,19 @@ public:
 
     // @cmember Constructor.
   OMDataStreamAccess(void* context);
+  /*
+  If the OMDataStreamAccess destructor is NOT virtual,
+  then classes which inherit from OMDataStreamAccess 
+  can leak memory when freed from a OMDataStreamAccess pointer.
+  If an object from a derived class is referenced 
+  by a OMDataStreamAccess pointer and is freed from that pointer,
+  then the NON virtual destructor of OMDataStreamAccess executes
+  but the destructor of the derived object does NOT execute,
+  the derived object is "sheered" and leaks memory. 
+  If no destructor for OMDataStreamAccess is written then the C++
+  compiler will auto-generate a NON virtual destructor and there 
+  will be memory leaks.*/
+  virtual ~OMDataStreamAccess() {}
 
     // @cmember Save data to the given <c OMDataStream> object.
     //          This is a call back function supplied by the client.
