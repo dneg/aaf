@@ -167,8 +167,20 @@ ImplAAFMob::~ImplAAFMob ()
 		{
 			ImplAAFKLVData* pKLVData = _KLVData.clearValueAt(j);
 			if (pKLVData)
-			  pKLVData->ReleaseReference();
+			  pKLVData->ReleaseReference(); 
 			pKLVData = 0;
+		}
+	}
+
+	if(_attributes.isPresent())
+	{
+		count = _attributes.count();
+		for (aafUInt32 j = 0; j < count; j++)
+		{
+			ImplAAFTaggedValue* pTaggedValue = _attributes.clearValueAt(j);
+			if (pTaggedValue)
+			  pTaggedValue->ReleaseReference();
+			pTaggedValue = 0;
 		}
 	}
 }
@@ -1466,6 +1478,8 @@ AAFRESULT STDMETHODCALLTYPE
 {
 	XPROTECT()
 	{
+		// New storable object returned by shallowCopy() is
+		// reference counted ImplAAFMob.
 		OMStorable* newStorable = shallowCopy();
 		
 		ImplAAFMob *newMob = dynamic_cast<ImplAAFMob*>( newStorable );
@@ -1487,7 +1501,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 		deepCopyTo( newMob, 0 );
 
- 		newMob->AcquireReference();
+ 		// newMob created by shallowCopy() is already reference counted.
 		*destMob = newMob;
 	}
 	XEXCEPT
@@ -1653,6 +1667,8 @@ AAFRESULT STDMETHODCALLTYPE
 			ImplAAFSmartPointer<ImplAAFDictionary> spDstDict;
 			CHECK( destFile->GetDictionary(&spDstDict) );
 
+			// New storable object returned by shallowCopy() is
+			// reference counted ImplAAFMob.
 			OMStorable* pNewStorable = shallowCopy(spDstDict);
 		
 			ImplAAFMob* pNewMob = dynamic_cast<ImplAAFMob*>(pNewStorable);
@@ -1664,7 +1680,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 			deepCopyTo( pNewStorable, 0 );
 
-			pNewMob->AcquireReference();
+			// pNewMob created by shallowCopy() is already reference counted.
 			*destMob = pNewMob;
 		}
 
