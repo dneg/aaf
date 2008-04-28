@@ -573,7 +573,7 @@ AAFRESULT
     ImplAAFHeader::AddIdentificationObject
 (aafProductIdentification_constptr pIdent)
 {
-	ImplAAFIdentification *		identObj;
+	ImplAAFIdentification *		identObj = NULL;
 	aafProductIdentification_t ident;
 
 	XPROTECT()
@@ -622,6 +622,11 @@ AAFRESULT
 	}
 	XEXCEPT
 	{
+		if (identObj)
+		{
+			identObj->ReleaseReference();
+			identObj = NULL;
+		}
 	}
 	XEND
 	
