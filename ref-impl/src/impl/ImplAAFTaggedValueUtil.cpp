@@ -49,6 +49,8 @@ AAFRESULT ImplAAFTaggedValueUtil::AppendNameValuePair(
   }
 
 
+  ImplAAFTaggedValue* pTaggedVal = NULL;
+
   XPROTECT()
   {
     ImplAAFSmartPointer<ImplAAFDictionary> spDict;
@@ -64,7 +66,6 @@ AAFRESULT ImplAAFTaggedValueUtil::AppendNameValuePair(
     // counted - don't release it.
     // pTaggedDef is the object we will return, so it is not put in a smart pointer
     // either.
-    ImplAAFTaggedValue* pTaggedVal;
     ImplAAFClassDef* pTaggedValDef = spDict->GetBuiltinDefs()->cdTaggedValue();
     if ( !pTaggedValDef ) {
       RAISE( E_FAIL );
@@ -89,7 +90,13 @@ AAFRESULT ImplAAFTaggedValueUtil::AppendNameValuePair(
 
   }
   XEXCEPT
-  {}
+  {
+    if (pTaggedVal)
+    {
+      pTaggedVal->ReleaseReference();
+      pTaggedVal = NULL;
+    }
+  }
   XEND;
 
 
