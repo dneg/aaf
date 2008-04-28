@@ -83,6 +83,30 @@ ImplAAFComponent::~ImplAAFComponent ()
 			pKLVData = 0;
 		}
 	}
+
+	if(_userComments.isPresent())
+	{
+		aafUInt32 count = _userComments.count();
+		for (aafUInt32 j = 0; j < count; j++)
+		{
+			ImplAAFTaggedValue* pTaggedValue = _userComments.clearValueAt(j);
+			if (pTaggedValue)
+			  pTaggedValue->ReleaseReference();
+			pTaggedValue = 0;
+		}
+	}
+
+	if(_attributes.isPresent())
+	{
+		aafUInt32 count = _attributes.count();
+		for (aafUInt32 j = 0; j < count; j++)
+		{
+			ImplAAFTaggedValue* pTaggedValue = _attributes.clearValueAt(j);
+			if (pTaggedValue)
+			  pTaggedValue->ReleaseReference();
+			pTaggedValue = 0;
+		}
+	}
 }
 
 
