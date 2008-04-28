@@ -130,6 +130,8 @@ AAFRESULT ImplAAFTypeDef::MergeTo( ImplAAFDictionary* pDstDictionary )
   {
     OMClassFactory* pDstFactory =
         dynamic_cast<OMClassFactory*>( pDstDictionary->metaDictionary() );
+    // New storable object returned by shallowCopy() is
+    // reference counted ImplAAFTypeDef.
     OMStorable* pDstStorable = shallowCopy( pDstFactory );
     ImplAAFTypeDef* pDstTypeDef =
         dynamic_cast<ImplAAFTypeDef*>( pDstStorable );
@@ -141,6 +143,10 @@ AAFRESULT ImplAAFTypeDef::MergeTo( ImplAAFDictionary* pDstDictionary )
       pDstTypeDef->onCopy( 0 );
       deepCopyTo( pDstTypeDef, 0 );
     }
+
+    // pDstTypeDef created by shallowCopy() is reference counted.
+    pDstTypeDef->ReleaseReference();
+    pDstTypeDef = 0;
   }
   else
   {
