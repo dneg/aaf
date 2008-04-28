@@ -1310,11 +1310,16 @@ ImplAAFCreateRawStorageCached
   if (!AAFRESULT_SUCCEEDED(hr))
     return hr;
 
-  return ImplAAFCreateRawStorageCached2(pRawStorage,
+  hr = ImplAAFCreateRawStorageCached2(pRawStorage,
                                         pageCount,
                                         pageSize,
                                         pCachePageAllocator,
                                         ppNewRawStorage);
+
+  pCachePageAllocator->Release();
+  pCachePageAllocator = 0;
+
+  return hr;
 }
 
 STDAPI
