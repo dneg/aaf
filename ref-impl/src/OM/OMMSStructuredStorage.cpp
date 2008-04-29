@@ -517,7 +517,6 @@ OMInt32 StgCreateDocfileOnILockBytesEx (
 		NULL,
 		0,
 		(IStorage **) ppstorage);
-	piLockBytes->Release();
 
 	return status;
 }
