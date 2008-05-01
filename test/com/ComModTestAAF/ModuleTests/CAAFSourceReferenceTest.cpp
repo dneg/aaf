@@ -161,6 +161,9 @@ static HRESULT CreateAAFFile(
   if (pSourceReference)
     pSourceReference->Release();
 
+  if (pSrcRef2)
+    pSrcRef2->Release();
+
   if (pDictionary)
     pDictionary->Release();
 
