@@ -664,7 +664,7 @@ static void Test_EssenceStreamPullWrite(
 	IAAFPropertyDefSP	pSampleIndexPropertyDef;  
 	IAAFPropertyValueSP pStreamPropertyValue;
 	IAAFStreamAccess		*cb = 0;
-	IAAFEssenceData		*pEssenceData;
+	IAAFEssenceDataSP		pEssenceData; 
 	IAAFHeaderSP		pHeader;
 	IAAFDictionarySP	pDictionary;
 	IAAFSourceMobSP		pSourceMob;
@@ -696,7 +696,7 @@ static void Test_EssenceStreamPullWrite(
 	CheckResult(TestStreamAccess::Create(&cb));
 	CheckResult(pTypeDefStream3->SetCallback(pStreamPropertyValue, cb,
 		reinterpret_cast<aafMemPtr_t>(const_cast<char *>(sSmiley))));
-	// !!! tjb not yet cb->Release();
+	cb->Release();
 }
 
 static void Test_KLVStreamParametersOnWrite(
