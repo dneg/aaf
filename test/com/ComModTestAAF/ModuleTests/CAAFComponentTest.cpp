@@ -98,6 +98,11 @@ void testCommentAttributeMethods(IAAFComponent2 *pComp2)
 	if(pComp2->RemoveComment(pTagVal) != AAFRESULT_SUCCESS)
 		checkResult(AAFRESULT_TEST_FAILED);
 
+	pTagVal->Release();
+	pTagVal = NULL;
+	pEnum->Release();
+	pEnum = NULL;
+
 	//test RemoveAttribute - remove the very first attribute
 	pComp2->GetAttributes(&pEnum);
   	pEnum->NextOne(&pTagVal);
