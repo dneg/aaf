@@ -286,6 +286,8 @@ void CEnumeratorTest<TEnum,TItem>::Run(
 
 	pFile->Save();
 	pFile->Close();
+	pFile->Release();
+	pFile = 0;
 }
 
 // Function to get AUID of AAF object
