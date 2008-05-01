@@ -409,6 +409,11 @@ main(int argc, char* argv[])
 		result = AAFRESULT_TEST_FAILED;
 	}
 
+	for (int k=0; k<argc; ++k) {
+	  delete [] wargv[k];
+	}
+	delete [] wargv;
+
 	// Translate AAFRESULTs into an exit status.
 	// Only the 8 least significant bits are available to a waiting parent
 	// (see IEEE Std 1003.1) and by convention the 8th bit (values over 127)
