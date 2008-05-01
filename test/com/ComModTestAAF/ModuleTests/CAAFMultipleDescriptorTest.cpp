@@ -107,6 +107,9 @@ static HRESULT CreateAAFFile(
 		
 		checkResult(pSourceMob->SetEssenceDescriptor (eDesc));
 
+		eDesc->Release();
+		eDesc = 0;
+
 
 /* CountFileDescriptors()	******************************************/
 	{
@@ -519,6 +522,9 @@ static HRESULT CreateAAFFile(
 	}
 
 
+	if (pMDesc)
+		pMDesc->Release();
+
 	if (pMob)
 		pMob->Release();
 
@@ -616,6 +622,9 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	}
 
 	// Cleanup object references
+	if (pMDesc)
+		pMDesc->Release();
+
 	if (pFileDescriptor)
 		pFileDescriptor->Release();
 
