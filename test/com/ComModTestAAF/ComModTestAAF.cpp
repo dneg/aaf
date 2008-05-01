@@ -57,6 +57,13 @@
 #include "CAAFModuleTest.h"
 #include "ModuleTest.h"
 
+#if defined(OS_WINDOWS) && !defined(NDEBUG)
+#include <windows.h>
+#define CHECKLEAKS 1
+#if defined(CHECKLEAKS)
+#include <crtdbg.h>
+#endif
+#endif
 
 static void formatError(HRESULT errorCode)
 {
@@ -177,8 +184,23 @@ listFileEncodings()
 // simple helper class to initialize and cleanup AAF library.
 struct CAAFInitialize
 {
+#if defined(CHECKLEAKS)
+	_CrtMemState	_memoryState;
+#endif
+
 	CAAFInitialize(const char *dllname = NULL) {
 		std::wcout << "Attempting to load the AAF dll... " << std::flush;
+#if defined(CHECKLEAKS)
+		// Send	all	reports	to STDOUT
+		_CrtSetReportMode( _CRT_WARN, _CRTDBG_MODE_FILE	);
+		_CrtSetReportFile( _CRT_WARN, _CRTDBG_FILE_STDOUT );
+		//_CrtSetReportMode( _CRT_ERROR, _CRTDBG_MODE_FILE );
+		//_CrtSetReportFile( _CRT_ERROR, _CRTDBG_FILE_STDOUT );
+		//_CrtSetReportMode( _CRT_ASSERT, _CRTDBG_MODE_FILE	);
+		//_CrtSetReportFile( _CRT_ASSERT, _CRTDBG_FILE_STDOUT );
+		_CrtMemCheckpoint( &_memoryState );
+#endif
+
 		HRESULT hr = AAFLoad(dllname);
 		if (S_OK != hr)
 		{
@@ -191,6 +213,16 @@ struct CAAFInitialize
 
 	~CAAFInitialize() {
 		AAFUnload();
+#if defined(CHECKLEAKS)
+		//_CrtMemDumpAllObjectsSince( &_memoryState );
+		//Cleaning up debug output:
+		_CrtMemState memNow;
+		_CrtMemCheckpoint(&memNow);
+		_CrtMemState memDiff;
+		std::string leakMsg = (_CrtMemDifference(&memDiff, &_memoryState, &memNow)==0)?"No leak.":"Leak!";
+		std::wcout << "_CrtMemDifference says " << leakMsg.c_str() << std::endl;
+		_CrtMemDumpStatistics( &memDiff );
+#endif
 	}
 };
 
