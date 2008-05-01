@@ -772,6 +772,9 @@ AAFRESULT GetPropertyValue(
                 pPropDef->Release();
                 pPropDef = 0;
             }
+
+            pClassDef->Release();
+            pClassDef = 0;
         }
 
         pObject->Release();
@@ -809,6 +812,9 @@ AAFRESULT GetPropertyType(
                 pPropDef->Release();
                 pPropDef = 0;
             }
+
+            pClassDef->Release();
+            pClassDef = 0;
         }
 
         pObject->Release();
