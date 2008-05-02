@@ -287,11 +287,6 @@ OMSimpleProperty::OMSimpleProperty(const OMPropertyId propertyId,
   PRECONDITION("Valid size", (valueSize > 0));
 
   setSize(valueSize);
-  for (size_t i = 0; i < _size; i++) {
-    _bits[i] = 0;
-  }
-
-  POSTCONDITION("Valid bits", _bits != 0 );
 }
 
   // @mfunc Destructor.
@@ -331,10 +326,13 @@ void OMSimpleProperty::setSize(OMPropertySize newSize)
   PRECONDITION("Valid size", newSize > 0);
 
   if (newSize != _size) {
+    if (_bits != 0)
+    {
       delete [] _bits;
       _bits = 0; // for BoundsChecker
       _bits = new unsigned char[newSize];
       ASSERT("Valid heap pointer", _bits != 0);
+    }
     _size = newSize;
   }
 }
@@ -362,7 +360,7 @@ void OMSimpleProperty::shallowCopyTo(OMProperty* destination) const
   ASSERT("Destination is correct type", dest != 0);
   ASSERT("Valid destination", dest != this);
 
-  dest->set(_bits, _size);
+  dest->set(bits(), _size);
 }
 
 void OMSimpleProperty::deepCopyTo(OMProperty* /* destination */,
@@ -384,7 +382,7 @@ void OMSimpleProperty::get(void* value, OMPropertySize ANAME(valueSize)) const
   PRECONDITION("Optional property is present",
                                            IMPLIES(isOptional(), isPresent()));
 
-  memcpy(value, _bits, _size);
+  memcpy(value, bits(), _size);
 }
 
   // @mfunc Set the value of this <c OMSimpleProperty>.
@@ -398,7 +396,7 @@ void OMSimpleProperty::set(const void* value, OMPropertySize valueSize)
   PRECONDITION("Valid size", valueSize > 0);
 
   setSize(valueSize);
-  memcpy(_bits, value, _size);
+  memcpy(bits(), value, _size);
   setPresent();
 }
 
@@ -509,6 +507,16 @@ OMByte* OMSimpleProperty::bits(void) const
 {
   TRACE("OMSimpleProperty::bits");
 
+  if (_bits == 0) {
+    if (_size > 0) {
+      OMSimpleProperty* nonConstThis = const_cast<OMSimpleProperty*>(this);
+      nonConstThis->_bits = new unsigned char[_size];
+      ASSERT("Valid heap pointer", _bits != 0);
+      for (size_t i = 0; i < _size; i++) {
+        _bits[i] = 0;
+      }
+    }
+  }
   return _bits;
 }
 
@@ -527,7 +535,7 @@ void OMSimpleProperty::getBits(OMByte* bits,
   PRECONDITION("Valid bits", bits != 0);
   PRECONDITION("Valid size", bitsSize >= _size);
 
-  memcpy(bits, _bits, _size);
+  memcpy(bits, this->bits(), _size);
 }
 
   // @mfunc Set the raw bits of this <c OMSimpleProperty>.
