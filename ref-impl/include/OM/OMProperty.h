@@ -280,10 +280,10 @@ protected:
     // @cmember Set the value of this <c OMSimpleProperty>.
   void set(const void* value, OMPropertySize valueSize);
 
+private:
+
   OMPropertySize _size;
   unsigned char* _bits;
-
-private:
 
     // OMSimpleProperty can't be assigned - declare but don't define
   OMSimpleProperty& operator = (const OMSimpleProperty& rhs);

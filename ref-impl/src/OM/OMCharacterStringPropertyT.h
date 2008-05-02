@@ -58,7 +58,7 @@ OMCharacterStringProperty<CharacterType>::~OMCharacterStringProperty(void)
 template <typename CharacterType>
 OMCharacterStringProperty<CharacterType>::operator const CharacterType*() const
 {
-  return reinterpret_cast<const CharacterType*>(this->_bits);
+  return reinterpret_cast<const CharacterType*>(this->bits());
 }
 
   // @mfunc Assign the string <p characterString> to this
