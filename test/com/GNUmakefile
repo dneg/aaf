@@ -82,6 +82,19 @@ check :
 	cd ResultToTextTest && $(MAKE) $@
 	cd XMLStoredFormat && $(MAKE) $@
 
+.PHONY : valgrind-check
+valgrind-check :
+	cd ComModTestAAF && $(MAKE) $@
+	cd CreateSequence && $(MAKE) $@
+	cd EssenceAccess && $(MAKE) $@
+	cd MultiGenTest && $(MAKE) $@
+	cd ComFileKindTest && $(MAKE) $@
+	cd UTF8FileNameTest && $(MAKE) $@
+	cd OpenExistingModify && $(MAKE) $@
+	cd ScaleTest && $(MAKE) $@
+	cd ResultToTextTest && $(MAKE) $@
+	cd XMLStoredFormat && $(MAKE) $@
+
 .PHONY : clean
 clean :
 	cd ComModTestAAF && $(MAKE) GENDEPS=0 $@

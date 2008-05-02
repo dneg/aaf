@@ -49,6 +49,10 @@ $(AAFSDKBINDIR)/UTF8FileNameTest$(EXE) : $(CXXOBJS)
 check : $(AAFSDKBINDIR)/UTF8FileNameTest$(EXE)
 	$(APP_RUN_ENV) $(AAFSDKBINDIR)/UTF8FileNameTest$(EXE)
 
+.PHONY : valgrind-check
+valgrind-check : $(AAFSDKBINDIR)/UTF8FileNameTest$(EXE)
+	$(APP_RUN_ENV) $(VALGRIND_CMD) $(AAFSDKBINDIR)/UTF8FileNameTest$(EXE)
+
 
 .PHONY : clean
 clean :

@@ -46,6 +46,10 @@ $(AAFSDKBINDIR)/MetaModelVerification$(EXE) : $(CXXOBJS)
 check : $(AAFSDKBINDIR)/MetaModelVerification$(EXE)
 	$(APP_RUN_ENV) $(AAFSDKBINDIR)/MetaModelVerification$(EXE)
 
+.PHONY : valgrind-check
+valgrind-check : $(AAFSDKBINDIR)/MetaModelVerification$(EXE)
+	$(APP_RUN_ENV) $(VALGRIND_CMD) $(AAFSDKBINDIR)/MetaModelVerification$(EXE)
+
 
 .PHONY : clean
 clean :

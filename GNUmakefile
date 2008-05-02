@@ -79,6 +79,10 @@ check : test
 	cd test && $(MAKE) $@
 	cd examples && $(MAKE) $@
 
+.PHONY : valgrind-check
+valgrind-check : test
+	cd test && $(MAKE) $@
+
 #
 # Binary distributions
 #

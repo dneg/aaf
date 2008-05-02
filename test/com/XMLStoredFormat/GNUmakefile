@@ -43,6 +43,10 @@ $(AAFSDKBINDIR)/XMLStoredFormatTest$(EXE) : $(CXXOBJS)
 check : $(AAFSDKBINDIR)/XMLStoredFormatTest$(EXE)
 	$(APP_RUN_ENV) $(AAFSDKBINDIR)/XMLStoredFormatTest$(EXE)
 
+.PHONY : valgrind-check
+valgrind-check : $(AAFSDKBINDIR)/XMLStoredFormatTest$(EXE)
+	$(APP_RUN_ENV) $(VALGRIND_CMD) $(AAFSDKBINDIR)/XMLStoredFormatTest$(EXE)
+
 
 .PHONY : clean
 clean :

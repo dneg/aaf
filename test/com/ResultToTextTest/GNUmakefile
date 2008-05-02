@@ -45,6 +45,10 @@ $(AAFSDKBINDIR)/ResultToTextTest$(EXE) : $(CXXOBJS)
 check : $(AAFSDKBINDIR)/ResultToTextTest$(EXE)
 	$(APP_RUN_ENV) $(AAFSDKBINDIR)/ResultToTextTest$(EXE)
 
+.PHONY : valgrind-check
+valgrind-check : $(AAFSDKBINDIR)/ResultToTextTest$(EXE)
+	$(APP_RUN_ENV) $(VALGRIND_CMD) $(AAFSDKBINDIR)/ResultToTextTest$(EXE)
+
 
 .PHONY : clean
 clean :

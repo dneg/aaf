@@ -53,9 +53,16 @@ $(AAFSDKBINDIR)/ScaleTest$(EXE) : $(CXXOBJS)
 .PHONY : check
 check : $(AAFSDKBINDIR)/ScaleTest$(EXE)
 	@echo "*** Testing EssenceData API ***"
-	true $(AAFSDKBINDIR)/ScaleTest$(EXE) -q -d
+	$(APP_RUN_ENV) $(AAFSDKBINDIR)/ScaleTest$(EXE) -q -d
 	@echo "*** Testing EssenceAccess API (Plugin codecs) ***"
-	true $(AAFSDKBINDIR)/ScaleTest$(EXE) -q -c -d
+	$(APP_RUN_ENV) $(AAFSDKBINDIR)/ScaleTest$(EXE) -q -c -d
+
+.PHONY : valgrind-check
+valgrind-check : $(AAFSDKBINDIR)/ScaleTest$(EXE)
+	@echo "*** Testing EssenceData API ***"
+	$(APP_RUN_ENV) $(VALGRIND_CMD) $(AAFSDKBINDIR)/ScaleTest$(EXE) -q -d
+	@echo "*** Testing EssenceAccess API (Plugin codecs) ***"
+	$(APP_RUN_ENV) $(VALGRIND_CMD) $(AAFSDKBINDIR)/ScaleTest$(EXE) -q -c -d
 
 
 .PHONY : clean

@@ -78,5 +78,8 @@ realclean : clean
 check : all
 	$(APP_RUN_ENV) $(AAFSDKBINDIR)/ComModAAF$(EXE)
 
+.PHONY : valgrind-check
+valgrind-check : all
+	$(APP_RUN_ENV) $(VALGRIND_CMD) $(AAFSDKBINDIR)/ComModAAF$(EXE)
 
 include $(AAFBASE)/build/rules.mk

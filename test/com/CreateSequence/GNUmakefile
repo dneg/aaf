@@ -49,6 +49,11 @@ $(AAFSDKBINDIR)/CreateSequence$(EXE) : $(CXXOBJS)
 check : $(AAFSDKBINDIR)/CreateSequence$(EXE)
 	$(APP_RUN_ENV) $(AAFSDKBINDIR)/CreateSequence$(EXE) 2000
 
+.PHONY : valgrind-check
+valgrind-check : $(AAFSDKBINDIR)/CreateSequence$(EXE)
+	# Use 200 instead of 2000 which causes >1GB memory usage
+	$(APP_RUN_ENV) $(VALGRIND_CMD) $(AAFSDKBINDIR)/CreateSequence$(EXE) 200
+
 
 .PHONY : clean
 clean :

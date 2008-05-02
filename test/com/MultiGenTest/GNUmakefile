@@ -90,5 +90,11 @@ check : $(AAFSDKBINDIR)/MultiGenTest$(EXE)
 	$(APP_RUN_ENV) $(AAFSDKBINDIR)/MultiGenTest$(EXE) -r LoadLib $(TEST_LIB_NAME) -r FileOp write S4KBinary basic.aaf -r AddMasterMobs A B -r FileOp save_and_close -r UnloadLib || exit 1
 	$(APP_RUN_ENV) $(AAFSDKBINDIR)/MultiGenTest$(EXE) -r LoadLib $(TEST_LIB_NAME) -r FileOp read S4KBinary basic.aaf -r FindMasterMobsExclusive A B -r FileOp close -r UnloadLib || exit 1
 
+.PHONY : valgrind-check
+valgrind-check : $(AAFSDKBINDIR)/MultiGenTest$(EXE)
+	rm -f basic.aaf
+	$(APP_RUN_ENV) $(VALGRIND_CMD) $(AAFSDKBINDIR)/MultiGenTest$(EXE) -r LoadLib $(TEST_LIB_NAME) -r FileOp write S4KBinary basic.aaf -r AddMasterMobs A B -r FileOp save_and_close -r UnloadLib || exit 1
+	$(APP_RUN_ENV) $(VALGRIND_CMD) $(AAFSDKBINDIR)/MultiGenTest$(EXE) -r LoadLib $(TEST_LIB_NAME) -r FileOp read S4KBinary basic.aaf -r FindMasterMobsExclusive A B -r FileOp close -r UnloadLib || exit 1
+
 
 include $(AAFBASE)/build/rules.mk

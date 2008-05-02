@@ -51,6 +51,15 @@ check : $(AAFSDKBINDIR)/OpenExistingModify$(EXE)
 	@echo "*** Testing modification of v1.0.2 toolkit generated file"
 	cp AAFHeaderTest_v102.aaf Modify_v102.aaf && $(APP_RUN_ENV) $(AAFSDKBINDIR)/OpenExistingModify$(EXE) Modify_v102.aaf
 
+.PHONY : valgrind-check
+valgrind-check : $(AAFSDKBINDIR)/OpenExistingModify$(EXE)
+	@echo
+	@echo "*** Testing modification of current toolkit generated file"
+	$(APP_RUN_ENV) $(VALGRIND_CMD) $(AAFSDKBINDIR)/OpenExistingModify$(EXE)
+	@echo
+	@echo "*** Testing modification of v1.0.2 toolkit generated file"
+	cp AAFHeaderTest_v102.aaf Modify_v102.aaf && $(APP_RUN_ENV) $(VALGRIND_CMD) $(AAFSDKBINDIR)/OpenExistingModify$(EXE) Modify_v102.aaf
+
 
 .PHONY : clean
 clean :

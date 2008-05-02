@@ -47,6 +47,11 @@ check :
 	cd com && $(MAKE) $@
 
 
+.PHONY : valgrind-check
+valgrind-check :
+	cd com && $(MAKE) $@
+
+
 .PHONY : clean
 clean :
 	cd com && $(MAKE) GENDEPS=0 $@

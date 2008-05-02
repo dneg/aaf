@@ -49,6 +49,11 @@ check : $(AAFSDKBINDIR)/EssenceAccess$(EXE)
 	@if [ ! -r Laser.wav ]; then cp ../ComModTestAAF/Laser.wav .; fi
 	$(APP_RUN_ENV) $(AAFSDKBINDIR)/EssenceAccess$(EXE) 100
 
+.PHONY : valgrind-check
+valgrind-check : $(AAFSDKBINDIR)/EssenceAccess$(EXE)
+	@if [ ! -r Laser.wav ]; then cp ../ComModTestAAF/Laser.wav .; fi
+	$(APP_RUN_ENV) $(VALGRIND_CMD) $(AAFSDKBINDIR)/EssenceAccess$(EXE) 100
+
 
 .PHONY : clean
 clean :
