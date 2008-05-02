@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2005, Licensor of the
+// The Original Code of this file is Copyright 1998-2008, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -945,6 +945,7 @@ static HRESULT ComprehensiveOpenTest(testMode_t /* mode */,
 		  checkExpression( NULL != pTestHeader, AAFRESULT_TEST_FAILED );
 	  
 		  // Cleanup for the next test
+		  pTestHeader->Release(), pTestHeader = 0;
 		  pFile->Close(), pFile->Release(), pFile = 0;
 	  }
 	  else
@@ -1376,6 +1377,7 @@ static HRESULT ComprehensiveSaveCopyAsTest(testMode_t /* mode */,
 			  checkExpression( NULL != pTestHeader, AAFRESULT_TEST_FAILED );
 
 			  // Cleanup for the next test
+			  pTestHeader->Release(), pTestHeader = 0;
 			  pCopy->Close(), pCopy->Release(), pCopy = 0;
 		  }
 		  else
@@ -1387,6 +1389,7 @@ static HRESULT ComprehensiveSaveCopyAsTest(testMode_t /* mode */,
 		  checkExpression( NULL != pTestHeader, AAFRESULT_TEST_FAILED );
 
 		  // Cleanup for the next test
+		  pTestHeader->Release(), pTestHeader = 0;
 		  pFile->Close(), pFile->Release(), pFile = 0;
 	  }
 	  else
