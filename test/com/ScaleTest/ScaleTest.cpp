@@ -64,9 +64,10 @@ using namespace std;
 const aafUID_t kAAFCompression_IEC_DV_525_60 = { 0x04010202, 0x0201, 0x0100, { 0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01 } };
 const aafUID_t *filekind_4K = &aafFileKindAaf4KBinary;
 #else
-// using v1.0.x toolkit
+// using v1.1.x toolkit
 #include "AAFCompressionDefs.h"
 const aafUID_t *filekind_4K = &kAAFFileKind_Aaf4KBinary;
+const aafUID_t *filekind_512 = &kAAFFileKind_Aaf512Binary;
 #endif
 
 
@@ -230,6 +231,7 @@ static aafProductVersion_t TestVersion = { 1, 1, 0, 0, kAAFVersionUnknown };
 static aafProductIdentification_t TestProductID;
 
 static HRESULT CreateAAFFileEssenceData(const aafWChar *pFileName, bool useRawStorage,
+									const aafUID_t *filekind,
 									aafLength_t frame_limit,
 									aafLength_t *p_totalbytes)
 {
@@ -261,7 +263,7 @@ static HRESULT CreateAAFFileEssenceData(const aafWChar *pFileName, bool useRawSt
 
 			check( AAFFileOpenNewModifyEx(
 						pFileName,
-						filekind_4K,
+						filekind,
 						0,
 						&TestProductID,
 						&pFile) );
@@ -319,7 +321,9 @@ static HRESULT CreateAAFFileEssenceData(const aafWChar *pFileName, bool useRawSt
 		check(pCDCIDesc->SetHorizontalSubsampling(2));
 		check(pCDCIDesc->SetVerticalSubsampling(2));
 		check(pSourceMob->SetEssenceDescriptor(edesc));
+		pDIDesc->Release();
 		pCDCIDesc->Release();
+		pFileDesc->Release();
 		edesc->Release();
 
 		// Add an EssenceData object containing DV frames
@@ -330,17 +334,27 @@ static HRESULT CreateAAFFileEssenceData(const aafWChar *pFileName, bool useRawSt
 		check(pEssenceData->SetFileMob(pSourceMob));
 		check(pHeader->AddEssenceData(pEssenceData));
 
+		// Setup compressed DV frame which will contain a frame counter
+		unsigned char dv_buf[sizeof(compressedDV_25_625)];
+		memcpy(dv_buf, compressedDV_25_625, sizeof(compressedDV_25_625));
+
 		*p_totalbytes = 0;
 		for (aafLength_t i = 0; i < frame_limit; i++)
 		{
+			// write a frame counter into an unused part of the DV frame metadata
+			memcpy(&dv_buf[16], &i, sizeof(i));
+
 			check(pEssenceData->Write(
 									sizeof(compressedDV_25_625),
-									(aafUInt8*)compressedDV_25_625,
+									(aafUInt8*)dv_buf,
 									&bytesWritten));
+
+			aaf_assert(bytesWritten == sizeof(compressedDV_25_625), "pEssenceData->Write() wrote correct size");
 			*p_totalbytes += bytesWritten;
+
 			if (verbose && (i+1) % 25 == 0)
 			{
-				printf("  %6"AAFFMT64"d frames %6.2f%%\r", i+1, (i+1) * 100.0 / frame_limit);
+				printf("  %6"AAFFMT64"d frames %6.2f%% %"AAFFMT64"d bytes\r", i+1, (i+1) * 100.0 / frame_limit, *p_totalbytes);
 				fflush(stdout);
 			}
 		}
@@ -414,10 +428,42 @@ static HRESULT ReadAAFFileEssenceData(const aafWChar *pFileName, aafLength_t fra
 			check(pEssenceData->GetSize(&size));
 			aaf_assert(size == bytes, "GetSize() matches total written bytes");
 
-			printf("  EssenceData GetSize() correct    (%"AAFFMT64"d bytes)\n", size);
+			printf("    EssenceData GetSize() correct    (%"AAFFMT64"d bytes)\n", size);
+
+			// Only test the frame counter when it was written into the DV frame.
+			// Work out whether this EssenceData was written using a codec since
+			// the codec will not put a frame counter into the DV frame.
+			bool testFrameCounter = true;
+			bool testDVFrame = true;
+			IAAFSourceMob *pSourceMob = NULL;
+			IAAFMob *pMob = NULL;
+			IEnumAAFMobSlots *pMobSlotIter = NULL;
+			IAAFMobSlot *pMobSlot = NULL;
+			IAAFDataDef *pDataDef = NULL;
+			aafBool bIsPictureKind = kAAFTrue;
+			aafBool bIsSoundKind = kAAFFalse;
+			check(pEssenceData->GetFileMob(&pSourceMob));
+			check(pSourceMob->QueryInterface(IID_IAAFMob, (void **)&pMob));
+			check(pMob->GetSlots(&pMobSlotIter));
+			if (pMobSlotIter->NextOne(&pMobSlot) == AAFRESULT_SUCCESS) {
+				check(pMobSlot->GetDataDef(&pDataDef));
+				check(pDataDef->IsPictureKind(&bIsPictureKind));
+				check(pDataDef->IsSoundKind(&bIsSoundKind));
+			}
+			aafWChar mobname[256];
+			if (pMob->GetName(mobname, sizeof(mobname)) == AAFRESULT_PROP_NOT_PRESENT)
+				// SourceMob was created by EssenceAccess API - don't check DV frame counter
+				testFrameCounter = false;
+			if (bIsSoundKind)
+				testDVFrame = false;
 
 			aafLength_t			totalRead = 0;
-			aafUInt8			buf[149993];	// use a nice prime number
+			aafUInt8			buf[sizeof(compressedDV_25_625)];	// size of one DV frame
+
+			// Setup compressed DV frame for checking data read is correct
+			unsigned char dv_buf[sizeof(compressedDV_25_625)];
+			memcpy(dv_buf, compressedDV_25_625, sizeof(compressedDV_25_625));
+			aafLength_t frame_counter = 0;
 
 			while (true)
 			{
@@ -425,19 +471,47 @@ static HRESULT ReadAAFFileEssenceData(const aafWChar *pFileName, aafLength_t fra
 
 				hr = pEssenceData->Read(sizeof(buf), buf, &bytesRead);
 				totalRead += bytesRead;
+
+				if (verbose && (frame_counter+1) % 25 == 0)
+				{
+					printf("  %6"AAFFMT64"d frames %6.2f%% %"AAFFMT64"d bytes\r", i+frame_counter, (i+frame_counter) * 100.0 / frame_limit, totalRead);
+					fflush(stdout);
+				}
+
 				if (AAFRESULT_FAILED(hr))
 				{
 					aaf_assert(hr == AAFRESULT_END_OF_DATA, "END_OF_DATA found as expected");
 					hr = S_OK;
 					break;
 				}
+
+				if (testFrameCounter)
+				{
+					// set up comparision frame containing frame counter
+					memcpy(&dv_buf[16], &frame_counter, sizeof(frame_counter));
+					frame_counter++;
+				}
+
+				if (testDVFrame)
+					aaf_assert(memcmp(buf, dv_buf, sizeof(compressedDV_25_625)) == 0,
+							"pEssenceData->Read() off-disk frame identical to computed frame");
 			}
 			aaf_assert(totalRead == bytes, "total Read() matches total written bytes");
 
-			printf("  EssenceData total Read() correct (%"AAFFMT64"d bytes)\n", totalRead);
+			printf("    EssenceData total Read() correct (%"AAFFMT64"d bytes)\n", totalRead);
+
+			check(pMob->Release());
+			check(pSourceMob->Release());
+			check(pMobSlotIter->Release());
+			if (pMobSlot)
+				check(pMobSlot->Release());
+			if (pDataDef)
+				check(pDataDef->Release());
+
 			check(pEssenceData->Release());
 		}
 		check(pEnumEssenceData->Release());
+		check(pHeader->Release());
 
 		check(pFile->Close());
 		check(pFile->Release());
@@ -502,6 +576,9 @@ static HRESULT ReadAAFFileCodec(const aafWChar *pFileName, aafLength_t frame_lim
 
 		while (AAFRESULT_SUCCESS == pMobIter->NextOne(&pMob))
 		{
+			aafWChar mobname[256];
+			check(pMob->GetName(mobname, sizeof(mobname)));
+
 			IEnumAAFMobSlots* pMobSlotIter = NULL;
 			check(pMob->GetSlots(&pMobSlotIter));
 			while(AAFRESULT_SUCCESS == pMobSlotIter->NextOne(&pMobSlot))
@@ -618,7 +695,9 @@ static HRESULT ReadAAFFileCodec(const aafWChar *pFileName, aafLength_t frame_lim
 }
 
 #ifndef AAF_TOOLKIT_V1_0
-static HRESULT CreateAAFFileCodec(const aafWChar * pFileName, bool useRawStorage, bool comp_enable,
+static HRESULT CreateAAFFileCodec(const aafWChar * pFileName, bool useRawStorage,
+								const aafUID_t *filekind,
+								bool comp_enable,
 								aafUID_t codec, aafUID_t container,
 								aafLength_t size_limit, aafLength_t *p_totalbytes)
 {
@@ -661,7 +740,7 @@ static HRESULT CreateAAFFileCodec(const aafWChar * pFileName, bool useRawStorage
 
 		check( AAFFileOpenNewModifyEx(
 					pFileName,
-					filekind_4K,
+					filekind,
 					0,
 					&TestProductID,
 					&pFile) );
@@ -901,26 +980,25 @@ void printUsage(const char *progname)
 	cout << endl;
 	cout << "\tWith no arguments creates TestEssData.aaf containing ~10 minutes of DV frames" << endl;
 	cout << endl;
-	cout << "\t-n frames   number of DV frames to write" << endl;
-	cout << "\t-c          Test the codecs only (not EssenceData API)" << endl;
-	cout << "\t-d          Delete test files upon completion" << endl;
-	cout << "\t-compress   Test using uncompressed video passing through codec's compressor" << endl;
-	cout << "\t-q          Quiet (less verbose)" << endl;
+	cout << "\t-n frames      number of DV frames to write [default 18611 (about 2.5GiB)]" << endl;
+	cout << "\t               30000 DV frames is > 4GiB" << endl;
+	cout << "\t-c             Test the codecs only (not EssenceData API)" << endl;
+	cout << "\t-d             Delete test files upon completion" << endl;
+	cout << "\t-f <filekind>  filekind for RawStorage API (filekind_512, filekind_4K (default))" << endl;
+	cout << "\t-compress      Test using uncompressed video passing through codec's compressor" << endl;
+	cout << "\t-q             Quiet (less verbose)" << endl;
 }
 
 extern int main(int argc, char *argv[])
 {
 	CAAFInitialize aafInit;
 
-	bool			compressionEnable = false;		// use compressed frames by default
+	bool			compressionEnable = false;	// use compressed frames by default
 	bool			testEssenceData = true;
 	bool			testCodecs = false;
 	bool			testRawStorage = true;
-
-	// 14897 DV frames + AAF overhead = 2147405824 (2GB - 77824)
-	// 14898 DV frames + AAF overhead = 2147553280 (2GB - 69632)
-	aafLength_t			frame_limit = 14898;		// just over 2GB by 69632 bytes
-	aafLength_t			size_limit = 14898 * DV_PAL_FRAME_SIZE;
+	const aafUID_t *filekind = filekind_4K;
+	aafLength_t		frame_limit = 18611;		// about 2.5GiB
 
 	int i = 1;
 	if (argc > 1)
@@ -940,7 +1018,14 @@ extern int main(int argc, char *argv[])
 					printUsage(argv[0]);
 					return 1;
 				}
-				size_limit = frame_limit * DV_PAL_FRAME_SIZE;
+				i+=2;
+			}
+			else if (!strcmp(argv[i], "-f"))
+			{
+				if (strcmp(argv[i+1], "filekind_512") == 0)
+					filekind = filekind_512;
+				if (strcmp(argv[i+1], "filekind_4K") == 0)
+					filekind = filekind_4K;
 				i+=2;
 			}
 			else if (!strcmp(argv[i], "-q"))
@@ -973,6 +1058,8 @@ extern int main(int argc, char *argv[])
 		}
 	}
 
+	aafLength_t			size_limit = frame_limit * DV_PAL_FRAME_SIZE;
+
 	// Make sure all of our required plugins have been registered.
 	checkFatal(RegisterRequiredPlugins());
 
@@ -981,12 +1068,12 @@ extern int main(int argc, char *argv[])
 		const aafWChar *		pwFileName	= L"TestEssData.aaf";
 		aafLength_t bytes = 0;
 
-		checkFatal(CreateAAFFileEssenceData(pwFileName, false, frame_limit, &bytes));
+		checkFatal(CreateAAFFileEssenceData(pwFileName, false, filekind, frame_limit, &bytes));
 		checkFatal(ReadAAFFileEssenceData(pwFileName, frame_limit, bytes));
 
 		if (testRawStorage)
 		{
-			checkFatal(CreateAAFFileEssenceData(pwFileName, true, frame_limit, &bytes));
+			checkFatal(CreateAAFFileEssenceData(pwFileName, true, filekind, frame_limit, &bytes));
 			checkFatal(ReadAAFFileEssenceData(pwFileName, frame_limit, bytes));
 		}
 	}
@@ -1009,7 +1096,7 @@ extern int main(int argc, char *argv[])
 							*PCMName = L"TestPCM.aaf";
 		aafLength_t bytes = 0;
 
-		checkFatal(CreateAAFFileCodec(CDCIName, false, compressionEnable,
+		checkFatal(CreateAAFFileCodec(CDCIName, false, filekind, compressionEnable,
 							kAAFCodecCDCI, ContainerAAF, size_limit, &bytes));
 		checkFatal(ReadAAFFileEssenceData(CDCIName, size_limit, bytes));
 		checkFatal(ReadAAFFileCodec(CDCIName, size_limit, bytes));
@@ -1017,14 +1104,14 @@ extern int main(int argc, char *argv[])
 
 		if (testRawStorage)
         {
-			checkFatal(CreateAAFFileCodec(CDCIName, true, compressionEnable,
+			checkFatal(CreateAAFFileCodec(CDCIName, true, filekind, compressionEnable,
 								kAAFCodecCDCI, ContainerAAF, size_limit, &bytes));
 			checkFatal(ReadAAFFileEssenceData(CDCIName, size_limit, bytes));
 			checkFatal(ReadAAFFileCodec(CDCIName, size_limit, bytes));
 			deleteTestFile(CDCIName);
 		}
 
-		checkFatal(CreateAAFFileCodec(PCMName, false, compressionEnable,
+		checkFatal(CreateAAFFileCodec(PCMName, false, filekind, compressionEnable,
 							kAAFCodecPCM, ContainerAAF, size_limit, &bytes));
 		checkFatal(ReadAAFFileEssenceData(PCMName, size_limit, bytes));
 		checkFatal(ReadAAFFileCodec(PCMName, size_limit, bytes));
@@ -1032,7 +1119,7 @@ extern int main(int argc, char *argv[])
 
 		if (testRawStorage)
         {
-			checkFatal(CreateAAFFileCodec(PCMName, true, compressionEnable,
+			checkFatal(CreateAAFFileCodec(PCMName, true, filekind, compressionEnable,
 								kAAFCodecPCM, ContainerAAF, size_limit, &bytes));
 			checkFatal(ReadAAFFileEssenceData(PCMName, size_limit, bytes));
 			checkFatal(ReadAAFFileCodec(PCMName, size_limit, bytes));
