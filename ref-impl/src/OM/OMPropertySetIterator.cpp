@@ -27,6 +27,7 @@
 
 #include "OMPropertySetIterator.h"
 #include "OMPropertySet.h"
+#include "OMProperty.h"
 
 #include "OMAssertions.h"
 
@@ -195,6 +196,7 @@ OMPropertyId OMPropertySetIterator::propertyId(void) const
 
   PRECONDITION("Valid iterator", _iterator.valid());
 
-  return _iterator.key();
+  const OMProperty* p = _iterator.value();
+  return p->propertyId();
 }
 

@@ -46,6 +46,27 @@ OMPropertySet::~OMPropertySet(void)
   _container = 0;
 }
 
+
+//@mfunc Get find the <c OMProperty> associated with the property
+//          id <p propertyId>.
+//   @param Property id.
+//   @rdesc The <c OMProperty> object with id <p propertyId>.
+//   @this const
+bool OMPropertySet::find(const OMPropertyId propertyId, OMProperty *&result) const
+{
+	result = 0;
+	for (OMUInt32 i=0; i < _set.count(); i++) 
+	{
+		if (_set.getAt(i)->propertyId() == propertyId) 
+		{
+			result = _set.getAt(i);  
+			return true;
+		}
+    }
+	return false;
+}
+
+
   // @mfunc Get the <c OMProperty> associated with the property
   //        id <p propertyId>.
   //   @parm Property id.
@@ -60,9 +81,10 @@ OMProperty* OMPropertySet::get(const OMPropertyId propertyId) const
   PRECONDITION("Property is present", isPresent(propertyId));
 
 #if defined(OM_DEBUG)
-  bool status = _set.find(propertyId, result);
+  bool status = find(propertyId, result);
 #endif
-  _set.find(propertyId, result);
+  find(propertyId, result);
+
   ASSERT("Property found", status);
   POSTCONDITION("Valid result", result != 0);
   return result;
@@ -100,7 +122,7 @@ void OMPropertySet::put(OMProperty* property)
   OMPropertyId propertyId = property->propertyId();
 
   property->setPropertySet(this);
-  _set.insert(propertyId, property);
+  _set.prepend(property);
 
   POSTCONDITION("Property installed", isPresent(property->propertyId()));
   POSTCONDITION("Consistent property set",
@@ -117,9 +139,8 @@ bool OMPropertySet::isPresent(const OMPropertyId propertyId) const
 {
   TRACE("OMPropertySet::isPresent");
 
-  OMProperty* p;
-  bool result = _set.find(propertyId, p);
-  return result;
+  OMProperty* p=0;
+  return find(propertyId, p);
 }
 
   // @mfunc Is an <c OMProperty> with name <p propertyName>

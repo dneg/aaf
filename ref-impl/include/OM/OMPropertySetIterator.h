@@ -27,7 +27,7 @@
 #define OMPROPERTYSETITERATOR_H
 
 #include "OMContainerIterator.h"
-#include "OMRedBlackTreeIterator.h"
+#include "OMVectorIterator.h"
 #include "OMDataTypes.h"
 
 class OMProperty;
@@ -124,7 +124,7 @@ public:
 
 private:
 
-  OMRedBlackTreeIterator<OMPropertyId, OMProperty*> _iterator;
+  OMVectorIterator<OMProperty*> _iterator;
 
 };
 

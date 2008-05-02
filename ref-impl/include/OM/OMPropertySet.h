@@ -28,6 +28,9 @@
 
 #include "OMDataTypes.h"
 #include "OMRedBlackTree.h"
+#include "OMVector.h"
+#include "OMVectorIterator.h"
+
 
 class OMProperty;
 class OMStorable;
@@ -105,10 +108,12 @@ public:
 
 private:
 
+  bool find(const OMPropertyId propertyId, OMProperty *&result) const;
+
   friend class OMPropertySetIterator;
 
-  typedef OMRedBlackTreeIterator<OMPropertyId, OMProperty*> SetIterator;
-  typedef OMRedBlackTree<OMPropertyId, OMProperty*> Set;
+  typedef OMVectorIterator<OMProperty*> SetIterator;
+  typedef OMVector<OMProperty*> Set;
 
   typedef OMRedBlackTreeIterator<OMUniqueObjectIdentification, OMProperty*> DynamicSetIterator;
   typedef OMRedBlackTree<OMUniqueObjectIdentification, OMProperty*> DynamicSet;
