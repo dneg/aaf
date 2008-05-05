@@ -242,7 +242,7 @@ static aafUInt8 *readDVframe(aafUInt32 *bufferSize)
 // perhaps all examples have access to instead of duplicating code.
 
 #ifdef _MSC_VER			// MS VC++ dosen't provide POSIX strncasecmp, getcwd
-#define strncasecmp(s1, s2, n) strnicmp(s1, s2, n)
+#define strncasecmp(s1, s2, n) _strnicmp(s1, s2, n)
 #include <direct.h>
 #define getcwd(buf, size) _getcwd(buf, size)
 #else

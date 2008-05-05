@@ -174,7 +174,7 @@ OMUInt64 OMStream::size(void) const
   OMInt64 status =
 #endif
 #if defined(_MSC_VER)
-  _fstati64( fileno( _file ), &fileStat );
+  _fstati64( _fileno( _file ), &fileStat );
 #else
   fstat( fileno( _file ), &fileStat );
 #endif
