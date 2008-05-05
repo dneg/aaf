@@ -119,8 +119,6 @@ void OMPropertySet::put(OMProperty* property)
   PRECONDITION("Property is not present", !isPresent(property->propertyId()));
   PRECONDITION("Room in set", count() < OMUINT16_MAX);
 
-  OMPropertyId propertyId = property->propertyId();
-
   property->setPropertySet(this);
   _set.prepend(property);
 
