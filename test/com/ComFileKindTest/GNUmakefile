@@ -44,11 +44,11 @@ $(AAFSDKBINDIR)/ComFileKindTest$(EXE) : $(CXXOBJS)
 
 .PHONY : check
 check : $(AAFSDKBINDIR)/ComFileKindTest$(EXE)
-	$(APP_RUN_ENV) $(AAFSDKBINDIR)/ComFileKindTest$(EXE)
+	$(APP_RUN_ENV) $(AAFSDKBINDIR)/ComFileKindTest$(EXE) -d
 
 .PHONY : valgrind-check
 valgrind-check : $(AAFSDKBINDIR)/ComFileKindTest$(EXE)
-	$(APP_RUN_ENV) $(VALGRIND_CMD) $(AAFSDKBINDIR)/ComFileKindTest$(EXE)
+	$(APP_RUN_ENV) $(VALGRIND_CMD) $(AAFSDKBINDIR)/ComFileKindTest$(EXE) -d
 
 
 .PHONY : clean

@@ -79,6 +79,8 @@ static const   aafMobID_t  TEST_MobID =
 static aafProductIdentification_t TestProductID;
 static aafProductVersion_t TestVersion = { 1, 1, 0, 0, kAAFVersionUnknown };
 
+static bool deleteFiles = false;
+
 // List of File APIs used for reading and writing
 typedef enum _api_t
 {
@@ -241,6 +243,7 @@ static HRESULT ReadAAFContents(IAAFFile *pFile)
 		checkExpression(kAAFRev2 == testRev, AAFRESULT_TEST_FAILED);
 
 		checkResult(pFile->Close());
+    	checkResult(pFile->Release());
 	}
 	catch (HRESULT& rResult)
 	{
@@ -352,6 +355,7 @@ static HRESULT OpenAAFFile(const aafUID_t *written_kind, aafWChar * pFileName)
 				checkExpression(false, AAFRESULT_TEST_FAILED);
 			}
 
+			// ReadAAFContents() closes and releases pFile
 		}
 	}
 	catch (HRESULT& rResult)
@@ -437,6 +441,9 @@ static HRESULT CreateAAFFile(api_info_t info, bool testLargeNames)
 
 				checkResult(OpenAAFFile( modeNewModify[i].kind, filename));
 				printf("\n");
+
+				if (deleteFiles)
+					RemoveTestFile(filename);
 			}
 		}
 		else if (info.api == FileOpenNewModifyEx)
@@ -468,6 +475,9 @@ static HRESULT CreateAAFFile(api_info_t info, bool testLargeNames)
 
 				checkResult(OpenAAFFile(filekind[i].kind, filename));
 				printf("\n");
+
+				if (deleteFiles)
+					RemoveTestFile(filename);
 			}
 		}
 		else
@@ -515,6 +525,9 @@ static HRESULT CreateAAFFile(api_info_t info, bool testLargeNames)
 
 				checkResult(OpenAAFFile(filekind[i].kind, filename));
 				printf("\n");
+
+				if (deleteFiles)
+					RemoveTestFile(filename);
 			}
 		}
 	}
@@ -525,10 +538,19 @@ static HRESULT CreateAAFFile(api_info_t info, bool testLargeNames)
 	return hr;
 }
 
+void printUsage(const char *progname)
+{
+	cout << "Usage : " << progname << " [-d]" << endl;
+	cout << endl;
+	cout << "\tTests all supported AAF write and AAF read APIs" << endl;
+	cout << endl;
+	cout << "\t-d             Delete test files upon completion" << endl;
+}
+
 static aafCharacter companyName[] = L"AMW Association";
 static aafCharacter productName[] = L"ComFileKindTest";
 
-int main(void)
+int main(int argc, char *argv[])
 {
 	TestProductID.companyName = companyName;
 	TestProductID.productName = productName;
@@ -536,6 +558,28 @@ int main(void)
 	TestProductID.productVersionString = NULL;
 	TestProductID.productID = UnitTestProductID;
 	TestProductID.platform = NULL;
+
+	int i = 1;
+	if (argc > 1)
+	{
+		while (i < argc)
+		{
+			if (!strcmp(argv[i], "-h") || !strcmp(argv[i], "--help"))
+			{
+				printUsage(argv[0]);
+				return 0;
+			}
+			else if (!strcmp(argv[i], "-d"))
+			{
+				deleteFiles = true;
+				i++;
+			}
+			else
+			{
+				printUsage(argv[0]);
+			}
+		}
+	}
 
 	try
 	{
