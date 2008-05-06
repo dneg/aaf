@@ -41,8 +41,8 @@
 #include "AAFCodecDefs.h"
 #include "AAFEssenceFormats.h"
 #include "AAFCompressionDefs.h"
+#include "AAFTypeDefUIDs.h"
 
-#include "CAAFBuiltinDefs.h"
 #include "utf8.h"
 
 
@@ -419,6 +419,7 @@ HRESULT STDMETHODCALLTYPE
 	plugin_trace("CAAFCDCICodec::GetIndexedDefinitionObject()\n");
 	HRESULT hr = S_OK;
 	IAAFCodecDef	*codecDef = NULL;
+	IAAFDataDef		*pDefPicture = NULL, *pDefLegacyPicture = NULL;
 	IAAFClassDef	*fileClass = NULL;
 	IAAFDefObject	*obj = NULL;
 	IAAFClassDef    *pcd = 0;
@@ -445,11 +446,11 @@ HRESULT STDMETHODCALLTYPE
 		pcd = 0;
 		
 		// Support "Picture" type of data definition.
-		CAAFBuiltinDefs defs (dict);
-		checkResult(codecDef->AddEssenceKind (defs.ddkAAFPicture()));
-		checkResult(codecDef->AddEssenceKind (defs.ddPicture()));
+		checkResult(dict->LookupDataDef(kAAFDataDef_Picture, &pDefPicture));
+		checkResult(codecDef->AddEssenceKind(pDefPicture));
+		checkResult(dict->LookupDataDef(kAAFDataDef_LegacyPicture, &pDefLegacyPicture));
+		checkResult(codecDef->AddEssenceKind(pDefLegacyPicture));
 
-		
 		// Initialize the standard Definition properties.
 		checkResult(codecDef->QueryInterface(IID_IAAFDefObject, (void **)&obj));
 		uid = kAAFCodecCDCI;
@@ -483,6 +484,16 @@ HRESULT STDMETHODCALLTYPE
 	}
 
 	// Cleanup on error.
+	if (NULL != pDefLegacyPicture)
+	  {
+		pDefLegacyPicture->Release();
+		pDefLegacyPicture = 0;
+	  }
+	if (NULL != pDefPicture)
+	  {
+		pDefPicture->Release();
+		pDefPicture = 0;
+	  }
 	if (NULL != codecDef)
 	  {
 		codecDef->Release();

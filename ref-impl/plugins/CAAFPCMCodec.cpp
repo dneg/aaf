@@ -43,8 +43,6 @@
 #include "AAFContainerDefs.h"
 #include "AAFEssenceFormats.h"
 
-#include "CAAFBuiltinDefs.h"
-
 
 const aafUID_t NULL_UID = { 0, 0, 0, { 0, 0, 0, 0, 0, 0, 0, 0 } };
 const aafProductVersion_t AAFPluginImplementationVersion = {1, 0, 0, 1, kAAFVersionBeta};
@@ -286,6 +284,7 @@ HRESULT STDMETHODCALLTYPE
 
 	IAAFClassDef	*fileClass = NULL;
 	IAAFCodecDef	*codecDef = NULL;
+	IAAFDataDef		*pDefSound = NULL, *pDefLegacySound = NULL;
 	IAAFDefObject	*obj = NULL;
 	IAAFClassDef    *pcd = 0;
 	aafUID_t		uid;
@@ -305,9 +304,10 @@ HRESULT STDMETHODCALLTYPE
 		uid = kAAFCodecPCM;
 		CHECK(codecDef->QueryInterface(IID_IAAFDefObject, (void **)&obj));
 		CHECK(codecDef->Initialize(uid, L"PCM Codec", L"Handles RIFF PCM data."));
-		CAAFBuiltinDefs defs (dict);
-		CHECK(codecDef->AddEssenceKind (defs.ddkAAFSound()));
-		CHECK(codecDef->AddEssenceKind (defs.ddSound()));
+		CHECK(dict->LookupDataDef(kAAFDataDef_Sound, &pDefSound));
+		CHECK(codecDef->AddEssenceKind(pDefSound));
+		CHECK(dict->LookupDataDef(kAAFDataDef_LegacySound, &pDefLegacySound));
+		CHECK(codecDef->AddEssenceKind(pDefLegacySound));
 	  	CHECK(dict->LookupClassDef(AUID_AAFPCMDescriptor, &fileClass));
 		CHECK(codecDef->SetFileDescriptorClass (fileClass));
 		fileClass->Release ();
@@ -318,6 +318,16 @@ HRESULT STDMETHODCALLTYPE
 	}
 	XEXCEPT
 	{
+		if(pDefLegacySound != NULL)
+		{
+			pDefLegacySound->Release();
+			pDefLegacySound = 0;
+		}
+		if(pDefSound != NULL)
+		{
+			pDefSound->Release();
+			pDefSound = 0;
+		}
 		if(codecDef != NULL)
 		  {
 			codecDef->Release();

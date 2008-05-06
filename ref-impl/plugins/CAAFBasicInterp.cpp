@@ -37,8 +37,6 @@
 #include "AAFInterpolatorDefs.h"
 #include "AAFTypeDefUIDs.h"
 
-#include "CAAFBuiltinDefs.h"
-
 const aafProductVersion_t AAFPluginImplementationVersion = {1, 0, 0, 1, kAAFVersionBeta};
 
 const CLSID CLSID_AAFBasicInterp = { 0x5B6C85A1, 0x0EDE, 0x11d3, { 0x80, 0xA9, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f } };
@@ -82,6 +80,7 @@ HRESULT STDMETHODCALLTYPE
 HRESULT STDMETHODCALLTYPE
     CAAFBasicInterp::GetIndexedDefinitionObject (aafUInt32 /* index */, IAAFDictionary *dict, IAAFDefObject **def)
 {
+	IAAFClassDef			*classDef = NULL;
 	IAAFInterpolationDef	*interpDef = NULL;
 	IAAFDefObject	*obj = NULL;
 	aafUID_t		uid;
@@ -91,10 +90,8 @@ HRESULT STDMETHODCALLTYPE
 	
 	XPROTECT()
 	{
-	    CAAFBuiltinDefs defs (dict);
-		CHECK(defs.cdInterpolationDefinition()->
-			  CreateInstance(IID_IAAFInterpolationDef, 
-							 (IUnknown **)&interpDef));
+		CHECK(dict->LookupClassDef(AUID_AAFInterpolationDefinition, &classDef));
+		CHECK(classDef->CreateInstance(IID_IAAFInterpolationDef, (IUnknown **)&interpDef));
 		uid = LinearInterpolator;
 		CHECK(interpDef->QueryInterface(IID_IAAFDefObject, (void **)&obj));
 		CHECK(interpDef->Initialize(uid, L"Basic Plugins", L"Handles step and linear interpolation."));
@@ -104,6 +101,8 @@ HRESULT STDMETHODCALLTYPE
 	}
 	XEXCEPT
 	{
+		if(classDef != NULL)
+			classDef->Release();
 		if(interpDef != NULL)
 			interpDef->Release();
 	}
@@ -122,24 +121,24 @@ static const wchar_t *manufRev = L"Rev 0.1";
 HRESULT STDMETHODCALLTYPE
     CAAFBasicInterp::CreateDescriptor (IAAFDictionary *dict, IAAFPluginDef **descPtr)
 {
+	IAAFClassDef			*classDef = NULL;
 	IAAFPluginDef			*desc = NULL;
 	IAAFLocator				*pLoc = NULL;
  	IAAFNetworkLocator		*pNetLoc = NULL;
 	
 	XPROTECT()
 	{
-	    CAAFBuiltinDefs defs (dict);
-		CHECK(defs.cdPluginDef()->
-			  CreateInstance(IID_IAAFPluginDef, 
-							 (IUnknown **)&desc));
+		CHECK(dict->LookupClassDef(AUID_AAFPluginDefinition, &classDef));
+		CHECK(classDef-> CreateInstance(IID_IAAFPluginDef, (IUnknown **)&desc));
 		*descPtr = desc;
 		desc->AddRef();
 		CHECK(desc->Initialize(BASIC_INTERP_PLUGIN, L"Example interpolators", L"Handles step and linear interpolation."));
 		CHECK(desc->SetCategoryClass(AUID_AAFInterpolationDefinition));
 		CHECK(desc->SetPluginVersionString(manufRev));
-		CHECK(defs.cdNetworkLocator()->
-			  CreateInstance(IID_IAAFLocator, 
-							 (IUnknown **)&pLoc));
+		classDef->Release();
+		classDef = NULL;
+		CHECK(dict->LookupClassDef(AUID_AAFNetworkLocator, &classDef));
+		CHECK(classDef->CreateInstance(IID_IAAFLocator, (IUnknown **)&pLoc));
 		CHECK(pLoc->SetPath (manufURL));
 		CHECK(pLoc->QueryInterface(IID_IAAFNetworkLocator, (void **)&pNetLoc));
 		CHECK(desc->SetManufacturerInfo(pNetLoc));
@@ -155,11 +154,11 @@ HRESULT STDMETHODCALLTYPE
 		CHECK(desc->SetSupportsAuthentication(kAAFFalse));
 		
 		/**/
-		CHECK(defs.cdNetworkLocator()->
-			  CreateInstance(IID_IAAFLocator, 
-							 (IUnknown **)&pLoc));
+		CHECK(classDef->CreateInstance(IID_IAAFLocator, (IUnknown **)&pLoc));
 		CHECK(pLoc->SetPath (downloadURL));
 		CHECK(desc->AppendLocator(pLoc));
+		classDef->Release();
+		classDef = NULL;
 		desc->Release();	// We have addRefed for the return value
 		desc = NULL;
 		pLoc->Release();
@@ -167,6 +166,8 @@ HRESULT STDMETHODCALLTYPE
 	}
 	XEXCEPT
 	{
+		if(classDef != NULL)
+			classDef->Release();
 		if(desc != NULL)
 			desc->Release();
 		if(pLoc != NULL)
