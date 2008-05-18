@@ -149,7 +149,8 @@ bool EPLocatorVisitor::PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPFileSource
                                                      L"EssenceDescriptor::Locator property of " + 
                                                     mobName + 
                                                     L" does not contain a locator pointing to any known file.", 
-                                                    TestResult::WARN );
+                                                    TestResult::WARN,
+						    node );
                 }
                 
                 locIter.Reset();
@@ -160,7 +161,8 @@ bool EPLocatorVisitor::PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPFileSource
                 _spTestResult->AddSingleResult( L"REQ_EP_059", 
                                                  L"Essence associated with " + mobName +
                                                 L" is neither internal or external.",
-                                                 TestResult::FAIL );
+                                                 TestResult::FAIL,
+						node );
                 testPassed = false;
             }
             
@@ -189,7 +191,8 @@ bool EPLocatorVisitor::PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPFileSource
                                 L" the constrains set out in Section 6.9 of the AAF Edit Protocol.";
                 _spTestResult->AddSingleResult( L"REQ_EP_061", 
                                                 explain,
-                                                TestResult::WARN );
+                                                TestResult::WARN,
+						node );
             }
             
         }
@@ -204,11 +207,13 @@ bool EPLocatorVisitor::PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPFileSource
 
             _spTestResult->AddSingleResult( L"REQ_EP_060",
                                             explain,
-                                            TestResult::WARN );
+                                            TestResult::WARN,
+					    node );
 
             _spTestResult->AddSingleResult( L"REQ_EP_061",
                                             explain,
-                                            TestResult::WARN );
+                                            TestResult::WARN,
+					    node );
         }
                  
     }
@@ -221,7 +226,8 @@ bool EPLocatorVisitor::PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPFileSource
         _spTestResult->AddSingleResult( L"REQ_EP_059", 
                                          mobName +
                                         L" does not have a FileDescriptor::ContainerDefinition property.",
-                                        TestResult::FAIL );
+                                        TestResult::FAIL,
+					node );
         testPassed = false;
     }        
     
@@ -267,7 +273,8 @@ bool EPLocatorVisitor::PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPImportSour
 
           _spTestResult->AddSingleResult( L"REQ_EP_075", 
                                           explain,
-                                          TestResult::FAIL );
+                                          TestResult::FAIL,
+					  node );
           return false;
         }
     }
@@ -283,7 +290,8 @@ bool EPLocatorVisitor::PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPImportSour
 
         _spTestResult->AddSingleResult( L"REQ_EP_075", 
                                         explain,
-                                        TestResult::FAIL );
+                                        TestResult::FAIL,
+					node );
         return false;
     }
 

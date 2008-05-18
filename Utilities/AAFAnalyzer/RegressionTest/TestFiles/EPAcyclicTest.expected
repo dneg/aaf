@@ -5,16 +5,18 @@
         Covered Requirements: None
         Noted Requirements: None
         Passing Requirements: None
+        Info Requirements: None
         Warning Requirements: None
         Failing Requirements: REQ_EP_256
 
-            Name:   Reference Cycle Detected
-            Desc:   
+            Name:   Acyclic Derivation Chain
+            Desc:   A mob derivation chain shall not contain a cycle.
             Result: Failed
-            Reason: A cycle was detected in the derivation chain.
+            Reason: A cycle was detected amoung the referenced objects in the file.
             Covered Requirements: None
             Noted Requirements: None
             Passing Requirements: None
+            Info Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_256
             Detail: Nodes involved in the cycle:

@@ -5,116 +5,139 @@
         Covered Requirements: None
         Noted Requirements: None
         Passing Requirements: None
+        Info Requirements: None
         Warning Requirements: None
         Failing Requirements: REQ_EP_147; REQ_EP_150; REQ_EP_151; REQ_EP_152
 
             Name:   Comment Marker Placement
             Desc:   CommentMarkers shall be placed only in EventMobSlots.  DescriptiveMarkers may be placed in any kind of MobSlot (e.g. TimelineMobSlot, EventMobSlot, StaticMobSlot).
+            Node:   13 (CommentMarker)
             Result: Passed
             Reason: Mob slot with ID = 1 of Top-Level Composition "User Comments in CommentMarker" is an Event Mob Slot that contains a CommentMarker.
             Covered Requirements: None
             Noted Requirements: None
             Passing Requirements: REQ_EP_150
+            Info Requirements: None
             Warning Requirements: None
             Failing Requirements: None
 
             Name:   Use of Component::UserComments
             Desc:   Component::UserComments shall only be used on: the Segment of a MobSlot or a CommentMarker (or its subclasses).
+            Node:   18 (Sequence)
             Result: Failed
             Reason: Mob slot with ID = 1 of Top-Level Composition "Illegal User Comments" contains a Component that illegally uses the Component::UserComments property.
             Covered Requirements: None
             Noted Requirements: None
             Passing Requirements: None
+            Info Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_147
 
             Name:   Comment Marker Placement
             Desc:   CommentMarkers shall be placed only in EventMobSlots.  DescriptiveMarkers may be placed in any kind of MobSlot (e.g. TimelineMobSlot, EventMobSlot, StaticMobSlot).
+            Node:   24 (CommentMarker)
             Result: Passed
             Reason: Mob slot with ID = 1 of Top-Level Composition "CommentMarker in Essence Track" is an Event Mob Slot that contains a CommentMarker.
             Covered Requirements: None
             Noted Requirements: None
             Passing Requirements: REQ_EP_150
+            Info Requirements: None
             Warning Requirements: None
             Failing Requirements: None
 
             Name:   Comment Marker Placement
             Desc:   CommentMarkers shall be placed only in EventMobSlots.  DescriptiveMarkers may be placed in any kind of MobSlot (e.g. TimelineMobSlot, EventMobSlot, StaticMobSlot).
+            Node:   31 (CommentMarker)
             Result: Passed
             Reason: Mob slot with ID = 1 of Top-Level Composition "CommentMarker in Event Mob Slot" is an Event Mob Slot that contains a CommentMarker.
             Covered Requirements: None
             Noted Requirements: None
             Passing Requirements: REQ_EP_150
+            Info Requirements: None
             Warning Requirements: None
             Failing Requirements: None
 
             Name:   Comment Marker Placement
             Desc:   CommentMarkers shall be placed only in EventMobSlots.  DescriptiveMarkers may be placed in any kind of MobSlot (e.g. TimelineMobSlot, EventMobSlot, StaticMobSlot).
+            Node:   35 (CommentMarker)
             Result: Failed
             Reason: Mob slot with ID = 1 of Top-Level Composition "CommentMarker nested in Timeline Mob Slot" is not an Event Mob Slot but contains a CommentMarker.
             Covered Requirements: None
             Noted Requirements: None
             Passing Requirements: None
+            Info Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_150
 
             Name:   Comment Marker Placement
             Desc:   CommentMarkers shall be placed only in EventMobSlots.  DescriptiveMarkers may be placed in any kind of MobSlot (e.g. TimelineMobSlot, EventMobSlot, StaticMobSlot).
+            Node:   38 (CommentMarker)
             Result: Failed
             Reason: Mob slot with ID = 1 of Top-Level Composition "CommentMarker in Timeline Mob Slot" is not an Event Mob Slot but contains a CommentMarker.
             Covered Requirements: None
             Noted Requirements: None
             Passing Requirements: None
+            Info Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_150
 
             Name:   Comment Marker Placement
             Desc:   CommentMarkers shall be placed only in EventMobSlots.  DescriptiveMarkers may be placed in any kind of MobSlot (e.g. TimelineMobSlot, EventMobSlot, StaticMobSlot).
+            Node:   42 (CommentMarker)
             Result: Failed
             Reason: Mob slot with ID = 1 of Top-Level Composition "CommentMarker nested in Static Mob Slot" is not an Event Mob Slot but contains a CommentMarker.
             Covered Requirements: None
             Noted Requirements: None
             Passing Requirements: None
+            Info Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_150
 
             Name:   Comment Marker Placement
             Desc:   CommentMarkers shall be placed only in EventMobSlots.  DescriptiveMarkers may be placed in any kind of MobSlot (e.g. TimelineMobSlot, EventMobSlot, StaticMobSlot).
+            Node:   45 (CommentMarker)
             Result: Failed
             Reason: Mob slot with ID = 1 of Top-Level Composition "CommentMarker in Static Mob Slot" is not an Event Mob Slot but contains a CommentMarker.
             Covered Requirements: None
             Noted Requirements: None
             Passing Requirements: None
+            Info Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_150
 
             Name:   Documenting TaggedValues
             Desc:   Exporting applications shall document all TaggedValues in use using TaggedValueDefinition objects in the Dictionary::TaggedValueDefinitions property.
+            Node:   6 (TaggedValue)
             Result: Failed
             Reason: TaggedValue "Test Case 1" is not documented in the dictionary.
             Covered Requirements: None
             Noted Requirements: None
             Passing Requirements: None
+            Info Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_151
 
             Name:   Documenting TaggedValues
             Desc:   Exporting applications shall document all TaggedValues in use using TaggedValueDefinition objects in the Dictionary::TaggedValueDefinitions property.
+            Node:   14 (TaggedValue)
             Result: Failed
             Reason: TaggedValue "Test Case 2" is not documented in the dictionary.
             Covered Requirements: None
             Noted Requirements: None
             Passing Requirements: None
+            Info Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_151
 
             Name:   Documenting KLVData
             Desc:   Exporting applications shall document all KLVData in use in KLVDataDefinition objects in the Dictionary::KLVDefinitions property.
+            Node:   66 (KLVData)
             Result: Failed
             Reason: KLVData with key 00000012-0012-0012-1212121212121212 is not documented in the dictionary.
             Covered Requirements: None
             Noted Requirements: None
             Passing Requirements: None
+            Info Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_152
 

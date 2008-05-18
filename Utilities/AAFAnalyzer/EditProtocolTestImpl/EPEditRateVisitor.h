@@ -91,9 +91,9 @@ class EPEditRateVisitor : public EPTypedVisitor
 
     unsigned int _unknownAudioTracks;
 
-    bool TestEditRate( aafRational_t editRate, AxMobSlot& axMobSlot, const AxString& mobName );
-    void VisitAudioTrack( shared_ptr<EPAudioTrack> spTrack, aafRational_t editRate );
-    bool VisitVideoTrack( shared_ptr<EPVideoTrack> spTrack, aafRational_t editRate );
+    bool TestEditRate( aafRational_t editRate, AxMobSlot& axMobSlot, const AxString& mobName, Node& node );
+    void VisitAudioTrack( shared_ptr<EPAudioTrack> spTrack, aafRational_t editRate, Node& node );
+    bool VisitVideoTrack( shared_ptr<EPVideoTrack> spTrack, aafRational_t editRate, Node& node );
 };
 
 } // end of namespace diskstream

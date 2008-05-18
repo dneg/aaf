@@ -53,8 +53,6 @@ class TestRegistry
   const shared_ptr<const Requirement::RequirementMap> GetConstRequirementsForTest( const wstring& name ) const;
   const Requirement::RequirementMap& GetRequirementCoverage() const;
   bool VerifyTestResultCoverage(const shared_ptr<TopLevelTestResult> results) const;
-  void UseUnsafeRequirements();
-  bool IsUnsafeRequirements();
 
  private:
 
@@ -66,7 +64,6 @@ class TestRegistry
   static TestRegistry* _pTestRegistry;
   Map _testSet;
   Requirement::RequirementMap _coveredRequirements;
-  bool _useUnsafeRequirements;
 
   // prohibited
   TestRegistry( const TestRegistry& );

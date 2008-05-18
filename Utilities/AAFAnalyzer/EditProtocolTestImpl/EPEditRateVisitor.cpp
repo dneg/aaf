@@ -74,7 +74,7 @@ bool EPEditRateVisitor::PreOrderVisit( EPTypedObjNode<IAAFTimelineMobSlot, EPAud
     //Video Specific Processing
     AxTimelineMobSlot axMobSlot( node.GetAAFObjectOfType() );
     aafRational_t editRate = axMobSlot.GetEditRate();
-    VisitAudioTrack( node.GetEPObject(), editRate );
+    VisitAudioTrack( node.GetEPObject(), editRate, node );
 
     //General Processing
     shared_ptr<EPTypedObjNode<IAAFTimelineMobSlot, EPEssenceTrack> > spGeneric( node.DownCast<IAAFTimelineMobSlot, EPEssenceTrack>() );
@@ -92,7 +92,7 @@ bool EPEditRateVisitor::PreOrderVisit( EPTypedObjNode<IAAFTimelineMobSlot, EPVid
     //Video Specific Processing
     AxTimelineMobSlot axMobSlot( node.GetAAFObjectOfType() );
     aafRational_t editRate = axMobSlot.GetEditRate();
-    return VisitVideoTrack( node.GetEPObject(), editRate ) && testPassed;
+    return VisitVideoTrack( node.GetEPObject(), editRate, node ) && testPassed;
 }
 
 bool EPEditRateVisitor::PreOrderVisit( EPTypedObjNode<IAAFTimelineMobSlot, EPEssenceTrack>& node )
@@ -100,7 +100,7 @@ bool EPEditRateVisitor::PreOrderVisit( EPTypedObjNode<IAAFTimelineMobSlot, EPEss
     AxTimelineMobSlot axMobSlot( node.GetAAFObjectOfType() );
     aafRational_t editRate = axMobSlot.GetEditRate();
     AxString mobName = this->GetMobName( _spEdgeMap, node );
-    return TestEditRate( editRate, axMobSlot, mobName );
+    return TestEditRate( editRate, axMobSlot, mobName, node );
 }
 
 bool EPEditRateVisitor::PreOrderVisit( EPTypedObjNode<IAAFEventMobSlot, EPAudioTrack>& node )
@@ -108,7 +108,7 @@ bool EPEditRateVisitor::PreOrderVisit( EPTypedObjNode<IAAFEventMobSlot, EPAudioT
     //Video Specific Processing
     AxEventMobSlot axMobSlot( node.GetAAFObjectOfType() );
     aafRational_t editRate = axMobSlot.GetEditRate();
-    VisitAudioTrack( node.GetEPObject(), editRate );
+    VisitAudioTrack( node.GetEPObject(), editRate, node );
 
     //General Processing
     shared_ptr<EPTypedObjNode<IAAFEventMobSlot, EPEssenceTrack> > spGeneric( node.DownCast<IAAFEventMobSlot, EPEssenceTrack>() );
@@ -126,7 +126,7 @@ bool EPEditRateVisitor::PreOrderVisit( EPTypedObjNode<IAAFEventMobSlot, EPVideoT
     //Video Specific Processing
     AxEventMobSlot axMobSlot( node.GetAAFObjectOfType() );
     aafRational_t editRate = axMobSlot.GetEditRate();
-    return VisitVideoTrack( node.GetEPObject(), editRate ) && testPassed;
+    return VisitVideoTrack( node.GetEPObject(), editRate, node ) && testPassed;
 }
 
 bool EPEditRateVisitor::PreOrderVisit( EPTypedObjNode<IAAFEventMobSlot, EPEssenceTrack>& node )
@@ -134,7 +134,7 @@ bool EPEditRateVisitor::PreOrderVisit( EPTypedObjNode<IAAFEventMobSlot, EPEssenc
     AxEventMobSlot axMobSlot( node.GetAAFObjectOfType() );
     aafRational_t editRate = axMobSlot.GetEditRate();
     AxString mobName = this->GetMobName( _spEdgeMap, node );
-    return TestEditRate( editRate, axMobSlot, mobName );
+    return TestEditRate( editRate, axMobSlot, mobName, node );
 }
 
 bool EPEditRateVisitor::PreOrderVisit( EPTypedObjNode<IAAFMobSlot, EPAudioTrack>& node )
@@ -155,7 +155,7 @@ bool EPEditRateVisitor::PreOrderVisit( EPTypedObjNode<IAAFMobSlot, EPVideoTrack>
 
     ss << L"Video Track in MobSlot with ID = " << slotId << L" of " << mobName
        << L" is in an unknown type of MobSlot and does not have an edit rate that can be accessed to compare with a sample rate.";
-    _spTestResult->AddSingleResult( L"REQ_EP_100", ss.str().c_str(), TestResult::FAIL );
+    _spTestResult->AddSingleResult( L"REQ_EP_100", ss.str().c_str(), TestResult::FAIL, node );
 
     //General Processing
     shared_ptr<EPTypedObjNode<IAAFMobSlot, EPEssenceTrack> > spGeneric( node.DownCast<IAAFMobSlot, EPEssenceTrack>() );
@@ -174,11 +174,11 @@ bool EPEditRateVisitor::PreOrderVisit( EPTypedObjNode<IAAFMobSlot, EPEssenceTrac
 
     ss << L"Mob Slot with ID = " << slotId << L" of " << mobName
        << L" is not a known type of MobSlot and its edit rate cannot be accessed.";
-    _spTestResult->AddSingleResult( L"REQ_EP_091", ss.str().c_str(), TestResult::FAIL );
+    _spTestResult->AddSingleResult( L"REQ_EP_091", ss.str().c_str(), TestResult::FAIL, node );
     return false;
 }
 
-bool EPEditRateVisitor::TestEditRate( aafRational_t editRate, AxMobSlot& axMobSlot, const AxString& mobName )
+bool EPEditRateVisitor::TestEditRate( aafRational_t editRate, AxMobSlot& axMobSlot, const AxString& mobName, Node& node )
 {
 
     AxDataDef axDataDef( axMobSlot.GetDataDef() );
@@ -193,28 +193,28 @@ bool EPEditRateVisitor::TestEditRate( aafRational_t editRate, AxMobSlot& axMobSl
     {
         ss << L"has an edit rate with a negative numerator (" << editRate.numerator
            << L"/" << editRate.denominator << L").";
-        _spTestResult->AddSingleResult( L"REQ_EP_092", ss.str().c_str(), TestResult::FAIL );
+        _spTestResult->AddSingleResult( L"REQ_EP_092", ss.str().c_str(), TestResult::FAIL, node );
         return false;
     }
     else if ( editRate.denominator < 0 )
     {
         ss << L"has an edit rate with a negative denominator (" << editRate.numerator
            << L"/" << editRate.denominator << L").";
-        _spTestResult->AddSingleResult( L"REQ_EP_092", ss.str().c_str(), TestResult::FAIL );
+        _spTestResult->AddSingleResult( L"REQ_EP_092", ss.str().c_str(), TestResult::FAIL, node );
         return false;
     }
     else if ( editRate.numerator == 0 )
     {
         ss << L"has an edit rate with a zero numerator (" << editRate.numerator
            << L"/" << editRate.denominator << L").";
-        _spTestResult->AddSingleResult( L"REQ_EP_092", ss.str().c_str(), TestResult::FAIL );
+        _spTestResult->AddSingleResult( L"REQ_EP_092", ss.str().c_str(), TestResult::FAIL, node );
         return false;
     }
     else if ( editRate.denominator == 0 )
     {
         ss << L"has an edit rate with a zero denominator (" << editRate.numerator
            << L"/" << editRate.denominator << L").";
-        _spTestResult->AddSingleResult( L"REQ_EP_092", ss.str().c_str(), TestResult::FAIL );
+        _spTestResult->AddSingleResult( L"REQ_EP_092", ss.str().c_str(), TestResult::FAIL, node );
         return false;
     }
     else if ( !_erTable.IsInTable( editRate, axDataDef.IsPictureKind() ) )
@@ -232,15 +232,14 @@ bool EPEditRateVisitor::TestEditRate( aafRational_t editRate, AxMobSlot& axMobSl
            << L" = "
            << _erTable.Round( (double)editRate.numerator/(double)editRate.denominator)
            << L").";
-        _spTestResult->AddSingleResult( L"REQ_EP_091", ss.str().c_str(), TestResult::FAIL );
+        _spTestResult->AddSingleResult( L"REQ_EP_091", ss.str().c_str(), TestResult::FAIL, node );
         return false;
     }
 
     return true;
-
 }
 
-void EPEditRateVisitor::VisitAudioTrack( shared_ptr<EPAudioTrack> spTrack, aafRational_t editRate )
+void EPEditRateVisitor::VisitAudioTrack( shared_ptr<EPAudioTrack> spTrack, aafRational_t editRate, Node& node )
 {
 
     RationalKey erKey( editRate.numerator, editRate.denominator );
@@ -270,7 +269,7 @@ void EPEditRateVisitor::VisitAudioTrack( shared_ptr<EPAudioTrack> spTrack, aafRa
 
 }
 
-bool EPEditRateVisitor::VisitVideoTrack( shared_ptr<EPVideoTrack> spTrack, aafRational_t editRate )
+bool EPEditRateVisitor::VisitVideoTrack( shared_ptr<EPVideoTrack> spTrack, aafRational_t editRate, Node& node )
 {
     AxSourceMob axSrcMob( AxQueryInterface<IAAFMob, IAAFSourceMob>( spTrack->GetMob() ) );
     AxFileDescriptor axFileDes( AxQueryInterface<IAAFEssenceDescriptor, IAAFFileDescriptor>( axSrcMob.GetEssenceDescriptor() ) );
@@ -291,7 +290,7 @@ bool EPEditRateVisitor::VisitVideoTrack( shared_ptr<EPVideoTrack> spTrack, aafRa
            << L") that is greater than its sample rate ("
            << sampleRate.numerator << L"/" << sampleRate.denominator
            << L").";
-        _spTestResult->AddSingleResult( L"REQ_EP_100", ss.str().c_str(), TestResult::FAIL );
+        _spTestResult->AddSingleResult( L"REQ_EP_100", ss.str().c_str(), TestResult::FAIL, node );
         return false;
     }
 
@@ -311,9 +310,9 @@ void EPEditRateVisitor::CheckAudioSampleRates()
        )
   {
     shared_ptr<DetailLevelTestResult> spSubResult =
-      _spTestResult->AddSingleResult( L"REQ_EP_099",
-				      L"All audio tracks within the file do not have the same edit rate.",
-				      TestResult::FAIL );
+      _spTestResult->AddUnassociatedSingleResult( L"REQ_EP_099",
+						  L"All audio tracks within the file do not have the same edit rate.",
+						  TestResult::FAIL );
     
     RateMap::const_iterator iter;
     
@@ -334,9 +333,9 @@ void EPEditRateVisitor::CheckAudioSampleRates()
   else if ( _audioSampleRates.size() > 1 )
   {
     shared_ptr<DetailLevelTestResult> spSubResult =
-      _spTestResult->AddSingleResult( L"REQ_EP_099",
-				      L"All audio tracks within the file do not have the same sample rate.",
-				      TestResult::FAIL );
+      _spTestResult->AddUnassociatedSingleResult( L"REQ_EP_099",
+						  L"All audio tracks within the file do not have the same sample rate.",
+						  TestResult::FAIL );
     
     for ( RateMap::const_iterator iter = _audioSampleRates.begin(); iter != _audioSampleRates.end(); iter++ )
     {

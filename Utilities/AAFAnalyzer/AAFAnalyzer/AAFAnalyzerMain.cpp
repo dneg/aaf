@@ -28,6 +28,7 @@
 //Test/Result Structure files
 #include <TopLevelTestResult.h>
 #include <TestPhaseLevelTestResult.h>
+#include <DetailLevelTestResult.h>
 #include <TestInfoRegistrar.h>
 #include <TestRegistry.h>
 #include <TestRegistryException.h>
@@ -58,6 +59,8 @@
 #include <string>
 #include <algorithm>
 #include <fstream>
+#include <set>
+#include <sstream>
 
 //Boost files
 #include <boost/shared_ptr.hpp>
@@ -107,10 +110,12 @@ private:
 
 void ListRequirements( const AxString& title, const Requirement::RequirementMap& reqs, const int level)
 {
+
   wcout << LevelToIndent( level ) << title << ": ";
-  if (reqs.size() == 0)
+
+  if ( reqs.empty() )
   {
-    wcout << "None" << endl;
+    wcout << "None" << endl;    
   }
   else
   {
@@ -118,16 +123,16 @@ void ListRequirements( const AxString& title, const Requirement::RequirementMap&
     iter = reqs.begin();
     while ( true ) 
     {
-        wcout << iter->first;
-        iter++;
-        if (iter != reqs.end() )
-        {
-          wcout << "; ";
-        }
-        else
-        {
-          break;
-        }
+      wcout << iter->first;
+      iter++;
+      if (iter != reqs.end() )
+      {
+	wcout << "; ";
+      }
+      else
+      {
+	break;
+      }
     }
     wcout << endl;
   }
@@ -154,6 +159,17 @@ void RecursiveOutputVerboseResultMsgs( shared_ptr<TestResult> res,
   {
     wcout << LevelToIndent(level) << "Name:   " << res->GetName() << endl;
     wcout << LevelToIndent(level) << "Desc:   " << res->GetDescription() << endl;
+
+    if ( res->GetResultType() == TestResult::DETAIL )
+    {
+      shared_ptr<DetailLevelTestResult> spDetailResult = dynamic_pointer_cast<DetailLevelTestResult>(res);
+      assert( spDetailResult );
+      shared_ptr<Node> spNode = spDetailResult->GetAssociatedNode();
+      if ( spNode )
+      {
+	wcout << LevelToIndent(level) << "Node:   " << spNode->GetLID() << L" (" << spNode->GetName() << L")" << endl;
+      }
+    }
   
     wcout << LevelToIndent(level) << "Result: ";
     wstring result;
@@ -166,6 +182,10 @@ void RecursiveOutputVerboseResultMsgs( shared_ptr<TestResult> res,
     }
     else if (res->GetResult() == TestResult::PASS) {
       result = L"Passed";
+    }
+    else if (res->GetResult() == TestResult::INFO)
+    {
+      result = L"Info";
     }
     else if (res->GetResult() == TestResult::WARN)
     {
@@ -188,6 +208,7 @@ void RecursiveOutputVerboseResultMsgs( shared_ptr<TestResult> res,
     ListRequirements( L"Covered Requirements", res->GetRequirements(TestResult::COVERED), level);
     ListRequirements( L"Noted Requirements",   res->GetRequirements(TestResult::NOTED),   level);
     ListRequirements( L"Passing Requirements", res->GetRequirements(TestResult::PASS),    level);
+    ListRequirements( L"Info Requirements",    res->GetRequirements(TestResult::INFO),    level);
     ListRequirements( L"Warning Requirements", res->GetRequirements(TestResult::WARN),    level);
     ListRequirements( L"Failing Requirements", res->GetRequirements(TestResult::FAIL),    level);
 
@@ -283,6 +304,10 @@ void OutputFileCoverage(shared_ptr<const TestResult> res, const basic_string<wch
   }
   else if (res->GetResult() == TestResult::WARN)
   {
+    wcout << L"Info" << endl;
+  }
+  else if (res->GetResult() == TestResult::INFO)
+  {
     wcout << L"Warned" << endl;
   }
   else if (res->GetResult() == TestResult::FAIL)
@@ -299,6 +324,7 @@ void OutputFileCoverage(shared_ptr<const TestResult> res, const basic_string<wch
   ListRequirements( L"Covered Requirements", res->GetRequirements(TestResult::COVERED), level );
   ListRequirements( L"Noted Requirements",   res->GetRequirements(TestResult::NOTED),   level );
   ListRequirements( L"Passing Requirements", res->GetRequirements(TestResult::PASS),    level );
+  ListRequirements( L"Info Requirements",    res->GetRequirements(TestResult::INFO),    level );
   ListRequirements( L"Warning Requirements", res->GetRequirements(TestResult::WARN),    level );
   ListRequirements( L"Failing Requirements", res->GetRequirements(TestResult::FAIL),    level );
 
@@ -509,6 +535,139 @@ void OutputRequirements( const AxString& title,
 
 //======================================================================
 
+class GenerateRequirementSQLInsert
+{
+public:
+  GenerateRequirementSQLInsert()
+  {}
+  
+  ~GenerateRequirementSQLInsert()
+  {}
+
+  wstring Escape( const wstring& s )
+  {
+    wstring result;
+
+    for( wstring::const_iterator c = s.begin();
+	 c != s.end();
+	 ++c )
+    {
+      if ( *c == L'\'' )
+      {
+	result.push_back( L'\\' );
+      }
+      result.push_back( *c );
+    }
+
+    return result;
+  }
+
+  wstring Q( const wstring& s, bool comma = true )
+  {
+    wstring result( L"'" + Escape(s) + L"'" );
+
+    if ( comma )
+    {
+      result.append( L", " );
+    }
+
+    return result;
+  }
+
+  void operator()( pair<const AxString, shared_ptr<const Requirement> > entry )
+  {
+    static wstring stnd_stmnt
+      = L"INSERT INTO Standard (doc_title, doc_version) VALUES ";
+    static wstring req_stmnt
+      = L"INSERT INTO Requirement (req_formal_id, req_name, description, req_type, category, annotate, note, standardid, doc_section, report, status) VALUES ";
+
+    wstring report( L"FALSE" );
+    if ( entry.second->GetRequirementType() == Requirement::FILE )
+    {
+      report = L"TRUE";
+    }
+
+    // Build the Standard insert statement.
+    if ( !(entry.second->GetDocument().empty() && entry.second->GetVersion().empty()) )
+    {
+      wstringstream stnd_stmnt_os;
+      stnd_stmnt_os << stnd_stmnt;
+      stnd_stmnt_os << L"(";
+      stnd_stmnt_os << Q( entry.second->GetDocument() );
+      stnd_stmnt_os << Q( entry.second->GetVersion(), false );
+      stnd_stmnt_os << L");";
+      stnd_stmnt_os << endl;
+      _insert_standard_stmnts.insert( stnd_stmnt_os.str() );
+    }
+
+    // Build the Requirement insert statement.
+    wstringstream req_stmnt_os;
+    req_stmnt_os << req_stmnt;
+    req_stmnt_os << L"(";
+    req_stmnt_os << Q( entry.second->GetId() );
+    req_stmnt_os << Q( entry.second->GetName() );
+    req_stmnt_os << Q( entry.second->GetDescription() );
+    req_stmnt_os << Q( entry.second->GetRequirementTypeAsString() );
+    req_stmnt_os << Q( entry.second->GetCategoryAsString() );
+    req_stmnt_os << Q( entry.second->GetAnnotation() );
+    req_stmnt_os << Q( entry.second->GetNote() );
+
+    // Query to get the Standard.standarid of the standard document.
+    if ( !(entry.second->GetDocument().empty() && entry.second->GetVersion().empty()) )
+    {
+      req_stmnt_os << L"(SELECT standardid FROM Standard"
+		   << L" WHERE"
+		   << L" doc_title=" << Q(entry.second->GetDocument(),false)
+		   << L" AND"
+		   << L" doc_version=" << Q(entry.second->GetVersion(),false)
+		   << L"), ";
+      req_stmnt_os << Q( entry.second->GetSection() );
+    }
+    else
+    {
+      // Else null standardid and doc_section because they aren't
+      // specified in the xml file.
+      req_stmnt_os << L" NULL, NULL, ";
+    }
+
+    req_stmnt_os << report << L", ";
+    req_stmnt_os << Q( L"current", false );
+    req_stmnt_os << L");";
+    req_stmnt_os << endl;
+    _insert_requirement_stmnts.insert( req_stmnt_os.str() );
+  }
+
+  void Dump( wostream& os )
+  {
+    for( set<wstring>::const_iterator iter = _insert_standard_stmnts.begin();
+	 iter != _insert_standard_stmnts.end();
+	 ++iter )
+    {
+      wcout << *iter << endl;
+    }
+
+    for( set<wstring>::const_iterator iter = _insert_requirement_stmnts.begin();
+	 iter != _insert_requirement_stmnts.end();
+	 ++iter )
+    {
+      wcout << *iter << endl;
+    }
+  }
+
+private:
+  set<wstring> _insert_standard_stmnts;
+  set<wstring> _insert_requirement_stmnts;
+};
+
+void OutputRequirementSQLUpdate( const Requirement::RequirementMap& reqs )
+{
+  GenerateRequirementSQLInsert result = 
+    for_each( reqs.begin(), reqs.end(), GenerateRequirementSQLInsert() );
+  result.Dump( wcout );
+}
+
+//======================================================================
+
 class Usage
 {
 public:
@@ -538,11 +697,10 @@ ostream& operator<<( ostream& os, const Usage& usage )
   os << "AAFAnalyzer [-reqs file.xml] [analysis options] filename.aaf" << endl;
   os << endl;
 
-  os << "AAFAnalyzer -report [-reqs file.xml] [requirement options]" << endl;
+  os << "AAFAnalyzer -report [-sqlinsert] [-reqs file.xml] [requirement options]" << endl;
   os << endl;
 
-  os << "[analysis options]    = -uncheckedrequirements"    << endl;
-  os << "                      | -verbose"                  << endl;
+  os << "[analysis options]    = -verbose"                  << endl;
   os << "                      | -filter <result name>"     << endl;
   os << "                      | -filecoverage"             << endl;
   os << "                      | -dump {header | comp}"     << endl;
@@ -556,8 +714,6 @@ ostream& operator<<( ostream& os, const Usage& usage )
   os << "-dump header:           dump contained objects beginning with header"                    << endl;
   os << "-dump comp:             dump the top level composition, including resolved references"   << endl;
   os << "-filecoverage:          output the file's requirement coverage data"                     << endl;
-  os << "-uncheckedrequirements: allow tests to use unloaded requirements and test"               << endl;
-  os << "                        results to use unassociated requirements"                        << endl;
   os << "-reqs:                  specify XML file that describes the requirements"                << endl;
   os << "-type:                  report only to specified requirement types, default is \"all\"." << endl;
   os << "-detail:                output requirement details"                                      << endl;
@@ -631,6 +787,9 @@ int main( int argc, char** argv )
       }
    }
     
+    // Generate sql insert statements.
+    pair<bool, int> sqlInsertArg = args.get( "-sqlinsert" );
+
     // List All Requirements option
     pair<bool, int> reportArg = args.get( "-report" );
     string reqType("all");
@@ -663,9 +822,6 @@ int main( int argc, char** argv )
     
     // Print file coverage
     pair<bool, int> fileCoverageArg = args.get( "-filecoverage" );
-    
-    // Allow test to register with unregistered requirements
-    pair<bool, int> unsafeRegistryArg = args.get ( "-uncheckedrequirements" );
     
     // Show verbose result output
     pair<bool, int> verboseOutput = args.get( "-verbose" );
@@ -735,6 +891,14 @@ int main( int argc, char** argv )
           loader.ParseXML( path.string().c_str() );
     }
 
+
+    // sql insert generate
+    if ( sqlInsertArg.first )
+    {
+      OutputRequirementSQLUpdate( RequirementRegistry::GetInstance().GetAllRequirements() );
+      return 0;
+    }
+
     // If a report is requested, but it is not a test coverage report,
     // then do it before registering the tests.
     if ( reportArg.first && !testCoverageArg.first )
@@ -749,12 +913,6 @@ int main( int argc, char** argv )
     //
     // Register the tests.
     //
-
-    // Allow unregistered or non-existant requirements to be used when necessary.
-    if ( unsafeRegistryArg.first )
-    {
-        TestRegistry::GetInstance().UseUnsafeRequirements();
-    }
     RegisterTests();
     
     // Now that the tests are registered we can report coverage.

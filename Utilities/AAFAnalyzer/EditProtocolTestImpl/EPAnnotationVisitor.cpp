@@ -197,14 +197,17 @@ bool EPAnnotationVisitor::PreOrderVisit( AAFTypedObjNode<IAAFCommentMarker>& nod
         _spTestResult->AddSingleResult(
             L"REQ_EP_150",
             this->GetMobSlotName( _spEdgeMap, node) + L" is an Event Mob Slot that contains a CommentMarker.",
-            TestResult::PASS );
+            TestResult::PASS,
+	    node );
     }
     else
     {
         _spTestResult->AddSingleResult(
             L"REQ_EP_150",
             this->GetMobSlotName( _spEdgeMap, node) + L" is not an Event Mob Slot but contains a CommentMarker.",
-            TestResult::FAIL );
+            TestResult::FAIL,
+	    node );
+
         testPassed = false;
     }
     
@@ -236,7 +239,8 @@ bool EPAnnotationVisitor::PreOrderVisit( AAFTypedObjNode<IAAFComponent>& node )
             _spTestResult->AddSingleResult(
                 L"REQ_EP_147",
                 this->GetMobSlotName( _spEdgeMap, node ) + L" contains a Component that illegally uses the Component::UserComments property.",
-                TestResult::FAIL );
+                TestResult::FAIL,
+		node );
             return false;
         }
     }
@@ -566,14 +570,14 @@ bool EPAnnotationVisitor::PostOrderVisit( AAFTypedObjNode<IAAFMobSlot>& node )
 bool EPAnnotationVisitor::PreOrderVisit( AAFTypedObjNode<IAAFTaggedValue>& node )
 {
     AxTaggedValue axTaggedVal( node.GetAAFObjectOfType() );
-    _taggedValueNames.insert( axTaggedVal.GetName() );
+    _taggedValueNames[axTaggedVal.GetName()] = node.GetSharedPointerToNode();
     return false;
 }
 
 bool EPAnnotationVisitor::PreOrderVisit( AAFTypedObjNode<IAAFKLVData>& node )
 {
     AxKLVData axKLVData( node.GetAAFObjectOfType() );
-    _klvDataKeys.insert( axKLVData.GetKey() );
+    _klvDataKeys[axKLVData.GetKey()] = node.GetSharedPointerToNode();
     return false;
 }
 
@@ -613,7 +617,7 @@ bool EPAnnotationVisitor::PopStacks()
  * 
  */
 void EPAnnotationVisitor::CheckForTaggedValueDefinitions()
-{    
+{
     //Remove all registered TaggedValues from the registered set.
     set<AxString>::const_iterator dIter;
     for ( dIter = _taggedValueDefs.begin(); dIter != _taggedValueDefs.end(); dIter++ )
@@ -621,14 +625,15 @@ void EPAnnotationVisitor::CheckForTaggedValueDefinitions()
         _taggedValueNames.erase( *dIter );
     }
     
-    //Fail for every unregistered TaggedValue.
-    set<AxString>::const_iterator uIter;
+    //Fail for every unregistered TaggedValue
+    map<AxString, shared_ptr<Node> >::const_iterator uIter;
     for ( uIter = _taggedValueNames.begin(); uIter != _taggedValueNames.end(); uIter++ )
     {
         _spTestResult->AddSingleResult(
             L"REQ_EP_151",
-            L"TaggedValue \"" + *uIter + L"\" is not documented in the dictionary.",
-            TestResult::FAIL );
+            L"TaggedValue \"" + uIter->first + L"\" is not documented in the dictionary.",
+            TestResult::FAIL,
+	    *uIter->second );
     }
 }
 
@@ -641,14 +646,15 @@ void EPAnnotationVisitor::CheckForKLVValueDefinitions()
         _klvDataKeys.erase( *dIter );
     }
     
-    //Fail for every unregistered TaggedValue.
-    set<aafUID_t>::const_iterator uIter;
+    //Fail for every unregistered KLV value
+    map<aafUID_t, shared_ptr<Node> >::const_iterator uIter;
     for ( uIter = _klvDataKeys.begin(); uIter != _klvDataKeys.end(); uIter++ )
     {
         _spTestResult->AddSingleResult(
             L"REQ_EP_152",
-            L"KLVData with key " + AxStringUtil::uid2Str(*uIter) + L" is not documented in the dictionary.",
-            TestResult::FAIL );
+            L"KLVData with key " + AxStringUtil::uid2Str(uIter->first) + L" is not documented in the dictionary.",
+            TestResult::FAIL,
+	    *uIter->second );
     }
 }
    

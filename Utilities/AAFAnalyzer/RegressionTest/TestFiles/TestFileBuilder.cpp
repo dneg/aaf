@@ -161,6 +161,18 @@ void TestFileBuilder::CreateOperationDefinition( const AxString& name, const AxS
     axOpDef.Initialize( auid, name, description );
     _namedAUIDs[name] = auid;
 
+    aafUID_t dataDefId;
+    if ( _useLegacyEffectDefinitions )
+    {
+      dataDefId = kAAFDataDef_LegacyPicture;
+    }
+    else
+    {
+      dataDefId = kAAFDataDef_Picture;
+    }
+    AxDataDef axDataDef( axDictionary.LookupDataDef( dataDefId ) );
+    axOpDef.SetDataDef( axDataDef );
+
     axDictionary.RegisterOperationDef( axOpDef );
 }
 
@@ -291,13 +303,17 @@ shared_ptr<AxMob> TestFileBuilder::AddFileSource( const AxString& name, bool isN
         spAxSrcMob->SetName( name );
     }
 
-	
+    // A "<file-source>" is used generically in the test (xml) files
+    // in cases were the test doesn't care what about the exact type
+    // of file source. However, we must add a descriptor of some sort,
+    // therefore, we genically add a fake wave header. It would be
+    // nice if we didn't need to do this, but as of right now, all
+    // other well-known FileDescriptors that are of non-normative
+    // essence types are being declared elsewhere and we don't want to
+    // confuse between them and a "basic" file source mob.
+
     AxWAVEDescriptor axFileDes( AxCreateInstance<IAAFWAVEDescriptor>( axDictionary ) );
 
-    //Fake a wave header.  It would be nice if we didn't need to do this, but
-    //as of right now, all other well-known FileDescriptors that are of
-    //non-normative essence types are being declared elsewhere and we don't want
-    //to confuse between them and a "basic" file source mob.
     aafUInt8* buffer = new aafUInt8[ sizeof(aafUInt8[44]) ];
     AxBuffer<aafUInt8> header = AxBuffer<aafUInt8>( std::auto_ptr<aafUInt8>( buffer ), sizeof( aafUInt8[44] ) );;
     axFileDes.SetSummary( header.GetSize(), header.GetPtr().get() );

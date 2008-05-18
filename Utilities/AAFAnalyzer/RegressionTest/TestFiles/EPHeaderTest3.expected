@@ -5,16 +5,19 @@
         Covered Requirements: None
         Noted Requirements: None
         Passing Requirements: None
+        Info Requirements: None
         Warning Requirements: None
         Failing Requirements: REQ_EP_255
 
             Name:   Protocol Label
             Desc:   Header::OperationalPattern should be equal to OpEditProtocol.
+            Node:   1 (Header)
             Result: Failed
             Reason: Header::OperationalPattern property is not equal to OpEditProtocol.
             Covered Requirements: None
             Noted Requirements: None
             Passing Requirements: None
+            Info Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_255
 

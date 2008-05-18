@@ -2,6 +2,8 @@
 <!DOCTYPE requirement-set SYSTEM "AAFRequirementsFormat.dtd" [
     <!ENTITY DOC_AAF_EP "AAF Edit Protocol">
     <!ENTITY VER_EP_1.0 "2005-04-08">
+    <!ENTITY DOC_AAF_OM "AAF Object Model">
+    <!ENTITY VER_OM_1.1 "1.1">
 ]>
 <requirement-set>
 
@@ -22,7 +24,7 @@
     <requirement type="app" category="general">
         <id>REQ_EP_002</id>
         <name>Import Accuracy</name>
-        <desc>Upon import, an Edit Protocol compliant application shall clearly report any alteration to the composition during the process according to fallback behaviours that are described in this document.</desc>
+        <desc>Upon import, an Edit Protocol compliant application shall clearly report any alteration to the composition during the [import] process according to fallback behaviours that are described in this document.</desc>
         <ref>
             <doc>&DOC_AAF_EP;</doc>
             <version>&VER_EP_1.0;</version>
@@ -42,13 +44,24 @@
     </requirement>
 
     <requirement type="app" category="general">
-        <id>REQ_EP_004</id>
+        <id>REQ_EP_004.1</id>
         <name>Immutability of Mobs</name>
         <desc>An application shall implement the rules regarding immutability of Mobs as described in the AAF Object Specification v1.1.  These rules specify how Mobs shall be identified when they are processed by an application.  Specifically, conditions are defined in which the identification of the Mob (MobID) must change, and in which the identification of the Mob must not change.</desc>
         <ref>
             <doc>&DOC_AAF_EP;</doc>
             <version>&VER_EP_1.0;</version>
             <section>4.2.3</section>
+        </ref>
+    </requirement>
+
+    <requirement type="file" category="general">
+        <id>REQ_EP_004.2</id>
+        <name>Unique MobsIDs</name>
+        <desc>Two Mobs in an AAF file shall not have the same MobID.</desc>
+        <ref>
+            <doc>&DOC_AAF_OM;</doc>
+            <version>&VER_OM_1.1;</version>
+            <section>4.3.1</section>
         </ref>
     </requirement>
 
@@ -634,10 +647,12 @@
         </ref>
     </requirement>
 
-    <requirement type="file" category="compositional">
+    <requirement type="file" category="compositional" action="reconcile">
         <id>REQ_EP_055</id>
         <name>Clip May Reference</name>
         <desc>A clip shall only reference the following kinds of material: a file source, an import source, a tape source, or a film source.</desc>
+	<annotate>A clip may contain an unresolved (out of file) reference.</annotate>
+	<note>See tracker item 137489.</note>
         <ref>
             <doc>&DOC_AAF_EP;</doc>
             <version>&VER_EP_1.0;</version>
@@ -727,6 +742,7 @@
         <name>File Source References Import, Tape, or Film Source</name>
         <desc>If a file source has any of the following sources, then those source mobs should be included and referenced by the file source: an import source, a tape source, or a film source. If a file source does not have an import source, a tape source or a film source, then it shall reference and include a recording source.</desc>
 	<annotate>A file source may also reference another file source. If no recording source is available then a file source may end the derivation chain.</annotate>
+	<note>See tracker item 1387418</note>
         <ref>
             <doc>&DOC_AAF_EP;</doc>
             <version>&VER_EP_1.0;</version>
@@ -857,10 +873,11 @@
         </ref>
     </requirement>
 
-    <requirement type="file" category="compositional">
+    <requirement type="file" category="compositional" action="reconcile">
         <id>REQ_EP_076</id>
         <name>Import Source References Tape or Film Sources</name>
         <desc>If an import source has any of the following source, then those source mobs should be included and referenced by the import source: a tape source or a film source.</desc>
+	<annotate>Incorporate feedback provided in tracking item 1387437</annotate>
         <ref>
             <doc>&DOC_AAF_EP;</doc>
             <version>&VER_EP_1.0;</version>
@@ -936,10 +953,11 @@
         </ref>
     </requirement>
 
-    <requirement type="file" category="compositional">
+    <requirement type="file" category="compositional" action="reconcile">
         <id>REQ_EP_083</id>
         <name>Tape Source References Film Source</name>
         <desc>If a tape has a film source, then it should be included and referenced by the tape source.</desc>
+	<annotate>Annotate per feedback in tracker item 1387439.</annotate>
         <ref>
             <doc>&DOC_AAF_EP;</doc>
             <version>&VER_EP_1.0;</version>
@@ -1218,9 +1236,9 @@
 
     <requirement type="file" category="metadata" action="reconcile">
         <id>REQ_EP_108.1</id>
-        <name>Mark IN Position</name>
-        <desc>The mark IN point shall be specified using the TimelineMobSlot::MarkIn optional property.</desc>
-	<annotate>If mark IN is not specified then the beginning of the seqment is implied.</annotate>
+        <name>Mark In Position</name>
+        <desc>The mark in point shall be specified using the TimelineMobSlot::MarkIn optional property.</desc>
+	<annotate>If MarkIn is not specified then the beginning of the seqment is implied.</annotate>
 	<note></note>
         <ref>
             <doc>&DOC_AAF_EP;</doc>
@@ -1231,9 +1249,9 @@
 
     <requirement type="file" category="metadata" action="reconcile">
         <id>REQ_EP_108.2</id>
-        <name>Mark OUT Position</name>
-        <desc>The mark OUT point shall be specified using the TimelineMobSlot::MarkOut optional property.</desc>
-	<annotate>If mark OUT is not specified then the end the seqment is implied.</annotate>
+        <name>Mark Out Position</name>
+        <desc>The mark out point shall be specified using the TimelineMobSlot::MarkOut optional property.</desc>
+	<annotate>If mark out is not specified then the end the seqment is implied.</annotate>
 	<note></note>
         <ref>
             <doc>&DOC_AAF_EP;</doc>
@@ -1244,8 +1262,8 @@
 
     <requirement type="file" category="metadata" action="reconcile">
         <id>REQ_EP_108.3</id>
-        <name>Marked Region Length</name>
-        <desc>The length of the marked region is OUT-IN. OUT shall be greater than IN.</desc>
+        <name>Timeline Marked Region Length</name>
+        <desc>The length of the marked region in a TimelineMobSlot is MarkOut minus MarkIn. MarkOut shall be greater than MarkIn.</desc>
 	<note>This is coded to FAIL, formerly it warned because this wasn't stated in the EP spec. This should be clear in the specification to avoid off by one errors, and to avoid the assumption that OUT equals IN is acceptable.</note>
         <ref>
             <doc>&DOC_AAF_EP;</doc>
@@ -1869,6 +1887,7 @@
         <id>REQ_EP_163</id>
         <name>Effect Data Definition Values</name>
         <desc>The effects defined in the Edit Protocol should be used with the AAF v1.1 data definition values of DataDef_Picture and DataDef_Sound.  The deprecated data definition values of DataDef_LegacyPicture and DataDef_LegacySound should only be used when working with legacy AAF v1.0 files.</desc>
+	<note>A warning is generated if the legacy values are used in 1.1. or later files. The reverse is the case for pre 1.1 files. A failure is not reported, only a warning.</note>
         <ref>
             <doc>&DOC_AAF_EP;</doc>
             <version>&VER_EP_1.0;</version>
@@ -1909,10 +1928,11 @@
         </ref>
     </requirement>
 
-    <requirement type="file" category="effect">
+    <requirement type="def" category="effect">
         <id>REQ_EP_167</id>
         <name>Transition Effect Containment</name>
         <desc>The OperationGroup shall be contained in a Transition object between two Segments.</desc>
+	<note>This is requirement on the Transtion, not the OperationGroup. The Transition class defines a required strong reference to an OperationGroup, therefore, there is nothing to test in that regard. The object model itself does not constraint on a Transition in this way, however, the open source SDK does. That makes this untestable in the analyzer. We can never create a file, using the open source SDK, that would violate this condition. Therefore, we classify this a as a definition.</note>
         <ref>
             <doc>&DOC_AAF_EP;</doc>
             <version>&VER_EP_1.0;</version>
@@ -1920,10 +1940,10 @@
         </ref>
     </requirement>
 
-    <requirement type="file" category="effect">
+    <requirement type="def" category="effect">
         <id>REQ_EP_168</id>
         <name>OperationGroup Containment</name>
-        <desc>The OperationGroup shall not be contained in a Transition object.</desc>
+        <desc>[A composite effect] OperationGroup shall not be contained in a Transition object. The OperationGroup::InputSegments property specifies the input segments that the effect requires.</desc>
         <ref>
             <doc>&DOC_AAF_EP;</doc>
             <version>&VER_EP_1.0;</version>
@@ -1931,10 +1951,10 @@
         </ref>
     </requirement>
 
-    <requirement type="file" category="effect">
+    <requirement type="def" category="effect">
         <id>REQ_EP_169</id>
         <name>Multiple Effects Sharing Common Material</name>
-        <desc>Multiple effects sharing common material shall be constructed within a NestedScope object.  A continuous section of common material, used by severak effects, shall be represented as a single segment in the NestedScope.</desc>
+        <desc>Multiple effects sharing common material shall be constructed within a NestedScope object. A continuous section of common material, used by severak effects, shall be represented as a single segment in the NestedScope.</desc>
         <ref>
             <doc>&DOC_AAF_EP;</doc>
             <version>&VER_EP_1.0;</version>
@@ -1945,7 +1965,7 @@
     <requirement type="def" category="effect">
         <id>DEF_EP_170</id>
         <name>Invoking Effects on Multiple Layers</name>
-        <desc>Effects on multiple layers shall be constructed within a NestedScope object.  The layers shall be ordered background to foreground within the Slots of the NestedScope.</desc>
+        <desc>Effects on multiple layers shall be constructed within a NestedScope object. The layers shall be ordered background to foreground within the Slots of the NestedScope.</desc>
         <ref>
             <doc>&DOC_AAF_EP;</doc>
             <version>&VER_EP_1.0;</version>
@@ -2891,7 +2911,7 @@
     <requirement type="file" category="ad-hoc" action="reconcile">
         <id>REQ_EP_256</id>
         <name>Acyclic Derivation Chain</name>
-        <desc>The AAF derivation chain of the AAF file shall not contain any cycles.</desc>
+        <desc>A mob derivation chain shall not contain a cycle.</desc>
     </requirement>
 
     <requirement type="file" category="ad-hoc" action="reconcile">
@@ -2912,7 +2932,7 @@
         <id>REQ_EP_259</id>
         <name>Film Source References No Other Sources</name>
 	<desc>A film source shall not reference any other type of material.</desc>
-	<note>This requirement does not currently exist in the EP specification.</note>
+	<note>This requirement does not currently exist in the EP specification. See tracker items 1387440, and 1387513.</note>
     </requirement>
 
     <requirement type="file" category="compositional" action="reconcile">
@@ -2933,7 +2953,7 @@
       <id>REQ_EP_262</id>
       <name>Valid Derivation Chain Termination</name>
       <desc>The derivation must have a valid end state.</desc>
-      <note>This is a generic error reported if the derivation chain parser encounters no errors but runs out of objects to parse before reaching a valid end state.</note>
+      <note>This is a generic error reported if the derivation chain parser encounters no errors but runs out of objects to parse before reaching a valid end state. See tracker item 1387513.</note>
     </requirement>
 
 </requirement-set>

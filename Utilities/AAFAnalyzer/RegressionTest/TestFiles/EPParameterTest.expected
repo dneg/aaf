@@ -5,16 +5,19 @@
         Covered Requirements: REQ_EP_174
         Noted Requirements: None
         Passing Requirements: None
+        Info Requirements: None
         Warning Requirements: None
         Failing Requirements: REQ_EP_175
 
             Name:   Interpolation for Time-Varying Parameters
             Desc:   Interpolation between ControlPoints within VaryingValue objects shall be specified as one of the following: ConstantInterpolator, LinearInterpolator, LogInterpolator, PowerInterpolator, BSplineInterpolator.
+            Node:   6 (VaryingValue)
             Result: Failed
             Reason: VaryingValue object in Mob slot with ID = 1 of Top-Level Composition "None Interpolator" has an illegal interpolation definition.
             Covered Requirements: None
             Noted Requirements: None
             Passing Requirements: None
+            Info Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_175
             Detail: AUID = 5b6c85a3-0ede-11d3-80a9006008143e6f).

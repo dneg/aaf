@@ -24,6 +24,9 @@
 //Test/Result files
 #include "LowLevelTestResult.h"
 
+//Base files
+#include <Node.h>
+
 namespace aafanalyzer {
 
 using namespace std;
@@ -52,19 +55,13 @@ class DetailLevelTestResult : public LowLevelTestResult
   // Result name and description are initialized to those of the
   // requirment.  Call must identify the requirment, provide a result,
   // and an explanation.
+  // Pass a null spNode if this result cannot be associated with a
+  // single node.
   DetailLevelTestResult( const shared_ptr<const Test> associatedTest,
                          const wstring& explain,
 			 const wstring& reqId,
-                         Result result );
-
-  // Call provides result name and description rather than using the
-  // requirements name and description.
-  DetailLevelTestResult( const shared_ptr<const Test> associatedTest,
-                         const wstring& name,
-                         const wstring& desc,
-                         const wstring& explain,
-			 const wstring& reqId,
-                         Result result );
+                         Result result,
+			 shared_ptr<Node> _spNode );
 
   virtual ~DetailLevelTestResult();
 
@@ -77,6 +74,10 @@ class DetailLevelTestResult : public LowLevelTestResult
   void SetResult( const wstring& reqId, Result result );
 
   virtual const enum ResultLevel GetResultType() const;
+
+  // Returns ~0 if this result is not associated with any particular
+  // node.
+  shared_ptr<Node> DetailLevelTestResult::GetAssociatedNode();
 
  private:
 
@@ -91,6 +92,9 @@ class DetailLevelTestResult : public LowLevelTestResult
   // on at a time against requirements, but they are accumulated
   // in sets in the TestResult base class. This is less obtuse.
   const wstring& _reqId;
+
+  // The node associated with the AAF object that caused the error.
+  shared_ptr<Node> _spNode;
 };
 
 } // end of namespace diskstream

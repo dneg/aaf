@@ -86,7 +86,8 @@ bool EPParameterVisitor::PreOrderVisit( AAFTypedObjNode<IAAFParameter>& node )
 
   _spTestResult->AddSingleResult( L"REQ_EP_174",
                                   L"Parameter within " + name + L" is not a ConstantValue or VaryingValue.",
-                                  TestResult::FAIL );
+                                  TestResult::FAIL,
+				  node );
   return false;
 }
 
@@ -101,7 +102,8 @@ bool EPParameterVisitor::PreOrderVisit( AAFTypedObjNode<IAAFVaryingValue>& node 
         shared_ptr<DetailLevelTestResult> spFailure = _spTestResult->AddSingleResult(
             L"REQ_EP_175",
             L"VaryingValue object in " + name + L" has an illegal interpolation definition.",
-            TestResult::FAIL );
+            TestResult::FAIL,
+	    node );
 
         spFailure->AddDetail( L"AUID = " + AxStringUtil::uid2Str( axIntDef.GetAUID() ) + L")." );
     }

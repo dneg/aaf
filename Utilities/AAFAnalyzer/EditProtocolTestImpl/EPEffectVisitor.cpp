@@ -74,8 +74,8 @@ class TransitionInputVisitor : public TypedVisitor
 	    AxSequence axSequence( node.GetAAFObjectOfType() );
 
 	    // JPT REVIEW - The order issue has been resolved.  Review
-	    // the code to determine the the reordering code below can
-	    // be removed.
+	    // the code to determine the reordering code below can be
+	    // removed.
 
             //The graph may not return edges in order, therefore, we need to
             //loop through and find the correct transition by address.  Use
@@ -170,7 +170,7 @@ class AlphaEffectVisitor : public EPTypedVisitor
             AxEssenceDescriptor axDescriptor( axMob.GetEssenceDescriptor() );
             AxDigitalImageDescriptor axImageDesc( AxQueryInterface<IAAFEssenceDescriptor,
 						  IAAFDigitalImageDescriptor>( axDescriptor ) );
-            CheckTransparency( axImageDesc, mobName );
+            CheckTransparency( axImageDesc, mobName, node );
             return false;
         }
 
@@ -182,7 +182,7 @@ class AlphaEffectVisitor : public EPTypedVisitor
             AxString mobName = this->GetMobName( axMob, EPCDCIImageFileSource::GetName() );
             AxEssenceDescriptor axDescriptor( axMob.GetEssenceDescriptor() );
             AxDigitalImageDescriptor axImageDesc( AxQueryInterface<IAAFEssenceDescriptor, IAAFDigitalImageDescriptor>( axDescriptor ) );
-            CheckTransparency( axImageDesc, mobName );
+            CheckTransparency( axImageDesc, mobName, node );
             return false;
         }
 
@@ -197,13 +197,14 @@ class AlphaEffectVisitor : public EPTypedVisitor
                 _descriptorReq,
                 L"Input " + mobName + L" to " + EffectType::GetName() + L" in " +
                      _slotName + L" does not have a RGBADescriptor or a CDCIDescriptor.",
-                TestResult::FAIL );
+                TestResult::FAIL,
+		node );
             _testPassed = false;
 
             //Now check for the AlphaTransparency property.
             AxEssenceDescriptor axDescriptor( axMob.GetEssenceDescriptor() );
             AxDigitalImageDescriptor axImageDesc( AxQueryInterface<IAAFEssenceDescriptor, IAAFDigitalImageDescriptor>( axDescriptor ) );
-            CheckTransparency( axImageDesc, mobName );
+            CheckTransparency( axImageDesc, mobName, node );
             return false;
         }
 
@@ -213,7 +214,7 @@ class AlphaEffectVisitor : public EPTypedVisitor
             //property.
             AxCompositionMob axMob( node.GetAAFObjectOfType() );
             AxString mobName = this->GetMobName( axMob, L"Composition Mob");
-            FailBothRequirements( mobName );
+            FailBothRequirements( mobName, node );
             return false;
         }
 
@@ -223,7 +224,7 @@ class AlphaEffectVisitor : public EPTypedVisitor
             //property.
             AxMasterMob axMob( node.GetAAFObjectOfType() );
             AxString mobName = this->GetMobName( axMob, L"Master Mob");
-            FailBothRequirements( mobName );
+            FailBothRequirements( mobName, node );
             return false;
         }
 
@@ -233,7 +234,7 @@ class AlphaEffectVisitor : public EPTypedVisitor
             //property.
             AxSourceMob axMob( node.GetAAFObjectOfType() );
             AxString mobName = this->GetMobName( axMob, L"Source Mob");
-            FailBothRequirements( mobName );
+            FailBothRequirements( mobName, node );
             return false;
         }
 
@@ -243,7 +244,7 @@ class AlphaEffectVisitor : public EPTypedVisitor
             //property.
             AxMob axMob( node.GetAAFObjectOfType() );
             AxString mobName = this->GetMobName( axMob, L"Mob");
-            FailBothRequirements( mobName );
+            FailBothRequirements( mobName, node );
             return false;
         }
 
@@ -254,7 +255,7 @@ class AlphaEffectVisitor : public EPTypedVisitor
 
     private:
 
-        void CheckTransparency( AxDigitalImageDescriptor& axDescriptor, const AxString& inputName )
+        void CheckTransparency( AxDigitalImageDescriptor& axDescriptor, const AxString& inputName, Node& node )
         {
             try
             {
@@ -269,7 +270,8 @@ class AlphaEffectVisitor : public EPTypedVisitor
                         L"Input " + inputName + L" to " + EffectType::GetName() +
                              L" in " + _slotName +
                              L" does not have the DigitalImageDescriptor::AlphaTransparency property.",
-                        TestResult::FAIL );
+                        TestResult::FAIL,
+			node );
                     _testPassed = false;
                 }
                 else
@@ -279,18 +281,20 @@ class AlphaEffectVisitor : public EPTypedVisitor
             }
         }
 
-        void FailBothRequirements( const AxString& inputName )
+        void FailBothRequirements( const AxString& inputName, Node& node )
         {
             AxString ident = L"Input " + inputName + L" to " + EffectType::GetName() + L" in " + _slotName;
 
             _spTestResult->AddSingleResult(
                 _descriptorReq,
                 ident + L" does not have a RGBADescriptor or a CDCIDescriptor.",
-                TestResult::FAIL );
+                TestResult::FAIL,
+		node );
             _spTestResult->AddSingleResult(
                 _alphaReq,
                 ident + L" does not have the DigitalImageDescriptor::AlphaTransparency property.",
-                TestResult::FAIL );
+                TestResult::FAIL,
+		node );
             _testPassed = false;
         }
 
@@ -336,38 +340,21 @@ bool EPEffectVisitor::PreOrderVisit( EPTypedObjNode<IAAFOperationGroup, EPEffect
 
 bool EPEffectVisitor::PreOrderVisit( EPTypedObjNode<IAAFOperationGroup, EPVideoDissolveEffect>& node)
 {
-    bool testPassed = true;
-    testPassed = VeirfyTransitionRequirement( node, true, L"REQ_EP_180", EPVideoDissolveEffect::GetName() );
-
-    //If the traversal is going to stop, do not update the parent as this nodes
-    //children will not be visited and this node will not be post order visited.
-    if ( testPassed )
-    {
-       _isParentTransition.push( false );
-    }
-
-    return testPassed;
+    VerifyTransitionRequirement( node, true, L"REQ_EP_180", EPVideoDissolveEffect::GetName() );
+    _isParentTransition.push( false );
+    return true;
 }
 
 bool EPEffectVisitor::PreOrderVisit( EPTypedObjNode<IAAFOperationGroup, EPSMPTEVideoWipeEffect>& node)
 {
-    bool testPassed = true;
-    testPassed = VeirfyTransitionRequirement( node, true, L"REQ_EP_183", EPSMPTEVideoWipeEffect::GetName() );
-
-    //If the traversal is going to stop, do not update the parent as this nodes
-    //children will not be visited and this node will not be post order visited.
-    if ( testPassed )
-    {
-       _isParentTransition.push( false );
-    }
-
-    return testPassed;
+    VerifyTransitionRequirement( node, true, L"REQ_EP_183", EPSMPTEVideoWipeEffect::GetName() );
+    _isParentTransition.push( false );
+    return true;
 }
 
 bool EPEffectVisitor::PreOrderVisit( EPTypedObjNode<IAAFOperationGroup, EPVideoSpeedControlEffect>& node)
 {
-    bool testPassed = true;
-    testPassed = VeirfyTransitionRequirement( node, false, L"REQ_EP_186", EPVideoSpeedControlEffect::GetName() );
+    VerifyTransitionRequirement( node, false, L"REQ_EP_186", EPVideoSpeedControlEffect::GetName() );
 
     AxOperationGroup axOpGroup( node.GetAAFObjectOfType() );
 
@@ -382,43 +369,29 @@ bool EPEffectVisitor::PreOrderVisit( EPTypedObjNode<IAAFOperationGroup, EPVideoS
         if ( AxIsA( axParam, spConstVal ) )
         {
             AxConstantValue axConstParam( spConstVal );
-            try
-            {
-                aafRational_t parameter;
-                axConstParam.GetValue<aafRational_t>( parameter );
-                if ( parameter.denominator == 0 )
-                {
-                    ss << L" has a Speed Ratio parameter with a 0 denominator ("
-                       << parameter.numerator << L"/" << parameter.denominator
-                       << L").";
+	    aafRational_t parameter;
+	    axConstParam.GetValue<aafRational_t>( parameter );
+	    if ( parameter.denominator == 0 )
+	    {
+	      ss << L" has a Speed Ratio parameter with a 0 denominator ("
+		 << parameter.numerator << L"/" << parameter.denominator
+		 << L").";
 
-                    _spTestResult->AddSingleResult( L"REQ_EP_187", ss.str().c_str(), TestResult::WARN );
-
-                    testPassed = false;
-                }
-                else if ( parameter.numerator == 0 )
-                {
-                    ss << L" has a Speed Ratio parameter with a ratio value of 0 ("
-                       << parameter.numerator << L"/" << parameter.denominator
-                       << L").";
-
-                    _spTestResult->AddSingleResult( L"REQ_EP_187", ss.str().c_str(), TestResult::FAIL );
-
-                    testPassed = false;
-                }
-            }
-            catch ( const AxEx& )
-            {
-                ss << L" has a Speed Ratio parameter that does not have a rational value.";
-                _spTestResult->AddSingleResult( L"REQ_EP_187", ss.str().c_str(), TestResult::FAIL );
-                testPassed = false;
-            }
-        }
+	      _spTestResult->AddSingleResult( L"REQ_EP_187", ss.str().c_str(), TestResult::WARN, node );
+	    }
+	    else if ( parameter.numerator == 0 )
+	    {
+	      ss << L" has a Speed Ratio parameter with a ratio value of 0 ("
+		 << parameter.numerator << L"/" << parameter.denominator
+		 << L").";
+	      
+	      _spTestResult->AddSingleResult( L"REQ_EP_187", ss.str().c_str(), TestResult::FAIL, node );
+	    }
+	}
         else
         {
             ss << L" has a Speed Ratio parameter that is not constant";
-            _spTestResult->AddSingleResult( L"REQ_EP_187", ss.str().c_str(), TestResult::FAIL );
-            testPassed = false;
+            _spTestResult->AddSingleResult( L"REQ_EP_187", ss.str().c_str(), TestResult::FAIL, node );
         }
     }
     catch ( const AxExHResult& ex )
@@ -429,409 +402,236 @@ bool EPEffectVisitor::PreOrderVisit( EPTypedObjNode<IAAFOperationGroup, EPVideoS
         }
 
         ss << L" does not have a Speed Ratio parameter.";
-        _spTestResult->AddSingleResult( L"REQ_EP_187", ss.str().c_str(), TestResult::FAIL );
-        testPassed = false;
+        _spTestResult->AddSingleResult( L"REQ_EP_187", ss.str().c_str(), TestResult::FAIL, node );
     }
 
-    //If the traversal is going to stop, do not update the parent as this nodes
-    //children will not be visited and this node will not be post order visited.
-    if ( testPassed )
-    {
-       _isParentTransition.push( false );
-    }
+    _isParentTransition.push( false );
 
-    return testPassed;
+    return true;
 }
 
 bool EPEffectVisitor::PreOrderVisit( EPTypedObjNode<IAAFOperationGroup, EPVideoRepeatEffect>& node)
 {
-    bool testPassed = true;
-    testPassed = VeirfyTransitionRequirement( node, false, L"REQ_EP_190", EPVideoRepeatEffect::GetName() );
-
-    //If the traversal is going to stop, do not update the parent as this nodes
-    //children will not be visited and this node will not be post order visited.
-    if ( testPassed )
-    {
-       _isParentTransition.push( false );
-    }
-
-    return testPassed;
+  VerifyTransitionRequirement( node, false, L"REQ_EP_190", EPVideoRepeatEffect::GetName() );
+  _isParentTransition.push( false );
+  return true;
 }
 
 bool EPEffectVisitor::PreOrderVisit( EPTypedObjNode<IAAFOperationGroup, EPVideoFlipEffect>& node)
 {
-    bool testPassed = true;
-    testPassed = VeirfyTransitionRequirement( node, false, L"REQ_EP_194", EPVideoFlipEffect::GetName() );
-
-    //If the traversal is going to stop, do not update the parent as this nodes
-    //children will not be visited and this node will not be post order visited.
-    if ( testPassed )
-    {
-       _isParentTransition.push( false );
-    }
-
-    return testPassed;
+  VerifyTransitionRequirement( node, false, L"REQ_EP_194", EPVideoFlipEffect::GetName() );
+  _isParentTransition.push( false );
+  return true;
 }
 
 bool EPEffectVisitor::PreOrderVisit( EPTypedObjNode<IAAFOperationGroup, EPVideoFlopEffect>& node)
 {
-    bool testPassed = true;
-    testPassed = VeirfyTransitionRequirement( node, false, L"REQ_EP_197", EPVideoFlopEffect::GetName() );
-
-    //If the traversal is going to stop, do not update the parent as this nodes
-    //children will not be visited and this node will not be post order visited.
-    if ( testPassed )
-    {
-       _isParentTransition.push( false );
-    }
-
-    return testPassed;
+  VerifyTransitionRequirement( node, false, L"REQ_EP_197", EPVideoFlopEffect::GetName() );
+  _isParentTransition.push( false );
+  return true;
 }
 
 bool EPEffectVisitor::PreOrderVisit( EPTypedObjNode<IAAFOperationGroup, EPVideoFlipFlopEffect>& node)
 {
-    bool testPassed = true;
-    testPassed = VeirfyTransitionRequirement( node, false, L"REQ_EP_200", EPVideoFlipFlopEffect::GetName() );
-
-    //If the traversal is going to stop, do not update the parent as this nodes
-    //children will not be visited and this node will not be post order visited.
-    if ( testPassed )
-    {
-       _isParentTransition.push( false );
-    }
-
-    return testPassed;
+  VerifyTransitionRequirement( node, false, L"REQ_EP_200", EPVideoFlipFlopEffect::GetName() );
+  _isParentTransition.push( false );
+  return true;
 }
 
 bool EPEffectVisitor::PreOrderVisit( EPTypedObjNode<IAAFOperationGroup, EPVideoPositionEffect>& node)
 {
-    bool testPassed = true;
-    testPassed = VeirfyTransitionRequirement( node, false, L"REQ_EP_203", EPVideoPositionEffect::GetName() );
-
-    //If the traversal is going to stop, do not update the parent as this nodes
-    //children will not be visited and this node will not be post order visited.
-    if ( testPassed )
-    {
-       _isParentTransition.push( false );
-    }
-
-    return testPassed;
+  VerifyTransitionRequirement( node, false, L"REQ_EP_203", EPVideoPositionEffect::GetName() );
+  _isParentTransition.push( false );
+  return true;
 }
 
 bool EPEffectVisitor::PreOrderVisit( EPTypedObjNode<IAAFOperationGroup, EPVideoCropEffect>& node)
 {
-    bool testPassed = true;
-    testPassed = VeirfyTransitionRequirement( node, false, L"REQ_EP_206", EPVideoCropEffect::GetName() );
-
-    //If the traversal is going to stop, do not update the parent as this nodes
-    //children will not be visited and this node will not be post order visited.
-    if ( testPassed )
-    {
-       _isParentTransition.push( false );
-    }
-
-    return testPassed;
+  VerifyTransitionRequirement( node, false, L"REQ_EP_206", EPVideoCropEffect::GetName() );
+  _isParentTransition.push( false );
+  return true;
 }
 
 bool EPEffectVisitor::PreOrderVisit( EPTypedObjNode<IAAFOperationGroup, EPVideoScaleEffect>& node)
 {
-    bool testPassed = true;
-    testPassed = VeirfyTransitionRequirement( node, false, L"REQ_EP_209", EPVideoScaleEffect::GetName() );
-
-    //If the traversal is going to stop, do not update the parent as this nodes
-    //children will not be visited and this node will not be post order visited.
-    if ( testPassed )
-    {
-       _isParentTransition.push( false );
-    }
-
-    return testPassed;
+  VerifyTransitionRequirement( node, false, L"REQ_EP_209", EPVideoScaleEffect::GetName() );
+  _isParentTransition.push( false );
+  return true;
 }
 
 bool EPEffectVisitor::PreOrderVisit( EPTypedObjNode<IAAFOperationGroup, EPVideoRotateEffect>& node)
 {
-    bool testPassed = true;
-    testPassed = VeirfyTransitionRequirement( node, false, L"REQ_EP_212", EPVideoRotateEffect::GetName() );
-
-    //If the traversal is going to stop, do not update the parent as this nodes
-    //children will not be visited and this node will not be post order visited.
-    if ( testPassed )
-    {
-       _isParentTransition.push( false );
-    }
-
-    return testPassed;
+  VerifyTransitionRequirement( node, false, L"REQ_EP_212", EPVideoRotateEffect::GetName() );
+  _isParentTransition.push( false );
+  return true;
 }
 
 bool EPEffectVisitor::PreOrderVisit( EPTypedObjNode<IAAFOperationGroup, EPVideoCornerPinningEffect>& node)
 {
-    bool testPassed = true;
-    testPassed = VeirfyTransitionRequirement( node, false, L"REQ_EP_215", EPVideoCornerPinningEffect::GetName() );
-
-    //If the traversal is going to stop, do not update the parent as this nodes
-    //children will not be visited and this node will not be post order visited.
-    if ( testPassed )
-    {
-       _isParentTransition.push( false );
-    }
-
-    return testPassed;
+  VerifyTransitionRequirement( node, false, L"REQ_EP_215", EPVideoCornerPinningEffect::GetName() );
+  _isParentTransition.push( false );
+  return true;
 }
 
 bool EPEffectVisitor::PreOrderVisit( EPTypedObjNode<IAAFOperationGroup, EPAlphaWithVideoKeyEffect>& node)
 {
-    bool testPassed = true;
-    testPassed = VeirfyTransitionRequirement( node, false, L"REQ_EP_220", EPAlphaWithVideoKeyEffect::GetName() );
+  VerifyTransitionRequirement( node, false, L"REQ_EP_220", EPAlphaWithVideoKeyEffect::GetName() );
 
-    AxOperationGroup axOpGroup( node.GetAAFObjectOfType() );
-    testPassed = VerifyAlphaRequirements( axOpGroup, EPAlphaWithVideoKeyEffect::GetName(), 2, L"REQ_EP_218", L"REQ_EP_219", this->GetMobSlotName( _spEdgeMap, node ) ) && testPassed;
+  AxOperationGroup axOpGroup( node.GetAAFObjectOfType() );
+  VerifyAlphaRequirements( node, axOpGroup, EPAlphaWithVideoKeyEffect::GetName(), 2, L"REQ_EP_218", L"REQ_EP_219", this->GetMobSlotName( _spEdgeMap, node ) );
 
-    //If the traversal is going to stop, do not update the parent as this nodes
-    //children will not be visited and this node will not be post order visited.
-    if ( testPassed )
-    {
-       _isParentTransition.push( false );
-    }
-
-    return testPassed;
+  _isParentTransition.push( false );
+  return true;
 }
 
 bool EPEffectVisitor::PreOrderVisit( EPTypedObjNode<IAAFOperationGroup, EPSeparateAlphaKeyEffect>& node)
 {
-    bool testPassed = true;
-    testPassed = VeirfyTransitionRequirement( node, false, L"REQ_EP_225", EPSeparateAlphaKeyEffect::GetName() );
+  VerifyTransitionRequirement( node, false, L"REQ_EP_225", EPSeparateAlphaKeyEffect::GetName() );
 
-    AxOperationGroup axOpGroup( node.GetAAFObjectOfType() );
-    testPassed = VerifyAlphaRequirements( axOpGroup, EPSeparateAlphaKeyEffect::GetName(), 3, L"REQ_EP_223", L"REQ_EP_224", this->GetMobSlotName( _spEdgeMap, node ) ) && testPassed;
+  AxOperationGroup axOpGroup( node.GetAAFObjectOfType() );
+  VerifyAlphaRequirements( node, axOpGroup, EPSeparateAlphaKeyEffect::GetName(), 3, L"REQ_EP_223", L"REQ_EP_224", this->GetMobSlotName( _spEdgeMap, node ) );
 
-    //If the traversal is going to stop, do not update the parent as this nodes
-    //children will not be visited and this node will not be post order visited.
-    if ( testPassed )
-    {
-       _isParentTransition.push( false );
-    }
-
-    return testPassed;
+  _isParentTransition.push( false );
+  
+  return true;
 }
 
 bool EPEffectVisitor::PreOrderVisit( EPTypedObjNode<IAAFOperationGroup, EPLuminanceKeyEffect>& node)
 {
-    bool testPassed = true;
-    testPassed = VeirfyTransitionRequirement( node, false, L"REQ_EP_228", EPLuminanceKeyEffect::GetName() );
+  VerifyTransitionRequirement( node, false, L"REQ_EP_228", EPLuminanceKeyEffect::GetName() );
 
-    //If the traversal is going to stop, do not update the parent as this nodes
-    //children will not be visited and this node will not be post order visited.
-    if ( testPassed )
-    {
-       _isParentTransition.push( false );
-    }
+  _isParentTransition.push( false );
 
-    return testPassed;
+  return true;
 }
 
 bool EPEffectVisitor::PreOrderVisit( EPTypedObjNode<IAAFOperationGroup, EPChromaKeyEffect>& node)
 {
-    bool testPassed = true;
-    testPassed = VeirfyTransitionRequirement( node, false, L"REQ_EP_231", EPChromaKeyEffect::GetName() );
-
-    //If the traversal is going to stop, do not update the parent as this nodes
-    //children will not be visited and this node will not be post order visited.
-    if ( testPassed )
-    {
-       _isParentTransition.push( false );
-    }
-
-    return testPassed;
+  VerifyTransitionRequirement( node, false, L"REQ_EP_231", EPChromaKeyEffect::GetName() );
+  _isParentTransition.push( false );
+  return true;
 }
 
 bool EPEffectVisitor::PreOrderVisit( EPTypedObjNode<IAAFOperationGroup, EPMonoAudioGainEffect>& node)
 {
-    bool testPassed = true;
-    testPassed = VeirfyTransitionRequirement( node, false, L"REQ_EP_234", EPMonoAudioGainEffect::GetName() );
-
-    //If the traversal is going to stop, do not update the parent as this nodes
-    //children will not be visited and this node will not be post order visited.
-    if ( testPassed )
-    {
-       _isParentTransition.push( false );
-    }
-
-    return testPassed;
+  VerifyTransitionRequirement( node, false, L"REQ_EP_234", EPMonoAudioGainEffect::GetName() );
+  _isParentTransition.push( false );
+  return true;
 }
 
 bool EPEffectVisitor::PreOrderVisit( EPTypedObjNode<IAAFOperationGroup, EPMonoAudioPanEffect>& node)
 {
-    bool testPassed = true;
-    testPassed = VeirfyTransitionRequirement( node, false, L"REQ_EP_240", EPMonoAudioPanEffect::GetName() );
-
-    //If the traversal is going to stop, do not update the parent as this nodes
-    //children will not be visited and this node will not be post order visited.
-    if ( testPassed )
-    {
-       _isParentTransition.push( false );
-    }
-
-    return testPassed;
+  VerifyTransitionRequirement( node, false, L"REQ_EP_240", EPMonoAudioPanEffect::GetName() );
+  _isParentTransition.push( false );
+  return true;
 }
 
 bool EPEffectVisitor::PreOrderVisit( EPTypedObjNode<IAAFOperationGroup, EPSingleParameterAudioDissolveEffect>& node)
 {
-    bool testPassed = true;
-    testPassed = VeirfyTransitionRequirement( node, true, L"REQ_EP_244", EPSingleParameterAudioDissolveEffect::GetName() );
-
-    //If the traversal is going to stop, do not update the parent as this nodes
-    //children will not be visited and this node will not be post order visited.
-    if ( testPassed )
-    {
-       _isParentTransition.push( false );
-    }
-
-    return testPassed;
+  VerifyTransitionRequirement( node, true, L"REQ_EP_244", EPSingleParameterAudioDissolveEffect::GetName() );
+  _isParentTransition.push( false );
+  return true;
 }
 
 bool EPEffectVisitor::PreOrderVisit( EPTypedObjNode<IAAFOperationGroup, EPTwoParameterAudioDissolveEffect>& node)
 {
-    bool testPassed = true;
-    testPassed = VeirfyTransitionRequirement( node, true, L"REQ_EP_247", EPTwoParameterAudioDissolveEffect::GetName() );
+  VerifyTransitionRequirement( node, true, L"REQ_EP_247", EPTwoParameterAudioDissolveEffect::GetName() );
 
-    AxString name = EPTwoParameterAudioDissolveEffect::GetName() + L" in " + this->GetMobSlotName( _spEdgeMap, node );
-    if ( !testPassed )
+  AxString name = EPTwoParameterAudioDissolveEffect::GetName() + L" in " + this->GetMobSlotName( _spEdgeMap, node );
+  if ( !_isParentTransition.top() )
+  {
+    //Parent is not a transition, so, we can't check REQ_EP_249.
+    AxString explain = name + L" is not within a Transition object.";
+    _spTestResult->AddSingleResult( L"REQ_EP_248", explain, TestResult::FAIL, node );
+    _spTestResult->AddSingleResult( L"REQ_EP_249", explain, TestResult::FAIL, node );
+  }
+  else
+  {
+    shared_ptr<TransitionInputVisitor> spVisitor( new TransitionInputVisitor() );
+    shared_ptr<Node> spNode( node.GetSharedPointerToNode() );
+    DepthFirstTraversal dft( _spEdgeMap, spNode );
+    dft.TraverseUp( spVisitor );
+
+    bool incomingPassed = true;
+    bool outgoingPassed = true;
+    
+    AxTransition axTransition( spVisitor->GetTransition() );
+    pair<bool,aafLength_t> transitionLen = axTransition.ExistsLength();
+    if ( !transitionLen.first )
     {
-        //Parent is not a transition, so, we can't check REQ_EP_249.
-        AxString explain = name + L" is not within a Transition object.";
-        _spTestResult->AddSingleResult( L"REQ_EP_248", explain, TestResult::FAIL );
-        _spTestResult->AddSingleResult( L"REQ_EP_249", explain, TestResult::FAIL );
+      AxString explain = L"Transition object of " + name
+	+ L" does not have a length property.";
+      _spTestResult->AddSingleResult( L"REQ_EP_248", explain, TestResult::FAIL, node );
+      _spTestResult->AddSingleResult( L"REQ_EP_249", explain, TestResult::FAIL, node );
+      incomingPassed = false;
+      outgoingPassed = false;
+    }
+
+    if ( spVisitor->GetFollowingComponent() )
+    {
+      AxComponent incoming( spVisitor->GetFollowingComponent() );
+      pair<bool,aafLength_t> incomingLen = incoming.ExistsLength();
+      if ( !incomingLen.first )
+      {
+	AxString explain = L"Incoming segment of " + name
+	  + L" does not have a length property.";
+	_spTestResult->AddSingleResult( L"REQ_EP_248", explain, TestResult::FAIL, node );
+	_spTestResult->AddSingleResult( L"REQ_EP_249", explain, TestResult::FAIL, node );
+	incomingPassed = false;
+      }
+      
+      if ( incomingPassed && incomingLen.second < transitionLen.second )
+      {
+	wstringstream ss;
+	
+	ss << name << L" has an incoming segment with length = "
+	   << incomingLen.second << L" and a transition with length = "
+	   << transitionLen.second << L".";
+	_spTestResult->AddSingleResult( L"REQ_EP_248", ss.str().c_str(), TestResult::FAIL, node );
+	_spTestResult->AddSingleResult( L"REQ_EP_249", ss.str().c_str(), TestResult::FAIL, node );
+	incomingPassed = false;
+      }
     }
     else
     {
-        shared_ptr<TransitionInputVisitor> spVisitor( new TransitionInputVisitor() );
-        shared_ptr<Node> spNode( node.GetSharedPointerToNode() );
-        DepthFirstTraversal dft( _spEdgeMap, spNode );
-        dft.TraverseUp( spVisitor );
-
-        bool incomingPassed = true;
-        bool outgoingPassed = true;
-
-        aafLength_t transitionLen = 0;
-        AxTransition axTransition( spVisitor->GetTransition() );
-        try
-        {
-            transitionLen = axTransition.GetLength();
-        }
-        catch ( const AxExHResult& ex )
-        {
-            if ( ex.getHResult() == AAFRESULT_PROP_NOT_PRESENT )
-            {
-                AxString explain = L"Transition object of " + name
-                                 + L" does not have a length property.";
-                _spTestResult->AddSingleResult( L"REQ_EP_248", explain, TestResult::FAIL );
-                _spTestResult->AddSingleResult( L"REQ_EP_249", explain, TestResult::FAIL );
-                incomingPassed = false;
-                outgoingPassed = false;
-            }
-            else
-            {
-                throw ex;
-            }
-        }
-
-        if ( spVisitor->GetFollowingComponent() )
-        {
-            aafLength_t incomingLen;
-            AxComponent incoming( spVisitor->GetFollowingComponent() );
-            try
-            {
-                incomingLen = incoming.GetLength();
-            }
-            catch ( const AxExHResult& ex )
-            {
-                if ( ex.getHResult() == AAFRESULT_PROP_NOT_PRESENT )
-                {
-                    AxString explain = L"Incoming segment of " + name
-                                     + L" does not have a length property.";
-                    _spTestResult->AddSingleResult( L"REQ_EP_248", explain, TestResult::FAIL );
-                    _spTestResult->AddSingleResult( L"REQ_EP_249", explain, TestResult::FAIL );
-                    incomingPassed = false;
-                }
-                else
-                {
-                    throw ex;
-                }
-            }
-
-            if ( incomingPassed && incomingLen < transitionLen )
-            {
-                wstringstream ss;
-
-                ss << name << L" has an incoming segment with length = "
-                   << incomingLen << L" and a transition with length = "
-                   << transitionLen << L".";
-                _spTestResult->AddSingleResult( L"REQ_EP_248", ss.str().c_str(), TestResult::FAIL );
-                _spTestResult->AddSingleResult( L"REQ_EP_249", ss.str().c_str(), TestResult::FAIL );
-                incomingPassed = false;
-            }
-        }
-        else
-        {
-            AxString explain = name + L" does not have an incoming segment.";
-            _spTestResult->AddSingleResult( L"REQ_EP_248", explain, TestResult::FAIL );
-            _spTestResult->AddSingleResult( L"REQ_EP_249", explain, TestResult::FAIL );
-            testPassed = false;
-        }
-
-        if ( spVisitor->GetPreceedingComponent() )
-        {
-            aafLength_t outgoingLen;
-            AxComponent outgoing( spVisitor->GetPreceedingComponent() );
-            try
-            {
-                outgoingLen = outgoing.GetLength();
-            }
-            catch ( const AxExHResult& ex )
-            {
-                if ( ex.getHResult() == AAFRESULT_PROP_NOT_PRESENT )
-                {
-                    AxString explain = L"Outgoing segment of " + name
-                                     + L" does not have a length property.";
-                    _spTestResult->AddSingleResult( L"REQ_EP_249", explain, TestResult::FAIL );
-                    outgoingPassed = false;
-                }
-                else
-                {
-                    throw ex;
-                }
-            }
-
-            if ( outgoingPassed && outgoingLen < transitionLen )
-            {
-                wstringstream ss;
-
-                ss << name << L" has an outgoing segment with length = "
-                   << outgoingLen << L" and a transition with length = "
-                   << transitionLen << L".";
-                _spTestResult->AddSingleResult( L"REQ_EP_249", ss.str().c_str(), TestResult::FAIL );
-                outgoingPassed = false;
-            }
-        }
-        else
-        {
-            AxString explain = name + L" does not have an outgoing segment.";
-            _spTestResult->AddSingleResult( L"REQ_EP_249", explain, TestResult::FAIL );
-            testPassed = false;
-        }
-
-        testPassed = incomingPassed && outgoingPassed;
-
+      AxString explain = name + L" does not have an incoming segment.";
+      _spTestResult->AddSingleResult( L"REQ_EP_248", explain, TestResult::FAIL, node );
+      _spTestResult->AddSingleResult( L"REQ_EP_249", explain, TestResult::FAIL, node );
     }
-
-    //If the traversal is going to stop, do not update the parent as this nodes
-    //children will not be visited and this node will not be post order visited.
-    if ( testPassed )
+    
+    if ( spVisitor->GetPreceedingComponent() )
     {
-       _isParentTransition.push( false );
+      AxComponent outgoing( spVisitor->GetPreceedingComponent() );
+      pair<bool,aafLength_t> outgoingLen = outgoing.ExistsLength();
+      if ( !outgoingLen.first )
+      {
+	AxString explain = L"Outgoing segment of " + name
+	  + L" does not have a length property.";
+	_spTestResult->AddSingleResult( L"REQ_EP_249", explain, TestResult::FAIL, node );
+	outgoingPassed = false;
+      }
+      
+      if ( outgoingPassed && outgoingLen.second < transitionLen.second )
+      {
+	wstringstream ss;
+	
+	ss << name << L" has an outgoing segment with length = "
+	   << outgoingLen.second << L" and a transition with length = "
+	   << transitionLen.second << L".";
+	_spTestResult->AddSingleResult( L"REQ_EP_249", ss.str().c_str(), TestResult::FAIL, node );
+	outgoingPassed = false;
+      }
     }
-
-    return testPassed;
+    else
+    {
+      AxString explain = name + L" does not have an outgoing segment.";
+      _spTestResult->AddSingleResult( L"REQ_EP_249", explain, TestResult::FAIL, node );
+    }
+  }
+  
+  _isParentTransition.push( false );
+  
+  return true;
 }
 
 bool EPEffectVisitor::PreOrderVisit( AAFTypedObjNode<IAAFTransition>& node )
@@ -846,6 +646,8 @@ bool EPEffectVisitor::PreOrderVisit( AAFTypedObjNode<IAAFOperationGroup>& node )
     // it didn't anticipate effects other those above (the decorated
     // operation group objects.  This should generate a warning
     // because it indicates the presence of an unknown effect.
+
+
     _isParentTransition.push(false);
     return true;
 }
@@ -862,115 +664,171 @@ bool EPEffectVisitor::PostOrderVisit( AAFTypedObjNode<IAAFTransition>& node )
     return true;
 }
 
-bool EPEffectVisitor::VeirfyTransitionRequirement( AAFTypedObjNode<IAAFOperationGroup>& node, bool withinTransition, const AxString& reqId, const AxString& type )
+void EPEffectVisitor::VerifyTransitionRequirement( AAFTypedObjNode<IAAFOperationGroup>& node,
+						   bool mustBeInTransition,
+						   const AxString& reqId,
+						   const AxString& type )
 {
-    if ( withinTransition != _isParentTransition.top() )
-    {
-        AxString mobSlotName = this->GetMobSlotName( _spEdgeMap, node );
-        AxString explain = type + L" in " + mobSlotName + L" is ";
-        if ( withinTransition )
-        {
-            explain += L"not ";
-        }
-        explain += L"within a Transition object.";
-        if ( withinTransition )
-        {
-            _spTestResult->AddSingleResult( L"REQ_EP_163", explain, TestResult::FAIL );
-        }
-        else
-        {
-            _spTestResult->AddSingleResult( L"REQ_EP_164", explain, TestResult::FAIL );
-        }
-        _spTestResult->AddSingleResult( reqId, explain, TestResult::FAIL );
-        return false;
-    }
-    return true;
+  TestResult::Result result = TestResult::PASS;
+
+  // If mustBeInTrantion is true then _isParentTransition.top() must
+  // be true (i.e. we are in a transtition).
+  //
+  // If mustBeInTrantion is false then _isParentTransition.top() must
+  // be false (i.e. we are not in a transtition).
+
+  if ( mustBeInTransition != _isParentTransition.top() )
+  {
+    result = TestResult::FAIL;
+  }
+
+  // Build the message.  e.g. "Dissolve is in transition", or
+  // "Dissolve is not in transition".
+  
+  AxString mobSlotName = this->GetMobSlotName( _spEdgeMap, node );
+  AxString explain = type + L" in " + mobSlotName + L" is ";
+
+  
+  // We need to insert the word "not" depending on whether this effect
+  // must or must not be in a transition and whether it actually is or
+  // is not. The four cases are:
+  //
+  // (mustBeInTransition && TestResult::Result == PASS)
+  // It must and it is: "effect is in a transition" -> don't add not
+  //
+  // (mustBeInTransition && TestResult::Result == FAIL)
+  // It must and it is not: "effect is not in a transition" -> do add not
+  //
+  // (!mustBeInTransition && TestResult::Result == PASS)
+  // It must not and it is not: "effect is not in a transition" -> do add not
+  //
+  // (!mustBeInTransition && TestResult::Result == FAIL)
+  // It must not and it is: "effect is in a transition" -> don't add not
+
+  if ( ( mustBeInTransition && result == TestResult::FAIL) ||
+       (!mustBeInTransition && result == TestResult::PASS) )
+  {
+    explain += L"not ";
+  }
+
+  explain += L"within a Transition object.";
+  
+  _spTestResult->AddSingleResult( reqId, explain, TestResult::FAIL, node );
 }
 
-bool EPEffectVisitor::VerifyAlphaRequirements( AxOperationGroup& axOpGroup, const AxString& effectType, aafUInt32 expectedInputs, const AxString& descriptorReq, const AxString& alphaReq, const AxString& slotName )
+void EPEffectVisitor::VerifyAlphaRequirements( Node& node, 
+					       AxOperationGroup& axOpGroup,
+					       const AxString& effectType,
+					       aafUInt32 expectedInputs,
+					       const AxString& descriptorReq,
+					       const AxString& alphaReq,
+					       const AxString& slotName )
 {
-    if ( axOpGroup.CountSourceSegments() == expectedInputs )
+  if ( axOpGroup.CountSourceSegments() == expectedInputs )
+  {
+    // The alpha input is always the final input
+
+    AxSegment axSegment( axOpGroup.GetInputSegmentAt( expectedInputs - 1) );
+    IAAFSourceReferenceSP spSrcRef;
+
+    if ( AxIsA( axSegment, spSrcRef ) )
     {
-        //The alpha input is always the final input
-        AxSegment axSegment( axOpGroup.GetInputSegmentAt( expectedInputs - 1) );
-        IAAFSourceReferenceSP spSrcRef;
-        //Make sure the input is a source reference
-        if ( AxIsA( axSegment, spSrcRef ) )
-        {
-            AxSourceReference axSourceRef( spSrcRef );
-            aafMobID_t mobid = axSourceRef.GetSourceID();
+      AxSourceReference axSourceRef( spSrcRef );
+      aafMobID_t mobid = axSourceRef.GetSourceID();
+      
+      // Make sure the source reference leads to a mob.
+      if ( AxConstants::NULL_MOBID == mobid )
+      {
+	// Not a valid mob so fail
+	_spTestResult->AddSingleResult( descriptorReq,
+					L"Input to " + effectType +  L" in " + slotName + L" is a null source reference.",
+					TestResult::FAIL,
+					node );
+	_spTestResult->AddSingleResult( alphaReq,
+					L"Input to " + effectType +  L" in " + slotName + L" is a null source reference.",
+					TestResult::FAIL,
+					node );
+	return;
+      }
 
-            //Make sure the source reference leads to a mob.
-            if ( AxConstants::NULL_MOBID == mobid )
-            {
-                //Not a valid mob so fail
-                _spTestResult->AddSingleResult(
-                    descriptorReq,
-                    L"Input to " + effectType +  L" in " + slotName + L" is a null source reference.",
-                    TestResult::FAIL );
-                _spTestResult->AddSingleResult(
-                    alphaReq,
-                    L"Input to " + effectType +  L" in " + slotName + L" is a null source reference.",
-                    TestResult::FAIL );
-                return false;
-            }
+      // Make sure the source reference leads to a mob in this file.
+      //
+      // JPT REVIEW - This is sufficient to determine the reference is
+      // valid only because the prior reference resolution test
+      // validated slot id of the reference.  and will have generated
+      // an error (unnoticed here) it is not.
+      //
+      // A better way to do this would be to access that resolution
+      // information, not repeat the test here. That can be done be
+      // accessing thild nodes directly. They should be references and
+      // they should be valid.
 
-            //Make sure the source reference leads to a mob in this file.
-            shared_ptr<Node> spInputNode = MobNodeMap::GetInstance().GetMobNode(mobid);
-            if ( !spInputNode )
-            {
-                //Out of File reference so warn.
-                _spTestResult->AddSingleResult(
-                    descriptorReq,
-                    L"Input to " + effectType +  L" in " + slotName + L" is an out-of-file reference.",
-                    TestResult::WARN );
-                _spTestResult->AddSingleResult(
-                    alphaReq,
-                    L"Input to " + effectType +  L" in " + slotName + L" is an out-of-file reference.",
-                    TestResult::WARN );
-                return false;
-            }
+      shared_ptr<Node> spInputNode = MobNodeMap::GetInstance().GetMobNode(mobid);
+      if ( !spInputNode )
+      {
+	// Out of File reference so warn.
+	_spTestResult->AddSingleResult( descriptorReq,
+					L"Input to " + effectType +  L" in " + slotName + L" is an out-of-file reference.",
+					TestResult::WARN,
+					node );
+	_spTestResult->AddSingleResult( alphaReq,
+					L"Input to " + effectType +  L" in " + slotName + L" is an out-of-file reference.",
+					TestResult::WARN,
+					node );
+	return;
+      }
 
-            //Verify the Alpha Requirements.
-            shared_ptr<AlphaEffectVisitor<EPAlphaWithVideoKeyEffect> > spVisitor( new AlphaEffectVisitor<EPAlphaWithVideoKeyEffect>( descriptorReq, alphaReq, slotName, _spTestResult ) );
-            DepthFirstTraversal dft( _spEdgeMap, spInputNode );
-            dft.TraverseDown( spVisitor );
-            return spVisitor->GetTestResult();
-        }
-        else
-        {
-            //The input is not a source reference so fail
-            _spTestResult->AddSingleResult(
-                descriptorReq,
-                L"Input to " + effectType +  L" in " + slotName + L" is not a SourceReference.",
-                TestResult::FAIL );
-            _spTestResult->AddSingleResult(
-                alphaReq,
-                L"Input to " + effectType +  L" in " + slotName + L" is not a SourceReference.",
-                TestResult::FAIL );
-            return false;
-        }
+      // Else, record pass result.
+      _spTestResult->AddSingleResult( descriptorReq,
+				      L"Input to " + effectType +  L" in " + slotName + L" is a valid reference.",
+				      TestResult::PASS,
+				      node );
+      _spTestResult->AddSingleResult( alphaReq,
+				      L"Input to " + effectType +  L" in " + slotName + L" is a valid reference.",
+				      TestResult::PASS,
+				      node );
+
+      //Verify the Alpha Requirements.
+      shared_ptr<AlphaEffectVisitor<EPAlphaWithVideoKeyEffect> >
+	spVisitor( new AlphaEffectVisitor<EPAlphaWithVideoKeyEffect>( descriptorReq, alphaReq, slotName, _spTestResult ) );
+      DepthFirstTraversal dft( _spEdgeMap, spInputNode );
+      dft.TraverseDown( spVisitor );
+      return;
     }
     else
     {
-        //Incorrect number of Input Segments - don't know which one to check so fail
-        wstringstream ss;
-
-        ss << expectedInputs << L" segments and found "
-           << axOpGroup.CountSourceSegments() << L" segments.";
-
-        _spTestResult->AddSingleResult(
-            descriptorReq,
-            effectType +  L" in " + slotName + L" has an incorrect number of input segments. " +
-                + L"Expecting " + ss.str().c_str(),
-            TestResult::FAIL );
-        _spTestResult->AddSingleResult(
-            alphaReq,
-            effectType +  L" in " + slotName + L" has an incorrect number of input segments. " +
-                + L"Expecting " + ss.str().c_str(),
-            TestResult::FAIL );
-        return false;
+      //The input is not a source reference so fail
+      _spTestResult->AddSingleResult( descriptorReq,
+				      L"Input to " + effectType +  L" in " + slotName + L" is not a SourceReference.",
+				      TestResult::FAIL,
+				      node );
+      _spTestResult->AddSingleResult( alphaReq,
+				      L"Input to " + effectType +  L" in " + slotName + L" is not a SourceReference.",
+				      TestResult::FAIL,
+				      node );
+      return;
     }
+  }
+  else
+  {
+    //Incorrect number of Input Segments - don't know which one to check so fail
+    wstringstream ss;
+    
+    ss << expectedInputs << L" segments and found "
+       << axOpGroup.CountSourceSegments() << L" segments.";
+    
+    _spTestResult->AddSingleResult( descriptorReq,
+				    effectType +  L" in " + slotName + L" has an incorrect number of input segments. " +
+				    + L"Expecting " + ss.str().c_str(),
+				    TestResult::FAIL,
+				    node );
+    _spTestResult->AddSingleResult( alphaReq,
+				    effectType +  L" in " + slotName + L" has an incorrect number of input segments. " +
+				    + L"Expecting " + ss.str().c_str(),
+				    TestResult::FAIL,
+				    node );
+    return;
+  }
 }
 
 } // end of namespace aafanalyzer

@@ -2,19 +2,274 @@
         Desc:   Verify the use of DataDefinition objects throught the file.
         Result: Failed
         Reason: 
-        Covered Requirements: REQ_EP_163
+        Covered Requirements: None
         Noted Requirements: None
-        Passing Requirements: None
+        Passing Requirements: REQ_EP_163
+        Info Requirements: None
         Warning Requirements: None
         Failing Requirements: REQ_EP_162
 
             Name:   OperationDefinition Data Definition Value
             Desc:   An OperationDefinition object in an AAF file shall have a data definition value consistent with the data definition of an OperationGroup object that references it.
+            Node:   8 (OperationGroup)
             Result: Failed
             Reason: OperationGroup in Mob slot with ID = 1 of Top-Level Composition "Invalid OperationGroup/OperationDefinition" has data definition value "DataDef_Sound" and references OperationDefinition "Chroma Key" with data definition value "DataDef_Picture".
             Covered Requirements: None
             Noted Requirements: None
             Passing Requirements: None
+            Info Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_162
+
+            Name:   OperationDefinition Data Definition Value
+            Desc:   An OperationDefinition object in an AAF file shall have a data definition value consistent with the data definition of an OperationGroup object that references it.
+            Node:   131 (OperationDefinition)
+            Result: Info
+            Reason: OperationDefinition "Unused" is not referenced.
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: None
+            Info Requirements: REQ_EP_162
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Effect Data Definition Values
+            Desc:   The effects defined in the Edit Protocol should be used with the AAF v1.1 data definition values of DataDef_Picture and DataDef_Sound.  The deprecated data definition values of DataDef_LegacyPicture and DataDef_LegacySound should only be used when working with legacy AAF v1.0 files.
+            Node:   134 (OperationDefinition)
+            Result: Passed
+            Reason: OperationDefinition "Alpha With Video Key effect" has DataDefinition = DataDef_DataDef_Picture in an AAF Version 1.1 file.
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: REQ_EP_163
+            Info Requirements: None
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Effect Data Definition Values
+            Desc:   The effects defined in the Edit Protocol should be used with the AAF v1.1 data definition values of DataDef_Picture and DataDef_Sound.  The deprecated data definition values of DataDef_LegacyPicture and DataDef_LegacySound should only be used when working with legacy AAF v1.0 files.
+            Node:   151 (OperationDefinition)
+            Result: Passed
+            Reason: OperationDefinition "Chroma Key" has DataDefinition = DataDef_DataDef_Picture in an AAF Version 1.1 file.
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: REQ_EP_163
+            Info Requirements: None
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Effect Data Definition Values
+            Desc:   The effects defined in the Edit Protocol should be used with the AAF v1.1 data definition values of DataDef_Picture and DataDef_Sound.  The deprecated data definition values of DataDef_LegacyPicture and DataDef_LegacySound should only be used when working with legacy AAF v1.0 files.
+            Node:   132 (OperationDefinition)
+            Result: Passed
+            Reason: OperationDefinition "Luminance Key" has DataDefinition = DataDef_DataDef_Picture in an AAF Version 1.1 file.
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: REQ_EP_163
+            Info Requirements: None
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Effect Data Definition Values
+            Desc:   The effects defined in the Edit Protocol should be used with the AAF v1.1 data definition values of DataDef_Picture and DataDef_Sound.  The deprecated data definition values of DataDef_LegacyPicture and DataDef_LegacySound should only be used when working with legacy AAF v1.0 files.
+            Node:   142 (OperationDefinition)
+            Result: Passed
+            Reason: OperationDefinition "Mono Audio Dissolve" has DataDefinition = DataDef_DataDef_Sound in an AAF Version 1.1 file.
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: REQ_EP_163
+            Info Requirements: None
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Effect Data Definition Values
+            Desc:   The effects defined in the Edit Protocol should be used with the AAF v1.1 data definition values of DataDef_Picture and DataDef_Sound.  The deprecated data definition values of DataDef_LegacyPicture and DataDef_LegacySound should only be used when working with legacy AAF v1.0 files.
+            Node:   149 (OperationDefinition)
+            Result: Passed
+            Reason: OperationDefinition "Mono Audio Gain" has DataDefinition = DataDef_DataDef_Sound in an AAF Version 1.1 file.
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: REQ_EP_163
+            Info Requirements: None
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Effect Data Definition Values
+            Desc:   The effects defined in the Edit Protocol should be used with the AAF v1.1 data definition values of DataDef_Picture and DataDef_Sound.  The deprecated data definition values of DataDef_LegacyPicture and DataDef_LegacySound should only be used when working with legacy AAF v1.0 files.
+            Node:   148 (OperationDefinition)
+            Result: Passed
+            Reason: OperationDefinition "Mono Audio Pan" has DataDefinition = DataDef_DataDef_Sound in an AAF Version 1.1 file.
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: REQ_EP_163
+            Info Requirements: None
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Effect Data Definition Values
+            Desc:   The effects defined in the Edit Protocol should be used with the AAF v1.1 data definition values of DataDef_Picture and DataDef_Sound.  The deprecated data definition values of DataDef_LegacyPicture and DataDef_LegacySound should only be used when working with legacy AAF v1.0 files.
+            Node:   143 (OperationDefinition)
+            Result: Passed
+            Reason: OperationDefinition "SMPTE Video Wipe" has DataDefinition = DataDef_DataDef_Picture in an AAF Version 1.1 file.
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: REQ_EP_163
+            Info Requirements: None
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Effect Data Definition Values
+            Desc:   The effects defined in the Edit Protocol should be used with the AAF v1.1 data definition values of DataDef_Picture and DataDef_Sound.  The deprecated data definition values of DataDef_LegacyPicture and DataDef_LegacySound should only be used when working with legacy AAF v1.0 files.
+            Node:   135 (OperationDefinition)
+            Result: Passed
+            Reason: OperationDefinition "Separate Alpha Key effect" has DataDefinition = DataDef_DataDef_Picture in an AAF Version 1.1 file.
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: REQ_EP_163
+            Info Requirements: None
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Effect Data Definition Values
+            Desc:   The effects defined in the Edit Protocol should be used with the AAF v1.1 data definition values of DataDef_Picture and DataDef_Sound.  The deprecated data definition values of DataDef_LegacyPicture and DataDef_LegacySound should only be used when working with legacy AAF v1.0 files.
+            Node:   146 (OperationDefinition)
+            Result: Passed
+            Reason: OperationDefinition "Two-Parameter Mono Audio Dissolve" has DataDefinition = DataDef_DataDef_Sound in an AAF Version 1.1 file.
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: REQ_EP_163
+            Info Requirements: None
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Effect Data Definition Values
+            Desc:   The effects defined in the Edit Protocol should be used with the AAF v1.1 data definition values of DataDef_Picture and DataDef_Sound.  The deprecated data definition values of DataDef_LegacyPicture and DataDef_LegacySound should only be used when working with legacy AAF v1.0 files.
+            Node:   136 (OperationDefinition)
+            Result: Passed
+            Reason: OperationDefinition "Video Corner Pinning" has DataDefinition = DataDef_DataDef_Picture in an AAF Version 1.1 file.
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: REQ_EP_163
+            Info Requirements: None
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Effect Data Definition Values
+            Desc:   The effects defined in the Edit Protocol should be used with the AAF v1.1 data definition values of DataDef_Picture and DataDef_Sound.  The deprecated data definition values of DataDef_LegacyPicture and DataDef_LegacySound should only be used when working with legacy AAF v1.0 files.
+            Node:   144 (OperationDefinition)
+            Result: Passed
+            Reason: OperationDefinition "Video Crop" has DataDefinition = DataDef_DataDef_Picture in an AAF Version 1.1 file.
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: REQ_EP_163
+            Info Requirements: None
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Effect Data Definition Values
+            Desc:   The effects defined in the Edit Protocol should be used with the AAF v1.1 data definition values of DataDef_Picture and DataDef_Sound.  The deprecated data definition values of DataDef_LegacyPicture and DataDef_LegacySound should only be used when working with legacy AAF v1.0 files.
+            Node:   141 (OperationDefinition)
+            Result: Passed
+            Reason: OperationDefinition "Video Dissolve" has DataDefinition = DataDef_DataDef_Picture in an AAF Version 1.1 file.
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: REQ_EP_163
+            Info Requirements: None
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Effect Data Definition Values
+            Desc:   The effects defined in the Edit Protocol should be used with the AAF v1.1 data definition values of DataDef_Picture and DataDef_Sound.  The deprecated data definition values of DataDef_LegacyPicture and DataDef_LegacySound should only be used when working with legacy AAF v1.0 files.
+            Node:   139 (OperationDefinition)
+            Result: Passed
+            Reason: OperationDefinition "Video Flip Flop" has DataDefinition = DataDef_DataDef_Picture in an AAF Version 1.1 file.
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: REQ_EP_163
+            Info Requirements: None
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Effect Data Definition Values
+            Desc:   The effects defined in the Edit Protocol should be used with the AAF v1.1 data definition values of DataDef_Picture and DataDef_Sound.  The deprecated data definition values of DataDef_LegacyPicture and DataDef_LegacySound should only be used when working with legacy AAF v1.0 files.
+            Node:   138 (OperationDefinition)
+            Result: Passed
+            Reason: OperationDefinition "Video Flip" has DataDefinition = DataDef_DataDef_Picture in an AAF Version 1.1 file.
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: REQ_EP_163
+            Info Requirements: None
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Effect Data Definition Values
+            Desc:   The effects defined in the Edit Protocol should be used with the AAF v1.1 data definition values of DataDef_Picture and DataDef_Sound.  The deprecated data definition values of DataDef_LegacyPicture and DataDef_LegacySound should only be used when working with legacy AAF v1.0 files.
+            Node:   140 (OperationDefinition)
+            Result: Passed
+            Reason: OperationDefinition "Video Flop" has DataDefinition = DataDef_DataDef_Picture in an AAF Version 1.1 file.
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: REQ_EP_163
+            Info Requirements: None
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Effect Data Definition Values
+            Desc:   The effects defined in the Edit Protocol should be used with the AAF v1.1 data definition values of DataDef_Picture and DataDef_Sound.  The deprecated data definition values of DataDef_LegacyPicture and DataDef_LegacySound should only be used when working with legacy AAF v1.0 files.
+            Node:   137 (OperationDefinition)
+            Result: Passed
+            Reason: OperationDefinition "Video Position" has DataDefinition = DataDef_DataDef_Picture in an AAF Version 1.1 file.
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: REQ_EP_163
+            Info Requirements: None
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Effect Data Definition Values
+            Desc:   The effects defined in the Edit Protocol should be used with the AAF v1.1 data definition values of DataDef_Picture and DataDef_Sound.  The deprecated data definition values of DataDef_LegacyPicture and DataDef_LegacySound should only be used when working with legacy AAF v1.0 files.
+            Node:   147 (OperationDefinition)
+            Result: Passed
+            Reason: OperationDefinition "Video Repeat" has DataDefinition = DataDef_DataDef_Picture in an AAF Version 1.1 file.
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: REQ_EP_163
+            Info Requirements: None
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Effect Data Definition Values
+            Desc:   The effects defined in the Edit Protocol should be used with the AAF v1.1 data definition values of DataDef_Picture and DataDef_Sound.  The deprecated data definition values of DataDef_LegacyPicture and DataDef_LegacySound should only be used when working with legacy AAF v1.0 files.
+            Node:   133 (OperationDefinition)
+            Result: Passed
+            Reason: OperationDefinition "Video Rotate" has DataDefinition = DataDef_DataDef_Picture in an AAF Version 1.1 file.
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: REQ_EP_163
+            Info Requirements: None
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Effect Data Definition Values
+            Desc:   The effects defined in the Edit Protocol should be used with the AAF v1.1 data definition values of DataDef_Picture and DataDef_Sound.  The deprecated data definition values of DataDef_LegacyPicture and DataDef_LegacySound should only be used when working with legacy AAF v1.0 files.
+            Node:   150 (OperationDefinition)
+            Result: Passed
+            Reason: OperationDefinition "Video Scale" has DataDefinition = DataDef_DataDef_Picture in an AAF Version 1.1 file.
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: REQ_EP_163
+            Info Requirements: None
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Effect Data Definition Values
+            Desc:   The effects defined in the Edit Protocol should be used with the AAF v1.1 data definition values of DataDef_Picture and DataDef_Sound.  The deprecated data definition values of DataDef_LegacyPicture and DataDef_LegacySound should only be used when working with legacy AAF v1.0 files.
+            Node:   145 (OperationDefinition)
+            Result: Passed
+            Reason: OperationDefinition "Video Speed Control" has DataDefinition = DataDef_DataDef_Picture in an AAF Version 1.1 file.
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: REQ_EP_163
+            Info Requirements: None
+            Warning Requirements: None
+            Failing Requirements: None
 

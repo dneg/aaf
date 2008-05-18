@@ -24,6 +24,9 @@
 //Test/Result files
 #include "LowLevelTestResult.h"
 
+//Base
+#include <Node.h>
+
 namespace aafanalyzer {
 
 using namespace std;
@@ -59,22 +62,19 @@ class TestLevelTestResult : public LowLevelTestResult
 
   const enum ResultLevel GetResultType() const;
 
-  // Add a single result for one requirement.
-  // DEPRECATED - use the version below that doesn't take result
-  // name/desc arguments.
-  shared_ptr<DetailLevelTestResult> AddSingleResult( const wstring& reqId,
-						     Result result,
-						     const wstring& resultName,
-						     const wstring& resultDesc,
-						     const wstring& resultExplain );
+  // Add a single result for one requirement. Result name and
+  // description are those of the requirment. Caller must explain the
+  // result.
 
-
-  // Add a single result for one requirement. Result name
-  // and description are those of the requirment. Call must explain
-  // the result.
   shared_ptr<DetailLevelTestResult> AddSingleResult( const wstring& reqId,
                                                      const wstring& resultExplain,
-                                                     Result result );
+                                                     Result result,
+						     Node& node );
+
+  // Same as above, but not associated with any particular node.
+  shared_ptr<DetailLevelTestResult> AddUnassociatedSingleResult( const wstring& reqId,
+								 const wstring& resultExplain,
+								 Result result );
 
  private:
 

@@ -222,7 +222,8 @@ bool ResolveRefVisitor::PostOrderVisit(AAFTypedObjNode<IAAFSourceClip>& node)
 
     _spTestLevelResult->AddSingleResult( L"REQ_EP_016",
                                          explain,
-					 TestResult::WARN );
+					 TestResult::WARN,
+					 node );
 
   }
 
@@ -294,10 +295,9 @@ shared_ptr<Node> ResolveRefVisitor::ResolveChildSlotNode( shared_ptr<EdgeMap> sp
      << L" with id " << AxStringUtil::mobid2Str( axParentMob.GetMobID() );
 
   _spTestLevelResult->AddSingleResult( L"REQ_EP_257",
+                                       ss.str(),
                                        TestResult::FAIL,
-                                       L"Slot Resolve",
-                                       L"Lookup slot in resolved mob.",
-                                       ss.str() );
+				       *spParentMobNode );
 
   return shared_ptr<Node>();
 }

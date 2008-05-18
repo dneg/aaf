@@ -73,7 +73,8 @@ bool EPMultiChannelAudioVisitor::PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EP
         L"REQ_EP_110", 
         this->GetMobName( axMob, EPMultiChannelAudioFileSource::GetName() ) +
             L" is referenced from a Composition or Master Mob.",
-        TestResult::FAIL ) ;
+        TestResult::FAIL,
+	node ) ;
         
     //Record this visitation
     this->RecordVisit( node.GetLID() );

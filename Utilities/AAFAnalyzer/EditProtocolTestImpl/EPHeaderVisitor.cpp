@@ -67,7 +67,8 @@ bool EPHeaderVisitor::PreOrderVisit( AAFTypedObjNode<IAAFHeader>& node )
     {
       _spTestResult->AddSingleResult( L"REQ_EP_255",
 				      L"Header::OperationalPattern property is not equal to OpEditProtocol.",
-				      TestResult::FAIL );
+				      TestResult::FAIL,
+				      node );
     }
   }
   catch ( const AxExHResult& ex )
@@ -76,7 +77,8 @@ bool EPHeaderVisitor::PreOrderVisit( AAFTypedObjNode<IAAFHeader>& node )
     {
       _spTestResult->AddSingleResult( L"REQ_EP_255",
 				      L"Header::OperationalPattern property is not present.",
-				      TestResult::FAIL );
+				      TestResult::FAIL,
+				      node );
     }
     else
     {

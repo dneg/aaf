@@ -49,7 +49,7 @@ class TestResult
   // result value is provided by the constructor.  The left most
   // (minimum value) should always be UNDEFINED, and the rightmost
   // (maxium value) should alwasy be FAIL.
-  enum Result      {UNDEFINED, COVERED, NOTED, PASS, WARN, FAIL};
+  enum Result      {UNDEFINED, COVERED, NOTED, PASS, INFO, WARN, FAIL};
 
   // The specialized type of this result.
   enum ResultLevel {TOP, PHASE, TEST, DETAIL};
@@ -82,9 +82,6 @@ class TestResult
   // Get the PASS, WARN, or FAIL requirements.
   const Requirement::RequirementMap& GetRequirements( Result type ) const;
 
-  // Get the kind of specialized result this is.
-  virtual const enum ResultLevel GetResultType() const =0;
-  
   // Add an abitrary detail to a result. Any number of details can
   // be added.
   void AddDetail( const wstring& detail );
@@ -104,6 +101,9 @@ class TestResult
   // Does reqId have status "result" in this test result instance?
   bool HasResult( const wstring& reqId, Result result ) const;
 
+  // Get the kind of specialized result this is.
+  virtual const enum ResultLevel GetResultType() const =0;
+  
  protected:
  
   TestResult();
@@ -126,7 +126,7 @@ class TestResult
   // Called by specialized TestResult instances that provide a
   // SetResult interface.
   void ProtectedSetResult( Result result );
-
+  
   // Clear/Add/Remove - used to implement consolidate.
   // Used to implement consolidate.
   // JPT REVIEW - Remove when the deprecated LowLevelResult::SetRequirementStatus is removed.
@@ -164,6 +164,7 @@ class TestResult
   const Requirement::RequirementMapSP _spCoveredRequirements;
   const Requirement::RequirementMapSP _spNotedRequirements;
   const Requirement::RequirementMapSP _spPassedRequirements;
+  const Requirement::RequirementMapSP _spInfoRequirements;
   const Requirement::RequirementMapSP _spWarnedRequirements;
   const Requirement::RequirementMapSP _spFailedRequirements;
   const Requirement::RequirementMapSP _spUndefinedRequirements;

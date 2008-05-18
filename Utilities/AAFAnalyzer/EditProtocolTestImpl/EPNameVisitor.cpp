@@ -71,8 +71,8 @@ EPNameVisitor::~EPNameVisitor()
 bool EPNameVisitor::PreOrderVisit( EPTypedObjNode<IAAFCompositionMob, EPTopLevelComposition>& node )
 {
     AxCompositionMob axCompMob( node.GetAAFObjectOfType() );
-    CheckForUniqueSlotNamesInMob( axCompMob );
-    if ( !this->VisitComposition( EPTopLevelComposition::GetName(), L"REQ_EP_027", axCompMob ) )
+    CheckForUniqueSlotNamesInMob( node, axCompMob );
+    if ( !this->VisitComposition( node, EPTopLevelComposition::GetName(), L"REQ_EP_027", axCompMob ) )
     {
         return false;
     }
@@ -83,8 +83,8 @@ bool EPNameVisitor::PreOrderVisit( EPTypedObjNode<IAAFCompositionMob, EPTopLevel
 bool EPNameVisitor::PreOrderVisit( EPTypedObjNode<IAAFCompositionMob, EPLowerLevelComposition>& node )
 {
     AxCompositionMob axCompMob( node.GetAAFObjectOfType() );
-    CheckForUniqueSlotNamesInMob( axCompMob );
-    if ( !this->VisitComposition( EPLowerLevelComposition::GetName(), L"REQ_EP_032", axCompMob ) )
+    CheckForUniqueSlotNamesInMob( node, axCompMob );
+    if ( !this->VisitComposition( node, EPLowerLevelComposition::GetName(), L"REQ_EP_032", axCompMob ) )
     {
         return false;
     }
@@ -95,75 +95,75 @@ bool EPNameVisitor::PreOrderVisit( EPTypedObjNode<IAAFCompositionMob, EPLowerLev
 bool EPNameVisitor::PreOrderVisit( EPTypedObjNode<IAAFCompositionMob, EPSubClipComposition>& node )
 {
     AxCompositionMob axCompMob( node.GetAAFObjectOfType() );
-    CheckForUniqueSlotNamesInMob( axCompMob );
-    return this->VisitComposition( EPSubClipComposition::GetName(), L"REQ_EP_038", axCompMob );
+    CheckForUniqueSlotNamesInMob( node, axCompMob );
+    return this->VisitComposition( node, EPSubClipComposition::GetName(), L"REQ_EP_038", axCompMob );
 }
 
 bool EPNameVisitor::PreOrderVisit( EPTypedObjNode<IAAFCompositionMob, EPAdjustedClipComposition>& node )
 {
     AxCompositionMob axCompMob( node.GetAAFObjectOfType() );
-    CheckForUniqueSlotNamesInMob( axCompMob );
-    return this->VisitComposition( EPAdjustedClipComposition::GetName(), L"REQ_EP_047", axCompMob );
+    CheckForUniqueSlotNamesInMob( node, axCompMob );
+    return this->VisitComposition( node, EPAdjustedClipComposition::GetName(), L"REQ_EP_047", axCompMob );
 }
 
 bool EPNameVisitor::PreOrderVisit( EPTypedObjNode<IAAFMasterMob, EPTemplateClip>& node )
 {
     AxMasterMob axMastMob( node.GetAAFObjectOfType() );
-    CheckForUniqueSlotNamesInMob( axMastMob );
-    return this->VisitNonComposition( EPTemplateClip::GetName(), L"REQ_EP_052", axMastMob );
+    CheckForUniqueSlotNamesInMob( node, axMastMob );
+    return this->VisitNonComposition( node, EPTemplateClip::GetName(), L"REQ_EP_052", axMastMob );
 }
 
 bool EPNameVisitor::PreOrderVisit( EPTypedObjNode<IAAFMasterMob, EPClip>& node )
 {
     AxMasterMob axMastMob( node.GetAAFObjectOfType() );
-    CheckForUniqueSlotNamesInMob( axMastMob );
-    return this->VisitNonComposition( EPClip::GetName(), L"REQ_EP_057", axMastMob );
+    CheckForUniqueSlotNamesInMob( node, axMastMob );
+    return this->VisitNonComposition( node, EPClip::GetName(), L"REQ_EP_057", axMastMob );
 }
 
 bool EPNameVisitor::PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPRecordingSource>& node )
 {
     AxSourceMob axSrcMob( node.GetAAFObjectOfType() );
-    CheckForUniqueSlotNamesInMob( axSrcMob );
-    return this->VisitNonComposition( EPRecordingSource::GetName(), L"REQ_EP_073", axSrcMob );
+    CheckForUniqueSlotNamesInMob( node, axSrcMob );
+    return this->VisitNonComposition( node, EPRecordingSource::GetName(), L"REQ_EP_073", axSrcMob );
 }
 
 bool EPNameVisitor::PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPTapeSource>& node )
 {
     AxSourceMob axSrcMob( node.GetAAFObjectOfType() );
-    CheckForUniqueSlotNamesInMob( axSrcMob );
-    return this->VisitNonComposition( EPTapeSource::GetName(), L"REQ_EP_081", axSrcMob );
+    CheckForUniqueSlotNamesInMob( node, axSrcMob );
+    return this->VisitNonComposition( node, EPTapeSource::GetName(), L"REQ_EP_081", axSrcMob );
 }
 
 bool EPNameVisitor::PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPFilmSource>& node )
 {
     AxSourceMob axSrcMob( node.GetAAFObjectOfType() );
-    CheckForUniqueSlotNamesInMob( axSrcMob );
-    return this->VisitNonComposition( EPFilmSource::GetName(), L"REQ_EP_086", axSrcMob );
+    CheckForUniqueSlotNamesInMob( node, axSrcMob );
+    return this->VisitNonComposition( node, EPFilmSource::GetName(), L"REQ_EP_086", axSrcMob );
 }
 
 bool EPNameVisitor::PreOrderVisit( AAFTypedObjNode<IAAFCompositionMob>& node)
 {
   AxCompositionMob axMob( node.GetAAFObjectOfType() );
-  CheckForUniqueSlotNamesInMob( axMob );
+  CheckForUniqueSlotNamesInMob( node, axMob );
   return false;
 }
 
 bool EPNameVisitor::PreOrderVisit( AAFTypedObjNode<IAAFMasterMob>& node)
 {
   AxMasterMob axMob( node.GetAAFObjectOfType() );
-  CheckForUniqueSlotNamesInMob( axMob );
+  CheckForUniqueSlotNamesInMob( node, axMob );
   return false;
 }
 
 bool EPNameVisitor::PreOrderVisit( AAFTypedObjNode<IAAFSourceMob>& node)
 {
   AxSourceMob axMob( node.GetAAFObjectOfType() );
-  CheckForUniqueSlotNamesInMob( axMob );
+  CheckForUniqueSlotNamesInMob( node, axMob );
   return false;
 }
 
 
-void EPNameVisitor::CheckForUniqueSlotNamesInMob( IAAFMobSP spMob )
+void EPNameVisitor::CheckForUniqueSlotNamesInMob( Node& node, IAAFMobSP spMob )
 {
   set<AxString> slotNameSet;
   AxMob axMob( spMob );
@@ -184,7 +184,8 @@ void EPNameVisitor::CheckForUniqueSlotNamesInMob( IAAFMobSP spMob )
 	 << mobName << L"\" does not have a valid name.";
       _spTestResult->AddSingleResult( L"REQ_EP_101",
 				      ss.str(),
-				      TestResult::FAIL );      
+				      TestResult::FAIL,
+				      node );
       continue;
     }
     else
@@ -202,7 +203,8 @@ void EPNameVisitor::CheckForUniqueSlotNamesInMob( IAAFMobSP spMob )
 	   << L"\" is not uniquely named within the mob.";
 	_spTestResult->AddSingleResult( L"REQ_EP_101",
 					ss.str(),
-					TestResult::FAIL );
+					TestResult::FAIL,
+					node );
 	continue;
       }
       else
@@ -288,7 +290,8 @@ bool EPNameVisitor::PreOrderVisit( AAFTypedObjNode<IAAFDefObject>& node )
             shared_ptr<DetailLevelTestResult>
               spFailure = _spTestResult->AddSingleResult( L"REQ_EP_161",
 							  explain,
-							  TestResult::FAIL );
+							  TestResult::FAIL,
+							  node );
 
             spFailure->AddDetail( L"AUID: " + AxStringUtil::uid2Str( axDefObj.GetAUID() ) );
         
@@ -302,7 +305,9 @@ bool EPNameVisitor::PreOrderVisit( AAFTypedObjNode<IAAFDefObject>& node )
     return true;
 }
 
-bool EPNameVisitor::VisitComposition( const AxString& type, const AxString& reqId, AxCompositionMob& axCompMob )
+bool EPNameVisitor::VisitComposition( Node& node,
+				      const AxString& type,
+				      const AxString& reqId, AxCompositionMob& axCompMob )
 {
     AxString nodeName;
 
@@ -319,7 +324,8 @@ bool EPNameVisitor::VisitComposition( const AxString& type, const AxString& reqI
             shared_ptr<DetailLevelTestResult>
               spFailure = _spTestResult->AddSingleResult( reqId,
 							  explain,
-							  TestResult::FAIL );
+							  TestResult::FAIL,
+							  node );
             
             spFailure->AddDetail( L"Mob ID: " + AxStringUtil::mobid2Str( axCompMob.GetMobID() ) );
             
@@ -344,7 +350,7 @@ bool EPNameVisitor::VisitComposition( const AxString& type, const AxString& reqI
     
 }
 
-bool EPNameVisitor::VisitNonComposition( const AxString& type, const AxString& reqId, AxMob& axMob )
+bool EPNameVisitor::VisitNonComposition( Node& node, const AxString& type, const AxString& reqId, AxMob& axMob )
 {
     AxString nodeName;
 
@@ -361,7 +367,8 @@ bool EPNameVisitor::VisitNonComposition( const AxString& type, const AxString& r
           shared_ptr<DetailLevelTestResult>
             spFailure = _spTestResult->AddSingleResult( reqId,
 							explain,
-							TestResult::FAIL );
+							TestResult::FAIL,
+							node );
 
             spFailure->AddDetail( L"Mob ID: " + AxStringUtil::mobid2Str( axMob.GetMobID() ) );
 
@@ -391,7 +398,7 @@ void EPNameVisitor::CheckForUniqueNames( NameSet& names, const AxString& reqId, 
         if ( _compositionNames[*iter] != 1 )
         {
             AxString explain( type + L" \"" + *iter + L"\" does not have a unique composition name." );
-            _spTestResult->AddSingleResult( reqId, explain, TestResult::FAIL );
+            _spTestResult->AddUnassociatedSingleResult( reqId, explain, TestResult::FAIL );
         }
     }
 }

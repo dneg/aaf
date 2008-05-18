@@ -4,7 +4,19 @@
         Reason: 
         Covered Requirements: REQ_EP_017; REQ_EP_026; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_072; REQ_EP_076; REQ_EP_083; REQ_EP_258; REQ_EP_259; REQ_EP_260; REQ_EP_261; REQ_EP_262
         Noted Requirements: None
-        Passing Requirements: None
+        Passing Requirements: REQ_EP_025.2
+        Info Requirements: None
         Warning Requirements: None
         Failing Requirements: None
+
+            Name:   Top-level Composition Unreferenced
+            Desc:   A top-level composition shall not be referenced by another Mob in the AAF file.
+            Result: Passed
+            Reason: No top level CompositionMob objects are referenced by other Mob objects in the file.
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: REQ_EP_025.2
+            Info Requirements: None
+            Warning Requirements: None
+            Failing Requirements: None
 

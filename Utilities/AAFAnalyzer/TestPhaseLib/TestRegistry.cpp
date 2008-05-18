@@ -48,8 +48,7 @@ using namespace boost;
 //static variable
 TestRegistry* TestRegistry::_pTestRegistry = NULL;
 
-TestRegistry::TestRegistry() :
-_useUnsafeRequirements( false )
+TestRegistry::TestRegistry()
 {
 }
 
@@ -75,80 +74,39 @@ TestRegistry& TestRegistry::GetInstance()
 
 void TestRegistry::Register( const TestInfo& info )
 {
-    Requirement::RequirementMapSP coveredByTest(new Requirement::RequirementMap());
-    const wstring name = info.GetName();
-    if ( _testSet.find( name ) == _testSet.end() )
+  Requirement::RequirementMapSP coveredByTest(new Requirement::RequirementMap());
+  const wstring name = info.GetName();
+  if ( _testSet.find( name ) == _testSet.end() )
+  {
+    RequirementRegistry& reqRegistry = RequirementRegistry::GetInstance();
+    //Get all requirements matching the list of requirement ids.  An
+    //exception is thrown if the requirement is not registered.
+    const shared_ptr<const vector<wstring> > spRequirements = info.GetRequirementIds();
+    vector<wstring>::const_iterator iter;
+    
+    for ( iter = spRequirements->begin(); iter != spRequirements->end(); iter++)
     {
-        RequirementRegistry& reqRegistry = RequirementRegistry::GetInstance();
-        //Get all requirements matching the list of requirement ids.  An
-        //exception is thrown if the requirement is not registered.
-        const shared_ptr<const vector<wstring> > spRequirements = info.GetRequirementIds();
-        vector<wstring>::const_iterator iter;
-
-        for ( iter = spRequirements->begin(); iter != spRequirements->end(); iter++)
-        {
-            wstring id = *iter;
-
-            try
-            {
-                shared_ptr<const Requirement> req(reqRegistry.GetRequirement(id));
-
-                if ( coveredByTest->find(id) == coveredByTest->end() )
-                {
-                    (*coveredByTest)[id] = req;
-                }
-                if ( _coveredRequirements.find(id) == _coveredRequirements.end() )
-                {
-                    _coveredRequirements[id] = req;
-                }
-            }
-            catch ( RequirementRegistryException ex )
-            {
-                //If unsafe requirement checking is turned on, it is ok for a
-                //test to use a requirement that does not exist.  To do this,
-                //create a new Requirement and store it in the necessary maps,
-                //however, do not register it because it should not be reported
-                //by the Requirement Registry as a loaded requirement.
-                if ( _useUnsafeRequirements )
-                {
-                    shared_ptr<const Requirement> unsafeReq(
-                        new Requirement(id,
-                                        Requirement::FILE,
-					L"file",
-                                        Requirement::ADHOC,
-					L"adhoc",
-					L"",                                                             // action
-                                        L"Unsafe Requirement",                                           // name
-                                        L"This Requirement ID does not exist in the requirements file",  // desc
-					L"",                                                             // annotation
-					L"",                                                             // note
-                                        L"None",                                                         // document
-                                        L"N/A",                                                          // document version
-                                        L"N/A" ) );                                                      // document section
-                    if ( coveredByTest->find(id) == coveredByTest->end() )
-                    {
-                        (*coveredByTest)[id] = unsafeReq;
-                    }
-                    if ( _coveredRequirements.find(id) == _coveredRequirements.end() )
-                    {
-                        _coveredRequirements[id] = unsafeReq;
-                    }
-                }
-                else
-                {
-                    throw ex;
-                }
-            }
-        }
-        _testSet[name] = coveredByTest;
+      wstring id = *iter;
+      
+      shared_ptr<const Requirement> req(reqRegistry.GetRequirement(id));
+      
+      if ( coveredByTest->find(id) == coveredByTest->end() )
+      {
+	(*coveredByTest)[id] = req;
+      }
+      if ( _coveredRequirements.find(id) == _coveredRequirements.end() )
+      {
+	_coveredRequirements[id] = req;
+      }
     }
-    else
-    {
-        wstring msg;
-        msg = L"Test " + name + L" is already registered.";
-        throw TestRegistryException( msg.c_str() );
-    }
-
+    _testSet[name] = coveredByTest;
+  }
+  else
+  {
+    wstring msg;
+    msg = L"Test " + name + L" is already registered.";
+    throw TestRegistryException( msg.c_str() );
+  }
 }
 
 const shared_ptr<Requirement::RequirementMap> TestRegistry::GetRequirementsForTest( const wstring& name ) const
@@ -214,16 +172,6 @@ void TestRegistry::VerifyTestResultCoverage(const shared_ptr<const TestResult> r
         }
     }
 
-}
-
-void TestRegistry::UseUnsafeRequirements()
-{
-    _useUnsafeRequirements = true;
-}
-
-bool TestRegistry::IsUnsafeRequirements()
-{
-    return _useUnsafeRequirements;
 }
 
 } // end of namespace diskstream

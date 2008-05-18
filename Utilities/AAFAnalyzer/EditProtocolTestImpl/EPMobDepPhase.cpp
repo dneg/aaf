@@ -86,7 +86,6 @@ shared_ptr<TestPhaseLevelTestResult> EPMobDepPhase::Execute()
   // change right now.
   shared_ptr<CompMobDependency> spDepTest( new CompMobDependency(_log, _spGraph ) );
   spPhaseResult->AppendSubtestResult( spDepTest->Execute() );
-  CompMobDependency::CompMobNodeVectorSP spPostDecorateRoots = spDepTest->GetRootCompMobNodes();
 
   // JPT REVIEW - A sanity check to ensure the spPostDecoratedRoots
   // and _spCompMobRoots identify the same underly node would be wise
@@ -94,7 +93,7 @@ shared_ptr<TestPhaseLevelTestResult> EPMobDepPhase::Execute()
 
   // Third, run the dependency test to verify the chains starting
   // with the identified root compositions.
-  shared_ptr<EPDerivationTest> derivationTest( new EPDerivationTest(_log, _spGraph, spPostDecorateRoots) );
+  shared_ptr<EPDerivationTest> derivationTest( new EPDerivationTest(_log, _spGraph, spDepTest) );
   spPhaseResult->AppendSubtestResult( derivationTest->Execute() );
   
   // Fourth, run the naming test
@@ -139,6 +138,7 @@ shared_ptr<TestPhaseLevelTestResult> EPMobDepPhase::Execute()
   spPhaseResult->AppendSubtestResult( parameterTest->Execute() );
   
   // Fourteenth, run the multi-channel audio test
+  CompMobDependency::CompMobNodeVectorSP spPostDecorateRoots = spDepTest->GetRootCompMobNodes();
   shared_ptr<EPMultiChannelAudioTest> mcaTest( new EPMultiChannelAudioTest( _log, _spGraph, spPostDecorateRoots ) );
   spPhaseResult->AppendSubtestResult( mcaTest->Execute() );
 

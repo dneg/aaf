@@ -79,34 +79,34 @@ const enum TestResult::ResultLevel TestLevelTestResult::GetResultType() const
   return TestResult::TEST;
 }
 
+
 shared_ptr<DetailLevelTestResult> TestLevelTestResult::AddSingleResult( const wstring& reqId,
+                                                                        const wstring& explain,
                                                                         Result result,
-                                                                        const wstring& resultName,
-                                                                        const wstring& resultDesc,
-                                                                        const wstring& resultExplain )
+									Node& node )
 {
   shared_ptr<DetailLevelTestResult>
     spResult( new DetailLevelTestResult( this->GetAssociatedTest(),
-                                         resultName,
-                                         resultDesc,
-                                         resultExplain,
+                                         explain,
                                          reqId,
-                                         result ) );
+                                         result,
+					 node.GetSharedPointerToNode() ) );
 
   this->AddSubtestResult( spResult );
 
   return spResult;
 }
 
-shared_ptr<DetailLevelTestResult> TestLevelTestResult::AddSingleResult( const wstring& reqId,
-                                                                        const wstring& explain,
-                                                                        Result result )
+shared_ptr<DetailLevelTestResult> TestLevelTestResult::AddUnassociatedSingleResult( const wstring& reqId,
+										    const wstring& explain,
+										    Result result )
 {
   shared_ptr<DetailLevelTestResult>
     spResult( new DetailLevelTestResult( this->GetAssociatedTest(),
                                          explain,
                                          reqId,
-                                         result ) );
+                                         result,
+					 shared_ptr<Node>() ) );
 
   this->AddSubtestResult( spResult );
 

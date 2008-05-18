@@ -105,10 +105,10 @@ class EPNameVisitor : public EPTypedVisitor
     NameSet _topLevelNames;
     NameSet _lowerLevelNames;
     
-    bool VisitComposition( const AxString& type, const AxString& reqId, AxCompositionMob& axCompMob );
-    bool VisitNonComposition( const AxString& type, const AxString& reqId, AxMob& axMob );
+    bool VisitComposition( Node& node, const AxString& type, const AxString& reqId, AxCompositionMob& axCompMob );
+    bool VisitNonComposition( Node& node, const AxString& type, const AxString& reqId, AxMob& axMob );
     void CheckForUniqueNames( NameSet& names, const AxString& reqId, const AxString& type );
-    void CheckForUniqueSlotNamesInMob( IAAFMobSP spMob );
+    void CheckForUniqueSlotNamesInMob( Node& node, IAAFMobSP spMob );
   
     // prohibited
     EPNameVisitor();

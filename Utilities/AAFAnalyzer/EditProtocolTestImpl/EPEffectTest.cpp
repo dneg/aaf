@@ -89,11 +89,9 @@ AxString EPEffectTest::GetDescription() const
 const TestInfo EPEffectTest::GetTestInfo()
 {
     shared_ptr<vector<AxString> > spReqIds(new vector<AxString>);
-    spReqIds->push_back(L"REQ_EP_163");     //Transition Effects.
-    spReqIds->push_back(L"REQ_EP_164");     //Composite Effects.
-    spReqIds->push_back(L"REQ_EP_180");     //Video Dissolve in Transition.
-    spReqIds->push_back(L"REQ_EP_180");     //Video Dissolve in Transition.
-    spReqIds->push_back(L"REQ_EP_183");     //SMPTE Video Wipe in Transition.
+
+    spReqIds->push_back(L"REQ_EP_180");     //Video Dissolve only permitted in Transition.
+    spReqIds->push_back(L"REQ_EP_183");     //SMPTE Video Wipe only permitted in Transition.
     spReqIds->push_back(L"REQ_EP_186");     //Video Speed Control not in Transition.
     spReqIds->push_back(L"REQ_EP_187");     //Speed Ratio parameter is not 0.
     spReqIds->push_back(L"REQ_EP_190");     //Video Repeat not in Transition.

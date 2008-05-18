@@ -221,18 +221,20 @@ void DerivationChainParser::InitStateNames()
 DerivationChainParser::~DerivationChainParser()
 {}
   
-void DerivationChainParser::AddFinalNotationalResult()
+void DerivationChainParser::AddFinalNotationalResult( Node& node )
 {
   StateToReqMap::const_iterator stateToReqIter = _stateToReqMap.find( _currentState.top() );
   assert( stateToReqIter != _stateToReqMap.end() );
 
   _spTestResult->AddSingleResult( stateToReqIter->second,
 				  L"The derivation chain parser reached a valid end state.",
-				  TestResult::NOTED );
+				  TestResult::NOTED,
+				  node );
 }
 
 void DerivationChainParser::AddNotationalResult( const wstring& nextName,
-						 State currentState )
+						 State currentState,
+						 Node& node )
 {
   std::wstringstream explain;
   explain << nextName << L" following " << _stateNameMap[currentState] << L" is valid.";
@@ -242,13 +244,15 @@ void DerivationChainParser::AddNotationalResult( const wstring& nextName,
 
   _spTestResult->AddSingleResult( stateToReqIter->second,
 				  explain.str(),
-				  TestResult::NOTED );
+				  TestResult::NOTED,
+				  node );
 }
 
 void DerivationChainParser::AddParseErrorResults( const wstring& curName,
 						  const wstring& nextName,
 						  const EventID& event,
-						  State currentState )
+						  State currentState,
+						  Node& node )
 {
   // First the basic transition error that is generated for all failures.
   std::wstringstream explain;
@@ -259,7 +263,8 @@ void DerivationChainParser::AddParseErrorResults( const wstring& curName,
   
   _spTestResult->AddSingleResult( stateToReqIter->second,
 				  explain.str(),
-				  TestResult::FAIL );
+				  TestResult::FAIL,
+				  node );
 }
 
 bool DerivationChainParser::IsInEndState() const
@@ -275,7 +280,7 @@ bool DerivationChainParser::IsInEndState() const
   }
 }
 
-void DerivationChainParser::CheckEndState()
+void DerivationChainParser::CheckEndState( Node& node )
 {
   if ( !IsInEndState() )
   {
@@ -284,7 +289,8 @@ void DerivationChainParser::CheckEndState()
 
     _spTestResult->AddSingleResult( L"REQ_EP_262",
 				    explain.str(),
-				    TestResult::FAIL );
+				    TestResult::FAIL,
+				    node );
 
     // Also add to to the tes result details because it makes
     // debugging easier (when it is see next to all the other details.
@@ -293,11 +299,12 @@ void DerivationChainParser::CheckEndState()
 }
 
 bool DerivationChainParser::Transition( const EventID& event,
-					const AxString& nextName )
+					const AxString& nextName,
+					Node& node )
 {
   EventMap::const_iterator eventNameIter = _eventMap.find( event );
   
-  // JPT - Review if this happens it is an implementation error. We
+  // JPT REVIEW - If this happens it is an implementation error. We
   // should never be sending an unknown event to this parser.
   if ( eventNameIter == _eventMap.end() )
   {
@@ -326,7 +333,7 @@ bool DerivationChainParser::Transition( const EventID& event,
        << L" to state " << _stateNameMap[transIter->second];
     AddDetail( true, ss.str() );
 
-    AddNotationalResult( nextName, currentState );
+    AddNotationalResult( nextName, currentState, node );
 
     // Update the current state.
     _currentState.push( transIter->second );
@@ -334,7 +341,7 @@ bool DerivationChainParser::Transition( const EventID& event,
 
     if ( IsInEndState() )
     {
-      AddFinalNotationalResult();
+      AddFinalNotationalResult( node );
     }
 
     return true;
@@ -363,7 +370,7 @@ bool DerivationChainParser::Transition( const EventID& event,
        << L" while in state " << _stateNameMap[currentState];
     AddDetail( false, ss.str() );
 
-    AddParseErrorResults( _objNameStack.top(), nextName, event, currentState );
+    AddParseErrorResults( _objNameStack.top(), nextName, event, currentState, node );
 
     return false;
   }        

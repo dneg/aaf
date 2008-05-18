@@ -67,6 +67,7 @@ TestResult::TestResult()
     _spCoveredRequirements( new Requirement::RequirementMap() ),
     _spNotedRequirements( new Requirement::RequirementMap() ),
     _spPassedRequirements( new Requirement::RequirementMap() ),
+    _spInfoRequirements( new Requirement::RequirementMap() ),
     _spWarnedRequirements( new Requirement::RequirementMap() ),
     _spFailedRequirements( new Requirement::RequirementMap() ),
     _spUndefinedRequirements( new Requirement::RequirementMap() )
@@ -83,6 +84,7 @@ TestResult::TestResult( const wstring& name,
     _spCoveredRequirements( new Requirement::RequirementMap() ),
     _spNotedRequirements( new Requirement::RequirementMap() ),
     _spPassedRequirements( new Requirement::RequirementMap() ),
+    _spInfoRequirements( new Requirement::RequirementMap() ),
     _spWarnedRequirements( new Requirement::RequirementMap() ),
     _spFailedRequirements( new Requirement::RequirementMap() ),
     _spUndefinedRequirements( new Requirement::RequirementMap() )
@@ -148,6 +150,9 @@ const Requirement::RequirementMap& TestResult::GetRequirements( Result type ) co
   case PASS:
     return *_spPassedRequirements;
     break;
+  case INFO:
+    return *_spInfoRequirements;
+    break;
   case WARN:
     return *_spWarnedRequirements;
     break;
@@ -180,28 +185,44 @@ void TestResult::AddSubtestResult( shared_ptr<TestResult> subtestResult )
 
 bool TestResult::ContainsRequirement( const wstring& id, Result& outContainedIn )
 {
-    if ( _spCoveredRequirements->find(id) != _spCoveredRequirements->end() ) {
-        outContainedIn = COVERED;
-        return true;
+    if ( _spCoveredRequirements->find(id) != _spCoveredRequirements->end() )
+    {
+      outContainedIn = COVERED;
+      return true;
     }
-    else if ( _spNotedRequirements->find(id) != _spNotedRequirements->end() ) {
-        outContainedIn = NOTED;
-        return true;
+    else if ( _spNotedRequirements->find(id) != _spNotedRequirements->end() )
+    {
+      outContainedIn = NOTED;
+      return true;
     }
-    else if ( _spPassedRequirements->find(id) != _spPassedRequirements->end() ) {
-        outContainedIn = PASS;
-        return true;
-    } else if ( _spWarnedRequirements->find(id) != _spWarnedRequirements->end() ) {
-        outContainedIn = WARN;
-        return true;
-    } else if ( _spFailedRequirements->find(id) != _spFailedRequirements->end() ) {
-        outContainedIn = FAIL;
-        return true;
-    } else if ( _spUndefinedRequirements->find(id) != _spUndefinedRequirements->end() ) {
-        outContainedIn = UNDEFINED;
-        return true;
-    } else {
-        return false;
+    else if ( _spPassedRequirements->find(id) != _spPassedRequirements->end() )
+    {
+      outContainedIn = PASS;
+      return true;
+    }
+    else if ( _spInfoRequirements->find(id) != _spInfoRequirements->end() )
+    {
+      outContainedIn = INFO;
+      return true;
+    }
+    else if ( _spWarnedRequirements->find(id) != _spWarnedRequirements->end() )
+    {
+      outContainedIn = WARN;
+      return true;
+    }
+    else if ( _spFailedRequirements->find(id) != _spFailedRequirements->end() )
+    {
+      outContainedIn = FAIL;
+      return true;
+    }
+    else if ( _spUndefinedRequirements->find(id) != _spUndefinedRequirements->end() )
+    {
+      outContainedIn = UNDEFINED;
+      return true;
+    }
+    else
+    {
+      return false;
     }
 }
 
@@ -215,6 +236,8 @@ bool TestResult::HasResult( const wstring& id, Result result ) const
       return _spFailedRequirements->find(id) != _spFailedRequirements->end();
     case WARN:
       return _spWarnedRequirements->find(id) != _spWarnedRequirements->end();
+    case INFO:
+      return _spInfoRequirements->find(id) != _spInfoRequirements->end();
     case PASS:
       return _spPassedRequirements->find(id) != _spPassedRequirements->end();
     case NOTED:
@@ -268,6 +291,9 @@ const Requirement::RequirementMapSP& TestResult::GetMyRequirements( Result type 
       break;
     case PASS:
       return _spPassedRequirements;
+      break;
+    case INFO:
+      return _spInfoRequirements;
       break;
     case WARN:
       return _spWarnedRequirements;
@@ -360,6 +386,7 @@ void TestResult::Dump( const wstring& prefix, wostream& os ) const
   DumpRequirementSet( L"covered",   prefix, os, _spCoveredRequirements   );
   DumpRequirementSet( L"noted",     prefix, os, _spNotedRequirements     );
   DumpRequirementSet( L"pass",      prefix, os, _spPassedRequirements    );
+  DumpRequirementSet( L"info",      prefix, os, _spInfoRequirements      );
   DumpRequirementSet( L"warn",      prefix, os, _spWarnedRequirements    );
   DumpRequirementSet( L"fail",      prefix, os, _spFailedRequirements    );
   DumpRequirementSet( L"undefined", prefix, os, _spUndefinedRequirements );

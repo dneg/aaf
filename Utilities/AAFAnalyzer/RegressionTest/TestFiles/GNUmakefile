@@ -50,6 +50,7 @@ alltests: EPAcyclicTest \
           EPDerivationTest1 \
           EPDerivationTest2 \
           EPDerivationTest3 \
+          EPDerivationTest4 \
           EPNameTest \
           EPContainedTrackTest \
           EPEditRateTest \
@@ -88,6 +89,10 @@ EPDerivationTest2: buildtestfile
 .PHONY: EPDerivationTest3
 EPDerivationTest3: buildtestfile
 	$(RUNONETEST) EPDerivationTest3 "Mob Derivation Test"
+
+.PHONY: EPDerivationTest4
+EPDerivationTest4: buildtestfile
+	$(RUNONETEST) EPDerivationTest4 "Mob Derivation Test"
 
 .PHONY: EPNameTest
 EPNameTest: buildtestfile

@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE aaf-file SYSTEM "EPDerivationChain.dtd">
 <aaf-file>
+ <dictionary>
+  <operation-def description="Should cause REQ_EP_162 info result." name="Unused"/>
+ </dictionary>
 <!-- Test Operation Definitions -->
  <top-level name="Valid OperationGroup/OperationDefinition">
   <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">

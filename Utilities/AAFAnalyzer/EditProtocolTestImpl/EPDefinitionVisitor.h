@@ -70,13 +70,15 @@ class EPDefinitionVisitor : public EPTypedVisitor
     EPDefinitionVisitor( const EPDefinitionVisitor& );
     EPDefinitionVisitor& operator=( const EPDefinitionVisitor& );
 
+    bool IsPre11();
+
     wostream& _log;
     shared_ptr<EdgeMap> _spEdgeMap;
     shared_ptr<TestLevelTestResult> _spTestResult;
     set<aafUID_t> _usedDefinitions;
-    map<aafUID_t, AxString> _registeredDefinitions;
-    set<AxString> _opDataDefCurrent;
-    set<AxString> _opDataDefLegacy;
+    map<aafUID_t, pair<AxString,shared_ptr<Node> > > _registeredDefinitions;
+    map<AxString, shared_ptr<Node> > _opDataDefCurrent;
+    map<AxString, shared_ptr<Node> > _opDataDefLegacy;
     aafProductVersion_t _fileVersion;
 
   

@@ -37,6 +37,7 @@ public:
 	virtual ~AxComponent();
 
 	aafLength_t GetLength();
+	std::pair<bool,aafLength_t> ExistsLength();
 	void SetLength( const aafLength_t& len );
 
 	void SetDataDef( IAAFDataDefSP );

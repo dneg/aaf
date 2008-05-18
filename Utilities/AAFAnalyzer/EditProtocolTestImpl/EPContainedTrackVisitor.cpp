@@ -90,7 +90,8 @@ class AuxiliarySlotVisitor : public EPTypedVisitor
                 _spTestResult->AddSingleResult(
                     L"REQ_EP_136",
                     this->GetMobSlotName( _spEdgeMap, node ) + L" has a segment with a Data Definition that is not DataDef_Auxiliary.",
-                    TestResult::FAIL );
+                    TestResult::FAIL,
+		    node );
                 _testPassed = false;
             }
             return false;
@@ -259,7 +260,7 @@ bool EPContainedTrackVisitor::PreOrderVisit( EPTypedObjNode<IAAFCompositionMob, 
             ss << L" in " << mobName << L" does not have exactly one SourceClip.";
 
             AxString explain( ss.str().c_str() );
-            _spTestResult->AddSingleResult( L"REQ_EP_037", explain, TestResult::FAIL );
+            _spTestResult->AddSingleResult( L"REQ_EP_037", explain, TestResult::FAIL, node );
             testPassed = false;
         }
     }
@@ -289,7 +290,7 @@ bool EPContainedTrackVisitor::PreOrderVisit( EPTypedObjNode<IAAFCompositionMob, 
             ss << L" in " << mobName << L" does not have exactly one OperationGroup.";
 
             AxString explain( ss.str().c_str() );
-            _spTestResult->AddSingleResult( L"REQ_EP_046", explain, TestResult::FAIL );
+            _spTestResult->AddSingleResult( L"REQ_EP_046", explain, TestResult::FAIL, node );
             testPassed = false;
         }
     }
@@ -326,7 +327,7 @@ bool EPContainedTrackVisitor::PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPFil
         wstringstream ss;
         ss << nodeName << L" has " << unnumberedtracks << " Edgecode tracks with no MobSlot::PhysicalTrackNumber property.";
         AxString explain( ss.str().c_str() );
-        _spTestResult->AddSingleResult( L"REQ_EP_087", explain, TestResult::FAIL );
+        _spTestResult->AddSingleResult( L"REQ_EP_087", explain, TestResult::FAIL, node );
         testPassed = false;
     }
 
@@ -339,7 +340,7 @@ bool EPContainedTrackVisitor::PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPFil
                 //1. Ensure that there are <=1 Keycode Number Edgecode tracks
                 if ( mapIter->second > 1 )
                 {
-                    _spTestResult->AddSingleResult( L"REQ_EP_087", nodeName + L" has more than one Keycode Number Edgecode track.", TestResult::FAIL );
+                    _spTestResult->AddSingleResult( L"REQ_EP_087", nodeName + L" has more than one Keycode Number Edgecode track.", TestResult::FAIL, node );
                     testPassed = false;
                 }
                 break;
@@ -347,7 +348,7 @@ bool EPContainedTrackVisitor::PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPFil
                 //2. Ensure that there are <=1 Ink Number Edgecode tracks
                 if ( mapIter->second > 1 )
                 {
-                    _spTestResult->AddSingleResult( L"REQ_EP_087", nodeName + L" has more than one Ink Number Edgecode track.", TestResult::FAIL );
+                    _spTestResult->AddSingleResult( L"REQ_EP_087", nodeName + L" has more than one Ink Number Edgecode track.", TestResult::FAIL, node );
                     testPassed = false;
                 }
                 break;
@@ -355,7 +356,7 @@ bool EPContainedTrackVisitor::PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPFil
                 //3. Ensure that there are <=1 Aux. Ink Number Edgecode tracks
                 if ( mapIter->second > 1 )
                 {
-                    _spTestResult->AddSingleResult( L"REQ_EP_087", nodeName + L" has more than one Aux. Ink Number Edgecode track.", TestResult::FAIL );
+                    _spTestResult->AddSingleResult( L"REQ_EP_087", nodeName + L" has more than one Aux. Ink Number Edgecode track.", TestResult::FAIL, node );
                     testPassed = false;
                 }
                 break;
@@ -365,7 +366,7 @@ bool EPContainedTrackVisitor::PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPFil
                     wstringstream ss;
                     ss << nodeName << L" has a illegal Edgecode track (MobSlot::PhysicalTrackNumber = " << mapIter->first << L").";
                     AxString explain( ss.str().c_str() );
-                    _spTestResult->AddSingleResult( L"REQ_EP_087", explain, TestResult::FAIL );
+                    _spTestResult->AddSingleResult( L"REQ_EP_087", explain, TestResult::FAIL, node );
                     testPassed = false;
                 }
                 break;
@@ -375,19 +376,21 @@ bool EPContainedTrackVisitor::PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPFil
 
     // The absence of physical track numbers in a file source is
     // valid, however, we want to add the result in order to identify
-    // physical track numbers as presence, and tested.  Therefore only
+    // physical track numbers as present, and tested.  Therefore only
     // add the pass result if the track map is not empty (ie. there
     // are tracks present to test). This is different from the test
     // behavior of top level composition and tape sources becasue each
-    // of those are always, minimally, tested to ensure they contain a
-    // primary timecode track (identified by physical track number).
+    // of those are always, minimally, be tested to ensure they
+    // contain a primary timecode track (identified by physical track
+    // number).
     if ( !spTrackNumMap->empty() && testPassed )
     {
       wstringstream ss;
       ss << nodeName << L" has valid physical track numbers.";
       _spTestResult->AddSingleResult( L"REQ_EP_087",
 				      ss.str(),
-				      TestResult::PASS );
+				      TestResult::PASS,
+				      node );
     }
 
     return testPassed;
@@ -401,7 +404,8 @@ bool EPContainedTrackVisitor::PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPAux
     {
         _spTestResult->AddSingleResult( L"REQ_EP_136",
 					this->GetMobSlotName( _spEdgeMap, node ) + L" does not have any mob slots.",
-					TestResult::FAIL);
+					TestResult::FAIL,
+					node );
         return false;
     }
 
@@ -426,7 +430,8 @@ bool EPContainedTrackVisitor::PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPAux
     // It's valid, add a pass result.
     _spTestResult->AddSingleResult( L"REQ_EP_136",
 				    this->GetMobSlotName( _spEdgeMap, node ) + L" is a valid auxiliary source.",
-				    TestResult::PASS );
+				    TestResult::PASS,
+				    node );
 
     return true;
 }
@@ -514,7 +519,7 @@ bool EPContainedTrackVisitor::CheckPrimaryTimecodeTracks( shared_ptr<EPTypedVisi
                     ss << L"Mob slot with ID = " << axMobSlot.GetSlotID()
                        << L" of " << this->GetMobSlotName( _spEdgeMap, node )
                        << L" is a timecode track that does not consist of a single Timecode object.";
-                    _spTestResult->AddSingleResult( L"REQ_EP_131", ss.str().c_str(), TestResult::FAIL );
+                    _spTestResult->AddSingleResult( L"REQ_EP_131", ss.str().c_str(), TestResult::FAIL, node );
                     testPassed = false;
                 }
             }
@@ -550,7 +555,7 @@ bool EPContainedTrackVisitor::CheckTimecodeTrackPhysicalNumbers( Node& node,
     wstringstream ss;
     ss << nodeName << L" has " << unnumberedtracks << " timecode tracks with no MobSlot::PhysicalTrackNumber property.";
     AxString explain( ss.str().c_str() );
-    _spTestResult->AddSingleResult( reqId, explain, TestResult::FAIL );
+    _spTestResult->AddSingleResult( reqId, explain, TestResult::FAIL, node );
     testPassed = false;
   }
 
@@ -570,7 +575,7 @@ bool EPContainedTrackVisitor::CheckTimecodeTrackPhysicalNumbers( Node& node,
       wstringstream ss;
       ss << nodeName << L" has a timecode track with an illegal MobSlot::PhysicalTrackNumber value of " << mapIter->first;
       shared_ptr<DetailLevelTestResult>
-	spDetailResult = _spTestResult->AddSingleResult( reqId, ss.str(), TestResult::FAIL );
+	spDetailResult = _spTestResult->AddSingleResult( reqId, ss.str(), TestResult::FAIL, node );
       ss.str( L"" );
       ss << "Valid values are 1 <= PhysicalTrackNumber <= " << maxPhysTrackNum << L".";
       spDetailResult->AddDetail( ss.str() );
@@ -586,7 +591,7 @@ bool EPContainedTrackVisitor::CheckTimecodeTrackPhysicalNumbers( Node& node,
       ss << nodeName << L" has " << mapIter->second
 	 << L" time code tracks with a MobSlot::PhysicalTrackNumber value of " << mapIter->first << L".";
       shared_ptr<DetailLevelTestResult>
-	spDetailResult = _spTestResult->AddSingleResult( reqId, ss.str(), TestResult::FAIL );
+	spDetailResult = _spTestResult->AddSingleResult( reqId, ss.str(), TestResult::FAIL, node );
       spDetailResult->AddDetail( L"Physical track number must be unique within a Mob." );
       testPassed = false;
     }
@@ -597,7 +602,8 @@ bool EPContainedTrackVisitor::CheckTimecodeTrackPhysicalNumbers( Node& node,
   {
     _spTestResult->AddSingleResult( reqId,
 				    nodeName + L" does not have a Primary Timecode track.",
-				    TestResult::FAIL );
+				    TestResult::FAIL,
+				    node );
     testPassed = false;
   }
   
@@ -607,7 +613,8 @@ bool EPContainedTrackVisitor::CheckTimecodeTrackPhysicalNumbers( Node& node,
     ss << nodeName << L" has valid physical track numbers.";
     _spTestResult->AddSingleResult( reqId,
 				    ss.str(),
-				    TestResult::PASS );
+				    TestResult::PASS,
+				    node );
   }
 
   return testPassed;

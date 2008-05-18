@@ -22,6 +22,9 @@
 #include "EPDerivationTest.h"
 #include "DerivationChainParser.h"
 
+//Base Test files
+#include <CompMobDependency.h>
+
 //Test/Result files
 #include <TestLevelTestResult.h>
 #include <DetailLevelTestResult.h>
@@ -52,6 +55,7 @@
 //AAF files
 #include <AAFResult.h>
 #include <AAFClassDefUIDs.h>
+#include <AAFExtEnum.h>
 
 //STL files
 #include <vector>
@@ -130,13 +134,13 @@ public:
     pair<bool,aafUID_t> usageCode = axMob.ExistsUsageCode();
     if ( usageCode.first )
     {
-      ParseArgs parseArgs( usageCode.second, nodeName );
+      ParseArgs parseArgs( usageCode.second, nodeName, node.GetSharedPointerToNode() );
       _parseArgs.push_back( parseArgs );
     }
     else
     {
       AxClassDef axClassDef( axMob.GetDefinition() );
-      ParseArgs parseArgs( axClassDef.GetAUID(), nodeName );
+      ParseArgs parseArgs( axClassDef.GetAUID(), nodeName, node.GetSharedPointerToNode() );
       _parseArgs.push_back( parseArgs );
     }
 
@@ -164,7 +168,7 @@ public:
     AxEssenceDescriptor descriptor( axSrcMob.GetEssenceDescriptor() );
     AxClassDef clsDef( descriptor.GetDefinition() );
 
-    ParseArgs parseArgs( GetAcceptedAUID(clsDef), nodeName );
+    ParseArgs parseArgs( GetAcceptedAUID(clsDef), nodeName, node.GetSharedPointerToNode() );
 
     _parseArgs.push_back( parseArgs );
 
@@ -383,11 +387,11 @@ public:
 
   //========================================
   //
-  // Visit a should clip. We must visit this, in addition to the the
+  // Visit a source clip. We must visit this, in addition to the the
   // mobs, because the means by which the mob chain is terminated is
-  // significations. In some places it can be terminated by either a
-  // zero valued source clip or and out of file reference, in other
-  // places on one of those is valid.
+  // significant. In some places it can be terminated by either a zero
+  // valued source clip or and out of file reference, in other places
+  // only one of those is valid.
 
   virtual bool PreOrderVisit( AAFTypedObjNode<IAAFSourceClip>& node )
   {
@@ -399,13 +403,13 @@ public:
 
     if ( node.GetKind() == AAFTypedObjNode<IAAFSourceClip>::AAFNODE_KIND_OUT_OF_FILE_REF )
     {
-      ParseArgs parseArgs( DerivationChainParser::OOF_EVENT_ID, L"Out Of File Reference" );
+      ParseArgs parseArgs( DerivationChainParser::OOF_EVENT_ID, L"Out Of File Reference", node.GetSharedPointerToNode() );
       _parseArgs.push_back( parseArgs );
       _spLastPreVisitNode = node.GetSharedPointerToNode();
     }
     else if ( node.GetKind() == AAFTypedObjNode<IAAFSourceClip>::AAFNODE_KIND_END_OF_CHAIN_REF )
     {
-      ParseArgs parseArgs( DerivationChainParser::EOC_EVENT_ID, L"End Of Chain" );
+      ParseArgs parseArgs( DerivationChainParser::EOC_EVENT_ID, L"End Of Chain", node.GetSharedPointerToNode() );
       _parseArgs.push_back( parseArgs );
       _spLastPreVisitNode = node.GetSharedPointerToNode();
     }
@@ -453,7 +457,7 @@ public:
     PreTrace(node, L"composition");
     AxCompositionMob axCompMob( node.GetAAFObjectOfType() );
     AxString nodeName = this->GetMobName( axCompMob, L"Composition Mob" ); 
-    REQ_EP_258_Failure( L"Composition Mob", axCompMob );
+    REQ_EP_258_Failure( L"Composition Mob", axCompMob, node );
     return false;
   }
   
@@ -463,7 +467,7 @@ public:
   {
     PreTrace(node, L"master" );
     AxMasterMob axMastMob( node.GetAAFObjectOfType() );
-    REQ_EP_258_Failure( L"Master Mob", axMastMob );
+    REQ_EP_258_Failure( L"Master Mob", axMastMob, node );
     return false;
   }
 
@@ -473,7 +477,7 @@ public:
   {
     PreTrace(node, L"source" );
     AxSourceMob axSrcMob( node.GetAAFObjectOfType() );
-    REQ_EP_258_Failure( L"Source Mob", axSrcMob );
+    REQ_EP_258_Failure( L"Source Mob", axSrcMob, node );
     return false;
   }
   
@@ -498,7 +502,7 @@ private:
             iter != _parseArgs.end();
 	    ++iter )
       {
-	if ( !parser.Transition( iter->event, iter->nodeName ) )
+	if ( !parser.Transition( iter->event, iter->nodeName, *iter->spNode ) )
 	{
 	  break;
 	}
@@ -508,7 +512,7 @@ private:
       // the parser was left in a valid end state.
       if ( iter == _parseArgs.end() )
       {
-	parser.CheckEndState();
+	parser.CheckEndState( *_parseArgs.back().spNode );
       }
     }
   }
@@ -529,7 +533,8 @@ private:
   }
   
   void REQ_EP_258_Failure( const wstring& mobTypeName,
-                          AxMob& mob )
+			   AxMob& mob,
+			   Node& node )
   {
     wstring explain = mobTypeName + L" named \"" + mob.GetName(L"<unnamed>")
                     + L"\" is out of place in the derrivation chain.";    
@@ -537,7 +542,8 @@ private:
     shared_ptr<DetailLevelTestResult>
       spFailure = _spTestResult->AddSingleResult( L"REQ_EP_258",
                                                   explain,
-                                                  TestResult::FAIL );
+                                                  TestResult::FAIL,
+						  node );
     spFailure->AddDetail( L"Does not have an Edit Protocol material type." );
   }
 
@@ -576,13 +582,16 @@ private:
   struct ParseArgs
   {
     ParseArgs( DerivationChainParser::EventID e,
-	       AxString n )
+	       AxString n,
+	       shared_ptr<Node> sp )
       : event(e),
-	nodeName(n)
+	nodeName(n),
+	spNode(sp)
     {}
 
     DerivationChainParser::EventID event;
     AxString nodeName;
+    shared_ptr<Node> spNode;
   };
   
   deque<ParseArgs> _parseArgs;
@@ -610,12 +619,12 @@ void AnalyzeMobChain( wostream& log,
 
 //======================================================================
 
-class Analyzer
+class DerivationChainAnalyzer
 {
 public:
-  Analyzer( wostream& log,
-            shared_ptr<const TestGraph> spGraph,
-            shared_ptr<TestLevelTestResult> spTestResult )
+  DerivationChainAnalyzer( wostream& log,
+			   shared_ptr<const TestGraph> spGraph,
+			   shared_ptr<TestLevelTestResult> spTestResult )
     : _log( log ),
       _spGraph( spGraph ),
       _spTestResult( spTestResult )
@@ -628,15 +637,70 @@ public:
 
 private:
 
+  // prohibited
+  DerivationChainAnalyzer();
+  DerivationChainAnalyzer& operator=( const DerivationChainAnalyzer& );
+
   wostream& _log;
   shared_ptr<const TestGraph> _spGraph;
   shared_ptr<TestLevelTestResult> _spTestResult;
-  
-  // prohibited
-  Analyzer();
-  Analyzer& operator=( const Analyzer& );
-  
 };
+
+//======================================================================
+
+class VerifyNotTopLevel
+{
+public:
+  VerifyNotTopLevel( wostream& log,
+		     shared_ptr<const TestGraph> spGraph,
+		     shared_ptr<TestLevelTestResult> spTestResult )
+    : _log( log ),
+      _spGraph( spGraph ),
+      _spTestResult( spTestResult ),
+      _fail(false)
+  {}
+
+  void operator () ( const CompMobDependency::CompMobNodeSP& spCompositionNode )
+  {
+    AxCompositionMob axCompMob( spCompositionNode->GetAAFObjectOfType() );
+
+    pair<bool,aafUID_t> usageCode = axCompMob.ExistsUsageCode();
+
+    if ( usageCode.first && usageCode.second == kAAFUsage_TopLevel )
+    {
+      AxString mobName = axCompMob.GetName( L"<unnamed>" );
+      wstringstream ss;
+      ss << "Top level CompositionMob \"" << mobName << L"\" is referenced by one, or more, Mob objects in the file.";
+      _spTestResult->AddSingleResult( L"REQ_EP_025.2",
+				      ss.str(),
+				      TestResult::FAIL,
+				      *spCompositionNode );
+      _fail = true;
+    }
+  }
+
+  void AddFinalResult()
+  {
+    if ( !_fail )
+    {
+      _spTestResult->AddUnassociatedSingleResult( L"REQ_EP_025.2",
+						  L"No top level CompositionMob objects are referenced by other Mob objects in the file.",
+						  TestResult::PASS );
+    }
+  }
+
+private:
+
+  // prohibited
+  VerifyNotTopLevel();
+  VerifyNotTopLevel& operator=( const VerifyNotTopLevel& );
+
+  wostream& _log;
+  shared_ptr<const TestGraph> _spGraph;
+  shared_ptr<TestLevelTestResult> _spTestResult;
+  bool _fail;
+};
+
 
 //======================================================================
 
@@ -650,9 +714,9 @@ using namespace std;
 
 EPDerivationTest::EPDerivationTest( wostream& log,
                                     shared_ptr<const TestGraph> spGraph,
-                                    CompMobDependency::CompMobNodeVectorSP spTopLevelCompMobs )
+                                    shared_ptr<CompMobDependency> spDepTest )
   : Test( log, GetTestInfo() ),
-    _spTopLevelCompMobs( spTopLevelCompMobs )
+    _spDepTest( spDepTest )
 {
     SetTestGraph(spGraph);
 }
@@ -664,9 +728,21 @@ shared_ptr<TestLevelTestResult> EPDerivationTest::Execute()
 {
   shared_ptr<TestLevelTestResult> spTestResult = CreateTestResult();
 
-  Analyzer analyzer( GetOutStream(), GetTestGraph(), spTestResult );
+  //
+  // Verify non root mobs are not top level.
+  //
+  CompMobDependency::CompMobNodeVectorSP spNonRootCompMobs = _spDepTest->GetNonRootCompMobNodes();
+  VerifyNotTopLevel verifyNotTopLevel = for_each( spNonRootCompMobs->begin(), spNonRootCompMobs->end(),
+						  VerifyNotTopLevel(GetOutStream(), GetTestGraph(), spTestResult) );
+  verifyNotTopLevel.AddFinalResult();
 
-  for_each( _spTopLevelCompMobs->begin(), _spTopLevelCompMobs->end(), analyzer );
+  //
+  // Analyzer derivation chains.
+  //
+
+  CompMobDependency::CompMobNodeVectorSP spRootCompMobs = _spDepTest->GetRootCompMobNodes();
+  for_each( spRootCompMobs->begin(), spRootCompMobs->end(),
+	    DerivationChainAnalyzer( GetOutStream(), GetTestGraph(), spTestResult ) );
 
   return spTestResult;
 }
@@ -705,12 +781,9 @@ const TestInfo EPDerivationTest::GetTestInfo()
     spReqIds->push_back(L"REQ_EP_261");     // * Unresolved references in derivation chain.
     spReqIds->push_back(L"REQ_EP_262");     // * Valid Derivation Chain Termination
 
-    // Use 25.2 instead of 260 if there is agreement that no other mob
-    // type, other than top level, can start the derivatino chain.  If
-    // there is not agreement on that point then This may not be the
-    // best test to this at all.... Must reconcile REQ_EP_260 to know
-    // the answer.
-    // spReqIds->push_back(L"REQ_EP_025.2"); // Top-level composition shall not be referenced by another Mob in the AAF file.
+    // REQ_EP_025.2 is unrelated to the derivation chain parsing but
+    // this is a logical place to test it.
+    spReqIds->push_back(L"REQ_EP_025.2");   // * Top-level composition shall not be referenced by another Mob in the AAF file.
 
     // TODO: Push an item for valid transitions from Film Source.
     return TestInfo(L"EPDerivationTest", spReqIds);

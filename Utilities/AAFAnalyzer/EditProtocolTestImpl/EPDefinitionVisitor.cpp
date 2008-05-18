@@ -76,12 +76,12 @@ bool EPDefinitionVisitor::PreOrderVisit( EPTypedObjNode<IAAFOperationDef, EPEffe
     
     if ( dataDef == kAAFDataDef_Picture || dataDef == kAAFDataDef_Sound )
     {
-        _opDataDefCurrent.insert( msg + axDataDef.GetName() + L"." );
+        _opDataDefCurrent[msg + axDataDef.GetName()] = node.GetSharedPointerToNode();
         
     }
     else if ( dataDef == kAAFDataDef_LegacyPicture || dataDef == kAAFDataDef_LegacySound )
     {
-        _opDataDefLegacy.insert( msg + L"Legacy" + axDataDef.GetName() + L"." );
+        _opDataDefLegacy[msg + L"Legacy" + axDataDef.GetName()] = node.GetSharedPointerToNode();
     }
     
     shared_ptr<AAFTypedObjNode<IAAFOperationDef> > spGeneric( node.DownCastToAAF<IAAFOperationDef>() );
@@ -91,7 +91,7 @@ bool EPDefinitionVisitor::PreOrderVisit( EPTypedObjNode<IAAFOperationDef, EPEffe
 bool EPDefinitionVisitor::PreOrderVisit( AAFTypedObjNode<IAAFOperationDef>& node )
 {
     AxOperationDef axOpDef( node.GetAAFObjectOfType() );
-    _registeredDefinitions[axOpDef.GetAUID()] = axOpDef.GetName();
+    _registeredDefinitions[axOpDef.GetAUID()] = make_pair( axOpDef.GetName(), node.GetSharedPointerToNode() );
     return false;
 }
 
@@ -137,7 +137,8 @@ bool EPDefinitionVisitor::PreOrderVisit( AAFTypedObjNode<IAAFOperationGroup>& no
                 L" has data definition value \"" + groupLegacy + axOpGroupDDef.GetName() + 
                 L"\" and references OperationDefinition \"" + axOpDef.GetName() +
                 L"\" with data definition value \"" + defLegacy + axOpDefDDef.GetName() + L"\".", 
-            TestResult::FAIL );
+            TestResult::FAIL,
+	    node );
     }
 
     //Continue checking even if this node failed.  Need to record AUIDs of
@@ -154,45 +155,77 @@ void EPDefinitionVisitor::CheckForUnusedOperationDefinitions()
         _registeredDefinitions.erase( *sIter );
     }
     
-    //Present a warning for every unused OperationDefinition.
-    map<aafUID_t, AxString>::const_iterator mIter;
+    //Present a info message for every unused OperationDefinition.
+    map<aafUID_t, pair<AxString,shared_ptr<Node> > >::const_iterator mIter;
     for ( mIter = _registeredDefinitions.begin(); mIter != _registeredDefinitions.end(); mIter++ )
     {
       _spTestResult->AddSingleResult(
          L"REQ_EP_162",
-	 L"OperationDefinition \"" + mIter->second + L"\" is not referenced.",
-	 TestResult::WARN );
+	 L"OperationDefinition \"" + mIter->second.first + L"\" is not referenced.",
+	 TestResult::INFO,
+	 *(mIter->second.second) );
     }
-    
+}
+
+bool EPDefinitionVisitor::IsPre11()
+{
+  if ( _fileVersion.major > 1 || ( _fileVersion.major == 1 && _fileVersion.minor >= 1 ) )
+  {
+    return false;
+  }
+  else
+  {
+    return true;
+  }
 }
 
 void EPDefinitionVisitor::CheckLegacyData()
 {
-    if ( _fileVersion.major < 1 || 
-        ( _fileVersion.major == 1 && _fileVersion.minor == 0 ) )
+  // A file version greater than 1.1 should not have legacy data
+  // definitions.  Warn if legacy values are found.  Pass if current
+  // values are found.  The reverse is true for pre 11 files.
+
+  map<AxString, shared_ptr<Node> >::const_iterator iter;
+  for ( iter = _opDataDefCurrent.begin(); iter != _opDataDefCurrent.end(); iter++ )
+  {
+    TestResult::Result result = TestResult::UNDEFINED;
+
+    if ( IsPre11() )
     {
-        //Legacy data is ok, warn if non-legacy data is found.
-        set<AxString>::const_iterator iter;
-        for ( iter = _opDataDefCurrent.begin(); iter != _opDataDefCurrent.end(); iter++ )
-        {
-            wstringstream ss;
-            ss << *iter << L" in an AAF Version " << _fileVersion.major
-               << L"." << _fileVersion.minor << L" file.";
-            _spTestResult->AddSingleResult( L"REQ_EP_163", ss.str().c_str(), TestResult::WARN );
-        }
+      result = TestResult::WARN;
     }
     else
     {
-        //Legacy data is illegal, therefore fail.
-        set<AxString>::const_iterator iter;
-        for ( iter = _opDataDefLegacy.begin(); iter != _opDataDefLegacy.end(); iter++ )
-        {
-            wstringstream ss;
-            ss << *iter << L" in an AAF Version " << _fileVersion.major
-               << L"." << _fileVersion.minor << L" file.";
-            _spTestResult->AddSingleResult( L"REQ_EP_163", ss.str().c_str(), TestResult::FAIL );
-        }
+      result = TestResult::PASS;
     }
+
+    wstringstream ss;
+    ss << iter->first << L" in an AAF Version " << _fileVersion.major
+       << L"." << _fileVersion.minor << L" file.";
+
+    _spTestResult->AddSingleResult( L"REQ_EP_163", ss.str().c_str(), result, *iter->second );
+  }
+
+  for ( iter = _opDataDefLegacy.begin(); iter != _opDataDefLegacy.end(); iter++ )
+  {
+    TestResult::Result result = TestResult::UNDEFINED;
+
+    if ( IsPre11() )
+    {
+      result = TestResult::PASS;
+    }
+    else
+    {
+      result = TestResult::WARN;
+    }
+
+    wstringstream ss;
+    ss << iter->first << L" in an AAF Version " << _fileVersion.major
+       << L"." << _fileVersion.minor << L" file.";
+
+    _spTestResult->AddSingleResult( L"REQ_EP_163", ss.str().c_str(), result, *iter->second );
+  }
+
 }
 
 } // end of namespace aafanalyzer

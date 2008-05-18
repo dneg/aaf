@@ -196,14 +196,14 @@ bool EPTrackContentsVisitor::PreOrderVisit( AAFTypedObjNode<IAAFTimelineMobSlot>
     {
       wstringstream ss;
       ss << this->GetMobSlotName( _spEdgeMap, node ) << " has a MarkIn property.";
-      _spTestResult->AddSingleResult( L"REQ_EP_108.1", ss.str(), TestResult::NOTED );
+      _spTestResult->AddSingleResult( L"REQ_EP_108.1", ss.str(), TestResult::NOTED, node );
     }
 
     if ( markOut.first )
     {
       wstringstream ss;
       ss << this->GetMobSlotName( _spEdgeMap, node ) << " has a MarkOut property.";
-      _spTestResult->AddSingleResult( L"REQ_EP_108.2", ss.str(), TestResult::NOTED );
+      _spTestResult->AddSingleResult( L"REQ_EP_108.2", ss.str(), TestResult::NOTED, node );
     }
 
     //
@@ -230,7 +230,7 @@ bool EPTrackContentsVisitor::PreOrderVisit( AAFTypedObjNode<IAAFTimelineMobSlot>
 	result = TestResult::NOTED;
       }
 
-      _spTestResult->AddSingleResult( L"REQ_EP_108.3", ss.str(), result );
+      _spTestResult->AddSingleResult( L"REQ_EP_108.3", ss.str(), result, node );
     }
 
     //
@@ -240,7 +240,7 @@ bool EPTrackContentsVisitor::PreOrderVisit( AAFTypedObjNode<IAAFTimelineMobSlot>
     {
       wstringstream ss;
       ss << this->GetMobSlotName( _spEdgeMap, node ) << " has a TimelineMobSlot::UserPos = " << userPos.second;
-      _spTestResult->AddSingleResult( L"REQ_EP_108.4", ss.str(), TestResult::NOTED );
+      _spTestResult->AddSingleResult( L"REQ_EP_108.4", ss.str(), TestResult::NOTED, node );
     }
 
     return true;    
@@ -338,7 +338,7 @@ bool EPTrackContentsVisitor::PreOrderVisit( EPTypedObjNode<IAAFMobSlot, EPEssenc
       result = TestResult::FAIL;
     }
 
-    _spTestResult->AddSingleResult( L"REQ_EP_103", ss.str(), result );
+    _spTestResult->AddSingleResult( L"REQ_EP_103", ss.str(), result, node );
   }
   
   return true;

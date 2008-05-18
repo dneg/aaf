@@ -28,12 +28,14 @@
 //STL files
 #include <stack>
 #include <set>
+#include <map>
 
 class AxComponent;
 
 namespace aafanalyzer {
 
 class TestLevelTestResult;
+class Node;
 
 using namespace boost;
 using namespace std;
@@ -140,9 +142,9 @@ class EPAnnotationVisitor : public EPTypedVisitor
     stack<bool> _isAncestorEventMobSlot;
     stack<bool> _isParentMobSlot;
     
-    set<AxString> _taggedValueNames;
+    map<AxString, shared_ptr<Node> > _taggedValueNames;
     set<AxString> _taggedValueDefs;
-    set<aafUID_t> _klvDataKeys;
+    map<aafUID_t, shared_ptr<Node> > _klvDataKeys;
     set<aafUID_t> _klvDataDefs;
     
     bool PopStacks();
@@ -151,7 +153,6 @@ class EPAnnotationVisitor : public EPTypedVisitor
     EPAnnotationVisitor();
     EPAnnotationVisitor( const EPAnnotationVisitor& );
     EPAnnotationVisitor& operator=( const EPAnnotationVisitor& );
-  
 };
 
 } // end of namespace diskstream

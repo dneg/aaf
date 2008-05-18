@@ -2,7 +2,7 @@
 <!DOCTYPE aaf-file SYSTEM "EPDerivationChain.dtd">
 <aaf-file effect-data-definitions="legacy">
 <!-- Test every operation defined in the edit protocol with legacy Data
-         Definition values -->
+       Definition values -->
  <top-level name="Video Dissolve not in Transition">
   <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
    <sequence length="0" track-type="picture">

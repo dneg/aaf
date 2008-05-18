@@ -36,3 +36,4 @@ ${ANALYZE} -filter "$2" -verbose $1.aaf > $1.actual
 echo diff $1.expected $1.actual
 diff $1.expected $1.actual > /dev/null
 
+

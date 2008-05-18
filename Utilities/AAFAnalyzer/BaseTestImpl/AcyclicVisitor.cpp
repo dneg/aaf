@@ -79,11 +79,9 @@ void AcyclicVisitor::CreateCycleTestResult()
   // Else, a cycle was detected, add a failure result and add details
   // showing the location in the chain of references.
   shared_ptr<DetailLevelTestResult>
-    spCycleResult = _spTestResult->AddSingleResult( L"REQ_EP_256",
-						    TestResult::FAIL,
-						    L"Reference Cycle Detected",
-						    L"",
-						    L"A cycle was detected in the derivation chain." );
+    spCycleResult = _spTestResult->AddUnassociatedSingleResult( L"REQ_EP_256",
+								L"A cycle was detected amoung the referenced objects in the file.",
+								TestResult::FAIL );
 
   spCycleResult->AddDetail( L"Nodes involved in the cycle:" );
 

@@ -52,7 +52,9 @@ using namespace std;
 using namespace boost;
 
 CompMobDependency::CompMobDependency(wostream& os, shared_ptr<const TestGraph> spGraph)
-: Test(os, GetTestInfo() )
+  : Test(os, GetTestInfo() ),
+    _spRootCompMobs(),
+    _spNonRootCompMobs()
 {
   SetTestGraph(spGraph);
 }
@@ -94,6 +96,9 @@ shared_ptr<TestLevelTestResult> CompMobDependency::Execute()
 
   spTestLevelResult->AddDetail( ss.str() );
 
+  // And the non root comp mobs.
+  _spNonRootCompMobs = spVisitor->GetNodesWithCountGreater(0);
+
   return spTestLevelResult;
 }
 
@@ -113,6 +118,11 @@ AxString CompMobDependency::GetDescription() const
 CompMobDependency::CompMobNodeVectorSP CompMobDependency::GetRootCompMobNodes()
 {
   return _spRootCompMobs;
+}
+
+CompMobDependency::CompMobNodeVectorSP CompMobDependency::GetNonRootCompMobNodes()
+{
+  return _spNonRootCompMobs;
 }
 
 const TestInfo CompMobDependency::GetTestInfo()

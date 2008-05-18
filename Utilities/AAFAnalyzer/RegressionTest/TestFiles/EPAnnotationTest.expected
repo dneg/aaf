@@ -5,116 +5,139 @@
         Covered Requirements: REQ_EP_151; REQ_EP_152
         Noted Requirements: None
         Passing Requirements: None
+        Info Requirements: None
         Warning Requirements: None
         Failing Requirements: REQ_EP_147; REQ_EP_150
 
             Name:   Comment Marker Placement
             Desc:   CommentMarkers shall be placed only in EventMobSlots.  DescriptiveMarkers may be placed in any kind of MobSlot (e.g. TimelineMobSlot, EventMobSlot, StaticMobSlot).
+            Node:   13 (CommentMarker)
             Result: Passed
             Reason: Mob slot with ID = 1 of Top-Level Composition "User Comments in CommentMarker" is an Event Mob Slot that contains a CommentMarker.
             Covered Requirements: None
             Noted Requirements: None
             Passing Requirements: REQ_EP_150
+            Info Requirements: None
             Warning Requirements: None
             Failing Requirements: None
 
             Name:   Use of Component::UserComments
             Desc:   Component::UserComments shall only be used on: the Segment of a MobSlot or a CommentMarker (or its subclasses).
+            Node:   18 (Sequence)
             Result: Failed
             Reason: Mob slot with ID = 1 of Top-Level Composition "Illegal User Comments" contains a Component that illegally uses the Component::UserComments property.
             Covered Requirements: None
             Noted Requirements: None
             Passing Requirements: None
+            Info Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_147
 
             Name:   Comment Marker Placement
             Desc:   CommentMarkers shall be placed only in EventMobSlots.  DescriptiveMarkers may be placed in any kind of MobSlot (e.g. TimelineMobSlot, EventMobSlot, StaticMobSlot).
+            Node:   24 (CommentMarker)
             Result: Passed
             Reason: Mob slot with ID = 1 of Top-Level Composition "CommentMarker in Essence Track" is an Event Mob Slot that contains a CommentMarker.
             Covered Requirements: None
             Noted Requirements: None
             Passing Requirements: REQ_EP_150
+            Info Requirements: None
             Warning Requirements: None
             Failing Requirements: None
 
             Name:   Comment Marker Placement
             Desc:   CommentMarkers shall be placed only in EventMobSlots.  DescriptiveMarkers may be placed in any kind of MobSlot (e.g. TimelineMobSlot, EventMobSlot, StaticMobSlot).
+            Node:   31 (CommentMarker)
             Result: Passed
             Reason: Mob slot with ID = 1 of Top-Level Composition "CommentMarker in Event Mob Slot" is an Event Mob Slot that contains a CommentMarker.
             Covered Requirements: None
             Noted Requirements: None
             Passing Requirements: REQ_EP_150
+            Info Requirements: None
             Warning Requirements: None
             Failing Requirements: None
 
             Name:   Comment Marker Placement
             Desc:   CommentMarkers shall be placed only in EventMobSlots.  DescriptiveMarkers may be placed in any kind of MobSlot (e.g. TimelineMobSlot, EventMobSlot, StaticMobSlot).
+            Node:   35 (CommentMarker)
             Result: Failed
             Reason: Mob slot with ID = 1 of Top-Level Composition "CommentMarker nested in Timeline Mob Slot" is not an Event Mob Slot but contains a CommentMarker.
             Covered Requirements: None
             Noted Requirements: None
             Passing Requirements: None
+            Info Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_150
 
             Name:   Comment Marker Placement
             Desc:   CommentMarkers shall be placed only in EventMobSlots.  DescriptiveMarkers may be placed in any kind of MobSlot (e.g. TimelineMobSlot, EventMobSlot, StaticMobSlot).
+            Node:   38 (CommentMarker)
             Result: Failed
             Reason: Mob slot with ID = 1 of Top-Level Composition "CommentMarker in Timeline Mob Slot" is not an Event Mob Slot but contains a CommentMarker.
             Covered Requirements: None
             Noted Requirements: None
             Passing Requirements: None
+            Info Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_150
 
             Name:   Comment Marker Placement
             Desc:   CommentMarkers shall be placed only in EventMobSlots.  DescriptiveMarkers may be placed in any kind of MobSlot (e.g. TimelineMobSlot, EventMobSlot, StaticMobSlot).
+            Node:   42 (CommentMarker)
             Result: Failed
             Reason: Mob slot with ID = 1 of Top-Level Composition "CommentMarker nested in Static Mob Slot" is not an Event Mob Slot but contains a CommentMarker.
             Covered Requirements: None
             Noted Requirements: None
             Passing Requirements: None
+            Info Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_150
 
             Name:   Comment Marker Placement
             Desc:   CommentMarkers shall be placed only in EventMobSlots.  DescriptiveMarkers may be placed in any kind of MobSlot (e.g. TimelineMobSlot, EventMobSlot, StaticMobSlot).
+            Node:   45 (CommentMarker)
             Result: Failed
             Reason: Mob slot with ID = 1 of Top-Level Composition "CommentMarker in Static Mob Slot" is not an Event Mob Slot but contains a CommentMarker.
             Covered Requirements: None
             Noted Requirements: None
             Passing Requirements: None
+            Info Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_150
 
             Name:   Use of Component::UserComments
             Desc:   Component::UserComments shall only be used on: the Segment of a MobSlot or a CommentMarker (or its subclasses).
+            Node:   71 (Sequence)
             Result: Failed
             Reason: Mob slot with ID = 1 of Top-Level Composition "Heredity Test 1" contains a Component that illegally uses the Component::UserComments property.
             Covered Requirements: None
             Noted Requirements: None
             Passing Requirements: None
+            Info Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_147
 
             Name:   Comment Marker Placement
             Desc:   CommentMarkers shall be placed only in EventMobSlots.  DescriptiveMarkers may be placed in any kind of MobSlot (e.g. TimelineMobSlot, EventMobSlot, StaticMobSlot).
+            Node:   86 (CommentMarker)
             Result: Passed
             Reason: Mob slot with ID = 1 of Unnamed Clip is an Event Mob Slot that contains a CommentMarker.
             Covered Requirements: None
             Noted Requirements: None
             Passing Requirements: REQ_EP_150
+            Info Requirements: None
             Warning Requirements: None
             Failing Requirements: None
 
             Name:   Comment Marker Placement
             Desc:   CommentMarkers shall be placed only in EventMobSlots.  DescriptiveMarkers may be placed in any kind of MobSlot (e.g. TimelineMobSlot, EventMobSlot, StaticMobSlot).
+            Node:   89 (CommentMarker)
             Result: Passed
             Reason: Mob slot with ID = 2 of Unnamed Clip is an Event Mob Slot that contains a CommentMarker.
             Covered Requirements: None
             Noted Requirements: None
             Passing Requirements: REQ_EP_150
+            Info Requirements: None
             Warning Requirements: None
             Failing Requirements: None
 

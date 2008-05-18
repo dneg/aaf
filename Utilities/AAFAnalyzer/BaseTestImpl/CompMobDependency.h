@@ -56,6 +56,8 @@ class CompMobDependency : public Test
 
   CompMobNodeVectorSP GetRootCompMobNodes();
 
+  CompMobNodeVectorSP GetNonRootCompMobNodes();
+
  private:
 
   // prohibited
@@ -64,6 +66,7 @@ class CompMobDependency : public Test
   CompMobDependency& operator=( const CompMobDependency& );
 
   CompMobNodeVectorSP _spRootCompMobs;
+  CompMobNodeVectorSP _spNonRootCompMobs;
 };
 
 } // end of namespace diskstream

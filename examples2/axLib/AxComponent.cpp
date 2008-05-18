@@ -44,6 +44,23 @@ aafLength_t AxComponent::GetLength()
 	return len;
 }
 
+std::pair<bool,aafLength_t> AxComponent::ExistsLength()
+{
+  std::pair<bool,aafLength_t> len(true,0);
+
+  AAFRESULT hresult = _spIaafComponent->GetLength( &len.second );
+  if ( hresult == AAFRESULT_PROP_NOT_PRESENT )
+  {
+    len.first = false;
+  }
+  else
+  {
+    CHECK_HRESULT( hresult );
+  }
+
+  return len;
+}
+
 void AxComponent::SetLength( const aafLength_t& len )
 {
 	CHECK_HRESULT( _spIaafComponent->SetLength( len ) );

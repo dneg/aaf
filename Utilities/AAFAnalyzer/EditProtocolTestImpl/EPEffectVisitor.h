@@ -81,12 +81,13 @@ class EPEffectVisitor : public EPTypedVisitor
     EPEffectVisitor( const EPEffectVisitor& );
     EPEffectVisitor& operator=( const EPEffectVisitor& );
 
-    bool VeirfyTransitionRequirement( AAFTypedObjNode<IAAFOperationGroup>& node,
+    void VerifyTransitionRequirement( AAFTypedObjNode<IAAFOperationGroup>& node,
 				      bool withinTransition,
 				      const AxString& reqId,
 				      const AxString& type );
 
-    bool VerifyAlphaRequirements( AxOperationGroup& axOpGroup,
+    void VerifyAlphaRequirements( Node& node,
+				  AxOperationGroup& axOpGroup,
 				  const AxString& effectType,
 				  aafUInt32 expectedInputs,
 				  const AxString& descriptorReq,
