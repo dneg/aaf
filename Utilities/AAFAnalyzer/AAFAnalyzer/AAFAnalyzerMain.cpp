@@ -18,6 +18,8 @@
 //
 //=---------------------------------------------------------------------=
 
+#define AAFANALYZER_VERSION "0.9.6"
+
 //Edit Protocol Test files
 #include <EPMobDepPhase.h>
 
@@ -413,6 +415,43 @@ void OutputSimpleResultMsgs( shared_ptr<const TestResult> res )
   }   
 }
 
+
+//======================================================================
+
+void WriteXMLResult(shared_ptr<const DetailLevelTestResult> res, wostream& os)
+{
+  os << "\t<req id=\"" << res->GetId() << "\">" << endl;
+  os << "\t\t<result>" << res->GetResultAsString() << "</result>" << endl;
+  os << "\t\t<explain><![CDATA[" << res->GetExplanation() << "]]></explain>" << endl;
+  os << "\t</req>" << endl;
+}
+
+void RecursiveOutputXMLResults( shared_ptr<const TestResult> res, wostream& os )
+{
+  if (res->GetResultType() == TestResult::DETAIL)
+  {
+    shared_ptr<const DetailLevelTestResult> detailResult = dynamic_pointer_cast<const DetailLevelTestResult>(res);
+    WriteXMLResult(detailResult, os);
+  }
+
+  TestResult::SubtestResultVector subResults = res->GetSubtestResults();
+  for (TestResult::SubtestResultVector::const_iterator iter = subResults.begin();
+       iter != subResults.end();
+       ++iter)
+  {
+    RecursiveOutputXMLResults(*iter, os);
+  }
+}
+
+void OutputXMLResults(shared_ptr<const TestResult> res, wostream& os)
+{
+  os << "<aafanalyzer_results version=\"" << AAFANALYZER_VERSION << "\"" << endl;
+  RecursiveOutputXMLResults(res,os);
+  os << "<\aafanalyzer_results>" << endl;
+}
+
+//======================================================================
+
 void RegisterTests()
 {
   // Register Load Phase tests.
@@ -703,6 +742,7 @@ ostream& operator<<( ostream& os, const Usage& usage )
   os << "[analysis options]    = -verbose"                  << endl;
   os << "                      | -filter <result name>"     << endl;
   os << "                      | -filecoverage"             << endl;
+  os << "                      | -xmlresults"               << endl;
   os << "                      | -dump {header | comp}"     << endl;
   os << endl;
 
@@ -714,6 +754,7 @@ ostream& operator<<( ostream& os, const Usage& usage )
   os << "-dump header:           dump contained objects beginning with header"                    << endl;
   os << "-dump comp:             dump the top level composition, including resolved references"   << endl;
   os << "-filecoverage:          output the file's requirement coverage data"                     << endl;
+  os << "-xmlresults:            dump results in xml format"                                      << endl;
   os << "-reqs:                  specify XML file that describes the requirements"                << endl;
   os << "-type:                  report only to specified requirement types, default is \"all\"." << endl;
   os << "-detail:                output requirement details"                                      << endl;
@@ -822,6 +863,9 @@ int main( int argc, char** argv )
     
     // Print file coverage
     pair<bool, int> fileCoverageArg = args.get( "-filecoverage" );
+
+    // Dump full results in xml format
+    pair<bool, int> xmlResultArg = args.get( "-xmlresults" );
     
     // Show verbose result output
     pair<bool, int> verboseOutput = args.get( "-verbose" );
@@ -1017,6 +1061,10 @@ int main( int argc, char** argv )
     else if (fileCoverageArg.first)
     {
         OutputFileCoverage(spResult, fileName, 0);
+    }
+    else if (xmlResultArg.first)
+    {
+      OutputXMLResults(spResult, wcout);
     }
     else
     {

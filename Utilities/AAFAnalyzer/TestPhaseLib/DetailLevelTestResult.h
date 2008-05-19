@@ -77,7 +77,10 @@ class DetailLevelTestResult : public LowLevelTestResult
 
   // Returns ~0 if this result is not associated with any particular
   // node.
-  shared_ptr<Node> DetailLevelTestResult::GetAssociatedNode();
+  shared_ptr<Node> DetailLevelTestResult::GetAssociatedNode() const;
+
+  // Get the require id against which this result is being reported.
+  const wstring& GetId() const;
 
  private:
 
@@ -91,7 +94,7 @@ class DetailLevelTestResult : public LowLevelTestResult
   // This is here primarily to aid debugging. We add test results
   // on at a time against requirements, but they are accumulated
   // in sets in the TestResult base class. This is less obtuse.
-  const wstring& _reqId;
+  const wstring _reqId;
 
   // The node associated with the AAF object that caused the error.
   shared_ptr<Node> _spNode;

@@ -61,6 +61,8 @@ namespace aafanalyzer
 using namespace std;
 using namespace boost;
 
+map<TestResult::Result,wstring> TestResult::_resultToString;
+
 TestResult::TestResult()
   : _result( UNDEFINED ),
     _spSubtestResults(new SubtestResultVector()),
@@ -71,7 +73,18 @@ TestResult::TestResult()
     _spWarnedRequirements( new Requirement::RequirementMap() ),
     _spFailedRequirements( new Requirement::RequirementMap() ),
     _spUndefinedRequirements( new Requirement::RequirementMap() )
-{}
+{
+  if ( _resultToString.empty() )
+  {
+    _resultToString[UNDEFINED] = L"UNDEFINED";
+    _resultToString[COVERED] = L"COVERED";
+    _resultToString[NOTED] = L"NOTED";
+    _resultToString[PASS] = L"PASS";
+    _resultToString[INFO] = L"INFO";
+    _resultToString[WARN] = L"WARN";
+    _resultToString[FAIL] = L"FAIL";
+  }
+}
 
 TestResult::TestResult( const wstring& name,
                         const wstring& desc,
@@ -111,6 +124,11 @@ const wstring& TestResult::GetDescription() const
 enum TestResult::Result TestResult::GetResult() const
 {
   return _result;
+}
+
+const wstring& TestResult::GetResultAsString() const
+{
+  return _resultToString[_result];
 }
 
 void TestResult::SetExplanation(const wstring& exp)

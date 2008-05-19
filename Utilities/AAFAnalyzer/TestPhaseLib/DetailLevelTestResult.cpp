@@ -139,9 +139,14 @@ shared_ptr<const Requirement> DetailLevelTestResult::GetRequirement() const
   return this->GetAssociatedTest()->GetRequirement( _reqId );
 }
 
-shared_ptr<Node> DetailLevelTestResult::GetAssociatedNode()
+shared_ptr<Node> DetailLevelTestResult::GetAssociatedNode() const
 {
   return _spNode;
+}
+
+const wstring& DetailLevelTestResult::GetId() const
+{
+  return _reqId;
 }
 
 } // end of namespace diskstream

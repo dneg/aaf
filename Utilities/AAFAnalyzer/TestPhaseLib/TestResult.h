@@ -72,6 +72,7 @@ class TestResult
   // this is the agreggate result. (i.e. the worst result 
   // amount all the children.
   Result GetResult() const;
+  const wstring& GetResultAsString() const;
 
   // This test's child results.
   const SubtestResultVector& GetSubtestResults() const;
@@ -171,6 +172,9 @@ class TestResult
 
   // Arbitrary comments that can be added to any result.
   vector<wstring> _details;
+
+  // map Result enum to string name.
+  static map<Result,wstring> _resultToString;
 };
 
 } // end of namespace diskstream
