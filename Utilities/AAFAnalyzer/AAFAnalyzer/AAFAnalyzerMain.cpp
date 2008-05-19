@@ -445,9 +445,9 @@ void RecursiveOutputXMLResults( shared_ptr<const TestResult> res, wostream& os )
 
 void OutputXMLResults(shared_ptr<const TestResult> res, wostream& os)
 {
-  os << "<aafanalyzer_results version=\"" << AAFANALYZER_VERSION << "\"" << endl;
+  os << "<aafanalyzer_results version=\"" << AAFANALYZER_VERSION << "\">" << endl;
   RecursiveOutputXMLResults(res,os);
-  os << "<\aafanalyzer_results>" << endl;
+  os << "</aafanalyzer_results>" << endl;
 }
 
 //======================================================================
