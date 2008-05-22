@@ -476,6 +476,11 @@ InitContainerDefinition (
   L"");
 
 InitContainerDefinition (
+  kAAFContainerDef_MXFGC_Avid_DNX_145_1440_1080i, 
+  L"ContainerDef_MXFGC_Avid_DNX_145_1440_1080i", 
+  L"");
+
+InitContainerDefinition (
   kAAFContainerDef_MXFGC_Avid_DNX_220X_720p, 
   L"ContainerDef_MXFGC_Avid_DNX_220X_720p", 
   L"");

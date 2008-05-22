@@ -46,10 +46,10 @@
 //
 // The following source files were used as input : 
 //
-// AAFMetaDict.csv 
+// smpte-ra.csv 
 //
-// This file was generated on Thu Nov 22 12:19:31 GMT 2007
-// by user phil on system pilot16.
+// This file was generated on Fri May 16 19:15:27 EDT 2008
+// by user Oliver on system TWEEDLEDUM.
 //
 // Key to macros.
 //
@@ -12343,6 +12343,26 @@ AAF_INSTANCE_GROUP(ContainerDefinitionInstances, ContainerDefinition)
       // 06.0E.2B.34.04.01.01.01.0E.04.03.01.02.06.02.03
       AAF_LITERAL_AUID(0x0E040301,
         0x0206, 0x0203,
+        0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x01))
+  AAF_INSTANCE_SEPARATOR()
+  AAF_INSTANCE(ContainerDefinition, AAF_SYMBOL(ContainerDef_MXFGC_Avid_DNX_145_1440_1080i,ContainerDef_MXFGC_Avid_DNX_145_1440_1080i,"",""), 
+      // {0E040301-0206-0204-060E-2B3404010101}
+      // 06.0E.2B.34.04.01.01.01.0E.04.03.01.02.06.02.04
+      AAF_LITERAL_AUID(0x0E040301,
+        0x0206, 0x0204,
+        0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x01), "")
+    AAF_INSTANCE_PROPERTY(Name, String, "ContainerDef_MXFGC_Avid_DNX_145_1440_1080i")
+    AAF_INSTANCE_PROPERTY(Identification, AUID, 
+      // {0E040301-0206-0204-060E-2B3404010101}
+      // 06.0E.2B.34.04.01.01.01.0E.04.03.01.02.06.02.04
+      AAF_LITERAL_AUID(0x0E040301,
+        0x0206, 0x0204,
+        0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x01))
+  AAF_INSTANCE_END(ContainerDefinition, AAF_SYMBOL(ContainerDef_MXFGC_Avid_DNX_145_1440_1080i,ContainerDef_MXFGC_Avid_DNX_145_1440_1080i,"",""), 
+      // {0E040301-0206-0204-060E-2B3404010101}
+      // 06.0E.2B.34.04.01.01.01.0E.04.03.01.02.06.02.04
+      AAF_LITERAL_AUID(0x0E040301,
+        0x0206, 0x0204,
         0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x01))
   AAF_INSTANCE_SEPARATOR()
   AAF_INSTANCE(ContainerDefinition, AAF_SYMBOL(ContainerDef_MXFGC_Avid_DNX_220X_720p,ContainerDef_MXFGC_Avid_DNX_220X_720p,"",""), 
