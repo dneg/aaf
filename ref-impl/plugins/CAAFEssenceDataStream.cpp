@@ -29,6 +29,55 @@
 #include <assert.h>
 #include <string.h>
 #include "AAFResult.h"
+#include "AAFUtils.h"
+
+#include "AAFSmartPointer.h"
+
+// declare a handy typedef for smart pointer
+#define TYPEDEF_SP( Object ) \
+	typedef IAAFSmartPointer<IAAF##Object> IAAF##Object##SP
+
+// smartpointer typedefs for common objects
+TYPEDEF_SP( EssenceData );
+TYPEDEF_SP( EssenceData2 );
+TYPEDEF_SP( PlainEssenceData );
+TYPEDEF_SP( KLVEssenceDataParameters );
+TYPEDEF_SP( Mob );
+TYPEDEF_SP( SourceMob );
+TYPEDEF_SP( MobSlot );
+
+const aafUID_t NULL_UID = { 0, 0, 0, { 0, 0, 0, 0, 0, 0, 0, 0 } };
+
+// Debugging log function which is optimised away for default builds
+inline void plugin_trace(const char *fmt, ...)
+{
+#ifdef PLUGIN_TRACE
+	va_list		ap;
+
+	va_start(ap, fmt);
+	vfprintf(stderr, fmt, ap);
+	va_end(ap);
+#endif
+}
+
+// local function for simplifying error handling.
+inline void checkResult(AAFRESULT r)
+{
+  if (AAFRESULT_SUCCESS != r)
+    throw HRESULT(r);
+}
+
+inline void checkExpression(bool test, AAFRESULT r)
+{
+  if (!test)
+    throw r;
+}
+
+inline void checkAssertion(bool test)
+{
+  if (!test)
+    throw HRESULT(AAFRESULT_ASSERTION_VIOLATION);
+}
 
 const CLSID CLSID_AAFEssenceDataStream = { 0x42A63FE1, 0x968A, 0x11d2, { 0x80, 0x89, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f } };
 //const IID IID_IAAFEssenceData = { 0x6a33f4e2, 0x8ed6, 0x11d2, { 0xbf, 0x9d, 0x00, 0x10, 0x4b, 0xc9, 0x15, 0x6d } };
@@ -36,7 +85,8 @@ const CLSID CLSID_AAFEssenceDataStream = { 0x42A63FE1, 0x968A, 0x11d2, { 0x80, 0
 
 CAAFEssenceDataStream::CAAFEssenceDataStream (IUnknown * pControllingUnknown)
   : CAAFUnknown (pControllingUnknown),
-  _data(NULL)
+  _data(NULL),
+  _eek(NULL_UID)
 {
 }
 
@@ -56,7 +106,7 @@ CAAFEssenceDataStream::Init(
     return AAFRESULT_NULL_PARAM;
 
   if (NULL != _data)
-    return AAFRESULT_NOT_INITIALIZED;
+    return AAFRESULT_ALREADY_INITIALIZED;
 
   IAAFEssenceData2* essenceData2 = NULL;
   AAFRESULT hr = essenceData->QueryInterface (IID_IAAFEssenceData2, (void **)&essenceData2);
@@ -69,6 +119,138 @@ CAAFEssenceDataStream::Init(
 
   return hr;
 }
+
+  //
+  // IAAFEssenceDataStream2 methods.
+  //
+HRESULT STDMETHODCALLTYPE
+CAAFEssenceDataStream::GetEssenceData
+			(// @parm [in]  essence data
+			IAAFEssenceData ** ppEssenceData)
+{
+  if (NULL == ppEssenceData)
+    return AAFRESULT_NULL_PARAM;
+
+  if (NULL == _data)
+    return AAFRESULT_NOT_INITIALIZED;
+
+  // FIXME: this will always fail because _data is an IAAFPlainEssenceData, whose QI does not know about IID_IAAFEssenceData
+  // return _data->QueryInterface( IID_IAAFEssenceData, (void **)ppEssenceData );
+  // should be named: GetPlainEssenceData() coded return _data;
+
+  return _data->QueryInterface( IID_IAAFPlainEssenceData, (void **)ppEssenceData );
+
+}
+
+HRESULT STDMETHODCALLTYPE
+CAAFEssenceDataStream::GetEssenceElementKey
+        (// @parm [out,ref] key of the essence elements in this stream
+         aafUID_t *  pEssenceElementKey)
+{
+  if (NULL == pEssenceElementKey)
+    return AAFRESULT_NULL_PARAM;
+
+  if (NULL == _data)
+    return AAFRESULT_NOT_INITIALIZED;
+
+  *pEssenceElementKey = _eek;
+
+  AAFRESULT hr = AAFRESULT_SUCCESS;
+  return hr;
+}
+
+// some well-known EssenceElementKeys
+const aafUID_t GC_EEK = { 0x0d010301, 0x0000, 0x0000, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x02, 0x01, 0x01 } };
+
+// the Avid legacy EEK for DNxHD
+const aafUID_t Avid_EEK = { 0x0e040301, 0x0000, 0x0000, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x02, 0x01, 0x01 } };
+
+// set EssenceElementKey from member variables and known consts
+HRESULT STDMETHODCALLTYPE
+CAAFEssenceDataStream::SetEssenceElementKey
+        (// @parm [in] essence element key
+         aafUID_constref	eek,
+         // @parm [in] essence element kind
+         aafUInt8  			eeKind,
+         // @parm [in] essence element count
+         aafUInt8  			eeCount,
+         // @parm [in] essence element type
+         aafUInt8  			eeType,
+         // @parm [in] essence element index
+         aafUInt8  			eeIndex,
+		 // @parm [in] logical slot id of source slot
+         aafSlotID_t  		sourceSlotID )
+{
+	plugin_trace("CAAFEssenceDataStream::SetEssenceElementKey()\n");
+
+	if (NULL == _data) return AAFRESULT_NOT_INITIALIZED;
+
+	AAFRESULT hr = AAFRESULT_SUCCESS;
+	try
+	{
+		hr = AAFRESULT_INTERNAL_ERROR;
+
+		// SetEEK
+		// we know how to set the EssenceElementKey on an EssenceData object
+		// via PlainEssenceData then KLVEssenceDataParameters::SetEssenceElementKey()
+
+		IAAFKLVEssenceDataParametersSP pParameters;
+		checkResult( _data->QueryInterface(IID_IAAFKLVEssenceDataParameters, (void **)&pParameters) );
+
+		aafUID_t Peek;
+		hr = pParameters->GetEssenceElementKey( &Peek );
+
+		// only do this is the file kind allows us to
+		if( hr == AAFRESULT_SUCCESS )
+		{
+			if( true ) // was: if( EqualAUID( &_eek, &NULL_UID ) )
+			{
+				// if null passed in by caller, preset to what the file kind wants
+				if( EqualAUID( &eek, &NULL_UID ) ) _eek = Peek;
+				else _eek = eek;
+
+				// make a GC bytes 12..16
+				aafUInt32 GCeeIndex = ( ( (eeKind&0xff)<<8 | (eeCount&0xff) )<<8 | (eeType&0xff) )<<8 | (eeIndex&0xff);	
+
+				// overwrite eek bytes 12..16
+				_eek.Data2 = (aafUInt16)(GCeeIndex>>16)&0xffff;
+				_eek.Data3 = (aafUInt16)(GCeeIndex)&0xffff;
+
+				// set the EssenceElementKey
+				checkResult( pParameters->SetEssenceElementKey( _eek ) );
+
+				// set the PhysicalNum in the track of the FileSourceMob
+				IAAFSourceMobSP pSourceMob;
+				checkResult( _data->GetFileMob( &pSourceMob ) );
+
+				IAAFMobSP pFileMob;
+				checkResult( pSourceMob->QueryInterface( IID_IAAFMob,(void**)&pFileMob ) );
+
+				IAAFMobSlotSP pSlot;
+				checkResult( pFileMob->LookupSlot( 1, &pSlot ) );
+				checkResult( pSlot->SetPhysicalNum( GCeeIndex ) );
+			}
+			else
+			{
+				// _eek has been initialized already
+				// we ought to leave it alone
+			}
+		}
+		else if( hr ==  AAFRESULT_OPERATION_NOT_PERMITTED )
+			// must be a file kind where eek isn't important
+			hr = AAFRESULT_CODEC_SEMANTIC_WARN;
+	}
+	catch (...)
+	{
+		// We CANNOT throw an exception out of a COM interface method!
+		// Return a reasonable exception code.
+		hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+	}
+	// smart pointers clean themselves up
+
+	return hr;
+}
+
 
 HRESULT STDMETHODCALLTYPE
     CAAFEssenceDataStream::Write (
@@ -234,10 +416,16 @@ HRESULT CAAFEssenceDataStream::InternalQueryInterface
     if (NULL == ppvObj)
         return E_INVALIDARG;
 
-    // We only support the IID_IAAFEssenceDataStream interface 
+    // We support the IID_IAAFEssenceDataStream and the IID_IAAFEssenceDataStream2 interfaces 
     if (EQUAL_UID(riid,IID_IAAFEssenceDataStream)) 
     { 
         *ppvObj = (IAAFEssenceDataStream *)this; 
+        ((IUnknown *)*ppvObj)->AddRef();
+        return S_OK;
+    }
+    else if (EQUAL_UID(riid,IID_IAAFEssenceDataStream2)) 
+    { 
+        *ppvObj = (IAAFEssenceDataStream2 *)this; 
         ((IUnknown *)*ppvObj)->AddRef();
         return S_OK;
     }

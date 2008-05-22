@@ -82,6 +82,9 @@ public:
 	STDMETHOD (GetSampleRate) (aafRational_t*  pRate);
 	STDMETHOD (SetContainerFormat) (IAAFContainerDef *pFormat);
 	STDMETHOD (GetContainerFormat) (IAAFContainerDef **ppFormat);
+	// Added methods to go direct to AUID
+	STDMETHOD (SetContainerFormat) (const aafUID_t &FormatID);
+	STDMETHOD (GetContainerFormat) (aafUID_t *pFormatID);
 	//
 	// DigitalImageDescriptor methods:
 	//

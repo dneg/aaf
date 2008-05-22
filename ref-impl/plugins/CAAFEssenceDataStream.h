@@ -43,7 +43,8 @@ interface IAAFEssenceData;
 EXTERN_C const CLSID CLSID_AAFEssenceDataStream;
 
 class CAAFEssenceDataStream
-  : public IAAFEssenceDataStream,
+  : public IAAFEssenceDataStream2,
+    public IAAFEssenceDataStream,
     public IAAFEssenceStream,
     public CAAFUnknown
 {
@@ -66,7 +67,34 @@ public:
   STDMETHOD (Init)
             (/* [in] */ IUnknown *essenceData);
 
+  //
+  // IAAFEssenceDataStream2 methods.
+  //
+
+  STDMETHOD (GetEssenceData)
+			(// @parm [out]  essence data
+			IAAFEssenceData ** ppEssenceData);
+
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetEssenceElementKey
+        (// @parm [out,ref] key of the essence elements in this stream
+         aafUID_t *  pEssenceElementKey);
   
+  virtual AAFRESULT STDMETHODCALLTYPE
+    SetEssenceElementKey
+        (// @parm [in] essence element key
+         aafUID_constref	eek,
+         // @parm [in] essence element kind
+         aafUInt8  			eeKind,
+         // @parm [in] essence element count
+         aafUInt8  			eeCount,
+         // @parm [in] essence element type
+         aafUInt8  			eeType,
+         // @parm [in] essence element index
+         aafUInt8  			eeIndex,
+		 // @parm [in] logical slot id of source slot
+         aafSlotID_t  		sourceSlotID );
+
   //
   // IAAFEssenceStream methods.
   //
@@ -142,6 +170,7 @@ public:
 
 private:
 	IAAFPlainEssenceData		*_data;
+	aafUID_t					_eek;
 };
 
 #endif // ! __CAAFEssenceDataStream_h__
