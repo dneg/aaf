@@ -671,7 +671,7 @@ public:
     }
 
     req_stmnt_os << report << L", ";
-    req_stmnt_os << Q( L"current", false );
+    req_stmnt_os << Q( L"active", false );
     req_stmnt_os << L");";
     req_stmnt_os << endl;
     _insert_requirement_stmnts.insert( req_stmnt_os.str() );
