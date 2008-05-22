@@ -75,6 +75,12 @@ typedef interface IAAFEssenceDataStream IAAFEssenceDataStream;
 #endif 	/* __IAAFEssenceDataStream_FWD_DEFINED__ */
 
 
+#ifndef __IAAFEssenceDataStream2_FWD_DEFINED__
+#define __IAAFEssenceDataStream2_FWD_DEFINED__
+typedef interface IAAFEssenceDataStream2 IAAFEssenceDataStream2;
+#endif 	/* __IAAFEssenceDataStream2_FWD_DEFINED__ */
+
+
 #ifndef __IAAFEssenceStream_FWD_DEFINED__
 #define __IAAFEssenceStream_FWD_DEFINED__
 typedef interface IAAFEssenceStream IAAFEssenceStream;
@@ -144,6 +150,7 @@ void __RPC_USER MIDL_user_free( void * );
 // AAF Interfaces.
 //=--------------------------------------------------------------------------=
 //
+
 
 
 
@@ -2040,6 +2047,177 @@ void __RPC_STUB IAAFEssenceDataStream_Init_Stub(
 
 
 #endif 	/* __IAAFEssenceDataStream_INTERFACE_DEFINED__ */
+
+
+#ifndef __IAAFEssenceDataStream2_INTERFACE_DEFINED__
+#define __IAAFEssenceDataStream2_INTERFACE_DEFINED__
+
+/* interface IAAFEssenceDataStream2 */
+/* [unique][helpstring][uuid][object] */ 
+
+
+EXTERN_C const IID IID_IAAFEssenceDataStream2;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("F8C9C2A1-DD6B-4e10-884F-012AF43550BC")
+    IAAFEssenceDataStream2 : public IUnknown
+    {
+    public:
+        virtual HRESULT STDMETHODCALLTYPE Init( 
+            /* [in] */ IUnknown *essenceData) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetEssenceData( 
+            /* [retval][out] */ IAAFEssenceData **ppEssenceData) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetEssenceElementKey( 
+            /* [ref][in] */ aafUID_constref eek,
+            /* [in] */ aafUInt8 eeKind,
+            /* [in] */ aafUInt8 eeCount,
+            /* [in] */ aafUInt8 eeType,
+            /* [in] */ aafUInt8 eeIndex,
+            /* [in] */ aafSlotID_t sourceSlotID) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetEssenceElementKey( 
+            /* [out] */ aafUID_t *pEssenceElementKey) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IAAFEssenceDataStream2Vtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IAAFEssenceDataStream2 * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IAAFEssenceDataStream2 * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IAAFEssenceDataStream2 * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *Init )( 
+            IAAFEssenceDataStream2 * This,
+            /* [in] */ IUnknown *essenceData);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetEssenceData )( 
+            IAAFEssenceDataStream2 * This,
+            /* [retval][out] */ IAAFEssenceData **ppEssenceData);
+        
+        HRESULT ( STDMETHODCALLTYPE *SetEssenceElementKey )( 
+            IAAFEssenceDataStream2 * This,
+            /* [ref][in] */ aafUID_constref eek,
+            /* [in] */ aafUInt8 eeKind,
+            /* [in] */ aafUInt8 eeCount,
+            /* [in] */ aafUInt8 eeType,
+            /* [in] */ aafUInt8 eeIndex,
+            /* [in] */ aafSlotID_t sourceSlotID);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetEssenceElementKey )( 
+            IAAFEssenceDataStream2 * This,
+            /* [out] */ aafUID_t *pEssenceElementKey);
+        
+        END_INTERFACE
+    } IAAFEssenceDataStream2Vtbl;
+
+    interface IAAFEssenceDataStream2
+    {
+        CONST_VTBL struct IAAFEssenceDataStream2Vtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IAAFEssenceDataStream2_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IAAFEssenceDataStream2_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IAAFEssenceDataStream2_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IAAFEssenceDataStream2_Init(This,essenceData)	\
+    (This)->lpVtbl -> Init(This,essenceData)
+
+#define IAAFEssenceDataStream2_GetEssenceData(This,ppEssenceData)	\
+    (This)->lpVtbl -> GetEssenceData(This,ppEssenceData)
+
+#define IAAFEssenceDataStream2_SetEssenceElementKey(This,eek,eeKind,eeCount,eeType,eeIndex,sourceSlotID)	\
+    (This)->lpVtbl -> SetEssenceElementKey(This,eek,eeKind,eeCount,eeType,eeIndex,sourceSlotID)
+
+#define IAAFEssenceDataStream2_GetEssenceElementKey(This,pEssenceElementKey)	\
+    (This)->lpVtbl -> GetEssenceElementKey(This,pEssenceElementKey)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+HRESULT STDMETHODCALLTYPE IAAFEssenceDataStream2_Init_Proxy( 
+    IAAFEssenceDataStream2 * This,
+    /* [in] */ IUnknown *essenceData);
+
+
+void __RPC_STUB IAAFEssenceDataStream2_Init_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFEssenceDataStream2_GetEssenceData_Proxy( 
+    IAAFEssenceDataStream2 * This,
+    /* [retval][out] */ IAAFEssenceData **ppEssenceData);
+
+
+void __RPC_STUB IAAFEssenceDataStream2_GetEssenceData_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFEssenceDataStream2_SetEssenceElementKey_Proxy( 
+    IAAFEssenceDataStream2 * This,
+    /* [ref][in] */ aafUID_constref eek,
+    /* [in] */ aafUInt8 eeKind,
+    /* [in] */ aafUInt8 eeCount,
+    /* [in] */ aafUInt8 eeType,
+    /* [in] */ aafUInt8 eeIndex,
+    /* [in] */ aafSlotID_t sourceSlotID);
+
+
+void __RPC_STUB IAAFEssenceDataStream2_SetEssenceElementKey_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFEssenceDataStream2_GetEssenceElementKey_Proxy( 
+    IAAFEssenceDataStream2 * This,
+    /* [out] */ aafUID_t *pEssenceElementKey);
+
+
+void __RPC_STUB IAAFEssenceDataStream2_GetEssenceElementKey_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __IAAFEssenceDataStream2_INTERFACE_DEFINED__ */
 
 
 #ifndef __IAAFEssenceStream_INTERFACE_DEFINED__

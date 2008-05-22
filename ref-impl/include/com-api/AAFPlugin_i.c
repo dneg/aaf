@@ -47,6 +47,24 @@ extern "C"{
 
 #else // !_MIDL_USE_GUIDDEF_
 
+#ifndef __IID_DEFINED__
+#define __IID_DEFINED__
+
+typedef struct _IID
+{
+    unsigned long x;
+    unsigned short s1;
+    unsigned short s2;
+    unsigned char  c[8];
+} IID;
+
+#endif // __IID_DEFINED__
+
+#ifndef CLSID_DEFINED
+#define CLSID_DEFINED
+typedef IID CLSID;
+#endif // CLSID_DEFINED
+
 #define MIDL_DEFINE_GUID(type,name,l,w1,w2,b1,b2,b3,b4,b5,b6,b7,b8) \
         const type name = {l,w1,w2,{b1,b2,b3,b4,b5,b6,b7,b8}}
 
@@ -65,6 +83,9 @@ MIDL_DEFINE_GUID(IID, IID_IAAFEssenceContainer,0xa7337031,0xc103,0x11d2,0x80,0x8
 
 
 MIDL_DEFINE_GUID(IID, IID_IAAFEssenceDataStream,0xCDDB6AB1,0x98DC,0x11d2,0x80,0x8a,0x00,0x60,0x08,0x14,0x3e,0x6f);
+
+
+MIDL_DEFINE_GUID(IID, IID_IAAFEssenceDataStream2,0xF8C9C2A1,0xDD6B,0x4e10,0x88,0x4F,0x01,0x2A,0xF4,0x35,0x50,0xBC);
 
 
 MIDL_DEFINE_GUID(IID, IID_IAAFEssenceStream,0x83402902,0x9146,0x11d2,0x80,0x88,0x00,0x60,0x08,0x14,0x3e,0x6f);
@@ -137,6 +158,24 @@ extern "C"{
 
 #else // !_MIDL_USE_GUIDDEF_
 
+#ifndef __IID_DEFINED__
+#define __IID_DEFINED__
+
+typedef struct _IID
+{
+    unsigned long x;
+    unsigned short s1;
+    unsigned short s2;
+    unsigned char  c[8];
+} IID;
+
+#endif // __IID_DEFINED__
+
+#ifndef CLSID_DEFINED
+#define CLSID_DEFINED
+typedef IID CLSID;
+#endif // CLSID_DEFINED
+
 #define MIDL_DEFINE_GUID(type,name,l,w1,w2,b1,b2,b3,b4,b5,b6,b7,b8) \
         const type name = {l,w1,w2,{b1,b2,b3,b4,b5,b6,b7,b8}}
 
@@ -155,6 +194,9 @@ MIDL_DEFINE_GUID(IID, IID_IAAFEssenceContainer,0xa7337031,0xc103,0x11d2,0x80,0x8
 
 
 MIDL_DEFINE_GUID(IID, IID_IAAFEssenceDataStream,0xCDDB6AB1,0x98DC,0x11d2,0x80,0x8a,0x00,0x60,0x08,0x14,0x3e,0x6f);
+
+
+MIDL_DEFINE_GUID(IID, IID_IAAFEssenceDataStream2,0xF8C9C2A1,0xDD6B,0x4e10,0x88,0x4F,0x01,0x2A,0xF4,0x35,0x50,0xBC);
 
 
 MIDL_DEFINE_GUID(IID, IID_IAAFEssenceStream,0x83402902,0x9146,0x11d2,0x80,0x88,0x00,0x60,0x08,0x14,0x3e,0x6f);
