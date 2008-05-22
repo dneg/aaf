@@ -420,10 +420,11 @@ void OutputSimpleResultMsgs( shared_ptr<const TestResult> res )
 
 void WriteXMLResult(shared_ptr<const DetailLevelTestResult> res, wostream& os)
 {
-  os << "\t<req id=\"" << res->GetId() << "\">" << endl;
-  os << "\t\t<result>" << res->GetResultAsString() << "</result>" << endl;
+  os << "\t<result>" << endl;
+  os << "\t\t<id>" <<  res->GetId() << "</id>" << endl;
+  os << "\t\t<status>" << res->GetResultAsString() << "</status>" << endl;
   os << "\t\t<explain><![CDATA[" << res->GetExplanation() << "]]></explain>" << endl;
-  os << "\t</req>" << endl;
+  os << "\t</result>" << endl;
 }
 
 void RecursiveOutputXMLResults( shared_ptr<const TestResult> res, wostream& os )
