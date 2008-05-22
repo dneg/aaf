@@ -77,7 +77,7 @@ class DetailLevelTestResult : public LowLevelTestResult
 
   // Returns ~0 if this result is not associated with any particular
   // node.
-  shared_ptr<Node> DetailLevelTestResult::GetAssociatedNode() const;
+  shared_ptr<Node> GetAssociatedNode() const;
 
   // Get the require id against which this result is being reported.
   const wstring& GetId() const;

@@ -60,7 +60,7 @@ class LowLevelTestResult : public TestResult
   LowLevelTestResult( const LowLevelTestResult& );
   LowLevelTestResult& operator=( const LowLevelTestResult& );
 
-  void LowLevelTestResult::SetRequirementStatus( TestResult::Result level, const shared_ptr<const Requirement>& req);
+  void SetRequirementStatus( TestResult::Result level, const shared_ptr<const Requirement>& req);
 
   const shared_ptr<const Test> _spAssociatedTest;
 };
