@@ -41,8 +41,7 @@
 #
 #	if the -v ALIAS= is non-null, will emit aliases for Classes and Properties in place of sym
 #
-#   if the -v SYM= value is specified, mkdict will use this field instead of s_sym
-#   note that for legacy support, if s_sym does not exist, r_sym will be used
+#   if the -v SYM= value is specified, mkdict will use this field instead of r_sym
 #
 # Authors
 #
@@ -98,6 +97,7 @@
 #                            the immediate ancestor
 #							 For a property this is the owning class
 #							 For a weak ref def member this is the owning class of the property
+# q_parent_app		  => the looked-up alias information for the parent
 # r_tag                   => property id lower 2 bytes used for properties
 # g_alias                 => full classname of which this is an (short) alias as used in code
 #
@@ -110,7 +110,7 @@ BEGIN {
   processedfields=0;
  
   # default value for field name that contains the normative symbols
-  if( SYM=="" ) SYM="s_sym";
+  if( SYM=="" ) SYM="r_sym";
 
   #
   # Write a header to the generated file.
@@ -825,13 +825,6 @@ BEGIN {
 			C[ i ]= -1;
 	}
 
-	# for legacy, if s_sym is no provided, use r_sym
-    if( Col[SYM]<0 )
-    {
-		Col[SYM]=Col["r_sym"];
-		C[Col["r_sym"]]="r_sym";
-	}
-
 	processedfields=1;
 	next
 }
@@ -848,7 +841,7 @@ BEGIN {
 	}
 
   # Discard Node lines (not used by MetaDictionary.h)
-  if( CC["r_nest"] == "" || tolower(CC["r_nest"]) == "node" ) next 
+  if( CC["r_nest"] == "" || tolower(CC["r_nest"]) == "node" || tolower(CC["r_nest"]) == "trunk" ) next 
 
   # Discard lines with no symbol field
   if (CC[SYM] == "") next 
@@ -938,6 +931,7 @@ BEGIN {
           printf("AAF_CLASS_SEPARATOR()\n");
 		  # use alias
 		  parent = getAlias( ALIAS, APP, APPVER, CC["q_parent_app"], CC["s_parent_sym"] );
+          if( parent == "" ) parent = "Root";
         } else {
           parent = "Root"
         }
@@ -1031,7 +1025,10 @@ BEGIN {
         propertyError(CC[SYM], class, Col["r_minOccurs"]);
         errors++;
       }
-      if (CC["s_parent_sym"] != class && CC["s_parent_sym"] != class_s) {
+		  # use alias
+		  parentsym = getAlias( ALIAS, APP, APPVER, CC["q_parent_app"], CC["s_parent_sym"] );
+
+      if ( parentsym != class ) {
         propertyError(CC[SYM], class, Col["s_parent_sym"]);
         errors++;
       }
@@ -1241,7 +1238,7 @@ BEGIN {
 	  # set parentTypeName for use by members
 	  parentTypeName = typeName;
 
-    } else if( tolower(CC["r_nest"]) == "child" || tolower(CC["r_nest"]) == "tendril") { # all "member"s of a type are child elements
+    } else if( tolower(CC["r_nest"]) == "child" || tolower(CC["r_nest"]) == "shoot") { # all "member"s of a type are child elements
 
       # use alias
       memberName = getAlias( ALIAS, APP, APPVER, CC["g_app"], CC[SYM] );
