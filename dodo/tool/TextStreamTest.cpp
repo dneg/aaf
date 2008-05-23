@@ -45,7 +45,7 @@ void TextStream::Test ()
   assert (0 == ts1._cachedLen);
   assert (0 == ts1.GetLength());
 
-  char * str = "What's up with this?\nI just want to know.\n";
+  const char * str = "What's up with this?\nI just want to know.\n";
   TextStream ts2 (str);
   assert (strlen (str) == ts2._cachedLen);
   assert (strlen (str) == ts2.GetLength());
