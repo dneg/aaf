@@ -251,7 +251,7 @@ HRESULT STDMETHODCALLTYPE
 
 
 HRESULT STDMETHODCALLTYPE
-    CAAFDescriptiveClip::IsDescribedSlotIDPresent (aafUInt32  describedSlotID,
+    CAAFDescriptiveClip::IsDescribedSlotIDPresent (aafUInt32  DescribedSlotID,
         aafBoolean_t*  pIsPresent)
 {
   HRESULT hr;
@@ -267,7 +267,7 @@ HRESULT STDMETHODCALLTYPE
   try
     {
       hr = ptr->IsDescribedSlotIDPresent
-       (describedSlotID,
+       (DescribedSlotID,
         pIsPresent);
     }
   catch (OMException& e)
@@ -305,7 +305,7 @@ HRESULT STDMETHODCALLTYPE
 
 
 HRESULT STDMETHODCALLTYPE
-    CAAFDescriptiveClip::AddDescribedSlotID (aafUInt32  describedSlotID)
+    CAAFDescriptiveClip::AddDescribedSlotID (aafUInt32  DescribedSlotID)
 {
   HRESULT hr;
 
@@ -320,7 +320,7 @@ HRESULT STDMETHODCALLTYPE
   try
     {
       hr = ptr->AddDescribedSlotID
-       (describedSlotID);
+       (DescribedSlotID);
     }
   catch (OMException& e)
     {
@@ -357,7 +357,7 @@ HRESULT STDMETHODCALLTYPE
 
 
 HRESULT STDMETHODCALLTYPE
-    CAAFDescriptiveClip::RemoveDescribedSlotID (aafUInt32  describedSlotID)
+    CAAFDescriptiveClip::RemoveDescribedSlotID (aafUInt32  DescribedSlotID)
 {
   HRESULT hr;
 
@@ -372,7 +372,7 @@ HRESULT STDMETHODCALLTYPE
   try
     {
       hr = ptr->RemoveDescribedSlotID
-       (describedSlotID);
+       (DescribedSlotID);
     }
   catch (OMException& e)
     {
