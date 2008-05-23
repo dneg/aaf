@@ -1092,47 +1092,47 @@ int main( int argc, char** argv )
   }
   catch ( const Usage& ex )
   {
-    cout << ex << endl;
+    cerr << ex << endl;
   }
   catch ( const AxExHResult& ex )
   {
-    wcout << L"Error: " << ex.widewhat() << endl;
+    wcerr << L"Error: " << ex.widewhat() << endl;
   }
   catch ( const RequirementXMLException& ex )
   {
-    wcout << ex.widewhat() << endl;
+    wcerr << ex.widewhat() << endl;
   }
   catch ( const RequirementMismatchException& ex )
   {
-    wcout << ex.widewhat() << endl;
+    wcerr << ex.widewhat() << endl;
   }
   catch ( const RequirementRegistryException& ex )
   {
-    wcout << ex.widewhat() << endl;
+    wcerr << ex.widewhat() << endl;
   }
   catch ( const TestRegistryException& ex )
   {
-    wcout << ex.widewhat() << endl;
+    wcerr << ex.widewhat() << endl;
   }
   catch ( const EPCastException& ex )
   {
-    wcout << ex.widewhat() << endl;
+    wcerr << ex.widewhat() << endl;
   }
   catch ( const AxEx& ex )
   {
-    wcout << L"Error: " << ex.widewhat() << endl;
+    wcerr << L"Error: " << ex.widewhat() << endl;
   }
   catch ( const AnalyzerException& ex )
   {
-    wcout << L"Error: " << ex.widewhat() << endl;
+    wcerr << L"Error: " << ex.widewhat() << endl;
   }
   catch ( const exception& ex )
   {
-    cout << "Error: " << ex.what() << endl;
+    cerr << "Error: " << ex.what() << endl;
   }
   catch ( ... )
   {
-    wcout << L"Error: unhandled exeption" << endl;
+    wcerr << L"Error: unhandled exeption" << endl;
   }
   
   //An exception occured and all tests were not run.
