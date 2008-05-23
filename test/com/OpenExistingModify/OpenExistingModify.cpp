@@ -41,8 +41,6 @@
 #include "AAFFileMode.h"
 #include "AAFFileKinds.h"
 
-#include "CAAFBuiltinDefs.h"
-
 using namespace std;
 
 static void RemoveTestFile(const aafWChar* pFileName)
@@ -109,11 +107,13 @@ static HRESULT CreateAAFFile(aafWChar *filename, aafUID_constref fileKind)
 		IAAFDictionary	*pDictionary = NULL;
 		checkResult(pFile->GetHeader(&pHeader));
 		checkResult(pHeader->GetDictionary(&pDictionary));
-		CAAFBuiltinDefs defs(pDictionary);
 
 		// Create a MasterMob
 		IAAFMob			*pMob = NULL;
-		checkResult(defs.cdMasterMob()->CreateInstance(IID_IAAFMob, (IUnknown **)&pMob));
+		IAAFClassDef	*classDef = NULL;
+		checkResult(pDictionary->LookupClassDef(AUID_AAFMasterMob, &classDef));
+		checkResult(classDef->CreateInstance(IID_IAAFMob, (IUnknown **)&pMob));
+		classDef->Release();
 		checkResult(pMob->SetMobID(TEST_MobID));
 		checkResult(pMob->SetName(L"CreateAAFFile - MasterMob"));
 		checkResult(pHeader->AddMob(pMob));
@@ -121,14 +121,18 @@ static HRESULT CreateAAFFile(aafWChar *filename, aafUID_constref fileKind)
 
 		// Create a SourceMob 
 		IAAFSourceMob			*pSourceMob = NULL;
-		checkResult(defs.cdSourceMob()->CreateInstance(IID_IAAFSourceMob, (IUnknown **)&pSourceMob));
+		checkResult(pDictionary->LookupClassDef(AUID_AAFSourceMob, &classDef));
+		checkResult(classDef->CreateInstance(IID_IAAFSourceMob, (IUnknown **)&pSourceMob));
+		classDef->Release();
 		checkResult(pSourceMob->QueryInterface(IID_IAAFMob, (void **)&pMob));
 		checkResult(pMob->SetMobID(TEST_SourceMobID));
 		checkResult(pMob->SetName(L"CreateAAFFile - SourceMob"));
 
 		IAAFEssenceDescriptor	*edesc = NULL;
 		IAAFAIFCDescriptor		*pAIFCDesc = NULL;
-		checkResult(defs.cdAIFCDescriptor()->CreateInstance(IID_IAAFEssenceDescriptor, (IUnknown **)&edesc));
+		checkResult(pDictionary->LookupClassDef(AUID_AAFAIFCDescriptor, &classDef));
+		checkResult(classDef->CreateInstance(IID_IAAFEssenceDescriptor, (IUnknown **)&edesc));
+		classDef->Release();
 		checkResult(edesc->QueryInterface(IID_IAAFAIFCDescriptor, (void **)&pAIFCDesc));
 		aafUInt8	buf[] = {0x00};
 		checkResult(pAIFCDesc->SetSummary(sizeof(buf), buf));
@@ -180,7 +184,6 @@ static HRESULT ModifyAAFFile(aafWChar *filename, int level)
 		IAAFDictionary	*pDictionary = NULL;
 		checkResult(pFile->GetHeader(&pHeader));
 		checkResult(pHeader->GetDictionary(&pDictionary));
-		CAAFBuiltinDefs defs(pDictionary);
 
 		// Search for Mobs
 		IAAFMob			*pFileMob = NULL;
@@ -221,12 +224,13 @@ static HRESULT ModifyAAFFile(aafWChar *filename, int level)
 				break;
 
 			// Change descriptor to new one (overwriting old one)
+			IAAFClassDef			*classDef = NULL;
 			IAAFFileDescriptor		*pFileDesc = NULL;
 			IAAFWAVEDescriptor		*pWAVEDesc = NULL;
 			IAAFEssenceDescriptor	*pNewEdesc = NULL;
 
-			CR(defs.cdWAVEDescriptor()->CreateInstance(
-					IID_IAAFFileDescriptor, (IUnknown **)&pFileDesc));
+			CR(pDictionary->LookupClassDef(AUID_AAFWAVEDescriptor, &classDef));
+			CR(classDef->CreateInstance(IID_IAAFFileDescriptor, (IUnknown **)&pFileDesc));
 			CR(pFileDesc->QueryInterface(IID_IAAFWAVEDescriptor, (void **)&pWAVEDesc));
 			CR(pFileDesc->QueryInterface(IID_IAAFEssenceDescriptor, (void **)&pNewEdesc));
 			aafUInt8				WAVEsum[] = {0x1a,0x1e,0xee,0xee};
@@ -235,6 +239,7 @@ static HRESULT ModifyAAFFile(aafWChar *filename, int level)
 			pNewEdesc->Release();
 			pWAVEDesc->Release();
 			pFileDesc->Release();
+			classDef->Release();
 			cout << "ModifyAAFFile() - replaced AIFCDescriptor with WAVEDescriptor" << endl;
 
 			if (level == 3)
@@ -246,8 +251,8 @@ static HRESULT ModifyAAFFile(aafWChar *filename, int level)
 			IAAFPlainEssenceData		*pPlainEssenceData = NULL;
 			aafUInt32				bytesWritten = 0;
 			aafUInt8				essdata[] = "Zaphod Beeblebrox";
-			CR(defs.cdEssenceData()->CreateInstance(
-					IID_IAAFEssenceData, (IUnknown **)&pEssenceData));
+			CR(pDictionary->LookupClassDef(AUID_AAFEssenceData, &classDef));
+			CR(classDef->CreateInstance(IID_IAAFEssenceData, (IUnknown **)&pEssenceData));
 			CR(pEssenceData->SetFileMob(pSourceMob));
 			CR(pHeader->AddEssenceData(pEssenceData));
 			CR(pEssenceData->QueryInterface(IID_IAAFEssenceData2, (void**)&pEssenceData2));
@@ -256,6 +261,7 @@ static HRESULT ModifyAAFFile(aafWChar *filename, int level)
 			pEssenceData->Release();
 			pEssenceData2->Release();
 			pPlainEssenceData->Release();
+			classDef->Release();
 			cout << "ModifyAAFFile() - added EssenceData" << endl;
 
 

@@ -30,8 +30,6 @@
 
 #include "AAFResult.h"
 
-#include "CAAFBuiltinDefs.h"
-
 #include <stdlib.h>
 #include <wchar.h>
 #include <string.h>
@@ -1035,8 +1033,6 @@ void CreateAndRegisterPositionEnum (IAAFDictionary * pDict)
   IAAFTypeDef *ptd = NULL;
   IAAFTypeDefExtEnum *ptde = NULL;
 
-  CAAFBuiltinDefs defs (pDict);
-
   // Check to see if we are have already been registered.
   if (SUCCEEDED(pDict->LookupTypeDef (kTypeID_ePosition, &ptd)))
   {
@@ -1103,8 +1099,6 @@ void CreateAndRegisterPersonnelResource (IAAFDictionary * pDict)
   IAAFTypeDef *ptd_String=NULL;
   IAAFTypeDef *ptd_Position=NULL;
   IAAFTypeDef *ptd_ui32=NULL;
-
-  CAAFBuiltinDefs defs (pDict);
 
   // Check to see if we are have already been registered.
   if (SUCCEEDED(pDict->LookupClassDef (kClassID_PersonnelResource,
@@ -1294,8 +1288,6 @@ CreateAndRegisterPersonnelResourceReference
   IAAFClassDef *pcd=NULL;
   IAAFTypeDefStrongObjRef *ptdsr=NULL;
 
-  CAAFBuiltinDefs defs (pDict);
-
   // Check to see if we are have already been registered.
   if (SUCCEEDED(pDict->LookupTypeDef
 				(kTypeID_PersonnelResourceStrongReference, &ptd)))
@@ -1373,8 +1365,6 @@ CreateAndRegisterPersonnelResourceReferenceVector
   IAAFTypeDefVariableArray *ptdv=NULL;
   IAAFTypeDef *ptdr=NULL;
 
-  CAAFBuiltinDefs defs (pDict);
-  
   // Check to see if we are have already been registered.
   if (SUCCEEDED(pDict->LookupTypeDef
 				(kTypeID_PersonnelResourceStrongReferenceVector,
@@ -1454,8 +1444,6 @@ void CreateAndRegisterAdminMob (IAAFDictionary * pDict)
   IAAFClassDef *pcd_Mob=NULL;
   IAAFPropertyDef *pd_unused=NULL;
   IAAFTypeDef *ptd_PersonnelVector=NULL;
-
-  CAAFBuiltinDefs defs (pDict);
 
   // Check to see if we are have already been registered.
   if (SUCCEEDED(pDict->LookupClassDef (kClassID_AdminMob, &pcd)))

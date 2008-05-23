@@ -30,13 +30,14 @@
 // Include the AAF interface declarations.
 #include "AAF.h"
 #include "AAFTypes.h"
+#include "AAFResult.h"
 
 
 // Include the AAF Stored Object identifiers. These symbols are defined in aaf.lib.
 #include "AAFStoredObjectIDs.h"
 #include "AAFFileKinds.h"
+#include "AAFDataDefs.h"
 
-#include "CAAFBuiltinDefs.h"
 
 static const aafMobID_t TEST_MobID[5] = {
 
@@ -443,7 +444,6 @@ static void CreateAAFFile(const aafWChar * pFileName)
 
   // Get the AAF Dictionary so that we can create valid AAF objects.
   check(pHeader->GetDictionary(&pDictionary));
-  CAAFBuiltinDefs defs (pDictionary);
    
 //Make the first mob
   IAAFMob            *pMob = NULL;
@@ -456,54 +456,60 @@ static void CreateAAFFile(const aafWChar * pFileName)
   IAAFSourceMob  *smob = NULL;
   aafInt32    testSlot;
   const aafWChar    *slotNames[5] = { L"SLOT1", L"SLOT2", L"SLOT3", L"SLOT4", L"SLOT5" };
+  IAAFClassDef  *classDef = NULL;
   IAAFFileDescriptor  *fileDesc = NULL;
   IAAFEssenceDescriptor *essenceDesc = NULL;
   aafRational_t  audioRate = { 44100, 1 };
   IAAFLocator    *pLocator = NULL;
-	IAAFComponent*		pComponent = NULL;
-	IAAFAIFCDescriptor*			pAIFCDesc = NULL;
+  IAAFComponent*		pComponent = NULL;
+  IAAFAIFCDescriptor*			pAIFCDesc = NULL;
 
   for(test = 0; test < 5; test++)
   {
      // Create a source Mob with a FileDescriptor attached
-    check(defs.cdSourceMob()->
-		  CreateInstance(IID_IAAFSourceMob, 
-						 (IUnknown **)&smob));
+    check(pDictionary->LookupClassDef(AUID_AAFSourceMob, &classDef));
+    check(classDef->CreateInstance(IID_IAAFSourceMob, (IUnknown **)&smob));
     check(smob->QueryInterface (IID_IAAFMob, (void **)&pMob));
     check(pMob->SetMobID( TEST_MobID[ test ] ));
     check(pMob->SetName(names[test]));
+	classDef->Release();
+	classDef = NULL;
 
 	// Create a concrete subclass of FileDescriptor
-    check(defs.cdAIFCDescriptor()->
-		  CreateInstance(IID_IAAFFileDescriptor, 
-						 (IUnknown **)&fileDesc));
+    check(pDictionary->LookupClassDef(AUID_AAFAIFCDescriptor, &classDef));
+    check(classDef->CreateInstance(IID_IAAFFileDescriptor, (IUnknown **)&fileDesc));
     check(fileDesc->SetSampleRate(audioRate));
     check(fileDesc->QueryInterface (IID_IAAFEssenceDescriptor, (void **)&essenceDesc));
 	check(fileDesc->QueryInterface (IID_IAAFAIFCDescriptor, (void **)&pAIFCDesc));
 	check(pAIFCDesc->SetSummary (5, (unsigned char*)"TEST"));
+	classDef->Release();
+	classDef = NULL;
 	pAIFCDesc->Release();
 	pAIFCDesc = NULL;
 
     {
       HRESULT stat;
-      stat = defs.cdNetworkLocator()->
-		CreateInstance(IID_IAAFLocator, 
-					   (IUnknown **)&pLocator);
+      check(pDictionary->LookupClassDef(AUID_AAFNetworkLocator, &classDef));
+      stat = classDef->CreateInstance(IID_IAAFLocator, (IUnknown **)&pLocator);
       check (stat);
     }
+	classDef->Release();
+	classDef = NULL;
+
     check(fileDesc->SetSampleRate(audioRate));
 
     check(essenceDesc->AppendLocator (pLocator));
     check(smob->SetEssenceDescriptor(essenceDesc));
 
     // Add some slots
+	IAAFDataDef *pDefPicture = NULL;
+    check(pDictionary->LookupDataDef(kAAFDataDef_Picture, &pDefPicture));
+    check(pDictionary->LookupClassDef(AUID_AAFSourceClip, &classDef));
     for(testSlot = 0; testSlot < 3; testSlot++)
     {
-       check(defs.cdSourceClip()->
-			 CreateInstance(IID_IAAFSourceClip, 
-							(IUnknown **)&sclp));
+       check(classDef->CreateInstance(IID_IAAFSourceClip, (IUnknown **)&sclp));
 		 check(sclp->QueryInterface(IID_IAAFComponent, (void **)&pComponent));
-		 check(pComponent->SetDataDef(defs.ddkAAFPicture()));
+		 check(pComponent->SetDataDef(pDefPicture));
 		pComponent->Release();
 		pComponent = NULL;
       check(sclp->QueryInterface (IID_IAAFSegment, (void **)&seg));
@@ -525,6 +531,10 @@ static void CreateAAFFile(const aafWChar * pFileName)
       sclp->Release();
       sclp = NULL;
     }
+	pDefPicture->Release();
+	pDefPicture = NULL;
+	classDef->Release();
+	classDef = NULL;
     
     // Add the newly created and initialized Mob to the end of the mob index.
     check(pHeader->AddMob(pMob));

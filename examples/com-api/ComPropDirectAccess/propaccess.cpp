@@ -28,9 +28,8 @@
 #include "AAF.h"
 #include "AAFFileMode.h"
 #include "AAFFileKinds.h"
+#include "AAFResult.h"
 
-
-#include "CAAFBuiltinDefs.h"
 
 //
 // This example code is intended to show the following:
@@ -203,8 +202,6 @@ HRESULT createRational16Type (IAAFDictionary * pDict)
   IAAFTypeDefSP pTDInt16;
   const aafUInt32 kNumMembers = 2;
 
-  CAAFBuiltinDefs defs (pDict);
-
   // Get the pre-defined type for int16
   PROPAGATE_RESULT(pDict->LookupTypeDef(kAAFTypeID_Int16,
 										&pTDInt16));
@@ -290,7 +287,6 @@ HRESULT registerRational16StructOffsets (IAAFDictionary * pDict)
 HRESULT addRational16ToComponent (IAAFDictionary * pDict)
 {
   IAAFClassDefSP pCDComponent;
-  CAAFBuiltinDefs defs (pDict);
 
   // Get the class def for AAFComponent
   PROPAGATE_RESULT(pDict->LookupClassDef(AUID_AAFComponent,
@@ -322,18 +318,23 @@ HRESULT createStinkyFiller (IAAFDictionary * pDict,
   assert (pDict);
   assert (ppCreatedFiller);
 
-  CAAFBuiltinDefs defs (pDict);
-
   //
   // Make a filler object.  Initialize it, then get the generic
   // IAAFObject interface.
   //
   IAAFFiller * pFill = 0;
-  PROPAGATE_RESULT(defs.cdFiller()->
-				   CreateInstance(IID_IAAFFiller,
-								  (IUnknown **) &pFill));
+  IAAFClassDef *classDef = NULL;
+  PROPAGATE_RESULT(pDict->LookupClassDef(AUID_AAFFiller, &classDef));
+  PROPAGATE_RESULT(classDef->CreateInstance(IID_IAAFFiller, (IUnknown **) &pFill));
   assert (pFill);
-  PROPAGATE_RESULT (pFill->Initialize(defs.ddkAAFSound(), 10));
+  classDef->Release();
+  classDef = NULL;
+
+  IAAFDataDef *pDefSound = NULL;
+  PROPAGATE_RESULT(pDict->LookupDataDef(kAAFDataDef_Sound, &pDefSound));
+  PROPAGATE_RESULT(pFill->Initialize(pDefSound, 10));
+  pDefSound->Release();
+  pDefSound = NULL;
 
   IAAFObjectSP pObj;
   PROPAGATE_RESULT (pFill->QueryInterface(IID_IAAFObject,
@@ -433,7 +434,6 @@ HRESULT checkStinkyFiller (IAAFDictionary * pDict,
 {
   assert (pFiller);
 
-  CAAFBuiltinDefs defs (pDict);
   IAAFObjectSP pObj;
   PROPAGATE_RESULT(pFiller->QueryInterface(IID_IAAFObject,
 										   (void**)&pObj));
@@ -625,8 +625,7 @@ static void CreateAAFFile(const aafWChar * pFileName,
   // Get the AAF Dictionary so that we can create valid AAF objects.
   IAAFDictionarySP spDictionary;
   check (spHeader->GetDictionary(&spDictionary));
-  CAAFBuiltinDefs defs (spDictionary);
-   
+
   // Create and register all new things that have to go into the
   // dictionary
   check (createRational16Type (spDictionary));
@@ -634,10 +633,12 @@ static void CreateAAFFile(const aafWChar * pFileName,
   check (addRational16ToComponent (spDictionary));
 
   // Create a source Mob
+  IAAFClassDef *classDef = NULL;
   IAAFSourceMobSP  smob;
-  check (defs.cdSourceMob()->
-		 CreateInstance(IID_IAAFSourceMob, 
-						(IUnknown **)&smob));
+  check (spDictionary->LookupClassDef(AUID_AAFSourceMob, &classDef));
+  check (classDef->CreateInstance(IID_IAAFSourceMob, (IUnknown **)&smob));
+  classDef->Release();
+  classDef = NULL;
 
   IAAFMobSP spMob;
   check (smob->QueryInterface (IID_IAAFMob, (void **)&spMob));
@@ -646,9 +647,11 @@ static void CreateAAFFile(const aafWChar * pFileName,
   check (spMob->SetName(L"a Source Mob"));
 
   IAAFAIFCDescriptorSP  spAIFCDesc;
-  check (defs.cdAIFCDescriptor()->
-		 CreateInstance(IID_IAAFAIFCDescriptor, 
-						(IUnknown **) &spAIFCDesc));
+  check (spDictionary->LookupClassDef(AUID_AAFAIFCDescriptor, &classDef));
+  check (classDef->CreateInstance(IID_IAAFAIFCDescriptor, (IUnknown **) &spAIFCDesc));
+  classDef->Release();
+  classDef = NULL;
+
   aafRational_t  audioRate = { 44100, 1 };
 
   IAAFEssenceDescriptorSP spEssenceDesc;

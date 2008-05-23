@@ -47,8 +47,8 @@ using namespace std;
 #include "AAFContainerDefs.h"
 #include "AAFCodecDefs.h"
 #include "AAFEssenceFormats.h"
-
-#include "CAAFBuiltinDefs.h"
+#include "AAFDataDefs.h"
+#include "AAFSmartPointer.h"
 
 #include "utf8.h"
 
@@ -187,11 +187,12 @@ static HRESULT WriteAAFFile(IAAFFile* pFile, const aafWChar *pExternalFilename)
 
     // Get the AAF Dictionary
     checkResult(pHeader->GetDictionary(&pDictionary));
-    CAAFBuiltinDefs defs (pDictionary);
-     
+
     // Create a Mob
-    checkResult(defs.cdMasterMob()->
-					CreateInstance(IID_IAAFMasterMob, (IUnknown **)&pMasterMob));
+    IAAFClassDef *classDef = NULL;
+    checkResult(pDictionary->LookupClassDef(AUID_AAFMasterMob, &classDef));
+    checkResult(classDef->CreateInstance(IID_IAAFMasterMob, (IUnknown **)&pMasterMob));
+    classDef->Release();
 	checkResult(pMasterMob->QueryInterface(IID_IAAFMob, (void **)&pMob));
     
     // Initialize the Mob (these values are tested when the file is read)
@@ -211,12 +212,17 @@ static HRESULT WriteAAFFile(IAAFFile* pFile, const aafWChar *pExternalFilename)
 
 	RemoveTestFile(pExternalFilename);		// avoid AAFRESULT_FILE_EXISTS
 
-	checkResult(defs.cdNetworkLocator()->CreateInstance(IID_IAAFLocator, (IUnknown **)&pLocator));
+	checkResult(pDictionary->LookupClassDef(AUID_AAFNetworkLocator, &classDef));
+	checkResult(classDef->CreateInstance(IID_IAAFLocator, (IUnknown **)&pLocator));
+	classDef->Release();
 	checkResult(pLocator->SetPath(pExternalFilename));
-	
+
+	IAAFDataDef *pDefSound = NULL;
+	checkResult(pDictionary->LookupDataDef(kAAFDataDef_Sound, &pDefSound));
+
 	checkResult(pMasterMob->CreateEssence(
 						1,
-						defs.ddkAAFSound(),
+						pDefSound,
 						kAAFCodecWAVE,
 						testRate,
 						testRate,
@@ -225,6 +231,7 @@ static HRESULT WriteAAFFile(IAAFFile* pFile, const aafWChar *pExternalFilename)
 						testContainer,
 						&pEssenceAccess));
 
+	pDefSound->Release();
 	aafUInt32 sampleBits = 8;
 	checkResult(pEssenceAccess->GetEmptyFileFormat(&pFormat));
 	checkResult(pFormat->AddFormatSpecifier(kAAFAudioSampleBits, sizeof(sampleBits), (aafUInt8 *)&sampleBits));

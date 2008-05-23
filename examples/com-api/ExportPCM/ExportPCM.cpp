@@ -43,7 +43,6 @@ using namespace std;
 #include "AAFContainerDefs.h"
 #include "AAFCodecDefs.h"
 #include "AAFEssenceFormats.h"
-#include "CAAFBuiltinDefs.h"		// for cdMasterMob()
 
 // Include the AAF interface declarations.
 #include "AAF.h"
@@ -191,8 +190,12 @@ static HRESULT CreateAAFFile(const aafWChar * pFileName)
 	check(pHeader->AddMob(pMob));
 
 	// Locator needed for non-embedded essence
-	CAAFBuiltinDefs defs(pDictionary);
-	check(defs.cdNetworkLocator()->CreateInstance(IID_IAAFLocator, (IUnknown **)&pLocator));
+	IAAFClassDef *classDef = NULL;
+	check(pDictionary->LookupClassDef(AUID_AAFNetworkLocator, &classDef));
+	check(classDef->CreateInstance(IID_IAAFLocator, (IUnknown **)&pLocator));
+	classDef->Release();
+	classDef = NULL;
+
 	if (container == NIL_UID)
 	{
 		pLocator = NULL;

@@ -50,7 +50,6 @@ using namespace std;
 #include "AAFFileMode.h"
 #include "AAF.h"
 #include "AAFStoredObjectIDs.h"
-#include "CAAFBuiltinDefs.h"
 
 // Guess the toolkit version (found by experiment)
 #if defined(__IAAFImportDescriptor_INTERFACE_DEFINED__)
@@ -287,11 +286,13 @@ static HRESULT CreateAAFFileEssenceData(const aafWChar *pFileName, bool useRawSt
 		IAAFDictionary	*pDictionary = NULL;
 		check(pFile->GetHeader(&pHeader));
 		check(pHeader->GetDictionary(&pDictionary));
-		CAAFBuiltinDefs defs(pDictionary);
 
 		// Create a MasterMob
+		IAAFClassDef	*classDef = NULL;
 		IAAFMob			*pMob = NULL;
-		check(defs.cdMasterMob()->CreateInstance(IID_IAAFMob, (IUnknown **)&pMob));
+		check(pDictionary->LookupClassDef(AUID_AAFMasterMob, &classDef));
+		check(classDef->CreateInstance(IID_IAAFMob, (IUnknown **)&pMob));
+		classDef->Release();
 		check(pMob->SetMobID(TEST_MobID));
 		check(pMob->SetName(L"CreateAAFFile - MasterMob"));
 		check(pHeader->AddMob(pMob));
@@ -299,7 +300,9 @@ static HRESULT CreateAAFFileEssenceData(const aafWChar *pFileName, bool useRawSt
 
 		// Create a SourceMob 
 		IAAFSourceMob			*pSourceMob = NULL;
-		check(defs.cdSourceMob()->CreateInstance(IID_IAAFSourceMob, (IUnknown **)&pSourceMob));
+		check(pDictionary->LookupClassDef(AUID_AAFSourceMob, &classDef));
+		check(classDef->CreateInstance(IID_IAAFSourceMob, (IUnknown **)&pSourceMob));
+		classDef->Release();
 		check(pSourceMob->QueryInterface(IID_IAAFMob, (void **)&pMob));
 		check(pMob->SetMobID(TEST_SourceMobID));
 		check(pMob->SetName(L"CreateAAFFile - SourceMob"));
@@ -310,7 +313,9 @@ static HRESULT CreateAAFFileEssenceData(const aafWChar *pFileName, bool useRawSt
 		IAAFFileDescriptor			*pFileDesc = NULL;
 		IAAFCDCIDescriptor			*pCDCIDesc = NULL;
 		IAAFDigitalImageDescriptor	*pDIDesc = NULL;
-		check(defs.cdCDCIDescriptor()->CreateInstance(IID_IAAFEssenceDescriptor, (IUnknown **)&edesc));
+		check(pDictionary->LookupClassDef(AUID_AAFCDCIDescriptor, &classDef));
+		check(classDef->CreateInstance(IID_IAAFEssenceDescriptor, (IUnknown **)&edesc));
+		classDef->Release();
 		check(edesc->QueryInterface(IID_IAAFFileDescriptor, (void **)&pFileDesc));
 		check(edesc->QueryInterface(IID_IAAFDigitalImageDescriptor, (void **)&pDIDesc));
 		check(edesc->QueryInterface(IID_IAAFCDCIDescriptor, (void **)&pCDCIDesc));
@@ -329,8 +334,9 @@ static HRESULT CreateAAFFileEssenceData(const aafWChar *pFileName, bool useRawSt
 		// Add an EssenceData object containing DV frames
 		IAAFEssenceData			*pEssenceData = NULL;
 		aafUInt32				bytesWritten = 0;
-		check(defs.cdEssenceData()->CreateInstance(
-					IID_IAAFEssenceData, (IUnknown **)&pEssenceData));
+		check(pDictionary->LookupClassDef(AUID_AAFEssenceData, &classDef));
+		check(classDef->CreateInstance(IID_IAAFEssenceData, (IUnknown **)&pEssenceData));
+		classDef->Release();
 		check(pEssenceData->SetFileMob(pSourceMob));
 		check(pHeader->AddEssenceData(pEssenceData));
 

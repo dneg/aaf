@@ -34,7 +34,6 @@ using namespace std;
 #include "AAFCodecDefs.h"
 #include "AAFEssenceFormats.h"
 #include "AAFClassDefUIDs.h"
-#include "CAAFBuiltinDefs.h"
 
 // Include the AAF interface declarations.
 #include "AAF.h"
@@ -67,7 +66,7 @@ extern "C" {
 #define aaf_assert(b, msg) \
 	if (!(b)) {fprintf(stderr, "ASSERT: %s\n\n", msg); exit(1);}
 
-static void LogError(HRESULT errcode, int line, char *file)
+static void LogError(HRESULT errcode, int line, const char *file)
 {
 	printf("Error '%0x' returned at line %d in %s\n", errcode, line, file);
 }
@@ -401,11 +400,11 @@ static HRESULT RelinkAAFFile(aafWChar * pFileName)
 	productVersion.type = kAAFVersionUnknown;
 
 	aafProductIdentification_t productInfo;
-	productInfo.companyName = L"BBC R&D";
-	productInfo.productName = L"Relink AVI Essence";
+	productInfo.companyName = (aafCharacter*)L"BBC R&D";
+	productInfo.productName = (aafCharacter*)L"Relink AVI Essence";
 	productInfo.productVersion = &productVersion;
-	productInfo.productVersionString = L"0.1.0.0";
-	productInfo.platform = L"GNU/Hurd";
+	productInfo.productVersionString = (aafCharacter*)L"0.1.0.0";
+	productInfo.platform = (aafCharacter*)L"GNU/Hurd";
 
 
 	aafUInt32 modeFlags = 0;
@@ -413,7 +412,6 @@ static HRESULT RelinkAAFFile(aafWChar * pFileName)
 
 	check(pFile->GetHeader(&pHeader));
 	check(pHeader->GetDictionary(&pDictionary));
-	CAAFBuiltinDefs defs(pDictionary);
 
 	IAAFMob			*pFileMob = NULL;
 	IEnumAAFMobs	*pFileMobIter = NULL;
@@ -488,6 +486,7 @@ static HRESULT RelinkAAFFile(aafWChar * pFileName)
 		// Make sure there exists a slot with a SourceClip of SoundKind or PictureKind
 		IEnumAAFMobSlots	*slotIter = NULL;
 		IAAFMobSlot			*slot = NULL;
+		IAAFClassDef		*classDef = NULL;
 		IAAFDataDef			*pDataDef = NULL;
 		aafUInt32			phys_num = 0;
 		check(pFileMob->GetSlots(&slotIter));
@@ -503,7 +502,9 @@ static HRESULT RelinkAAFFile(aafWChar * pFileName)
 		IAAFEssenceDescriptor	*pNewAudioEdesc = NULL;
 		if (isAIFC)
 		{
-			check(defs.cdWAVEDescriptor()->CreateInstance(IID_IAAFFileDescriptor, (IUnknown **)&pSoundFileDesc));
+			check(pDictionary->LookupClassDef(AUID_AAFWAVEDescriptor, &classDef));
+			check(classDef->CreateInstance(IID_IAAFFileDescriptor, (IUnknown **)&pSoundFileDesc));
+			classDef->Release();
 			check(pSoundFileDesc->QueryInterface(IID_IAAFWAVEDescriptor, (void **)&pWAVEDesc));
 			check(pSoundFileDesc->QueryInterface(IID_IAAFEssenceDescriptor, (void **)&pNewAudioEdesc));
 			check(pSourceMob->SetEssenceDescriptor(pNewAudioEdesc));
@@ -517,7 +518,9 @@ static HRESULT RelinkAAFFile(aafWChar * pFileName)
 
 		// Create and add EssenceData object
 		IAAFEssenceData *pEssenceData;
-		check(defs.cdEssenceData()->CreateInstance(IID_IAAFEssenceData, (IUnknown **)&pEssenceData));
+		check(pDictionary->LookupClassDef(AUID_AAFEssenceData, &classDef));
+		check(classDef->CreateInstance(IID_IAAFEssenceData, (IUnknown **)&pEssenceData));
+		classDef->Release();
 
 		check(pEssenceData->SetFileMob(pSourceMob));
 		check(pHeader->AddEssenceData(pEssenceData));
@@ -615,15 +618,20 @@ static HRESULT RelinkAAFFile(aafWChar * pFileName)
 			if (pDictionary->LookupCodecDef(kAAFCodecDef_WAVE, &codecDef) != AAFRESULT_SUCCESS)
 			{
 				// Need to register missing CodecDef
-				IAAFClassDef	*classDef = NULL;
+				IAAFDataDef *pDefSound = NULL;
 
-				check(defs.cdCodecDef()->CreateInstance(IID_IAAFCodecDef, (IUnknown **)&codecDef));
+				check(pDictionary->LookupClassDef(AUID_AAFCodecDefinition, &classDef));
+				check(classDef->CreateInstance(IID_IAAFCodecDef, (IUnknown **)&codecDef));
+				classDef->Release();
 				check(codecDef->Initialize(kAAFCodecDef_WAVE, L"Wave", L"Wave audio codec."));
 #ifdef AAF_TOOLKIT_V1_0
-				check(codecDef->AddEssenceKind(defs.ddSound()));
+				check(pDictionary->LookupDataDef(DDEF_Sound, &pDefSound));
+				check(codecDef->AddEssenceKind(pDefSound));
 #else
-				check(codecDef->AddEssenceKind(defs.ddkAAFSound()));
+				check(pDictionary->LookupDataDef(kAAFDataDef_Sound, &pDefSound));
+				check(codecDef->AddEssenceKind(pDefSound));
 #endif
+				pDefSound->Release();
 				check(pDictionary->RegisterCodecDef(codecDef));
 				check(pDictionary->LookupClassDef(kAAFClassID_WAVEDescriptor, &classDef));
 				check(codecDef->SetFileDescriptorClass(classDef));
@@ -635,7 +643,9 @@ static HRESULT RelinkAAFFile(aafWChar * pFileName)
 			// Add network locator
 			IAAFNetworkLocator	*pNetLocator = NULL;
 			IAAFLocator			*pLocator = NULL;
-			check(defs.cdNetworkLocator()->CreateInstance(IID_IAAFNetworkLocator, (IUnknown **)&pNetLocator));
+			check(pDictionary->LookupClassDef(AUID_AAFNetworkLocator, &classDef));
+			check(classDef->CreateInstance(IID_IAAFNetworkLocator, (IUnknown **)&pNetLocator));
+			classDef->Release();
 			check(pNetLocator->QueryInterface(IID_IAAFLocator, (void **)&pLocator));
 			check(pLocator->SetPath(URLbuf));
 			check(pNewAudioEdesc->AppendLocator(pLocator));
