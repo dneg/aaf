@@ -292,7 +292,7 @@ static int avi_ixnn_entry(avi_t *AVI, avistdindex_chunk *ch, avisuperindex_entry
 #undef OUTC
 
 // inits a super index structure including its enclosed stdindex
-static int avi_init_super_index(avi_t *AVI, char *idxtag, avisuperindex_chunk **si)
+static int avi_init_super_index(avi_t *AVI, const char *idxtag, avisuperindex_chunk **si)
 {
     int k;
 
@@ -336,7 +336,7 @@ static int avi_init_super_index(avi_t *AVI, char *idxtag, avisuperindex_chunk **
 }
 
 // fills an alloc'ed stdindex structure and mallocs some entries for the actual chunks
-static int avi_add_std_index(avi_t *AVI, char *idxtag, char *strtag,
+static int avi_add_std_index(avi_t *AVI, const char *idxtag, const char *strtag,
 	avistdindex_chunk *stdil)
 {
 
@@ -472,7 +472,7 @@ static int avi_add_odml_index_entry(avi_t *AVI, char *tag, long flags, off_t pos
 	if (AVI->video_superindex->nEntriesInUse > NR_IXNN_CHUNKS) {
 	    fprintf (stderr, "Internal error in avilib - redefine NR_IXNN_CHUNKS\n");
 	    fprintf (stderr, "[avilib dump] cur_std_idx=%d NR_IXNN_CHUNKS=%d"
-		    "POS=%ld towrite=%ld\n",
+		    "POS=%lld towrite=%lld\n",
 		    cur_std_idx,NR_IXNN_CHUNKS, AVI->pos, towrite);
 	    return -1;
 	}
@@ -3315,7 +3315,7 @@ long AVI_read_audio(avi_t *AVI, char *audbuf, long bytes)
       lseek(AVI->fdes, pos, SEEK_SET);
       if ( (ret = avi_read(AVI->fdes,audbuf+nr,todo)) != todo)
       {
-	 fprintf(stderr, "XXX pos = %ld, ret = %ld, todo = %ld\n", pos, ret, todo);
+	 fprintf(stderr, "XXX pos = %lld, ret = %lld, todo = %ld\n", pos, ret, todo);
          AVI_errno = AVI_ERR_READ;
          return -1;
       }
@@ -3430,7 +3430,7 @@ int AVI_read_data(avi_t *AVI, char *vidbuf, long max_vidbuf,
 
 /* AVI_print_error: Print most recent error (similar to perror) */
 
-char *(avi_errors[]) =
+const char *(avi_errors[]) =
 {
   /*  0 */ "avilib - No Error",
   /*  1 */ "avilib - AVI file size limit reached",
@@ -3473,7 +3473,7 @@ void AVI_print_error(char *str)
    }
 }
 
-char *AVI_strerror(void)
+const char *AVI_strerror(void)
 {
    int aerrno;
 
