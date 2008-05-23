@@ -24,13 +24,17 @@
 
 
 .PHONY : all
-all : aafextract aafomf eli2aaf aafviewer aafdump aaffmtconv
+all : aafomf AAFAnalyzer aafextract eli2aaf aafviewer aafdump aaffmtconv aafembed
 
 # AafOmf depends upon OMF development libraries which are no longer distributed
 # with the SDK.  They are available from http://aafassociation.org/download/
 .PHONY : aafomf
 aafomf:
 	@if [ -r ../OMF/Include/omDefs.h ] ; then cd AafOmf && $(MAKE); else echo; echo "OMF libraries not present - AafOmf will not be built"; echo; fi
+
+.PHONY : AAFAnalyzer
+AAFAnalyzer:
+	cd AAFAnalyzer && $(MAKE)
 
 .PHONY : aafextract
 aafextract:
@@ -53,23 +57,30 @@ aafdump:
 aaffmtconv:
 	cd aaffmtconv && $(MAKE)
 
+.PHONY : aafembed
+aafembed:
+	cd aafembed && $(MAKE)
+
 .PHONY : clean
 clean :
 	cd AafOmf && $(MAKE) GENDEPS=0 $@
+	cd AAFAnalyzer && $(MAKE) GENDEPS=0 $@
 	cd aafextract && $(MAKE) GENDEPS=0 $@
 	cd eli2aaf && $(MAKE) GENDEPS=0 $@
 	cd aafviewer/src/aaf2dot && $(MAKE) GENDEPS=0 $@
 	cd aafviewer/src/aafmeta2dot && $(MAKE) GENDEPS=0 $@
 	cd aafdump && $(MAKE) GENDEPS=0 $@
 	cd aaffmtconv && $(MAKE) GENDEPS=0 $@
+	cd aafembed && $(MAKE) GENDEPS=0 $@
 
 .PHONY : realclean
 realclean :
 	cd AafOmf && $(MAKE) GENDEPS=0 $@
+	cd AAFAnalyzer && $(MAKE) GENDEPS=0 $@
 	cd aafextract && $(MAKE) GENDEPS=0 $@
 	cd eli2aaf && $(MAKE) GENDEPS=0 $@
 	cd aafviewer/src/aaf2dot && $(MAKE) GENDEPS=0 $@
 	cd aafviewer/src/aafmeta2dot && $(MAKE) GENDEPS=0 $@
 	cd aafdump && $(MAKE) GENDEPS=0 $@
 	cd aaffmtconv && $(MAKE) GENDEPS=0 $@
-
+	cd aafembed && $(MAKE) GENDEPS=0 $@
