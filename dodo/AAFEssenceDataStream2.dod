@@ -1,0 +1,190 @@
+#c *********************************************************************
+#c
+#c $Id$
+#c
+#c The contents of this file are subject to the AAF SDK Public
+#c Source License Agreement (the "License"); You may not use this file
+#c except in compliance with the License.  The License is available in
+#c AAFSDKPSL.TXT, or you may obtain a copy of the License from the AAF
+#c Association or its successor.
+#c
+#c Software distributed under the License is distributed on an "AS IS"
+#c basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.  See
+#c the License for the specific language governing rights and limitations
+#c under the License.
+#c
+#c The Original Code of this file is Copyright 1998-2004, Licensor of the
+#c AAF Association.
+#c
+#c The Initial Developer of the Original Code of this file and the
+#c Licensor of the AAF Association is Avid Technology.
+#c All rights reserved.
+#c
+#c *********************************************************************
+#startm .this-module 0
+AAFEssenceDataStream2\
+#endm
+#c
+#startm .parent-module 0
+AAFRoot\
+#endm
+#c
+AD_HEAD
+
+AD_IDL(///
+/// The IAAFEssenceDataStream2 interface is an additional interface implemented by objects
+/// which stream over AAF and MXF files.  This interface allows the setting of a pointer to 
+/// the AAFEssenceData object over which to stream\, and the setting of the EssenceElementKey
+/// for use in MXF essence containers. These functions are specific to Essence streams inside
+/// AAF and MXF files\, and are not general-purpose enough for the IAAFEssenceStream interface.
+///
+/// Objects which support this interface should be created by methods in IAAFEssenceContainer\, 
+/// since the container definition is what differentiates between different streams.
+/// However\, in the absence of a reflexive plugin IAAFEssenceContainer for AAF and MXF\, 
+/// IAAFEssenceAccess directly creates objects inside the current AAF file.
+///
+/// IAAFEssenceDataStream2 implements the methods of IAAFEssenceDataStream in addition to its
+/// own new methods
+/// 
+/// The following text originates from the IAAFEssenceStream interface:
+///		The IAAFEssenceStream interface is an internal interface used by AAFEssenceAccess and
+///		essence codecs to read the low-level representation of the essence.  There are multiple
+///		classes implementing this interface\, each representing a different underlying container
+///		holding the essence data.  The idea of \"container\" is separate from any formatting such
+///		as WAVE or JPEG.  Examples of containers \(and therefore streams\)\, are essence embedded
+///		in AAF files\, and essence in a file all by itself \(ex. a WAVE file\).
+///
+///		Objects which support this interface must be created by methods in IAAFEssenceContainer\,
+///		since the container definition is what differentiates between different streams.
+///		If the stream needs a reference to data other than a file pointer \(ex. the AAFContainer
+///		makes a stream which needs a reference to a structureed storage stream\) it will have another
+///		interface to support the additional behaviour. For an AAF container\, the additional 
+///		interface is IAAFEssenceDataStream or IAAFEssenceDataStream2.
+///
+///)
+
+AD_CLASS_UUID(D4716495, CC57, 4a85, 8F, 28, 78, BC, 64, CA, 22, 13)
+
+AD_DEFAULT_UUID(F8C9C2A1, DD6B, 4e10, 88, 4F, 01, 2A, F4, 35, 50, BC)
+
+AD_XCLASS_BEGIN(Concrete, Transient)
+
+AD_XMETHOD1(Init,
+			[in],
+			objIn,
+			Unknown,
+			essenceData,
+			The EssenceData to stream over,
+			Init the stream over a particular EssenceData.)
+
+AD_XMETHOD1(GetEssenceData,
+			[out\,retval],
+			objOut,
+			AAFEssenceData,
+			ppEssenceData,
+			The EssenceData this stream applies to,
+			Returns the EssenceData with which the EssenceDataStream2 was initialized\, in
+/// the ppEssenceData argument.  The returned EssenceData interface is AddRef\(\)ed
+/// before it is returned.
+/// 
+/// Succeeds if all of the following are true:
+/// - the ppEssenceData pointer is valid.
+/// 
+/// If this method fails nothing will be written to *ppEssenceData.
+/// 
+/// This method will return the following codes.  If more than one of
+/// the listed errors is in effect\, it will return the first one
+/// encountered in the order given below:
+/// 
+/// AAFRESULT_SUCCESS
+///   - succeeded.  \(This is the only code indicating success.\)
+///
+/// AAFRESULT_NULL_PARAM
+///   - ppEssenceData is null.)
+
+AD_XMETHOD6(SetEssenceElementKey,
+			[in\, ref],
+			objPass,
+			aafUID_constref,
+			eek,
+			essence element key,
+			[in],
+			objPass,
+			aafUInt8,
+			eeKind,
+			Generic Container essence kind,
+			[in],
+			objPass,
+			aafUInt8,
+			eeCount,
+			Generic Container essence element count,
+			[in],
+			objPass,
+			aafUInt8,
+			eeType,
+			Generic Container essence element type,
+			[in],
+			objPass,
+			aafUInt8,
+			eeIndex,
+			Generic Container essence element index,
+			[in],
+			objPass,
+			aafSlotID_t,
+			sourceSlotID,
+			Slot ID of the Source Mob slot to be adjusted,
+
+			Set the essence element key on the essence stream 
+  /// and optionally sets the Physical Track Number on a slot of the associated File Mob.
+  ///
+  /// If the EssenceStream does not support essence element keys\, does not update the Physical Num\,
+  /// fails gracefully and returns
+  ///		AAFRESULT_OPERATION_NOT_PERMITTED
+  /// this is NOT an error
+  ///
+  /// If the Essence Element Key input parameter is NULL\, uses SMPTE 379M Generic Container keys
+  /// 
+  /// Constructs the 4 least significant bytes of the essence element key from the parameters
+  ///		kind	- essence kind \(ex. 0x15 for GC Picture - refer to SMPTE 379M\)
+  ///		count	- essence count \(normally 1 for mono essence\)
+  ///		type	- essence type \(ex. 0x0D for VC-3 clip-wrapped - refer to essence mapping documents\)
+  ///		index	- integer from 1 up to count \(normally 1 for mon essence\)
+  /// if any of these is zero\, does not override the 4 least significant bytes of the essence element key
+  ///
+  /// If the sourceSlotID input parameter is not 0\, sets thte PhysicalNum of that slot to match
+  /// the 4 least significant bytes of the essence element key
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the essence stream supports essence element keys.
+  /// 
+  /// If this method fails\, the property will not be changed.
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NO_INIT
+  ///
+  /// AAFRESULT_OPERATION_NOT_PERMITTED
+  ///   - the essence stream does not support essence element keys.)
+
+AD_XMETHOD1(GetEssenceElementKey,
+			[out],
+			objPass,
+			aafUID_t *,
+			pEssenceElementKey,
+			Essence element key.,
+
+			This method returns the essence element key associated
+  /// with the essence stream.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - pEssenceElementKey is a valid pointer.
+  /// - the essence stream supports essence element keys.
+  ///
+  /// If this method fails nothing will be written to *pEssenceElementKey.
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NO_INIT
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pEssenceElementKey\)
+  ///
+  /// AAFRESULT_OPERATION_NOT_PERMITTED
+  ///   - the essence stream does not support essence element keys.)
+
+AD_XCLASS_END(Concrete, Transient)
+
