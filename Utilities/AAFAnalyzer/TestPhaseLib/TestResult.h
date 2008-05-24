@@ -73,6 +73,7 @@ class TestResult
   // amount all the children.
   Result GetResult() const;
   const wstring& GetResultAsString() const;
+  static const wstring& ResultToString(Result result);
 
   // This test's child results.
   const SubtestResultVector& GetSubtestResults() const;

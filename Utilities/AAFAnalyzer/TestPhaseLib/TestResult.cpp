@@ -131,6 +131,12 @@ const wstring& TestResult::GetResultAsString() const
   return _resultToString[_result];
 }
 
+/*static*/
+const wstring& TestResult::ResultToString(Result result)
+{
+  return TestResult::_resultToString[result];
+}
+
 void TestResult::SetExplanation(const wstring& exp)
 {
   _expl = exp;

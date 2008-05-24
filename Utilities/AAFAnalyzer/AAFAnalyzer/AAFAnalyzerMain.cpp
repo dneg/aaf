@@ -379,7 +379,7 @@ void OutputSimpleResultMsgs( shared_ptr<const TestResult> res )
   Requirement::RequirementMap::const_iterator iter;
 
   const Requirement::RequirementMap& failures = res->GetRequirements( TestResult::FAIL );
-  for ( iter = failures.begin(); iter != failures.end(); iter++ )
+  for ( iter = failures.begin(); iter != failures.end(); ++iter )
   {
     shared_ptr<const Requirement> req = iter->second;
     wcout << "FAIL   : " << req->GetId() << L", " << req->GetName() << endl;
@@ -418,36 +418,59 @@ void OutputSimpleResultMsgs( shared_ptr<const TestResult> res )
 
 //======================================================================
 
-void WriteXMLResult(shared_ptr<const DetailLevelTestResult> res, wostream& os)
+void WriteXMLResult(const wstring& id, const wstring& result, const wstring& explain,  wostream& os)
 {
   os << "\t<result>" << endl;
-  os << "\t\t<id>" <<  res->GetId() << "</id>" << endl;
-  os << "\t\t<status>" << res->GetResultAsString() << "</status>" << endl;
-  os << "\t\t<explain><![CDATA[" << res->GetExplanation() << "]]></explain>" << endl;
+  os << "\t\t<id>" << id << "</id>" << endl;
+  os << "\t\t<status>" << result << "</status>" << endl;
+  if ( explain.size() > 0 ) { os << "\t\t<explain><![CDATA[" << explain << "]]></explain>" << endl; }
+  else  { os << "\t\t<explain></explain>" << endl; }
   os << "\t</result>" << endl;
 }
 
-void RecursiveOutputXMLResults( shared_ptr<const TestResult> res, wostream& os )
+void WriteXMLRequirements(shared_ptr<const TestResult> spTestResult,
+			  TestResult::Result result,
+			  set<wstring>& coveredReqIds,
+			  wostream& os)
 {
-  if (res->GetResultType() == TestResult::DETAIL)
+  const Requirement::RequirementMap& reqMap = spTestResult->GetRequirements(result);
+  for(Requirement::RequirementMap::const_iterator iter = reqMap.begin(); iter != reqMap.end(); ++iter)
   {
-    shared_ptr<const DetailLevelTestResult> detailResult = dynamic_pointer_cast<const DetailLevelTestResult>(res);
-    WriteXMLResult(detailResult, os);
-  }
-
-  TestResult::SubtestResultVector subResults = res->GetSubtestResults();
-  for (TestResult::SubtestResultVector::const_iterator iter = subResults.begin();
-       iter != subResults.end();
-       ++iter)
-  {
-    RecursiveOutputXMLResults(*iter, os);
+    shared_ptr<const Requirement> req = iter->second;    
+    coveredReqIds.erase(req->GetId());
+    set<wstring> reasonSet;
+    CollectReasons(spTestResult, req->GetId(), result, reasonSet);
+    for( set<wstring>::const_iterator iter = reasonSet.begin(); iter != reasonSet.end(); ++iter )
+    {
+      WriteXMLResult( req->GetId(), TestResult::ResultToString(result), *iter, os);
+    }
   }
 }
 
 void OutputXMLResults(shared_ptr<const TestResult> res, wostream& os)
 {
   os << "<aafanalyzer_results version=\"" << AAFANALYZER_VERSION << "\">" << endl;
-  RecursiveOutputXMLResults(res,os);
+
+  const Requirement::RequirementMap& coveredReqs = TestRegistry::GetInstance().GetRequirementCoverage();
+  set<wstring> coveredReqIds;
+  for(Requirement::RequirementMap::const_iterator iter = coveredReqs.begin(); iter != coveredReqs.end(); ++iter)
+  {
+    shared_ptr<const Requirement> req = iter->second;    
+    coveredReqIds.insert(req->GetId());
+  }
+
+  WriteXMLRequirements( res, TestResult::FAIL,  coveredReqIds, os );
+  WriteXMLRequirements( res, TestResult::WARN,  coveredReqIds, os );
+  WriteXMLRequirements( res, TestResult::INFO,  coveredReqIds, os );
+  WriteXMLRequirements( res, TestResult::PASS,  coveredReqIds, os );
+  WriteXMLRequirements( res, TestResult::NOTED, coveredReqIds, os );
+
+  wstring emptyReason;
+  for(set<wstring>::const_iterator iter = coveredReqIds.begin(); iter != coveredReqIds.end(); ++iter)
+  {
+    WriteXMLResult( *iter, TestResult::ResultToString(TestResult::COVERED), emptyReason, os);    
+  }
+
   os << "</aafanalyzer_results>" << endl;
 }
 
@@ -984,7 +1007,7 @@ int main( int argc, char** argv )
     spResult->SetDescription( L"AAF Edit Protocol compliance test." );
 
     // First phase - load all objects and resolve references.
-    LoadPhase load( wcout, fileName );
+    LoadPhase load( wcerr, fileName );
     shared_ptr<TestPhaseLevelTestResult> spSubResult( load.Execute() );
     spResult->AppendSubtestResult(spSubResult);
     
@@ -1001,33 +1024,33 @@ int main( int argc, char** argv )
     {
       if ( dumpOption.second == string("header") )
       {
-        wcout << L"header dump:" << endl;
-        DumpPhase dump( wcout, graphInfo->GetGraph() );
+        wcerr << L"header dump:" << endl;
+        DumpPhase dump( wcerr, graphInfo->GetGraph() );
         spSubResult = dump.Execute();
         spResult->AppendSubtestResult(spSubResult);
       }
       else
       {
         assert( dumpOption.second == string( "comp" ) );
-        wcout << "composition dump:" << endl;
+        wcerr << "composition dump:" << endl;
 
         if ( load.IsCyclic() )
         {
           assert( roots.empty() );
-          wcout << L"Note: The reference graph is cyclic. No composotion root was determined." << endl;
+          wcerr << L"Note: The reference graph is cyclic. No composition root was determined." << endl;
         }
 
-        wcout << L"found " <<  static_cast<unsigned int>(roots.size()) << L" unreferenced object";
+        wcerr << L"found " <<  static_cast<unsigned int>(roots.size()) << L" unreferenced object";
         if ( roots.size() > 1 )
         {
-          wcout << "s";
+          wcerr << "s";
         }
-        wcout << endl;
+        wcerr << endl;
 
         for( size_t i = 0; i < roots.size(); ++i )
         {
-          wcout << L"root object " << static_cast<unsigned int>(i) << L": " << roots[i]->GetName() << endl;
-          DumpPhase dump( wcout, graphInfo->GetGraph(), roots[i] );
+          wcerr << L"root object " << static_cast<unsigned int>(i) << L": " << roots[i]->GetName() << endl;
+          DumpPhase dump( wcerr, graphInfo->GetGraph(), roots[i] );
           spSubResult = dump.Execute();
           spResult->AppendSubtestResult(spSubResult);
         }
@@ -1039,7 +1062,7 @@ int main( int argc, char** argv )
     // tests.
     if ( !load.IsCyclic() )
     {
-      EPMobDepPhase mobDepPhase( wcout, graphInfo->GetGraph(), load.GetCompMobRoots() );
+      EPMobDepPhase mobDepPhase( wcerr, graphInfo->GetGraph(), load.GetCompMobRoots() );
       spResult->AppendSubtestResult( mobDepPhase.Execute() );
     }
 
