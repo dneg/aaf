@@ -2910,13 +2910,21 @@
         <id>REQ_EP_256</id>
         <name>Acyclic Derivation Chain</name>
         <desc>A mob derivation chain shall not contain a cycle.</desc>
+        <ref>
+            <doc>&DOC_AAF_EP;</doc>
+            <version>&VER_EP_1.0;</version>
+        </ref>
     </requirement>
 
     <requirement type="file" category="ad-hoc" action="reconcile">
         <id>REQ_EP_257</id>
         <name>Slot Must Exist In Referenced Mob</name>
         <desc>A source reference must specify a Slot ID that exists in the referenced Mob.</desc>
-	<note>This requirement does not currently exist in the EP specification or 1.1 object model spec.</note>
+	<note>This is not explicitly stated anywhere in the Edit Protocol specification or 1.1 object model specifications.</note>
+        <ref>
+            <doc>&DOC_AAF_EP;</doc>
+            <version>&VER_EP_1.0;</version>
+        </ref>
     </requirement>
 
     <requirement type="file" category="compositional" action="reconcile">
@@ -2924,6 +2932,10 @@
         <name>Valid Mob Type</name>
 	<desc>All Mob objects in a derivation chain shall have a have a known Edit Protocol material type.</desc>
 	<note>This requirement does not currently exist in the EP specification.</note>
+        <ref>
+            <doc>&DOC_AAF_EP;</doc>
+            <version>&VER_EP_1.0;</version>
+        </ref>
     </requirement>
 
     <requirement type="file" category="compositional" action="reconcile">
@@ -2931,6 +2943,10 @@
         <name>Film Source References No Other Sources</name>
 	<desc>A film source shall not reference any other type of material.</desc>
 	<note>This requirement does not currently exist in the EP specification. See tracker items 1387440, and 1387513.</note>
+        <ref>
+            <doc>&DOC_AAF_EP;</doc>
+            <version>&VER_EP_1.0;</version>
+        </ref>
     </requirement>
 
     <requirement type="file" category="compositional" action="reconcile">
@@ -2938,6 +2954,10 @@
         <name>Start Of Derivation Chain</name>
 	<desc>A Top-Level CompositionMob is always the first mob in a derivation chain.</desc>
 	<note>This requirement does not currently exist in the EP specification. REQ_EP_025.2 may be sufficient if there is agreement that no other mobs can start the mob derivation chain.</note>
+       <ref>
+          <doc>&DOC_AAF_EP;</doc>
+          <version>&VER_EP_1.0;</version>
+       </ref>
     </requirement>
 
     <requirement type="file" category="compositional" action="reconcile">
@@ -2945,6 +2965,10 @@
       <name>Unresolved References In Derivation Chain</name>
       <desc>Import Source, Tape Source, File Source, and Clip can terminate the derivation chain with an unresolved source reference that exists outside the file.</desc>
       <note>This requirement does not currently stated explicitly in the EP specification.</note>
+      <ref>
+          <doc>&DOC_AAF_EP;</doc>
+          <version>&VER_EP_1.0;</version>
+      </ref>
     </requirement>
 
     <requirement type="file" category="ad-hoc" >
@@ -2952,6 +2976,10 @@
       <name>Valid Derivation Chain Termination</name>
       <desc>The derivation must have a valid end state.</desc>
       <note>This is a generic error reported if the derivation chain parser encounters no errors but runs out of objects to parse before reaching a valid end state. See tracker item 1387513.</note>
+      <ref>
+          <doc>&DOC_AAF_EP;</doc>
+          <version>&VER_EP_1.0;</version>
+      </ref>
     </requirement>
 
 </requirement-set>
