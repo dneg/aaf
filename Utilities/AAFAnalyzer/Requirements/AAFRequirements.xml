@@ -2,8 +2,6 @@
 <!DOCTYPE requirement-set SYSTEM "AAFRequirementsFormat.dtd" [
     <!ENTITY DOC_AAF_EP "AAF Edit Protocol">
     <!ENTITY VER_EP_1.0 "2005-04-08">
-    <!ENTITY DOC_AAF_OM "AAF Object Model">
-    <!ENTITY VER_OM_1.1 "1.1">
 ]>
 <requirement-set>
 
@@ -59,9 +57,9 @@
         <name>Unique MobsIDs</name>
         <desc>Two Mobs in an AAF file shall not have the same MobID.</desc>
         <ref>
-            <doc>&DOC_AAF_OM;</doc>
-            <version>&VER_OM_1.1;</version>
-            <section>4.3.1</section>
+            <doc>&DOC_AAF_EP;</doc>
+            <version>&VER_EP_1.0;</version>
+            <section>4.2.3</section>
         </ref>
     </requirement>
 
