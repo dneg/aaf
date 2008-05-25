@@ -45,6 +45,7 @@ interface IAAFEssenceCodec;
 interface IAAFEssenceCodec2;
 interface IAAFEssenceContainer;
 interface IAAFEssenceDataStream;
+interface IAAFEssenceDataStream2;
 interface IAAFEssenceStream;
 interface IAAFInterpolator;
 interface IAAFMultiEssenceCodec;
@@ -55,6 +56,7 @@ typedef interface IAAFEssenceCodec IAAFEssenceCodec;
 typedef interface IAAFEssenceCodec2 IAAFEssenceCodec2;
 typedef interface IAAFEssenceContainer IAAFEssenceContainer;
 typedef interface IAAFEssenceDataStream IAAFEssenceDataStream;
+typedef interface IAAFEssenceDataStream2 IAAFEssenceDataStream2;
 typedef interface IAAFEssenceStream IAAFEssenceStream;
 typedef interface IAAFInterpolator IAAFInterpolator;
 typedef interface IAAFMultiEssenceCodec IAAFMultiEssenceCodec;
@@ -2096,6 +2098,177 @@ DECLARE_INTERFACE_(IAAFEssenceDataStream, IUnknown)
   END_INTERFACE
 };
 #endif // __IAAFEssenceDataStream_INTERFACE_DEFINED__
+
+
+
+
+// IAAFEssenceDataStream2
+
+// ************************
+//
+// Interface IAAFEssenceDataStream2
+//
+// ************************
+
+
+
+
+
+#ifndef __IAAFEssenceDataStream2_INTERFACE_DEFINED__
+#define __IAAFEssenceDataStream2_INTERFACE_DEFINED__
+
+EXTERN_C const IID IID_IAAFEssenceDataStream2;
+
+
+#undef  INTERFACE
+#define INTERFACE   IAAFEssenceDataStream2
+
+DECLARE_INTERFACE_(IAAFEssenceDataStream2, IUnknown)
+{
+  BEGIN_INTERFACE
+
+  /* *** IUnknown methods *** */
+  STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppvObj) PURE;
+  STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
+  STDMETHOD_(ULONG,Release) (THIS) PURE;
+
+  /* *** IAAFEssenceDataStream2 methods *** */
+
+
+  //***********************************************************
+  //
+  // Init()
+  //
+  /// Init the stream over a particular EssenceData.
+  ///
+  /// @param essenceData [in] The EssenceData to stream over
+  ///
+  STDMETHOD(Init) (THIS_
+    IUnknown * essenceData) PURE;
+
+  //***********************************************************
+  //
+  // GetEssenceData()
+  //
+  /// Returns the EssenceData with which the EssenceDataStream2 was initialized, in
+/// the ppEssenceData argument.  The returned EssenceData interface is AddRef()ed
+/// before it is returned.
+/// 
+/// Succeeds if all of the following are true:
+/// - the ppEssenceData pointer is valid.
+/// 
+/// If this method fails nothing will be written to *ppEssenceData.
+/// 
+/// This method will return the following codes.  If more than one of
+/// the listed errors is in effect, it will return the first one
+/// encountered in the order given below:
+/// 
+/// AAFRESULT_SUCCESS
+///   - succeeded.  (This is the only code indicating success.)
+///
+/// AAFRESULT_NULL_PARAM
+///   - ppEssenceData is null.
+  ///
+  /// @param ppEssenceData [out,retval] The EssenceData this stream applies to
+  ///
+  STDMETHOD(GetEssenceData) (THIS_
+    IAAFEssenceData ** ppEssenceData) PURE;
+
+  //***********************************************************
+  //
+  // SetEssenceElementKey()
+  //
+  /// Set the essence element key on the essence stream 
+  /// and optionally sets the Physical Track Number on a slot of the associated File Mob.
+  ///
+  /// If the EssenceStream does not support essence element keys, does not update the Physical Num,
+  /// fails gracefully and returns
+  ///		AAFRESULT_OPERATION_NOT_PERMITTED
+  /// this is NOT an error
+  ///
+  /// If the Essence Element Key input parameter is NULL, uses SMPTE 379M Generic Container keys
+  /// 
+  /// Constructs the 4 least significant bytes of the essence element key from the parameters
+  ///		kind	- essence kind (ex. 0x15 for GC Picture - refer to SMPTE 379M)
+  ///		count	- essence count (normally 1 for mono essence)
+  ///		type	- essence type (ex. 0x0D for VC-3 clip-wrapped - refer to essence mapping documents)
+  ///		index	- integer from 1 up to count (normally 1 for mon essence)
+  /// if any of these is zero, does not override the 4 least significant bytes of the essence element key
+  ///
+  /// If the sourceSlotID input parameter is not 0, sets thte PhysicalNum of that slot to match
+  /// the 4 least significant bytes of the essence element key
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the essence stream supports essence element keys.
+  /// 
+  /// If this method fails, the property will not be changed.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
+  ///
+  /// AAFRESULT_OPERATION_NOT_PERMITTED
+  ///   - the essence stream does not support essence element keys.
+  ///
+  /// @param eek [in, ref] essence element key
+  /// @param eeKind [in] Generic Container essence kind
+  /// @param eeCount [in] Generic Container essence element count
+  /// @param eeType [in] Generic Container essence element type
+  /// @param eeIndex [in] Generic Container essence element index
+  /// @param sourceSlotID [in] Slot ID of the Source Mob slot to be adjusted
+  ///
+  STDMETHOD(SetEssenceElementKey) (THIS_
+    aafUID_constref  eek,
+    aafUInt8  eeKind,
+    aafUInt8  eeCount,
+    aafUInt8  eeType,
+    aafUInt8  eeIndex,
+    aafSlotID_t  sourceSlotID) PURE;
+
+  //***********************************************************
+  //
+  // GetEssenceElementKey()
+  //
+  /// This method returns the essence element key associated
+  /// with the essence stream.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - pEssenceElementKey is a valid pointer.
+  /// - the essence stream supports essence element keys.
+  ///
+  /// If this method fails nothing will be written to *pEssenceElementKey.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pEssenceElementKey arg is NULL.
+  ///
+  /// AAFRESULT_OPERATION_NOT_PERMITTED
+  ///   - the essence stream does not support essence element keys.
+  ///
+  /// @param pEssenceElementKey [out] Essence element key.
+  ///
+  STDMETHOD(GetEssenceElementKey) (THIS_
+    aafUID_t *  pEssenceElementKey) PURE;
+
+
+  END_INTERFACE
+};
+#endif // __IAAFEssenceDataStream2_INTERFACE_DEFINED__
 
 
 
