@@ -702,6 +702,8 @@ public:
 
   void Dump( wostream& os )
   {
+    os << L"START TRANSACTION;" << endl << endl;
+
     for( set<wstring>::const_iterator iter = _insert_standard_stmnts.begin();
 	 iter != _insert_standard_stmnts.end();
 	 ++iter )
@@ -715,6 +717,8 @@ public:
     {
       wcout << *iter << endl;
     }
+
+    os << L"COMMIT;" << endl;
   }
 
 private:
