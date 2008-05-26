@@ -56,13 +56,29 @@ AAFWATCHDOG=0
 #WATCHDOGLOGFILE=D:/AAFWatchDog/AAFWatchDog.log
 WATCHDOGLOGFILE=/tmp/AAFWatchDog/AAFWatchDog.log
 
+# this script must be run from the AAF root (which is where it is checked in)
 AAFBASEDIR=`pwd`
+
+# set AAFPLATFORM using same script as for make
+AAFPLATFORM="AAF`build/aafplatform.sh`SDK"
+
+# set default COMPILER g++
+# for Win: . which will become vs7
+if [[ "$AAFPLATFORM" == "AAFWinSDK" ]] ; then
+	COMPILER="."
+else
+	COMPILER="g++"
+fi
+
+
 
 PrintHelp ()
 {
 	printf "\nTo run module test and all examples for specified target, use either:\n"
 	echo "-r  = Release"
 	echo "-d  = Debug"
+	printf "\nTo select a compiler other than the default, use:\n"
+	echo "-c name   for example -c vs8"
 	printf "\nTo specify which tests to run, add any of the following:\n"
 	echo "-a  = Run ALL Tests"
 	echo "-ao = AafOmf"
@@ -100,6 +116,7 @@ fi
 until [ $# = 0 ]
 do
 	case $1 in
+		-c ) shift; COMPILER="$1" ;;
 		-a ) ALL=1;;
 		-r ) CHECK_RELEASE=1 ;;
 		-d ) CHECK_DEBUG=1 ;;
@@ -126,9 +143,10 @@ do
 	shift
 done
 
-
-DEBUG="AAFWinSDK/Debug"
-RELEASE="AAFWinSDK/Release"
+if [ ! -d "$AAFBASEDIR/$AAFPLATFORM/$COMPILER" ] ; then
+	echo "$AAFBASEDIR/$AAFPLATFORM/$COMPILER not found"
+	exit 1
+fi
 
 OLD_PATH=""
 
@@ -152,11 +170,11 @@ CheckExitCode ()
 
 SetPath ()
 {
-	Target=$1
+	New=$1
 
-	printf "\nSetting PATH $Target \n"
+	printf "\nAdding $New/RefImpl to PATH\n"
 	OLD_PATH=$PATH
-	PATH="`PWD`/AAFWINSDK/${Target}/RefImpl;$PATH"
+	PATH="${New}/RefImpl:$PATH"
 }
 
 
@@ -241,28 +259,27 @@ VerifyFiles ()
 RunMainScript ()
 {
 	Target=$1
-	printf "\n\nTarget:  $Target"
-	SetPath "$Target"
-
-	if [ $PRINTPATH -eq 1 ]; then 
-		printf "PATH = $PATH" 
-		printf "\n\n"
-	fi
+	SetPath "$AAFBASEDIR/$AAFPLATFORM/$COMPILER/${Target}"
 
 	START_DIR="`PWD`"
 
-	cd AAFWinSDK/$Target
+	printf "\n\nStartDir: $START_DIR \nPlatform: $AAFPLATFORM \nCompiler: $COMPILER \nTarget:   $Target \n"
+	
+	cd "$AAFBASEDIR/$AAFPLATFORM/$COMPILER/${Target}"
 	
 	TargetDir="`PWD`"
 	DumpDir="`PWD`/DevUtils"
 	ExamplesDir="`PWD`/Examples/Com"
 	UtilitiesDir="`PWD`/Utilities"
 
+	if [ $PRINTPATH -eq 1 ]; then 
+		printf "PATH = $PATH \n\n" 
+		printf "cd $TargetDir \n\n"
+	fi
 
 	if [ $MODULETEST -eq 1 ] || [ $ALL -eq 1 ]; then
 		cd Test
-		cp ../../Test/Com/ComModTestAAF/Laser.wav .
-		echo PWD is $PWD
+		cp $AAFBASEDIR/Test/Com/ComModTestAAF/Laser.wav .
 		./ComModAAF
 		CheckExitCode $? "ComModAAF"
 		
@@ -339,7 +356,7 @@ RunMainScript ()
 	if [ $ESSENCETEST -eq 1 ] || [ $ALL -eq 1 ]; then
 		PrintSeparator "Running ComEssenceDataTest"
 		cd Examples/com
-		cp ../../../examples/com-api/ComEssenceDataTest/Laser.wav .
+		cp $AAFBASEDIR/Test/Com/ComModTestAAF/Laser.wav .
 		./ComEssenceDataTest
 		CheckExitCode $? "ComEssenceDataTest"
 
@@ -417,6 +434,7 @@ RunMainScript ()
 	if [ $EXPORTAUDIOEXAMPLE -eq 1 ] || [ $ALL -eq 1 ]; then
 		PrintSeparator "Running ExportAudioExample"
 		cd Examples/Com
+		cp $AAFBASEDIR/Test/Com/ComModTestAAF/Laser.wav .
 		./ExportAudioExample
 		CheckExitCode $? "ExportAudioExample" 
 
