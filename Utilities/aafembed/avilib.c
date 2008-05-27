@@ -57,6 +57,19 @@ typedef unsigned long ssize_t;
 #define AAFCONSTUINT64(i)   (i##ULL)
 #endif
 
+#if defined(__x86_64__)
+#define PFi64 "ld"
+#define PFu64 "lu"
+#define PFx64 "lx"
+#define PFoff "ld"
+#else
+#define PFi64 "lld"
+#define PFu64 "llu"
+#define PFx64 "llx"
+#define PFoff "lld"
+#endif
+
+
 #define INFO_LIST
 
 // add a new riff chunk after XX MB
@@ -458,8 +471,6 @@ static int avi_add_odml_index_entry(avi_t *AVI, char *tag, long flags, off_t pos
     }
     towrite += len + (len&1) + 8;
 
-    //printf("ODML: towrite = 0x%llX = %lld\n", towrite, towrite);
-
     if (AVI->video_superindex && 
 	    (off_t)(AVI->pos+towrite) > (off_t)((off_t)NEW_RIFF_THRES*AVI->video_superindex->nEntriesInUse)) {
 
@@ -472,7 +483,7 @@ static int avi_add_odml_index_entry(avi_t *AVI, char *tag, long flags, off_t pos
 	if (AVI->video_superindex->nEntriesInUse > NR_IXNN_CHUNKS) {
 	    fprintf (stderr, "Internal error in avilib - redefine NR_IXNN_CHUNKS\n");
 	    fprintf (stderr, "[avilib dump] cur_std_idx=%d NR_IXNN_CHUNKS=%d"
-		    "POS=%lld towrite=%lld\n",
+		    "POS=%"PFi64" towrite=%"PFi64"\n",
 		    cur_std_idx,NR_IXNN_CHUNKS, AVI->pos, towrite);
 	    return -1;
 	}
@@ -531,7 +542,7 @@ static int avi_add_odml_index_entry(avi_t *AVI, char *tag, long flags, off_t pos
 
 	    AVI->video_superindex->stdindex[ cur_std_idx ]->qwBaseOffset = AVI->pos -16 -8;
 #ifdef DEBUG_ODML
-	    printf("ODML: RIFF No.%02d at Offset 0x%llX\n", cur_std_idx, AVI->pos -16 -8);
+	    printf("ODML: RIFF No.%02d at Offset 0x%"PFx64"\n", cur_std_idx, AVI->pos -16 -8);
 #endif
 
 	    for (audtr = 0; audtr < AVI->anum; audtr++) {
@@ -1388,7 +1399,7 @@ static int avi_close_output_file(avi_t *AVI)
 	   uint32_t r = (AVI->video_superindex->aIndex[k].qwOffset >> 32) & 0xffffffff;
 	   uint32_t s = (AVI->video_superindex->aIndex[k].qwOffset) & 0xffffffff;
 
-	printf("VID NrEntries %d/%ld (%c%c%c%c) |0x%llX|%ld|%ld|\n",  k, 
+	printf("VID NrEntries %d/%ld (%c%c%c%c) |0x%"PFx64"|%ld|%ld|\n",  k, 
 		(unsigned long)AVI->video_superindex->nEntriesInUse,
 		AVI->video_superindex->dwChunkId[0],
 		AVI->video_superindex->dwChunkId[1],
@@ -1563,7 +1574,7 @@ static int avi_close_output_file(avi_t *AVI)
 	       uint32_t s = (AVI->track[j].audio_superindex->aIndex[k].qwOffset) & 0xffffffff;
 
 	       /*
-	       printf("AUD[%d] NrEntries %d/%ld (%c%c%c%c) |0x%llX|%ld|%ld| \n",  j, k, 
+	       printf("AUD[%d] NrEntries %d/%ld (%c%c%c%c) |0x%"PFx64"|%ld|%ld| \n",  j, k, 
 	               AVI->track[j].audio_superindex->nEntriesInUse,
 		       AVI->track[j].audio_superindex->dwChunkId[0], AVI->track[j].audio_superindex->dwChunkId[1],
 		       AVI->track[j].audio_superindex->dwChunkId[2], AVI->track[j].audio_superindex->dwChunkId[3],
@@ -2182,7 +2193,7 @@ int avi_parse_index_from_file(avi_t *AVI, char *filename)
 
     while (fgets(data, 100, fd)) {
 	// this is very slow
-	// sscanf(data, "%*s %d %*d %*d %lld %lld %d %*f", &type,  &pos, &len, &key);
+	// sscanf(data, "%*s %d %*d %*d %"PFi64" %"PFi64" %d %*f", &type,  &pos, &len, &key);
 	c     = strchr (data, ' ');
 	type  = strtol(c+1, &c, 10);
 	//ch    = strtol(c+1, &c, 10);
@@ -2498,7 +2509,7 @@ int avi_parse_input_file(avi_t *AVI, int getIndex)
 	       AVI->video_superindex->aIndex[j].dwDuration = str2ulong ((unsigned char*)a); a += 4;
 
 #ifdef DEBUG_ODML
-	       printf("[%d] 0x%llx 0x%lx %lu\n", j, 
+	       printf("[%d] 0x%"PFx64" 0x%lx %lu\n", j, 
 		       (unsigned int64_t)AVI->video_superindex->aIndex[j].qwOffset,
 		       (unsigned long)AVI->video_superindex->aIndex[j].dwSize, 
 		       (unsigned long)AVI->video_superindex->aIndex[j].dwDuration);
@@ -2552,7 +2563,7 @@ int avi_parse_input_file(avi_t *AVI, int getIndex)
 	       AVI->track[AVI->aptr].audio_superindex->aIndex[j].dwDuration = str2ulong ((unsigned char*)a); a += 4;
 
 #ifdef DEBUG_ODML
-	       printf("[%d] 0x%llx 0x%lx %lu\n", j, 
+	       printf("[%d] 0x%"PFx64" 0x%lx %lu\n", j, 
 		       (unsigned int64_t)AVI->track[AVI->aptr].audio_superindex->aIndex[j].qwOffset,
 		       (unsigned long)AVI->track[AVI->aptr].audio_superindex->aIndex[j].dwSize, 
 		       (unsigned long)AVI->track[AVI->aptr].audio_superindex->aIndex[j].dwDuration);
@@ -2732,14 +2743,14 @@ int avi_parse_input_file(avi_t *AVI, int getIndex)
 	 chunk_start = en = (char *)malloc (AVI->video_superindex->aIndex[j].dwSize+hdrl_len);
 
 	 if (lseek(AVI->fdes, AVI->video_superindex->aIndex[j].qwOffset, SEEK_SET) == (off_t)-1) {
-	    fprintf(stderr, "(%s) cannot seek to 0x%llx\n", __FILE__, 
+	    fprintf(stderr, "(%s) cannot seek to 0x%"PFx64"\n", __FILE__, 
 		    (uint64_t)AVI->video_superindex->aIndex[j].qwOffset);
 	    free(chunk_start);
 	    continue;
 	 }
 
 	 if (avi_read(AVI->fdes, en, AVI->video_superindex->aIndex[j].dwSize+hdrl_len) <= 0) {
-	    fprintf(stderr, "(%s) cannot read from offset 0x%llx %ld bytes; broken (incomplete) file?\n", 
+	    fprintf(stderr, "(%s) cannot read from offset 0x%"PFx64" %ld bytes; broken (incomplete) file?\n", 
 		  __FILE__, (uint64_t)AVI->video_superindex->aIndex[j].qwOffset,
 		  (unsigned long)AVI->video_superindex->aIndex[j].dwSize+hdrl_len);
 	    free(chunk_start);
@@ -2775,7 +2786,7 @@ int avi_parse_input_file(avi_t *AVI, int getIndex)
 
 #ifdef DEBUG_ODML
 	    /*
-	    printf("[%d] POS 0x%llX len=%d key=%s offset (%llx) (%ld)\n", k, 
+	    printf("[%d] POS 0x%"PFx64" len=%d key=%s offset (%"PFx64") (%ld)\n", k, 
 		  AVI->video_index[k].pos, 
 		  (int)AVI->video_index[k].len, 
 		  AVI->video_index[k].key?"yes":"no ", offset, 
@@ -2813,13 +2824,13 @@ int avi_parse_input_file(avi_t *AVI, int getIndex)
 	    chunk_start = en = (char *)malloc (AVI->track[audtr].audio_superindex->aIndex[j].dwSize+hdrl_len);
 
 	    if (lseek(AVI->fdes, AVI->track[audtr].audio_superindex->aIndex[j].qwOffset, SEEK_SET) == (off_t)-1) {
-	       fprintf(stderr, "(%s) cannot seek to 0x%llx\n", __FILE__, (uint64_t)AVI->track[audtr].audio_superindex->aIndex[j].qwOffset);
+	       fprintf(stderr, "(%s) cannot seek to 0x%"PFx64"\n", __FILE__, (uint64_t)AVI->track[audtr].audio_superindex->aIndex[j].qwOffset);
 	       free(chunk_start);
 	       continue;
 	    }
 
 	    if (avi_read(AVI->fdes, en, AVI->track[audtr].audio_superindex->aIndex[j].dwSize+hdrl_len) <= 0) {
-	       fprintf(stderr, "(%s) cannot read from offset 0x%llx; broken (incomplete) file?\n", 
+	       fprintf(stderr, "(%s) cannot read from offset 0x%"PFx64"; broken (incomplete) file?\n", 
 		     __FILE__,(uint64_t) AVI->track[audtr].audio_superindex->aIndex[j].qwOffset);
 	       free(chunk_start);
 	       continue;
@@ -2846,7 +2857,7 @@ int avi_parse_input_file(avi_t *AVI, int getIndex)
 
 #ifdef DEBUG_ODML
 	       /*
-		  printf("[%d:%d] POS 0x%llX len=%d offset (%llx) (%ld)\n", k, audtr, 
+		  printf("[%d:%d] POS 0x%"PFx64" len=%d offset (%"PFx64") (%ld)\n", k, audtr, 
 		  AVI->track[audtr].audio_index[k].pos, 
 		  (int)AVI->track[audtr].audio_index[k].len, 
 		  offset, AVI->track[audtr].audio_superindex->aIndex[j].dwSize); 
@@ -2936,7 +2947,7 @@ multiple_riff:
 	     AVI->video_index[nvi].len = n;
 
 	     /*
-	     fprintf(stderr, "Frame %ld pos %lld len %lld key %ld\n",
+	     fprintf(stderr, "Frame %ld pos %"PFi64" len %"PFi64" key %ld\n",
 		     nvi, AVI->video_index[nvi].pos,  AVI->video_index[nvi].len, (long)AVI->video_index[nvi].key);
 		     */
 	     nvi++;
@@ -3315,7 +3326,7 @@ long AVI_read_audio(avi_t *AVI, char *audbuf, long bytes)
       lseek(AVI->fdes, pos, SEEK_SET);
       if ( (ret = avi_read(AVI->fdes,audbuf+nr,todo)) != todo)
       {
-	 fprintf(stderr, "XXX pos = %lld, ret = %lld, todo = %ld\n", pos, ret, todo);
+	 fprintf(stderr, "XXX pos = %"PFi64", ret = %"PFi64", todo = %ld\n", pos, ret, todo);
          AVI_errno = AVI_ERR_READ;
          return -1;
       }
