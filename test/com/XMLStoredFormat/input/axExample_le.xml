@@ -492,6 +492,11 @@
             <DefinitionObjectDescription/>
             <DefinitionObjectName>ContainerDef_MXFGC_Avid_DNX_36_1080p</DefinitionObjectName>
           </ContainerDefinition>
+          <ContainerDefinition aaf:uid="urn:x-ul:060e2b34.0401.0101.0e040301.02060204">
+            <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0101.0e040301.02060204</DefinitionObjectIdentification>
+            <DefinitionObjectDescription/>
+            <DefinitionObjectName>ContainerDef_MXFGC_Avid_DNX_145_1440_1080i</DefinitionObjectName>
+          </ContainerDefinition>
           <ContainerDefinition aaf:uid="ContainerDef_RIFFWAVE">
             <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0106.0d011301.01010100</DefinitionObjectIdentification>
             <DefinitionObjectDescription/>
