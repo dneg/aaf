@@ -32,9 +32,11 @@ all : aafomf AAFAnalyzer aafextract eli2aaf aafviewer aafdump aaffmtconv aafembe
 aafomf:
 	@if [ -r ../OMF/Include/omDefs.h ] ; then cd AafOmf && $(MAKE); else echo; echo "OMF libraries not present - AafOmf will not be built"; echo; fi
 
+# AAFAnalyzer needs the Boost C++ libraries, so check they are present first
+# by looking either in /usr/include or the ADD_CFLAGS variable
 .PHONY : AAFAnalyzer
 AAFAnalyzer:
-	cd AAFAnalyzer && $(MAKE)
+	@if [ -r /usr/include/boost/shared_ptr.hpp ] || echo $(ADD_CFLAGS) | grep -i boost ; then cd AAFAnalyzer && $(MAKE) ; else echo "Boost includes not found - AAFAnalyzer will not be built"; echo ; fi
 
 .PHONY : aafextract
 aafextract:
