@@ -35,7 +35,9 @@
 
 class OMCachePageAllocator;
 
-  // @class Page caches.
+  // @class Page caches. Client inherit from this class and provide
+  //        implementations for the pure virtual functions
+  //        <mf OMPageCache::readPage()> and <mf OMPageCache::writePage()>.
   //   @cauthor Tim Bingham | tjb | Avid Technology, Inc.
 class OMPageCache {
 public:
