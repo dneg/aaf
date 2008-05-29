@@ -827,29 +827,11 @@ static HRESULT CreateAAFFile(
 
 
 	// Cleanup object references
-	if ( edesc ) {
-	  edesc->CountLocators(&numLocators);
+	if (edesc)
+		edesc->Release();
 
-	  for (i=0; i<numLocators; ++i)
-	    {
-	      edesc->GetLocatorAt(i, &pLocator);
-	      pLocator->Release();
-	    }
-	  
-	  edesc->Release();
-	}
-	
-	if (edesc2) {
-	  edesc2->CountSubDescriptors(&numSubDescriptors);
-
-	  for (i=0; i<numSubDescriptors; ++i)
-	    {
-	      edesc2->GetSubDescriptorAt(i, &pSubDescriptor);
-	      pSubDescriptor->Release();
-	    }
-	  
-          edesc2->Release();
-	}
+	if (edesc2)
+		edesc2->Release();
 
 	if (pMob)
 		pMob->Release();
@@ -858,7 +840,7 @@ static HRESULT CreateAAFFile(
 		pSourceMob->Release();
 	
 	if (pDictionary)
-    pDictionary->Release();
+		pDictionary->Release();
 
 	if (pHeader)
 		pHeader->Release();
