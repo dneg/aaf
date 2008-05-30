@@ -60,6 +60,7 @@ OMDataStreamProperty::~OMDataStreamProperty(void)
     }
   }
   POSTCONDITION("Stream closed", _stream == 0);
+  delete _streamAccess;
 }
 
   // @mfunc Save this <c OMDataStreamProperty>.
@@ -576,6 +577,7 @@ void OMDataStreamProperty::clearStreamAccess(void)
 {
   TRACE("OMDataStreamProperty::clearStreamAccess");
   PRECONDITION("Existing stream access", hasStreamAccess());
+  delete _streamAccess;
   _streamAccess = 0;
   POSTCONDITION("No stream access", !hasStreamAccess());
 }
