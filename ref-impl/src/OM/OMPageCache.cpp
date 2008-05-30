@@ -40,6 +40,7 @@ OMPageCache::OMPageCache(OMUInt32 pageSize,
                          OMUInt32 pageCount)
 : _pageSize(pageSize),
   _pageCount(pageCount),
+  _allocator(0),
   _validPageCount(0),
   _mruEntry(0),
   _cache(),
@@ -80,10 +81,15 @@ OMPageCache::~OMPageCache(void)
   while (++iterator) {
     CacheEntry* entry = iterator.value();
     ASSERT("Page is clean", !entry->_isDirty);
-    delete [] entry->_page;
+    if (_allocator != 0) {
+      _allocator->deallocate(entry->_page);
+    } else {
+      delete [] entry->_page;
+    }
     entry->_page = 0;
     delete entry;
   }
+  delete _allocator;
 }
 
   // @mfunc Attempt to read the number of bytes given by <p byteCount>
@@ -326,7 +332,12 @@ OMPageCache::CacheEntry* OMPageCache::newEntry(OMUInt64 page)
 {
   TRACE("OMPageCache::newEntry");
 
-  OMByte* p = new OMByte[_pageSize];
+  OMByte* p = 0;
+  if (_allocator != 0) {
+    p = _allocator->allocate();
+  } else {
+    p = new OMByte[_pageSize];
+  }
   ASSERT("Valid heap pointer", p != 0);
 
   CacheEntry* entry = new CacheEntry;
