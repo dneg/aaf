@@ -333,12 +333,12 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 			checkResult(pBWFImportDesc->CountUnknownBWFChunks(&numData));
 			checkExpression(1 == numData, AAFRESULT_TEST_FAILED);
 		
-			//pRIFFChunk->Release();
+			pRIFFChunk->Release();
 			pRIFFChunk = NULL;
-			pRIFFChunkTest->Release();
-			pRIFFChunkTest = NULL;
 			pEnum->Release();
 			pEnum = NULL;
+			pBWFImportDesc->Release();
+			pBWFImportDesc = NULL;
 			pEssDesc->Release();
 			pEssDesc = NULL;
 								
@@ -351,14 +351,20 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	
 			
 		}
+		pRIFFChunkTest->Release();
+		pRIFFChunkTest = NULL;
+
 		pMob->Release();
 		pMob = NULL;
 		
 		pHeader->Release();
 		pHeader = NULL;
-		
+
+		pDictionary->Release();
+		pDictionary = NULL;
+
 		pFile->Close();
-    	pFile->Release();
+		pFile->Release();
 		pFile = NULL;
 
 	return hr;

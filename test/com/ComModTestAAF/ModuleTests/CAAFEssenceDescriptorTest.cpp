@@ -200,6 +200,11 @@ static HRESULT CreateAAFFile(
 			edesc->GetLocatorAt(i-1, &pLocator2);
 			if (pLocator2 != pLocator)
 				localhr = AAFRESULT_TEST_FAILED;
+
+			pLocator->Release();
+			pLocator = 0;
+			pLocator2->Release();
+			pLocator2 = 0;
 		}
 
 		// Make sure we can't add it again
@@ -245,6 +250,11 @@ static HRESULT CreateAAFFile(
 			edesc->GetLocatorAt(0, &pLocator2);
 			if (pLocator2 != pLocator)
 				localhr = AAFRESULT_TEST_FAILED;
+
+			pLocator->Release();
+			pLocator = 0;
+			pLocator2->Release();
+			pLocator2 = 0;
 		}
 
 		if (localhr == AAFRESULT_SUCCESS)
@@ -285,7 +295,13 @@ static HRESULT CreateAAFFile(
 		edesc->CountLocators(&numLocators2);
 		if (numLocators2 != numLocators+1)
 			localhr = AAFRESULT_TEST_FAILED;
-			
+
+		pLocator->Release();
+		pLocator = 0;
+		pLocator2->Release();
+		pLocator2 = 0;
+
+
 		edesc->CountLocators(&numLocators);
 		// Make a concrete subclass of locator to attach in the middle
 		checkResult(defs.cdNetworkLocator()->
@@ -302,6 +318,12 @@ static HRESULT CreateAAFFile(
 		edesc->CountLocators(&numLocators2);
 		if (numLocators2 != numLocators+1)
 			localhr = AAFRESULT_TEST_FAILED;
+
+		pLocator->Release();
+		pLocator = 0;
+		pLocator2->Release();
+		pLocator2 = 0;
+
 
 		edesc->CountLocators(&numLocators);
 		// Make a concrete subclass of locator to attach to the end
@@ -323,8 +345,13 @@ static HRESULT CreateAAFFile(
 		// Make sure we can't add it again
 		if (edesc->InsertLocatorAt(numLocators+1, pLocator) != AAFRESULT_OBJECT_ALREADY_ATTACHED)
 			localhr = AAFRESULT_TEST_FAILED;
-
 		
+		pLocator->Release();
+		pLocator = 0;
+		pLocator2->Release();
+		pLocator2 = 0;
+
+
 		if (localhr == AAFRESULT_SUCCESS)
 			cout<< "	InsertLocatorAt() ...	Passed"<< endl;
 		else
@@ -350,12 +377,10 @@ static HRESULT CreateAAFFile(
 		{
 			pLocator = NULL;
 			if (edesc->GetLocatorAt(i, &pLocator) != AAFRESULT_SUCCESS)
-			{
-				if (pLocator == NULL)
-					localhr = AAFRESULT_TEST_FAILED;
-				else
-					pLocator->Release();
-			}
+				localhr = AAFRESULT_TEST_FAILED;
+
+			if (pLocator != NULL)
+				pLocator->Release();
 		}
 			
 		if (localhr == AAFRESULT_SUCCESS)
@@ -385,7 +410,10 @@ static HRESULT CreateAAFFile(
 					localhr = AAFRESULT_TEST_FAILED;
 				else
 					pLocator2->Release();
-					
+
+				pLocator->Release();
+				pLocator = 0;
+
 				pEnumLocators->Release();
 			}
 			else
@@ -434,6 +462,11 @@ static HRESULT CreateAAFFile(
 		if (pLocator != pLocator2)
 			localhr = AAFRESULT_TEST_FAILED;
 		
+		pLocator->Release();
+		pLocator = 0;
+		pLocator2->Release();
+		pLocator2 = 0;
+
 		// Remove locator in middle, but Release it first
 		edesc->CountLocators(&numLocators);
 		edesc->GetLocatorAt((numLocators/2), &pLocator);
@@ -452,6 +485,12 @@ static HRESULT CreateAAFFile(
 		if (pLocator != pLocator2)
 			localhr = AAFRESULT_TEST_FAILED;
 
+		pLocator->Release();
+		pLocator = 0;
+		pLocator2->Release();
+		pLocator2 = 0;
+
+
 		// Remove locator at end, but Release it first
 		edesc->CountLocators(&numLocators);
 		edesc->GetLocatorAt(numLocators-1, &pLocator);
@@ -469,6 +508,11 @@ static HRESULT CreateAAFFile(
 		// Verify that the locators shifted properly
 		if (pLocator != pLocator2)
 			localhr = AAFRESULT_TEST_FAILED;
+
+		pLocator->Release();
+		pLocator = 0;
+		pLocator2->Release();
+		pLocator2 = 0;
 
 		if (localhr == AAFRESULT_SUCCESS)
 			cout<< "	RemoveLocatorAt() ...	Passed"<< endl;
@@ -532,6 +576,11 @@ static HRESULT CreateAAFFile(
 			edesc2->GetSubDescriptorAt(i-1, &pSubDescriptor2);
 			if (pSubDescriptor2 != pSubDescriptor)
 				localhr = AAFRESULT_TEST_FAILED;
+
+			pSubDescriptor->Release();
+			pSubDescriptor = 0;
+			pSubDescriptor2->Release();
+			pSubDescriptor2 = 0;
 		}
 
 		// Make sure we can't add it again
@@ -540,7 +589,6 @@ static HRESULT CreateAAFFile(
 
 //			localhr = AAFRESULT_TEST_FAILED;
 
-
 		if (localhr == AAFRESULT_SUCCESS)
 			cout<< "	AppendSubDescriptor() ...		Passed"<< endl;
 		else
@@ -548,7 +596,7 @@ static HRESULT CreateAAFFile(
 			cout<< "	AppendSubDescriptor() ...		FAILED"<< endl;
 			hr = AAFRESULT_TEST_FAILED;
 		}
-			
+
 
 /* PrependSubDescriptor()	******************************************/
 		localhr = AAFRESULT_SUCCESS;
@@ -577,6 +625,11 @@ static HRESULT CreateAAFFile(
 			edesc2->GetSubDescriptorAt(0, &pSubDescriptor2);
 			if (pSubDescriptor2 != pSubDescriptor)
 				localhr = AAFRESULT_TEST_FAILED;
+	
+			pSubDescriptor->Release();
+			pSubDescriptor = 0;
+			pSubDescriptor2->Release();
+			pSubDescriptor2 = 0;
 		}
 
 		if (localhr == AAFRESULT_SUCCESS)
@@ -618,6 +671,11 @@ static HRESULT CreateAAFFile(
 		if (numSubDescriptors2 != numSubDescriptors+1)
 			localhr = AAFRESULT_TEST_FAILED;
 
+		pSubDescriptor->Release();
+		pSubDescriptor = 0;
+		pSubDescriptor2->Release();
+		pSubDescriptor2 = 0;
+
 		edesc2->CountSubDescriptors(&numSubDescriptors);
 		// Make a concrete subclass of subdescriptor to attach in the middle
 		checkResult( pDictionary->CreateInstance( TestSubDescriptorClassID,
@@ -634,6 +692,11 @@ static HRESULT CreateAAFFile(
 		edesc2->CountSubDescriptors(&numSubDescriptors2);
 		if (numSubDescriptors2 != numSubDescriptors+1)
 			localhr = AAFRESULT_TEST_FAILED;
+
+		pSubDescriptor->Release();
+		pSubDescriptor = 0;
+		pSubDescriptor2->Release();
+		pSubDescriptor2 = 0;
 
 		edesc2->CountSubDescriptors(&numSubDescriptors);
 		// Make a concrete subclass of subdescriptor to attach to the end
@@ -656,7 +719,11 @@ static HRESULT CreateAAFFile(
 		if (edesc2->InsertSubDescriptorAt(numSubDescriptors+1, pSubDescriptor) != AAFRESULT_OBJECT_ALREADY_ATTACHED)
 			localhr = AAFRESULT_TEST_FAILED;
 
-		
+		pSubDescriptor->Release();
+		pSubDescriptor = 0;
+		pSubDescriptor2->Release();
+		pSubDescriptor2 = 0;
+
 		if (localhr == AAFRESULT_SUCCESS)
 			cout<< "	InsertSubDescriptorAt() ...	Passed"<< endl;
 		else
@@ -682,12 +749,9 @@ static HRESULT CreateAAFFile(
 		{
 			pSubDescriptor = NULL;
 			if (edesc2->GetSubDescriptorAt(i, &pSubDescriptor) != AAFRESULT_SUCCESS)
-			{
-				if (pSubDescriptor == NULL)
-					localhr = AAFRESULT_TEST_FAILED;
-				else
-					pSubDescriptor->Release();
-			}
+				localhr = AAFRESULT_TEST_FAILED;
+			if (pSubDescriptor != NULL)
+				pSubDescriptor->Release();
 		}
 			
 		if (localhr == AAFRESULT_SUCCESS)
@@ -715,9 +779,11 @@ static HRESULT CreateAAFFile(
 
 				if (pSubDescriptor != pSubDescriptor2)
 					localhr = AAFRESULT_TEST_FAILED;
-				else
+
+				if (pSubDescriptor)
+					pSubDescriptor->Release();
+				if (pSubDescriptor2)
 					pSubDescriptor2->Release();
-					
 				pEnumSubDescriptors->Release();
 			}
 			else
@@ -765,7 +831,12 @@ static HRESULT CreateAAFFile(
 		// Verify that the subdescriptors shifted properly
 		if (pSubDescriptor != pSubDescriptor2)
 			localhr = AAFRESULT_TEST_FAILED;
-		
+
+		pSubDescriptor->Release();
+		pSubDescriptor = 0;
+		pSubDescriptor2->Release();
+		pSubDescriptor2 = 0;
+
 		// Remove subdescriptor in middle, but Release it first
 		edesc2->CountSubDescriptors(&numSubDescriptors);
 		edesc2->GetSubDescriptorAt((numSubDescriptors/2), &pSubDescriptor);
@@ -784,6 +855,11 @@ static HRESULT CreateAAFFile(
 		if (pSubDescriptor != pSubDescriptor2)
 			localhr = AAFRESULT_TEST_FAILED;
 
+		pSubDescriptor->Release();
+		pSubDescriptor = 0;
+		pSubDescriptor2->Release();
+		pSubDescriptor2 = 0;
+
 		// Remove subdescriptor at end, but Release it first
 		edesc2->CountSubDescriptors(&numSubDescriptors);
 		edesc2->GetSubDescriptorAt(numSubDescriptors-1, &pSubDescriptor);
@@ -801,6 +877,11 @@ static HRESULT CreateAAFFile(
 		// Verify that the subdescriptors shifted properly
 		if (pSubDescriptor != pSubDescriptor2)
 			localhr = AAFRESULT_TEST_FAILED;
+
+		pSubDescriptor->Release();
+		pSubDescriptor = 0;
+		pSubDescriptor2->Release();
+		pSubDescriptor2 = 0;
 
 		if (localhr == AAFRESULT_SUCCESS)
 			cout<< "	RemoveSubDescriptorAt() ...	Passed"<< endl;

@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2008, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -128,8 +128,12 @@ HRESULT STDMETHODCALLTYPE
 		CHECK(codecDef->Initialize(uid, L"WAVE Codec", L"Handles RIFF WAVE data."));
 		CHECK(dict->LookupDataDef(kAAFDataDef_Sound, &pDefSound));
 		CHECK(codecDef->AddEssenceKind(pDefSound));
+		pDefSound->Release ();
+		pDefSound = 0;
 		CHECK(dict->LookupDataDef(kAAFDataDef_LegacySound, &pDefLegacySound));
 		CHECK(codecDef->AddEssenceKind(pDefLegacySound));
+		pDefLegacySound->Release ();
+		pDefLegacySound = 0;
 	  	CHECK(dict->LookupClassDef(AUID_AAFWAVEDescriptor, &fileClass));
 		CHECK(codecDef->SetFileDescriptorClass (fileClass));
 		fileClass->Release ();

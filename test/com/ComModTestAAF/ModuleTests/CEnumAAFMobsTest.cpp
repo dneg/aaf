@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2005, Licensor of the
+// The Original Code of this file is Copyright 1998-2008, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -233,8 +233,12 @@ static void CheckMobsByUsageCode( IAAFHeader* pHeader,
        AAFRESULT_SUCCESS == nextHr;
        count++, nextHr = pEnumByUsage->NextOne( &pNextMob ) ) {
     if ( checkIID ) {
-      void* pUnused;
-      checkResult( pNextMob->QueryInterface( expectedIID, &pUnused ) );
+      // Quering for one interface but passing a pointer to another
+      // interface is not a right thing to do but since it's a pointer
+      // to IUnknown, the parent of them all, and all we do is call
+      // Release() on it, it's OK.
+      IAAFSmartPointer<IUnknown> pUnused;
+      checkResult( pNextMob->QueryInterface( expectedIID, (void**)&pUnused ) );
     }
   }
     

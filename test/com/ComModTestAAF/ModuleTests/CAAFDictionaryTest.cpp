@@ -14,7 +14,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2005, Licensor of the
+// The Original Code of this file is Copyright 1998-2008, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -635,6 +635,7 @@ void testKLVDataDefinitions(IAAFDictionary *pDictionary, IAAFMob *pMob)
 	IAAFKLVDataDefinition *pKLVDef = NULL; 
 	IAAFKLVData *pKLVData = NULL;
 	IAAFTypeDef *typeDef = NULL;
+	IAAFClassDef *pKLVDataDefCD = NULL;
 
 	const aafCharacter defName[32] = L"Data Definition Omega";
 	const aafCharacter defDescription[64] = L"This is a test of the data definition!!!";
@@ -657,10 +658,10 @@ void testKLVDataDefinitions(IAAFDictionary *pDictionary, IAAFMob *pMob)
 	assert(pDic2);
 
 	//lookup class definition for KLVDataDefinition
-	checkResult(pDictionary->LookupClassDef(AUID_AAFKLVDataDefinition, &pKLVDataCD));
+	checkResult(pDictionary->LookupClassDef(AUID_AAFKLVDataDefinition, &pKLVDataDefCD));
 
 	//Create KLVDataDef and append it to Dic
-	checkResult(pKLVDataCD->CreateInstance(IID_IAAFKLVDataDefinition, (IUnknown **)&pKLVDef));
+	checkResult(pKLVDataDefCD->CreateInstance(IID_IAAFKLVDataDefinition, (IUnknown **)&pKLVDef));
 	checkResult(pKLVDef->Initialize(KLVDef_TestData, defName, defDescription));
 	checkResult(pDic2->RegisterKLVDataDef(pKLVDef));
 
@@ -675,6 +676,8 @@ void testKLVDataDefinitions(IAAFDictionary *pDictionary, IAAFMob *pMob)
 	pKLVData = NULL;
 	typeDef->Release();
 	typeDef = NULL;
+	pKLVDataDefCD->Release();
+	pKLVDataDefCD = NULL;
 }
 
 void testTaggedDefinitions(IAAFDictionary *pDictionary, IAAFMob *pMob)
@@ -1020,7 +1023,8 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 	IAAFKLVDataDefinition *pKLVLook = NULL;
 	IAAFTaggedValueDefinition *pTAGDefLook = NULL;
 	IAAFDictionary2 *pDic2 = NULL;	
-	IAAFDefObject *pDefObj = NULL;
+	IAAFDefObject *pKLVDataDefObj = NULL;
+	IAAFDefObject *pTaggedValueDefObj = NULL;
 	aafUID_t auid;
 
 	checkResult( pDictionary->QueryInterface( IID_IAAFDictionary2, reinterpret_cast<void**>(&pDic2) ) );
@@ -1030,11 +1034,11 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 	if(pDic2->LookupKLVDataDef(KLVDef_TestData, &pKLVLook) != AAFRESULT_SUCCESS)
 		checkResult(AAFRESULT_TEST_FAILED);
 
-	checkResult( pKLVLook->QueryInterface( IID_IAAFDefObject, reinterpret_cast<void**>(&pDefObj) ) );
-	assert(pDefObj);
+	checkResult( pKLVLook->QueryInterface( IID_IAAFDefObject, reinterpret_cast<void**>(&pKLVDataDefObj) ) );
+	assert(pKLVDataDefObj);
 	
 	//ensure the KLVLook auid is equal to KLVDef_TestData auid
-	checkResult(pDefObj->GetAUID(&auid));
+	checkResult(pKLVDataDefObj->GetAUID(&auid));
 
 	if(auid != KLVDef_TestData)
 		checkResult(AAFRESULT_TEST_FAILED);
@@ -1043,11 +1047,11 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 	if(pDic2->LookupTaggedValueDef(TAGDef_TestData, &pTAGDefLook) != AAFRESULT_SUCCESS)
 		checkResult(AAFRESULT_TEST_FAILED);
 
-	checkResult( pTAGDefLook->QueryInterface( IID_IAAFDefObject, reinterpret_cast<void**>(&pDefObj) ) );
-	assert(pDefObj);
+	checkResult( pTAGDefLook->QueryInterface( IID_IAAFDefObject, reinterpret_cast<void**>(&pTaggedValueDefObj) ) );
+	assert(pTaggedValueDefObj);
 	
 	//ensure the TAGDefLook auid is equal to TAGDef_TestData auid
-	checkResult(pDefObj->GetAUID(&auid));
+	checkResult(pTaggedValueDefObj->GetAUID(&auid));
 
 	if(auid != TAGDef_TestData)
 		checkResult(AAFRESULT_TEST_FAILED);
@@ -1060,8 +1064,10 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 	pKLVLook = NULL;
 	pTAGDefLook->Release();
 	pTAGDefLook = NULL;
-	pDefObj->Release();
-	pDefObj = NULL;
+	pKLVDataDefObj->Release();
+	pKLVDataDefObj = NULL;
+	pTaggedValueDefObj->Release();
+	pTaggedValueDefObj = NULL;
 
 	}
 

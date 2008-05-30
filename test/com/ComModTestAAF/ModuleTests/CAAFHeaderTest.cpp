@@ -15,7 +15,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2007, Licensor of the
+// The Original Code of this file is Copyright 1998-2008, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -371,10 +371,14 @@ void HeaderTest::createFile(
 
   _bFileOpen = true;
   check(_pFile->GetHeader(&_pHeader));
+  check(_pHeader->QueryInterface(IID_IAAFHeader2, reinterpret_cast<void**>(&_pHeader2)));
+
 
   // GetDictionary
   checkhr(_pHeader->GetDictionary(NULL), AAFRESULT_NULL_PARAM);
   check(_pHeader->GetDictionary(&_pDictionary));
+  check(_pDictionary->QueryInterface(IID_IAAFDictionary2, reinterpret_cast<void**>(&_pDictionary2)));
+
   
   CAAFBuiltinDefs defs (_pDictionary);
 
@@ -484,7 +488,9 @@ void HeaderTest::openFile(wchar_t *pFileName)
   check(AAFFileOpenExistingRead(pFileName, 0, &_pFile));
   _bFileOpen = true;
   check(_pFile->GetHeader(&_pHeader));
+  check(_pHeader->QueryInterface(IID_IAAFHeader2, reinterpret_cast<void**>(&_pHeader2)));
   check(_pHeader->GetDictionary(&_pDictionary));
+  check(_pDictionary->QueryInterface(IID_IAAFDictionary2, reinterpret_cast<void**>(&_pDictionary2)));
 
   openEssenceData();
   openMobs();
@@ -499,7 +505,7 @@ void HeaderTest::openFile(wchar_t *pFileName)
 
 void HeaderTest::writeOptionalProperties()
 {
-  assert(_pHeader && _pDictionary);
+  assert(_pHeader && _pDictionary && _pHeader2);
 
   aafProductVersion_t toolkitVersion;
   check(GetAAFVersions(_pHeader, &toolkitVersion, NULL));
@@ -524,9 +530,6 @@ void HeaderTest::writeOptionalProperties()
     check(_pHeaderObject->SetPropertyValue(_pOptionalPropDef, _pOptionalPropValue));
 
     //add some descriptive schemes
-    check(_pHeader->QueryInterface(IID_IAAFHeader2, reinterpret_cast<void**>(&_pHeader2) ) );
-    assert(_pHeader2);  
-
     if(_pHeader2->AddDescriptiveScheme(descSchID_1) != AAFRESULT_SUCCESS)
       check(AAFRESULT_TEST_FAILED);
 
@@ -617,7 +620,7 @@ int HeaderTest::formatMobName(aafUInt32 itemNumber, wchar_t* mobName)
 
 void HeaderTest::createFileMob(aafUInt32 itemNumber)
 {
-  assert(_pFile && _pHeader && _pDictionary);
+  assert(_pFile && _pHeader && _pDictionary && _pDictionary2);
   assert(NULL == _pSourceMob);
   assert(NULL == _pMob);
   assert(NULL == _pFileDescriptor);
@@ -661,9 +664,6 @@ void HeaderTest::createFileMob(aafUInt32 itemNumber)
 
 	//create a container for the AIFCDescriptor, assigning it a container definition
 	//4 containers will be created
-  	check(_pDictionary->QueryInterface(IID_IAAFDictionary2, reinterpret_cast<void**>(&_pDictionary2) ) );
-  	assert(_pDictionary2);
-
 	aafUInt32 num;
 	check(_pDictionary2->CountContainerDefs(&num));
 
@@ -672,14 +672,21 @@ void HeaderTest::createFileMob(aafUInt32 itemNumber)
 
 	check(_pDictionary2->GetContainerDefs(&pEnum));
 
-	for(unsigned int i = 0; i <= itemNumber && i < num; i++)
+	for(unsigned int i = 0; i < itemNumber && i < num; i++)
 	{
 		check(pEnum->NextOne(&pDef));
+		pDef->Release();
+		pDef = NULL;
 	}
 
+	check(pEnum->NextOne(&pDef));
 	check(pDef->SetEssenceIsIdentified((aafBoolean_t)true));
 	check(_pFileDescriptor->SetContainerFormat(pDef));
+	pDef->Release();
+	pDef = NULL;
 
+	pEnum->Release();
+	pEnum = NULL;
 
   // AddMob
   checkhr(_pHeader->AddMob(NULL), AAFRESULT_NULL_PARAM);
@@ -874,14 +881,13 @@ void HeaderTest::openEssenceData()
 
 void HeaderTest::checkByteOrder()
 {
+  assert(_pHeader);
+
+  check(_pHeader->QueryInterface(IID_IAAFEndian, reinterpret_cast<void**>(&_pEndian) ) );
+
   //little endian tests blanked out because they will fail on mac/sparc systems since
   //those systems use big endian. intel byte order
 
-  if(_pHeader2 == NULL)
-  {
-    check(_pHeader->QueryInterface(IID_IAAFEndian, reinterpret_cast<void**>(&_pEndian) ) );
-    assert(_pEndian);
-  }
   eAAFByteOrder_t result;
 
   //test GetStoredByteOrder method
@@ -900,15 +906,14 @@ void HeaderTest::checkByteOrder()
   if(result != kAAFByteOrderLittle && result != kAAFByteOrderBig)
     check(AAFRESULT_TEST_FAILED);
 
+  _pEndian->Release();
+  _pEndian = NULL;
 }
 
 void HeaderTest::checkOperationalPattern()
 {
-  if(_pHeader2 == NULL)
-  {
-    check(_pHeader->QueryInterface(IID_IAAFHeader2, reinterpret_cast<void**>(&_pHeader2) ) );
-    assert(_pHeader2);  
-  }
+  assert(_pHeader2);
+
   aafUID_t getOpPatternID;
 
   //test getOperationalPattern method
@@ -923,6 +928,8 @@ void HeaderTest::checkOperationalPattern()
 
 void HeaderTest::checkEssenceContainer()
 {
+  assert(_pHeader2);
+
   //Essence containers created in createFileMob() so that below methods could be tested
   //NOTE:_pHeader2 init'd in (this*)checkOperationalPattern()
   if(_pHeader2->UpdateEssenceContainers() != AAFRESULT_SUCCESS)
@@ -1039,11 +1046,7 @@ aafUID_t HeaderTest::getMobContainerFormatID(aafUInt32 itemNumber)
 
 void HeaderTest::checkDescriptiveSchemes()
 {
-  if(_pHeader2 == NULL)
-  {
-    check(_pHeader->QueryInterface(IID_IAAFHeader2, reinterpret_cast<void**>(&_pHeader2) ) );
-    assert(_pHeader2);  
-  }
+  assert(_pHeader2);
 
   aafUInt32 count;
 

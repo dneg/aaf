@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2005, Licensor of the
+// The Original Code of this file is Copyright 1998-2008, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -107,6 +107,8 @@ static HRESULT CreateAAFFile(
 		
 		checkResult(pSourceMob->SetEssenceDescriptor (eDesc));
 
+		eDesc->Release();
+		eDesc = NULL;
 
 /* CountFileDescriptors()	******************************************/
 	{
@@ -203,6 +205,9 @@ static HRESULT CreateAAFFile(
 	if (pSourceMob)
 		pSourceMob->Release();
 	
+	if (pMDesc)
+		pMDesc->Release();
+
 	if (pDictionary)
 		pDictionary->Release();
 
@@ -638,8 +643,17 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	if (FDArray)
 		delete [] FDArray;
 
+	if (cloneFDIter)
+		cloneFDIter->Release();
+
+	if (aFD)
+		aFD->Release();
+
 	if (FDIter)
 		FDIter->Release();
+
+	if (pMDesc)
+		pMDesc->Release();
 
 	if (pFileDescriptor)
 		pFileDescriptor->Release();

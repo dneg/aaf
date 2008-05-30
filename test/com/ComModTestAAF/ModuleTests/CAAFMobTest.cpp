@@ -15,7 +15,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2005, Licensor of the
+// The Original Code of this file is Copyright 1998-2008, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -448,6 +448,9 @@ static HRESULT CreateAAFFile(
 		seg->Release();
 		seg = NULL;
 
+		pSourceRef->Release();
+		pSourceRef = NULL;
+
 		sclp->Release();
 		sclp = NULL;
 
@@ -493,6 +496,18 @@ static HRESULT CreateAAFFile(
 
 		pComponent->Release();
 		pComponent = NULL;
+
+		event->Release();
+		event = NULL;
+
+		pcdEventConcrete->Release();
+		pcdEventConcrete = NULL;
+
+		pcdEvent->Release();
+		pcdEvent = NULL;
+
+		pcdEventMeta->Release();
+		pcdEventMeta = NULL;
 
 
 		// Try CountKLVData before any have been attached
@@ -640,7 +655,6 @@ static HRESULT CreateAAFFile(
 
   	  // Check the Mob2 attribute and usage code implementations.
  	  // Need IAAFMob2 for that;
-	 checkResult( pMob->QueryInterface( IID_IAAFMob2, reinterpret_cast<void**>(&pMobInterface2) ) );
 	 checkResult( pMobInterface2->AppendAttribute( AttributeNames[0], AttributeValues[0] ) );
 	 checkResult( pMobInterface2->AppendAttribute( AttributeNames[1], AttributeValues[1] ) );
 	 checkResult( pMobInterface2->SetUsageCode( kAAFUsage_SubClip ) );

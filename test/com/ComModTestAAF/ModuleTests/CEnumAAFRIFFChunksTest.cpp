@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2005, Licensor of the
+// The Original Code of this file is Copyright 1998-2008, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -285,6 +285,12 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 		  	pCloneIterator->Release();
 			pCloneIterator = NULL;
 			
+			pBWFImportDesc->Release();
+			pBWFImportDesc = NULL;
+
+			pEssDesc->Release();
+			pEssDesc = NULL;
+
 			pSourceMob->Release();
 			pSourceMob = NULL;
 				

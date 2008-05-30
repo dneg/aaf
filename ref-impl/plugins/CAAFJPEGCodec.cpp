@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2008, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -335,6 +335,12 @@ void CAAFJPEGCodec::CreateLegacyPropDefs(IAAFDictionary *p_dict)
 		pPropertyDef->Release();
 		pPropertyDef = NULL;
 	}
+	else
+	{
+		pPropertyDef->Release();
+		pPropertyDef = NULL;
+	}
+
 	if(p_did_classdef->LookupPropertyDef(kAAFPropID_DIDFrameIndexByteOrder, &pPropertyDef) != AAFRESULT_SUCCESS)
 	{
 		checkResult(p_dict->LookupTypeDef(kAAFTypeID_Int16, &pTypeDef));
@@ -346,6 +352,12 @@ void CAAFJPEGCodec::CreateLegacyPropDefs(IAAFDictionary *p_dict)
 		pPropertyDef->Release();
 		pPropertyDef = NULL;
 	}		
+	else
+	{
+		pPropertyDef->Release();
+		pPropertyDef = NULL;
+	}
+
 	if(p_did_classdef->LookupPropertyDef(kAAFPropID_DIDResolutionID, &pPropertyDef) != AAFRESULT_SUCCESS)
 	{
 		checkResult(p_dict->LookupTypeDef(kAAFTypeID_Int32, &pTypeDef));
@@ -357,6 +369,12 @@ void CAAFJPEGCodec::CreateLegacyPropDefs(IAAFDictionary *p_dict)
 		pPropertyDef->Release();
 		pPropertyDef = NULL;
 	}		
+	else
+	{
+		pPropertyDef->Release();
+		pPropertyDef = NULL;
+	}
+
 	if(p_did_classdef->LookupPropertyDef(kAAFPropID_DIDFirstFrameOffset, &pPropertyDef) != AAFRESULT_SUCCESS)
 	{
 		checkResult(p_dict->LookupTypeDef(kAAFTypeID_Int32, &pTypeDef));
@@ -368,6 +386,12 @@ void CAAFJPEGCodec::CreateLegacyPropDefs(IAAFDictionary *p_dict)
 		pPropertyDef->Release();
 		pPropertyDef = NULL;
 	}		
+	else
+	{
+		pPropertyDef->Release();
+		pPropertyDef = NULL;
+	}
+
 	if(p_did_classdef->LookupPropertyDef(kAAFPropID_DIDImageSize, &pPropertyDef) != AAFRESULT_SUCCESS)
 	{
 		checkResult(p_dict->LookupTypeDef(kAAFTypeID_Int32, &pTypeDef));
@@ -379,6 +403,12 @@ void CAAFJPEGCodec::CreateLegacyPropDefs(IAAFDictionary *p_dict)
 		pPropertyDef->Release();
 		pPropertyDef = NULL;
 	}		
+	else
+	{
+		pPropertyDef->Release();
+		pPropertyDef = NULL;
+	}
+
 	if(p_did_classdef->LookupPropertyDef(kAAFPropID_DIDFrameSampleSize, &pPropertyDef) != AAFRESULT_SUCCESS)
 	{
 		checkResult(p_dict->LookupTypeDef(kAAFTypeID_Int32, &pTypeDef));
@@ -390,6 +420,12 @@ void CAAFJPEGCodec::CreateLegacyPropDefs(IAAFDictionary *p_dict)
 		pPropertyDef->Release();
 		pPropertyDef = NULL;
 	}		
+	else
+	{
+		pPropertyDef->Release();
+		pPropertyDef = NULL;
+	}
+
 	if (pcd)
 	{
 		pcd->Release ();

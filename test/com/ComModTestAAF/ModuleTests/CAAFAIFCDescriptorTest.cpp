@@ -152,6 +152,8 @@ static HRESULT CreateAAFFile(
 		checkResult(pHeader->QueryInterface(IID_IAAFEndian, (void **)&pEndian));
 		eAAFByteOrder_t byteorder;
 		checkResult(pEndian->GetNativeByteOrder(&byteorder));
+		pEndian->Release();
+		pEndian = NULL;
 
 //		AIFCSummary summary;
 		unsigned char	writeBuf[SUMMARY_SIZE], *writePtr;
@@ -317,6 +319,8 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 		checkResult(pHeader->QueryInterface(IID_IAAFEndian, (void **)&pEndian));
 		eAAFByteOrder_t byteorder;
 		checkResult(pEndian->GetNativeByteOrder(&byteorder));
+		pEndian->Release();
+		pEndian = NULL;
 
 		checkExpression((strncmp((char*)summary+FORM_HDR_SIZE, "COMM", 4) == 0) &&
 						(strncmp((char*)summary, "FORM", 4) == 0) &&
