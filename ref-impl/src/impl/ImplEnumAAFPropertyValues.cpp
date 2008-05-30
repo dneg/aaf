@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2008, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -90,9 +90,11 @@ AAFRESULT GetElementValueFromSet( ImplAAFPropertyValue* pVal,
     return hr;
   };
 
-  // Done.  AcquireReference and return pointer.
-  pElemValData->AcquireReference();
   *ppItemVal = pElemValData;
+  (*ppItemVal)->AcquireReference();
+
+  pElemValData->ReleaseReference();
+
   return AAFRESULT_SUCCESS;
 }
 
@@ -107,6 +109,11 @@ ImplEnumAAFPropertyValues::ImplEnumAAFPropertyValues ()
 
 ImplEnumAAFPropertyValues::~ImplEnumAAFPropertyValues ()
 {
+  if ( _pDefSet ) {
+    _pDefSet->ReleaseReference();
+    _pDefSet = 0;
+  }
+
   if ( _pDef ) {
     _pDef->ReleaseReference();
     _pDef = 0;
