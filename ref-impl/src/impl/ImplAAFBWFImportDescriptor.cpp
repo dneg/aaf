@@ -14,7 +14,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2006, Licensor of the
+// The Original Code of this file is Copyright 1998-2008, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -70,7 +70,19 @@ ImplAAFBWFImportDescriptor::ImplAAFBWFImportDescriptor ():
 
 
 ImplAAFBWFImportDescriptor::~ImplAAFBWFImportDescriptor ()
-{}
+{
+	// Release all of the chunk pointers.
+	aafUInt32 count = _unknownBWFChunks.count();
+	for (aafUInt32  i = 0; i < count; i++)
+	{
+		ImplAAFRIFFChunk *pBWFChunk = _unknownBWFChunks.clearValueAt(i);
+		if (pBWFChunk)
+		{
+			pBWFChunk->ReleaseReference();
+			pBWFChunk = 0;
+		}
+	}
+}
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFBWFImportDescriptor::Initialize ()
