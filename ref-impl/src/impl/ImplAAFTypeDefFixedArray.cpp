@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2006, Licensor of the
+// The Original Code of this file is Copyright 1998-2008, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -178,11 +178,15 @@ ImplAAFTypeDefFixedArray::GetElements ( ImplAAFPropertyValue * pInPropVal,
   if ( AAFRESULT_FAILED( hr ) ) {
     return hr;
   }
+  if ( AAFRESULT_SUCCEEDED( hr ) ) {
+    pEnum->AcquireReference();
+    *ppEnum = pEnum;
+  }
+
+  pEnum->ReleaseReference();
+  pEnum = NULL;
   
-  pEnum->AcquireReference();
-  *ppEnum = pEnum;
-  
-  return AAFRESULT_SUCCESS;
+  return hr;
 }
 
 // Override from AAFTypeDef
