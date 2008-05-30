@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2004, Licensor of the
+// The Original Code of this file is Copyright 1998-2008, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -330,7 +330,6 @@ ImplAAFFile::OpenExistingRead (const aafCharacter * pFileName,
 		if (_file)
 		{
 			_file->close();
-			_file = 0;
 		}
 
 		if (NULL != _head)
@@ -491,7 +490,6 @@ ImplAAFFile::OpenExistingModify (const aafCharacter * pFileName,
 		if (_file)
 		{
 			_file->close();
-			_file = 0;
 		}
 
 		if (NULL != _head)
@@ -644,7 +642,6 @@ ImplAAFFile::OpenNewModify (const aafCharacter * pFileName,
 		if (_file)
 		{
 			_file->close();
-			_file = 0;
 		}
 
 		if (NULL != _head)
@@ -1263,6 +1260,11 @@ ImplAAFFile::SaveCopyAs (ImplAAFFile * pDestFile)
       spSrcContentStore->deepCopyTo( pNewDstStorable, 0 );
       pNewDstStorage->onCopy( 0 );
 
+      // Object created by shallowCopy() is reference counted.
+      // Since we already attached it and its container has its
+      // own reference to it, we should release our reference.
+      pNewDstStorage->ReleaseReference();
+      pNewDstStorage = 0;
     }
 
     // Clone the ident list.
@@ -1285,8 +1287,13 @@ ImplAAFFile::SaveCopyAs (ImplAAFFile * pDestFile)
 	checkResult( spDstHeader->AppendIdentification( pNewDstIdent ) );
 
 	pNewDstIdent->onCopy( 0 );
-       	spSrcIdent->deepCopyTo( pNewDstIdent, 0 );
+	spSrcIdent->deepCopyTo( pNewDstIdent, 0 );
 
+	// Object created by shallowCopy() is reference counted.
+	// Since we already attached it and its container has its
+	// own reference to it, we should release our reference.
+	pNewDstIdent->ReleaseReference();
+	pNewDstIdent = 0;
       }
     }
 
