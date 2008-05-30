@@ -97,6 +97,16 @@ com-dll :
 	cd com-dll && $(MAKE)
 
 
+# Under MSVC compilers, a different version of STORAGE_LIBS must be used for each
+# compiler version to avoid undefined behaviour at runtime.
+ifeq ($(COMPILER),cl)
+  MSVC_VER = $(shell cl 2>&1 | head -1 | sed -e 's/.*Version //' -e 's/\..*//')
+  ifeq ($(MSVC_VER),14)
+    # 13 means vs7, 14 means vs8
+    STORAGE_LIBS = $(AAFBASE)/AAF$(AAFPLATFORM)SDK/vs8/sss-impl/ssrw_c$(LIBEXT)
+  endif
+endif
+
 # For a static build, simply archive the object files into a static library.
 # The static library is intended for debugging only.
 $(STAT_LIBTARGET) : $(CXXOBJS) $(CXXOBJS2)
