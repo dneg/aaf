@@ -107,7 +107,10 @@ AAFRESULT STDMETHODCALLTYPE
   else
   {
     if (_cachedTypeDef)
+    {
       _cachedTypeDef->ReleaseReference ();
+      _cachedTypeDef = NULL;
+    }
   }
 
   // Cleanup
