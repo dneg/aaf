@@ -1598,6 +1598,15 @@ HRESULT STDMETHODCALLTYPE
 			CHECK(find_data_chunk_offset());
 		}
 
+		// fill in member data from descriptor
+		aafUInt32 bitspersample, numch;
+		CHECK(_filedes->GetLength(&_sampleFrames));
+		CHECK(_snddes->GetAudioSamplingRate(&_sampleRate));
+		CHECK(_snddes->GetQuantizationBits(&bitspersample));
+		CHECK(_snddes->GetChannelCount(&numch));
+		_bitsPerSample = bitspersample;
+		_numCh = numch;
+
 		containerDef->Release();
 		defObj->Release();
 

@@ -304,7 +304,7 @@ private:
 	aafUInt16			_bitsPerSample;
 	aafUInt16			_numCh;
 	aafUInt16			_bytesPerFrame;		// also known as nBlockAlign
-	aafUInt32			_sampleFrames;
+	aafLength_t			_sampleFrames;
 	aafUInt64			_lengthSamplesWritten;
 	aafUInt32			_dataChunkOffset;
 	pcm_interleaveBuf_t	*_interleaveBuf;
