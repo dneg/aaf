@@ -75,19 +75,6 @@ static HRESULT moduleErrorTmp = S_OK; /* note usage in macro */
 		exit(1);\
 }
 
-static void convert(char* cName, size_t length, const wchar_t* name)
-{
-	aaf_assert((name && *name), "Valid input name");
-	aaf_assert(cName != 0, "Valid output buffer");
-	aaf_assert(length > 0, "Valid output buffer size");
-
-	size_t status = wcstombs(cName, name, length);
-	if (status == (size_t)-1) {
-		fprintf(stderr, ": Error : Conversion failed.\n\n");
-		exit(1);
-	}
-}
-
 static void MobIDtoString(aafMobID_constref uid, char *buf)
 {
     sprintf( buf, "%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x-" \
@@ -152,7 +139,10 @@ static HRESULT OpenAAFFile(aafWChar * pFileName)
 	/* Check number of Mobs in file */
 	check(pHeader->CountMobs(kAAFMasterMob, &numMobs));
 	if (numMobs == 0)
+	{
+		printf("No Master Mobs found in AAF file\n");
 		return 0;
+	}
 
 	printf("Found %d Master Mobs\n", numMobs);
 	criteria.searchTag = kAAFByMobKind;
@@ -162,7 +152,6 @@ static HRESULT OpenAAFFile(aafWChar * pFileName)
 	while (AAFRESULT_SUCCESS == pMobIter->NextOne(&pMob))
 	{
 		char mobIDstr[256];
-		char mobName[256];
 		aafWChar	namebuf[1204];
 		IAAFTimelineMobSlot* pTimelineMobSlot = NULL;
 		IAAFDataDef *pDataDef = NULL;
@@ -174,9 +163,8 @@ static HRESULT OpenAAFFile(aafWChar * pFileName)
 
 		check(pMob->GetMobID (&mobID));
 		check(pMob->GetName (namebuf, sizeof(namebuf)));
-		convert(mobName, sizeof(mobName), namebuf);
 		MobIDtoString(mobID, mobIDstr);
-		printf("    MasterMob Name = '%s'\n", mobName);
+		printf("    MasterMob Name = '%ls'\n", namebuf);
 		printf("        (mobID %s)\n", mobIDstr);
 		
 		// Get the number of slots
@@ -220,22 +208,30 @@ static HRESULT OpenAAFFile(aafWChar * pFileName)
 					// Get the information about the format of the audio data.
 					// The pFormat object must be setup with each specifier you
 					// wish to access, otherwise you get AAFRESULT_FORMAT_NOT_FOUND.
+					aafUInt32			audioSampleBits;
 					aafRational_t		sampleRate;
-					aafUInt32			maxSampleSize;
+					aafUInt32			numChannels;
+					aafUInt32			maxSampleBytes;
 
-					check(pEssenceAccess->GetEmptyFileFormat (&fmtTemplate));
-					check(fmtTemplate->AddFormatSpecifier (kAAFSampleRate, 0, NULL));
-					check(fmtTemplate->AddFormatSpecifier (kAAFMaxSampleBytes, 0, NULL));
-					check(pEssenceAccess->GetFileFormat (fmtTemplate, &pFormat));
+					check(pEssenceAccess->GetEmptyFileFormat(&fmtTemplate));
+					check(fmtTemplate->AddFormatSpecifier(kAAFAudioSampleBits, 0, NULL));
+					check(fmtTemplate->AddFormatSpecifier(kAAFSampleRate, 0, NULL));
+					check(fmtTemplate->AddFormatSpecifier(kAAFNumChannels, 0, NULL));
+					check(fmtTemplate->AddFormatSpecifier(kAAFMaxSampleBytes, 0, NULL));
+					check(pEssenceAccess->GetFileFormat(fmtTemplate, &pFormat));
 
 					fmtTemplate->Release();
 					fmtTemplate = NULL;
 					
 					aafInt32 fmtBytesRead;
+					check(pFormat->GetFormatSpecifier(kAAFAudioSampleBits, sizeof(audioSampleBits),
+									(aafDataBuffer_t)&audioSampleBits, &fmtBytesRead));
 					check(pFormat->GetFormatSpecifier(kAAFSampleRate, sizeof(sampleRate),
 									(aafDataBuffer_t)&sampleRate, &fmtBytesRead));
-					check(pFormat->GetFormatSpecifier(kAAFMaxSampleBytes, sizeof(maxSampleSize),
-									(aafDataBuffer_t)&maxSampleSize, &fmtBytesRead));
+					check(pFormat->GetFormatSpecifier(kAAFNumChannels, sizeof(numChannels),
+									(aafDataBuffer_t)&numChannels, &fmtBytesRead));
+					check(pFormat->GetFormatSpecifier(kAAFMaxSampleBytes, sizeof(maxSampleBytes),
+									(aafDataBuffer_t)&maxSampleBytes, &fmtBytesRead));
 
 					pFormat->Release();
 					pFormat = NULL;
@@ -244,14 +240,15 @@ static HRESULT OpenAAFFile(aafWChar * pFileName)
 					aafLength_t sampleCount;
 					check(pEssenceAccess->CountSamples(pSoundDef, &sampleCount));
 
-					printf("\tSlotID %u: SampleRate=%d/%d MaxSampleBytes=%u\n",
-								MobSlotID, sampleRate.numerator, sampleRate.denominator,
-								maxSampleSize);
+					printf("\tSlotID %u: SampleBits=%d SampleRate=%d/%d NumChannels=%d MaxSampleBytes=%u\n",
+								MobSlotID,
+								audioSampleBits, sampleRate.numerator, sampleRate.denominator,
+								numChannels, maxSampleBytes);
 			
 					printf("\t\tCountSamples=%"AAFFMT64"d\n", sampleCount);
 	
 					// Set a suitable buffer size						
-					dataBuff = new unsigned char[maxSampleSize];
+					dataBuff = new unsigned char[maxSampleBytes];
 	
 					// Read samples until no more are available
 					aafUInt32	samplesRead, actualBytesRead, total_samples = 0;
@@ -259,7 +256,7 @@ static HRESULT OpenAAFFile(aafWChar * pFileName)
 					{
 						hr = (pEssenceAccess->ReadSamples(
 										1, 					// number of samples to read
-										maxSampleSize,		// maximum buffer size
+										maxSampleBytes,		// maximum buffer size
 										dataBuff,			// output buffer for audio data
 										&samplesRead,		// number of samples read
 										&actualBytesRead));	// number of bytes read
@@ -273,7 +270,7 @@ static HRESULT OpenAAFFile(aafWChar * pFileName)
 							total_samples += samplesRead;
 
 							// Write out samples
-							if ( fwrite(dataBuff, maxSampleSize, 1, output) != 1 )
+							if ( fwrite(dataBuff, maxSampleBytes, 1, output) != 1 )
 							{
 								perror(output_file);
 								return 1;
