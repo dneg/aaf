@@ -79,19 +79,6 @@ static HRESULT moduleErrorTmp = S_OK; /* note usage in macro */
      exit(1);\
 }
 
-static void convert(char* cName, size_t length, const wchar_t* name)
-{
-  assert((name && *name), "Valid input name");
-  assert(cName != 0, "Valid output buffer");
-  assert(length > 0, "Valid output buffer size");
-
-  size_t status = wcstombs(cName, name, length);
-  if (status == (size_t)-1) {
-    fprintf(stderr, ": Error : Conversion failed.\n\n");
-    exit(1);  
-  }
-}
-
 static void MobIDtoString(aafMobID_constref uid, char *buf)
 {
     sprintf( buf, "%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x-" \
@@ -201,13 +188,11 @@ static HRESULT ReadAAFFile(const aafWChar * pFileName, testType_t testType)
 		while(AAFRESULT_SUCCESS == pMobIter->NextOne(&pMob))
 		{
 			char mobIDstr[256];
-			char mobName[256];
 
 			check(pMob->GetMobID (&mobID));
 			check(pMob->GetName (namebuf, sizeof(namebuf)));
-			convert(mobName, sizeof(mobName), namebuf);
 			MobIDtoString(mobID, mobIDstr);
-			printf("    MasterMob Name = '%s'\n", mobName);
+			printf("    MasterMob Name = '%ls'\n", namebuf);
 			printf("        (mobID %s)\n", mobIDstr);
 			
 			// Get the number of slots
