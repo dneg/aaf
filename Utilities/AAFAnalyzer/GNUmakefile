@@ -104,11 +104,4 @@ clean:
 	cd AAFAnalyzer && $(MAKE) GENDEPS=0 $@
 
 .PHONY: realclean
-realclean:
-	cd AnalyzerBase && $(MAKE) GENDEPS=0 $@
-	cd AAFAnalyzerBase && $(MAKE) GENDEPS=0 $@
-	cd EPAnalyzerBase && $(MAKE) GENDEPS=0 $@
-	cd TestPhaseLib && $(MAKE) GENDEPS=0 $@
-	cd BaseTestImpl && $(MAKE) GENDEPS=0 $@
-	cd EditProtocolTestImpl && $(MAKE) GENDEPS=0 $@
-	cd AAFAnalyzer && $(MAKE) GENDEPS=0 $@
+realclean: clean

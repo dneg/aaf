@@ -50,3 +50,6 @@ check :
 clean :
 	cd TestFiles && $(MAKE) GENDEPS=0 $@
 	cd TestStructure && $(MAKE) GENDEPS=0 $@
+
+.PHONY : realclean
+realclean : clean
