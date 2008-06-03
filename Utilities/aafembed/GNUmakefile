@@ -35,10 +35,6 @@ INCLUDES = -I. -I$(AAFSDKINCLUDEDIR)
 .PHONY : all
 all : $(OBJDIR) $(AAFSDKBINDIR)/aafembed$(EXE)
 
-# Compile avilib.c using only gcc
-#$(OBJDIR)/avilib.o: avilib.c
-#	gcc -c $(CFLAGS) -Wno-error $(INCLUDES) $< -o $@
-
 $(AAFSDKBINDIR)/aafembed$(EXE) : $(CXXOBJS)
 	$(LD) $(CXXOBJS) $(LINK_AAF_APP)
 
@@ -46,8 +42,7 @@ $(AAFSDKBINDIR)/aafembed$(EXE) : $(CXXOBJS)
 clean :
 	@$(RM) $(CXXOBJS)
 	@$(RM) $(DEPS)
-	@$(RM) $(AAFSDKBINDIR)/aafdump$(EXE)
-	@$(RMDIR) $(OBJDIR)/ii_files
+	@$(RM) $(AAFSDKBINDIR)/aafembed$(EXE)
 
 
 .PHONY : realclean
