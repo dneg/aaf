@@ -65,15 +65,14 @@ $(BINTARGET) : $(CXXOBJS)
 	$(LD) $(CXXOBJS) $(LINK_AXLIB_APP) $(LINK_AAF_APP)
 
 .PHONY : clean
-clean ::
+clean :
 	@$(RM) $(CXXOBJS)
 	@$(RM) $(DEPS)
 	@$(RM) $(BINTARGET)
-	@$(RMDIR) $(OBJDIR)/ii_files
 
 
 .PHONY : realclean
-realclean :: clean
+realclean : clean
 
 
 include $(AAFBASE)/build/rules.mk
