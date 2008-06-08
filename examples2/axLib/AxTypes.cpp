@@ -35,7 +35,7 @@
 #include <map>
 
 
-#include <string>
+#include <cstring>
 #include <assert.h>
 
 namespace {

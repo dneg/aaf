@@ -21,6 +21,9 @@
 //Analyzer Base files
 #include "AnalyzerException.h"
 
+//For wctomb()
+#include <stdlib.h>
+
 //STL files
 #include <sstream>
 
