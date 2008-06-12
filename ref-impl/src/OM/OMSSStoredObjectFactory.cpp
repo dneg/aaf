@@ -317,32 +317,6 @@ bool OMSSStoredObjectFactory::compatibleNamedFile(
   return result;
 }
 
-  // @mfunc Perform any necessary actions when the file
-  //        contained in <p fileName> is closed.
-  //   @parm The file name.
-void OMSSStoredObjectFactory::close(const wchar_t* fileName,
-                                     bool isWritable)
-{
-  TRACE("OMSSStoredObjectFactory::close");
-
-  if (isWritable) {
-    writeSignature(fileName, signature());
-  }
-}
-
-  // @mfunc Perform any necessary actions when the file
-  //        contained in <p rawStorage> is closed.
-  //   @parm The <c OMRawStorage>
-void OMSSStoredObjectFactory::close(OMRawStorage* rawStorage,
-                                     bool isWritable )
-{
-  TRACE("OMSSStoredObjectFactory::close");
-
-  if (isWritable) {
-    writeSignature(rawStorage, signature());
-  }
-}
-
   // @mfunc Perform any necessary actions when <p file> is closed.
   //   @parm The <c OMFile>
 void OMSSStoredObjectFactory::close(OMFile* file)
