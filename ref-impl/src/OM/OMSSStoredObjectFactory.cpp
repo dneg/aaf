@@ -345,10 +345,23 @@ void OMSSStoredObjectFactory::close(OMRawStorage* rawStorage,
 
   // @mfunc Perform any necessary actions when <p file> is closed.
   //   @parm The <c OMFile>
-void OMSSStoredObjectFactory::close(OMFile* /* file */)
+void OMSSStoredObjectFactory::close(OMFile* file)
 {
   TRACE("OMSSStoredObjectFactory::close");
-  // Nothing to do.
+
+  PRECONDITION("Valid file", file != 0);
+
+  const bool isWritable = file->isWritable();
+  OMRawStorage* store = file->rawStorage();
+  if (store != 0) {
+    if (isWritable) {
+      this->writeSignature(store, this->signature());
+    }
+    store->synchronize();
+  } else if (isWritable) {
+    const wchar_t* fileName = file->fileName();
+    this->writeSignature(fileName, this->signature());
+  }
 }
 
   // @mfunc Write the signature to the given raw storage.
