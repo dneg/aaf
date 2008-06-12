@@ -839,14 +839,7 @@ void OMFile::close(void)
   if (isValid()) {
     OMStoredObjectFactory* factory = findFactory(_encoding);
     ASSERT("Recognized file encoding", factory != 0);
-    OMRawStorage* store = rawStorage();
-    if (store != 0) {
-      factory->close(store, isWritable());
-      store->synchronize();
-    } else {
-      const wchar_t* name = fileName();
-      factory->close(name, isWritable());
-    }
+    factory->close(this);
   }
 
   // TBS - tjb delete _rootStore; _rootStore = 0;
