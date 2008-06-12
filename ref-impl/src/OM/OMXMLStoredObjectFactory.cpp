@@ -284,6 +284,14 @@ void OMXMLStoredObjectFactory::close(OMRawStorage* /* rawStorage */,
   // Nothing to do.
 }
 
+  // @mfunc Perform any necessary actions when <p file> is closed.
+  //   @parm The <c OMFile>
+void OMXMLStoredObjectFactory::close(OMFile* /* file */)
+{
+  TRACE("OMXMLStoredObjectFactory::close");
+  // Nothing to do.
+}
+
   // @mfunc Read the signature from the given raw storage.
   //   @parm TBS
   //   @parm TBS

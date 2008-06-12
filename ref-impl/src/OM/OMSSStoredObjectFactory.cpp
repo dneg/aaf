@@ -343,6 +343,14 @@ void OMSSStoredObjectFactory::close(OMRawStorage* rawStorage,
   }
 }
 
+  // @mfunc Perform any necessary actions when <p file> is closed.
+  //   @parm The <c OMFile>
+void OMSSStoredObjectFactory::close(OMFile* /* file */)
+{
+  TRACE("OMSSStoredObjectFactory::close");
+  // Nothing to do.
+}
+
   // @mfunc Write the signature to the given raw storage.
   //   @parm The raw storage.
   //   @parm The signature.
