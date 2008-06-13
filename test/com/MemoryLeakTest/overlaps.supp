@@ -1,0 +1,56 @@
+{
+   OM_memcpy_overlap1
+   Memcheck:Overlap
+   fun:memcpy
+   fun:_ZN21OMWeakObjectReference8setValueEPKvPK10OMStorable
+   fun:_ZNK23OMWeakReferencePropertyI22OMObjectIdentification15ImplAAFClassDefE18getReferencedValueEv
+   fun:_ZNK23OMWeakReferencePropertyI22OMObjectIdentification15ImplAAFClassDefE8getValueERPS1_
+   fun:_ZNK23OMWeakReferencePropertyI22OMObjectIdentification15ImplAAFClassDefEcvPS1_Ev
+   fun:_ZNK21ImplAAFMetaDefinition27bootstrapClassWeakReferenceERK23OMWeakReferencePropertyI22OMObjectIdentification15ImplAAFClassDefE
+   fun:_ZN15ImplAAFClassDef9GetParentEPPS_
+   fun:_ZN13ImplAAFObject16InitOMPropertiesEP15ImplAAFClassDef
+   fun:_ZN15ImplAAFStorable20InitializeOMStorableEP15ImplAAFClassDef
+   fun:_ZNK17ImplAAFDictionary13CreateAndInitEP15ImplAAFClassDef
+   fun:_ZN17ImplAAFDictionary14CreateInstanceERK9_aafUID_tPP13ImplAAFObject
+   fun:_ZNK17ImplAAFDictionary6createERK22OMObjectIdentification
+   fun:_ZN16OMSSStoredObject13restoreObjectERK23OMStrongObjectReference
+   fun:_ZN23OMStrongObjectReference4loadEv
+   fun:_ZNK23OMStrongObjectReference8getValueEv
+   fun:_ZNK25OMStrongReferencePropertyI10OMStorableE8getValueERPS0_
+   fun:_ZNK25OMStrongReferencePropertyI10OMStorableEcvPS0_Ev
+   fun:_ZNK14OMRootStorable10clientRootEv
+   fun:_ZN6OMFile7restoreEv
+   fun:_ZN11ImplAAFFile16OpenExistingReadEPKwj
+   fun:ImplAAFFileOpenExistingRead
+   fun:AAFFileOpenExistingRead
+   fun:_ZN6AAFDLL16OpenExistingReadEPKwjPP8IAAFFile
+   fun:AAFFileOpenExistingRead
+}
+{
+   OM_memcpy_overlap2
+   Memcheck:Overlap
+   fun:memcpy
+   fun:_ZN21OMWeakObjectReference8setValueEPKvPK10OMStorable
+   fun:_ZNK23OMWeakReferencePropertyI22OMObjectIdentification14ImplAAFTypeDefE18getReferencedValueEv
+   fun:_ZNK23OMWeakReferencePropertyI22OMObjectIdentification14ImplAAFTypeDefE8getValueERPS1_
+   fun:_ZNK23OMWeakReferencePropertyI22OMObjectIdentification14ImplAAFTypeDefEcvPS1_Ev
+   fun:_ZNK21ImplAAFMetaDefinition26bootstrapTypeWeakReferenceERK23OMWeakReferencePropertyI22OMObjectIdentification14ImplAAFTypeDefE
+   fun:_ZNK24ImplAAFTypeDefFixedArray7GetTypeEPP14ImplAAFTypeDef
+   fun:_ZNK24ImplAAFTypeDefFixedArray21NonRefCountedBaseTypeEv
+   fun:_ZNK24ImplAAFTypeDefFixedArray11IsFixedSizeEv
+   fun:_ZNK20ImplAAFTypeDefRecord11PropValSizeEv
+   fun:_ZNK20ImplAAFTypeDefRecord19pvtCreateOMPropertyEtPKw
+   fun:_ZNK18ImplAAFPropertyDef16CreateOMPropertyEv
+   fun:_ZN13ImplAAFObject14InitOMPropertyEP18ImplAAFPropertyDefP13OMPropertySet
+   fun:_ZN13ImplAAFObject16InitOMPropertiesEP15ImplAAFClassDef
+   fun:_ZN15ImplAAFStorable20InitializeOMStorableEP15ImplAAFClassDef
+   fun:_ZNK17ImplAAFDictionary13CreateAndInitEP15ImplAAFClassDef
+   fun:_ZN17ImplAAFDictionary14CreateInstanceERK9_aafUID_tPP13ImplAAFObject
+   fun:_ZNK17ImplAAFDictionary6createERK22OMObjectIdentification
+   fun:_ZN16OMSSStoredObject13restoreObjectERK23OMStrongObjectReference
+   fun:_ZN23OMStrongObjectReference4loadEv
+   fun:_ZNK23OMStrongObjectReference8getValueEv
+   fun:_ZNK25OMStrongReferencePropertyI10OMStorableE8getValueERPS0_
+   fun:_ZNK25OMStrongReferencePropertyI10OMStorableEcvPS0_Ev
+   fun:_ZNK14OMRootStorable10clientRootEv
+}

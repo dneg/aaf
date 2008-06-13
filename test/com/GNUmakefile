@@ -27,7 +27,7 @@ AAFBASE ?= ../../..
 
 
 .PHONY : all
-all : ComModTestAAF CreateSequence EssenceAccess MultiGenTest ComFileKindTest UTF8FileNameTest OpenExistingModify ScaleTest ResultToTextTest XMLStoredFormat
+all : ComModTestAAF CreateSequence EssenceAccess MultiGenTest ComFileKindTest UTF8FileNameTest OpenExistingModify ScaleTest ResultToTextTest MemoryLeakTest XMLStoredFormat
 
 .PHONY : ComModTestAAF
 ComModTestAAF :
@@ -65,6 +65,10 @@ ScaleTest :
 ResultToTextTest :
 	cd ResultToTextTest && $(MAKE)
 
+.PHONY : MemoryLeakTest
+MemoryLeakTest :
+	cd MemoryLeakTest && $(MAKE)
+
 .PHONY : XMLStoredFormat
 XMLStoredFormat :
 	cd XMLStoredFormat && $(MAKE)
@@ -80,6 +84,7 @@ check :
 	cd OpenExistingModify && $(MAKE) $@
 	cd ScaleTest && $(MAKE) $@
 	cd ResultToTextTest && $(MAKE) $@
+	cd MemoryLeakTest && $(MAKE) $@
 	cd XMLStoredFormat && $(MAKE) $@
 
 .PHONY : valgrind-check
@@ -93,6 +98,7 @@ valgrind-check :
 	cd OpenExistingModify && $(MAKE) $@
 	cd ScaleTest && $(MAKE) $@
 	cd ResultToTextTest && $(MAKE) $@
+	cd MemoryLeakTest && $(MAKE) $@
 	cd XMLStoredFormat && $(MAKE) $@
 
 .PHONY : clean
@@ -106,6 +112,7 @@ clean :
 	cd OpenExistingModify && $(MAKE) GENDEPS=0 $@
 	cd ScaleTest && $(MAKE) GENDEPS=0 $@
 	cd ResultToTextTest && $(MAKE) GENDEPS=0 $@
+	cd MemoryLeakTest && $(MAKE) GENDEPS=0 $@
 	cd XMLStoredFormat && $(MAKE) GENDEPS=0 $@
 
 .PHONY : realclean
@@ -119,5 +126,6 @@ realclean :
 	cd OpenExistingModify && $(MAKE) GENDEPS=0 $@
 	cd ScaleTest && $(MAKE) GENDEPS=0 $@
 	cd ResultToTextTest && $(MAKE) GENDEPS=0 $@
+	cd MemoryLeakTest && $(MAKE) GENDEPS=0 $@
 	cd XMLStoredFormat && $(MAKE) GENDEPS=0 $@
 	
