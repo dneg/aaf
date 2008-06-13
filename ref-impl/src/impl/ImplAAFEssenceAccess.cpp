@@ -86,6 +86,8 @@ typedef ImplAAFSmartPointer<ImplAAFDataDef> ImplAAFDataDefSP;
 #include "AAFStoredObjectIDs.h"
 #include "AAFContainerDefs.h"
 #include "AAFCodecDefs.h"
+#include "AAFCompressionDefs.h"		// JPEG Compression ID for fallback Codec ID test
+#include "ImplAAFDigitalImageDescriptor.h"
 
 #define DEFAULT_FILE_SLOT	1
 
@@ -1761,11 +1763,45 @@ AAFRESULT STDMETHODCALLTYPE
 			
 			CHECK(access.fileMob->GetMobID(&fileMobID));
 			CHECK(access.mdes->GetObjectClass(&essenceDescClass));
-			CHECK(access.mdes->GetCodecDef(&codecDef));
-			CHECK(codecDef->GetAUID(&codecID));
-			codecDef->ReleaseReference();
-			codecDef = NULL;
-			
+
+			// If the FileDescriptor does not have a CodecDef property, use the
+			// following hardcoded list of descriptors and matching CodecIds as
+			// a fallback approach for choosing the Codec to use for this essence.
+			HRESULT codecdef_hr = access.mdes->GetCodecDef(&codecDef);
+			if (codecdef_hr == AAFRESULT_PROP_NOT_PRESENT) {
+				// Use EssenceDescriptor to decide which CodecID to use
+				if (essenceDescClass == AUID_AAFWAVEDescriptor)
+					codecID = kAAFCodecDef_WAVE;
+				else if (essenceDescClass == AUID_AAFPCMDescriptor)
+					codecID = kAAFCodecDef_PCM;
+				else if (essenceDescClass == AUID_AAFAIFCDescriptor)
+					codecID = kAAFCodecDef_AIFC;
+				else if (essenceDescClass == AUID_AAFCDCIDescriptor) {
+					// Use CDCI Codec by default
+					codecID = kAAFCodecDef_CDCI;
+
+					ImplAAFDigitalImageDescriptor *pDIDesc;
+					if (access.fileMob->GetEssenceDescriptor((ImplAAFEssenceDescriptor **)&pDIDesc) != AAFRESULT_SUCCESS)
+						CHECK(codecdef_hr);
+
+					// Use Compression property to determine when to use JPEG codec as a special case
+					aafUID_t compression;
+					if (pDIDesc->GetCompression(&compression) != AAFRESULT_SUCCESS)
+						CHECK(codecdef_hr);
+
+					if (compression == kAAFCompressionDef_AAF_CMPR_FULL_JPEG)
+						codecID = kAAFCodecDef_JPEG;
+				}
+				else // give up and throw exception
+					CHECK(codecdef_hr);
+			}
+			else {
+				// Get CodecID to use from the CodecDef property
+				CHECK(codecDef->GetAUID(&codecID));
+				codecDef->ReleaseReference();
+				codecDef = NULL;
+			}
+
 			if (plugins == NULL)
 				plugins = ImplAAFContext::GetInstance()->GetPluginManager();
 			CHECK(plugins->CreateInstanceFromDefinition(
