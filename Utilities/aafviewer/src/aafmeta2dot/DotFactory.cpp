@@ -265,14 +265,13 @@ DotFactory::RemoveDotElement( DotElement *element)
 
 
    // remove the element
-   bool found = false;
-   for ( iter=_dotElements.begin(); iter!=_dotElements.end() && !found; iter++ )
+   for ( iter=_dotElements.begin(); iter!=_dotElements.end(); iter++ )
    {
       if ( (*iter)->GetUID().compare( element->GetUID() ) == 0 )
       {
-	 found = true;
-	 _dotElements.erase( iter );
 	 delete *iter;
+	 _dotElements.erase( iter );
+	 break;
       }
    }
 
