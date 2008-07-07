@@ -1,0 +1,2863 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:aaf="http://www.aafassociation.org/aafx/v1.1/20050628" xmlns:ns1="urn:uuid:58190333-69de-11d2-b6bc-fcab70ff7331" targetNamespace="http://www.aafassociation.org/aafx/v1.1/20050628" elementFormDefault="qualified" attributeFormDefault="unqualified">
+   <xs:include schemaLocation="metadict.xsd"/>
+   <xs:import namespace="urn:uuid:58190333-69de-11d2-b6bc-fcab70ff7331" schemaLocation="ns1.xsd"/>
+
+
+<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+<!--  AAF Root Element  -->
+<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+
+   <xs:element name="AAF">
+      <xs:complexType>
+         <xs:sequence>
+            <xs:element name="Extensions" minOccurs="0">
+               <xs:complexType>
+                  <xs:sequence>
+                     <xs:element ref="aaf:Extension" minOccurs="0" maxOccurs="unbounded"/>
+                  </xs:sequence>
+               </xs:complexType>
+            </xs:element>
+            <xs:element ref="aaf:Header"/>
+         </xs:sequence>
+         <xs:attribute use="required" type="aaf:_T_Version" name="version"/>
+      </xs:complexType>
+      <xs:unique name="_U_Extensions_Identification">
+         <xs:selector xpath="aaf:Extensions/aaf:Extension"/>
+         <xs:field xpath="aaf:Identification"/>
+      </xs:unique>
+      <xs:unique name="_U_Extensions_Symbolspace">
+         <xs:selector xpath="aaf:Extensions/aaf:Extension"/>
+         <xs:field xpath="aaf:Symbolspace"/>
+      </xs:unique>
+      <xs:keyref name="_KR_aaf_ComponentDataDefinition" refer="aaf:_K_aaf_DataDefinitions">
+         <xs:selector xpath=".//aaf:ComponentDataDefinition"/>
+         <xs:field xpath="."/>
+      </xs:keyref>
+      <xs:keyref name="_KR_aaf_Operation" refer="aaf:_K_aaf_OperationDefinitions">
+         <xs:selector xpath=".//aaf:Operation"/>
+         <xs:field xpath="."/>
+      </xs:keyref>
+      <xs:key name="_K_aaf_Mobs">
+         <xs:selector xpath=".//aaf:Mobs/*"/>
+         <xs:field xpath="aaf:MobID"/>
+      </xs:key>
+      <xs:keyref name="_KR_aaf_OperationDefinitionDataDefinition" refer="aaf:_K_aaf_DataDefinitions">
+         <xs:selector xpath=".//aaf:OperationDefinitionDataDefinition"/>
+         <xs:field xpath="."/>
+      </xs:keyref>
+      <xs:keyref name="_KR_aaf_DegradeTo" refer="aaf:_K_aaf_OperationDefinitions">
+         <xs:selector xpath=".//aaf:DegradeTo/aaf:OperationDefinitionWeakReference"/>
+         <xs:field xpath="."/>
+      </xs:keyref>
+      <xs:keyref name="_KR_aaf_ParametersDefined" refer="aaf:_K_aaf_ParameterDefinitions">
+         <xs:selector xpath=".//aaf:ParametersDefined/aaf:ParameterDefinitionWeakReference"/>
+         <xs:field xpath="."/>
+      </xs:keyref>
+      <xs:keyref name="_KR_aaf_CodecDefinitionDataDefinitions" refer="aaf:_K_aaf_DataDefinitions">
+         <xs:selector xpath=".//aaf:CodecDefinitionDataDefinitions/aaf:DataDefinitionWeakReference"/>
+         <xs:field xpath="."/>
+      </xs:keyref>
+      <xs:key name="_K_aaf_OperationDefinitions">
+         <xs:selector xpath=".//aaf:OperationDefinitions/*"/>
+         <xs:field xpath="@aaf:uid"/>
+      </xs:key>
+      <xs:key name="_K_aaf_ParameterDefinitions">
+         <xs:selector xpath=".//aaf:ParameterDefinitions/*"/>
+         <xs:field xpath="@aaf:uid"/>
+      </xs:key>
+      <xs:key name="_K_aaf_DataDefinitions">
+         <xs:selector xpath=".//aaf:DataDefinitions/*"/>
+         <xs:field xpath="@aaf:uid"/>
+      </xs:key>
+      <xs:key name="_K_aaf_PluginDefinitions">
+         <xs:selector xpath=".//aaf:PluginDefinitions/*"/>
+         <xs:field xpath="@aaf:uid"/>
+      </xs:key>
+      <xs:key name="_K_aaf_CodecDefinitions">
+         <xs:selector xpath=".//aaf:CodecDefinitions/*"/>
+         <xs:field xpath="@aaf:uid"/>
+      </xs:key>
+      <xs:key name="_K_aaf_ContainerDefinitions">
+         <xs:selector xpath=".//aaf:ContainerDefinitions/*"/>
+         <xs:field xpath="@aaf:uid"/>
+      </xs:key>
+      <xs:key name="_K_aaf_InterpolationDefinitions">
+         <xs:selector xpath=".//aaf:InterpolationDefinitions/*"/>
+         <xs:field xpath="@aaf:uid"/>
+      </xs:key>
+      <xs:keyref name="_KR_aaf_ContainerFormat" refer="aaf:_K_aaf_ContainerDefinitions">
+         <xs:selector xpath=".//aaf:ContainerFormat"/>
+         <xs:field xpath="."/>
+      </xs:keyref>
+      <xs:keyref name="_KR_aaf_FileDescriptorCodecDefinition" refer="aaf:_K_aaf_CodecDefinitions">
+         <xs:selector xpath=".//aaf:FileDescriptorCodecDefinition"/>
+         <xs:field xpath="."/>
+      </xs:keyref>
+      <xs:keyref name="_KR_aaf_Interpolation" refer="aaf:_K_aaf_InterpolationDefinitions">
+         <xs:selector xpath=".//aaf:Interpolation"/>
+         <xs:field xpath="."/>
+      </xs:keyref>
+   </xs:element>
+
+
+<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+<!--  Global attributes -->
+<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+
+   <xs:attribute name="uid" type="aaf:_T_AUID"/>
+   <xs:attribute name="byteOrder" type="aaf:_T_ByteOrder"/>
+   <xs:attribute name="stream" type="xs:ENTITY"/>
+   <xs:attribute name="actualType" type="aaf:_T_AUID"/>
+   <xs:attribute name="escaped" type="xs:boolean"/>
+
+
+<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+<!--  AAF-X Types  -->
+<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+
+   <xs:simpleType name="_T_ByteOrder">
+      <xs:restriction base="xs:string">
+         <xs:enumeration value="BigEndian"/>
+         <xs:enumeration value="LittleEndian"/>
+      </xs:restriction>
+   </xs:simpleType>
+   <xs:simpleType name="_T_HexByteArray">
+      <xs:restriction base="xs:string">
+         <xs:pattern value="(\s*[0-9a-fA-F][0-9a-fA-F])*\s*"/>
+      </xs:restriction>
+   </xs:simpleType>
+   <xs:simpleType name="_T_AUID">
+      <xs:union memberTypes="xs:token">
+         <xs:simpleType>
+            <xs:restriction base="xs:anyURI">
+               <xs:pattern value="urn:x-ul:[0-9a-fA-F]{8}\.([0-9a-fA-F]){4}\.([0-9a-fA-F]){4}\.([0-9a-fA-F]){8}\.([0-9a-fA-F]){8}"/>
+               <xs:pattern value="urn:uuid:[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}"/>
+            </xs:restriction>
+         </xs:simpleType>
+         <xs:simpleType>
+            <xs:restriction base="xs:string">
+               <xs:pattern value="[^\s]+ [^\s]+"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:union>
+   </xs:simpleType>
+   <xs:simpleType name="_T_Version">
+      <xs:restriction base="xs:string">
+         <xs:pattern value="\d{1,3}\.\d{1,3}"/>
+      </xs:restriction>
+   </xs:simpleType>
+
+
+<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+<!--  Classes -->
+<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+
+   <xs:element name="AIFCDescriptor">
+      <xs:complexType>
+         <xs:all>
+            <xs:element ref="aaf:Generation" minOccurs="0"/>
+            <xs:element ref="aaf:EssenceDescriptorLocator" minOccurs="0"/>
+            <xs:element ref="aaf:FileDescriptorSampleRate"/>
+            <xs:element ref="aaf:FileDescriptorLength"/>
+            <xs:element ref="aaf:ContainerFormat" minOccurs="0"/>
+            <xs:element ref="aaf:FileDescriptorCodecDefinition" minOccurs="0"/>
+            <xs:element ref="aaf:AIFCDescriptorSummary"/>
+         </xs:all>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="AuxiliaryDescriptor">
+      <xs:complexType>
+         <xs:all>
+            <xs:element ref="aaf:Generation" minOccurs="0"/>
+            <xs:element ref="aaf:EssenceDescriptorLocator" minOccurs="0"/>
+            <xs:element ref="aaf:MimeType"/>
+            <xs:element ref="aaf:CharSet" minOccurs="0"/>
+         </xs:all>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="CDCIDescriptor">
+      <xs:complexType>
+         <xs:all>
+            <xs:element ref="aaf:Generation" minOccurs="0"/>
+            <xs:element ref="aaf:EssenceDescriptorLocator" minOccurs="0"/>
+            <xs:element ref="aaf:FileDescriptorSampleRate"/>
+            <xs:element ref="aaf:FileDescriptorLength"/>
+            <xs:element ref="aaf:ContainerFormat" minOccurs="0"/>
+            <xs:element ref="aaf:FileDescriptorCodecDefinition" minOccurs="0"/>
+            <xs:element ref="aaf:DigitalImageDescriptorCompression" minOccurs="0"/>
+            <xs:element ref="aaf:StoredHeight"/>
+            <xs:element ref="aaf:StoredWidth"/>
+            <xs:element ref="aaf:SampledHeight" minOccurs="0"/>
+            <xs:element ref="aaf:SampledWidth" minOccurs="0"/>
+            <xs:element ref="aaf:SampledXOffset" minOccurs="0"/>
+            <xs:element ref="aaf:SampledYOffset" minOccurs="0"/>
+            <xs:element ref="aaf:DisplayHeight" minOccurs="0"/>
+            <xs:element ref="aaf:DisplayWidth" minOccurs="0"/>
+            <xs:element ref="aaf:DisplayXOffset" minOccurs="0"/>
+            <xs:element ref="aaf:DisplayYOffset" minOccurs="0"/>
+            <xs:element ref="aaf:FrameLayout"/>
+            <xs:element ref="aaf:VideoLineMap"/>
+            <xs:element ref="aaf:ImageAspectRatio"/>
+            <xs:element ref="aaf:AlphaTransparency" minOccurs="0"/>
+            <xs:element ref="aaf:TransferCharacteristic" minOccurs="0"/>
+            <xs:element ref="aaf:ColorPrimaries" minOccurs="0"/>
+            <xs:element ref="aaf:CodingEquations" minOccurs="0"/>
+            <xs:element ref="aaf:ImageAlignmentFactor" minOccurs="0"/>
+            <xs:element ref="aaf:FieldDominance" minOccurs="0"/>
+            <xs:element ref="aaf:FieldStartOffset" minOccurs="0"/>
+            <xs:element ref="aaf:FieldEndOffset" minOccurs="0"/>
+            <xs:element ref="aaf:SignalStandard" minOccurs="0"/>
+            <xs:element ref="aaf:StoredF2Offset" minOccurs="0"/>
+            <xs:element ref="aaf:DisplayF2Offset" minOccurs="0"/>
+            <xs:element ref="aaf:ActiveFormatDescriptor" minOccurs="0"/>
+            <xs:element ref="ns1:ResolutionID" minOccurs="0"/>
+            <xs:element ref="ns1:FirstFrameOffset" minOccurs="0"/>
+            <xs:element ref="ns1:ImageSize" minOccurs="0"/>
+            <xs:element ref="ns1:FrameSampleSize" minOccurs="0"/>
+            <xs:element ref="ns1:FrameIndexByteOrder" minOccurs="0"/>
+            <xs:element ref="ns1:DataOffset" minOccurs="0"/>
+            <xs:element ref="aaf:ComponentWidth"/>
+            <xs:element ref="aaf:HorizontalSubsampling"/>
+            <xs:element ref="aaf:ColorSiting" minOccurs="0"/>
+            <xs:element ref="aaf:BlackReferenceLevel" minOccurs="0"/>
+            <xs:element ref="aaf:WhiteReferenceLevel" minOccurs="0"/>
+            <xs:element ref="aaf:ColorRange" minOccurs="0"/>
+            <xs:element ref="aaf:PaddingBits" minOccurs="0"/>
+            <xs:element ref="aaf:VerticalSubsampling" minOccurs="0"/>
+            <xs:element ref="aaf:AlphaSamplingWidth" minOccurs="0"/>
+            <xs:element ref="aaf:ReversedByteOrder" minOccurs="0"/>
+            <xs:element ref="ns1:OffsetToFrameIndexes" minOccurs="0"/>
+         </xs:all>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="ClassDefinition">
+      <xs:complexType>
+         <xs:all>
+            <xs:element ref="aaf:MetaDefinitionIdentification"/>
+            <xs:element ref="aaf:MetaDefinitionName"/>
+            <xs:element ref="aaf:MetaDefinitionDescription" minOccurs="0"/>
+            <xs:element ref="aaf:ParentClass"/>
+            <xs:element ref="aaf:Properties" minOccurs="0"/>
+            <xs:element ref="aaf:IsConcrete"/>
+         </xs:all>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="CodecDefinition">
+      <xs:complexType>
+         <xs:all>
+            <xs:element ref="aaf:Generation" minOccurs="0"/>
+            <xs:element ref="aaf:DefinitionObjectIdentification"/>
+            <xs:element ref="aaf:DefinitionObjectName"/>
+            <xs:element ref="aaf:DefinitionObjectDescription" minOccurs="0"/>
+            <xs:element ref="aaf:FileDescriptorClass"/>
+            <xs:element ref="aaf:CodecDefinitionDataDefinitions"/>
+         </xs:all>
+         <xs:attribute ref="aaf:uid" use="required"/>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="CommentMarker">
+      <xs:complexType>
+         <xs:all>
+            <xs:element ref="aaf:Generation" minOccurs="0"/>
+            <xs:element ref="aaf:ComponentDataDefinition"/>
+            <xs:element ref="aaf:ComponentLength" minOccurs="0"/>
+            <xs:element ref="aaf:ComponentKLVData" minOccurs="0"/>
+            <xs:element ref="aaf:ComponentUserComments" minOccurs="0"/>
+            <xs:element ref="aaf:ComponentAttributes" minOccurs="0"/>
+            <xs:element ref="ns1:ComponentAttributeList" minOccurs="0"/>
+            <xs:element ref="aaf:Position"/>
+            <xs:element ref="aaf:Comment" minOccurs="0"/>
+            <xs:element ref="aaf:Annotation" minOccurs="0"/>
+            <xs:element ref="ns1:CommentMarkerAttributeList" minOccurs="0"/>
+            <xs:element ref="ns1:CommentMarkerColor" minOccurs="0"/>
+            <xs:element ref="ns1:CommentMarkerUSer" minOccurs="0"/>
+            <xs:element ref="ns1:CommentMarkerDate" minOccurs="0"/>
+            <xs:element ref="ns1:CommentMarkerTime" minOccurs="0"/>
+            <xs:element ref="ns1:CommentMarkerIcon" minOccurs="0"/>
+            <xs:element ref="ns1:CommentMarkerStatus" minOccurs="0"/>
+         </xs:all>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="Component" abstract="true">
+      <xs:complexType>
+         <xs:all>
+            <xs:element ref="aaf:Generation" minOccurs="0"/>
+            <xs:element ref="aaf:ComponentDataDefinition"/>
+            <xs:element ref="aaf:ComponentLength" minOccurs="0"/>
+            <xs:element ref="aaf:ComponentKLVData" minOccurs="0"/>
+            <xs:element ref="aaf:ComponentUserComments" minOccurs="0"/>
+            <xs:element ref="aaf:ComponentAttributes" minOccurs="0"/>
+            <xs:element ref="ns1:ComponentAttributeList" minOccurs="0"/>
+         </xs:all>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="CompositionMob">
+      <xs:complexType>
+         <xs:all>
+            <xs:element ref="aaf:Generation" minOccurs="0"/>
+            <xs:element ref="aaf:MobID"/>
+            <xs:element ref="aaf:MobName" minOccurs="0"/>
+            <xs:element ref="aaf:MobSlots"/>
+            <xs:element ref="aaf:MobLastModified"/>
+            <xs:element ref="aaf:CreationTime"/>
+            <xs:element ref="aaf:MobUserComments" minOccurs="0"/>
+            <xs:element ref="aaf:MobKLVData" minOccurs="0"/>
+            <xs:element ref="aaf:MobAttributes" minOccurs="0"/>
+            <xs:element ref="aaf:UsageCode" minOccurs="0"/>
+            <xs:element ref="ns1:MobAttributeList" minOccurs="0"/>
+            <xs:element ref="ns1:AppCode" minOccurs="0"/>
+            <xs:element ref="ns1:ConvertFrameRate" minOccurs="0"/>
+            <xs:element ref="aaf:DefaultFadeLength" minOccurs="0"/>
+            <xs:element ref="aaf:DefFadeType" minOccurs="0"/>
+            <xs:element ref="aaf:DefFadeEditUnit" minOccurs="0"/>
+            <xs:element ref="aaf:CompositionMobRendering" minOccurs="0"/>
+         </xs:all>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="ConstantValue">
+      <xs:complexType>
+         <xs:all>
+            <xs:element ref="aaf:Generation" minOccurs="0"/>
+            <xs:element ref="aaf:Definition"/>
+            <xs:element ref="aaf:ConstantValueValue"/>
+         </xs:all>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="ContainerDefinition">
+      <xs:complexType>
+         <xs:all>
+            <xs:element ref="aaf:Generation" minOccurs="0"/>
+            <xs:element ref="aaf:DefinitionObjectIdentification"/>
+            <xs:element ref="aaf:DefinitionObjectName"/>
+            <xs:element ref="aaf:DefinitionObjectDescription" minOccurs="0"/>
+            <xs:element ref="aaf:EssenceIsIdentified" minOccurs="0"/>
+         </xs:all>
+         <xs:attribute ref="aaf:uid" use="required"/>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="ContentStorage">
+      <xs:complexType>
+         <xs:all>
+            <xs:element ref="aaf:Generation" minOccurs="0"/>
+            <xs:element ref="aaf:Mobs"/>
+            <xs:element ref="aaf:ContentStorageEssenceData" minOccurs="0"/>
+         </xs:all>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="ControlPoint">
+      <xs:complexType>
+         <xs:all>
+            <xs:element ref="aaf:Generation" minOccurs="0"/>
+            <xs:element ref="aaf:ControlPointValue"/>
+            <xs:element ref="aaf:Time"/>
+            <xs:element ref="aaf:EditHint" minOccurs="0"/>
+            <xs:element ref="ns1:ControlPointPointProperties" minOccurs="0"/>
+         </xs:all>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="DataDefinition">
+      <xs:complexType>
+         <xs:all>
+            <xs:element ref="aaf:Generation" minOccurs="0"/>
+            <xs:element ref="aaf:DefinitionObjectIdentification"/>
+            <xs:element ref="aaf:DefinitionObjectName"/>
+            <xs:element ref="aaf:DefinitionObjectDescription" minOccurs="0"/>
+         </xs:all>
+         <xs:attribute ref="aaf:uid" use="required"/>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="DefinitionObject" abstract="true">
+      <xs:complexType>
+         <xs:all>
+            <xs:element ref="aaf:Generation" minOccurs="0"/>
+            <xs:element ref="aaf:DefinitionObjectIdentification"/>
+            <xs:element ref="aaf:DefinitionObjectName"/>
+            <xs:element ref="aaf:DefinitionObjectDescription" minOccurs="0"/>
+         </xs:all>
+         <xs:attribute ref="aaf:uid" use="required"/>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="DescriptiveFramework" abstract="true">
+      <xs:complexType>
+         <xs:all>
+            <xs:element ref="aaf:Generation" minOccurs="0"/>
+         </xs:all>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="DescriptiveMarker">
+      <xs:complexType>
+         <xs:all>
+            <xs:element ref="aaf:Generation" minOccurs="0"/>
+            <xs:element ref="aaf:ComponentDataDefinition"/>
+            <xs:element ref="aaf:ComponentLength" minOccurs="0"/>
+            <xs:element ref="aaf:ComponentKLVData" minOccurs="0"/>
+            <xs:element ref="aaf:ComponentUserComments" minOccurs="0"/>
+            <xs:element ref="aaf:ComponentAttributes" minOccurs="0"/>
+            <xs:element ref="ns1:ComponentAttributeList" minOccurs="0"/>
+            <xs:element ref="aaf:Position"/>
+            <xs:element ref="aaf:Comment" minOccurs="0"/>
+            <xs:element ref="aaf:Annotation" minOccurs="0"/>
+            <xs:element ref="ns1:CommentMarkerAttributeList" minOccurs="0"/>
+            <xs:element ref="ns1:CommentMarkerColor" minOccurs="0"/>
+            <xs:element ref="ns1:CommentMarkerUSer" minOccurs="0"/>
+            <xs:element ref="ns1:CommentMarkerDate" minOccurs="0"/>
+            <xs:element ref="ns1:CommentMarkerTime" minOccurs="0"/>
+            <xs:element ref="ns1:CommentMarkerIcon" minOccurs="0"/>
+            <xs:element ref="ns1:CommentMarkerStatus" minOccurs="0"/>
+            <xs:element ref="aaf:DescribedSlots" minOccurs="0"/>
+            <xs:element ref="aaf:DescriptiveMarkerDescription" minOccurs="0"/>
+         </xs:all>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="Dictionary">
+      <xs:complexType>
+         <xs:all>
+            <xs:element ref="aaf:Generation" minOccurs="0"/>
+            <xs:element ref="aaf:OperationDefinitions" minOccurs="0"/>
+            <xs:element ref="aaf:ParameterDefinitions" minOccurs="0"/>
+            <xs:element ref="aaf:DataDefinitions" minOccurs="0"/>
+            <xs:element ref="aaf:PluginDefinitions" minOccurs="0"/>
+            <xs:element ref="aaf:CodecDefinitions" minOccurs="0"/>
+            <xs:element ref="aaf:ContainerDefinitions" minOccurs="0"/>
+            <xs:element ref="aaf:InterpolationDefinitions" minOccurs="0"/>
+            <xs:element ref="aaf:KLVDataDefinitions" minOccurs="0"/>
+            <xs:element ref="aaf:TaggedValueDefinitions" minOccurs="0"/>
+         </xs:all>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="DigitalImageDescriptor" abstract="true">
+      <xs:complexType>
+         <xs:all>
+            <xs:element ref="aaf:Generation" minOccurs="0"/>
+            <xs:element ref="aaf:EssenceDescriptorLocator" minOccurs="0"/>
+            <xs:element ref="aaf:FileDescriptorSampleRate"/>
+            <xs:element ref="aaf:FileDescriptorLength"/>
+            <xs:element ref="aaf:ContainerFormat" minOccurs="0"/>
+            <xs:element ref="aaf:FileDescriptorCodecDefinition" minOccurs="0"/>
+            <xs:element ref="aaf:DigitalImageDescriptorCompression" minOccurs="0"/>
+            <xs:element ref="aaf:StoredHeight"/>
+            <xs:element ref="aaf:StoredWidth"/>
+            <xs:element ref="aaf:SampledHeight" minOccurs="0"/>
+            <xs:element ref="aaf:SampledWidth" minOccurs="0"/>
+            <xs:element ref="aaf:SampledXOffset" minOccurs="0"/>
+            <xs:element ref="aaf:SampledYOffset" minOccurs="0"/>
+            <xs:element ref="aaf:DisplayHeight" minOccurs="0"/>
+            <xs:element ref="aaf:DisplayWidth" minOccurs="0"/>
+            <xs:element ref="aaf:DisplayXOffset" minOccurs="0"/>
+            <xs:element ref="aaf:DisplayYOffset" minOccurs="0"/>
+            <xs:element ref="aaf:FrameLayout"/>
+            <xs:element ref="aaf:VideoLineMap"/>
+            <xs:element ref="aaf:ImageAspectRatio"/>
+            <xs:element ref="aaf:AlphaTransparency" minOccurs="0"/>
+            <xs:element ref="aaf:TransferCharacteristic" minOccurs="0"/>
+            <xs:element ref="aaf:ColorPrimaries" minOccurs="0"/>
+            <xs:element ref="aaf:CodingEquations" minOccurs="0"/>
+            <xs:element ref="aaf:ImageAlignmentFactor" minOccurs="0"/>
+            <xs:element ref="aaf:FieldDominance" minOccurs="0"/>
+            <xs:element ref="aaf:FieldStartOffset" minOccurs="0"/>
+            <xs:element ref="aaf:FieldEndOffset" minOccurs="0"/>
+            <xs:element ref="aaf:SignalStandard" minOccurs="0"/>
+            <xs:element ref="aaf:StoredF2Offset" minOccurs="0"/>
+            <xs:element ref="aaf:DisplayF2Offset" minOccurs="0"/>
+            <xs:element ref="aaf:ActiveFormatDescriptor" minOccurs="0"/>
+            <xs:element ref="ns1:ResolutionID" minOccurs="0"/>
+            <xs:element ref="ns1:FirstFrameOffset" minOccurs="0"/>
+            <xs:element ref="ns1:ImageSize" minOccurs="0"/>
+            <xs:element ref="ns1:FrameSampleSize" minOccurs="0"/>
+            <xs:element ref="ns1:FrameIndexByteOrder" minOccurs="0"/>
+            <xs:element ref="ns1:DataOffset" minOccurs="0"/>
+         </xs:all>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="EdgeCode">
+      <xs:complexType>
+         <xs:all>
+            <xs:element ref="aaf:Generation" minOccurs="0"/>
+            <xs:element ref="aaf:ComponentDataDefinition"/>
+            <xs:element ref="aaf:ComponentLength" minOccurs="0"/>
+            <xs:element ref="aaf:ComponentKLVData" minOccurs="0"/>
+            <xs:element ref="aaf:ComponentUserComments" minOccurs="0"/>
+            <xs:element ref="aaf:ComponentAttributes" minOccurs="0"/>
+            <xs:element ref="ns1:ComponentAttributeList" minOccurs="0"/>
+            <xs:element ref="aaf:EdgeCodeStart"/>
+            <xs:element ref="aaf:FilmKind"/>
+            <xs:element ref="aaf:CodeFormat"/>
+            <xs:element ref="aaf:EdgeCodeHeader" minOccurs="0"/>
+         </xs:all>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="EssenceData">
+      <xs:complexType>
+         <xs:all>
+            <xs:element ref="aaf:Generation" minOccurs="0"/>
+            <xs:element ref="aaf:EssenceDataMobID"/>
+            <xs:element ref="aaf:Data"/>
+            <xs:element ref="aaf:SampleIndex" minOccurs="0"/>
+         </xs:all>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="EssenceDescriptor" abstract="true">
+      <xs:complexType>
+         <xs:all>
+            <xs:element ref="aaf:Generation" minOccurs="0"/>
+            <xs:element ref="aaf:EssenceDescriptorLocator" minOccurs="0"/>
+         </xs:all>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="EssenceGroup">
+      <xs:complexType>
+         <xs:all>
+            <xs:element ref="aaf:Generation" minOccurs="0"/>
+            <xs:element ref="aaf:ComponentDataDefinition"/>
+            <xs:element ref="aaf:ComponentLength" minOccurs="0"/>
+            <xs:element ref="aaf:ComponentKLVData" minOccurs="0"/>
+            <xs:element ref="aaf:ComponentUserComments" minOccurs="0"/>
+            <xs:element ref="aaf:ComponentAttributes" minOccurs="0"/>
+            <xs:element ref="ns1:ComponentAttributeList" minOccurs="0"/>
+            <xs:element ref="aaf:Choices"/>
+            <xs:element ref="aaf:StillFrame" minOccurs="0"/>
+            <xs:element ref="ns1:EssenceGroupType" minOccurs="0"/>
+         </xs:all>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="Event" abstract="true">
+      <xs:complexType>
+         <xs:all>
+            <xs:element ref="aaf:Generation" minOccurs="0"/>
+            <xs:element ref="aaf:ComponentDataDefinition"/>
+            <xs:element ref="aaf:ComponentLength" minOccurs="0"/>
+            <xs:element ref="aaf:ComponentKLVData" minOccurs="0"/>
+            <xs:element ref="aaf:ComponentUserComments" minOccurs="0"/>
+            <xs:element ref="aaf:ComponentAttributes" minOccurs="0"/>
+            <xs:element ref="ns1:ComponentAttributeList" minOccurs="0"/>
+            <xs:element ref="aaf:Position"/>
+            <xs:element ref="aaf:Comment" minOccurs="0"/>
+         </xs:all>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="EventMobSlot">
+      <xs:complexType>
+         <xs:all>
+            <xs:element ref="aaf:Generation" minOccurs="0"/>
+            <xs:element ref="aaf:SlotID"/>
+            <xs:element ref="aaf:SlotName" minOccurs="0"/>
+            <xs:element ref="aaf:MobSlotSegment"/>
+            <xs:element ref="aaf:PhysicalTrackNumber" minOccurs="0"/>
+            <xs:element ref="aaf:EventMobSlotEditRate"/>
+         </xs:all>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="FileDescriptor" abstract="true">
+      <xs:complexType>
+         <xs:all>
+            <xs:element ref="aaf:Generation" minOccurs="0"/>
+            <xs:element ref="aaf:EssenceDescriptorLocator" minOccurs="0"/>
+            <xs:element ref="aaf:FileDescriptorSampleRate"/>
+            <xs:element ref="aaf:FileDescriptorLength"/>
+            <xs:element ref="aaf:ContainerFormat" minOccurs="0"/>
+            <xs:element ref="aaf:FileDescriptorCodecDefinition" minOccurs="0"/>
+         </xs:all>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="Filler">
+      <xs:complexType>
+         <xs:all>
+            <xs:element ref="aaf:Generation" minOccurs="0"/>
+            <xs:element ref="aaf:ComponentDataDefinition"/>
+            <xs:element ref="aaf:ComponentLength" minOccurs="0"/>
+            <xs:element ref="aaf:ComponentKLVData" minOccurs="0"/>
+            <xs:element ref="aaf:ComponentUserComments" minOccurs="0"/>
+            <xs:element ref="aaf:ComponentAttributes" minOccurs="0"/>
+            <xs:element ref="ns1:ComponentAttributeList" minOccurs="0"/>
+         </xs:all>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="FilmDescriptor">
+      <xs:complexType>
+         <xs:all>
+            <xs:element ref="aaf:Generation" minOccurs="0"/>
+            <xs:element ref="aaf:EssenceDescriptorLocator" minOccurs="0"/>
+            <xs:element ref="aaf:FilmFormat" minOccurs="0"/>
+            <xs:element ref="aaf:FrameRate" minOccurs="0"/>
+            <xs:element ref="aaf:PerforationsPerFrame" minOccurs="0"/>
+            <xs:element ref="aaf:FilmAspectRatio" minOccurs="0"/>
+            <xs:element ref="aaf:FilmDescriptorManufacturer" minOccurs="0"/>
+            <xs:element ref="aaf:FilmDescriptorModel" minOccurs="0"/>
+            <xs:element ref="aaf:FilmGaugeFormat" minOccurs="0"/>
+            <xs:element ref="aaf:FilmBatchNumber" minOccurs="0"/>
+         </xs:all>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="GPITrigger">
+      <xs:complexType>
+         <xs:all>
+            <xs:element ref="aaf:Generation" minOccurs="0"/>
+            <xs:element ref="aaf:ComponentDataDefinition"/>
+            <xs:element ref="aaf:ComponentLength" minOccurs="0"/>
+            <xs:element ref="aaf:ComponentKLVData" minOccurs="0"/>
+            <xs:element ref="aaf:ComponentUserComments" minOccurs="0"/>
+            <xs:element ref="aaf:ComponentAttributes" minOccurs="0"/>
+            <xs:element ref="ns1:ComponentAttributeList" minOccurs="0"/>
+            <xs:element ref="aaf:Position"/>
+            <xs:element ref="aaf:Comment" minOccurs="0"/>
+            <xs:element ref="aaf:ActiveState"/>
+         </xs:all>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="Header">
+      <xs:complexType>
+         <xs:all>
+            <xs:element ref="aaf:Generation" minOccurs="0"/>
+            <xs:element ref="aaf:ByteOrder"/>
+            <xs:element ref="aaf:LastModified"/>
+            <xs:element ref="aaf:Content"/>
+            <xs:element ref="aaf:HeaderDictionary"/>
+            <xs:element ref="aaf:Version"/>
+            <xs:element ref="aaf:IdentificationList"/>
+            <xs:element ref="aaf:ObjectModelVersion" minOccurs="0"/>
+            <xs:element ref="aaf:OperationalPattern" minOccurs="0"/>
+            <xs:element ref="aaf:EssenceContainers" minOccurs="0"/>
+            <xs:element ref="aaf:DescriptiveSchemes" minOccurs="0"/>
+         </xs:all>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="HTMLClip">
+      <xs:complexType>
+         <xs:all>
+            <xs:element ref="aaf:Generation" minOccurs="0"/>
+            <xs:element ref="aaf:ComponentDataDefinition"/>
+            <xs:element ref="aaf:ComponentLength" minOccurs="0"/>
+            <xs:element ref="aaf:ComponentKLVData" minOccurs="0"/>
+            <xs:element ref="aaf:ComponentUserComments" minOccurs="0"/>
+            <xs:element ref="aaf:ComponentAttributes" minOccurs="0"/>
+            <xs:element ref="ns1:ComponentAttributeList" minOccurs="0"/>
+            <xs:element ref="aaf:SourceID" minOccurs="0"/>
+            <xs:element ref="aaf:SourceMobSlotID"/>
+            <xs:element ref="aaf:ChannelIDs" minOccurs="0"/>
+            <xs:element ref="aaf:MonoSourceSlotIDs" minOccurs="0"/>
+            <xs:element ref="aaf:BeginAnchor" minOccurs="0"/>
+            <xs:element ref="aaf:EndAnchor" minOccurs="0"/>
+         </xs:all>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="HTMLDescriptor">
+      <xs:complexType>
+         <xs:all>
+            <xs:element ref="aaf:Generation" minOccurs="0"/>
+            <xs:element ref="aaf:EssenceDescriptorLocator" minOccurs="0"/>
+            <xs:element ref="aaf:FileDescriptorSampleRate"/>
+            <xs:element ref="aaf:FileDescriptorLength"/>
+            <xs:element ref="aaf:ContainerFormat" minOccurs="0"/>
+            <xs:element ref="aaf:FileDescriptorCodecDefinition" minOccurs="0"/>
+         </xs:all>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="Identification">
+      <xs:complexType>
+         <xs:all>
+            <xs:element ref="aaf:Generation" minOccurs="0"/>
+            <xs:element ref="aaf:CompanyName"/>
+            <xs:element ref="aaf:ProductName"/>
+            <xs:element ref="aaf:ProductVersion" minOccurs="0"/>
+            <xs:element ref="aaf:ProductVersionString"/>
+            <xs:element ref="aaf:ProductID"/>
+            <xs:element ref="aaf:Date"/>
+            <xs:element ref="aaf:ToolkitVersion" minOccurs="0"/>
+            <xs:element ref="aaf:IdentificationPlatform" minOccurs="0"/>
+            <xs:element ref="aaf:GenerationAUID"/>
+         </xs:all>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="ImportDescriptor">
+      <xs:complexType>
+         <xs:all>
+            <xs:element ref="aaf:Generation" minOccurs="0"/>
+            <xs:element ref="aaf:EssenceDescriptorLocator" minOccurs="0"/>
+         </xs:all>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="InterchangeObject" abstract="true">
+      <xs:complexType>
+         <xs:all>
+            <xs:element ref="aaf:Generation" minOccurs="0"/>
+         </xs:all>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="InterpolationDefinition">
+      <xs:complexType>
+         <xs:all>
+            <xs:element ref="aaf:Generation" minOccurs="0"/>
+            <xs:element ref="aaf:DefinitionObjectIdentification"/>
+            <xs:element ref="aaf:DefinitionObjectName"/>
+            <xs:element ref="aaf:DefinitionObjectDescription" minOccurs="0"/>
+         </xs:all>
+         <xs:attribute ref="aaf:uid" use="required"/>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="KLVData">
+      <xs:complexType>
+         <xs:all>
+            <xs:element ref="aaf:Generation" minOccurs="0"/>
+            <xs:element ref="aaf:KLVDataValue"/>
+         </xs:all>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="KLVDataDefinition">
+      <xs:complexType>
+         <xs:all>
+            <xs:element ref="aaf:Generation" minOccurs="0"/>
+            <xs:element ref="aaf:DefinitionObjectIdentification"/>
+            <xs:element ref="aaf:DefinitionObjectName"/>
+            <xs:element ref="aaf:DefinitionObjectDescription" minOccurs="0"/>
+            <xs:element ref="aaf:KLVDataType" minOccurs="0"/>
+         </xs:all>
+         <xs:attribute ref="aaf:uid" use="required"/>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="Locator" abstract="true">
+      <xs:complexType>
+         <xs:all>
+            <xs:element ref="aaf:Generation" minOccurs="0"/>
+         </xs:all>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="MasterMob">
+      <xs:complexType>
+         <xs:all>
+            <xs:element ref="aaf:Generation" minOccurs="0"/>
+            <xs:element ref="aaf:MobID"/>
+            <xs:element ref="aaf:MobName" minOccurs="0"/>
+            <xs:element ref="aaf:MobSlots"/>
+            <xs:element ref="aaf:MobLastModified"/>
+            <xs:element ref="aaf:CreationTime"/>
+            <xs:element ref="aaf:MobUserComments" minOccurs="0"/>
+            <xs:element ref="aaf:MobKLVData" minOccurs="0"/>
+            <xs:element ref="aaf:MobAttributes" minOccurs="0"/>
+            <xs:element ref="aaf:UsageCode" minOccurs="0"/>
+            <xs:element ref="ns1:MobAttributeList" minOccurs="0"/>
+            <xs:element ref="ns1:AppCode" minOccurs="0"/>
+            <xs:element ref="ns1:ConvertFrameRate" minOccurs="0"/>
+         </xs:all>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="MetaDefinition" abstract="true">
+      <xs:complexType>
+         <xs:all>
+            <xs:element ref="aaf:MetaDefinitionIdentification"/>
+            <xs:element ref="aaf:MetaDefinitionName"/>
+            <xs:element ref="aaf:MetaDefinitionDescription" minOccurs="0"/>
+         </xs:all>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="MetaDictionary">
+      <xs:complexType>
+         <xs:all>
+            <xs:element ref="aaf:ClassDefinitions" minOccurs="0"/>
+            <xs:element ref="aaf:TypeDefinitions" minOccurs="0"/>
+         </xs:all>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="Mob" abstract="true">
+      <xs:complexType>
+         <xs:all>
+            <xs:element ref="aaf:Generation" minOccurs="0"/>
+            <xs:element ref="aaf:MobID"/>
+            <xs:element ref="aaf:MobName" minOccurs="0"/>
+            <xs:element ref="aaf:MobSlots"/>
+            <xs:element ref="aaf:MobLastModified"/>
+            <xs:element ref="aaf:CreationTime"/>
+            <xs:element ref="aaf:MobUserComments" minOccurs="0"/>
+            <xs:element ref="aaf:MobKLVData" minOccurs="0"/>
+            <xs:element ref="aaf:MobAttributes" minOccurs="0"/>
+            <xs:element ref="aaf:UsageCode" minOccurs="0"/>
+            <xs:element ref="ns1:MobAttributeList" minOccurs="0"/>
+            <xs:element ref="ns1:AppCode" minOccurs="0"/>
+            <xs:element ref="ns1:ConvertFrameRate" minOccurs="0"/>
+         </xs:all>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="MobSlot" abstract="true">
+      <xs:complexType>
+         <xs:all>
+            <xs:element ref="aaf:Generation" minOccurs="0"/>
+            <xs:element ref="aaf:SlotID"/>
+            <xs:element ref="aaf:SlotName" minOccurs="0"/>
+            <xs:element ref="aaf:MobSlotSegment"/>
+            <xs:element ref="aaf:PhysicalTrackNumber" minOccurs="0"/>
+         </xs:all>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="NestedScope">
+      <xs:complexType>
+         <xs:all>
+            <xs:element ref="aaf:Generation" minOccurs="0"/>
+            <xs:element ref="aaf:ComponentDataDefinition"/>
+            <xs:element ref="aaf:ComponentLength" minOccurs="0"/>
+            <xs:element ref="aaf:ComponentKLVData" minOccurs="0"/>
+            <xs:element ref="aaf:ComponentUserComments" minOccurs="0"/>
+            <xs:element ref="aaf:ComponentAttributes" minOccurs="0"/>
+            <xs:element ref="ns1:ComponentAttributeList" minOccurs="0"/>
+            <xs:element ref="aaf:NestedScopeSlots"/>
+         </xs:all>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="NetworkLocator">
+      <xs:complexType>
+         <xs:all>
+            <xs:element ref="aaf:Generation" minOccurs="0"/>
+            <xs:element ref="aaf:URLString"/>
+         </xs:all>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="OperationDefinition">
+      <xs:complexType>
+         <xs:all>
+            <xs:element ref="aaf:Generation" minOccurs="0"/>
+            <xs:element ref="aaf:DefinitionObjectIdentification"/>
+            <xs:element ref="aaf:DefinitionObjectName"/>
+            <xs:element ref="aaf:DefinitionObjectDescription" minOccurs="0"/>
+            <xs:element ref="aaf:OperationDefinitionDataDefinition"/>
+            <xs:element ref="aaf:IsTimeWarp" minOccurs="0"/>
+            <xs:element ref="aaf:DegradeTo" minOccurs="0"/>
+            <xs:element ref="aaf:OperationCategory" minOccurs="0"/>
+            <xs:element ref="aaf:NumberInputs"/>
+            <xs:element ref="aaf:Bypass" minOccurs="0"/>
+            <xs:element ref="aaf:ParametersDefined" minOccurs="0"/>
+         </xs:all>
+         <xs:attribute ref="aaf:uid" use="required"/>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="OperationGroup">
+      <xs:complexType>
+         <xs:all>
+            <xs:element ref="aaf:Generation" minOccurs="0"/>
+            <xs:element ref="aaf:ComponentDataDefinition"/>
+            <xs:element ref="aaf:ComponentLength" minOccurs="0"/>
+            <xs:element ref="aaf:ComponentKLVData" minOccurs="0"/>
+            <xs:element ref="aaf:ComponentUserComments" minOccurs="0"/>
+            <xs:element ref="aaf:ComponentAttributes" minOccurs="0"/>
+            <xs:element ref="ns1:ComponentAttributeList" minOccurs="0"/>
+            <xs:element ref="aaf:Operation"/>
+            <xs:element ref="aaf:InputSegments" minOccurs="0"/>
+            <xs:element ref="aaf:Parameters" minOccurs="0"/>
+            <xs:element ref="aaf:BypassOverride" minOccurs="0"/>
+            <xs:element ref="aaf:OperationGroupRendering" minOccurs="0"/>
+            <xs:element ref="ns1:OpGroupMotionCtlOffsetMapAdjust" minOccurs="0"/>
+            <xs:element ref="ns1:OpGrpTKMNTrackedParamAry" minOccurs="0"/>
+            <xs:element ref="ns1:OpGrpTKMNTrackerDataAry" minOccurs="0"/>
+            <xs:element ref="ns1:OpGrpTKMNTrackedParamSetng" minOccurs="0"/>
+            <xs:element ref="ns1:OpGroupMotionCtlSourceParams" minOccurs="0"/>
+         </xs:all>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="Parameter" abstract="true">
+      <xs:complexType>
+         <xs:all>
+            <xs:element ref="aaf:Generation" minOccurs="0"/>
+            <xs:element ref="aaf:Definition"/>
+         </xs:all>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="ParameterDefinition">
+      <xs:complexType>
+         <xs:all>
+            <xs:element ref="aaf:Generation" minOccurs="0"/>
+            <xs:element ref="aaf:DefinitionObjectIdentification"/>
+            <xs:element ref="aaf:DefinitionObjectName"/>
+            <xs:element ref="aaf:DefinitionObjectDescription" minOccurs="0"/>
+            <xs:element ref="aaf:ParameterDefinitionType"/>
+            <xs:element ref="aaf:DisplayUnits" minOccurs="0"/>
+         </xs:all>
+         <xs:attribute ref="aaf:uid" use="required"/>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="PCMDescriptor">
+      <xs:complexType>
+         <xs:all>
+            <xs:element ref="aaf:Generation" minOccurs="0"/>
+            <xs:element ref="aaf:EssenceDescriptorLocator" minOccurs="0"/>
+            <xs:element ref="aaf:FileDescriptorSampleRate"/>
+            <xs:element ref="aaf:FileDescriptorLength"/>
+            <xs:element ref="aaf:ContainerFormat" minOccurs="0"/>
+            <xs:element ref="aaf:FileDescriptorCodecDefinition" minOccurs="0"/>
+            <xs:element ref="aaf:AudioSamplingRate"/>
+            <xs:element ref="aaf:Locked" minOccurs="0"/>
+            <xs:element ref="aaf:AudioRefLevel" minOccurs="0"/>
+            <xs:element ref="aaf:ElectroSpatial" minOccurs="0"/>
+            <xs:element ref="aaf:Channels"/>
+            <xs:element ref="aaf:QuantizationBits"/>
+            <xs:element ref="aaf:DialNorm" minOccurs="0"/>
+            <xs:element ref="aaf:SoundDescriptorCompression" minOccurs="0"/>
+            <xs:element ref="aaf:BlockAlign"/>
+            <xs:element ref="aaf:SequenceOffset" minOccurs="0"/>
+            <xs:element ref="aaf:AverageBPS"/>
+            <xs:element ref="aaf:ChannelAssignment" minOccurs="0"/>
+            <xs:element ref="aaf:PeakEnvelopeVersion" minOccurs="0"/>
+            <xs:element ref="aaf:PeakEnvelopeFormat" minOccurs="0"/>
+            <xs:element ref="aaf:PointsPerPeakValue" minOccurs="0"/>
+            <xs:element ref="aaf:PeakEnvelopeBlockSize" minOccurs="0"/>
+            <xs:element ref="aaf:PeakChannels" minOccurs="0"/>
+            <xs:element ref="aaf:PeakFrames" minOccurs="0"/>
+            <xs:element ref="aaf:PeakOfPeaksPosition" minOccurs="0"/>
+            <xs:element ref="aaf:PeakEnvelopeTimestamp" minOccurs="0"/>
+            <xs:element ref="aaf:PeakEnvelopeData" minOccurs="0"/>
+         </xs:all>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="PhysicalDescriptor" abstract="true">
+      <xs:complexType>
+         <xs:all>
+            <xs:element ref="aaf:Generation" minOccurs="0"/>
+            <xs:element ref="aaf:EssenceDescriptorLocator" minOccurs="0"/>
+         </xs:all>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="PluginDefinition">
+      <xs:complexType>
+         <xs:all>
+            <xs:element ref="aaf:Generation" minOccurs="0"/>
+            <xs:element ref="aaf:DefinitionObjectIdentification"/>
+            <xs:element ref="aaf:DefinitionObjectName"/>
+            <xs:element ref="aaf:DefinitionObjectDescription" minOccurs="0"/>
+            <xs:element ref="aaf:PluginCategory"/>
+            <xs:element ref="aaf:VersionNumber"/>
+            <xs:element ref="aaf:VersionString" minOccurs="0"/>
+            <xs:element ref="aaf:PluginDefinitionManufacturer" minOccurs="0"/>
+            <xs:element ref="aaf:ManufacturerInfo" minOccurs="0"/>
+            <xs:element ref="aaf:PluginDefinitionManufacturerID" minOccurs="0"/>
+            <xs:element ref="aaf:PluginDefinitionPlatform" minOccurs="0"/>
+            <xs:element ref="aaf:MinPlatformVersion" minOccurs="0"/>
+            <xs:element ref="aaf:MaxPlatformVersion" minOccurs="0"/>
+            <xs:element ref="aaf:Engine" minOccurs="0"/>
+            <xs:element ref="aaf:MinEngineVersion" minOccurs="0"/>
+            <xs:element ref="aaf:MaxEngineVersion" minOccurs="0"/>
+            <xs:element ref="aaf:PluginAPI" minOccurs="0"/>
+            <xs:element ref="aaf:MinPluginAPI" minOccurs="0"/>
+            <xs:element ref="aaf:MaxPluginAPI" minOccurs="0"/>
+            <xs:element ref="aaf:SoftwareOnly" minOccurs="0"/>
+            <xs:element ref="aaf:Accelerator" minOccurs="0"/>
+            <xs:element ref="aaf:Locators" minOccurs="0"/>
+            <xs:element ref="aaf:Authentication" minOccurs="0"/>
+            <xs:element ref="aaf:PluginDefinitionDefinitionObject" minOccurs="0"/>
+         </xs:all>
+         <xs:attribute ref="aaf:uid" use="required"/>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="PropertyDefinition">
+      <xs:complexType>
+         <xs:all>
+            <xs:element ref="aaf:MetaDefinitionIdentification"/>
+            <xs:element ref="aaf:MetaDefinitionName"/>
+            <xs:element ref="aaf:MetaDefinitionDescription" minOccurs="0"/>
+            <xs:element ref="aaf:PropertyDefinitionType"/>
+            <xs:element ref="aaf:IsOptional"/>
+            <xs:element ref="aaf:LocalIdentification"/>
+            <xs:element ref="aaf:IsUniqueIdentifier" minOccurs="0"/>
+         </xs:all>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="Pulldown">
+      <xs:complexType>
+         <xs:all>
+            <xs:element ref="aaf:Generation" minOccurs="0"/>
+            <xs:element ref="aaf:ComponentDataDefinition"/>
+            <xs:element ref="aaf:ComponentLength" minOccurs="0"/>
+            <xs:element ref="aaf:ComponentKLVData" minOccurs="0"/>
+            <xs:element ref="aaf:ComponentUserComments" minOccurs="0"/>
+            <xs:element ref="aaf:ComponentAttributes" minOccurs="0"/>
+            <xs:element ref="ns1:ComponentAttributeList" minOccurs="0"/>
+            <xs:element ref="aaf:InputSegment"/>
+            <xs:element ref="aaf:PulldownKind"/>
+            <xs:element ref="aaf:PulldownDirection"/>
+            <xs:element ref="aaf:PhaseFrame"/>
+         </xs:all>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="RecordingDescriptor">
+      <xs:complexType>
+         <xs:all>
+            <xs:element ref="aaf:Generation" minOccurs="0"/>
+            <xs:element ref="aaf:EssenceDescriptorLocator" minOccurs="0"/>
+         </xs:all>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="RGBADescriptor">
+      <xs:complexType>
+         <xs:all>
+            <xs:element ref="aaf:Generation" minOccurs="0"/>
+            <xs:element ref="aaf:EssenceDescriptorLocator" minOccurs="0"/>
+            <xs:element ref="aaf:FileDescriptorSampleRate"/>
+            <xs:element ref="aaf:FileDescriptorLength"/>
+            <xs:element ref="aaf:ContainerFormat" minOccurs="0"/>
+            <xs:element ref="aaf:FileDescriptorCodecDefinition" minOccurs="0"/>
+            <xs:element ref="aaf:DigitalImageDescriptorCompression" minOccurs="0"/>
+            <xs:element ref="aaf:StoredHeight"/>
+            <xs:element ref="aaf:StoredWidth"/>
+            <xs:element ref="aaf:SampledHeight" minOccurs="0"/>
+            <xs:element ref="aaf:SampledWidth" minOccurs="0"/>
+            <xs:element ref="aaf:SampledXOffset" minOccurs="0"/>
+            <xs:element ref="aaf:SampledYOffset" minOccurs="0"/>
+            <xs:element ref="aaf:DisplayHeight" minOccurs="0"/>
+            <xs:element ref="aaf:DisplayWidth" minOccurs="0"/>
+            <xs:element ref="aaf:DisplayXOffset" minOccurs="0"/>
+            <xs:element ref="aaf:DisplayYOffset" minOccurs="0"/>
+            <xs:element ref="aaf:FrameLayout"/>
+            <xs:element ref="aaf:VideoLineMap"/>
+            <xs:element ref="aaf:ImageAspectRatio"/>
+            <xs:element ref="aaf:AlphaTransparency" minOccurs="0"/>
+            <xs:element ref="aaf:TransferCharacteristic" minOccurs="0"/>
+            <xs:element ref="aaf:ColorPrimaries" minOccurs="0"/>
+            <xs:element ref="aaf:CodingEquations" minOccurs="0"/>
+            <xs:element ref="aaf:ImageAlignmentFactor" minOccurs="0"/>
+            <xs:element ref="aaf:FieldDominance" minOccurs="0"/>
+            <xs:element ref="aaf:FieldStartOffset" minOccurs="0"/>
+            <xs:element ref="aaf:FieldEndOffset" minOccurs="0"/>
+            <xs:element ref="aaf:SignalStandard" minOccurs="0"/>
+            <xs:element ref="aaf:StoredF2Offset" minOccurs="0"/>
+            <xs:element ref="aaf:DisplayF2Offset" minOccurs="0"/>
+            <xs:element ref="aaf:ActiveFormatDescriptor" minOccurs="0"/>
+            <xs:element ref="ns1:ResolutionID" minOccurs="0"/>
+            <xs:element ref="ns1:FirstFrameOffset" minOccurs="0"/>
+            <xs:element ref="ns1:ImageSize" minOccurs="0"/>
+            <xs:element ref="ns1:FrameSampleSize" minOccurs="0"/>
+            <xs:element ref="ns1:FrameIndexByteOrder" minOccurs="0"/>
+            <xs:element ref="ns1:DataOffset" minOccurs="0"/>
+            <xs:element ref="aaf:PixelLayout"/>
+            <xs:element ref="aaf:Palette" minOccurs="0"/>
+            <xs:element ref="aaf:PaletteLayout" minOccurs="0"/>
+            <xs:element ref="aaf:ScanningDirection" minOccurs="0"/>
+            <xs:element ref="aaf:ComponentMaxRef" minOccurs="0"/>
+            <xs:element ref="aaf:ComponentMinRef" minOccurs="0"/>
+            <xs:element ref="aaf:AlphaMaxRef" minOccurs="0"/>
+            <xs:element ref="aaf:AlphaMinRef" minOccurs="0"/>
+         </xs:all>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="ScopeReference">
+      <xs:complexType>
+         <xs:all>
+            <xs:element ref="aaf:Generation" minOccurs="0"/>
+            <xs:element ref="aaf:ComponentDataDefinition"/>
+            <xs:element ref="aaf:ComponentLength" minOccurs="0"/>
+            <xs:element ref="aaf:ComponentKLVData" minOccurs="0"/>
+            <xs:element ref="aaf:ComponentUserComments" minOccurs="0"/>
+            <xs:element ref="aaf:ComponentAttributes" minOccurs="0"/>
+            <xs:element ref="ns1:ComponentAttributeList" minOccurs="0"/>
+            <xs:element ref="aaf:RelativeScope"/>
+            <xs:element ref="aaf:RelativeSlot"/>
+         </xs:all>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="Segment" abstract="true">
+      <xs:complexType>
+         <xs:all>
+            <xs:element ref="aaf:Generation" minOccurs="0"/>
+            <xs:element ref="aaf:ComponentDataDefinition"/>
+            <xs:element ref="aaf:ComponentLength" minOccurs="0"/>
+            <xs:element ref="aaf:ComponentKLVData" minOccurs="0"/>
+            <xs:element ref="aaf:ComponentUserComments" minOccurs="0"/>
+            <xs:element ref="aaf:ComponentAttributes" minOccurs="0"/>
+            <xs:element ref="ns1:ComponentAttributeList" minOccurs="0"/>
+         </xs:all>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="Selector">
+      <xs:complexType>
+         <xs:all>
+            <xs:element ref="aaf:Generation" minOccurs="0"/>
+            <xs:element ref="aaf:ComponentDataDefinition"/>
+            <xs:element ref="aaf:ComponentLength" minOccurs="0"/>
+            <xs:element ref="aaf:ComponentKLVData" minOccurs="0"/>
+            <xs:element ref="aaf:ComponentUserComments" minOccurs="0"/>
+            <xs:element ref="aaf:ComponentAttributes" minOccurs="0"/>
+            <xs:element ref="ns1:ComponentAttributeList" minOccurs="0"/>
+            <xs:element ref="aaf:Selected"/>
+            <xs:element ref="aaf:Alternates" minOccurs="0"/>
+         </xs:all>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="Sequence">
+      <xs:complexType>
+         <xs:all>
+            <xs:element ref="aaf:Generation" minOccurs="0"/>
+            <xs:element ref="aaf:ComponentDataDefinition"/>
+            <xs:element ref="aaf:ComponentLength" minOccurs="0"/>
+            <xs:element ref="aaf:ComponentKLVData" minOccurs="0"/>
+            <xs:element ref="aaf:ComponentUserComments" minOccurs="0"/>
+            <xs:element ref="aaf:ComponentAttributes" minOccurs="0"/>
+            <xs:element ref="ns1:ComponentAttributeList" minOccurs="0"/>
+            <xs:element ref="aaf:Components"/>
+         </xs:all>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="SoundDescriptor">
+      <xs:complexType>
+         <xs:all>
+            <xs:element ref="aaf:Generation" minOccurs="0"/>
+            <xs:element ref="aaf:EssenceDescriptorLocator" minOccurs="0"/>
+            <xs:element ref="aaf:FileDescriptorSampleRate"/>
+            <xs:element ref="aaf:FileDescriptorLength"/>
+            <xs:element ref="aaf:ContainerFormat" minOccurs="0"/>
+            <xs:element ref="aaf:FileDescriptorCodecDefinition" minOccurs="0"/>
+            <xs:element ref="aaf:AudioSamplingRate"/>
+            <xs:element ref="aaf:Locked" minOccurs="0"/>
+            <xs:element ref="aaf:AudioRefLevel" minOccurs="0"/>
+            <xs:element ref="aaf:ElectroSpatial" minOccurs="0"/>
+            <xs:element ref="aaf:Channels"/>
+            <xs:element ref="aaf:QuantizationBits"/>
+            <xs:element ref="aaf:DialNorm" minOccurs="0"/>
+            <xs:element ref="aaf:SoundDescriptorCompression" minOccurs="0"/>
+         </xs:all>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="SourceClip">
+      <xs:complexType>
+         <xs:all>
+            <xs:element ref="aaf:Generation" minOccurs="0"/>
+            <xs:element ref="aaf:ComponentDataDefinition"/>
+            <xs:element ref="aaf:ComponentLength" minOccurs="0"/>
+            <xs:element ref="aaf:ComponentKLVData" minOccurs="0"/>
+            <xs:element ref="aaf:ComponentUserComments" minOccurs="0"/>
+            <xs:element ref="aaf:ComponentAttributes" minOccurs="0"/>
+            <xs:element ref="ns1:ComponentAttributeList" minOccurs="0"/>
+            <xs:element ref="aaf:SourceID" minOccurs="0"/>
+            <xs:element ref="aaf:SourceMobSlotID"/>
+            <xs:element ref="aaf:ChannelIDs" minOccurs="0"/>
+            <xs:element ref="aaf:MonoSourceSlotIDs" minOccurs="0"/>
+            <xs:element ref="aaf:StartTime" minOccurs="0"/>
+            <xs:element ref="aaf:FadeInLength" minOccurs="0"/>
+            <xs:element ref="aaf:FadeInType" minOccurs="0"/>
+            <xs:element ref="aaf:FadeOutLength" minOccurs="0"/>
+            <xs:element ref="aaf:FadeOutType" minOccurs="0"/>
+         </xs:all>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="SourceMob">
+      <xs:complexType>
+         <xs:all>
+            <xs:element ref="aaf:Generation" minOccurs="0"/>
+            <xs:element ref="aaf:MobID"/>
+            <xs:element ref="aaf:MobName" minOccurs="0"/>
+            <xs:element ref="aaf:MobSlots"/>
+            <xs:element ref="aaf:MobLastModified"/>
+            <xs:element ref="aaf:CreationTime"/>
+            <xs:element ref="aaf:MobUserComments" minOccurs="0"/>
+            <xs:element ref="aaf:MobKLVData" minOccurs="0"/>
+            <xs:element ref="aaf:MobAttributes" minOccurs="0"/>
+            <xs:element ref="aaf:UsageCode" minOccurs="0"/>
+            <xs:element ref="ns1:MobAttributeList" minOccurs="0"/>
+            <xs:element ref="ns1:AppCode" minOccurs="0"/>
+            <xs:element ref="ns1:ConvertFrameRate" minOccurs="0"/>
+            <xs:element ref="aaf:EssenceDescription"/>
+         </xs:all>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="SourceReference" abstract="true">
+      <xs:complexType>
+         <xs:all>
+            <xs:element ref="aaf:Generation" minOccurs="0"/>
+            <xs:element ref="aaf:ComponentDataDefinition"/>
+            <xs:element ref="aaf:ComponentLength" minOccurs="0"/>
+            <xs:element ref="aaf:ComponentKLVData" minOccurs="0"/>
+            <xs:element ref="aaf:ComponentUserComments" minOccurs="0"/>
+            <xs:element ref="aaf:ComponentAttributes" minOccurs="0"/>
+            <xs:element ref="ns1:ComponentAttributeList" minOccurs="0"/>
+            <xs:element ref="aaf:SourceID" minOccurs="0"/>
+            <xs:element ref="aaf:SourceMobSlotID"/>
+            <xs:element ref="aaf:ChannelIDs" minOccurs="0"/>
+            <xs:element ref="aaf:MonoSourceSlotIDs" minOccurs="0"/>
+         </xs:all>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="StaticMobSlot">
+      <xs:complexType>
+         <xs:all>
+            <xs:element ref="aaf:Generation" minOccurs="0"/>
+            <xs:element ref="aaf:SlotID"/>
+            <xs:element ref="aaf:SlotName" minOccurs="0"/>
+            <xs:element ref="aaf:MobSlotSegment"/>
+            <xs:element ref="aaf:PhysicalTrackNumber" minOccurs="0"/>
+         </xs:all>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="TaggedValue">
+      <xs:complexType>
+         <xs:all>
+            <xs:element ref="aaf:Generation" minOccurs="0"/>
+            <xs:element ref="aaf:TaggedValueName"/>
+            <xs:element ref="aaf:TaggedValueValue"/>
+            <xs:element ref="ns1:PortableObject" minOccurs="0"/>
+            <xs:element ref="ns1:PortableObjectClassID" minOccurs="0"/>
+            <xs:element ref="ns1:TaggedValueAttributeList" minOccurs="0"/>
+         </xs:all>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="TaggedValueDefinition">
+      <xs:complexType>
+         <xs:all>
+            <xs:element ref="aaf:Generation" minOccurs="0"/>
+            <xs:element ref="aaf:DefinitionObjectIdentification"/>
+            <xs:element ref="aaf:DefinitionObjectName"/>
+            <xs:element ref="aaf:DefinitionObjectDescription" minOccurs="0"/>
+         </xs:all>
+         <xs:attribute ref="aaf:uid" use="required"/>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="TapeDescriptor">
+      <xs:complexType>
+         <xs:all>
+            <xs:element ref="aaf:Generation" minOccurs="0"/>
+            <xs:element ref="aaf:EssenceDescriptorLocator" minOccurs="0"/>
+            <xs:element ref="aaf:FormFactor" minOccurs="0"/>
+            <xs:element ref="aaf:VideoSignal" minOccurs="0"/>
+            <xs:element ref="aaf:TapeFormat" minOccurs="0"/>
+            <xs:element ref="aaf:TapeDescriptorLength" minOccurs="0"/>
+            <xs:element ref="aaf:TapeDescriptorManufacturerID" minOccurs="0"/>
+            <xs:element ref="aaf:TapeDescriptorModel" minOccurs="0"/>
+            <xs:element ref="aaf:TapeBatchNumber" minOccurs="0"/>
+            <xs:element ref="aaf:TapeStock" minOccurs="0"/>
+            <xs:element ref="ns1:ColorFrame" minOccurs="0"/>
+         </xs:all>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="TextClip" abstract="true">
+      <xs:complexType>
+         <xs:all>
+            <xs:element ref="aaf:Generation" minOccurs="0"/>
+            <xs:element ref="aaf:ComponentDataDefinition"/>
+            <xs:element ref="aaf:ComponentLength" minOccurs="0"/>
+            <xs:element ref="aaf:ComponentKLVData" minOccurs="0"/>
+            <xs:element ref="aaf:ComponentUserComments" minOccurs="0"/>
+            <xs:element ref="aaf:ComponentAttributes" minOccurs="0"/>
+            <xs:element ref="ns1:ComponentAttributeList" minOccurs="0"/>
+            <xs:element ref="aaf:SourceID" minOccurs="0"/>
+            <xs:element ref="aaf:SourceMobSlotID"/>
+            <xs:element ref="aaf:ChannelIDs" minOccurs="0"/>
+            <xs:element ref="aaf:MonoSourceSlotIDs" minOccurs="0"/>
+         </xs:all>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="TextLocator">
+      <xs:complexType>
+         <xs:all>
+            <xs:element ref="aaf:Generation" minOccurs="0"/>
+            <xs:element ref="aaf:TextLocatorName"/>
+         </xs:all>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="TIFFDescriptor">
+      <xs:complexType>
+         <xs:all>
+            <xs:element ref="aaf:Generation" minOccurs="0"/>
+            <xs:element ref="aaf:EssenceDescriptorLocator" minOccurs="0"/>
+            <xs:element ref="aaf:FileDescriptorSampleRate"/>
+            <xs:element ref="aaf:FileDescriptorLength"/>
+            <xs:element ref="aaf:ContainerFormat" minOccurs="0"/>
+            <xs:element ref="aaf:FileDescriptorCodecDefinition" minOccurs="0"/>
+            <xs:element ref="aaf:IsUniform"/>
+            <xs:element ref="aaf:IsContiguous"/>
+            <xs:element ref="aaf:LeadingLines" minOccurs="0"/>
+            <xs:element ref="aaf:TrailingLines" minOccurs="0"/>
+            <xs:element ref="aaf:JPEGTableID" minOccurs="0"/>
+            <xs:element ref="aaf:TIFFDescriptorSummary"/>
+         </xs:all>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="Timecode">
+      <xs:complexType>
+         <xs:all>
+            <xs:element ref="aaf:Generation" minOccurs="0"/>
+            <xs:element ref="aaf:ComponentDataDefinition"/>
+            <xs:element ref="aaf:ComponentLength" minOccurs="0"/>
+            <xs:element ref="aaf:ComponentKLVData" minOccurs="0"/>
+            <xs:element ref="aaf:ComponentUserComments" minOccurs="0"/>
+            <xs:element ref="aaf:ComponentAttributes" minOccurs="0"/>
+            <xs:element ref="ns1:ComponentAttributeList" minOccurs="0"/>
+            <xs:element ref="aaf:TimecodeStart"/>
+            <xs:element ref="aaf:FPS"/>
+            <xs:element ref="aaf:Drop"/>
+         </xs:all>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="TimecodeStream" abstract="true">
+      <xs:complexType>
+         <xs:all>
+            <xs:element ref="aaf:Generation" minOccurs="0"/>
+            <xs:element ref="aaf:ComponentDataDefinition"/>
+            <xs:element ref="aaf:ComponentLength" minOccurs="0"/>
+            <xs:element ref="aaf:ComponentKLVData" minOccurs="0"/>
+            <xs:element ref="aaf:ComponentUserComments" minOccurs="0"/>
+            <xs:element ref="aaf:ComponentAttributes" minOccurs="0"/>
+            <xs:element ref="ns1:ComponentAttributeList" minOccurs="0"/>
+            <xs:element ref="aaf:TimecodeStreamSampleRate"/>
+            <xs:element ref="aaf:Source"/>
+            <xs:element ref="aaf:SourceType"/>
+         </xs:all>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="TimecodeStream12M">
+      <xs:complexType>
+         <xs:all>
+            <xs:element ref="aaf:Generation" minOccurs="0"/>
+            <xs:element ref="aaf:ComponentDataDefinition"/>
+            <xs:element ref="aaf:ComponentLength" minOccurs="0"/>
+            <xs:element ref="aaf:ComponentKLVData" minOccurs="0"/>
+            <xs:element ref="aaf:ComponentUserComments" minOccurs="0"/>
+            <xs:element ref="aaf:ComponentAttributes" minOccurs="0"/>
+            <xs:element ref="ns1:ComponentAttributeList" minOccurs="0"/>
+            <xs:element ref="aaf:TimecodeStreamSampleRate"/>
+            <xs:element ref="aaf:Source"/>
+            <xs:element ref="aaf:SourceType"/>
+            <xs:element ref="aaf:IncludeSync"/>
+         </xs:all>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="TimelineMobSlot">
+      <xs:complexType>
+         <xs:all>
+            <xs:element ref="aaf:Generation" minOccurs="0"/>
+            <xs:element ref="aaf:SlotID"/>
+            <xs:element ref="aaf:SlotName" minOccurs="0"/>
+            <xs:element ref="aaf:MobSlotSegment"/>
+            <xs:element ref="aaf:PhysicalTrackNumber" minOccurs="0"/>
+            <xs:element ref="aaf:TimelineMobSlotEditRate"/>
+            <xs:element ref="aaf:SlotOrigin"/>
+            <xs:element ref="aaf:MarkIn" minOccurs="0"/>
+            <xs:element ref="aaf:MarkOut" minOccurs="0"/>
+            <xs:element ref="aaf:UserPos" minOccurs="0"/>
+            <xs:element ref="ns1:TimelineMobAttributeList" minOccurs="0"/>
+         </xs:all>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="Transition">
+      <xs:complexType>
+         <xs:all>
+            <xs:element ref="aaf:Generation" minOccurs="0"/>
+            <xs:element ref="aaf:ComponentDataDefinition"/>
+            <xs:element ref="aaf:ComponentLength" minOccurs="0"/>
+            <xs:element ref="aaf:ComponentKLVData" minOccurs="0"/>
+            <xs:element ref="aaf:ComponentUserComments" minOccurs="0"/>
+            <xs:element ref="aaf:ComponentAttributes" minOccurs="0"/>
+            <xs:element ref="ns1:ComponentAttributeList" minOccurs="0"/>
+            <xs:element ref="aaf:TransitionOperationGroup"/>
+            <xs:element ref="aaf:CutPoint"/>
+            <xs:element ref="ns1:TranTKMNTrackerDataAry" minOccurs="0"/>
+            <xs:element ref="ns1:TranTKMNTrackedParamAry" minOccurs="0"/>
+            <xs:element ref="ns1:TranTKMNTrackedParamSetngs" minOccurs="0"/>
+         </xs:all>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="TypeDefinition" abstract="true">
+      <xs:complexType>
+         <xs:all>
+            <xs:element ref="aaf:MetaDefinitionIdentification"/>
+            <xs:element ref="aaf:MetaDefinitionName"/>
+            <xs:element ref="aaf:MetaDefinitionDescription" minOccurs="0"/>
+         </xs:all>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="TypeDefinitionCharacter">
+      <xs:complexType>
+         <xs:all>
+            <xs:element ref="aaf:MetaDefinitionIdentification"/>
+            <xs:element ref="aaf:MetaDefinitionName"/>
+            <xs:element ref="aaf:MetaDefinitionDescription" minOccurs="0"/>
+         </xs:all>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="TypeDefinitionEnumeration">
+      <xs:complexType>
+         <xs:all>
+            <xs:element ref="aaf:MetaDefinitionIdentification"/>
+            <xs:element ref="aaf:MetaDefinitionName"/>
+            <xs:element ref="aaf:MetaDefinitionDescription" minOccurs="0"/>
+            <xs:element ref="aaf:EnumElementType"/>
+            <xs:element ref="aaf:EnumElementNames"/>
+            <xs:element ref="aaf:EnumElementValues"/>
+         </xs:all>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="TypeDefinitionExtendibleEnumeration">
+      <xs:complexType>
+         <xs:all>
+            <xs:element ref="aaf:MetaDefinitionIdentification"/>
+            <xs:element ref="aaf:MetaDefinitionName"/>
+            <xs:element ref="aaf:MetaDefinitionDescription" minOccurs="0"/>
+            <xs:element ref="aaf:ExtEnumElementNames"/>
+            <xs:element ref="aaf:ExtEnumElementValues"/>
+         </xs:all>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="TypeDefinitionFixedArray">
+      <xs:complexType>
+         <xs:all>
+            <xs:element ref="aaf:MetaDefinitionIdentification"/>
+            <xs:element ref="aaf:MetaDefinitionName"/>
+            <xs:element ref="aaf:MetaDefinitionDescription" minOccurs="0"/>
+            <xs:element ref="aaf:FixedArrayElementType"/>
+            <xs:element ref="aaf:ElementCount"/>
+         </xs:all>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="TypeDefinitionIndirect">
+      <xs:complexType>
+         <xs:all>
+            <xs:element ref="aaf:MetaDefinitionIdentification"/>
+            <xs:element ref="aaf:MetaDefinitionName"/>
+            <xs:element ref="aaf:MetaDefinitionDescription" minOccurs="0"/>
+         </xs:all>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="TypeDefinitionInteger">
+      <xs:complexType>
+         <xs:all>
+            <xs:element ref="aaf:MetaDefinitionIdentification"/>
+            <xs:element ref="aaf:MetaDefinitionName"/>
+            <xs:element ref="aaf:MetaDefinitionDescription" minOccurs="0"/>
+            <xs:element ref="aaf:IntegerSize"/>
+            <xs:element ref="aaf:IsSigned"/>
+         </xs:all>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="TypeDefinitionOpaque">
+      <xs:complexType>
+         <xs:all>
+            <xs:element ref="aaf:MetaDefinitionIdentification"/>
+            <xs:element ref="aaf:MetaDefinitionName"/>
+            <xs:element ref="aaf:MetaDefinitionDescription" minOccurs="0"/>
+         </xs:all>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="TypeDefinitionRecord">
+      <xs:complexType>
+         <xs:all>
+            <xs:element ref="aaf:MetaDefinitionIdentification"/>
+            <xs:element ref="aaf:MetaDefinitionName"/>
+            <xs:element ref="aaf:MetaDefinitionDescription" minOccurs="0"/>
+            <xs:element ref="aaf:MemberTypes"/>
+            <xs:element ref="aaf:MemberNames"/>
+         </xs:all>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="TypeDefinitionRename">
+      <xs:complexType>
+         <xs:all>
+            <xs:element ref="aaf:MetaDefinitionIdentification"/>
+            <xs:element ref="aaf:MetaDefinitionName"/>
+            <xs:element ref="aaf:MetaDefinitionDescription" minOccurs="0"/>
+            <xs:element ref="aaf:RenamedType"/>
+         </xs:all>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="TypeDefinitionSet">
+      <xs:complexType>
+         <xs:all>
+            <xs:element ref="aaf:MetaDefinitionIdentification"/>
+            <xs:element ref="aaf:MetaDefinitionName"/>
+            <xs:element ref="aaf:MetaDefinitionDescription" minOccurs="0"/>
+            <xs:element ref="aaf:SetElementType"/>
+         </xs:all>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="TypeDefinitionStream">
+      <xs:complexType>
+         <xs:all>
+            <xs:element ref="aaf:MetaDefinitionIdentification"/>
+            <xs:element ref="aaf:MetaDefinitionName"/>
+            <xs:element ref="aaf:MetaDefinitionDescription" minOccurs="0"/>
+         </xs:all>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="TypeDefinitionString">
+      <xs:complexType>
+         <xs:all>
+            <xs:element ref="aaf:MetaDefinitionIdentification"/>
+            <xs:element ref="aaf:MetaDefinitionName"/>
+            <xs:element ref="aaf:MetaDefinitionDescription" minOccurs="0"/>
+            <xs:element ref="aaf:StringElementType"/>
+         </xs:all>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="TypeDefinitionStrongObjectReference">
+      <xs:complexType>
+         <xs:all>
+            <xs:element ref="aaf:MetaDefinitionIdentification"/>
+            <xs:element ref="aaf:MetaDefinitionName"/>
+            <xs:element ref="aaf:MetaDefinitionDescription" minOccurs="0"/>
+            <xs:element ref="aaf:StrongReferencedType"/>
+         </xs:all>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="TypeDefinitionVariableArray">
+      <xs:complexType>
+         <xs:all>
+            <xs:element ref="aaf:MetaDefinitionIdentification"/>
+            <xs:element ref="aaf:MetaDefinitionName"/>
+            <xs:element ref="aaf:MetaDefinitionDescription" minOccurs="0"/>
+            <xs:element ref="aaf:VariableArrayElementType"/>
+         </xs:all>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="TypeDefinitionWeakObjectReference">
+      <xs:complexType>
+         <xs:all>
+            <xs:element ref="aaf:MetaDefinitionIdentification"/>
+            <xs:element ref="aaf:MetaDefinitionName"/>
+            <xs:element ref="aaf:MetaDefinitionDescription" minOccurs="0"/>
+            <xs:element ref="aaf:WeakReferencedType"/>
+            <xs:element ref="aaf:ReferenceTargetSet"/>
+         </xs:all>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="VaryingValue">
+      <xs:complexType>
+         <xs:all>
+            <xs:element ref="aaf:Generation" minOccurs="0"/>
+            <xs:element ref="aaf:Definition"/>
+            <xs:element ref="aaf:Interpolation"/>
+            <xs:element ref="aaf:PointList"/>
+            <xs:element ref="ns1:VVal_FieldCount" minOccurs="0"/>
+            <xs:element ref="ns1:VVal_Extrapolation" minOccurs="0"/>
+         </xs:all>
+      </xs:complexType>
+   </xs:element>
+   <xs:element name="WAVEDescriptor">
+      <xs:complexType>
+         <xs:all>
+            <xs:element ref="aaf:Generation" minOccurs="0"/>
+            <xs:element ref="aaf:EssenceDescriptorLocator" minOccurs="0"/>
+            <xs:element ref="aaf:FileDescriptorSampleRate"/>
+            <xs:element ref="aaf:FileDescriptorLength"/>
+            <xs:element ref="aaf:ContainerFormat" minOccurs="0"/>
+            <xs:element ref="aaf:FileDescriptorCodecDefinition" minOccurs="0"/>
+            <xs:element ref="aaf:WAVEDescriptorSummary"/>
+         </xs:all>
+      </xs:complexType>
+   </xs:element>
+
+
+<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+<!--  Properties -->
+<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+
+   <xs:element name="Accelerator" type="aaf:Boolean"/>
+   <xs:element name="ActiveFormatDescriptor" type="aaf:UInt8"/>
+   <xs:element name="ActiveState" type="aaf:Boolean"/>
+   <xs:element name="AIFCDescriptorSummary" type="aaf:DataValue"/>
+   <xs:element name="AlphaMaxRef" type="aaf:UInt32"/>
+   <xs:element name="AlphaMinRef" type="aaf:UInt32"/>
+   <xs:element name="AlphaSamplingWidth" type="aaf:UInt32"/>
+   <xs:element name="AlphaTransparency" type="aaf:AlphaTransparencyType"/>
+   <xs:element name="Alternates" type="aaf:SegmentStrongReferenceVector"/>
+   <xs:element name="Annotation" type="aaf:SourceReferenceStrongReference"/>
+   <xs:element name="AudioRefLevel" type="aaf:Int8"/>
+   <xs:element name="AudioSamplingRate" type="aaf:Rational"/>
+   <xs:element name="Authentication" type="aaf:Boolean"/>
+   <xs:element name="AverageBPS" type="aaf:UInt32"/>
+   <xs:element name="BeginAnchor" type="aaf:String"/>
+   <xs:element name="BlackReferenceLevel" type="aaf:UInt32"/>
+   <xs:element name="BlockAlign" type="aaf:UInt16"/>
+   <xs:element name="Bypass" type="aaf:UInt32"/>
+   <xs:element name="BypassOverride" type="aaf:UInt32"/>
+   <xs:element name="ByteOrder" type="aaf:_T_ByteOrder"/>
+   <xs:element name="ChannelAssignment" type="aaf:AUID"/>
+   <xs:element name="ChannelIDs" type="aaf:UInt32Array"/>
+   <xs:element name="Channels" type="aaf:UInt32"/>
+   <xs:element name="CharSet" type="aaf:String"/>
+   <xs:element name="Choices" type="aaf:SourceReferenceStrongReferenceVector"/>
+   <xs:element name="ClassDefinitions" type="aaf:ClassDefinitionStrongReferenceSet"/>
+   <xs:element name="CodecDefinitionDataDefinitions" type="aaf:DataDefinitionWeakReferenceVector"/>
+   <xs:element name="CodecDefinitions" type="aaf:CodecDefinitionStrongReferenceSet"/>
+   <xs:element name="CodeFormat" type="aaf:EdgeType"/>
+   <xs:element name="CodingEquations" type="aaf:CodingEquationsType"/>
+   <xs:element name="ColorPrimaries" type="aaf:ColorPrimariesType"/>
+   <xs:element name="ColorRange" type="aaf:UInt32"/>
+   <xs:element name="ColorSiting" type="aaf:ColorSitingType"/>
+   <xs:element name="Comment" type="aaf:String"/>
+   <xs:element name="CompanyName" type="aaf:String"/>
+   <xs:element name="ComponentAttributes" type="aaf:TaggedValueStrongReferenceVector"/>
+   <xs:element name="ComponentDataDefinition" type="aaf:DataDefinitionWeakReference"/>
+   <xs:element name="ComponentKLVData" type="aaf:KLVDataStrongReferenceVector"/>
+   <xs:element name="ComponentLength" type="aaf:LengthType"/>
+   <xs:element name="ComponentMaxRef" type="aaf:UInt32"/>
+   <xs:element name="ComponentMinRef" type="aaf:UInt32"/>
+   <xs:element name="Components" type="aaf:ComponentStrongReferenceVector"/>
+   <xs:element name="ComponentUserComments" type="aaf:TaggedValueStrongReferenceVector"/>
+   <xs:element name="ComponentWidth" type="aaf:UInt32"/>
+   <xs:element name="CompositionMobRendering" type="aaf:MobIDType"/>
+   <xs:element name="ConstantValueValue" type="aaf:Indirect"/>
+   <xs:element name="ContainerDefinitions" type="aaf:ContainerDefinitionStrongReferenceSet"/>
+   <xs:element name="ContainerFormat" type="aaf:ContainerDefinitionWeakReference"/>
+   <xs:element name="Content" type="aaf:ContentStorageStrongReference"/>
+   <xs:element name="ContentStorageEssenceData" type="aaf:EssenceDataStrongReferenceSet">
+      <xs:unique name="_U_aaf_ContentStorageEssenceData">
+         <xs:selector xpath="*"/>
+         <xs:field xpath="aaf:EssenceDataMobID"/>
+      </xs:unique>
+   </xs:element>
+   <xs:element name="ControlPointValue" type="aaf:Indirect"/>
+   <xs:element name="CreationTime" type="aaf:TimeStamp"/>
+   <xs:element name="CutPoint" type="aaf:PositionType"/>
+   <xs:element name="Data" type="aaf:Stream"/>
+   <xs:element name="DataDefinitions" type="aaf:DataDefinitionStrongReferenceSet"/>
+   <xs:element name="Date" type="aaf:TimeStamp"/>
+   <xs:element name="DefaultFadeLength" type="aaf:LengthType"/>
+   <xs:element name="DefFadeEditUnit" type="aaf:Rational"/>
+   <xs:element name="DefFadeType" type="aaf:FadeType"/>
+   <xs:element name="Definition" type="aaf:AUID"/>
+   <xs:element name="DefinitionObjectDescription" type="aaf:String"/>
+   <xs:element name="DefinitionObjectIdentification" type="aaf:AUID"/>
+   <xs:element name="DefinitionObjectName" type="aaf:String"/>
+   <xs:element name="DegradeTo" type="aaf:OperationDefinitionWeakReferenceVector"/>
+   <xs:element name="DescribedSlots" type="aaf:UInt32Set">
+      <xs:unique name="_U_aaf_DescribedSlots">
+         <xs:selector xpath="aaf:UInt32"/>
+         <xs:field xpath="."/>
+      </xs:unique>
+   </xs:element>
+   <xs:element name="DescriptiveMarkerDescription" type="aaf:DescriptiveFrameworkStrongReference"/>
+   <xs:element name="DescriptiveSchemes" type="aaf:AUIDSet">
+      <xs:unique name="_U_aaf_DescriptiveSchemes">
+         <xs:selector xpath="aaf:AUID"/>
+         <xs:field xpath="."/>
+      </xs:unique>
+   </xs:element>
+   <xs:element name="DialNorm" type="aaf:Int8"/>
+   <xs:element name="DigitalImageDescriptorCompression" type="aaf:AUID"/>
+   <xs:element name="DisplayF2Offset" type="aaf:Int32"/>
+   <xs:element name="DisplayHeight" type="aaf:UInt32"/>
+   <xs:element name="DisplayUnits" type="aaf:String"/>
+   <xs:element name="DisplayWidth" type="aaf:UInt32"/>
+   <xs:element name="DisplayXOffset" type="aaf:Int32"/>
+   <xs:element name="DisplayYOffset" type="aaf:Int32"/>
+   <xs:element name="Drop" type="aaf:Boolean"/>
+   <xs:element name="EdgeCodeHeader" type="aaf:DataValue"/>
+   <xs:element name="EdgeCodeStart" type="aaf:PositionType"/>
+   <xs:element name="EditHint" type="aaf:EditHintType"/>
+   <xs:element name="ElectroSpatial" type="aaf:ElectroSpatialFormulation"/>
+   <xs:element name="ElementCount" type="aaf:UInt32"/>
+   <xs:element name="EndAnchor" type="aaf:String"/>
+   <xs:element name="Engine" type="aaf:AUID"/>
+   <xs:element name="EnumElementNames" type="aaf:StringArray"/>
+   <xs:element name="EnumElementType" type="aaf:TypeDefinitionWeakReference"/>
+   <xs:element name="EnumElementValues" type="aaf:Int64Array"/>
+   <xs:element name="EssenceContainers" type="aaf:AUIDSet">
+      <xs:unique name="_U_aaf_EssenceContainers">
+         <xs:selector xpath="aaf:AUID"/>
+         <xs:field xpath="."/>
+      </xs:unique>
+   </xs:element>
+   <xs:element name="EssenceDataMobID" type="aaf:MobIDType"/>
+   <xs:element name="EssenceDescription" type="aaf:EssenceDescriptorStrongReference"/>
+   <xs:element name="EssenceDescriptorLocator" type="aaf:LocatorStrongReferenceVector"/>
+   <xs:element name="EssenceIsIdentified" type="aaf:Boolean"/>
+   <xs:element name="EventMobSlotEditRate" type="aaf:Rational"/>
+   <xs:element name="ExtEnumElementNames" type="aaf:StringArray"/>
+   <xs:element name="ExtEnumElementValues" type="aaf:AUIDArray"/>
+   <xs:element name="FadeInLength" type="aaf:LengthType"/>
+   <xs:element name="FadeInType" type="aaf:FadeType"/>
+   <xs:element name="FadeOutLength" type="aaf:LengthType"/>
+   <xs:element name="FadeOutType" type="aaf:FadeType"/>
+   <xs:element name="FieldDominance" type="aaf:FieldNumber"/>
+   <xs:element name="FieldEndOffset" type="aaf:UInt32"/>
+   <xs:element name="FieldStartOffset" type="aaf:UInt32"/>
+   <xs:element name="FileDescriptorClass" type="aaf:ClassDefinitionWeakReference"/>
+   <xs:element name="FileDescriptorCodecDefinition" type="aaf:CodecDefinitionWeakReference"/>
+   <xs:element name="FileDescriptorLength" type="aaf:LengthType"/>
+   <xs:element name="FileDescriptorSampleRate" type="aaf:Rational"/>
+   <xs:element name="FilmAspectRatio" type="aaf:Rational"/>
+   <xs:element name="FilmBatchNumber" type="aaf:String"/>
+   <xs:element name="FilmDescriptorManufacturer" type="aaf:String"/>
+   <xs:element name="FilmDescriptorModel" type="aaf:String"/>
+   <xs:element name="FilmFormat" type="aaf:FilmType"/>
+   <xs:element name="FilmGaugeFormat" type="aaf:String"/>
+   <xs:element name="FilmKind" type="aaf:FilmType"/>
+   <xs:element name="FixedArrayElementType" type="aaf:TypeDefinitionWeakReference"/>
+   <xs:element name="FormFactor" type="aaf:TapeCaseType"/>
+   <xs:element name="FPS" type="aaf:UInt16"/>
+   <xs:element name="FrameLayout" type="aaf:LayoutType"/>
+   <xs:element name="FrameRate" type="aaf:UInt32"/>
+   <xs:element name="Generation" type="aaf:AUID"/>
+   <xs:element name="GenerationAUID" type="aaf:AUID"/>
+   <xs:element name="HeaderDictionary" type="aaf:DictionaryStrongReference"/>
+   <xs:element name="HorizontalSubsampling" type="aaf:UInt32"/>
+   <xs:element name="IdentificationList" type="aaf:IdentificationStrongReferenceVector"/>
+   <xs:element name="IdentificationPlatform" type="aaf:String"/>
+   <xs:element name="ImageAlignmentFactor" type="aaf:UInt32"/>
+   <xs:element name="ImageAspectRatio" type="aaf:Rational"/>
+   <xs:element name="IncludeSync" type="aaf:Boolean"/>
+   <xs:element name="InputSegment" type="aaf:SegmentStrongReference"/>
+   <xs:element name="InputSegments" type="aaf:SegmentStrongReferenceVector"/>
+   <xs:element name="IntegerSize" type="aaf:UInt8"/>
+   <xs:element name="Interpolation" type="aaf:InterpolationDefinitionWeakReference"/>
+   <xs:element name="InterpolationDefinitions" type="aaf:InterpolationDefinitionStrongReferenceSet"/>
+   <xs:element name="IsConcrete" type="aaf:Boolean"/>
+   <xs:element name="IsContiguous" type="aaf:Boolean"/>
+   <xs:element name="IsOptional" type="aaf:Boolean"/>
+   <xs:element name="IsSigned" type="aaf:Boolean"/>
+   <xs:element name="IsTimeWarp" type="aaf:Boolean"/>
+   <xs:element name="IsUniform" type="aaf:Boolean"/>
+   <xs:element name="IsUniqueIdentifier" type="aaf:Boolean"/>
+   <xs:element name="JPEGTableID" type="aaf:JPEGTableIDType"/>
+   <xs:element name="KLVDataDefinitions" type="aaf:KLVDataDefinitionStrongReferenceSet">
+      <xs:unique name="_U_aaf_KLVDataDefinitions">
+         <xs:selector xpath="*"/>
+         <xs:field xpath="@aaf:uid"/>
+      </xs:unique>
+   </xs:element>
+   <xs:element name="KLVDataType" type="aaf:TypeDefinitionWeakReference"/>
+   <xs:element name="KLVDataValue" type="aaf:Opaque"/>
+   <xs:element name="LastModified" type="aaf:TimeStamp"/>
+   <xs:element name="LeadingLines" type="aaf:Int32"/>
+   <xs:element name="LocalIdentification" type="aaf:UInt16"/>
+   <xs:element name="Locators" type="aaf:LocatorStrongReferenceVector"/>
+   <xs:element name="Locked" type="aaf:Boolean"/>
+   <xs:element name="ManufacturerInfo" type="aaf:NetworkLocatorStrongReference"/>
+   <xs:element name="MarkIn" type="aaf:PositionType"/>
+   <xs:element name="MarkOut" type="aaf:PositionType"/>
+   <xs:element name="MaxEngineVersion" type="aaf:VersionType"/>
+   <xs:element name="MaxPlatformVersion" type="aaf:VersionType"/>
+   <xs:element name="MaxPluginAPI" type="aaf:VersionType"/>
+   <xs:element name="MemberNames" type="aaf:StringArray"/>
+   <xs:element name="MemberTypes" type="aaf:TypeDefinitionWeakReferenceVector"/>
+   <xs:element name="MetaDefinitionDescription" type="aaf:String"/>
+   <xs:element name="MetaDefinitionIdentification" type="aaf:AUID"/>
+   <xs:element name="MetaDefinitionName" type="aaf:String"/>
+   <xs:element name="MimeType" type="aaf:String"/>
+   <xs:element name="MinEngineVersion" type="aaf:VersionType"/>
+   <xs:element name="MinPlatformVersion" type="aaf:VersionType"/>
+   <xs:element name="MinPluginAPI" type="aaf:VersionType"/>
+   <xs:element name="MobAttributes" type="aaf:TaggedValueStrongReferenceVector"/>
+   <xs:element name="MobID" type="aaf:MobIDType"/>
+   <xs:element name="MobKLVData" type="aaf:KLVDataStrongReferenceVector"/>
+   <xs:element name="MobLastModified" type="aaf:TimeStamp"/>
+   <xs:element name="MobName" type="aaf:String"/>
+   <xs:element name="Mobs" type="aaf:MobStrongReferenceSet"/>
+   <xs:element name="MobSlots" type="aaf:MobSlotStrongReferenceVector"/>
+   <xs:element name="MobSlotSegment" type="aaf:SegmentStrongReference"/>
+   <xs:element name="MobUserComments" type="aaf:TaggedValueStrongReferenceVector"/>
+   <xs:element name="MonoSourceSlotIDs" type="aaf:UInt32Array"/>
+   <xs:element name="NestedScopeSlots" type="aaf:SegmentStrongReferenceVector"/>
+   <xs:element name="NumberInputs" type="aaf:Int32"/>
+   <xs:element name="ObjectModelVersion" type="aaf:UInt32"/>
+   <xs:element name="Operation" type="aaf:OperationDefinitionWeakReference"/>
+   <xs:element name="OperationalPattern" type="aaf:AUID"/>
+   <xs:element name="OperationCategory" type="aaf:OperationCategoryType"/>
+   <xs:element name="OperationDefinitionDataDefinition" type="aaf:DataDefinitionWeakReference"/>
+   <xs:element name="OperationDefinitions" type="aaf:OperationDefinitionStrongReferenceSet"/>
+   <xs:element name="OperationGroupRendering" type="aaf:SourceReferenceStrongReference"/>
+   <xs:element name="PaddingBits" type="aaf:Int16"/>
+   <xs:element name="Palette" type="aaf:DataValue"/>
+   <xs:element name="PaletteLayout" type="aaf:RGBALayout"/>
+   <xs:element name="ParameterDefinitions" type="aaf:ParameterDefinitionStrongReferenceSet"/>
+   <xs:element name="ParameterDefinitionType" type="aaf:TypeDefinitionWeakReference"/>
+   <xs:element name="Parameters" type="aaf:ParameterStrongReferenceVector"/>
+   <xs:element name="ParametersDefined" type="aaf:ParameterDefinitionWeakReferenceSet">
+      <xs:unique name="_U_aaf_ParametersDefined">
+         <xs:selector xpath="aaf:ParameterDefinitionWeakReference"/>
+         <xs:field xpath="."/>
+      </xs:unique>
+   </xs:element>
+   <xs:element name="ParentClass" type="aaf:ClassDefinitionWeakReference"/>
+   <xs:element name="PeakChannels" type="aaf:UInt32"/>
+   <xs:element name="PeakEnvelopeBlockSize" type="aaf:UInt32"/>
+   <xs:element name="PeakEnvelopeData" type="aaf:Stream"/>
+   <xs:element name="PeakEnvelopeFormat" type="aaf:UInt32"/>
+   <xs:element name="PeakEnvelopeTimestamp" type="aaf:TimeStamp"/>
+   <xs:element name="PeakEnvelopeVersion" type="aaf:UInt32"/>
+   <xs:element name="PeakFrames" type="aaf:UInt32"/>
+   <xs:element name="PeakOfPeaksPosition" type="aaf:PositionType"/>
+   <xs:element name="PerforationsPerFrame" type="aaf:UInt8"/>
+   <xs:element name="PhaseFrame" type="aaf:PhaseFrameType"/>
+   <xs:element name="PhysicalTrackNumber" type="aaf:UInt32"/>
+   <xs:element name="PixelLayout" type="aaf:RGBALayout"/>
+   <xs:element name="PluginAPI" type="aaf:AUID"/>
+   <xs:element name="PluginCategory" type="aaf:PluginCategoryType"/>
+   <xs:element name="PluginDefinitionDefinitionObject" type="aaf:AUID"/>
+   <xs:element name="PluginDefinitionManufacturer" type="aaf:String"/>
+   <xs:element name="PluginDefinitionManufacturerID" type="aaf:AUID"/>
+   <xs:element name="PluginDefinitionPlatform" type="aaf:AUID"/>
+   <xs:element name="PluginDefinitions" type="aaf:PluginDefinitionStrongReferenceSet"/>
+   <xs:element name="PointList" type="aaf:ControlPointStrongReferenceVector"/>
+   <xs:element name="PointsPerPeakValue" type="aaf:UInt32"/>
+   <xs:element name="Position" type="aaf:PositionType"/>
+   <xs:element name="ProductID" type="aaf:AUID"/>
+   <xs:element name="ProductName" type="aaf:String"/>
+   <xs:element name="ProductVersion" type="aaf:ProductVersionType"/>
+   <xs:element name="ProductVersionString" type="aaf:String"/>
+   <xs:element name="Properties" type="aaf:PropertyDefinitionStrongReferenceSet"/>
+   <xs:element name="PropertyDefinitionType" type="aaf:AUID"/>
+   <xs:element name="PulldownDirection" type="aaf:PulldownDirectionType"/>
+   <xs:element name="PulldownKind" type="aaf:PulldownKindType"/>
+   <xs:element name="QuantizationBits" type="aaf:UInt32"/>
+   <xs:element name="ReferenceTargetSet" type="aaf:AUIDArray"/>
+   <xs:element name="RelativeScope" type="aaf:UInt32"/>
+   <xs:element name="RelativeSlot" type="aaf:UInt32"/>
+   <xs:element name="RenamedType" type="aaf:TypeDefinitionWeakReference"/>
+   <xs:element name="ReversedByteOrder" type="aaf:Boolean"/>
+   <xs:element name="SampledHeight" type="aaf:UInt32"/>
+   <xs:element name="SampledWidth" type="aaf:UInt32"/>
+   <xs:element name="SampledXOffset" type="aaf:Int32"/>
+   <xs:element name="SampledYOffset" type="aaf:Int32"/>
+   <xs:element name="SampleIndex" type="aaf:Stream"/>
+   <xs:element name="ScanningDirection" type="aaf:ScanningDirectionType"/>
+   <xs:element name="Selected" type="aaf:SegmentStrongReference"/>
+   <xs:element name="SequenceOffset" type="aaf:UInt8"/>
+   <xs:element name="SetElementType" type="aaf:TypeDefinitionWeakReference"/>
+   <xs:element name="SignalStandard" type="aaf:SignalStandardType"/>
+   <xs:element name="SlotID" type="aaf:UInt32"/>
+   <xs:element name="SlotName" type="aaf:String"/>
+   <xs:element name="SlotOrigin" type="aaf:PositionType"/>
+   <xs:element name="SoftwareOnly" type="aaf:Boolean"/>
+   <xs:element name="SoundDescriptorCompression" type="aaf:AUID"/>
+   <xs:element name="Source" type="aaf:Stream"/>
+   <xs:element name="SourceID" type="aaf:MobIDType"/>
+   <xs:element name="SourceMobSlotID" type="aaf:UInt32"/>
+   <xs:element name="SourceType" type="aaf:TCSource"/>
+   <xs:element name="StartTime" type="aaf:PositionType"/>
+   <xs:element name="StillFrame" type="aaf:SourceReferenceStrongReference"/>
+   <xs:element name="StoredF2Offset" type="aaf:Int32"/>
+   <xs:element name="StoredHeight" type="aaf:UInt32"/>
+   <xs:element name="StoredWidth" type="aaf:UInt32"/>
+   <xs:element name="StringElementType" type="aaf:TypeDefinitionWeakReference"/>
+   <xs:element name="StrongReferencedType" type="aaf:ClassDefinitionWeakReference"/>
+   <xs:element name="TaggedValueDefinitions" type="aaf:TaggedValueDefinitionStrongReferenceSet">
+      <xs:unique name="_U_aaf_TaggedValueDefinitions">
+         <xs:selector xpath="*"/>
+         <xs:field xpath="@aaf:uid"/>
+      </xs:unique>
+   </xs:element>
+   <xs:element name="TaggedValueName" type="aaf:String"/>
+   <xs:element name="TaggedValueValue" type="aaf:Indirect"/>
+   <xs:element name="TapeBatchNumber" type="aaf:String"/>
+   <xs:element name="TapeDescriptorLength" type="aaf:UInt32"/>
+   <xs:element name="TapeDescriptorManufacturerID" type="aaf:String"/>
+   <xs:element name="TapeDescriptorModel" type="aaf:String"/>
+   <xs:element name="TapeFormat" type="aaf:TapeFormatType"/>
+   <xs:element name="TapeStock" type="aaf:String"/>
+   <xs:element name="TextLocatorName" type="aaf:String"/>
+   <xs:element name="TIFFDescriptorSummary" type="aaf:DataValue"/>
+   <xs:element name="Time" type="aaf:Rational"/>
+   <xs:element name="TimecodeStart" type="aaf:PositionType"/>
+   <xs:element name="TimecodeStreamSampleRate" type="aaf:Rational"/>
+   <xs:element name="TimelineMobSlotEditRate" type="aaf:Rational"/>
+   <xs:element name="ToolkitVersion" type="aaf:ProductVersionType"/>
+   <xs:element name="TrailingLines" type="aaf:Int32"/>
+   <xs:element name="TransferCharacteristic" type="aaf:TransferCharacteristicType"/>
+   <xs:element name="TransitionOperationGroup" type="aaf:OperationGroupStrongReference"/>
+   <xs:element name="TypeDefinitions" type="aaf:TypeDefinitionStrongReferenceSet"/>
+   <xs:element name="URLString" type="aaf:String"/>
+   <xs:element name="UsageCode" type="aaf:UsageType"/>
+   <xs:element name="UserPos" type="aaf:PositionType"/>
+   <xs:element name="VariableArrayElementType" type="aaf:TypeDefinitionWeakReference"/>
+   <xs:element name="Version" type="aaf:VersionType"/>
+   <xs:element name="VersionNumber" type="aaf:VersionType"/>
+   <xs:element name="VersionString" type="aaf:String"/>
+   <xs:element name="VerticalSubsampling" type="aaf:UInt32"/>
+   <xs:element name="VideoLineMap" type="aaf:Int32Array"/>
+   <xs:element name="VideoSignal" type="aaf:VideoSignalType"/>
+   <xs:element name="WAVEDescriptorSummary" type="aaf:DataValue"/>
+   <xs:element name="WeakReferencedType" type="aaf:ClassDefinitionWeakReference"/>
+   <xs:element name="WhiteReferenceLevel" type="aaf:UInt32"/>
+
+
+<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+<!--  Types -->
+<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+
+   <xs:simpleType name="AlphaTransparencyType">
+      <xs:restriction base="xs:token">
+         <xs:enumeration value="MinValueTransparent"/>
+         <xs:enumeration value="MaxValueTransparent"/>
+      </xs:restriction>
+   </xs:simpleType>
+   <xs:simpleType name="AUID">
+      <xs:restriction base="aaf:_T_AUID"/>
+   </xs:simpleType>
+   <xs:element name="AUID" type="aaf:AUID"/>
+   <xs:complexType name="AUIDArray">
+      <xs:sequence>
+         <xs:element ref="aaf:AUID" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name="AUIDSet">
+      <xs:sequence>
+         <xs:element ref="aaf:AUID" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+   </xs:complexType>
+   <xs:simpleType name="Boolean">
+      <xs:restriction base="xs:boolean"/>
+   </xs:simpleType>
+   <xs:complexType name="Character">
+      <xs:simpleContent>
+         <xs:extension base="xs:string">
+            <xs:attribute ref="aaf:escaped" use="optional"/>
+         </xs:extension>
+      </xs:simpleContent>
+   </xs:complexType>
+   <xs:element name="Character" type="aaf:Character"/>
+   <xs:group name="_G_ClassDefinitionStrongReference">
+      <xs:choice>
+         <xs:element ref="aaf:ClassDefinition"/>
+      </xs:choice>
+   </xs:group>
+   <xs:complexType name="ClassDefinitionStrongReference">
+      <xs:group ref="aaf:_G_ClassDefinitionStrongReference"/>
+   </xs:complexType>
+   <xs:complexType name="ClassDefinitionStrongReferenceSet">
+      <xs:group ref="aaf:_G_ClassDefinitionStrongReference" minOccurs="0" maxOccurs="unbounded"/>
+   </xs:complexType>
+   <xs:simpleType name="ClassDefinitionWeakReference">
+      <xs:restriction base="aaf:AUID"/>
+   </xs:simpleType>
+   <xs:group name="_G_CodecDefinitionStrongReference">
+      <xs:choice>
+         <xs:element ref="aaf:CodecDefinition"/>
+      </xs:choice>
+   </xs:group>
+   <xs:complexType name="CodecDefinitionStrongReference">
+      <xs:group ref="aaf:_G_CodecDefinitionStrongReference"/>
+   </xs:complexType>
+   <xs:complexType name="CodecDefinitionStrongReferenceSet">
+      <xs:group ref="aaf:_G_CodecDefinitionStrongReference" minOccurs="0" maxOccurs="unbounded"/>
+   </xs:complexType>
+   <xs:simpleType name="CodecDefinitionWeakReference">
+      <xs:restriction base="aaf:AUID"/>
+   </xs:simpleType>
+   <xs:simpleType name="CodingEquationsType">
+      <xs:restriction base="xs:token">
+         <xs:enumeration value="CodingEquations_ITU601"/>
+         <xs:enumeration value="CodingEquations_ITU709"/>
+         <xs:enumeration value="CodingEquations_SMPTE240M"/>
+      </xs:restriction>
+   </xs:simpleType>
+   <xs:simpleType name="ColorPrimariesType">
+      <xs:restriction base="xs:token">
+         <xs:enumeration value="ColorPrimaries_SMPTE170M"/>
+         <xs:enumeration value="ColorPrimaries_ITU470_PAL"/>
+         <xs:enumeration value="ColorPrimaries_ITU709"/>
+      </xs:restriction>
+   </xs:simpleType>
+   <xs:simpleType name="ColorSitingType">
+      <xs:restriction base="xs:token">
+         <xs:enumeration value="CoSiting"/>
+         <xs:enumeration value="Averaging"/>
+         <xs:enumeration value="ThreeTap"/>
+         <xs:enumeration value="Quincunx"/>
+         <xs:enumeration value="Rec601"/>
+         <xs:enumeration value="UnknownSiting"/>
+      </xs:restriction>
+   </xs:simpleType>
+   <xs:group name="_G_ComponentStrongReference">
+      <xs:choice>
+         <xs:element ref="aaf:Component"/>
+         <xs:element ref="aaf:Segment"/>
+         <xs:element ref="aaf:EdgeCode"/>
+         <xs:element ref="aaf:EssenceGroup"/>
+         <xs:element ref="aaf:Event"/>
+         <xs:element ref="aaf:GPITrigger"/>
+         <xs:element ref="aaf:CommentMarker"/>
+         <xs:element ref="aaf:DescriptiveMarker"/>
+         <xs:element ref="aaf:Filler"/>
+         <xs:element ref="aaf:OperationGroup"/>
+         <xs:element ref="aaf:NestedScope"/>
+         <xs:element ref="aaf:Pulldown"/>
+         <xs:element ref="aaf:ScopeReference"/>
+         <xs:element ref="aaf:Selector"/>
+         <xs:element ref="aaf:Sequence"/>
+         <xs:element ref="aaf:SourceReference"/>
+         <xs:element ref="aaf:SourceClip"/>
+         <xs:element ref="aaf:TextClip"/>
+         <xs:element ref="aaf:HTMLClip"/>
+         <xs:element ref="aaf:Timecode"/>
+         <xs:element ref="aaf:TimecodeStream"/>
+         <xs:element ref="aaf:TimecodeStream12M"/>
+         <xs:element ref="aaf:Transition"/>
+      </xs:choice>
+   </xs:group>
+   <xs:complexType name="ComponentStrongReference">
+      <xs:group ref="aaf:_G_ComponentStrongReference"/>
+   </xs:complexType>
+   <xs:complexType name="ComponentStrongReferenceVector">
+      <xs:group ref="aaf:_G_ComponentStrongReference" minOccurs="0" maxOccurs="unbounded"/>
+   </xs:complexType>
+   <xs:group name="_G_ContainerDefinitionStrongReference">
+      <xs:choice>
+         <xs:element ref="aaf:ContainerDefinition"/>
+      </xs:choice>
+   </xs:group>
+   <xs:complexType name="ContainerDefinitionStrongReference">
+      <xs:group ref="aaf:_G_ContainerDefinitionStrongReference"/>
+   </xs:complexType>
+   <xs:complexType name="ContainerDefinitionStrongReferenceSet">
+      <xs:group ref="aaf:_G_ContainerDefinitionStrongReference" minOccurs="0" maxOccurs="unbounded"/>
+   </xs:complexType>
+   <xs:simpleType name="ContainerDefinitionWeakReference">
+      <xs:restriction base="aaf:AUID"/>
+   </xs:simpleType>
+   <xs:group name="_G_ContentStorageStrongReference">
+      <xs:choice>
+         <xs:element ref="aaf:ContentStorage"/>
+      </xs:choice>
+   </xs:group>
+   <xs:complexType name="ContentStorageStrongReference">
+      <xs:group ref="aaf:_G_ContentStorageStrongReference"/>
+   </xs:complexType>
+   <xs:group name="_G_ControlPointStrongReference">
+      <xs:choice>
+         <xs:element ref="aaf:ControlPoint"/>
+      </xs:choice>
+   </xs:group>
+   <xs:complexType name="ControlPointStrongReference">
+      <xs:group ref="aaf:_G_ControlPointStrongReference"/>
+   </xs:complexType>
+   <xs:complexType name="ControlPointStrongReferenceVector">
+      <xs:group ref="aaf:_G_ControlPointStrongReference" minOccurs="0" maxOccurs="unbounded"/>
+   </xs:complexType>
+   <xs:group name="_G_DataDefinitionStrongReference">
+      <xs:choice>
+         <xs:element ref="aaf:DataDefinition"/>
+      </xs:choice>
+   </xs:group>
+   <xs:complexType name="DataDefinitionStrongReference">
+      <xs:group ref="aaf:_G_DataDefinitionStrongReference"/>
+   </xs:complexType>
+   <xs:complexType name="DataDefinitionStrongReferenceSet">
+      <xs:group ref="aaf:_G_DataDefinitionStrongReference" minOccurs="0" maxOccurs="unbounded"/>
+   </xs:complexType>
+   <xs:simpleType name="DataDefinitionWeakReference">
+      <xs:restriction base="aaf:AUID"/>
+   </xs:simpleType>
+   <xs:element name="DataDefinitionWeakReference" type="aaf:DataDefinitionWeakReference"/>
+   <xs:complexType name="DataDefinitionWeakReferenceSet">
+      <xs:sequence>
+         <xs:element ref="aaf:DataDefinitionWeakReference" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name="DataDefinitionWeakReferenceVector">
+      <xs:sequence>
+         <xs:element ref="aaf:DataDefinitionWeakReference" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+   </xs:complexType>
+   <xs:simpleType name="DataValue">
+      <xs:restriction base="aaf:_T_HexByteArray"/>
+   </xs:simpleType>
+   <xs:simpleType name="DateStruct">
+      <xs:union>
+         <xs:simpleType>
+            <xs:restriction base="xs:date">
+               <xs:pattern value=".+(((\+|\-)\d\d:\d\d)|Z)"/>
+            </xs:restriction>
+         </xs:simpleType>
+         <xs:simpleType>
+            <xs:restriction base="xs:string">
+               <xs:enumeration value="0000-00-00Z"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:union>
+   </xs:simpleType>
+   <xs:group name="_G_DescriptiveFrameworkStrongReference">
+      <xs:choice>
+         <xs:element ref="aaf:DescriptiveFramework"/>
+      </xs:choice>
+   </xs:group>
+   <xs:complexType name="DescriptiveFrameworkStrongReference">
+      <xs:group ref="aaf:_G_DescriptiveFrameworkStrongReference"/>
+   </xs:complexType>
+   <xs:group name="_G_DictionaryStrongReference">
+      <xs:choice>
+         <xs:element ref="aaf:Dictionary"/>
+      </xs:choice>
+   </xs:group>
+   <xs:complexType name="DictionaryStrongReference">
+      <xs:group ref="aaf:_G_DictionaryStrongReference"/>
+   </xs:complexType>
+   <xs:simpleType name="EdgeType">
+      <xs:restriction base="xs:token">
+         <xs:enumeration value="EtNull"/>
+         <xs:enumeration value="EtKeycode"/>
+         <xs:enumeration value="EtEdgenum4"/>
+         <xs:enumeration value="EtEdgenum5"/>
+         <xs:enumeration value="EtHeaderSize"/>
+      </xs:restriction>
+   </xs:simpleType>
+   <xs:simpleType name="EditHintType">
+      <xs:restriction base="xs:token">
+         <xs:enumeration value="NoEditHint"/>
+         <xs:enumeration value="Proportional"/>
+         <xs:enumeration value="RelativeLeft"/>
+         <xs:enumeration value="RelativeRight"/>
+         <xs:enumeration value="RelativeFixed"/>
+      </xs:restriction>
+   </xs:simpleType>
+   <xs:simpleType name="ElectroSpatialFormulation">
+      <xs:restriction base="xs:token">
+         <xs:enumeration value="ElectroSpatialFormulation_Default"/>
+         <xs:enumeration value="ElectroSpatialFormulation_TwoChannelMode"/>
+         <xs:enumeration value="ElectroSpatialFormulation_SingleChannelMode"/>
+         <xs:enumeration value="ElectroSpatialFormulation_PrimarySecondaryMode"/>
+         <xs:enumeration value="ElectroSpatialFormulation_StereophonicMode"/>
+         <xs:enumeration value="ElectroSpatialFormulation_SingleChannelDoubleSamplingFrequencyMode"/>
+         <xs:enumeration value="ElectroSpatialFormulation_StereoLeftChannelDoubleSamplingFrequencyMode"/>
+         <xs:enumeration value="ElectroSpatialFormulation_StereoRightChannelDoubleSamplingFrequencyMode"/>
+         <xs:enumeration value="ElectroSpatialFormulation_MultiChannelMode"/>
+      </xs:restriction>
+   </xs:simpleType>
+   <xs:group name="_G_EssenceDataStrongReference">
+      <xs:choice>
+         <xs:element ref="aaf:EssenceData"/>
+      </xs:choice>
+   </xs:group>
+   <xs:complexType name="EssenceDataStrongReference">
+      <xs:group ref="aaf:_G_EssenceDataStrongReference"/>
+   </xs:complexType>
+   <xs:complexType name="EssenceDataStrongReferenceSet">
+      <xs:group ref="aaf:_G_EssenceDataStrongReference" minOccurs="0" maxOccurs="unbounded"/>
+   </xs:complexType>
+   <xs:group name="_G_EssenceDescriptorStrongReference">
+      <xs:choice>
+         <xs:element ref="aaf:EssenceDescriptor"/>
+         <xs:element ref="aaf:FileDescriptor"/>
+         <xs:element ref="aaf:AIFCDescriptor"/>
+         <xs:element ref="aaf:DigitalImageDescriptor"/>
+         <xs:element ref="aaf:CDCIDescriptor"/>
+         <xs:element ref="aaf:RGBADescriptor"/>
+         <xs:element ref="aaf:SoundDescriptor"/>
+         <xs:element ref="aaf:PCMDescriptor"/>
+         <xs:element ref="aaf:HTMLDescriptor"/>
+         <xs:element ref="aaf:TIFFDescriptor"/>
+         <xs:element ref="aaf:WAVEDescriptor"/>
+         <xs:element ref="aaf:FilmDescriptor"/>
+         <xs:element ref="aaf:TapeDescriptor"/>
+         <xs:element ref="aaf:PhysicalDescriptor"/>
+         <xs:element ref="aaf:ImportDescriptor"/>
+         <xs:element ref="aaf:RecordingDescriptor"/>
+         <xs:element ref="aaf:AuxiliaryDescriptor"/>
+      </xs:choice>
+   </xs:group>
+   <xs:complexType name="EssenceDescriptorStrongReference">
+      <xs:group ref="aaf:_G_EssenceDescriptorStrongReference"/>
+   </xs:complexType>
+   <xs:simpleType name="FadeType">
+      <xs:restriction base="xs:token">
+         <xs:enumeration value="FadeNone"/>
+         <xs:enumeration value="FadeLinearAmp"/>
+         <xs:enumeration value="FadeLinearPower"/>
+      </xs:restriction>
+   </xs:simpleType>
+   <xs:simpleType name="FieldNumber">
+      <xs:restriction base="xs:token">
+         <xs:enumeration value="UnspecifiedField"/>
+         <xs:enumeration value="FieldOne"/>
+         <xs:enumeration value="FieldTwo"/>
+      </xs:restriction>
+   </xs:simpleType>
+   <xs:simpleType name="FilmType">
+      <xs:restriction base="xs:token">
+         <xs:enumeration value="FtNull"/>
+         <xs:enumeration value="Ft35MM"/>
+         <xs:enumeration value="Ft16MM"/>
+         <xs:enumeration value="Ft8MM"/>
+         <xs:enumeration value="Ft65MM"/>
+      </xs:restriction>
+   </xs:simpleType>
+   <xs:group name="_G_IdentificationStrongReference">
+      <xs:choice>
+         <xs:element ref="aaf:Identification"/>
+      </xs:choice>
+   </xs:group>
+   <xs:complexType name="IdentificationStrongReference">
+      <xs:group ref="aaf:_G_IdentificationStrongReference"/>
+   </xs:complexType>
+   <xs:complexType name="IdentificationStrongReferenceVector">
+      <xs:group ref="aaf:_G_IdentificationStrongReference" minOccurs="0" maxOccurs="unbounded"/>
+   </xs:complexType>
+   <xs:complexType name="Indirect">
+      <xs:complexContent mixed="true">
+         <xs:restriction base="xs:anyType">
+            <xs:sequence>
+               <xs:any minOccurs="0" maxOccurs="unbounded" processContents="skip"/>
+            </xs:sequence>
+            <xs:attribute ref="aaf:actualType" use="required"/>
+            <xs:attribute ref="aaf:escaped" use="optional"/>
+         </xs:restriction>
+      </xs:complexContent>
+   </xs:complexType>
+   <xs:simpleType name="Int16">
+      <xs:union memberTypes="xs:short">
+         <xs:simpleType>
+            <xs:restriction base="xs:string">
+               <xs:pattern value="0x[0-9a-fA-F]{1,4}"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:union>
+   </xs:simpleType>
+   <xs:simpleType name="Int32">
+      <xs:union memberTypes="xs:integer">
+         <xs:simpleType>
+            <xs:restriction base="xs:string">
+               <xs:pattern value="0x[0-9a-fA-F]{1,8}"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:union>
+   </xs:simpleType>
+   <xs:element name="Int32" type="aaf:Int32"/>
+   <xs:complexType name="Int32Array">
+      <xs:sequence>
+         <xs:element ref="aaf:Int32" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+   </xs:complexType>
+   <xs:simpleType name="Int64">
+      <xs:union memberTypes="xs:long">
+         <xs:simpleType>
+            <xs:restriction base="xs:string">
+               <xs:pattern value="0x[0-9a-fA-F]{1,16}"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:union>
+   </xs:simpleType>
+   <xs:element name="Int64" type="aaf:Int64"/>
+   <xs:complexType name="Int64Array">
+      <xs:sequence>
+         <xs:element ref="aaf:Int64" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+   </xs:complexType>
+   <xs:simpleType name="Int8">
+      <xs:union memberTypes="xs:byte">
+         <xs:simpleType>
+            <xs:restriction base="xs:string">
+               <xs:pattern value="0x[0-9a-fA-F]{1,2}"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:union>
+   </xs:simpleType>
+   <xs:group name="_G_InterpolationDefinitionStrongReference">
+      <xs:choice>
+         <xs:element ref="aaf:InterpolationDefinition"/>
+      </xs:choice>
+   </xs:group>
+   <xs:complexType name="InterpolationDefinitionStrongReference">
+      <xs:group ref="aaf:_G_InterpolationDefinitionStrongReference"/>
+   </xs:complexType>
+   <xs:complexType name="InterpolationDefinitionStrongReferenceSet">
+      <xs:group ref="aaf:_G_InterpolationDefinitionStrongReference" minOccurs="0" maxOccurs="unbounded"/>
+   </xs:complexType>
+   <xs:simpleType name="InterpolationDefinitionWeakReference">
+      <xs:restriction base="aaf:AUID"/>
+   </xs:simpleType>
+   <xs:simpleType name="JPEGTableIDType">
+      <xs:restriction base="aaf:Int32"/>
+   </xs:simpleType>
+   <xs:group name="_G_KLVDataDefinitionStrongReference">
+      <xs:choice>
+         <xs:element ref="aaf:KLVDataDefinition"/>
+      </xs:choice>
+   </xs:group>
+   <xs:complexType name="KLVDataDefinitionStrongReference">
+      <xs:group ref="aaf:_G_KLVDataDefinitionStrongReference"/>
+   </xs:complexType>
+   <xs:complexType name="KLVDataDefinitionStrongReferenceSet">
+      <xs:group ref="aaf:_G_KLVDataDefinitionStrongReference" minOccurs="0" maxOccurs="unbounded"/>
+   </xs:complexType>
+   <xs:group name="_G_KLVDataStrongReference">
+      <xs:choice>
+         <xs:element ref="aaf:KLVData"/>
+      </xs:choice>
+   </xs:group>
+   <xs:complexType name="KLVDataStrongReference">
+      <xs:group ref="aaf:_G_KLVDataStrongReference"/>
+   </xs:complexType>
+   <xs:complexType name="KLVDataStrongReferenceVector">
+      <xs:group ref="aaf:_G_KLVDataStrongReference" minOccurs="0" maxOccurs="unbounded"/>
+   </xs:complexType>
+   <xs:simpleType name="LayoutType">
+      <xs:restriction base="xs:token">
+         <xs:enumeration value="FullFrame"/>
+         <xs:enumeration value="SeparateFields"/>
+         <xs:enumeration value="OneField"/>
+         <xs:enumeration value="MixedFields"/>
+         <xs:enumeration value="SegmentedFrame"/>
+      </xs:restriction>
+   </xs:simpleType>
+   <xs:simpleType name="LengthType">
+      <xs:restriction base="aaf:Int64"/>
+   </xs:simpleType>
+   <xs:group name="_G_LocatorStrongReference">
+      <xs:choice>
+         <xs:element ref="aaf:Locator"/>
+         <xs:element ref="aaf:NetworkLocator"/>
+         <xs:element ref="aaf:TextLocator"/>
+      </xs:choice>
+   </xs:group>
+   <xs:complexType name="LocatorStrongReference">
+      <xs:group ref="aaf:_G_LocatorStrongReference"/>
+   </xs:complexType>
+   <xs:complexType name="LocatorStrongReferenceVector">
+      <xs:group ref="aaf:_G_LocatorStrongReference" minOccurs="0" maxOccurs="unbounded"/>
+   </xs:complexType>
+   <xs:simpleType name="MobIDType">
+      <xs:restriction base="xs:anyURI">
+         <xs:pattern value="urn:x-umid:[0-9a-fA-F]{24}-13-[0-9a-fA-F]{6}-[0-9a-fA-F]{32}"/>
+         <xs:pattern value="urn:x-umid:000000000000000000000000-00-000000-00000000000000000000000000000000"/>
+      </xs:restriction>
+   </xs:simpleType>
+   <xs:group name="_G_MobSlotStrongReference">
+      <xs:choice>
+         <xs:element ref="aaf:MobSlot"/>
+         <xs:element ref="aaf:EventMobSlot"/>
+         <xs:element ref="aaf:StaticMobSlot"/>
+         <xs:element ref="aaf:TimelineMobSlot"/>
+      </xs:choice>
+   </xs:group>
+   <xs:complexType name="MobSlotStrongReference">
+      <xs:group ref="aaf:_G_MobSlotStrongReference"/>
+   </xs:complexType>
+   <xs:complexType name="MobSlotStrongReferenceVector">
+      <xs:group ref="aaf:_G_MobSlotStrongReference" minOccurs="0" maxOccurs="unbounded"/>
+   </xs:complexType>
+   <xs:group name="_G_MobStrongReference">
+      <xs:choice>
+         <xs:element ref="aaf:Mob"/>
+         <xs:element ref="aaf:CompositionMob"/>
+         <xs:element ref="aaf:MasterMob"/>
+         <xs:element ref="aaf:SourceMob"/>
+      </xs:choice>
+   </xs:group>
+   <xs:complexType name="MobStrongReference">
+      <xs:group ref="aaf:_G_MobStrongReference"/>
+   </xs:complexType>
+   <xs:complexType name="MobStrongReferenceSet">
+      <xs:group ref="aaf:_G_MobStrongReference" minOccurs="0" maxOccurs="unbounded"/>
+   </xs:complexType>
+   <xs:simpleType name="MobWeakReference">
+      <xs:restriction base="aaf:MobIDType"/>
+   </xs:simpleType>
+   <xs:group name="_G_NetworkLocatorStrongReference">
+      <xs:choice>
+         <xs:element ref="aaf:NetworkLocator"/>
+      </xs:choice>
+   </xs:group>
+   <xs:complexType name="NetworkLocatorStrongReference">
+      <xs:group ref="aaf:_G_NetworkLocatorStrongReference"/>
+   </xs:complexType>
+   <xs:complexType name="Opaque">
+      <xs:simpleContent>
+         <xs:extension base="aaf:_T_HexByteArray">
+            <xs:attribute ref="aaf:actualType" use="required"/>
+            <xs:attribute ref="aaf:byteOrder" use="required"/>
+         </xs:extension>
+      </xs:simpleContent>
+   </xs:complexType>
+   <xs:simpleType name="OperationCategoryType">
+      <xs:restriction base="xs:token">
+         <xs:enumeration value="OperationCategory_Effect"/>
+      </xs:restriction>
+   </xs:simpleType>
+   <xs:group name="_G_OperationDefinitionStrongReference">
+      <xs:choice>
+         <xs:element ref="aaf:OperationDefinition"/>
+      </xs:choice>
+   </xs:group>
+   <xs:complexType name="OperationDefinitionStrongReference">
+      <xs:group ref="aaf:_G_OperationDefinitionStrongReference"/>
+   </xs:complexType>
+   <xs:complexType name="OperationDefinitionStrongReferenceSet">
+      <xs:group ref="aaf:_G_OperationDefinitionStrongReference" minOccurs="0" maxOccurs="unbounded"/>
+   </xs:complexType>
+   <xs:simpleType name="OperationDefinitionWeakReference">
+      <xs:restriction base="aaf:AUID"/>
+   </xs:simpleType>
+   <xs:element name="OperationDefinitionWeakReference" type="aaf:OperationDefinitionWeakReference"/>
+   <xs:complexType name="OperationDefinitionWeakReferenceVector">
+      <xs:sequence>
+         <xs:element ref="aaf:OperationDefinitionWeakReference" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+   </xs:complexType>
+   <xs:group name="_G_OperationGroupStrongReference">
+      <xs:choice>
+         <xs:element ref="aaf:OperationGroup"/>
+      </xs:choice>
+   </xs:group>
+   <xs:complexType name="OperationGroupStrongReference">
+      <xs:group ref="aaf:_G_OperationGroupStrongReference"/>
+   </xs:complexType>
+   <xs:group name="_G_ParameterDefinitionStrongReference">
+      <xs:choice>
+         <xs:element ref="aaf:ParameterDefinition"/>
+      </xs:choice>
+   </xs:group>
+   <xs:complexType name="ParameterDefinitionStrongReference">
+      <xs:group ref="aaf:_G_ParameterDefinitionStrongReference"/>
+   </xs:complexType>
+   <xs:complexType name="ParameterDefinitionStrongReferenceSet">
+      <xs:group ref="aaf:_G_ParameterDefinitionStrongReference" minOccurs="0" maxOccurs="unbounded"/>
+   </xs:complexType>
+   <xs:simpleType name="ParameterDefinitionWeakReference">
+      <xs:restriction base="aaf:AUID"/>
+   </xs:simpleType>
+   <xs:element name="ParameterDefinitionWeakReference" type="aaf:ParameterDefinitionWeakReference"/>
+   <xs:complexType name="ParameterDefinitionWeakReferenceSet">
+      <xs:sequence>
+         <xs:element ref="aaf:ParameterDefinitionWeakReference" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+   </xs:complexType>
+   <xs:group name="_G_ParameterStrongReference">
+      <xs:choice>
+         <xs:element ref="aaf:Parameter"/>
+         <xs:element ref="aaf:ConstantValue"/>
+         <xs:element ref="aaf:VaryingValue"/>
+      </xs:choice>
+   </xs:group>
+   <xs:complexType name="ParameterStrongReference">
+      <xs:group ref="aaf:_G_ParameterStrongReference"/>
+   </xs:complexType>
+   <xs:complexType name="ParameterStrongReferenceVector">
+      <xs:group ref="aaf:_G_ParameterStrongReference" minOccurs="0" maxOccurs="unbounded"/>
+   </xs:complexType>
+   <xs:simpleType name="PhaseFrameType">
+      <xs:restriction base="aaf:Int32"/>
+   </xs:simpleType>
+   <xs:simpleType name="PluginCategoryType">
+      <xs:restriction base="xs:token">
+         <xs:enumeration value="PluginCategory_Effect"/>
+         <xs:enumeration value="PluginCategory_Codec"/>
+         <xs:enumeration value="PluginCategory_Interpolation"/>
+      </xs:restriction>
+   </xs:simpleType>
+   <xs:group name="_G_PluginDefinitionStrongReference">
+      <xs:choice>
+         <xs:element ref="aaf:PluginDefinition"/>
+      </xs:choice>
+   </xs:group>
+   <xs:complexType name="PluginDefinitionStrongReference">
+      <xs:group ref="aaf:_G_PluginDefinitionStrongReference"/>
+   </xs:complexType>
+   <xs:complexType name="PluginDefinitionStrongReferenceSet">
+      <xs:group ref="aaf:_G_PluginDefinitionStrongReference" minOccurs="0" maxOccurs="unbounded"/>
+   </xs:complexType>
+   <xs:simpleType name="PluginDefinitionWeakReference">
+      <xs:restriction base="aaf:AUID"/>
+   </xs:simpleType>
+   <xs:element name="PluginDefinitionWeakReference" type="aaf:PluginDefinitionWeakReference"/>
+   <xs:complexType name="PluginDefinitionWeakReferenceSet">
+      <xs:sequence>
+         <xs:element ref="aaf:PluginDefinitionWeakReference" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name="PositionArray">
+      <xs:sequence>
+         <xs:element ref="aaf:UInt8" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+   </xs:complexType>
+   <xs:simpleType name="PositionType">
+      <xs:restriction base="aaf:Int64"/>
+   </xs:simpleType>
+   <xs:simpleType name="ProductReleaseType">
+      <xs:restriction base="xs:token">
+         <xs:enumeration value="VersionUnknown"/>
+         <xs:enumeration value="VersionReleased"/>
+         <xs:enumeration value="VersionDebug"/>
+         <xs:enumeration value="VersionPatched"/>
+         <xs:enumeration value="VersionBeta"/>
+         <xs:enumeration value="VersionPrivateBuild"/>
+      </xs:restriction>
+   </xs:simpleType>
+   <xs:complexType name="ProductVersionType">
+      <xs:sequence>
+         <xs:element name="major" type="aaf:UInt16"/>
+         <xs:element name="minor" type="aaf:UInt16"/>
+         <xs:element name="tertiary" type="aaf:UInt16"/>
+         <xs:element name="patchLevel" type="aaf:UInt16"/>
+         <xs:element name="type" type="aaf:ProductReleaseType"/>
+      </xs:sequence>
+   </xs:complexType>
+   <xs:group name="_G_PropertyDefinitionStrongReference">
+      <xs:choice>
+         <xs:element ref="aaf:PropertyDefinition"/>
+      </xs:choice>
+   </xs:group>
+   <xs:complexType name="PropertyDefinitionStrongReference">
+      <xs:group ref="aaf:_G_PropertyDefinitionStrongReference"/>
+   </xs:complexType>
+   <xs:complexType name="PropertyDefinitionStrongReferenceSet">
+      <xs:group ref="aaf:_G_PropertyDefinitionStrongReference" minOccurs="0" maxOccurs="unbounded"/>
+   </xs:complexType>
+   <xs:simpleType name="PropertyDefinitionWeakReference">
+      <xs:restriction base="aaf:AUID"/>
+   </xs:simpleType>
+   <xs:element name="PropertyDefinitionWeakReference" type="aaf:PropertyDefinitionWeakReference"/>
+   <xs:complexType name="PropertyDefinitionWeakReferenceSet">
+      <xs:sequence>
+         <xs:element ref="aaf:PropertyDefinitionWeakReference" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+   </xs:complexType>
+   <xs:simpleType name="PulldownDirectionType">
+      <xs:restriction base="xs:token">
+         <xs:enumeration value="TapeToFilmSpeed"/>
+         <xs:enumeration value="FilmToTapeSpeed"/>
+      </xs:restriction>
+   </xs:simpleType>
+   <xs:simpleType name="PulldownKindType">
+      <xs:restriction base="xs:token">
+         <xs:enumeration value="TwoThreePD"/>
+         <xs:enumeration value="PALPD"/>
+         <xs:enumeration value="OneToOneNTSC"/>
+         <xs:enumeration value="OneToOnePAL"/>
+         <xs:enumeration value="VideoTapNTSC"/>
+         <xs:enumeration value="OneToOneHDSixty"/>
+         <xs:enumeration value="TwentyFourToSixtyPD"/>
+         <xs:enumeration value="TwoToOnePD"/>
+      </xs:restriction>
+   </xs:simpleType>
+   <xs:simpleType name="Rational">
+      <xs:restriction base="xs:string">
+         <xs:pattern value="\-?\d{1,10}(/\-?\d{1,10})?"/>
+      </xs:restriction>
+   </xs:simpleType>
+   <xs:simpleType name="ReferenceType">
+      <xs:restriction base="xs:token">
+         <xs:enumeration value="RefLimitMinimum"/>
+         <xs:enumeration value="RefLimitMaximum"/>
+         <xs:enumeration value="RefMinimum"/>
+         <xs:enumeration value="RefMaximum"/>
+         <xs:enumeration value="RefEnumvalue"/>
+      </xs:restriction>
+   </xs:simpleType>
+   <xs:complexType name="RGBAComponent">
+      <xs:sequence>
+         <xs:element name="Code" type="aaf:RGBAComponentKind"/>
+         <xs:element name="Size" type="aaf:UInt8"/>
+      </xs:sequence>
+   </xs:complexType>
+   <xs:element name="RGBAComponent" type="aaf:RGBAComponent"/>
+   <xs:simpleType name="RGBAComponentKind">
+      <xs:restriction base="xs:token">
+         <xs:enumeration value="CompNone"/>
+         <xs:enumeration value="CompAlpha"/>
+         <xs:enumeration value="CompBlue"/>
+         <xs:enumeration value="CompFill"/>
+         <xs:enumeration value="CompGreen"/>
+         <xs:enumeration value="CompPalette"/>
+         <xs:enumeration value="CompRed"/>
+         <xs:enumeration value="CompNull"/>
+      </xs:restriction>
+   </xs:simpleType>
+   <xs:complexType name="RGBALayout">
+      <xs:sequence>
+         <xs:element ref="aaf:RGBAComponent" minOccurs="8" maxOccurs="8"/>
+      </xs:sequence>
+   </xs:complexType>
+   <xs:simpleType name="ScanningDirectionType">
+      <xs:restriction base="xs:token">
+         <xs:enumeration value="ScanningDirection_LeftToRightTopToBottom"/>
+         <xs:enumeration value="ScanningDirection_RightToLeftTopToBottom"/>
+         <xs:enumeration value="ScanningDirection_LeftToRightBottomToTop"/>
+         <xs:enumeration value="ScanningDirection_RightToLeftBottomToTop"/>
+         <xs:enumeration value="ScanningDirection_TopToBottomLeftToRight"/>
+         <xs:enumeration value="ScanningDirection_TopToBottomRightToLeft"/>
+         <xs:enumeration value="ScanningDirection_BottomToTopLeftToRight"/>
+         <xs:enumeration value="ScanningDirection_BottomToTopRightToLeft"/>
+      </xs:restriction>
+   </xs:simpleType>
+   <xs:group name="_G_SegmentStrongReference">
+      <xs:choice>
+         <xs:element ref="aaf:Segment"/>
+         <xs:element ref="aaf:EdgeCode"/>
+         <xs:element ref="aaf:EssenceGroup"/>
+         <xs:element ref="aaf:Event"/>
+         <xs:element ref="aaf:GPITrigger"/>
+         <xs:element ref="aaf:CommentMarker"/>
+         <xs:element ref="aaf:DescriptiveMarker"/>
+         <xs:element ref="aaf:Filler"/>
+         <xs:element ref="aaf:OperationGroup"/>
+         <xs:element ref="aaf:NestedScope"/>
+         <xs:element ref="aaf:Pulldown"/>
+         <xs:element ref="aaf:ScopeReference"/>
+         <xs:element ref="aaf:Selector"/>
+         <xs:element ref="aaf:Sequence"/>
+         <xs:element ref="aaf:SourceReference"/>
+         <xs:element ref="aaf:SourceClip"/>
+         <xs:element ref="aaf:TextClip"/>
+         <xs:element ref="aaf:HTMLClip"/>
+         <xs:element ref="aaf:Timecode"/>
+         <xs:element ref="aaf:TimecodeStream"/>
+         <xs:element ref="aaf:TimecodeStream12M"/>
+      </xs:choice>
+   </xs:group>
+   <xs:complexType name="SegmentStrongReference">
+      <xs:group ref="aaf:_G_SegmentStrongReference"/>
+   </xs:complexType>
+   <xs:complexType name="SegmentStrongReferenceVector">
+      <xs:group ref="aaf:_G_SegmentStrongReference" minOccurs="0" maxOccurs="unbounded"/>
+   </xs:complexType>
+   <xs:simpleType name="SignalStandardType">
+      <xs:restriction base="xs:token">
+         <xs:enumeration value="SignalStandard_None"/>
+         <xs:enumeration value="SignalStandard_ITU601"/>
+         <xs:enumeration value="SignalStandard_ITU1358"/>
+         <xs:enumeration value="SignalStandard_SMPTE347M"/>
+         <xs:enumeration value="SignalStandard_SMPTE274M"/>
+         <xs:enumeration value="SignalStandard_SMPTE296M"/>
+         <xs:enumeration value="SignalStandard_SMPTE349M"/>
+      </xs:restriction>
+   </xs:simpleType>
+   <xs:group name="_G_SourceClipStrongReference">
+      <xs:choice>
+         <xs:element ref="aaf:SourceClip"/>
+      </xs:choice>
+   </xs:group>
+   <xs:complexType name="SourceClipStrongReference">
+      <xs:group ref="aaf:_G_SourceClipStrongReference"/>
+   </xs:complexType>
+   <xs:group name="_G_SourceReferenceStrongReference">
+      <xs:choice>
+         <xs:element ref="aaf:SourceReference"/>
+         <xs:element ref="aaf:SourceClip"/>
+         <xs:element ref="aaf:TextClip"/>
+         <xs:element ref="aaf:HTMLClip"/>
+      </xs:choice>
+   </xs:group>
+   <xs:complexType name="SourceReferenceStrongReference">
+      <xs:group ref="aaf:_G_SourceReferenceStrongReference"/>
+   </xs:complexType>
+   <xs:complexType name="SourceReferenceStrongReferenceVector">
+      <xs:group ref="aaf:_G_SourceReferenceStrongReference" minOccurs="0" maxOccurs="unbounded"/>
+   </xs:complexType>
+   <xs:complexType name="Stream">
+      <xs:attribute ref="aaf:stream" use="required"/>
+      <xs:attribute ref="aaf:byteOrder" use="optional"/>
+   </xs:complexType>
+   <xs:complexType name="String">
+      <xs:simpleContent>
+         <xs:extension base="xs:string">
+            <xs:attribute ref="aaf:escaped" use="optional"/>
+         </xs:extension>
+      </xs:simpleContent>
+   </xs:complexType>
+   <xs:element name="String" type="aaf:String"/>
+   <xs:complexType name="StringArray">
+      <xs:sequence>
+         <xs:element ref="aaf:String" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+   </xs:complexType>
+   <xs:group name="_G_TaggedValueDefinitionStrongReference">
+      <xs:choice>
+         <xs:element ref="aaf:TaggedValueDefinition"/>
+      </xs:choice>
+   </xs:group>
+   <xs:complexType name="TaggedValueDefinitionStrongReference">
+      <xs:group ref="aaf:_G_TaggedValueDefinitionStrongReference"/>
+   </xs:complexType>
+   <xs:complexType name="TaggedValueDefinitionStrongReferenceSet">
+      <xs:group ref="aaf:_G_TaggedValueDefinitionStrongReference" minOccurs="0" maxOccurs="unbounded"/>
+   </xs:complexType>
+   <xs:group name="_G_TaggedValueStrongReference">
+      <xs:choice>
+         <xs:element ref="aaf:TaggedValue"/>
+      </xs:choice>
+   </xs:group>
+   <xs:complexType name="TaggedValueStrongReference">
+      <xs:group ref="aaf:_G_TaggedValueStrongReference"/>
+   </xs:complexType>
+   <xs:complexType name="TaggedValueStrongReferenceVector">
+      <xs:group ref="aaf:_G_TaggedValueStrongReference" minOccurs="0" maxOccurs="unbounded"/>
+   </xs:complexType>
+   <xs:simpleType name="TapeCaseType">
+      <xs:restriction base="xs:token">
+         <xs:enumeration value="TapeCaseNull"/>
+         <xs:enumeration value="ThreeFourthInchVideoTape"/>
+         <xs:enumeration value="VHSVideoTape"/>
+         <xs:enumeration value="8mmVideoTape"/>
+         <xs:enumeration value="BetacamVideoTape"/>
+         <xs:enumeration value="CompactCassette"/>
+         <xs:enumeration value="DATCartridge"/>
+         <xs:enumeration value="NagraAudioTape"/>
+      </xs:restriction>
+   </xs:simpleType>
+   <xs:simpleType name="TapeFormatType">
+      <xs:restriction base="xs:token">
+         <xs:enumeration value="TapeFormatNull"/>
+         <xs:enumeration value="BetacamFormat"/>
+         <xs:enumeration value="BetacamSPFormat"/>
+         <xs:enumeration value="VHSFormat"/>
+         <xs:enumeration value="SVHSFormat"/>
+         <xs:enumeration value="8mmFormat"/>
+         <xs:enumeration value="Hi8Format"/>
+      </xs:restriction>
+   </xs:simpleType>
+   <xs:simpleType name="TCSource">
+      <xs:restriction base="xs:token">
+         <xs:enumeration value="TimecodeLTC"/>
+         <xs:enumeration value="TimecodeVITC"/>
+      </xs:restriction>
+   </xs:simpleType>
+   <xs:simpleType name="TimeStamp">
+      <xs:union>
+         <xs:simpleType>
+            <xs:restriction base="xs:dateTime">
+               <xs:pattern value=".+(((\+|\-)\d\d:\d\d)|Z)"/>
+            </xs:restriction>
+         </xs:simpleType>
+         <xs:simpleType>
+            <xs:restriction base="xs:string">
+               <xs:enumeration value="0000-00-00T00:00:00.00Z"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:union>
+   </xs:simpleType>
+   <xs:simpleType name="TimeStruct">
+      <xs:union>
+         <xs:simpleType>
+            <xs:restriction base="xs:time">
+               <xs:pattern value=".+(((\+|\-)\d\d:\d\d)|Z)"/>
+            </xs:restriction>
+         </xs:simpleType>
+         <xs:simpleType>
+            <xs:restriction base="xs:string">
+               <xs:enumeration value="00:00:00.00Z"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:union>
+   </xs:simpleType>
+   <xs:simpleType name="TransferCharacteristicType">
+      <xs:restriction base="xs:token">
+         <xs:enumeration value="TransferCharacteristic_ITU470_PAL"/>
+         <xs:enumeration value="TransferCharacteristic_ITU709"/>
+         <xs:enumeration value="TransferCharacteristic_SMPTE240M"/>
+         <xs:enumeration value="TransferCharacteristic_ITU1361"/>
+         <xs:enumeration value="TransferCharacteristic_linear"/>
+      </xs:restriction>
+   </xs:simpleType>
+   <xs:group name="_G_TypeDefinitionStrongReference">
+      <xs:choice>
+         <xs:element ref="aaf:TypeDefinition"/>
+         <xs:element ref="aaf:TypeDefinitionInteger"/>
+         <xs:element ref="aaf:TypeDefinitionStrongObjectReference"/>
+         <xs:element ref="aaf:TypeDefinitionWeakObjectReference"/>
+         <xs:element ref="aaf:TypeDefinitionEnumeration"/>
+         <xs:element ref="aaf:TypeDefinitionFixedArray"/>
+         <xs:element ref="aaf:TypeDefinitionVariableArray"/>
+         <xs:element ref="aaf:TypeDefinitionSet"/>
+         <xs:element ref="aaf:TypeDefinitionString"/>
+         <xs:element ref="aaf:TypeDefinitionStream"/>
+         <xs:element ref="aaf:TypeDefinitionRecord"/>
+         <xs:element ref="aaf:TypeDefinitionRename"/>
+         <xs:element ref="aaf:TypeDefinitionExtendibleEnumeration"/>
+         <xs:element ref="aaf:TypeDefinitionIndirect"/>
+         <xs:element ref="aaf:TypeDefinitionOpaque"/>
+         <xs:element ref="aaf:TypeDefinitionCharacter"/>
+      </xs:choice>
+   </xs:group>
+   <xs:complexType name="TypeDefinitionStrongReference">
+      <xs:group ref="aaf:_G_TypeDefinitionStrongReference"/>
+   </xs:complexType>
+   <xs:complexType name="TypeDefinitionStrongReferenceSet">
+      <xs:group ref="aaf:_G_TypeDefinitionStrongReference" minOccurs="0" maxOccurs="unbounded"/>
+   </xs:complexType>
+   <xs:simpleType name="TypeDefinitionWeakReference">
+      <xs:restriction base="aaf:AUID"/>
+   </xs:simpleType>
+   <xs:element name="TypeDefinitionWeakReference" type="aaf:TypeDefinitionWeakReference"/>
+   <xs:complexType name="TypeDefinitionWeakReferenceVector">
+      <xs:sequence>
+         <xs:element ref="aaf:TypeDefinitionWeakReference" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+   </xs:complexType>
+   <xs:simpleType name="UInt16">
+      <xs:union memberTypes="xs:unsignedShort">
+         <xs:simpleType>
+            <xs:restriction base="xs:string">
+               <xs:pattern value="0x[0-9a-fA-F]{1,4}"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:union>
+   </xs:simpleType>
+   <xs:simpleType name="UInt32">
+      <xs:union memberTypes="xs:unsignedInt">
+         <xs:simpleType>
+            <xs:restriction base="xs:string">
+               <xs:pattern value="0x[0-9a-fA-F]{1,8}"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:union>
+   </xs:simpleType>
+   <xs:element name="UInt32" type="aaf:UInt32"/>
+   <xs:complexType name="UInt32Array">
+      <xs:sequence>
+         <xs:element ref="aaf:UInt32" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name="UInt32Set">
+      <xs:sequence>
+         <xs:element ref="aaf:UInt32" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+   </xs:complexType>
+   <xs:simpleType name="UInt64">
+      <xs:union memberTypes="xs:unsignedLong">
+         <xs:simpleType>
+            <xs:restriction base="xs:string">
+               <xs:pattern value="0x[0-9a-fA-F]{1,16}"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:union>
+   </xs:simpleType>
+   <xs:simpleType name="UInt8">
+      <xs:union memberTypes="xs:unsignedByte">
+         <xs:simpleType>
+            <xs:restriction base="xs:string">
+               <xs:pattern value="0x[0-9a-fA-F]{1,2}"/>
+            </xs:restriction>
+         </xs:simpleType>
+      </xs:union>
+   </xs:simpleType>
+   <xs:element name="UInt8" type="aaf:UInt8"/>
+   <xs:complexType name="UInt8Array">
+      <xs:sequence>
+         <xs:element ref="aaf:UInt8" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name="UInt8Array12">
+      <xs:sequence>
+         <xs:element ref="aaf:UInt8" minOccurs="12" maxOccurs="12"/>
+      </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name="UInt8Array8">
+      <xs:sequence>
+         <xs:element ref="aaf:UInt8" minOccurs="8" maxOccurs="8"/>
+      </xs:sequence>
+   </xs:complexType>
+   <xs:simpleType name="UsageType">
+      <xs:restriction base="xs:token">
+         <xs:enumeration value="Usage_SubClip"/>
+         <xs:enumeration value="Usage_AdjustedClip"/>
+         <xs:enumeration value="Usage_TopLevel"/>
+         <xs:enumeration value="Usage_LowerLevel"/>
+         <xs:enumeration value="Usage_Template"/>
+      </xs:restriction>
+   </xs:simpleType>
+   <xs:simpleType name="VersionType">
+      <xs:restriction base="xs:string">
+         <xs:pattern value="\-?\d{1,3}\.\-?\d{1,3}"/>
+      </xs:restriction>
+   </xs:simpleType>
+   <xs:simpleType name="VideoSignalType">
+      <xs:restriction base="xs:token">
+         <xs:enumeration value="VideoSignalNull"/>
+         <xs:enumeration value="NTSCSignal"/>
+         <xs:enumeration value="PALSignal"/>
+      </xs:restriction>
+   </xs:simpleType>
+</xs:schema>

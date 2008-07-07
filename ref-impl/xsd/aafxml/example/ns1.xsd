@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:aaf="http://www.aafassociation.org/aafx/v1.1/20050628" xmlns:ns1="urn:uuid:58190333-69de-11d2-b6bc-fcab70ff7331" targetNamespace="urn:uuid:58190333-69de-11d2-b6bc-fcab70ff7331" elementFormDefault="qualified" attributeFormDefault="unqualified">
+   <xs:import namespace="http://www.aafassociation.org/aafx/v1.1/20050628" schemaLocation="aaf.xsd"/>
+
+
+<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+<!--  Classes -->
+<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+
+   <xs:element name="Avid_MC_Mob_Reference">
+      <xs:complexType>
+         <xs:all>
+            <xs:element ref="aaf:Generation" minOccurs="0"/>
+            <xs:element ref="ns1:Mob_Reference_MobID"/>
+            <xs:element ref="ns1:Mob_Reference_Position"/>
+         </xs:all>
+      </xs:complexType>
+   </xs:element>
+
+
+<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+<!--  Properties -->
+<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+
+   <xs:element name="AppCode" type="aaf:Int32"/>
+   <xs:element name="ColorFrame" type="aaf:Int32"/>
+   <xs:element name="CommentMarkerAttributeList" type="aaf:TaggedValueStrongReferenceVector"/>
+   <xs:element name="CommentMarkerColor" type="ns1:RGBColor"/>
+   <xs:element name="CommentMarkerDate" type="aaf:String"/>
+   <xs:element name="CommentMarkerIcon" type="aaf:Int32"/>
+   <xs:element name="CommentMarkerStatus" type="aaf:Int32"/>
+   <xs:element name="CommentMarkerTime" type="aaf:String"/>
+   <xs:element name="CommentMarkerUSer" type="aaf:String"/>
+   <xs:element name="ComponentAttributeList" type="aaf:TaggedValueStrongReferenceVector"/>
+   <xs:element name="ControlPointPointProperties" type="aaf:ParameterStrongReferenceVector"/>
+   <xs:element name="ConvertFrameRate" type="aaf:Boolean"/>
+   <xs:element name="DataOffset" type="aaf:Int32"/>
+   <xs:element name="EssenceGroupType" type="aaf:Int32"/>
+   <xs:element name="FirstFrameOffset" type="aaf:Int32"/>
+   <xs:element name="FrameIndexByteOrder" type="aaf:UInt16"/>
+   <xs:element name="FrameSampleSize" type="aaf:Int32"/>
+   <xs:element name="ImageSize" type="aaf:Int32"/>
+   <xs:element name="Mob_Reference_MobID" type="aaf:MobIDType"/>
+   <xs:element name="Mob_Reference_Position" type="aaf:Int64"/>
+   <xs:element name="MobAttributeList" type="aaf:TaggedValueStrongReferenceVector"/>
+   <xs:element name="OffsetToFrameIndexes" type="aaf:Int32"/>
+   <xs:element name="OpGroupMotionCtlOffsetMapAdjust" type="aaf:Rational"/>
+   <xs:element name="OpGroupMotionCtlSourceParams" type="aaf:ParameterStrongReferenceVector"/>
+   <xs:element name="OpGrpTKMNTrackedParamAry" type="ns1:AvidTKMNTrackedParamArray"/>
+   <xs:element name="OpGrpTKMNTrackedParamSetng" type="ns1:AvidBagOfBits"/>
+   <xs:element name="OpGrpTKMNTrackerDataAry" type="ns1:AvidTKMNTrackerDataArray"/>
+   <xs:element name="PortableObject" type="ns1:AvidStrongReference"/>
+   <xs:element name="PortableObjectClassID" type="aaf:UInt32"/>
+   <xs:element name="ResolutionID" type="aaf:Int32"/>
+   <xs:element name="TaggedValueAttributeList" type="aaf:TaggedValueStrongReferenceVector"/>
+   <xs:element name="TimelineMobAttributeList" type="aaf:TaggedValueStrongReferenceVector"/>
+   <xs:element name="TranTKMNTrackedParamAry" type="ns1:AvidTKMNTrackedParamArray"/>
+   <xs:element name="TranTKMNTrackedParamSetngs" type="ns1:AvidBagOfBits"/>
+   <xs:element name="TranTKMNTrackerDataAry" type="ns1:AvidTKMNTrackerDataArray"/>
+   <xs:element name="VVal_Extrapolation" type="aaf:AUID"/>
+   <xs:element name="VVal_FieldCount" type="aaf:Int16"/>
+
+
+<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+<!--  Types -->
+<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+
+   <xs:complexType name="AvidBagOfBits">
+      <xs:sequence>
+         <xs:element ref="aaf:UInt8" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+   </xs:complexType>
+   <xs:group name="_G_AvidStrongReference">
+      <xs:choice>
+         <xs:element ref="aaf:InterchangeObject"/>
+         <xs:element ref="aaf:Component"/>
+         <xs:element ref="aaf:Segment"/>
+         <xs:element ref="aaf:EdgeCode"/>
+         <xs:element ref="aaf:EssenceGroup"/>
+         <xs:element ref="aaf:Event"/>
+         <xs:element ref="aaf:GPITrigger"/>
+         <xs:element ref="aaf:CommentMarker"/>
+         <xs:element ref="aaf:DescriptiveMarker"/>
+         <xs:element ref="aaf:Filler"/>
+         <xs:element ref="aaf:OperationGroup"/>
+         <xs:element ref="aaf:NestedScope"/>
+         <xs:element ref="aaf:Pulldown"/>
+         <xs:element ref="aaf:ScopeReference"/>
+         <xs:element ref="aaf:Selector"/>
+         <xs:element ref="aaf:Sequence"/>
+         <xs:element ref="aaf:SourceReference"/>
+         <xs:element ref="aaf:SourceClip"/>
+         <xs:element ref="aaf:TextClip"/>
+         <xs:element ref="aaf:HTMLClip"/>
+         <xs:element ref="aaf:Timecode"/>
+         <xs:element ref="aaf:TimecodeStream"/>
+         <xs:element ref="aaf:TimecodeStream12M"/>
+         <xs:element ref="aaf:Transition"/>
+         <xs:element ref="aaf:DescriptiveFramework"/>
+         <xs:element ref="aaf:ContentStorage"/>
+         <xs:element ref="aaf:ControlPoint"/>
+         <xs:element ref="aaf:DefinitionObject"/>
+         <xs:element ref="aaf:DataDefinition"/>
+         <xs:element ref="aaf:OperationDefinition"/>
+         <xs:element ref="aaf:ParameterDefinition"/>
+         <xs:element ref="aaf:PluginDefinition"/>
+         <xs:element ref="aaf:CodecDefinition"/>
+         <xs:element ref="aaf:ContainerDefinition"/>
+         <xs:element ref="aaf:InterpolationDefinition"/>
+         <xs:element ref="aaf:TaggedValueDefinition"/>
+         <xs:element ref="aaf:KLVDataDefinition"/>
+         <xs:element ref="aaf:Dictionary"/>
+         <xs:element ref="aaf:EssenceData"/>
+         <xs:element ref="aaf:EssenceDescriptor"/>
+         <xs:element ref="aaf:FileDescriptor"/>
+         <xs:element ref="aaf:AIFCDescriptor"/>
+         <xs:element ref="aaf:DigitalImageDescriptor"/>
+         <xs:element ref="aaf:CDCIDescriptor"/>
+         <xs:element ref="aaf:RGBADescriptor"/>
+         <xs:element ref="aaf:SoundDescriptor"/>
+         <xs:element ref="aaf:PCMDescriptor"/>
+         <xs:element ref="aaf:HTMLDescriptor"/>
+         <xs:element ref="aaf:TIFFDescriptor"/>
+         <xs:element ref="aaf:WAVEDescriptor"/>
+         <xs:element ref="aaf:FilmDescriptor"/>
+         <xs:element ref="aaf:TapeDescriptor"/>
+         <xs:element ref="aaf:PhysicalDescriptor"/>
+         <xs:element ref="aaf:ImportDescriptor"/>
+         <xs:element ref="aaf:RecordingDescriptor"/>
+         <xs:element ref="aaf:AuxiliaryDescriptor"/>
+         <xs:element ref="aaf:Header"/>
+         <xs:element ref="aaf:Identification"/>
+         <xs:element ref="aaf:Locator"/>
+         <xs:element ref="aaf:NetworkLocator"/>
+         <xs:element ref="aaf:TextLocator"/>
+         <xs:element ref="aaf:Mob"/>
+         <xs:element ref="aaf:CompositionMob"/>
+         <xs:element ref="aaf:MasterMob"/>
+         <xs:element ref="aaf:SourceMob"/>
+         <xs:element ref="aaf:MobSlot"/>
+         <xs:element ref="aaf:EventMobSlot"/>
+         <xs:element ref="aaf:StaticMobSlot"/>
+         <xs:element ref="aaf:TimelineMobSlot"/>
+         <xs:element ref="aaf:Parameter"/>
+         <xs:element ref="aaf:ConstantValue"/>
+         <xs:element ref="aaf:VaryingValue"/>
+         <xs:element ref="aaf:TaggedValue"/>
+         <xs:element ref="aaf:KLVData"/>
+         <xs:element ref="ns1:Avid_MC_Mob_Reference"/>
+      </xs:choice>
+   </xs:group>
+   <xs:complexType name="AvidStrongReference">
+      <xs:group ref="ns1:_G_AvidStrongReference"/>
+   </xs:complexType>
+   <xs:complexType name="AvidTKMNTrackedParamArray">
+      <xs:group ref="ns1:_G_AvidStrongReference" minOccurs="0" maxOccurs="unbounded"/>
+   </xs:complexType>
+   <xs:complexType name="AvidTKMNTrackerDataArray">
+      <xs:group ref="ns1:_G_AvidStrongReference" minOccurs="0" maxOccurs="unbounded"/>
+   </xs:complexType>
+   <xs:complexType name="RGBColor">
+      <xs:sequence>
+         <xs:element name="red" type="aaf:UInt16"/>
+         <xs:element name="green" type="aaf:UInt16"/>
+         <xs:element name="blue" type="aaf:UInt16"/>
+      </xs:sequence>
+   </xs:complexType>
+</xs:schema>

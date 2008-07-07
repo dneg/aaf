@@ -1,0 +1,374 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+Author: Philip de Nier, BBC
+
+CHANGES
+* 12/10/04, Philip de Nier, BBC
+  - original version
+  
+* 13/10/04, AAF-X meeting Boston
+  - updated
+  
+* 19/10/04, Philip de Nier, BBC
+  - changed namespace suffix metadict to meta: 'http://www.aafassociation.org/aafx/meta'
+  - changed Label to mAUID
+  - changed ElementNames and ElementValues in the enumerations to a sequence of (Name, Value) pairs
+  - changed MemberNames and MemberTypes in the record to a sequence of (Name, Type) pairs
+  - added ExtendibleEnumerationExtension for extensions to already defined TypeDefinitionExtendibleEnumerations
+  - added unique constraint for Definition::Symbol and Definition::Identification
+  - added unique constraints for Name and Value in enumeration types
+  - added unique constraints for member Name in record type
+  - changed element name in mAUIDArray from 'e' to 'mAUID'
+  - changed Dependencies / Definitions minOccurs to 1 (the default); if there are no dependencies / definitions then the length of the array is 0
+  
+* 20/10/04, Philip de Nier, BBC
+   - made URI required; if no URI is known then it must equal the Identification property value
+   - added AAFMetaDictionary which will be used to represent a set of MetaDictionaries, e.g. the set of AAF Association defined MetaDictionaries.
+   - changed TypeDefinitionStrongObjectReference::ReferencedType to TypeDefinitionStrongObjectReference::ReferencedClass
+
+* 25/10/04, Philip de Nier, BBC
+   - Added PreferredPrefix property
+  
+* 01/11/04, Philip de Nier, BBC
+   - changed the URI element to Symbolspace
+   - added a date string to the namespace
+   - changed the pattern for the mAUID to allow any integer sub identifiers
+
+* 15/11/04, Philip de Nier, BBC
+   - changed to have no target namespace so that it can be used as part of the baseline AAF-X namespace
+   - removed the AAFMetaDictionary element declaration
+   - added the prefix 'm' to the types so they do not clash with AAF Object Model types
+   - removed annotations
+   
+* 16/11/04, Philip de Nier, BBC
+   - changed naming of the uniqueness constraints to use a '_U_' prefix
+   - changed Meta Dictionary Boolean type to 'True' or 'False' to match the AAF Boolean type
+
+* 22/11/04, Philip de Nier, BBC
+   - corrected pattern for urn:oid
+   
+* 30/06/05, Philip de Nier, BBC
+   - changed MetaDictionary to Extension
+   - extendible enumeration elements specified separately and individually
+   - removed Dependencies
+   - changed mAUID type to use urn:x-ul in place of urn:oid
+   - replaced mAUID type for references to meta-definitions to mMetaDefRef, which includes baseline Symbol or Symbolspace qualified Symbol
+   - using the XSDL boolean type
+   - separated Extension element declaration from the type definition to that the type can be reused elsewhere, e.g. for the baseline dictionary
+   - changed TargetSet type from mAUIDArray to mMetaDefRefArray
+   - changed TypeDefinitionWeakObjectReference::ReferencedType to TypeDefinitionWeakObjectReference::ReferencedClass
+   - made ClassDefinition::ParentClass optional
+
+* 01/07/05, Philip de Nier, BBC
+   -  changed ReferencedClass back to ReferencedType to match AAF specification
+   
+* 08/07/05, Philip de Nier, BBC
+   - changed LocalIdentification type to allow hexadecimal values
+  
+* 12/07/05, Philip de Nier, BBC
+   - changed enum names from NCName to string - not all AAF enums are NCName (see TapeFormatType '8mmFormat')
+  
+* 13/07/05, Philip de Nier, BBC
+   - changed enum names from string to token
+   - using XSDL types directly
+  
+NOTES:
+* 19/10/04, Philip de Nier, BBC
+  - ideally the XSD must be as restrictive as the format independent definition of the MetaDictionary
+    if it is more / less restrictive then there could be issues when converting between formats
+  - the XSD will in all cases be as or less restrictive because there are known constraints that cannot be validated, e.g. Types used in Arrays must have a known fixed length
+  - should mSymbolType and/or URI become a builtin AAF type? Currently each property of this type needs to validated on a case by case basis
+
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:annotation>
+		<xs:documentation>The AAF-X Extension Meta Dictionary XML Schema. Version 2005-07-13</xs:documentation>
+	</xs:annotation>
+	<xs:element name="Extension" type="mExtensionType"/>
+	<xs:complexType name="mExtensionType">
+		<xs:all>
+			<xs:element name="Identification" type="mAUID"/>
+			<xs:element name="Symbolspace" type="xs:anyURI"/>
+			<xs:element name="PreferredPrefix" type="xs:NCName" minOccurs="0"/>
+			<xs:element name="Description" type="xs:string" minOccurs="0"/>
+			<xs:element name="Definitions">
+				<xs:complexType>
+					<xs:choice minOccurs="0" maxOccurs="unbounded">
+						<xs:element name="ClassDefinition">
+							<xs:complexType>
+								<xs:all>
+									<xs:element name="Identification" type="mAUID"/>
+									<xs:element name="Symbol" type="xs:NCName"/>
+									<xs:element name="Description" type="xs:string" minOccurs="0"/>
+									<xs:element name="Name" type="xs:string"/>
+									<xs:element name="ParentClass" type="mMetaDefRef" minOccurs="0"/>
+									<xs:element name="IsConcrete" type="xs:boolean"/>
+								</xs:all>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="PropertyDefinition">
+							<xs:complexType>
+								<xs:all>
+									<xs:element name="Identification" type="mAUID"/>
+									<xs:element name="Symbol" type="xs:NCName"/>
+									<xs:element name="Description" type="xs:string" minOccurs="0"/>
+									<xs:element name="Name" type="xs:string"/>
+									<xs:element name="Type" type="mMetaDefRef"/>
+									<xs:element name="IsOptional" type="xs:boolean"/>
+									<xs:element name="IsUniqueIdentifier" type="xs:boolean" minOccurs="0"/>
+									<xs:element name="LocalIdentification" type="mLocalIdentificationType"/>
+									<xs:element name="MemberOf" type="mMetaDefRef"/>
+								</xs:all>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="TypeDefinitionCharacter">
+							<xs:complexType>
+								<xs:all>
+									<xs:element name="Identification" type="mAUID"/>
+									<xs:element name="Symbol" type="xs:NCName"/>
+									<xs:element name="Description" type="xs:string" minOccurs="0"/>
+									<xs:element name="Name" type="xs:string"/>
+								</xs:all>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="TypeDefinitionEnumeration">
+							<xs:complexType>
+								<xs:all>
+									<xs:element name="Identification" type="mAUID"/>
+									<xs:element name="Symbol" type="xs:NCName"/>
+									<xs:element name="Description" type="xs:string" minOccurs="0"/>
+									<xs:element name="Name" type="xs:string"/>
+									<xs:element name="ElementType" type="mMetaDefRef"/>
+									<xs:element name="Elements">
+										<xs:complexType>
+											<xs:sequence minOccurs="0" maxOccurs="unbounded">
+												<xs:element name="Name" type="xs:token"/>
+												<xs:element name="Value" type="xs:long"/>
+											</xs:sequence>
+										</xs:complexType>
+										<xs:unique name="mTypeDefEnumNamesUnique">
+											<xs:selector xpath="Name"/>
+											<xs:field xpath="."/>
+										</xs:unique>
+										<xs:unique name="mTypeDefEnumValuesUnique">
+											<xs:selector xpath="Value"/>
+											<xs:field xpath="."/>
+										</xs:unique>
+									</xs:element>
+								</xs:all>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="TypeDefinitionExtendibleEnumeration">
+							<xs:complexType>
+								<xs:all>
+									<xs:element name="Identification" type="mAUID"/>
+									<xs:element name="Symbol" type="xs:NCName"/>
+									<xs:element name="Description" type="xs:string" minOccurs="0"/>
+									<xs:element name="Name" type="xs:string"/>
+								</xs:all>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="ExtendibleEnumerationElement">
+							<xs:complexType>
+								<xs:all>
+									<xs:element name="ElementOf" type="mMetaDefRef"/>
+									<xs:element name="Name" type="xs:token"/>
+									<xs:element name="Value" type="mAUID"/>
+								</xs:all>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="TypeDefinitionFixedArray">
+							<xs:complexType>
+								<xs:all>
+									<xs:element name="Identification" type="mAUID"/>
+									<xs:element name="Symbol" type="xs:NCName"/>
+									<xs:element name="Description" type="xs:string" minOccurs="0"/>
+									<xs:element name="Name" type="xs:string"/>
+									<xs:element name="ElementType" type="mMetaDefRef"/>
+									<xs:element name="ElementCount" type="xs:unsignedInt"/>
+								</xs:all>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="TypeDefinitionIndirect">
+							<xs:complexType>
+								<xs:all>
+									<xs:element name="Identification" type="mAUID"/>
+									<xs:element name="Symbol" type="xs:NCName"/>
+									<xs:element name="Description" type="xs:string" minOccurs="0"/>
+									<xs:element name="Name" type="xs:string"/>
+								</xs:all>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="TypeDefinitionInteger">
+							<xs:complexType>
+								<xs:all>
+									<xs:element name="Identification" type="mAUID"/>
+									<xs:element name="Symbol" type="xs:NCName"/>
+									<xs:element name="Description" type="xs:string" minOccurs="0"/>
+									<xs:element name="Name" type="xs:string"/>
+									<xs:element name="Size">
+										<xs:simpleType>
+											<xs:restriction base="xs:unsignedByte">
+												<xs:enumeration value="1"/>
+												<xs:enumeration value="2"/>
+												<xs:enumeration value="4"/>
+												<xs:enumeration value="8"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:element>
+									<xs:element name="IsSigned" type="xs:boolean"/>
+								</xs:all>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="TypeDefinitionOpaque">
+							<xs:complexType>
+								<xs:all>
+									<xs:element name="Identification" type="mAUID"/>
+									<xs:element name="Symbol" type="xs:NCName"/>
+									<xs:element name="Description" type="xs:string" minOccurs="0"/>
+									<xs:element name="Name" type="xs:string"/>
+								</xs:all>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="TypeDefinitionRecord">
+							<xs:complexType>
+								<xs:all>
+									<xs:element name="Identification" type="mAUID"/>
+									<xs:element name="Symbol" type="xs:NCName"/>
+									<xs:element name="Description" type="xs:string" minOccurs="0"/>
+									<xs:element name="Name" type="xs:string"/>
+									<xs:element name="Members">
+										<xs:complexType>
+											<xs:sequence minOccurs="0" maxOccurs="unbounded">
+												<xs:element name="Name" type="xs:NCName"/>
+												<xs:element name="Type" type="mMetaDefRef"/>
+											</xs:sequence>
+										</xs:complexType>
+										<xs:unique name="mTypeDefRecordMemberNamesUnique">
+											<xs:selector xpath="Name"/>
+											<xs:field xpath="."/>
+										</xs:unique>
+									</xs:element>
+								</xs:all>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="TypeDefinitionRename">
+							<xs:complexType>
+								<xs:all>
+									<xs:element name="Identification" type="mAUID"/>
+									<xs:element name="Symbol" type="xs:NCName"/>
+									<xs:element name="Description" type="xs:string" minOccurs="0"/>
+									<xs:element name="Name" type="xs:string"/>
+									<xs:element name="RenamedType" type="mMetaDefRef"/>
+								</xs:all>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="TypeDefinitionSet">
+							<xs:complexType>
+								<xs:all>
+									<xs:element name="Identification" type="mAUID"/>
+									<xs:element name="Symbol" type="xs:NCName"/>
+									<xs:element name="Description" type="xs:string" minOccurs="0"/>
+									<xs:element name="Name" type="xs:string"/>
+									<xs:element name="ElementType" type="mMetaDefRef"/>
+								</xs:all>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="TypeDefinitionStream">
+							<xs:complexType>
+								<xs:all>
+									<xs:element name="Identification" type="mAUID"/>
+									<xs:element name="Symbol" type="xs:NCName"/>
+									<xs:element name="Description" type="xs:string" minOccurs="0"/>
+									<xs:element name="Name" type="xs:string"/>
+								</xs:all>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="TypeDefinitionString">
+							<xs:complexType>
+								<xs:all>
+									<xs:element name="Identification" type="mAUID"/>
+									<xs:element name="Symbol" type="xs:NCName"/>
+									<xs:element name="Description" type="xs:string" minOccurs="0"/>
+									<xs:element name="Name" type="xs:string"/>
+									<xs:element name="ElementType" type="mMetaDefRef"/>
+								</xs:all>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="TypeDefinitionStrongObjectReference">
+							<xs:complexType>
+								<xs:all>
+									<xs:element name="Identification" type="mAUID"/>
+									<xs:element name="Symbol" type="xs:NCName"/>
+									<xs:element name="Description" type="xs:string" minOccurs="0"/>
+									<xs:element name="Name" type="xs:string"/>
+									<xs:element name="ReferencedType" type="mMetaDefRef"/>
+								</xs:all>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="TypeDefinitionVariableArray">
+							<xs:complexType>
+								<xs:all>
+									<xs:element name="Identification" type="mAUID"/>
+									<xs:element name="Symbol" type="xs:NCName"/>
+									<xs:element name="Description" type="xs:string" minOccurs="0"/>
+									<xs:element name="Name" type="xs:string"/>
+									<xs:element name="ElementType" type="mMetaDefRef"/>
+								</xs:all>
+							</xs:complexType>
+						</xs:element>
+						<xs:element name="TypeDefinitionWeakObjectReference">
+							<xs:complexType>
+								<xs:all>
+									<xs:element name="Identification" type="mAUID"/>
+									<xs:element name="Symbol" type="xs:NCName"/>
+									<xs:element name="Description" type="xs:string" minOccurs="0"/>
+									<xs:element name="Name" type="xs:string"/>
+									<xs:element name="ReferencedType" type="mMetaDefRef"/>
+									<xs:element name="TargetSet" type="mMetaDefRefArray"/>
+								</xs:all>
+							</xs:complexType>
+						</xs:element>
+					</xs:choice>
+				</xs:complexType>
+				<xs:unique name="mDefSymbolsUnique">
+					<xs:selector xpath="*"/>
+					<xs:field xpath="Symbol"/>
+				</xs:unique>
+				<xs:unique name="mDefIdentificationUnique">
+					<xs:selector xpath="*"/>
+					<xs:field xpath="Identification"/>
+				</xs:unique>
+			</xs:element>
+		</xs:all>
+	</xs:complexType>
+	<xs:simpleType name="mAUID">
+		<xs:restriction base="xs:anyURI">
+			<xs:pattern value="urn:x-ul:[0-9a-fA-F]{8}\.([0-9a-fA-F]){4}\.([0-9a-fA-F]){4}\.([0-9a-fA-F]){8}\.([0-9a-fA-F]){8}"/>
+			<xs:pattern value="urn:uuid:[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="mMetaDefRef">
+		<xs:union memberTypes="mAUID xs:NCName">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:pattern value="[^ ]+ \i\c*"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:union>
+	</xs:simpleType>
+	<xs:complexType name="mMetaDefRefArray">
+		<xs:sequence>
+			<xs:element name="MetaDefRef" type="mMetaDefRef" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:simpleType name="mLocalIdentificationType">
+        <xs:union memberTypes="xs:unsignedShort">
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:pattern value="0x[0-9a-fA-F]{1,4}"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:union>
+	</xs:simpleType>
+</xs:schema>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema targetNamespace="http://www.aafassociation.org/aafx/v1.1/20050628" 
+    xmlns="http://www.aafassociation.org/aafx/v1.1/20050628" 
+    xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+    elementFormDefault="qualified" attributeFormDefault="unqualified">
+    
+	<xs:include schemaLocation="metadict.xsd"/>
+    
+	<xs:element name="AAFFileModel">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Baseline" type="mExtensionType"/>
+				<xs:element ref="Extension" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+    
+</xs:schema>
