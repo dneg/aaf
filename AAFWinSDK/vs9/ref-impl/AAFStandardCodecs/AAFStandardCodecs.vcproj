@@ -364,6 +364,14 @@
 			</FileConfiguration>
 		</File>
 		<File
+			RelativePath="..\..\..\..\ref-impl\plugins\CAAFDNxHDCodec.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\..\..\..\ref-impl\plugins\CAAFDNxHDCodec.h"
+			>
+		</File>
+		<File
 			RelativePath="..\..\..\..\ref-impl\plugins\CAAFEssenceDataStream.cpp"
 			>
 			<FileConfiguration
@@ -626,6 +634,14 @@
 					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;$(NoInherit)"
 				/>
 			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\..\..\..\ref-impl\plugins\CAAFVC3Codec.cpp"
+			>
+		</File>
+		<File
+			RelativePath="..\..\..\..\ref-impl\plugins\CAAFVC3Codec.h"
+			>
 		</File>
 		<File
 			RelativePath="..\..\..\..\ref-impl\plugins\CAAFWAVECodec.cpp"
