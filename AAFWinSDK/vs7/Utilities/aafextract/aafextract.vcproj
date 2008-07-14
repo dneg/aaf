@@ -44,7 +44,7 @@
 				OutputFile=".\Release/aafextract.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
-				AdditionalLibraryDirectories="../../../lib"
+				AdditionalLibraryDirectories="../../lib"
 				ProgramDatabaseFile=".\Release/aafextract.pdb"
 				SubSystem="1"
 				TargetMachine="1"/>
@@ -106,7 +106,7 @@
 				OutputFile=".\Debug/aafextract.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
-				AdditionalLibraryDirectories="../../../lib"
+				AdditionalLibraryDirectories="../../lib"
 				GenerateDebugInformation="TRUE"
 				ProgramDatabaseFile=".\Debug/aafextract.pdb"
 				SubSystem="1"
