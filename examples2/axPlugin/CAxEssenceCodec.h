@@ -50,21 +50,21 @@ public:
 	// IAAFEssenceCodec interface methods
 	//
 
-	STDMETHOD(SetEssenceAccess)(
+	HRESULT STDMETHODCALLTYPE SetEssenceAccess (
 		IAAFEssenceAccess * pEssenceAccess )
 	{
 		AX_PLUGIN_CHECK_NULL_PARAM( pEssenceAccess );
 		AX_PLUGIN_TRY( _impl, SetEssenceAccess, (pEssenceAccess) );
 	}
 
-	STDMETHOD(CountFlavours)(
+	HRESULT STDMETHODCALLTYPE CountFlavours (
 		aafUInt32*  pCount )
 	{
 		AX_PLUGIN_CHECK_NULL_PARAM( pCount );
 		AX_PLUGIN_TRY( _impl, CountFlavours, (pCount) );
 	}
 
-	STDMETHOD(GetIndexedFlavourID)(
+	HRESULT STDMETHODCALLTYPE GetIndexedFlavourID (
 		aafUInt32  index,
 		aafUID_t *  pVariant )
 	{
@@ -72,14 +72,14 @@ public:
 		AX_PLUGIN_TRY( _impl, GetIndexedFlavourID, (index, pVariant) );
 	}
  
-	STDMETHOD(CountDataDefinitions)(
+	HRESULT STDMETHODCALLTYPE CountDataDefinitions (
 		aafUInt32*  pCount )
 	{
 		AX_PLUGIN_CHECK_NULL_PARAM( pCount );
 		AX_PLUGIN_TRY( _impl, CountDataDefinitions, (pCount) );
 	}
 
-	STDMETHOD(GetIndexedDataDefinition) (
+	HRESULT STDMETHODCALLTYPE GetIndexedDataDefinition (
 		aafUInt32  index,
 		aafUID_t *  pDataDefID )
 	{
@@ -87,14 +87,14 @@ public:
 		AX_PLUGIN_TRY( _impl, GetIndexedDataDefinition, (index, pDataDefID) );
 	}
 
-	STDMETHOD(GetMaxCodecDisplayNameLength) (
+	HRESULT STDMETHODCALLTYPE GetMaxCodecDisplayNameLength (
 		aafUInt32*  pBufSize )
 	{
 		AX_PLUGIN_CHECK_NULL_PARAM( pBufSize );
 		AX_PLUGIN_TRY( _impl, GetMaxCodecDisplayNameLength, (pBufSize) );
 	}		
 
-	STDMETHOD(GetCodecDisplayName) (
+	HRESULT STDMETHODCALLTYPE GetCodecDisplayName (
 		aafUID_constref  flavour,
 		aafCharacter *  pName,
 		aafUInt32  bufSize )
@@ -103,7 +103,7 @@ public:
 		AX_PLUGIN_TRY( _impl, GetCodecDisplayName, (flavour, pName, bufSize) );
 	}
 	
-	STDMETHOD(CountChannels) (
+	HRESULT STDMETHODCALLTYPE CountChannels (
 		IAAFSourceMob * fileMob,
 		aafUID_constref  essenceKind,
 		IAAFEssenceStream * stream,
@@ -115,7 +115,7 @@ public:
 		AX_PLUGIN_TRY( _impl, CountChannels, (fileMob, essenceKind, stream, pNumChannels) );
 	}
 
-	STDMETHOD(GetSelectInfo) (
+	HRESULT STDMETHODCALLTYPE GetSelectInfo (
 		IAAFSourceMob * fileMob,
 		IAAFEssenceStream * stream,
 		aafSelectInfo_t *  pSelectInfo )
@@ -126,7 +126,7 @@ public:
 		AX_PLUGIN_TRY( _impl, GetSelectInfo, (fileMob, stream, pSelectInfo) );
 	}
 
-	STDMETHOD(ValidateEssence) (
+	HRESULT STDMETHODCALLTYPE ValidateEssence (
 		IAAFSourceMob * fileMob,
 		IAAFEssenceStream * stream,
 		aafCheckVerbose_t  verbose,
@@ -142,7 +142,7 @@ public:
 		AX_PLUGIN_TRY( _impl, ValidateEssence, (fileMob, stream, verbose, outputWarnings, bufSize, pErrorText, pBytesRead) );
 	}
 
-	STDMETHOD(Create) (
+	HRESULT STDMETHODCALLTYPE Create (
 		IAAFSourceMob * fileMob,
 		aafUID_constref  flavour,
 		aafUID_constref  essenceKind,
@@ -155,7 +155,7 @@ public:
 		AX_PLUGIN_TRY( _impl, Create, (fileMob, flavour, essenceKind, sampleRate, stream, compEnable) );
 	}	
 
-	STDMETHOD(Open) (
+	HRESULT STDMETHODCALLTYPE Open (
 		IAAFSourceMob * fileMob,
 		aafMediaOpenMode_t  openMode,
 		IAAFEssenceStream * stream,
@@ -166,7 +166,7 @@ public:
 		AX_PLUGIN_TRY( _impl, Open, (fileMob, openMode, stream, compEnable) );
 	}
 	
-	STDMETHOD(CountSamples) (
+	HRESULT STDMETHODCALLTYPE CountSamples (
 		aafUID_constref  essenceKind,
 		aafLength_t *  pNumSamples)
 	{
@@ -174,7 +174,7 @@ public:
 		AX_PLUGIN_TRY( _impl, CountSamples, (essenceKind, pNumSamples) );
 	}
 
-	STDMETHOD(WriteSamples) (
+	HRESULT STDMETHODCALLTYPE WriteSamples (
 		aafUInt32  nSamples,
 		aafUInt32  buflen,
 		aafDataBuffer_t  buffer,
@@ -187,7 +187,7 @@ public:
 		AX_PLUGIN_TRY( _impl, WriteSamples, (nSamples, buflen, buffer, samplesWritten, bytesWritten) );
 	}
 
-	STDMETHOD(ReadSamples) (
+	HRESULT STDMETHODCALLTYPE ReadSamples (
 		aafUInt32  nSamples,
 		aafUInt32  buflen,
 		aafDataBuffer_t  buffer,
@@ -200,21 +200,21 @@ public:
 		AX_PLUGIN_TRY( _impl, ReadSamples, (nSamples, buflen, buffer, samplesRead, bytesRead) );
 	}
 
-	STDMETHOD(Seek) (
+	HRESULT STDMETHODCALLTYPE Seek (
 		aafPosition_t  sampleFrame)
 	{
 		AX_PLUGIN_TRY( _impl, Seek, (sampleFrame) );
 	}
 
 
-	STDMETHOD(CompleteWrite) (
+	HRESULT STDMETHODCALLTYPE CompleteWrite (
 		IAAFSourceMob * pFileMob)
 	{
 		// No check for null pFileMob.  It is optional, and may have a null value.
 		AX_PLUGIN_TRY( _impl, CompleteWrite, (pFileMob) );
 	}
 
-	STDMETHOD(CreateDescriptorFromStream) (
+	HRESULT STDMETHODCALLTYPE CreateDescriptorFromStream (
 		IAAFEssenceStream * pStream,
 		IAAFSourceMob * pSourceMob)
 	{
@@ -223,21 +223,21 @@ public:
 		AX_PLUGIN_TRY( _impl, CreateDescriptorFromStream, (pStream, pSourceMob) );
 	}
 
-	STDMETHOD(GetCurrentEssenceStream) (
+	HRESULT STDMETHODCALLTYPE GetCurrentEssenceStream (
 		IAAFEssenceStream ** ppStream)
 	{
 		AX_PLUGIN_CHECK_NULL_PARAM( ppStream );
 		AX_PLUGIN_TRY( _impl, GetCurrentEssenceStream, (ppStream) );
 	}
 
-	STDMETHOD(PutEssenceFormat) (
+	HRESULT STDMETHODCALLTYPE PutEssenceFormat (
 		IAAFEssenceFormat * pFormat)
 	{
 		AX_PLUGIN_CHECK_NULL_PARAM( pFormat );
 		AX_PLUGIN_TRY( _impl, PutEssenceFormat, (pFormat) );
 	}
 	
-	STDMETHOD(GetEssenceFormat) (
+	HRESULT STDMETHODCALLTYPE GetEssenceFormat (
 		IAAFEssenceFormat * pFormatTemplate,
 		IAAFEssenceFormat ** ppNewFormat)
 	{
@@ -246,28 +246,28 @@ public:
 		AX_PLUGIN_TRY( _impl, GetEssenceFormat, (pFormatTemplate, ppNewFormat) );
 	}
 
-	STDMETHOD(GetDefaultEssenceFormat) (
+	HRESULT STDMETHODCALLTYPE GetDefaultEssenceFormat (
 		IAAFEssenceFormat ** ppNewFormat)
 	{
 		AX_PLUGIN_CHECK_NULL_PARAM( ppNewFormat );
 		AX_PLUGIN_TRY( _impl, GetDefaultEssenceFormat, (ppNewFormat) );
 	}
 
-	STDMETHOD(GetEssenceDescriptorID) (
+	HRESULT STDMETHODCALLTYPE GetEssenceDescriptorID (
 		aafUID_t *  pDescriptorID)
 	{
 		AX_PLUGIN_CHECK_NULL_PARAM( pDescriptorID );
 		AX_PLUGIN_TRY( _impl, GetEssenceDescriptorID, (pDescriptorID) );
 	}
 
-	STDMETHOD(GetEssenceDataID) (
+	HRESULT STDMETHODCALLTYPE GetEssenceDataID (
 		aafUID_t *  pEssenceDataID)
 	{
 		AX_PLUGIN_CHECK_NULL_PARAM( pEssenceDataID );
 		AX_PLUGIN_TRY( _impl, GetEssenceDataID, (pEssenceDataID) );
 	}
 	
-	STDMETHOD(GetIndexedSampleSize) (
+	HRESULT STDMETHODCALLTYPE GetIndexedSampleSize (
 		aafUID_constref  essenceDefID,
 		aafPosition_t  sampleOffset,
 		aafLength_t *  pLength)
@@ -276,7 +276,7 @@ public:
 		AX_PLUGIN_TRY( _impl, GetIndexedSampleSize, (essenceDefID, sampleOffset, pLength) );
 	}
 
-	STDMETHOD(GetLargestSampleSize) (
+	HRESULT STDMETHODCALLTYPE GetLargestSampleSize (
 		aafUID_constref  essenceDefID,
 		aafLength_t *  pLength)
 	{

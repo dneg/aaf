@@ -49,7 +49,7 @@ public:
 	// IAAFPlugin Interface methods
 	//
 
-	STDMETHOD(CountDefinitions)(
+	HRESULT STDMETHODCALLTYPE CountDefinitions (
 		aafUInt32 *pDefCount )
 	{
 		AX_PLUGIN_CHECK_NULL_PARAM( pDefCount );
@@ -57,7 +57,7 @@ public:
 	}
 
 
-	STDMETHOD(GetIndexedDefinitionID)(
+	HRESULT STDMETHODCALLTYPE GetIndexedDefinitionID (
 		aafUInt32 index, aafUID_t *result )
 	{
 		AX_PLUGIN_CHECK_NULL_PARAM( result );
@@ -65,14 +65,14 @@ public:
 	}
 
 
-	STDMETHOD(GetPluginDescriptorID)(
+	HRESULT STDMETHODCALLTYPE GetPluginDescriptorID (
 		aafUID_t *result )
 	{
 		AX_PLUGIN_CHECK_NULL_PARAM( result );
 		AX_PLUGIN_TRY( _impl, GetPluginDescriptorID, (result) );
 	}
 
-    STDMETHOD(GetIndexedDefinitionObject)( 
+    HRESULT STDMETHODCALLTYPE GetIndexedDefinitionObject ( 
 		aafUInt32 index,
         IAAFDictionary *dict,
         IAAFDefObject **def )
@@ -82,7 +82,7 @@ public:
 		AX_PLUGIN_TRY( _impl, GetIndexedDefinitionObject, (index, dict, def) );
 	}
  
-	STDMETHOD(CreateDescriptor)(
+	HRESULT STDMETHODCALLTYPE CreateDescriptor (
 		IAAFDictionary *dict,
 		IAAFPluginDef **desc )
 	{	
