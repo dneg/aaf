@@ -83,3 +83,21 @@ const aafUID_t kAAFPadBytesPerRow = { 0xc146bde0, 0x4c0d, 0x11d3, { 0xbf, 0xdc, 
 // data will be very lossy non-baseline JPEG image. The image quality does not improve
 // much past 95.
 const aafUID_t kAAFCompressionQuality = { 0xc146bde1, 0x4c0d, 0x11d3, { 0xbf, 0xdc, 0x0, 0x10, 0x4b, 0xc9, 0x15, 0x6d } };
+
+// Set this format parameter to force use of legacy ULs for Essence
+const aafUID_t kAAFLegacyAUIDs = { 0xf543369a, 0xe0f9, 0x45f5, { 0xb1, 0x2e, 0x77, 0x7f, 0x2d, 0x12, 0xcd, 0x75 } };
+
+// Set this format parameter to force a specific Essence Element Key in AAF-KLV (MXF)
+const aafUID_t kAAFEssenceElementKey = { 0x8d37dc7f, 0xfa11, 0x48da, { 0x86, 0xe, 0x64, 0xf9, 0x6e, 0x8c, 0x26, 0xac } };
+
+// Set this format parameter to force a specific Physical Track Number (default = 1)
+const aafUID_t kAAFPhysicalTrackNum = { 0xec1660b5, 0x3c72, 0x4dd2, { 0x9d, 0x49, 0xc3, 0x8f, 0x81, 0x8d, 0x40, 0x96 } };
+
+// Specify the number of threads to be used for an encode or decode operation
+const aafUID_t kAAFNumThreads = { 0xfd5a645e, 0x7bfe, 0x47cd, { 0x8f, 0xfb, 0x39, 0xbc, 0xbb, 0x9a, 0x40, 0xb3 } };
+
+// Specify the layout of the picture buffer (i.e. mapping of bytes to pixels and components) as an enumerated value
+// kAAFBufferLayout supercedes kAAFPixelFormat - it covers a wider range of parameters
+// the enumerated type is BufferLayout_t (presently declared in framebuffer.h, should be from autogen)
+// BufferLayout_t supercedes aafColorSpace_e (declared in AAFTypes.h, used in CAAFCDCICodec.cpp et al)
+const aafUID_t kAAFBufferLayout = { 0x3c93eb8a, 0xe61, 0x434c, { 0xa1, 0xa8, 0x63, 0xf0, 0x98, 0x3e, 0x5b, 0x4b } };
