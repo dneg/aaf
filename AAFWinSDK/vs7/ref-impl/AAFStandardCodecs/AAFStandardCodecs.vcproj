@@ -21,7 +21,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="../../../../ref-impl/src/com-api,../../../../ref-impl/plugins,../../../../ref-impl/include/com-api/,../../../../ref-impl/src/impl,../../../../ref-impl/src/Om,../../../../ref-impl/include/OM,../../../../ref-impl/src/com-api/com-dll,../../../../ref-impl/include,../../../../ref-impl/libjpeg"
+				AdditionalIncludeDirectories="../../../../ref-impl/src/com-api;../../../../ref-impl/plugins;../../../../ref-impl/include/com-api/;../../../../ref-impl/src/impl;../../../../ref-impl/src/Om;../../../../ref-impl/include/OM;../../../../ref-impl/src/com-api/com-dll;../../../../ref-impl/include;../../../../ref-impl/libjpeg;$(CODECS_ROOT)\DNxHDCodecSDK\include;$(CODECS_ROOT)\VC3Codec\Source"
 				PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;WIN32"
 				RuntimeLibrary="3"
 				RuntimeTypeInfo="TRUE"
@@ -40,6 +40,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				IgnoreImportLibrary="TRUE"
+				AdditionalDependencies="$(CODECS_ROOT)\DNxHDCodecSDK\win32\lib\DNxHDCodec.lib $(CODECS_ROOT)\VC3Codec\Source\AvidDNxHDCodec.lib"
 				OutputFile="../../Debug/RefImpl/aafext/AAFPGAPI.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
@@ -91,7 +92,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="../../../../ref-impl/src/com-api,../../../../ref-impl/plugins,../../../../ref-impl/include/com-api/,../../../../ref-impl/src/impl,../../../../ref-impl/src/Om,../../../../ref-impl/include/OM,../../../../ref-impl/src/com-api/com-dll,../../../../ref-impl/include,../../../../ref-impl/libjpeg"
+				AdditionalIncludeDirectories="../../../../ref-impl/src/com-api;../../../../ref-impl/plugins;../../../../ref-impl/include/com-api/;../../../../ref-impl/src/impl;../../../../ref-impl/src/Om;../../../../ref-impl/include/OM;../../../../ref-impl/src/com-api/com-dll;../../../../ref-impl/include;../../../../ref-impl/libjpeg;$(CODECS_ROOT)\DNxHDCodecSDK\include;$(CODECS_ROOT)\VC3Codec\Source"
 				PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;WIN32"
 				StringPooling="TRUE"
 				RuntimeLibrary="2"
@@ -111,6 +112,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				IgnoreImportLibrary="TRUE"
+				AdditionalDependencies="$(CODECS_ROOT)\DNxHDCodecSDK\win32\lib\DNxHDCodec.lib $(CODECS_ROOT)\VC3Codec\Source\AvidDNxHDCodec.lib"
 				OutputFile="../../Release/RefImpl/aafext/AAFPGAPI.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
@@ -270,6 +272,9 @@
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;$(NoInherit)"/>
 			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\..\..\..\ref-impl\plugins\CAAFDNxHDCodec.cpp">
 		</File>
 		<File
 			RelativePath="..\..\..\..\ref-impl\plugins\CAAFEssenceDataStream.cpp">
@@ -479,6 +484,9 @@
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;$(NoInherit)"/>
 			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\..\..\..\ref-impl\plugins\CAAFVC3Codec.cpp">
 		</File>
 		<File
 			RelativePath="..\..\..\..\ref-impl\plugins\CAAFWAVECodec.cpp">

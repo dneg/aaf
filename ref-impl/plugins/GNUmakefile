@@ -31,6 +31,13 @@ AAFBASE ?= ../..
 include $(AAFBASE)/build/common.mk
 
 
+
+# for access to the Avid DNxHD Codec SDK
+# please visit http://www.avid.com/DNxHD
+# or contact DNxHDSupport@avid.com
+
+#CFLAGS += -DUSE_VC3_CODEC #-DUSE_DNxHD_CODEC
+
 # Include directories
 INCLUDES = -I. \
 		-I../include \
@@ -39,6 +46,8 @@ INCLUDES = -I. \
 		-I../src/com-api \
 		-I../src/com-api/com-dll \
 		-I../libjpeg \
+                -I$(CODECS_ROOT)/VC3Codec/Source \
+                -I$(CODECS_ROOT)/DNxHDCodecSDK/include \
 		-I../include/com-api
 
 
@@ -55,6 +64,8 @@ CXXFILES = AAFPluginCOM.cpp \
 		CAAFWAVECodec.cpp \
 		CAAFAIFCCodec.cpp \
 		CAAFPCMCodec.cpp \
+		CAAFDNxHDCodec.cpp \
+		CAAFVC3Codec.cpp \
 		jpegesdatadst.cpp \
 		jpegesdatasrc.cpp
 
@@ -106,6 +117,9 @@ endif
 
 JPEGLIB = $(LIBDIR)/libjpeg$(LIBEXT)
 
+VC3CODECLIB = $(CODECS_ROOT)/VC3Codec/Source/DNxHDCodec$(LIBEXT)
+
+# DNxHDCODECLIB = -L$(CODECS_ROOT)/DNxHDCodecSDK/linux32/lib/OpenSuse-10_3 -Wl,-Bstatic -Wl,-lDNxHDCodec -Wl,-lpthread -Wl,-Bdynamic  -Wl,--warn-unresolved-symbols -Wl,--unresolved-symbols=report-all
 
 .PHONY : aafpgapi
 aafpgapi : $(OBJDIR) $(LIBDIR) $(PGAPI_LIB)
@@ -122,7 +136,10 @@ $(DYN_PGAPI_LIB) : $(CXXOBJS)
 	$(SUPOBJS) $(CXXOBJS) $(LD_DYN_OUTPUT) $(PGAPI_DEF) \
 	$(AAFBUILDDIR)/aaflib/$(AAFTARGETDIR)/libaaflib$(LIBEXT) \
 	$(AAFBUILDDIR)/aafiid/$(AAFTARGETDIR)/libaafiid$(LIBEXT) \
-	$(JPEGLIB) $(OPT_CODEC_LIBS)
+	$(JPEGLIB) \
+	$(VC3CODECLIB) \
+#	$(DNxHDCODECLIB) \
+	$(OPT_CODEC_LIBS)
 
 
 CXXFILES2 = AAFInterpCOM.cpp \

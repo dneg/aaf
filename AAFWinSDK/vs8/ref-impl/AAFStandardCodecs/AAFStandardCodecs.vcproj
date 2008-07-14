@@ -48,7 +48,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="../../../../ref-impl/src/com-api,../../../../ref-impl/plugins,../../../../ref-impl/include/com-api/,../../../../ref-impl/src/impl,../../../../ref-impl/src/Om,../../../../ref-impl/include/OM,../../../../ref-impl/src/com-api/com-dll,../../../../ref-impl/include,../../../../ref-impl/libjpeg"
+				AdditionalIncludeDirectories="../../../../ref-impl/src/com-api;../../../../ref-impl/plugins;../../../../ref-impl/include/com-api/;../../../../ref-impl/src/impl;../../../../ref-impl/src/Om;../../../../ref-impl/include/OM;../../../../ref-impl/src/com-api/com-dll;../../../../ref-impl/include;../../../../ref-impl/libjpeg;$(CODECS_ROOT)\DNxHDCodecSDK\include;$(CODECS_ROOT)\VC3Codec\Source"
 				PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;WIN32"
 				RuntimeLibrary="3"
 				RuntimeTypeInfo="true"
@@ -59,7 +59,7 @@
 				ProgramDataBaseFileName=".\Debug/"
 				WarningLevel="3"
 				SuppressStartupBanner="true"
-				DebugInformationFormat="3"
+				DebugInformationFormat="4"
 				CompileAs="0"
 			/>
 			<Tool
@@ -76,6 +76,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				IgnoreImportLibrary="true"
+				AdditionalDependencies="$(CODECS_ROOT)\DNxHDCodecSDK\win32\lib\DNxHDCodec.lib $(CODECS_ROOT)\VC3Codec\Source\AvidDNxHDCodec.lib"
 				OutputFile="../../Debug/RefImpl/aafext/AAFPGAPI.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
@@ -147,7 +148,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="../../../../ref-impl/src/com-api,../../../../ref-impl/plugins,../../../../ref-impl/include/com-api/,../../../../ref-impl/src/impl,../../../../ref-impl/src/Om,../../../../ref-impl/include/OM,../../../../ref-impl/src/com-api/com-dll,../../../../ref-impl/include,../../../../ref-impl/libjpeg"
+				AdditionalIncludeDirectories="../../../../ref-impl/src/com-api;../../../../ref-impl/plugins;../../../../ref-impl/include/com-api/;../../../../ref-impl/src/impl;../../../../ref-impl/src/Om;../../../../ref-impl/include/OM;../../../../ref-impl/src/com-api/com-dll;../../../../ref-impl/include;../../../../ref-impl/libjpeg;$(CODECS_ROOT)\DNxHDCodecSDK\include;$(CODECS_ROOT)\VC3Codec\Source"
 				PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;WIN32"
 				StringPooling="true"
 				RuntimeLibrary="2"
@@ -159,6 +160,7 @@
 				ObjectFile=".\Release/"
 				ProgramDataBaseFileName=".\Release/"
 				WarningLevel="3"
+				WarnAsError="true"
 				SuppressStartupBanner="true"
 				CompileAs="0"
 			/>
@@ -176,6 +178,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				IgnoreImportLibrary="true"
+				AdditionalDependencies="$(CODECS_ROOT)\DNxHDCodecSDK\win32\lib\DNxHDCodec.lib $(CODECS_ROOT)\VC3Codec\Source\AvidDNxHDCodec.lib"
 				OutputFile="../../Release/RefImpl/aafext/AAFPGAPI.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
@@ -226,7 +229,7 @@
 					Name="VCCLCompilerTool"
 					Optimization="0"
 					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;$(NoInherit)"
+					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32"
 				/>
 			</FileConfiguration>
 			<FileConfiguration
@@ -236,7 +239,7 @@
 					Name="VCCLCompilerTool"
 					Optimization="2"
 					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;$(NoInherit)"
+					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32"
 				/>
 			</FileConfiguration>
 		</File>
@@ -278,7 +281,7 @@
 					Name="VCCLCompilerTool"
 					Optimization="0"
 					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;$(NoInherit)"
+					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32"
 				/>
 			</FileConfiguration>
 			<FileConfiguration
@@ -288,7 +291,7 @@
 					Name="VCCLCompilerTool"
 					Optimization="2"
 					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;$(NoInherit)"
+					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32"
 				/>
 			</FileConfiguration>
 		</File>
@@ -302,7 +305,7 @@
 					Name="VCCLCompilerTool"
 					Optimization="0"
 					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;$(NoInherit)"
+					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32"
 				/>
 			</FileConfiguration>
 			<FileConfiguration
@@ -312,7 +315,7 @@
 					Name="VCCLCompilerTool"
 					Optimization="2"
 					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;$(NoInherit)"
+					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32"
 				/>
 			</FileConfiguration>
 		</File>
@@ -326,7 +329,7 @@
 					Name="VCCLCompilerTool"
 					Optimization="0"
 					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;$(NoInherit)"
+					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32"
 				/>
 			</FileConfiguration>
 			<FileConfiguration
@@ -336,7 +339,7 @@
 					Name="VCCLCompilerTool"
 					Optimization="2"
 					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;$(NoInherit)"
+					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32"
 				/>
 			</FileConfiguration>
 		</File>
@@ -350,7 +353,7 @@
 					Name="VCCLCompilerTool"
 					Optimization="0"
 					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;$(NoInherit)"
+					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32"
 				/>
 			</FileConfiguration>
 			<FileConfiguration
@@ -360,9 +363,13 @@
 					Name="VCCLCompilerTool"
 					Optimization="2"
 					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;$(NoInherit)"
+					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32"
 				/>
 			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\..\..\..\ref-impl\plugins\CAAFDNxHDCodec.cpp"
+			>
 		</File>
 		<File
 			RelativePath="..\..\..\..\ref-impl\plugins\CAAFEssenceDataStream.cpp"
@@ -398,7 +405,7 @@
 					Name="VCCLCompilerTool"
 					Optimization="0"
 					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;$(NoInherit)"
+					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32"
 				/>
 			</FileConfiguration>
 			<FileConfiguration
@@ -408,7 +415,7 @@
 					Name="VCCLCompilerTool"
 					Optimization="2"
 					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;$(NoInherit)"
+					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32"
 				/>
 			</FileConfiguration>
 		</File>
@@ -446,7 +453,7 @@
 					Name="VCCLCompilerTool"
 					Optimization="0"
 					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;$(NoInherit)"
+					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32"
 				/>
 			</FileConfiguration>
 			<FileConfiguration
@@ -456,7 +463,7 @@
 					Name="VCCLCompilerTool"
 					Optimization="2"
 					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;$(NoInherit)"
+					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32"
 				/>
 			</FileConfiguration>
 		</File>
@@ -494,7 +501,7 @@
 					Name="VCCLCompilerTool"
 					Optimization="0"
 					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;$(NoInherit)"
+					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32"
 				/>
 			</FileConfiguration>
 			<FileConfiguration
@@ -504,7 +511,7 @@
 					Name="VCCLCompilerTool"
 					Optimization="2"
 					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;$(NoInherit)"
+					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32"
 				/>
 			</FileConfiguration>
 		</File>
@@ -518,7 +525,7 @@
 					Name="VCCLCompilerTool"
 					Optimization="0"
 					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;$(NoInherit)"
+					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32"
 				/>
 			</FileConfiguration>
 			<FileConfiguration
@@ -528,7 +535,7 @@
 					Name="VCCLCompilerTool"
 					Optimization="2"
 					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;$(NoInherit)"
+					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32"
 				/>
 			</FileConfiguration>
 		</File>
@@ -542,7 +549,7 @@
 					Name="VCCLCompilerTool"
 					Optimization="0"
 					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;$(NoInherit)"
+					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32"
 				/>
 			</FileConfiguration>
 			<FileConfiguration
@@ -552,7 +559,7 @@
 					Name="VCCLCompilerTool"
 					Optimization="2"
 					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;$(NoInherit)"
+					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32"
 				/>
 			</FileConfiguration>
 		</File>
@@ -590,7 +597,7 @@
 					Name="VCCLCompilerTool"
 					Optimization="0"
 					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;$(NoInherit)"
+					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32"
 				/>
 			</FileConfiguration>
 			<FileConfiguration
@@ -600,7 +607,7 @@
 					Name="VCCLCompilerTool"
 					Optimization="2"
 					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;$(NoInherit)"
+					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32"
 				/>
 			</FileConfiguration>
 		</File>
@@ -614,7 +621,7 @@
 					Name="VCCLCompilerTool"
 					Optimization="0"
 					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;$(NoInherit)"
+					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32"
 				/>
 			</FileConfiguration>
 			<FileConfiguration
@@ -624,9 +631,13 @@
 					Name="VCCLCompilerTool"
 					Optimization="2"
 					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;$(NoInherit)"
+					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32"
 				/>
 			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\..\..\..\ref-impl\plugins\CAAFVC3Codec.cpp"
+			>
 		</File>
 		<File
 			RelativePath="..\..\..\..\ref-impl\plugins\CAAFWAVECodec.cpp"
@@ -638,7 +649,7 @@
 					Name="VCCLCompilerTool"
 					Optimization="0"
 					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;$(NoInherit)"
+					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32"
 				/>
 			</FileConfiguration>
 			<FileConfiguration
@@ -648,7 +659,7 @@
 					Name="VCCLCompilerTool"
 					Optimization="2"
 					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;$(NoInherit)"
+					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32"
 				/>
 			</FileConfiguration>
 		</File>
@@ -662,7 +673,7 @@
 					Name="VCCLCompilerTool"
 					Optimization="0"
 					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;$(NoInherit)"
+					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32"
 				/>
 			</FileConfiguration>
 			<FileConfiguration
@@ -672,7 +683,7 @@
 					Name="VCCLCompilerTool"
 					Optimization="2"
 					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;$(NoInherit)"
+					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32"
 				/>
 			</FileConfiguration>
 		</File>
@@ -686,7 +697,7 @@
 					Name="VCCLCompilerTool"
 					Optimization="0"
 					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;$(NoInherit)"
+					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32"
 				/>
 			</FileConfiguration>
 			<FileConfiguration
@@ -696,7 +707,7 @@
 					Name="VCCLCompilerTool"
 					Optimization="2"
 					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;$(NoInherit)"
+					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32"
 				/>
 			</FileConfiguration>
 		</File>
@@ -710,7 +721,8 @@
 					Name="VCCLCompilerTool"
 					Optimization="0"
 					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;$(NoInherit)"
+					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32"
+					WarnAsError="false"
 				/>
 			</FileConfiguration>
 			<FileConfiguration
@@ -720,7 +732,7 @@
 					Name="VCCLCompilerTool"
 					Optimization="2"
 					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;$(NoInherit)"
+					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32"
 				/>
 			</FileConfiguration>
 		</File>
