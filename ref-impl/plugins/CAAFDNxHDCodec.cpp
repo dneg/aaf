@@ -822,7 +822,7 @@ HRESULT STDMETHODCALLTYPE
 	case 1253: byte14n15 = 0x7113; break;
 	case 1254: byte14n15 = 0x7114; break;
 	default:
-		throw HRESULT(AAFRESULT_NOT_IMPLEMENTED);
+		return HRESULT(AAFRESULT_NOT_IMPLEMENTED);
 		break;
 	}
 	_compression.Data2=byte14n15;
