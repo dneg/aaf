@@ -76,7 +76,6 @@
 			<Tool
 				Name="VCLinkerTool"
 				IgnoreImportLibrary="true"
-				AdditionalDependencies="$(CODECS_ROOT)\DNxHDCodecSDK\win32\lib\DNxHDCodec.lib $(CODECS_ROOT)\VC3Codec\Source\AvidDNxHDCodec.lib"
 				OutputFile="../../Debug/RefImpl/aafext/AAFPGAPI.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
@@ -178,7 +177,6 @@
 			<Tool
 				Name="VCLinkerTool"
 				IgnoreImportLibrary="true"
-				AdditionalDependencies="$(CODECS_ROOT)\DNxHDCodecSDK\win32\lib\DNxHDCodec.lib $(CODECS_ROOT)\VC3Codec\Source\AvidDNxHDCodec.lib"
 				OutputFile="../../Release/RefImpl/aafext/AAFPGAPI.dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
