@@ -32,11 +32,33 @@ include $(AAFBASE)/build/common.mk
 
 
 
+# for access to the VC3Codec SDK
+# please visit http://www.avid.com/DNxHD
+# or contact DNxHDSupport@avid.com
+
+VC3CODECINC = -I$(CODECS_ROOT)/VC3Codec/Source
+VC3CODECLIB = $(CODECS_ROOT)/VC3Codec/Source/DNxHDCodec$(LIBEXT)
+
+# CFLAGS += -DUSE_VC3_CODEC 
+# OPT_CODEC_INCS += $(VC3CODECINC)
+# OPT_CODEC_LIBS += $(VC3CODECLIB)
+
+
 # for access to the Avid DNxHD Codec SDK
 # please visit http://www.avid.com/DNxHD
 # or contact DNxHDSupport@avid.com
 
-#CFLAGS += -DUSE_VC3_CODEC #-DUSE_DNxHD_CODEC
+DNxHDCODECINC = -I$(CODECS_ROOT)/DNxHDCodecSDK/include
+DNxHDCODECLIB = $(CODECS_ROOT)/DNxHDCodecSDK/linux32/lib/OpenSuse-10_3/DNxHDCodec$(LIBEXT)
+
+# experiment
+DNxHDCODECOPT = -L$(CODECS_ROOT)/DNxHDCodecSDK/linux32/lib/OpenSuse-10_3 		\
+		-Wl,-Bstatic -Wl,-lDNxHDCodec -Wl,-lpthread -Wl,-Bdynamic 		\
+		-Wl,--warn-unresolved-symbols -Wl,--unresolved-symbols=report-all
+
+# CFLAGS += -DUSE_DNxHD_CODEC
+# OPT_CODEC_INCS += $(DNxHDCODECINC)
+# OPT_CODEC_LIBS += $(DNxHDCODECLIB)
 
 # Include directories
 INCLUDES = -I. \
@@ -46,8 +68,7 @@ INCLUDES = -I. \
 		-I../src/com-api \
 		-I../src/com-api/com-dll \
 		-I../libjpeg \
-                -I$(CODECS_ROOT)/VC3Codec/Source \
-                -I$(CODECS_ROOT)/DNxHDCodecSDK/include \
+                 $(OPT_CODEC_INCS) \
 		-I../include/com-api
 
 
@@ -117,10 +138,6 @@ endif
 
 JPEGLIB = $(LIBDIR)/libjpeg$(LIBEXT)
 
-VC3CODECLIB = $(CODECS_ROOT)/VC3Codec/Source/DNxHDCodec$(LIBEXT)
-
-# DNxHDCODECLIB = -L$(CODECS_ROOT)/DNxHDCodecSDK/linux32/lib/OpenSuse-10_3 -Wl,-Bstatic -Wl,-lDNxHDCodec -Wl,-lpthread -Wl,-Bdynamic  -Wl,--warn-unresolved-symbols -Wl,--unresolved-symbols=report-all
-
 .PHONY : aafpgapi
 aafpgapi : $(OBJDIR) $(LIBDIR) $(PGAPI_LIB)
 
@@ -137,8 +154,6 @@ $(DYN_PGAPI_LIB) : $(CXXOBJS)
 	$(AAFBUILDDIR)/aaflib/$(AAFTARGETDIR)/libaaflib$(LIBEXT) \
 	$(AAFBUILDDIR)/aafiid/$(AAFTARGETDIR)/libaafiid$(LIBEXT) \
 	$(JPEGLIB) \
-	$(VC3CODECLIB) \
-#	$(DNxHDCODECLIB) \
 	$(OPT_CODEC_LIBS)
 
 
