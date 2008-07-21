@@ -235,53 +235,59 @@ static HRESULT OpenAAFFile(aafWChar * pFileName, bool comp_enable, const char * 
 					else
 					{
 						maxSampleSize=MAX_VC3_COMPRESSED_FRAME; 
-
-						check(pEssenceAccess->GetEmptyFileFormat (&fmtTemplate));
-						check(fmtTemplate->AddFormatSpecifier (kAAFSampleRate, 0, NULL));
-						//check(fmtTemplate->AddFormatSpecifier (kAAFMaxSampleBytes, 0, NULL));
-						check(fmtTemplate->AddFormatSpecifier (kAAFStoredRect, 0, NULL));
-						check(fmtTemplate->AddFormatSpecifier (kAAFFrameLayout, 0, NULL));
-						check(pEssenceAccess->GetFileFormat (fmtTemplate, &pFormat));
-
-						fmtTemplate->Release();
-						fmtTemplate = NULL;
-
-						aafInt32 fmtBytesRead;
-						check(pFormat->GetFormatSpecifier(kAAFSampleRate, sizeof(sampleRate),
-							(aafDataBuffer_t)&sampleRate, &fmtBytesRead));
-						//check(pFormat->GetFormatSpecifier(kAAFMaxSampleBytes, sizeof(maxSampleSize),
-						//	(aafDataBuffer_t)&maxSampleSize, &fmtBytesRead));
-						check(pFormat->GetFormatSpecifier(kAAFStoredRect, sizeof(storedRect),
-							(aafDataBuffer_t)&storedRect, &fmtBytesRead));
-						check(pFormat->GetFormatSpecifier(kAAFFrameLayout, sizeof(frameLayout),
-							(aafDataBuffer_t)&frameLayout, &fmtBytesRead));
-
-						pFormat->Release();
-						pFormat = NULL;
-						
-				
-						// Get the sample count which is in terms of EditRate
-						aafLength_t sampleCount;
-						check(pEssenceAccess->CountSamples(pPictureDef, &sampleCount));
-
-						const char *frameLayoutStr = "";
-						switch (frameLayout)
-						{
-							case kAAFFullFrame: frameLayoutStr = "FullFrame"; break;
-							case kAAFOneField: frameLayoutStr = "OneField"; break;
-							case kAAFSeparateFields: frameLayoutStr = "SeparateFields"; break;
-							case kAAFMixedFields: frameLayoutStr = "MixedFields"; break;
-							default: break;
-						}
-						printf("\tSlotID %u: SampleRate=%d/%d MaxSampleBytes=%u StoredRect=%dx%d\n",
-									MobSlotID, sampleRate.numerator, sampleRate.denominator,
-									maxSampleSize, storedRect.xSize, storedRect.ySize);
-				
-						printf("\t\tFrameLayout=%s CountSamples=%"AAFFMT64"d\n", frameLayoutStr, sampleCount);
 					}
 					// Set a suitable buffer size						
 					dataBuff = new unsigned char[maxSampleSize];
 	
+					// Get some essence properties and print them
+					check(pEssenceAccess->GetEmptyFileFormat (&fmtTemplate));
+					check(fmtTemplate->AddFormatSpecifier (kAAFSampleRate, 0, NULL));
+					//check(fmtTemplate->AddFormatSpecifier (kAAFMaxSampleBytes, 0, NULL));
+					check(fmtTemplate->AddFormatSpecifier (kAAFStoredRect, 0, NULL));
+					check(fmtTemplate->AddFormatSpecifier (kAAFFrameLayout, 0, NULL));
+					check(pEssenceAccess->GetFileFormat (fmtTemplate, &pFormat));
+
+					fmtTemplate->Release();
+					fmtTemplate = NULL;
+
+					aafInt32 fmtBytesRead;
+					check(pFormat->GetFormatSpecifier(kAAFSampleRate, sizeof(sampleRate),
+						(aafDataBuffer_t)&sampleRate, &fmtBytesRead));
+					//check(pFormat->GetFormatSpecifier(kAAFMaxSampleBytes, sizeof(maxSampleSize),
+					//	(aafDataBuffer_t)&maxSampleSize, &fmtBytesRead));
+					check(pFormat->GetFormatSpecifier(kAAFStoredRect, sizeof(storedRect),
+						(aafDataBuffer_t)&storedRect, &fmtBytesRead));
+					check(pFormat->GetFormatSpecifier(kAAFFrameLayout, sizeof(frameLayout),
+						(aafDataBuffer_t)&frameLayout, &fmtBytesRead));
+
+					pFormat->Release();
+					pFormat = NULL;
+
+					const char *frameLayoutStr = "";
+					switch (frameLayout)
+					{
+						case kAAFFullFrame: frameLayoutStr = "FullFrame"; break;
+						case kAAFOneField: frameLayoutStr = "OneField"; break;
+						case kAAFSeparateFields: frameLayoutStr = "SeparateFields"; break;
+						case kAAFMixedFields: frameLayoutStr = "MixedFields"; break;
+						default: frameLayoutStr = "Unknown"; break;
+					}
+
+					// Get the sample count which is in terms of EditRate
+					aafLength_t sampleCount;
+					check(pEssenceAccess->CountSamples(pPictureDef, &sampleCount));
+
+					// Get and print the name of the selected codec flavour
+					aafWChar codec_name[128] = L"";
+					check(pEssenceAccess->GetCodecName(sizeof(codec_name), codec_name));
+					printf("\n\tUsing codec flavour \"%ls\"", codec_name);
+
+					printf("\n\tSlotID %u: \n\t\tSampleRate=%d/%d \n\t\tMaxSampleBytes=%u \n\t\tStoredRect=%dx%d",
+								MobSlotID, sampleRate.numerator, sampleRate.denominator,
+								maxSampleSize, storedRect.xSize, storedRect.ySize);
+			
+					printf("\n\t\tFrameLayout=%s \n\t\tCountSamples=%"AAFFMT64"d\n", frameLayoutStr, sampleCount);
+
 					// Read samples until no more are available
 					aafUInt32	samplesRead, actualBytesRead, total_samples = 0;
 					while (true)
