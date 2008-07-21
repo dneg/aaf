@@ -26,7 +26,8 @@
 all: ComCutsOnlyTest ComEssenceDataTest ComExtension ComPropDirectAccess \
 	ComPropDirectDump ExportAudioExample ExportSimpleComposition \
 	ImportAudioExample InfoDumper MetadataExample comClientTest \
-	ExportDV ImportDV ExportJPEG ImportJPEG ExportPCM ImportPCM
+	ExportDV ImportDV ExportJPEG ImportJPEG ExportPCM ImportPCM \
+	ExportVC3 ImportVC3
 
 .PHONY : ComCutsOnlyTest
 ComCutsOnlyTest:
@@ -96,6 +97,14 @@ ExportPCM :
 ImportPCM :
 	cd ImportPCM && $(MAKE)
 
+.PHONY : ExportVC3
+ExportVC3 :
+	cd ExportVC3 && $(MAKE)
+
+.PHONY : ImportVC3
+ImportVC3 :
+	cd ImportVC3 && $(MAKE)
+
 # Run ComPropDirectDump, comClientTest and InfoDumper checks last since all
 # generated AAF files will be available to be read and tested
 .PHONY : check
@@ -114,6 +123,8 @@ check : all
 	cd ImportJPEG && $(MAKE) $@
 	cd ExportPCM && $(MAKE) $@
 	cd ImportPCM && $(MAKE) $@
+	cd ExportVC3 && $(MAKE) $@
+	cd ImportVC3 && $(MAKE) $@
 	cd ComPropDirectDump && $(MAKE) $@
 	cd comClientTest && $(MAKE) $@
 	cd InfoDumper && $(MAKE) $@
@@ -137,6 +148,8 @@ clean :
 	cd ImportJPEG && $(MAKE) GENDEPS=0 $@
 	cd ExportPCM && $(MAKE) GENDEPS=0 $@
 	cd ImportPCM && $(MAKE) GENDEPS=0 $@
+	cd ExportVC3 && $(MAKE) GENDEPS=0 $@
+	cd ImportVC3 && $(MAKE) GENDEPS=0 $@
 
 .PHONY : realclean
 realclean :
@@ -157,3 +170,5 @@ realclean :
 	cd ImportJPEG && $(MAKE) GENDEPS=0 $@
 	cd ExportPCM && $(MAKE) GENDEPS=0 $@
 	cd ImportPCM && $(MAKE) GENDEPS=0 $@
+	cd ExportVC3 && $(MAKE) GENDEPS=0 $@
+	cd ImportVC3 && $(MAKE) GENDEPS=0 $@
