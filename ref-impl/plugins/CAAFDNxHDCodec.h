@@ -362,6 +362,7 @@ private:
 			return 0;
 			break;
 		}
+		return 0; // avoid unnecessary warning
 	}
 
 	aafUInt32 GetUncomprFrameSize()
@@ -416,7 +417,7 @@ private:
 			return 0;
 			break;
 		}
-
+		return 0; // avoid unnecessary warning
 	}
 
 	int GetPixelsPerLine()
@@ -446,6 +447,7 @@ private:
 			return 0;
 			break;
 		}
+		return 0; // avoid unnecessary warning
 	}
 
 
