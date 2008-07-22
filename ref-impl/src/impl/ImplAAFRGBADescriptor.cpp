@@ -113,7 +113,7 @@ AAFRESULT STDMETHODCALLTYPE
 	local = _pixelLayout;
 	for( n = 0, result = 0; n < MAX_NUM_RGBA_COMPS; n++)
 	{
-		if(local.comps[n].Code != kAAFCompNone)
+		if(local.comps[n].Code != kAAFCompNone && local.comps[n].Code != kAAFCompNull)
 		{
 			result++;
 		}
@@ -226,7 +226,7 @@ AAFRESULT STDMETHODCALLTYPE
 	local = _paletteLayout;
 	for( n = 0, result = 0; n < MAX_NUM_RGBA_COMPS; n++)
 	{
-		if(local.comps[n].Code != kAAFCompNone)
+		if(local.comps[n].Code != kAAFCompNone && local.comps[n].Code != kAAFCompNull)
 		{
 			result++;
 		}
