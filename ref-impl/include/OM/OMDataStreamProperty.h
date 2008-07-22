@@ -47,6 +47,7 @@ public:
 
     // @cmember Destructor.
   virtual ~OMDataStreamProperty(void);
+  virtual void detach(void);
 
     // @cmember Save this <c OMDataStreamProperty>.
   virtual void save(void) const;

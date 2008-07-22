@@ -63,6 +63,18 @@ OMDataStreamProperty::~OMDataStreamProperty(void)
   delete _streamAccess;
 }
 
+void OMDataStreamProperty::detach(void)
+{
+	  if (_stream != 0) {
+    try {
+      close();
+    } catch (...) {
+      _stream = 0;
+    }
+  }
+
+}
+
   // @mfunc Save this <c OMDataStreamProperty>.
   //   @this const
 void OMDataStreamProperty::save(void) const
