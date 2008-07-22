@@ -86,8 +86,63 @@ typedef ImplAAFSmartPointer<ImplAAFDataDef> ImplAAFDataDefSP;
 #include "AAFStoredObjectIDs.h"
 #include "AAFContainerDefs.h"
 #include "AAFCodecDefs.h"
+
+// EqualDegenerateAUID() could be moved to AAFUtils.cpp
+// it also appears in plugins/CAAFVC3Codec.cpp and plugins/CAAFDNxHDCodec.cpp 
+// it is kept here for 1.1.3 because it is used only by the patch to accept MXF files with no CodecID
+static aafBool EqualDegenerateAUID(const aafUID_t *uid1, const aafUID_t *uid2)
+{
+	// does not test any bytes that are zero in uid2
+	// allows comparing a specific UL against a family of ULs
+
+	int i = sizeof(aafUID_t);
+
+	const char* u1= (const char*)uid1;
+	const char* u2= (const char*)uid2;
+
+	char b;
+	do
+		if( *u1++ != (b = *u2++) && b ) return kAAFFalse;
+	while( --i ); 
+
+	return kAAFTrue;
+}
+
+// the following definitions enable the patch to accept MXF files with no CodecID
+// and also enable the patch for VC3Codec and DNxHDCodec
+// note: this is the ONLY code in the ref-impl that is specific to VC3
+// in all other respects, the VC3 codec plugin dll can be used with 1.1.2 without this patch
+#ifndef NO_CODECID_PATCH
+#define NO_CODECID_PATCH
+
+#ifdef WIN32
+#define USE_DNxHD_CODEC
+#endif
+
+#define USE_VC3_CODEC
+
+#endif
+
+#if defined( NO_CODECID_PATCH )
+// begin patch to accept MXF files with no CodecID
+// this is intended to be replaced with a proper API post 1.1.3
+
 #include "AAFCompressionDefs.h"		// JPEG Compression ID for fallback Codec ID test
 #include "ImplAAFDigitalImageDescriptor.h"
+
+inline bool IsVC3(const aafUID_t &compId)
+{
+#if defined( USE_VC3_CODEC ) || defined( USE_DNxHD_CODEC )
+	if( EqualAUID(&compId,&kAAFCompressionDef_Avid_DNxHD_Legacy) ) return true; 
+	else if( EqualDegenerateAUID(&compId,&kAAFCompressionDef_VC3_1) ) return true; 
+	else return false;
+#else
+	return false;
+#endif
+}
+
+#endif // NO_CODECID_PATCH
+
 
 #define DEFAULT_FILE_SLOT	1
 
@@ -1764,6 +1819,9 @@ AAFRESULT STDMETHODCALLTYPE
 			CHECK(access.fileMob->GetMobID(&fileMobID));
 			CHECK(access.mdes->GetObjectClass(&essenceDescClass));
 
+#if defined( NO_CODECID_PATCH )
+// begin patch to accept MXF files with no CodecID
+// this is intended to be replaced with a proper API post 1.1.3
 			// If the FileDescriptor does not have a CodecDef property, use the
 			// following hardcoded list of descriptors and matching CodecIds as
 			// a fallback approach for choosing the Codec to use for this essence.
@@ -1791,6 +1849,14 @@ AAFRESULT STDMETHODCALLTYPE
 
 					if (compression == kAAFCompressionDef_AAF_CMPR_FULL_JPEG)
 						codecID = kAAFCodecDef_JPEG;
+
+#if defined( USE_DNxHD_CODEC )
+					else if( IsVC3( compression ) )
+						codecID = kAAFCodecDef_DNxHD;
+#elif defined( USE_VC3_CODEC )
+					else if( IsVC3( compression ) )
+						codecID = kAAFCodecDef_VC3;
+#endif
 				}
 				else // give up and throw exception
 					CHECK(codecdef_hr);
@@ -1801,6 +1867,7 @@ AAFRESULT STDMETHODCALLTYPE
 				codecDef->ReleaseReference();
 				codecDef = NULL;
 			}
+#endif // NO_CODECID_PATCH
 
 			if (plugins == NULL)
 				plugins = ImplAAFContext::GetInstance()->GetPluginManager();
