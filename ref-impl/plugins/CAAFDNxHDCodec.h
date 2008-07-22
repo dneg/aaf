@@ -485,6 +485,7 @@ private:
 	{
 		aafUInt32 c = 0;
 
+#ifdef USE_DNxHD_CODEC
 		if( EqualAUID(&compId,&kAAFCompressionDef_Avid_DNxHD_Legacy) )
 		{
 			// derive Compression ID from Container Def
@@ -522,6 +523,7 @@ private:
 			default:	 c = 0;
 			}
 		}
+#endif
 		return c;
 	}
 
