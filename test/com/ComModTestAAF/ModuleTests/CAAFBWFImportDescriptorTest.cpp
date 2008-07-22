@@ -333,9 +333,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 			checkResult(pBWFImportDesc->CountUnknownBWFChunks(&numData));
 			checkExpression(1 == numData, AAFRESULT_TEST_FAILED);
 		
-			// Temporarily comment out the Release() to avoid
-			// segmentation fault in SchemaSoft's closeStream().
-			//pRIFFChunk->Release();
+			pRIFFChunk->Release();
 			pRIFFChunk = NULL;
 			pEnum->Release();
 			pEnum = NULL;
@@ -347,7 +345,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 							
 			pSourceMob->Release();
 			pSourceMob = NULL;
-				
+				 
 			pMobIter->Release();
 			pMobIter = NULL;
 	
