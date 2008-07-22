@@ -55,11 +55,14 @@ enum _BufferLayout{
 };
 typedef enum _BufferLayout BufferLayout_t;
 
+#include "AAFCompressionDefs.h"
+#include "AAFContainerDefs.h"
+
 #ifdef USE_DNxHD_CODEC
 
-	// for access to the Avid DNxHD Codec SDK
-	// please visit http://www.avid.com/DNxHD
-	// or contact DNxHDSupport@avid.com
+// for access to the Avid DNxHD Codec SDK
+// please visit http://www.avid.com/DNxHD
+// or contact DNxHDSupport@avid.com
 
 #include "AvidDNXCodecParams.h"
 
@@ -69,11 +72,10 @@ typedef enum _BufferLayout BufferLayout_t;
 #include "AvidHDCodecSDK.h"
 #endif
 
-#endif //HAVE_DNxHD_LIB
+#endif //USE_DNxHD_CODEC
 
 // ID for this Plugin's CoClass.
 EXTERN_C const CLSID CLSID_AAFDNxHDCodec;
-
 
 #define DNxHDHEADERSIZE 640
 
@@ -298,6 +300,35 @@ public:
 
 
 private:
+
+	// EqualDegenerateAUID() could be moved to AAFUtils.cpp
+	// it appears in plugins/CAAFVC3Codec.cpp and plugins/CAAFDNxHDCodec.cpp and impl/ImplAAFEssenceAccess.cpp
+	// it is kept here for 1.1.3 because it is used only by the patch to accept MXF files with no CodecID
+	static aafBool EqualDegenerateAUID(const aafUID_t *uid1, const aafUID_t *uid2)
+	{
+		// does not test any bytes that are zero in uid2
+		// allows comparing a specific UL against a family of ULs
+
+		int i = sizeof(aafUID_t);
+
+		const char* u1= (const char*)uid1;
+		const char* u2= (const char*)uid2;
+
+		char b;
+		do
+			if( *u1++ != (b = *u2++) && b ) return kAAFFalse;
+		while( --i ); 
+
+		return kAAFTrue;
+	}
+
+	static bool IsDNxHD(const aafUID_t &compId)
+	{
+		if( EqualAUID(&compId,&kAAFCompressionDef_Avid_DNxHD_Legacy) ) return true; 
+		else if( EqualDegenerateAUID(&compId,&kAAFCompressionDef_VC3_1) ) return true; 
+		else return false;
+	}
+
 	void SetEssenceStream(IAAFEssenceStream *stream);
 	void SetCompressionEnabled(aafCompressEnable_t compEnable);
 
@@ -450,8 +481,49 @@ private:
 		return 0; // avoid unnecessary warning
 	}
 
+	inline aafUInt32 GetComprID(const aafUID_t &compId, const aafUID_t &container)
+	{
+		aafUInt32 c = 0;
 
-
+		if( EqualAUID(&compId,&kAAFCompressionDef_Avid_DNxHD_Legacy) )
+		{
+			// derive Compression ID from Container Def
+				 if( EqualAUID(&container,&kAAFContainerDef_MXFGC_Avid_DNX_220X_1080p ) ) c = DNX_220X_1080p_COMPRESSION_ID;
+			else if( EqualAUID(&container,&kAAFContainerDef_MXFGC_Avid_DNX_145_1080p ) ) c = DNX_145_1080p_COMPRESSION_ID;
+			else if( EqualAUID(&container,&kAAFContainerDef_MXFGC_Avid_DNX_220_1080p ) ) c = DNX_220_1080p_COMPRESSION_ID;
+			else if( EqualAUID(&container,&kAAFContainerDef_MXFGC_Avid_DNX_220X_1080i ) ) c = DNX_220X_1080i_COMPRESSION_ID;
+			else if( EqualAUID(&container,&kAAFContainerDef_MXFGC_Avid_DNX_145_1080i ) ) c = DNX_145_1080i_COMPRESSION_ID;
+			else if( EqualAUID(&container,&kAAFContainerDef_MXFGC_Avid_DNX_220_1080i ) ) c = DNX_220_1080i_COMPRESSION_ID;
+			else if( EqualAUID(&container,&kAAFContainerDef_MXFGC_Avid_DNX_145_1440_1080i ) ) c = DNX_145_1440_1080i_COMPRESSION_ID;
+			else if( EqualAUID(&container,&kAAFContainerDef_MXFGC_Avid_DNX_220X_720p ) ) c = DNX_220X_720p_COMPRESSION_ID;
+			else if( EqualAUID(&container,&kAAFContainerDef_MXFGC_Avid_DNX_220_720p ) ) c = DNX_220_720p_COMPRESSION_ID;
+			else if( EqualAUID(&container,&kAAFContainerDef_MXFGC_Avid_DNX_145_720p ) ) c = DNX_145_720p_COMPRESSION_ID;
+			else if( EqualAUID(&container,&kAAFContainerDef_MXFGC_Avid_DNX_36_1080p ) ) c = DNX_36_1080p_COMPRESSION_ID;
+			// else if( EqualAUID(&container,& ) ) c = DNX_50_1080i_COMPRESSION_ID;
+			else							    c = 0;
+		}
+		else if( EqualDegenerateAUID(&compId,&kAAFCompressionDef_VC3_1) ) 
+		{
+			// derive ComprID from Compression 
+			switch(compId.Data2)
+			{
+			case 0x7101: c = DNX_220X_1080p_COMPRESSION_ID; break;
+			case 0x7103: c = DNX_145_1080p_COMPRESSION_ID; break;
+			case 0x7104: c = DNX_220_1080p_COMPRESSION_ID; break;
+			case 0x7107: c = DNX_220X_1080i_COMPRESSION_ID; break;
+			case 0x7108: c = DNX_145_1080i_COMPRESSION_ID; break;
+			case 0x7109: c = DNX_220_1080i_COMPRESSION_ID; break;
+			case 0x710a: c = DNX_145_1440_1080i_COMPRESSION_ID; break;
+			case 0x7110: c = DNX_220X_720p_COMPRESSION_ID; break;
+			case 0x7111: c = DNX_220_720p_COMPRESSION_ID; break;
+			case 0x7112: c = DNX_145_720p_COMPRESSION_ID; break;
+			case 0x7113: c = DNX_36_1080p_COMPRESSION_ID; break;
+			//case 0x7114: c = DNX_50_1080i_COMPRESSION_ID; break;
+			default:	 c = 0;
+			}
+		}
+		return c;
+	}
 
 private:
 	AAFByteOrder		_nativeByteOrder;

@@ -152,32 +152,6 @@ const aafCharacter kAAFPropName_DIDFirstFrameOffset[]	= { 'F','i','r','s','t','F
 const aafCharacter kAAFPropName_DIDImageSize[]	= { 'I','m','a','g','e','S','i','z','e','\0' };
 const aafCharacter kAAFPropName_CDCIOffsetToFrameIndexes[]	= { 'O','f','f','s','e','t','T','o','F','r','a','m','e','I','n','d','e','x','e','s','\0'};
 
-static aafBool EqualDegenerateAUID(const aafUID_t *uid1, const aafUID_t *uid2)
-{
-	// does not test any bytes that are zero in uid2
-	// allows comparing a specific UL against a family of ULs
-
-	int i = sizeof(aafUID_t);
-
-	const char* u1= (const char*)uid1;
-	const char* u2= (const char*)uid2;
-
-	char b;
-	do
-		if( *u1++ != (b = *u2++) && b ) return kAAFFalse;
-	while( --i ); 
-
-	return kAAFTrue;
-}
-
-inline bool IsDNxHD(const aafUID_t &compId)
-{
-	if( EqualAUID(&compId,&kAAFCompressionDef_Avid_DNxHD_Legacy) ) return true; 
-	else if( EqualDegenerateAUID(&compId,&kAAFCompressionDef_VC3_1) ) return true; 
-	else return false;
-}
-
-
 // Constructor
 
 CAAFDNxHDCodec::CAAFDNxHDCodec (IUnknown * pControllingUnknown)
@@ -1138,11 +1112,12 @@ HRESULT STDMETHODCALLTYPE
 		hr = ReadDescriptor( _descriptorHelper );
 		checkExpression (hr == S_OK, hr);
 
+		_ComprID = GetComprID( _compression, _containerFormat );
+		_fileBytesPerSample = GetBytesPerSample();
+
 		if (_compressEnable == kAAFCompressionEnable && IsDNxHD(_compression))
 		{
 #ifdef USE_DNxHD_CODEC
-
-
 #else
 			// Can't decompress without DNxHD Codec
 			throw HRESULT( AAFRESULT_INVALID_OP_CODEC );
@@ -1862,8 +1837,10 @@ HRESULT STDMETHODCALLTYPE CAAFDNxHDCodec::ReadDescriptor(
 
 	hr = descriptorHelper.GetFrameSampleSize( &_fileBytesPerSample );
 	checkExpression( AAFRESULT_PROP_NOT_PRESENT == hr || 
+			 AAFRESULT_NO_MORE_OBJECTS == hr ||
 			 AAFRESULT_SUCCESS == hr, hr );
-	if( hr == AAFRESULT_PROP_NOT_PRESENT )
+	if( hr == AAFRESULT_PROP_NOT_PRESENT ||
+		    hr == AAFRESULT_NO_MORE_OBJECTS )
 	    _fileBytesPerSample = 0;
 
 

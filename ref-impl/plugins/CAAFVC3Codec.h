@@ -40,6 +40,9 @@
 #include "CAAFCDCIDescriptorHelper.h"
 #endif
 
+#include "AAFCompressionDefs.h"
+#include "AAFContainerDefs.h"
+
 // ID for this Plugin's CoClass.
 EXTERN_C const CLSID CLSID_AAFVC3Codec;
 
@@ -266,6 +269,35 @@ public:
 
 
 private:
+
+	// EqualDegenerateAUID() could be moved to AAFUtils.cpp
+	// it appears in plugins/CAAFVC3Codec.cpp and plugins/CAAFDNxHDCodec.cpp and impl/ImplAAFEssenceAccess.cpp
+	// it is kept here for 1.1.3 because it is used only by the patch to accept MXF files with no CodecID
+	static aafBool EqualDegenerateAUID(const aafUID_t *uid1, const aafUID_t *uid2)
+	{
+		// does not test any bytes that are zero in uid2
+		// allows comparing a specific UL against a family of ULs
+
+		int i = sizeof(aafUID_t);
+
+		const char* u1= (const char*)uid1;
+		const char* u2= (const char*)uid2;
+
+		char b;
+		do
+			if( *u1++ != (b = *u2++) && b ) return kAAFFalse;
+		while( --i ); 
+
+		return kAAFTrue;
+	}
+
+	static bool IsVC3(const aafUID_t &compId)
+	{
+		if( EqualAUID(&compId,&kAAFCompressionDef_Avid_DNxHD_Legacy) ) return true; 
+		else if( EqualDegenerateAUID(&compId,&kAAFCompressionDef_VC3_1) ) return true; 
+		else return false;
+	}
+
 	void SetEssenceStream(IAAFEssenceStream *stream);
 	void SetCompressionEnabled(aafCompressEnable_t compEnable);
 
@@ -405,8 +437,49 @@ private:
 		return 0; // avoid unnecessary warning
 	}
 
+	inline aafUInt32 GetComprID(const aafUID_t &compId, const aafUID_t &container)
+	{
+		aafUInt32 c = 0;
 
-
+		if( EqualAUID(&compId,&kAAFCompressionDef_Avid_DNxHD_Legacy) )
+		{
+			// derive Compression ID from Container Def
+				 if( EqualAUID(&container,&kAAFContainerDef_MXFGC_Avid_DNX_220X_1080p ) ) c = 1235;
+			else if( EqualAUID(&container,&kAAFContainerDef_MXFGC_Avid_DNX_145_1080p ) ) c = 1237;
+			else if( EqualAUID(&container,&kAAFContainerDef_MXFGC_Avid_DNX_220_1080p ) ) c = 1238;
+			else if( EqualAUID(&container,&kAAFContainerDef_MXFGC_Avid_DNX_220X_1080i ) ) c = 1241;
+			else if( EqualAUID(&container,&kAAFContainerDef_MXFGC_Avid_DNX_145_1080i ) ) c = 1242;
+			else if( EqualAUID(&container,&kAAFContainerDef_MXFGC_Avid_DNX_220_1080i ) ) c = 1243;
+			//else if( EqualAUID(&container,&kAAFContainerDef_MXFGC_Avid_DNX_145_1440_1080i ) ) c = 1244;
+			else if( EqualAUID(&container,&kAAFContainerDef_MXFGC_Avid_DNX_220X_720p ) ) c = 1250;
+			else if( EqualAUID(&container,&kAAFContainerDef_MXFGC_Avid_DNX_220_720p ) ) c = 1251;
+			else if( EqualAUID(&container,&kAAFContainerDef_MXFGC_Avid_DNX_145_720p ) ) c = 1252;
+			else if( EqualAUID(&container,&kAAFContainerDef_MXFGC_Avid_DNX_36_1080p ) ) c = 1253;
+			// else if( EqualAUID(&container,&kAAFContainerDef_MXFGC_Avid_DNX_50_1080i ) ) c = DNX_50_10125480i_COMPRESSION_ID;
+			else							    c = 0;
+		}
+		else if( EqualDegenerateAUID(&compId,&kAAFCompressionDef_VC3_1) ) 
+		{
+			// derive ComprID from Compression 
+			switch(compId.Data2)
+			{
+			case 0x7101: c = 1235; break;
+			case 0x7103: c = 1237; break;
+			case 0x7104: c = 1238; break;
+			case 0x7107: c = 1241; break;
+			case 0x7108: c = 1242; break;
+			case 0x7109: c = 1243; break;
+			//case 0x710a: c = 1244; break;
+			case 0x7110: c = 1250; break;
+			case 0x7111: c = 1251; break;
+			case 0x7112: c = 1252; break;
+			case 0x7113: c = 1253; break;
+			case 0x7114: c = 1254; break;
+			default:	 c = 0;
+			}
+		}
+		return c;
+	}
 
 private:
 	AAFByteOrder		_nativeByteOrder;
