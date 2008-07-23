@@ -62,10 +62,12 @@ AAFBASEDIR=`pwd`
 # set AAFPLATFORM using same script as for make
 AAFPLATFORM="AAF`build/aafplatform.sh`SDK"
 
-# set default COMPILER g++
-# for Win: . which will become vs7
+# set default COMPILER 
+# for Win vs7
+# otherwise g++
+
 if [[ "$AAFPLATFORM" == "AAFWinSDK" ]] ; then
-	COMPILER="."
+	COMPILER="vs7"
 else
 	COMPILER="g++"
 fi
