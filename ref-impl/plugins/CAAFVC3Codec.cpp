@@ -1628,8 +1628,10 @@ HRESULT STDMETHODCALLTYPE CAAFVC3Codec::ReadDescriptor(
 
 	hr = descriptorHelper.GetFrameSampleSize( &_fileBytesPerSample );
 	checkExpression( AAFRESULT_PROP_NOT_PRESENT == hr || 
+			 AAFRESULT_NO_MORE_OBJECTS == hr ||
 			 AAFRESULT_SUCCESS == hr, hr );
-	if( hr == AAFRESULT_PROP_NOT_PRESENT )
+	if( hr == AAFRESULT_PROP_NOT_PRESENT ||
+		    hr == AAFRESULT_NO_MORE_OBJECTS )
 	    _fileBytesPerSample = 0;
 
 
