@@ -1,5 +1,8 @@
 #! C:/mksnt/sh.exe
 
+echo this script is deprecated...use RunModTestAndExamples.bash under cygwin instead!
+exit 1
+
 ###############################################################################
 #
 # $Id$ $Name$
