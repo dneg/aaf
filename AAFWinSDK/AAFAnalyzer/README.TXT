@@ -5,6 +5,9 @@ Getting Started
 
 1. Download the Boost source zip file from:
    http://sourceforge.net/project/showfiles.php?group_id=7586.
+
+or rather, get the libraries from http://www.boost-consulting.com/boost_1_34_1_setup.exe
+
 2. Unzip the file.
 3. Set the environment variable BOOSTINC to the directory the boost header files
    were stored (ie. C:\AAF\Boost\boost_1_33_1).
