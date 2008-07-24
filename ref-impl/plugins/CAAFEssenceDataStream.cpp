@@ -49,6 +49,7 @@ TYPEDEF_SP( MobSlot );
 const aafUID_t NULL_UID = { 0, 0, 0, { 0, 0, 0, 0, 0, 0, 0, 0 } };
 
 // Debugging log function which is optimised away for default builds
+#include <stdarg.h>
 inline void plugin_trace(const char *fmt, ...)
 {
 #ifdef PLUGIN_TRACE
