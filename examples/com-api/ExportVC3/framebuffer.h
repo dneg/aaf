@@ -54,6 +54,13 @@ static void malign_free ( void * pmem ) {  _aligned_free( pmem); }
 static byte* malign( size_t size, size_t alignment ) { return (byte*)malloc( size ); }
 static void malign_free ( void * pmem ) {  free( pmem); }
 
+#elif defined(__sun) // _WIN32
+
+// Solaris 10 doesn't have posix_memalign(), but does have memalign()
+#include <stdlib.h>
+static byte* malign( size_t size, size_t alignment ) { return (byte*)memalign( alignment, size ); }
+static void malign_free ( void * pmem ) {  free( pmem); }
+
 #else // _WIN32
 
 // linux and other gcc: posix_memalign() and free()
