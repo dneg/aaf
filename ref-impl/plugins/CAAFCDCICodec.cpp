@@ -1904,6 +1904,24 @@ void CAAFCDCICodec::UpdateDescriptor (CAAFCDCIDescriptorHelper& descriptorHelper
 			checkResult( descriptorHelper.SetImageSize( static_cast<aafInt32>(_numberOfSamples * DV_NTSC_FRAME_SIZE) ) );
 		}
 	}
+
+	// Prepare to set Essence Element key
+	IAAFEssenceDataStream2 *pEDS2;
+	checkResult(_stream->QueryInterface(IID_IAAFEssenceDataStream2, (void **)&pEDS2));
+
+	aafUID_t GC_EEK = { 0x0d010301, 0x0000, 0x0000, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x02, 0x01, 0x01 } };
+	HRESULT hr;
+
+	// Set Essence Element key depending upon essence type
+	if (IsDV(_compression))
+		hr = pEDS2->SetEssenceElementKey( GC_EEK, 0x18, 1, 0x02, 1, 1 );
+	else		// uncompressed clip wrapped
+		hr = pEDS2->SetEssenceElementKey( GC_EEK, 0x15, 1, 0x03, 1, 1 );
+
+	// EssenceDataStream2 will return AAFRESULT_CODEC_SEMANTIC_WARN when SetEssenceElementKey()
+	// not appropriate for container, so ignore the error in this case.
+	if (AAFRESULT_FAILED(hr) && hr != AAFRESULT_CODEC_SEMANTIC_WARN)
+		throw HRESULT(AAFRESULT_CODEC_SEMANTIC_WARN);
 }
 
 
@@ -2993,6 +3011,7 @@ HRESULT CAAFCDCICodec::InternalQueryInterface
     REFIID riid,
     void **ppvObj)
 {
+    plugin_trace("CAAFCDCICodec::InternalQueryInterface()\n");
     if (NULL == ppvObj)
         return E_INVALIDARG;
 
