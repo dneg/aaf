@@ -1918,8 +1918,10 @@ void CAAFCDCICodec::UpdateDescriptor (CAAFCDCIDescriptorHelper& descriptorHelper
 	else		// uncompressed clip wrapped
 		hr = pEDS2->SetEssenceElementKey( GC_EEK, 0x15, 1, 0x03, 1, 1 );
 
+	pEDS2->Release();
+
 	// EssenceDataStream2 will return AAFRESULT_CODEC_SEMANTIC_WARN when SetEssenceElementKey()
-	// not appropriate for container, so ignore the error in this case.
+	// is not appropriate for container, so ignore the error in this case.
 	if (AAFRESULT_FAILED(hr) && hr != AAFRESULT_CODEC_SEMANTIC_WARN)
 		throw HRESULT(AAFRESULT_CODEC_SEMANTIC_WARN);
 }
