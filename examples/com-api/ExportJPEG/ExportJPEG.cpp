@@ -54,12 +54,13 @@ using namespace std;
 // where "PAL" & "NTSC" mean 625/50 and 525/60 respectively
 bool formatPAL = true;
 
+bool formatMXF = false;		// default format AAF container
+aafUID_t kAAFOpDef_Atom = { 0x0d010201, 0x1000, 0x0000, { 0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01}};
+
 const aafInt32 UNC_PAL_FRAME_SIZE = 720*576*2;
 const aafInt32 UNC_NTSC_FRAME_SIZE = 720*480*2;
 
 bool useLegacySS = true;
-
-aafUID_t kAAFOpDef_Atom = { 0x0d010201, 0x1000, 0x0000, { 0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01}};
 
 #define aaf_assert(b, msg) \
 	if (!(b)) {fprintf(stderr, "ASSERT: %s\n\n", msg); exit(1);}
@@ -180,6 +181,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, bool comp_enable)
 {
 	IAAFFile*					pFile = NULL;
 	IAAFHeader*					pHeader = NULL;
+	IAAFHeader2*				pHeader2 = NULL;
 	IAAFDictionary*				pDictionary = NULL;
 	IAAFMob*					pMob = NULL;
 	IAAFMasterMob*				pMasterMob = NULL;
@@ -211,17 +213,25 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, bool comp_enable)
 
 
 	const aafUID_t *fileKind = 0;
-	// Large sectors for new files, small sectors for legacy files
-    if (useLegacySS) {
-	    fileKind = &kAAFFileKind_Aaf512Binary;
-    } else {
-        fileKind = &kAAFFileKind_Aaf4KBinary;
+	if (formatMXF) {
+		fileKind = &kAAFFileKind_AafKlvBinary;
+	}
+	else {
+		// Large sectors for new files, small sectors for legacy files
+		if (useLegacySS) {
+			fileKind = &kAAFFileKind_Aaf512Binary;
+		} else {
+			fileKind = &kAAFFileKind_Aaf4KBinary;
+		}
 	}
 
 	// Create a new AAF file
 	check(AAFFileOpenNewModifyEx(pFileName, fileKind, 0, &ProductInfo, &pFile));
 	check(pFile->GetHeader(&pHeader));
 
+	// Set the operational pattern
+	check(pHeader->QueryInterface(IID_IAAFHeader2, (void **)&pHeader2));
+	check(pHeader2->SetOperationalPattern(kAAFOpDef_Atom));
 
 	// Get the AAF Dictionary from the file
 	check(pHeader->GetDictionary(&pDictionary));
@@ -508,6 +518,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, bool comp_enable)
 
 	// Set the essence to indicate that you have finished writing the samples
 	check(pEssenceAccess->CompleteWrite());
+	check(pHeader2->UpdateEssenceContainers());
 
 	pEssenceAccess->Release();
 
@@ -519,6 +530,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, bool comp_enable)
 
 	pDictionary->Release();
 	pHeader->Release();
+	pHeader2->Release();
 
 	pFile->Save();
 	pFile->Close();
@@ -574,6 +586,7 @@ void printUsage(const char *progname)
 	cout << "\tWith no arguments creates ExportJPEG.aaf in legacy 512B sectors" << endl;
 	cout << "\tcontaining 10 JPEG PAL colorbar \"frames\" at 15:1s" << endl;
 	cout << endl;
+	cout << "\t-mxf           store AAF file as KLV encoded file (OP Atom)" << endl;
 	cout << "\t-ntsc          treat inputs and colorbars as 720x480 30fps instead of" << endl;
 	cout << "\t               the default 720x576 25fps" << endl;
 	cout << "\t-res <id>      resolution: 2:1, 3:1, 10:1, 15:1, 20:1" << endl;
@@ -599,6 +612,11 @@ extern int main(int argc, char *argv[])
 			{
 				printUsage(argv[0]);
 				return 0;
+			}
+			else if (!strcmp(argv[i], "-mxf")) 	 
+			{ 	 
+				formatMXF = true; 	 
+				i++; 	 
 			}
 			else if (!strcmp(argv[i], "-ntsc")) 	 
 			{ 	 
