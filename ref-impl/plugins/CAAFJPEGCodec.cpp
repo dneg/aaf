@@ -2084,7 +2084,6 @@ void CAAFJPEGCodec::UpdateDescriptor (CAAFJPEGDescriptorHelper& descriptorHelper
 	}
 
 	// Set Essence Element key to Avid's private key
-	printf("CAAFJPEGCodec::UpdateDescriptor() about to set ee key\n");
 	IAAFEssenceDataStream2 *pEDS2;
 	checkResult(_stream->QueryInterface(IID_IAAFEssenceDataStream2, (void **)&pEDS2));
 	aafUID_t Avid_JPEG_EEK = { 0x0e040301, 0x0000, 0x0000, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x02, 0x01, 0x01 } };
@@ -2094,7 +2093,6 @@ void CAAFJPEGCodec::UpdateDescriptor (CAAFJPEGDescriptorHelper& descriptorHelper
 
 	// EssenceDataStream2 will return AAFRESULT_CODEC_SEMANTIC_WARN when SetEssenceElementKey()
 	// is not appropriate for container, so ignore the error in this case.
-	printf("CAAFJPEGCodec::UpdateDescriptor() hr=0x%08x\n", hr);
 	if (AAFRESULT_FAILED(hr) && hr != AAFRESULT_CODEC_SEMANTIC_WARN)
 		throw HRESULT(AAFRESULT_CODEC_SEMANTIC_WARN);
 }
