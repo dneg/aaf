@@ -46,8 +46,13 @@ $(AAFSDKBINDIR)/ExportVC3$(EXE) : $(CXXOBJS)
 
 .PHONY : check
 check : $(AAFSDKBINDIR)/ExportVC3$(EXE)
+	# Only run encode tests if Avid DNxHD codec available
+ifneq (,$(findstring USE_VC3_CODEC,$(CFLAGS)))
 	$(APP_RUN_ENV) $(AAFSDKBINDIR)/ExportVC3$(EXE)
 	$(APP_RUN_ENV) $(AAFSDKBINDIR)/ExportVC3$(EXE) -vc3=1235 -raw=raw.dnx -o=ExportVC3.aaf && test -f ExportVC3.aaf
+else
+	$(APP_RUN_ENV) $(AAFSDKBINDIR)/ExportVC3$(EXE) -vc3=1235 -raw=raw_DNxHD_1080p_10bit_1235.dnx -o=ExportVC3.aaf && test -f ExportVC3.aaf
+endif
 
 .PHONY : clean
 clean :
