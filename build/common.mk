@@ -65,9 +65,9 @@ ifeq ($(wildcard $(AAFBUILDDIR)/sss-impl/libSSRW2C$(LIBEXT)),$(AAFBUILDDIR)/sss-
 endif
 
 # On Windows the layout is /sss-impl/ssrw_c.lib (for historical reasons)
-ifeq ($(wildcard $(AAFBASE)/AAF$(AAFPLATFORM)SDK/sss-impl/ssrw_c$(LIBEXT)),$(AAFBASE)/AAF$(AAFPLATFORM)SDK/sss-impl/ssrw_c$(LIBEXT))
-	STORAGE_LIBS += $(AAFBASE)/AAF$(AAFPLATFORM)SDK/sss-impl/ssrw_c$(LIBEXT)
-	LINK_STG += -L$(AAFBASE)/AAF$(AAFPLATFORM)SDK/sss-impl -lssrw_c
+ifeq ($(wildcard $(AAFBASE)/AAF$(AAFPLATFORM)SDK/$(MSVCVERSION)/sss-impl/ssrw_c$(LIBEXT)),$(AAFBASE)/AAF$(AAFPLATFORM)SDK/$(MSVCVERSION)/sss-impl/ssrw_c$(LIBEXT))
+	STORAGE_LIBS += $(AAFBASE)/AAF$(AAFPLATFORM)SDK/$(MSVCVERSION)/sss-impl/ssrw_c$(LIBEXT)
+	LINK_STG += -L$(AAFBASE)/AAF$(AAFPLATFORM)SDK/$(MSVCVERSION)/sss-impl -lssrw_c
 	ADD_CFLAGS += -DOM_USE_SCHEMASOFT_SS
 	USE_SS=1
 endif

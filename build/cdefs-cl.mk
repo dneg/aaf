@@ -54,6 +54,7 @@
 #------------------------------------------------------------------------------
 CC = cl
 CCVERSION = $(shell cl 2>&1 | head -1 | sed 's/.*Version \([^ ]*\).*/\1/')
+MSVCVERSION = $(shell echo $(CCVERSION) | sed -e 's/^12\..*/vs6/' -e 's/^13\..*/vs7/' -e 's/^14\..*/vs8/' -e 's/^15\..*/vs9/')
 
 # Header dependencies are taken care of by PDB or precompiled headers.
 # Therefore don't generate dependencies to be included by make.
