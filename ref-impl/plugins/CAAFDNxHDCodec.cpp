@@ -75,7 +75,7 @@ typedef struct {
 	const aafCharacter *name;
 } FlavourInfo;
 
-static FlavourInfo kSupportedFlavours[12];
+static FlavourInfo kSupportedFlavours[13];
 const aafUInt32 kNumSupportedFlavours = sizeof(kSupportedFlavours);
 
 const wchar_t kDisplayName[] = L"AAF DNxHD Codec";
