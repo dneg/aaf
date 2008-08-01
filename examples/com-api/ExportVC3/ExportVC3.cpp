@@ -683,7 +683,7 @@ extern int main(int argc, char *argv[])
 	CAAFInitialize aafInit;
 
 	aafWChar 		pwFileName[FILENAME_MAX] = L"ExportVC3.aaf";
-	bool			compressionEnable = true;		// convert from uncomp to VC3 by default
+	bool			compressionEnable = true;		// supply synthetic component bars to codec by default
 
 	int i = 1;
 	if (argc > 1)
