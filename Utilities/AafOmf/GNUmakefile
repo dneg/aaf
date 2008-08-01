@@ -37,6 +37,7 @@ include $(AAFBASE)/build/common.mk
 
 # Include directories
 INCLUDES = -I$(AAFSDKINCLUDEDIR) \
+		-I../Include \
 	   -I../../OMF/Include \
 	   -I../../OMF/portinc
 
