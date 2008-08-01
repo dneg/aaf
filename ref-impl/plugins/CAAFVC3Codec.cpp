@@ -366,7 +366,7 @@ HRESULT STDMETHODCALLTYPE CAAFVC3Codec::CreateLegacyPropDefs(
 
 
 		// Register legacy property definitions
-		if (p_did_classdef->LookupPropertyDef(kAAFPropID_DIDFrameSampleSize, &p_propdef) != AAFRESULT_SUCCESS)
+		if ( true || p_did_classdef->LookupPropertyDef(kAAFPropID_DIDFrameSampleSize, &p_propdef) != AAFRESULT_SUCCESS)
 		{
 			checkResult( p_did_classdef->RegisterOptionalPropertyDef( 
 				kAAFPropID_DIDFrameSampleSize, kAAFPropName_DIDFrameSampleSize, 
