@@ -68,7 +68,7 @@ INCLUDES = -I. \
 		-I../src/com-api \
 		-I../src/com-api/com-dll \
 		-I../libjpeg \
-                 $(OPT_CODEC_INCS) \
+		$(OPT_CODEC_INCS) \
 		-I../include/com-api
 
 
