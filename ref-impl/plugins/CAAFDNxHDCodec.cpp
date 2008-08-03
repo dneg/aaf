@@ -374,18 +374,9 @@ HRESULT STDMETHODCALLTYPE CAAFDNxHDCodec::CreateLegacyPropDefs(
 		checkResult( p_dict->LookupTypeDef( kAAFTypeID_Int32, 
 			&p_typedef_int32 ) );
 
+
 		// Register legacy property definitions
-		if (p_did_classdef->LookupPropertyDef(kAAFPropID_DIDResolutionID, &p_propdef) != AAFRESULT_SUCCESS)
-		{
-			checkResult( p_did_classdef->RegisterOptionalPropertyDef( 
-				kAAFPropID_DIDResolutionID, kAAFPropName_DIDResolutionID, 
-				p_typedef_int32, &p_propdef ) );
-		}
-		p_propdef->Release();
-		p_propdef = NULL;
-
-
-		if ( true || p_did_classdef->LookupPropertyDef(kAAFPropID_DIDFrameSampleSize, &p_propdef) != AAFRESULT_SUCCESS)
+		if ( p_did_classdef->LookupPropertyDef(kAAFPropID_DIDFrameSampleSize, &p_propdef) != AAFRESULT_SUCCESS)
 		{
 			checkResult( p_did_classdef->RegisterOptionalPropertyDef( 
 				kAAFPropID_DIDFrameSampleSize, kAAFPropName_DIDFrameSampleSize, 
@@ -407,6 +398,15 @@ HRESULT STDMETHODCALLTYPE CAAFDNxHDCodec::CreateLegacyPropDefs(
 		{
 			checkResult( p_did_classdef->RegisterOptionalPropertyDef( 
 				kAAFPropID_DIDImageSize, kAAFPropName_DIDImageSize, 
+				p_typedef_int32, &p_propdef ) );
+		}
+		p_propdef->Release();
+		p_propdef = NULL;
+
+		if (p_did_classdef->LookupPropertyDef(kAAFPropID_DIDResolutionID, &p_propdef) != AAFRESULT_SUCCESS)
+		{
+			checkResult( p_did_classdef->RegisterOptionalPropertyDef( 
+				kAAFPropID_DIDResolutionID, kAAFPropName_DIDResolutionID, 
 				p_typedef_int32, &p_propdef ) );
 		}
 		p_propdef->Release();
