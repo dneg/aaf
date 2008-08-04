@@ -71,7 +71,7 @@ int testExampleFiles()
             saveCopy(exampleFiles[i], L"tmp.xml");
             if (diff(exampleFiles[i], L"tmp.xml"))
             {
-                printf("FAILED\n");
+                printf("FAILED diff(%ls,%ls)\n", exampleFiles[i], L"tmp.xml");
                 thisFilePassed = false;
             }
             else
@@ -83,7 +83,7 @@ int testExampleFiles()
             copyAndTouch(exampleFiles[i], L"tmp.xml");
             if (diff(exampleFiles[i], L"tmp.xml"))
             {
-                printf("FAILED\n");
+                printf("FAILED diff(%ls,%ls)\n", exampleFiles[i], L"tmp.xml");
                 thisFilePassed = false;
             }
             else
