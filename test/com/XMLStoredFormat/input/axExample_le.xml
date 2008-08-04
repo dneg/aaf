@@ -16,6 +16,24 @@
       <Description>AAF file default extension symbolspace</Description>
       <Definitions>
         <PropertyDefinition>
+          <Identification>urn:x-ul:060e2b34.0101.0104.01030404.00000000</Identification>
+          <Symbol>EssenceStreamID</Symbol>
+          <Name>EssenceStreamID</Name>
+          <Type>Stream</Type>
+          <MemberOf>EssenceData</MemberOf>
+          <LocalIdentification>0x3f07</LocalIdentification>
+          <IsOptional>true</IsOptional>
+        </PropertyDefinition>
+        <PropertyDefinition>
+          <Identification>urn:x-ul:060e2b34.0101.0104.01030405.00000000</Identification>
+          <Symbol>IndexStreamID</Symbol>
+          <Name>IndexStreamID</Name>
+          <Type>Stream</Type>
+          <MemberOf>EssenceData</MemberOf>
+          <LocalIdentification>0x3f06</LocalIdentification>
+          <IsOptional>true</IsOptional>
+        </PropertyDefinition>
+        <PropertyDefinition>
           <Identification>urn:uuid:ce2aca4d-51ab-11d3-a024-006094eb75cb</Identification>
           <Symbol>ResolutionID</Symbol>
           <Name>ResolutionID</Name>
