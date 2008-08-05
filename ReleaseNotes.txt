@@ -1,7 +1,7 @@
-AAF SDK v1.1.2
-==============
+AAF SDK v1.1.3 Developer Release 1
+==================================
 
-2008-02-29
+2008-08-05
 
 This SDK is the reference implementation of the Advanced
 Authoring Format (AAF) version 1.1. See doc/aafeditprotocol.pdf,
@@ -13,10 +13,11 @@ Supported platforms
 
 This release has been tested on the following platforms:
 
-  MacOS X 10.4.9 Intel (Xcode 2.4.1, gcc 4.0.1 Apple build 5367)
+  MacOS X 10.5.4 Intel (Xcode 3.0, gcc 4.0.1 Apple build 5465)
   MacOS X 10.4.9 PowerPC (Xcode 2.4.1, gcc 4.0.1 Apple build 5367)
   Windows 2000 SP4 32bit (Microsoft Visual C++ 7.1)
-  Windows XP SP2 32bit (Microsoft Visual C++ 7.1)
+  Windows XP SP2 32bit (Microsoft Visual C++ 7.1 SP1, 8.0 SP1, 9.0)
+  Windows Vista SP1 32bit (Microsoft Visual C++ 8.0 SP1 & Vista Update, 9.0)
   Solaris 9 (gcc 3.4.2)
   x86-Linux:
     SuSE 10.1 (gcc-4.1.0, glibc-2.4, kernel 2.6)
@@ -48,6 +49,36 @@ CREATE AND DISTRIBUTE AAF COMPLIANT PRODUCTS.  PLEASE CONTACT THE AAF
 ASSOCIATION, INC. FOR MORE INFORMATION ABOUT ANY ADDITIONAL LICENSES
 THAT MAY BE REQUIRED TO CREATE AND DISTRIBUTE AAF COMPLIANT PRODUCTS
 (HTTP://WWW.AAFASSOCIATION.ORG/POLICIES).
+
+Major Changes from v1.1.2 to v1.1.3 DR1
+---------------------------------------
+
+Platforms:
+  Added support for Microsoft Visual C++ 8.0 compiler
+  Added support for Microsoft Visual C++ 9.0 compiler
+    Note. MSVC 7.1, 8.0 & 9.0 each have a sub-directory under AAFWinSDK.
+    This is a change to the previous support for MSVC 7.1.
+  Added support for Microsoft Vista
+
+Plugin codec changes:
+  Added Avid DNxHD and SMPTE VC3 plugin codecs
+    Note. As supplied, these AAF codecs provide wrapping capability.
+    With an additional library, they can provide compress/decompress capability.
+  Added IAAFEssenceDataStream2 for access to MXF Essence Element Key
+  Added setting of MXF Essence Element Key in CDCI, JPEG, DNxHD & VC3 codecs
+
+Memory usage:
+  Fix memory leaks
+  Reduce memory footprint
+  Add MemoryLeakTest test
+  
+Utilities:
+  AAFAnalyzer updated for use with AMWA registration website
+  Added AAF-XML XSD generation stylesheets
+  Moved CAAFBuiltinDefs.h from the public API in ref-impl/include to
+    Utilities/Include to make it clear that it's only an example or utility.
+  Replaced deprecated CAAFBuiltinDefs.h macro usage with COM API calls
+
 
 Major Changes from v1.1.1 to v1.1.2
 -----------------------------------
@@ -103,7 +134,7 @@ New built-in stored object property definitions:
   MPEGVideoDescriptor::
     BitRate, ClosedGOP, CodedContentScanning, ConstantBPictureCount, 
     IdenticalGOP, LowDelay, MaxBPictureCount, MaxGOP, ProfileAndLevel,
-    SingleSequence
+    SingleSequenceexamples/com-api/ImportVC3/raw.dnx
   MultipleDescriptor::FileDescriptors
   RIFFChunk::
     ChunkData, ChunkID, ChunkLength
