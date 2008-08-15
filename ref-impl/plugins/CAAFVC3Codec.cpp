@@ -1104,8 +1104,13 @@ HRESULT STDMETHODCALLTYPE
 		hr = ReadDescriptor( _descriptorHelper );
 		checkExpression (hr == S_OK, hr);
 
-		_ComprID = GetComprID( _compression, _containerFormat );
-		_fileBytesPerSample = GetBytesPerSample();
+		// if _fileBytesPerSample was not provided by (optional) Descriptor::FrameSampleSize
+		// try to obtain it by decoding Compression and ContainerFormat
+		if( !_fileBytesPerSample )
+		{
+			if( !_ComprID ) _ComprID = GetComprID( _compression, _containerFormat );
+			_fileBytesPerSample = GetBytesPerSample();
+		}
 
 		if (_compressEnable == kAAFCompressionEnable && IsVC3(_compression))
 		{
