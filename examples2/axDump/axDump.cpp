@@ -40,6 +40,7 @@
 #include <iostream>
 #include <sstream>
 
+#include <stdio.h>
 #include <assert.h>
 
 namespace {

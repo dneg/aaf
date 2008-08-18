@@ -36,6 +36,7 @@
 
 
 #include <cstring>
+#include <stdio.h>
 #include <assert.h>
 
 namespace {
