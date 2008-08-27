@@ -6096,14 +6096,14 @@ EXTERN_C const IID IID_IAAFDescriptiveClip;
             /* [size_is][out] */ aafUInt32 __RPC_FAR *pDescribedSlotIDs) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsDescribedSlotIDPresent( 
-            /* [in] */ aafUInt32 describedSlotID,
+            /* [in] */ aafUInt32 DescribedSlotID,
             /* [retval][out] */ aafBoolean_t __RPC_FAR *pIsPresent) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AddDescribedSlotID( 
-            /* [in] */ aafUInt32 describedSlotID) = 0;
+            /* [in] */ aafUInt32 DescribedSlotID) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RemoveDescribedSlotID( 
-            /* [in] */ aafUInt32 describedSlotID) = 0;
+            /* [in] */ aafUInt32 DescribedSlotID) = 0;
         
     };
     
@@ -6141,16 +6141,16 @@ EXTERN_C const IID IID_IAAFDescriptiveClip;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *IsDescribedSlotIDPresent )( 
             IAAFDescriptiveClip __RPC_FAR * This,
-            /* [in] */ aafUInt32 describedSlotID,
+            /* [in] */ aafUInt32 DescribedSlotID,
             /* [retval][out] */ aafBoolean_t __RPC_FAR *pIsPresent);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AddDescribedSlotID )( 
             IAAFDescriptiveClip __RPC_FAR * This,
-            /* [in] */ aafUInt32 describedSlotID);
+            /* [in] */ aafUInt32 DescribedSlotID);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RemoveDescribedSlotID )( 
             IAAFDescriptiveClip __RPC_FAR * This,
-            /* [in] */ aafUInt32 describedSlotID);
+            /* [in] */ aafUInt32 DescribedSlotID);
         
         END_INTERFACE
     } IAAFDescriptiveClipVtbl;
@@ -6184,14 +6184,14 @@ EXTERN_C const IID IID_IAAFDescriptiveClip;
 #define IAAFDescriptiveClip_GetDescribedSlotIDs(This,maxDescribedSlotIDCount,pDescribedSlotIDs)	\
     (This)->lpVtbl -> GetDescribedSlotIDs(This,maxDescribedSlotIDCount,pDescribedSlotIDs)
 
-#define IAAFDescriptiveClip_IsDescribedSlotIDPresent(This,describedSlotID,pIsPresent)	\
-    (This)->lpVtbl -> IsDescribedSlotIDPresent(This,describedSlotID,pIsPresent)
+#define IAAFDescriptiveClip_IsDescribedSlotIDPresent(This,DescribedSlotID,pIsPresent)	\
+    (This)->lpVtbl -> IsDescribedSlotIDPresent(This,DescribedSlotID,pIsPresent)
 
-#define IAAFDescriptiveClip_AddDescribedSlotID(This,describedSlotID)	\
-    (This)->lpVtbl -> AddDescribedSlotID(This,describedSlotID)
+#define IAAFDescriptiveClip_AddDescribedSlotID(This,DescribedSlotID)	\
+    (This)->lpVtbl -> AddDescribedSlotID(This,DescribedSlotID)
 
-#define IAAFDescriptiveClip_RemoveDescribedSlotID(This,describedSlotID)	\
-    (This)->lpVtbl -> RemoveDescribedSlotID(This,describedSlotID)
+#define IAAFDescriptiveClip_RemoveDescribedSlotID(This,DescribedSlotID)	\
+    (This)->lpVtbl -> RemoveDescribedSlotID(This,DescribedSlotID)
 
 #endif /* COBJMACROS */
 
@@ -6241,7 +6241,7 @@ void __RPC_STUB IAAFDescriptiveClip_GetDescribedSlotIDs_Stub(
 
 HRESULT STDMETHODCALLTYPE IAAFDescriptiveClip_IsDescribedSlotIDPresent_Proxy( 
     IAAFDescriptiveClip __RPC_FAR * This,
-    /* [in] */ aafUInt32 describedSlotID,
+    /* [in] */ aafUInt32 DescribedSlotID,
     /* [retval][out] */ aafBoolean_t __RPC_FAR *pIsPresent);
 
 
@@ -6254,7 +6254,7 @@ void __RPC_STUB IAAFDescriptiveClip_IsDescribedSlotIDPresent_Stub(
 
 HRESULT STDMETHODCALLTYPE IAAFDescriptiveClip_AddDescribedSlotID_Proxy( 
     IAAFDescriptiveClip __RPC_FAR * This,
-    /* [in] */ aafUInt32 describedSlotID);
+    /* [in] */ aafUInt32 DescribedSlotID);
 
 
 void __RPC_STUB IAAFDescriptiveClip_AddDescribedSlotID_Stub(
@@ -6266,7 +6266,7 @@ void __RPC_STUB IAAFDescriptiveClip_AddDescribedSlotID_Stub(
 
 HRESULT STDMETHODCALLTYPE IAAFDescriptiveClip_RemoveDescribedSlotID_Proxy( 
     IAAFDescriptiveClip __RPC_FAR * This,
-    /* [in] */ aafUInt32 describedSlotID);
+    /* [in] */ aafUInt32 DescribedSlotID);
 
 
 void __RPC_STUB IAAFDescriptiveClip_RemoveDescribedSlotID_Stub(

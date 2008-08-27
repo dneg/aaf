@@ -5746,7 +5746,7 @@ DECLARE_INTERFACE_(IAAFDescriptiveClip, IUnknown)
   /// the given properties.  Only required properties are set.
   /// Optional properties are added with separate functions.
   ///
-  /// Succeeds if:
+  /// Succeds if:
   /// - This object has not already been Initialize()d.
   ///
   /// This method will return the following codes.  If more than one of
@@ -5873,11 +5873,11 @@ DECLARE_INTERFACE_(IAAFDescriptiveClip, IUnknown)
   /// AAFRESULT_PROP_NOT_PRESENT
   ///   - the DescribedSlotIDs property is not present.
   ///
-  /// @param describedSlotID [in] Described slot ID whose presence is to be queried
-  /// @param pIsPresent [out,retval] True if describedSlotID is present
+  /// @param DescribedSlotID [in] described slot ID whose presence is to be queried
+  /// @param pIsPresent [out,retval] True if DescribedSlotID is present
   ///
   STDMETHOD(IsDescribedSlotIDPresent) (THIS_
-    aafUInt32  describedSlotID,
+    aafUInt32  DescribedSlotID,
     aafBoolean_t*  pIsPresent) PURE;
 
 
@@ -5903,10 +5903,10 @@ DECLARE_INTERFACE_(IAAFDescriptiveClip, IUnknown)
   ///   - The given described slot ID is already contained in the list
   ///     of described slot IDs referenced by this DescriptiveClip.
   ///
-  /// @param describedSlotID [in] Described slot ID to add.
+  /// @param DescribedSlotID [in] described slot ID to add.
   ///
   STDMETHOD(AddDescribedSlotID) (THIS_
-    aafUInt32  describedSlotID) PURE;
+    aafUInt32  DescribedSlotID) PURE;
 
 
   //***********************************************************
@@ -5938,10 +5938,10 @@ DECLARE_INTERFACE_(IAAFDescriptiveClip, IUnknown)
   ///   - The given described slot ID is not present in the list
   ///     of described slot IDs referenced by this DescriptiveClip.
   ///
-  /// @param describedSlotID [in] Described slot ID to remove.
+  /// @param DescribedSlotID [in] described slot ID to remove.
   ///
   STDMETHOD(RemoveDescribedSlotID) (THIS_
-    aafUInt32  describedSlotID) PURE;
+    aafUInt32  DescribedSlotID) PURE;
 
 
 
@@ -9859,6 +9859,8 @@ DECLARE_INTERFACE_(IAAFFileDescriptor, IUnknown)
   ///
   /// Succeeds if all of the following are true:
   /// - the pCodecDef pointer is valid.
+  /// - the CodecDefinition identifying the codec is
+  ///   present in the dictionary.
   /// 
   /// If this method fails nothing will be written to *pCodecDef.
   /// 
@@ -9871,6 +9873,10 @@ DECLARE_INTERFACE_(IAAFFileDescriptor, IUnknown)
   ///
   /// AAFRESULT_NULL_PARAM
   ///   - pCodecDef arg is NULL.
+  ///
+  /// AAFRESULT_OBJECT_NOT_FOUND
+  ///   - the CodecDefinition identifying the codec is not
+  ///     in the dictionary.
   ///
   /// @param pCodecDef [out] Which codec was used
   ///
@@ -9959,6 +9965,8 @@ DECLARE_INTERFACE_(IAAFFileDescriptor, IUnknown)
   ///
   /// Succeeds if all of the following are true:
   /// - the pFormat pointer is valid.
+  /// - the ContainerDefinition identifying the file format is
+  ///   present in the dictionary.
   /// 
   /// If this method fails nothing will be written to *pFormat.
   /// 
@@ -9971,6 +9979,10 @@ DECLARE_INTERFACE_(IAAFFileDescriptor, IUnknown)
   ///
   /// AAFRESULT_NULL_PARAM
   ///   - pFormat arg is NULL.
+  ///
+  /// AAFRESULT_OBJECT_NOT_FOUND
+  ///   - the ContainerDefinition identifying the file format is not
+  ///     in the dictionary.
   ///
   /// @param pFormat [out] Optional
   ///
@@ -46370,6 +46382,8 @@ DECLARE_INTERFACE_(IAAFFileDescriptor2, IUnknown)
   ///
   /// Succeeds if all of the following are true:
   /// - the pCodecDef pointer is valid.
+  /// - the CodecDefinition identifying the codec is
+  ///   present in the dictionary.
   /// 
   /// If this method fails nothing will be written to *pCodecDef.
   /// 
@@ -46382,6 +46396,10 @@ DECLARE_INTERFACE_(IAAFFileDescriptor2, IUnknown)
   ///
   /// AAFRESULT_NULL_PARAM
   ///   - pCodecDef arg is NULL.
+  ///
+  /// AAFRESULT_OBJECT_NOT_FOUND
+  ///   - the CodecDefinition identifying the codec is not
+  ///     in the dictionary.
   ///
   /// @param pCodecDef [out] Which codec was used
   ///
@@ -46470,6 +46488,8 @@ DECLARE_INTERFACE_(IAAFFileDescriptor2, IUnknown)
   ///
   /// Succeeds if all of the following are true:
   /// - the pFormat pointer is valid.
+  /// - the ContainerDefinition identifying the file format is
+  ///   present in the dictionary.
   /// 
   /// If this method fails nothing will be written to *pFormat.
   /// 
@@ -46482,6 +46502,10 @@ DECLARE_INTERFACE_(IAAFFileDescriptor2, IUnknown)
   ///
   /// AAFRESULT_NULL_PARAM
   ///   - pFormat arg is NULL.
+  ///
+  /// AAFRESULT_OBJECT_NOT_FOUND
+  ///   - the ContainerDefinition identifying the file format is not
+  ///     in the dictionary.
   ///
   /// @param pFormat [out] Optional
   ///

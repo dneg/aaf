@@ -5605,7 +5605,7 @@ interface IAAFDescriptiveClip : IUnknown
   /// the given properties.  Only required properties are set.
   /// Optional properties are added with separate functions.
   ///
-  /// Succeeds if:
+  /// Succeds if:
   /// - This object has not already been Initialize()d.
   ///
   /// This method will return the following codes.  If more than one of
@@ -5732,11 +5732,11 @@ interface IAAFDescriptiveClip : IUnknown
   /// AAFRESULT_PROP_NOT_PRESENT
   ///   - the DescribedSlotIDs property is not present.
   /// 
-  /// @param describedSlotID [in] Described slot ID whose presence is to be queried
-  /// @param pIsPresent [out,retval] True if describedSlotID is present
+  /// @param DescribedSlotID [in] described slot ID whose presence is to be queried
+  /// @param pIsPresent [out,retval] True if DescribedSlotID is present
   ///
   HRESULT IsDescribedSlotIDPresent (
-    [in] aafUInt32  describedSlotID,
+    [in] aafUInt32  DescribedSlotID,
     [out,retval] aafBoolean_t*  pIsPresent);
 
 
@@ -5762,10 +5762,10 @@ interface IAAFDescriptiveClip : IUnknown
   ///   - The given described slot ID is already contained in the list
   ///     of described slot IDs referenced by this DescriptiveClip.
   /// 
-  /// @param describedSlotID [in] Described slot ID to add.
+  /// @param DescribedSlotID [in] described slot ID to add.
   ///
   HRESULT AddDescribedSlotID (
-    [in] aafUInt32  describedSlotID);
+    [in] aafUInt32  DescribedSlotID);
 
 
   //***********************************************************
@@ -5797,10 +5797,10 @@ interface IAAFDescriptiveClip : IUnknown
   ///   - The given described slot ID is not present in the list
   ///     of described slot IDs referenced by this DescriptiveClip.
   /// 
-  /// @param describedSlotID [in] Described slot ID to remove.
+  /// @param DescribedSlotID [in] described slot ID to remove.
   ///
   HRESULT RemoveDescribedSlotID (
-    [in] aafUInt32  describedSlotID);
+    [in] aafUInt32  DescribedSlotID);
 
 
 }
@@ -9813,6 +9813,8 @@ interface IAAFFileDescriptor : IUnknown
   ///
   /// Succeeds if all of the following are true:
   /// - the pCodecDef pointer is valid.
+  /// - the CodecDefinition identifying the codec is
+  ///   present in the dictionary.
   /// 
   /// If this method fails nothing will be written to *pCodecDef.
   /// 
@@ -9825,6 +9827,10 @@ interface IAAFFileDescriptor : IUnknown
   ///
   /// AAFRESULT_NULL_PARAM
   ///   - pCodecDef arg is NULL.
+  ///
+  /// AAFRESULT_OBJECT_NOT_FOUND
+  ///   - the CodecDefinition identifying the codec is not
+  ///     in the dictionary.
   /// 
   /// @param pCodecDef [out] Which codec was used
   ///
@@ -9913,6 +9919,8 @@ interface IAAFFileDescriptor : IUnknown
   ///
   /// Succeeds if all of the following are true:
   /// - the pFormat pointer is valid.
+  /// - the ContainerDefinition identifying the file format is
+  ///   present in the dictionary.
   /// 
   /// If this method fails nothing will be written to *pFormat.
   /// 
@@ -9925,6 +9933,10 @@ interface IAAFFileDescriptor : IUnknown
   ///
   /// AAFRESULT_NULL_PARAM
   ///   - pFormat arg is NULL.
+  ///
+  /// AAFRESULT_OBJECT_NOT_FOUND
+  ///   - the ContainerDefinition identifying the file format is not
+  ///     in the dictionary.
   /// 
   /// @param pFormat [out] Optional
   ///
@@ -46089,6 +46101,8 @@ interface IAAFFileDescriptor2 : IUnknown
   ///
   /// Succeeds if all of the following are true:
   /// - the pCodecDef pointer is valid.
+  /// - the CodecDefinition identifying the codec is
+  ///   present in the dictionary.
   /// 
   /// If this method fails nothing will be written to *pCodecDef.
   /// 
@@ -46101,6 +46115,10 @@ interface IAAFFileDescriptor2 : IUnknown
   ///
   /// AAFRESULT_NULL_PARAM
   ///   - pCodecDef arg is NULL.
+  ///
+  /// AAFRESULT_OBJECT_NOT_FOUND
+  ///   - the CodecDefinition identifying the codec is not
+  ///     in the dictionary.
   /// 
   /// @param pCodecDef [out] Which codec was used
   ///
@@ -46189,6 +46207,8 @@ interface IAAFFileDescriptor2 : IUnknown
   ///
   /// Succeeds if all of the following are true:
   /// - the pFormat pointer is valid.
+  /// - the ContainerDefinition identifying the file format is
+  ///   present in the dictionary.
   /// 
   /// If this method fails nothing will be written to *pFormat.
   /// 
@@ -46201,6 +46221,10 @@ interface IAAFFileDescriptor2 : IUnknown
   ///
   /// AAFRESULT_NULL_PARAM
   ///   - pFormat arg is NULL.
+  ///
+  /// AAFRESULT_OBJECT_NOT_FOUND
+  ///   - the ContainerDefinition identifying the file format is not
+  ///     in the dictionary.
   /// 
   /// @param pFormat [out] Optional
   ///

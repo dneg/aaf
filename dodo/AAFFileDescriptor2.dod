@@ -126,6 +126,8 @@ AD_XMETHOD1(GetCodecDef,
   ///
   /// Succeeds if all of the following are true:
   /// - the pCodecDef pointer is valid.
+  /// - the CodecDefinition identifying the codec is
+  ///   present in the dictionary.
   /// 
   /// If this method fails nothing will be written to *pCodecDef.
   /// 
@@ -137,7 +139,11 @@ AD_XMETHOD1(GetCodecDef,
   ///   - succeeded.  \(This is the only code indicating success.\)
   ///
   /// AAFRESULT_NULL_PARAM
-  ///   - pCodecDef arg is NULL.)
+  ///   - pCodecDef arg is NULL.
+  ///
+  /// AAFRESULT_OBJECT_NOT_FOUND
+  ///   - the CodecDefinition identifying the codec is not
+  ///     in the dictionary.)
 
 
 AD_XMETHOD1(SetSampleRate,
@@ -214,6 +220,8 @@ AD_XMETHOD1(GetContainerFormat,
   ///
   /// Succeeds if all of the following are true:
   /// - the pFormat pointer is valid.
+  /// - the ContainerDefinition identifying the file format is
+  ///   present in the dictionary.
   /// 
   /// If this method fails nothing will be written to *pFormat.
   /// 
@@ -225,7 +233,11 @@ AD_XMETHOD1(GetContainerFormat,
   ///   - succeeded.  \(This is the only code indicating success.\)
   ///
   /// AAFRESULT_NULL_PARAM
-  ///   - pFormat arg is NULL.)
+  ///   - pFormat arg is NULL.
+  ///
+  /// AAFRESULT_OBJECT_NOT_FOUND
+  ///   - the ContainerDefinition identifying the file format is not
+  ///     in the dictionary.)
 
 
 AD_XMETHOD1(SetLinkedSlotID,

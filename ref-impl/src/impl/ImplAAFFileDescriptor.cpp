@@ -109,6 +109,16 @@ AAFRESULT STDMETHODCALLTYPE
 	if (!_codecDef.isPresent())
 		return AAFRESULT_PROP_NOT_PRESENT;	
 
+	// Should isVoid() be sufficient? It's not in the case
+	// of references to MXF container definitions, which are not in
+	// the built-in dictionary.
+        /*
+	if (_codecDef.isVoid())
+		return AAFRESULT_OBJECT_NOT_FOUND;
+        */
+	if (!_codecDef)
+		return AAFRESULT_OBJECT_NOT_FOUND;
+
 	*ppDef = _codecDef;
 	ASSERTU (*ppDef);
 
@@ -157,7 +167,16 @@ AAFRESULT STDMETHODCALLTYPE
 
 	if (!_containerFmt.isPresent())
 		return AAFRESULT_PROP_NOT_PRESENT;	
-	
+
+	if (_containerFmt.isVoid())
+		return AAFRESULT_OBJECT_NOT_FOUND;
+
+	// Should the isVoid() above be sufficient? It's not in the case
+	// of references to MXF container definitions, which are not in
+	// the built-in dictionary.
+	if (!_containerFmt)
+		return AAFRESULT_OBJECT_NOT_FOUND;
+
 	*ppDef = _containerFmt;
 	ASSERTU (*ppDef);
 	 (*ppDef)->AcquireReference ();
