@@ -150,6 +150,148 @@
 			<Tool
 				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
 		</Configuration>
+		<Configuration
+			Name="VC3Debug|Win32"
+			OutputDirectory="$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
+			ConfigurationType="2"
+			UseOfMFC="0"
+			ATLMinimizesCRunTimeLibraryUsage="FALSE"
+			CharacterSet="1">
+			<Tool
+				Name="VCCLCompilerTool"
+				Optimization="0"
+				AdditionalIncludeDirectories="../../../../ref-impl/src/com-api;../../../../ref-impl/plugins;../../../../ref-impl/include/com-api/;../../../../ref-impl/src/impl;../../../../ref-impl/src/Om;../../../../ref-impl/include/OM;../../../../ref-impl/src/com-api/com-dll;../../../../ref-impl/include;../../../../ref-impl/libjpeg;$(CODECS_ROOT)\DNxHDCodecSDK\include;$(CODECS_ROOT)\VC3Codec\Source"
+				PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;WIN32;USE_DNxHD_CODEC;USE_VC3_CODEC"
+				RuntimeLibrary="3"
+				RuntimeTypeInfo="TRUE"
+				UsePrecompiledHeader="2"
+				PrecompiledHeaderFile=".\Debug/AAFStandardCodecs.pch"
+				AssemblerListingLocation=".\Debug/"
+				ObjectFile=".\Debug/"
+				ProgramDataBaseFileName=".\Debug/"
+				WarningLevel="3"
+				WarnAsError="TRUE"
+				SuppressStartupBanner="TRUE"
+				DebugInformationFormat="4"
+				CompileAs="0"/>
+			<Tool
+				Name="VCCustomBuildTool"/>
+			<Tool
+				Name="VCLinkerTool"
+				IgnoreImportLibrary="TRUE"
+				AdditionalDependencies="$(CODECS_ROOT)\DNxHDCodecSDK\win32\lib\DNxHDCodec.lib $(CODECS_ROOT)\VC3Codec\Source\AvidDNxHDCodec.lib"
+				OutputFile="../../Debug/RefImpl/aafext/AAFPGAPI.dll"
+				LinkIncremental="1"
+				SuppressStartupBanner="TRUE"
+				IgnoreDefaultLibraryNames="libc.lib,libcmt.lib,msvcrt.lib,libcd.lib,libcmtd.lib"
+				ModuleDefinitionFile="..\..\..\..\ref-impl\plugins\AafPlugincom.def"
+				GenerateDebugInformation="TRUE"
+				ProgramDatabaseFile=".\../../Debug/RefImpl/AAFPGAPI.pdb"
+				SubSystem="2"
+				ImportLibrary=".\../../Debug/RefImpl/AAFPGAPI.lib"
+				TargetMachine="1"/>
+			<Tool
+				Name="VCMIDLTool"
+				PreprocessorDefinitions="_DEBUG"
+				MkTypLibCompatible="TRUE"
+				SuppressStartupBanner="TRUE"
+				TargetEnvironment="1"
+				TypeLibraryName=".\../../Debug/RefImpl/AAFStandardCodecs.tlb"
+				HeaderFileName=""/>
+			<Tool
+				Name="VCPostBuildEventTool"/>
+			<Tool
+				Name="VCPreBuildEventTool"/>
+			<Tool
+				Name="VCPreLinkEventTool"/>
+			<Tool
+				Name="VCResourceCompilerTool"
+				PreprocessorDefinitions="_DEBUG"
+				Culture="1033"/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
+				Name="VCWebDeploymentTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
+		</Configuration>
+		<Configuration
+			Name="VC3Release|Win32"
+			OutputDirectory="$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
+			ConfigurationType="2"
+			UseOfMFC="0"
+			ATLMinimizesCRunTimeLibraryUsage="FALSE"
+			CharacterSet="1">
+			<Tool
+				Name="VCCLCompilerTool"
+				Optimization="2"
+				InlineFunctionExpansion="1"
+				AdditionalIncludeDirectories="../../../../ref-impl/src/com-api;../../../../ref-impl/plugins;../../../../ref-impl/include/com-api/;../../../../ref-impl/src/impl;../../../../ref-impl/src/Om;../../../../ref-impl/include/OM;../../../../ref-impl/src/com-api/com-dll;../../../../ref-impl/include;../../../../ref-impl/libjpeg;$(CODECS_ROOT)\DNxHDCodecSDK\include;$(CODECS_ROOT)\VC3Codec\Source"
+				PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;WIN32;USE_DNxHD_CODEC;USE_VC3_CODEC"
+				StringPooling="TRUE"
+				RuntimeLibrary="2"
+				EnableFunctionLevelLinking="TRUE"
+				RuntimeTypeInfo="TRUE"
+				UsePrecompiledHeader="2"
+				PrecompiledHeaderFile=".\Release/AAFStandardCodecs.pch"
+				AssemblerListingLocation=".\Release/"
+				ObjectFile=".\Release/"
+				ProgramDataBaseFileName=".\Release/"
+				WarningLevel="3"
+				WarnAsError="TRUE"
+				SuppressStartupBanner="TRUE"
+				CompileAs="0"/>
+			<Tool
+				Name="VCCustomBuildTool"/>
+			<Tool
+				Name="VCLinkerTool"
+				IgnoreImportLibrary="TRUE"
+				AdditionalDependencies="$(CODECS_ROOT)\DNxHDCodecSDK\win32\lib\DNxHDCodec.lib $(CODECS_ROOT)\VC3Codec\Source\AvidDNxHDCodec.lib"
+				OutputFile="../../Release/RefImpl/aafext/AAFPGAPI.dll"
+				LinkIncremental="1"
+				SuppressStartupBanner="TRUE"
+				AdditionalLibraryDirectories="..\..\Release\aafsdk\lib"
+				IgnoreDefaultLibraryNames="libc.lib,libcmt.lib,libcd.lib,libcmtd.lib,msvcrtd.lib"
+				ModuleDefinitionFile="..\..\..\..\ref-impl\plugins\AafPlugincom.def"
+				ProgramDatabaseFile=".\../../Release/RefImpl/AAFPGAPI.pdb"
+				SubSystem="2"
+				ImportLibrary=".\../../Release/RefImpl/AAFPGAPI.lib"
+				TargetMachine="1"/>
+			<Tool
+				Name="VCMIDLTool"
+				PreprocessorDefinitions="NDEBUG"
+				MkTypLibCompatible="TRUE"
+				SuppressStartupBanner="TRUE"
+				TargetEnvironment="1"
+				TypeLibraryName=".\../../Release/RefImpl/AAFStandardCodecs.tlb"
+				HeaderFileName=""/>
+			<Tool
+				Name="VCPostBuildEventTool"/>
+			<Tool
+				Name="VCPreBuildEventTool"/>
+			<Tool
+				Name="VCPreLinkEventTool"/>
+			<Tool
+				Name="VCResourceCompilerTool"
+				PreprocessorDefinitions="NDEBUG"
+				Culture="1033"/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
+				Name="VCWebDeploymentTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
+		</Configuration>
 	</Configurations>
 	<References>
 	</References>
@@ -166,6 +308,22 @@
 			</FileConfiguration>
 			<FileConfiguration
 				Name="Release|Win32">
+				<Tool
+					Name="VCCLCompilerTool"
+					Optimization="2"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;$(NoInherit)"/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="VC3Debug|Win32">
+				<Tool
+					Name="VCCLCompilerTool"
+					Optimization="0"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;$(NoInherit)"/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="VC3Release|Win32">
 				<Tool
 					Name="VCCLCompilerTool"
 					Optimization="2"
@@ -194,6 +352,22 @@
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;$(NoInherit)"/>
 			</FileConfiguration>
+			<FileConfiguration
+				Name="VC3Debug|Win32">
+				<Tool
+					Name="VCCLCompilerTool"
+					Optimization="0"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;$(NoInherit)"/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="VC3Release|Win32">
+				<Tool
+					Name="VCCLCompilerTool"
+					Optimization="2"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;$(NoInherit)"/>
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\..\ref-impl\plugins\CAAFAIFCCodec.cpp">
@@ -207,6 +381,22 @@
 			</FileConfiguration>
 			<FileConfiguration
 				Name="Release|Win32">
+				<Tool
+					Name="VCCLCompilerTool"
+					Optimization="2"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;$(NoInherit)"/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="VC3Debug|Win32">
+				<Tool
+					Name="VCCLCompilerTool"
+					Optimization="0"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;$(NoInherit)"/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="VC3Release|Win32">
 				<Tool
 					Name="VCCLCompilerTool"
 					Optimization="2"
@@ -232,6 +422,22 @@
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;$(NoInherit)"/>
 			</FileConfiguration>
+			<FileConfiguration
+				Name="VC3Debug|Win32">
+				<Tool
+					Name="VCCLCompilerTool"
+					Optimization="0"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;$(NoInherit)"/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="VC3Release|Win32">
+				<Tool
+					Name="VCCLCompilerTool"
+					Optimization="2"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;$(NoInherit)"/>
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\..\ref-impl\plugins\CAAFCDCIDescriptorHelper.cpp">
@@ -251,6 +457,22 @@
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;$(NoInherit)"/>
 			</FileConfiguration>
+			<FileConfiguration
+				Name="VC3Debug|Win32">
+				<Tool
+					Name="VCCLCompilerTool"
+					Optimization="0"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;$(NoInherit)"/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="VC3Release|Win32">
+				<Tool
+					Name="VCCLCompilerTool"
+					Optimization="2"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;$(NoInherit)"/>
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\..\ref-impl\src\com-api\com-dll\CAAFClassFactory.cpp">
@@ -264,6 +486,22 @@
 			</FileConfiguration>
 			<FileConfiguration
 				Name="Release|Win32">
+				<Tool
+					Name="VCCLCompilerTool"
+					Optimization="2"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;$(NoInherit)"/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="VC3Debug|Win32">
+				<Tool
+					Name="VCCLCompilerTool"
+					Optimization="0"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;$(NoInherit)"/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="VC3Release|Win32">
 				<Tool
 					Name="VCCLCompilerTool"
 					Optimization="2"
@@ -292,6 +530,22 @@
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;$(NoInherit)"/>
 			</FileConfiguration>
+			<FileConfiguration
+				Name="VC3Debug|Win32">
+				<Tool
+					Name="VCCLCompilerTool"
+					Optimization="0"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;$(NoInherit)"/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="VC3Release|Win32">
+				<Tool
+					Name="VCCLCompilerTool"
+					Optimization="2"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;$(NoInherit)"/>
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\..\ref-impl\plugins\CAAFEssenceFileContainer.cpp">
@@ -305,6 +559,22 @@
 			</FileConfiguration>
 			<FileConfiguration
 				Name="Release|Win32">
+				<Tool
+					Name="VCCLCompilerTool"
+					Optimization="2"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;$(NoInherit)"/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="VC3Debug|Win32">
+				<Tool
+					Name="VCCLCompilerTool"
+					Optimization="0"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;$(NoInherit)"/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="VC3Release|Win32">
 				<Tool
 					Name="VCCLCompilerTool"
 					Optimization="2"
@@ -330,6 +600,22 @@
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;$(NoInherit)"/>
 			</FileConfiguration>
+			<FileConfiguration
+				Name="VC3Debug|Win32">
+				<Tool
+					Name="VCCLCompilerTool"
+					Optimization="0"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;$(NoInherit)"/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="VC3Release|Win32">
+				<Tool
+					Name="VCCLCompilerTool"
+					Optimization="2"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;$(NoInherit)"/>
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\..\ref-impl\plugins\CAAFEssenceRIFFWAVEContainer.cpp">
@@ -343,6 +629,22 @@
 			</FileConfiguration>
 			<FileConfiguration
 				Name="Release|Win32">
+				<Tool
+					Name="VCCLCompilerTool"
+					Optimization="2"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;$(NoInherit)"/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="VC3Debug|Win32">
+				<Tool
+					Name="VCCLCompilerTool"
+					Optimization="0"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;$(NoInherit)"/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="VC3Release|Win32">
 				<Tool
 					Name="VCCLCompilerTool"
 					Optimization="2"
@@ -368,6 +670,22 @@
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;$(NoInherit)"/>
 			</FileConfiguration>
+			<FileConfiguration
+				Name="VC3Debug|Win32">
+				<Tool
+					Name="VCCLCompilerTool"
+					Optimization="0"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;$(NoInherit)"/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="VC3Release|Win32">
+				<Tool
+					Name="VCCLCompilerTool"
+					Optimization="2"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;$(NoInherit)"/>
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\..\ref-impl\src\com-api\com-dll\CAAFInProcServer.cpp">
@@ -381,6 +699,22 @@
 			</FileConfiguration>
 			<FileConfiguration
 				Name="Release|Win32">
+				<Tool
+					Name="VCCLCompilerTool"
+					Optimization="2"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;$(NoInherit)"/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="VC3Debug|Win32">
+				<Tool
+					Name="VCCLCompilerTool"
+					Optimization="0"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;$(NoInherit)"/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="VC3Release|Win32">
 				<Tool
 					Name="VCCLCompilerTool"
 					Optimization="2"
@@ -406,6 +740,22 @@
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;$(NoInherit)"/>
 			</FileConfiguration>
+			<FileConfiguration
+				Name="VC3Debug|Win32">
+				<Tool
+					Name="VCCLCompilerTool"
+					Optimization="0"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;$(NoInherit)"/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="VC3Release|Win32">
+				<Tool
+					Name="VCCLCompilerTool"
+					Optimization="2"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;$(NoInherit)"/>
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\..\ref-impl\plugins\CAAFJPEGDescriptorHelper.cpp">
@@ -419,6 +769,22 @@
 			</FileConfiguration>
 			<FileConfiguration
 				Name="Release|Win32">
+				<Tool
+					Name="VCCLCompilerTool"
+					Optimization="2"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;$(NoInherit)"/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="VC3Debug|Win32">
+				<Tool
+					Name="VCCLCompilerTool"
+					Optimization="0"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;$(NoInherit)"/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="VC3Release|Win32">
 				<Tool
 					Name="VCCLCompilerTool"
 					Optimization="2"
@@ -444,6 +810,22 @@
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;$(NoInherit)"/>
 			</FileConfiguration>
+			<FileConfiguration
+				Name="VC3Debug|Win32">
+				<Tool
+					Name="VCCLCompilerTool"
+					Optimization="0"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;$(NoInherit)"/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="VC3Release|Win32">
+				<Tool
+					Name="VCCLCompilerTool"
+					Optimization="2"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;$(NoInherit)"/>
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\..\ref-impl\src\com-api\com-dll\CAAFServer.cpp">
@@ -463,6 +845,22 @@
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;$(NoInherit)"/>
 			</FileConfiguration>
+			<FileConfiguration
+				Name="VC3Debug|Win32">
+				<Tool
+					Name="VCCLCompilerTool"
+					Optimization="0"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;$(NoInherit)"/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="VC3Release|Win32">
+				<Tool
+					Name="VCCLCompilerTool"
+					Optimization="2"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;$(NoInherit)"/>
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\..\ref-impl\src\com-api\com-dll\CAAFUnknown.cpp">
@@ -476,6 +874,22 @@
 			</FileConfiguration>
 			<FileConfiguration
 				Name="Release|Win32">
+				<Tool
+					Name="VCCLCompilerTool"
+					Optimization="2"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;$(NoInherit)"/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="VC3Debug|Win32">
+				<Tool
+					Name="VCCLCompilerTool"
+					Optimization="0"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;$(NoInherit)"/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="VC3Release|Win32">
 				<Tool
 					Name="VCCLCompilerTool"
 					Optimization="2"
@@ -504,6 +918,22 @@
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;$(NoInherit)"/>
 			</FileConfiguration>
+			<FileConfiguration
+				Name="VC3Debug|Win32">
+				<Tool
+					Name="VCCLCompilerTool"
+					Optimization="0"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;$(NoInherit)"/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="VC3Release|Win32">
+				<Tool
+					Name="VCCLCompilerTool"
+					Optimization="2"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;$(NoInherit)"/>
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\..\ref-impl\plugins\jpegesdatadst.cpp">
@@ -517,6 +947,22 @@
 			</FileConfiguration>
 			<FileConfiguration
 				Name="Release|Win32">
+				<Tool
+					Name="VCCLCompilerTool"
+					Optimization="2"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;$(NoInherit)"/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="VC3Debug|Win32">
+				<Tool
+					Name="VCCLCompilerTool"
+					Optimization="0"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;$(NoInherit)"/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="VC3Release|Win32">
 				<Tool
 					Name="VCCLCompilerTool"
 					Optimization="2"
@@ -542,6 +988,22 @@
 					AdditionalIncludeDirectories=""
 					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;$(NoInherit)"/>
 			</FileConfiguration>
+			<FileConfiguration
+				Name="VC3Debug|Win32">
+				<Tool
+					Name="VCCLCompilerTool"
+					Optimization="0"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;$(NoInherit)"/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="VC3Release|Win32">
+				<Tool
+					Name="VCCLCompilerTool"
+					Optimization="2"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;$(NoInherit)"/>
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\..\..\ref-impl\plugins\utf8.cpp">
@@ -555,6 +1017,22 @@
 			</FileConfiguration>
 			<FileConfiguration
 				Name="Release|Win32">
+				<Tool
+					Name="VCCLCompilerTool"
+					Optimization="2"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;$(NoInherit)"/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="VC3Debug|Win32">
+				<Tool
+					Name="VCCLCompilerTool"
+					Optimization="0"
+					AdditionalIncludeDirectories=""
+					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;$(NoInherit)"/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="VC3Release|Win32">
 				<Tool
 					Name="VCCLCompilerTool"
 					Optimization="2"
