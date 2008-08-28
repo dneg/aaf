@@ -51,17 +51,12 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "RegressionTestStructure", "
 		{A422F5E0-5C85-458A-BDCD-8975C1CF5367} = {A422F5E0-5C85-458A-BDCD-8975C1CF5367}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Everything", "Everything\Everything.vcproj", "{CE315B55-C2F8-4296-8F12-77651DC748C1}"
-	ProjectSection(ProjectDependencies) = postProject
-		{BF106A3E-C282-476C-8014-D7575C66E8CD} = {BF106A3E-C282-476C-8014-D7575C66E8CD}
-		{F7FA487F-32BC-4DD2-B22C-70760C857090} = {F7FA487F-32BC-4DD2-B22C-70760C857090}
-		{280BFDCC-DE41-4169-B2BB-1FBFBCA2281F} = {280BFDCC-DE41-4169-B2BB-1FBFBCA2281F}
-	EndProjectSection
-EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		Debug = Debug
 		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectDependencies) = postSolution
 	EndGlobalSection
 	GlobalSection(ProjectConfiguration) = postSolution
 		{9DD45964-642A-4D06-8263-674A87C5917C}.Debug.ActiveCfg = Debug|Win32
@@ -104,10 +99,6 @@ Global
 		{280BFDCC-DE41-4169-B2BB-1FBFBCA2281F}.Debug.Build.0 = Debug|Win32
 		{280BFDCC-DE41-4169-B2BB-1FBFBCA2281F}.Release.ActiveCfg = Release|Win32
 		{280BFDCC-DE41-4169-B2BB-1FBFBCA2281F}.Release.Build.0 = Release|Win32
-		{CE315B55-C2F8-4296-8F12-77651DC748C1}.Debug.ActiveCfg = Debug|Win32
-		{CE315B55-C2F8-4296-8F12-77651DC748C1}.Debug.Build.0 = Debug|Win32
-		{CE315B55-C2F8-4296-8F12-77651DC748C1}.Release.ActiveCfg = Release|Win32
-		{CE315B55-C2F8-4296-8F12-77651DC748C1}.Release.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection

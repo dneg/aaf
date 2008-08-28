@@ -19,7 +19,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=".;../../../Utilities/AAFAnalyzer/AnalyzerBase;../../../Utilities/AAFAnalyzer/RequirementLib;../../../Utilities/AAFAnalyzer/TestPhaseLib;../../../Utilities/AAFAnalyzer/AAFAnalyzerBase;../../../Utilities/AAFAnalyzer/BaseTestImpl;../../../Utilities/AAFAnalyzer/EPAnalyzerBase;../../../Utilities/AAFAnalyzer/EditProtocolTestImpl;../../include;../../../examples2/axLib;&quot;$(BOOSTINC)&quot;"
+				AdditionalIncludeDirectories=".;../../../Utilities/AAFAnalyzer/AnalyzerBase;../../../Utilities/AAFAnalyzer/RequirementLib;../../../Utilities/AAFAnalyzer/TestPhaseLib;../../../Utilities/AAFAnalyzer/AAFAnalyzerBase;../../../Utilities/AAFAnalyzer/BaseTestImpl;../../../Utilities/AAFAnalyzer/EPAnalyzerBase;../../../Utilities/AAFAnalyzer/EditProtocolTestImpl;../../vs7/include;../../../examples2/axLib;&quot;$(BOOSTINC)&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				MinimalRebuild="TRUE"
 				BasicRuntimeChecks="3"
@@ -33,7 +33,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="../AnalyzerBase/Debug/AnalyzerBase.lib ../RequirementLib/Debug/RequirementLib.lib ../TestPhaseLib/Debug/TestPhaseLib.lib ../AAFAnalyzerBase/Debug/AAFAnalyzerBase.lib ../BaseTestImpl/Debug/BaseTestImpl.lib ../EPAnalyzerBase/Debug/EPAnalyzerBase.lib ../EditProtocolTestImpl/Debug/EditProtocolTestImpl.lib ../../../examples2/axLib/Debug/axLib.lib ../../lib/AAFD.lib ../../lib/AAFIIDD.lib ../../ref-impl/expat/Debug/expat.lib"
+				AdditionalDependencies="../AnalyzerBase/Debug/AnalyzerBase.lib ../RequirementLib/Debug/RequirementLib.lib ../TestPhaseLib/Debug/TestPhaseLib.lib ../AAFAnalyzerBase/Debug/AAFAnalyzerBase.lib ../BaseTestImpl/Debug/BaseTestImpl.lib ../EPAnalyzerBase/Debug/EPAnalyzerBase.lib ../EditProtocolTestImpl/Debug/EditProtocolTestImpl.lib ../../../examples2/axLib/Debug/axLib.lib ../../vs7/lib/AAFD.lib ../../vs7/lib/AAFIIDD.lib ../../vs7/ref-impl/expat/Debug/expat.lib"
 				OutputFile="$(OutDir)/AAFAnalyze.exe"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="&quot;$(BOOSTINC)\lib&quot;"
@@ -72,7 +72,7 @@
 			CharacterSet="2">
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories=".;../../../Utilities/AAFAnalyzer/AnalyzerBase;../../../Utilities/AAFAnalyzer/RequirementLib;../../../Utilities/AAFAnalyzer/TestPhaseLib;../../../Utilities/AAFAnalyzer/AAFAnalyzerBase;../../../Utilities/AAFAnalyzer/BaseTestImpl;../../../Utilities/AAFAnalyzer/EPAnalyzerBase;../../../Utilities/AAFAnalyzer/EditProtocolTestImpl;../../include;../../../examples2/axLib;&quot;$(BOOSTINC)&quot;"
+				AdditionalIncludeDirectories=".;../../../Utilities/AAFAnalyzer/AnalyzerBase;../../../Utilities/AAFAnalyzer/RequirementLib;../../../Utilities/AAFAnalyzer/TestPhaseLib;../../../Utilities/AAFAnalyzer/AAFAnalyzerBase;../../../Utilities/AAFAnalyzer/BaseTestImpl;../../../Utilities/AAFAnalyzer/EPAnalyzerBase;../../../Utilities/AAFAnalyzer/EditProtocolTestImpl;../../vs7/include;../../../examples2/axLib;&quot;$(BOOSTINC)&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				RuntimeLibrary="2"
 				RuntimeTypeInfo="TRUE"
@@ -84,7 +84,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="../AnalyzerBase/Release/AnalyzerBase.lib ../RequirementLib/Release/RequirementLib.lib ../TestPhaseLib/Release/TestPhaseLib.lib ../AAFAnalyzerBase/Release/AAFAnalyzerBase.lib ../BaseTestImpl/Release/BaseTestImpl.lib ../EPAnalyzerBase/Release/EPAnalyzerBase.lib ../EditProtocolTestImpl/Release/EditProtocolTestImpl.lib ../../../examples2/axLib/Release/axLib.lib ../../lib/AAFD.lib ../../lib/AAFIIDD.lib ../../ref-impl/expat/Debug/expat.lib"
+				AdditionalDependencies="../AnalyzerBase/Release/AnalyzerBase.lib ../RequirementLib/Release/RequirementLib.lib ../TestPhaseLib/Release/TestPhaseLib.lib ../AAFAnalyzerBase/Release/AAFAnalyzerBase.lib ../BaseTestImpl/Release/BaseTestImpl.lib ../EPAnalyzerBase/Release/EPAnalyzerBase.lib ../EditProtocolTestImpl/Release/EditProtocolTestImpl.lib ../../../examples2/axLib/Release/axLib.lib ../../vs7/lib/AAFD.lib ../../vs7/lib/AAFIIDD.lib ../../vs7/ref-impl/expat/Debug/expat.lib"
 				OutputFile="$(OutDir)/AAFAnalyzer.exe"
 				LinkIncremental="1"
 				SuppressStartupBanner="TRUE"
