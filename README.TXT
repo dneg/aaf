@@ -1,10 +1,11 @@
-                         AAF SDK version 1.1 Release
+                        AAF SDK version 1.1.3 Release
                          http://aaf.sourceforge.net/
 
 Getting Started
 ----------------
 (a) Using Microsoft Visual C++ (Win32)
-    - Open AAFWinSDK/AAFWinSDK.sln
+    - Open AAFWinSDK/vs<version>/AAFWinSDK.sln
+      (where Visual C++ version can be 7, 8 or 9)
 
     - Build the "Everything" project
       (a Debug or Release build type can be selected)
