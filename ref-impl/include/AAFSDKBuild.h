@@ -38,14 +38,14 @@
 
 #define AAF_MAJOR_VERSION 1
 #define AAF_MINOR_VERSION 1
-#define AAF_MAINT_RELEASE 2
+#define AAF_MAINT_RELEASE 3
 
-#define AAF_RELEASE_STAGE kAAFVersionReleased
+#define AAF_RELEASE_STAGE kAAFVersionBeta
  
 // these next two lines are monitored/incremented by newbuild.pl
 
 #define AAF_PATCH_LEVEL 0
-#define AAF_CURRENT_YEAR "2007"
+#define AAF_CURRENT_YEAR "2008"
 
 //   The lines below shouldn't normally need to be modified
 //
