@@ -46,10 +46,10 @@
 //
 // The following source files were used as input : 
 //
-// smpte-ra-20080802.1709.1.13.csv 
+// AAFMetaDict.csv 
 //
-// This file was generated on Sat Aug  2 18:14:58 EDT 2008
-// by user Oliver on system TWEEDLEDUM.
+// This file was generated on Fri Aug 29 17:18:30 BST 2008
+// by user phil on system pilot16.
 //
 // Key to macros.
 //
@@ -2505,28 +2505,6 @@ AAF_CLASS(EssenceData,
       0x0100, 0x0000,
       0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x02),
     0x2b01,
-    AAF_TYPE(Stream),
-    false,
-    false,
-    EssenceData)
-  AAF_PROPERTY(EssenceStreamID,
-    // {01030404-0000-0000-060E-2B3401010104}
-    // 06.0E.2B.34.01.01.01.04.01.03.04.04.00.00.00.00
-    AAF_LITERAL_AUID(0x01030404,
-      0x0000, 0x0000,
-      0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
-    0x3f07,
-    AAF_TYPE(Stream),
-    false,
-    false,
-    EssenceData)
-  AAF_PROPERTY(IndexStreamID,
-    // {01030405-0000-0000-060E-2B3401010104}
-    // 06.0E.2B.34.01.01.01.04.01.03.04.05.00.00.00.00
-    AAF_LITERAL_AUID(0x01030405,
-      0x0000, 0x0000,
-      0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
-    0x3f06,
     AAF_TYPE(Stream),
     false,
     false,
