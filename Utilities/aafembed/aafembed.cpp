@@ -542,11 +542,11 @@ static HRESULT RelinkAAFFile(aafWChar * pFileName)
 			if (*(pb+1))
 				pb++;
 			strncpy(avifile, EssenceDir, sizeof(avifile));
-			avifile[sizeof(avifile)] = '\0';
+			avifile[sizeof(avifile)-1] = '\0';
 			strncat(avifile, "/", sizeof(avifile));
-			avifile[sizeof(avifile)] = '\0';
+			avifile[sizeof(avifile)-1] = '\0';
 			strncat(avifile, pb, sizeof(avifile));
-			avifile[sizeof(avifile)] = '\0';
+			avifile[sizeof(avifile)-1] = '\0';
 		}
 		printf("  Using path=%s\n", avifile);
 
