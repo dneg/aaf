@@ -11,10 +11,10 @@ Getting Started
       (a Debug or Release build type can be selected)
 
     - Client application builds should point their library & include paths to:
-        AAFWinSDK/include/
-        AAFWinSDK/lib/
+        AAFWinSDK/vs<version>/include/
+        AAFWinSDK/vs<version>/lib/
       and running client applications requires AAFCOAPI.dll so PATH must include:
-        AAFWinSDK/bin/
+        AAFWinSDK/vs<version>/bin/
 
 (b) Using GNU make
     - To build the library, tests and all the examples and utilities run
