@@ -40,7 +40,7 @@
 #define AAF_MINOR_VERSION 1
 #define AAF_MAINT_RELEASE 3
 
-#define AAF_RELEASE_STAGE kAAFVersionBeta
+#define AAF_RELEASE_STAGE kAAFVersionReleased
  
 // these next two lines are monitored/incremented by newbuild.pl
 
