@@ -197,18 +197,23 @@ private:
    AAFRESULT CheckFirstComponentSematics( ImplAAFComponent* pComponent );
 
    AAFRESULT CheckTypeSemantics( ImplAAFEvent* pEvent );
-   AAFRESULT CheckPositionSemantics( ImplAAFEvent* pEvent );
+   AAFRESULT CheckPositionSemantics( ImplAAFEvent* pEvent, aafUInt32 index );
    AAFRESULT CheckLengthSemantics( ImplAAFEvent* pEvent );
 
-   AAFRESULT CheckTypeSemantics( ImplAAFComponent* pComponent );
+   AAFRESULT CheckTypeSemantics( ImplAAFComponent* pComponent, aafUInt32 index );
    AAFRESULT CheckPositionSemantics( ImplAAFComponent* pComponent );
    AAFRESULT CheckLengthSemantics( ImplAAFComponent* pComponent );
 
    // These routines will update the length of an event, or !event, component.
    // The caller must resolve the type.  Both will work correctly if pComponent
    // or pEvent is the first component.
-   AAFRESULT UpdateSequenceLength( ImplAAFEvent* pEvent );
    AAFRESULT UpdateSequenceLength( ImplAAFComponent* pComponent );
+   AAFRESULT UpdateSequenceLength( ImplAAFEvent* pEvent, aafUInt32 index);
+   AAFRESULT UpdateSequenceLengthOnRemove( ImplAAFEvent* pEvent, aafUInt32 index);
+   AAFRESULT UpdateSequenceLengthOnRemove( ImplAAFComponent* pComponent);
+
+   aafLength_t FindEventSequenceEnd();
+   AAFRESULT getEventEnd(ImplAAFEvent*, aafLength_t &end);//pos+len
 
    ImplAAFComponent* GetLastComponent();
    ImplAAFComponent* GetFirstComponent();

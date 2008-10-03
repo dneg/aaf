@@ -162,94 +162,27 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFSequence::AppendComponent (ImplAAFComponent* pComponent)
 {
-	ImplAAFDataDefSP sequDataDef, cpntDataDef;
-	aafBool			willConvert = kAAFFalse;
-
-	if (pComponent == NULL)
-		return AAFRESULT_NULL_PARAM;
-	
-	if (pComponent->attached())
-		return AAFRESULT_OBJECT_ALREADY_ATTACHED;
-
-	XPROTECT()
+	aafUInt32 count;
+	AAFRESULT ar;
+	ar = CountComponents (&count);
+	if (AAFRESULT_FAILED (ar)) 
 	{
-		// Verify that component's datadef converts to sequence's datadef
-		if(GetDataDef(&sequDataDef) == AAFRESULT_SUCCESS)
-		{
-			pComponent->GetDataDef(&cpntDataDef);
-			CHECK(cpntDataDef->DoesDataDefConvertTo(sequDataDef, &willConvert));
-		
-			if (willConvert == kAAFFalse)
-				RAISE(AAFRESULT_INVALID_DATADEF);
-		}
-		else
-			SetDataDef(cpntDataDef);
-		
-
-		// Three distinct cases to handle here:
-		// 1) This is first component to be appended to the sequence.
-		// 2) This is a sequence of events, as determined by the type of
-		//    the first entry in the sequence.  Enforce event sequence policies.
-		// 3) This is not a sequence of events, as determined by the type
-		//    of the first entry in the sequence.  Enforce !event sequence
-		//    policies.
-				
-		ImplAAFEvent* pEvent = dynamic_cast<ImplAAFEvent*>( pComponent );
-
-		if ( 0 == _components.count() ) {
-
-			CHECK( CheckFirstComponentSematics( pComponent ) );
-
-			if ( pEvent ) {
-				CHECK( UpdateSequenceLength( pEvent ) );
-			}
-			else {
-				CHECK( UpdateSequenceLength( pComponent ) );
-			}
-		
-		}
-		else if ( dynamic_cast<ImplAAFEvent*>( GetFirstComponent() ) ) {
-
-			CHECK( CheckTypeSemantics( pEvent ) );
-			CHECK( CheckPositionSemantics( pEvent ) );
-			CHECK( CheckLengthSemantics( pEvent ) );
-			CHECK( UpdateSequenceLength( pEvent ) );
-		}
-		else {
-
-			CHECK( CheckTypeSemantics( pComponent ) );
-			CHECK( CheckPositionSemantics( pComponent ) );
-			CHECK( CheckLengthSemantics( pComponent ) );
-			CHECK( UpdateSequenceLength( pComponent ) );
-		}
-
-		// It all checks out, append the component to the sequence.
-		pComponent->AcquireReference();
-		_components.appendValue(pComponent);
-		
+		return ar;
 	}
-	XEXCEPT
-	{
-	}
-	XEND;
-
-	return(AAFRESULT_SUCCESS);
+	return InsertComponentAt(count, pComponent);
 }
 
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFSequence::PrependComponent (ImplAAFComponent* pComponent)
 {
-  if(!pComponent)
+	if(!pComponent)
 		return(AAFRESULT_NULL_PARAM);
 
-  if (pComponent->attached())
-		return AAFRESULT_OBJECT_ALREADY_ATTACHED;
+	if (pComponent->attached())
+			return AAFRESULT_OBJECT_ALREADY_ATTACHED;
 
-  _components.prependValue(pComponent);
-  pComponent->AcquireReference();
-
-  return AAFRESULT_SUCCESS;
+	return  InsertComponentAt(0, pComponent);
 }
 
 
@@ -263,15 +196,83 @@ AAFRESULT STDMETHODCALLTYPE
   aafUInt32 count;
   AAFRESULT ar;
   ar = CountComponents (&count);
-  if (AAFRESULT_FAILED (ar)) return ar;
+  if (AAFRESULT_FAILED (ar)) 
+  {
+	  return ar;
+  }
+
   if (index > count)
+  {
 	return AAFRESULT_BADINDEX;
+  }
 
   if (pComponent->attached())
     return AAFRESULT_OBJECT_ALREADY_ATTACHED;
 
-  _components.insertAt(pComponent,index);
-  pComponent->AcquireReference();
+  ImplAAFDataDefSP sequDataDef, cpntDataDef;
+  aafBool			willConvert = kAAFFalse;
+
+  XPROTECT()
+  {
+    // Verify that component's datadef converts to sequence's datadef
+	if(GetDataDef(&sequDataDef) == AAFRESULT_SUCCESS)
+	{
+		pComponent->GetDataDef(&cpntDataDef);
+		CHECK(cpntDataDef->DoesDataDefConvertTo(sequDataDef, &willConvert));
+	
+		if (willConvert == kAAFFalse)
+			RAISE(AAFRESULT_INVALID_DATADEF);
+	}
+	else
+		SetDataDef(cpntDataDef); //This should never execute because the sequence the datadef must be set before manipulating the sequence.
+
+	ImplAAFEvent* pEvent = dynamic_cast<ImplAAFEvent*>( pComponent );
+
+	//index > count means an index = 0 and a count = 0, i.e. insert into an epmty list at index 0 is allowed.
+	if ( 0 == count ) {
+
+			CHECK( CheckFirstComponentSematics( pComponent ) );
+
+			if ( pEvent ) {
+				CHECK( UpdateSequenceLength(pEvent, index) ); 
+			}
+			else {
+				CHECK( UpdateSequenceLength( pComponent ) );
+			}
+		
+		}
+		else if ( dynamic_cast<ImplAAFEvent*>( GetFirstComponent() ) ) {
+
+			if(!pEvent)
+			{
+				return AAFRESULT_EVENT_SEMANTICS;
+			}
+			CHECK( CheckTypeSemantics( pEvent ) ); 
+			CHECK( CheckPositionSemantics( pEvent, index ) ); 
+			CHECK( CheckLengthSemantics( pEvent ) ); 
+			CHECK( UpdateSequenceLength( pEvent, index ) );
+		}
+		else {
+
+			if(pEvent)
+			{
+				return AAFRESULT_EVENT_SEMANTICS;
+			}
+			CHECK( CheckTypeSemantics( pComponent, index) );
+			CHECK( CheckPositionSemantics( pComponent ) );
+			CHECK( CheckLengthSemantics( pComponent ) );
+			CHECK( UpdateSequenceLength( pComponent ) );
+		}
+
+
+
+	_components.insertAt(pComponent,index);
+	pComponent->AcquireReference();
+  }
+  XEXCEPT
+  {
+  }
+  XEND;
 
   return AAFRESULT_SUCCESS;
 }
@@ -305,6 +306,7 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFSequence::RemoveComponentAt (aafUInt32 index)
 {
+  AAFRESULT status;
   aafUInt32 count;
   AAFRESULT hr;
   hr = CountComponents (&count);
@@ -314,14 +316,51 @@ AAFRESULT STDMETHODCALLTYPE
 
 	ImplAAFComponent *pComp = NULL;
 	pComp = 	_components.removeAt(index);
+	ImplAAFEvent* pEvent = 0;
+	pEvent = dynamic_cast<ImplAAFEvent*>( pComp );
+
 	if (pComp)
 	{
+		if(count == 1)
+		{
+			//If count was 1 and we successfully removed an item, the list is now empty.
+			aafLength_t dummy;
+			//In order eveluation of and will not call GetLenght when pEvent is 0.
+			if (pEvent != 0 && 
+				AAFRESULT_PROP_NOT_PRESENT == pEvent->GetLength(&dummy) )
+ 		    {
+				//If the event didn't have length defined, do noting with the sequence lenght.
+				//If the sequence had a component with length, which was previously removed,
+				//and then a component without lenght is removed and there are no components
+				//left in the sequence, should its length be 0 or undefined?
+			}
+			else status = SetLength( 0 );
+		}
+		else
+		{
+			XPROTECT()
+			{
+				if ( dynamic_cast<ImplAAFEvent*>( GetFirstComponent() ) ) 
+				{
+					CHECK( UpdateSequenceLengthOnRemove( pEvent, index ) );
+				}
+				else 
+				{
+					CHECK( UpdateSequenceLengthOnRemove( pComp) );
+				}
+			}
+			XEXCEPT
+			{
+			}
+			XEND;
+		}
 		// We have removed an element from a "stong reference container" so we must
 		// decrement the objects reference count. This will not delete the object
 		// since the caller must have alread acquired a reference. (transdel 2000-MAR-10)
 		pComp->ReleaseReference ();
 	}
-	return AAFRESULT_SUCCESS;
+
+	return status;
 }
 
 
@@ -351,16 +390,25 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFSequence::RemoveComponent (ImplAAFComponent* pComponent)
 {
+	AAFRESULT status;
+
 	if (!_components.containsValue(pComponent))
 	  return AAFRESULT_BADINDEX;
 
 	if (!pComponent->attached())
 	  return AAFRESULT_OBJECT_NOT_ATTACHED;
 
-	_components.removeValue(pComponent);
-	pComponent->ReleaseReference();
+	OMUInt32 index; 
+	if(_components.findIndex(pComponent, index))
+	{
+		status = RemoveComponentAt(index);
+	}
+	else 
+	{
+		status = AAFRESULT_PARAMETER_NOT_FOUND;
+	}
 
-	return AAFRESULT_SUCCESS;
+	return status;
 }
 
 //***********************************************************
@@ -967,34 +1015,55 @@ AAFRESULT ImplAAFSequence::CheckTypeSemantics( ImplAAFEvent* pEvent )
 	return AAFRESULT_SUCCESS;
 }
 
-AAFRESULT ImplAAFSequence::CheckPositionSemantics( ImplAAFEvent* pEvent )
+AAFRESULT ImplAAFSequence::CheckPositionSemantics( ImplAAFEvent* pEvent, aafUInt32 index )
 {
-	// Position of an event must be greater than or equal to
-	// the position of the last event.
+	//Events must be in order by position.
 
 	AAFRESULT status;
-	
 
-	aafPosition_t posNext;
-	status = pEvent->GetPosition( &posNext );
+	ImplAAFComponent* pComponentPrior = 0;
+	ImplAAFComponent* pComponentNext = 0;
+	ImplAAFEvent* pEventPrior = 0;
+	ImplAAFEvent* pEventNext = 0;
+
+	if(index > 0) _components.getValueAt(pComponentPrior, index-1 );
+    //Existing values in this <c OMVector> at <p index> and higher are shifted up one index position on insert.
+	if(_components.count() > index) _components.getValueAt(pComponentNext, index);
+
+	if(pComponentPrior != 0)
+	{
+		pEventPrior = dynamic_cast<ImplAAFEvent*> (pComponentPrior);
+		if(!pEventPrior) return AAFRESULT_EVENT_SEMANTICS;
+	}
+
+	if(pComponentNext != 0)
+	{
+		pEventNext = dynamic_cast<ImplAAFEvent*> (pComponentNext);
+		if(!pEventNext) return AAFRESULT_EVENT_SEMANTICS;
+	}
+
+	aafPosition_t posNew;
+	status = pEvent->GetPosition( &posNew );
 	if ( AAFRESULT_SUCCESS != status ) {
 		return status;
 	}
 
-	ImplAAFEvent* pLastEvent;
-	status = GetLastEvent( pLastEvent );
-	if ( AAFRESULT_SUCCESS != status ) {
-		return status;
-	}
-	
-	aafPosition_t posLast;
-	status = pLastEvent->GetPosition( &posLast );
-	if ( AAFRESULT_SUCCESS != status ) {
-		return status;
+	if(pEventPrior != 0)
+	{
+		aafPosition_t posPrior;
+		status = pEventPrior->GetPosition( &posPrior );
+		if ( AAFRESULT_SUCCESS != status ) return status;
+
+		if ( posPrior > posNew ) return AAFRESULT_EVENT_SEMANTICS;
 	}
 
-	if ( posLast > posNext ) {
-		return AAFRESULT_EVENT_SEMANTICS;
+	if(pEventNext != 0)
+	{
+		aafPosition_t posNext;
+		status = pEventNext->GetPosition( &posNext );
+		if ( AAFRESULT_SUCCESS != status ) return status;
+
+		if ( posNext < posNew ) return AAFRESULT_EVENT_SEMANTICS;
 	}
 
 	return AAFRESULT_SUCCESS;
@@ -1008,18 +1077,175 @@ AAFRESULT ImplAAFSequence::CheckLengthSemantics( ImplAAFEvent* /*pEvent*/ )
 	return AAFRESULT_SUCCESS;
 }
 
-AAFRESULT ImplAAFSequence::UpdateSequenceLength( ImplAAFEvent* pEvent )
+AAFRESULT ImplAAFSequence::getEventEnd(ImplAAFEvent *pEvent, aafLength_t &end)
 {
-	// If this sequence does not have a length property, and pEvent
-	// does not have a length property, then do nothing (i.e. do not set
-	// this sequence's length).
-	//
-	// If this sequence does have a length property, and pEvent does not
-	// have a length property then assume the length of pEvent is zero and
-	// update length normally.
-	//
-	// If both this sequence and pEvent have a length properties then update
-	// this sequence normally.
+	AAFRESULT status;
+	aafPosition_t pos;
+	status = pEvent->GetPosition( &pos);
+	if ( AAFRESULT_SUCCESS != status ) return status;
+
+	aafLength_t length;
+	status = GetOptionalComponentLength( pEvent, length );
+	if ( AAFRESULT_SUCCESS != status ) return status;
+
+	end = pos+length;
+
+	return AAFRESULT_SUCCESS;
+}
+
+aafLength_t ImplAAFSequence::FindEventSequenceEnd()
+{
+	AAFRESULT status;
+	aafLength_t seqLen = 0;
+	aafLength_t eventLen;
+	ImplAAFComponent *pComp;
+	aafUInt32 count = _components.count();
+	/*
+		Dyn. cast each comp to an event, sum its pos. and lenght, if total > sequence length then update the seqLen.
+	*/
+	for (aafUInt32 i = 0; i < count; i++) 
+	{
+		eventLen = 0;
+		pComp = 0;
+		_components.getValueAt(pComp, i);
+		if (pComp) 
+		{
+			ImplAAFEvent *pEvent = 0;
+			pEvent = dynamic_cast<ImplAAFEvent*>(pComp);
+			if(pEvent)
+			{
+				status = getEventEnd(pEvent, eventLen);
+				if ( AAFRESULT_SUCCESS == status ) 
+				{
+					if(seqLen > eventLen)
+					{
+						seqLen = seqLen;
+					}
+					else seqLen = eventLen;
+				}
+			}
+		}
+	}
+	return seqLen;
+}
+
+AAFRESULT ImplAAFSequence::UpdateSequenceLengthOnRemove( ImplAAFEvent* pEvent, aafUInt32 index)
+{
+	AAFRESULT status;
+	// Position of an event must be greater than or equal to
+	// the position of the last event.
+
+	//Get sequence lenght, if sequence has no lenght or lenght is 0, just return success.
+	aafLength_t sequenceLength = 0; 
+	if ( AAFRESULT_PROP_NOT_PRESENT == GetLength(&sequenceLength)) 
+	{
+		return AAFRESULT_SUCCESS;
+	}
+	//If we reach this point of execution it means that at least one event in this sequence had defined lenght
+	//and so the sequence should have defined lenght even if it is 0.
+	if (sequenceLength == 0) 
+	{
+		return AAFRESULT_SUCCESS;
+	}
+
+	aafLength_t eventLength = 0; 
+	status = GetOptionalComponentLength(pEvent, eventLength); 
+	if ( AAFRESULT_SUCCESS != status ) 
+	{
+		return status;
+	}
+	
+	aafPosition_t eventPos;
+	status = pEvent->GetPosition( &eventPos );
+	if ( AAFRESULT_SUCCESS != status ) 
+	{
+		return status;
+	}
+
+	//pEvent was the first event in the sequence:
+	if(index == 0)
+	{
+		ImplAAFEvent* pFirstEvent;
+		status = GetFirstEvent( pFirstEvent );
+		if ( AAFRESULT_SUCCESS != status ) return status;
+
+		aafPosition_t posFirst;
+		status = pFirstEvent->GetPosition( &posFirst );
+		if ( AAFRESULT_SUCCESS != status ) return status;
+
+		if(eventPos + eventLength < sequenceLength) 
+		{
+			sequenceLength = sequenceLength - (posFirst - eventPos);
+		}
+		else
+		{
+			sequenceLength = FindEventSequenceEnd() - posFirst;
+		}
+	}
+	else if(index == _components.count()) //pEvent was the last event in the sequence
+	{
+		ImplAAFEvent* pLastEvent;
+		status = GetLastEvent( pLastEvent );
+		if ( AAFRESULT_SUCCESS != status ) return status;
+
+		aafPosition_t posLast;
+		status = pLastEvent->GetPosition( &posLast );
+		if ( AAFRESULT_SUCCESS != status ) 
+		{
+			return status;
+		}
+
+		aafLength_t lastLength;
+		status = GetOptionalComponentLength( pLastEvent, lastLength );
+		if ( AAFRESULT_SUCCESS != status ) 
+		{
+			return status;
+		}
+
+		if(eventPos + eventLength < sequenceLength)
+		{
+			//Nada
+		}
+		else
+		{
+			ImplAAFEvent* pFirstEvent;
+			status = GetFirstEvent( pFirstEvent );
+			if ( AAFRESULT_SUCCESS != status ) return status;
+
+			aafPosition_t posFirst;
+			status = pFirstEvent->GetPosition( &posFirst );
+			if ( AAFRESULT_SUCCESS != status ) return status;
+
+			sequenceLength =  FindEventSequenceEnd() - posFirst;
+		}
+	}
+	else if(eventPos + eventLength < sequenceLength)
+	{
+		//Nada
+	}
+	else
+	{
+		ImplAAFEvent* pFirstEvent;
+		status = GetFirstEvent( pFirstEvent );
+		if ( AAFRESULT_SUCCESS != status ) return status;
+
+		aafPosition_t posFirst;
+		status = pFirstEvent->GetPosition( &posFirst );
+		if ( AAFRESULT_SUCCESS != status ) return status;
+
+		sequenceLength =  FindEventSequenceEnd() - posFirst;
+	}
+	//Sanity check
+	ASSERTU(sequenceLength >= 0);
+	status = SetLength( sequenceLength );
+	if ( AAFRESULT_SUCCESS != status ) return status;
+	
+	return AAFRESULT_SUCCESS;
+}
+
+AAFRESULT ImplAAFSequence::UpdateSequenceLength( ImplAAFEvent* pEvent, aafUInt32 index)
+{
+	aafLength_t newEndPoint = 0;
 
 	aafLength_t dummy;
 	if ( AAFRESULT_PROP_NOT_PRESENT == GetLength(&dummy) &&
@@ -1027,7 +1253,8 @@ AAFRESULT ImplAAFSequence::UpdateSequenceLength( ImplAAFEvent* pEvent )
 		return AAFRESULT_SUCCESS;
 	}
 
-	AAFRESULT status;
+
+    AAFRESULT status;
 
 	aafPosition_t posNext;
 	status = pEvent->GetPosition( &posNext );
@@ -1041,8 +1268,6 @@ AAFRESULT ImplAAFSequence::UpdateSequenceLength( ImplAAFEvent* pEvent )
 		return status;
 	}
 
-	// This routine is also responsible for updating the length
-	// when the first event is appended.  Hence, this special case.
 	if ( _components.count() == 0 ) {
 
 		status = SetLength( lengthNext );
@@ -1071,32 +1296,62 @@ AAFRESULT ImplAAFSequence::UpdateSequenceLength( ImplAAFEvent* pEvent )
 			return status;
 		}
 
-		// Sanity check.  This should never fail if
-		// event ordering rules are correctly enforced.
-		ASSERTU( posNext + lengthNext >= posFirst );
 
-		if ( posNext + lengthNext - posFirst > seqLength ) {
-			seqLength = posNext + lengthNext - posFirst;
+		if(((lengthNext + posNext) - posFirst) > seqLength) newEndPoint = (lengthNext + posNext) - posFirst;
+		else newEndPoint = seqLength;
+
+
+		if(index == 0)
+		{
+
+			if(posNext > posFirst) seqLength = newEndPoint;
+			else seqLength = newEndPoint + (posFirst-posNext);
 		}
-
+		else
+		{
+			seqLength = newEndPoint;
+		}
 		status = SetLength( seqLength );
-		if ( AAFRESULT_SUCCESS != status ) {
-			return status;
-		}
+		if ( AAFRESULT_SUCCESS != status ) return status;
 	}
 
 	return status;
 }
 
-// ImplAAFSequence private - !Event sematics
-// 
 
-AAFRESULT ImplAAFSequence::CheckTypeSemantics( ImplAAFComponent* pComponent )
+AAFRESULT ImplAAFSequence::CheckTypeSemantics( ImplAAFComponent* pComponent, aafUInt32 index) 
 {
-	// Only one policy to enforce here: reject adjacent transitions.
+	//reject adjacent transitions:
+	ImplAAFTransition *pTrans = dynamic_cast<ImplAAFTransition*>( pComponent );
+	if(!pTrans) 
+	{ 
+		return AAFRESULT_SUCCESS;
+	}
+	if(pTrans && index == 0)
+	{
+		return AAFRESULT_LEADING_TRAN;
+	}
 
-	if ( dynamic_cast<ImplAAFTransition*>( pComponent )  && 
-		 dynamic_cast<ImplAAFTransition*>( GetLastComponent() ) ) {
+	ImplAAFComponent* pComponentPrior = 0;
+	ImplAAFComponent* pComponentNext = 0;
+
+	if(index > 0)
+	{
+		_components.getValueAt(pComponentPrior, index-1 );
+	}
+    //Existing values in this <c OMVector> at <p index> and higher are shifted up one index position on insert.
+	if(_components.count() > index) 
+	{
+		_components.getValueAt(pComponentNext, index);
+	}
+
+	if(pComponentPrior != 0 && dynamic_cast<ImplAAFTransition*>(pComponentPrior)) 
+	{
+		return AAFRESULT_ADJACENT_TRAN;
+	}
+
+	if(pComponentNext != 0 && dynamic_cast<ImplAAFTransition*>(pComponentNext)) 
+	{
 		return AAFRESULT_ADJACENT_TRAN;
 	}
 
@@ -1111,6 +1366,8 @@ AAFRESULT ImplAAFSequence::CheckPositionSemantics( ImplAAFComponent* /*pComponen
 
 	return AAFRESULT_SUCCESS;
 }
+
+
 
 AAFRESULT ImplAAFSequence::CheckLengthSemantics( ImplAAFComponent* pComponentNext )
 {
@@ -1133,10 +1390,37 @@ AAFRESULT ImplAAFSequence::CheckLengthSemantics( ImplAAFComponent* pComponentNex
 		return status;
 	}
 
-	if ( ( dynamic_cast<ImplAAFTransition*>( pComponentNext )     && ( lengthLast < lengthNext ) ) ||
-		 ( dynamic_cast<ImplAAFTransition*>( GetLastComponent() ) && ( lengthNext < lengthLast ) ) ) {
+	if ( ( dynamic_cast<ImplAAFTransition*>( pComponentNext )     && ( (lengthLast) < (lengthNext) ) ) ||
+		 ( dynamic_cast<ImplAAFTransition*>( GetLastComponent() ) && ( (lengthNext) < (lengthLast) ) ) ) {
 		return AAFRESULT_INSUFF_TRAN_MATERIAL;
 	}
+	
+	return AAFRESULT_SUCCESS;
+}
+
+AAFRESULT ImplAAFSequence::UpdateSequenceLengthOnRemove( ImplAAFComponent* pComponent)
+{
+	AAFRESULT status;
+
+	aafLength_t sequenceLength = 0; 
+	status = GetLength(&sequenceLength);
+	if ( AAFRESULT_SUCCESS != status ) return status;
+
+	aafLength_t compLength = 0;
+	status = pComponent->GetLength( &compLength );
+	if ( AAFRESULT_SUCCESS != status ) return status;
+
+	if(dynamic_cast<ImplAAFTransition*>(pComponent))
+	{
+		sequenceLength = sequenceLength + compLength;
+	}
+	else
+	{
+		sequenceLength = sequenceLength - compLength;
+	}
+	//No sanity check for comps, because a comps sequence can go negative!
+	status = SetLength( sequenceLength );
+	if ( AAFRESULT_SUCCESS != status ) return status;
 	
 	return AAFRESULT_SUCCESS;
 }
@@ -1155,7 +1439,7 @@ AAFRESULT ImplAAFSequence::UpdateSequenceLength( ImplAAFComponent* pComponent )
 	// If this sequence has a length,  then update this sequence's length.
 	//
 	// If the component is a transition subtract its length, else, add its length.
-	
+
 	AAFRESULT status;
 
 	aafLength_t compLength = 0;
@@ -1172,9 +1456,11 @@ AAFRESULT ImplAAFSequence::UpdateSequenceLength( ImplAAFComponent* pComponent )
 	}
 	
 	if ( dynamic_cast<ImplAAFTransition*>( pComponent ) )  {
+
 		seqLength -= compLength;
 	}
 	else {
+
 		seqLength += compLength;
 	}
 	status = SetLength( seqLength );
