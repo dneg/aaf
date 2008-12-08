@@ -1,5 +1,4 @@
 // @com Executable example program by Stuart Cunningham, BBC R&D
-// @com This is based upon ComEssenceDataTest.cpp.
 
 //=---------------------------------------------------------------------=
 //
@@ -50,23 +49,40 @@ using namespace std;
 #include "AAFStoredObjectIDs.h"
 
 
-typedef enum { NONE = 0, RawDV, RawUYVY, RawYUY2 } InputFormat;
-InputFormat inpFormat = NONE;
+typedef enum {
+	formatYUV422,
+	formatYUV420,
+	formatYUV411
+} videoFormat_t;
 
 // Use libdv API terminology for consistency with internal use of libdv API
 // where "PAL" & "NTSC" mean 625/50 and 525/60 respectively
-bool formatPAL = true;
+const aafInt32 comprSizePALDV25 = 144000;
+const aafInt32 comprSizePALDV50 = 288000;
+const aafInt32 comprSizeNTSCDV25 = 120000;
+const aafInt32 comprSizeNTSCDV50 = 240000;
 
-const aafInt32 UNC_PAL_FRAME_SIZE = 720*576*2;
-const aafInt32 UNC_NTSC_FRAME_SIZE = 720*480*2;
-const aafInt32 DV_PAL_FRAME_SIZE = 144000;
-const aafInt32 DV_NTSC_FRAME_SIZE = 120000;
+const aafRational_t sampleRate25 = {25, 1};
+const aafRational_t sampleRate30 = {30000, 1001};
+const aafRational_t sampleRate50 = {50, 1};
+const aafRational_t sampleRate60 = {60000, 1001};
 
+// Default output is IEC_DV_625_50 DV 25Mbps wrapped in AAF
+aafRational_t sample_rate = sampleRate25;
+aafUID_t flavour = kAAFCodecFlavour_IEC_DV_625_50;
+aafInt32 comprSize = comprSizePALDV25;
+aafInt32 frameWidth = 720;
+aafInt32 frameHeight = 576;
 bool useLegacyDV = false;
-bool useDVBased = false;
+videoFormat_t vidFmt = formatYUV420;
 bool formatMXF = false;
 
- aafUID_t kAAFOpDef_Atom = { 0x0d010201, 0x1000, 0x0000, { 0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01}};
+aafUID_t kAAFOpDef_Atom = { 0x0d010201, 0x1000, 0x0000, { 0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01}};
+
+inline bool operator == (const aafRational_t a, const aafRational_t b)
+{
+	return memcmp(&a, &b, sizeof(a)) == 0;
+}
 
 #define aaf_assert(b, msg) \
 	if (!(b)) {fprintf(stderr, "ASSERT: %s\n\n", msg); exit(1);}
@@ -105,49 +121,54 @@ static void convert(char* cName, size_t length, const wchar_t* name)
 	}
 }
 
-// Generate a video buffer containing uncompressed UYVY video representing
-// the familiar colour bars test signal (or YUY2 video if specified).
-static void create_colour_bars(unsigned char *video_buffer, bool convert_to_YUY2)
+// Generate a video buffer containing uncompressed YUV420, YUV411 or YUV422
+// with a representation of the colour bars test pattern.
+static void create_colour_bars(unsigned char *video_buffer, int width, int height, videoFormat_t format)
 {
 	int		i,j,b;
-	int		UYVY_table[][5] = {
-				{ 52, 0x80,0xEB,0x80,0xEB },	// white
-				{ 140, 0x10,0xD2,0x92,0xD2 },	// yellow
-				{ 228, 0xA5,0xA9,0x10,0xA9 },	// cyan
-				{ 316, 0x35,0x90,0x22,0x90 },	// green
-				{ 404, 0xCA,0x6A,0xDD,0x6A },	// magenta
-				{ 492, 0x5A,0x51,0xF0,0x51 },	// red
-				{ 580, 0xf0,0x29,0x6d,0x29 },	// blue
-				{ 668, 0x80,0x10,0x80,0x10 },	// black
-				{ 720, 0x80,0xEB,0x80,0xEB },	// white
+	int		UYVY_table[9][4] = {
+				{ 52,  0xEB,0x80,0x80 },	// white
+				{ 140, 0xD2,0x10,0x92 },	// yellow
+				{ 228, 0xA9,0xA5,0x10 },	// cyan
+				{ 316, 0x90,0x35,0x22 },	// green
+				{ 404, 0x6A,0xCA,0xDD },	// magenta
+				{ 492, 0x51,0x5A,0xF0 },	// red
+				{ 580, 0x29,0xf0,0x6d },	// blue
+				{ 668, 0x10,0x80,0x80 },	// black
+				{ 720, 0xEB,0x80,0x80 },	// white
 			};
 
-	for (j = 0; j < 576; j++)
+	unsigned char *y, *u, *v;
+
+	y = video_buffer;
+	u = y + width*height;
+	if (format == formatYUV422)
+		v = u + width*height/2;
+	else
+		v = u + width*height/4;
+
+	for (j = 0; j < height; j++)
 	{
-		for (i = 0; i < 720*2; i+=4)
+		for (i = 0; i < width; i++)
 		{
 			for (b = 0; b < 9; b++)
 			{
-				if (i < UYVY_table[b][0] * 2)
+				if (i < (UYVY_table[b][0] * (width / 720.0)))
 				{
-					video_buffer[j*720*2 + i + 0] = UYVY_table[b][1];
-					video_buffer[j*720*2 + i + 1] = UYVY_table[b][2];
-					video_buffer[j*720*2 + i + 2] = UYVY_table[b][3];
-					video_buffer[j*720*2 + i + 3] = UYVY_table[b][4];
+					*y++ = UYVY_table[b][1];
+
+					if (format == formatYUV411 && i % 4 != 0)	// horiz subsample by 4
+						break;
+					if (format == formatYUV420 && j % 2 == 1)	// vert subsample by 2
+						break;
+					if (i % 2 == 1)								// horiz subsample by 2
+						break;
+
+					*u++ = UYVY_table[b][2];
+					*v++ = UYVY_table[b][3];
 					break;
 				}
 			}
-		}
-	}
-
-	if (convert_to_YUY2)
-	{
-		// Convert from UYVY -> YUY2
-		for (i = 0; i < 720 * 576 * 2; i+=2)
-		{
-			unsigned char tmp = video_buffer[i+1];
-			video_buffer[i+1] = video_buffer[i];
-			video_buffer[i] = tmp;
 		}
 	}
 }
@@ -163,20 +184,16 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, bool comp_enable)
 {
 	IAAFFile*					pFile = NULL;
 	IAAFHeader*					pHeader = NULL;
-	IAAFHeader2*					pHeader2 = NULL;
+	IAAFHeader2*				pHeader2 = NULL;
 	IAAFDictionary*				pDictionary = NULL;
 	IAAFMob*					pMob = NULL;
 	IAAFMasterMob*				pMasterMob = NULL;
 	IAAFEssenceAccess*			pEssenceAccess = NULL;
 	aafMobID_t					masterMobID;
 	aafProductIdentification_t	ProductInfo;
-	aafRational_t				editRate = {25, 1};
-	aafRational_t				sampleRate = {25, 1};
-	aafRational_t				ntsc_rate = {30000, 1001};
 	IAAFClassDef				*pCDMasterMob = NULL;
 	IAAFDataDef					*pPictureDef = NULL;
 	aafUInt32					samplesWritten, bytesWritten;
-	aafInt32					frameSize;
 
 	// Delete any previous test file before continuing...
 	char cFileName[FILENAME_MAX];
@@ -196,23 +213,23 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, bool comp_enable)
 
 
 	const aafUID_t *fileKind = 0;
-	if (!formatMXF) {
-	  // Large sectors for new files, small sectors for legacy files
-          if (useLegacyDV) {
-	    fileKind = &kAAFFileKind_Aaf512Binary;
-          } else {
-            fileKind = &kAAFFileKind_Aaf4KBinary;
-	  }
+	if (formatMXF) {
+		fileKind = &kAAFFileKind_AafKlvBinary;
 	} else {
-	  fileKind = &kAAFFileKind_AafKlvBinary;
+		// Large sectors for new files, small sectors for legacy files
+		if (useLegacyDV) {
+			fileKind = &kAAFFileKind_Aaf512Binary;
+		} else {
+			fileKind = &kAAFFileKind_Aaf4KBinary;
+		}
 	}
 
 	// Create a new AAF file
 	check(AAFFileOpenNewModifyEx(pFileName, fileKind, 0, &ProductInfo, &pFile));
 	check(pFile->GetHeader(&pHeader));
 
-        // Set the operational pattern
-        check(pHeader->QueryInterface(IID_IAAFHeader2, (void **)&pHeader2));
+	// Set the operational pattern
+	check(pHeader->QueryInterface(IID_IAAFHeader2, (void **)&pHeader2));
 	check(pHeader2->SetOperationalPattern(kAAFOpDef_Atom));
 
 	// Get the AAF Dictionary from the file
@@ -223,9 +240,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, bool comp_enable)
 
 	/* Lookup any necessary data definitions. */
 	if (useLegacyDV) {
-	  check(pDictionary->LookupDataDef(kAAFDataDef_LegacyPicture, &pPictureDef));
-        } else {
-	  check(pDictionary->LookupDataDef(kAAFDataDef_Picture, &pPictureDef));
+		check(pDictionary->LookupDataDef(kAAFDataDef_LegacyPicture, &pPictureDef));
+	} else {
+		check(pDictionary->LookupDataDef(kAAFDataDef_Picture, &pPictureDef));
 	}
 
 	/* Create a Mastermob */
@@ -249,86 +266,75 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, bool comp_enable)
 	check(pHeader->AddMob(pMob));
 
 	// Create a frame of colour bars
-	// experiment shows 4 bytes per pixel needed to avoid SMALLBUF using WriteSamples
-	// with kAAFMixedFields and 720x576
-	// 2 bytes per pixel work fine with kAAFSeparateFields and 720x288
-	unsigned char video_buf[UNC_PAL_FRAME_SIZE];
+	aafInt32 frameSize = frameWidth * frameHeight * 3/2;		// YUV411 or YUV420
+	if (vidFmt == formatYUV422)
+		frameSize = frameWidth * frameHeight * 2;
+	unsigned char *video_buf = (unsigned char *)malloc(frameSize);
 	if (input_video == NULL)
 	{
-		create_colour_bars(video_buf, true);
+		create_colour_bars(video_buf, frameWidth, frameHeight, vidFmt);
 	}
 
 	// Get a pointer to video data for WriteSamples
 	unsigned char *dataPtr;
 	dataPtr = video_buf;
 
-	if (! formatPAL)	// set NTSC rates if using NTSC video
-	{
-		editRate = ntsc_rate;
-		sampleRate = ntsc_rate;
-	}
-
-
 	/* Create the Essence Data specifying the codec, container, edit rate and sample rate */
-	check(pMasterMob->CreateEssence(1,			// Slot ID within MasterMob
+	AAFRESULT res = pMasterMob->CreateEssence(
+						1,						// Slot ID within MasterMob
 						pPictureDef,			// MediaKind
 						kAAFCodecCDCI,			// codecID
-						editRate,				// edit rate
-						sampleRate,				// sample rate
+						sample_rate,			// edit rate
+						sample_rate,			// sample rate
 						comp_enable ? kAAFCompressionEnable : kAAFCompressionDisable,
 						NULL,					// No Locator used
 						ContainerAAF,			// Essence embedded in AAF file
-						&pEssenceAccess));		//
+						&pEssenceAccess);		// object returned
+	if (res == AAFRESULT_INVALID_OP_CODEC) {
+		printf("Error AAFRESULT_INVALID_OP_CODEC: Plugin codec not compiled with compression support\n");
+		exit(1);
+	}
 
 	// Set the codec flavour for desired video format
-	if (formatPAL)
-	{
-		if (useLegacyDV)
-			pEssenceAccess->SetEssenceCodecFlavour( kAAFCodecFlavour_LegacyDV_625_50 );
-		else if (useDVBased)
-			pEssenceAccess->SetEssenceCodecFlavour( kAAFCodecFlavour_DV_Based_25Mbps_625_50 );
-		else
-			pEssenceAccess->SetEssenceCodecFlavour( kAAFCodecFlavour_IEC_DV_625_50 );
-
-		frameSize = (comp_enable ? UNC_PAL_FRAME_SIZE : DV_PAL_FRAME_SIZE);
-	}
-	else	// format is NTSC
-	{
-		if (useLegacyDV)
-			pEssenceAccess->SetEssenceCodecFlavour( kAAFCodecFlavour_LegacyDV_525_60 );
-		else if (useDVBased)
-			pEssenceAccess->SetEssenceCodecFlavour( kAAFCodecFlavour_DV_Based_25Mbps_525_60 );
-		else
-			pEssenceAccess->SetEssenceCodecFlavour( kAAFCodecFlavour_IEC_DV_525_60 );
-
-		frameSize = (comp_enable ? UNC_NTSC_FRAME_SIZE : DV_NTSC_FRAME_SIZE);
-	}
+	check(pEssenceAccess->SetEssenceCodecFlavour(flavour));
 
 	// For fun, print the name of the selected codec flavour
-	aafWChar codec_name[128] = L"";
+	// and use it to add to the Mob Name property.
+	aafWChar codec_name[128] = L"", mob_name[256] = L"";
 	check(pEssenceAccess->GetCodecName(sizeof(codec_name), codec_name));
+	check(pMob->GetName(mob_name, 256));
+	wcscat(mob_name, L" - ");
+	wcscat(mob_name, codec_name);
+	check(pMob->SetName(mob_name));
 	printf("  using codec flavour \"%ls\"\n", codec_name);
-
 
 	// Write the video samples
 	int total_samples = 0;
-	if (input_video == NULL)		// using generated uncompressed video?
+	aafInt64 total_bytes_written = 0;
+
+	// If compression is enabled, pass uncompressed data, otherwise pass pre-compressed data
+	aafInt32 dataSize = comp_enable ? frameSize : comprSize;
+
+	if (input_video == NULL)
 	{
+		// use generated uncompressed video
 		for (int i = 0; i < 10; i++)	// 10 frames will do
 		{
-			check(pEssenceAccess->WriteSamples(	1,					//
-												sizeof(video_buf),	// buffer size
+			check(pEssenceAccess->WriteSamples(	1,					// nSamples
+												dataSize,			// buffer size
 												dataPtr,			// pointer to video frame
 												&samplesWritten,
 												&bytesWritten));
 			total_samples += samplesWritten;
+			total_bytes_written += bytesWritten;
 		}
 	}
 	else
 	{
 		while (1)
 		{
-			if ( fread(video_buf, frameSize, 1, input) != 1 )
+			// Read video, either uncompressed or compressed, from file
+			if ( fread(video_buf, dataSize, 1, input) != 1 )
 			{
 				if (feof(input))
 					break;
@@ -337,27 +343,17 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, bool comp_enable)
 				break;
 			}
 
-			if (inpFormat == RawUYVY)
-			{
-				// Convert from UYVY -> YUY2
-				for (int i = 0; i < frameSize; i+=2)
-				{
-					unsigned char tmp = video_buf[i+1];
-					video_buf[i+1] = video_buf[i];
-					video_buf[i] = tmp;
-				}
-			}
-
 			check(pEssenceAccess->WriteSamples(
 									1,					// number of samples
-									frameSize,			// buffer size
+									dataSize,			// buffer size
 									dataPtr,			// samples buffer
 									&samplesWritten,
 									&bytesWritten));
 			total_samples += samplesWritten;
+			total_bytes_written += bytesWritten;
 		}
 	}
-	printf("Wrote %d samples\n", total_samples);
+	printf("Wrote %d samples (size of essence=%lld)\n", total_samples, total_bytes_written);
 
 	/* Set the essence to indicate that you have finished writing the samples */
 	check(pEssenceAccess->CompleteWrite());
@@ -381,6 +377,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, bool comp_enable)
 	/* Close the AAF file */
 	pFile->Close();
 	pFile->Release();
+
+	// cleanup local data
+	free(video_buf);
 
 	return moduleErrorTmp;
 }
@@ -425,45 +424,36 @@ static HRESULT RegisterRequiredPlugins(void)
 	return moduleErrorTmp;
 }
 
-static void detect_format(FILE *fp)
-{
-	if (fp == NULL)
-	{
-		printf("%s:%d NULL file pointer", __FILE__, __LINE__);
-		exit(1);
-	}
-	char header[4];
-	if (fread(header, sizeof(header), 1, fp) < 1) 
-	{
-		printf("%s:%d Error reading file header", __FILE__, __LINE__);
-		exit(1);
-	}
-	if (header[3] & 0x80)
-		formatPAL = true;
-	else if (~header[3] & 0x80)
-		formatPAL = false;
-	else
-	{
-		printf("Unknown format\n");
-		exit(1);
-	}
-	printf("\nCreating output in %s format.\n",  formatPAL ? "PAL" : "NTSC" );
-	fseek(fp, 0L, SEEK_SET);
-}
-
 void printUsage(const char *progname)
 {
-	cout << "Usage : " << progname << " [-mxf] [-legacyDV|-DVBased][-o outputfile] [-rawDV|-rawYUY2|-rawUYVY] input_filename" << endl;
+	cout << "Usage : " << progname << " [options] [input_filename]" << endl;
 	cout << endl;
-	cout << "\tWith no arguments creates ExportDV.aaf containing 10 DV frames" << endl;
+	cout << "  With no arguments, creates ExportDV.aaf containing 10 DV frames" << endl;
+	cout << "  using IEC_DV_625_50 flavour." << endl;
 	cout << endl;
-	cout << "\t-mxf           store AAF file as KLV encoded file (OP Atom)" << endl;
-	cout << "\t-legacyDV      use the legacy Compression ID and 6 extended properties found in legacy software" << endl;
-	cout << "\t-DVBased       use DV-Based RP244 label for Compression ID (default IEC DV RP224 label)" << endl;
-	cout << "\t-o file        write output to specified file instead of ExportDV.aaf" << endl;
-	cout << "\t-rawDV file    specified input video is already compressed DV (raw DIF)" << endl;
-	cout << "\t-rawYUY2 file  specified input video is in raw uncompressed YUY2 format" << endl;
-	cout << "\t-rawUYVY file  specified input video is in raw uncompressed UYVY format" << endl;
+	cout << "  -mxf           store file as KLV encoded file (OP Atom) rather than AAF" << endl;
+	cout << "  -o file        write output to specified file instead of ExportDV.aaf" << endl;
+	cout << "  -raw file      wrap, don't compress, already compressed input file" << endl;
+	cout << "                 (use along with -f <flavour>)" << endl;
+	cout << "  -f <flavour>   Use the specified codec flavour for wrapping or encoding:" << endl;
+	cout << "      LegacyDV_625_50            - DV 25Mbps 4:1:1 with 6 ext legacy props" << endl;
+	cout << "      LegacyDV_525_60            - DV 25Mbps 4:1:1 with 6 ext legacy props" << endl;
+	cout << "      IEC_DV_625_50              - DV 25Mbps 4:2:0 IEC 61834 RP224 label" << endl;
+	cout << "      IEC_DV_525_60              - DV 25Mbps 4:1:1 IEC 61834 RP224 label" << endl;
+	cout << "      DV_Based_25Mbps_625_50     - DV 25Mbps 4:1:1 SMPTE 314M RP244 label" << endl;
+	cout << "      DV_Based_25Mbps_525_60     - DV 25Mbps 4:1:1 SMPTE 314M RP244 label" << endl;
+	cout << "      DV_Based_50Mbps_625_50     - DV 50Mbps 4:2:2 SMPTE 314M RP244 label" << endl;
+	cout << "      DV_Based_50Mbps_525_60     - DV 50Mbps 4:2:2 SMPTE 314M RP244 label" << endl;
+	cout << "      DVbased_1080x50I_100Mbps   - DV 100Mbps 4:2:2 SMPTE 370M RP244 label" << endl;
+	cout << "      DVbased_1080x5994I_100Mbps - DV 100Mbps 4:2:2 SMPTE 370M RP244 label" << endl;
+	cout << "      DVbased_720x50P_100Mbps    - DV 100Mbps 4:2:2 SMPTE 370M RP244 label" << endl;
+	cout << "      DVbased_720x5994P_100Mbps  - DV 100Mbps 4:2:2 SMPTE 370M RP244 label" << endl;
+	cout << "      SMPTE_D10_625x50I_50Mbps   - IMX 50 4:2:2 SMPTE D-10" << endl;
+	cout << "      SMPTE_D10_525x5994I_50Mbps - IMX 50 4:2:2 SMPTE D-10" << endl;
+	cout << "      SMPTE_D10_625x50I_40Mbps   - IMX 40 4:2:2 SMPTE D-10" << endl;
+	cout << "      SMPTE_D10_525x5994I_40Mbps - IMX 40 4:2:2 SMPTE D-10" << endl;
+	cout << "      SMPTE_D10_625x50I_30Mbps   - IMX 30 4:2:2 SMPTE D-10" << endl;
+	cout << "      SMPTE_D10_525x5994I_30Mbps - IMX 30 4:2:2 SMPTE D-10" << endl;
 }
 
 extern int main(int argc, char *argv[])
@@ -493,51 +483,148 @@ extern int main(int argc, char *argv[])
 				mbstowcs(pwFileName, argv[i+1], sizeof(pwFileName));
 				i += 2;
 			}
-			else if (!strcmp(argv[i], "-legacyDV"))
+			else if (!strcmp(argv[i], "-f"))
 			{
-				useLegacyDV = true;
-				i++;
-			}
-			else if (!strcmp(argv[i], "-DVBased"))
-			{
-				useDVBased = true;
-				i++;
-			}
-			else if (!strcmp(argv[i], "-rawDV"))
-			{
-				if (inpFormat)
+				if (i >= argc-1)		// -f requires flavour arg
 				{
 					printUsage(argv[0]);
 					return 1;
 				}
+				const char *fstr = argv[i+1];
+				// 625/50 flavours
+				if (!strcmp(fstr, "LegacyDV_625_50")) {
+					flavour = kAAFCodecFlavour_LegacyDV_625_50;
+					useLegacyDV = true;
+					comprSize = comprSizePALDV25;
+					vidFmt = formatYUV420;
+				}
+				else if (!strcmp(fstr, "IEC_DV_625_50")) {
+					flavour = kAAFCodecFlavour_IEC_DV_625_50;
+					comprSize = comprSizePALDV25;
+					vidFmt = formatYUV411;
+				}
+				else if (!strcmp(fstr, "DV_Based_25Mbps_625_50")) {
+					flavour = kAAFCodecFlavour_DV_Based_25Mbps_625_50;
+					comprSize = comprSizePALDV25;
+					vidFmt = formatYUV411;
+				}
+				else if (!strcmp(fstr, "DV_Based_50Mbps_625_50")) {
+					flavour = kAAFCodecFlavour_DV_Based_50Mbps_625_50;
+					comprSize = comprSizePALDV50;
+					vidFmt = formatYUV422;
+				}
+				else if (!strcmp(fstr, "SMPTE_D10_625x50I_50Mbps")) {
+					flavour = kAAFCodecFlavour_SMPTE_D10_625x50I_50Mbps;
+					comprSize = 250000;
+					vidFmt = formatYUV422;
+				}
+				else if (!strcmp(fstr, "SMPTE_D10_625x50I_40Mbps")) {
+					flavour = kAAFCodecFlavour_SMPTE_D10_625x50I_40Mbps;
+					comprSize = 200000;
+					vidFmt = formatYUV422;
+				}
+				else if (!strcmp(fstr, "SMPTE_D10_625x50I_30Mbps")) {
+					flavour = kAAFCodecFlavour_SMPTE_D10_625x50I_30Mbps;
+					comprSize = 150000;
+					vidFmt = formatYUV422;
+				}
+				else if (!strcmp(fstr, "DVbased_1080x50I_100Mbps")) {
+					flavour = kAAFCodecFlavour_DVbased_1080x50I_100Mbps;
+					comprSize = 576000;
+					vidFmt = formatYUV422;
+					frameWidth = 1440;
+					frameHeight = 1080;
+				}
+				else if (!strcmp(fstr, "DVbased_720x50P_100Mbps")) {
+					flavour = kAAFCodecFlavour_DVbased_720x50P_100Mbps;
+					sample_rate = sampleRate50;
+					comprSize = 288000;
+					vidFmt = formatYUV422;
+					frameWidth = 960;
+					frameHeight = 720;
+				}
+				// 525/60 flavours
+				else if (!strcmp(fstr, "LegacyDV_525_60")) {
+					flavour = kAAFCodecFlavour_LegacyDV_525_60;
+					useLegacyDV = true;
+					sample_rate = sampleRate30;
+					frameHeight = 480;
+					comprSize = comprSizeNTSCDV25;
+					vidFmt = formatYUV411;
+				}
+				else if (!strcmp(fstr, "IEC_DV_525_60")) {
+					flavour = kAAFCodecFlavour_IEC_DV_525_60;
+					sample_rate = sampleRate30;
+					frameHeight = 480;
+					comprSize = comprSizeNTSCDV25;
+					vidFmt = formatYUV411;
+				}
+				else if (!strcmp(fstr, "DV_Based_25Mbps_525_60")) {
+					flavour = kAAFCodecFlavour_DV_Based_25Mbps_525_60;
+					sample_rate = sampleRate30;
+					frameHeight = 480;
+					comprSize = comprSizeNTSCDV25;
+					vidFmt = formatYUV411;
+				}
+				else if (!strcmp(fstr, "DV_Based_50Mbps_525_60")) {
+					flavour = kAAFCodecFlavour_DV_Based_50Mbps_525_60;
+					sample_rate = sampleRate30;
+					frameHeight = 480;
+					comprSize = comprSizeNTSCDV50;
+					vidFmt = formatYUV422;
+				}
+				else if (!strcmp(fstr, "SMPTE_D10_525x5994I_50Mbps")) {
+					flavour = kAAFCodecFlavour_SMPTE_D10_525x5994I_50Mbps;
+					sample_rate = sampleRate30;
+					frameHeight = 480;
+					comprSize = 208541;
+					vidFmt = formatYUV422;
+				}
+				else if (!strcmp(fstr, "SMPTE_D10_525x5994I_40Mbps")) {
+					flavour = kAAFCodecFlavour_SMPTE_D10_525x5994I_40Mbps;
+					sample_rate = sampleRate30;
+					frameHeight = 480;
+					comprSize = 166833;
+					vidFmt = formatYUV422;
+				}
+				else if (!strcmp(fstr, "SMPTE_D10_525x5994I_30Mbps")) {
+					flavour = kAAFCodecFlavour_SMPTE_D10_525x5994I_30Mbps;
+					sample_rate = sampleRate30;
+					frameHeight = 480;
+					comprSize = 125125;
+					vidFmt = formatYUV422;
+				}
+				else if (!strcmp(fstr, "DVbased_1080x5994I_100Mbps")) {
+					flavour = kAAFCodecFlavour_DVbased_1080x5994I_100Mbps;
+					sample_rate = sampleRate30;
+					comprSize = 480000;
+					vidFmt = formatYUV422;
+					frameWidth = 1280;
+					frameHeight = 1080;
+				}
+				else if (!strcmp(fstr, "DVbased_720x5994P_100Mbps")) {
+					flavour = kAAFCodecFlavour_DVbased_720x5994P_100Mbps;
+					sample_rate = sampleRate60;
+					comprSize = 240000;
+					vidFmt = formatYUV422;
+					frameWidth = 960;
+					frameHeight = 720;
+				}
+				else {
+					printf("Flavour %s not supported\n", fstr);
+					exit(1);
+				}
+				i += 2;
+			}
+			else if (!strcmp(argv[i], "-raw"))
+			{
 				compressionEnable = false;
-				inpFormat = RawYUY2;
-				i++;
-			}
-			else if (!strcmp(argv[i], "-rawYUY2"))
-			{
-				if (inpFormat)
-				{
-					printUsage(argv[0]);
-					return 1;
-				}
-				inpFormat = RawYUY2;
-				i++;
-			}
-			else if (!strcmp(argv[i], "-rawUYVY"))
-			{
-				if (inpFormat)
-				{
-					printUsage(argv[0]);
-					return 1;
-				}
-				inpFormat = RawUYVY;
 				i++;
 			}
 			else if (!strcmp(argv[i], "-mxf"))
 			{
-			  formatMXF = true;
-			  i++;
+				formatMXF = true;
+				i++;
 			}
 			else
 			{
@@ -550,25 +637,9 @@ extern int main(int argc, char *argv[])
 	{
 		input_video = argv[i];		// source of uncompressed video
 
-		if (inpFormat == NONE)
-		{
-			cout << "Input format not specified" << endl;
-			printUsage(argv[0]);
-			return 1;
-		}
 		if ( (input = fopen(input_video, "rb")) == NULL)
 		{
 			perror(input_video);
-			return 1;
-		}
-		detect_format(input);
-	}
-	else
-	{
-		if (inpFormat != NONE)		// provided format but no filename
-		{
-			cout << "Input file not specified" << endl;
-			printUsage(argv[0]);
 			return 1;
 		}
 	}

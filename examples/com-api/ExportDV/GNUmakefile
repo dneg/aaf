@@ -30,12 +30,35 @@ include ../comexamplerules.mk
 TEST_CMD = $(APP_RUN_ENV) $(AAFSDKBINDIR)/ExportDV$(EXE)
 .PHONY : check
 check : $(AAFSDKBINDIR)/ExportDV$(EXE)
-	# Only run libdv compression tests if libdv available
-ifdef LIBDV_PATH
+	@# Only run compression tests if ffmpeg available
+ifdef FFMPEG_PATH
+	@# Test default args
 	$(TEST_CMD)
+	@# Test mxf output
 	$(TEST_CMD) -o ExportDV.mxf -mxf
-	$(TEST_CMD) -o ExportDV_legacyDV.aaf -legacyDV
-	$(TEST_CMD) -o ExportDV_DVBased.aaf -DVBased
+	@# Test compression using all codec flavours
+	@for f in \
+	LegacyDV_625_50 \
+	LegacyDV_525_60 \
+	IEC_DV_625_50 \
+	IEC_DV_525_60 \
+	DV_Based_25Mbps_625_50 \
+	DV_Based_25Mbps_525_60 \
+	DV_Based_50Mbps_625_50 \
+	DV_Based_50Mbps_525_60 \
+	DVbased_1080x50I_100Mbps \
+	DVbased_1080x5994I_100Mbps \
+	DVbased_720x50P_100Mbps \
+	DVbased_720x5994P_100Mbps \
+	SMPTE_D10_625x50I_50Mbps \
+	SMPTE_D10_525x5994I_50Mbps \
+	SMPTE_D10_625x50I_40Mbps \
+	SMPTE_D10_525x5994I_40Mbps \
+	SMPTE_D10_625x50I_30Mbps \
+	SMPTE_D10_525x5994I_30Mbps ; do \
+	  rm -f $$f.aaf; echo $(TEST_CMD) -o ExportDV_$$f.aaf -f $$f; $(TEST_CMD) -o ExportDV_$$f.aaf -f $$f || exit 1; \
+	done
 endif
-	# Always run test using DV-compressed frame
-	$(TEST_CMD) -o ExportDV_NoCompression.aaf -rawDV ../../../test/com/ScaleTest/1frame.dv
+	@# Run test using pre-compressed DV frame (default IEC_DV_625_50 flavour)
+	rm -f ExportDV_NoCompression.aaf
+	$(TEST_CMD) -o ExportDV_NoCompression.aaf -raw ../../../test/com/ScaleTest/1frame.dv && test -f ExportDV_NoCompression.aaf

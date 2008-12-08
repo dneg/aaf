@@ -53,13 +53,6 @@ const CLSID CLSID_AAFCDCICodec =
 // This plugin currently only supports a single definition
 const aafUInt32 kSupportedDefinitions = 1;
 
-typedef struct {
-	aafUID_t flavour;
-	const aafCharacter *name;
-} FlavourInfo;
-static FlavourInfo kSupportedFlavours[9];
-const aafUInt32 kNumSupportedFlavours = sizeof(kSupportedFlavours);
-
 const wchar_t kDisplayName[] = L"AAF CDCI Codec";
 const wchar_t kDescription[] = L"Handles uncompressed YUV & YCbCr and (compressed) IEC 61834 DV family & DV-Based family";
 
@@ -88,12 +81,6 @@ const aafUID_t MANUF_AVID_PLUGINS = { 0xA6487F21, 0xE78F, 0x11d2, { 0x80, 0x9E, 
 const aafUID_t NULL_UID = { 0, 0, 0, { 0, 0, 0, 0, 0, 0, 0, 0 } };
 const aafRational_t NULL_RATIONAL = {0, 0};
 const aafRational_t DEFAULT_ASPECT_RATIO = {4, 3};
-
-// Use libdv API terminology when using the libdv API where
-// "PAL" & "NTSC" mean 625/50 and 525/60 respectively
-const int DV_PAL_FRAME_SIZE = 144000;
-const int DV_NTSC_FRAME_SIZE = 120000;
-static bool formatPAL = false;
 
 
 // Debugging log function which is optimised away for default builds
@@ -136,30 +123,167 @@ const aafCharacter kAAFPropName_DIDImageSize[]	= { 'I','m','a','g','e','S','i','
 const aafCharacter kAAFPropName_CDCIOffsetToFrameIndexes[]	= { 'O','f','f','s','e','t','T','o','F','r','a','m','e','I','n','d','e','x','e','s','\0'};
 
 
+typedef enum {
+	YUV422,
+	YUV420,
+	YUV411
+} VideoSamplingFormat_t;
+
+typedef enum {
+	codecDV,
+	codecMPEG
+} CodecFamily_t;
+
+typedef enum {
+	SepFields,
+	FullFrame,
+	MixedFields
+} FrameLayout_t;
+
+typedef struct {
+	aafUID_constref flavour;
+	aafUID_constref compressionDef;
+	const aafCharacter *name;
+	VideoSamplingFormat_t vidFormat;
+	int sampleRate;
+	CodecFamily_t codecFamily;
+	FrameLayout_t frameLayout;
+	int width;
+	int height;
+	int storedSize;
+	int storedWidth;
+	int storedHeight;
+} FlavourParameters_t;
+
+const FlavourParameters_t FlavourParams[] = {
+	{kAAFCodecFlavour_LegacyDV_625_50, kAAFCompressionDef_LegacyDV, L"AAF CDCI Codec (LegacyDV 625 lines 50Hz)", YUV420, 25, codecDV, MixedFields, 720, 576, 144000, 720, 576},
+	{kAAFCodecFlavour_LegacyDV_525_60, kAAFCompressionDef_LegacyDV, L"AAF CDCI Codec (LegacyDV 525 lines 60Hz)", YUV411, 30, codecDV, MixedFields, 720, 480, 120000, 720, 480},
+	{kAAFCodecFlavour_IEC_DV_625_50, kAAFCompressionDef_IEC_DV_625_50, L"AAF CDCI Codec (IEC DV 625 lines 50Hz)", YUV420, 25, codecDV, SepFields, 720, 576, 144000, 720, 576},
+	{kAAFCodecFlavour_IEC_DV_525_60, kAAFCompressionDef_IEC_DV_525_60, L"AAF CDCI Codec (IEC DV 525 lines 60Hz)", YUV411, 30, codecDV, SepFields, 720, 480, 120000, 720, 480},
+	{kAAFCodecFlavour_DV_Based_25Mbps_625_50, kAAFCompressionDef_DV_Based_25Mbps_625_50, L"AAF CDCI Codec (DV-Based 25 Mbps 525 lines 60Hz)", YUV411, 25, codecDV, SepFields, 720, 576, 144000, 720, 576},
+	{kAAFCodecFlavour_DV_Based_25Mbps_525_60, kAAFCompressionDef_DV_Based_25Mbps_525_60, L"AAF CDCI Codec (DV-Based 25 Mbps 625 lines 50Hz)", YUV411, 30, codecDV, SepFields, 720, 480, 120000, 720, 480},
+	{kAAFCodecFlavour_DV_Based_50Mbps_625_50, kAAFCompressionDef_DV_Based_50Mbps_625_50, L"AAF CDCI Codec (DV-Based 50 Mbps 525 lines 60Hz)", YUV422, 25, codecDV, SepFields, 720, 576, 288000, 720, 576},
+	{kAAFCodecFlavour_DV_Based_50Mbps_525_60, kAAFCompressionDef_DV_Based_50Mbps_525_60, L"AAF CDCI Codec (DV-Based 50 Mbps 625 lines 50Hz)", YUV422, 30, codecDV, SepFields, 720, 480, 240000, 720, 480},
+
+	{kAAFCodecFlavour_SMPTE_D10_625x50I_50Mbps, kAAFCompressionDef_SMPTE_D10_625x50I_50Mbps, L"AAF CDCI Codec (SMPTE D10 625x50I 50Mbps)", YUV422, 25, codecMPEG, SepFields, 720, 576, 250000, 720, 608},
+	{kAAFCodecFlavour_SMPTE_D10_525x5994I_50Mbps, kAAFCompressionDef_SMPTE_D10_525x5994I_50Mbps, L"AAF CDCI Codec (SMPTE D10 525x5994I 50Mbps)", YUV422, 30, codecMPEG, SepFields, 720, 480, 208541, 720, 512},
+	{kAAFCodecFlavour_SMPTE_D10_625x50I_40Mbps, kAAFCompressionDef_SMPTE_D10_625x50I_40Mbps, L"AAF CDCI Codec (SMPTE D10 625x50I 40Mbps)", YUV422, 25, codecMPEG, SepFields, 720, 576, 200000, 720, 608},
+	{kAAFCodecFlavour_SMPTE_D10_525x5994I_40Mbps, kAAFCompressionDef_SMPTE_D10_525x5994I_40Mbps, L"AAF CDCI Codec (SMPTE D10 525x5994I 40Mbps)", YUV422, 30, codecMPEG, SepFields, 720, 480, 166833, 720, 512},
+	{kAAFCodecFlavour_SMPTE_D10_625x50I_30Mbps, kAAFCompressionDef_SMPTE_D10_625x50I_30Mbps, L"AAF CDCI Codec (SMPTE D10 625x50I 30Mbps)", YUV422, 25, codecMPEG, SepFields, 720, 576, 150000, 720, 608},
+	{kAAFCodecFlavour_SMPTE_D10_525x5994I_30Mbps, kAAFCompressionDef_SMPTE_D10_525x5994I_30Mbps, L"AAF CDCI Codec (SMPTE D10 525x5994I 30Mbps)", YUV422, 30, codecMPEG, SepFields, 720, 480, 125125, 720, 512},
+
+	{kAAFCodecFlavour_DVbased_1080x50I_100Mbps, kAAFCompressionDef_DVbased_1080x50I_100Mbps, L"AAF CDCI Codec (DVbased 1080x50I 100Mbps)", YUV422, 25, codecDV, SepFields, 1920, 1080, 576000, 1440, 1080},
+	{kAAFCodecFlavour_DVbased_1080x5994I_100Mbps, kAAFCompressionDef_DVbased_1080x5994I_100Mbps, L"AAF CDCI Codec (DVbased 1080x5994I 100Mbps)", YUV422, 30, codecDV, SepFields, 1920, 1080, 480000, 1280, 1080},
+	{kAAFCodecFlavour_DVbased_720x50P_100Mbps, kAAFCompressionDef_DVbased_720x50P_100Mbps, L"AAF CDCI Codec (DVbased 720x50P 100Mbps)", YUV422, 50, codecDV, FullFrame, 1280, 720, 288000, 960, 720},
+	{kAAFCodecFlavour_DVbased_720x5994P_100Mbps, kAAFCompressionDef_DVbased_720x5994P_100Mbps, L"AAF CDCI Codec (DVbased 720x5994P 100Mbps)", YUV422, 60, codecDV, FullFrame, 1280, 720, 240000, 960, 720},
+};
+
+static const FlavourParameters_t* lookupFlavourParams(aafUID_constref flavour)
+{
+	for (size_t i = 0; i < sizeof(FlavourParams) / sizeof(FlavourParams[0]); i++) {
+		if (FlavourParams[i].flavour == flavour)
+			return &FlavourParams[i];
+	}
+	// Return NULL for no match 
+	return NULL;
+}
+
+static const FlavourParameters_t* lookupFlavourParamsByCompression(const aafUID_t &compId, aafUInt32 height)
+{
+	// kAAFCompressionDef_LegacyDV is a special case since both PAL and NTSC
+	// versions have the same CompressionDef, so use height to distinguish them.
+	if (EqualAUID(&compId, &kAAFCompressionDef_LegacyDV))
+	{
+		if (height == 240)			// height of one field for 720x480 picture
+			return lookupFlavourParams(kAAFCodecFlavour_LegacyDV_525_60);
+		else
+			return lookupFlavourParams(kAAFCodecFlavour_LegacyDV_625_50);
+	}
+
+	for (size_t i = 0; i < sizeof(FlavourParams) / sizeof(FlavourParams[0]); i++) {
+		if (EqualAUID(&compId, &FlavourParams[i].compressionDef))
+			return &FlavourParams[i];
+	}
+
+	return NULL;
+}
+
+static int vidFormat_horizontal(VideoSamplingFormat_t format)
+{
+	if (format == YUV411)
+		return 4;
+	return 2;		// YUV422 and YUV420
+}
+
+static int vidFormat_vertical(VideoSamplingFormat_t format)
+{
+	if (format == YUV420)
+		return 2;
+	return 1;		// YUV422 and YUV411
+}
+
+static int apiFrameSizeFromParams(const FlavourParameters_t* params)
+{
+	// IMX formats store extra 32 lines but the API uses displayed size
+	if (params->codecFamily == codecMPEG)
+		return params->width * params->height * 2;
+
+	// All other formats have API size same as stored size
+	if (params->vidFormat == YUV422)
+		return params->storedWidth * params->storedHeight * 2;
+	else
+		return params->storedWidth * params->storedHeight * 3/2;
+}
+
+#if defined(USE_FFMPEG)
+static int bitrate_for_flavour(aafUID_constref flavour)
+{
+	// Use fixed values for IMX formats since the NTSC IMX rates
+	// cannot be reliably calculated from sampleRate * storedSize
+	if (flavour == kAAFCodecFlavour_SMPTE_D10_625x50I_50Mbps || flavour == kAAFCodecFlavour_SMPTE_D10_525x5994I_50Mbps)
+		return 50000000;
+	if (flavour == kAAFCodecFlavour_SMPTE_D10_625x50I_40Mbps || flavour == kAAFCodecFlavour_SMPTE_D10_525x5994I_40Mbps)
+		return 40000000;
+	if (flavour == kAAFCodecFlavour_SMPTE_D10_625x50I_30Mbps || flavour == kAAFCodecFlavour_SMPTE_D10_525x5994I_30Mbps)
+		return 30000000;
+
+	// Use (sampleRate * storedSize) calculation for all others
+	const FlavourParameters_t *p = lookupFlavourParams(flavour);
+	return p->storedSize * p->sampleRate * 8;
+}
+#endif
+
+inline bool operator == (const aafRational_t a, const aafRational_t b)
+{
+	return memcmp(&a, &b, sizeof(a)) == 0;
+}
+
 inline bool IsDV(const aafUID_t &compId)
 {
-	if (EqualAUID(&compId, &kAAFCompressionDef_LegacyDV) ||
-		EqualAUID(&compId, &kAAFCompressionDef_IEC_DV_625_50) ||
-		EqualAUID(&compId, &kAAFCompressionDef_IEC_DV_525_60) ||
-		EqualAUID(&compId, &kAAFCompressionDef_DV_Based_25Mbps_525_60) ||
-		EqualAUID(&compId, &kAAFCompressionDef_DV_Based_25Mbps_625_50) ||
-		EqualAUID(&compId, &kAAFCompressionDef_DV_Based_50Mbps_525_60) ||
-		EqualAUID(&compId, &kAAFCompressionDef_DV_Based_50Mbps_625_50)
-		)
-	{
-		return true;
+	for (size_t i = 0; i < sizeof(FlavourParams) / sizeof(FlavourParams[0]); i++) {
+		// Find matching compressionDef (if any)
+		if (EqualAUID(&compId, &FlavourParams[i].compressionDef)) {
+			// Is this compressionDef a DV one?
+			if (FlavourParams[i].codecFamily == codecDV)
+				return true;
+		}
 	}
+
 	return false;
 }
 
 inline bool IsSupportedCompressionID(const aafUID_t &compId)
 {
-	if (EqualAUID(&compId, &NULL_UID) ||
-		EqualAUID(&compId, &AAF_CMPR_AUNC422) ||
-		IsDV(compId))
-	{
+	// Null or uncompressed?
+	if (EqualAUID(&compId, &NULL_UID) || EqualAUID(&compId, &AAF_CMPR_AUNC422))
 		return true;
+
+	// A supported compressionDef?
+	for (size_t i = 0; i < sizeof(FlavourParams) / sizeof(FlavourParams[0]); i++) {
+		if (EqualAUID(&compId, &FlavourParams[i].compressionDef))
+			return true;
 	}
+
 	return false;
 }
 
@@ -175,6 +299,7 @@ CAAFCDCICodec::CAAFCDCICodec (IUnknown * pControllingUnknown)
 	_access = NULL;
 	_stream = NULL;
 	_openMode = kAAFMediaOpenReadOnly;
+	_flavour = kAAFNilCodecFlavour;
 	_length = 0;
 	_sampleRate = NULL_RATIONAL;
 	_containerFormat = NULL_UID;
@@ -204,40 +329,18 @@ CAAFCDCICodec::CAAFCDCICodec (IUnknown * pControllingUnknown)
 	_whiteReferenceLevel = 255;
 	_colorRange = 0;
 	_paddingBits = 0;
-	_imageHeight = 0;
-	_imageWidth = 0;
-	_fileBytesPerSample = 0;
-	_descriptorFlushed = kAAFFalse;
-	_pixelFormat = kAAFColorSpaceYUV;
 	_fieldDominance = kAAFNoDominant;
 	_fieldStartOffset = 0;
 	_fieldEndOffset = 0;
+	_imageHeight = 0;
+	_imageWidth = 0;
+	_apiFrameSampleSize = 0;
+	_storedFrameSampleSize = 0;
+	_pixelFormat = kAAFColorSpaceYUV;
 	_bitsPerPixelAvg = kDefaultPixelWidth;
-	_bitsPerSample = 0;
 	_numberOfSamples = 0;
 	_padBytesPerRow = 0;
-
-	// Ugly workaround for broken MSVC initialiser support
-	kSupportedFlavours[0].flavour = kAAFNilCodecFlavour;
-	kSupportedFlavours[1].flavour = kAAFCodecFlavour_LegacyDV_625_50;
-	kSupportedFlavours[2].flavour = kAAFCodecFlavour_LegacyDV_525_60;
-	kSupportedFlavours[3].flavour = kAAFCodecFlavour_IEC_DV_625_50;
-	kSupportedFlavours[4].flavour = kAAFCodecFlavour_IEC_DV_525_60;
-	kSupportedFlavours[5].flavour = kAAFCodecFlavour_DV_Based_25Mbps_525_60;
-	kSupportedFlavours[6].flavour = kAAFCodecFlavour_DV_Based_25Mbps_625_50;
-	kSupportedFlavours[7].flavour = kAAFCodecFlavour_DV_Based_50Mbps_525_60;
-	kSupportedFlavours[8].flavour = kAAFCodecFlavour_DV_Based_50Mbps_625_50;
-	kSupportedFlavours[0].name = L"AAF CDCI Codec (no flavour)";
-	kSupportedFlavours[1].name = L"AAF CDCI Codec (LegacyDV 625 lines 50Hz)";
-	kSupportedFlavours[2].name = L"AAF CDCI Codec (LegacyDV 525 lines 60Hz)";
-	kSupportedFlavours[3].name = L"AAF CDCI Codec (IEC DV 625 lines 50Hz)";
-	kSupportedFlavours[4].name = L"AAF CDCI Codec (IEC DV 525 lines 60Hz)";
-	kSupportedFlavours[5].name = L"AAF CDCI Codec (DV-Based 25 Mbps 525 lines 60Hz)";
-	kSupportedFlavours[6].name = L"AAF CDCI Codec (DV-Based 25 Mbps 625 lines 50Hz)";
-	kSupportedFlavours[7].name = L"AAF CDCI Codec (DV-Based 50 Mbps 525 lines 60Hz)";
-	kSupportedFlavours[8].name = L"AAF CDCI Codec (DV-Based 50 Mbps 625 lines 50Hz)";
 }
-
 
 // Desctructor
 
@@ -663,7 +766,8 @@ HRESULT STDMETHODCALLTYPE
 	if(pCount == NULL)
 		return AAFRESULT_NULL_PARAM;
 
-	*pCount = kNumSupportedFlavours;
+	int num_flavours = sizeof(FlavourParams) / sizeof(FlavourParams[0]);
+	*pCount = num_flavours;
 
 	return AAFRESULT_SUCCESS;
 }
@@ -676,10 +780,12 @@ HRESULT STDMETHODCALLTYPE
 	if (pFlavour == NULL)
 		return AAFRESULT_NULL_PARAM;
 
-	if (index >= kNumSupportedFlavours)
+	aafUInt32 num_flavours = sizeof(FlavourParams) / sizeof(FlavourParams[0]);
+
+	if (index >= num_flavours)
 		return AAFRESULT_BADINDEX;
 
-	*pFlavour = kSupportedFlavours[index].flavour;
+	*pFlavour = FlavourParams[index].flavour;
 
 	return AAFRESULT_SUCCESS;
 }
@@ -719,10 +825,10 @@ HRESULT STDMETHODCALLTYPE
 
 	// Loop over all flavours recording the largest name's buffer size
 	aafUInt32 max = 0;
-	for (size_t i = 0; i < sizeof(kSupportedFlavours); i++)
+	for (size_t i = 0; i < sizeof(FlavourParams) / sizeof(FlavourParams[0]); i++)
 	{
 		// compute length of name in bytes including terminating NUL
-		aafUInt32 len = (wcsu8slen(kSupportedFlavours[i].name) + 1) *
+		aafUInt32 len = (wcsu8slen(FlavourParams[i].name) + 1) *
 									sizeof(aafCharacter);
 		if (len > max)
 			max = len;
@@ -743,22 +849,17 @@ HRESULT STDMETHODCALLTYPE
 	if (0 >= bufSize)
 		return AAFRESULT_INVALID_PARAM;
 
-	for (size_t i = 0; i < sizeof(kSupportedFlavours); i++)
-	{
-		if (flavour == kSupportedFlavours[i].flavour)
-		{
-			// compute length of name in bytes including terminating NUL
-			aafUInt32 len = (wcsu8slen(kSupportedFlavours[i].name) + 1) *
-										sizeof(aafCharacter);
-			if(len > bufSize)
-				len = bufSize;
-			memcpy(pName, kSupportedFlavours[i].name, len);
-			return AAFRESULT_SUCCESS;
-		}
-	}
+	const FlavourParameters_t *p = lookupFlavourParams(flavour);
+	if (p == NULL)
+		return AAFRESULT_NOT_IMPLEMENTED;
 
-	// Indicate flavour not implemented
-	return AAFRESULT_NOT_IMPLEMENTED;
+	// compute length of name in bytes including terminating NUL
+	aafUInt32 len = (wcsu8slen(p->name) + 1) * sizeof(aafCharacter);
+	if (len > bufSize)
+		len = bufSize;
+
+	memcpy(pName, p->name, len);
+	return AAFRESULT_SUCCESS;
 }
 
 
@@ -769,85 +870,53 @@ HRESULT STDMETHODCALLTYPE
     CAAFCDCICodec::SetFlavour (aafUID_constref flavour)
 {
 	plugin_trace("CAAFCDCICodec::SetFlavour()\n");
+
+	// Set current flavour
+	_flavour = flavour;
+
 	if (flavour == kAAFNilCodecFlavour)
 		return AAFRESULT_SUCCESS;
 
-	// Legacy Flavours for supporting legacy apps.
-	if (flavour == kAAFCodecFlavour_LegacyDV_625_50)
-	{
-		memcpy( &_compression, &kAAFCompressionDef_LegacyDV, sizeof(_compression) );
-		_frameLayout = kAAFMixedFields;
-		_imageWidth = _storedWidth = 720;
-		_imageHeight = _storedHeight = 288;
-		_horizontalSubsampling = 2;				// 4:2:0
-		formatPAL = true;
+	const FlavourParameters_t *p_params = lookupFlavourParams(flavour);
+	if (p_params == NULL)
+		return AAFRESULT_NOT_IMPLEMENTED;
+
+	// Set properties based on flavour params
+	_compression = p_params->compressionDef;
+	_frameLayout = (p_params->frameLayout == SepFields) ? kAAFSeparateFields :
+					(p_params->frameLayout == FullFrame ? kAAFFullFrame : kAAFMixedFields);
+	_imageWidth = _storedWidth = p_params->storedWidth;
+	_displayWidth = p_params->width;
+	if (p_params->frameLayout == FullFrame) {
+		_imageHeight = _storedHeight = p_params->storedHeight;
+		_displayHeight = p_params->height;
 	}
-	else if (flavour == kAAFCodecFlavour_LegacyDV_525_60)
-	{
-		memcpy( &_compression, &kAAFCompressionDef_LegacyDV, sizeof(_compression) );
-		_frameLayout = kAAFMixedFields;
-		_imageWidth = _storedWidth = 720;
-		_imageHeight = _storedHeight = 240;
-		_horizontalSubsampling = 1;				// 4:1:1
-		formatPAL = false;
+	else {
+		_imageHeight = _storedHeight = p_params->storedHeight / 2;
+		_displayHeight = p_params->height / 2;
 	}
-	// The normal way to use the codec
-	else if (flavour == kAAFCodecFlavour_IEC_DV_625_50)
-	{
-		memcpy( &_compression, &kAAFCompressionDef_IEC_DV_625_50, sizeof(_compression) );
-		_frameLayout = kAAFSeparateFields;
-		_imageWidth = _storedWidth = 720;
-		_imageHeight = _storedHeight = 288;
-		_horizontalSubsampling = 2;				// 4:2:0
-		formatPAL = true;
+	if (p_params->codecFamily == codecMPEG) {
+		_displayYOffset = 16;
+		if (p_params->height == 480) {
+			_displayHeight = 243;		// Observed in Avid IMX files
+			_displayYOffset = 13;
+		}
 	}
-	else if (flavour == kAAFCodecFlavour_IEC_DV_525_60)
+	_horizontalSubsampling = vidFormat_horizontal(p_params->vidFormat);
+	_verticalSubsampling = vidFormat_vertical(p_params->vidFormat);
+
+	// The following are non-Property variables needed to be setup
+	if (_compressEnable == kAAFCompressionEnable)
 	{
-		memcpy( &_compression, &kAAFCompressionDef_IEC_DV_525_60, sizeof(_compression) );
-		_frameLayout = kAAFSeparateFields;
-		_imageWidth = _storedWidth = 720;
-		_imageHeight = _storedHeight = 240;
-		_horizontalSubsampling = 1;				// 4:1:1
-		formatPAL = false;
-	}
-	else if (flavour == kAAFCodecFlavour_DV_Based_25Mbps_625_50)
-	{
-		memcpy( &_compression, &kAAFCompressionDef_DV_Based_25Mbps_625_50, sizeof(_compression) );
-		_frameLayout = kAAFSeparateFields;
-		_imageWidth = _storedWidth = 720;
-		_imageHeight = _storedHeight = 288;
-		_horizontalSubsampling = 1;				// 4:1:1 (N.B. different to IEC DV 625_50)
-		formatPAL = true;
-	}
-	else if (flavour == kAAFCodecFlavour_DV_Based_25Mbps_525_60)
-	{
-		memcpy( &_compression, &kAAFCompressionDef_DV_Based_25Mbps_525_60, sizeof(_compression) );
-		_frameLayout = kAAFSeparateFields;
-		_imageWidth = _storedWidth = 720;
-		_imageHeight = _storedHeight = 240;
-		_horizontalSubsampling = 1;				// 4:1:1
-		formatPAL = false;
-	}
-	else if (flavour == kAAFCodecFlavour_DV_Based_50Mbps_625_50)
-	{
-		memcpy( &_compression, &kAAFCompressionDef_DV_Based_50Mbps_625_50, sizeof(_compression) );
-		_frameLayout = kAAFSeparateFields;
-		_imageWidth = _storedWidth = 720;
-		_imageHeight = _storedHeight = 288;
-		_horizontalSubsampling = 2;				// 4:2:2
-		formatPAL = true;
-	}
-	else if (flavour == kAAFCodecFlavour_DV_Based_50Mbps_525_60)
-	{
-		memcpy( &_compression, &kAAFCompressionDef_DV_Based_50Mbps_525_60, sizeof(_compression) );
-		_frameLayout = kAAFSeparateFields;
-		_imageWidth = _storedWidth = 720;
-		_imageHeight = _storedHeight = 240;
-		_horizontalSubsampling = 2;				// 4:2:2
-		formatPAL = false;
+		_apiFrameSampleSize = apiFrameSizeFromParams(p_params);
 	}
 	else
-		return AAFRESULT_NOT_IMPLEMENTED;
+	{
+		// Just wrapping, no compressing
+		_apiFrameSampleSize = p_params->storedSize;
+	}
+
+	_storedFrameSampleSize = p_params->storedSize;
 
 	SetCodecState();
 
@@ -1059,15 +1128,15 @@ CAAFCDCICodec::Create (IAAFSourceMob *p_srcmob,
 	plugin_trace("CAAFCDCICodec::Create()\n");
 
     HRESULT	    hr = S_OK;
-
     
     // Check input arguments.
-    if( NULL == p_srcmob || NULL == stream )
-	return AAFRESULT_NULL_PARAM;
+	if ( NULL == p_srcmob || NULL == stream )
+		return AAFRESULT_NULL_PARAM;
 
-    if( EqualAUID( &kAAFNilCodecFlavour, &flavour) != kAAFTrue )
-	return AAFRESULT_NULL_PARAM;
-
+	// Due to a bug in the CreateEssence() API, flavour must not be set here
+	// Instead, flavour can be set with the SetFlavour() API.
+	if ( EqualAUID( &kAAFNilCodecFlavour, &flavour) != kAAFTrue )
+		return AAFRESULT_NULL_PARAM;
 
     try
     {
@@ -1078,6 +1147,18 @@ CAAFCDCICodec::Create (IAAFSourceMob *p_srcmob,
 
 		// Sets whether or not to compress samples as they are written
 		SetCompressionEnabled(compEnable);
+
+		if (_compressEnable == kAAFCompressionEnable)
+		{
+#if defined(USE_FFMPEG)
+			// Prepare FFmpeg codec for encoding
+			av_register_all();
+			_encoder = (internal_ffmpeg_encoder_t*)av_mallocz(sizeof(internal_ffmpeg_encoder_t));
+#else
+			// Cannot compress without FFmpeg
+			throw HRESULT( AAFRESULT_INVALID_OP_CODEC );
+#endif
+		}
 
 	    // Initialize the descriptor helper:
 	    checkResult(_descriptorHelper.Initialize(p_srcmob));
@@ -1157,15 +1238,18 @@ HRESULT STDMETHODCALLTYPE
 		hr = ReadDescriptor( _descriptorHelper );
 		checkExpression (hr == S_OK, hr);
 
-		if (_compressEnable == kAAFCompressionEnable && IsDV(_compression))
+		if (_compressEnable == kAAFCompressionEnable)
 		{
-#ifdef USE_LIBDV
-			// Setup libdv defaults and quality parameters
-			_decoder = dv_decoder_new( FALSE, FALSE, FALSE );
-			_decoder->quality = DV_QUALITY_BEST;
-			_decoder->prev_frame_decoded = 0;
+#if defined(USE_FFMPEG)
+			// Use compression read from Descriptor to determine if we can decompress this format
+			if (! IsSupportedCompressionID(_compression))
+				throw HRESULT( AAFRESULT_INVALID_OP_CODEC );
+
+			// Prepare FFmpeg codec for decoding
+			av_register_all();
+			_decoder = (internal_ffmpeg_decoder_t*)av_mallocz(sizeof(internal_ffmpeg_decoder_t));
 #else
-			// Can't decompress without libdv
+			// Cannot decompress without FFmpeg
 			throw HRESULT( AAFRESULT_INVALID_OP_CODEC );
 #endif
 		}
@@ -1181,6 +1265,17 @@ HRESULT STDMETHODCALLTYPE
 	    hr = AAFRESULT_UNEXPECTED_EXCEPTION;
     }
 
+	// Setup variables based on _compression
+	const FlavourParameters_t *params = lookupFlavourParamsByCompression(_compression, _storedHeight);
+	if (params)
+	{
+		_apiFrameSampleSize = apiFrameSizeFromParams(params);
+
+		if (_compressEnable != kAAFCompressionEnable)
+			_apiFrameSampleSize = params->storedSize;
+
+		_storedFrameSampleSize = params->storedSize;
+	}
 
     return hr;
 }
@@ -1198,7 +1293,6 @@ HRESULT STDMETHODCALLTYPE CAAFCDCICodec::WriteSamples(
     HRESULT	hr = S_OK;
     aafUInt32	n;
     aafUInt32	sampleBytesWritten;	// Number of sample bytes written.
-    aafUInt32	sampleSize;		// Number of bytes per sample.
     aafUInt32	alignmentBytes = 0;	// Number of alignment bytes.
     aafUInt8	*pAligmentBuffer = NULL;// Padding bytes to be written.
 
@@ -1219,57 +1313,74 @@ HRESULT STDMETHODCALLTYPE CAAFCDCICodec::WriteSamples(
 	// Preconditions.
 	checkAssertion( NULL != _stream );
 	checkExpression( _componentWidth != 0, AAFRESULT_ZERO_PIXELSIZE );
-	checkExpression( _fileBytesPerSample != 0, AAFRESULT_ZERO_SAMPLESIZE );
-#ifdef USE_LIBDV
+	checkExpression( _apiFrameSampleSize != 0, AAFRESULT_ZERO_SAMPLESIZE );
+#if defined(USE_FFMPEG)
 	checkAssertion( !(_compressEnable == kAAFCompressionEnable && NULL == _encoder ));
 #endif
 
-	sampleSize = _fileBytesPerSample;
-
 	// Make sure the given buffer is really large enough for the complete
 	// pixel data.
-	checkExpression( sampleSize*nSamples <= buflen, AAFRESULT_SMALLBUF );
-
-
+	checkExpression( _apiFrameSampleSize*nSamples <= buflen, AAFRESULT_SMALLBUF );
 
 	// Write samples one by one aligning them if necessary.
 	for( n=0; n<nSamples; n++ )
 	{
-		if (_compressEnable == kAAFCompressionEnable && IsDV(_compression))
+		if (_compressEnable == kAAFCompressionEnable)
 		{
-#ifdef USE_LIBDV
-			// metadata to be stored in DV frame header
-			time_t	datetime = time(NULL);
+#if defined(USE_FFMPEG)
+			if (_encoder->tmpFrame) {
+				int padColour[3] = {16, 128, 128};
 
-			// Write YUY2 formatted video frames
-			dv_encode_full_frame(_encoder,
-						&buffer,			// uncompressed video samples
-						e_dv_color_yuv,		// options are yuv/rgb/bgr0
-						_dv_buffer );		// DV frame
+				avpicture_fill(	_encoder->tmpFrame,
+							buffer,
+							_encoder->codec_context->pix_fmt,
+							_encoder->codec_context->width,
+							_encoder->codec_context->height - 32);
+				avpicture_fill((AVPicture*)	_encoder->inputFrame,
+							_encoder->inputBuffer,
+							_encoder->codec_context->pix_fmt,
+							_encoder->codec_context->width,
+							_encoder->codec_context->height);
+				av_picture_pad((AVPicture*)	_encoder->inputFrame,
+							_encoder->tmpFrame,
+							_encoder->codec_context->height,
+							_encoder->codec_context->width,
+							_encoder->codec_context->pix_fmt,
+							32, 0, 0, 0,
+							padColour);
+			}
+			else {
+				// Setup AVPicture pointers to point to YUV planes
+				avpicture_fill(	(AVPicture*)_encoder->inputFrame,
+							buffer,
+							_encoder->codec_context->pix_fmt,
+							_encoder->codec_context->width,
+							_encoder->codec_context->height);
+			}
 
-			// We have no audio to encode, so audio stream will be empty
-
-			dv_encode_metadata(_dv_buffer,		// DV frame
-						_encoder->isPAL,		// isPAL
-						_encoder->is16x9,		// is16x9
-						&datetime,				// record date & time
-						n);						// frame counter for timestamp
-
-			dv_encode_timecode(_dv_buffer,		// DV frame
-						_encoder->isPAL,		// isPAL
-						n);						// frame counter for timecode
+			// Encode one frame
+			int size = avcodec_encode_video(_encoder->codec_context,
+							_encoder->outputBuffer,
+							_encoder->bufferSize,
+							_encoder->inputFrame);
+			if (size < 0)
+			{
+				fprintf(stderr, "avcodec_encode_video() failed\n");
+				throw HRESULT( AAFRESULT_INVALID_OP_CODEC );
+			}
 
 		    sampleBytesWritten = 0;
-		    checkResult( _stream->Write( _encoder->isPAL ? DV_PAL_FRAME_SIZE : DV_NTSC_FRAME_SIZE, _dv_buffer, &sampleBytesWritten));
+			checkResult(_stream->Write(size, _encoder->outputBuffer, &sampleBytesWritten));
+
 #else
-			// Can't compress without libdv
+			// Can't compress without ffmpeg
 			throw HRESULT( AAFRESULT_INVALID_OP_CODEC );
 #endif
 		}
 		else
 		{
 	    	sampleBytesWritten = 0;
-	    	checkResult( _stream->Write( sampleSize, buffer, 
+	    	checkResult( _stream->Write( _apiFrameSampleSize, buffer, 
 				&sampleBytesWritten));
 		}
 	    buffer += sampleBytesWritten;
@@ -1321,7 +1432,6 @@ HRESULT STDMETHODCALLTYPE CAAFCDCICodec::WriteSamples(
 }
 
 
-
 /*
 	nSamples		- number of samples to read.
 	buflen			- size of the buffer to hold read data.
@@ -1362,12 +1472,12 @@ HRESULT STDMETHODCALLTYPE CAAFCDCICodec::ReadSamples(
 	// Preconditions.
 	checkAssertion( NULL != _stream );
 	checkExpression( _componentWidth != 0, AAFRESULT_ZERO_PIXELSIZE );
-	checkExpression( _fileBytesPerSample != 0, AAFRESULT_ZERO_SAMPLESIZE );
-#ifdef USE_LIBDV
+	checkExpression( _apiFrameSampleSize != 0, AAFRESULT_ZERO_SAMPLESIZE );
+#if defined(USE_FFMPEG)
 	checkAssertion( !(_compressEnable == kAAFCompressionEnable && NULL == _decoder ));
 #endif
 
-	sampleSize = _fileBytesPerSample;
+	sampleSize = _apiFrameSampleSize;
 
 	plugin_trace("CAAFCDCICodec::ReadSamples() sampleSize=%d nSamples=%d sampleSize*nSamples=%d buflen=%d\n",
 				sampleSize, nSamples, sampleSize*nSamples, buflen);
@@ -1376,44 +1486,101 @@ HRESULT STDMETHODCALLTYPE CAAFCDCICodec::ReadSamples(
 	// pixel data.
 	checkExpression( sampleSize*nSamples <= buflen, AAFRESULT_SMALLBUF );
 
-
+#if defined(USE_FFMPEG)
+	const FlavourParameters_t *params = lookupFlavourParamsByCompression(_compression, _storedHeight);
+#endif
 
 	// Read samples one by one skipping alignment data
 	for( n = 0; n < nSamples; n++ )
 	{
 	    sampleBytesRead = 0;
 
-		if (_compressEnable == kAAFCompressionEnable && IsDV(_compression))
+		if (_compressEnable == kAAFCompressionEnable)
 		{
-#ifdef USE_LIBDV
-			unsigned int bufsize = formatPAL ? DV_PAL_FRAME_SIZE : DV_NTSC_FRAME_SIZE;
-
-		    checkResult( _stream->Read( bufsize, _dv_buffer, &sampleBytesRead ));
-
-			// parse DV frame header
-			if (dv_parse_header(_decoder, _dv_buffer) < 0)
+#if defined(USE_FFMPEG)
+			// Setup decoder first time through
+			if (_decoder->codec == NULL)
 			{
-				plugin_trace("CAAFCDCICodec::ReadSamples dv_parse_header() failed for sample %d\n", n);
-		    	throw HRESULT( AAFRESULT_DECOMPRESS );	// i.e. Software Decompression Failed
+				enum CodecID codecId = CODEC_ID_DVVIDEO;
+				if (params->codecFamily == codecMPEG)
+					codecId = CODEC_ID_MPEG2VIDEO;
+
+				_decoder->codec = avcodec_find_decoder(codecId);
+				checkExpression( _decoder->codec, AAFRESULT_DECOMPRESS );
+
+				_decoder->codec_context = avcodec_alloc_context();
+				checkExpression( _decoder->codec_context, AAFRESULT_DECOMPRESS );
+
+				// Setup outputFrame's dimensions and format
+				avcodec_set_dimensions(_decoder->codec_context, params->width, params->height);
+				if (params->vidFormat == YUV411)
+					_decoder->codec_context->pix_fmt = PIX_FMT_YUV411P;
+				else if (params->vidFormat == YUV420)
+					_decoder->codec_context->pix_fmt = PIX_FMT_YUV420P;
+				else
+					_decoder->codec_context->pix_fmt = PIX_FMT_YUV422P;
+		
+				// Open codec
+				if (avcodec_open(_decoder->codec_context, _decoder->codec) < 0) {
+					printf("ReadSamples(): avcodec_open() failed\n");
+					throw HRESULT( AAFRESULT_DECOMPRESS );
+				}
+
+				_decoder->outputFrame = avcodec_alloc_frame();
+				checkExpression( _decoder->outputFrame, AAFRESULT_DECOMPRESS );
+
+				// The extra 4 bytes are to allow ffmpeg's optimized functions to read past array
+				_decoder->inputBuffer = (unsigned char*)av_mallocz(params->storedSize + 4);
+				checkExpression( _decoder->inputBuffer, AAFRESULT_DECOMPRESS );
 			}
 
-			// setup libdv pixel "pitches" array
-			_pitches[0]  = _decoder->width * 2;
-			_pitches[1]  = 0;
-			_pitches[2]  = 0;
+			// Read one frame's worth of uncompressed data
+		    checkResult( _stream->Read( params->storedSize, _decoder->inputBuffer, &sampleBytesRead ));
 
-			dv_decode_full_frame(_decoder,
-							_dv_buffer,
-							e_dv_color_yuv,
-							&buffer,
-							_pitches);
+			// Setup AVFrame's YUV pointers to point into supplied output buffer
+			avpicture_fill(	(AVPicture*)_decoder->outputFrame,
+							buffer,
+							_decoder->codec_context->pix_fmt,
+							_decoder->codec_context->width,
+							_decoder->codec_context->height);
 
-			buffer += sampleSize;
-			*pTotalBytesRead += sampleSize;
+			// Decode one frame
+			int dec_picture_ok = 0;
+			int bytes_dec = avcodec_decode_video(_decoder->codec_context, _decoder->outputFrame, &dec_picture_ok,
+													_decoder->inputBuffer, params->storedSize);
+    
+			if (bytes_dec <= 0 || !dec_picture_ok) 
+			{
+				fprintf(stderr, "avcodec_decode_video() Error decoding video\n");
+				throw HRESULT( AAFRESULT_DECOMPRESS );	// decompression failed
+			}
 
-			_decoder->prev_frame_decoded = 1;
+			// Copy the AVFrame uncompressed video data into a contiguous video frame
+			// at the supplied buffer address.  Ideally AVCodecContext's get_buffer(),
+			// could be used to avoid this copy, but it is undocumented.
+			int w = _decoder->codec_context->width;
+			int h = _decoder->codec_context->height;
+			int	colour_width = (params->vidFormat == YUV422) ? w / 2 : w / 4;
+			unsigned char *dest_y = buffer;
+			unsigned char *dest_u = buffer + w * h;
+			unsigned char *dest_v = buffer + w * h + colour_width * h;
+			for (int j = 0; j < h; j++) {
+				unsigned char *y = _decoder->outputFrame->data[0] + j * _decoder->outputFrame->linesize[0];
+				unsigned char *u = _decoder->outputFrame->data[1] + j * _decoder->outputFrame->linesize[1];
+				unsigned char *v = _decoder->outputFrame->data[2] + j * _decoder->outputFrame->linesize[2];
+				
+				memcpy(dest_y, y, w);
+				dest_y += w;
+				memcpy(dest_u, u, colour_width);
+				dest_u += colour_width;
+				memcpy(dest_v, v, colour_width);
+				dest_v += colour_width;
+			}
+
+			buffer += _apiFrameSampleSize;
+			*pTotalBytesRead += bytes_dec;
 #else
-			// Can't decompress without libdv
+			// Can't decompress without ffmpeg
 			throw HRESULT( AAFRESULT_INVALID_OP_CODEC );
 #endif
 		}
@@ -1476,42 +1643,30 @@ HRESULT STDMETHODCALLTYPE
     CAAFCDCICodec::Seek (aafPosition_t  sampleFrame)
 {
 	plugin_trace("CAAFCDCICodec::Seek()\n");
-    HRESULT	hr = S_OK;
-    aafUInt32	alignmentBytes = _imageAlignmentFactor > 0 ? 
-		(_fileBytesPerSample % _imageAlignmentFactor) : 0;
+	HRESULT	hr = S_OK;
+	aafUInt32	alignmentBytes = _imageAlignmentFactor > 0 ? 
+		(_storedFrameSampleSize % _imageAlignmentFactor) : 0;
 
 
-    try
-    {
-	checkAssertion(NULL != _stream);
-	checkExpression( sampleFrame <= _numberOfSamples, 
-	    AAFRESULT_BADFRAMEOFFSET );
-
-	if (IsDV(_compression))
+	try
 	{
-		int frameLen = formatPAL ? DV_PAL_FRAME_SIZE: DV_NTSC_FRAME_SIZE;
-		checkResult(_stream->Seek( (frameLen + alignmentBytes) * 
-	    	sampleFrame) );
+		checkAssertion(NULL != _stream);
+		checkExpression( sampleFrame <= _numberOfSamples, AAFRESULT_BADFRAMEOFFSET );
+
+		checkResult(_stream->Seek( (_storedFrameSampleSize + alignmentBytes) * sampleFrame) );
 	}
-	else
+	catch (HRESULT& rhr)
 	{
-		checkResult(_stream->Seek( (_fileBytesPerSample + alignmentBytes) * 
-	    	sampleFrame) );
-    }
+		hr = rhr; // return thrown error code.
 	}
-    catch (HRESULT& rhr)
-    {
-	hr = rhr; // return thrown error code.
-    }
-    catch (...)
-    {
-	// We CANNOT throw an exception out of a COM interface method!
-	// Return a reasonable exception code.
-	hr = AAFRESULT_UNEXPECTED_EXCEPTION;
-    }
+	catch (...)
+	{
+		// We CANNOT throw an exception out of a COM interface method!
+		// Return a reasonable exception code.
+		hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+	}
 
-
-    return hr;
+	return hr;
 }
 
 
@@ -1576,15 +1731,6 @@ HRESULT STDMETHODCALLTYPE CAAFCDCICodec::ReadDescriptor(
 	    &_storedHeight, &_storedWidth ) );
 	_imageHeight = _storedHeight;
 	_imageWidth = _storedWidth;
-
-	if (IsDV(_compression))
-	{
-		// Derive DV format from imageHeight
-		if (_imageHeight == 288)
-			formatPAL = true;
-		else
-			formatPAL = false;
-	}
 
 	// Sampled view is optional property. If it's not present 
 	// set sampled view to be the same as stored view.
@@ -1789,70 +1935,90 @@ HRESULT STDMETHODCALLTYPE CAAFCDCICodec::ReadDescriptor(
 // Called by PutEssenceFormat() and SetFlavour()
 void CAAFCDCICodec::SetCodecState(void)
 {
-	// compression should be disabled for non-DV data
 	if (_compressEnable == kAAFCompressionEnable)
-		checkExpression (IsDV(_compression),AAFRESULT_BADCOMPR);
-
-	// Allow only supported combinations of subsampling and height
-	if (IsDV(_compression))
 	{
-		// Use attributes of known DV formats to derive VerticalSubsampling
-		if (_imageHeight == 288)
-		{
-			formatPAL = true;
-			_verticalSubsampling = 2;	// for IEC_DV_625_50 (4:2:0)
-		}
-		else
-		{
-			formatPAL = false;
-			_verticalSubsampling = 1;	// for IEC_DV_525_60 & DV-based SMPTE 314M (4:1:1)
-		}
+#if defined(USE_FFMPEG)
+		const FlavourParameters_t *params = lookupFlavourParams(_flavour);
 
-		// DV-Based 50Mbps formats have 4:2:2 sampling
-		if (EqualAUID(&_compression, &kAAFCompressionDef_DV_Based_50Mbps_625_50) ||
-			EqualAUID(&_compression, &kAAFCompressionDef_DV_Based_50Mbps_525_60))
-		{
-			_verticalSubsampling = 1;
-			_horizontalSubsampling = 2;
-		}
+		CodecID codec_id = CODEC_ID_DVVIDEO;
+		if (params->codecFamily == codecMPEG)
+			codec_id = CODEC_ID_MPEG2VIDEO;
 
-		// Check sensible verticalSubsampling values
-		checkExpression( _verticalSubsampling == 1 || _verticalSubsampling == 2, AAFRESULT_BADPIXFORM );
-
-		if (EqualAUID(&_compression, &kAAFCompressionDef_LegacyDV))
+		if (! (_encoder->codec = avcodec_find_encoder(codec_id)))
 		{
-			// Experiment showed that legacy applications require display size set equal to stored size
-			// and that FrameLayout have the incorrect value of MixedFields, not SeparateFields
-			// (e.g. Avid Xpress DV)
-			_displayWidth = _storedWidth;
-			_displayHeight = _storedHeight;
-			_frameLayout = kAAFMixedFields;
-		}
-	}
-	else
-	{
-		// for all other (non-DV) CDCI video
-		checkExpression( _verticalSubsampling == 1, AAFRESULT_BADPIXFORM );
-	}
-
-	if (_compressEnable == kAAFCompressionEnable && IsDV(_compression))
-	{
-#ifdef USE_LIBDV
-		if (EqualAUID(&_compression, &kAAFCompressionDef_DV_Based_50Mbps_625_50) ||
-			EqualAUID(&_compression, &kAAFCompressionDef_DV_Based_50Mbps_525_60))
-		{
-			// libdv does not yet support 50Mbps DV
+			fprintf(stderr, "Could not find encoder\n");
+			//cleanup(_encoder);
 			throw HRESULT( AAFRESULT_INVALID_OP_CODEC );
 		}
-		// Setup libdv encoder object, defaults and tuning parameters
-		_encoder = dv_encoder_new( FALSE, FALSE, FALSE );
-		_encoder->isPAL = formatPAL ? 1: 0;			
-		_encoder->is16x9 = (_imageAspectRatio.numerator == 16 && _imageAspectRatio.denominator == 9) ? 1: 0;
-		_encoder->vlc_encode_passes = 3;
-		_encoder->static_qno = 0;
-		_encoder->force_dct = DV_DCT_AUTO;
+
+		if (! (_encoder->codec_context = avcodec_alloc_context()))
+		{
+			fprintf(stderr, "Could not allocate encoder context\n");
+			throw HRESULT( AAFRESULT_INVALID_OP_CODEC );
+		}
+
+		// Note FFmpeg time_base is the inverse of _sampleRate
+		_encoder->codec_context->time_base.num = _sampleRate.denominator;
+		_encoder->codec_context->time_base.den = _sampleRate.numerator;
+
+		_encoder->codec_context->codec_type = CODEC_TYPE_VIDEO;
+		_encoder->codec_context->sample_aspect_ratio.num = _imageAspectRatio.numerator;
+		_encoder->codec_context->sample_aspect_ratio.den = _imageAspectRatio.denominator;
+
+		if (params->codecFamily == codecMPEG) {
+			int bit_rate = bitrate_for_flavour(_flavour);
+			// vbv_buffer_size values found by experiment to match Avid IMX bitstreams
+			// Value for 50Mbps 40Mbps 30Mbps are: 2,000,000 1,600,000 1,200,000
+			int buffer_size = bit_rate / 25;
+			_encoder->codec_context->rc_min_rate = bit_rate;
+			_encoder->codec_context->rc_max_rate = bit_rate;
+			_encoder->codec_context->bit_rate = bit_rate;
+			_encoder->codec_context->rc_buffer_size = buffer_size;
+			_encoder->codec_context->rc_initial_buffer_occupancy = buffer_size;
+			_encoder->codec_context->rtp_payload_size = 1;
+			_encoder->codec_context->global_quality = 1 * FF_QP2LAMBDA;
+			_encoder->codec_context->gop_size = 0;
+			_encoder->codec_context->qmin = 1;
+			_encoder->codec_context->qmax = 3;
+			_encoder->codec_context->lmin = 1 * FF_QP2LAMBDA;
+			_encoder->codec_context->lmax = 3 * FF_QP2LAMBDA;
+			_encoder->codec_context->flags |= CODEC_FLAG_INTERLACED_DCT | CODEC_FLAG_LOW_DELAY;
+			_encoder->codec_context->intra_dc_precision = 2;
+			_encoder->codec_context->flags2 |= CODEC_FLAG2_NON_LINEAR_QUANT;
+			_encoder->codec_context->flags2 |= CODEC_FLAG2_INTRA_VLC;
+
+			_encoder->tmpFrame = (AVPicture*)av_mallocz(sizeof(AVPicture));
+			_encoder->inputBuffer = (unsigned char*)av_mallocz(params->storedWidth * params->storedHeight * 2);
+		}
+
+		if (params->vidFormat == YUV411)
+			_encoder->codec_context->pix_fmt = PIX_FMT_YUV411P;
+		else if (params->vidFormat == YUV420)
+			_encoder->codec_context->pix_fmt = PIX_FMT_YUV420P;
+		else
+			_encoder->codec_context->pix_fmt = PIX_FMT_YUV422P;
+
+		// storedHeight includes 32 lines of padding for IMX format
+		avcodec_set_dimensions(_encoder->codec_context, params->storedWidth, params->storedHeight);
+
+		if (avcodec_open(_encoder->codec_context, _encoder->codec) < 0)
+		{
+			fprintf(stderr, "Could not open encoder\n");
+			throw HRESULT( AAFRESULT_INVALID_OP_CODEC );
+		}
+
+		if (! (_encoder->inputFrame = avcodec_alloc_frame()))
+		{
+			fprintf(stderr, "Could not allocate input frame\n");
+			throw HRESULT( AAFRESULT_INVALID_OP_CODEC );
+		}
+
+		// Extra 5000 bytes needed to avoid "stuffing too large" error at runtime
+		_encoder->bufferSize = params->storedSize + 5000;
+		_encoder->outputBuffer = (unsigned char*)av_mallocz(_encoder->bufferSize);
+
 #else
-		// Can't compress without libdv
+		// Can't compress without ffmpeg
 		throw HRESULT( AAFRESULT_INVALID_OP_CODEC );
 #endif
 	}
@@ -1900,27 +2066,26 @@ void CAAFCDCICodec::UpdateDescriptor (CAAFCDCIDescriptorHelper& descriptorHelper
 	    _fieldStartOffset == 0  &&  _fieldEndOffset == 4 )
 	{
 	    checkResult( descriptorHelper.SetResolutionID( 0x97 ) );
-	    checkResult( descriptorHelper.SetFrameSampleSize( 
-		_fileBytesPerSample ) );
+	    checkResult( descriptorHelper.SetFrameSampleSize( _storedFrameSampleSize ) );
 	}
 
-	if( EqualAUID(&_compression,&kAAFCompressionDef_LegacyDV))
+	// LegacyDV needs several legacy properties set
+	if (EqualAUID(&_compression, &kAAFCompressionDef_LegacyDV))
 	{
 	    checkResult( descriptorHelper.SetOffsetToFrameIndexes( 0 ) );
 	    checkResult( descriptorHelper.SetFrameIndexByteOrder( 0x4949) );
 	    checkResult( descriptorHelper.SetFirstFrameOffset( 0 ) );
 
-		if (formatPAL)
+	    checkResult( descriptorHelper.SetFrameSampleSize( _storedFrameSampleSize ));
+	    checkResult( descriptorHelper.SetImageSize( static_cast<aafInt32>(_numberOfSamples * _storedFrameSampleSize) ) );
+
+		if (_imageHeight == 288)		// i.e. PAL size
 		{
 	    	checkResult( descriptorHelper.SetResolutionID( 0x8d ) );
-	    	checkResult( descriptorHelper.SetFrameSampleSize(DV_PAL_FRAME_SIZE));
-	    	checkResult( descriptorHelper.SetImageSize( static_cast<aafInt32>(_numberOfSamples * DV_PAL_FRAME_SIZE) ) );
 		}
 		else
 		{
 	    	checkResult( descriptorHelper.SetResolutionID( 0x8c ) );
-	    	checkResult( descriptorHelper.SetFrameSampleSize( DV_NTSC_FRAME_SIZE));
-			checkResult( descriptorHelper.SetImageSize( static_cast<aafInt32>(_numberOfSamples * DV_NTSC_FRAME_SIZE) ) );
 		}
 	}
 
@@ -1932,7 +2097,7 @@ void CAAFCDCICodec::UpdateDescriptor (CAAFCDCIDescriptorHelper& descriptorHelper
 	HRESULT hr;
 
 	// Set Essence Element key depending upon essence type
-	if (IsDV(_compression))
+	if (IsSupportedCompressionID(_compression))
 		hr = pEDS2->SetEssenceElementKey( GC_EEK, 0x18, 1, 0x02, 1, 1 );
 	else		// uncompressed clip wrapped
 		hr = pEDS2->SetEssenceElementKey( GC_EEK, 0x15, 1, 0x03, 1, 1 );
@@ -1952,20 +2117,15 @@ void CAAFCDCICodec::UpdateCalculatedData( void )
 	plugin_trace("CAAFCDCICodec::UpdateCalculatedData()\n");
     aafUInt32 numFields = 0;
 
-
     // Number of fields per frame
-    if( _frameLayout == kAAFSeparateFields ||
-	_frameLayout == kAAFMixedFields )
-	numFields = 2;
-    else
-	numFields = 1;
+    if ( _frameLayout == kAAFSeparateFields || _frameLayout == kAAFMixedFields )
+		numFields = 2;
+	else
+		numFields = 1;
 
 
     // Computer the file bytes per sample.
-    _fileBytesPerSample = 0;
     _bitsPerPixelAvg = 0;
-    _bitsPerSample = 0;
-
 
    	if (_horizontalSubsampling == 1)
 		_bitsPerPixelAvg = (aafInt16)((_componentWidth * 3) + _paddingBits);
@@ -1973,26 +2133,15 @@ void CAAFCDCICodec::UpdateCalculatedData( void )
 		_bitsPerPixelAvg = (aafInt16)((_componentWidth * 2) + _paddingBits);
     checkAssertion( _bitsPerPixelAvg % 8  ==  0 );
 
-	if (IsDV(_compression))
+
+	const FlavourParameters_t *p_params = lookupFlavourParams(_flavour);
+	if (p_params != NULL)
 	{
-		if (_compressEnable == kAAFCompressionDisable)
-		{
-			// input data is already compressed DV frames
-			if ( formatPAL)
-				_fileBytesPerSample = DV_PAL_FRAME_SIZE;
-			else
-				_fileBytesPerSample = DV_NTSC_FRAME_SIZE;
-		}
-		else
-		{
-			// Uncompressed video to be compressed as DV or decompressed from DV.
-			// Since _imageHeight represents one field use _imageHeight*2 for height.
-			_fileBytesPerSample = _imageWidth * _imageHeight*2 * 2;
-		}
-		_bitsPerSample = _fileBytesPerSample * 8;
+		// Do nothing since SetFlavour has been called and necessary variables set.
 	}
-	else if (_compressEnable == kAAFCompressionEnable || EqualAUID(&NULL_UID, &_compression) || EqualAUID(&AAF_CMPR_AUNC422, &_compression))
+	else if (EqualAUID(&NULL_UID, &_compression) || EqualAUID(&AAF_CMPR_AUNC422, &_compression))
 	{
+		aafUInt32 _bitsPerSample;
     	//
 	    // Calculate number of bits per pixel. 
     	// Be aware that for 4:2:2 format number of bits per pi
@@ -2028,7 +2177,8 @@ void CAAFCDCICodec::UpdateCalculatedData( void )
 				numFields;
     	}
 
-    	_fileBytesPerSample = (_bitsPerSample + 7) / 8;
+    	_apiFrameSampleSize = (_bitsPerSample + 7) / 8;
+		_storedFrameSampleSize = _apiFrameSampleSize;
 	}
 }
 
@@ -2192,16 +2342,7 @@ HRESULT STDMETHODCALLTYPE
 			aafUID_t		nullCompID = NULL_UID;
 			checkExpression(param.size == sizeof(param.operand.expUID), AAFRESULT_INVALID_PARM_SIZE);
 
-
-			// Only DV compressions supported for compressed CDCI
-			checkExpression (EqualAUID(&nullCompID, &param.operand.expUID) ||
-					EqualAUID(&kAAFCompressionDef_IEC_DV_625_50, &param.operand.expUID) ||
-					EqualAUID(&kAAFCompressionDef_IEC_DV_525_60, &param.operand.expUID) ||
-					EqualAUID(&kAAFCompressionDef_DV_Based_25Mbps_525_60, &param.operand.expUID) ||
-					EqualAUID(&kAAFCompressionDef_DV_Based_25Mbps_625_50, &param.operand.expUID) ||
-					EqualAUID(&kAAFCompressionDef_DV_Based_50Mbps_525_60, &param.operand.expUID) ||
-					EqualAUID(&kAAFCompressionDef_DV_Based_50Mbps_625_50, &param.operand.expUID),
-					AAFRESULT_BADCOMPR);
+			checkExpression(IsSupportedCompressionID(param.operand.expUID), AAFRESULT_BADCOMPR);
 
 			memcpy( &_compression, &(param.operand.expUID), 
 			    sizeof(param.operand.expUID) );
@@ -2680,7 +2821,7 @@ HRESULT STDMETHODCALLTYPE CAAFCDCICodec::GetEssenceFormat(
 	    else if( EqualAUID( &kAAFMaxSampleBytes, &param.opcode ) )
 	    {
 		// Write out the sample size.
-		param.operand.expUInt32 = _fileBytesPerSample;
+		param.operand.expUInt32 = _apiFrameSampleSize;
 		checkResult( ADD_FORMAT_SPECIFIER( 
 		    p_fmt, kAAFMaxSampleBytes, param.operand.expUInt32 ) );
 	    }
@@ -2846,8 +2987,8 @@ HRESULT STDMETHODCALLTYPE
 		checkResult( ADD_FORMAT_SPECIFIER( 
 		    p_fmt, kAAFWillTransferLines, param.operand.expBoolean ) );
 
-		// DV is the only form of compressed CDCI supported
-		if (IsDV(_compression))
+		// Is this compression supported?
+		if (IsSupportedCompressionID(_compression))
 			param.operand.expBoolean = kAAFTrue;
 		else
 			param.operand.expBoolean = kAAFFalse;
@@ -2902,7 +3043,7 @@ HRESULT STDMETHODCALLTYPE
 		    p_fmt, kAAFPadBytesPerRow, param.operand.expUInt16 ) );
 
 		// Write out the sample size.
-		param.operand.expUInt32 = _fileBytesPerSample;
+		param.operand.expUInt32 = _apiFrameSampleSize;
 		checkResult( ADD_FORMAT_SPECIFIER( 
 		    p_fmt, kAAFMaxSampleBytes, param.operand.expUInt32 ) );
 
@@ -3003,7 +3144,7 @@ HRESULT STDMETHODCALLTYPE CAAFCDCICodec::GetLargestSampleSize(
 			// The samples will be uncompressed so return the 
 			// previously computed value for a single 
 			// uncompressed sample.
-			*pResult = _fileBytesPerSample;
+			*pResult = _apiFrameSampleSize;
 		}
 		else
 			hr = AAFRESULT_CODEC_CHANNELS;

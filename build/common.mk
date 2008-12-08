@@ -104,19 +104,30 @@ else
     ADD_CFLAGS += -DOM_STRUCTURED_STORAGE
 endif
 
+
+# DISABLE_FFMPEG turns off FFMPEG support (useful if FFMPEG_PATH is detected
+# but you do not wish to build with FFMPEG support)
+ifdef DISABLE_FFMPEG
+    FFMPEG_PATH=
+endif
+
 #--------------------------------------------------------------------------
-# Optional DV functionality requires libdv and can be turned on using e.g.
-# make LIBDV_PATH=/usr/lib
+# Optional FFmpeg libraries provide DV/DV50/DVCPRO-HD, IMX, and DNxHD codecs.
+# If not detected, set FFMPEG_PATH e.g. make FFMPEG_PATH=/usr/local/lib
 #
-# libdv is used to provide DV functionality in the CDCI codec.
+# FFMPEG_EXTRA_LIBS should be set when your FFmpeg libraries require extra
+# libraries at link time e.g.
+#   FFMPEG_EXTRA_LIBS='-lz -lbz2 -lmp3lame -lx264 -lfaac -lfaad -lm -lpthread'
+#
+# FFmpeg codecs are used in plugin codecs (ref-impl/plugins/CAAFCDCICodec.cpp)
 #--------------------------------------------------------------------------
-ifdef LIBDV_PATH
-    ifneq "$(LIBDV_PATH)" "/usr/lib"
-        ADD_CFLAGS += -I$(LIBDV_PATH)/include
-        OPT_CODEC_LIBS += -L$(LIBDV_PATH)
+ifdef FFMPEG_PATH
+    ifneq "$(FFMPEG_PATH)" "/usr/lib"
+        ADD_CFLAGS += -I$(FFMPEG_PATH)/include
+        OPT_CODEC_LIBS += -L$(FFMPEG_PATH)
     endif
-    ADD_CFLAGS += -DUSE_LIBDV
-    OPT_CODEC_LIBS += -ldv
+    ADD_CFLAGS += -DUSE_FFMPEG
+    OPT_CODEC_LIBS += -lavformat -lavcodec -lavutil $(FFMPEG_EXTRA_LIBS)
 endif
 
 

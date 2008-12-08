@@ -30,17 +30,48 @@ include ../comexamplerules.mk
 TEST_CMD = $(APP_RUN_ENV) $(AAFSDKBINDIR)/ImportDV$(EXE)
 .PHONY : check
 check : $(AAFSDKBINDIR)/ImportDV$(EXE)
-	@# Only run libdv compression tests if libdv available
-ifdef LIBDV_PATH
-	@rm -f raw.yuv
-	$(TEST_CMD) -compressionEnable ../ExportDV/ExportDV.aaf && test -f raw.yuv
-	@rm -f raw.yuv
-	$(TEST_CMD) -compressionEnable ../ExportDV/ExportDV.mxf && test -f raw.yuv
-	@rm -f raw.yuv
-	$(TEST_CMD) -compressionEnable ../ExportDV/ExportDV_legacyDV.aaf && test -f raw.yuv
-	@rm -f raw.yuv
-	$(TEST_CMD) -compressionEnable ../ExportDV/ExportDV_DVBased.aaf && test -f raw.yuv
+	@# Only run decompression tests if ffmpeg available
+ifdef FFMPEG_PATH
+	@for f in \
+	LegacyDV_625_50 \
+	LegacyDV_525_60 \
+	IEC_DV_625_50 \
+	IEC_DV_525_60 \
+	DV_Based_25Mbps_625_50 \
+	DV_Based_25Mbps_525_60 \
+	DV_Based_50Mbps_625_50 \
+	DV_Based_50Mbps_525_60 \
+	SMPTE_D10_625x50I_50Mbps \
+	SMPTE_D10_525x5994I_50Mbps \
+	SMPTE_D10_625x50I_40Mbps \
+	SMPTE_D10_525x5994I_40Mbps \
+	SMPTE_D10_625x50I_30Mbps \
+	SMPTE_D10_525x5994I_30Mbps \
+	NoCompression \
+	; do rm -f raw.yuv; echo $(TEST_CMD) -d ../ExportDV/ExportDV_$$f.aaf; $(TEST_CMD) -d ../ExportDV/ExportDV_$$f.aaf || exit 1; done
 endif
-	@# Always run test using DV-compressed frame (doesn't require libdv)
-	@rm -f raw.dv
-	$(TEST_CMD) ../ExportDV/ExportDV_NoCompression.aaf && test -f raw.dv
+	@# Run unwrapping only (no decompression) tests.
+	@# Tests if file is present before attempting test to avoid errors
+	@# when FFMPEG_PATH is not set and FFMPEG-encoded files not present.
+	@for f in \
+	LegacyDV_625_50 \
+	LegacyDV_525_60 \
+	IEC_DV_625_50 \
+	IEC_DV_525_60 \
+	DV_Based_25Mbps_625_50 \
+	DV_Based_25Mbps_525_60 \
+	DV_Based_50Mbps_625_50 \
+	DV_Based_50Mbps_525_60 \
+	DVbased_1080x50I_100Mbps \
+	DVbased_1080x5994I_100Mbps \
+	DVbased_720x50P_100Mbps \
+	DVbased_720x5994P_100Mbps \
+	SMPTE_D10_625x50I_50Mbps \
+	SMPTE_D10_525x5994I_50Mbps \
+	SMPTE_D10_625x50I_40Mbps \
+	SMPTE_D10_525x5994I_40Mbps \
+	SMPTE_D10_625x50I_30Mbps \
+	SMPTE_D10_525x5994I_30Mbps \
+	NoCompression ; do \
+	  rm -f raw.cdci; if [ ! -r ../ExportDV/ExportDV_$$f.aaf ] ; then continue; fi; echo $(TEST_CMD) ../ExportDV/ExportDV_$$f.aaf; $(TEST_CMD) ../ExportDV/ExportDV_$$f.aaf || exit 1; \
+	done

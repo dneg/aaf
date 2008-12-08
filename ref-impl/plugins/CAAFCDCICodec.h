@@ -40,16 +40,37 @@
 #include "CAAFCDCIDescriptorHelper.h"
 #endif
 
-#ifdef USE_LIBDV
-#include <libdv/dv_types.h>
-#include <libdv/dv.h>
-#endif
-
 // ID for this Plugin's CoClass.
 EXTERN_C const CLSID CLSID_AAFCDCICodec;
 
 
+#ifdef USE_FFMPEG
 
+extern "C" {
+#include <libavcodec/avcodec.h>
+#include <libavformat/avformat.h>
+}
+
+typedef struct 
+{
+	AVCodec *codec;
+	AVCodecContext *codec_context;
+	AVFrame *inputFrame;
+	unsigned char *outputBuffer;
+	unsigned int bufferSize;
+	AVPicture *tmpFrame;
+	unsigned char *inputBuffer;
+} internal_ffmpeg_encoder_t;
+
+typedef struct 
+{
+	AVCodec *codec;
+	AVCodecContext *codec_context;
+	AVFrame *outputFrame;
+	unsigned char *inputBuffer;
+} internal_ffmpeg_decoder_t;
+
+#endif
 
 
 class CAAFCDCICodec
@@ -304,6 +325,8 @@ private:
 
 	aafMediaOpenMode_t _openMode; // Either read-only or for append.
 
+	aafUID_t _flavour;			// current flavour
+
 	// Data from/to FileDescriptor
 	aafLength_t _length; // total size of file (informational?)
 	aafRational_t _sampleRate; // same for all samples.
@@ -337,47 +360,42 @@ private:
 	aafUID_t _gamma;
 	aafUInt32 _imageAlignmentFactor; // padding for "sector size" on disk for possibly faster access.
 
-	// Data from/to CDCIDescriptor
-	aafUInt32 _componentWidth; // should always be 8 (no support for 12 bit data).
-	aafUInt32 _horizontalSubsampling;
-	aafUInt32 _verticalSubsampling; // not currently a property (default to 1 in codec).
+	// Properties read from or written to CDCIDescriptor
+	aafLength_t	_numberOfSamples;		// Length
+	aafUInt32 _componentWidth;			// ComponentWidth (currently only 8bit supported)
+	aafUInt32 _horizontalSubsampling;	// HorizontalSubsampling
+	aafUInt32 _verticalSubsampling;		// VerticalSubsampling
 	aafColorSiting_t _colorSiting;
 	aafUInt32 _blackReferenceLevel;
 	aafUInt32 _whiteReferenceLevel;
 	aafUInt32 _colorRange;
-	aafInt16 _paddingBits;
+	aafInt16 _paddingBits;				// PaddingBits (only useful when ComponentWidth is not 8)
+	aafFieldDom_t _fieldDominance;
+	aafUInt32 _fieldStartOffset;
+	aafUInt32 _fieldEndOffset;
 
-	// Misc. data copied from omf codec
-	aafUInt32 _imageHeight; 
+	// Current video frame format settings for codec operations
+	aafUInt32 _imageHeight;
 	aafUInt32 _imageWidth;
-	aafUInt32 _fileBytesPerSample;
-	aafBoolean_t _descriptorFlushed;
+	aafUInt32 _apiFrameSampleSize;		// bytes in frame passed to Read/Write API
+	aafUInt32 _storedFrameSampleSize;	// bytes in frame stored in stream
 
-	aafColorSpace_t _pixelFormat;
-	aafCompArray_t _compArray;
+	// Used for Get/Put EssenceFormat only (TODO: what is the point then?)
+	aafColorSpace_t _pixelFormat;		// either kAAFColorSpaceYUV or kAAFColorSpaceRGB
 
-	aafFieldDom_t	_fieldDominance;
-	aafUInt32	_fieldStartOffset;
-	aafUInt32	_fieldEndOffset;
 
 	aafUInt16 _bitsPerPixelAvg;
-	aafUInt32 _bitsPerSample;
 
-	// Copied from WaveCodec...(may be renamed...)
-	aafLength_t	_numberOfSamples; /* was _sampleFrames in WaveCodec) */
+	aafUInt16 _padBytesPerRow;			// format specifier used to calculate _bitsPerSample
 
-	aafUInt16 _padBytesPerRow;
+#if defined(USE_FFMPEG)
+	// FFmpeg codec objects
+	internal_ffmpeg_encoder_t *_encoder;
+	internal_ffmpeg_decoder_t *_decoder;
 
-#ifdef USE_LIBDV
-	// variables for libdv interface
-	unsigned char	_dv_buffer[144000];		// enough for PAL or NTSC frame
-	dv_encoder_t	*_encoder;
-	dv_decoder_t	*_decoder;
-	int				_pitches[3];
 #endif
 
 	aafCompressEnable_t _compressEnable;
 };
 
 #endif // ! __CAAFCDCICodec_h__
-
