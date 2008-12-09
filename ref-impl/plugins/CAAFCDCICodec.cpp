@@ -2141,7 +2141,7 @@ void CAAFCDCICodec::UpdateCalculatedData( void )
 	}
 	else if (EqualAUID(&NULL_UID, &_compression) || EqualAUID(&AAF_CMPR_AUNC422, &_compression))
 	{
-		aafUInt32 _bitsPerSample;
+		aafUInt32 _bitsPerSample = 0;
     	//
 	    // Calculate number of bits per pixel. 
     	// Be aware that for 4:2:2 format number of bits per pi
