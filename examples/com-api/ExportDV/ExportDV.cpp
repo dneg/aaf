@@ -353,7 +353,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, bool comp_enable)
 			total_bytes_written += bytesWritten;
 		}
 	}
-	printf("Wrote %d samples (size of essence=%lld)\n", total_samples, total_bytes_written);
+	printf("Wrote %d samples (size of essence=%"AAFFMT64"d)\n", total_samples, total_bytes_written);
 
 	/* Set the essence to indicate that you have finished writing the samples */
 	check(pEssenceAccess->CompleteWrite());
