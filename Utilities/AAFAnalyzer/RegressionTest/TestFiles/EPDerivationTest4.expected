@@ -1,0 +1,88 @@
+        Name:   Mob Derivation Test
+        Desc:   Verify the correctness of mob derivation chains.
+        Result: Failed
+        Reason: 
+        Covered Requirements: REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_072; REQ_EP_076; REQ_EP_083; REQ_EP_258; REQ_EP_259; REQ_EP_261; REQ_EP_262
+        Noted Requirements: REQ_EP_017; REQ_EP_026; REQ_EP_055; REQ_EP_063; REQ_EP_260
+        Passing Requirements: None
+        Info Requirements: None
+        Warning Requirements: None
+        Failing Requirements: REQ_EP_025.2
+        Detail: Analyzing root composition mob "top level composition with reference to static essence"
+        Detail: OK   - Valid object Top-Level Composition "top level composition with reference to static essence" transitioning from state INITIAL to state TOP_LEVEL
+        Detail: OK   -   Valid object Clip "clip with reference to static essence" transitioning from state TOP_LEVEL to state CLIP
+        Detail: OK   -     Valid object Unnamed RGBA Digital Image File Source transitioning from state CLIP to state FILE_SOURCE
+        Detail: OK   -       Valid object End Of Chain transitioning from state FILE_SOURCE to state END OF CHAIN
+
+            Name:   Top-level Composition Unreferenced
+            Desc:   A top-level composition shall not be referenced by another Mob in the AAF file.
+            Node:   6 (CompositionMob)
+            Result: Failed
+            Reason: Top level CompositionMob "Master->Top-Level" is referenced by one, or more, Mob objects in the file.
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: None
+            Info Requirements: None
+            Warning Requirements: None
+            Failing Requirements: REQ_EP_025.2
+
+            Name:   Start Of Derivation Chain
+            Desc:   A Top-Level CompositionMob is always the first mob in a derivation chain.
+            Node:   9 (CompositionMob)
+            Result: Noted
+            Reason: Top-Level Composition "top level composition with reference to static essence" following INITIAL is valid.
+            Covered Requirements: None
+            Noted Requirements: REQ_EP_260
+            Passing Requirements: None
+            Info Requirements: None
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Top-level Composition May Reference
+            Desc:   A top-level composition shall only reference the following kinds of material: a lower-level composition, a sub-clip composition, an adjusted-clip composition, a template clip, or a clip.
+            Node:   13 (MasterMob)
+            Result: Noted
+            Reason: Clip "clip with reference to static essence" following TOP_LEVEL is valid.
+            Covered Requirements: None
+            Noted Requirements: REQ_EP_026
+            Passing Requirements: None
+            Info Requirements: None
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Clip May Reference
+            Desc:   A clip shall only reference the following kinds of material: a file source, an import source, a tape source, or a film source.
+            Node:   16 (SourceMob)
+            Result: Noted
+            Reason: Unnamed RGBA Digital Image File Source following CLIP is valid.
+            Covered Requirements: None
+            Noted Requirements: REQ_EP_055
+            Passing Requirements: None
+            Info Requirements: None
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   File Source References Import, Tape, or Film Source
+            Desc:   If a file source has any of the following sources, then those source mobs should be included and referenced by the file source: an import source, a tape source, or a film source. If a file source does not have an import source, a tape source or a film source, then it shall reference and include a recording source.
+            Node:   18 (SourceClip)
+            Result: Noted
+            Reason: End Of Chain following FILE_SOURCE is valid.
+            Covered Requirements: None
+            Noted Requirements: REQ_EP_063
+            Passing Requirements: None
+            Info Requirements: None
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   End of Derivation Chain
+            Desc:   The end of the derivation change (i.e. the original material), to the extent an application is aware of it, shall be specified using a zero-value SourceClip object.
+            Node:   18 (SourceClip)
+            Result: Noted
+            Reason: The derivation chain parser reached a valid end state.
+            Covered Requirements: None
+            Noted Requirements: REQ_EP_017
+            Passing Requirements: None
+            Info Requirements: None
+            Warning Requirements: None
+            Failing Requirements: None
+

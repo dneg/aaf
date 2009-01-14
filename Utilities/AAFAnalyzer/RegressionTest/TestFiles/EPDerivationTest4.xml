@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE aaf-file SYSTEM "EPDerivationChain.dtd">
+<aaf-file>
+<!-- Master->TopLevel test REQ_EP_025.2. The Master->TopLevel should
+      fail without invoking the derivatino chain parser because it
+      will be detected as a top level composition that is referenced
+      by on or more clips. We use a master to reference the top level
+      because specifically don't it to be ignored by the derivation
+      chain parser. -->
+ <clip name="Master->TopLevel">
+  <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+   <source-clip length="0" track-type="none">
+    <top-level name="Master->Top-Level">
+     <timeline-mob-slot edit-rate-denominator="1" edit-rate-numerator="1">
+      <eoc length="0" track-type="none"/>
+     </timeline-mob-slot>
+    </top-level>
+   </source-clip>
+  </timeline-mob-slot>
+ </clip>
+<!-- Test with static mob slots. The code should have no dependency on
+ mob slot type. This is intended to confirm that. -->
+ <top-level name="top level composition with reference to static essence">
+  <timeline-mob-slot edit-rate-numerator="30000" edit-rate-denominator="1001">
+   <sequence length="1">
+    <source-clip length="1">
+     <clip name="clip with reference to static essence">
+      <static-mob-slot edit-rate-numerator="30000" edit-rate-denominator="1001">
+       <source-clip length="1">
+        <rgba-source sample-rate-denominator="30000" sample-rate-numerator="1001">
+         <static-mob-slot name="Static stlot included in derivation chain and referenced from timeline.">
+          <eoc/>
+         </static-mob-slot>
+        </rgba-source>
+       </source-clip>
+      </static-mob-slot>
+     </clip>
+    </source-clip>
+   </sequence>
+  </timeline-mob-slot>
+ </top-level>
+</aaf-file>
