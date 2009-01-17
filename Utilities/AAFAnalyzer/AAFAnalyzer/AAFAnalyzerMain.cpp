@@ -1153,7 +1153,7 @@ int main( int argc, char** argv )
   {
     wcerr << L"Error: " << ex.widewhat() << endl;
   }
-  catch ( const exception& ex )
+  catch ( const std::exception& ex )
   {
     cerr << "Error: " << ex.what() << endl;
   }

@@ -9,7 +9,7 @@ namespace aafanalyzer {
 
 using namespace std;
 
-class AnalyzerException : public exception {
+class AnalyzerException : public std::exception {
 
 public:
 
