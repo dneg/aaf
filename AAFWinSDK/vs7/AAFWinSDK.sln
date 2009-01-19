@@ -349,6 +349,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "XMLStoredFormat", "Test\com
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MetaModelVerification", "Test\com\MetaModelVerification\MetaModelVerification.vcproj", "{A6218883-57B0-4346-8E96-0F679D6DC2CA}"
 	ProjectSection(ProjectDependencies) = postProject
+		{08296C77-388B-42C6-BF97-B06B9796985A} = {08296C77-388B-42C6-BF97-B06B9796985A}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ImportVC3", "examples\com-api\ImportVC3\ImportVC3.vcproj", "{B06D9BF2-E979-40A8-BBA7-3F8C41774ABD}"
