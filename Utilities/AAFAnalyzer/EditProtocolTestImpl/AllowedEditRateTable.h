@@ -26,8 +26,7 @@
 #include <boost/shared_ptr.hpp>
 
 //STL files
-#include <map>
-#include <set>
+#include <vector>
 
 #ifndef __AllowedEditRateTable_h_
 #define __AllowedEditRateTable_h_
@@ -37,27 +36,43 @@ namespace aafanalyzer {
 using namespace boost;
 using namespace std;
 
-class AllowedEditRateTable
+class Section71TableEntry
 {
  public:
 
-    typedef map<aafInt32, aafInt32> NumeratorMap;
-    typedef map<double, aafInt32> RoundedMap;
-    typedef map<aafInt32, shared_ptr<NumeratorMap> > DenominatorMap;
-    typedef set<aafInt32> TrackSet;
-    
+  enum TrackType_e {AV, A};
+
+ private:
+
+  TrackType_e _type;
+  aafRational_t _exactRate;
+  aafRational_t _roundedRate;
+
+ public:
+
+  Section71TableEntry(TrackType_e t, int exactNum, int exactDen, int roundedNum, int roundedDen);
+
+  TrackType_e GetTrackType() const;
+  const aafRational_t& GetExactRate() const;
+  const aafRational_t& GetRoundedRate() const;
+
+  bool IsEquivalent(const aafRational_t& rate, bool isVideo) const;
+};
+
+class AllowedEditRateTable
+{
+  std::vector<Section71TableEntry> _rates;
+
+ public:
+
     AllowedEditRateTable();
     virtual ~AllowedEditRateTable();
     
-    bool IsInTable( aafRational_t editRate, bool isVideo );
-    double Round( double num );
+    bool IsInTable( const aafRational_t& editRate, bool isVideo ) const;
+    double Round( double num ) const;
 
  private:
  
-    DenominatorMap _editRateTable;
-    RoundedMap _roundedEditRates;
-    TrackSet _nominalVideoRates;
-    
     void InitializeTable();
 
     // prohibited
