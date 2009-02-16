@@ -1108,7 +1108,9 @@ HRESULT STDMETHODCALLTYPE
 		// try to obtain it by decoding Compression and ContainerFormat
 		if( !_fileBytesPerSample )
 		{
-			if( !_ComprID ) _ComprID = GetComprID( _compression, _containerFormat );
+			if( _ComprID==0 || _ComprID==0xFFFFFFFF )
+				_ComprID = GetComprID( _compression, _containerFormat );
+
 			_fileBytesPerSample = GetBytesPerSample();
 		}
 
