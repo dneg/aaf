@@ -1125,7 +1125,9 @@ HRESULT STDMETHODCALLTYPE
 		// try to obtain it by decoding Compression and ContainerFormat
 		if( !_fileBytesPerSample )
 		{
-			if( !_ComprID ) _ComprID = GetComprID( _compression, _containerFormat );
+			if( _ComprID==0 || _ComprID==0xFFFFFFFF )
+				_ComprID = GetComprID( _compression, _containerFormat );
+
 			_fileBytesPerSample = GetBytesPerSample();
 		}
 
@@ -2047,6 +2049,9 @@ void CAAFDNxHDCodec::UpdateDescriptor (CAAFCDCIDescriptorHelper& descriptorHelpe
 		_compression.Data2=byte14n15;
 	}
 
+	if(_UseLegacyAvidUIDs)
+		checkResult( descriptorHelper.SetResolutionID( _ComprID ) );
+	
 	checkResult(descriptorHelper.SetContainerFormat(_containerFormat));
 
 	checkResult(descriptorHelper.SetCompression(_compression));
