@@ -1607,6 +1607,10 @@ HRESULT STDMETHODCALLTYPE
 		_bitsPerSample = (aafUInt16)bitspersample;
 		_numCh = (aafUInt16)numch;
 
+		// mkirk, 11/26/08
+		// _bytesPerFrame was never being reset from its default of 1.
+		_bytesPerFrame = ((_bitsPerSample + 7) / 8) * _numCh;
+
 		containerDef->Release();
 		defObj->Release();
 
