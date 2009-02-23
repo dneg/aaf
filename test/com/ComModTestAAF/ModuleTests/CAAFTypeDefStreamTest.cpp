@@ -900,7 +900,8 @@ void CAAFTypeDefStream_read (aafCharacter_constptr pFileName) // throw HRESULT
     IEnumAAFEssenceDataSP pEnumEssenceData;
     CheckResult(pHeader->EnumEssenceData(&pEnumEssenceData));
     CheckResult(pEnumEssenceData->NextOne(&pEssenceData));
-    aafMobID_t testMobID = {0};
+    aafMobID_t testMobID = {{0,0,0,0,0,0,0,0,0,0,0,0},0,0,0,0,
+                            {0,0,0,{0,0,0,0,0,0,0,0}}};
     CheckResult(pEssenceData->GetFileMobID(&testMobID));
     CheckExpression(0 == memcmp(&testMobID, &sMobID[0], sizeof(aafMobID_t)),
                     AAFRESULT_TEST_FAILED);  
