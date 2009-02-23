@@ -463,6 +463,19 @@ static void Test_EssenceStreamWrite(
   CheckResult(pTypeDefStream->GetPosition(pStreamPropertyValue, &streamPosition));
   CheckExpression(expectedPosition == streamPosition, AAFRESULT_TEST_FAILED);
 
+  // Test growing the stream
+  const aafUInt32  increment = 50;
+  CheckResult(pTypeDefStream->SetSize(pStreamPropertyValue, expectedSize+increment));
+  CheckResult(pTypeDefStream->GetSize(pStreamPropertyValue, &streamSize));
+  CheckExpression(expectedSize+increment == streamSize, AAFRESULT_TEST_FAILED);
+  // After growing, truncate the stream back to the original size
+  CheckResult(pTypeDefStream->SetSize(pStreamPropertyValue, expectedSize));
+  CheckResult(pTypeDefStream->GetSize(pStreamPropertyValue, &streamSize));
+  CheckExpression(expectedSize == streamSize, AAFRESULT_TEST_FAILED);
+  // Make sure the current position didn't change
+  CheckResult(pTypeDefStream->GetPosition(pStreamPropertyValue, &streamPosition));
+  CheckExpression(expectedPosition == streamPosition, AAFRESULT_TEST_FAILED);
+
   // Restore the position to the begining of the stream.
   CheckResult(pTypeDefStream->SetPosition(pStreamPropertyValue, 0));
 }
