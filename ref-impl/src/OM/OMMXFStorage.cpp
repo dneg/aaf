@@ -2069,7 +2069,7 @@ void OMMXFStorage::saveStreams(void)
       if (previous == 0) {
         pos = _metadataEnd;
       } else {
-        pos = previous->_origin + previous->_size;
+        pos = previous->_origin + previous->_size + fillBufferZoneSize;
       }
       ASSERT("Segments in file address order", seg->_origin > pos);
       setPosition(pos);
@@ -2085,7 +2085,7 @@ void OMMXFStorage::saveStreams(void)
 
       // If we wrote index, fill in the index bye count
       if (s->_label == IndexTableSegmentKey) {
-        OMUInt64 ibc = seg->_size;
+        OMUInt64 ibc = seg->_size + fillBufferZoneSize;
         ibc = ibc + sizeof(OMKLVKey) + 8 + 1;
         fixupReference(pos + sizeof(OMKLVKey) + 8 + 1 + 40, ibc);
       }
@@ -2093,21 +2093,21 @@ void OMMXFStorage::saveStreams(void)
 
       // Fill end of segment
       OMUInt64 len = validSize(seg); // length of valid portion of segment
-      OMUInt64 fillSize = seg->_size - len;
+      OMUInt64 fillSize = seg->_size + fillBufferZoneSize - len;
       if (fillSize > 0) {
         ASSERT("Can fill", fillSize >= minimumFill);
-        OMUInt64 fillEnd = seg->_origin + seg->_size;
+        OMUInt64 fillEnd = seg->_origin + seg->_size + fillBufferZoneSize;
         OMUInt64 fillStart = fillEnd - fillSize;
         setPosition(fillStart);
         writeKLVFill(fillSize - minimumFill);
       }
-      ASSERT("Consistent size", seg->_size == len + fillSize);
+      //ASSERT("Consistent size", seg->_size == len + fillSize);
 
       previous = seg;
     }
 
     if (last->_stream->_label != IndexTableSegmentKey) {
-      setPosition(last->_origin + last->_size);
+      setPosition(last->_origin + last->_size + fillBufferZoneSize);
       writePartition(FooterKey, 0, 0, defaultKAGSize);
     }
 
