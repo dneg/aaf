@@ -13,7 +13,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2007, Licensor of the
+// The Original Code of this file is Copyright 1998-2008, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -90,7 +90,12 @@ static const aafMobID_t sMobID[] = {
   //{060c2b340205110101001000-13-00-00-00-{3F546F83-D784-4c98-A6C8-B498DAAF98F4}}
   {{0x06, 0x0c, 0x2b, 0x34, 0x02, 0x05, 0x11, 0x01, 0x01, 0x00, 0x10, 0x00}, 
   0x13, 0x00, 0x00, 0x00, 
-  {0x3f546f83, 0xd784, 0x4c98, {0xa6, 0xc8, 0xb4, 0x98, 0xda, 0xaf, 0x98, 0xf4}}}
+  {0x3f546f83, 0xd784, 0x4c98, {0xa6, 0xc8, 0xb4, 0x98, 0xda, 0xaf, 0x98, 0xf4}}},
+
+  //{060c2b340205110101001000-13-00-00-00-{97FA93E8-D4BE-4420-8F8C-90B1FD6F14C5}}
+  {{0x06, 0x0c, 0x2b, 0x34, 0x02, 0x05, 0x11, 0x01, 0x01, 0x00, 0x10, 0x00}, 
+  0x13, 0x00, 0x00, 0x00, 
+  {0x97fa93e8, 0xd4be, 0x4420, {0x8f, 0x8c, 0x90, 0xb1, 0xfd, 0x6f, 0x14, 0xc5}}}
 };
 
 static aafCharacter_constptr sMobName[] = 
@@ -99,7 +104,8 @@ static aafCharacter_constptr sMobName[] =
   L"TypeDefStreamTest File Mob - 2", 
   L"TypeDefStreamTest File Mob - 3",
   L"TypeDefStreamTest File Mob - 4",
-  L"TypeDefStreamTest File Mob - 5"
+  L"TypeDefStreamTest File Mob - 5",
+  L"TypeDefStreamTest File Mob - 6",
 };
 
 static const char sSmiley[] =        /* 16x16 smiley face */
@@ -784,6 +790,93 @@ static void Test_KLVStreamParametersOnRead(
   */
 }
 
+// Test the case when the stream data size approaches the KLV
+// Alignment Grid (KAG) boundary and leaves some but not enough
+// space to pad to the end of the boundary.
+struct Test_NearKAGBoundaryFixture
+{
+private:
+  static const size_t  defaultKAGSize = 0x200;
+  static const size_t  KLVFillKeySize = 16;
+  static const size_t  KLVFillLengthSize = 9;
+  static const size_t  minKLVFillSize = KLVFillKeySize + KLVFillLengthSize;
+
+  // Size of data thar almost fills the KAG leaving just enough space
+  // for minimum KLV fill item. (Minimum KLV fill item consits of a KLV
+  // key and zero KLV length).
+  static const size_t  dataByteCountWithSpaceForMinFill = defaultKAGSize -
+                                                          minKLVFillSize;
+
+public:
+  // Size of data thar almost fills the KAG but doesn't leave enough space
+  // for KLV fill item.
+  static const size_t  dataByteCountWithoutSpaceForMinFill =
+                                     dataByteCountWithSpaceForMinFill + 1;
+};
+
+static void Test_NearKAGBoundaryWrite(
+  CAAFBuiltinDefs & defs,
+  IAAFPropertyValue *pStreamPropertyValue)
+{
+  AAFRESULT hr = AAFRESULT_SUCCESS;
+
+  IAAFPlainStreamDataSP pTypeDefStream;
+  Test_GetTypeDefStream(pStreamPropertyValue, &pTypeDefStream);
+
+  CheckResult(pTypeDefStream->SetPosition(pStreamPropertyValue, 0));
+
+  aafUInt32 remainingBytes =
+    Test_NearKAGBoundaryFixture::dataByteCountWithoutSpaceForMinFill;
+  while( remainingBytes > 0 )
+  {
+    aafUInt32 bytesToWrite = sizeof(sFrowney);
+    if( bytesToWrite > remainingBytes )
+      bytesToWrite = remainingBytes;
+    CheckResult(pTypeDefStream->Write(
+                pStreamPropertyValue,
+                bytesToWrite,
+                reinterpret_cast<aafMemPtr_t>(const_cast<char *>(sFrowney))));
+    remainingBytes = remainingBytes - bytesToWrite;
+  }
+
+}
+
+// Read data created by Test_NearKAGBoundaryWrite().
+static void Test_NearKAGBoundaryRead(
+  CAAFBuiltinDefs & defs,
+  IAAFPropertyValue *pStreamPropertyValue)
+{
+  IAAFPlainStreamDataSP pTypeDefStream;
+  Test_GetTypeDefStream(pStreamPropertyValue, &pTypeDefStream);
+
+  const size_t testDataSize = sizeof(sFrowney);
+  unsigned char  buffer[testDataSize];
+
+  CheckResult(pTypeDefStream->SetPosition(pStreamPropertyValue, 0));
+
+  aafUInt32 remainingBytes =
+    Test_NearKAGBoundaryFixture::dataByteCountWithoutSpaceForMinFill;
+  while( remainingBytes > 0 )
+  {
+    memset(buffer, 0, testDataSize);
+
+    aafUInt32 bytesToRead = testDataSize;
+    if( bytesToRead > remainingBytes )
+      bytesToRead = remainingBytes;
+
+    aafUInt32 bytesRead = 0;
+    CheckResult(pTypeDefStream->Read(pStreamPropertyValue,
+                                     bytesToRead,
+                                     reinterpret_cast<aafMemPtr_t>(buffer),
+                                     &bytesRead));
+    CheckExpression(bytesRead == bytesToRead, AAFRESULT_TEST_FAILED);
+    CheckExpression(0 == memcmp(buffer, sFrowney, bytesRead),
+                    AAFRESULT_TEST_FAILED);
+
+    remainingBytes = remainingBytes - bytesToRead;
+  }
+}
+
 // Create the test file.
 void CAAFTypeDefStream_create (
     aafCharacter_constptr pFileName,
@@ -864,6 +957,25 @@ void CAAFTypeDefStream_create (
     Test_EssenceStreamWrite(defs, pDataPropertyValue3);
     Test_KLVStreamParametersOnRead(defs, pDataPropertyValue3);
     Test_EssenceStreamRead(defs, pDataPropertyValue3);
+
+
+    // Test the case when the stream data size approaches the KLV
+    // Alignment Grid (KAG) boundary and leaves some but not enough
+    // space to pad to the end of the boundary.
+    // (This is a test of edge conditions specific to KLV encoded files.)
+    IAAFEssenceDataSP pEssenceData4;
+    IAAFPropertyValueSP pDataPropertyValue4;
+    IAAFPropertyValueSP pSampleIndexPropertyValue4;
+
+    Test_CreateEssenceData(defs, pHeader, sMobID[5], sMobName[5], &pEssenceData4);
+
+    Test_EssenceStreamPropertyValues(pDictionary,
+                                     pEssenceData4,
+                                     &pDataPropertyValue4,
+                                     &pSampleIndexPropertyValue4);
+
+    Test_NearKAGBoundaryWrite(defs, pDataPropertyValue4);
+    Test_NearKAGBoundaryRead(defs, pDataPropertyValue4);
 
 
     CheckResult(pFile->Save());
@@ -971,6 +1083,28 @@ void CAAFTypeDefStream_read (aafCharacter_constptr pFileName) // throw HRESULT
 
       Test_KLVStreamParametersOnRead(defs, pDataPropertyValue3);
       Test_EssenceStreamRead(defs, pDataPropertyValue3);
+    }
+
+
+    // Test the case when the stream data size approaches the KLV
+    // Alignment Grid (KAG) boundary and leaves some but not enough
+    // space to pad to the end of the boundary.
+    // (This is a test of edge conditions specific to KLV encoded files.)
+    IAAFEssenceDataSP pEssenceData4;
+
+    // sMobID[4] may not be in the file, in the case
+    // the file was created by an older test.
+    if(pHeader->LookupEssenceData(sMobID[5], &pEssenceData4)==AAFRESULT_SUCCESS)
+    {
+      IAAFPropertyValueSP pDataPropertyValue4;
+      IAAFPropertyValueSP pSampleIndexPropertyValue4;
+
+      Test_EssenceStreamPropertyValues(pDictionary,
+                                       pEssenceData4,
+                                       &pDataPropertyValue4,
+                                       &pSampleIndexPropertyValue4);
+
+      Test_NearKAGBoundaryRead(defs, pDataPropertyValue4);
     }
 
 
