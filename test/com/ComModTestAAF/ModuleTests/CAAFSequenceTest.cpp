@@ -149,7 +149,37 @@ void InstantiateTransition(CAAFBuiltinDefs *defs,
 	pOperationGroup = NULL;
 }
 
+HRESULT TestDefinitions(CAAFBuiltinDefs *defs)
+{
+	HRESULT			hr = S_OK;
 
+	IAAFSequence*	pSequence = NULL; 
+	IAAFComponent *pCompLengthCheck = NULL; 
+	IAAFComponent*	pComponent = NULL;
+
+	// Add mob slot w/ sequence
+ 	  checkResult(defs->cdSequence()->
+				  CreateInstance(IID_IAAFSequence, 
+								 (IUnknown **)&pSequence));		//Instantiate the sequence
+
+	  /*
+		This is a charaterization test.
+		This test confirms the erroneus behavior that inserting components into an uninitialized sequence succeeds.
+		The insert will succeed and leave the sequence uninitialized.
+		This behaviour is wrong but legacy code probably depends on it.
+		The correct behaviour would be to return AAFRESULT_NOT_INITIALIZED on any attempt to maninpulat the sequence before it is initialized.
+	  */
+	  //Attempt to insert a component before the sequence datadef is set
+	  InstantiateComponent(defs, COMPONENT_TEST_LENGTH, pComponent);
+	  checkExpression(AAFRESULT_SUCCESS == pSequence->PrependComponent(pComponent), AAFRESULT_TEST_FAILED);
+	  pComponent->Release();
+	  pComponent = NULL;
+
+	  pSequence->Release();
+	  pSequence = 0;
+
+	  return hr;
+}
 
  		
 HRESULT TestComponents(CAAFBuiltinDefs *defs, 
@@ -544,6 +574,7 @@ static HRESULT CreateAAFFile(
 	  checkResult(pMob->SetMobID(TEST_MobID));
 	  checkResult(pMob->SetName(L"AAFSequenceTest"));
 
+	  TestDefinitions(&defs);
 	  TestEvents(&defs);
 	  TestComponents(&defs,pDictionary, pMob);
 	  
