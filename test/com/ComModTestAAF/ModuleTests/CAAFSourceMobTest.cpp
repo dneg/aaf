@@ -58,7 +58,11 @@ inline void checkExpression(bool expression, HRESULT r)
     throw r;
 }
 
-
+const int numberOfSlots = 2;
+aafFrameOffset_t storedTimeCode = 0;
+aafFrameOffset_t storedEdgeCode = 0;
+const aafInt32 edgeSlotID = 33;
+const aafInt32 timeCodeSlotID = 35;
 
 static HRESULT CreateAAFFile(
     aafWChar * pFileName,
@@ -109,15 +113,52 @@ static HRESULT CreateAAFFile(
 	  checkResult(pMob->SetName(L"SourceMOBTest"));
 	  
 	  // Add some slots
-	  for(test = 0; test < 2; test++)
+	  for(test = 0; test < numberOfSlots; test++)
 	  {
 		  checkResult(pSourceMob->AddNilReference (test+1, 0, defs.ddkAAFSound(), audioRate));
 	  }
 
-	  // Test AppendTimecodeSlot()
+	  // Append an Edgcode slot:
+	  aafInt32 slotID = edgeSlotID;
+	  aafRational_t editRate;
+	  editRate.numerator = 1; editRate.denominator = 1;
+	  aafFilmType_t filmType = kAAFFt35MM;
+	  aafEdgeType_t edgeType = kAAFEtEdgenum4;
+	  aafFrameOffset_t startEC = 34;
+	  aafFrameLength_t length = 44;
+	  aafEdgecodeHeader_t edgeCodeHeader;
+	
+	  //Add new edgecode slot
+	  checkResult(pSourceMob->AppendEdgecodeSlot(editRate,
+		  slotID,
+		  startEC,
+		  length,
+		  filmType,
+		  edgeType,
+		  edgeCodeHeader));
+	  startEC += 1;
+	  storedEdgeCode = startEC;
+	  //Modify existing edgecode slot
+	  checkResult(pSourceMob->AppendEdgecodeSlot(editRate,
+		  slotID,
+		  startEC,
+		  length,
+		  filmType,
+		  edgeType,
+		  edgeCodeHeader));
+
+	  //Append time code slot:
+	  slotID = timeCodeSlotID;
 	  aafRational_t videoRate = { 30000, 1001 };
-	  aafTimecode_t timeCode = { 108000, kAAFTcNonDrop, 30 };
-	  checkResult(pSourceMob->AppendTimecodeSlot(videoRate, 3, timeCode, 60*60*30));
+	  aafTimecode_t               tapeTC = { 108000, kAAFTcNonDrop, 30};
+	  #define TAPE_LENGTH     1L * 60L *60L * 30L
+
+	  //Add timecode slot
+	  checkResult(pSourceMob->AppendTimecodeSlot(videoRate, slotID, tapeTC, TAPE_LENGTH));
+	  tapeTC.startFrame += 1;
+	  storedTimeCode = tapeTC.startFrame;
+	  //Modify existing timecode slot
+	  checkResult(pSourceMob->AppendTimecodeSlot(videoRate, slotID, tapeTC, TAPE_LENGTH));
 
 	  // Create a concrete subclass of EssenceDescriptor
  	  checkResult(defs.cdAIFCDescriptor()->
@@ -168,6 +209,13 @@ static HRESULT CreateAAFFile(
 	return hr;
 }
 
+#include "AAFSmartPointer.h"
+typedef IAAFSmartPointer<IAAFSegment>             IAAFSegmentSP;
+typedef IAAFSmartPointer<IAAFSequence>        IAAFSequenceSP;
+typedef IAAFSmartPointer<IAAFTimecode> IAAFTimecodeSP;
+typedef IAAFSmartPointer<IAAFEdgecode> IAAFEdgecodeSP;
+typedef IAAFSmartPointer<IAAFComponent> IAAFComponentSP;
+
 static HRESULT ReadAAFFile(aafWChar * pFileName)
 {
 	// IAAFSession *				pSession = NULL;
@@ -197,6 +245,10 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 		checkExpression(1 == numMobs, AAFRESULT_TEST_FAILED);
 
 
+		
+
+
+
     checkResult(pHeader->GetMobs (NULL, &mobIter));
 	  for(n = 0; n < numMobs; n++)
 	  {
@@ -210,7 +262,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 		  checkResult(aMob->GetMobID (&mobID));
 
 		  checkResult(aMob->CountSlots (&numSlots));
-		  if (3 != numSlots)
+		  if (numberOfSlots+2 != numSlots)
 			  return AAFRESULT_TEST_FAILED;
 		  if(numSlots != 0)
 		  {
@@ -221,6 +273,34 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 				  checkResult(slotIter->NextOne (&slot));
 				  checkResult(slot->GetSlotID(&trackID));
 
+				if(trackID == timeCodeSlotID || trackID == edgeSlotID)
+				{
+					IAAFSegmentSP pSegment;
+					IAAFSequenceSP pSequence;
+					checkResult(slot->GetSegment(&pSegment));
+					checkResult(pSegment->QueryInterface(IID_IAAFSequence, (void **) &pSequence));
+
+					if(trackID == timeCodeSlotID)
+					{
+						IAAFTimecodeSP timeCode;
+						IAAFComponentSP compTimeCodeSP;
+						checkResult(pSequence->GetComponentAt(0, &compTimeCodeSP));
+						checkResult(compTimeCodeSP->QueryInterface(IID_IAAFTimecode, (void**)&timeCode));
+						aafTimecode_t tc;
+						checkResult(timeCode->GetTimecode(&tc));
+						checkExpression(tc.startFrame == storedTimeCode,AAFRESULT_TEST_FAILED);
+					}
+					else if (trackID == edgeSlotID)
+					{
+						IAAFEdgecodeSP edgeCode;
+						IAAFComponentSP compEdgeCodeSP;
+						checkResult(pSequence->GetComponentAt(0, &compEdgeCodeSP));
+						checkResult(compEdgeCodeSP->QueryInterface(IID_IAAFEdgecode, (void**)&edgeCode));
+						aafEdgecode_t  edgecode; 
+						checkResult(edgeCode->GetEdgecode(&edgecode));
+						checkExpression(edgecode.startFrame == storedEdgeCode,AAFRESULT_TEST_FAILED);
+					}
+				}
 				  slot->Release();
 				  slot = NULL;
 			  }
@@ -323,7 +403,6 @@ extern "C" HRESULT CAAFSourceMob_test(
 	{
 		cout << "The following AAFSourceMob methods have not been implemented:" << endl; 
 		cout << "     Initialize" << endl; 
-		cout << "     AppendEdgecodeSlot" << endl; 
 		cout << "     AppendPhysSourceRef - needs unit test" << endl; 
 		cout << "     SpecifyValidCodeRange" << endl; 
 		cout << "     NewPhysSourceRef" << endl; 

@@ -247,20 +247,27 @@ AAFRESULT STDMETHODCALLTYPE
 //****************
 // AddTimecodeClip()
 //
+#include "ImplAAFSmartPointer.h"
+typedef ImplAAFSmartPointer<ImplAAFTimecode>    ImplAAFTimecodeSP;
+typedef ImplAAFSmartPointer<ImplAAFSequence> ImplAAFSequenceSP;
+typedef ImplAAFSmartPointer<ImplAAFTimelineMobSlot> ImplAAFTimelineMobSlotSP;
+typedef ImplAAFSmartPointer<ImplAAFDictionary> ImplAAFDictionarySP;
+
 AAFRESULT STDMETHODCALLTYPE
    ImplAAFSourceMob::AppendTimecodeSlot (aafRational_t editrate,
                            aafInt32 slotID,
 						   aafTimecode_t startTC,
                            aafFrameLength_t length64)
 {
-	ImplAAFTimecode *tccp = NULL;
-	ImplAAFSequence	*aSequ = NULL;
+	
+	ImplAAFTimecodeSP tccp;
+	ImplAAFSequenceSP aSequ;
 	aafFrameLength_t maxLength;
 	aafPosition_t	zeroPos;
 	aafLength_t		length;
-	ImplAAFTimelineMobSlot *	newSlot = NULL, *mobSlot = NULL;
+	ImplAAFTimelineMobSlotSP	newSlot, mobSlot;
 	aafBool			fullLength = kAAFFalse;
-	ImplAAFDictionary *pDictionary = NULL;
+	ImplAAFDictionarySP pDictionary;
 
 	//!!!Validate tape mobs only, return AAFRESULT_TAPE_DESC_ONLY
 	if(length64 == FULL_LENGTH)
@@ -279,28 +286,25 @@ AAFRESULT STDMETHODCALLTYPE
 		CHECK(GetDictionary(&pDictionary));
 		CHECK(pDictionary->GetBuiltinDefs()->cdTimecode()->
 			  CreateInstance ((ImplAAFObject**) &tccp));
+		tccp->Initialize(length, &startTC);	
 
-		tccp->Initialize(length, &startTC);		 
- 		if (FindSlotBySlotID(slotID, (ImplAAFMobSlot **)&mobSlot)
-			== AAFRESULT_SUCCESS)
-		{
 			CHECK(pDictionary->GetBuiltinDefs()->cdSequence()->
 				  CreateInstance((ImplAAFObject**) &aSequ));
 			CHECK(aSequ->Initialize(pDictionary->
 									GetBuiltinDefs()->
 									ddTimecode()));
+
+			 
 			CHECK(aSequ->AppendComponent(tccp));
+
+ 		if (FindSlotBySlotID(slotID, (ImplAAFMobSlot **)&mobSlot)
+			== AAFRESULT_SUCCESS)
+		{
 			CHECK(mobSlot->SetSegment(aSequ));
 
 		} /* FindTimecodeSlot */
 		else
 		{
-			CHECK(pDictionary->GetBuiltinDefs()->cdSequence()->
-				  CreateInstance ((ImplAAFObject**) &aSequ));
-			CHECK(aSequ->Initialize(pDictionary->
-									GetBuiltinDefs()->
-									ddTimecode()));
-			CHECK(aSequ->AppendComponent(tccp));
 			CHECK(AppendNewTimelineSlot(editrate, aSequ, slotID,
 										L"Timecode", zeroPos, &newSlot));
 		}
@@ -316,33 +320,11 @@ AAFRESULT STDMETHODCALLTYPE
 				CHECK(aSequ->SetLength(length) );
 			}
 		}
-		if(newSlot != NULL)
-		  newSlot->ReleaseReference();
-		newSlot = 0;
-		if(aSequ != NULL)
-		  aSequ->ReleaseReference();
-		aSequ = 0;
-		if(tccp != NULL)
-		  tccp->ReleaseReference();
-		tccp = 0;
 
-		pDictionary->ReleaseReference();
-		pDictionary = NULL;
 	} /* XPROTECT */
 	XEXCEPT
 	{
-		if(newSlot != NULL)
-		  newSlot->ReleaseReference();
-		newSlot = 0;
-		if(aSequ != NULL)
-		  aSequ->ReleaseReference();
-		aSequ = 0;
-		if(tccp != NULL)
-		  tccp->ReleaseReference();
-		tccp = 0;
-		if(pDictionary != NULL)
-		  pDictionary->ReleaseReference();
-		pDictionary = 0;
+		
 	}
 	XEND;
 									
@@ -354,6 +336,8 @@ AAFRESULT STDMETHODCALLTYPE
 //****************
 // AddEdgecodeClip()
 //
+typedef ImplAAFSmartPointer<ImplAAFEdgecode> ImplAAFEdgecodeSP;
+
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFSourceMob::AppendEdgecodeSlot (aafRational_t  editrate,
                            aafInt32  slotID,
@@ -363,14 +347,13 @@ AAFRESULT STDMETHODCALLTYPE
                            aafEdgeType_t  codeFormat,
                            aafEdgecodeHeader_t  header)
 {
-	ImplAAFFiller *     filler1= NULL, *filler2 = NULL;
-	ImplAAFSequence *ecSequence;
-	ImplAAFEdgecode *edgecodeClip;
+	ImplAAFSequenceSP ecSequence;
+	ImplAAFEdgecodeSP edgecodeClip;
 	aafPosition_t	startPos, zeroPos;
 	aafLength_t		length, zeroLen;
-	ImplAAFTimelineMobSlot *	newSlot;
+	ImplAAFTimelineMobSlotSP newSlot, mobSlot;
 	aafEdgecode_t	edge;
-	ImplAAFDictionary *pDictionary = NULL;
+	ImplAAFDictionarySP pDictionary;
 
 	// Validate film mobs only, return AAFRESULT_FILM_DESC_ONLY
 	zeroPos = 0;
@@ -378,16 +361,6 @@ AAFRESULT STDMETHODCALLTYPE
 	XPROTECT()
 	{
 		CHECK(GetDictionary(&pDictionary));
-		CHECK(pDictionary->GetBuiltinDefs()->cdFiller()->
-			  CreateInstance((ImplAAFObject**) &filler1));
-		CHECK(filler1->Initialize(pDictionary->
-								  GetBuiltinDefs()->
-								  ddEdgecode(), zeroLen));	
-		CHECK(pDictionary->GetBuiltinDefs()->cdFiller()->
-			  CreateInstance ((ImplAAFObject**) &filler2));
-		CHECK(filler2->Initialize(pDictionary->
-								  GetBuiltinDefs()->
-								  ddEdgecode(), zeroLen));	
 
 		CHECK(pDictionary->GetBuiltinDefs()->cdSequence()->
 			  CreateInstance ((ImplAAFObject**) &ecSequence));
@@ -406,32 +379,25 @@ AAFRESULT STDMETHODCALLTYPE
 			  CreateInstance ((ImplAAFObject**) &edgecodeClip));
 		CHECK(edgecodeClip->Initialize(length, edge));	
 		
-		CHECK(ecSequence->AppendComponent(filler1));
+		
 		CHECK(ecSequence->AppendComponent(edgecodeClip));
-		CHECK(ecSequence->AppendComponent(filler2));
-		CHECK(AppendNewTimelineSlot(editrate, ecSequence, slotID,
-									NULL, zeroPos, &newSlot));
+		
 
-		if(filler1 != NULL)
-		  filler1->ReleaseReference();
-		filler1 = 0;
-		if(filler2 != NULL)
-		  filler2->ReleaseReference();
-		filler2 = 0;
-		pDictionary->ReleaseReference();
-		pDictionary = NULL;
+		if (FindSlotBySlotID(slotID, (ImplAAFMobSlot **)&mobSlot)
+			== AAFRESULT_SUCCESS)
+		{
+			CHECK(mobSlot->SetSegment(ecSequence));
+		}
+		else
+		{
+		CHECK(AppendNewTimelineSlot(editrate, ecSequence, slotID,
+									L"Edgecode", zeroPos, &newSlot));
+		}
+
 	} /* XPROTECT */
 	XEXCEPT
 	{
-		if(filler1 != NULL)
-		  filler1->ReleaseReference();
-		filler1 = 0;
-		if(filler2 != NULL)
-		  filler2->ReleaseReference();
-		filler2 = 0;
-		if(pDictionary != NULL)
-		  pDictionary->ReleaseReference();
-		pDictionary = 0;
+		
 	}
 	XEND;
 
