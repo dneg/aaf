@@ -154,7 +154,6 @@ HRESULT TestDefinitions(CAAFBuiltinDefs *defs)
 	HRESULT			hr = S_OK;
 
 	IAAFSequence*	pSequence = NULL; 
-	IAAFComponent *pCompLengthCheck = NULL; 
 	IAAFComponent*	pComponent = NULL;
 
 	// Add mob slot w/ sequence
@@ -167,7 +166,7 @@ HRESULT TestDefinitions(CAAFBuiltinDefs *defs)
 		This test confirms the erroneus behavior that inserting components into an uninitialized sequence succeeds.
 		The insert will succeed and leave the sequence uninitialized.
 		This behaviour is wrong but legacy code probably depends on it.
-		The correct behaviour would be to return AAFRESULT_NOT_INITIALIZED on any attempt to maninpulat the sequence before it is initialized.
+		The correct behaviour would be to return AAFRESULT_NOT_INITIALIZED on any attempt to manipulate the sequence before it is initialized.
 	  */
 	  //Attempt to insert a component before the sequence datadef is set
 	  InstantiateComponent(defs, COMPONENT_TEST_LENGTH, pComponent);

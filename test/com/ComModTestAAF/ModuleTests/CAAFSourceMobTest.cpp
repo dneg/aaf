@@ -61,8 +61,8 @@ inline void checkExpression(bool expression, HRESULT r)
 const int numberOfSlots = 2;
 aafFrameOffset_t storedTimeCode = 0;
 aafFrameOffset_t storedEdgeCode = 0;
-const aafInt32 edgeSlotID = 33;
-const aafInt32 timeCodeSlotID = 35;
+const aafSlotID_t edgeSlotID = 33;
+const aafSlotID_t timeCodeSlotID = 35;
 
 static HRESULT CreateAAFFile(
     aafWChar * pFileName,
@@ -119,7 +119,7 @@ static HRESULT CreateAAFFile(
 	  }
 
 	  // Append an Edgcode slot:
-	  aafInt32 slotID = edgeSlotID;
+	  aafSlotID_t slotID = edgeSlotID;
 	  aafRational_t editRate;
 	  editRate.numerator = 1; editRate.denominator = 1;
 	  aafFilmType_t filmType = kAAFFt35MM;

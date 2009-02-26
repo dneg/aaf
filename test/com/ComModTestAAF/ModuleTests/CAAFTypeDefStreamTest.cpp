@@ -818,8 +818,6 @@ static void Test_NearKAGBoundaryWrite(
   CAAFBuiltinDefs & defs,
   IAAFPropertyValue *pStreamPropertyValue)
 {
-  AAFRESULT hr = AAFRESULT_SUCCESS;
-
   IAAFPlainStreamDataSP pTypeDefStream;
   Test_GetTypeDefStream(pStreamPropertyValue, &pTypeDefStream);
 
