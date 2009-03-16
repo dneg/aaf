@@ -61,8 +61,18 @@ inline void checkExpression(bool expression, HRESULT r)
 const int numberOfSlots = 2;
 aafFrameOffset_t storedTimeCode = 0;
 aafFrameOffset_t storedEdgeCode = 0;
-const aafSlotID_t edgeSlotID = 33;
-const aafSlotID_t timeCodeSlotID = 35;
+const aafInt32 edgeSlotID = 33;
+aafInt32 editRateNumerator = 1; 
+aafInt32 editRateDenominator = 1;
+aafFilmType_t filmType = kAAFFt35MM;
+aafEdgeType_t edgeType = kAAFEtEdgenum4;
+aafFrameOffset_t startEC = 34;
+aafFrameLength_t length = 44;
+aafEdgecodeHeader_t edgeCodeHeader = "AAA";
+const aafInt32 timeCodeSlotID = 35;
+aafRational_t videoRate = { 30000, 1001 };
+aafTimecode_t tapeTC = { 108000, kAAFTcNonDrop, 30};
+#define TAPE_LENGTH  1L * 60L *60L * 30L
 
 static HRESULT CreateAAFFile(
     aafWChar * pFileName,
@@ -121,12 +131,8 @@ static HRESULT CreateAAFFile(
 	  // Append an Edgcode slot:
 	  aafSlotID_t slotID = edgeSlotID;
 	  aafRational_t editRate;
-	  editRate.numerator = 1; editRate.denominator = 1;
-	  aafFilmType_t filmType = kAAFFt35MM;
-	  aafEdgeType_t edgeType = kAAFEtEdgenum4;
-	  aafFrameOffset_t startEC = 34;
-	  aafFrameLength_t length = 44;
-	  aafEdgecodeHeader_t edgeCodeHeader;
+	  editRate.numerator = editRateNumerator; 
+	  editRate.denominator = editRateDenominator;
 	
 	  //Add new edgecode slot
 	  checkResult(pSourceMob->AppendEdgecodeSlot(editRate,
@@ -149,10 +155,6 @@ static HRESULT CreateAAFFile(
 
 	  //Append time code slot:
 	  slotID = timeCodeSlotID;
-	  aafRational_t videoRate = { 30000, 1001 };
-	  aafTimecode_t               tapeTC = { 108000, kAAFTcNonDrop, 30};
-	  #define TAPE_LENGTH     1L * 60L *60L * 30L
-
 	  //Add timecode slot
 	  checkResult(pSourceMob->AppendTimecodeSlot(videoRate, slotID, tapeTC, TAPE_LENGTH));
 	  tapeTC.startFrame += 1;
@@ -299,6 +301,9 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 						aafEdgecode_t  edgecode; 
 						checkResult(edgeCode->GetEdgecode(&edgecode));
 						checkExpression(edgecode.startFrame == storedEdgeCode,AAFRESULT_TEST_FAILED);
+						checkExpression(memcmp(edgecode.header, edgeCodeHeader, 3)==0,AAFRESULT_TEST_FAILED);
+						checkExpression(edgecode.filmKind == filmType, AAFRESULT_TEST_FAILED);
+						checkExpression(edgecode.codeFormat == edgeType, AAFRESULT_TEST_FAILED);
 					}
 				}
 				  slot->Release();

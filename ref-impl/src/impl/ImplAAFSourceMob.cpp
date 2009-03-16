@@ -373,7 +373,7 @@ AAFRESULT STDMETHODCALLTYPE
 		edge.startFrame = startPos;
 		edge.filmKind = filmKind;
 		edge.codeFormat = codeFormat;
-		strncpy((char *)&edge.header, (char *)&header, 8);
+		strncpy((char *)edge.header, (char *)header, 8);
 		
 		CHECK(pDictionary->GetBuiltinDefs()->cdEdgecode()->
 			  CreateInstance ((ImplAAFObject**) &edgecodeClip));
