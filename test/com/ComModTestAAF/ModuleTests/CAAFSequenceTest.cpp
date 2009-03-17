@@ -79,6 +79,13 @@ void InstantiateComponent(CAAFBuiltinDefs *defs,
 	checkResult(pComponent->SetLength(length)); 
 }
 
+void InstantiateComponentWithoutLength(CAAFBuiltinDefs *defs, IAAFComponent*& pComponent)
+{
+	checkResult(defs->cdFiller()->CreateInstance(IID_IAAFComponent, 
+		(IUnknown **)&pComponent));
+	checkResult(pComponent->SetDataDef(defs->ddkAAFSound()));
+}
+
 void InstantiateEvent(CAAFBuiltinDefs *defs,
 					  aafPosition_t position,
 					  IAAFComponent*& pEventASpComp)
@@ -210,6 +217,11 @@ HRESULT TestComponents(CAAFBuiltinDefs *defs,
 	  IAAFComponent *pEventASpComp = NULL;
 	  aafPosition_t position;
 	  
+	  InstantiateComponentWithoutLength(defs, pComponent);
+	  //Inserting a component without length should fail:
+	  checkExpression(AAFRESULT_PROP_NOT_PRESENT==pSequence->AppendComponent(pComponent), AAFRESULT_TEST_FAILED);
+	  pComponent->Release();
+	  pComponent = NULL;
 
 	  int i = 0;
 	  // Append two components onto sequence

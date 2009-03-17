@@ -1373,7 +1373,7 @@ AAFRESULT ImplAAFSequence::CheckLengthSemantics( ImplAAFComponent* pComponentNex
 	// If either the new component, or the last component in the sequence, is
 	// a transition, then verify they fully overlap.
 
-	// Length properties are not optional in this case.
+	// Length properties are not optional for components and transitions.
 
 	AAFRESULT status;
 
