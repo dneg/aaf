@@ -43,6 +43,7 @@
 #include "AAFEssenceFormats.h"
 #include "AAFFileKinds.h"
 #include "AAFExtEnum.h"
+#include "AAFOPDefs.h"
 
 // Include the AAF interface declarations.
 #include "AAF.h"
@@ -871,6 +872,7 @@ static HRESULT MakeAAFFile(const char* pFileName)
 
   IAAFFile* pFile = 0;
   IAAFHeader* pHeader = 0;
+  IAAFHeader2* pHeader2 = 0;
   IAAFDictionary* pDictionary = 0;
 
   IAAFSourceMob* pSourceMob = 0;
@@ -883,6 +885,10 @@ static HRESULT MakeAAFFile(const char* pFileName)
   check(pFile->GetHeader(&pHeader));
   check(pHeader->GetDictionary(&pDictionary));
  
+  // Set the operational pattern
+  check(pHeader->QueryInterface(IID_IAAFHeader2, (void **)&pHeader2));
+  check(pHeader2->SetOperationalPattern(kAAFOPDef_EditProtocol));
+
   check(pDictionary->LookupDataDef(kAAFDataDef_Picture, &pPictureDataDef));
 
   check(CreateSourceMob(pFile, pHeader, pDictionary, pPictureDataDef, rate, &pSourceMob));
@@ -903,6 +909,9 @@ cleanup:
 
   if (pDictionary)
     pDictionary->Release();
+
+  if (pHeader2)
+    pHeader2->Release();
 
   if (pHeader)
     pHeader->Release();
@@ -980,6 +989,3 @@ int main(int argumentCount, char* argumentVector[])
 
   return 0;
 }
-
-// djm
-// release
