@@ -61,7 +61,7 @@ inline void checkExpression(bool expression, HRESULT r)
 const int numberOfSlots = 2;
 aafFrameOffset_t storedTimeCode = 0;
 aafFrameOffset_t storedEdgeCode = 0;
-const aafInt32 edgeSlotID = 33;
+const aafSlotID_t edgeSlotID = 33;
 aafInt32 editRateNumerator = 1; 
 aafInt32 editRateDenominator = 1;
 aafFilmType_t filmType = kAAFFt35MM;
@@ -69,7 +69,7 @@ aafEdgeType_t edgeType = kAAFEtEdgenum4;
 aafFrameOffset_t startEC = 34;
 aafFrameLength_t length = 44;
 aafEdgecodeHeader_t edgeCodeHeader = "AAA";
-const aafInt32 timeCodeSlotID = 35;
+const aafSlotID_t timeCodeSlotID = 35;
 aafRational_t videoRate = { 30000, 1001 };
 aafTimecode_t tapeTC = { 108000, kAAFTcNonDrop, 30};
 #define TAPE_LENGTH  1L * 60L *60L * 30L
