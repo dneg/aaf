@@ -1148,6 +1148,7 @@ ImplAAFObject::GetDictionary(ImplAAFDictionary **ppDictionary) const
 
 void ImplAAFObject::pvtSetSoid (const aafUID_t & id)
 {
+#if defined(OM_DEBUG)
   const aafUID_t null_uid = { 0 };
 
   // make sure it hasn't been set already
@@ -1155,6 +1156,7 @@ void ImplAAFObject::pvtSetSoid (const aafUID_t & id)
 
   // make sure new one is valid
   ASSERTU (EqualAUID (&_soid, &null_uid));
+#endif
   _soid = id;
 }
 
@@ -1322,8 +1324,10 @@ OMProperty * ImplAAFObject::InitOMProperty(ImplAAFPropertyDef * pPropertyDef, OM
 //
 const OMClassId& ImplAAFObject::classId(void) const
 {
+#if defined(OM_DEBUG)
   const aafUID_t null_uid = { 0 };
   ASSERTU (! EqualAUID (&_soid, &null_uid));
+#endif
   return *reinterpret_cast<const OMClassId*>(&_soid);
 }
 
