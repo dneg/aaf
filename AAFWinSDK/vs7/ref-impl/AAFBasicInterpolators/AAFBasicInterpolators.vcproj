@@ -196,25 +196,6 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\..\..\ref-impl\src\impl\AAFUtils.cpp">
-			<FileConfiguration
-				Name="Release|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="NDEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;$(NoInherit)"/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32">
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions="_DEBUG;OM_DEBUG;_WIN32;_WINDOWS;UNICODE;_UNICODE;WIN32;$(NoInherit)"/>
-			</FileConfiguration>
-		</File>
-		<File
 			RelativePath="..\..\..\..\ref-impl\plugins\CAAFBasicInterp.cpp">
 			<FileConfiguration
 				Name="Release|Win32">

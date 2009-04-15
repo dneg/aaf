@@ -3978,32 +3978,6 @@
 			>
 		</File>
 		<File
-			RelativePath="..\..\..\..\..\ref-impl\src\impl\AAFUtils.cpp"
-			>
-			<FileConfiguration
-				Name="Release|Win32"
-				>
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="2"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""
-				/>
-			</FileConfiguration>
-			<FileConfiguration
-				Name="Debug|Win32"
-				>
-				<Tool
-					Name="VCCLCompilerTool"
-					Optimization="0"
-					AdditionalIncludeDirectories=""
-					PreprocessorDefinitions=""
-					ForcedIncludeFiles=""
-				/>
-			</FileConfiguration>
-		</File>
-		<File
 			RelativePath="..\..\..\..\..\test\com\ComModTestAAF\ComModTestAAF.cpp"
 			>
 			<FileConfiguration
