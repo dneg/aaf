@@ -73,6 +73,7 @@ INCLUDES = -I. \
 
 
 CXXFILES = AAFPluginCOM.cpp \
+		AAFPluginUtils.cpp \
 		CAAFEssenceDataStream.cpp \
 		CAAFEssenceFileStream.cpp \
 		CAAFEssenceFileContainer.cpp \
@@ -91,8 +92,7 @@ CXXFILES = AAFPluginCOM.cpp \
 		jpegesdatasrc.cpp
 
 
-SUPOBJS = $(OBJDIR)/AAFPluginUtils$(OBJ) \
-		$(AAFBUILDDIR)/com-api/$(AAFTARGETDIR)/CAAFClassFactory$(OBJ) \
+SUPOBJS = $(AAFBUILDDIR)/com-api/$(AAFTARGETDIR)/CAAFClassFactory$(OBJ) \
 		$(AAFBUILDDIR)/com-api/$(AAFTARGETDIR)/CAAFServer$(OBJ) \
 		$(AAFBUILDDIR)/com-api/$(AAFTARGETDIR)/CAAFUnknown$(OBJ) \
 		$(AAFBUILDDIR)/com-api/$(AAFTARGETDIR)/CAAFInProcServer$(OBJ) \
