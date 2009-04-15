@@ -91,7 +91,7 @@ CXXFILES = AAFPluginCOM.cpp \
 		jpegesdatasrc.cpp
 
 
-SUPOBJS = $(OBJDIR)/AAFUtils$(OBJ) \
+SUPOBJS = $(OBJDIR)/AAFPluginUtils$(OBJ) \
 		$(AAFBUILDDIR)/com-api/$(AAFTARGETDIR)/CAAFClassFactory$(OBJ) \
 		$(AAFBUILDDIR)/com-api/$(AAFTARGETDIR)/CAAFServer$(OBJ) \
 		$(AAFBUILDDIR)/com-api/$(AAFTARGETDIR)/CAAFUnknown$(OBJ) \

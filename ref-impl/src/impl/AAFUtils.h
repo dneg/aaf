@@ -41,11 +41,6 @@ typedef enum
 	kRoundCeiling, kRoundFloor
 } aafRounding_t;
 
-typedef aafInt16	AAFByteOrder;
-const AAFByteOrder INTEL_ORDER		      = 0x4949; // 'II' for Intel
-const AAFByteOrder MOTOROLA_ORDER         = 0x4d4d; // 'MM' for Motorola
-
-AAFByteOrder GetNativeByteOrder(void);
 
 aafBool	EqualAUID(const aafUID_t *uid1, const aafUID_t *uid2);
 aafBool	EqualMobID(aafMobID_constref mobID1, aafMobID_constref mobID2);
@@ -204,14 +199,7 @@ void AAFGetDateTime(aafTimeStamp_t *time);
  *
  ************************************************************************/
 
-void AAFByteSwap16(
-			aafInt16 * wp);	/* IN/OUT -- Byte swap this value */
-			
-void AAFByteSwap32(
-			aafInt32 *lp);	/* IN/OUT -- Byte swap this value */
 
-void AAFByteSwap64(
-			aafInt64 *lp);	/* IN/OUT -- Byte swap this value */
 
 #define PROGRESS_UNKNOWN	-1
 
@@ -225,8 +213,6 @@ aafErr_t AAFConvertEditRate(
 
 double FloatFromRational(
 			aafRational_t	e);		/* IN - Convert this into a double */
-aafRational_t RationalFromFloat(
-			double	f);		/* IN - Convert this number into a rational */
 
 
 // URL utility functions

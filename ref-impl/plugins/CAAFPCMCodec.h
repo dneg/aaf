@@ -28,7 +28,7 @@
 //=---------------------------------------------------------------------=
 
 
-#include "AAFUtils.h"
+#include "AAFPluginUtils.h"
 #include "AAF.h"
 #include "AAFPlugin.h"
 #include "CAAFUnknown.h"

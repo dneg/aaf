@@ -29,13 +29,13 @@
 #include <assert.h>
 #include <string.h>
 #include <stdarg.h>		// for varargs
+#include <stdio.h>		// for sprintf
 
 #include "AAFResult.h"
 
 #include "AAF.h"
 
 #include "aafErr.h"
-#include "AAFUtils.h"
 #include "AAFDataDefs.h"
 #include "AAFDefUIDs.h"
 #include "AAFStoredObjectIDs.h"

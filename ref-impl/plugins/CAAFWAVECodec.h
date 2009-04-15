@@ -28,10 +28,10 @@
 //=---------------------------------------------------------------------=
 
 
-#include "AAFUtils.h"
 #include "AAF.h"
 #include "AAFPlugin.h"
 #include "CAAFUnknown.h"
+#include "AAFPluginUtils.h"
 
 EXTERN_C const CLSID CLSID_AAFWaveCodec;
 

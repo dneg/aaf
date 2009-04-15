@@ -39,7 +39,7 @@
 #include "CAAFJPEGDescriptorHelper.h"
 #endif
 
-#include "AAFUtils.h" // AAFByteOrder
+#include "AAFPluginUtils.h" // AAFByteOrder
 
 #include "jpegesdata.h"
 

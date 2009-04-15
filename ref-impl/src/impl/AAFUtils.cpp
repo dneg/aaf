@@ -61,21 +61,6 @@
 #include "utf8.h"
 
 
-AAFByteOrder GetNativeByteOrder(void)
-{
-  aafInt16 word = 0x1234;
-  aafInt8  byte = *((aafInt8*)&word);
-  AAFByteOrder result;
-
-//  ASSERT("Valid byte order", ((byte == 0x12) || (byte == 0x34)));
-
-  if (byte == 0x12) {
-    result = MOTOROLA_ORDER;
-  } else {
-    result = INTEL_ORDER;
-  }
-  return result;
-}
 
 aafBool	EqualAUID(const aafUID_t *uid1, const aafUID_t *uid2)
 {
@@ -227,86 +212,6 @@ double FloatFromRational(
 }
 
 
-/************************
- * Function: powi		(INTERNAL)
- *
- * 	Return base ^ exponent.
- *
- * Argument Notes:
- * 	<none>
- *
- * ReturnValue:
- *		The result.
- *
- * Possible Errors:
- *		<none>.
- */
-static aafInt32 powi(
-			aafInt32	base,
-			aafInt32	exponent)
-{
-	aafInt32           result = 1;
-	aafInt32           i = exponent;
-
-	if (exponent == 0)
-		return (1);
-	else if (exponent > 0)
-	{
-		while (i--)
-			result *= base;
-		return (result);
-	}
-	else
-	{
-		/* negative exponent not good for integer
-		 * exponentiation
-		 */
-		return (0);
-	}
-}
-
-
-
-/************************
- * Function: RationalFromFloat (INTERNAL)
- *
- * 	Translate a floating point number into the nearest rational
- *		number.  Used when rates must be stored as floats.
- *
- * Argument Notes:
- *		See argument comments and assertions.
- *
- * ReturnValue:
- *		A rational number
- *
- * Possible Errors:
- */
-aafRational_t RationalFromFloat(
-			double	f)		/* IN - Convert this number into a rational */
-{
-	/* chintzy conversion of old code  */
-	aafRational_t   rate;
-	double          rem;
-	aafInt32           i;
-
-	/* special check for NTSC video */
-	if (fabs(f - 29.97) < .01)
-	{
-		rate.numerator = 2997;
-		rate.denominator = 100;
-		return (rate);
-	}
-	/* need to normalize to make compare work */
-	rem = f - floor(f);
-	for (i = 0; (i < 4) && (rem > .001); i++)
-	{
-		f = f * 10;
-		rem = f - floor(f);
-	}
-	rate.numerator = (aafInt32) f;
-	rate.denominator = powi(10L, i);
-	return (rate);
-}
 
 
 
@@ -691,96 +596,6 @@ aafErr_t PvtTimecodeToOffset(
 	*result = val;
 
 	return(AAFRESULT_SUCCESS);
-}
-
-/************************
- * Function: AAFByteSwap16		(INTERNAL)
- *
- * 	Byte swap a short value to convert between big-endian and
- *		little-endian formats.
- *
- * Argument Notes:
- *		See argument comments.
- *
- * ReturnValue:
- *		Modifies the value in place
- *
- * Possible Errors:
- *		none
- */
-void AAFByteSwap16(
-			aafInt16 * wp)	/* IN/OUT -- Byte swap this value */
-{
-	register unsigned char *cp = (unsigned char *) wp;
-	int             t;
-
-	t = cp[1];
-	cp[1] = cp[0];
-	cp[0] = t;
-}
-
-/************************
- * Function: AAFByteSwap32		(INTERNAL)
- *
- * 	Byte swap a 32-bit int value to convert between big-endian and
- *		little-endian formats.
- *
- * Argument Notes:
- *		See argument comments.
- *
- * ReturnValue:
- *		Modifies the value in place
- *
- * Possible Errors:
- *		none
- */
-void AAFByteSwap32(
-			aafInt32 *lp)	/* IN/OUT -- Byte swap this value */
-{
-	register unsigned char *cp = (unsigned char *) lp;
-	int             t;
-
-	t = cp[3];
-	cp[3] = cp[0];
-	cp[0] = t;
-	t = cp[2];
-	cp[2] = cp[1];
-	cp[1] = t;
-}
-
-/************************
- * Function: AAFByteSwap64		(INTERNAL)
- *
- * 	Byte swap a 32-bit int value to convert between big-endian and
- *		little-endian formats.
- *
- * Argument Notes:
- *		See argument comments.
- *
- * ReturnValue:
- *		Modifies the value in place
- *
- * Possible Errors:
- *		none
- */
-void AAFByteSwap64(
-			aafInt64 *lp)	/* IN/OUT -- Byte swap this value */
-{
-	register unsigned char *cp = (unsigned char *) lp;
-	int             t;
-
-	t = cp[7];
-	cp[7] = cp[0];
-	cp[0] = t;
-	t = cp[6];
-	cp[6] = cp[1];
-	cp[1] = t;
-	t = cp[5];
-	cp[5] = cp[2];
-	cp[2] = t;
-	t = cp[4];
-	cp[4] = cp[3];
-	cp[3] = t;
 }
 
 /*

@@ -34,7 +34,7 @@
 // Include our base class for support of IUnknown methods.
 #include "CAAFUnknown.h"
 
-#include "AAFUtils.h" // AAFByteOrder
+#include "AAFPluginUtils.h" // AAFByteOrder
 
 #ifndef __CAAFCDCIDescriptorHelper_h__
 #include "CAAFCDCIDescriptorHelper.h"

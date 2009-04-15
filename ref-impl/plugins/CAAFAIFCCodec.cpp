@@ -30,7 +30,6 @@
 #include "AAF.h"
 
 #include "aafErr.h"
-#include "AAFUtils.h"
 #include "AAFDataDefs.h"
 #include "AAFDefUIDs.h"
 #include "AAFStoredObjectIDs.h"
