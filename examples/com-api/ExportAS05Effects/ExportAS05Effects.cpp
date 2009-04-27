@@ -123,6 +123,8 @@ static HRESULT CreateSourceMob(IAAFFile* pFile, IAAFHeader* pHeader, IAAFDiction
   IAAFTimelineMobSlot* pTcTimelineMobSlot = 0;
   IAAFMobSlot* pTcMobSlot = 0;
   IAAFTimecode* pTimecode = 0;
+  IAAFDataDef* pTimecodeDataDef = 0;
+  IAAFComponent* pTcComponent = 0;
   IAAFSegment* pTcSegment = 0;
 
   aafSlotID_t sourceSlotID = 1;
@@ -186,6 +188,11 @@ static HRESULT CreateSourceMob(IAAFFile* pFile, IAAFHeader* pHeader, IAAFDiction
   tc.fps = 25;
   check(pTimecode->Initialize(length, &tc));
 
+  check(pDictionary->LookupDataDef(kAAFDataDef_Timecode, &pTimecodeDataDef));
+
+  check(pTimecode->QueryInterface(IID_IAAFComponent, (void **)&pTcComponent));
+  check(pTcComponent->SetDataDef(pTimecodeDataDef)); // force to non-legacy timecode data def
+
   check(pTimecode->QueryInterface(IID_IAAFSegment, (void **)&pTcSegment));
 
   check(pTcTimelineMobSlot->QueryInterface(IID_IAAFMobSlot, (void **)&pTcMobSlot));
@@ -201,6 +208,12 @@ cleanup:
 
   if (pTcSegment)
     pTcSegment->Release();
+
+  if (pTcComponent)
+    pTcComponent->Release();
+
+  if (pTimecodeDataDef)
+    pTimecodeDataDef->Release();
 
   if (pTimecode)
     pTimecode->Release();
