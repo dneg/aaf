@@ -1238,7 +1238,7 @@ BEGIN {
 	  # set parentTypeName for use by members
 	  parentTypeName = typeName;
 
-    } else if( tolower(CC["r_nest"]) == "child" || tolower(CC["r_nest"]) == "shoot") { # all "member"s of a type are child elements
+    } else if( tolower(CC["r_nest"]) == "child" || tolower(CC["r_nest"]) == "link") { # all "member"s of a type are child elements
 
       # use alias
       memberName = getAlias( ALIAS, APP, APPVER, CC["g_app"], CC[SYM] );
@@ -1755,13 +1755,16 @@ function referenceTypeName( kind, qualif )
 
 function getAlias( alias, app, appver, appsource, appdefault )
 {
-	# currently doesn't check app
-	nAlias = split( appsource, appfields, "~" );
+	# split into different apps
+	nApp = split( appsource, apps, " " );
+
+	# currently doesn't check app, just uses the first one
+	nAlias = split( apps[1], appfields, "~" );
 
 	if( nAlias < 2 ) ret = "" ; # no aliases are given
 	else
 	{
-		# merely return the last alias on the line
+		# merely return the alias for the first app on the line
 		ret = appfields[ nAlias ] ;
 	}
 	
