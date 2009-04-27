@@ -88,7 +88,7 @@ static HRESULT CreateAAFFile(const char* pFileName, IAAFFile** ppFile)
   v.major = 1;
   v.minor = 0;
   v.tertiary = 0;
-  v.patchLevel = 0;
+  v.patchLevel = 1;
   v.type = kAAFVersionUnknown;
 
   aafProductIdentification_t  ProductInfo;
@@ -108,6 +108,71 @@ cleanup:
   return moduleErrorTmp;
 }
 
+static HRESULT CreateTimecodeSlot(IAAFDictionary* pDictionary, IAAFMob* pMob,
+                                  aafRational_t rate, aafSlotID_t slotID, aafLength_t length)
+{
+  IAAFTimelineMobSlot* pTimelineMobSlot = 0;
+  IAAFMobSlot* pMobSlot = 0;
+  IAAFTimecode* pTimecode = 0;
+  IAAFDataDef* pTimecodeDataDef = 0;
+  IAAFComponent* pComponent = 0;
+  IAAFSegment* pSegment = 0;
+
+  // Create timecode slot
+  check(pDictionary->CreateInstance(AUID_AAFTimelineMobSlot, IID_IAAFTimelineMobSlot, (IUnknown **)&pTimelineMobSlot));
+  check(pTimelineMobSlot->Initialize());
+  check(pTimelineMobSlot->SetEditRate(rate));
+  check(pTimelineMobSlot->SetOrigin(0));
+
+  check(pDictionary->CreateInstance(AUID_AAFTimecode, IID_IAAFTimecode, (IUnknown **)&pTimecode));
+
+  aafTimecode_t tc;
+  tc.startFrame = 0;
+  tc.drop = 0;
+  tc.fps = 25;
+  check(pTimecode->Initialize(length, &tc));
+
+  check(pDictionary->LookupDataDef(kAAFDataDef_Timecode, &pTimecodeDataDef));
+
+  check(pTimecode->QueryInterface(IID_IAAFComponent, (void **)&pComponent));
+  check(pComponent->SetDataDef(pTimecodeDataDef)); // force to non-legacy timecode data def
+
+  check(pTimecode->QueryInterface(IID_IAAFSegment, (void **)&pSegment));
+
+  aafUInt32 physicalNum = 1; // count up from 1 for each slot type
+
+  check(pTimelineMobSlot->QueryInterface(IID_IAAFMobSlot, (void **)&pMobSlot));
+  check(pMobSlot->SetSegment(pSegment));
+  check(pMobSlot->SetPhysicalNum(physicalNum));
+  check(pMobSlot->SetName(L"Timecode"));
+  check(pMobSlot->SetSlotID(slotID));
+
+  check(pMob->AppendSlot(pMobSlot));
+
+cleanup:
+  // Cleanup and return
+
+  if (pSegment)
+    pSegment->Release();
+
+  if (pComponent)
+    pComponent->Release();
+
+  if (pTimecodeDataDef)
+    pTimecodeDataDef->Release();
+
+  if (pTimecode)
+    pTimecode->Release();
+
+  if (pMobSlot)
+    pMobSlot->Release();
+
+  if (pTimelineMobSlot)
+    pTimelineMobSlot->Release();
+
+  return moduleErrorTmp;
+}
+
 static HRESULT CreateSourceMob(IAAFFile* pFile, IAAFHeader* pHeader, IAAFDictionary* pDictionary,
                                IAAFDataDef* pDataDef, aafRational_t rate, IAAFSourceMob** ppSourceMob)
 {
@@ -120,13 +185,6 @@ static HRESULT CreateSourceMob(IAAFFile* pFile, IAAFHeader* pHeader, IAAFDiction
   IAAFSegment* pSegment = 0;
   IAAFMobSlot* pMobSlot = 0;
 
-  IAAFTimelineMobSlot* pTcTimelineMobSlot = 0;
-  IAAFMobSlot* pTcMobSlot = 0;
-  IAAFTimecode* pTimecode = 0;
-  IAAFDataDef* pTimecodeDataDef = 0;
-  IAAFComponent* pTcComponent = 0;
-  IAAFSegment* pTcSegment = 0;
-
   aafSlotID_t sourceSlotID = 1;
   aafUInt32 physicalNum = 1; // count up from 1 for each slot type
 
@@ -136,7 +194,6 @@ static HRESULT CreateSourceMob(IAAFFile* pFile, IAAFHeader* pHeader, IAAFDiction
   memset(&srcRef, 0, sizeof(srcRef));
 
   aafSlotID_t timecodeSlotID = 2;
-  aafUInt32 timecodePhysicalNum = 1; // count up from 1 for each slot type
 
   // Source mob
   check(pDictionary->CreateInstance(AUID_AAFSourceMob, IID_IAAFSourceMob, (IUnknown **)ppSourceMob));
@@ -175,54 +232,10 @@ static HRESULT CreateSourceMob(IAAFFile* pFile, IAAFHeader* pHeader, IAAFDiction
   check(pMobSource->AppendSlot(pMobSlot));
 
   // Create timecode slot
-  check(pDictionary->CreateInstance(AUID_AAFTimelineMobSlot, IID_IAAFTimelineMobSlot, (IUnknown **)&pTcTimelineMobSlot));
-  check(pTcTimelineMobSlot->Initialize());
-  check(pTcTimelineMobSlot->SetEditRate(rate));
-  check(pTcTimelineMobSlot->SetOrigin(0));
-
-  check(pDictionary->CreateInstance(AUID_AAFTimecode, IID_IAAFTimecode, (IUnknown **)&pTimecode));
-
-  aafTimecode_t tc;
-  tc.startFrame = 0;
-  tc.drop = 0;
-  tc.fps = 25;
-  check(pTimecode->Initialize(length, &tc));
-
-  check(pDictionary->LookupDataDef(kAAFDataDef_Timecode, &pTimecodeDataDef));
-
-  check(pTimecode->QueryInterface(IID_IAAFComponent, (void **)&pTcComponent));
-  check(pTcComponent->SetDataDef(pTimecodeDataDef)); // force to non-legacy timecode data def
-
-  check(pTimecode->QueryInterface(IID_IAAFSegment, (void **)&pTcSegment));
-
-  check(pTcTimelineMobSlot->QueryInterface(IID_IAAFMobSlot, (void **)&pTcMobSlot));
-  check(pTcMobSlot->SetSegment(pTcSegment));
-  check(pTcMobSlot->SetPhysicalNum(timecodePhysicalNum));
-  check(pTcMobSlot->SetName(L"Timecode"));
-  check(pTcMobSlot->SetSlotID(timecodeSlotID));
-
-  check(pMobSource->AppendSlot(pTcMobSlot));
+  CreateTimecodeSlot(pDictionary, pMobSource, rate, timecodeSlotID, length);
 
 cleanup:
   // Cleanup and return
-
-  if (pTcSegment)
-    pTcSegment->Release();
-
-  if (pTcComponent)
-    pTcComponent->Release();
-
-  if (pTimecodeDataDef)
-    pTimecodeDataDef->Release();
-
-  if (pTimecode)
-    pTimecode->Release();
-
-  if (pTcMobSlot)
-    pTcMobSlot->Release();
-
-  if (pTcTimelineMobSlot)
-    pTcTimelineMobSlot->Release();
 
   if (pMobSlot)
     pMobSlot->Release();
@@ -824,9 +837,11 @@ static HRESULT CreateCompositionMob(IAAFFile* pFile, IAAFHeader* pHeader, IAAFDi
   IAAFSegment* pSegment = 0;
   IAAFTimelineMobSlot* pTimelineMobSlot = 0;
   IAAFMobSlot* pMobSlot = 0;
+  IAAFComponent* pComponent = 0;
 
   aafSlotID_t compositionSlotID = 1;
   aafSlotID_t masterSlotID = 1;
+  aafSlotID_t timecodeSlotID = 2;
   aafUInt32 physicalNum = 1; // count up from 1 for each slot type
   
   // Composition mob
@@ -852,8 +867,19 @@ static HRESULT CreateCompositionMob(IAAFFile* pFile, IAAFHeader* pHeader, IAAFDi
 
   check(CreateOperations(pFile, pHeader, pDictionary, pDataDef, pMasterMob, masterSlotID, pSequence));
 
+  // Create timecode slot
+  check(pSequence->QueryInterface(IID_IAAFComponent, (void **)&pComponent));
+
+  aafLength_t length = 0;
+  check(pComponent->GetLength(&length));
+
+  CreateTimecodeSlot(pDictionary, pMobComp, rate, timecodeSlotID, length);
+
 cleanup:
   // Cleanup and return
+
+  if (pComponent)
+    pComponent->Release();
 
   if (pMobSlot)
     pMobSlot->Release();
