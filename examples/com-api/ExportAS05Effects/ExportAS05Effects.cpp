@@ -117,6 +117,7 @@ static HRESULT CreateTimecodeSlot(IAAFDictionary* pDictionary, IAAFMob* pMob,
   IAAFDataDef* pTimecodeDataDef = 0;
   IAAFComponent* pComponent = 0;
   IAAFSegment* pSegment = 0;
+  aafUInt32 physicalNum = 1; // count up from 1 for each slot type
 
   // Create timecode slot
   check(pDictionary->CreateInstance(AUID_AAFTimelineMobSlot, IID_IAAFTimelineMobSlot, (IUnknown **)&pTimelineMobSlot));
@@ -138,8 +139,6 @@ static HRESULT CreateTimecodeSlot(IAAFDictionary* pDictionary, IAAFMob* pMob,
   check(pComponent->SetDataDef(pTimecodeDataDef)); // force to non-legacy timecode data def
 
   check(pTimecode->QueryInterface(IID_IAAFSegment, (void **)&pSegment));
-
-  aafUInt32 physicalNum = 1; // count up from 1 for each slot type
 
   check(pTimelineMobSlot->QueryInterface(IID_IAAFMobSlot, (void **)&pMobSlot));
   check(pMobSlot->SetSegment(pSegment));
@@ -843,6 +842,7 @@ static HRESULT CreateCompositionMob(IAAFFile* pFile, IAAFHeader* pHeader, IAAFDi
   aafSlotID_t masterSlotID = 1;
   aafSlotID_t timecodeSlotID = 2;
   aafUInt32 physicalNum = 1; // count up from 1 for each slot type
+  aafLength_t length = 0;
   
   // Composition mob
   check(pDictionary->CreateInstance(AUID_AAFCompositionMob, IID_IAAFCompositionMob, (IUnknown **)&pCompositionMob));
@@ -870,7 +870,6 @@ static HRESULT CreateCompositionMob(IAAFFile* pFile, IAAFHeader* pHeader, IAAFDi
   // Create timecode slot
   check(pSequence->QueryInterface(IID_IAAFComponent, (void **)&pComponent));
 
-  aafLength_t length = 0;
   check(pComponent->GetLength(&length));
 
   CreateTimecodeSlot(pDictionary, pMobComp, rate, timecodeSlotID, length);
