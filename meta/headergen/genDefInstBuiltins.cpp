@@ -31,6 +31,7 @@
 #include <iostream>
 #include <assert.h>
 #include <stdlib.h>
+#include <cstring>
 
 #include "headerGenUtils.h"
 
@@ -48,10 +49,10 @@
   };
 
 struct inst_t {
-  char* cls;
-  char* name;
-  char* alias;
-  char* desc;
+  const char* cls;
+  const char* name;
+  const char* alias;
+  const char* desc;
   uid identification;
 };
 
@@ -76,7 +77,7 @@ static void doFile (const char * moduleName, const char * prefix)
 		if( 0==strcmp( instances[i].cls, moduleName ) )
 		{
 			// DataDef_Unknown appears in AAFDataDefs.h but should not be built-in
-			if (instances[i].name != "DataDef_Unknown") {
+			if ( 0!=strcmp( instances[i].name, "DataDef_Unknown") ) {
 				cout << "Init" << moduleName << " (" << endl;
 				cout << "  " << prefix << instances[i].name << ", " << endl;
 				cout << "  L\"" << instances[i].name << "\", " << endl;

@@ -40,8 +40,8 @@ const char* prefix = "kAAFClassID_";
 #define AAF_ALIAS_TABLE_END()   };
 
 struct aliasTag {
-  char* name;
-  char* alias;
+  const char* name;
+  const char* alias;
 } aliases [] =
 #include "AAFMetaDictionary.h"
 
@@ -51,7 +51,7 @@ struct aliasTag {
 #define AAF_TABLE_END()   };
 
 struct classesTag {
-  char* name;
+  const char* name;
   uid identifier;
 } classes [] =
 #include "AAFMetaDictionary.h"

@@ -38,7 +38,7 @@
 #define AAF_TABLE_END()   };
 
 typedef struct {
-  char* name;
+  const char* name;
   int identifier;
 } Property_t;
 

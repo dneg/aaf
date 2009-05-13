@@ -114,7 +114,7 @@ void validateArgs(int argc, char** argv, char*& moduleName, char*& prefix)
 
   moduleName = argv[1];
 
-  if( argc < 3 ) prefix = "";
+  if( argc < 3 ) prefix = const_cast<char*>("");
   else prefix = argv[2];
 }
 

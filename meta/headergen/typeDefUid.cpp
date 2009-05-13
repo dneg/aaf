@@ -115,7 +115,7 @@ const char* prefix = "kAAFTypeID_";
 #define AAF_REFERENCE_TYPE_NAME(type, target) AAF_TYPE(target##type)
 
 struct typesTag {
-  char* name;
+  const char* name;
   uid identifier;
 } types [] = {
 #include "AAFMetaDictionary.h"

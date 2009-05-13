@@ -31,6 +31,7 @@
 #include <iostream>
 #include <assert.h>
 #include <stdlib.h>
+#include <cstring>
 
 #include "headerGenUtils.h"
 
@@ -51,10 +52,10 @@
 // additional properties of subclasses not yet supported
 
 struct inst_t {
-  char* cls;
-  char* name;
-  char* alias;
-  char* desc;
+  const char* cls;
+  const char* name;
+  const char* alias;
+  const char* desc;
   uid identification;
 };
 

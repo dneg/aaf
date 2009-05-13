@@ -39,7 +39,7 @@ const char* prefix = "kAAFPropID_";
 #define AAF_TABLE_END()   };
 
 typedef struct {
-  char* name;
+  const char* name;
   uid identifier;
 } Property_t;
 

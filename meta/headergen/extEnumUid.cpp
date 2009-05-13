@@ -42,7 +42,7 @@ const char* prefix = "kAAF";
 
 struct membersTag {
   int kind;
-  char* name;
+  const char* name;
   uid identifier;
 } members [] =
 #include "AAFMetaDictionary.h"

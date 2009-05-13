@@ -30,6 +30,7 @@
 #include <string>
 using namespace std;
 #include <assert.h>
+#include <cstring>
 
 void comment(const char* s)
 {
