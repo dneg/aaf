@@ -440,20 +440,20 @@ void printUsage(const char *progname)
 	cout << "      LegacyDV_525_60            - DV 25Mbps 4:1:1 with 6 ext legacy props" << endl;
 	cout << "      IEC_DV_625_50              - DV 25Mbps 4:2:0 IEC 61834 RP224 label" << endl;
 	cout << "      IEC_DV_525_60              - DV 25Mbps 4:1:1 IEC 61834 RP224 label" << endl;
-	cout << "      DV_Based_25Mbps_625_50     - DV 25Mbps 4:1:1 SMPTE 314M RP244 label" << endl;
-	cout << "      DV_Based_25Mbps_525_60     - DV 25Mbps 4:1:1 SMPTE 314M RP244 label" << endl;
-	cout << "      DV_Based_50Mbps_625_50     - DV 50Mbps 4:2:2 SMPTE 314M RP244 label" << endl;
-	cout << "      DV_Based_50Mbps_525_60     - DV 50Mbps 4:2:2 SMPTE 314M RP244 label" << endl;
-	cout << "      DVbased_1080x50I_100Mbps   - DV 100Mbps 4:2:2 SMPTE 370M RP244 label" << endl;
-	cout << "      DVbased_1080x5994I_100Mbps - DV 100Mbps 4:2:2 SMPTE 370M RP244 label" << endl;
-	cout << "      DVbased_720x50P_100Mbps    - DV 100Mbps 4:2:2 SMPTE 370M RP244 label" << endl;
-	cout << "      DVbased_720x5994P_100Mbps  - DV 100Mbps 4:2:2 SMPTE 370M RP244 label" << endl;
-	cout << "      SMPTE_D10_625x50I_50Mbps   - IMX 50 4:2:2 SMPTE D-10" << endl;
-	cout << "      SMPTE_D10_525x5994I_50Mbps - IMX 50 4:2:2 SMPTE D-10" << endl;
-	cout << "      SMPTE_D10_625x50I_40Mbps   - IMX 40 4:2:2 SMPTE D-10" << endl;
-	cout << "      SMPTE_D10_525x5994I_40Mbps - IMX 40 4:2:2 SMPTE D-10" << endl;
-	cout << "      SMPTE_D10_625x50I_30Mbps   - IMX 30 4:2:2 SMPTE D-10" << endl;
-	cout << "      SMPTE_D10_525x5994I_30Mbps - IMX 30 4:2:2 SMPTE D-10" << endl;
+	cout << "      DV_Based_25Mbps_625_50     - DV 25Mbps 4:1:1 SMPTE 314M RP224 label" << endl;
+	cout << "      DV_Based_25Mbps_525_60     - DV 25Mbps 4:1:1 SMPTE 314M RP224 label" << endl;
+	cout << "      DV_Based_50Mbps_625_50     - DV 50Mbps 4:2:2 SMPTE 314M RP224 label" << endl;
+	cout << "      DV_Based_50Mbps_525_60     - DV 50Mbps 4:2:2 SMPTE 314M RP224 label" << endl;
+	cout << "      DV_Based_100Mbps_1080x50I   - DV 100Mbps 4:2:2 SMPTE 370M RP224 label" << endl;
+	cout << "      DV_Based_100Mbps_1080x5994I - DV 100Mbps 4:2:2 SMPTE 370M RP224 label" << endl;
+	cout << "      DV_Based_100Mbps_720x50P    - DV 100Mbps 4:2:2 SMPTE 370M RP224 label" << endl;
+	cout << "      DV_Based_100Mbps_720x5994P  - DV 100Mbps 4:2:2 SMPTE 370M RP224 label" << endl;
+	cout << "      SMPTE_D10_50Mbps_625x50I   - IMX 50 4:2:2 SMPTE D-10" << endl;
+	cout << "      SMPTE_D10_50Mbps_525x5994I - IMX 50 4:2:2 SMPTE D-10" << endl;
+	cout << "      SMPTE_D10_40Mbps_625x50I   - IMX 40 4:2:2 SMPTE D-10" << endl;
+	cout << "      SMPTE_D10_40Mbps_525x5994I - IMX 40 4:2:2 SMPTE D-10" << endl;
+	cout << "      SMPTE_D10_30Mbps_625x50I   - IMX 30 4:2:2 SMPTE D-10" << endl;
+	cout << "      SMPTE_D10_30Mbps_525x5994I - IMX 30 4:2:2 SMPTE D-10" << endl;
 }
 
 extern int main(int argc, char *argv[])
@@ -513,30 +513,30 @@ extern int main(int argc, char *argv[])
 					comprSize = comprSizePALDV50;
 					vidFmt = formatYUV422;
 				}
-				else if (!strcmp(fstr, "SMPTE_D10_625x50I_50Mbps")) {
-					flavour = kAAFCodecFlavour_SMPTE_D10_625x50I_50Mbps;
+				else if (!strcmp(fstr, "SMPTE_D10_50Mbps_625x50I")) {
+					flavour = kAAFCodecFlavour_SMPTE_D10_50Mbps_625x50I;
 					comprSize = 250000;
 					vidFmt = formatYUV422;
 				}
-				else if (!strcmp(fstr, "SMPTE_D10_625x50I_40Mbps")) {
-					flavour = kAAFCodecFlavour_SMPTE_D10_625x50I_40Mbps;
+				else if (!strcmp(fstr, "SMPTE_D10_40Mbps_625x50I")) {
+					flavour = kAAFCodecFlavour_SMPTE_D10_40Mbps_625x50I;
 					comprSize = 200000;
 					vidFmt = formatYUV422;
 				}
-				else if (!strcmp(fstr, "SMPTE_D10_625x50I_30Mbps")) {
-					flavour = kAAFCodecFlavour_SMPTE_D10_625x50I_30Mbps;
+				else if (!strcmp(fstr, "SMPTE_D10_30Mbps_625x50I")) {
+					flavour = kAAFCodecFlavour_SMPTE_D10_30Mbps_625x50I;
 					comprSize = 150000;
 					vidFmt = formatYUV422;
 				}
-				else if (!strcmp(fstr, "DVbased_1080x50I_100Mbps")) {
-					flavour = kAAFCodecFlavour_DVbased_1080x50I_100Mbps;
+				else if (!strcmp(fstr, "DV_Based_100Mbps_1080x50I")) {
+					flavour = kAAFCodecFlavour_DV_Based_100Mbps_1080x50I;
 					comprSize = 576000;
 					vidFmt = formatYUV422;
 					frameWidth = 1440;
 					frameHeight = 1080;
 				}
-				else if (!strcmp(fstr, "DVbased_720x50P_100Mbps")) {
-					flavour = kAAFCodecFlavour_DVbased_720x50P_100Mbps;
+				else if (!strcmp(fstr, "DV_Based_100Mbps_720x50P")) {
+					flavour = kAAFCodecFlavour_DV_Based_100Mbps_720x50P;
 					sample_rate = sampleRate50;
 					comprSize = 288000;
 					vidFmt = formatYUV422;
@@ -573,37 +573,37 @@ extern int main(int argc, char *argv[])
 					comprSize = comprSizeNTSCDV50;
 					vidFmt = formatYUV422;
 				}
-				else if (!strcmp(fstr, "SMPTE_D10_525x5994I_50Mbps")) {
-					flavour = kAAFCodecFlavour_SMPTE_D10_525x5994I_50Mbps;
+				else if (!strcmp(fstr, "SMPTE_D10_50Mbps_525x5994I")) {
+					flavour = kAAFCodecFlavour_SMPTE_D10_50Mbps_525x5994I;
 					sample_rate = sampleRate30;
 					frameHeight = 480;
 					comprSize = 208541;
 					vidFmt = formatYUV422;
 				}
-				else if (!strcmp(fstr, "SMPTE_D10_525x5994I_40Mbps")) {
-					flavour = kAAFCodecFlavour_SMPTE_D10_525x5994I_40Mbps;
+				else if (!strcmp(fstr, "SMPTE_D10_40Mbps_525x5994I")) {
+					flavour = kAAFCodecFlavour_SMPTE_D10_40Mbps_525x5994I;
 					sample_rate = sampleRate30;
 					frameHeight = 480;
 					comprSize = 166833;
 					vidFmt = formatYUV422;
 				}
-				else if (!strcmp(fstr, "SMPTE_D10_525x5994I_30Mbps")) {
-					flavour = kAAFCodecFlavour_SMPTE_D10_525x5994I_30Mbps;
+				else if (!strcmp(fstr, "SMPTE_D10_30Mbps_525x5994I")) {
+					flavour = kAAFCodecFlavour_SMPTE_D10_30Mbps_525x5994I;
 					sample_rate = sampleRate30;
 					frameHeight = 480;
 					comprSize = 125125;
 					vidFmt = formatYUV422;
 				}
-				else if (!strcmp(fstr, "DVbased_1080x5994I_100Mbps")) {
-					flavour = kAAFCodecFlavour_DVbased_1080x5994I_100Mbps;
+				else if (!strcmp(fstr, "DV_Based_100Mbps_1080x5994I")) {
+					flavour = kAAFCodecFlavour_DV_Based_100Mbps_1080x5994I;
 					sample_rate = sampleRate30;
 					comprSize = 480000;
 					vidFmt = formatYUV422;
 					frameWidth = 1280;
 					frameHeight = 1080;
 				}
-				else if (!strcmp(fstr, "DVbased_720x5994P_100Mbps")) {
-					flavour = kAAFCodecFlavour_DVbased_720x5994P_100Mbps;
+				else if (!strcmp(fstr, "DV_Based_100Mbps_720x5994P")) {
+					flavour = kAAFCodecFlavour_DV_Based_100Mbps_720x5994P;
 					sample_rate = sampleRate60;
 					comprSize = 240000;
 					vidFmt = formatYUV422;

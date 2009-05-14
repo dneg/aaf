@@ -164,17 +164,17 @@ const FlavourParameters_t FlavourParams[] = {
 	{kAAFCodecFlavour_DV_Based_50Mbps_625_50, kAAFCompressionDef_DV_Based_50Mbps_625_50, L"AAF CDCI Codec (DV-Based 50 Mbps 525 lines 60Hz)", YUV422, 25, codecDV, SepFields, 720, 576, 288000, 720, 576},
 	{kAAFCodecFlavour_DV_Based_50Mbps_525_60, kAAFCompressionDef_DV_Based_50Mbps_525_60, L"AAF CDCI Codec (DV-Based 50 Mbps 625 lines 50Hz)", YUV422, 30, codecDV, SepFields, 720, 480, 240000, 720, 480},
 
-	{kAAFCodecFlavour_SMPTE_D10_625x50I_50Mbps, kAAFCompressionDef_SMPTE_D10_625x50I_50Mbps, L"AAF CDCI Codec (SMPTE D10 625x50I 50Mbps)", YUV422, 25, codecMPEG, SepFields, 720, 576, 250000, 720, 608},
-	{kAAFCodecFlavour_SMPTE_D10_525x5994I_50Mbps, kAAFCompressionDef_SMPTE_D10_525x5994I_50Mbps, L"AAF CDCI Codec (SMPTE D10 525x5994I 50Mbps)", YUV422, 30, codecMPEG, SepFields, 720, 480, 208541, 720, 512},
-	{kAAFCodecFlavour_SMPTE_D10_625x50I_40Mbps, kAAFCompressionDef_SMPTE_D10_625x50I_40Mbps, L"AAF CDCI Codec (SMPTE D10 625x50I 40Mbps)", YUV422, 25, codecMPEG, SepFields, 720, 576, 200000, 720, 608},
-	{kAAFCodecFlavour_SMPTE_D10_525x5994I_40Mbps, kAAFCompressionDef_SMPTE_D10_525x5994I_40Mbps, L"AAF CDCI Codec (SMPTE D10 525x5994I 40Mbps)", YUV422, 30, codecMPEG, SepFields, 720, 480, 166833, 720, 512},
-	{kAAFCodecFlavour_SMPTE_D10_625x50I_30Mbps, kAAFCompressionDef_SMPTE_D10_625x50I_30Mbps, L"AAF CDCI Codec (SMPTE D10 625x50I 30Mbps)", YUV422, 25, codecMPEG, SepFields, 720, 576, 150000, 720, 608},
-	{kAAFCodecFlavour_SMPTE_D10_525x5994I_30Mbps, kAAFCompressionDef_SMPTE_D10_525x5994I_30Mbps, L"AAF CDCI Codec (SMPTE D10 525x5994I 30Mbps)", YUV422, 30, codecMPEG, SepFields, 720, 480, 125125, 720, 512},
+	{kAAFCodecFlavour_SMPTE_D10_50Mbps_625x50I, kAAFCompressionDef_SMPTE_D10_50Mbps_625x50I, L"AAF CDCI Codec (SMPTE D10 50Mbps 625x50I)", YUV422, 25, codecMPEG, SepFields, 720, 576, 250000, 720, 608},
+	{kAAFCodecFlavour_SMPTE_D10_50Mbps_525x5994I, kAAFCompressionDef_SMPTE_D10_50Mbps_525x5994I, L"AAF CDCI Codec (SMPTE D10 50Mbps 525x5994I)", YUV422, 30, codecMPEG, SepFields, 720, 480, 208541, 720, 512},
+	{kAAFCodecFlavour_SMPTE_D10_40Mbps_625x50I, kAAFCompressionDef_SMPTE_D10_40Mbps_625x50I, L"AAF CDCI Codec (SMPTE D10 40Mbps 625x50I)", YUV422, 25, codecMPEG, SepFields, 720, 576, 200000, 720, 608},
+	{kAAFCodecFlavour_SMPTE_D10_40Mbps_525x5994I, kAAFCompressionDef_SMPTE_D10_40Mbps_525x5994I, L"AAF CDCI Codec (SMPTE D10 40Mbps 525x5994I)", YUV422, 30, codecMPEG, SepFields, 720, 480, 166833, 720, 512},
+	{kAAFCodecFlavour_SMPTE_D10_30Mbps_625x50I, kAAFCompressionDef_SMPTE_D10_30Mbps_625x50I, L"AAF CDCI Codec (SMPTE D10 30Mbps 625x50I)", YUV422, 25, codecMPEG, SepFields, 720, 576, 150000, 720, 608},
+	{kAAFCodecFlavour_SMPTE_D10_30Mbps_525x5994I, kAAFCompressionDef_SMPTE_D10_30Mbps_525x5994I, L"AAF CDCI Codec (SMPTE D10 30Mbps 525x5994I)", YUV422, 30, codecMPEG, SepFields, 720, 480, 125125, 720, 512},
 
-	{kAAFCodecFlavour_DVbased_1080x50I_100Mbps, kAAFCompressionDef_DVbased_1080x50I_100Mbps, L"AAF CDCI Codec (DVbased 1080x50I 100Mbps)", YUV422, 25, codecDV, SepFields, 1920, 1080, 576000, 1440, 1080},
-	{kAAFCodecFlavour_DVbased_1080x5994I_100Mbps, kAAFCompressionDef_DVbased_1080x5994I_100Mbps, L"AAF CDCI Codec (DVbased 1080x5994I 100Mbps)", YUV422, 30, codecDV, SepFields, 1920, 1080, 480000, 1280, 1080},
-	{kAAFCodecFlavour_DVbased_720x50P_100Mbps, kAAFCompressionDef_DVbased_720x50P_100Mbps, L"AAF CDCI Codec (DVbased 720x50P 100Mbps)", YUV422, 50, codecDV, FullFrame, 1280, 720, 288000, 960, 720},
-	{kAAFCodecFlavour_DVbased_720x5994P_100Mbps, kAAFCompressionDef_DVbased_720x5994P_100Mbps, L"AAF CDCI Codec (DVbased 720x5994P 100Mbps)", YUV422, 60, codecDV, FullFrame, 1280, 720, 240000, 960, 720},
+	{kAAFCodecFlavour_DV_Based_100Mbps_1080x50I, kAAFCompressionDef_DV_Based_100Mbps_1080x50I, L"AAF CDCI Codec (DV-Based 100Mbps 1080x50I)", YUV422, 25, codecDV, SepFields, 1920, 1080, 576000, 1440, 1080},
+	{kAAFCodecFlavour_DV_Based_100Mbps_1080x5994I, kAAFCompressionDef_DV_Based_100Mbps_1080x5994I, L"AAF CDCI Codec (DV-Based 100Mbps 1080x5994I)", YUV422, 30, codecDV, SepFields, 1920, 1080, 480000, 1280, 1080},
+	{kAAFCodecFlavour_DV_Based_100Mbps_720x50P, kAAFCompressionDef_DV_Based_100Mbps_720x50P, L"AAF CDCI Codec (DV-Based 100Mbps 720x50P)", YUV422, 50, codecDV, FullFrame, 1280, 720, 288000, 960, 720},
+	{kAAFCodecFlavour_DV_Based_100Mbps_720x5994P, kAAFCompressionDef_DV_Based_100Mbps_720x5994P, L"AAF CDCI Codec (DV-Based 100Mbps 720x5994P)", YUV422, 60, codecDV, FullFrame, 1280, 720, 240000, 960, 720},
 };
 
 static const FlavourParameters_t* lookupFlavourParams(aafUID_constref flavour)
@@ -239,11 +239,11 @@ static int bitrate_for_flavour(aafUID_constref flavour)
 {
 	// Use fixed values for IMX formats since the NTSC IMX rates
 	// cannot be reliably calculated from sampleRate * storedSize
-	if (flavour == kAAFCodecFlavour_SMPTE_D10_625x50I_50Mbps || flavour == kAAFCodecFlavour_SMPTE_D10_525x5994I_50Mbps)
+	if (flavour == kAAFCodecFlavour_SMPTE_D10_50Mbps_625x50I || flavour == kAAFCodecFlavour_SMPTE_D10_50Mbps_525x5994I)
 		return 50000000;
-	if (flavour == kAAFCodecFlavour_SMPTE_D10_625x50I_40Mbps || flavour == kAAFCodecFlavour_SMPTE_D10_525x5994I_40Mbps)
+	if (flavour == kAAFCodecFlavour_SMPTE_D10_40Mbps_625x50I || flavour == kAAFCodecFlavour_SMPTE_D10_40Mbps_525x5994I)
 		return 40000000;
-	if (flavour == kAAFCodecFlavour_SMPTE_D10_625x50I_30Mbps || flavour == kAAFCodecFlavour_SMPTE_D10_525x5994I_30Mbps)
+	if (flavour == kAAFCodecFlavour_SMPTE_D10_30Mbps_625x50I || flavour == kAAFCodecFlavour_SMPTE_D10_30Mbps_525x5994I)
 		return 30000000;
 
 	// Use (sampleRate * storedSize) calculation for all others
