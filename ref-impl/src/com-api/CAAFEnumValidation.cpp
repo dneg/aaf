@@ -812,6 +812,18 @@ bool Is_aafTimecodeSourceType_t_Valid(aafTimecodeSourceType_t param)
   }
 }
 
+bool Is_aafTitleAlignmentType_t_Valid(aafTitleAlignmentType_t param)
+{
+  switch (param) {
+    case kAAFTitleAlignment_Left:
+    case kAAFTitleAlignment_Center:
+    case kAAFTitleAlignment_Right:
+      return true;
+    default:
+      return false;
+  }
+}
+
 bool Is_aafUserDataModeType_t_Valid(aafUserDataModeType_t param)
 {
   switch (param) {

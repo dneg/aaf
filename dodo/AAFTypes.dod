@@ -374,8 +374,15 @@ typedef enum _aafContentScanningType_e
 	kAAFContentScanning_Progressive = 1,
 	kAAFContentScanning_Interlace = 2,
 	kAAFContentScanning_Mixed = 3
-
 } aafContentScanningType_e;
+	
+typedef aafInt32 aafTitleAlignmentType_t;
+typedef enum _aafTitleAlignmentType_e
+{
+	kAAFTitleAlignment_Left = 0,
+	kAAFTitleAlignment_Center = 1,
+	kAAFTitleAlignment_Right = 2
+} aafTitleAlignmentType_e;
 	
 typedef aafInt32 aafColorSiting_t;
 typedef enum _aafColorSiting_e
