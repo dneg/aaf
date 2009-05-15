@@ -550,53 +550,6 @@ cleanup:
   return moduleErrorTmp;
 }
 
-static HRESULT CreateAlignmentTypeDef(IAAFDictionary* pDictionary)
-{
-  IAAFTypeDef* pTypeDef = 0;
-  IAAFTypeDefEnum* pTypeDefEnum = 0;
-  IAAFTypeDef* pTypeDefUInt8 = 0;
-
-  if (FAILED(pDictionary->LookupTypeDef(kAAFTypeID_TitleAlignmentType, &pTypeDef)))
-  {
-    check(pDictionary->CreateMetaInstance(AUID_AAFTypeDefEnum, IID_IAAFTypeDefEnum, (IUnknown **)&pTypeDefEnum));
-
-    check(pDictionary->LookupTypeDef(kAAFTypeID_UInt8, &pTypeDefUInt8));
-
-    const int kNumValues = 3;
-
-    aafInt64 values[kNumValues];
-    values[0] = 0;
-    values[1] = 1;
-    values[2] = 2;
-
-    aafString_t names[kNumValues];
-    names[0] = const_cast<aafCharacter*>(L"Left");
-    names[1] = const_cast<aafCharacter*>(L"Center");
-    names[2] = const_cast<aafCharacter*>(L"Right");
-
-    check(pTypeDefEnum->Initialize(kAAFTypeID_TitleAlignmentType, pTypeDefUInt8, values, names, kNumValues, L"Title Alignment"));
-
-    check(pTypeDefEnum->QueryInterface(IID_IAAFTypeDef, (void **)&pTypeDef));
-
-    check(pDictionary->RegisterTypeDef(pTypeDef));
-  }
-  check(pDictionary->LookupTypeDef(kAAFTypeID_TitleAlignmentType, &pTypeDef));
-
-cleanup:
-  // Cleanup and return
-
-  if (pTypeDefUInt8)
-    pTypeDefUInt8->Release();
-
-  if (pTypeDefEnum)
-    pTypeDefEnum->Release();
-
-  if (pTypeDef)
-    pTypeDef->Release();
-
-  return moduleErrorTmp;
-}
-
 static HRESULT GetTitleOperation(IAAFDictionary* pDictionary, IAAFDataDef* pDataDef,
                                  const aafUID_t& uid, IAAFOperationDef** ppOpDef)
 {
@@ -611,8 +564,6 @@ static HRESULT GetTitleOperation(IAAFDictionary* pDictionary, IAAFDataDef* pData
     //check(pOperationDef->SetCategory(???));
     check(pOperationDef->SetNumberInputs(1));
     check(pOperationDef->SetIsTimeWarp((aafBool)0));
-
-    check(CreateAlignmentTypeDef(pDictionary));
 
     check(AddParameterDef(pDictionary, pOperationDef, kAAFTypeID_String,
       kAAFParameterDef_TitleText, L"Text", L"Text String"));
@@ -666,7 +617,7 @@ static HRESULT CreateTitleOperation(IAAFDictionary* pDictionary, IAAFDataDef* pD
   aafRational_t fontColorR = {1,1};
   aafRational_t fontColorG = {0,1};
   aafRational_t fontColorB = {0,1};
-  unsigned char alignment = 1; // center
+  aafTitleAlignmentType_t alignment = kAAFTitleAlignment_Center;
   aafBoolean_t bold = true;
   aafBoolean_t italic = true;
   aafRational_t positionX = {3,10};
@@ -1023,7 +974,7 @@ int main(int argumentCount, char* argumentVector[])
   checkFatal(RegisterRequiredPlugins());
 
   const char* pFileName = "ExportAS05Effects.aaf";
-  MakeAAFFile(pFileName);
+  checkFatal(MakeAAFFile(pFileName));
 
   return 0;
 }
