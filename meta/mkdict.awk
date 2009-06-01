@@ -2,22 +2,31 @@
 #
 # $Id$ $Name$
 #
-# The contents of this file are subject to the AAF SDK Public
-# Source License Agreement (the "License"); You may not use this file
-# except in compliance with the License.  The License is available in
-# AAFSDKPSL.TXT, or you may obtain a copy of the License from the AAF
-# Association or its successor.
+# The contents of this file are subject to the AAF SDK Public Source
+# License Agreement Version 2.0 (the "License"); You may not use this
+# file except in compliance with the License.  The License is available
+# in AAFSDKPSL.TXT, or you may obtain a copy of the License from the
+# Advanced Media Workflow Association, Inc., or its successor.
 #
 # Software distributed under the License is distributed on an "AS IS"
 # basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.  See
 # the License for the specific language governing rights and limitations
-# under the License.
+# under the License.  Refer to Section 3.3 of the License for proper use
+# of this Exhibit.
 #
-# The Original Code of this file is Copyright 1998-2005, Licensor of the
-# AAF Association.
+# WARNING:  Please contact the Advanced Media Workflow Association,
+# Inc., for more information about any additional licenses to
+# intellectual property covering the AAF Standard that may be required
+# to create and distribute AAF compliant products.
+# (http://www.amwa.tv/policies).
+#
+# Copyright Notices:
+# The Original Code of this file is Copyright 1998-2009, licensor of the
+# Advanced Media Workflow Association.  All rights reserved.
 #
 # The Initial Developer of the Original Code of this file and the
-# Licensor of the AAF Association is Avid Technology.
+# licensor of the Advanced Media Workflow Association is
+# Avid Technology.
 # All rights reserved.
 #
 ###############################################################################
@@ -121,22 +130,31 @@ BEGIN {
   printf("//\n");
   printf("// $""Id$ $""Name$\n");
   printf("//\n");
-  printf("// The contents of this file are subject to the AAF SDK Public\n");
-  printf("// Source License Agreement (the \"License\"); You may not use this file\n");
-  printf("// except in compliance with the License.  The License is available in\n");
-  printf("// AAFSDKPSL.TXT, or you may obtain a copy of the License from the AAF\n");
-  printf("// Association or its successor.\n");
+  printf("// The contents of this file are subject to the AAF SDK Public Source\n");
+  printf("// License Agreement Version 2.0 (the \"License\"); You may not use this\n");
+  printf("// file except in compliance with the License.  The License is available\n");
+  printf("// in AAFSDKPSL.TXT, or you may obtain a copy of the License from the\n");
+  printf("// Advanced Media Workflow Association, Inc., or its successor.\n");
   printf("//\n");
   printf("// Software distributed under the License is distributed on an \"AS IS\"\n");
   printf("// basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.  See\n");
   printf("// the License for the specific language governing rights and limitations\n");
-  printf("// under the License.\n");
+  printf("// under the License.  Refer to Section 3.3 of the License for proper use\n");
+  printf("// of this Exhibit.\n");
   printf("//\n");
-  printf("// The Original Code of this file is Copyright 1998-2005, Licensor of the\n");
-  printf("// AAF Association.\n");
+  printf("// WARNING:  Please contact the Advanced Media Workflow Association,\n");
+  printf("// Inc., for more information about any additional licenses to\n");
+  printf("// intellectual property covering the AAF Standard that may be required\n");
+  printf("// to create and distribute AAF compliant products.\n");
+  printf("// (http://www.amwa.tv/policies).\n");
+  printf("//\n");
+  printf("// Copyright Notices:\n");
+  printf("// The Original Code of this file is Copyright 1998-2009, licensor of the\n");
+  printf("// Advanced Media Workflow Association.  All rights reserved.\n");
   printf("//\n");
   printf("// The Initial Developer of the Original Code of this file and the\n");
-  printf("// Licensor of the AAF Association is Avid Technology.\n");
+  printf("// licensor of the Advanced Media Workflow Association is\n");
+  printf("// Avid Technology.\n");
   printf("// All rights reserved.\n");
   printf("//\n");
   printf("//=---------------------------------------------------------------------=\n");

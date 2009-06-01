@@ -2,22 +2,31 @@
 //
 // $Id$ $Name$
 //
-// The contents of this file are subject to the AAF SDK Public
-// Source License Agreement (the "License"); You may not use this file
-// except in compliance with the License.  The License is available in
-// AAFSDKPSL.TXT, or you may obtain a copy of the License from the AAF
-// Association or its successor.
+// The contents of this file are subject to the AAF SDK Public Source
+// License Agreement Version 2.0 (the "License"); You may not use this
+// file except in compliance with the License.  The License is available
+// in AAFSDKPSL.TXT, or you may obtain a copy of the License from the
+// Advanced Media Workflow Association, Inc., or its successor.
 //
 // Software distributed under the License is distributed on an "AS IS"
 // basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.  See
 // the License for the specific language governing rights and limitations
-// under the License.
+// under the License.  Refer to Section 3.3 of the License for proper use
+// of this Exhibit.
 //
-// The Original Code of this file is Copyright 1998-2006, Licensor of the
-// AAF Association.
+// WARNING:  Please contact the Advanced Media Workflow Association,
+// Inc., for more information about any additional licenses to
+// intellectual property covering the AAF Standard that may be required
+// to create and distribute AAF compliant products.
+// (http://www.amwa.tv/policies).
+//
+// Copyright Notices:
+// The Original Code of this file is Copyright 1998-2009, licensor of the
+// Advanced Media Workflow Association.  All rights reserved.
 //
 // The Initial Developer of the Original Code of this file and the
-// Licensor of the AAF Association is Avid Technology.
+// licensor of the Advanced Media Workflow Association is
+// Avid Technology.
 // All rights reserved.
 //
 //=---------------------------------------------------------------------=
@@ -59,23 +68,31 @@ void printCopyright (const char* originator, ostream & s)
 "//\n"
 "// $""Id$ $""Name$\n"
 "//\n"
-"// The contents of this file are subject to the AAF SDK Public\n"
-"// Source License Agreement (the \"License\"); You may not use this file\n"
-"// except in compliance with the License.  The License is available in\n"
-"// AAFSDKPSL.TXT, or you may obtain a copy of the License from the AAF\n"
-"// Association or its successor.\n"
+"// The contents of this file are subject to the AAF SDK Public Source\n"
+"// License Agreement Version 2.0 (the \"License\"); You may not use this\n"
+"// file except in compliance with the License.  The License is available\n"
+"// in AAFSDKPSL.TXT, or you may obtain a copy of the License from the\n"
+"// Advanced Media Workflow Association, Inc., or its successor.\n"
 "//\n"
 "// Software distributed under the License is distributed on an \"AS IS\"\n"
 "// basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.  See\n"
 "// the License for the specific language governing rights and limitations\n"
-"// under the License.\n"
+"// under the License.  Refer to Section 3.3 of the License for proper use\n"
+"// of this Exhibit.\n"
 "//\n"
-"// The Original Code of this file is Copyright 1998-2006, Licensor of the\n"
-"// AAF Association.\n"
+"// WARNING:  Please contact the Advanced Media Workflow Association,\n"
+"// Inc., for more information about any additional licenses to\n"
+"// intellectual property covering the AAF Standard that may be required\n"
+"// to create and distribute AAF compliant products.\n"
+"// (http://www.amwa.tv/policies).\n"
+"//\n"
+"// Copyright Notices:\n"
+"// The Original Code of this file is Copyright 1998-2009, licensor of the\n"
+"// Advanced Media Workflow Association.  All rights reserved.\n"
 "//\n"
 "// The Initial Developer of the Original Code of this file and the\n"
-"// Licensor of the AAF Association is " 
-<< originator << ".\n"
+"// licensor of the Advanced Media Workflow Association is\n" 
+"// " << originator << ".\n"
 "// All rights reserved.\n"
 "//\n"
 "//=---------------------------------------------------------------------=\n";
