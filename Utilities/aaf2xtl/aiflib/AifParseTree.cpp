@@ -26,7 +26,7 @@
 //
 // The Initial Developer of the Original Code of this file and the
 // licensor of the Advanced Media Workflow Association is
-// Siemens SBS Media
+// Siemens SBS Media.
 // All rights reserved.
 //
 //=---------------------------------------------------------------------=

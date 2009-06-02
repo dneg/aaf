@@ -28,8 +28,7 @@
 //
 // The Initial Developer of the Original Code of this file and the
 // licensor of the Advanced Media Workflow Association is
-// Avid Technology, 
-// with parts Metaglue Corporation.
+// Avid Technology.
 // All rights reserved.
 //
 //=---------------------------------------------------------------------=

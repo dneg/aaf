@@ -25,7 +25,8 @@
 # Advanced Media Workflow Association.  All rights reserved.
 #
 # The Initial Developer of the Original Code of this file and the
-# licensor of the Advanced Media Workflow Association is Avid Technology.
+# licensor of the Advanced Media Workflow Association is
+# Avid Technology.
 # All rights reserved.
 #
 ###############################################################################

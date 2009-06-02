@@ -26,7 +26,8 @@ rem   The Original Code of this file is Copyright 1998-2009, licensor of the
 rem   Advanced Media Workflow Association.  All rights reserved.
 rem
 rem   The Initial Developer of the Original Code of this file and the
-rem   licensor of the Advanced Media Workflow Association is Avid Technology.
+rem   licensor of the Advanced Media Workflow Association is
+rem   Avid Technology.
 rem   All rights reserved.
 rem
 rem  --------------------------------------------------------------------------
