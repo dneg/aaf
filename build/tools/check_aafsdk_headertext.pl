@@ -108,11 +108,12 @@ sub check_licence
 		print "To check licenes run script in SDK top-level directory\n";
 		return 0;
 	}
-	my $cur_licence;
-	read(LIC, $cur_licence, -s $lic_file);
+	my $dodo_licence;
+	read(LIC, $dodo_licence, -s $lic_file);
 	close(LIC);
 
 	# Remove "The Initial Developer" paragraph since it is optional
+	my $cur_licence = $dodo_licence;
 	$cur_licence =~ s/\nThe Initial Developer.*//s;
 
 	my %dates;
@@ -154,6 +155,7 @@ sub check_licence
 		#	{ print "$file: missing The Initial Developer\n" }
 
 		next if $file =~ m,dodo/CopyrightMessage.txt,;		# Tests below not suitable for this file
+		next if $file =~ m,LEGAL/AAFSDKPSL.TXT,;			# Tests below not suitable for this file
 
 		# Get the string starting from the start of file up to 'subject to the'
 		my ($start_of_file) = /(.*?\n.*?)subject to the/ms;
@@ -183,6 +185,21 @@ sub check_licence
 		if (! /$tmp_licence/s) {
 			print "$file: complete and intact licence not found\n";
 			$result = 0;
+			next;			# Skip Initial Developer check below
+		}
+
+		# Check Initial Developer paragraph for consistency if present
+		if (/The Initial Developer of the Original Code/) {
+			my $tmp_licence = $dodo_licence;
+			$tmp_licence =~ s/.*\n(The Initial Developer.*)/$1/s;
+			$tmp_licence =~ s/^/$prefix/mgs;	# put prefix on every line
+			$tmp_licence =~ s/ +$//mgs;			# strip trailing spaces
+			$tmp_licence =~ s/Avid Technology\./[\\S ]+\\./s;		# Replace Avid name with pattern
+
+			if (! /$tmp_licence/s) {
+				print "$file: \"The Initial Developer\" paragraph inconsistent\n$tmp_licence";
+				$result = 0;
+			}
 		}
 	}
 
