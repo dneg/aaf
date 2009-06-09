@@ -46,13 +46,21 @@
 #endif
 
 #if defined(OM_OS_WINDOWS)
+
 #define OM_USE_WINDOWS_SS
 #include <MStructuredStorage.h>
+
 #elif defined(OM_OS_UNIX)
+
+#ifndef OM_USE_GSF_SS
 #define OM_USE_GSF_SS
+#endif
 #include <GSFStructuredStorage.h>
+
 #else
+
 #error "Don't know which implementation of structured storage to use."
+
 #endif
 
 
