@@ -136,7 +136,6 @@ const int SF_WEAK_OBJECT_REFERENCE_STORED_OBJECT_ID = 0x03;
 const int SF_UNIQUE_OBJECT_ID                       = 0x86;
 const int SF_OPAQUE_STREAM                          = 0x40;
 
-
 // Integral types
 //
 #if defined(OM_OS_WINDOWS)
@@ -435,10 +434,10 @@ static size_t maxSignatureSize = signatureSize();
 // The following may change at run time depending on the file format
 // version.
 //
-char* _propertyValueStreamName = (char*)propertiesStreamName;
-char* _propertyIndexStreamName = (char*)propertiesStreamName;
-char* _openArrayKeySymbol = (char*)openArrayKeySymbol;
-char* _closeArrayKeySymbol = (char*)closeArrayKeySymbol;
+const char* _propertyValueStreamName = propertiesStreamName;
+const char* _propertyIndexStreamName = propertiesStreamName;
+const char* _openArrayKeySymbol = openArrayKeySymbol;
+const char* _closeArrayKeySymbol = closeArrayKeySymbol;
 
 // Old values for stored forms
 //
@@ -517,17 +516,17 @@ typedef struct {
 // Prototypes for local functions.
 //
 static char* baseName(char* fullName);
-static void reportAssertionFailure(char* name,
-                                   char* expressionString,
-                                   char* fileName,
+static void reportAssertionFailure(const char* name,
+                                   const char* expressionString,
+                                   const char* fileName,
                                    size_t lineNumber);
 static void checkSizes(void);
 static ByteOrder hostByteOrder(void);
 static const char* byteOrder(ByteOrder bo);
 static void formatError(DWORD errorCode);
-static void fatalError(char* routineName, char* message);
-static void error(char* routineName, char* message);
-static void warning(char* routineName, char* message);
+static void fatalError(const char* routineName, const char* message);
+static void error(const char* routineName, const char* message);
+static void warning(const char* routineName, const char* message);
 static void printError(const char* prefix,
                        const char* fileName,
                        DWORD errorCode);
@@ -543,7 +542,7 @@ static void convert(char* cName, size_t length, const char* name);
 static void convertName(char* cName,
                         size_t length,
                         OMCHAR* wideName,
-                        char** tag);
+                        const char** tag);
 static char* makePathName(const char* pathName,
                           const char* componentName,
                           int isRoot);
@@ -559,11 +558,11 @@ static HRESULT openStreamTry(IStorage* storage,
                              const char* streamName,
                              IStream** stream);
 static size_t sizeOfStream(IStream* stream, const char* streamName);
-static void printStat(STATSTG* statstg, char* tag);
+static void printStat(STATSTG* statstg, const char* tag);
 static void dumpStream(IStream* stream, STATSTG* statstg, char* pathName);
 static void dumpStorage(IStorage* storage,
                         STATSTG* statstg,
-                        char* pathName,
+                        const char* pathName,
                         int isRoot);
 static void read(IStream* stream, void* address, size_t size);
 static void read(IStream* stream, size_t offset, void* address, size_t size);
@@ -598,7 +597,7 @@ static IndexEntry* readIndex(IStream* stream,
                              OMUInt32 count,
                              bool swapNeeded,
                              OMUInt32 version);
-void reportBadIndex(char* pathName,
+void reportBadIndex(const char* pathName,
                     OMUInt16 order,
                     OMUInt32 version,
                     OMUInt32 entryCount,
@@ -613,7 +612,7 @@ static bool isValid(const IndexEntry* index,
                     const CLSID& clsid,
                     const char* path);
 static size_t valueStreamSize(const IndexEntry* index, const OMUInt32 entries);
-static char* typeName(OMUInt32 type);
+static const char* typeName(OMUInt32 type);
 static void openStorage(IStorage* parentStorage,
                         char* storageName,
                         IStorage** subStorage);
@@ -672,7 +671,7 @@ static WeakCollectionIndexEntry* readWeakCollectionIndex(IStream* stream,
                                                          OMUInt32 count,
                                                          bool swapNeeded);
 static void dumpObject(IStorage* storage,
-                       char* pathName,
+                       const char* pathName,
                        int isRoot,
                        OMUInt32 version);
 static OMUInt32 typeOf(IndexEntry* entry, OMUInt32 version);
@@ -686,7 +685,7 @@ void checkObject(IStorage* storage,
                  IndexEntry* index,
                  OMUInt32 entries,
                  OMUInt32 version,
-                 char* pathName,
+                 const char* pathName,
                  int isRoot,
                  bool swapNeeded);
 static void dumpContainedObjects(IStorage* storage,
@@ -694,7 +693,7 @@ static void dumpContainedObjects(IStorage* storage,
                                  IndexEntry* index,
                                  OMUInt32 entries,
                                  OMUInt32 version,
-                                 char* pathName,
+                                 const char* pathName,
                                  int isRoot,
                                  bool swapNeeded);
 static void dumpDataStream(IStream* stream,
@@ -707,7 +706,7 @@ static void dumpProperties(IStorage* storage,
                            IndexEntry* index,
                            OMUInt32 entries,
                            OMUInt32 version,
-                           char* pathName,
+                           const char* pathName,
                            int isRoot,
                            bool swapNeeded);
 static void openStorage(char* fileName, IStorage** storage);
@@ -731,9 +730,9 @@ static int isAnAAFFile(const wchar_t* fileName,
                        bool* fileIsAAFFile);
 static void usage(void);
 
-static void printInteger(const size_t value, char* label);
-static void printFixed(const double value, char* label);
-static void printFixedPercent(const double value, char* label);
+static void printInteger(const size_t value, const char* label);
+static void printFixed(const double value, const char* label);
+static void printFixedPercent(const double value, const char* label);
 
 static void resetStatistics(void);
 static void printStatistics(void);
@@ -956,9 +955,9 @@ char* baseName(char* fullName)
   return result;
 }
 
-void reportAssertionFailure(char* name,
-                            char* expressionString,
-                            char* fileName,
+void reportAssertionFailure(const char* name,
+                            const char* expressionString,
+                            const char* fileName,
                             size_t lineNumber)
 {
   cerr << "Assertion \"" << name << "\" failed." << endl;
@@ -1020,7 +1019,7 @@ ByteOrder hostByteOrder(void)
 
 const char* byteOrder(ByteOrder bo)
 {
-  char* result = "unknown";
+  const char* result = "unknown";
 
   if (bo == littleEndian) {
     result = "little endian";
@@ -1109,7 +1108,7 @@ void formatError(DWORD errorCode)
 
 char* programName;
 
-void fatalError(char* routineName, char* message)
+void fatalError(const char* routineName, const char* message)
 {
   cerr << programName << ": Fatal error";
   if (verboseFlag) {
@@ -1120,7 +1119,7 @@ void fatalError(char* routineName, char* message)
   exit(EXIT_FAILURE);
 }
 
-void error(char* routineName, char* message)
+void error(const char* routineName, const char* message)
 {
   cerr << programName << ": Error";
   if (verboseFlag) {
@@ -1131,7 +1130,7 @@ void error(char* routineName, char* message)
   errorCount = errorCount + 1;
 }
 
-void warning(char* routineName, char* message)
+void warning(const char* routineName, const char* message)
 {
   cerr << programName << ": Warning";
   if (verboseFlag) {
@@ -1212,7 +1211,7 @@ void convert(char* cName, size_t length, const char* name)
   }
 }
 
-void convertName(char* cName, size_t length, OMCHAR* wideName, char** tag)
+void convertName(char* cName, size_t length, OMCHAR* wideName, const char** tag)
 {
   char name[256];
   convert(name, 256, wideName);
@@ -1415,7 +1414,7 @@ size_t sizeOfStream(IStream* stream, const char* streamName)
   return streamBytes;
 }
 
-void printStat(STATSTG* statstg, char* tag)
+void printStat(STATSTG* statstg, const char* tag)
 {
   indent(4);
   switch (statstg->type) {
@@ -1496,7 +1495,7 @@ void dumpStream(IStream* stream, STATSTG* statstg, char* pathName)
 
   OMCHAR* name = statstg->pwcsName;
   char cName[256];
-  char* tag;
+  const char* tag;
 
   convertName(cName, 256, name, &tag);
 
@@ -1532,7 +1531,7 @@ void dumpStream(IStream* stream, STATSTG* statstg, char* pathName)
 
 void dumpStorage(IStorage* storage,
                  STATSTG* statstg,
-                 char* pathName,
+                 const char* pathName,
                  int isRoot)
 {
   totalStorages = totalStorages + 1; // Count this storage
@@ -1540,7 +1539,7 @@ void dumpStorage(IStorage* storage,
   OMCHAR* name = statstg->pwcsName;
   char cName[256];
   char myPathName[256];
-  char* tag;
+  const char* tag;
 
   // Compute my name.
   //
@@ -1885,14 +1884,14 @@ IndexEntry* readIndex(IStream* stream,
   return result;
 }
 
-void reportBadIndex(char* pathName,
+void reportBadIndex(const char* pathName,
                     OMUInt16 order,
                     OMUInt32 version,
                     OMUInt32 entryCount,
                     OMUInt32 expectedSize,
                     OMUInt32 actualSize)
 {
-  char* endianity;
+  const char* endianity;
   if (order == hostByteOrder()) {
     endianity = "native";
   } else {
@@ -1993,9 +1992,9 @@ size_t valueStreamSize(const IndexEntry* index, const OMUInt32 entries)
   return result;
 }
 
-char* typeName(OMUInt32 type)
+const char* typeName(OMUInt32 type)
 {
-  char * result;
+  const char * result;
 
   switch (type) {
 
@@ -2473,7 +2472,7 @@ OMUInt32 objectCount(IStorage* storage,
 {
   // get name of collection index
   //
-  char* suffix = " index";
+  const char* suffix = " index";
   char* collectionName = readName(propertiesStream,
                                   index->_offset,
                                   index->_length,
@@ -2513,7 +2512,7 @@ void checkObject(IStorage* storage,
                  IndexEntry* index,
                  OMUInt32 entries,
                  OMUInt32 version,
-                 char* pathName,
+                 const char* pathName,
                  int isRoot,
                  bool swapNeeded)
 {
@@ -2618,7 +2617,7 @@ void dumpContainedObjects(IStorage* storage,
                           IndexEntry* index,
                           OMUInt32 entries,
                           OMUInt32 version,
-                          char* pathName,
+                          const char* pathName,
                           int isRoot,
                           bool swapNeeded)
 {
@@ -2716,7 +2715,7 @@ void dumpContainedObjects(IStorage* storage,
     case SF_STRONG_OBJECT_REFERENCE_VECTOR: {
       // get name of vector index
       //
-      char* suffix = " index";
+      const char* suffix = " index";
       char* vectorName = readName(propertiesStream,
                                   index[i]._offset,
                                   index[i]._length,
@@ -2836,7 +2835,7 @@ void dumpContainedObjects(IStorage* storage,
     case SF_STRONG_OBJECT_REFERENCE_SET : {
       // get name of set index
       //
-      char* suffix = " index";
+      const char* suffix = " index";
       char* setName = readName(propertiesStream,
                                index[i]._offset,
                                index[i]._length,
@@ -3013,7 +3012,7 @@ void dumpContainedObjects(IStorage* storage,
     case SF_WEAK_OBJECT_REFERENCE_SET: {
       // get name of index
       //
-      char* suffix = " index";
+      const char* suffix = " index";
       char* setName = readName(propertiesStream,
                                index[i]._offset,
                                index[i]._length,
@@ -3166,7 +3165,7 @@ void dumpDataStream(IStream* stream,
   }
 
   if (version >= 28) {
-    char* s;
+    const char* s;
     switch (byteOrder) {
     case 'L':
       s = "little endian";
@@ -3216,7 +3215,7 @@ void dumpProperties(IStorage* storage,
                     IndexEntry* index,
                     OMUInt32 entries,
                     OMUInt32 version,
-                    char* pathName,
+                    const char* pathName,
                     int isRoot,
                     bool swapNeeded)
 {
@@ -3335,7 +3334,7 @@ void dumpProperties(IStorage* storage,
 ByteOrder fileByteOrder = unspecifiedEndian;
 
 void dumpObject(IStorage* storage,
-                char* pathName,
+                const char* pathName,
                 int isRoot,
                 OMUInt32 version)
 {
@@ -3500,7 +3499,7 @@ void dumpObject(IStorage* storage,
   printClsid(clsid, cout);
   cout << endl;
 
-  char* endianity;
+  const char* endianity;
   if (_byteOrder == hostByteOrder()) {
     endianity = "native";
   } else {
@@ -3588,11 +3587,9 @@ void openStorage(char* fileName, IStorage** storage)
     NULL,
     0,
     storage);
-
   if (!checkStatus(fileName, result)) {
     fatalError("openStorage", "StgOpenStorage() failed.");
   }
-
 
 }
 
@@ -3631,7 +3628,6 @@ void dumpFile(char* fileName)
   }
 
   _ssStorage = StructuredStorage::Create();
-
   IStorage* storage = 0;
   openStorage(fileName, &storage);
 
@@ -3805,7 +3801,6 @@ void dumpFileProperties(char* fileName, const char* label)
   }
 
   _ssStorage = StructuredStorage::Create();
-
   IStorage* storage = 0;
   openStorage(fileName, &storage);
 
@@ -3858,7 +3853,7 @@ static void dumpReferencedProperties(IStorage* root, OMUInt16 version)
       bo = bigEndian;
     }
     bool swap;
-    char* endianity;
+    const char* endianity;
     if (bo == hostByteOrder()) {
       swap = false;
       endianity = "native";
@@ -4122,7 +4117,7 @@ void usage(void)
 
 bool printStats = false; // default
 
-void printInteger(const size_t value, char* label)
+void printInteger(const size_t value, const char* label)
 {
     cout << label
          << setw(8)
@@ -4130,7 +4125,7 @@ void printInteger(const size_t value, char* label)
          << endl;
 }
 
-void printFixed(const double value, char* label)
+void printFixed(const double value, const char* label)
 {
     ios_base_fmtflags oldFlags = cout.flags(ios::right | ios::fixed);
     cout << label
@@ -4141,7 +4136,7 @@ void printFixed(const double value, char* label)
     cout.flags(oldFlags);
 }
 
-void printFixedPercent(const double value, char* label)
+void printFixedPercent(const double value, const char* label)
 {
     ios_base_fmtflags oldFlags = cout.flags(ios::right | ios::fixed);
     cout << label
@@ -4629,5 +4624,4 @@ int main(int argumentCount, char* argumentVector[])
   completed = true;
   return result;
 }
-
 
