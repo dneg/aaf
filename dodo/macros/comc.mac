@@ -178,12 +178,23 @@ AD_CLASS_BEGIN\
 
 #ccccccccccccccccccccccccccc
 #c
-#c Starts a class definition for classes which support 2 more than the
+#c Starts a class definition for classes which support 3 more than the
 #c primary COM interface.
 #c
 #c Arguments: additional interface name
 #c
 #startm AD_COM_EXT3_CLASS_BEGIN 03
+AD_CLASS_BEGIN\
+#endm
+
+#ccccccccccccccccccccccccccc
+#c
+#c Starts a class definition for classes which support 4 more than the
+#c primary COM interface.
+#c
+#c Arguments: additional interface name
+#c
+#startm AD_COM_EXT4_CLASS_BEGIN 04
 AD_CLASS_BEGIN\
 #endm
 
@@ -1499,6 +1510,75 @@ HRESULT C.this-module::InternalQueryInterface
     if (EQUAL_UID(riid,IID_I%03)) 
     { 
         *ppvObj = (I%03 *)this; 
+        ((IUnknown *)*ppvObj)->AddRef();
+        return S_OK;
+    }
+
+    // Always delegate back to base implementation.
+    return C.parent-module::InternalQueryInterface(riid, ppvObj);
+}
+
+//
+// Define the contrete object support implementation.
+// 
+AAF_DEFINE_FACTORY(.this-module)\
+
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Ends a class definition for classes which support more than the
+#c primary COM interface.
+#c
+#c Arguments: additional interface name
+#c
+#startm AD_COM_EXT4_CLASS_END 04
+
+//
+// 
+//
+inline int EQUAL_UID(const GUID & a, const GUID & b)
+{
+  return (0 == memcmp((&a), (&b), sizeof (aafUID_t)));
+} 
+HRESULT C.this-module::InternalQueryInterface
+(
+    REFIID riid,
+    void **ppvObj)
+{
+    if (NULL == ppvObj)
+        return E_INVALIDARG;
+
+    // We only support the IClassFactory interface 
+    if (EQUAL_UID(riid,IID_I.this-module)) 
+    { 
+        *ppvObj = (I.this-module *)this; 
+        ((IUnknown *)*ppvObj)->AddRef();
+        return S_OK;
+    }
+
+    if (EQUAL_UID(riid,IID_I%01)) 
+    { 
+        *ppvObj = (I%01 *)this; 
+        ((IUnknown *)*ppvObj)->AddRef();
+        return S_OK;
+    }
+    if (EQUAL_UID(riid,IID_I%02)) 
+    { 
+        *ppvObj = (I%02 *)this; 
+        ((IUnknown *)*ppvObj)->AddRef();
+        return S_OK;
+    }
+    if (EQUAL_UID(riid,IID_I%03)) 
+    { 
+        *ppvObj = (I%03 *)this; 
+        ((IUnknown *)*ppvObj)->AddRef();
+        return S_OK;
+    }
+    if (EQUAL_UID(riid,IID_I%04)) 
+    { 
+        *ppvObj = (I%04 *)this; 
         ((IUnknown *)*ppvObj)->AddRef();
         return S_OK;
     }
