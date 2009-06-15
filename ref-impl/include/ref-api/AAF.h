@@ -21946,7 +21946,7 @@ DECLARE_INTERFACE_(IAAFPluginManager, IUnknown)
   // EnumLoadedPlugins()
   //
   /// Returns an enumerator which enumerates over all of the loaded
-  /// pluigin choices through the *ppEnum argument.  The returned
+  /// plugin choices through the *ppEnum argument.  The returned
   /// enumerator is AddRef()ed before it is returned.
   /// 
   /// Succeeds if all of the following are true:
