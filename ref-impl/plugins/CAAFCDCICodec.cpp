@@ -63,6 +63,8 @@ const aafUInt32 kSupportedDefinitions = 1;
 
 const wchar_t kDisplayName[] = L"AAF CDCI Codec";
 const wchar_t kDescription[] = L"Handles uncompressed YUV & YCbCr and (compressed) IEC 61834 DV family & DV-Based family";
+const wchar_t kNilCodecFlavourName[] = L"AAF CDCI Codec (no flavour)";
+
 
 const aafProductVersion_t kAAFPluginVersion = {1, 0, 0, 1, kAAFVersionBeta};
 const aafRational_t		kDefaultRate = { 30000, 1001 };
@@ -832,7 +834,7 @@ HRESULT STDMETHODCALLTYPE
 		return AAFRESULT_NULL_PARAM;
 
 	// Loop over all flavours recording the largest name's buffer size
-	aafUInt32 max = 0;
+	aafUInt32 max = (wcsu8slen(kNilCodecFlavourName) + 1) * sizeof(aafCharacter);
 	for (size_t i = 0; i < sizeof(FlavourParams) / sizeof(FlavourParams[0]); i++)
 	{
 		// compute length of name in bytes including terminating NUL
@@ -857,16 +859,23 @@ HRESULT STDMETHODCALLTYPE
 	if (0 >= bufSize)
 		return AAFRESULT_INVALID_PARAM;
 
-	const FlavourParameters_t *p = lookupFlavourParams(flavour);
-	if (p == NULL)
-		return AAFRESULT_NOT_IMPLEMENTED;
+	const aafCharacter *name;
+	if (flavour == kAAFNilCodecFlavour) {
+		name = kNilCodecFlavourName;
+	}
+	else {
+		const FlavourParameters_t *p = lookupFlavourParams(flavour);
+		if (p == NULL)
+			return AAFRESULT_NOT_IMPLEMENTED;
+		name = p->name;
+	}
 
 	// compute length of name in bytes including terminating NUL
-	aafUInt32 len = (wcsu8slen(p->name) + 1) * sizeof(aafCharacter);
+	aafUInt32 len = (wcsu8slen(name) + 1) * sizeof(aafCharacter);
 	if (len > bufSize)
 		len = bufSize;
 
-	memcpy(pName, p->name, len);
+	memcpy(pName, name, len);
 	return AAFRESULT_SUCCESS;
 }
 
