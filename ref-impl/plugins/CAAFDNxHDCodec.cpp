@@ -84,7 +84,7 @@ typedef struct {
 } FlavourInfo;
 
 static FlavourInfo kSupportedFlavours[13];
-const aafUInt32 kNumSupportedFlavours = sizeof(kSupportedFlavours);
+const aafUInt32 kNumSupportedFlavours = sizeof(kSupportedFlavours) / sizeof(FlavourInfo);
 
 const wchar_t kDisplayName[] = L"AAF DNxHD Codec";
 const wchar_t kDescription[] = L"Handles uncompressed CbYCrY and (compressed) DNxHD streams";

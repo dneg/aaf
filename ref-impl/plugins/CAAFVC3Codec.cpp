@@ -94,7 +94,7 @@ typedef struct {
 } FlavourInfo;
 
 static FlavourInfo kSupportedFlavours[11];
-const aafUInt32 kNumSupportedFlavours = sizeof(kSupportedFlavours);
+const aafUInt32 kNumSupportedFlavours = sizeof(kSupportedFlavours) / sizeof(FlavourInfo);
 
 const wchar_t kDisplayName[] = L"AAF VC3 Codec";
 const wchar_t kDescription[] = L"Handles uncompressed CbYCrY and (compressed) VC3 streams";
