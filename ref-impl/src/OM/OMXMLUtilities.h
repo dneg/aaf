@@ -38,10 +38,10 @@
 #include "OMByteArray.h"
 
 
-#define XML_MAX_AUID_URI_SIZE                   46
-#define XML_MAX_MOBID_URI_SIZE                  79
+#define XML_MAX_AUID_URI_SIZE                   49
+#define XML_MAX_MOBID_URI_SIZE                  87
 // XML_MAX_URI_SIZE = max(XML_MAX_AUID_URI_SIZE, XML_MAX_MOBID_URI_SIZE)
-#define XML_MAX_URI_SIZE                        79 
+#define XML_MAX_URI_SIZE                        87 
 #define XML_MAX_INTEGER_STRING_SIZE             21
 #define XML_MAX_BYTE_ORDER_STRING_SIZE          13
 #define XML_MAX_TIMESTAMP_STRING_SIZE           32

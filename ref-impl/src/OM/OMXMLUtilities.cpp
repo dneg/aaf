@@ -573,7 +573,7 @@ auidToURI(OMUniqueObjectIdentification id, wchar_t* uri)
     else
     {
         std_swprintf(uri, XML_MAX_AUID_URI_SIZE,
-            L"urn:x-ul:%02x%02x%02x%02x.%02x%02x.%02x%02x.%08x.%04x%04x",
+            L"urn:smpte:ul:%02x%02x%02x%02x.%02x%02x%02x%02x.%08x.%04x%04x",
             id.Data4[0], id.Data4[1], id.Data4[2], id.Data4[3],
             id.Data4[4], id.Data4[5], id.Data4[6], id.Data4[7],
             id.Data1, id.Data2, id.Data3);
@@ -595,10 +595,10 @@ mobIdToURI(OMMaterialIdentification mobId, wchar_t* uri)
         mobId.material.Data4[5] == 0x7F)
     {
         std_swprintf(uri, XML_MAX_MOBID_URI_SIZE, 
-            L"urn:x-umid:%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x-"
-            L"%02x-"
-            L"%02x%02x%02x-"
-            L"%02x%02x%02x%02x%02x%02x%02x%02x%08x%04x%04x",
+            L"urn:smpte:umid:%02x%02x%02x%02x.%02x%02x%02x%02x.%02x%02x%02x%02x."
+            L"%02x"
+            L"%02x%02x%02x."
+            L"%02x%02x%02x%02x.%02x%02x%02x%02x.%08x.%04x%04x",
             mobId.SMPTELabel[0], mobId.SMPTELabel[1], mobId.SMPTELabel[2], mobId.SMPTELabel[3], 
             mobId.SMPTELabel[4], mobId.SMPTELabel[5], mobId.SMPTELabel[6], mobId.SMPTELabel[7], 
             mobId.SMPTELabel[8], mobId.SMPTELabel[9], mobId.SMPTELabel[10], mobId.SMPTELabel[11], 
@@ -611,10 +611,10 @@ mobIdToURI(OMMaterialIdentification mobId, wchar_t* uri)
     else
     {
         std_swprintf(uri, XML_MAX_MOBID_URI_SIZE, 
-            L"urn:x-umid:%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x-"
-            L"%02x-"
-            L"%02x%02x%02x-"
-            L"%08x%04x%04x%02x%02x%02x%02x%02x%02x%02x%02x",
+            L"urn:smpte:umid:%02x%02x%02x%02x.%02x%02x%02x%02x.%02x%02x%02x%02x."
+            L"%02x"
+            L"%02x%02x%02x."
+            L"%08x.%04x%04x.%02x%02x%02x%02x.%02x%02x%02x%02x",
             mobId.SMPTELabel[0], mobId.SMPTELabel[1], mobId.SMPTELabel[2], mobId.SMPTELabel[3], 
             mobId.SMPTELabel[4], mobId.SMPTELabel[5], mobId.SMPTELabel[6], mobId.SMPTELabel[7], 
             mobId.SMPTELabel[8], mobId.SMPTELabel[9], mobId.SMPTELabel[10], mobId.SMPTELabel[11], 
@@ -654,7 +654,7 @@ isAUIDURI(const wchar_t* str)
 {
     TRACE("::isAUIDURI");
 
-    if ((wcsncmp(str, L"urn:uuid", 8) == 0 || wcsncmp(str, L"urn:x-ul", 8) == 0) &&
+    if ((wcsncmp(str, L"urn:uuid", 8) == 0 || wcsncmp(str, L"urn:smpte:ul", 12) == 0) &&
         (wmemchr(str, L' ', wcslen(str)) == 0))
     
     {
@@ -668,7 +668,7 @@ isUMIDURI(const wchar_t* str)
 {
     TRACE("::isUMIDURI");
 
-    if (wcsncmp(str, L"urn:x-umid", 10) == 0)
+    if (wcsncmp(str, L"urn:smpte:umid", 14) == 0)
     {
         return true;
     }
@@ -699,7 +699,7 @@ uriToAUID(const wchar_t* uri, OMUniqueObjectIdentification* id)
     else
     {
         int ret = swscanf(uri,
-            L"urn:x-ul:%02x%02x%02x%02x.%02x%02x.%02x%02x.%02x%02x%02x%02x.%02x%02x%02x%02x",
+            L"urn:smpte:ul:%02x%02x%02x%02x.%02x%02x%02x%02x.%02x%02x%02x%02x.%02x%02x%02x%02x",
 		    &bytes[8], &bytes[9], &bytes[10], &bytes[11],
 		    &bytes[12], &bytes[13], &bytes[14], &bytes[15],
 		    &bytes[0], &bytes[1], &bytes[2], &bytes[3],
@@ -730,10 +730,10 @@ uriToMobId(const wchar_t* uri, OMMaterialIdentification* mobId)
     unsigned int bytes[32];
     
     int ret = swscanf(uri,
-        L"urn:x-umid:%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x-"
-        L"%02x-"
-        L"%02x%02x%02x-"
-        L"%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x",
+        L"urn:smpte:umid:%02x%02x%02x%02x.%02x%02x%02x%02x.%02x%02x%02x%02x."
+        L"%02x"
+        L"%02x%02x%02x."
+        L"%02x%02x%02x%02x.%02x%02x%02x%02x.%02x%02x%02x%02x.%02x%02x%02x%02x",
         &bytes[0], &bytes[1], &bytes[2], &bytes[3], 
         &bytes[4], &bytes[5], &bytes[6], &bytes[7], 
         &bytes[8], &bytes[9], &bytes[10], &bytes[11], 
