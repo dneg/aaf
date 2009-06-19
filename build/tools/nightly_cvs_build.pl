@@ -19,39 +19,50 @@ my @opt_target;							# try a single target
 my $opt_date;							# use specified date instead of latest change
 my $opt_rebuild = 0;
 my $opt_shortcut_copy = 0;				# don't remove and copy files
-my $opt_local_build;
+my $opt_no_sourceforge_update = 0;
+my $opt_local_build = 0;
 my $opt_config_file;
+my $opt_show_targets = 0;
 my $opt_help = 0;
+my $opt_verbose = 0;
 my $quiet;
-GetOptions(
+my $getopt_res = GetOptions(
             'date=s', \$opt_date,
             'target=s', \@opt_target,
             'r', \$opt_rebuild,
             'f', \$opt_shortcut_copy,
+            'n', \$opt_no_sourceforge_update,
             'l=s', \$opt_local_build,
             'c=s', \$opt_config_file,
+            'show-targets', \$opt_show_targets,
             'q', \$quiet,
-            'h', \$opt_help);
+            'v', \$opt_verbose,
+            'h', \$opt_help,
+            'help', \$opt_help);
 
-if ($opt_help) {
+if ($opt_help or ! $getopt_res) {
 	print "  --date=<cvs date>     Retrieve from CVS and build using specified date\n";
 	print "                        rather than using latest CVS version e.g.\n";
 	print "                          --date=2006/12/31\n";
 	print "                          --date='2006/12/31 09:40:20'\n";
-	print "  --target=<target>     specify target(s) in of building all configured targets,";
+	print "  --target=<target>     specify target(s) in of building all configured targets,\n";
 	print "                        use more than once for more targets e.g.\n";
 	print "                          --target=i686Win-cl --target=i686Linux-rel\n";
 	print "  -r                    rebuild even if existing working copy is up-to-date\n";
 	print "  -f                    shortcut the removal, copy and setup of source tree\n";
 	print "                        i.e. source tree is already on compile farm nodes\n";
+	print "  -n                    no sourceforge update (use source tree as-is, don't update web)\n";
 	print "  -l path               local build from specified source tree\n";
 	print "                        i.e do not checkout CVS, do not update web page\n";
+	print "  --show-targets        list the targets which would be built then exit\n";
 	print "  -c config.dumper      read a different config file to the default in\n";
 	print "                        \$HOME/.nightly_cvs_build.dumper\n";
 	print "  -q                    quiet, fewer logging messages\n";
+	print "  -v                    verbose, log remote commands\n";
 	print "  -h                    help message\n";
 	exit 0;
 }
+
 
 =head1 NAME
 
@@ -77,12 +88,13 @@ Features include:
 
 Compile farm hosts are simple to setup.  All you need is a compiler
 and sshd running.  No networked filesystems are used, instead scp
-copies the source tree to the compile farm host.
+or rsync copies the source tree to the compile farm host.
 
 =item *
 
 Supports remote building with MS Visual C++ using the 'devenv' command.
-Cygwin with sshd running on the MS Windows host is recommended.
+A convenient way to remotely access the MS Windows host is to install
+Cygwin with sshd running as a service.
 
 =item *
 
@@ -94,8 +106,8 @@ be included in a new column in the results table.
 =item *
 
 Compile farm hosts can be woken from suspension using Wake-On-Lan and reliably
-used for unattended compilation.  After the host has finished it can return to
-idle and go back to sleep.
+used for unattended compilation.  After the build has finished a host can return
+to idle and go back to sleep.
 
 =back
 
@@ -122,8 +134,8 @@ entry to run the script every morning at 0100 would be:
 Given a source tree, copy it to all configured compile farm hosts,
 build, test and collect the results in log files and a summary on
 the terminal.  No update of files on the web host is made.
-This is very useful for
-developers to check their changes on several local machines before committing.
+This is very useful for developers to check their changes on
+several local machines before committing.
 
 =back
 
@@ -142,30 +154,43 @@ for the local source tree and the remote CVS and web host paths.
        # CVS module name
        cvs_module => 'AAF',
 
+       # build only a subdirectory of a csv module, not the whole tree
+       cvs_subdir => 'libMXF'
+
        # command for accessing CVS (in this example a socks proxy is used)
        cvs_command => 'env CVS_RSH=ssh socksify cvs -z3 -d:ext:stuart_hc@aaf.cvs.sourceforge.net:/cvsroot/aaf',
+
+       # command to update source tree on compile farm hosts
+       rsync_command => 'rsync -aiv --delete -e ssh'
 
        # Web host destination for generated html and build state
        scp_web_dest => 'stuart_hc@shell.sf.net:/home/groups/a/aa/aaf/htdocs/build'
    },
 
-All other entries will describe a single compile farm host target.  E.g.
+All other entries will describe a single compile farm host target.
+E.g.
 
   'x86_64Linux' => {
        host=>'igor',         # hostname
        prefix=>'nightly',    # directory on remote host to store build tree
-       wakeup=>'pilot35',    # name or ethernet address for wake-on-lan command
+       wakeup=>'pilot35',    # hostname or ethernet address for wake-on-lan command
+       copy=>'rsync',        # use rsync instead of simple copy command 'cp' to update  source tree
+
+                             # 'tarball' will package up a snapshot of binaries or libraries
+                             # which will be uploaded to the web site
+       tarball=>'cd AAFi686LinuxSDK/g++/bin/debug && tar cf - libcom-api.so aafext | gzip'
    },
 
   'x86_64Linux-rel' => {
        host=>'igor',
        prefix=>'nightly',
-       aafopts => q{AAFTARGET=Release},	# args pass to make command for Release
+       aafopts => q{AAFTARGET=Release},  # args passed to make command for Release
    },
 
   'i686msdev' => {
        host=>'Administrator@pilot60',    # remote username is different to local username
        prefix=>'nightly',
+       init=>'. MSVC8_env_vars.sh ;'     # command to run before 'make' e.g. to setup environment variables
        # A special case is needed for MS Visual C++ using 'devenv'
        aafopts => q{. $HOME/vc71_vars.sh; devenv AAFWinSDK\\\\AAFWinSDK.sln /build Debug /project "Everything" /out devenv.log; cat devenv.log},
    },
@@ -196,8 +221,8 @@ Remote execution for MS Windows builds is a little tricky:
   commands in a cygwin environment.
   To get a MinGW environment (MinGW gcc, ld etc) a remote cygwin shell can
   be used as follows:
-	$ c:/msys/1.0/bin/sh --login -c "make && make check"
-	or
+    $ c:/msys/1.0/bin/sh --login -c "make && make check"
+    or
     $ c:/msys/1.0/bin/sh --login -c "./configure && make"
 
 =head1 AUTHOR
@@ -213,6 +238,24 @@ if (! exists $farm{config}) {
 }
 my %config = %{ $farm{config} };
 delete $farm{config};				# stops spurious build attempts
+my $scp = exists $config{scp_command} ? $config{scp_command} : 'scp';
+my $rsync = exists $config{rsync_command} ? $config{rsync_command} : 'rsync';
+
+# Setup list of all targets to build and check config exists
+my @farm_targets = sort keys %farm;
+if (scalar @opt_target) {
+	@farm_targets = @opt_target;
+}
+for my $k (@farm_targets) {
+	if (! exists $farm{$k}) {
+		die "Target $k has no configuration";
+	}
+}
+
+if ($opt_show_targets) {
+	for my $k (@farm_targets) { print "$k\n"; }
+	exit 0;
+}
 
 my $cvs_proj = $config{cvs_module};
 
@@ -244,51 +287,45 @@ if (! $opt_local_build)
 		my $dir = "$config{cvs_module}-$date_path";
 		system("rm -rf $dir");
 		my $output = cvs_retry(20, $config{cvs_command}, "-q checkout -D '$opt_date' -d $dir $config{cvs_module}");
+		if (! defined $output)
+			{ die "cvs checkout failed\n"; }
 		chdir $orig_pwd;
-	}
-	else {
-		# get latest CVS
-		if (-e $tree) {
-			# update CVS tree
-			if (update_tree($tree, $tree_arg, \$date)) {
-				push @to_build, $tree;
-			}
-		}
-		else {
-			# checkout CVS tree
-			chop(my $orig_pwd = `pwd`);
-			chdir $config{tree} || die "chdir $config{tree} $!";
-			chdir $orig_pwd;
-		}
-	}
 
-	# Force build if -r option set
-	if ($opt_rebuild) {
 		push @to_build, $tree;
-	}
-
-	if (! @to_build)
-	{
-		print "Nothing to build\n";
-		exit 0;
-	}
-
-	if ($opt_date) {
 		$date = $opt_date;
 	}
-	else {
-		# When updating, $date is set by update_tree() using cvs.log.
-		# Otherwise we must have done a fresh checkout so use 'cvs history'
-		# which is not as good since it doesn't give you seconds
-		if (!defined $date) {
-			$date = cvs_history();
+	elsif (! $opt_no_sourceforge_update) {
+		# Update CVS tree or checkout fresh copy if tree does not exist.
+		# The date of last change (if any) is returned in the 3rd arg.
+		if (update_tree($tree, $config{cvs_subdir}, $tree_arg, \$date)) {
+			push @to_build, $tree;
 		}
+	}
+
+	# Force build if -r or -n option set
+	if (($opt_rebuild  || $opt_no_sourceforge_update) && ! @to_build) {
+		push @to_build, $tree;
+
+		my $log_tree = $tree;
+		$log_tree .= "/$config{cvs_subdir}" if defined $config{cvs_subdir};
+		$date = read_date_from_cvs_log($log_tree);
+	}
+
+	if (! @to_build) {
+		print "Nothing to build\n";
+		exit 0;
 	}
 }
 else	# local build only
 {
+	$tree = $opt_local_build;
 	push @to_build, $tree;
 	$date = 'local';
+}
+
+if (! defined $date) {
+	print "date undefined";
+	exit 0;
 }
 
 my $date_path = date_to_filepath($date);
@@ -300,11 +337,6 @@ print "to build for \"$date\": ", join(' ', @to_build), "\n";
 ##################
 # fork and monitor
 ##################
-
-my @farm_targets = sort keys %farm;
-if (scalar @opt_target) {
-	@farm_targets = @opt_target;
-}
 
 # Load the results from the last build state unless local build
 # Results will be updated by when a build status is returned
@@ -425,8 +457,10 @@ if ($@)
 save_build_state(\%build_state);
 
 # Now copy results up to sourceforge.
-# The results could also be emailed to aaf-commits.
-save_build_state_as_webpage(\%build_state, "/tmp/nightly_$cvs_proj") unless $opt_local_build;
+# TODO: A results summary should be emailed to aaf-commits.
+if (! $opt_local_build) {
+	save_build_state_as_webpage(\%build_state, "/tmp/nightly_$cvs_proj");
+}
 
 exit 0;
 
@@ -474,8 +508,8 @@ sub load_build_state
 	}
 	else {
 		$file = "/tmp/build_state_$cvs_proj.dumper";
-		system("socksify scp -qp $config{scp_web_dest}/build_state_$cvs_proj.dumper $file");
-		if ($? != 0) { die "scp build state file from remote site failed\n" }
+		system("$scp $config{scp_web_dest}/build_state_$cvs_proj.dumper $file");
+		if ($? != 0) { die "scp build state file failed (\$?=$?) $config{scp_web_dest}/build_state_$cvs_proj.dumper $file\n" }
 	}
 
 	$str = `cat $file`;
@@ -534,11 +568,12 @@ sub save_build_state_as_webpage
 	my ($p, $file) = @_;
 
 	my @logfiles;
+	my @tarballs;
 
 	if (! open(OUT, ">$file"))
 		{ warn "saving build state - $file: $!"; return }
 
-	# Make list of all build target to use in first row of table
+	# Make list of all build targets to use in first row of table
 	# Not all dates will have all targets, so search all results
 	my %alltargets;
 	for my $date (sort {$b cmp $a} keys %{ $p })
@@ -550,13 +585,16 @@ sub save_build_state_as_webpage
 		}
 	}
 
+	# Sort targets by their platform importance to make results table easier to read
+	my @sorted_targets = sort by_platform_importance keys(%alltargets);
+
 	# Create the headings of the table
-	print OUT q{<TR> <TH rowspan="2" valign="bottom">snapshot or tag};
-	for my $key (sort keys %alltargets) {
+	print OUT q{<TR> <TH rowspan="2" valign="bottom">snapshot or tag (times are UTC)};
+	for my $key (@sorted_targets) {
 		print OUT qq{\t<TH colspan="2">$key\n};
 	}
 	print OUT q{<TR> };
-	for my $key (sort keys %alltargets) {
+	for my $key (@sorted_targets) {
 		print OUT "\t<TH>Dbg<TH>Rel\n";
 	}
 
@@ -567,7 +605,7 @@ sub save_build_state_as_webpage
 
 		my $dp = $p->{$date};
 
-		for my $key (sort keys %alltargets)
+		for my $key (@sorted_targets)
 		{
 			if (! exists $dp->{$key})
 			{
@@ -586,19 +624,27 @@ sub save_build_state_as_webpage
 				print OUT	q{<TD class="} . css_class($dp->{$rkey}{status}) . q{">};
 
 				if (defined $dp->{$rkey}{status}) {
-					# Can we give a link to make log? (status 1 or 2 mean no make log)
 					my $date_path = date_to_filepath($date);
+					$date_path =~ s/_*\(.*\)$//;		# remove annotation e.g. " (V112_DR1)
+
+					# Can we give a link to make log? (status 1 or 2 mean no make log)
 					if ($dp->{$rkey}{status} != 1 && $dp->{$rkey}{status} != 2)
 					{
 						print OUT	qq{<a href="log/$date_path-make-$rkey.log.gz">M</a>};
 						push @logfiles, "$lasttree/log/$date_path-make-$rkey.log";
 					}
 
-					# Link to make-check log if status indicates one should be available
+					# Link to make-check log and libs tarball if status indicates one should be available
 					if ($dp->{$rkey}{status} == 0 || $dp->{$rkey}{status} == 5)
 					{
-						print OUT	qq{ <a href="log/$date_path-make_check-$rkey.log.gz">T</a>};
-						push @logfiles, "$lasttree/log/$date_path-make_check-$rkey.log";
+						print OUT	qq{ <a href="log/$date_path-check-$rkey.log.gz">T</a>};
+						push @logfiles, "$lasttree/log/$date_path-check-$rkey.log";
+
+						my $tarball = "log/$date_path-libs-$rkey.tar.gz";
+						if (-e "$lasttree/$tarball") {
+							print OUT qq{ <a href="$tarball">&nabla;</a>};
+							push @tarballs, "$lasttree/$tarball";
+						}
 					}
 				}
 				print OUT "\n";
@@ -608,30 +654,75 @@ sub save_build_state_as_webpage
 	}
 	close(OUT);
 
+	if ($opt_no_sourceforge_update) {
+		print "Not updating sourceforge\n";
+		return;
+	}
+
 	print "Copying build state to sourceforge...\n";
-	system("socksify scp -qp $internal_build_state_file $config{scp_web_dest}/");
+	system("$scp $internal_build_state_file $config{scp_web_dest}/");
 	if ($? != 0)
 		{ warn "scp build state failed\n" }
 
-	print "Compressing log files...\n";
-	# create list of uncompressed logs which exist
-	my $logfiles = join(' ', map { (-e $_) ? $_ : '' } @logfiles);
-	system("gzip -f $logfiles");
-	if ($? != 0)
-		{ warn "gzip log files failed\n" }
+	@logfiles = grep { -e $_ } @logfiles;		# get existing logfiles
+	if (@logfiles) {
+		print "Compressing log files...\n";
+		# create list of uncompressed logs which exist
+		my $logfiles = join(' ', @logfiles);
+		system("gzip -f $logfiles");
+		if ($? != 0)
+			{ warn "gzip log files failed\n" }
 
-	print "Copying log files to sourceforge...\n";
-	my @gz_logfiles = map { $_ . '.gz' } @logfiles; 	# modify each logfile to add '.gz'
-	my $gz_logfiles = join(' ', @gz_logfiles);
-	system("socksify scp -qp $gz_logfiles $config{scp_web_dest}/log");
-	if ($? != 0)
-		{ warn "scp log files failed\n" }
+		print "Copying log files to sourceforge...\n";
+		my @gz_logfiles = map { $_ . '.gz' } @logfiles; 	# modify each logfile to add '.gz'
+		my $gz_logfiles = join(' ', @gz_logfiles);
+		system("$rsync $gz_logfiles $config{scp_web_dest}/log");
+		if ($? != 0)
+			{ warn "scp log files failed\n" }
+	}
+
+	if (@tarballs) {
+		print "Copying (rsync) tarballs to sourceforge...\n";
+		system("$rsync @tarballs $config{scp_web_dest}/log");
+		if ($? != 0)
+			{ warn "scp tarballs failed\n" }
+	}
 
 	print "Copying html table to sourceforge...\n";
-	system("socksify scp -qp $file $config{scp_web_dest}/nightly_trunk_rows");
+	system("$rsync $file $config{scp_web_dest}/nightly_trunk_rows");
 	if ($? != 0)
 		{ warn "scp html table failed\n" }
 	print "sourceforge updated\n";
+}
+
+sub by_platform_importance
+{
+	# Sort comparison function to sort by "platform inportance".
+	#
+	# Convert platform into score representing importance where
+	# lower score means higher in importance (sorted to front of list)
+	my ($a_score, $b_score) = (0, 0);
+
+	# Least important is Apple platform
+	$a_score = -16 if $a =~ /darwin/i;
+	$b_score = -16 if $b =~ /darwin/i;
+
+	# then Linux platform
+	$a_score = -32 if $a =~ /linux/i;
+	$b_score = -32 if $b =~ /linux/i;
+
+	# then Win platform, MSVC compiler first
+	$a_score = -64 if $a =~ /\bWin|\dWin|VC[\d]/i;
+	$b_score = -64 if $b =~ /\bWin|\dWin|VC[\d]/i;
+
+	# Visual C compiler environment is most important
+	$a_score = -128 if $a =~ /msdev|devenv|vcexpress/i;
+	$b_score = -128 if $b =~ /msdev|devenv|vcexpress/i;
+
+	my $r = $a_score <=> $b_score	# compare by score
+			|| $a cmp $b;			# then alphanumeric sort if score equal
+
+	return $r;
 }
 
 ##################
@@ -640,10 +731,8 @@ sub save_build_state_as_webpage
 sub build_type
 {
 	my ($tree) = @_;
-	my $name = basename($tree);
-	my $type = 'autoconf';
-	$type = 'AAF' if $config{cvs_module} =~ /AAF/;
-	return $type;
+	return 'autoconf' if -e "$tree/configure.in" or -e "$tree/configure.ac";
+	return 'make';
 }
 
 sub prepare_build
@@ -710,7 +799,7 @@ sub build
 		return ERR_SOURCE_PREP unless defined $distfile;
 		my $basedist = basename($distfile);
 
-		qscp($distfile, $host, $path) || return ERR_SOURCE_PREP;
+		qscp($build, $distfile, $host, $path) || return ERR_SOURCE_PREP;
 
 		qssh($host, $init, "cd $path && gzip -dc $basedist | tar xf -") || return ERR_SOURCE_PREP;
 
@@ -720,50 +809,39 @@ sub build
 
 		qssh($host, $init, "cd $path/$unpackdir && make check", "> $tree/$log_prefix$build-check.log 2>&1") || return ERR_TEST;
 	}
-	elsif (build_type($tree) eq 'AAF')
+	elsif (build_type($tree) eq 'make')
 	{
-		my ($aafopts, $aafcheck) = ('','');
-		$aafopts = $farm{$build}{aafopts} if exists $farm{$build}{aafopts};
-		$aafcheck = $farm{$build}{aafcheck} if exists $farm{$build}{aafcheck};
-
 		if (! $opt_shortcut_copy) {
-			# Prepare target disk space
-			#
-			# Note that rm -rf stalls for WIN32 targets so use cmd /c rmdir
-			if ($aafopts =~ /msdev|devenv/i)		# msdev or devenv build?
-			{
-				my $qpath = $path;
-				$qpath =~ s,/,\\\\,g;			# convert / to \\
-				qssh($host, '', "cmd /c rmdir /s /q $qpath");
-				qssh($host, '', "rm -rf $path") || return ERR_SOURCE_PREP;
-			}
-			else
-			{
-				qssh($host, '', "rm -rf $path") || return ERR_SOURCE_PREP;
-			}
-
-			# Copy AAF source tree
-			qscp($tree, $host, $path) || return ERR_SOURCE_PREP;
+			# Copy source tree
+			qscp($build, $tree, $host, $path) || return ERR_SOURCE_PREP;
 		}
 
-		print "Building AAF path=$path\n";
+		# subdir is an optional subdir to limit what is built
+		$path .= "/$config{cvs_subdir}" if exists $config{cvs_subdir};
+		my $make_opts = '';
+		$make_opts = $farm{$build}{make_opts} if exists $farm{$build}{make_opts};
+		my $make_command = "make $make_opts";
+		my $check_command = "make $make_opts check";
+		$make_command = $farm{$build}{make_command} if exists $farm{$build}{make_command};
+		$check_command = $farm{$build}{check_command} if exists $farm{$build}{check_command};
 
-		if ($aafopts =~ /msdev|devenv/i)		# msdev or devenv build?
-		{
-			qssh($host, $init, "cd $path && $aafopts", "> $tree/${log_prefix}make-$build.log 2>&1") || return ERR_BUILD;
-			qssh($host, $init, "cd $path && $aafcheck", "> $tree/${log_prefix}make_check-$build.log 2>&1") || return ERR_TEST;
+		print "Building path=$path\n";
+		qssh($host, $init, "cd $path && $make_command", "> $tree/${log_prefix}make-$build.log 2>&1") || return ERR_BUILD;
+
+		# Create a binary tarball containing a binary release
+		if (exists $farm{$build}{tarball}) {
+			qssh($host, $init, "cd $path && $farm{$build}{tarball}", "> $tree/${log_prefix}libs-$build.tar.gz");
 		}
-		else
-		{
-			qssh($host, $init, "cd $path && make $aafopts everything", "> $tree/${log_prefix}make-$build.log 2>&1") || return ERR_BUILD;
 
+		# Kludge for AAF SDK to prevent ScaleTest taking a very long time
+		if ($cvs_proj eq 'AAF') {
 			# Until we have an environment variable to turn off ScaleTest for nightly builds
 			# turn off test by modifying makefile (this could surprise users though).
-			qssh($host, $init, "cd $path && perl -p -i -e s/..APP_RUN_ENV./true/ test/com/ScaleTest/GNUmakefile");		# ignore error
-
-			qssh($host, $init, "cd $path && make $aafopts check", "> $tree/${log_prefix}make_check-$build.log 2>&1") || return ERR_TEST;
+			qssh($host, $init, "cd $path && perl -p -i -e s/..APP_RUN_ENV./true/ test/com/ScaleTest/GNUmakefile");
 		}
 
+		# Run tests after tarball is made since tests may fail
+		qssh($host, $init, "cd $path && $check_command", "> $tree/${log_prefix}check-$build.log 2>&1") || return ERR_TEST;
 	}
 	return 0;
 }
@@ -830,7 +908,8 @@ sub qssh
 		$command = qq{ssh $host '$init $cmd' $redir};
 	}
 
-	#print "executing \"$command\"\n";
+	print "executing \"$command\"\n" if $opt_verbose;
+
 	system($command);
 	if ($? != 0)
 	{
@@ -842,32 +921,79 @@ sub qssh
 
 sub qscp
 {
-	my ($src, $host, $dst) = @_;
+	# E.g. (i686Linux, /dp_videoedit/AAF-cvs-tip, stuartc@igor, nightly/AAF-cvs-tip-SparcSolaris)
+	my ($build, $src, $host, $dst) = @_;
 
-	my $scp = 'scp';
+	my $copy;
+	# Use custom copy command (usually rsync) if set
+	if (exists $farm{$build}{copy}) {
+		$copy = $farm{$build}{copy};
+		if ($copy eq 'rsync') {
+			$copy = 'rsync -aiv --delete -e ssh';	# expand shorthand 'rsync'
+		}
 
-	# Kludge sourceforge compile farm hosts
-	if ($host =~ /\.cf\.sf\.net/)
-	{
-		$host =~ s/[a-zA-Z0-9-]+\.cf/cf-shell/;
-		$scp = 'socksify scp';
-	}
+		# To make contents of src tree sync'd with dst
+		# add trailing '/' if not present
+		# E.g. src=AAF-cvs-tip dest=igor:nightly/AAF-cvs-tip-x86_64Linux
+		$src .= '/' unless $src =~ m,/$,;
 
-	system("$scp -q -pr $src $host:$dst > /tmp/$$-$host-scp.log 2>&1");
-	if ($? != 0)
-	{
-		# Work around sung1 bug where commands that succeed return non-zero
-		# but stderr is empty
-		if ($host eq 'sung1' && !(-s "/tmp/$$-$host-scp.log"))
-		{
-			system("rm /tmp/$$-$host-scp.log");
+		print "Executing: $copy $src $host:$dst\n";
+		system("$copy $src $host:$dst > /tmp/$$-$host-scp.log 2>&1");
+		my $res = $? >> 8;
+		if ($res == 0 || $res == 24) {
+			# 0 means success
+			# 24 means "file vanished" which happens when deleting UTF filename tests
+			#system("rm /tmp/$$-$host-scp.log");
 			return 1;
 		}
-		warn "scp failed: scp -q -pr $src $host:$dst\n";
-		return 0
+
+		# Otherwise it failed, so display error
+		system("cat /tmp/$$-$host-scp.log");
+		return 0;
 	}
-	system("rm /tmp/$$-$host-scp.log");
-	return 1;
+	else {
+		# Clean out old directory if any
+		#
+		# Note that rm -rf stalls for WIN32 targets so use cmd /c rmdir
+		my $aafopts = '';
+		$aafopts = $farm{$build}{aafopts} if exists $farm{$build}{aafopts};
+		my $path = $dst;
+		if ($aafopts =~ /msdev|devenv|vcexpress|VC\d|Win/i) {		# msdev or devenv build?
+			my $qpath = $path;
+			$qpath =~ s,/,\\\\,g;			# convert / to \\
+			qssh($host, '', "cmd /c rmdir /s /q $qpath");
+			qssh($host, '', "rm -rf $path") || return ERR_SOURCE_PREP;
+		}
+		else {
+			qssh($host, '', "rm -rf $path") || return ERR_SOURCE_PREP;
+		}
+
+		$copy = 'scp -q -pr';
+
+		# Kludge sourceforge compile farm hosts
+		if ($host =~ /\.cf\.sf\.net/)
+		{
+			$host =~ s/[a-zA-Z0-9-]+\.cf/cf-shell/;
+			$copy = "socksify $copy";
+		}
+
+		print "Executing: $copy $src $host:$dst\n";
+		system("$copy $src $host:$dst > /tmp/$$-$host-scp.log 2>&1");
+		if ($? != 0) {
+			# Work around sung1 bug where commands that succeed return non-zero
+			# but stderr is zero-size
+			if ($host =~ /sung1|compression1/ && (-s "/tmp/$$-$host-scp.log") == 0)
+			{
+				system("rm /tmp/$$-$host-scp.log");
+				return 1;
+			}
+			warn "scp failed: scp -q -pr $src $host:$dst\n";
+			system("cat /tmp/$$-$host-scp.log");			# display exact scp error
+			return 0
+		}
+		system("rm /tmp/$$-$host-scp.log");
+		return 1;
+	}
 }
 
 #################
@@ -887,15 +1013,17 @@ sub cvs_retry
 	my $log = '';
 	for my $c (1 .. $retries)
 	{
+		print "pwd=", `pwd`;
 		print "Executing: $cvs_command $argstr\n";
 		open(PIPE, "$cvs_command $argstr 2>&1 |") || die "pipe failed: $!";
 		while (<PIPE>)
 			{ $log .= $_ }
 		close(PIPE);
-		return $log if ($? == 0);
-		sleep 10;
+		return $log if ($? == 0);	# success
+		print $log;					# $log will contain cvs error message
+		sleep 5;
 	}
-	return '';
+	return undef;
 }
 
 sub cvs_history
@@ -913,12 +1041,13 @@ sub cvs_history
 
 # update_tree
 # cd to tree, perform CVS update -PAd, using optional -r branch
+# or checkout new tree if it doesn't exist
 #
 # returns 0 for no updates found or update failed (conflicts, disk space etc)
 # returns 1 for update found - i.e. need to rebuild
 sub update_tree
 {
-	my ($tree, $branch, $p_last_date) = @_;			# branch is optional
+	my ($tree, $subdir, $branch, $p_last_date) = @_;			# branch is optional
 
 	my $result = 0;
 	chop(my $orig_pwd = `pwd`);
@@ -930,10 +1059,10 @@ sub update_tree
 
 		my $basename = basename($tree);
 		my $output = cvs_retry(20, $config{cvs_command}, "-q checkout -d $basename $config{cvs_module}");
-		if (! $output)
-			{ die "cvs update failed\n"; }
+		if (! defined $output)
+			{ die "cvs checkout failed\n"; }
 
-		# chdir so that log command will work
+		# chdir into newly checked out tree so that log command will work
 		if (! chdir($tree))
 			{ die "chdir: $tree: $!\n"; }
 
@@ -944,12 +1073,16 @@ sub update_tree
 		if (! chdir($tree))
 			{ die "chdir: $tree: $!\n"; }
 
+		# cd to subdir if specified
+		if (defined $subdir && !chdir($subdir))
+			{ die "chdir: $subdir: $!\n"; }
+
 		# cvs update
 		my $cvs_args = '-q update -PAd';
 		$cvs_args .= " -r $branch" if defined $branch;
 
 		my $cvs_update = cvs_retry(20, $config{cvs_command}, $cvs_args);
-		if (! $cvs_update) {
+		if (! defined $cvs_update) {
 			die "cvs update failed\n";
 		}
 
@@ -958,7 +1091,7 @@ sub update_tree
 		if (@new)
 		{
 			if (grep(/^C /, @new)) {	# conflicts mean broken tree
-				die "cvs update found conflicts\n";
+				die "cvs update found conflicts:\n" . join("\n", grep(/^C /, @new)) . "\n";
 			}
 			
 			print join("\n", @new), "\n";
@@ -969,7 +1102,7 @@ sub update_tree
 	if ($result) {
 		# Something changed so update cvs log
 		my $cvs_log = cvs_retry(20, $config{cvs_command}, 'log');
-		if ($cvs_log)
+		if (defined $cvs_log)
 		{
 			# save cvs.log for later perusal
 			if (! open(OUT, "> cvs.log"))
@@ -982,7 +1115,11 @@ sub update_tree
 
 			# work out the date of the last change
 			my @sorted = sort( $cvs_log =~ /^date: (\d\d\d\d...............)/gm );
-			$$p_last_date = date_to_filepath($sorted[-1]);
+			my $last_date = $sorted[-1];
+			# log file dates are in the form '2007/04/16 17:08:50'
+			# For consistency with other uses, change '/' to '-'
+			$last_date =~ s/\//-/g;
+			$$p_last_date = $last_date;
 		}
 	}
 	else
@@ -995,46 +1132,35 @@ sub update_tree
 	return $result;
 }
 
+sub read_date_from_cvs_log
+{
+	my ($tree) = @_;
+
+	my $logfile = "$tree/cvs.log";
+	if (! open(IN, $logfile)) {
+		die "$logfile: $!";
+	}
+
+	my $cvs_log = '';
+	while (<IN>) {
+		$cvs_log .= $_ if /^date: /;
+	}
+	close(IN);
+
+	# work out the date of the last change
+	my @sorted = sort( $cvs_log =~ /^date: (\d\d\d\d...............)/gm );
+	my $last_date = $sorted[-1];
+	# log file dates are in the form '2007/04/16 17:08:50'
+	# For consistency with other uses, change '/' to '-'
+	$last_date =~ s/\//-/g;
+
+	return $last_date;
+}
+
 sub date_to_filepath
 {
 	my ($date_time) = @_;
 	$date_time =~ s/\//-/g;			# convert '/' to underscore
 	$date_time =~ s/[ :]/_/g;		# convert ' ' or ':'  to underscore
 	return $date_time;
-}
-
-
-# Internal function for generating AAF test cases
-# The output is only used to create perl code representing WIN32 test cases.
-# To regenerate the Win32 test command insert this near the top of file:
-#   printTestWin32(); exit;
-sub printTestWin32
-{
-	foreach my $release qw(Debug Release)
-	{
-		my $path = 'test/com/';
-		my $prefix = '';
-		my $reldir = "$release/";
-
-		foreach my $test qw(ComModTestAAF CreateSequence EssenceAccess MultiGenTest ComFileKindTest UTF8FileNameTest OpenExistingModify ScaleTest ResultToTextTest XMLStoredFormat)
-		{
-			my $args = '';
-			print "${prefix}cd $path$test && ";
-			$path = '../';
-			$prefix = ' && ';
-
-			if ($test eq 'EssenceAccess')
-				{ print "cp ../ComModTestAAF/Laser.wav . && " }
-
-			my $testexe = $test;
-			$testexe =~ s/ComModTestAAF/ComModAAF/;
-	
-			$args = ' 2000' if $test eq 'CreateSequence';
-			$args = ' 100' if $test eq 'EssenceAccess';
-			$args = ' -r LoadLib AAFCOAPI.dll -r FileOp write S4KBinary basic.aaf -r AddMasterMobs A B -r FileOp save_and_close -r UnloadLib' if $test eq 'MultiGenTest';
-			$args = ' -q -d' if $test eq 'ScaleTest';
-			print "env PATH=../../../AAFWinSDK/bin:\"\$PATH\" ../../../AAFWinSDK/${reldir}Test/$testexe.exe$args"
-		}
-		print "\n\n";
-	}
 }
