@@ -150,7 +150,7 @@ static const wchar_t* AAFEscape_AttrName = L"escaped";
 
 
 // property symbols
-static const wchar_t* HeaderDictionarySymbol = L"HeaderDictionary";
+static const wchar_t* HeaderDictionarySymbol = L"Dictionaries";
 static const wchar_t* DefObjectIdentificationSymbol = L"DefinitionObjectIdentification"; 
 
 
@@ -1090,7 +1090,7 @@ OMXMLStoredObject::restore(OMPropertySet& properties)
         }
 
         if (getReader()->getEventType() == OMXMLReader::START_ELEMENT &&
-            getReader()->elementEquals(getBaselineURI(), L"Header"))
+            getReader()->elementEquals(getBaselineURI(), L"Preface"))
         {
             createDictionaryMap();
             OMStrongReference* headerRef = dynamic_cast<OMStrongReference*>(
@@ -3670,7 +3670,7 @@ OMXMLStoredObject::createDictionaryMap()
     getReader()->reset();
     getReader()->nextElement();
     while (getReader()->nextElement() && 
-        !getReader()->elementEquals(getBaselineURI(), L"Header"))
+        !getReader()->elementEquals(getBaselineURI(), L"Preface"))
     {
         getReader()->skipContent();
     }
