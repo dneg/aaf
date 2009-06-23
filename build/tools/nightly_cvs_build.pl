@@ -196,6 +196,18 @@ E.g.
    },
 
 
+=head1 BUILD STATE
+
+The build state file stores the results of all previous builds in Data::Dumper format.
+It is stored at $config{scp_web_dest}/build_state_$config{cvs_module}.dumper on the
+remote host.  Before each build, unless it is a local build with the -l option, the 
+previous build state is read so that new build results can be merged into the
+previous results and an updated table of results can be generated.
+
+The first time nightly_cvs.build.pl is run, an initial build state file can be
+a plain text file consisting of one character, the digit 1.
+
+
 =head1 INTERNAL DESIGN DETAILS
 
 The parent process forks creating multiple children: one for each build.
