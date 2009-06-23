@@ -292,31 +292,34 @@ bool diff(const aafCharacter* fileNameA, const aafCharacter* fileNameB)
     return diff;
 }
 
+#define XML_NUM_TESTS 15
 
+typedef struct {
+	const char *name;
+	int (*function)(void);
+} XMLTests_t;
 
 int main(int argc, char *argv[])
 {
     CAAFInitialize aafInit;
 
-    int result[15];
-    memset(result, 0, sizeof(result));
-    const char* tests[15] = 
+    XMLTests_t tests[XML_NUM_TESTS] = 
     {
-        "Character ",
-        "Enum      ",
-        "ExtEnum   ",
-        "FixedArray",
-        "Indirect  ",
-        "Integer   ",
-        "Opaque    ",
-        "Record    ",
-        "Rename    ",
-        "Set       ",
-        "Stream    ",
-        "String    ",
-        "VarArray  ",
-        "WeakRef   ",
-        "Examples  "
+        {"Character", testCharacter},
+        {"Enum", testEnum},
+        {"ExtEnum", testExtEnum},
+        {"FixedArray", testFixedArray},
+        {"Indirect", testIndirect},
+        {"Integer", testInteger},
+        {"Opaque", testOpaque},
+        {"Record", testRecord},
+        {"Rename", testRename},
+        {"Set", testSet},
+        {"Stream", testStream},
+        {"String", testString},
+        {"VarArray", testVarArray},
+        {"WeakRef", testWeakRef},
+        {"Examples", testExampleFiles}
     };
         
     printf("\n");
@@ -324,35 +327,36 @@ int main(int argc, char *argv[])
     printf("* XML Stored Format Test *\n");
     printf("**************************\n");
     printf("\n");
-    
-    result[0] = testCharacter();
-    result[1] = testEnum();
-    result[2] = testExtEnum();
-    result[3] = testFixedArray();
-    result[4] = testIndirect();
-    result[5] = testInteger();
-    result[6] = testOpaque();
-    result[7] = testRecord();
-    result[8] = testRename();
-    result[9] = testSet();
-    result[10] = testStream();
-    result[11] = testString();
-    result[12] = testVarArray();
-    result[13] = testWeakRef();
-    result[14] = testExampleFiles();
 
     printf("\nResults summary:\n");
-    bool passed = true;
-    for (unsigned int i = 0; i < sizeof(tests) / sizeof(char*); i++)
+    bool passed = false;
+    for (unsigned int i = 0; i < XML_NUM_TESTS; i++)
     {
-        printf("  %s", tests[i]);
-        if (result[i] == 0)
+		if (argc > 1)
+		{
+			// If arguments supplied, only execute tests matching arguments
+			bool name_matched = false;
+			for (int n = 1; n < argc; n++)
+			{
+				if (strcmp(argv[n], tests[i].name) == 0)
+					name_matched = true;
+			}
+			if (! name_matched)
+				continue;
+		}
+
+		int result = tests[i].function();
+
+        printf("  %10s", tests[i].name);
+        if (result == 0)
         {
             printf("\t\tpassed\n");
+            passed = true;
         }
-        else if (result[i] == 1)
+        else if (result == 1)
         {
             printf("\t\tpassed (with known FAILURES)\n");
+            passed = true;
         }
         else
         {
