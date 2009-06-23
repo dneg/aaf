@@ -1,3 +1,7 @@
+This ReadMe describes the deprecated AutoBuild system.  AutoBuild has been
+replaced by nightly_cvs_build.pl in build/tools/.  For full documentation
+on nightly_cvs_build.pl run "perldoc nightly_cvs_build.pl".
+
 Automated Build Tools ReadMe
 ============================
 
