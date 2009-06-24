@@ -9,8 +9,8 @@ d) enumeration value with element size 4
 e) enumeration value with element size 8
     
 -->
-<AAF xmlns="http://www.aafassociation.org/aafx/v1.1/20070305" 
-    xmlns:aaf="http://www.aafassociation.org/aafx/v1.1/20070305"
+<AAF xmlns="http://www.aafassociation.org/aafx/v1.1/20090617" 
+    xmlns:aaf="http://www.aafassociation.org/aafx/v1.1/20090617"
     xmlns:this="urn:uuid:8b6886f6-c6ac-4a5a-8158-309a238c1a08"
     version="1.1">
   <Extensions>
@@ -25,7 +25,7 @@ e) enumeration value with element size 8
                 <LocalIdentification>60000</LocalIdentification>
                 <Type>ProductReleaseType</Type>
                 <IsOptional>true</IsOptional>
-                <MemberOf>Mob</MemberOf>
+                <MemberOf>Package</MemberOf>
             </PropertyDefinition>
             <PropertyDefinition>
                 <Identification>urn:uuid:10000000-0000-0000-8000-000000000000</Identification>
@@ -34,7 +34,7 @@ e) enumeration value with element size 8
                 <LocalIdentification>60001</LocalIdentification>
                 <Type>urn:uuid:00000000-1000-0000-8000-000000000000</Type>
                 <IsOptional>true</IsOptional>
-                <MemberOf>Mob</MemberOf>
+                <MemberOf>Package</MemberOf>
             </PropertyDefinition>
             <PropertyDefinition>
                 <Identification>urn:uuid:20000000-0000-0000-8000-000000000000</Identification>
@@ -43,7 +43,7 @@ e) enumeration value with element size 8
                 <LocalIdentification>60002</LocalIdentification>
                 <Type>urn:uuid:00000000-2000-0000-8000-000000000000</Type>
                 <IsOptional>true</IsOptional>
-                <MemberOf>Mob</MemberOf>
+                <MemberOf>Package</MemberOf>
             </PropertyDefinition>
             <PropertyDefinition>
                 <Identification>urn:uuid:30000000-0000-0000-8000-000000000000</Identification>
@@ -52,7 +52,7 @@ e) enumeration value with element size 8
                 <LocalIdentification>60003</LocalIdentification>
                 <Type>urn:uuid:00000000-3000-0000-8000-000000000000</Type>
                 <IsOptional>true</IsOptional>
-                <MemberOf>Mob</MemberOf>
+                <MemberOf>Package</MemberOf>
             </PropertyDefinition>
             <PropertyDefinition>
                 <Identification>urn:uuid:40000000-0000-0000-8000-000000000000</Identification>
@@ -61,7 +61,7 @@ e) enumeration value with element size 8
                 <LocalIdentification>60004</LocalIdentification>
                 <Type>urn:uuid:00000000-4000-0000-8000-000000000000</Type>
                 <IsOptional>true</IsOptional>
-                <MemberOf>Mob</MemberOf>
+                <MemberOf>Package</MemberOf>
             </PropertyDefinition>
             <TypeDefinitionEnumeration>
                 <Identification>urn:uuid:00000000-1000-0000-8000-000000000000</Identification>
@@ -114,24 +114,24 @@ e) enumeration value with element size 8
         </Definitions>
     </Extension>
   </Extensions>
-  <Header>
-    <HeaderDictionary>
+  <Preface>
+    <Dictionaries>
       <Dictionary>
         <DataDefinitions>
           <DataDefinition aaf:uid="DataDef_Sound">
-            <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0101.01030202.02000000</DefinitionObjectIdentification>
+            <DefinitionObjectIdentification>urn:smpte:ul:060e2b34.04010101.01030202.02000000</DefinitionObjectIdentification>
             <DefinitionObjectName>Sound</DefinitionObjectName>
             <DefinitionObjectDescription>Sound data</DefinitionObjectDescription>
           </DataDefinition>
         </DataDefinitions>
       </Dictionary>
-    </HeaderDictionary>
+    </Dictionaries>
     <ByteOrder>LittleEndian</ByteOrder>
-    <LastModified>0000-00-00T00:00:00.00Z</LastModified>
-    <Content>
+    <FileLastModified>0000-00-00T00:00:00.00Z</FileLastModified>
+    <ContentStorageObject>
       <ContentStorage>
-        <Mobs>
-          <MasterMob>
+        <Packages>
+          <MaterialPackage>
 <!-- TEST DATA START -->
             <this:BaselineEnum>VersionPrivateBuild</this:BaselineEnum>
             <this:Int8Enum>AAA</this:Int8Enum>
@@ -139,43 +139,43 @@ e) enumeration value with element size 8
             <this:Int32Enum>AAA</this:Int32Enum>
             <this:Int64Enum>BBB</this:Int64Enum>
 <!-- TEST DATA END -->
-            <MobID>urn:x-umid:060a2b340101010101010f02-13-000000-f4304fc3123141edbee5d2de3067f0cb</MobID>
-            <MobSlots>
-              <TimelineMobSlot>
-                <SlotID>1</SlotID>
-                <MobSlotSegment>
+            <PackageID>urn:smpte:umid:060a2b34.01010101.01010f02.13000000.f4304fc3.123141ed.bee5d2de.3067f0cb</PackageID>
+            <PackageTracks>
+              <TimelineTrack>
+                <TrackID>1</TrackID>
+                <TrackSegment>
                   <SourceClip>
                     <ComponentDataDefinition>DataDef_Sound</ComponentDataDefinition>
                     <ComponentLength>0</ComponentLength>
-                    <SourceID>urn:x-umid:000000000000000000000000-00-000000-00000000000000000000000000000000</SourceID>
-                    <SourceMobSlotID>0</SourceMobSlotID>
+                    <SourcePackageID>urn:smpte:umid:00000000.00000000.00000000.00000000.00000000.00000000.00000000.00000000</SourcePackageID>
+                    <SourceTrackID>0</SourceTrackID>
                   </SourceClip>
-                </MobSlotSegment>
-                <TimelineMobSlotEditRate>48000/1</TimelineMobSlotEditRate>
-                <SlotOrigin>0</SlotOrigin>
-              </TimelineMobSlot>
-            </MobSlots>
-            <MobLastModified>2005-06-02T10:00:00.00Z</MobLastModified>
+                </TrackSegment>
+                <EditRate>48000/1</EditRate>
+                <Origin>0</Origin>
+              </TimelineTrack>
+            </PackageTracks>
+            <PackageLastModified>2005-06-02T10:00:00.00Z</PackageLastModified>
             <CreationTime>2005-06-02T10:00:00.00Z</CreationTime>
-          </MasterMob>
-        </Mobs>
+          </MaterialPackage>
+        </Packages>
       </ContentStorage>
-    </Content>
-    <Version>1.1</Version>
+    </ContentStorageObject>
+    <FormatVersion>1.1</FormatVersion>
     <IdentificationList>
       <Identification>
-        <CompanyName>AAF Association</CompanyName>
-        <ProductName>AAF-X Test</ProductName>
-        <ProductVersion>
+        <ApplicationSupplierName>AAF Association</ApplicationSupplierName>
+        <ApplicationName>AAF-X Test</ApplicationName>
+        <ApplicationVersion>
           <major>0</major>
           <minor>1</minor>
           <tertiary>0</tertiary>
           <patchLevel>0</patchLevel>
           <type>VersionUnknown</type>
-        </ProductVersion>
-        <ProductVersionString>Unknown version</ProductVersionString>
-        <ProductID>urn:uuid:d3ec8680-1e79-48f9-9941-0a10a16886af</ProductID>
-        <Date>2005-06-02T10:00:00.00Z</Date>
+        </ApplicationVersion>
+        <ApplicationVersionString>Unknown version</ApplicationVersionString>
+        <ApplicationProductID>urn:uuid:d3ec8680-1e79-48f9-9941-0a10a16886af</ApplicationProductID>
+        <FileModificationDate>2005-06-02T10:00:00.00Z</FileModificationDate>
         <ToolkitVersion>
           <major>1</major>
           <minor>1</minor>
@@ -183,10 +183,10 @@ e) enumeration value with element size 8
           <patchLevel>0</patchLevel>
           <type>VersionBeta</type>
         </ToolkitVersion>
-        <IdentificationPlatform>AAFSDK (Linux)</IdentificationPlatform>
-        <GenerationAUID>urn:uuid:8b6886f6-c6ac-4a5a-8158-309a238c1a08</GenerationAUID>
+        <ApplicationPlatform>AAFSDK (Linux)</ApplicationPlatform>
+        <GenerationID>urn:uuid:8b6886f6-c6ac-4a5a-8158-309a238c1a08</GenerationID>
       </Identification>
     </IdentificationList>
     <ObjectModelVersion>1</ObjectModelVersion>
-  </Header>
+  </Preface>
 </AAF>

@@ -15,8 +15,8 @@ j) Non-baseline reference type to ClassDefinition
 k) Non-baseline reference type to DataDefinition
     
 -->
-<AAF xmlns="http://www.aafassociation.org/aafx/v1.1/20070305" 
-    xmlns:aaf="http://www.aafassociation.org/aafx/v1.1/20070305"
+<AAF xmlns="http://www.aafassociation.org/aafx/v1.1/20090617" 
+    xmlns:aaf="http://www.aafassociation.org/aafx/v1.1/20090617"
     xmlns:this="http://www.companyx.com/aafx"
     version="1.1">
   <Extensions>
@@ -29,7 +29,7 @@ k) Non-baseline reference type to DataDefinition
                 <Symbol>NonBaseClass</Symbol>
                 <Name>NonBaseClass</Name>
                 <IsConcrete>true</IsConcrete>
-                <ParentClass>Mob</ParentClass>
+                <ParentClass>Package</ParentClass>
             </ClassDefinition>
             <PropertyDefinition>
                 <Identification>urn:uuid:00000000-0000-0000-8000-000000000000</Identification>
@@ -38,7 +38,7 @@ k) Non-baseline reference type to DataDefinition
                 <LocalIdentification>60000</LocalIdentification>
                 <Type>ClassDefinitionWeakReference</Type>
                 <IsOptional>true</IsOptional>
-                <MemberOf>Mob</MemberOf>
+                <MemberOf>Package</MemberOf>
             </PropertyDefinition>
             <PropertyDefinition>
                 <Identification>urn:uuid:10000000-0000-0000-8000-000000000000</Identification>
@@ -47,7 +47,7 @@ k) Non-baseline reference type to DataDefinition
                 <LocalIdentification>60001</LocalIdentification>
                 <Type>ClassDefinitionWeakReference</Type>
                 <IsOptional>true</IsOptional>
-                <MemberOf>Mob</MemberOf>
+                <MemberOf>Package</MemberOf>
             </PropertyDefinition>
             <PropertyDefinition>
                 <Identification>urn:uuid:20000000-0000-0000-8000-000000000000</Identification>
@@ -56,7 +56,7 @@ k) Non-baseline reference type to DataDefinition
                 <LocalIdentification>60002</LocalIdentification>
                 <Type>ClassDefinitionWeakReference</Type>
                 <IsOptional>true</IsOptional>
-                <MemberOf>Mob</MemberOf>
+                <MemberOf>Package</MemberOf>
             </PropertyDefinition>
             <PropertyDefinition>
                 <Identification>urn:uuid:30000000-0000-0000-8000-000000000000</Identification>
@@ -65,7 +65,7 @@ k) Non-baseline reference type to DataDefinition
                 <LocalIdentification>60003</LocalIdentification>
                 <Type>ClassDefinitionWeakReference</Type>
                 <IsOptional>true</IsOptional>
-                <MemberOf>Mob</MemberOf>
+                <MemberOf>Package</MemberOf>
             </PropertyDefinition>
             <PropertyDefinition>
                 <Identification>urn:uuid:40000000-0000-0000-8000-000000000000</Identification>
@@ -74,7 +74,7 @@ k) Non-baseline reference type to DataDefinition
                 <LocalIdentification>60004</LocalIdentification>
                 <Type>ClassDefinitionWeakReference</Type>
                 <IsOptional>true</IsOptional>
-                <MemberOf>Mob</MemberOf>
+                <MemberOf>Package</MemberOf>
             </PropertyDefinition>
             <PropertyDefinition>
                 <Identification>urn:uuid:50000000-0000-0000-8000-000000000000</Identification>
@@ -83,7 +83,7 @@ k) Non-baseline reference type to DataDefinition
                 <LocalIdentification>60005</LocalIdentification>
                 <Type>DataDefinitionWeakReference</Type>
                 <IsOptional>true</IsOptional>
-                <MemberOf>Mob</MemberOf>
+                <MemberOf>Package</MemberOf>
             </PropertyDefinition>
             <PropertyDefinition>
                 <Identification>urn:uuid:60000000-0000-0000-8000-000000000000</Identification>
@@ -92,7 +92,7 @@ k) Non-baseline reference type to DataDefinition
                 <LocalIdentification>60006</LocalIdentification>
                 <Type>DataDefinitionWeakReference</Type>
                 <IsOptional>true</IsOptional>
-                <MemberOf>Mob</MemberOf>
+                <MemberOf>Package</MemberOf>
             </PropertyDefinition>
             <PropertyDefinition>
                 <Identification>urn:uuid:70000000-0000-0000-8000-000000000000</Identification>
@@ -101,7 +101,7 @@ k) Non-baseline reference type to DataDefinition
                 <LocalIdentification>60007</LocalIdentification>
                 <Type>DataDefinitionWeakReference</Type>
                 <IsOptional>true</IsOptional>
-                <MemberOf>Mob</MemberOf>
+                <MemberOf>Package</MemberOf>
             </PropertyDefinition>
             <PropertyDefinition>
                 <Identification>urn:uuid:80000000-0000-0000-8000-000000000000</Identification>
@@ -110,7 +110,7 @@ k) Non-baseline reference type to DataDefinition
                 <LocalIdentification>60008</LocalIdentification>
                 <Type>DataDefinitionWeakReference</Type>
                 <IsOptional>true</IsOptional>
-                <MemberOf>Mob</MemberOf>
+                <MemberOf>Package</MemberOf>
             </PropertyDefinition>
             <PropertyDefinition>
                 <Identification>urn:uuid:90000000-0000-0000-8000-000000000000</Identification>
@@ -119,7 +119,7 @@ k) Non-baseline reference type to DataDefinition
                 <LocalIdentification>60009</LocalIdentification>
                 <Type>urn:uuid:00000000-0000-0000-8000-100000000000</Type>
                 <IsOptional>true</IsOptional>
-                <MemberOf>Mob</MemberOf>
+                <MemberOf>Package</MemberOf>
             </PropertyDefinition>
             <PropertyDefinition>
                 <Identification>urn:uuid:A0000000-0000-0000-8000-000000000000</Identification>
@@ -128,7 +128,7 @@ k) Non-baseline reference type to DataDefinition
                 <LocalIdentification>60010</LocalIdentification>
                 <Type>urn:uuid:00000000-0000-0000-8000-200000000000</Type>
                 <IsOptional>true</IsOptional>
-                <MemberOf>Mob</MemberOf>
+                <MemberOf>Package</MemberOf>
             </PropertyDefinition>
             <TypeDefinitionWeakObjectReference>
                 <Identification>urn:uuid:00000000-0000-0000-8000-100000000000</Identification>
@@ -147,24 +147,24 @@ k) Non-baseline reference type to DataDefinition
                 <ReferencedType>DataDefinition</ReferencedType>
                 <TargetSet>
                     <MetaDefRef>RootHeader</MetaDefRef>
-                    <MetaDefRef>HeaderDictionary</MetaDefRef>
+                    <MetaDefRef>Dictionaries</MetaDefRef>
                     <MetaDefRef>DataDefinitions</MetaDefRef>
                 </TargetSet>
             </TypeDefinitionWeakObjectReference>
         </Definitions>
     </Extension>
   </Extensions>
-  <Header>
-    <HeaderDictionary>
+  <Preface>
+    <Dictionaries>
       <Dictionary>
         <DataDefinitions>
           <DataDefinition aaf:uid="DataDef_Sound">
-            <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0101.01030202.02000000</DefinitionObjectIdentification>
+            <DefinitionObjectIdentification>urn:smpte:ul:060e2b34.04010101.01030202.02000000</DefinitionObjectIdentification>
             <DefinitionObjectName>Sound</DefinitionObjectName>
             <DefinitionObjectDescription>Sound data</DefinitionObjectDescription>
           </DataDefinition>
-          <DataDefinition aaf:uid="urn:x-ul:060e2b34.0401.0101.01030202.01000000">
-            <DefinitionObjectIdentification>urn:x-ul:060e2b34.0401.0101.01030202.01000000</DefinitionObjectIdentification>
+          <DataDefinition aaf:uid="urn:smpte:ul:060e2b34.04010101.01030202.01000000">
+            <DefinitionObjectIdentification>urn:smpte:ul:060e2b34.04010101.01030202.01000000</DefinitionObjectIdentification>
             <DefinitionObjectName>Picture</DefinitionObjectName>
             <DefinitionObjectDescription>Picture data</DefinitionObjectDescription>
           </DataDefinition>
@@ -178,63 +178,63 @@ k) Non-baseline reference type to DataDefinition
           </DataDefinition>
         </DataDefinitions>
       </Dictionary>
-    </HeaderDictionary>
+    </Dictionaries>
     <ByteOrder>LittleEndian</ByteOrder>
-    <LastModified>0000-00-00T00:00:00.00Z</LastModified>
-    <Content>
+    <FileLastModified>0000-00-00T00:00:00.00Z</FileLastModified>
+    <ContentStorageObject>
       <ContentStorage>
-        <Mobs>
-          <MasterMob>
+        <Packages>
+          <MaterialPackage>
 <!-- TEST DATA START -->
-            <this:MetaDefBaseAUID>urn:x-ul:060e2b34.0206.0101.0d010101.01013500</this:MetaDefBaseAUID>
-            <this:MetaDefBaseSymbol>CompositionMob</this:MetaDefBaseSymbol>
-            <this:MetaDefBaseQSymbol>http://www.aafassociation.org/aafx/v1.1/20050628 CompositionMob</this:MetaDefBaseQSymbol>
+            <this:MetaDefBaseAUID>urn:smpte:ul:060e2b34.02060101.0d010101.01013500</this:MetaDefBaseAUID>
+            <this:MetaDefBaseSymbol>CompositionPackage</this:MetaDefBaseSymbol>
+            <this:MetaDefBaseQSymbol>http://www.aafassociation.org/aafx/v1.1/20050628 CompositionPackage</this:MetaDefBaseQSymbol>
             <this:MetaDefNonBaseAUID>urn:uuid:00000000-0000-1000-8000-000000000000</this:MetaDefNonBaseAUID>
             <this:MetaDefNonBaseQSymbol>http://www.companyx.com/aafx NonBaseClass</this:MetaDefNonBaseQSymbol>
-            <this:DefBaseAUID>urn:x-ul:060e2b34.0401.0101.01030202.01000000</this:DefBaseAUID>
+            <this:DefBaseAUID>urn:smpte:ul:060e2b34.04010101.01030202.01000000</this:DefBaseAUID>
             <this:DefBaseSymbol>DataDef_Sound</this:DefBaseSymbol>
             <this:DefNonBaseAUID>urn:uuid:00000000-0000-0000-8000-000000000111</this:DefNonBaseAUID>
             <this:DefNonBaseUIDStr>MyDef2</this:DefNonBaseUIDStr>
-            <this:NonBaseMetaDefRef>CompositionMob</this:NonBaseMetaDefRef>
+            <this:NonBaseMetaDefRef>CompositionPackage</this:NonBaseMetaDefRef>
             <this:NonBaseDefRef>MyDef2</this:NonBaseDefRef>
 <!-- TEST DATA END -->
-            <MobID>urn:x-umid:060a2b340101010101010f02-13-000000-f4304fc3123141edbee5d2de3067f0cb</MobID>
-            <MobSlots>
-              <TimelineMobSlot>
-                <SlotID>1</SlotID>
-                <MobSlotSegment>
+            <PackageID>urn:smpte:umid:060a2b34.01010101.01010f02.13000000.f4304fc3.123141ed.bee5d2de.3067f0cb</PackageID>
+            <PackageTracks>
+              <TimelineTrack>
+                <TrackID>1</TrackID>
+                <TrackSegment>
                   <SourceClip>
                     <ComponentDataDefinition>DataDef_Sound</ComponentDataDefinition>
                     <ComponentLength>0</ComponentLength>
-                    <SourceID>urn:x-umid:000000000000000000000000-00-000000-00000000000000000000000000000000</SourceID>
-                    <SourceMobSlotID>0</SourceMobSlotID>
+                    <SourcePackageID>urn:smpte:umid:00000000.00000000.00000000.00000000.00000000.00000000.00000000.00000000</SourcePackageID>
+                    <SourceTrackID>0</SourceTrackID>
                   </SourceClip>
-                </MobSlotSegment>
-                <TimelineMobSlotEditRate>48000/1</TimelineMobSlotEditRate>
-                <SlotOrigin>0</SlotOrigin>
-              </TimelineMobSlot>
-            </MobSlots>
-            <MobLastModified>2005-06-02T10:00:00.00Z</MobLastModified>
+                </TrackSegment>
+                <EditRate>48000/1</EditRate>
+                <Origin>0</Origin>
+              </TimelineTrack>
+            </PackageTracks>
+            <PackageLastModified>2005-06-02T10:00:00.00Z</PackageLastModified>
             <CreationTime>2005-06-02T10:00:00.00Z</CreationTime>
-          </MasterMob>
-        </Mobs>
+          </MaterialPackage>
+        </Packages>
       </ContentStorage>
-    </Content>
-    <Version>1.1</Version>
+    </ContentStorageObject>
+    <FormatVersion>1.1</FormatVersion>
     <IdentificationList>
       <Identification>
-        <CompanyName>AAF Association</CompanyName>
-        <ProductName>AAF-X Test</ProductName>
-        <ProductVersion>
+        <ApplicationSupplierName>AAF Association</ApplicationSupplierName>
+        <ApplicationName>AAF-X Test</ApplicationName>
+        <ApplicationVersion>
           <major>0</major>
           <minor>1</minor>
           <tertiary>0</tertiary>
           <patchLevel>0</patchLevel>
           <type>VersionUnknown</type>
-        </ProductVersion>
-        <ProductVersionString>Unknown version</ProductVersionString>
-        <ProductID>urn:uuid:d3ec8680-1e79-48f9-9941-0a10a16886af</ProductID>
-        <Date>2005-06-02T10:00:00.00Z</Date>
+        </ApplicationVersion>
+        <ApplicationVersionString>Unknown version</ApplicationVersionString>
+        <ApplicationProductID>urn:uuid:d3ec8680-1e79-48f9-9941-0a10a16886af</ApplicationProductID>
+        <FileModificationDate>2005-06-02T10:00:00.00Z</FileModificationDate>
         <ToolkitVersion>
           <major>1</major>
           <minor>1</minor>
@@ -242,10 +242,10 @@ k) Non-baseline reference type to DataDefinition
           <patchLevel>0</patchLevel>
           <type>VersionBeta</type>
         </ToolkitVersion>
-        <IdentificationPlatform>AAFSDK (Linux)</IdentificationPlatform>
-        <GenerationAUID>urn:uuid:8b6886f6-c6ac-4a5a-8158-309a238c1a08</GenerationAUID>
+        <ApplicationPlatform>AAFSDK (Linux)</ApplicationPlatform>
+        <GenerationID>urn:uuid:8b6886f6-c6ac-4a5a-8158-309a238c1a08</GenerationID>
       </Identification>
     </IdentificationList>
     <ObjectModelVersion>1</ObjectModelVersion>
-  </Header>
+  </Preface>
 </AAF>
