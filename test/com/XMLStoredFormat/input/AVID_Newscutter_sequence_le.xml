@@ -395,11 +395,6 @@
           <Name>AvidBagOfBits</Name>
           <ElementType>UInt8</ElementType>
         </TypeDefinitionVariableArray>
-        <ExtendibleEnumerationElement>
-          <ElementOf>TransferCharacteristicType</ElementOf>
-          <Name>TransferCharacteristic_274M_296M</Name>
-          <Value>urn:smpte:ul:060e2b34.04010101.04010101.01040000</Value>
-        </ExtendibleEnumerationElement>
       </Definitions>
     </Extension>
   </Extensions>
