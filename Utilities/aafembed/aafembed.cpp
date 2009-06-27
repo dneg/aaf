@@ -174,7 +174,7 @@ void wcsconvertURLtoFilepath(wchar_t *url, wchar_t *filepath)
 	// Convert to char* for ease of processing.
 	// (wcsncasecmp and similiar are not available everywhere)
 	//unsigned tlen = wcslen(url);
-	unsigned tlen = wcslen(url);
+	unsigned tlen = (unsigned) wcslen(url);
 	char *tmp = new char[tlen+1];		// +1 includes terminating '\0'
 	wcstombs(tmp, url, tlen+1);
 
@@ -214,7 +214,7 @@ void wcsconvertURLtoFilepath(wchar_t *url, wchar_t *filepath)
 static void fixURL(aafWChar *url)
 {
 	// Convert to char* for ease of processing.
-	unsigned tlen = wcslen(url);
+	unsigned tlen = (unsigned) wcslen(url);
 	char *tmp = new char[tlen+1];		// +1 includes terminating '\0'
 	wcstombs(tmp, url, tlen+1);
 

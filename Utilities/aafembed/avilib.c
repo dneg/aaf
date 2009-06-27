@@ -105,7 +105,7 @@ static ssize_t avi_read(int fd, char *buf, size_t len)
    size_t r = 0;
 
    while (r < len) {
-      n = read (fd, buf + r, len - r);
+      n = read (fd, buf + r, (unsigned)len - r);
       if (n == 0)
 	  break;
       if (n < 0) {
@@ -118,7 +118,7 @@ static ssize_t avi_read(int fd, char *buf, size_t len)
       r += n;
    }
 
-   return r;
+   return (ssize_t) r;
 }
 
 static ssize_t avi_write (int fd, char *buf, size_t len)
@@ -127,13 +127,13 @@ static ssize_t avi_write (int fd, char *buf, size_t len)
    size_t r = 0;
 
    while (r < len) {
-      n = write (fd, buf + r, len - r);
+      n = write (fd, buf + r, (unsigned) len - r);
       if (n < 0)
          return n;
       
       r += n;
    }
-   return r;
+   return (ssize_t) r;
 }
 
 /* HEADERBYTES: The number of bytes to reserve for the header */
@@ -1623,7 +1623,7 @@ static int avi_close_output_file(avi_t *AVI)
    memset(id_str, 0, MAX_INFO_STRLEN);
 
    sprintf(id_str, "%s-%s", PACKAGE, VERSION);
-   real_id_len = id_len = strlen(id_str)+1;
+   real_id_len = id_len = (long) strlen(id_str)+1;
    if (id_len&1) id_len++;
 
    OUTLONG(real_id_len);
