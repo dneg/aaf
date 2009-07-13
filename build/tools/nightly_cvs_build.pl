@@ -10,6 +10,7 @@ use constant ERR_SOURCE_PREP => 2;
 use constant ERR_CONFIGURE => 3;
 use constant ERR_BUILD => 4;
 use constant ERR_TEST => 5;
+use constant ERR_PACKAGE => 6;
 
 # perform all CVS date operations in UTC
 $ENV{TZ} = 'UTC';
@@ -571,6 +572,7 @@ sub css_class
 			3 => 'red',
 			4 => 'red',
 			5 => 'yellow',
+			6 => 'orange',
 			);
 	return defined $state ? $class{$state} : 'gray';
 }
@@ -640,14 +642,14 @@ sub save_build_state_as_webpage
 					$date_path =~ s/_*\(.*\)$//;		# remove annotation e.g. " (V112_DR1)
 
 					# Can we give a link to make log? (status 1 or 2 mean no make log)
-					if ($dp->{$rkey}{status} != 1 && $dp->{$rkey}{status} != 2)
+					if ($dp->{$rkey}{status} != ERR_TIMEOUT && $dp->{$rkey}{status} != ERR_SOURCE_PREP)
 					{
 						print OUT	qq{<a href="log/$date_path-make-$rkey.log.gz">M</a>};
 						push @logfiles, "$lasttree/log/$date_path-make-$rkey.log";
 					}
 
 					# Link to make-check log and libs tarball if status indicates one should be available
-					if ($dp->{$rkey}{status} == 0 || $dp->{$rkey}{status} == 5)
+					if ($dp->{$rkey}{status} == 0 || $dp->{$rkey}{status} == ERR_TEST)
 					{
 						print OUT	qq{ <a href="log/$date_path-check-$rkey.log.gz">T</a>};
 						push @logfiles, "$lasttree/log/$date_path-check-$rkey.log";
@@ -656,6 +658,16 @@ sub save_build_state_as_webpage
 						if (-e "$lasttree/$tarball") {
 							print OUT qq{ <a href="$tarball">&nabla;</a>};
 							push @tarballs, "$lasttree/$tarball";
+						}
+					}
+
+					# Link to package log
+					if ($dp->{$rkey}{status} == 0 || $dp->{$rkey}{status} == ERR_PACKAGE)
+					{
+						my $logname = "log/$date_path-package-$rkey.log";
+						if (-e "$lasttree/$logname") {
+							print OUT   qq{ <a href="$logname.gz">P</a>};
+							push @logfiles, "$lasttree/$logname";
 						}
 					}
 				}
@@ -767,6 +779,7 @@ sub build
 	# e.g. tree = /dp_sources/AAF-cvs-tip, build = i686Linux
 	my ($tree, $build) = @_;
 
+	my $result = 0;
 	my $name = basename($tree);
 	my $path = "$farm{$build}{prefix}/$name-$build";
 	my $host = $farm{$build}{host};
@@ -837,12 +850,18 @@ sub build
 		$make_command = $farm{$build}{make_command} if exists $farm{$build}{make_command};
 		$check_command = $farm{$build}{check_command} if exists $farm{$build}{check_command};
 
+		# Create rpm or similar package before building to leave tree clean
+		if (exists $farm{$build}{package_cmd}) {
+			qssh($host, $init, "cd $path && $farm{$build}{package_cmd}", "> $tree/${log_prefix}package-$build.log 2>&1") || ($result = ERR_PACKAGE);
+		}
+
+		# build the source tree
 		print "Building path=$path\n";
 		qssh($host, $init, "cd $path && $make_command", "> $tree/${log_prefix}make-$build.log 2>&1") || return ERR_BUILD;
 
 		# Create a binary tarball containing a binary release
 		if (exists $farm{$build}{tarball}) {
-			qssh($host, $init, "cd $path && $farm{$build}{tarball}", "> $tree/${log_prefix}libs-$build.tar.gz");
+			qssh($host, $init, "cd $path && $farm{$build}{tarball}", "> $tree/${log_prefix}libs-$build.tar.gz 2>&1");
 		}
 
 		# Kludge for AAF SDK to prevent ScaleTest taking a very long time
@@ -855,7 +874,7 @@ sub build
 		# Run tests after tarball is made since tests may fail
 		qssh($host, $init, "cd $path && $check_command", "> $tree/${log_prefix}check-$build.log 2>&1") || return ERR_TEST;
 	}
-	return 0;
+	return $result;
 }
 
 sub get_last_distfile
