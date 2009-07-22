@@ -335,6 +335,19 @@ static HRESULT OpenAAFFile(aafWChar * pFileName, bool comp_enable)
 	pMobIter->Release();
 	pMobIter = NULL;
 
+	pPictureDef->Release();
+	pPictureDef = NULL;
+
+	pDictionary->Release();
+	pDictionary = NULL;
+
+	pHeader->Release();
+	pHeader = NULL;
+
+	pFile->Close();
+	pFile->Release();
+	pFile = NULL;
+
 	return moduleErrorTmp;
 }
 
