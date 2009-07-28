@@ -3081,10 +3081,6 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\..\..\ref-impl\src\impl\ImplAAFSubDescriptor.cpp"
-			>
-		</File>
-		<File
 			RelativePath="..\..\..\..\ref-impl\src\impl\ImplAAFTaggedValue.cpp"
 			>
 			<FileConfiguration

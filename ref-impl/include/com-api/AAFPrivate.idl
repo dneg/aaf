@@ -354,7 +354,6 @@ interface IAAFHTMLClip : IUnknown
 ///  - IAAFFileDescriptor
 ///  - IAAFFileDescriptor2
 ///  - IAAFEssenceDescriptor
-///  - IAAFEssenceDescriptor2
 ///  - IAAFObject
 [
     object,

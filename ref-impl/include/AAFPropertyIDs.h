@@ -154,7 +154,6 @@ const int PID_EssenceData_MobID                                  = 0x2701;
 const int PID_EssenceData_Data                                   = 0x2702;
 const int PID_EssenceData_SampleIndex                            = 0x2B01;
 const int PID_EssenceDescriptor_Locator                          = 0x2F01;
-const int PID_EssenceDescriptor_SubDescriptors                   = 0x2F02;
 const int PID_FileDescriptor_SampleRate                          = 0x3001;
 const int PID_FileDescriptor_Length                              = 0x3002;
 const int PID_FileDescriptor_ContainerFormat                     = 0x3004;

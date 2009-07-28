@@ -53,9 +53,6 @@ static const aafMobID_t TEST_MobID = {
 0x13, 0x00, 0x00, 0x00, 
 {0x12bd35d0, 0x996e, 0x11d4, {0x9f, 0x7b, 0x08, 0x00, 0x36, 0x21, 0x08, 0x04}}};
 
-const aafUID_t TestSubDescriptorClassID = 
-{ 0x023a1cae, 0xdc16, 0x4db9, { 0x95, 0xf9, 0x43, 0xd0, 0x56, 0xca, 0xd3, 0x78 } };
-
 // convenient error handlers.
 inline void checkResult(HRESULT r)
 {
@@ -69,26 +66,6 @@ inline void checkExpression(bool expression, HRESULT r)
 }
 
 
-static void RegisterSubDescriptorTest( IAAFDictionary* pDict )
-{
-
-  // Create a new class definition for the TestDescriptiveFramework.
-
-  IAAFSmartPointer<IAAFClassDef> pClassDef;
-  checkResult( pDict->CreateMetaInstance( AUID_AAFClassDef, IID_IAAFClassDef,
-					  (IUnknown**)&pClassDef ) );
-
-  IAAFSmartPointer<IAAFClassDef> pBaseClassDef;
-  checkResult( pDict->LookupClassDef( AUID_AAFSubDescriptor, &pBaseClassDef ) );
-
-  checkResult( pClassDef->Initialize( TestSubDescriptorClassID,
-				      pBaseClassDef,
-				      L"TestSubDescriptor",
-				      kAAFTrue ) );
-
-  checkResult( pDict->RegisterClassDef( pClassDef ) );
-}
-
 static HRESULT CreateAAFFile(
     aafWChar * pFileName,
     aafUID_constref fileKind,
@@ -101,15 +78,11 @@ static HRESULT CreateAAFFile(
 	IAAFDictionary				*pDictionary = NULL;
 	IAAFLocator					*pLocator = NULL;
 	IAAFLocator					*pLocator2 = NULL;
-	IAAFSubDescriptor			*pSubDescriptor = NULL;
-	IAAFSubDescriptor			*pSubDescriptor2 = NULL;
 	IAAFSourceMob 				*pSourceMob = NULL;
 	IAAFMob						*pMob = NULL;
 	IAAFEssenceDescriptor 		*edesc = NULL;
-	IAAFEssenceDescriptor2		*edesc2 = NULL;
 	IEnumAAFLocators			*pEnumLocators = NULL;
-	IEnumAAFSubDescriptors		*pEnumSubDescriptors = NULL;
-	aafUInt32					numLocators, numLocators2, numSubDescriptors, numSubDescriptors2;
+	aafUInt32					numLocators, numLocators2;
 	aafUInt32					i;
 	HRESULT						hr = AAFRESULT_SUCCESS,
 								localhr = AAFRESULT_SUCCESS;
@@ -149,8 +122,6 @@ static HRESULT CreateAAFFile(
 		checkResult(defs.cdAIFCDescriptor()->
 					CreateInstance(IID_IAAFEssenceDescriptor, 
 								   (IUnknown **)&edesc));		
-		checkResult(edesc->QueryInterface(IID_IAAFEssenceDescriptor2,
-						(void **)&edesc2));
 
 		IAAFAIFCDescriptor*			pAIFCDesc = NULL;
 		checkResult(edesc->QueryInterface (IID_IAAFAIFCDescriptor, (void **)&pAIFCDesc));
@@ -533,378 +504,6 @@ static HRESULT CreateAAFFile(
 
 /*************************************************************/
 
-	RegisterSubDescriptorTest( pDictionary );
-
-/* CountSubDescriptors()	******************************************/
-		localhr = AAFRESULT_SUCCESS;
-		// Verify AAFRESULT_NULL_PARAM is returned
-		if (edesc2->CountSubDescriptors(NULL) != AAFRESULT_NULL_PARAM)
-			localhr = AAFRESULT_TEST_FAILED;		
-		
-		// Verify that there are no subdescriptors
-		if (edesc2->CountSubDescriptors(&numSubDescriptors) != AAFRESULT_SUCCESS)
-			localhr = AAFRESULT_TEST_FAILED;
-		if (0 != numSubDescriptors)
-			localhr = AAFRESULT_TEST_FAILED;
-			
-		if (localhr == AAFRESULT_SUCCESS)
-			cout<< "	CountSubDescriptors() ...		Passed"<< endl;
-		else
-		{
-			cout<< "	CountSubDescriptors() ...		FAILED"<< endl;
-			hr = AAFRESULT_TEST_FAILED;
-		}
-		
-/* AppendSubDescriptor()	******************************************/
-		localhr = AAFRESULT_SUCCESS;
-		// Verify AAFRESULT_NULL_PARAM is returned
-		if (edesc2->AppendSubDescriptor(NULL) != AAFRESULT_NULL_PARAM)
-			localhr = AAFRESULT_TEST_FAILED;		
-
-		// Append and Count a bunch of SubDescriptors
-		for (i=1; i<=10; i++)
-		{
-			// Make a concrete subclass of subdescriptor, and attach it to
-			// the EssenceDescriptor
-			// Attach a (concrete) descriptive framework object to the marker.
-   			 
-    
-    		checkResult( pDictionary->CreateInstance( TestSubDescriptorClassID,
-							   IID_IAAFSubDescriptor,
-							   (IUnknown**)&pSubDescriptor ) );
-   							   	
-			if (edesc2->AppendSubDescriptor(pSubDescriptor) != AAFRESULT_SUCCESS)
-				localhr = AAFRESULT_TEST_FAILED;
-			// Verify the number of subdescriptors
-			numSubDescriptors = 0;
-			edesc2->CountSubDescriptors(&numSubDescriptors);
-			if (i != numSubDescriptors)
-				localhr = AAFRESULT_TEST_FAILED;
-
-			// Verify that subdescriptor was appended
-			edesc2->GetSubDescriptorAt(i-1, &pSubDescriptor2);
-			if (pSubDescriptor2 != pSubDescriptor)
-				localhr = AAFRESULT_TEST_FAILED;
-
-			pSubDescriptor->Release();
-			pSubDescriptor = 0;
-			pSubDescriptor2->Release();
-			pSubDescriptor2 = 0;
-		}
-
-		// Make sure we can't add it again
-
-//		if (edesc2->AppendSubDescriptor(pSubDescriptor) != AAFRESULT_OBJECT_ALREADY_ATTACHED)
-
-//			localhr = AAFRESULT_TEST_FAILED;
-
-		if (localhr == AAFRESULT_SUCCESS)
-			cout<< "	AppendSubDescriptor() ...		Passed"<< endl;
-		else
-		{
-			cout<< "	AppendSubDescriptor() ...		FAILED"<< endl;
-			hr = AAFRESULT_TEST_FAILED;
-		}
-
-
-/* PrependSubDescriptor()	******************************************/
-		localhr = AAFRESULT_SUCCESS;
-		// Verify AAFRESULT_NULL_PARAM is returned
-		if (edesc2->PrependSubDescriptor(NULL) != AAFRESULT_NULL_PARAM)
-			localhr = AAFRESULT_TEST_FAILED;		
-
-		for (; i<=20; i++)
-		{
-			// Make a concrete subclass of subdescriptor, and attach it to
-			// the EssenceDescriptor
-			checkResult( pDictionary->CreateInstance( TestSubDescriptorClassID,
-							   IID_IAAFSubDescriptor,
-							   (IUnknown**)&pSubDescriptor ) );	
-								   	
-			if (edesc2->PrependSubDescriptor(pSubDescriptor) != AAFRESULT_SUCCESS)
-				localhr = AAFRESULT_TEST_FAILED;
-
-			// Verify the number of subdescriptors
-			numSubDescriptors = 0;
-			edesc2->CountSubDescriptors(&numSubDescriptors);
-			if (i != numSubDescriptors)
-				localhr = AAFRESULT_TEST_FAILED;
-				
-			// Verify that subdescriptor was prepended
-			edesc2->GetSubDescriptorAt(0, &pSubDescriptor2);
-			if (pSubDescriptor2 != pSubDescriptor)
-				localhr = AAFRESULT_TEST_FAILED;
-	
-			pSubDescriptor->Release();
-			pSubDescriptor = 0;
-			pSubDescriptor2->Release();
-			pSubDescriptor2 = 0;
-		}
-
-		if (localhr == AAFRESULT_SUCCESS)
-			cout<< "	PrependSubDescriptor() ...	Passed"<< endl;
-		else
-		{
-			cout<< "	PrependSubDescriptor() ...	FAILED"<< endl;
-			hr = AAFRESULT_TEST_FAILED;
-		}
-
-
-/* InsertSubDescriptorAt()	**************************************/
-		localhr = AAFRESULT_SUCCESS;
-
-		// Make a concrete subclass of subdescriptor to attach
-		checkResult( pDictionary->CreateInstance( TestSubDescriptorClassID,
-							   IID_IAAFSubDescriptor,
-							   (IUnknown**)&pSubDescriptor ) );		
-
-		// Verify that we can't remove an index value that is out of range
-		if (edesc2->InsertSubDescriptorAt(numSubDescriptors+1, pSubDescriptor) != AAFRESULT_BADINDEX)
-			localhr = AAFRESULT_TEST_FAILED;
-
-		// Verify behavior when NULL is passed in
-		if (edesc2->InsertSubDescriptorAt(1, NULL) != AAFRESULT_NULL_PARAM)
-			localhr = AAFRESULT_TEST_FAILED;
-
-		edesc2->CountSubDescriptors(&numSubDescriptors);
-
-		// Insert it
-		if (edesc2->InsertSubDescriptorAt(0, pSubDescriptor) != AAFRESULT_SUCCESS)
-			localhr = AAFRESULT_TEST_FAILED;
-		// Check it
-		edesc2->GetSubDescriptorAt(0, &pSubDescriptor2);
-		if (pSubDescriptor2 != pSubDescriptor)
-			localhr = AAFRESULT_TEST_FAILED;
-		// Count it	
-		edesc2->CountSubDescriptors(&numSubDescriptors2);
-		if (numSubDescriptors2 != numSubDescriptors+1)
-			localhr = AAFRESULT_TEST_FAILED;
-
-		pSubDescriptor->Release();
-		pSubDescriptor = 0;
-		pSubDescriptor2->Release();
-		pSubDescriptor2 = 0;
-
-		edesc2->CountSubDescriptors(&numSubDescriptors);
-		// Make a concrete subclass of subdescriptor to attach in the middle
-		checkResult( pDictionary->CreateInstance( TestSubDescriptorClassID,
-							   IID_IAAFSubDescriptor,
-							   (IUnknown**)&pSubDescriptor ) );			
-		// Insert it
-		if (edesc2->InsertSubDescriptorAt(numSubDescriptors/2, pSubDescriptor) != AAFRESULT_SUCCESS)
-			localhr = AAFRESULT_TEST_FAILED;
-		// Check it
-		edesc2->GetSubDescriptorAt(numSubDescriptors/2, &pSubDescriptor2);
-		if (pSubDescriptor2 != pSubDescriptor)
-			localhr = AAFRESULT_TEST_FAILED;
-		// Count it	
-		edesc2->CountSubDescriptors(&numSubDescriptors2);
-		if (numSubDescriptors2 != numSubDescriptors+1)
-			localhr = AAFRESULT_TEST_FAILED;
-
-		pSubDescriptor->Release();
-		pSubDescriptor = 0;
-		pSubDescriptor2->Release();
-		pSubDescriptor2 = 0;
-
-		edesc2->CountSubDescriptors(&numSubDescriptors);
-		// Make a concrete subclass of subdescriptor to attach to the end
-		checkResult( pDictionary->CreateInstance( TestSubDescriptorClassID,
-							   IID_IAAFSubDescriptor,
-							   (IUnknown**)&pSubDescriptor ) );				
-		// Insert it.  note: its 0 based so the end is numSubDescriptors - 1
-		if (edesc2->InsertSubDescriptorAt(numSubDescriptors-1, pSubDescriptor) != AAFRESULT_SUCCESS)
-			localhr = AAFRESULT_TEST_FAILED;
-		// Check it
-		edesc2->GetSubDescriptorAt(numSubDescriptors-1, &pSubDescriptor2);
-		if (pSubDescriptor2 != pSubDescriptor)
-			localhr = AAFRESULT_TEST_FAILED;
-		// Count it	
-		edesc2->CountSubDescriptors(&numSubDescriptors2);
-		if (numSubDescriptors2 != numSubDescriptors+1)
-			localhr = AAFRESULT_TEST_FAILED;
-			
-		// Make sure we can't add it again
-		if (edesc2->InsertSubDescriptorAt(numSubDescriptors+1, pSubDescriptor) != AAFRESULT_OBJECT_ALREADY_ATTACHED)
-			localhr = AAFRESULT_TEST_FAILED;
-
-		pSubDescriptor->Release();
-		pSubDescriptor = 0;
-		pSubDescriptor2->Release();
-		pSubDescriptor2 = 0;
-
-		if (localhr == AAFRESULT_SUCCESS)
-			cout<< "	InsertSubDescriptorAt() ...	Passed"<< endl;
-		else
-		{
-			cout<< "	InsertSubDescriptorAt() ...	FAILED"<< endl;
-			hr = AAFRESULT_TEST_FAILED;
-		}
-			
-			
-/* GetSubDescriptorAt()	******************************************/
-		localhr = AAFRESULT_SUCCESS;
-		edesc2->CountSubDescriptors(&numSubDescriptors);
-		// Verify that we can't remove an index value that is out of range
-		// note: SubDescriptors index is 0 based so the index numSubDescriptors is out of range
-		if (edesc2->GetSubDescriptorAt(numSubDescriptors, &pSubDescriptor) != AAFRESULT_BADINDEX)
-			localhr = AAFRESULT_TEST_FAILED;
-
-		// Verify behavior when NULL is passed in
-		if (edesc2->GetSubDescriptorAt(1, NULL) != AAFRESULT_NULL_PARAM)
-			localhr = AAFRESULT_TEST_FAILED;
-			
-		for (i=0; i<numSubDescriptors; i++)
-		{
-			pSubDescriptor = NULL;
-			if (edesc2->GetSubDescriptorAt(i, &pSubDescriptor) != AAFRESULT_SUCCESS)
-				localhr = AAFRESULT_TEST_FAILED;
-			if (pSubDescriptor != NULL)
-				pSubDescriptor->Release();
-		}
-			
-		if (localhr == AAFRESULT_SUCCESS)
-			cout<< "	GetSubDescriptorAt() ...		Passed"<< endl;
-		else
-		{
-			cout<< "	GetSubDescriptorAt() ...		FAILED"<< endl;
-			hr = AAFRESULT_TEST_FAILED;
-		}
-
-
-/* GetSubDescriptors()	******************************************/
-		if (edesc2->GetSubDescriptors(NULL) != AAFRESULT_NULL_PARAM)
-			localhr = AAFRESULT_TEST_FAILED;	
-
-		pEnumSubDescriptors = NULL;
-		if (edesc2->GetSubDescriptors(&pEnumSubDescriptors) == AAFRESULT_SUCCESS)
-		{
-			if (pEnumSubDescriptors != NULL)
-			{	
-				// Try a simple test to confirm
-				if (pEnumSubDescriptors->NextOne(&pSubDescriptor) != AAFRESULT_SUCCESS)					
-					localhr = AAFRESULT_TEST_FAILED;
-				edesc2->GetSubDescriptorAt(0, &pSubDescriptor2);
-
-				if (pSubDescriptor != pSubDescriptor2)
-					localhr = AAFRESULT_TEST_FAILED;
-
-				if (pSubDescriptor)
-					pSubDescriptor->Release();
-				if (pSubDescriptor2)
-					pSubDescriptor2->Release();
-				pEnumSubDescriptors->Release();
-			}
-			else
-				localhr = AAFRESULT_TEST_FAILED;			
-		}
-		else	
-			localhr = AAFRESULT_TEST_FAILED;
-
-		if (localhr == AAFRESULT_SUCCESS)
-			cout<< "	GetSubDescriptors() ...		Passed"<< endl;
-		else
-		{
-			cout<< "	GetSubDescriptors() ...		FAILED"<< endl;
-			hr = AAFRESULT_TEST_FAILED;
-		}
-
-
-		
-
-/* RemoveSubDescriptorAt()	******************************************/
-		localhr = AAFRESULT_SUCCESS;
-
-		// Verify that we can't remove an index value that is out of range
-		// note: SubDescriptors index is 0 based so the index numSubDescriptors is out of range
-
-		if (edesc2->RemoveSubDescriptorAt (numSubDescriptors) != AAFRESULT_BADINDEX)
-			localhr = AAFRESULT_TEST_FAILED;
-				
-		// Remove subdescriptor at beginning, but Release it first
-		edesc2->CountSubDescriptors(&numSubDescriptors);
-
-		edesc2->GetSubDescriptorAt(0, &pSubDescriptor);
-		pSubDescriptor->Release();
-
-		edesc2->GetSubDescriptorAt(1, &pSubDescriptor);
-		if (edesc2->RemoveSubDescriptorAt (0) != AAFRESULT_SUCCESS)
-			localhr = AAFRESULT_TEST_FAILED;
-
-		// Verify the count
-		edesc2->CountSubDescriptors(&numSubDescriptors2);
-		if (numSubDescriptors2 != (numSubDescriptors - 1))
-			localhr = AAFRESULT_TEST_FAILED;
-
-		edesc2->GetSubDescriptorAt(0, &pSubDescriptor2);
-		// Verify that the subdescriptors shifted properly
-		if (pSubDescriptor != pSubDescriptor2)
-			localhr = AAFRESULT_TEST_FAILED;
-
-		pSubDescriptor->Release();
-		pSubDescriptor = 0;
-		pSubDescriptor2->Release();
-		pSubDescriptor2 = 0;
-
-		// Remove subdescriptor in middle, but Release it first
-		edesc2->CountSubDescriptors(&numSubDescriptors);
-		edesc2->GetSubDescriptorAt((numSubDescriptors/2), &pSubDescriptor);
-		pSubDescriptor->Release();
-
-		edesc2->GetSubDescriptorAt((numSubDescriptors/2 +1), &pSubDescriptor);
-		if (edesc2->RemoveSubDescriptorAt (numSubDescriptors/2) != AAFRESULT_SUCCESS)
-			localhr = AAFRESULT_TEST_FAILED;
-		
-		edesc2->CountSubDescriptors(&numSubDescriptors2);
-		if (numSubDescriptors2 != (numSubDescriptors - 1))
-			localhr = AAFRESULT_TEST_FAILED;
-		
-		edesc2->GetSubDescriptorAt(numSubDescriptors/2, &pSubDescriptor2);
-		// Verify that the subdescriptors shifted properly
-		if (pSubDescriptor != pSubDescriptor2)
-			localhr = AAFRESULT_TEST_FAILED;
-
-		pSubDescriptor->Release();
-		pSubDescriptor = 0;
-		pSubDescriptor2->Release();
-		pSubDescriptor2 = 0;
-
-		// Remove subdescriptor at end, but Release it first
-		edesc2->CountSubDescriptors(&numSubDescriptors);
-		edesc2->GetSubDescriptorAt(numSubDescriptors-1, &pSubDescriptor);
-		pSubDescriptor->Release();
-
-		edesc2->GetSubDescriptorAt(numSubDescriptors-2, &pSubDescriptor);
-		if (edesc2->RemoveSubDescriptorAt (numSubDescriptors-1) != AAFRESULT_SUCCESS)
-			localhr = AAFRESULT_TEST_FAILED;
-		
-		edesc2->CountSubDescriptors(&numSubDescriptors2);
-		if (numSubDescriptors2 != (numSubDescriptors - 1))
-			localhr = AAFRESULT_TEST_FAILED;
-
-		edesc2->GetSubDescriptorAt(numSubDescriptors2-1, &pSubDescriptor2);
-		// Verify that the subdescriptors shifted properly
-		if (pSubDescriptor != pSubDescriptor2)
-			localhr = AAFRESULT_TEST_FAILED;
-
-		pSubDescriptor->Release();
-		pSubDescriptor = 0;
-		pSubDescriptor2->Release();
-		pSubDescriptor2 = 0;
-
-		if (localhr == AAFRESULT_SUCCESS)
-			cout<< "	RemoveSubDescriptorAt() ...	Passed"<< endl;
-		else
-		{
-			cout<< "	RemoveSubDescriptorAt() ...	FAILED"<< endl;
-			hr = AAFRESULT_TEST_FAILED;
-		}
-
-/*************************************************************/
-
-
-
-
 
 	// Add the source mob into the tree
 	checkResult(pHeader->AddMob(pMob));
@@ -919,9 +518,6 @@ static HRESULT CreateAAFFile(
 	// Cleanup object references
 	if (edesc)
 		edesc->Release();
-
-	if (edesc2)
-		edesc2->Release();
 
 	if (pMob)
 		pMob->Release();
@@ -956,14 +552,10 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	IEnumAAFMobs *mobIter = NULL;
 	IAAFMob			*aMob = NULL;
 	IAAFEssenceDescriptor		*pEdesc = NULL;
-	IAAFEssenceDescriptor2		*pEdesc2 = NULL;
 	IAAFSourceMob				*pSourceMob = NULL;
 	IEnumAAFLocators *			pEnum = NULL;
 	IAAFLocator	*				pLocator = NULL;
-	IEnumAAFSubDescriptors *		pEnum2 = NULL;
-	IAAFSubDescriptor	*		pSubDescriptor = NULL;
 	aafUInt32					numLocators;
-	aafUInt32					numSubDescriptors;
 	aafNumSlots_t	numMobs, n;
 	HRESULT						hr = AAFRESULT_SUCCESS;
 	bool bFileOpen = false;
@@ -994,27 +586,6 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 			checkResult(aMob->QueryInterface (IID_IAAFSourceMob, (void **)&pSourceMob));
 			checkResult(pSourceMob->GetEssenceDescriptor (&pEdesc));
 
-			// Verify that there is now one subdescriptor
-			checkResult(pEdesc->QueryInterface(IID_IAAFEssenceDescriptor2, (void **)&pEdesc2));
-			checkResult(pEdesc2->CountSubDescriptors(&numSubDescriptors));
-		 	checkExpression(20 == numSubDescriptors, AAFRESULT_TEST_FAILED);
-		
-			checkResult(pEdesc2->GetSubDescriptors(&pEnum2));
-
-			// This should read the one real subdescriptor
-			for ( n=0; n<numSubDescriptors; n++)
-			{
-				checkResult(pEnum2->NextOne(&pSubDescriptor));
-
-				pSubDescriptor->Release();
-				pSubDescriptor = NULL;
-			}
-
-     		// We had better not succeed or get an unknown failure.
-     		checkExpression(AAFRESULT_NO_MORE_OBJECTS == pEnum2->NextOne(&pSubDescriptor),
-                      AAFRESULT_TEST_FAILED);
-			
-			
 			// Verify that there is now one locator
 			checkResult(pEdesc->CountLocators(&numLocators));
 		 	checkExpression(20 == numLocators, AAFRESULT_TEST_FAILED);
@@ -1038,14 +609,8 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 			pEnum->Release();
 			pEnum = NULL;
 			
-			pEnum2->Release();
-			pEnum2 = NULL;
-
 			pEdesc->Release();
 			pEdesc = NULL;
-
-			pEdesc2->Release();
-			pEdesc2 = NULL;
 
 			pSourceMob->Release();
 			pSourceMob = NULL;
@@ -1063,17 +628,11 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	if (pLocator)
 		pLocator->Release();
 	
-	if (pSubDescriptor)
-		pSubDescriptor->Release();
-
 	if (pEnum)
 		pEnum->Release();
 
 	if (pEdesc)
 		pEdesc->Release();
-
-	if (pEdesc2)
-		pEdesc2->Release();
 
 	if (pSourceMob)
 		pSourceMob->Release();

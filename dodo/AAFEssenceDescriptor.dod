@@ -39,11 +39,8 @@ AAFObject\
 #endm
 #c
 #c #import ./AAFObject.exp
-#import ./AAFEssenceDescriptor2.exp
 AD_HEAD
 AD_IDL(///
-/// IAAFEsseceDescriptor is DEPRECATED\, please use IAAFEssenceDescriptor2.
-///
 /// The IAAFEssenceDescriptor interface is implemented by objects which
 /// describe the format of the content data associated with a File
 /// Source mob or of the media associated with a Physical Source mob.
@@ -69,7 +66,7 @@ AD_FORWARD_DECLARATION(EnumAAFLocators)
 AD_CLASS_UUID(94659784, 2a3c, 11D2, bf, A4, 00, 60, 97, 11, 62, 12)
 
 AD_DEFAULT_UUID(94659783, 2a3c, 11D2, bf, A4, 00, 60, 97, 11, 62, 12)
-AD_COM_EXT_CLASS_BEGIN(public IAAFEssenceDescriptor2)
+AD_XCLASS_BEGIN(Abstract, StoredObject)
 AD_XMETHOD1(CountLocators,
 			[out],
 			objPass,
@@ -281,17 +278,4 @@ AD_XMETHOD1(GetLocators,
   ///
   /// AAFRESULT_NULL_PARAM
   ///   - ppEnum is null.)
-
-#c AAFEssenceDescriptor2 methods
-#c
-
-AD_COM_METH(.method-CountSubDescriptors)
-AD_COM_METH(.method-AppendSubDescriptor)
-AD_COM_METH(.method-PrependSubDescriptor)
-AD_COM_METH(.method-InsertSubDescriptorAt)
-AD_COM_METH(.method-GetSubDescriptorAt)
-AD_COM_METH(.method-RemoveSubDescriptorAt)
-AD_COM_METH(.method-GetSubDescriptors)
-
-
-AD_COM_EXT_CLASS_END(AAFEssenceDescriptor2)
+AD_XCLASS_END(Abstract, StoredObject)

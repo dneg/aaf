@@ -39,21 +39,16 @@
 //=---------------------------------------------------------------------=
 
 class ImplAAFLocator;
-class ImplAAFSubDescriptor;
 
 template <class T> 
 class ImplAAFEnumerator;
 typedef ImplAAFEnumerator<ImplAAFLocator> ImplEnumAAFLocators;
-typedef ImplAAFEnumerator<ImplAAFSubDescriptor> ImplEnumAAFSubDescriptors;
 
 #ifndef __ImplAAFObject_h__
 #include "ImplAAFObject.h"
 #endif
 #ifndef __ImplAAFLocator_h__
 #include "ImplAAFLocator.h"
-#endif
-#ifndef __ImplAAFSubDescriptor_h__
-#include "ImplAAFSubDescriptor.h"
 #endif
 
 #include "OMStrongRefVectorProperty.h"
@@ -150,84 +145,6 @@ public:
   //@comm The number of locators may be zero if the essence is in the current file.
 
 
-//****************
-  // CountSubDescriptors()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    CountSubDescriptors
-		// @parm [out] Returns the number of subdescriptors
-        (aafUInt32 *  pCount);
-  //@comm The number of subdescriptors may be zero if the essence is in the current file.
-
-  //****************
-  // AppendSubDescriptor()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    AppendSubDescriptor
-		// @parm [in] SubDescriptor to append
-        (ImplAAFSubDescriptor * pSubDescriptor);
-  //@comm    Use this function to add a subdescriptor to be scanned first when searching for
-  // the essence (a new primary location).
-
-  //****************
-  // PrependSubDescriptor()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    PrependSubDescriptor
-		// @parm [in] SubDescriptor to append
-        (ImplAAFSubDescriptor * pSubDescriptor);
-  //@comm    Use this function to add a subdescriptor to be scanned first when searching for
-  // the essence (a secondary location for the essence).
-
-
-  //****************
-  // InsertSubDescriptorAt()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    InsertSubDescriptorAt
-		// @parm [in] place to insert subdescriptor
-        (aafUInt32 index,
-		// @parm [in] SubDescriptor to insert
-		 ImplAAFSubDescriptor * pSubDescriptor);
-
-
-  //****************
-  // GetSubDescriptorAt()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    GetSubDescriptorAt
-		// @parm [in] index of subdescriptor to get
-        (aafUInt32 index,
-		// @parm [in] returned subdescriptor
-		 ImplAAFSubDescriptor ** ppSubDescriptor);
-
-
-  //****************
-  // GetSubDescriptorAt()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    RemoveSubDescriptorAt
-		// @parm [in] index of subdescriptor to remove
-        (aafUInt32 index);
-
-
-  //****************
-  // RemoveSubDescriptor()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    RemoveSubDescriptor
-		// @parm [in] SubDescriptor to remove
-        (ImplAAFSubDescriptor * pSubDescriptor);
-
-  //****************
-  // GetSubDescriptors()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    GetSubDescriptors
-		// @parm [out] An enumerator to the subdescriptors on this essence descriptor
-        (ImplEnumAAFSubDescriptors ** ppEnum);
-  //@comm The number of subdescriptors may be zero if the essence is in the current file.
-
 public:
 	// Functions internal to the toolkit
 	virtual AAFRESULT STDMETHODCALLTYPE
@@ -236,12 +153,8 @@ public:
 	virtual AAFRESULT
 		GetNthLocator (aafInt32 index, ImplAAFLocator **ppLocator);
 
-	virtual AAFRESULT
-		GetNthSubDescriptor (aafInt32 index, ImplAAFSubDescriptor **ppSubDescriptor);
-
 private:
     OMStrongReferenceVectorProperty<ImplAAFLocator> _locators;
-    OMStrongReferenceVectorProperty<ImplAAFSubDescriptor> _subdescriptors;
 };
 
 #endif // ! __ImplAAFEssenceDescriptor_h__

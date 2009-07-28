@@ -553,12 +553,6 @@ typedef interface IAAFStaticMobSlot IAAFStaticMobSlot;
 #endif 	/* __IAAFStaticMobSlot_FWD_DEFINED__ */
 
 
-#ifndef __IAAFSubDescriptor_FWD_DEFINED__
-#define __IAAFSubDescriptor_FWD_DEFINED__
-typedef interface IAAFSubDescriptor IAAFSubDescriptor;
-#endif 	/* __IAAFSubDescriptor_FWD_DEFINED__ */
-
-
 #ifndef __IAAFTIFFDescriptor_FWD_DEFINED__
 #define __IAAFTIFFDescriptor_FWD_DEFINED__
 typedef interface IAAFTIFFDescriptor IAAFTIFFDescriptor;
@@ -899,12 +893,6 @@ typedef interface IEnumAAFRIFFChunks IEnumAAFRIFFChunks;
 #define __IEnumAAFSegments_FWD_DEFINED__
 typedef interface IEnumAAFSegments IEnumAAFSegments;
 #endif 	/* __IEnumAAFSegments_FWD_DEFINED__ */
-
-
-#ifndef __IEnumAAFSubDescriptors_FWD_DEFINED__
-#define __IEnumAAFSubDescriptors_FWD_DEFINED__
-typedef interface IEnumAAFSubDescriptors IEnumAAFSubDescriptors;
-#endif 	/* __IEnumAAFSubDescriptors_FWD_DEFINED__ */
 
 
 #ifndef __IEnumAAFTaggedValueDefs_FWD_DEFINED__
@@ -25003,74 +24991,6 @@ EXTERN_C const IID IID_IAAFStaticMobSlot;
 #endif 	/* __IAAFStaticMobSlot_INTERFACE_DEFINED__ */
 
 
-#ifndef __IAAFSubDescriptor_INTERFACE_DEFINED__
-#define __IAAFSubDescriptor_INTERFACE_DEFINED__
-
-/* interface IAAFSubDescriptor */
-/* [unique][helpstring][uuid][object] */ 
-
-
-EXTERN_C const IID IID_IAAFSubDescriptor;
-
-#if defined(__cplusplus) && !defined(CINTERFACE)
-    
-    MIDL_INTERFACE("3e44c183-02de-4a0c-a749-5c3a769dc8f2")
-    IAAFSubDescriptor : public IUnknown
-    {
-    public:
-    };
-    
-#else 	/* C style interface */
-
-    typedef struct IAAFSubDescriptorVtbl
-    {
-        BEGIN_INTERFACE
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IAAFSubDescriptor __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IAAFSubDescriptor __RPC_FAR * This);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IAAFSubDescriptor __RPC_FAR * This);
-        
-        END_INTERFACE
-    } IAAFSubDescriptorVtbl;
-
-    interface IAAFSubDescriptor
-    {
-        CONST_VTBL struct IAAFSubDescriptorVtbl __RPC_FAR *lpVtbl;
-    };
-
-    
-
-#ifdef COBJMACROS
-
-
-#define IAAFSubDescriptor_QueryInterface(This,riid,ppvObject)	\
-    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
-
-#define IAAFSubDescriptor_AddRef(This)	\
-    (This)->lpVtbl -> AddRef(This)
-
-#define IAAFSubDescriptor_Release(This)	\
-    (This)->lpVtbl -> Release(This)
-
-
-#endif /* COBJMACROS */
-
-
-#endif 	/* C style interface */
-
-
-
-
-#endif 	/* __IAAFSubDescriptor_INTERFACE_DEFINED__ */
-
-
 #ifndef __IAAFTIFFDescriptor_INTERFACE_DEFINED__
 #define __IAAFTIFFDescriptor_INTERFACE_DEFINED__
 
@@ -37296,187 +37216,6 @@ void __RPC_STUB IEnumAAFSegments_Clone_Stub(
 #endif 	/* __IEnumAAFSegments_INTERFACE_DEFINED__ */
 
 
-#ifndef __IEnumAAFSubDescriptors_INTERFACE_DEFINED__
-#define __IEnumAAFSubDescriptors_INTERFACE_DEFINED__
-
-/* interface IEnumAAFSubDescriptors */
-/* [unique][helpstring][uuid][object] */ 
-
-
-EXTERN_C const IID IID_IEnumAAFSubDescriptors;
-
-#if defined(__cplusplus) && !defined(CINTERFACE)
-    
-    MIDL_INTERFACE("5b2f57e7-7170-445d-b38b-6f02db84f4d3")
-    IEnumAAFSubDescriptors : public IUnknown
-    {
-    public:
-        virtual HRESULT STDMETHODCALLTYPE NextOne( 
-            /* [retval][out] */ IAAFSubDescriptor __RPC_FAR *__RPC_FAR *ppSubDescriptors) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ aafUInt32 count,
-            /* [length_is][size_is][out] */ IAAFSubDescriptor __RPC_FAR *__RPC_FAR *ppSubDescriptors,
-            /* [ref][out] */ aafUInt32 __RPC_FAR *pNumFetched) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ aafUInt32 count) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [retval][out] */ IEnumAAFSubDescriptors __RPC_FAR *__RPC_FAR *ppEnum) = 0;
-        
-    };
-    
-#else 	/* C style interface */
-
-    typedef struct IEnumAAFSubDescriptorsVtbl
-    {
-        BEGIN_INTERFACE
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
-            IEnumAAFSubDescriptors __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
-            IEnumAAFSubDescriptors __RPC_FAR * This);
-        
-        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
-            IEnumAAFSubDescriptors __RPC_FAR * This);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *NextOne )( 
-            IEnumAAFSubDescriptors __RPC_FAR * This,
-            /* [retval][out] */ IAAFSubDescriptor __RPC_FAR *__RPC_FAR *ppSubDescriptors);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Next )( 
-            IEnumAAFSubDescriptors __RPC_FAR * This,
-            /* [in] */ aafUInt32 count,
-            /* [length_is][size_is][out] */ IAAFSubDescriptor __RPC_FAR *__RPC_FAR *ppSubDescriptors,
-            /* [ref][out] */ aafUInt32 __RPC_FAR *pNumFetched);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Skip )( 
-            IEnumAAFSubDescriptors __RPC_FAR * This,
-            /* [in] */ aafUInt32 count);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Reset )( 
-            IEnumAAFSubDescriptors __RPC_FAR * This);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Clone )( 
-            IEnumAAFSubDescriptors __RPC_FAR * This,
-            /* [retval][out] */ IEnumAAFSubDescriptors __RPC_FAR *__RPC_FAR *ppEnum);
-        
-        END_INTERFACE
-    } IEnumAAFSubDescriptorsVtbl;
-
-    interface IEnumAAFSubDescriptors
-    {
-        CONST_VTBL struct IEnumAAFSubDescriptorsVtbl __RPC_FAR *lpVtbl;
-    };
-
-    
-
-#ifdef COBJMACROS
-
-
-#define IEnumAAFSubDescriptors_QueryInterface(This,riid,ppvObject)	\
-    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
-
-#define IEnumAAFSubDescriptors_AddRef(This)	\
-    (This)->lpVtbl -> AddRef(This)
-
-#define IEnumAAFSubDescriptors_Release(This)	\
-    (This)->lpVtbl -> Release(This)
-
-
-#define IEnumAAFSubDescriptors_NextOne(This,ppSubDescriptors)	\
-    (This)->lpVtbl -> NextOne(This,ppSubDescriptors)
-
-#define IEnumAAFSubDescriptors_Next(This,count,ppSubDescriptors,pNumFetched)	\
-    (This)->lpVtbl -> Next(This,count,ppSubDescriptors,pNumFetched)
-
-#define IEnumAAFSubDescriptors_Skip(This,count)	\
-    (This)->lpVtbl -> Skip(This,count)
-
-#define IEnumAAFSubDescriptors_Reset(This)	\
-    (This)->lpVtbl -> Reset(This)
-
-#define IEnumAAFSubDescriptors_Clone(This,ppEnum)	\
-    (This)->lpVtbl -> Clone(This,ppEnum)
-
-#endif /* COBJMACROS */
-
-
-#endif 	/* C style interface */
-
-
-
-HRESULT STDMETHODCALLTYPE IEnumAAFSubDescriptors_NextOne_Proxy( 
-    IEnumAAFSubDescriptors __RPC_FAR * This,
-    /* [retval][out] */ IAAFSubDescriptor __RPC_FAR *__RPC_FAR *ppSubDescriptors);
-
-
-void __RPC_STUB IEnumAAFSubDescriptors_NextOne_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IEnumAAFSubDescriptors_Next_Proxy( 
-    IEnumAAFSubDescriptors __RPC_FAR * This,
-    /* [in] */ aafUInt32 count,
-    /* [length_is][size_is][out] */ IAAFSubDescriptor __RPC_FAR *__RPC_FAR *ppSubDescriptors,
-    /* [ref][out] */ aafUInt32 __RPC_FAR *pNumFetched);
-
-
-void __RPC_STUB IEnumAAFSubDescriptors_Next_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IEnumAAFSubDescriptors_Skip_Proxy( 
-    IEnumAAFSubDescriptors __RPC_FAR * This,
-    /* [in] */ aafUInt32 count);
-
-
-void __RPC_STUB IEnumAAFSubDescriptors_Skip_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IEnumAAFSubDescriptors_Reset_Proxy( 
-    IEnumAAFSubDescriptors __RPC_FAR * This);
-
-
-void __RPC_STUB IEnumAAFSubDescriptors_Reset_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IEnumAAFSubDescriptors_Clone_Proxy( 
-    IEnumAAFSubDescriptors __RPC_FAR * This,
-    /* [retval][out] */ IEnumAAFSubDescriptors __RPC_FAR *__RPC_FAR *ppEnum);
-
-
-void __RPC_STUB IEnumAAFSubDescriptors_Clone_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-
-#endif 	/* __IEnumAAFSubDescriptors_INTERFACE_DEFINED__ */
-
-
 #ifndef __IEnumAAFTaggedValueDefs_INTERFACE_DEFINED__
 #define __IEnumAAFTaggedValueDefs_INTERFACE_DEFINED__
 
@@ -43807,29 +43546,6 @@ EXTERN_C const IID IID_IAAFEssenceDescriptor2;
         virtual HRESULT STDMETHODCALLTYPE GetLocators( 
             /* [out] */ IEnumAAFLocators __RPC_FAR *__RPC_FAR *ppEnum) = 0;
         
-        virtual HRESULT STDMETHODCALLTYPE CountSubDescriptors( 
-            /* [out] */ aafUInt32 __RPC_FAR *pResult) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE AppendSubDescriptor( 
-            /* [in] */ IAAFSubDescriptor __RPC_FAR *pSubDescriptors) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE PrependSubDescriptor( 
-            /* [in] */ IAAFSubDescriptor __RPC_FAR *pSubDescriptor) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE InsertSubDescriptorAt( 
-            /* [in] */ aafUInt32 index,
-            /* [in] */ IAAFSubDescriptor __RPC_FAR *pSubDescriptor) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetSubDescriptorAt( 
-            /* [in] */ aafUInt32 index,
-            /* [retval][out] */ IAAFSubDescriptor __RPC_FAR *__RPC_FAR *ppSubDescriptor) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE RemoveSubDescriptorAt( 
-            /* [in] */ aafUInt32 index) = 0;
-        
-        virtual HRESULT STDMETHODCALLTYPE GetSubDescriptors( 
-            /* [out] */ IEnumAAFSubDescriptors __RPC_FAR *__RPC_FAR *ppEnum) = 0;
-        
     };
     
 #else 	/* C style interface */
@@ -43879,36 +43595,6 @@ EXTERN_C const IID IID_IAAFEssenceDescriptor2;
             IAAFEssenceDescriptor2 __RPC_FAR * This,
             /* [out] */ IEnumAAFLocators __RPC_FAR *__RPC_FAR *ppEnum);
         
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CountSubDescriptors )( 
-            IAAFEssenceDescriptor2 __RPC_FAR * This,
-            /* [out] */ aafUInt32 __RPC_FAR *pResult);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AppendSubDescriptor )( 
-            IAAFEssenceDescriptor2 __RPC_FAR * This,
-            /* [in] */ IAAFSubDescriptor __RPC_FAR *pSubDescriptors);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *PrependSubDescriptor )( 
-            IAAFEssenceDescriptor2 __RPC_FAR * This,
-            /* [in] */ IAAFSubDescriptor __RPC_FAR *pSubDescriptor);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *InsertSubDescriptorAt )( 
-            IAAFEssenceDescriptor2 __RPC_FAR * This,
-            /* [in] */ aafUInt32 index,
-            /* [in] */ IAAFSubDescriptor __RPC_FAR *pSubDescriptor);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetSubDescriptorAt )( 
-            IAAFEssenceDescriptor2 __RPC_FAR * This,
-            /* [in] */ aafUInt32 index,
-            /* [retval][out] */ IAAFSubDescriptor __RPC_FAR *__RPC_FAR *ppSubDescriptor);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RemoveSubDescriptorAt )( 
-            IAAFEssenceDescriptor2 __RPC_FAR * This,
-            /* [in] */ aafUInt32 index);
-        
-        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetSubDescriptors )( 
-            IAAFEssenceDescriptor2 __RPC_FAR * This,
-            /* [out] */ IEnumAAFSubDescriptors __RPC_FAR *__RPC_FAR *ppEnum);
-        
         END_INTERFACE
     } IAAFEssenceDescriptor2Vtbl;
 
@@ -43952,27 +43638,6 @@ EXTERN_C const IID IID_IAAFEssenceDescriptor2;
 
 #define IAAFEssenceDescriptor2_GetLocators(This,ppEnum)	\
     (This)->lpVtbl -> GetLocators(This,ppEnum)
-
-#define IAAFEssenceDescriptor2_CountSubDescriptors(This,pResult)	\
-    (This)->lpVtbl -> CountSubDescriptors(This,pResult)
-
-#define IAAFEssenceDescriptor2_AppendSubDescriptor(This,pSubDescriptors)	\
-    (This)->lpVtbl -> AppendSubDescriptor(This,pSubDescriptors)
-
-#define IAAFEssenceDescriptor2_PrependSubDescriptor(This,pSubDescriptor)	\
-    (This)->lpVtbl -> PrependSubDescriptor(This,pSubDescriptor)
-
-#define IAAFEssenceDescriptor2_InsertSubDescriptorAt(This,index,pSubDescriptor)	\
-    (This)->lpVtbl -> InsertSubDescriptorAt(This,index,pSubDescriptor)
-
-#define IAAFEssenceDescriptor2_GetSubDescriptorAt(This,index,ppSubDescriptor)	\
-    (This)->lpVtbl -> GetSubDescriptorAt(This,index,ppSubDescriptor)
-
-#define IAAFEssenceDescriptor2_RemoveSubDescriptorAt(This,index)	\
-    (This)->lpVtbl -> RemoveSubDescriptorAt(This,index)
-
-#define IAAFEssenceDescriptor2_GetSubDescriptors(This,ppEnum)	\
-    (This)->lpVtbl -> GetSubDescriptors(This,ppEnum)
 
 #endif /* COBJMACROS */
 
@@ -44065,93 +43730,6 @@ void __RPC_STUB IAAFEssenceDescriptor2_GetLocators_Stub(
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFEssenceDescriptor2_CountSubDescriptors_Proxy( 
-    IAAFEssenceDescriptor2 __RPC_FAR * This,
-    /* [out] */ aafUInt32 __RPC_FAR *pResult);
-
-
-void __RPC_STUB IAAFEssenceDescriptor2_CountSubDescriptors_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFEssenceDescriptor2_AppendSubDescriptor_Proxy( 
-    IAAFEssenceDescriptor2 __RPC_FAR * This,
-    /* [in] */ IAAFSubDescriptor __RPC_FAR *pSubDescriptors);
-
-
-void __RPC_STUB IAAFEssenceDescriptor2_AppendSubDescriptor_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFEssenceDescriptor2_PrependSubDescriptor_Proxy( 
-    IAAFEssenceDescriptor2 __RPC_FAR * This,
-    /* [in] */ IAAFSubDescriptor __RPC_FAR *pSubDescriptor);
-
-
-void __RPC_STUB IAAFEssenceDescriptor2_PrependSubDescriptor_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFEssenceDescriptor2_InsertSubDescriptorAt_Proxy( 
-    IAAFEssenceDescriptor2 __RPC_FAR * This,
-    /* [in] */ aafUInt32 index,
-    /* [in] */ IAAFSubDescriptor __RPC_FAR *pSubDescriptor);
-
-
-void __RPC_STUB IAAFEssenceDescriptor2_InsertSubDescriptorAt_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFEssenceDescriptor2_GetSubDescriptorAt_Proxy( 
-    IAAFEssenceDescriptor2 __RPC_FAR * This,
-    /* [in] */ aafUInt32 index,
-    /* [retval][out] */ IAAFSubDescriptor __RPC_FAR *__RPC_FAR *ppSubDescriptor);
-
-
-void __RPC_STUB IAAFEssenceDescriptor2_GetSubDescriptorAt_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFEssenceDescriptor2_RemoveSubDescriptorAt_Proxy( 
-    IAAFEssenceDescriptor2 __RPC_FAR * This,
-    /* [in] */ aafUInt32 index);
-
-
-void __RPC_STUB IAAFEssenceDescriptor2_RemoveSubDescriptorAt_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
-
-HRESULT STDMETHODCALLTYPE IAAFEssenceDescriptor2_GetSubDescriptors_Proxy( 
-    IAAFEssenceDescriptor2 __RPC_FAR * This,
-    /* [out] */ IEnumAAFSubDescriptors __RPC_FAR *__RPC_FAR *ppEnum);
-
-
-void __RPC_STUB IAAFEssenceDescriptor2_GetSubDescriptors_Stub(
-    IRpcStubBuffer *This,
-    IRpcChannelBuffer *_pRpcChannelBuffer,
-    PRPC_MESSAGE _pRpcMessage,
-    DWORD *_pdwStubPhase);
-
 
 
 #endif 	/* __IAAFEssenceDescriptor2_INTERFACE_DEFINED__ */

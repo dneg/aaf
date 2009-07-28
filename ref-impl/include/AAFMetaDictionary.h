@@ -2549,17 +2549,6 @@ AAF_CLASS(EssenceDescriptor,
     false,
     false,
     EssenceDescriptor)
-  AAF_PROPERTY(SubDescriptors,
-    // {06010104-0610-0000-060E-2B3401010109}
-    // 06.0E.2B.34.01.01.01.09.06.01.01.04.06.10.00.00
-    AAF_LITERAL_AUID(0x06010104,
-      0x0610, 0x0000,
-      0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x09),
-    0x2f02,
-    AAF_REFERENCE_TYPE(StrongReferenceVector, SubDescriptor),
-    false,
-    false,
-    EssenceDescriptor)
 AAF_CLASS_END(EssenceDescriptor,
   // {0D010101-0101-2400-060E-2B3402060101}
   // 06.0E.2B.34.02.53.01.01.0D.01.01.01.01.01.24.00
@@ -5494,26 +5483,6 @@ AAF_CLASS_END(MPEGVideoDescriptor,
     0x06, 0x0E, 0x2B, 0x34, 0x02, 0x06, 0x01, 0x01),
   CDCIDescriptor,
   true)
-AAF_CLASS_SEPARATOR()
-
-// SubDescriptor
-//
-AAF_CLASS(SubDescriptor,
-  // {0D010101-0101-5900-060E-2B3402060101}
-  // 06.0E.2B.34.02.53.01.01.0D.01.01.01.01.01.59.00
-  AAF_LITERAL_AUID(0x0D010101,
-    0x0101, 0x5900,
-    0x06, 0x0E, 0x2B, 0x34, 0x02, 0x06, 0x01, 0x01),
-  InterchangeObject,
-  false)
-AAF_CLASS_END(SubDescriptor,
-  // {0D010101-0101-5900-060E-2B3402060101}
-  // 06.0E.2B.34.02.53.01.01.0D.01.01.01.01.01.59.00
-  AAF_LITERAL_AUID(0x0D010101,
-    0x0101, 0x5900,
-    0x06, 0x0E, 0x2B, 0x34, 0x02, 0x06, 0x01, 0x01),
-  InterchangeObject,
-  false)
 AAF_CLASS_SEPARATOR()
 
 // ClassDefinition
@@ -8504,18 +8473,6 @@ AAF_TYPE_DEFINITION_STRONG_REFERENCE(
   AAF_TYPE(DescriptiveObject))
 AAF_TYPE_SEPARATOR()
 
-// StrongReference<SubDescriptor>
-//
-AAF_TYPE_DEFINITION_STRONG_REFERENCE(
-  AAF_REFERENCE_TYPE_NAME(StrongReference, SubDescriptor), 
-  // {05022600-0000-0000-060E-2B3401040101}
-  // 06.0E.2B.34.01.04.01.01.05.02.26.00.00.00.00.00
-  AAF_LITERAL_AUID(0x05022600,
-    0x0000, 0x0000,
-    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x04, 0x01, 0x01),
-  AAF_TYPE(SubDescriptor))
-AAF_TYPE_SEPARATOR()
-
 // WeakReferenceSet<DataDefinition>
 //
 AAF_TYPE_DEFINITION_WEAK_REFERENCE_SET(
@@ -8935,17 +8892,6 @@ AAF_TYPE_DEFINITION_STRONG_REFERENCE_VECTOR(
     0x06, 0x0E, 0x2B, 0x34, 0x01, 0x04, 0x01, 0x01),
   AAF_TYPE(DescriptiveObject))
 AAF_TYPE_SEPARATOR()
-
-// StrongReferenceVector<SubDescriptor>
-//
-AAF_TYPE_DEFINITION_STRONG_REFERENCE_VECTOR(
-  AAF_REFERENCE_TYPE_NAME(StrongReferenceVector, SubDescriptor), 
-  // {05060E00-0000-0000-060E-2B3401040101}
-  // 06.0E.2B.34.01.04.01.01.05.06.0E.00.00.00.00.00
-  AAF_LITERAL_AUID(0x05060E00,
-    0x0000, 0x0000,
-    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x04, 0x01, 0x01),
-  AAF_TYPE(SubDescriptor))
 
 AAF_TYPE_TABLE_END()
 

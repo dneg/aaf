@@ -1892,9 +1892,6 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFSubDescriptorTest.cpp">
-			</File>
-			<File
 				RelativePath="..\..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFTaggedValueDefinitionTest.cpp">
 				<FileConfiguration
 					Name="Release|Win32">
@@ -3054,9 +3051,6 @@
 						PreprocessorDefinitions=""
 						ForcedIncludeFiles=""/>
 				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\..\..\..\..\test\com\ComModTestAAF\ModuleTests\CEnumAAFSubDescriptorsTest.cpp">
 			</File>
 			<File
 				RelativePath="..\..\..\..\..\test\com\ComModTestAAF\ModuleTests\CEnumAAFTaggedValueDefsTest.cpp">

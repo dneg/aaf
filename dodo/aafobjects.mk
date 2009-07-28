@@ -51,7 +51,6 @@ AAFCOMINTERFACESONLY="\
 	AAFEndian \
 	AAFEssenceDataEx \
 	AAFEssenceData2 \
-	AAFEssenceDescriptor2 \
 	AAFEssenceMultiAccess \
 	AAFEventMobSlot2 \
 	AAFFileDescriptor2 \
@@ -162,7 +161,6 @@ HUMAN_TYPED_IMPL="\
 	AAFSourceMob \
 	AAFSourceReference \
 	AAFStaticMobSlot \
-	AAFSubDescriptor \
 	AAFTIFFDescriptor \
 	AAFTaggedValue \
 	AAFTaggedValueDefinition \
@@ -220,7 +218,6 @@ HUMAN_TYPED_IMPL="\
 	EnumAAFPropertyValues \
 	EnumAAFRIFFChunks \
 	EnumAAFSegments \
-	EnumAAFSubDescriptors \
 	EnumAAFTaggedValueDefs \
 	EnumAAFTaggedValues \
 	EnumAAFTypeDefs "

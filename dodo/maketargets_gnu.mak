@@ -412,7 +412,8 @@ $(INCLUDE_DIR)/ref-api/%.h : %.dod macros/refh.mac macros/base.mac
 .dod.comc :
 	$(RM) $*.comc
 	$(DODO) -f macros/comc.mac < $*.dod > $*.tmp
-	$(MV) $*.tmp $*.comc
+	$(PERL) tool/fix_compiler_warnings.pl $*.tmp > $*.comc
+	$(RM) $*.tmp
 	$(CHMOD) -w $*.comc
 
 .dod.comcx :

@@ -2816,10 +2816,6 @@
 			</FileConfiguration>
 		</File>
 		<File
-			RelativePath="..\..\..\..\ref-impl\src\com-api\CAAFSubDescriptor.cpp"
-			>
-		</File>
-		<File
 			RelativePath="..\..\..\..\ref-impl\src\com-api\CAAFTaggedValue.cpp"
 			>
 			<FileConfiguration
@@ -4412,10 +4408,6 @@
 					ForcedIncludeFiles=""
 				/>
 			</FileConfiguration>
-		</File>
-		<File
-			RelativePath="..\..\..\..\ref-impl\src\com-api\CEnumAAFSubDescriptors.cpp"
-			>
 		</File>
 		<File
 			RelativePath="..\..\..\..\ref-impl\src\com-api\CEnumAAFTaggedValueDefs.cpp"

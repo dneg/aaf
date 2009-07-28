@@ -136,7 +136,6 @@ interface IAAFSourceClip;
 interface IAAFSourceMob;
 interface IAAFSourceReference;
 interface IAAFStaticMobSlot;
-interface IAAFSubDescriptor;
 interface IAAFTIFFDescriptor;
 interface IAAFTaggedValue;
 interface IAAFTaggedValueDefinition;
@@ -194,7 +193,6 @@ interface IEnumAAFPropertyDefs;
 interface IEnumAAFPropertyValues;
 interface IEnumAAFRIFFChunks;
 interface IEnumAAFSegments;
-interface IEnumAAFSubDescriptors;
 interface IEnumAAFTaggedValueDefs;
 interface IEnumAAFTaggedValues;
 interface IEnumAAFTypeDefs;
@@ -210,7 +208,6 @@ interface IAAFDigitalImageDescriptor2;
 interface IAAFEndian;
 interface IAAFEssenceDataEx;
 interface IAAFEssenceData2;
-interface IAAFEssenceDescriptor2;
 interface IAAFEssenceMultiAccess;
 interface IAAFEventMobSlot2;
 interface IAAFFileDescriptor2;
@@ -261,7 +258,6 @@ interface IAAFTypeDefVariableArrayEx;
 ///  - IAAFFileDescriptor
 ///  - IAAFFileDescriptor2
 ///  - IAAFEssenceDescriptor
-///  - IAAFEssenceDescriptor2
 ///  - IAAFObject
 [
     object,
@@ -337,7 +333,6 @@ interface IAAFAES3PCMDescriptor : IUnknown
 ///  - IAAFFileDescriptor
 ///  - IAAFFileDescriptor2
 ///  - IAAFEssenceDescriptor
-///  - IAAFEssenceDescriptor2
 ///  - IAAFObject
 [
     object,
@@ -485,7 +480,6 @@ interface IAAFAIFCDescriptor : IUnknown
 /// Objects that implement IAAFAuxiliaryDescriptor also implement the following interfaces:
 ///  - IAAFPhysicalDescriptor
 ///  - IAAFEssenceDescriptor
-///  - IAAFEssenceDescriptor2
 ///  - IAAFObject
 [
     object,
@@ -755,7 +749,6 @@ interface IAAFAuxiliaryDescriptor : IUnknown
 ///  - IAAFImportDescriptor
 ///  - IAAFPhysicalDescriptor
 ///  - IAAFEssenceDescriptor
-///  - IAAFEssenceDescriptor2
 ///  - IAAFObject
 [
     object,
@@ -2007,7 +2000,6 @@ interface IAAFBWFImportDescriptor : IUnknown
 ///  - IAAFFileDescriptor
 ///  - IAAFFileDescriptor2
 ///  - IAAFEssenceDescriptor
-///  - IAAFEssenceDescriptor2
 ///  - IAAFObject
 [
     object,
@@ -5194,7 +5186,6 @@ interface IAAFDataDef : IUnknown
 ///  - IAAFFileDescriptor
 ///  - IAAFFileDescriptor2
 ///  - IAAFEssenceDescriptor
-///  - IAAFEssenceDescriptor2
 ///  - IAAFObject
 [
     object,
@@ -7160,7 +7151,6 @@ interface IAAFDictionary : IUnknown
 ///  - IAAFFileDescriptor
 ///  - IAAFFileDescriptor2
 ///  - IAAFEssenceDescriptor
-///  - IAAFEssenceDescriptor2
 ///  - IAAFObject
 [
     object,
@@ -8488,8 +8478,6 @@ interface IAAFEssenceData : IUnknown
 //
 // ************************
 ///
-/// IAAFEsseceDescriptor is DEPRECATED, please use IAAFEssenceDescriptor2.
-///
 /// The IAAFEssenceDescriptor interface is implemented by objects which
 /// describe the format of the content data associated with a File
 /// Source mob or of the media associated with a Physical Source mob.
@@ -8512,7 +8500,6 @@ interface IAAFEssenceData : IUnknown
 ///
 ///
 /// Objects that implement IAAFEssenceDescriptor also implement the following interfaces:
-///  - IAAFEssenceDescriptor2
 ///  - IAAFObject
 [
     object,
@@ -8522,6 +8509,7 @@ interface IAAFEssenceData : IUnknown
 ]
 interface IAAFEssenceDescriptor : IUnknown
 {
+
   //***********************************************************
   //
   // CountLocators()
@@ -8736,18 +8724,8 @@ interface IAAFEssenceDescriptor : IUnknown
   ///
   HRESULT GetLocators (
     [out] IEnumAAFLocators ** ppEnum);
-
-
-
-
-
-
-
-
-
-
-
 }
+
 
 
 // ************************
@@ -9735,7 +9713,6 @@ interface IAAFFile : IUnknown
 /// Objects that implement IAAFFileDescriptor also implement the following interfaces:
 ///  - IAAFFileDescriptor2
 ///  - IAAFEssenceDescriptor
-///  - IAAFEssenceDescriptor2
 ///  - IAAFObject
 [
     object,
@@ -10261,7 +10238,6 @@ interface IAAFFiller : IUnknown
 ///
 /// Objects that implement IAAFFilmDescriptor also implement the following interfaces:
 ///  - IAAFEssenceDescriptor
-///  - IAAFEssenceDescriptor2
 ///  - IAAFObject
 [
     object,
@@ -12383,7 +12359,6 @@ interface IAAFIdentification : IUnknown
 /// Objects that implement IAAFImportDescriptor also implement the following interfaces:
 ///  - IAAFPhysicalDescriptor
 ///  - IAAFEssenceDescriptor
-///  - IAAFEssenceDescriptor2
 ///  - IAAFObject
 [
     object,
@@ -15337,7 +15312,6 @@ interface IAAFMobSlot : IUnknown
 ///  - IAAFFileDescriptor
 ///  - IAAFFileDescriptor2
 ///  - IAAFEssenceDescriptor
-///  - IAAFEssenceDescriptor2
 ///  - IAAFObject
 [
     object,
@@ -15895,7 +15869,6 @@ interface IAAFMPEGVideoDescriptor : IUnknown
 ///  - IAAFFileDescriptor
 ///  - IAAFFileDescriptor2
 ///  - IAAFEssenceDescriptor
-///  - IAAFEssenceDescriptor2
 ///  - IAAFObject
 [
     object,
@@ -18284,7 +18257,6 @@ interface IAAFOperationGroup : IUnknown
 ///  - IAAFFileDescriptor
 ///  - IAAFFileDescriptor2
 ///  - IAAFEssenceDescriptor
-///  - IAAFEssenceDescriptor2
 ///  - IAAFObject
 [
     object,
@@ -19605,7 +19577,6 @@ interface IAAFParameterDef : IUnknown
 ///
 /// Objects that implement IAAFPhysicalDescriptor also implement the following interfaces:
 ///  - IAAFEssenceDescriptor
-///  - IAAFEssenceDescriptor2
 ///  - IAAFObject
 [
     object,
@@ -22836,7 +22807,6 @@ interface IAAFPulldown : IUnknown
 ///  - IAAFFileDescriptor
 ///  - IAAFFileDescriptor2
 ///  - IAAFEssenceDescriptor
-///  - IAAFEssenceDescriptor2
 ///  - IAAFObject
 [
     object,
@@ -23939,7 +23909,6 @@ interface IAAFRIFFChunk : IUnknown
 /// Objects that implement IAAFRecordingDescriptor also implement the following interfaces:
 ///  - IAAFPhysicalDescriptor
 ///  - IAAFEssenceDescriptor
-///  - IAAFEssenceDescriptor2
 ///  - IAAFObject
 [
     object,
@@ -25005,7 +24974,6 @@ interface IAAFSetFileBits : IUnknown
 ///  - IAAFFileDescriptor
 ///  - IAAFFileDescriptor2
 ///  - IAAFEssenceDescriptor
-///  - IAAFEssenceDescriptor2
 ///  - IAAFObject
 [
     object,
@@ -26417,47 +26385,6 @@ interface IAAFStaticMobSlot : IUnknown
 
 // ************************
 //
-// Interface IAAFSubDescriptor
-//
-// ************************
-///
-/// The IAAFSubDescriptor interface is implemented by objects that provide
-/// information to help find a file that contains the essence.
-///
-/// In addition to the specific error results listed for each method,
-/// all methods in this interface may also return one of the following
-/// values:
-/// 
-/// AAFRESULT_NOMEMORY
-///   - insufficient system memory is available to perform the
-///     operation.
-///
-/// AAFRESULT_NOT_INITIALIZED
-///   - This object has not yet had Initialize() called on it through
-///     this object's primary interface.  Note that IAAFSubDescriptor is a
-///     primary interface for an abstract class, so it is not
-///     appropriate for the Initialize() method to exist in this
-///     interface.  The Initialize() method is available through the
-///     concrete object's primary interface.
-///
-///
-/// Objects that implement IAAFSubDescriptor also implement the following interfaces:
-///  - IAAFObject
-[
-    object,
-    uuid(3e44c183-02de-4a0c-a749-5c3a769dc8f2),
-    helpstring("IAAFSubDescriptor Interface"),
-    pointer_default(unique)
-]
-interface IAAFSubDescriptor : IUnknown
-{
-
-}
-
-
-
-// ************************
-//
 // Interface IAAFTIFFDescriptor
 //
 // ************************
@@ -26483,7 +26410,6 @@ interface IAAFSubDescriptor : IUnknown
 ///  - IAAFFileDescriptor
 ///  - IAAFFileDescriptor2
 ///  - IAAFEssenceDescriptor
-///  - IAAFEssenceDescriptor2
 ///  - IAAFObject
 [
     object,
@@ -27266,7 +27192,6 @@ interface IAAFTaggedValueDefinition : IUnknown
 ///
 /// Objects that implement IAAFTapeDescriptor also implement the following interfaces:
 ///  - IAAFEssenceDescriptor
-///  - IAAFEssenceDescriptor2
 ///  - IAAFObject
 [
     object,
@@ -34403,7 +34328,6 @@ interface IAAFVaryingValue : IUnknown
 ///  - IAAFFileDescriptor
 ///  - IAAFFileDescriptor2
 ///  - IAAFEssenceDescriptor
-///  - IAAFEssenceDescriptor2
 ///  - IAAFObject
 [
     object,
@@ -39058,179 +38982,6 @@ interface IEnumAAFSegments : IUnknown
 
 // ************************
 //
-// Interface IEnumAAFSubDescriptors
-//
-// ************************
-///
-/// This interface is used to enumerate over the AAFSubDescriptors
-/// contained in a collection.
-///
-/// In addition to the specific error results listed for each method,
-/// all methods in this interface may also return one of the following
-/// values:
-/// 
-/// AAFRESULT_NOMEMORY
-///   - insufficient system memory is available to perform the
-///     operation.
-[
-    object,
-    uuid(5b2f57e7-7170-445d-b38b-6f02db84f4d3),
-    helpstring("IEnumAAFSubDescriptors Interface"),
-    pointer_default(unique)
-]
-interface IEnumAAFSubDescriptors : IUnknown
-{
-
-  //***********************************************************
-  //
-  // NextOne()
-  //
-  /// Enumerates to the next element in the enumerators list. The
-  /// caller is responsible for properly releasing the returned pointer
-  /// when it is no longer needed.
-  /// 
-  /// Succeeds if all of the following are true:
-  /// - the ppSubDescriptors pointer is valid.
-  /// - there are SubDescriptor objects remaining to be returned.
-  /// 
-  /// If this method fails nothing is written to *ppSubDescriptors.
-  ///
-  /// This method will return the following codes.  If more than one of
-  /// the listed errors is in effect, it will return the first one
-  /// encountered in the order given below:
-  /// 
-  /// AAFRESULT_SUCCESS
-  ///   - succeeded.  (This is the only code indicating success.)
-  ///
-  /// AAFRESULT_NULL_PARAM
-  ///   - ppSubDescriptors arg is NULL.
-  ///
-  /// AAFRESULT_NO_MORE_OBJECTS
-  ///   - no SubDescriptor objects remaining to be returned.
-  /// 
-  /// @param ppSubDescriptors [out,retval] The Next SubDescriptor
-  ///
-  HRESULT NextOne (
-    [out,retval] IAAFSubDescriptor ** ppSubDescriptors);
-
-
-  //***********************************************************
-  //
-  // Next()
-  //
-  /// Enumerates the next count elements (AAFSubDescriptor pointers) in the
-  /// enumerator's list, returning them in the given array along with
-  /// the actual number of enumerated elements in pNumFetched. The caller
-  /// is responsible for properly releasing the returned pointers.
-  /// 
-  /// Succeeds if all of the following are true:
-  /// - The ppSubDescriptors pointer is valid.
-  /// - The pNumFetched pointer is valid. If count is 1, pNumFetched
-  ///   can be NULL.
-  /// - There are SubDescriptor objects remaining to be returned.
-  /// 
-  /// If this method fails nothing is written to *ppSubDescriptors or
-  /// pNumFetched.
-  ///
-  /// This method will return the following codes.  If more than one of
-  /// the listed errors is in effect, it will return the first one
-  /// encountered in the order given below:
-  /// 
-  /// AAFRESULT_SUCCESS
-  ///   - succeeded.  (This is the only code indicating success.)
-  ///
-  /// AAFRESULT_NULL_PARAM
-  ///   - Either ppSubDescriptors or pNumFetched arg is NULL.
-  /// 
-  /// @param count [in] number of SubDescriptors requested
-  /// @param ppSubDescriptors [out, size_is(count), length_is(*pNumFetched)] array to receive elements
-  /// @param pNumFetched [out,ref] number of actual SubDescriptor objects fetched into ppSubDescriptors array
-  ///
-  HRESULT Next (
-    [in] aafUInt32  count,
-    [out, size_is(count), length_is(*pNumFetched)] IAAFSubDescriptor ** ppSubDescriptors,
-    [out,ref] aafUInt32 *  pNumFetched);
-
-
-  //***********************************************************
-  //
-  // Skip()
-  //
-  /// Instructs the enumerator to skip the next count elements in the
-  /// enumeration so that the next call to Next will not return those
-  /// elements.
-  /// 
-  /// Succeeds if all of the following are true:
-  /// - count is less than or equal to the number of remaining objects.
-  ///
-  /// This method will return the following codes.  If more than one of
-  /// the listed errors is in effect, it will return the first one
-  /// encountered in the order given below:
-  /// 
-  /// AAFRESULT_SUCCESS
-  ///   - succeeded.  (This is the only code indicating success.)
-  ///
-  /// AAFRESULT_NO_MORE_OBJECTS
-  ///   - count exceeded number of remaining objects.
-  /// 
-  /// @param count [in] Number of elements to skip
-  ///
-  HRESULT Skip (
-    [in] aafUInt32  count);
-
-
-  //***********************************************************
-  //
-  // Reset()
-  //
-  /// Instructs the enumerator to position itself at the beginning of
-  /// the list of elements.
-  ///
-  /// This method will return the following codes.  If more than one of
-  /// the listed errors is in effect, it will return the first one
-  /// encountered in the order given below:
-  /// 
-  /// AAFRESULT_SUCCESS
-  ///   - succeeded.  (This is the only code indicating success.)
-  /// 
-  HRESULT Reset ();
-
-
-  //***********************************************************
-  //
-  // Clone()
-  //
-  /// Creates another enumerator with the same state as the current
-  /// enumerator to iterate over the same list. This method makes it
-  /// possible to record a point in the enumeration sequence in order
-  /// to return to that point at a later time.
-  ///
-  /// Note: The caller must release this new enumerator separately from
-  /// the first enumerator.
-  /// 
-  /// Succeeds if all of the following are true:
-  /// - the ppEnum pointer is valid.
-  ///
-  /// This method will return the following codes.  If more than one of
-  /// the listed errors is in effect, it will return the first one
-  /// encountered in the order given below:
-  /// 
-  /// AAFRESULT_SUCCESS
-  ///   - succeeded.  (This is the only code indicating success.)
-  ///
-  /// AAFRESULT_NULL_PARAM
-  ///   - ppEnum arg is NULL.
-  /// 
-  /// @param ppEnum [out,retval] new enumeration
-  ///
-  HRESULT Clone (
-    [out,retval] IEnumAAFSubDescriptors ** ppEnum);
-}
-
-
-
-// ************************
-//
 // Interface IEnumAAFTaggedValueDefs
 //
 // ************************
@@ -39743,7 +39494,6 @@ interface IEnumAAFTypeDefs : IUnknown
 ///  - IAAFFileDescriptor
 ///  - IAAFFileDescriptor2
 ///  - IAAFEssenceDescriptor
-///  - IAAFEssenceDescriptor2
 ///  - IAAFObject
 [
     object,
@@ -40224,7 +39974,6 @@ interface IAAFAES3PCMDescriptor2 : IUnknown
 ///  - IAAFFileDescriptor
 ///  - IAAFFileDescriptor2
 ///  - IAAFEssenceDescriptor
-///  - IAAFEssenceDescriptor2
 ///  - IAAFObject
 [
     object,
@@ -43412,7 +43161,6 @@ interface IAAFDictionary2 : IUnknown
 ///  - IAAFFileDescriptor
 ///  - IAAFFileDescriptor2
 ///  - IAAFEssenceDescriptor
-///  - IAAFEssenceDescriptor2
 ///  - IAAFObject
 [
     object,
@@ -45256,496 +45004,6 @@ interface IAAFEssenceData2 : IUnknown
 
 // ************************
 //
-// Interface IAAFEssenceDescriptor2
-//
-// ************************
-///
-/// The IAAFEssenceDescriptor2 interface is implemented by objects which
-/// describe the format of the content data associated with a File
-/// Source mob or of the media associated with a Physical Source mob.
-///
-/// In addition to the specific error results listed for each method,
-/// all methods in this interface may also return one of the following
-/// values:
-/// 
-/// AAFRESULT_NOMEMORY
-///   - insufficient system memory is available to perform the
-///     operation.
-///
-/// AAFRESULT_NOT_INITIALIZED
-///   - This object has not yet had Initialize() called on it through
-///     this object's primary interface.  Note that
-///     IAAFEssenceDescriptor2 is a primary interface for an abstract
-///     class, so it is not appropriate for the Initialize() method
-///     to exist in this interface.  The Initialize() method is
-///     available through the concrete object's primary interface.
-///
-///
-/// Objects that implement IAAFEssenceDescriptor2 also implement the following interfaces:
-///  - IAAFObject
-[
-    object,
-    uuid(3ec92568-730d-45d7-805f-d8629aa10910),
-    helpstring("IAAFEssenceDescriptor2 Interface"),
-    pointer_default(unique)
-]
-interface IAAFEssenceDescriptor2 : IUnknown
-{
-
-  //***********************************************************
-  //
-  // CountLocators()
-  //
-  /// Return the number of locators attached to this essence
-  /// descriptor.  The number of locators may be zero if the essence is
-  /// in the current file.
-  /// 
-  /// Succeeds if all of the following are true:
-  /// - the pCount pointer is valid.
-  /// 
-  /// If this method fails nothing is written to *pCount.
-  /// 
-  /// This method will return the following codes.  If more than one of
-  /// the listed errors is in effect, it will return the first one
-  /// encountered in the order given below:
-  /// 
-  /// AAFRESULT_SUCCESS
-  ///   - succeeded.  (This is the only code indicating success.)
-  ///
-  /// AAFRESULT_NULL_PARAM
-  ///   - pCount is null.
-  /// 
-  /// @param pResult [out] Returns the number of locators
-  ///
-  HRESULT CountLocators (
-    [out] aafUInt32 *  pResult);
-
-
-  //***********************************************************
-  //
-  // AppendLocator()
-  //
-  /// Append another locator to this essence descriptor.  Use this
-  /// function to add a locator to be scanned last when searching for
-  /// the essence (a secondary location for the essence).
-  /// 
-  /// Succeeds if all of the following are true:
-  /// - the pLocator pointer is valid.
-  /// 
-  /// If this method fails no state will be changed.
-  /// 
-  /// This method will return the following codes.  If more than one of
-  /// the listed errors is in effect, it will return the first one
-  /// encountered in the order given below:
-  /// 
-  /// AAFRESULT_SUCCESS
-  ///   - succeeded.  (This is the only code indicating success.)
-  ///
-  /// AAFRESULT_NULL_PARAM
-  ///   - pLocator is null.
-  /// 
-  /// @param pLocator [in] Locator to append
-  ///
-  HRESULT AppendLocator (
-    [in] IAAFLocator * pLocator);
-
-
-  //***********************************************************
-  //
-  // PrependLocator()
-  //
-  /// Prepend another locator to this essence descriptor.  Use this
-  /// function to add a locator to be scanned first when searching for
-  /// the essence (a new primary location for the essence).
-  /// 
-  /// Succeeds if all of the following are true:
-  /// - the pLocator pointer is valid.
-  /// 
-  /// If this method fails no state will be changed.
-  /// 
-  /// This method will return the following codes.  If more than one of
-  /// the listed errors is in effect, it will return the first one
-  /// encountered in the order given below:
-  /// 
-  /// AAFRESULT_SUCCESS
-  ///   - succeeded.  (This is the only code indicating success.)
-  ///
-  /// AAFRESULT_NULL_PARAM
-  ///   - pLocator is null.
-  /// 
-  /// @param pLocator [in] Locator to append
-  ///
-  HRESULT PrependLocator (
-    [in] IAAFLocator * pLocator);
-
-
-  //***********************************************************
-  //
-  // InsertLocatorAt()
-  //
-  /// Inserts the given locator at the given index.  Locators already
-  /// existing at the given and higher indices will be moved to the
-  /// next higher index to accommodate.
-  /// 
-  /// Succeeds if all of the following are true:
-  /// - the pLocator pointer is valid.
-  /// - index is less than or equal to the value returned by
-  ///   CountLocators().
-  /// 
-  /// If this method fails no state will be changed.
-  /// 
-  /// This method will return the following codes.  If more than one of
-  /// the listed errors is in effect, it will return the first one
-  /// encountered in the order given below:
-  /// 
-  /// AAFRESULT_SUCCESS
-  ///   - succeeded.  (This is the only code indicating success.)
-  ///
-  /// AAFRESULT_NULL_PARAM
-  ///   - pLocator is null.
-  ///
-  /// AAFRESULT_BADINDEX
-  ///   - index is greater than the value returned by
-  ///     CountLocators().
-  /// 
-  /// @param index [in] index at which locator is to be inserted
-  /// @param pLocator [in] Locator to append
-  ///
-  HRESULT InsertLocatorAt (
-    [in] aafUInt32  index,
-    [in] IAAFLocator * pLocator);
-
-
-  //***********************************************************
-  //
-  // GetLocatorAt()
-  //
-  /// Retrieves the locator at the given index.
-  /// 
-  /// Succeeds if all of the following are true:
-  /// - the pLocator pointer is valid.
-  /// - index is less than the value returned by CountLocators().
-  /// 
-  /// If this method fails no state will be changed.
-  /// 
-  /// This method will return the following codes.  If more than one of
-  /// the listed errors is in effect, it will return the first one
-  /// encountered in the order given below:
-  /// 
-  /// AAFRESULT_SUCCESS
-  ///   - succeeded.  (This is the only code indicating success.)
-  ///
-  /// AAFRESULT_NULL_PARAM
-  ///   - pLocator is null.
-  ///
-  /// AAFRESULT_BADINDEX
-  ///   - index is greater than or equal to the value returned by
-  ///     CountLocators().
-  /// 
-  /// @param index [in] index of locator to retrieve
-  /// @param ppLocator [out, retval] returned locator
-  ///
-  HRESULT GetLocatorAt (
-    [in] aafUInt32  index,
-    [out, retval] IAAFLocator ** ppLocator);
-
-
-  //***********************************************************
-  //
-  // RemoveLocatorAt()
-  //
-  /// Removes the locator at the given index.  Locators already
-  /// existing at indices higher than the given index will be moved to
-  /// the next lower index to accommodate.
-  /// 
-  /// Succeeds if all of the following are true:
-  /// - index is less than the value returned by CountLocators().
-  /// 
-  /// If this method fails no state will be changed.
-  /// 
-  /// This method will return the following codes.  If more than one of
-  /// the listed errors is in effect, it will return the first one
-  /// encountered in the order given below:
-  /// 
-  /// AAFRESULT_SUCCESS
-  ///   - succeeded.  (This is the only code indicating success.)
-  ///
-  /// AAFRESULT_BADINDEX
-  ///   - index is greater than or equal to the value returned by
-  ///     CountLocators().
-  /// 
-  /// @param index [in] index of locator to remove
-  ///
-  HRESULT RemoveLocatorAt (
-    [in] aafUInt32  index);
-
-
-  //***********************************************************
-  //
-  // GetLocators()
-  //
-  /// Returns an enumerator to the locators.  The number of locators
-  /// may be zero if the essence is in the current file.
-  /// 
-  /// Succeeds if all of the following are true:
-  /// - the ppEnum pointer is valid.
-  /// 
-  /// If this method fails nothing will be written to *ppEnum.
-  /// 
-  /// This method will return the following codes.  If more than one of
-  /// the listed errors is in effect, it will return the first one
-  /// encountered in the order given below:
-  /// 
-  /// AAFRESULT_SUCCESS
-  ///   - succeeded.  (This is the only code indicating success.)
-  ///
-  /// AAFRESULT_NULL_PARAM
-  ///   - ppEnum is null.
-  /// 
-  /// @param ppEnum [out] An enumerator to the locators on this essence descriptor
-  ///
-  HRESULT GetLocators (
-    [out] IEnumAAFLocators ** ppEnum);
-
-
-  //***********************************************************
-  //
-  // CountSubDescriptors()
-  //
-  /// Return the number of SubDescriptors attached to this essence
-  /// descriptor.  The number of SubDescriptors may be zero if the essence is
-  /// in the current file.
-  /// 
-  /// Succeeds if all of the following are true:
-  /// - the pCount pointer is valid.
-  /// 
-  /// If this method fails nothing is written to *pCount.
-  /// 
-  /// This method will return the following codes.  If more than one of
-  /// the listed errors is in effect, it will return the first one
-  /// encountered in the order given below:
-  /// 
-  /// AAFRESULT_SUCCESS
-  ///   - succeeded.  (This is the only code indicating success.)
-  ///
-  /// AAFRESULT_NULL_PARAM
-  ///   - pCount is null.
-  /// 
-  /// @param pResult [out] Returns the number of SubDescriptors
-  ///
-  HRESULT CountSubDescriptors (
-    [out] aafUInt32 *  pResult);
-
-
-  //***********************************************************
-  //
-  // AppendSubDescriptor()
-  //
-  /// Append another SubDescriptor to this essence descriptor.  Use this
-  /// function to add a SubDescriptor to be scanned last when searching for
-  /// the essence (a secondary location for the essence).
-  /// 
-  /// Succeeds if all of the following are true:
-  /// - the pSubDescriptor pointer is valid.
-  /// - the pSubDescriptor pointer indicates an object which is not already
-  ///   owned by any object
-  /// 
-  /// If this method fails no state will be changed.
-  /// 
-  /// This method will return the following codes.  If more than one of
-  /// the listed errors is in effect, it will return the first one
-  /// encountered in the order given below:
-  /// 
-  /// AAFRESULT_SUCCESS
-  ///   - succeeded.  (This is the only code indicating success.)
-  ///
-  /// AAFRESULT_NULL_PARAM
-  ///   - pSubDescriptor is null.
-  ///
-  /// AAFRESULT_OBJECT_ALREADY_ATTACHED
-  ///   - the object pointed to by pSubDescriptor is already owned by this or
-  ///     another object
-  /// 
-  /// @param pSubDescriptors [in] SubDescriptor to append
-  ///
-  HRESULT AppendSubDescriptor (
-    [in] IAAFSubDescriptor * pSubDescriptors);
-
-
-  //***********************************************************
-  //
-  // PrependSubDescriptor()
-  //
-  /// Prepend another SubDescriptor to this essence descriptor.  Use this
-  /// function to add a SubDescriptor to be scanned first when searching for
-  /// the essence (a new primary location for the essence).
-  /// 
-  /// Succeeds if all of the following are true:
-  /// - the pSubDescriptor pointer is valid.
-  /// - the pSubDescriptor pointer indicates an object which is not already
-  ///   owned by any object
-  /// 
-  /// If this method fails no state will be changed.
-  /// 
-  /// This method will return the following codes.  If more than one of
-  /// the listed errors is in effect, it will return the first one
-  /// encountered in the order given below:
-  /// 
-  /// AAFRESULT_SUCCESS
-  ///   - succeeded.  (This is the only code indicating success.)
-  ///
-  /// AAFRESULT_NULL_PARAM
-  ///   - pSubDescriptor is null.
-  ///
-  /// AAFRESULT_OBJECT_ALREADY_ATTACHED
-  ///   - the object pointed to by pSubDescriptor is already owned by this or
-  ///     another object
-  /// 
-  /// @param pSubDescriptor [in] SubDescriptor to append
-  ///
-  HRESULT PrependSubDescriptor (
-    [in] IAAFSubDescriptor * pSubDescriptor);
-
-
-  //***********************************************************
-  //
-  // InsertSubDescriptorAt()
-  //
-  /// Inserts the given SubDescriptor at the given index.  SubDescriptors already
-  /// existing at the given and higher indices will be moved to the
-  /// next higher index to accommodate.
-  /// 
-  /// Succeeds if all of the following are true:
-  /// - the pSubDescriptor pointer is valid.
-  /// - the pSubDescriptor pointer indicates an object which is not already
-  ///   owned by any object
-  /// - index is less than or equal to the value returned by
-  ///   CountSubDescriptors().
-  /// 
-  /// If this method fails no state will be changed.
-  /// 
-  /// This method will return the following codes.  If more than one of
-  /// the listed errors is in effect, it will return the first one
-  /// encountered in the order given below:
-  /// 
-  /// AAFRESULT_SUCCESS
-  ///   - succeeded.  (This is the only code indicating success.)
-  ///
-  /// AAFRESULT_NULL_PARAM
-  ///   - pSubDescriptor is null.
-  ///
-  /// AAFRESULT_OBJECT_ALREADY_ATTACHED
-  ///   - the object pointed to by pSubDescriptor is already owned by this or
-  ///     another object
-  ///
-  /// AAFRESULT_BADINDEX
-  ///   - index is greater than the value returned by
-  ///     CountSubDescriptors().
-  /// 
-  /// @param index [in] index at which SubDescriptor is to be inserted
-  /// @param pSubDescriptor [in] SubDescriptor to append
-  ///
-  HRESULT InsertSubDescriptorAt (
-    [in] aafUInt32  index,
-    [in] IAAFSubDescriptor * pSubDescriptor);
-
-
-  //***********************************************************
-  //
-  // GetSubDescriptorAt()
-  //
-  /// Retrieves the SubDescriptor at the given index.
-  /// 
-  /// Succeeds if all of the following are true:
-  /// - the pSubDescriptor pointer is valid.
-  /// - index is less than the value returned by CountSubDescriptors().
-  /// 
-  /// If this method fails no state will be changed.
-  /// 
-  /// This method will return the following codes.  If more than one of
-  /// the listed errors is in effect, it will return the first one
-  /// encountered in the order given below:
-  /// 
-  /// AAFRESULT_SUCCESS
-  ///   - succeeded.  (This is the only code indicating success.)
-  ///
-  /// AAFRESULT_NULL_PARAM
-  ///   - pSubDescriptor is null.
-  ///
-  /// AAFRESULT_BADINDEX
-  ///   - index is greater than or equal to the value returned by
-  ///     CountSubDescriptors().
-  /// 
-  /// @param index [in] index of SubDescriptor to retrieve
-  /// @param ppSubDescriptor [out, retval] returned SubDescriptor
-  ///
-  HRESULT GetSubDescriptorAt (
-    [in] aafUInt32  index,
-    [out, retval] IAAFSubDescriptor ** ppSubDescriptor);
-
-
-  //***********************************************************
-  //
-  // RemoveSubDescriptorAt()
-  //
-  /// Removes the SubDescriptor at the given index.  SubDescriptors already
-  /// existing at indices higher than the given index will be moved to
-  /// the next lower index to accommodate.
-  /// 
-  /// Succeeds if all of the following are true:
-  /// - index is less than the value returned by CountSubDescriptors().
-  /// 
-  /// If this method fails no state will be changed.
-  /// 
-  /// This method will return the following codes.  If more than one of
-  /// the listed errors is in effect, it will return the first one
-  /// encountered in the order given below:
-  /// 
-  /// AAFRESULT_SUCCESS
-  ///   - succeeded.  (This is the only code indicating success.)
-  ///
-  /// AAFRESULT_BADINDEX
-  ///   - index is greater than or equal to the value returned by
-  ///     CountSubDescriptors().
-  /// 
-  /// @param index [in] index of SubDescriptor to remove
-  ///
-  HRESULT RemoveSubDescriptorAt (
-    [in] aafUInt32  index);
-
-
-  //***********************************************************
-  //
-  // GetSubDescriptors()
-  //
-  /// Returns an enumerator to the SubDescriptors.  The number of SubDescriptors
-  /// may be zero if the essence is in the current file.
-  /// 
-  /// Succeeds if all of the following are true:
-  /// - the ppEnum pointer is valid.
-  /// 
-  /// If this method fails nothing will be written to *ppEnum.
-  /// 
-  /// This method will return the following codes.  If more than one of
-  /// the listed errors is in effect, it will return the first one
-  /// encountered in the order given below:
-  /// 
-  /// AAFRESULT_SUCCESS
-  ///   - succeeded.  (This is the only code indicating success.)
-  ///
-  /// AAFRESULT_NULL_PARAM
-  ///   - ppEnum is null.
-  /// 
-  /// @param ppEnum [out] An enumerator to the SubDescriptors on this essence descriptor
-  ///
-  HRESULT GetSubDescriptors (
-    [out] IEnumAAFSubDescriptors ** ppEnum);
-}
-
-
-
-// ************************
-//
 // Interface IAAFEssenceMultiAccess
 //
 // ************************
@@ -46022,7 +45280,6 @@ interface IAAFEventMobSlot2 : IUnknown
 ///
 /// Objects that implement IAAFFileDescriptor2 also implement the following interfaces:
 ///  - IAAFEssenceDescriptor
-///  - IAAFEssenceDescriptor2
 ///  - IAAFObject
 [
     object,
@@ -49831,7 +49088,6 @@ interface IAAFProgress : IUnknown
 ///  - IAAFFileDescriptor
 ///  - IAAFFileDescriptor2
 ///  - IAAFEssenceDescriptor
-///  - IAAFEssenceDescriptor2
 ///  - IAAFObject
 [
     object,

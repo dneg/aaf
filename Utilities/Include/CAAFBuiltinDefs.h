@@ -225,7 +225,6 @@ public:
   CLASS_DEF_METHOD(SourceMob);
   CLASS_DEF_METHOD(SourceReference);
   CLASS_DEF_METHOD(StaticMobSlot);
-  CLASS_DEF_METHOD(SubDescriptor);
   CLASS_DEF_METHOD(TIFFDescriptor);
   CLASS_DEF_METHOD(TaggedValue);
   CLASS_DEF_METHOD(TaggedValueDefinition);
