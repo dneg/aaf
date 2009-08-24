@@ -271,6 +271,232 @@ AAFRESULT STDMETHODCALLTYPE
 
 //***********************************************************
 //
+// AddMasterSlotWithSequence()
+//
+// This function is similar to AddMasterSlot but creates the structure
+// MobSlot - Sequence - SourceClip instead of MobSlot - SourceClip.
+// This arrangement is required for MXF compliance.
+//
+// This function adds a slot to the specified Master Mob that
+// references the specified a slot in the specified Source Mob. The
+// new slot in the Master Mob contains a Source Clip that specifies
+// the Source Mob in its source reference properties.
+//
+// The dataDef parameter requires a data kind valid for a media
+// stream. Valid data kinds are:
+//
+// - Picture
+// - Sound
+//
+// Note: If pSlotName is passed in with zero length, then the
+// slot is not assigned a name.  Slot names are not used by the
+// SDK, and exist only so the user can name slots.
+// 
+// Succeeds if all of the following are true:
+// (more conditions here)
+// 
+// If this method fails no state is changed.
+// 
+// This method will return the following codes.  If more than one of
+// the listed errors is in effect, it will return the first one
+// encountered in the order given below:
+// 
+// AAFRESULT_SUCCESS
+//   - succeeded.  (This is the only code indicating success.)
+//
+// AAFRESULT_NULL_PARAM
+//   - One or more of the following parameters are NULL pSourceMob,
+//     pDataDef, and pSlotName.
+//
+// AAFRESULT_INVALID_DATADEF
+//   - The data kind of the source MOB slot to be added to the Master
+//     Mob does not match what is specfied in pDataDef.
+//
+// AAFRESULT_SLOT_NOTFOUND
+//   - The specified Source Mob slot was not found.
+//
+// AAFRESULT_SLOT_EXISTS
+//   - The specified Master slot ID already exists.
+//
+// 
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFMasterMob::AddMasterSlotWithSequence (ImplAAFDataDef *   pDataDef,
+									 aafSlotID_t		sourceSlotID,
+									 ImplAAFSourceMob*	pSourceMob,
+									 aafSlotID_t		masterSlotID,
+									 const aafWChar*	pSlotName)
+{
+	aafLength_t	slotLength;
+	aafMobID_t	sourceMobID;
+	HRESULT		hr = AAFRESULT_SUCCESS;
+	ImplAAFMobSlot*	pMobSlot;
+	ImplAAFTimelineMobSlot* pTimelineMobSlot = NULL;
+	ImplAAFStaticMobSlot* pStaticMobSlot = NULL;
+	aafUID_t	segDataDef;
+	ImplAAFSegment*	pSegment = NULL;
+	ImplAAFSequence*	pSequence = NULL;
+	ImplAAFSourceClip*	pSrcClip = NULL;
+	aafSourceRef_t		ref;
+	aafPosition_t		zeroPos;
+	ImplAAFTimelineMobSlot	*pNewTimelineSlot = NULL;
+	ImplAAFStaticMobSlot	*pNewStaticSlot = NULL;
+	aafRational_t  editRate;
+  ImplAAFDictionary *pDictionary = NULL;
+
+
+	if (!pSourceMob || !pSlotName)
+		return AAFRESULT_NULL_PARAM;
+
+	XPROTECT()
+	{
+		// Get the slot length and mob id.  Verify that data kind
+		// of the slot is the same as dataDef
+		CHECK(pSourceMob->GetMobID(&sourceMobID));
+
+		CHECK(pSourceMob->FindSlotBySlotID(sourceSlotID, &pMobSlot));
+		pTimelineMobSlot = dynamic_cast<ImplAAFTimelineMobSlot *>(pMobSlot);
+		if (NULL == pTimelineMobSlot)
+		{
+			// there is scope for refactoring this block and the else block to have
+			//more common code.
+			//I have chosen not to at the moment as I will be adding event slots as well
+			//After adding the event slot will be the  time to refactor
+			pStaticMobSlot = dynamic_cast<ImplAAFStaticMobSlot *>(pMobSlot);
+			if (NULL == pStaticMobSlot)
+				RAISE(AAFRESULT_SLOT_NOT_FOUND); // please use the correct error code!
+			
+			CHECK(pMobSlot->GetSegment(&pSegment));
+			pSegment->GetLength(&slotLength);
+			ImplAAFDataDefSP pSegDataDef;
+			pSegment->GetDataDef(&pSegDataDef);
+			pSegDataDef->GetAUID(&segDataDef);
+			pSegment->ReleaseReference();
+			pSegment = NULL;
+
+			// Make sure the slot contains the expected media type.
+			aafUID_t dataDef;
+			CHECK(pDataDef->GetAUID(&dataDef));
+			if (!EqualAUID(&segDataDef, &dataDef))
+				RAISE(AAFRESULT_INVALID_DATADEF);
+
+			pMobSlot->ReleaseReference();
+			pMobSlot = NULL;
+
+		// Add the master slot
+
+			zeroPos = 0;
+			ref.sourceID = sourceMobID;
+			ref.sourceSlotID = sourceSlotID;
+			ref.startTime = zeroPos;
+			CHECK(GetDictionary(&pDictionary));
+			CHECK(pDictionary->GetBuiltinDefs()->cdSourceClip()->
+				CreateInstance((ImplAAFObject**) &pSrcClip));
+			CHECK(pSrcClip->Initialize(pDataDef, slotLength, ref));
+
+		// For MXF it is mandatory that we use a sequence here.
+		// For AAF it is optional.
+			CHECK(pDictionary->GetBuiltinDefs()->cdSequence()->
+			    CreateInstance((ImplAAFObject **) &pSequence));
+			CHECK(pSequence->Initialize(pDataDef));
+			CHECK(pSequence->AppendComponent(pSrcClip));
+
+			CHECK(AppendNewStaticSlot(pSequence, masterSlotID, pSlotName, 
+										&pNewStaticSlot));
+
+			pDictionary->ReleaseReference();
+			pDictionary = NULL;
+
+			pNewStaticSlot->ReleaseReference();
+			pNewStaticSlot = NULL;
+
+			pSrcClip->ReleaseReference();
+			pSrcClip = NULL;
+
+			pSequence->ReleaseReference();
+			pSequence = NULL;
+			
+		}
+		else
+		{
+	//		CHECK(pMobSlot->QueryInterface(IID_IAAFTimelineMobSlot,(void **) &pTimelineMobSlot));
+			CHECK(pTimelineMobSlot->GetEditRate(&editRate));
+
+			CHECK(pMobSlot->GetSegment(&pSegment));
+
+			pSegment->GetLength(&slotLength);
+			ImplAAFDataDefSP pSegDataDef;
+			pSegment->GetDataDef(&pSegDataDef);
+			pSegDataDef->GetAUID(&segDataDef);
+			pSegment->ReleaseReference();
+			pSegment = NULL;
+
+			// Make sure the slot contains the expected media type.
+			aafUID_t dataDef;
+			CHECK(pDataDef->GetAUID(&dataDef));
+			if (!EqualAUID(&segDataDef, &dataDef))
+				RAISE(AAFRESULT_INVALID_DATADEF);
+
+			pMobSlot->ReleaseReference();
+			pMobSlot = NULL;
+
+		// Add the master slot
+
+			zeroPos = 0;
+			ref.sourceID = sourceMobID;
+			ref.sourceSlotID = sourceSlotID;
+			ref.startTime = zeroPos;
+			CHECK(GetDictionary(&pDictionary));
+			CHECK(pDictionary->GetBuiltinDefs()->cdSourceClip()->
+				CreateInstance((ImplAAFObject**) &pSrcClip));
+
+			CHECK(pSrcClip->Initialize(pDataDef, slotLength, ref));
+
+		// For MXF it is mandatory that we use a sequence here.
+		// For AAF it is optional.
+			CHECK(pDictionary->GetBuiltinDefs()->cdSequence()->
+			    CreateInstance((ImplAAFObject **) &pSequence));
+			CHECK(pSequence->Initialize(pDataDef));
+			CHECK(pSequence->AppendComponent(pSrcClip));
+
+			CHECK(AppendNewTimelineSlot(editRate,pSequence, masterSlotID, pSlotName, 
+										zeroPos,&pNewTimelineSlot));
+
+			pDictionary->ReleaseReference();
+			pDictionary = NULL;
+
+			pNewTimelineSlot->ReleaseReference();
+			pNewTimelineSlot = NULL;
+
+			pSrcClip->ReleaseReference();
+			pSrcClip = NULL;
+
+			pSequence->ReleaseReference();
+			pSequence = NULL;
+		}
+	}
+	XEXCEPT
+	{
+		if(pNewStaticSlot != NULL)
+			pNewStaticSlot->ReleaseReference();
+		if(pNewTimelineSlot != NULL)
+			pNewTimelineSlot->ReleaseReference();
+		if(pSegment != NULL)
+			pSegment->ReleaseReference();
+		if(pMobSlot != NULL)
+			pMobSlot->ReleaseReference();
+		if(pSrcClip != NULL)
+			pSrcClip->ReleaseReference();
+		if(pSequence != NULL)
+			pSequence->ReleaseReference();
+		if(pDictionary != NULL)
+			pDictionary->ReleaseReference();
+	}
+	XEND;
+	return hr;
+}
+
+//***********************************************************
+//
 // GetTapeName()
 //
 // Finds the videotape Source Mob associated with a Master Mob slot

@@ -53,11 +53,11 @@ using namespace std;
 typedef IAAFSmartPointer<IAAFDataDef> IAAFDataDefSP;
 
 #define	MobName			L"MasterMOBTest"
-#define	NumMobSlots		3
+#define	NumMobSlots		4
 
-static const aafWChar *		slotNames[NumMobSlots] = { L"VIDEO SLOT", L"AUDIO SLOT1", L"AUDIO SLOT2"};
-static const aafUID_t *	slotDDefs[NumMobSlots] = {&kAAFDataDef_Picture, &kAAFDataDef_Sound, &kAAFDataDef_Sound};
-static aafRational_t	slotRates[NumMobSlots] = { {297,1}, {44100, 1}, {44100, 1}};
+static const aafWChar *		slotNames[NumMobSlots] = { L"VIDEO SLOT", L"AUDIO SLOT1", L"AUDIO SLOT2", L"VIDEO SLOT MXF style"};
+static const aafUID_t *	slotDDefs[NumMobSlots] = {&kAAFDataDef_Picture, &kAAFDataDef_Sound, &kAAFDataDef_Sound, &kAAFDataDef_Picture};
+static aafRational_t	slotRates[NumMobSlots] = { {297,1}, {44100, 1}, {44100, 1}, {25,1}};
 static const aafWChar* Manufacturer = L"Sony";
 static const aafWChar* Model = L"MyModel";
 static aafTapeCaseType_t FormFactor = kAAFVHSVideoTape;
@@ -91,8 +91,13 @@ static const 	aafMobID_t	TEST_Source_MobIDs[NumMobSlots] =
 	//third id
 	{{0x06, 0x0c, 0x2b, 0x34, 0x02, 0x05, 0x11, 0x01, 0x01, 0x00, 0x10, 0x00},
 	0x13, 0x00, 0x00, 0x00,
-	{0x8d6c568c, 0x0403, 0x11d4, {0x8e, 0x3d, 0x00, 0x90, 0x27, 0xdf, 0xca, 0x7c}}}
+	{0x8d6c568c, 0x0403, 0x11d4, {0x8e, 0x3d, 0x00, 0x90, 0x27, 0xdf, 0xca, 0x7c}}},
 	
+	//fourth id
+	{{0x06, 0x0c, 0x2b, 0x34, 0x02, 0x05, 0x11, 0x01, 0x01, 0x00, 0x10, 0x00},
+	0x13, 0x00, 0x00, 0x00,
+	{0x462c6792, 0x0403, 0x11d4, {0x8e, 0x3d, 0x00, 0x90, 0x27, 0xdf, 0xca, 0x7c}}}
+
 };	//end mobid block
 
 
@@ -120,6 +125,7 @@ static HRESULT CreateAAFFile(
 	IAAFDictionary*  pDictionary = NULL;
 	IAAFMob*		pMob = NULL;
 	IAAFMasterMob*	pMasterMob = NULL;
+	IAAFMasterMob3* pMasterMob3 = NULL;
 	IAAFSourceMob* pSrcMob = NULL;
 	IAAFSourceMob* pTapeMob = NULL;
 	IAAFEssenceDescriptor*	pDesc = NULL;
@@ -272,7 +278,20 @@ static HRESULT CreateAAFFile(
 			
 			IAAFDataDefSP pDataDef;
 			checkResult (pDictionary->LookupDataDef (*slotDDefs[test], &pDataDef));
-			checkResult(pMasterMob->AddMasterSlot(pDataDef, test, pSrcMob, test+1, slotNames[test]));
+
+			if (test == NumMobSlots-1)		// last slot?
+			{
+				// The last slot to test is added using AAFMasterMob3 to test whether
+				// it is added inside a sequence rather than just on the SourceClip.
+				checkResult(pMasterMob->QueryInterface(IID_IAAFMasterMob3, (void **) &pMasterMob3));
+				checkResult(pMasterMob3->AddMasterSlotWithSequence(pDataDef, test, pSrcMob, test+1, slotNames[test]));
+				pMasterMob3->Release();
+				pMasterMob3 = NULL;
+			}
+			else
+			{
+				checkResult(pMasterMob->AddMasterSlot(pDataDef, test, pSrcMob, test+1, slotNames[test]));
+			}
 			
 			pSrcMob->Release();
 			pSrcMob = NULL;
@@ -307,6 +326,9 @@ static HRESULT CreateAAFFile(
 	if (pTapeMob)
 		pTapeMob->Release();
 	
+	if (pMasterMob3)
+		pMasterMob3->Release();
+	
 	if (pMasterMob)
 		pMasterMob->Release();
 	
@@ -340,9 +362,10 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 	IEnumAAFMobs*	pMobIter = NULL;
 	IAAFMob*		pMob = NULL;
 	IAAFSegment*		pSeg = NULL;
+	IAAFSequence*		pSequence = NULL;
 	IAAFMasterMob*		pMasterMob = NULL;
 	IEnumAAFMobSlots*	pSlotIter = NULL;
-	IAAFMobSlot*		pSlot;
+	IAAFMobSlot*		pSlot = NULL;
 	aafWChar*			pTapeName = NULL;
 	aafNumSlots_t	numMobs;
 	aafSearchCrit_t	criteria;
@@ -406,6 +429,25 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
         // Validate the slot id.
 				checkResult(pSlot->GetSlotID(&slotID));
 				checkExpression(slotID == s+1, AAFRESULT_TEST_FAILED);
+
+				// Get the segment and check that the last slot contains a
+				// Sequence since it was added with AddMasterSlotWithSequence().
+				checkResult(pSlot->GetSegment(&pSeg));
+				HRESULT qr = pSeg->QueryInterface(IID_IAAFSequence, (void **)&pSequence);
+				if (slotID == NumMobSlots)
+				{
+					checkResult(qr);
+					aafUInt32			numCpnts = 0;
+					checkResult(pSequence->CountComponents(&numCpnts));
+					checkExpression(numCpnts == 1, AAFRESULT_TEST_FAILED);
+					pSequence->Release();
+				}
+				else
+				{
+					checkExpression(qr != AAFRESULT_SUCCESS, AAFRESULT_TEST_FAILED);
+				}
+				pSeg->Release();
+				pSeg = NULL;
 
 				checkResult(pMasterMob->GetTapeNameBufLen(slotID, &bufSize));
 				if (bufSize)

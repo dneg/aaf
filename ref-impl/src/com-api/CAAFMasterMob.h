@@ -70,6 +70,7 @@ class CAAFMasterMob
     public IAAFSearchSource,
     public IAAFMasterMobEx,
     public IAAFMasterMob2,
+    public IAAFMasterMob3,
     public CAAFMob
 {
 protected:
@@ -926,6 +927,76 @@ public:
 
     // @parm [out] AAFEssenceAccess | access | Return an essence access on the essence.
     IAAFEssenceAccess ** access
+  );
+
+
+  //***********************************************************
+  // METHOD NAME: AddMasterSlotWithSequence()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFMasterMob3 | AddMasterSlotWithSequence |
+  // This function is similar to AddMasterSlot but creates the structure
+  /// MobSlot - Sequence - SourceClip instead of MobSlot - SourceClip.
+  /// This arrangement is required for MXF compliance.
+  ///
+  /// This function adds a slot to the specified Master Mob that
+  /// references the specified a slot in the specified Source Mob. The
+  /// new slot in the Master Mob has a Sequence containing the Source Clip
+  /// that specifies the Source Mob in its source reference properties.
+  ///
+  /// Note: If pSlotName is passed in with zero length, then the
+  /// slot is not assigned a name.  Slot names are not used by the
+  /// SDK, and exist only so the user can name slots.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// (more conditions here)
+  /// 
+  /// If this method fails no state is changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - One or more of the following parameters are NULL pSourceMob,
+  ///     pSlotName, and pDataDef.
+  ///
+  /// AAFRESULT_INVALID_DATADEF
+  ///   - The data kind of the source MOB slot to be added to the Master
+  ///     Mob does not match what is specfied in pDataDef.
+  ///
+  /// AAFRESULT_SLOT_NOTFOUND
+  ///   - The specified Source Mob slot was not found.
+  ///
+  /// AAFRESULT_SLOT_EXISTS
+  ///   - The specified Master slot ID already exists.
+  // @end
+  // 
+  STDMETHOD (AddMasterSlotWithSequence)
+   (
+    // @parm [in] AAFDataDef | pDataDef | Data kind of new slot.  Requires a data kind valid for a media
+  /// stream. Valid data kinds are:
+  /// - Picture
+  /// - Sound
+    IAAFDataDef * pDataDef,
+
+    // @parm [in] aafSlotID_t | sourceSlotID | Slot ID of the Source Mob slot to be added to the Master Mob
+    aafSlotID_t  sourceSlotID,
+
+    // @parm [in] AAFSourceMob | pSourceMob | Source Mob containing the slot to be added to the Master Mob
+    IAAFSourceMob * pSourceMob,
+
+    // @parm [in] aafSlotID_t | masterSlotID | SlotID assigned to the new Master Mob slot
+    aafSlotID_t  masterSlotID,
+
+    // @parm [in, string] aafCharacter_constptr | pSlotName | Name to assign to new slot in Master Mob
+    aafCharacter_constptr  pSlotName
   );
 
 

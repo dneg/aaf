@@ -214,6 +214,7 @@ interface IAAFHeader2;
 interface IAAFKLVEssenceDataParameters;
 interface IAAFKLVStreamParameters;
 interface IAAFMasterMob2;
+interface IAAFMasterMob3;
 interface IAAFMasterMobEx;
 interface IAAFMob2;
 interface IAAFProgress;
@@ -391,6 +392,7 @@ typedef interface IAAFHeader2 IAAFHeader2;
 typedef interface IAAFKLVEssenceDataParameters IAAFKLVEssenceDataParameters;
 typedef interface IAAFKLVStreamParameters IAAFKLVStreamParameters;
 typedef interface IAAFMasterMob2 IAAFMasterMob2;
+typedef interface IAAFMasterMob3 IAAFMasterMob3;
 typedef interface IAAFMasterMobEx IAAFMasterMobEx;
 typedef interface IAAFMob2 IAAFMob2;
 typedef interface IAAFProgress IAAFProgress;
@@ -13670,6 +13672,8 @@ DECLARE_INTERFACE_(IAAFMasterMob, IUnknown)
     aafMediaCriteria_t*  mediaCrit,
     IAAFDataDef * pMediaKind,
     aafUInt16*  numCh) PURE;
+
+
 
 
 
@@ -47968,6 +47972,843 @@ DECLARE_INTERFACE_(IAAFMasterMob2, IUnknown)
   END_INTERFACE
 };
 #endif // __IAAFMasterMob2_INTERFACE_DEFINED__
+
+
+
+
+// IAAFMasterMob3
+
+// ************************
+//
+// Interface IAAFMasterMob3
+//
+// ************************
+
+
+
+
+
+
+
+
+
+
+#ifndef __IAAFMasterMob3_INTERFACE_DEFINED__
+#define __IAAFMasterMob3_INTERFACE_DEFINED__
+
+EXTERN_C const IID IID_IAAFMasterMob3;
+
+#undef  INTERFACE
+#define INTERFACE   IAAFMasterMob3
+
+DECLARE_INTERFACE_(IAAFMasterMob3, IUnknown)
+{
+  BEGIN_INTERFACE
+
+  /* *** IUnknown methods *** */
+  STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppvObj) PURE;
+  STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
+  STDMETHOD_(ULONG,Release) (THIS) PURE;
+
+  /* *** IAAFMasterMob3 methods *** */
+
+
+
+  //***********************************************************
+  //
+  // Initialize()
+  //
+  /// Initializes a newly allocated, empty IAAFMasterMob-supporting
+  /// object.  This method must be called after allocation, and before
+  /// any other method can be called.
+  ///
+  /// Succeeds if:
+  /// - Initialize() has not yet been called on this object.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_ALREADY_INITIALIZED
+  ///   - Initialize() has already been called on this object.
+  STDMETHOD(Initialize) (THIS) PURE;
+
+
+  //***********************************************************
+  //
+  // AddMasterSlot()
+  //
+  /// This function adds a slot to the specified Master Mob that
+  /// references the specified a slot in the specified Source Mob. The
+  /// new slot in the Master Mob contains a Source Clip that specifies
+  /// the Source Mob in its source reference properties.  Typically this
+  /// is done automatically by passing the Master Mob handle to
+  /// AAFMedia::Create, but this function allows you to add it later.
+  ///
+  /// Note: If pSlotName is passed in with zero length, then the
+  /// slot is not assigned a name.  Slot names are not used by the
+  /// SDK, and exist only so the user can name slots.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// (more conditions here)
+  /// 
+  /// If this method fails no state is changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - One or more of the following parameters are NULL pSourceMob,
+  ///     pSlotName, and pDataDef.
+  ///
+  /// AAFRESULT_INVALID_DATADEF
+  ///   - The data kind of the source MOB slot to be added to the Master
+  ///     Mob does not match what is specfied in pDataDef.
+  ///
+  /// AAFRESULT_SLOT_NOTFOUND
+  ///   - The specified Source Mob slot was not found.
+  ///
+  /// AAFRESULT_SLOT_EXISTS
+  ///   - The specified Master slot ID already exists.
+  ///
+  /// @param pDataDef [in] Data kind of new slot.  Requires a data kind valid for a media
+  /// stream. Valid data kinds are:
+  /// - Picture
+  /// - Sound
+  /// @param sourceSlotID [in] Slot ID of the Source Mob slot to be added to the Master Mob
+  /// @param pSourceMob [in] Source Mob containing the slot to be added to the Master Mob
+  /// @param masterSlotID [in] SlotID assigned to the new Master Mob slot
+  /// @param pSlotName [in, string] Name to assign to new slot in Master Mob
+  ///
+  STDMETHOD(AddMasterSlot) (THIS_
+    IAAFDataDef * pDataDef,
+    aafSlotID_t  sourceSlotID,
+    IAAFSourceMob * pSourceMob,
+    aafSlotID_t  masterSlotID,
+    aafCharacter_constptr  pSlotName) PURE;
+
+
+  //***********************************************************
+  //
+  // GetTapeName()
+  //
+  /// Finds the tape Source Mob associated with a Master Mob slot
+  /// and writes the name of the tape, which is stored in the
+  /// Mobs Name property, into the pTapeName buffer.  The buffer is
+  /// allocated by the caller.  The size of the buffer is given by
+  /// bufSize.  If the property name has not yet been set, a
+  /// zero-length string will be written (that is, only the trailing
+  /// null character).
+  /// 
+  /// Caller may call GetTapeNameBufLen() to determine the required
+  /// buffer size.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pTapeName pointer is valid.
+  /// - the specified master slot was found.
+  /// - the specified master slot contains a tape mob.
+  /// - bufSize indicates the buffer is large enough to hold the name.
+  /// 
+  /// If this method fails nothing will be written to *pTapeName.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pTapeName arg is NULL.
+  ///
+  /// AAFRESULT_SLOT_NOTFOUND
+  ///   - The specified Master Slot was not found.
+  ///
+  /// AAFRESULT_NOT_TAPEMOB
+  ///   - The specified Master Slot does not contain a Tape MOB.
+  ///
+  /// AAFRESULT_SMALLBUF
+  ///   - bufSize indicates the buffer is too small to hold the string.
+  ///
+  /// @param masterSlotID [in] SlotID of the Master Mob slot
+  /// @param pTapeName [out, size_is(bufSize), string] The returned name
+  /// @param bufSize [in] the size of the pTapeName buffer
+  ///
+  STDMETHOD(GetTapeName) (THIS_
+    aafUInt32  masterSlotID,
+    aafCharacter *  pTapeName,
+    aafUInt32  bufSize) PURE;
+
+
+  //***********************************************************
+  //
+  // GetTapeNameBufLen()
+  //
+  /// Returns the length of buffer required for the GetTapeName()
+  /// method.  The value is placed into the location specified by
+  /// pLen.  The value will include space required for the trailing
+  /// null character.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pLen pointer is valid.
+  ///
+  /// If this method fails nothing will be written to *pLen.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pLen arg is NULL.
+  ///
+  /// AAFRESULT_SLOT_NOTFOUND
+  ///   - The specified Master Slot was not found.
+  ///
+  /// AAFRESULT_NOT_TAPEMOB
+  ///   - The specified Master Slot does not contain a Tape MOB.
+  ///
+  /// @param masterSlotID [in] SlotID of the Master Mob slot
+  /// @param pLen [out] required buffer length
+  ///
+  STDMETHOD(GetTapeNameBufLen) (THIS_
+    aafUInt32  masterSlotID,
+    aafUInt32 *  pLen) PURE;
+
+
+  //***********************************************************
+  //
+  // GetNumRepresentations()
+  //
+  /// This function returns the number of media representations
+  /// available for the specified SlotID on a specified Master
+  /// Mob. This function is meant to work with
+  /// GetRepresentationSourceClip, so that you can iterate through
+  /// all of the choices yourself.  In most cases, you can use
+  /// GetCriteriaSourceClip to handle multiple
+  /// representations.  This function and
+  /// GetRepresentationSourceClip are lower-level functions.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pNumReps pointer is valid.
+  ///
+  /// If this method fails nothing will be written to *pNumReps.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pNumReps arg is NULL.
+  ///
+  /// AAFRESULT_SLOT_NOTFOUND
+  ///   - The Master Slot specified by slotID was not found.
+  ///
+  /// @param slotID [in] SlotID
+  /// @param pNumReps [out, retval] number of representations
+  ///
+  STDMETHOD(GetNumRepresentations) (THIS_
+    aafSlotID_t  slotID,
+    aafNumSlots_t *  pNumReps) PURE;
+
+
+  //***********************************************************
+  //
+  // GetRepresentation()
+  //
+  /// This method returns the indexed media representation for the
+  /// specified Master Mob, SlotID, and index.  This call is meant to
+  /// work with GetNumRepresentations, so that you can iterate through
+  /// all of the choices yourself.  This method uses an integer index,
+  /// not an iterator.  The function GetRepresentationSourceClip takes
+  /// an index between 1 and the number of representations
+  /// [inclusive], and returns the indexed Source Mob. You can make
+  /// calls to functions such as AAFMedia::GetVideoInfo and
+  /// AAFMedia::IsMediaContiguous to determine which media is the best
+  /// fit.
+  ///
+  /// The returned source clip is AddRef()ed before it is returned.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the ppSourceClip pointer is valid.
+  ///
+  /// If this method fails nothing will be written to *ppSourceClip.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - ppSourceClip arg is NULL.
+  ///
+  /// AAFRESULT_SLOT_NOTFOUND
+  ///   - The specified Master Slot was not found.
+  ///
+  /// AAFRESULT_BADINDEX
+  ///   - No Source Mob at specified index.
+  ///
+  /// @param slotID [in] Slot ID
+  /// @param index [in] Index of requested representation
+  /// @param ppSourceClip [out] Requested Source Clip
+  ///
+  STDMETHOD(GetRepresentation) (THIS_
+    aafSlotID_t  slotID,
+    aafUInt32  index,
+    IAAFSegment ** ppSourceClip) PURE;
+
+
+  //***********************************************************
+  //
+  // GetCriteriaSegment()
+  //
+  /// Returns the Segment on the specified slot of a Master Mob
+  /// that references the Source Mob that best meets the specified
+  /// criteria.  This function will work whether multiple media
+  /// representations exist or not.
+  ///
+  /// The returned segment is AddRef()ed before it is returned.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the ppSegment pointer is valid.
+  ///
+  /// If this method fails nothing will be written to *ppSegment.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - ppSegment arg is NULL.
+  ///
+  /// AAFRESULT_SLOT_NOTFOUND
+  ///   - The specified Master Slot was not found.
+  ///
+  /// @param slotID [in] Slot ID
+  /// @param pCriteria [in] Index of requested representation.  Note: the
+  /// aafMediaCriteria_t is defined as the following structure:
+  /// typedef struct
+  /// {
+  ///	aafCriteriaType_t type;
+  ///	aafCriteriaProc_t proc;
+  /// } aafMediaCriteria_t;
+  ///
+  /// The type field can have one of the following values:
+  /// typedef enum
+  /// {
+  ///	kAAFAnyRepresentation = 0,
+  ///	kAAFFastestRepresentation,
+  ///	kAAFBestFidelityRepresentation,
+  ///	kAAFSmallestRepresentation,
+  ///	kAAFUseRepresentationProc
+  /// } aafCriteriaType_t;
+  /// @param ppSegment [out] Requested Segment
+  ///
+  STDMETHOD(GetCriteriaSegment) (THIS_
+    aafSlotID_t  slotID,
+    aafMediaCriteria_t *  pCriteria,
+    IAAFSegment ** ppSegment) PURE;
+
+
+  //***********************************************************
+  //
+  // AppendPhysSourceRef()
+  //
+  /// Connects this Source Mob with the physical Source Mob that
+  /// describes the previous generation of essence, appending it to
+  /// existing Mob data.  If a physical Source Mob, such as a File
+  /// Source Mob or tape Source Mob, references another physical
+  /// Source Mob as its ancestor, with no pulldown, then this
+  /// function makes the connection between the two.
+  ///
+  /// Functionally, this is a helper function to create a slot with an
+  /// AAFSourceClip referencing a particular piece of media.  This
+  /// function takes many parameters because the components of an
+  /// aafSourceRef_t have been broken out as separate parameters.
+  ///
+  /// The ancestor of an AAFSourceMob with an AAFFileDescriptor is often an
+  /// AAFTapeDescriptor or NIL.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pSourceRefObj pointer is valid.
+  /// - the pEssenceKind pointer is valid.
+  /// (other conditions here)
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pSourceRefObj or pEssenceKind is null.
+  ///
+  /// (other codes here.)
+  ///
+  /// @param editrate [in] Edit rate of slot to contain reference
+  /// @param aMobSlot [in] SlotID of slot to contain reference
+  /// @param pEssenceKind [in] Data kind of slot to contain reference.  Requires a data kind
+  /// valid for a essence stream.  Valid data kinds are:
+  /// - Picture
+  /// - Sound
+  /// @param ref [in] Reference to a Physical Source Mob
+  /// @param srcRefLength [in] Length of the Source Clip
+  ///
+  STDMETHOD(AppendPhysSourceRef) (THIS_
+    aafRational_t  editrate,
+    aafSlotID_t  aMobSlot,
+    IAAFDataDef * pEssenceKind,
+    aafSourceRef_t  ref,
+    aafLength_t  srcRefLength) PURE;
+
+
+  //***********************************************************
+  //
+  // NewPhysSourceRef()
+  //
+  /// Connects this Source Mob with the physical Source Mob that
+  /// describes the previous generation of essence, replacing any
+  /// existing Mob data.  If a physical Source Mob, such as a File
+  /// Source Mob or tape Source Mob, references another physical
+  /// Source Mob as its ancestor, with no pulldown, then this
+  /// function makes the connection between the two.
+  ///
+  /// Functionally, this is a helper function to create a slot with an
+  /// AAFSourceClip referencing a particular piece of media.  This
+  /// function takes many parameters because the components of an
+  /// aafSourceRef_t have been broken out as separate parameters.
+  ///
+  /// The ancestor of an AAFSourceMob with an AAFFileDescriptor is often an
+  /// AAFTapeDescriptor or NIL.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pSourceRefObj pointer is valid.
+  /// - the pEssenceKind pointer is valid.
+  /// (other conditions here)
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pSourceRefObj or pEssenceKind is null.
+  ///
+  /// (other codes here.)
+  ///
+  /// @param editrate [in] Edit rate of slot to contain reference
+  /// @param aMobSlot [in] SlotID of slot to contain reference
+  /// @param pEssenceKind [in] Data kind of slot to contain reference.  Requires a data kind
+  /// valid for a essence stream.  Valid data kinds are:
+  /// - Picture
+  /// - Sound
+  /// @param ref [in] Reference to a Physical Source Mob
+  /// @param srcRefLength [in] Length of the Source Clip
+  ///
+  STDMETHOD(NewPhysSourceRef) (THIS_
+    aafRational_t  editrate,
+    aafSlotID_t  aMobSlot,
+    IAAFDataDef * pEssenceKind,
+    aafSourceRef_t  ref,
+    aafLength_t  srcRefLength) PURE;
+
+
+  //***********************************************************
+  //
+  // CreateEssence()
+  //
+  /// Creates a single channel stream of essence.  Convenience
+  /// functions exist to create audio or video essence, and a separate
+  /// call (MultiCreate) exists to create interleaved audio and video
+  /// data.
+  ///
+  /// The essence handle from this call can be used with
+  /// WriteDataSamples  and possibly WriteDataLines, but NOT with
+  /// WriteMultiSamples.
+  /// 
+  /// If you are creating the essence, and then attaching it to a
+  /// master mob, then the "masterMob" field may be left NULL.  For
+  /// video, the sampleRate should be the edit rate of the file mob.
+  /// For audio, the sample rate should be the actual samples per
+  /// second.
+  ///
+  /// @param masterSlotID [in] 
+  /// @param pMediaKind [in] create essence of this type
+  /// @param codecID [in, ref] using this codec
+  /// @param editRate [in] with this edit rate
+  /// @param samplerate [in] with this sample rate
+  /// @param Enable [in] optionally compressing it
+  /// @param destination [in] Optionally create the file HERE.
+  /// @param fileFormat objPass with this format
+  /// @param access objOut Return an essence access on the essence.
+  ///
+  STDMETHOD(CreateEssence) (THIS_
+    aafSlotID_t  masterSlotID,
+    IAAFDataDef * pMediaKind,
+    aafUID_constref  codecID,
+    aafRational_t  editRate,
+    aafRational_t  samplerate,
+    aafCompressEnable_t  Enable,
+    IAAFLocator * destination,
+    aafUID_constref  fileFormat,
+    IAAFEssenceAccess ** access) PURE;
+
+
+  //***********************************************************
+  //
+  // CreateMultiEssence()
+  //
+  /// Creates a multi-channel interleaved stream of essence.  The
+  /// essence handle from this call can be used with WriteDataSamples
+  /// or WriteMultiSamples but NOT with or WriteDataLines.
+  /// 
+  /// If you are creating the essence, and then attaching it to a
+  /// master mob, then the "masterMob" field may be left NULL.
+  ///
+  /// @param codecID [in, ref] using this codec
+  /// @param arrayElemCount [in] this many channels
+  /// @param mediaArray [in,ref,size_is(arrayElemCount)] using these definitions
+  /// @param Enable [in] optionally compressing it
+  /// @param destination [in] Optionally create the file HERE.
+  /// @param fileFormat [in, ref] with this format
+  /// @param access [out] Return an essence access on the essence.
+  ///
+  STDMETHOD(CreateMultiEssence) (THIS_
+    aafUID_constref  codecID,
+    aafUInt16  arrayElemCount,
+    aafmMultiCreate_t *  mediaArray,
+    aafCompressEnable_t  Enable,
+    IAAFLocator * destination,
+    aafUID_constref  fileFormat,
+    IAAFEssenceMultiAccess**  access) PURE;
+
+
+  //***********************************************************
+  //
+  // OpenEssence()
+  //
+  /// Opens a single channel of a file mob.  If the essence is
+  /// interleaved, then it will be di-interleaved when samples are
+  /// read.  This routine follows the locator, and may call the locator
+  /// failure callback if the essence can not be found.  If the failure
+  /// callback finds the essence, then this routine will return
+  /// normally.
+  /// 
+  /// The essence handle from this call can be used with
+  /// ReadDataSamples  and possibly ReadDataLines, but NOT with
+  /// ReadMultiSamples.
+  /// 
+  /// NOTE: If a locator is followed, then essencePtr may reference
+  /// ANOTHER file object, which must be closed on file close.
+  ///
+  /// @param slotID [in] On this slot
+  /// @param mediaCrit [in] using this essence criteria
+  /// @param openMode [in] ReadOnly or Append
+  /// @param compEnable [in] optionally decompressing
+  /// @param access [out] Return an essence access on the essence.
+  ///
+  STDMETHOD(OpenEssence) (THIS_
+    aafSlotID_t  slotID,
+    aafMediaCriteria_t*  mediaCrit,
+    aafMediaOpenMode_t  openMode,
+    aafCompressEnable_t  compEnable,
+    IAAFEssenceAccess ** access) PURE;
+	
+
+  //***********************************************************
+  //
+  // OpenMultiEssence()
+  //
+  /// Opens a all channels associated with a file mob.  This routine
+  /// follows the locator, and may call the locator failure callback if
+  /// the essence can not be found.  If the failure callback finds the
+  /// essence, then this routine will return normally.
+  ///
+  /// The essence handle from this call can be used with
+  /// WriteMultiSamples but NOT with WriteDataSamples.
+  ///
+  /// @param slotID [in] On this slot
+  /// @param mediaCrit [in] using this essence criteria
+  /// @param openMode [in] ReadOnly or Append
+  /// @param compEnable [in] optionally decompressing
+  /// @param access [out] Return an essence access on the essence.
+  ///
+  STDMETHOD(OpenMultiEssence) (THIS_
+    aafSlotID_t  slotID,
+    aafMediaCriteria_t*  mediaCrit,
+    aafMediaOpenMode_t  openMode,
+    aafCompressEnable_t  compEnable,
+    IAAFEssenceMultiAccess**  access) PURE;
+
+
+  //***********************************************************
+  //
+  // CountChannels()
+  //
+  /// Takes an opaque handle, a master mob reference, and a slot ID
+  /// so that it may be called before the essence is opened.
+  ///
+  /// Returns the number of interleaved essence channels of a given
+  /// type in the essence stream referenced by the given file mob.
+  ///
+  /// If the data format is not interleaved, then the answer will
+  /// always be zero or one.  This function correctly returns zero for
+  /// essence types not handled by a given codec, and handles codecs
+  /// which work with multiple essence types.
+  ///
+  /// @param slotID [in] On this slot
+  /// @param mediaCrit [in] using this essence criteria
+  /// @param pMediaKind [in] for this essence type
+  /// @param numCh [out] How many channels?
+  ///
+  STDMETHOD(CountChannels) (THIS_
+    aafSlotID_t  slotID,
+    aafMediaCriteria_t*  mediaCrit,
+    IAAFDataDef * pMediaKind,
+    aafUInt16*  numCh) PURE;
+
+
+
+
+  //***********************************************************
+  //
+  // ExtendEssence()
+  //
+  /// Extends a single stream of essence that was originally created using
+  /// IAAFMasterMob::CreateEssence.  Extended essence is represented by
+  /// a Sequence of SourceClip objects.  The first call to ExtendEssence will cause the
+  /// TimelineMobSlot's SourceClip object to be replaced by a
+  /// Sequence.  The initial SourceClip becomes the first
+  /// component of the new Sequence.
+  ///
+  /// @param masterSlotID [in] 
+  /// @param pMediaKind [in] create essence of this type
+  /// @param codecID [in, ref] using this codec
+  /// @param editRate [in] with this edit rate
+  /// @param samplerate [in] with this sample rate
+  /// @param Enable [in] optionally compressing it
+  /// @param destination [in] Optionally create the file HERE.
+  /// @param fileFormat objPass with this format
+  /// @param access objOut Return an essence access on the essence.
+  ///
+  STDMETHOD(ExtendEssence) (THIS_
+    aafSlotID_t  masterSlotID,
+    IAAFDataDef * pMediaKind,
+    aafUID_constref  codecID,
+    aafRational_t  editRate,
+    aafRational_t  samplerate,
+    aafCompressEnable_t  Enable,
+    IAAFLocator * destination,
+    aafUID_constref  fileFormat,
+    IAAFEssenceAccess ** access) PURE;
+
+
+  //***********************************************************
+  //
+  // ExtendMultiEssence()
+  //
+  /// Extends a multi-channel interleaved stream of essence that was
+  /// originally created using IAAFMasterMob::CreateMultiEssence.
+  /// Extended essence is represented by a Sequence of SourceClip objects.
+  /// The first call to ExtendEssence will cause the TimelineMobSlot's SourceClip
+  /// object to be replaced by a Sequence.  The initial SourceClip becomes the first
+  /// component of the new Sequence.
+  ///
+  /// @param codecID [in, ref] using this codec
+  /// @param arrayElemCount [in] this many channels
+  /// @param mediaArray [in,ref,size_is(arrayElemCount)] using these definitions
+  /// @param Enable [in] optionally compressing it
+  /// @param destination [in] Optionally create the file HERE.
+  /// @param fileFormat [in, ref] with this format
+  /// @param access [out] Return an essence access on the essence.
+  ///
+  STDMETHOD(ExtendMultiEssence) (THIS_
+    aafUID_constref  codecID,
+    aafUInt16  arrayElemCount,
+    aafmMultiCreate_t *  mediaArray,
+    aafCompressEnable_t  Enable,
+    IAAFLocator * destination,
+    aafUID_constref  fileFormat,
+    IAAFEssenceMultiAccess**  access) PURE;
+
+
+  //***********************************************************
+  //
+  // CreateStaticEssence()
+  //
+  /// Creates and initializes the objects required to represent static essence.
+  ///
+  /// @param masterSlotID [in] 
+  /// @param pMediaKind [in] create essence of this type
+  /// @param codecID [in, ref] using this codec
+  /// @param Enable [in] optionally compressing it
+  /// @param destination [in] Optionally create the file HERE.
+  /// @param fileFormat [in, ref] with this format
+  /// @param access [out] Return an essence access on the essence.
+  ///
+  STDMETHOD(CreateStaticEssence) (THIS_
+    aafSlotID_t  masterSlotID,
+    IAAFDataDef * pMediaKind,
+    aafUID_constref  codecID,
+    aafCompressEnable_t  Enable,
+    IAAFLocator * destination,
+    aafUID_constref  fileFormat,
+    IAAFEssenceAccess ** access) PURE;
+  /// This function is broadly similar to CreateEssence except that the essence is 
+  /// Created in a static slot in the MasterMob
+  ///
+  /// The essence handle from this call can be used with
+  /// WriteDataSamples  and possibly WriteDataLines\, but NOT with
+  /// WriteMultiSamples.
+  /// 
+
+
+  //***********************************************************
+  //
+  // CreateEventEssence()
+  //
+  /// Creates and initializes the objects required to represent stream of events.
+  ///
+  /// @param masterSlotID [in] 
+  /// @param pMediaKind [in] create essence of this type
+  /// @param codecID [in, ref] using this codec
+  /// @param editRate [in] with this edit rate
+  /// @param samplerate [in] with this sample rate
+  /// @param Enable [in] optionally compressing it
+  /// @param destination [in] Optionally create the file HERE.
+  /// @param fileFormat objPass with this format
+  /// @param access objOut Return an essence access on the essence.
+  ///
+  STDMETHOD(CreateEventEssence) (THIS_
+    aafSlotID_t  masterSlotID,
+    IAAFDataDef * pMediaKind,
+    aafUID_constref  codecID,
+    aafRational_t  editRate,
+    aafRational_t  samplerate,
+    aafCompressEnable_t  Enable,
+    IAAFLocator * destination,
+    aafUID_constref  fileFormat,
+    IAAFEssenceAccess ** access) PURE;
+  /// This function is broadly similar to CreateEssence except that the essence is 
+  /// Created in a event slot in the MasterMob
+  ///
+  /// 
+  /// The essence handle from this call can be used with
+  /// WriteDataSamples  and possibly WriteDataLines\, but NOT with
+  /// WriteMultiSamples.
+  /// 
+
+
+  //***********************************************************
+  //
+  // AddMasterSlotWithSequence()
+  //
+  /// This function is similar to AddMasterSlot but creates the structure
+  /// MobSlot - Sequence - SourceClip instead of MobSlot - SourceClip.
+  /// This arrangement is required for MXF compliance.
+  ///
+  /// This function adds a slot to the specified Master Mob that
+  /// references the specified a slot in the specified Source Mob. The
+  /// new slot in the Master Mob has a Sequence containing the Source Clip
+  /// that specifies the Source Mob in its source reference properties.
+  ///
+  /// Note: If pSlotName is passed in with zero length, then the
+  /// slot is not assigned a name.  Slot names are not used by the
+  /// SDK, and exist only so the user can name slots.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// (more conditions here)
+  /// 
+  /// If this method fails no state is changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - One or more of the following parameters are NULL pSourceMob,
+  ///     pSlotName, and pDataDef.
+  ///
+  /// AAFRESULT_INVALID_DATADEF
+  ///   - The data kind of the source MOB slot to be added to the Master
+  ///     Mob does not match what is specfied in pDataDef.
+  ///
+  /// AAFRESULT_SLOT_NOTFOUND
+  ///   - The specified Source Mob slot was not found.
+  ///
+  /// AAFRESULT_SLOT_EXISTS
+  ///   - The specified Master slot ID already exists.
+  ///
+  /// @param pDataDef [in] Data kind of new slot.  Requires a data kind valid for a media
+  /// stream. Valid data kinds are:
+  /// - Picture
+  /// - Sound
+  /// @param sourceSlotID [in] Slot ID of the Source Mob slot to be added to the Master Mob
+  /// @param pSourceMob [in] Source Mob containing the slot to be added to the Master Mob
+  /// @param masterSlotID [in] SlotID assigned to the new Master Mob slot
+  /// @param pSlotName [in, string] Name to assign to new slot in Master Mob
+  ///
+  STDMETHOD(AddMasterSlotWithSequence) (THIS_
+    IAAFDataDef * pDataDef,
+    aafSlotID_t  sourceSlotID,
+    IAAFSourceMob * pSourceMob,
+    aafSlotID_t  masterSlotID,
+    aafCharacter_constptr  pSlotName) PURE;
+
+
+  END_INTERFACE
+};
+#endif // __IAAFMasterMob3_INTERFACE_DEFINED__
 
 
 

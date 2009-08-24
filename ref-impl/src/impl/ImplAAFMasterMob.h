@@ -96,6 +96,28 @@ public:
 
 
   //****************
+  // AddMasterSlotWithSequence()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    AddMasterSlotWithSequence
+        (// @parm [in] Data kind of new Master Mob slot
+		 ImplAAFDataDef * pDataDef,
+
+		 // @parm [in] Slot ID of the Source Mob slot to be added to the Master Mob
+         aafSlotID_t  sourceSlotID,
+
+		 // @parm [in] Source Mob containing the slot to be added to the Master Mob
+         ImplAAFSourceMob * pSourceMob,
+
+		 // @parm [in] SlotID assigned to the new Master Mob slot
+		 aafSlotID_t  masterSlotID,
+
+		 // @parm [in, string] Name to assign to new slot in Master Mob
+		 const aafWChar *  pSlotName);
+
+
+
+  //****************
   // GetTapeName()
   //
   virtual AAFRESULT STDMETHODCALLTYPE

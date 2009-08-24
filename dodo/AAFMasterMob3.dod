@@ -31,7 +31,7 @@
 #c
 #c *********************************************************************
 #startm .this-module 0
-AAFMasterMob\
+AAFMasterMob3\
 #endm
 #c
 #startm .parent-module 0
@@ -40,10 +40,6 @@ AAFMob\
 #c
 #c #import ./AAFObject.exp
 #c #import ./AAFMob.exp
-#import ./AAFSearchSource.exp
-#import ./AAFMasterMobEx.exp
-#import ./AAFMasterMob2.exp
-#import ./AAFMasterMob3.exp
 AD_HEAD
 AD_IDL(///
 /// The IAAFMasterMob interface is implemented by objects which provide
@@ -65,11 +61,16 @@ AD_FORWARD_DECLARATION(AAFComponent)
 AD_FORWARD_DECLARATION(AAFDataDef)
 AD_FORWARD_DECLARATION(AAFFindSourceInfo)
 AD_FORWARD_DECLARATION(AAFEssenceAccess)
-AD_CLASS_UUID(b1a21373, 1a7d, 11d2, bf, 78, 00, 10, 4b, c9, 15, 6d)
 
-AD_DEFAULT_UUID(b1a21372, 1a7d, 11d2, bf, 78, 00, 10, 4b, c9, 15, 6d)
-#c AD_XCLASS_BEGIN(Concrete, StoredObject)
-AD_COM_EXT4_CLASS_BEGIN(public IAAFSearchSource,public IAAFMasterMobEx,public IAAFMasterMob2,public IAAFMasterMob3)
+AD_CLASS_UUID(7f1563bc, 1699, 483a, a7, 4d, cc, 2d, 3a, f7, ec, 86)
+
+AD_DEFAULT_UUID(988af5ac, 57d8, 47b7, 9b, 0f, 23, 99, 71, 16, 19, 39)
+AD_XCLASS_BEGIN(Concrete, StoredObject)
+
+#c
+#c Original MasterMob methods
+#c
+
 AD_METHOD0(Initialize,
      Initializes a newly allocated\, empty IAAFMasterMob-supporting
   /// object.  This method must be called after allocation\, and before
@@ -641,28 +642,163 @@ AD_XMETHOD4(CountChannels,
   /// essence types not handled by a given codec\, and handles codecs
   /// which work with multiple essence types.)
 
-#c
-#c SearchSource methods
-#c
-
-AD_COM_METH(.method-SearchSource)
 
 #c
 #c MasterMobEx methods
 #c
-AD_COM_METH(.method-ExtendEssence)
-AD_COM_METH(.method-ExtendMultiEssence)
+
+
+AD_XMETHOD9(ExtendEssence,
+[in],objPass, aafSlotID_t,masterSlotID,,
+[in],objIn, AAFDataDef,pMediaKind,create essence of this type,
+[in\, ref],objPass, aafUID_constref,codecID,using this codec,
+[in],objPass, aafRational_t,editRate,with this edit rate,
+[in],objPass, aafRational_t,samplerate,with this sample rate,
+[in],enumIn, aafCompressEnable_t,Enable,optionally compressing it,
+[in],objIn, AAFLocator,destination,Optionally create the file HERE.,
+[in\, ref],objPass, aafUID_constref,fileFormat,with this format,
+[out],objOut, AAFEssenceAccess,access,Return an essence access on the essence.,
+      Extends a single stream of essence that was originally created using
+  /// IAAFMasterMob::CreateEssence.  Extended essence is represented by
+  /// a Sequence of SourceClip objects.  The first call to ExtendEssence will cause the
+  /// TimelineMobSlot's SourceClip object to be replaced by a
+  /// Sequence.  The initial SourceClip becomes the first
+  /// component of the new Sequence.)
+
+
+AD_XMETHOD7(ExtendMultiEssence,
+[in\, ref],objPass, aafUID_constref,codecID,using this codec,
+[in],objPass, aafUInt16,arrayElemCount,this many channels,
+[in\,ref\,size_is\(arrayElemCount\)],objPass, aafmMultiCreate_t *,mediaArray,using these definitions,
+[in],enumIn, aafCompressEnable_t,Enable,optionally compressing it,
+[in],objIn,	  AAFLocator,destination,Optionally create the file HERE.,
+[in\, ref],objPass, aafUID_constref,fileFormat,with this format,
+[out],objPass, IAAFEssenceMultiAccess**,access,Return an essence access on the essence.,
+     Extends a multi-channel interleaved stream of essence that was
+  /// originally created using IAAFMasterMob::CreateMultiEssence.
+  /// Extended essence is represented by a Sequence of SourceClip objects.
+  /// The first call to ExtendEssence will cause the TimelineMobSlot's SourceClip
+  /// object to be replaced by a Sequence.  The initial SourceClip becomes the first
+  /// component of the new Sequence.)
 
 #c
-#c MasterMob2 methods
+#c New MasterMob2 methods
 #c
-AD_COM_METH(.method-CreateStaticEssence)
-AD_COM_METH(.method-CreateEventEssence)
+
+AD_XMETHOD7(CreateStaticEssence,
+[in],objPass, aafSlotID_t,masterSlotID,,
+[in],objIn, AAFDataDef,pMediaKind,create essence of this type,
+[in\, ref],objPass, aafUID_constref,codecID,using this codec,
+[in],enumIn, aafCompressEnable_t,Enable,optionally compressing it,
+[in],objIn,	  AAFLocator,destination,Optionally create the file HERE.,
+[in\, ref],objPass, aafUID_constref,fileFormat,with this format,
+[out],objOut, AAFEssenceAccess,access,Return an essence access on the essence.,
+
+     Creates and initializes the objects required to represent static essence.)
+  /// This function is broadly similar to CreateEssence except that the essence is 
+  /// Created in a static slot in the MasterMob
+  ///
+  /// The essence handle from this call can be used with
+  /// WriteDataSamples  and possibly WriteDataLines\, but NOT with
+  /// WriteMultiSamples.
+  /// 
+
+
+AD_XMETHOD9(CreateEventEssence,
+[in],objPass, aafSlotID_t,masterSlotID,,
+[in],objIn, AAFDataDef,pMediaKind,create essence of this type,
+[in\, ref],objPass, aafUID_constref,codecID,using this codec,
+[in],objPass, aafRational_t,editRate,with this edit rate,
+[in],objPass, aafRational_t,samplerate,with this sample rate,
+[in],enumIn, aafCompressEnable_t,Enable,optionally compressing it,
+[in],objIn,	  AAFLocator,destination,Optionally create the file HERE.,
+[in\, ref],objPass, aafUID_constref,fileFormat,with this format,
+[out],objOut, AAFEssenceAccess,access,Return an essence access on the essence.,
+
+     Creates and initializes the objects required to represent stream of events.)
+  /// This function is broadly similar to CreateEssence except that the essence is 
+  /// Created in a event slot in the MasterMob
+  ///
+  /// 
+  /// The essence handle from this call can be used with
+  /// WriteDataSamples  and possibly WriteDataLines\, but NOT with
+  /// WriteMultiSamples.
+  /// 
 
 #c
-#c MasterMob3 methods
+#c New MasterMob3 methods
 #c
-AD_COM_METH(.method-AddMasterSlotWithSequence)
 
-#c AD_XCLASS_END(Concrete, StoredObject)
-AD_COM_EXT4_CLASS_END(AAFSearchSource, AAFMasterMobEx, AAFMasterMob2, AAFMasterMob3)
+AD_XMETHOD5(AddMasterSlotWithSequence,
+			[in],
+			  objIn,
+			  AAFDataDef,
+			  pDataDef,
+       Data kind of new slot.  Requires a data kind valid for a media
+  /// stream. Valid data kinds are:
+  /// - Picture
+  /// - Sound,
+			[in],
+			  objPass,
+			  aafSlotID_t,
+			  sourceSlotID,
+			  Slot ID of the Source Mob slot to be added to the Master Mob,
+			[in],
+			  objIn,
+			  AAFSourceMob,
+			  pSourceMob,
+			  Source Mob containing the slot to be added to the Master Mob,
+			[in],
+			  objPass,
+			  aafSlotID_t,
+			  masterSlotID,
+			  SlotID assigned to the new Master Mob slot,
+			[in\, string],
+			  objPass,
+			  aafCharacter_constptr,
+			  pSlotName,
+			  Name to assign to new slot in Master Mob,
+     This function is similar to AddMasterSlot but creates the structure
+  /// MobSlot - Sequence - SourceClip instead of MobSlot - SourceClip.
+  /// This arrangement is required for MXF compliance.
+  ///
+  /// This function adds a slot to the specified Master Mob that
+  /// references the specified a slot in the specified Source Mob. The
+  /// new slot in the Master Mob has a Sequence containing the Source Clip
+  /// that specifies the Source Mob in its source reference properties.
+  ///
+  /// Note: If pSlotName is passed in with zero length\, then the
+  /// slot is not assigned a name.  Slot names are not used by the
+  /// SDK\, and exist only so the user can name slots.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// \(more conditions here\)
+  /// 
+  /// If this method fails no state is changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize\(\) called on it.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - One or more of the following parameters are NULL pSourceMob\,
+  ///     pSlotName\, and pDataDef.
+  ///
+  /// AAFRESULT_INVALID_DATADEF
+  ///   - The data kind of the source MOB slot to be added to the Master
+  ///     Mob does not match what is specfied in pDataDef.
+  ///
+  /// AAFRESULT_SLOT_NOTFOUND
+  ///   - The specified Source Mob slot was not found.
+  ///
+  /// AAFRESULT_SLOT_EXISTS
+  ///   - The specified Master slot ID already exists.)
+
+AD_XCLASS_END(Concrete, StoredObject)
+

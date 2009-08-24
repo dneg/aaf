@@ -58,6 +58,7 @@ AAFCOMINTERFACESONLY="\
 	AAFKLVEssenceDataParameters \
 	AAFKLVStreamParameters \
 	AAFMasterMob2 \
+	AAFMasterMob3 \
 	AAFMasterMobEx \
 	AAFMob2 \
 	AAFProgress \

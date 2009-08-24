@@ -3,10 +3,10 @@
 /* this ALWAYS GENERATED file contains the definitions for the interfaces */
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* at Fri Mar 24 17:09:03 2006
+/* File created by MIDL compiler version 6.00.0361 */
+/* at TIMESTAMP REMOVED
  */
-/* Compiler settings for C:\cygwin\home\jesse\SDK\AAF\ref-impl\include\com-api\AAFPluginTypes.idl:
+/* Compiler settings for ../ref-impl/include/com-api/AAFPluginTypes.idl:
     Oicf, W1, Zp8, env=Win32 (32b run)
     protocol : dce , ms_ext, c_ext, robust
     error checks: allocation ref bounds_check enum stub_data 

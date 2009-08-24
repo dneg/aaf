@@ -1873,6 +1873,116 @@ HRESULT STDMETHODCALLTYPE
 
 
 
+HRESULT STDMETHODCALLTYPE
+    CAAFMasterMob::AddMasterSlotWithSequence (IAAFDataDef * pDataDef,
+        aafSlotID_t  sourceSlotID,
+        IAAFSourceMob * pSourceMob,
+        aafSlotID_t  masterSlotID,
+        aafCharacter_constptr  pSlotName)
+{
+  HRESULT hr;
+
+  ImplAAFMasterMob * ptr;
+  ImplAAFRoot * pO;
+  pO = GetRepObject ();
+  assert (pO);
+  ptr = static_cast<ImplAAFMasterMob*> (pO);
+  assert (ptr);
+
+  //
+  // set up for pDataDef
+  //
+  ImplAAFDataDef * internalpDataDef = NULL;
+  if (pDataDef)
+    {
+      HRESULT hStat;
+      IAAFRoot * iObj;
+      ImplAAFRoot *arg;
+      hStat = pDataDef->QueryInterface (IID_IAAFRoot, (void **)&iObj);
+      assert (SUCCEEDED (hStat));
+      assert (iObj);
+      hStat = iObj->GetImplRep((void **)&arg);
+      assert (SUCCEEDED (hStat));
+      iObj->Release(); // we are through with this interface pointer.
+      internalpDataDef = static_cast<ImplAAFDataDef*>(arg);
+      assert (internalpDataDef);
+    }
+
+
+  //
+  // set up for pSourceMob
+  //
+  ImplAAFSourceMob * internalpSourceMob = NULL;
+  if (pSourceMob)
+    {
+      HRESULT hStat;
+      IAAFRoot * iObj;
+      ImplAAFRoot *arg;
+      hStat = pSourceMob->QueryInterface (IID_IAAFRoot, (void **)&iObj);
+      assert (SUCCEEDED (hStat));
+      assert (iObj);
+      hStat = iObj->GetImplRep((void **)&arg);
+      assert (SUCCEEDED (hStat));
+      iObj->Release(); // we are through with this interface pointer.
+      internalpSourceMob = static_cast<ImplAAFSourceMob*>(arg);
+      assert (internalpSourceMob);
+    }
+
+
+
+  try
+    {
+      hr = ptr->AddMasterSlotWithSequence (internalpDataDef,
+    sourceSlotID,
+    internalpSourceMob,
+    masterSlotID,
+    pSlotName);
+    }
+  catch (OMException& e)
+    {
+      // OMExceptions should be handled by the impl code. However, if an
+      // unhandled OMException occurs, control reaches here. We must not
+      // allow the unhandled exception to reach the client code, so we
+      // turn it into a failure status code.
+      //
+      // If the OMException contains an HRESULT, it is returned to the
+      // client, if not, AAFRESULT_UHANDLED_EXCEPTION is returned.
+      //
+      hr = OMExceptionToResult(e, AAFRESULT_UNHANDLED_EXCEPTION);
+    }
+  catch (OMAssertionViolation &)
+    {
+      // Control reaches here if there is a programming error in the
+      // impl code that was detected by an assertion violation.
+      // We must not allow the assertion to reach the client code so
+      // here we turn it into a failure status code.
+      //
+      hr = AAFRESULT_ASSERTION_VIOLATION;
+    }
+  catch (...)
+    {
+      // We CANNOT throw an exception out of a COM interface method!
+      // Return a reasonable exception code.
+      //
+      hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+    }
+
+  //
+  // no cleanup necessary for pDataDef
+  //
+
+
+  //
+  // no cleanup necessary for pSourceMob
+  //
+
+
+
+  return hr;
+}
+
+
+
 
 //
 // 
@@ -1912,6 +2022,12 @@ HRESULT CAAFMasterMob::InternalQueryInterface
     if (EQUAL_UID(riid,IID_IAAFMasterMob2)) 
     { 
         *ppvObj = (IAAFMasterMob2 *)this; 
+        ((IUnknown *)*ppvObj)->AddRef();
+        return S_OK;
+    }
+    if (EQUAL_UID(riid,IID_IAAFMasterMob3)) 
+    { 
+        *ppvObj = (IAAFMasterMob3 *)this; 
         ((IUnknown *)*ppvObj)->AddRef();
         return S_OK;
     }
