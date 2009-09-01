@@ -28,6 +28,7 @@
 
 #include <AxMetaDef.h>
 #include <AxMob.h>
+#include <AxDefObject.h>
 #include <AAFTypeDefUIDs.h>
 #include <AAFResult.h>
 #include <AAFSmartPointer2.h>
@@ -1012,41 +1013,15 @@ AAFDotInstanceMapper::MapAAFPropertyValueGeneric( AxTypeDef &axTypeDef,
         pStalker->IncreaseArrayIndex();
         
         
-        DotEdge *edge = _dotFactory->CreateEdge( pStalker->GetName(), _dotFactory->CreateEdgeUID() );
-        edge->SetElementAttribute( "color", "blue" );
-        edge->SetElementAttribute( "weight", _profile.GetWeakRefEdgeWeight() );
-        if ( pStalker->GetArrayIndex() > 0 )
-        {
-            ostringstream sstr;
-            sstr << pStalker->GetArrayIndex();
-            edge->SetElementAttribute( "label", sstr.str() );
-        }
-        DotEdgeEnd *sourceEdgeEnd = new DotEdgeEnd();
-        sourceEdgeEnd->SetReference( oStalker->GetNode() );
-        edge->SetSource( sourceEdgeEnd );
-        DotEdgeEnd *targetEdgeEnd = new DotEdgeEnd();
-        // don't know reference yet
-        edge->SetTarget( targetEdgeEnd );
-        
         AxTypeDefWeakObjRef axTypeDefWeakObjRef(
-        AxQueryInterface< IAAFTypeDef,IAAFTypeDefWeakObjRef > (
-        axPropertyValue.GetType() ) );
+            AxQueryInterface< IAAFTypeDef,IAAFTypeDefWeakObjRef > (
+                axPropertyValue.GetType() ) );
         
-        bool abort = false;
         IUnknownSP spIUnknown;
         try
         {
             spIUnknown = axTypeDefWeakObjRef.GetObject( propValue, IID_IAAFObject );
-        }
-        catch (...)
-        {
-            Logging::DebugLogStream() << "Note: Unknown weak reference type encountered. Probably a meta definition reference." << endl;
-            _dotFactory->RemoveDotElement( edge );
-            abort = true;
-        }
-        
-        if ( !abort )
-        {
+            
             IAAFDefObjectSP spIaafDefObject;
             if ( AxIsA( spIUnknown, spIaafDefObject ) )
             {
@@ -1055,16 +1030,39 @@ AAFDotInstanceMapper::MapAAFPropertyValueGeneric( AxTypeDef &axTypeDef,
                 {
                     AxQueryInterface( spIUnknown, spIaafDefObject );
                     
-                    aafUID_t uid;
-                    CHECK_HRESULT( spIaafDefObject->GetAUID( &uid ) );
+                    // add an edge if showing the Dictionary is enabled
+                    if ( _profile.GetDictionary() ) {
+                        aafUID_t uid;
+                        CHECK_HRESULT( spIaafDefObject->GetAUID( &uid ) );
+                                                
+                        DotEdge *edge = _dotFactory->CreateEdge( pStalker->GetName(), _dotFactory->CreateEdgeUID() );
+                        edge->SetElementAttribute( "color", "blue" );
+                        edge->SetElementAttribute( "weight", _profile.GetWeakRefEdgeWeight() );
+                        if ( pStalker->GetArrayIndex() > 0 )
+                        {
+                            ostringstream sstr;
+                            sstr << pStalker->GetArrayIndex();
+                            edge->SetElementAttribute( "label", sstr.str() );
+                        }
+                        DotEdgeEnd *sourceEdgeEnd = new DotEdgeEnd();
+                        sourceEdgeEnd->SetReference( oStalker->GetNode() );
+                        edge->SetSource( sourceEdgeEnd );
+                        DotEdgeEnd *targetEdgeEnd = new DotEdgeEnd();
+                        targetEdgeEnd->SetAAFUIDReference( UIDToString( uid ) );
+                        edge->SetTarget( targetEdgeEnd );
+    
+                        _dotGraph->AddEdge( edge );
+                    }
                     
-                    targetEdgeEnd->SetAAFUIDReference( UIDToString( uid ) );
+                    // show the name of the weak referenced object
+                    
+                    string value = "->" + AxStringToString( AxDefObject(spIaafDefObject).GetName() );
+                    DotRecordNodeAttribute attribute( pStalker->GetName(), value );
+                    oStalker->GetNode()->AddAttribute( attribute );
                 }
                 else
                 {
                     Logging::DebugLogStream() << "Note: Data definition object reference not exported." << endl;
-                    _dotFactory->RemoveDotElement( edge );
-                    abort = true;
                 }
             }
             else
@@ -1073,12 +1071,11 @@ AAFDotInstanceMapper::MapAAFPropertyValueGeneric( AxTypeDef &axTypeDef,
                 assert( false );
             }
         }
-        
-        if ( !abort )
+        catch (...)
         {
-            _dotGraph->AddEdge( edge );
+            Logging::DebugLogStream() << "Note: Unknown weak reference type encountered. Probably a meta definition reference." << endl;
         }
-    
+        
         PushStalker( oStalker );
         PushStalker( pStalker );
     }
