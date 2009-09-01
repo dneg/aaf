@@ -343,9 +343,10 @@ OMUInt32 ImplAAFTypeDefFixedArray::internalSize(const OMByte* /*externalBytes*/,
 
 OMUInt32 ImplAAFTypeDefFixedArray::internalSize(void) const
 {
-  // Should be properly implemented
-  ASSERTU (0);
-  return 0; // Not reached!
+  ImplAAFTypeDef* ptd = NonRefCountedBaseType ();
+  ASSERTU (ptd->IsFixedSize ());
+  OMUInt32 result = _ElementCount * ptd->ActualSize ();
+  return result;
 }
 
 
