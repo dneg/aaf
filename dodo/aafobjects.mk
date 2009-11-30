@@ -270,6 +270,7 @@ PLUGIN_OBJECTS="\
 	AAFClassExtension \
 	AAFEssenceCodec \
 	AAFEssenceCodec2 \
+	AAFEssenceCodec3 \
 	AAFEssenceContainer \
 	AAFEssenceDataStream \
 	AAFEssenceDataStream2 \

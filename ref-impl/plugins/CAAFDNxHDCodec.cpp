@@ -830,6 +830,26 @@ HRESULT STDMETHODCALLTYPE
 	return AAFRESULT_SUCCESS;
 }
 
+// IsCompressionSupported is used by the toolkit to test whether this plugin
+// is capable of opening and reading essence for the given compression ID.
+HRESULT STDMETHODCALLTYPE
+	CAAFDNxHDCodec::IsCompressionSupported(
+		aafUID_constref compression,
+		aafBool* pIsSupported)
+{
+	plugin_trace("CAAFDNxHDCodec::IsCompressionSupported()\n");
+
+	if (NULL == pIsSupported)
+		return AAFRESULT_NULL_PARAM;
+
+	if (IsDNxHD(compression))
+		*pIsSupported = kAAFTrue;
+	else
+		*pIsSupported = kAAFFalse;
+
+	return AAFRESULT_SUCCESS;
+}
+
 HRESULT STDMETHODCALLTYPE
     CAAFDNxHDCodec::CountChannels (IAAFSourceMob *fileMob,
         aafUID_constref essenceKind,
@@ -3304,9 +3324,16 @@ HRESULT CAAFDNxHDCodec::InternalQueryInterface
         return S_OK;
     }
     // and the IAAFEssenceCodec2 interface 
-    if( aafIsEqualIID( riid, IID_IAAFEssenceCodec2 ) )
+    else if( aafIsEqualIID( riid, IID_IAAFEssenceCodec2 ) )
     { 
         *ppvObj = (IAAFEssenceCodec2 *)this; 
+        ((IUnknown *)*ppvObj)->AddRef();
+        return S_OK;
+    }
+    // and the IAAFEssenceCodec3 interface 
+    else if( aafIsEqualIID( riid, IID_IAAFEssenceCodec3 ) )
+    { 
+        *ppvObj = (IAAFEssenceCodec3 *)this; 
         ((IUnknown *)*ppvObj)->AddRef();
         return S_OK;
     }

@@ -81,6 +81,7 @@ typedef ImplAAFSmartPointer<ImplAAFDataDef> ImplAAFDataDefSP;
 #endif
 
 #include "ImplAAFPluginManager.h"
+#include "ImplEnumAAFLoadedPlugins.h"
 #include "AAFUtils.h"
 #include "ImplAAFHeader.h"
 #include "ImplAAFSourceMob.h"
@@ -96,61 +97,11 @@ typedef ImplAAFSmartPointer<ImplAAFDataDef> ImplAAFDataDefSP;
 #include "AAFContainerDefs.h"
 #include "AAFCodecDefs.h"
 
-// EqualDegenerateAUID() could be moved to AAFUtils.cpp
-// it also appears in plugins/CAAFVC3Codec.cpp and plugins/CAAFDNxHDCodec.cpp 
-// it is kept here for 1.1.3 because it is used only by the patch to accept MXF files with no CodecID
-static aafBool EqualDegenerateAUID(const aafUID_t *uid1, const aafUID_t *uid2)
-{
-	// does not test any bytes that are zero in uid2
-	// allows comparing a specific UL against a family of ULs
-
-	int i = sizeof(aafUID_t);
-
-	const char* u1= (const char*)uid1;
-	const char* u2= (const char*)uid2;
-
-	char b;
-	do
-		if( *u1++ != (b = *u2++) && b ) return kAAFFalse;
-	while( --i ); 
-
-	return kAAFTrue;
-}
-
-// the following definitions enable the patch to accept MXF files with no CodecID
-// and also enable the patch for VC3Codec and DNxHDCodec
-// note: this is the ONLY code in the ref-impl that is specific to VC3
-// in all other respects, the VC3 codec plugin dll can be used with 1.1.2 without this patch
-#ifndef NO_CODECID_PATCH
-#define NO_CODECID_PATCH
-
-#ifdef WIN32
-#define USE_DNxHD_CODEC
-#endif
-
-#define USE_VC3_CODEC
-
-#endif
-
-#if defined( NO_CODECID_PATCH )
-// begin patch to accept MXF files with no CodecID
-// this is intended to be replaced with a proper API post 1.1.3
-
-#include "AAFCompressionDefs.h"		// JPEG Compression ID for fallback Codec ID test
+// The following two headers are needed to call GetCompression() when
+// a file is missing a CodecDef.
 #include "ImplAAFDigitalImageDescriptor.h"
+#include "ImplAAFSoundDescriptor.h"
 
-inline bool IsVC3(const aafUID_t &compId)
-{
-#if defined( USE_VC3_CODEC ) || defined( USE_DNxHD_CODEC )
-	if( EqualAUID(&compId,&kAAFCompressionDef_Avid_DNxHD_Legacy) ) return true; 
-	else if( EqualDegenerateAUID(&compId,&kAAFCompressionDef_VC3_1) ) return true; 
-	else return false;
-#else
-	return false;
-#endif
-}
-
-#endif // NO_CODECID_PATCH
 
 
 #define DEFAULT_FILE_SLOT	1
@@ -1828,47 +1779,81 @@ AAFRESULT STDMETHODCALLTYPE
 			CHECK(access.fileMob->GetMobID(&fileMobID));
 			CHECK(access.mdes->GetObjectClass(&essenceDescClass));
 
-#if defined( NO_CODECID_PATCH )
-// begin patch to accept MXF files with no CodecID
-// this is intended to be replaced with a proper API post 1.1.3
-			// If the FileDescriptor does not have a CodecDef property, use the
-			// following hardcoded list of descriptors and matching CodecIds as
-			// a fallback approach for choosing the Codec to use for this essence.
+			if (plugins == NULL)
+				plugins = ImplAAFContext::GetInstance()->GetPluginManager();
+
+
+			// If the FileDescriptor does not have a CodecDef property, iterate over
+			// all plugin codecs to find a codec which can read the file's essence.
+			// First look for codecs which have matching EssenceDescriptors, then
+			// if the essence has a compression property, check if the codec can
+			// handle that compression ID.
 			HRESULT codecdef_hr = access.mdes->GetCodecDef(&codecDef);
 			if (codecdef_hr == AAFRESULT_PROP_NOT_PRESENT) {
-				// Use EssenceDescriptor to decide which CodecID to use
-				if (essenceDescClass == AUID_AAFWAVEDescriptor)
-					codecID = kAAFCodecDef_WAVE;
-				else if (essenceDescClass == AUID_AAFPCMDescriptor)
-					codecID = kAAFCodecDef_PCM;
-				else if (essenceDescClass == AUID_AAFAIFCDescriptor)
-					codecID = kAAFCodecDef_AIFC;
-				else if (essenceDescClass == AUID_AAFCDCIDescriptor) {
-					// Use CDCI Codec by default
-					codecID = kAAFCodecDef_CDCI;
 
-					ImplAAFDigitalImageDescriptor *pDIDesc;
-					if (access.fileMob->GetEssenceDescriptor((ImplAAFEssenceDescriptor **)&pDIDesc) != AAFRESULT_SUCCESS)
-						CHECK(codecdef_hr);
+				ImplEnumAAFLoadedPlugins	*pEnum = NULL;
+				aafUID_t				pluginUID;
+				CHECK(plugins->EnumLoadedPlugins(AUID_AAFCodecDef, &pEnum));
+				codecID = kAAFCodecDef_None;
 
-					// Use Compression property to determine when to use JPEG codec as a special case
-					aafUID_t compression;
-					if (pDIDesc->GetCompression(&compression) != AAFRESULT_SUCCESS)
-						CHECK(codecdef_hr);
+				while (pEnum->NextOne(&pluginUID) == AAFRESULT_SUCCESS)
+				{
+					IAAFEssenceCodec *tmpCodec;
+					aafUID_t essDesc;
 
-					if (compression == kAAFCompressionDef_AAF_CMPR_FULL_JPEG)
-						codecID = kAAFCodecDef_JPEG;
+					CHECK(plugins->CreateInstanceFromDefinition(pluginUID, NULL, IID_IAAFEssenceCodec, (void**)&tmpCodec));
+					CHECK(tmpCodec->GetEssenceDescriptorID(&essDesc));
+	
+					if (essDesc != essenceDescClass) {
+						continue;				// Skip this Codec as it can't handle this type of essence
+					}
 
-#if defined( USE_DNxHD_CODEC )
-					else if( IsVC3( compression ) )
-						codecID = kAAFCodecDef_DNxHD;
-#elif defined( USE_VC3_CODEC )
-					else if( IsVC3( compression ) )
-						codecID = kAAFCodecDef_VC3;
-#endif
+					// The AAF model states only SoundDescriptor and DigitalImageDescriptor
+					// have the compression property, so determine whether the essence is
+					// one of those, and if so the value of the compression property.
+					ImplAAFDigitalImageDescriptor *pDID = NULL;
+					ImplAAFSoundDescriptor *pSD = NULL;
+					aafUID_t compressionID;
+					HRESULT comp_hr = AAFRESULT_PROP_NOT_PRESENT;
+					if ((pSD = dynamic_cast<ImplAAFSoundDescriptor *>(access.mdes)))
+					{
+						comp_hr = pSD->GetCompression(&compressionID);
+					}
+					else if ((pDID = dynamic_cast<ImplAAFDigitalImageDescriptor *>(access.mdes)))
+					{
+						comp_hr = pDID->GetCompression(&compressionID);
+					}
+					else
+					{
+						// EssenceDescriptor does not support Compression property, so essence is uncompressed
+						// and this codec is a match
+						codecID = pluginUID;
+						break;
+					}
+
+					if (FAILED(comp_hr))
+					{
+						// Compression property supported but compression not present, so essence is uncompressed
+						codecID = pluginUID;
+						break;
+					}
+
+					// The essence uses a compression property so check if codec can handle compression
+					aafBool bSupported = kAAFFalse;
+					IAAFEssenceCodec3 *codec3 = NULL;
+					if (SUCCEEDED( tmpCodec->QueryInterface(IID_IAAFEssenceCodec3, (void **)&codec3) ))
+					{
+						CHECK(codec3->IsCompressionSupported(compressionID, &bSupported));
+						codec3->Release();
+						if (bSupported) {
+							codecID = pluginUID;
+							break;
+						}
+					}
 				}
-				else // give up and throw exception
-					CHECK(codecdef_hr);
+
+				if (codecID == kAAFCodecDef_None)
+					CHECK(codecdef_hr);				// no suitable codec found
 			}
 			else {
 				// Get CodecID to use from the CodecDef property
@@ -1876,10 +1861,7 @@ AAFRESULT STDMETHODCALLTYPE
 				codecDef->ReleaseReference();
 				codecDef = NULL;
 			}
-#endif // NO_CODECID_PATCH
 
-			if (plugins == NULL)
-				plugins = ImplAAFContext::GetInstance()->GetPluginManager();
 			CHECK(plugins->CreateInstanceFromDefinition(
 				codecID, NULL, IID_IAAFEssenceCodec, (void**)&access.codec));
 			

@@ -31,7 +31,7 @@
 #c
 #c *********************************************************************
 #startm .this-module 0
-AAFEssenceCodec\
+AAFEssenceCodec3\
 #endm
 #c
 #startm .parent-module 0
@@ -43,9 +43,10 @@ AD_HEAD
 AD_FORWARD_DECLARATION(AAFEssenceFormat)
 
 AD_IDL(///
-/// AAFEssenceCodec is DEPRECATED\, please use AAFEssenceCodec3.
+/// The AAFEssenceCodec2 interface adds SetFlavour\(\) to the
+/// interfaces of the now deprecated AAFEssenceCodec API.
 ///
-/// The AAFEssenceCodec interface describes the calls of a plugin
+/// The AAFEssenceCodec2 interface describes the calls of a plugin
 /// which handles encoding media in a particular file format\, with
 /// optional compression.  These methods are used internally by the SDK\,
 /// and are not exported through the client interface.
@@ -65,17 +66,30 @@ AD_IDL(///
 ///   - insufficient system memory is available to perform the
 ///     operation.
 ///)
-AD_CLASS_UUID(3631F7A1, 9121, 11d2, 80, 88, 00, 60, 08, 14, 3e, 6f)
 
-AD_DEFAULT_UUID(3631F7A2, 9121, 11d2, 80, 88, 00, 60, 08, 14, 3e, 6f)
-AD_COM_EXT2_CLASS_BEGIN(public IAAFEssenceCodec2, public IAAFEssenceCodec3)
+AD_CLASS_UUID(CB1B4D64, DE69, 41DD, BC, 00, 7C, DA, 9A, 79, 0C, 25)
 
-AD_IDL(///
-	///**************
-	/// Meta codec functions.  Called to plug a codec into the SDK\, but
-	/// NOT for each instance of a codec.
-	///)
+AD_DEFAULT_UUID(F375A58F, EB6A, 49C7, 90, A2, 79, 37, 32, 9A, E0, E4)
+AD_XCLASS_BEGIN(Abstract, Transient)
 
+
+#c First, the original AAFEssenceCodec interfaces are repeated for
+#c the AAFEssenceCodec2 interface:
+#c
+#c SetEssenceAccess, CountFlavours, GetIndexedFlavourID,
+#c CountDataDefinitions, GetIndexedDataDefinition,
+#c GetMaxCodecDisplayNameLength, GetCodecDisplayName, CountChannels,
+#c GetSelectInfo, ValidateEssence, Create, Open, CountSamples, WriteSamples,
+#c ReadSamples, Seek, CompleteWrite, CreateDescriptorFromStream,
+#c GetCurrentEssenceStream, PutEssenceFormat, GetEssenceFormat,
+#c GetDefaultEssenceFormat, GetEssenceDescriptorID, GetEssenceDataID,
+#c GetIndexedSampleSize, GetLargestSampleSize
+#c
+#c After those, the new interface SetFlavour is added.
+
+#c
+#c Original AAFEssenceCodec methods
+#c
 
 AD_XMETHOD1(SetEssenceAccess,
 		   [in],
@@ -939,15 +953,61 @@ AD_XMETHOD2(GetLargestSampleSize,
   ///   - pLength is null.)
 
 #c
-#c AAFEssenceCodec2 methods
+#c New AAFEssenceCodec2 methods
 #c
 
-AD_COM_METH(.method-SetFlavour)
+AD_XMETHOD1(SetFlavour,
+			[in\, ref],
+			objPass,
+			aafUID_constref,
+			flavour,
+			the codec flavour to use,
+     Switches the codec into the specified flavour.  Flavour is
+  /// codec dependent.  For example\, the DV codec could use a
+  /// flavour to switch into a legacy mode causing legacy properties
+  /// to be added which are needed by legacy applications.
+  /// 
+  /// This method should return only the following codes.  If more than
+  /// one of the listed errors is in effect\, it should return the
+  /// first one encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// HRESULT_NOT_IMPLEMENTED
+  ///   - flavour not implemented by the codec)
 
 #c
-#c AAFEssenceCodec3 methods
+#c New AAFEssenceCodec3 methods
 #c
 
-AD_COM_METH(.method-IsCompressionSupported)
+AD_XMETHOD2(IsCompressionSupported,
+			[in],
+			  objPass,
+			  aafUID_constref,
+			  compression,
+			  The compression to test for support,
+			[out\,retval],
+			  objPass,
+			  aafBoolean_t*,
+			  pIsSupported,
+			  Is this compression supported,
+			Returns AAFTrue if the codec supports opening essence with
+  /// the specified compression ID.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pIsSupported pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *pIsSupported.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pIsSupported is null.)
 
-AD_COM_EXT2_CLASS_END(AAFEssenceCodec2, AAFEssenceCodec3)
+AD_XCLASS_END(Abstract, Transient)

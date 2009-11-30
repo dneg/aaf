@@ -754,7 +754,35 @@ HRESULT STDMETHODCALLTYPE
 	memcpy(pName, kDisplayName, len);
 	return AAFRESULT_SUCCESS;
 }
-	
+
+// Only one flavour (kAAFNilCodecFlavour) is supported
+HRESULT STDMETHODCALLTYPE
+    CAAFJPEGCodec::SetFlavour (aafUID_constref flavour)
+{
+	if (flavour == kAAFNilCodecFlavour)
+		return AAFRESULT_SUCCESS;
+
+	return AAFRESULT_NOT_IMPLEMENTED;
+}
+
+// IsCompressionSupported is used by the toolkit to test whether this plugin
+// is capable of opening and reading essence for the given compression ID.
+HRESULT STDMETHODCALLTYPE
+	CAAFJPEGCodec::IsCompressionSupported(
+		aafUID_constref compression,
+		aafBool* pIsSupported)
+{
+	if (NULL == pIsSupported)
+		return AAFRESULT_NULL_PARAM;
+
+	if (AAF_CMPR_FULL_JPEG == compression)
+		*pIsSupported = kAAFTrue;
+	else
+		*pIsSupported = kAAFFalse;
+
+	return AAFRESULT_SUCCESS;
+}
+
 HRESULT STDMETHODCALLTYPE
     CAAFJPEGCodec::CountChannels (IAAFSourceMob *fileMob,
         aafUID_constref essenceKind,
@@ -4364,7 +4392,21 @@ HRESULT CAAFJPEGCodec::InternalQueryInterface
         ((IUnknown *)*ppvObj)->AddRef();
         return S_OK;
     }
-		// and the IAAFPlugin interface.
+    // and the IAAFEssenceCodec2 interface
+    else if (EQUAL_UID(riid,IID_IAAFEssenceCodec2)) 
+    { 
+        *ppvObj = (IAAFEssenceCodec2 *)this; 
+        ((IUnknown *)*ppvObj)->AddRef();
+        return S_OK;
+    }
+    // and the IAAFEssenceCodec3 interface
+    else if (EQUAL_UID(riid,IID_IAAFEssenceCodec3)) 
+    { 
+        *ppvObj = (IAAFEssenceCodec3 *)this; 
+        ((IUnknown *)*ppvObj)->AddRef();
+        return S_OK;
+    }
+	// and the IAAFPlugin interface.
     else if (EQUAL_UID(riid,IID_IAAFPlugin)) 
     { 
         *ppvObj = (IAAFPlugin *)this; 

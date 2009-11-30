@@ -63,6 +63,12 @@ typedef interface IAAFEssenceCodec2 IAAFEssenceCodec2;
 #endif 	/* __IAAFEssenceCodec2_FWD_DEFINED__ */
 
 
+#ifndef __IAAFEssenceCodec3_FWD_DEFINED__
+#define __IAAFEssenceCodec3_FWD_DEFINED__
+typedef interface IAAFEssenceCodec3 IAAFEssenceCodec3;
+#endif 	/* __IAAFEssenceCodec3_FWD_DEFINED__ */
+
+
 #ifndef __IAAFEssenceContainer_FWD_DEFINED__
 #define __IAAFEssenceContainer_FWD_DEFINED__
 typedef interface IAAFEssenceContainer IAAFEssenceContainer;
@@ -159,6 +165,7 @@ void __RPC_USER MIDL_user_free( void * );
 // AAF Interfaces.
 //=--------------------------------------------------------------------------=
 //
+
 
 
 
@@ -1786,6 +1793,804 @@ void __RPC_STUB IAAFEssenceCodec2_SetFlavour_Stub(
 
 
 #endif 	/* __IAAFEssenceCodec2_INTERFACE_DEFINED__ */
+
+
+#ifndef __IAAFEssenceCodec3_INTERFACE_DEFINED__
+#define __IAAFEssenceCodec3_INTERFACE_DEFINED__
+
+/* interface IAAFEssenceCodec3 */
+/* [unique][helpstring][uuid][object] */ 
+
+
+EXTERN_C const IID IID_IAAFEssenceCodec3;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("F375A58F-EB6A-49C7-90A2-7937329AE0E4")
+    IAAFEssenceCodec3 : public IUnknown
+    {
+    public:
+        virtual HRESULT STDMETHODCALLTYPE SetEssenceAccess( 
+            /* [in] */ IAAFEssenceAccess *pEssenceAccess) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE CountFlavours( 
+            /* [out] */ aafUInt32 *pCount) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetIndexedFlavourID( 
+            /* [in] */ aafUInt32 index,
+            /* [out] */ aafUID_t *pVariant) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE CountDataDefinitions( 
+            /* [out] */ aafUInt32 *pCount) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetIndexedDataDefinition( 
+            /* [in] */ aafUInt32 index,
+            /* [out] */ aafUID_t *pDataDefID) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetMaxCodecDisplayNameLength( 
+            /* [out] */ aafUInt32 *pBufSize) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetCodecDisplayName( 
+            /* [ref][in] */ aafUID_constref flavour,
+            /* [size_is][string][out] */ aafCharacter *pName,
+            /* [in] */ aafUInt32 bufSize) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE CountChannels( 
+            /* [in] */ IAAFSourceMob *fileMob,
+            /* [ref][in] */ aafUID_constref essenceKind,
+            /* [in] */ IAAFEssenceStream *stream,
+            /* [out] */ aafUInt16 *pNumChannels) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetSelectInfo( 
+            /* [in] */ IAAFSourceMob *fileMob,
+            /* [in] */ IAAFEssenceStream *stream,
+            /* [out] */ aafSelectInfo_t *pSelectInfo) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE ValidateEssence( 
+            /* [in] */ IAAFSourceMob *fileMob,
+            /* [in] */ IAAFEssenceStream *stream,
+            /* [in] */ aafCheckVerbose_t verbose,
+            /* [in] */ aafCheckWarnings_t outputWarnings,
+            /* [in] */ aafUInt32 bufSize,
+            /* [length_is][size_is][out] */ aafCharacter *pErrorText,
+            /* [out] */ aafUInt32 *pBytesRead) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE Create( 
+            /* [in] */ IAAFSourceMob *fileMob,
+            /* [ref][in] */ aafUID_constref flavour,
+            /* [ref][in] */ aafUID_constref essenceKind,
+            /* [ref][in] */ aafRational_constref sampleRate,
+            /* [in] */ IAAFEssenceStream *stream,
+            /* [in] */ aafCompressEnable_t compEnable) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE Open( 
+            /* [in] */ IAAFSourceMob *fileMob,
+            /* [in] */ aafMediaOpenMode_t openMode,
+            /* [in] */ IAAFEssenceStream *stream,
+            /* [in] */ aafCompressEnable_t compEnable) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE CountSamples( 
+            /* [ref][in] */ aafUID_constref essenceKind,
+            /* [out] */ aafLength_t *pNumSamples) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE WriteSamples( 
+            /* [in] */ aafUInt32 nSamples,
+            /* [in] */ aafUInt32 buflen,
+            /* [size_is][in] */ aafDataBuffer_t buffer,
+            /* [ref][out] */ aafUInt32 *samplesWritten,
+            /* [ref][out] */ aafUInt32 *bytesWritten) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE ReadSamples( 
+            /* [in] */ aafUInt32 nSamples,
+            /* [in] */ aafUInt32 buflen,
+            /* [length_is][size_is][out] */ aafDataBuffer_t buffer,
+            /* [ref][out] */ aafUInt32 *samplesRead,
+            /* [ref][out] */ aafUInt32 *bytesRead) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE Seek( 
+            /* [in] */ aafPosition_t sampleFrame) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE CompleteWrite( 
+            /* [in] */ IAAFSourceMob *pFileMob) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE CreateDescriptorFromStream( 
+            /* [in] */ IAAFEssenceStream *pStream,
+            /* [in] */ IAAFSourceMob *pSourceMob) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetCurrentEssenceStream( 
+            /* [out] */ IAAFEssenceStream **ppStream) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE PutEssenceFormat( 
+            /* [in] */ IAAFEssenceFormat *pFormat) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetEssenceFormat( 
+            /* [in] */ IAAFEssenceFormat *pFormatTemplate,
+            /* [out] */ IAAFEssenceFormat **ppNewFormat) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetDefaultEssenceFormat( 
+            /* [out] */ IAAFEssenceFormat **ppNewFormat) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetEssenceDescriptorID( 
+            /* [out] */ aafUID_t *pDescriptorID) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetEssenceDataID( 
+            /* [out] */ aafUID_t *pEssenceDataID) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetIndexedSampleSize( 
+            /* [ref][in] */ aafUID_constref essenceDefID,
+            /* [in] */ aafPosition_t sampleOffset,
+            /* [out] */ aafLength_t *pLength) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE GetLargestSampleSize( 
+            /* [ref][in] */ aafUID_constref essenceDefID,
+            /* [out] */ aafLength_t *pLength) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE SetFlavour( 
+            /* [ref][in] */ aafUID_constref flavour) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE IsCompressionSupported( 
+            /* [in] */ aafUID_constref compression,
+            /* [retval][out] */ aafBoolean_t *pIsSupported) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IAAFEssenceCodec3Vtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
+            IAAFEssenceCodec3 * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void **ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE *AddRef )( 
+            IAAFEssenceCodec3 * This);
+        
+        ULONG ( STDMETHODCALLTYPE *Release )( 
+            IAAFEssenceCodec3 * This);
+        
+        HRESULT ( STDMETHODCALLTYPE *SetEssenceAccess )( 
+            IAAFEssenceCodec3 * This,
+            /* [in] */ IAAFEssenceAccess *pEssenceAccess);
+        
+        HRESULT ( STDMETHODCALLTYPE *CountFlavours )( 
+            IAAFEssenceCodec3 * This,
+            /* [out] */ aafUInt32 *pCount);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetIndexedFlavourID )( 
+            IAAFEssenceCodec3 * This,
+            /* [in] */ aafUInt32 index,
+            /* [out] */ aafUID_t *pVariant);
+        
+        HRESULT ( STDMETHODCALLTYPE *CountDataDefinitions )( 
+            IAAFEssenceCodec3 * This,
+            /* [out] */ aafUInt32 *pCount);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetIndexedDataDefinition )( 
+            IAAFEssenceCodec3 * This,
+            /* [in] */ aafUInt32 index,
+            /* [out] */ aafUID_t *pDataDefID);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetMaxCodecDisplayNameLength )( 
+            IAAFEssenceCodec3 * This,
+            /* [out] */ aafUInt32 *pBufSize);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetCodecDisplayName )( 
+            IAAFEssenceCodec3 * This,
+            /* [ref][in] */ aafUID_constref flavour,
+            /* [size_is][string][out] */ aafCharacter *pName,
+            /* [in] */ aafUInt32 bufSize);
+        
+        HRESULT ( STDMETHODCALLTYPE *CountChannels )( 
+            IAAFEssenceCodec3 * This,
+            /* [in] */ IAAFSourceMob *fileMob,
+            /* [ref][in] */ aafUID_constref essenceKind,
+            /* [in] */ IAAFEssenceStream *stream,
+            /* [out] */ aafUInt16 *pNumChannels);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetSelectInfo )( 
+            IAAFEssenceCodec3 * This,
+            /* [in] */ IAAFSourceMob *fileMob,
+            /* [in] */ IAAFEssenceStream *stream,
+            /* [out] */ aafSelectInfo_t *pSelectInfo);
+        
+        HRESULT ( STDMETHODCALLTYPE *ValidateEssence )( 
+            IAAFEssenceCodec3 * This,
+            /* [in] */ IAAFSourceMob *fileMob,
+            /* [in] */ IAAFEssenceStream *stream,
+            /* [in] */ aafCheckVerbose_t verbose,
+            /* [in] */ aafCheckWarnings_t outputWarnings,
+            /* [in] */ aafUInt32 bufSize,
+            /* [length_is][size_is][out] */ aafCharacter *pErrorText,
+            /* [out] */ aafUInt32 *pBytesRead);
+        
+        HRESULT ( STDMETHODCALLTYPE *Create )( 
+            IAAFEssenceCodec3 * This,
+            /* [in] */ IAAFSourceMob *fileMob,
+            /* [ref][in] */ aafUID_constref flavour,
+            /* [ref][in] */ aafUID_constref essenceKind,
+            /* [ref][in] */ aafRational_constref sampleRate,
+            /* [in] */ IAAFEssenceStream *stream,
+            /* [in] */ aafCompressEnable_t compEnable);
+        
+        HRESULT ( STDMETHODCALLTYPE *Open )( 
+            IAAFEssenceCodec3 * This,
+            /* [in] */ IAAFSourceMob *fileMob,
+            /* [in] */ aafMediaOpenMode_t openMode,
+            /* [in] */ IAAFEssenceStream *stream,
+            /* [in] */ aafCompressEnable_t compEnable);
+        
+        HRESULT ( STDMETHODCALLTYPE *CountSamples )( 
+            IAAFEssenceCodec3 * This,
+            /* [ref][in] */ aafUID_constref essenceKind,
+            /* [out] */ aafLength_t *pNumSamples);
+        
+        HRESULT ( STDMETHODCALLTYPE *WriteSamples )( 
+            IAAFEssenceCodec3 * This,
+            /* [in] */ aafUInt32 nSamples,
+            /* [in] */ aafUInt32 buflen,
+            /* [size_is][in] */ aafDataBuffer_t buffer,
+            /* [ref][out] */ aafUInt32 *samplesWritten,
+            /* [ref][out] */ aafUInt32 *bytesWritten);
+        
+        HRESULT ( STDMETHODCALLTYPE *ReadSamples )( 
+            IAAFEssenceCodec3 * This,
+            /* [in] */ aafUInt32 nSamples,
+            /* [in] */ aafUInt32 buflen,
+            /* [length_is][size_is][out] */ aafDataBuffer_t buffer,
+            /* [ref][out] */ aafUInt32 *samplesRead,
+            /* [ref][out] */ aafUInt32 *bytesRead);
+        
+        HRESULT ( STDMETHODCALLTYPE *Seek )( 
+            IAAFEssenceCodec3 * This,
+            /* [in] */ aafPosition_t sampleFrame);
+        
+        HRESULT ( STDMETHODCALLTYPE *CompleteWrite )( 
+            IAAFEssenceCodec3 * This,
+            /* [in] */ IAAFSourceMob *pFileMob);
+        
+        HRESULT ( STDMETHODCALLTYPE *CreateDescriptorFromStream )( 
+            IAAFEssenceCodec3 * This,
+            /* [in] */ IAAFEssenceStream *pStream,
+            /* [in] */ IAAFSourceMob *pSourceMob);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetCurrentEssenceStream )( 
+            IAAFEssenceCodec3 * This,
+            /* [out] */ IAAFEssenceStream **ppStream);
+        
+        HRESULT ( STDMETHODCALLTYPE *PutEssenceFormat )( 
+            IAAFEssenceCodec3 * This,
+            /* [in] */ IAAFEssenceFormat *pFormat);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetEssenceFormat )( 
+            IAAFEssenceCodec3 * This,
+            /* [in] */ IAAFEssenceFormat *pFormatTemplate,
+            /* [out] */ IAAFEssenceFormat **ppNewFormat);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetDefaultEssenceFormat )( 
+            IAAFEssenceCodec3 * This,
+            /* [out] */ IAAFEssenceFormat **ppNewFormat);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetEssenceDescriptorID )( 
+            IAAFEssenceCodec3 * This,
+            /* [out] */ aafUID_t *pDescriptorID);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetEssenceDataID )( 
+            IAAFEssenceCodec3 * This,
+            /* [out] */ aafUID_t *pEssenceDataID);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetIndexedSampleSize )( 
+            IAAFEssenceCodec3 * This,
+            /* [ref][in] */ aafUID_constref essenceDefID,
+            /* [in] */ aafPosition_t sampleOffset,
+            /* [out] */ aafLength_t *pLength);
+        
+        HRESULT ( STDMETHODCALLTYPE *GetLargestSampleSize )( 
+            IAAFEssenceCodec3 * This,
+            /* [ref][in] */ aafUID_constref essenceDefID,
+            /* [out] */ aafLength_t *pLength);
+        
+        HRESULT ( STDMETHODCALLTYPE *SetFlavour )( 
+            IAAFEssenceCodec3 * This,
+            /* [ref][in] */ aafUID_constref flavour);
+        
+        HRESULT ( STDMETHODCALLTYPE *IsCompressionSupported )( 
+            IAAFEssenceCodec3 * This,
+            /* [in] */ aafUID_constref compression,
+            /* [retval][out] */ aafBoolean_t *pIsSupported);
+        
+        END_INTERFACE
+    } IAAFEssenceCodec3Vtbl;
+
+    interface IAAFEssenceCodec3
+    {
+        CONST_VTBL struct IAAFEssenceCodec3Vtbl *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IAAFEssenceCodec3_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IAAFEssenceCodec3_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IAAFEssenceCodec3_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IAAFEssenceCodec3_SetEssenceAccess(This,pEssenceAccess)	\
+    (This)->lpVtbl -> SetEssenceAccess(This,pEssenceAccess)
+
+#define IAAFEssenceCodec3_CountFlavours(This,pCount)	\
+    (This)->lpVtbl -> CountFlavours(This,pCount)
+
+#define IAAFEssenceCodec3_GetIndexedFlavourID(This,index,pVariant)	\
+    (This)->lpVtbl -> GetIndexedFlavourID(This,index,pVariant)
+
+#define IAAFEssenceCodec3_CountDataDefinitions(This,pCount)	\
+    (This)->lpVtbl -> CountDataDefinitions(This,pCount)
+
+#define IAAFEssenceCodec3_GetIndexedDataDefinition(This,index,pDataDefID)	\
+    (This)->lpVtbl -> GetIndexedDataDefinition(This,index,pDataDefID)
+
+#define IAAFEssenceCodec3_GetMaxCodecDisplayNameLength(This,pBufSize)	\
+    (This)->lpVtbl -> GetMaxCodecDisplayNameLength(This,pBufSize)
+
+#define IAAFEssenceCodec3_GetCodecDisplayName(This,flavour,pName,bufSize)	\
+    (This)->lpVtbl -> GetCodecDisplayName(This,flavour,pName,bufSize)
+
+#define IAAFEssenceCodec3_CountChannels(This,fileMob,essenceKind,stream,pNumChannels)	\
+    (This)->lpVtbl -> CountChannels(This,fileMob,essenceKind,stream,pNumChannels)
+
+#define IAAFEssenceCodec3_GetSelectInfo(This,fileMob,stream,pSelectInfo)	\
+    (This)->lpVtbl -> GetSelectInfo(This,fileMob,stream,pSelectInfo)
+
+#define IAAFEssenceCodec3_ValidateEssence(This,fileMob,stream,verbose,outputWarnings,bufSize,pErrorText,pBytesRead)	\
+    (This)->lpVtbl -> ValidateEssence(This,fileMob,stream,verbose,outputWarnings,bufSize,pErrorText,pBytesRead)
+
+#define IAAFEssenceCodec3_Create(This,fileMob,flavour,essenceKind,sampleRate,stream,compEnable)	\
+    (This)->lpVtbl -> Create(This,fileMob,flavour,essenceKind,sampleRate,stream,compEnable)
+
+#define IAAFEssenceCodec3_Open(This,fileMob,openMode,stream,compEnable)	\
+    (This)->lpVtbl -> Open(This,fileMob,openMode,stream,compEnable)
+
+#define IAAFEssenceCodec3_CountSamples(This,essenceKind,pNumSamples)	\
+    (This)->lpVtbl -> CountSamples(This,essenceKind,pNumSamples)
+
+#define IAAFEssenceCodec3_WriteSamples(This,nSamples,buflen,buffer,samplesWritten,bytesWritten)	\
+    (This)->lpVtbl -> WriteSamples(This,nSamples,buflen,buffer,samplesWritten,bytesWritten)
+
+#define IAAFEssenceCodec3_ReadSamples(This,nSamples,buflen,buffer,samplesRead,bytesRead)	\
+    (This)->lpVtbl -> ReadSamples(This,nSamples,buflen,buffer,samplesRead,bytesRead)
+
+#define IAAFEssenceCodec3_Seek(This,sampleFrame)	\
+    (This)->lpVtbl -> Seek(This,sampleFrame)
+
+#define IAAFEssenceCodec3_CompleteWrite(This,pFileMob)	\
+    (This)->lpVtbl -> CompleteWrite(This,pFileMob)
+
+#define IAAFEssenceCodec3_CreateDescriptorFromStream(This,pStream,pSourceMob)	\
+    (This)->lpVtbl -> CreateDescriptorFromStream(This,pStream,pSourceMob)
+
+#define IAAFEssenceCodec3_GetCurrentEssenceStream(This,ppStream)	\
+    (This)->lpVtbl -> GetCurrentEssenceStream(This,ppStream)
+
+#define IAAFEssenceCodec3_PutEssenceFormat(This,pFormat)	\
+    (This)->lpVtbl -> PutEssenceFormat(This,pFormat)
+
+#define IAAFEssenceCodec3_GetEssenceFormat(This,pFormatTemplate,ppNewFormat)	\
+    (This)->lpVtbl -> GetEssenceFormat(This,pFormatTemplate,ppNewFormat)
+
+#define IAAFEssenceCodec3_GetDefaultEssenceFormat(This,ppNewFormat)	\
+    (This)->lpVtbl -> GetDefaultEssenceFormat(This,ppNewFormat)
+
+#define IAAFEssenceCodec3_GetEssenceDescriptorID(This,pDescriptorID)	\
+    (This)->lpVtbl -> GetEssenceDescriptorID(This,pDescriptorID)
+
+#define IAAFEssenceCodec3_GetEssenceDataID(This,pEssenceDataID)	\
+    (This)->lpVtbl -> GetEssenceDataID(This,pEssenceDataID)
+
+#define IAAFEssenceCodec3_GetIndexedSampleSize(This,essenceDefID,sampleOffset,pLength)	\
+    (This)->lpVtbl -> GetIndexedSampleSize(This,essenceDefID,sampleOffset,pLength)
+
+#define IAAFEssenceCodec3_GetLargestSampleSize(This,essenceDefID,pLength)	\
+    (This)->lpVtbl -> GetLargestSampleSize(This,essenceDefID,pLength)
+
+#define IAAFEssenceCodec3_SetFlavour(This,flavour)	\
+    (This)->lpVtbl -> SetFlavour(This,flavour)
+
+#define IAAFEssenceCodec3_IsCompressionSupported(This,compression,pIsSupported)	\
+    (This)->lpVtbl -> IsCompressionSupported(This,compression,pIsSupported)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+HRESULT STDMETHODCALLTYPE IAAFEssenceCodec3_SetEssenceAccess_Proxy( 
+    IAAFEssenceCodec3 * This,
+    /* [in] */ IAAFEssenceAccess *pEssenceAccess);
+
+
+void __RPC_STUB IAAFEssenceCodec3_SetEssenceAccess_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFEssenceCodec3_CountFlavours_Proxy( 
+    IAAFEssenceCodec3 * This,
+    /* [out] */ aafUInt32 *pCount);
+
+
+void __RPC_STUB IAAFEssenceCodec3_CountFlavours_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFEssenceCodec3_GetIndexedFlavourID_Proxy( 
+    IAAFEssenceCodec3 * This,
+    /* [in] */ aafUInt32 index,
+    /* [out] */ aafUID_t *pVariant);
+
+
+void __RPC_STUB IAAFEssenceCodec3_GetIndexedFlavourID_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFEssenceCodec3_CountDataDefinitions_Proxy( 
+    IAAFEssenceCodec3 * This,
+    /* [out] */ aafUInt32 *pCount);
+
+
+void __RPC_STUB IAAFEssenceCodec3_CountDataDefinitions_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFEssenceCodec3_GetIndexedDataDefinition_Proxy( 
+    IAAFEssenceCodec3 * This,
+    /* [in] */ aafUInt32 index,
+    /* [out] */ aafUID_t *pDataDefID);
+
+
+void __RPC_STUB IAAFEssenceCodec3_GetIndexedDataDefinition_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFEssenceCodec3_GetMaxCodecDisplayNameLength_Proxy( 
+    IAAFEssenceCodec3 * This,
+    /* [out] */ aafUInt32 *pBufSize);
+
+
+void __RPC_STUB IAAFEssenceCodec3_GetMaxCodecDisplayNameLength_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFEssenceCodec3_GetCodecDisplayName_Proxy( 
+    IAAFEssenceCodec3 * This,
+    /* [ref][in] */ aafUID_constref flavour,
+    /* [size_is][string][out] */ aafCharacter *pName,
+    /* [in] */ aafUInt32 bufSize);
+
+
+void __RPC_STUB IAAFEssenceCodec3_GetCodecDisplayName_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFEssenceCodec3_CountChannels_Proxy( 
+    IAAFEssenceCodec3 * This,
+    /* [in] */ IAAFSourceMob *fileMob,
+    /* [ref][in] */ aafUID_constref essenceKind,
+    /* [in] */ IAAFEssenceStream *stream,
+    /* [out] */ aafUInt16 *pNumChannels);
+
+
+void __RPC_STUB IAAFEssenceCodec3_CountChannels_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFEssenceCodec3_GetSelectInfo_Proxy( 
+    IAAFEssenceCodec3 * This,
+    /* [in] */ IAAFSourceMob *fileMob,
+    /* [in] */ IAAFEssenceStream *stream,
+    /* [out] */ aafSelectInfo_t *pSelectInfo);
+
+
+void __RPC_STUB IAAFEssenceCodec3_GetSelectInfo_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFEssenceCodec3_ValidateEssence_Proxy( 
+    IAAFEssenceCodec3 * This,
+    /* [in] */ IAAFSourceMob *fileMob,
+    /* [in] */ IAAFEssenceStream *stream,
+    /* [in] */ aafCheckVerbose_t verbose,
+    /* [in] */ aafCheckWarnings_t outputWarnings,
+    /* [in] */ aafUInt32 bufSize,
+    /* [length_is][size_is][out] */ aafCharacter *pErrorText,
+    /* [out] */ aafUInt32 *pBytesRead);
+
+
+void __RPC_STUB IAAFEssenceCodec3_ValidateEssence_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFEssenceCodec3_Create_Proxy( 
+    IAAFEssenceCodec3 * This,
+    /* [in] */ IAAFSourceMob *fileMob,
+    /* [ref][in] */ aafUID_constref flavour,
+    /* [ref][in] */ aafUID_constref essenceKind,
+    /* [ref][in] */ aafRational_constref sampleRate,
+    /* [in] */ IAAFEssenceStream *stream,
+    /* [in] */ aafCompressEnable_t compEnable);
+
+
+void __RPC_STUB IAAFEssenceCodec3_Create_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFEssenceCodec3_Open_Proxy( 
+    IAAFEssenceCodec3 * This,
+    /* [in] */ IAAFSourceMob *fileMob,
+    /* [in] */ aafMediaOpenMode_t openMode,
+    /* [in] */ IAAFEssenceStream *stream,
+    /* [in] */ aafCompressEnable_t compEnable);
+
+
+void __RPC_STUB IAAFEssenceCodec3_Open_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFEssenceCodec3_CountSamples_Proxy( 
+    IAAFEssenceCodec3 * This,
+    /* [ref][in] */ aafUID_constref essenceKind,
+    /* [out] */ aafLength_t *pNumSamples);
+
+
+void __RPC_STUB IAAFEssenceCodec3_CountSamples_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFEssenceCodec3_WriteSamples_Proxy( 
+    IAAFEssenceCodec3 * This,
+    /* [in] */ aafUInt32 nSamples,
+    /* [in] */ aafUInt32 buflen,
+    /* [size_is][in] */ aafDataBuffer_t buffer,
+    /* [ref][out] */ aafUInt32 *samplesWritten,
+    /* [ref][out] */ aafUInt32 *bytesWritten);
+
+
+void __RPC_STUB IAAFEssenceCodec3_WriteSamples_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFEssenceCodec3_ReadSamples_Proxy( 
+    IAAFEssenceCodec3 * This,
+    /* [in] */ aafUInt32 nSamples,
+    /* [in] */ aafUInt32 buflen,
+    /* [length_is][size_is][out] */ aafDataBuffer_t buffer,
+    /* [ref][out] */ aafUInt32 *samplesRead,
+    /* [ref][out] */ aafUInt32 *bytesRead);
+
+
+void __RPC_STUB IAAFEssenceCodec3_ReadSamples_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFEssenceCodec3_Seek_Proxy( 
+    IAAFEssenceCodec3 * This,
+    /* [in] */ aafPosition_t sampleFrame);
+
+
+void __RPC_STUB IAAFEssenceCodec3_Seek_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFEssenceCodec3_CompleteWrite_Proxy( 
+    IAAFEssenceCodec3 * This,
+    /* [in] */ IAAFSourceMob *pFileMob);
+
+
+void __RPC_STUB IAAFEssenceCodec3_CompleteWrite_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFEssenceCodec3_CreateDescriptorFromStream_Proxy( 
+    IAAFEssenceCodec3 * This,
+    /* [in] */ IAAFEssenceStream *pStream,
+    /* [in] */ IAAFSourceMob *pSourceMob);
+
+
+void __RPC_STUB IAAFEssenceCodec3_CreateDescriptorFromStream_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFEssenceCodec3_GetCurrentEssenceStream_Proxy( 
+    IAAFEssenceCodec3 * This,
+    /* [out] */ IAAFEssenceStream **ppStream);
+
+
+void __RPC_STUB IAAFEssenceCodec3_GetCurrentEssenceStream_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFEssenceCodec3_PutEssenceFormat_Proxy( 
+    IAAFEssenceCodec3 * This,
+    /* [in] */ IAAFEssenceFormat *pFormat);
+
+
+void __RPC_STUB IAAFEssenceCodec3_PutEssenceFormat_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFEssenceCodec3_GetEssenceFormat_Proxy( 
+    IAAFEssenceCodec3 * This,
+    /* [in] */ IAAFEssenceFormat *pFormatTemplate,
+    /* [out] */ IAAFEssenceFormat **ppNewFormat);
+
+
+void __RPC_STUB IAAFEssenceCodec3_GetEssenceFormat_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFEssenceCodec3_GetDefaultEssenceFormat_Proxy( 
+    IAAFEssenceCodec3 * This,
+    /* [out] */ IAAFEssenceFormat **ppNewFormat);
+
+
+void __RPC_STUB IAAFEssenceCodec3_GetDefaultEssenceFormat_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFEssenceCodec3_GetEssenceDescriptorID_Proxy( 
+    IAAFEssenceCodec3 * This,
+    /* [out] */ aafUID_t *pDescriptorID);
+
+
+void __RPC_STUB IAAFEssenceCodec3_GetEssenceDescriptorID_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFEssenceCodec3_GetEssenceDataID_Proxy( 
+    IAAFEssenceCodec3 * This,
+    /* [out] */ aafUID_t *pEssenceDataID);
+
+
+void __RPC_STUB IAAFEssenceCodec3_GetEssenceDataID_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFEssenceCodec3_GetIndexedSampleSize_Proxy( 
+    IAAFEssenceCodec3 * This,
+    /* [ref][in] */ aafUID_constref essenceDefID,
+    /* [in] */ aafPosition_t sampleOffset,
+    /* [out] */ aafLength_t *pLength);
+
+
+void __RPC_STUB IAAFEssenceCodec3_GetIndexedSampleSize_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFEssenceCodec3_GetLargestSampleSize_Proxy( 
+    IAAFEssenceCodec3 * This,
+    /* [ref][in] */ aafUID_constref essenceDefID,
+    /* [out] */ aafLength_t *pLength);
+
+
+void __RPC_STUB IAAFEssenceCodec3_GetLargestSampleSize_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFEssenceCodec3_SetFlavour_Proxy( 
+    IAAFEssenceCodec3 * This,
+    /* [ref][in] */ aafUID_constref flavour);
+
+
+void __RPC_STUB IAAFEssenceCodec3_SetFlavour_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFEssenceCodec3_IsCompressionSupported_Proxy( 
+    IAAFEssenceCodec3 * This,
+    /* [in] */ aafUID_constref compression,
+    /* [retval][out] */ aafBoolean_t *pIsSupported);
+
+
+void __RPC_STUB IAAFEssenceCodec3_IsCompressionSupported_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __IAAFEssenceCodec3_INTERFACE_DEFINED__ */
 
 
 #ifndef __IAAFEssenceContainer_INTERFACE_DEFINED__

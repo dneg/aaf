@@ -62,7 +62,8 @@ EXTERN_C const CLSID CLSID_AAFVC3Codec;
 #define MAX_VC3_COMPRESSED_FRAME (917504)
 
 class CAAFVC3Codec
-  : public IAAFEssenceCodec2,
+  : public IAAFEssenceCodec3,
+	public IAAFEssenceCodec2,
 	public IAAFEssenceCodec,
 	public IAAFPlugin,
 	public CAAFUnknown
@@ -145,6 +146,11 @@ public:
 	// Switches the codec into the specified flavour.
   STDMETHOD (SetFlavour)
     (/*[in]*/ aafUID_constref flavour);
+
+  // Returns whether this codec can open and read the specified CompressionID
+  STDMETHOD (IsCompressionSupported)
+    (/*[in] */ aafUID_constref compression, // CompressionID property to test
+     /*[out]*/ aafBool* pIsSupported); // Boolean - can the compression be read?
 
   // Returns the number of channels which this codec can handle
 			// of the given essence kind
