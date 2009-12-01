@@ -39,3 +39,4 @@ include ../comexamplerules.mk
 .PHONY : check
 check : $(AAFSDKBINDIR)/ImportAudioExample$(EXE)
 	$(APP_RUN_ENV) $(AAFSDKBINDIR)/ImportAudioExample$(EXE) ../ExportAudioExample/ExportAudioExample.aaf
+	$(APP_RUN_ENV) $(AAFSDKBINDIR)/ImportAudioExample$(EXE) ../ExportAudioExample/ExportAudioExample_NoCodecDef.aaf

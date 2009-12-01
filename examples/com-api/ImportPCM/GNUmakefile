@@ -40,3 +40,4 @@ include ../comexamplerules.mk
 check : $(AAFSDKBINDIR)/ImportPCM$(EXE)
 	@rm -f raw.pcm
 	$(APP_RUN_ENV) $(AAFSDKBINDIR)/ImportPCM$(EXE) ../ExportPCM/ExportPCM.aaf && test -f raw.pcm
+	$(APP_RUN_ENV) $(AAFSDKBINDIR)/ImportPCM$(EXE) ../ExportPCM/ExportPCM_NoCodecDef.aaf && test -f raw.pcm

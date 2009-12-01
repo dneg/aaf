@@ -43,3 +43,5 @@ check : $(AAFSDKBINDIR)/ImportJPEG$(EXE)
 	@for f in 2_1 3_1 10_1 20_1 15_1 ; do if [ -r ../ExportJPEG/sdlake_uyvy_ntsc_$$f.aaf ] ; then $(TEST_CMD) -d ../ExportJPEG/sdlake_uyvy_ntsc_$$f.aaf || exit $$? ; $(TEST_CMD) ../ExportJPEG/sdlake_uyvy_ntsc_$$f.aaf || exit $$? ; fi ; done
 	@for f in 2_1 3_1 10_1 20_1 15_1 ; do if [ -r ../ExportJPEG/colorbars_$$f.aaf ] ; then $(TEST_CMD) -d ../ExportJPEG/colorbars_$$f.aaf || exit $$? ; $(TEST_CMD) ../ExportJPEG/colorbars_$$f.aaf || exit $$? ; fi ; done
 	@for f in 2_1 3_1 10_1 20_1 15_1 ; do if [ -r ../ExportJPEG/colorbars_ntsc_$$f.aaf ] ; then $(TEST_CMD) -d ../ExportJPEG/colorbars_ntsc_$$f.aaf || exit $$? ; $(TEST_CMD) ../ExportJPEG/colorbars_ntsc_$$f.aaf || exit $$? ; fi ; done
+	$(TEST_CMD) -d ../ExportJPEG/ExportJPEG_NoCodecDef.aaf
+	$(TEST_CMD) ../ExportJPEG/ExportJPEG_NoCodecDef.aaf

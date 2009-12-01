@@ -81,6 +81,7 @@ endif
 	SMPTE_D10_525x5994I_40Mbps \
 	SMPTE_D10_625x50I_30Mbps \
 	SMPTE_D10_525x5994I_30Mbps \
-	NoCompression ; do \
+	NoCompression \
+	NoCodecDef ; do \
 	  rm -f raw.cdci; if [ ! -r ../ExportDV/ExportDV_$$f.aaf ] ; then continue; fi; echo $(TEST_CMD) ../ExportDV/ExportDV_$$f.aaf; $(TEST_CMD) ../ExportDV/ExportDV_$$f.aaf || exit 1; \
 	done
