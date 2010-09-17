@@ -77,12 +77,12 @@ CCVERSION = $(shell g++ -dumpversion)
 #------------------------------------------------------------------------------
 # Debug info generation
 #------------------------------------------------------------------------------
-DBG_FLAGS = -g -Wall -Wundef -Wno-non-virtual-dtor -Werror
+DBG_FLAGS = -g -Wall -Wundef -Wno-non-virtual-dtor -Werror -Wno-reorder -Wno-unused
 
 #------------------------------------------------------------------------------
 # Optimisation flags when building a Release
 #------------------------------------------------------------------------------
-REL_FLAGS = -O2 -Wall -Wundef -Wno-non-virtual-dtor -Werror
+REL_FLAGS = -O2 -Wall -Wundef -Wno-non-virtual-dtor -Werror -Wno-reorder -Wno-unused
 
 # Turn off no-strict-aliasing warning as a workaround for g++ 4.1.x and above
 # "dereferencing type-punned pointer will break strict-aliasing rules" warnings.
