@@ -68,7 +68,7 @@ static bool AAFIsValidFile(const char *name)
    if (name == NULL)
       return false;
 
-   char *pExt = strrchr(name, '.');
+   const char *pExt = strrchr(name, '.');
 
    return (pExt && strcmp(++pExt, pluginExt) == 0);
 }
