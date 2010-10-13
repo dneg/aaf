@@ -647,7 +647,10 @@ void OMWeakReferenceProperty<Key, ReferencedObject>::shallowCopyTo(
   ASSERT("Valid destination", dest != this);
   ASSERT("Valid source", (_targetName != 0) || (_targetPropertyPath != 0));
 
+  Key id = identification();
+
   dest->_reference = _reference;
+  dest->_reference.setValue(&id, 0); // set reference unresolved
   dest->_targetTag = nullOMPropertyTag;
   dest->_targetName = _targetName;
   delete [] dest->_targetPropertyPath;
