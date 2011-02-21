@@ -356,12 +356,21 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ImportVC3", "examples\com-a
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ExportAS05Effects", "examples\com-api\ExportAS05Effects\ExportAS05Effects.vcproj", "{00180A3D-76DA-4941-8F47-0CC47A757902}"
+	ProjectSection(ProjectDependencies) = postProject
+		{08296C77-388B-42C6-BF97-B06B9796985A} = {08296C77-388B-42C6-BF97-B06B9796985A}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "mxfdump", "DevUtils\MXFDump\mxfdump.vcproj", "{997DBA7B-B607-46FB-A379-222C07AB982D}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "aafembed", "Utilities\aafembed\aafembed.vcproj", "{719D16ED-CAAD-46FE-B4D7-A78D75FF4B15}"
+	ProjectSection(ProjectDependencies) = postProject
+		{08296C77-388B-42C6-BF97-B06B9796985A} = {08296C77-388B-42C6-BF97-B06B9796985A}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "aaffmtconv", "Utilities\aaffmtconv\aaffmtconv.vcproj", "{F065E737-3746-46B3-BAE6-F2279CA650C4}"
+	ProjectSection(ProjectDependencies) = postProject
+		{08296C77-388B-42C6-BF97-B06B9796985A} = {08296C77-388B-42C6-BF97-B06B9796985A}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
