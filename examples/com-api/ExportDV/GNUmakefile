@@ -55,16 +55,16 @@ ifdef FFMPEG_PATH
 	DV_Based_25Mbps_525_60 \
 	DV_Based_50Mbps_625_50 \
 	DV_Based_50Mbps_525_60 \
-	DVbased_1080x50I_100Mbps \
-	DVbased_1080x5994I_100Mbps \
-	DVbased_720x50P_100Mbps \
-	DVbased_720x5994P_100Mbps \
-	SMPTE_D10_625x50I_50Mbps \
-	SMPTE_D10_525x5994I_50Mbps \
-	SMPTE_D10_625x50I_40Mbps \
-	SMPTE_D10_525x5994I_40Mbps \
-	SMPTE_D10_625x50I_30Mbps \
-	SMPTE_D10_525x5994I_30Mbps ; do \
+	DV_Based_100Mbps_720x50P \
+	DV_Based_100Mbps_720x5994P \
+	DV_Based_100Mbps_1080x50I \
+	DV_Based_100Mbps_1080x5994I \
+	SMPTE_D10_50Mbps_625x50I \
+	SMPTE_D10_50Mbps_525x5994I \
+	SMPTE_D10_40Mbps_625x50I \
+	SMPTE_D10_40Mbps_525x5994I \
+	SMPTE_D10_30Mbps_625x50I \
+	SMPTE_D10_30Mbps_525x5994I; do \
 	  rm -f $$f.aaf; echo $(TEST_CMD) -o ExportDV_$$f.aaf -f $$f; $(TEST_CMD) -o ExportDV_$$f.aaf -f $$f || exit 1; \
 	done
 endif
