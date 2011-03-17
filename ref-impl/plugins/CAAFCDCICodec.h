@@ -55,6 +55,10 @@ EXTERN_C const CLSID CLSID_AAFCDCICodec;
 
 #ifdef USE_FFMPEG
 
+#if !defined(UINT64_C)
+#define UINT64_C AAFCONSTUINT64
+#endif
+
 extern "C" {
 #include <libavcodec/avcodec.h>
 #include <libavformat/avformat.h>
