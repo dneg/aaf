@@ -1608,21 +1608,28 @@ HRESULT STDMETHODCALLTYPE CAAFCDCICodec::ReadSamples(
 			// could be used to avoid this copy, but it is undocumented.
 			int w = _decoder->codec_context->width;
 			int h = _decoder->codec_context->height;
-			int	colour_width = (params->vidFormat == YUV422) ? w / 2 : w / 4;
+			int	colour_w = (params->vidFormat == YUV411) ? w / 4 : w / 2;
+			int	colour_h = (params->vidFormat == YUV420) ? h / 2 : h;
 			unsigned char *dest_y = buffer;
 			unsigned char *dest_u = buffer + w * h;
-			unsigned char *dest_v = buffer + w * h + colour_width * h;
+			unsigned char *dest_v = buffer + w * h + colour_w * colour_h;
+			unsigned char *src_y = _decoder->outputFrame->data[0];
+			unsigned char *src_u = _decoder->outputFrame->data[1];
+			unsigned char *src_v = _decoder->outputFrame->data[2];
 			for (int j = 0; j < h; j++) {
-				unsigned char *y = _decoder->outputFrame->data[0] + j * _decoder->outputFrame->linesize[0];
-				unsigned char *u = _decoder->outputFrame->data[1] + j * _decoder->outputFrame->linesize[1];
-				unsigned char *v = _decoder->outputFrame->data[2] + j * _decoder->outputFrame->linesize[2];
-				
-				memcpy(dest_y, y, w);
+				memcpy(dest_y, src_y, w);
 				dest_y += w;
-				memcpy(dest_u, u, colour_width);
-				dest_u += colour_width;
-				memcpy(dest_v, v, colour_width);
-				dest_v += colour_width;
+				src_y += _decoder->outputFrame->linesize[0];
+
+				if (params->vidFormat != YUV420 || j % 2 == 0)
+				{
+					memcpy(dest_u, src_u, colour_w);
+					dest_u += colour_w;
+					src_u += _decoder->outputFrame->linesize[1];
+					memcpy(dest_v, src_v, colour_w);
+					dest_v += colour_w;
+					src_v += _decoder->outputFrame->linesize[2];
+				}
 			}
 
 			buffer += _apiFrameSampleSize;
