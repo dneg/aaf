@@ -115,9 +115,9 @@ endif
 # For GNU/Linux the UUID library is provided by e2fsprogs-devel (.rpm based systems)
 # or uuid-dev (.deb based systems).
 ifndef UUIDLIB
-    UUIDLIB_PATH := $(shell for f in /usr/local/lib /usr/lib /lib /usr/lib64 /lib64; do test -e $$f/libuuid.a && echo $$f && break; done)
+    UUIDLIB_PATH := $(shell for f in /usr/local/lib /usr/lib /lib /usr/lib64 /lib64; do test -e $$f/libuuid.a -o -e $$f/libuuid.so && echo $$f && break; done)
     ifeq "$(UUIDLIB_PATH)" ""
-        $(error Required library libuuid.a not found - install e2fsprogs-devel .rpm or uuid-dev .deb)
+        $(error Required library libuuid.a or libuuid.so not found - install e2fsprogs-devel .rpm or uuid-dev .deb)
     endif
 
     UUIDLIB = -luuid
