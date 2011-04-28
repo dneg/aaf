@@ -1,4 +1,4 @@
-                        AAF SDK version 1.1.3 Release
+                        AAF SDK version 1.1.4 Release
                          http://aaf.sourceforge.net/
 
 Getting Started
@@ -25,6 +25,9 @@ Getting Started
 
     - For MacOS X, you can optionally build universal binaries using
 	    make AAFPLATFORM=UniversalDarwin <target>
+
+    - For MacOS X 10.6 64 bit, you can only build 32 bit binaries using
+	    make AAFPLATFORM=i386Darwin <target>
 
     - To build a release version (instead of the default debug version)
         make AAFTARGET=Release <target>
