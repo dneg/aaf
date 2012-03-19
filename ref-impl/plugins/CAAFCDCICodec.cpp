@@ -163,29 +163,30 @@ typedef struct {
 	int storedSize;
 	int storedWidth;
 	int storedHeight;
+	int yOffset;
 } FlavourParameters_t;
 
 const FlavourParameters_t FlavourParams[] = {
-	{kAAFCodecFlavour_LegacyDV_625_50, kAAFCompressionDef_LegacyDV, L"AAF CDCI Codec (LegacyDV 625 lines 50Hz)", YUV420, 25, codecDV, MixedFields, 720, 576, 144000, 720, 576},
-	{kAAFCodecFlavour_LegacyDV_525_60, kAAFCompressionDef_LegacyDV, L"AAF CDCI Codec (LegacyDV 525 lines 60Hz)", YUV411, 30, codecDV, MixedFields, 720, 480, 120000, 720, 480},
-	{kAAFCodecFlavour_IEC_DV_625_50, kAAFCompressionDef_IEC_DV_625_50, L"AAF CDCI Codec (IEC DV 625 lines 50Hz)", YUV420, 25, codecDV, SepFields, 720, 576, 144000, 720, 576},
-	{kAAFCodecFlavour_IEC_DV_525_60, kAAFCompressionDef_IEC_DV_525_60, L"AAF CDCI Codec (IEC DV 525 lines 60Hz)", YUV411, 30, codecDV, SepFields, 720, 480, 120000, 720, 480},
-	{kAAFCodecFlavour_DV_Based_25Mbps_625_50, kAAFCompressionDef_DV_Based_25Mbps_625_50, L"AAF CDCI Codec (DV-Based 25 Mbps 525 lines 60Hz)", YUV411, 25, codecDV, SepFields, 720, 576, 144000, 720, 576},
-	{kAAFCodecFlavour_DV_Based_25Mbps_525_60, kAAFCompressionDef_DV_Based_25Mbps_525_60, L"AAF CDCI Codec (DV-Based 25 Mbps 625 lines 50Hz)", YUV411, 30, codecDV, SepFields, 720, 480, 120000, 720, 480},
-	{kAAFCodecFlavour_DV_Based_50Mbps_625_50, kAAFCompressionDef_DV_Based_50Mbps_625_50, L"AAF CDCI Codec (DV-Based 50 Mbps 525 lines 60Hz)", YUV422, 25, codecDV, SepFields, 720, 576, 288000, 720, 576},
-	{kAAFCodecFlavour_DV_Based_50Mbps_525_60, kAAFCompressionDef_DV_Based_50Mbps_525_60, L"AAF CDCI Codec (DV-Based 50 Mbps 625 lines 50Hz)", YUV422, 30, codecDV, SepFields, 720, 480, 240000, 720, 480},
+	{kAAFCodecFlavour_LegacyDV_625_50, kAAFCompressionDef_LegacyDV, L"AAF CDCI Codec (LegacyDV 625 lines 50Hz)", YUV420, 25, codecDV, MixedFields, 720, 576, 144000, 720, 576, 0},
+	{kAAFCodecFlavour_LegacyDV_525_60, kAAFCompressionDef_LegacyDV, L"AAF CDCI Codec (LegacyDV 525 lines 60Hz)", YUV411, 30, codecDV, MixedFields, 720, 480, 120000, 720, 480, 0},
+	{kAAFCodecFlavour_IEC_DV_625_50, kAAFCompressionDef_IEC_DV_625_50, L"AAF CDCI Codec (IEC DV 625 lines 50Hz)", YUV420, 25, codecDV, SepFields, 720, 576, 144000, 720, 576, 0},
+	{kAAFCodecFlavour_IEC_DV_525_60, kAAFCompressionDef_IEC_DV_525_60, L"AAF CDCI Codec (IEC DV 525 lines 60Hz)", YUV411, 30, codecDV, SepFields, 720, 480, 120000, 720, 480, 0},
+	{kAAFCodecFlavour_DV_Based_25Mbps_625_50, kAAFCompressionDef_DV_Based_25Mbps_625_50, L"AAF CDCI Codec (DV-Based 25 Mbps 525 lines 60Hz)", YUV411, 25, codecDV, SepFields, 720, 576, 144000, 720, 576, 0},
+	{kAAFCodecFlavour_DV_Based_25Mbps_525_60, kAAFCompressionDef_DV_Based_25Mbps_525_60, L"AAF CDCI Codec (DV-Based 25 Mbps 625 lines 50Hz)", YUV411, 30, codecDV, SepFields, 720, 480, 120000, 720, 480, 0},
+	{kAAFCodecFlavour_DV_Based_50Mbps_625_50, kAAFCompressionDef_DV_Based_50Mbps_625_50, L"AAF CDCI Codec (DV-Based 50 Mbps 525 lines 60Hz)", YUV422, 25, codecDV, SepFields, 720, 576, 288000, 720, 576, 0},
+	{kAAFCodecFlavour_DV_Based_50Mbps_525_60, kAAFCompressionDef_DV_Based_50Mbps_525_60, L"AAF CDCI Codec (DV-Based 50 Mbps 625 lines 50Hz)", YUV422, 30, codecDV, SepFields, 720, 480, 240000, 720, 480, 0},
 
-	{kAAFCodecFlavour_SMPTE_D10_50Mbps_625x50I, kAAFCompressionDef_SMPTE_D10_50Mbps_625x50I, L"AAF CDCI Codec (SMPTE D10 50Mbps 625x50I)", YUV422, 25, codecMPEG, SepFields, 720, 576, 250000, 720, 608},
-	{kAAFCodecFlavour_SMPTE_D10_50Mbps_525x5994I, kAAFCompressionDef_SMPTE_D10_50Mbps_525x5994I, L"AAF CDCI Codec (SMPTE D10 50Mbps 525x5994I)", YUV422, 30, codecMPEG, SepFields, 720, 480, 208541, 720, 512},
-	{kAAFCodecFlavour_SMPTE_D10_40Mbps_625x50I, kAAFCompressionDef_SMPTE_D10_40Mbps_625x50I, L"AAF CDCI Codec (SMPTE D10 40Mbps 625x50I)", YUV422, 25, codecMPEG, SepFields, 720, 576, 200000, 720, 608},
-	{kAAFCodecFlavour_SMPTE_D10_40Mbps_525x5994I, kAAFCompressionDef_SMPTE_D10_40Mbps_525x5994I, L"AAF CDCI Codec (SMPTE D10 40Mbps 525x5994I)", YUV422, 30, codecMPEG, SepFields, 720, 480, 166833, 720, 512},
-	{kAAFCodecFlavour_SMPTE_D10_30Mbps_625x50I, kAAFCompressionDef_SMPTE_D10_30Mbps_625x50I, L"AAF CDCI Codec (SMPTE D10 30Mbps 625x50I)", YUV422, 25, codecMPEG, SepFields, 720, 576, 150000, 720, 608},
-	{kAAFCodecFlavour_SMPTE_D10_30Mbps_525x5994I, kAAFCompressionDef_SMPTE_D10_30Mbps_525x5994I, L"AAF CDCI Codec (SMPTE D10 30Mbps 525x5994I)", YUV422, 30, codecMPEG, SepFields, 720, 480, 125125, 720, 512},
+	{kAAFCodecFlavour_SMPTE_D10_50Mbps_625x50I, kAAFCompressionDef_SMPTE_D10_50Mbps_625x50I, L"AAF CDCI Codec (SMPTE D10 50Mbps 625x50I)", YUV422, 25, codecMPEG, SepFields, 720, 576, 250000, 720, 608, 32},
+	{kAAFCodecFlavour_SMPTE_D10_50Mbps_525x5994I, kAAFCompressionDef_SMPTE_D10_50Mbps_525x5994I, L"AAF CDCI Codec (SMPTE D10 50Mbps 525x5994I)", YUV422, 30, codecMPEG, SepFields, 720, 480, 208541, 720, 512, 26},
+	{kAAFCodecFlavour_SMPTE_D10_40Mbps_625x50I, kAAFCompressionDef_SMPTE_D10_40Mbps_625x50I, L"AAF CDCI Codec (SMPTE D10 40Mbps 625x50I)", YUV422, 25, codecMPEG, SepFields, 720, 576, 200000, 720, 608, 32},
+	{kAAFCodecFlavour_SMPTE_D10_40Mbps_525x5994I, kAAFCompressionDef_SMPTE_D10_40Mbps_525x5994I, L"AAF CDCI Codec (SMPTE D10 40Mbps 525x5994I)", YUV422, 30, codecMPEG, SepFields, 720, 480, 166833, 720, 512, 26},
+	{kAAFCodecFlavour_SMPTE_D10_30Mbps_625x50I, kAAFCompressionDef_SMPTE_D10_30Mbps_625x50I, L"AAF CDCI Codec (SMPTE D10 30Mbps 625x50I)", YUV422, 25, codecMPEG, SepFields, 720, 576, 150000, 720, 608, 32},
+	{kAAFCodecFlavour_SMPTE_D10_30Mbps_525x5994I, kAAFCompressionDef_SMPTE_D10_30Mbps_525x5994I, L"AAF CDCI Codec (SMPTE D10 30Mbps 525x5994I)", YUV422, 30, codecMPEG, SepFields, 720, 480, 125125, 720, 512, 26},
 
-	{kAAFCodecFlavour_DV_Based_100Mbps_1080x50I, kAAFCompressionDef_DV_Based_100Mbps_1080x50I, L"AAF CDCI Codec (DV-Based 100Mbps 1080x50I)", YUV422, 25, codecDV, SepFields, 1920, 1080, 576000, 1440, 1080},
-	{kAAFCodecFlavour_DV_Based_100Mbps_1080x5994I, kAAFCompressionDef_DV_Based_100Mbps_1080x5994I, L"AAF CDCI Codec (DV-Based 100Mbps 1080x5994I)", YUV422, 30, codecDV, SepFields, 1920, 1080, 480000, 1280, 1080},
-	{kAAFCodecFlavour_DV_Based_100Mbps_720x50P, kAAFCompressionDef_DV_Based_100Mbps_720x50P, L"AAF CDCI Codec (DV-Based 100Mbps 720x50P)", YUV422, 50, codecDV, FullFrame, 1280, 720, 288000, 960, 720},
-	{kAAFCodecFlavour_DV_Based_100Mbps_720x5994P, kAAFCompressionDef_DV_Based_100Mbps_720x5994P, L"AAF CDCI Codec (DV-Based 100Mbps 720x5994P)", YUV422, 60, codecDV, FullFrame, 1280, 720, 240000, 960, 720},
+	{kAAFCodecFlavour_DV_Based_100Mbps_1080x50I, kAAFCompressionDef_DV_Based_100Mbps_1080x50I, L"AAF CDCI Codec (DV-Based 100Mbps 1080x50I)", YUV422, 25, codecDV, SepFields, 1920, 1080, 576000, 1440, 1080, 0},
+	{kAAFCodecFlavour_DV_Based_100Mbps_1080x5994I, kAAFCompressionDef_DV_Based_100Mbps_1080x5994I, L"AAF CDCI Codec (DV-Based 100Mbps 1080x5994I)", YUV422, 30, codecDV, SepFields, 1920, 1080, 480000, 1280, 1080, 0},
+	{kAAFCodecFlavour_DV_Based_100Mbps_720x50P, kAAFCompressionDef_DV_Based_100Mbps_720x50P, L"AAF CDCI Codec (DV-Based 100Mbps 720x50P)", YUV422, 50, codecDV, FullFrame, 1280, 720, 288000, 960, 720, 0},
+	{kAAFCodecFlavour_DV_Based_100Mbps_720x5994P, kAAFCompressionDef_DV_Based_100Mbps_720x5994P, L"AAF CDCI Codec (DV-Based 100Mbps 720x5994P)", YUV422, 60, codecDV, FullFrame, 1280, 720, 240000, 960, 720, 0},
 };
 
 static const FlavourParameters_t* lookupFlavourParams(aafUID_constref flavour)
@@ -1606,8 +1607,20 @@ HRESULT STDMETHODCALLTYPE CAAFCDCICodec::ReadSamples(
 			// Copy the AVFrame uncompressed video data into a contiguous video frame
 			// at the supplied buffer address.  Ideally AVCodecContext's get_buffer(),
 			// could be used to avoid this copy, but it is undocumented.
-			int w = _decoder->codec_context->width;
-			int h = _decoder->codec_context->height;
+			int w, h;
+			if (params->codecFamily == codecMPEG)
+			{
+				// IMX formats store extra 32/26 lines but the API uses displayed size
+				w = params->width;
+				h = params->height;
+			}
+			else
+			{
+				// All other formats have API size same as stored size
+				w = params->storedWidth;
+				h = params->storedHeight;
+			}
+			checkAssertion(w <= _decoder->codec_context->width && h <= _decoder->codec_context->height);
 			int	colour_w = (params->vidFormat == YUV411) ? w / 4 : w / 2;
 			int	colour_h = (params->vidFormat == YUV420) ? h / 2 : h;
 			unsigned char *dest_y = buffer;
@@ -1616,6 +1629,21 @@ HRESULT STDMETHODCALLTYPE CAAFCDCICodec::ReadSamples(
 			unsigned char *src_y = _decoder->outputFrame->data[0];
 			unsigned char *src_u = _decoder->outputFrame->data[1];
 			unsigned char *src_v = _decoder->outputFrame->data[2];
+			if (params->yOffset > 0 &&
+			    _decoder->codec_context->height >= h + params->yOffset)
+			{
+				src_y += params->yOffset * _decoder->outputFrame->linesize[0];
+				if (params->vidFormat == YUV420)
+				{
+					src_u += params->yOffset / 2 * _decoder->outputFrame->linesize[1];
+					src_v += params->yOffset / 2 * _decoder->outputFrame->linesize[2];
+				}
+				else
+				{
+					src_u += params->yOffset * _decoder->outputFrame->linesize[1];
+					src_v += params->yOffset * _decoder->outputFrame->linesize[2];
+				}
+			}
 			for (int j = 0; j < h; j++) {
 				memcpy(dest_y, src_y, w);
 				dest_y += w;
