@@ -1,7 +1,7 @@
 AAF SDK v1.1.4
 ==============
 
-2011-04-28
+2012-03-19
 
 This SDK is the reference implementation of the Advanced
 Authoring Format (AAF) version 1.1. See doc/aafeditprotocol.pdf,
@@ -421,6 +421,11 @@ Compatibility with earlier releases
 
 Notes
 -----
+
+- The optional codec functionality using the ffmpeg library has been
+  tested with the following version from the ffmpeg git repository:
+    commit 969eb21ba21f0ed7154dd2a2fc754ef159df94a2
+    date: Mon Mar 14 22:14:23 2011 -0700
 
 - To create 4kB sector AAF files use any of the following interfaces.
   When embedding large amounts of essence in an AAF file (e.g. 10 minutes of
