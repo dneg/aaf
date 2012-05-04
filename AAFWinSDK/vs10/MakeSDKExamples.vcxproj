@@ -1,0 +1,201 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{4E04FADE-804E-4DE4-AD31-370DE130092A}</ProjectGuid>
+    <Keyword>MakeFileProj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="AAFReleaseAndDebug.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="AAFReleaseAndDebug.props" />
+    <Import Project="AAFRelease.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.40219.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(Configuration)\</IntDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Midl>
+      <TypeLibraryName>.\Release/MakeSDKExamples.tlb</TypeLibraryName>
+      <HeaderFileName>
+      </HeaderFileName>
+    </Midl>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Midl>
+      <TypeLibraryName>.\Debug/MakeSDKExamples.tlb</TypeLibraryName>
+      <HeaderFileName>
+      </HeaderFileName>
+    </Midl>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ProjectReference Include="examples\com-api\ComAAFInfo\ComAAFInfo.vcxproj">
+      <Project>{3d9893a5-c6f4-468d-8766-779cd5de3b4c}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="examples\com-api\ComClientTestAAF\ComClientTestAAF.vcxproj">
+      <Project>{aca89223-d224-41ad-b952-50eb8963a73b}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="examples\com-api\ComCutsTestAAF\ComCutsTestAAF.vcxproj">
+      <Project>{3deae0d4-226f-4980-b035-7f821d329590}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="examples\com-api\ComEssenceDataTest\ComEssenceDataTest.vcxproj">
+      <Project>{4fc5990f-065c-4628-bb12-5826dc3da3cf}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="examples\com-api\ComExtension\ComExtensionRead.vcxproj">
+      <Project>{c156a0c3-6cc3-4573-9f76-da9589566cc7}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="examples\com-api\ComExtension\ComExtensionWrite.vcxproj">
+      <Project>{31aeb5ae-f4d6-448c-9d2d-8f252613bf38}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="examples\com-api\ComPersonnelExtension\ComPersonnelExtension.vcxproj">
+      <Project>{f86c18c8-10a8-487b-bee4-722669dfda91}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="examples\com-api\ComPersonnelExtension\ComPersonnelPluginWrite.vcxproj">
+      <Project>{d96ca683-9e8a-44d1-8e80-d0b89b02508a}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="examples\com-api\ComPropDirectAccess\ComPropDirectAccess.vcxproj">
+      <Project>{5d3c6921-3b34-4da0-b32e-70bc99df29ea}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="examples\com-api\ComPropDirectDump\ComPropDirectDump.vcxproj">
+      <Project>{21ffba4c-a88f-41c5-bd1a-6e57d920bfb3}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="examples\com-api\ExportAS05Effects\ExportAS05Effects.vcxproj">
+      <Project>{00180a3d-76da-4941-8f47-0cc47a757902}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="examples\com-api\ExportAudioExample\ExportAudioExample.vcxproj">
+      <Project>{77152584-6056-41f5-9e7e-f4b9bd54baa6}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="examples\com-api\ExportDV\ExportDV.vcxproj">
+      <Project>{8d1d943b-3af0-489d-8795-3a274a9e5af2}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="examples\com-api\ExportJPEG\ExportJPEG.vcxproj">
+      <Project>{2d0d8c0f-c378-45d1-be6f-7c58db5b076a}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="examples\com-api\ExportPCM\ExportPCM.vcxproj">
+      <Project>{17337e7b-ced4-478e-90a7-8868eb1b4ef6}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="examples\com-api\ExportSimpleComposition\ExportSimpleComposition.vcxproj">
+      <Project>{dade6468-05e9-4d5f-abaa-e3585a70b7c5}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="examples\com-api\ImportAudioExample\ImportAudioExample.vcxproj">
+      <Project>{c04c6e3d-3e09-492d-8577-2bef55810c5a}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="examples\com-api\ImportDV\ImportDV.vcxproj">
+      <Project>{f2197337-aba4-4613-9611-f9469e5eafae}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="examples\com-api\ImportJPEG\ImportJPEG.vcxproj">
+      <Project>{52717538-1202-456b-87f9-46221b1422a8}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="examples\com-api\ImportPCM\ImportPCM.vcxproj">
+      <Project>{6c9e0b31-e16d-46a5-b590-55e314441a8f}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="examples\com-api\InfoDumper\InfoDumper.vcxproj">
+      <Project>{b58e49ce-6203-4c99-9c81-a0d8e942e3f7}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="MakeSDK.vcxproj">
+      <Project>{08296c77-388b-42c6-bf97-b06b9796985a}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="ref-impl\AAFBasicInterpolators\AAFBasicInterpolators.vcxproj">
+      <Project>{e85c65ac-7fc0-454e-ad56-2240f880f617}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="ref-impl\AAFStandardCodecs\AAFStandardCodecs.vcxproj">
+      <Project>{027cc7b6-ef01-46e3-8830-932dbcfea9e3}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="Test\com\ComFileKindTest\ComFileKindTest.vcxproj">
+      <Project>{d060526e-51c4-45ff-8dd5-dc71508ef274}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="Test\com\ComModTestAAF\ComModTestAAF.vcxproj">
+      <Project>{28eabd72-1ce1-49ee-8591-29d42cf8321d}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="Test\com\CreateSequence\CreateSequence.vcxproj">
+      <Project>{311e0d0b-5f0c-4f0c-9018-9f9cf2424eb3}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="Test\com\EssenceAccess\EssenceAccess.vcxproj">
+      <Project>{f129d652-882b-4bbe-ae6c-1547e36ee53b}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="Test\com\MultiGenTest\MultiGenTest.vcxproj">
+      <Project>{9d603d1f-09a9-433e-9655-cda81ba77222}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="Test\com\OpenExistingModify\OpenExistingModify.vcxproj">
+      <Project>{7a45af9e-e20e-4f22-b45b-eb5e10e93612}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="Test\com\ResultToTextTest\ResultToTextTest.vcxproj">
+      <Project>{ee337afa-135c-4f49-abff-fc2f8fb424a2}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="Test\com\ScaleTest\ScaleTest.vcxproj">
+      <Project>{fe214977-76f6-4cf8-9365-8ddf4185cac1}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="Test\com\UTF8FileNameTest\UTF8FileNameTest.vcxproj">
+      <Project>{1b728387-be7e-4536-959b-107c9c7c8be0}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="Test\com\XMLStoredFormat\XMLStoredFormat.vcxproj">
+      <Project>{3367dc7a-7520-42d2-9734-38265b43e525}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

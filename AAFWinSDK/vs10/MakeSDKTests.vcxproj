@@ -1,0 +1,105 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{456880A4-3576-428D-A208-4AC77736691F}</ProjectGuid>
+    <RootNamespace>MakeSDKTests</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(Configuration)\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>$(Configuration)\</OutDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ProjectReference Include="MakeSDK.vcxproj">
+      <Project>{08296c77-388b-42c6-bf97-b06b9796985a}</Project>
+    </ProjectReference>
+    <ProjectReference Include="Test\com\ComFileKindTest\ComFileKindTest.vcxproj">
+      <Project>{d060526e-51c4-45ff-8dd5-dc71508ef274}</Project>
+    </ProjectReference>
+    <ProjectReference Include="Test\com\ComModTestAAF\ComModTestAAF.vcxproj">
+      <Project>{28eabd72-1ce1-49ee-8591-29d42cf8321d}</Project>
+    </ProjectReference>
+    <ProjectReference Include="Test\com\CreateSequence\CreateSequence.vcxproj">
+      <Project>{311e0d0b-5f0c-4f0c-9018-9f9cf2424eb3}</Project>
+    </ProjectReference>
+    <ProjectReference Include="Test\com\EssenceAccess\EssenceAccess.vcxproj">
+      <Project>{f129d652-882b-4bbe-ae6c-1547e36ee53b}</Project>
+    </ProjectReference>
+    <ProjectReference Include="Test\com\MetaModelVerification\MetaModelVerification.vcxproj">
+      <Project>{a6218883-57b0-4346-8e96-0f679d6dc2ca}</Project>
+    </ProjectReference>
+    <ProjectReference Include="Test\com\MultiGenTest\MultiGenTest.vcxproj">
+      <Project>{9d603d1f-09a9-433e-9655-cda81ba77222}</Project>
+    </ProjectReference>
+    <ProjectReference Include="Test\com\OpenExistingModify\OpenExistingModify.vcxproj">
+      <Project>{7a45af9e-e20e-4f22-b45b-eb5e10e93612}</Project>
+    </ProjectReference>
+    <ProjectReference Include="Test\com\ResultToTextTest\ResultToTextTest.vcxproj">
+      <Project>{ee337afa-135c-4f49-abff-fc2f8fb424a2}</Project>
+    </ProjectReference>
+    <ProjectReference Include="Test\com\ScaleTest\ScaleTest.vcxproj">
+      <Project>{fe214977-76f6-4cf8-9365-8ddf4185cac1}</Project>
+    </ProjectReference>
+    <ProjectReference Include="Test\com\UTF8FileNameTest\UTF8FileNameTest.vcxproj">
+      <Project>{1b728387-be7e-4536-959b-107c9c7c8be0}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
