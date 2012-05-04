@@ -824,9 +824,10 @@ mxfUInt32 runInLimit = 64 * 1024;
 bool hFlag = false;
 
 #if defined(MXF_OS_WINDOWS)
+
 mxfFile openExistingRead(char* fileName)
 {
-  HANDLE result = CreateFile(fileName,
+  HANDLE result = CreateFileA(fileName,
                              GENERIC_READ,
                              FILE_SHARE_READ | FILE_SHARE_WRITE,
                              0,

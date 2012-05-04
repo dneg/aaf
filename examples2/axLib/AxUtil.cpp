@@ -147,7 +147,7 @@ std::pair<bool,int> AxCmdLineArgs::get( const char* opt, int i )
 
 std::pair<bool,const char*> AxCmdLineArgs::get( int n, int m )
 {
-	std::pair<bool,const char*> result(false,0);
+	std::pair<bool,const char*> result(false,reinterpret_cast<const char *>(0));
 
 	if ( m <= n  &&  n < _argc ) {
 		result.first = true;
