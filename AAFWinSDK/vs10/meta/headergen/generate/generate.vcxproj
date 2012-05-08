@@ -74,9 +74,6 @@
       <Project>{5d0d139b-7884-4b19-915b-e726d76c0983}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
-    <ProjectReference Include="..\genASPAIDs\genASPAIDs.vcxproj">
-      <Project>{f68d2423-d286-4970-868b-3b4a2921c4c7}</Project>
-    </ProjectReference>
     <ProjectReference Include="..\genDefInstances\genDefInstances.vcxproj">
       <Project>{efdcf3ed-05d3-4bf4-a22e-d13958afec6f}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>

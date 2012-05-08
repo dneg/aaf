@@ -25,8 +25,7 @@ PROGS=$(META_BIN)\classDefUid$(EXE) \
       $(META_BIN)\propertyId$(EXE) \
       $(META_BIN)\storedObjectUid$(EXE) \
       $(META_BIN)\typeDefUid$(EXE) \
-      $(META_BIN)\genDefInstances$(EXE) \
-      $(META_BIN)\genASPAIDs$(EXE)
+      $(META_BIN)\genDefInstances$(EXE)
 
 # main build target
 all :   $(GEN_H_DIR) \
@@ -46,14 +45,10 @@ all :   $(GEN_H_DIR) \
 		$(GEN_H_DIR)\AAFTaggedValueDefs.h \
 		$(GEN_H_DIR)\AAFPluginDefs.h \
 		$(GEN_H_DIR)\AAFCodecDefs.h \
-		$(GEN_H_DIR)\AAFCompressionDefs.h \
-		$(GEN_H_DIR)\genASPAIDs.cpp \
-		$(GEN_H_DIR)\genASPAIDs.h
-
-
+		$(GEN_H_DIR)\AAFCompressionDefs.h
 
 $(GEN_H_DIR) :
-	mkdir $(GEN_H_DIR)
+	IF exist $(GEN_H_DIR) (echo headergen include directory $(GEN_H_DIR) exists) ELSE (mkdir $(GEN_H_DIR) && echo headergen include directory $(GEN_H_DIR) created)
 
 #
 # targets for generated source files
@@ -116,17 +111,7 @@ $(GEN_H_DIR)\AAFCodecDefs.h : $(META_BIN)\genDefInstances$(EXE)
 	$(META_BIN)\genDefInstances$(EXE) CodecDefinition kAAF > $(GEN_H_DIR)\AAFCodecDefs.h
 
 $(GEN_H_DIR)\AAFCompressionDefs.h : $(META_BIN)\genDefInstances$(EXE)
-	$(META_BIN)\genDefInstances$(EXE) CompressionDefinition kAAF > $(GEN_H_DIR)\AAFCompressionDefs.h
-
-
+	$(META_BIN)\genDefInstances$(EXE) CompressionDefinition kAAF > $(GEN_H_DIR)\AAFCompressionDefs.h	
 	
-$(GEN_H_DIR)\genASPAIDs.cpp : $(META_BIN)\genASPAIDs$(EXE)
-	$(META_BIN)\genASPAIDs$(EXE) -cpp ASPA kASPA > $(GEN_H_DIR)\genASPAIDs.cpp
-	
-$(GEN_H_DIR)\genASPAIDs.h : $(META_BIN)\genASPAIDs$(EXE)
-	$(META_BIN)\genASPAIDs$(EXE) -h ASPA kASPA > $(GEN_H_DIR)\genASPAIDs.h
-	
-	
-
 # Clean target doesn't do anything yet
 clean:
