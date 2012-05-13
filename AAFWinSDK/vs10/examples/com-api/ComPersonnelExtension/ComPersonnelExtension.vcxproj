@@ -119,7 +119,7 @@
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention>
       </DataExecutionPrevention>
-      <ImportLibrary>.\Release/AAFPersonnelExtension.lib</ImportLibrary>
+      <ImportLibrary>$(Platform)\$(Configuration)\AAFPersonnelExtension.lib</ImportLibrary>
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
   </ItemDefinitionGroup>
@@ -158,7 +158,7 @@
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention>
       </DataExecutionPrevention>
-      <ImportLibrary>.\Release/AAFPersonnelExtension.lib</ImportLibrary>
+      <ImportLibrary>$(Platform)\$(Configuration)\AAFPersonnelExtension.lib</ImportLibrary>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -197,7 +197,7 @@
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention>
       </DataExecutionPrevention>
-      <ImportLibrary>.\Debug/AAFPersonnelExtension.lib</ImportLibrary>
+      <ImportLibrary>$(Platform)\$(Configuration)\AAFPersonnelExtension.lib</ImportLibrary>
       <TargetMachine>MachineX86</TargetMachine>
     </Link>
   </ItemDefinitionGroup>
@@ -236,7 +236,7 @@
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention>
       </DataExecutionPrevention>
-      <ImportLibrary>.\Debug/AAFPersonnelExtension.lib</ImportLibrary>
+      <ImportLibrary>$(Platform)\$(Configuration)\AAFPersonnelExtension.lib</ImportLibrary>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
