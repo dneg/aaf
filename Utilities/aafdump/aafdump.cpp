@@ -1409,7 +1409,7 @@ size_t sizeOfStream(IStream* stream, const char* streamName)
   unsigned long int streamBytes = statstg.cbSize.LowPart;
   if (statstg.cbSize.HighPart != 0) {
     warning("sizeOfStream", "Large streams not handled.");
-    streamBytes = (size_t)-1;
+    streamBytes = (unsigned long int)-1;
   }
   return streamBytes;
 }
@@ -1453,7 +1453,7 @@ void printStat(STATSTG* statstg, const char* tag)
     unsigned long int byteCount = statstg->cbSize.LowPart;
     if (statstg->cbSize.HighPart != 0) {
       warning("printStat", "Large streams not handled.");
-      byteCount = (size_t)-1;
+      byteCount = (unsigned long int)-1;
     }
 
     indent(6);
@@ -1510,7 +1510,7 @@ void dumpStream(IStream* stream, STATSTG* statstg, char* pathName)
   unsigned long int byteCount = statstg->cbSize.LowPart;
   if (statstg->cbSize.HighPart != 0) {
     warning("dumpStream", "Large streams not handled.");
-    byteCount = (size_t)-1;
+    byteCount = (unsigned long int)-1;
   }
   totalStreamBytes = totalStreamBytes + byteCount;
 
@@ -3140,7 +3140,7 @@ void dumpDataStream(IStream* stream,
   unsigned long int streamBytes = statstg.cbSize.LowPart;
   if (statstg.cbSize.HighPart != 0) {
     warning("dumpDataStream", "Large streams not handled.");
-    streamBytes = (size_t)-1;
+    streamBytes = (unsigned long int)-1;
   }
   totalStreamBytes = totalStreamBytes + streamBytes;
   totalPropertyBytes = totalPropertyBytes + streamBytes;
