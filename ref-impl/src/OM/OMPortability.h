@@ -59,6 +59,9 @@
 #elif defined(__GNUC__) && defined(__i386__) && defined(__APPLE__)
 #define OM_COMPILER_GCC_INTEL_MACOSX
 #define OM_OS_UNIX
+#elif defined(__GNUC__) && defined(__x86_64__) && defined(__APPLE__)
+#define OM_COMPILER_GCC_X86_64_MACOSX
+#define OM_OS_UNIX
 #elif defined(__GNUC__) && defined(__mips__) && defined(__sgi__)
 #define OM_COMPILER_GCC_MIPS_SGI
 #define OM_OS_UNIX
