@@ -57,7 +57,7 @@ typedef unsigned long ssize_t;
 #define AAFCONSTUINT64(i)   (i##ULL)
 #endif
 
-#if defined(__x86_64__)
+#if defined(__x86_64__) && !defined(__APPLE__)
 #define PFi64 "ld"
 #define PFu64 "lu"
 #define PFx64 "lx"

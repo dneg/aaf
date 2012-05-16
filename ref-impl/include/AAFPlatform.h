@@ -397,6 +397,8 @@ typedef wchar_t			aafCharacter;
  */
 #if defined(_MSC_VER)
 #define AAFFMT64 "I64"
+#elif defined(__x86_64) && defined(__APPLE__)
+#define AAFFMT64 "ll"
 #elif defined(__x86_64__) || defined(__powerpc64__)
 #define AAFFMT64 "l"		// 64bit g++
 #else
