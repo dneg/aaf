@@ -2127,6 +2127,7 @@ int avi_parse_index_from_file(avi_t *AVI, char *filename)
     long line_count=0;
     char *c, d;
     int i,j;
+	char* rc;
 
     for (i=0; i<AVI_MAX_TRACKS; i++) aud_chunks[i] = 0;
     i=0;
@@ -2148,8 +2149,8 @@ int avi_parse_index_from_file(avi_t *AVI, char *filename)
     if (!(fd = fopen(filename, "rb"))) { perror ("avi_parse_index_from_file: fopen"); return -1; }
 
     // read header
-    char* rc = fgets(data, 100, fd);
-    (void)rc;
+    rc = fgets(data, 100, fd);
+	(void)rc;
 
     if ( strncasecmp(data, "AVIIDX1", 7) != 0) {
 	fprintf(stderr, "%s: Not an AVI index file\n", filename);
@@ -2158,8 +2159,9 @@ int avi_parse_index_from_file(avi_t *AVI, char *filename)
 
     // read comment
     rc = fgets(data, 100, fd);
-    (void)rc;
-    f_pos = ftell(fd);
+	(void)rc;
+
+	f_pos = ftell(fd);
     while (fgets(data, 100, fd)) {
 	d = data[5] - '1';
 	if        (d == 0) {
