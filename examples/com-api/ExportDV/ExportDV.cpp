@@ -489,7 +489,7 @@ extern int main(int argc, char *argv[])
 					printUsage(argv[0]);
 					return 1;
 				}
-				mbstowcs(pwFileName, argv[i+1], sizeof(pwFileName));
+				mbstowcs(pwFileName, argv[i+1], FILENAME_MAX);
 				i += 2;
 			}
 			else if (!strcmp(argv[i], "-f"))

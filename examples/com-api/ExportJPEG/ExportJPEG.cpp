@@ -267,7 +267,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, bool comp_enable)
 	else
 	{
 		aafWChar 		mob_name[FILENAME_MAX];
-		mbstowcs(mob_name, input_video, sizeof(mob_name));
+		mbstowcs(mob_name, input_video, sizeof(mob_name)/sizeof(mob_name[0]));
 		check(pMob->SetName(mob_name));
 	}
 
@@ -682,7 +682,7 @@ extern int main(int argc, char *argv[])
 					printUsage(argv[0]);
 					return 1;
 				}
-				mbstowcs(pwFileName, argv[i+1], sizeof(pwFileName));
+				mbstowcs(pwFileName, argv[i+1], sizeof(pwFileName)/sizeof(pwFileName[0]));
 				i += 2;
 			}
 			else if (!strcmp(argv[i], "-rawUYVY"))

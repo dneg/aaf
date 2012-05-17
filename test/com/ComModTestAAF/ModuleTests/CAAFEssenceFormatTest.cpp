@@ -160,8 +160,9 @@ static HRESULT CreateAAFFile(
 		if (pWavFile)
 		{
 			// read in the essence data
-			fread(dataBuff, sizeof(unsigned char), sizeof(dataBuff), pWavFile);
-			
+		        int rc = fread(dataBuff, sizeof(unsigned char), sizeof(dataBuff), pWavFile);
+			(void)rc;
+
 			// We have the data in memory so
 			// close essence data file
 			fclose(pWavFile);

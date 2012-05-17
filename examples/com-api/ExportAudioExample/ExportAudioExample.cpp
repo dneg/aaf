@@ -235,7 +235,8 @@ static HRESULT CreateAAFFile(const aafWChar * pFileName, testDataFile_t *dataFil
 	if (pWavFile)
 	{
 		// Read in the essence data
-		fread(dataBuff, sizeof(unsigned char), sizeof(dataBuff), pWavFile);
+		int rc = fread(dataBuff, sizeof(unsigned char), sizeof(dataBuff), pWavFile);
+		(void)rc;
 		check(loadWAVEHeader(dataBuff,
 										&bitsPerSample,
 										&numCh,

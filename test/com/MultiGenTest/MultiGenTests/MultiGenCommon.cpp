@@ -65,7 +65,8 @@ wchar_t* ToWideString( const char* str )
 
   int i;
   for( i = 0; i < len; i++ ) {
-    mbtowc( &wstr[i], &str[i], 1 );
+    int rc = mbtowc( &wstr[i], &str[i], 1 );
+    (void)rc;
   }
   wstr[i] = 0;
 

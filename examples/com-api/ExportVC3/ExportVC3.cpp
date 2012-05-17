@@ -706,7 +706,7 @@ extern int main(int argc, char *argv[])
 			}
 			else if (!strncmp(argv[i], "-o=",3))
 			{
-				mbstowcs(pwFileName, opt(i,argc,argv), sizeof(pwFileName));
+			        mbstowcs(pwFileName, opt(i,argc,argv), sizeof(pwFileName)/sizeof(pwFileName[0]));
 			}
 			else if (!strncmp(argv[i], "-cbar",5))
 			{

@@ -1386,8 +1386,9 @@ int main(int argc, char* argv[])
 	vector<int> end_by_idx;
 	char str[1024];
 
-	fscanf(edlfp, "%[^\n]\n", str);		// skip first line
-	fscanf(edlfp, "%[^\n]\n", str);		// PAL / NTSC specifier
+	int rc = fscanf(edlfp, "%[^\n]\n", str);		// skip first line
+	rc = fscanf(edlfp, "%[^\n]\n", str);		// PAL / NTSC specifier
+	(void)rc;
 	if (strcmp(str, "PAL") == 0)
 	{
 		formatPAL = true;
@@ -1398,13 +1399,15 @@ int main(int argc, char* argv[])
 		add_audio = false;
 	}
 	int num_clips = 0;
-	fscanf(edlfp, "%d\n", &num_clips);	// read total number of clips (not DV files)
+	rc = fscanf(edlfp, "%d\n", &num_clips);	// read total number of clips (not DV files)
+	(void)rc;
 
 	cout << "*** Start ELI ***" << endl;
 	// read DV files and add to a map
 	for (i = 0; i < num_clips; i++)
 	{
-		fscanf(edlfp, "%[^\n]\n", str);
+		rc = fscanf(edlfp, "%[^\n]\n", str);
+		(void)rc;
 
 		// look in essence_src_dir for DV files if specified
 		string filename(str);
@@ -1430,7 +1433,8 @@ int main(int argc, char* argv[])
 	for (i = 0; i < num_clips; i++)
 	{
 		int index, start, end;
-		fscanf(edlfp, "%d %d %d\n", &index, &start, &end);
+		int rc = fscanf(edlfp, "%d %d %d\n", &index, &start, &end);
+		(void)rc;
 		start_by_idx.push_back(start);
 		end_by_idx.push_back(end);
 		printf("index %d  start %d  end %d\n", index, start, end);
