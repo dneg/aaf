@@ -1,20 +1,27 @@
-                        AAF SDK version 1.1.4 Release
+                        AAF SDK version 1.1.5 Release
                          http://aaf.sourceforge.net/
 
 Getting Started
 ----------------
 (a) Using Microsoft Visual C++ (Win32)
     - Open AAFWinSDK/vs<version>/AAFWinSDK.sln
-      (where Visual C++ version can be 7, 8 or 9)
+      (where Visual C++ version can be 9 or 10)
 
     - Build the "Everything" project
-      (a Debug or Release build type can be selected)
+      (Select Debug or Release configuration and Win32 or x86_64 platform.)
 
-    - Client application builds should point their library & include paths to:
-        AAFWinSDK/vs<version>/include/
-        AAFWinSDK/vs<version>/lib/
-      and running client applications requires AAFCOAPI.dll so PATH must include:
+    - VS9 client application builds should point their library & include paths to:
+        AAFWinSDK/vs9/include/
+        AAFWinSDK/vs9/lib/
+      and running client applications require AAFCOAPI.dll so PATH must include:
         AAFWinSDK/vs<version>/bin/
+      Clean the solution before changing the platfrom between Win32 and x86_64.
+
+    - VS10 client application builds should point their library & include paths to:
+        include: AAFWinSDK/vs10/include/
+        library: AAFWinSDK/vs10/{Win32,x86_64}/{Debug,Release}/RefImpl
+      and running client applications require AAFCOAPI.dll so PATH must include:
+        AAFWinSDK/vs10/{Win32,x86_64}/{Debug,Release}/RefImpl
 
 (b) Using GNU make
     - To build the library, tests and all the examples and utilities run
@@ -26,9 +33,14 @@ Getting Started
     - For MacOS X, you can optionally build universal binaries using
 	    make AAFPLATFORM=UniversalDarwin <target>
 
-    - For MacOS X 10.6 64 bit, you can only build 32 bit binaries using
+    - For MacOS X 10.6 64 bit, you can build 32 or 64 bit binaries using
 	    make AAFPLATFORM=i386Darwin <target>
+	    or
+	    make AAFPLATFORM=x86_64Darwin <target>
 
+	    Note that AAFPLATFORM=i386Darwin is used by default on OSX
+	    if no platform is specified on the make command line.
+	    
     - To build a release version (instead of the default debug version)
         make AAFTARGET=Release <target>
 
@@ -59,13 +71,15 @@ dynamic library search path.
 
 (a) Under Win32 your PATH must contain AAFWinSDK\bin
     - Create sample AAF files by running ComModAAF.exe
-        AAFWinSDK/Debug/Test/ComModAAF.exe
+        vs9: vs9/AAFWinSDK/Debug/Test/ComModAAF.exe
+        vs10: vs10/AAFWinSDK/{Win32,x86_64}/Debug/Test/ComModAAF.exe
 
     - Use the InfoDumper executable to inspect an AAF file
-        AAFWinSDK/Debug/Examples/Com/InfoDumper.exe EssenceAccessCDCI_DV.aaf
+        vs9: vs9/AAFWinSDK/Debug/Examples/Com/InfoDumper.exe EssenceAccessCDCI_DV.aaf
+        vs10: vs10/AAFWinSDK/{Win32,x86_64}/Debug/Examples/Com/InfoDumper.exe EssenceAccessCDCI_DV.aaf
 
 (b) Using GNU make
-    - run "make check" to have sample .aaf files created under
+    - On a unix platform run "make check" to have sample .aaf files created under
         test/com/ComModTestAAF
 
     - run InfoDumper to inspect an AAF file

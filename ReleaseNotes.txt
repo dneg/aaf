@@ -1,7 +1,7 @@
-AAF SDK v1.1.4
+AAF SDK v1.1.5
 ==============
 
-2012-03-19
+2012-05-18
 
 This SDK is the reference implementation of the Advanced
 Authoring Format (AAF) version 1.1. See doc/aafeditprotocol.pdf,
@@ -13,14 +13,24 @@ Supported platforms
 
 This release has been tested on the following platforms:
 
-  MacOS X 10.6.6 Intel (32-bit build, 64-bit OS)
-    (Xcode 3.2.5, gcc 4.2.1 Apple build 5664)
+  MacOS X 10.6.8 Intel (32 and 64 bit builds, 64-bit OS)
+    (xcode 4.0.2, gcc 4.2.1 Apple build 5666)
+  x86-Linux: 
+    Centos 5.8 (32 bit, gcc 4.1.2, glibc 2.5 kernel 2.6)
+    Ubuntu 10.10 (64 bit, gcc 4.4.5, glibc 2.12, kernel 2.6)
+  Windows 7/64
+    Visual Studio 2008 (32 and 64 bit builds)
+    Visual Studio 2010 (32 and 64 bit builds)
+
+The release was not tested on the following platforms, however, these
+were supported by the prior release and no changes in this release are
+expected to affect them:
+
+  Solaris 10 (gcc 4.3.3)
   MacOS X 10.5.8 PowerPC (Xcode 3.1.3, gcc 4.0.1 Apple build 5593)
   Windows 2000 SP4 32-bit (Microsoft Visual C++ 7.1)
   Windows XP SP2 32-bit (Microsoft Visual C++ 7.1, 8.0 and 9.0)
-  Solaris 10 (gcc 4.3.3)
   x86-Linux: 
-    Ubuntu 10.10 (gcc 4.5.5, glibc 2.12, kernel 2.6)
     Fedora 14 (gcc 4.5.1, glibc 2.13, kernel 2.6)
   x86_64-Linux:
     OpenSUSE 11.1 (gcc 4.3.2, glibc 2.9, kernel 2.6)
@@ -39,6 +49,30 @@ CREATE AND DISTRIBUTE AAF COMPLIANT PRODUCTS.  PLEASE CONTACT THE AAF
 ASSOCIATION, INC. FOR MORE INFORMATION ABOUT ANY ADDITIONAL LICENSES
 THAT MAY BE REQUIRED TO CREATE AND DISTRIBUTE AAF COMPLIANT PRODUCTS
 (HTTP://WWW.AAFASSOCIATION.ORG/POLICIES).
+
+Major Changes from v1.1.4 to v1.1.5
+-----------------------------------
+
+Addition of VS10 (Visual Studio 2010) support.
+
+Addition of 64 bit build support for: VS9, VS10, and OSX.
+
+The 1.1.5 source code changes are limited to minor modifications that
+were necessary to correct compiler warnings related to the addition of
+support for the platforms noted above.
+
+Note that VS10 modifies the directory layout that has been used for
+VS9 and prior.  VS10 now prefixes the build output paths with the
+platform name, i.e. Win32 or x86_64. Prior to VS10 the results of the
+most recent successful build, regardless of configuration (Debug or
+Release), were always placed in a generic "bin" and "lib" directory
+(e.g. AAFWinSDK/vs9/bin). VS10 support discontinues this pattern. The
+build outputs are found only in
+AAFWinSDK/vs10/{Win32,x86_64}/{Debug,Release}/...
+
+Note that the VS9 x86_64 build support requires that the solution be
+cleaned before changing between Win32 or x86_64 platforms.  This
+restriction does not exist in VS10.
 
 Major Changes from v1.1.3 to v1.1.4
 -----------------------------------
