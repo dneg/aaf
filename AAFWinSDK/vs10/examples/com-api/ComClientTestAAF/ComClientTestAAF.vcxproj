@@ -80,6 +80,10 @@
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(Platform)\$(Configuration)\</IntDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(Platform)\$(Configuration)\</IntDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(Platform)\$(Configuration)\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">ComClientAAF</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">ComClientAAF</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">ComClientAAF</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">COMClientAAF</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Midl>
