@@ -36,9 +36,10 @@
 # Terry Skotz
 # modified by Tom Ransdell 15-DEC-1999, 05-JAN-2000.
 
-# Modified to support the Cygwin bash shell.  Only tested with the "-d" option.
-# Many tests don't work with the "-r" option.  The "-r" problems were pre-existing
-# as far as I can tell. - jptrainor@users.sourceforge.net, 20 Jun 01
+# VS10 - Set the COMPILER variable to vs10/Win32 or vs10/x64 before running.
+# e.g.:
+# AAFPLATFORM=AAFWinSDK COMPILER=vs10/x64 ./RunModTestAndExamples.bash -r -a
+#
 
 CHECK_DEBUG=0
 CHECK_RELEASE=0
