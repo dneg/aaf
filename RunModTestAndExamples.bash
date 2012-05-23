@@ -302,7 +302,13 @@ RunMainScript ()
 		cd $TargetDir
 	fi
 
-	if [ $AAFOMFTEST -eq 1 ] || [ $ALL -eq 1 ]; then
+	# AAFOMFTEST is not executed when $ALL is set because it is
+	# not built as part of the standard SDK. This remains here for
+	# historical purposes in the event someone continues to use it
+	# privately. Note, The OMF library that is necessary to build
+	# the AafOmf source code remains available for download from
+	# AMWA.  See the ReleaseNotes.txt comments.
+	if [ $AAFOMFTEST -eq 1 ]; then
 		PrintSeparator "AafOmf Convertor Test 1 -  AAF -> OMF"
 		cd $AAFBASEDIR/AAFWinSDK/Debug/Utilities
                 
