@@ -69,19 +69,21 @@ WATCHDOGLOGFILE=/tmp/AAFWatchDog/AAFWatchDog.log
 AAFBASEDIR=`pwd`
 
 # set AAFPLATFORM using same script as for make
-AAFPLATFORM="AAF`build/aafplatform.sh`SDK"
-
-# set default COMPILER 
-# for Win vs7
-# otherwise g++
-
-if [[ "$AAFPLATFORM" == "AAFWinSDK" ]] ; then
-	COMPILER="vs7"
-else
-	COMPILER="g++"
+if [ -z $AAFPLATFORM ]; then
+    AAFPLATFORM="AAF`build/aafplatform.sh`SDK"
 fi
 
+# set default COMPILER 
+# for Win to vs10
+# otherwise g++
 
+if [ -z $COMPILER ] ; then
+    if [ "$AAFPLATFORM" == "AAFWinSDK" ] ; then
+	COMPILER="vs10/Win32"
+    else
+	COMPILER="g++"
+    fi
+fi
 
 PrintHelp ()
 {
