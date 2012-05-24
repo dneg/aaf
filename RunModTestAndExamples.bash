@@ -36,9 +36,10 @@
 # Terry Skotz
 # modified by Tom Ransdell 15-DEC-1999, 05-JAN-2000.
 
-# Modified to support the Cygwin bash shell.  Only tested with the "-d" option.
-# Many tests don't work with the "-r" option.  The "-r" problems were pre-existing
-# as far as I can tell. - jptrainor@users.sourceforge.net, 20 Jun 01
+# VS10 - Set the COMPILER variable to vs10/Win32 or vs10/x64 before running.
+# e.g.:
+# AAFPLATFORM=AAFWinSDK COMPILER=vs10/x64 ./RunModTestAndExamples.bash -r -a
+#
 
 CHECK_DEBUG=0
 CHECK_RELEASE=0
@@ -69,19 +70,21 @@ WATCHDOGLOGFILE=/tmp/AAFWatchDog/AAFWatchDog.log
 AAFBASEDIR=`pwd`
 
 # set AAFPLATFORM using same script as for make
-AAFPLATFORM="AAF`build/aafplatform.sh`SDK"
-
-# set default COMPILER 
-# for Win vs7
-# otherwise g++
-
-if [[ "$AAFPLATFORM" == "AAFWinSDK" ]] ; then
-	COMPILER="vs7"
-else
-	COMPILER="g++"
+if [ -z $AAFPLATFORM ]; then
+    AAFPLATFORM="AAF`build/aafplatform.sh`SDK"
 fi
 
+# set default COMPILER 
+# for Win to vs10
+# otherwise g++
 
+if [ -z $COMPILER ] ; then
+    if [ "$AAFPLATFORM" == "AAFWinSDK" ] ; then
+	COMPILER="vs10/Win32"
+    else
+	COMPILER="g++"
+    fi
+fi
 
 PrintHelp ()
 {
@@ -299,7 +302,13 @@ RunMainScript ()
 		cd $TargetDir
 	fi
 
-	if [ $AAFOMFTEST -eq 1 ] || [ $ALL -eq 1 ]; then
+	# AAFOMFTEST is not executed when $ALL is set because it is
+	# not built as part of the standard SDK. This remains here for
+	# historical purposes in the event someone continues to use it
+	# privately. Note, The OMF library that is necessary to build
+	# the AafOmf source code remains available for download from
+	# AMWA.  See the ReleaseNotes.txt comments.
+	if [ $AAFOMFTEST -eq 1 ]; then
 		PrintSeparator "AafOmf Convertor Test 1 -  AAF -> OMF"
 		cd $AAFBASEDIR/AAFWinSDK/Debug/Utilities
                 
