@@ -1586,7 +1586,7 @@ extern "C" HRESULT CAAFFile_test(
     aafUID_t fileKind,
     testRawStorageType_t rawStorageType,
     aafProductIdentification_t productID)
-{
+ {
 	HRESULT hr = AAFRESULT_NOT_IMPLEMENTED;
 	HRESULT hr4K = AAFRESULT_SUCCESS;
 

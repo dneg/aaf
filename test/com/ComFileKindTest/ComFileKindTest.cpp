@@ -1,5 +1,5 @@
 // @doc INTERNAL
-// @com This file implements tests for variour file kinds
+// @com This file implements tests for various file kinds
 //=---------------------------------------------------------------------=
 //
 // $Id$ $Name$
@@ -620,5 +620,6 @@ int main(int argc, char *argv[])
 		cerr << "Error : Caught HRESULT 0x" << hex << r << endl;
 		return 1;
 	}
+
 	return 0;
 }
