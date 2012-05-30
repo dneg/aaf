@@ -71,6 +71,9 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MakeSDK", "MakeSDK.vcxproj", "{08296C77-388B-42C6-BF97-B06B9796985A}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MakeSDKExamples", "MakeSDKExamples.vcxproj", "{4E04FADE-804E-4DE4-AD31-370DE130092A}"
+	ProjectSection(ProjectDependencies) = postProject
+		{BB2B93A6-1B2A-48C8-BD4F-17C349F050BC} = {BB2B93A6-1B2A-48C8-BD4F-17C349F050BC}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MakeSDKExamples2", "MakeSDKExamples2.vcxproj", "{D7966045-2976-4F66-BB1A-727874396F84}"
 EndProject
@@ -131,6 +134,14 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "aaffmtconv", "Utilities\aaffmtconv\aaffmtconv.vcxproj", "{F065E737-3746-46B3-BAE6-F2279CA650C4}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MakeSDKTests", "MakeSDKTests.vcxproj", "{456880A4-3576-428D-A208-4AC77736691F}"
+	ProjectSection(ProjectDependencies) = postProject
+		{BB2B93A6-1B2A-48C8-BD4F-17C349F050BC} = {BB2B93A6-1B2A-48C8-BD4F-17C349F050BC}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ComFileExtensionTest", "Test\com\ComFileExtensionTest\ComFileExtensionTest.vcxproj", "{BB2B93A6-1B2A-48C8-BD4F-17C349F050BC}"
+	ProjectSection(ProjectDependencies) = postProject
+		{08296C77-388B-42C6-BF97-B06B9796985A} = {08296C77-388B-42C6-BF97-B06B9796985A}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -668,6 +679,14 @@ Global
 		{456880A4-3576-428D-A208-4AC77736691F}.Release|Win32.Build.0 = Release|Win32
 		{456880A4-3576-428D-A208-4AC77736691F}.Release|x64.ActiveCfg = Release|x64
 		{456880A4-3576-428D-A208-4AC77736691F}.Release|x64.Build.0 = Release|x64
+		{BB2B93A6-1B2A-48C8-BD4F-17C349F050BC}.Debug|Win32.ActiveCfg = Debug|Win32
+		{BB2B93A6-1B2A-48C8-BD4F-17C349F050BC}.Debug|Win32.Build.0 = Debug|Win32
+		{BB2B93A6-1B2A-48C8-BD4F-17C349F050BC}.Debug|x64.ActiveCfg = Debug|x64
+		{BB2B93A6-1B2A-48C8-BD4F-17C349F050BC}.Debug|x64.Build.0 = Debug|x64
+		{BB2B93A6-1B2A-48C8-BD4F-17C349F050BC}.Release|Win32.ActiveCfg = Release|Win32
+		{BB2B93A6-1B2A-48C8-BD4F-17C349F050BC}.Release|Win32.Build.0 = Release|Win32
+		{BB2B93A6-1B2A-48C8-BD4F-17C349F050BC}.Release|x64.ActiveCfg = Release|x64
+		{BB2B93A6-1B2A-48C8-BD4F-17C349F050BC}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
