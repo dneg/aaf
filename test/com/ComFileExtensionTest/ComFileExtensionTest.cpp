@@ -91,7 +91,10 @@ class AbstractTest
 {
 protected:
 
-	aafProductIdentification_t testProductID;	
+	aafProductIdentification_t testProductID;
+
+        static aafCharacter companyName[];
+        static aafCharacter productName[];
 
 private:
 	static aafProductVersion_t TestVersion;
@@ -99,8 +102,8 @@ private:
 public:
 	AbstractTest()
 	{	
-		testProductID.companyName = L"AMW Association";
-		testProductID.productName = L"ComFileExtensionTest";
+	        testProductID.companyName = companyName;
+	        testProductID.productName = productName;
 		testProductID.productVersion = &TestVersion;
 		testProductID.productVersionString = NULL;
 		testProductID.productID = UnitTestProductID;
@@ -129,6 +132,8 @@ protected:
 	virtual void IsAAF() = 0;
 };
 aafProductVersion_t AbstractTest::TestVersion = { 1, 1, 0, 0, kAAFVersionUnknown };
+aafCharacter AbstractTest::companyName[] = L"AMW Association";
+aafCharacter AbstractTest::productName[] = L"ComFileExtensionTest";
 
 // BasicTest - simple test possible - just create a file, open for modify, and open for read.
 // The basic AAF api calls are used to create and open the file.
@@ -285,12 +290,13 @@ public:
 			new BasicExTest(L"basicExTest.4K.aaf", &kAAFFileKind_Aaf4KBinary),
 			new BasicExTest(L"basicExTest.4K.isr", &kAAFFileKind_Aaf4KBinary),
 
+#ifdef OS_WINDOWS
 			new BasicExTest(L"basicExTest.M512.aaf", &kAAFFileKind_AafM512Binary),
 			new BasicExTest(L"basicExTest.M512.isr", &kAAFFileKind_AafM512Binary),
 
 			new BasicExTest(L"basicExTest.M4K.aaf", &kAAFFileKind_AafM4KBinary),
 			new BasicExTest(L"basicExTest.M4K.isr", &kAAFFileKind_AafM4KBinary),
-
+#endif
 			new BasicExTest(L"basicExTest.S512K.aaf", &kAAFFileKind_AafS512Binary),
 			new BasicExTest(L"basicExTest.S512K.isr", &kAAFFileKind_AafS512Binary),
 

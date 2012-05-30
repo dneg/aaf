@@ -36,7 +36,7 @@ AAFBASE ?= ../../..
 
 
 .PHONY : all
-all : ComModTestAAF CreateSequence EssenceAccess MultiGenTest ComFileKindTest UTF8FileNameTest OpenExistingModify ScaleTest ResultToTextTest MemoryLeakTest XMLStoredFormat
+all : ComModTestAAF CreateSequence EssenceAccess MultiGenTest ComFileKindTest ComFileExtensionTest UTF8FileNameTest OpenExistingModify ScaleTest ResultToTextTest MemoryLeakTest XMLStoredFormat
 
 .PHONY : ComModTestAAF
 ComModTestAAF :
@@ -53,6 +53,10 @@ EssenceAccess :
 .PHONY : MultiGenTest
 MultiGenTest :
 	cd MultiGenTest && $(MAKE)
+
+.PHONY : ComFileExtensionTest
+ComFileExtensionTest :
+	cd ComFileExtensionTest && $(MAKE)
 
 .PHONY : ComFileKindTest
 ComFileKindTest :
