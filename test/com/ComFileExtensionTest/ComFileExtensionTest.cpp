@@ -120,15 +120,18 @@ public:
 	{
 		wcout << this->GetTestName() << L": " << this->GetFileName() << endl;
 		this->Create();
-		this->Modify();
-		this->Read();
-		this->IsAAF();
+		if (this->IsKindRegistered()) {
+		  this->Modify();
+		  this->Read();
+		  this->IsAAF();
+		}
 	}
 
 protected:
 
 	virtual const wchar_t* GetTestName() = 0;
 	virtual const wchar_t* GetFileName() = 0;
+        virtual bool IsKindRegistered() = 0;
 	virtual void Create() = 0;
 	virtual void Modify() = 0;
 	virtual void Read() = 0;
@@ -213,12 +216,18 @@ protected:
 			throw AAFRESULT_NOT_AAF_FILE;
 		}
 	}
+
+        virtual bool IsKindRegistered() {
+  	        // Always true because the fails if the file was not created for any reason.
+  	        return true;
+	}
 };
 
 // Same as BasicTest but uses the extended interface to create the file.
 class BasicExTest : public BasicTest
 {
 	const aafUID_t* pFileKind;
+        bool isKindRegistered;
 
 public:
 	BasicExTest(const aafCharacter* filename, const aafUID_t* pFileKind) 
@@ -231,9 +240,20 @@ public:
 	{
 		RemoveTestFile(filename);
 		IAAFFile* pFile = 0;
-		checkResult(AAFFileOpenNewModifyEx(this->filename, this->pFileKind, this->modeFlags, &this->testProductID, &pFile));
-		checkResult(pFile->Save());
-		checkResult(pFile->Close());
+		HRESULT r = AAFFileOpenNewModifyEx(this->filename, this->pFileKind, this->modeFlags, &this->testProductID, &pFile);
+		if (r == AAFRESULT_FILEKIND_NOT_REGISTERED) {
+		  isKindRegistered = false;
+		}
+		else {
+		  isKindRegistered = true;
+		  checkResult(r);
+		  checkResult(pFile->Save());
+		  checkResult(pFile->Close());
+		}
+	}
+
+        virtual bool IsKindRegistered() {
+  	        return isKindRegistered;
 	}
 
 };
@@ -293,18 +313,22 @@ public:
 			new BasicExTest(L"basicExTest.4K.aaf", &kAAFFileKind_Aaf4KBinary),
 			new BasicExTest(L"basicExTest.4K.isr", &kAAFFileKind_Aaf4KBinary),
 
-#ifdef OS_WINDOWS
 			new BasicExTest(L"basicExTest.M512.aaf", &kAAFFileKind_AafM512Binary),
 			new BasicExTest(L"basicExTest.M512.isr", &kAAFFileKind_AafM512Binary),
 
 			new BasicExTest(L"basicExTest.M4K.aaf", &kAAFFileKind_AafM4KBinary),
 			new BasicExTest(L"basicExTest.M4K.isr", &kAAFFileKind_AafM4KBinary),
-#endif
-			new BasicExTest(L"basicExTest.S512K.aaf", &kAAFFileKind_AafS512Binary),
-			new BasicExTest(L"basicExTest.S512K.isr", &kAAFFileKind_AafS512Binary),
+
+			new BasicExTest(L"basicExTest.S512.aaf", &kAAFFileKind_AafS512Binary),
+			new BasicExTest(L"basicExTest.S512.isr", &kAAFFileKind_AafS512Binary),
 
 			new BasicExTest(L"basicExTest.S4K.aaf", &kAAFFileKind_AafS4KBinary),
 			new BasicExTest(L"basicExTest.S4K.isr", &kAAFFileKind_AafS4KBinary),
+
+			new BasicExTest(L"basicExTest.G512.aaf", &kAAFFileKind_AafS512Binary),
+			new BasicExTest(L"basicExTest.G512.isr", &kAAFFileKind_AafS512Binary),
+			new BasicExTest(L"basicExTest.G4K.aaf", &kAAFFileKind_AafS512Binary),
+			new BasicExTest(L"basicExTest.G4K.isr", &kAAFFileKind_AafS512Binary),
 
 			new BasicExTest(L"basicExTest.klv",     &kAAFFileKind_AafKlvBinary),
 			new BasicExTest(L"basicExTest.klv.aaf", &kAAFFileKind_AafKlvBinary),
