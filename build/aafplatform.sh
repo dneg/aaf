@@ -75,7 +75,7 @@ case "${MACHINE}:${OS}" in
 	echo PPCDarwin
 	exit 0;;
 
-	*86:Darwin)
+	*:Darwin)
 	echo ${MACHINE}Darwin
 	exit 0;;
 
