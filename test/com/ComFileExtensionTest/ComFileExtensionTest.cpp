@@ -58,7 +58,7 @@ void checkResult(HRESULT r)
 		throw r;
 }
 
-void RemoveTestFile(const aafWChar* pFileName)
+void RemoveFile(const aafWChar* pFileName)
 {
 	const size_t kMaxFileName = 512;
 	char cFileName[kMaxFileName];
@@ -92,6 +92,10 @@ void RenameTestFile(const wchar_t* pName, const wchar_t* pNewName)
 
 class AbstractTest 
 {
+public:
+        enum EncodingInfo {SS, XML, KLV};
+
+
 protected:
 
 	aafProductIdentification_t testProductID;
@@ -101,8 +105,8 @@ protected:
 
 private:
 	static aafProductVersion_t TestVersion;
-
 public:
+
 	AbstractTest()
 	{	
 	        testProductID.companyName = companyName;
@@ -116,18 +120,42 @@ public:
 	virtual ~AbstractTest()
 	{}
 
-	void Execute()
+	void Execute(bool deleteFileAfterTest)
 	{
-		wcout << this->GetTestName() << L": " << this->GetFileName() << endl;
 		this->Create();
 		if (this->IsKindRegistered()) {
+		  wcout << this->GetTestName() << L"," << this->GetEncodingInfoAsString() << L"," << this->GetFileName() << endl;
 		  this->Modify();
 		  this->Read();
 		  this->IsAAF();
+		  if (deleteFileAfterTest) {
+		    this->RemoveTestFile();
+		  }
 		}
 	}
 
+        const wchar_t* GetEncodingInfoAsString() {
+	  switch(this->GetEncodingInfo()) {
+	  case SS:
+	    return L"SS";
+	    break;
+	  case XML:
+	    return L"XML";
+	    break;
+	  case KLV:
+	    return L"KLV";
+	    break;
+	  default:
+	    // Indicates a programming error in this test.
+	    throw AAFRESULT_TEST_FAILED;
+	  }
+        }
+
 protected:
+
+        void RemoveTestFile() {
+	  RemoveFile(this->GetFileName());
+        }
 
 	virtual const wchar_t* GetTestName() = 0;
 	virtual const wchar_t* GetFileName() = 0;
@@ -136,6 +164,7 @@ protected:
 	virtual void Modify() = 0;
 	virtual void Read() = 0;
 	virtual void IsAAF() = 0;
+        virtual EncodingInfo GetEncodingInfo() = 0;
 };
 aafProductVersion_t AbstractTest::TestVersion = { 1, 1, 0, 0, kAAFVersionUnknown };
 aafCharacter AbstractTest::companyName[] = L"AMW Association";
@@ -149,13 +178,16 @@ class BasicTest : public AbstractTest
 protected:
 	// input
 	aafCharacter* filename;
-	aafUInt32  modeFlags;
+ 	aafUInt32  modeFlags;
+         EncodingInfo encodingInfo;
 
 public:
 
 	BasicTest(const aafCharacter* filename,
+		  EncodingInfo encodingInfo,
 		aafUInt32  modeFlags)
 		: filename(0),
+		  encodingInfo(encodingInfo),
 		  modeFlags(0)
 	{
 		assert(modeFlags == 0 || modeFlags == AAF_FILE_MODE_USE_LARGE_SS_SECTORS);
@@ -185,7 +217,7 @@ protected:
 	virtual void Create()
 	{
 		IAAFFile* pFile = 0;
-		RemoveTestFile(filename);
+		RemoveFile(filename);
 		checkResult(AAFFileOpenNewModify(this->filename, this->modeFlags, &this->testProductID, &pFile));
 		checkResult(pFile->Save());
 		checkResult(pFile->Close());
@@ -221,6 +253,10 @@ protected:
   	        // Always true because the fails if the file was not created for any reason.
   	        return true;
 	}
+
+         virtual EncodingInfo GetEncodingInfo() {
+	      return encodingInfo;
+	 }
 };
 
 // Same as BasicTest but uses the extended interface to create the file.
@@ -230,15 +266,15 @@ class BasicExTest : public BasicTest
         bool isKindRegistered;
 
 public:
-	BasicExTest(const aafCharacter* filename, const aafUID_t* pFileKind) 
-		: BasicTest(filename, 0)
+  BasicExTest(const aafCharacter* filename, EncodingInfo encodingInfo, const aafUID_t* pFileKind) 
+    : BasicTest(filename, encodingInfo, 0)
 	{
 		this->pFileKind = pFileKind;
 	}
 
 	virtual void Create()
 	{
-		RemoveTestFile(filename);
+		RemoveTestFile();
 		IAAFFile* pFile = 0;
 		HRESULT r = AAFFileOpenNewModifyEx(this->filename, this->pFileKind, this->modeFlags, &this->testProductID, &pFile);
 		if (r == AAFRESULT_FILEKIND_NOT_REGISTERED) {
@@ -266,9 +302,9 @@ private:
 	const wchar_t* newExt;
 
 public:
-	BasicRenameTest(const aafCharacter* filename,
+  BasicRenameTest(const aafCharacter* filename, EncodingInfo encodingInfo,
 		aafUInt32  modeFlags, const wchar_t* newExt) 
-		: BasicTest(filename, modeFlags),
+    : BasicTest(filename, encodingInfo, modeFlags),
 		newExt(newExt)
 	{}
 
@@ -291,60 +327,60 @@ protected:
 
 class FileExtensionTest
 {
+  static AbstractTest* tests[]; 
 
 public:
 
 	FileExtensionTest() {
 	}
 
-	void Execute() {
-
-		AbstractTest* tests[] = {
-			new BasicTest(L"basicTest.aaf", 0),
-			new BasicTest(L"basicTest.4k.aaf", AAF_FILE_MODE_USE_LARGE_SS_SECTORS),
-			new BasicTest(L"basicTest.isr", 0),
-			new BasicTest(L"basicTest.4k.isr", AAF_FILE_MODE_USE_LARGE_SS_SECTORS),
-			new BasicRenameTest(L"renameTest.aaf", 0, L".isr"),
-			new BasicRenameTest(L"renameTest.4k.aaf", AAF_FILE_MODE_USE_LARGE_SS_SECTORS, L".isr"),
-
-			new BasicExTest(L"basicExTest.512.aaf", &kAAFFileKind_Aaf512Binary),
-			new BasicExTest(L"basicExTest.512.aaf", &kAAFFileKind_Aaf512Binary),
-
-			new BasicExTest(L"basicExTest.4K.aaf", &kAAFFileKind_Aaf4KBinary),
-			new BasicExTest(L"basicExTest.4K.isr", &kAAFFileKind_Aaf4KBinary),
-
-			new BasicExTest(L"basicExTest.M512.aaf", &kAAFFileKind_AafM512Binary),
-			new BasicExTest(L"basicExTest.M512.isr", &kAAFFileKind_AafM512Binary),
-
-			new BasicExTest(L"basicExTest.M4K.aaf", &kAAFFileKind_AafM4KBinary),
-			new BasicExTest(L"basicExTest.M4K.isr", &kAAFFileKind_AafM4KBinary),
-
-			new BasicExTest(L"basicExTest.S512.aaf", &kAAFFileKind_AafS512Binary),
-			new BasicExTest(L"basicExTest.S512.isr", &kAAFFileKind_AafS512Binary),
-
-			new BasicExTest(L"basicExTest.S4K.aaf", &kAAFFileKind_AafS4KBinary),
-			new BasicExTest(L"basicExTest.S4K.isr", &kAAFFileKind_AafS4KBinary),
-
-			new BasicExTest(L"basicExTest.G512.aaf", &kAAFFileKind_AafS512Binary),
-			new BasicExTest(L"basicExTest.G512.isr", &kAAFFileKind_AafS512Binary),
-			new BasicExTest(L"basicExTest.G4K.aaf", &kAAFFileKind_AafS512Binary),
-			new BasicExTest(L"basicExTest.G4K.isr", &kAAFFileKind_AafS512Binary),
-
-			new BasicExTest(L"basicExTest.klv",     &kAAFFileKind_AafKlvBinary),
-			new BasicExTest(L"basicExTest.klv.aaf", &kAAFFileKind_AafKlvBinary),
-			new BasicExTest(L"basicExTest.klv.isr", &kAAFFileKind_AafKlvBinary),
-
-			new BasicExTest(L"basicExTest.xml",     &kAAFFileKind_AafXmlText),
-			new BasicExTest(L"basicExTest.xml.aaf", &kAAFFileKind_AafXmlText),
-			new BasicExTest(L"basicExTest.xml.isr", &kAAFFileKind_AafXmlText),
-			0  
-		};
-
+	void Execute(bool deleteFileAfterTest) {
 		for(int i = 0; tests[i] != 0; ++i) {
-			tests[i]->Execute();
+			tests[i]->Execute(deleteFileAfterTest);
 		}
 
 	}
+};
+
+AbstractTest* FileExtensionTest::tests[] = {
+  new BasicTest(L"basicTest.aaf", AbstractTest::SS, 0),
+  new BasicTest(L"basicTest.4k.aaf", AbstractTest::SS, AAF_FILE_MODE_USE_LARGE_SS_SECTORS),
+  new BasicTest(L"basicTest.isr", AbstractTest::SS, 0),
+  new BasicTest(L"basicTest.4k.isr", AbstractTest::SS, AAF_FILE_MODE_USE_LARGE_SS_SECTORS),
+  new BasicRenameTest(L"renameTest.aaf", AbstractTest::SS, 0, L".isr"),
+   new BasicRenameTest(L"renameTest.4k.aaf", AbstractTest::SS, AAF_FILE_MODE_USE_LARGE_SS_SECTORS, L".isr"),
+  
+  new BasicExTest(L"basicExTest.512.aaf", AbstractTest::SS, &kAAFFileKind_Aaf512Binary),
+  new BasicExTest(L"basicExTest.512.aaf", AbstractTest::SS, &kAAFFileKind_Aaf512Binary),
+  
+  new BasicExTest(L"basicExTest.4K.aaf",AbstractTest::SS, &kAAFFileKind_Aaf4KBinary),
+  new BasicExTest(L"basicExTest.4K.isr", AbstractTest::SS, &kAAFFileKind_Aaf4KBinary),
+  
+  new BasicExTest(L"basicExTest.M512.aaf", AbstractTest::SS, &kAAFFileKind_AafM512Binary),
+  new BasicExTest(L"basicExTest.M512.isr", AbstractTest::SS, &kAAFFileKind_AafM512Binary),
+  
+  new BasicExTest(L"basicExTest.M4K.aaf", AbstractTest::SS, &kAAFFileKind_AafM4KBinary),
+  new BasicExTest(L"basicExTest.M4K.isr", AbstractTest::SS, &kAAFFileKind_AafM4KBinary),
+  
+  new BasicExTest(L"basicExTest.S512.aaf", AbstractTest::SS, &kAAFFileKind_AafS512Binary),
+  new BasicExTest(L"basicExTest.S512.isr", AbstractTest::SS, &kAAFFileKind_AafS512Binary),
+  
+  new BasicExTest(L"basicExTest.S4K.aaf", AbstractTest::SS, &kAAFFileKind_AafS4KBinary),
+  new BasicExTest(L"basicExTest.S4K.isr", AbstractTest::SS, &kAAFFileKind_AafS4KBinary),
+  
+  new BasicExTest(L"basicExTest.G512.aaf", AbstractTest::SS, &kAAFFileKind_AafS512Binary),
+  new BasicExTest(L"basicExTest.G512.isr", AbstractTest::SS, &kAAFFileKind_AafS512Binary),
+  new BasicExTest(L"basicExTest.G4K.aaf", AbstractTest::SS, &kAAFFileKind_AafS512Binary),
+  new BasicExTest(L"basicExTest.G4K.isr", AbstractTest::SS, &kAAFFileKind_AafS512Binary),
+  
+  new BasicExTest(L"basicExTest.klv",     AbstractTest::KLV, &kAAFFileKind_AafKlvBinary),
+  new BasicExTest(L"basicExTest.klv.aaf", AbstractTest::KLV, &kAAFFileKind_AafKlvBinary),
+  new BasicExTest(L"basicExTest.klv.isr", AbstractTest::KLV, &kAAFFileKind_AafKlvBinary),
+  
+  new BasicExTest(L"basicExTest.xml",     AbstractTest::XML, &kAAFFileKind_AafXmlText),
+  new BasicExTest(L"basicExTest.xml.aaf", AbstractTest::XML, &kAAFFileKind_AafXmlText),
+  new BasicExTest(L"basicExTest.xml.isr", AbstractTest::XML, &kAAFFileKind_AafXmlText),
+  0
 };
 
 void printUsage(const char* progName)
@@ -353,7 +389,7 @@ void printUsage(const char* progName)
 
 int main(int argc, char *argv[])
 {
-	bool deleteFiles = false;
+	bool notDeleteFiles = false;
 	int i = 1;
 
 	if (argc > 1)
@@ -367,7 +403,7 @@ int main(int argc, char *argv[])
 			}
 			else if (!strcmp(argv[i], "-d"))
 			{
-				deleteFiles = true;
+				notDeleteFiles = true;
 				i++;
 			}
 			else
@@ -379,16 +415,14 @@ int main(int argc, char *argv[])
 	}
 
 	try {
-		FileExtensionTest test;
-		test.Execute();
+	        FileExtensionTest test;
+		test.Execute(!notDeleteFiles);
 	}
 	catch (HRESULT& r)
 	{
 		wcerr << L"Error : Caught HRESULT 0x" << hex << r << endl;
 		return 1;
 	}
-
-
 
 	return 0;
 }
