@@ -110,7 +110,7 @@ PrintHelp ()
 	echo "-eae = ExportAudioExample"
 	echo "-esc = ExportSimpleComposition"
 	echo "-iae = ImportAudioExample"
-	echo "-ext = dev util file extension independence test"
+	echo "-ext = ComFileExtensionTest"
 	echo "-t  = dump\n\n"
 	echo "-s  = update AAFWatchDog.log with exit code results"
 	echo "-p = Print PATH variable\n\n"
@@ -492,8 +492,10 @@ RunMainScript ()
 
 
 	if [ $FILEEXTVERIFY -eq 1 ] || [ $ALL -eq 1 ]; then
-	    PrintSeparator "Running ComFileExtDevUtilVerify.sh"
-	    # TBC
+	    PrintSeparator "Running ComFileExtensionTest"
+	    cd Test
+	    ./ComFileExtensionTest
+	    CheckExitCode $? "ComFileExtensionTest"
 	fi
 
 	cd $START_DIR
