@@ -45,20 +45,21 @@ INCLUDES = -I$(AAFSDKINCLUDEDIR)
 
 
 .PHONY : all
-all : $(OBJDIR) $(AAFSDKBINDIR)/ComFileExtensionTest$(EXE)
+all : $(OBJDIR) $(AAFSDKBINDIR)/ComFileExtensionTest$(EXE) $(AAFSDKBINDIR)/ComFileExtDevUtilVerifyTest.sh
 
 $(AAFSDKBINDIR)/ComFileExtensionTest$(EXE) : $(CXXOBJS)
 	$(LD) $(CXXOBJS) $(LINK_AAF_APP)
 
+$(AAFSDKBINDIR)/ComFileExtDevUtilVerifyTest.sh : ComFileExtDevUtilVerifyTest.sh $(AAFSDKBINDIR)/ComFileExtensionTest$(EXE)
+	$(CP) ComFileExtDevUtilVerifyTest.sh $(AAFSDKBINDIR)/ComFileExtDevUtilVerifyTest.sh
 
 .PHONY : check
 check : $(AAFSDKBINDIR)/ComFileExtensionTest$(EXE)
-	$(APP_RUN_ENV) $(AAFSDKBINDIR)/ComFileExtensionTest$(EXE) -d
+	$(APP_RUN_ENV) $(AAFSDKBINDIR)/ComFileExtensionTest$(EXE)
 
 .PHONY : valgrind-check
 valgrind-check : $(AAFSDKBINDIR)/ComFileExtensionTest$(EXE)
-	$(APP_RUN_ENV) $(VALGRIND_CMD) $(AAFSDKBINDIR)/ComFileExtensionTest$(EXE) -d
-
+	$(APP_RUN_ENV) $(VALGRIND_CMD) $(AAFSDKBINDIR)/ComFileExtensionTest$(EXE)
 
 .PHONY : clean
 clean :

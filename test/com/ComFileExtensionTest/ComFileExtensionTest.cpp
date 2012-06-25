@@ -95,7 +95,6 @@ class AbstractTest
 public:
         enum EncodingInfo {SS, XML, KLV};
 
-
 protected:
 
 	aafProductIdentification_t testProductID;
@@ -348,10 +347,10 @@ AbstractTest* FileExtensionTest::tests[] = {
   new BasicTest(L"basicTest.isr", AbstractTest::SS, 0),
   new BasicTest(L"basicTest.4k.isr", AbstractTest::SS, AAF_FILE_MODE_USE_LARGE_SS_SECTORS),
   new BasicRenameTest(L"renameTest.aaf", AbstractTest::SS, 0, L".isr"),
-   new BasicRenameTest(L"renameTest.4k.aaf", AbstractTest::SS, AAF_FILE_MODE_USE_LARGE_SS_SECTORS, L".isr"),
+  new BasicRenameTest(L"renameTest.4k.aaf", AbstractTest::SS, AAF_FILE_MODE_USE_LARGE_SS_SECTORS, L".isr"),
   
   new BasicExTest(L"basicExTest.512.aaf", AbstractTest::SS, &kAAFFileKind_Aaf512Binary),
-  new BasicExTest(L"basicExTest.512.aaf", AbstractTest::SS, &kAAFFileKind_Aaf512Binary),
+  new BasicExTest(L"basicExTest.512.isr", AbstractTest::SS, &kAAFFileKind_Aaf512Binary),
   
   new BasicExTest(L"basicExTest.4K.aaf",AbstractTest::SS, &kAAFFileKind_Aaf4KBinary),
   new BasicExTest(L"basicExTest.4K.isr", AbstractTest::SS, &kAAFFileKind_Aaf4KBinary),
