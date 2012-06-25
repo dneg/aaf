@@ -59,6 +59,7 @@ EXPORTSIMPLECOMPOSITION=0
 IMPORTAUDIOEXAMPLE=0
 PERSONNELEXTENSIONTEST=0
 PERSONNELEXTENSIONDIFF=0
+FILEEXTVERIFY=0
 ALL=0
 PRINTPATH=0
 AAFWATCHDOG=0
@@ -109,6 +110,7 @@ PrintHelp ()
 	echo "-eae = ExportAudioExample"
 	echo "-esc = ExportSimpleComposition"
 	echo "-iae = ImportAudioExample"
+	echo "-ext = dev util file extension independence test"
 	echo "-t  = dump\n\n"
 	echo "-s  = update AAFWatchDog.log with exit code results"
 	echo "-p = Print PATH variable\n\n"
@@ -149,6 +151,7 @@ do
 		-eae ) EXPORTAUDIOEXAMPLE=1;;
 		-esc ) EXPORTSIMPLECOMPOSITION=1;;
 		-iae ) IMPORTAUDIOEXAMPLE=1;;
+	        -ext ) FILEEXTVERIFY=1;;
 		-p ) PRINTPATH=1;;
 		-s ) AAFWATCHDOG=1;;
 		-h ) PrintHelp
@@ -485,6 +488,12 @@ RunMainScript ()
 		VerifyFiles "ExportAudioExample.aaf"
 
 		cd $TargetDir
+	fi
+
+
+	if [ $FILEEXTVERIFY -eq 1 ] || [ $ALL -eq 1 ]; then
+	    PrintSeparator "Running ComFileExtDevUtilVerify.sh"
+	    # TBC
 	fi
 
 	cd $START_DIR
