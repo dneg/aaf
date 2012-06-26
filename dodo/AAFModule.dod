@@ -91,8 +91,10 @@ AD_XFUNCTION3(AAFFileOpenExistingRead,
 			  aafCharacter_constptr,
 			  pFileName,
 			  Null-terminated string containing name of filesystem file to be
-  /// opened for reading.  Filename must be in a form that would be
-  /// acceptable to StgOpenStorage\(\) for this platform.,
+  /// opened for reading. The file name has no restrictions other than those imposed by
+  /// the underlying file system. AAF files that use structured storage encoding typically
+  /// use the extension .aaf or .isr. AAF files that use XML encoding typically use the .xml
+  /// extension. AAF files that use KLV encoding typically use use the extension .mxf or .klv.,
 			[in],
 			  objPass,
 			  aafUInt32,
@@ -159,8 +161,10 @@ AD_XFUNCTION4(AAFFileOpenExistingModify,
 			  aafCharacter_constptr,
 			  pFileName,
 			  Null-terminated string containing name of filesystem file to be
-  /// opened for modification.  Filename must be in a form that would
-  /// be acceptable to StgOpenStorage\(\) for this platform.,
+  /// opened for modification. The file name has no restrictions other than those imposed by
+  /// the underlying file system. AAF files that use structured storage encoding typically
+  /// use the extension .aaf or .isr. AAF files that use XML encoding typically use the .xml
+  /// extension. AAF files that use KLV encoding typically use use the extension .mxf or .klv.,
 			[in],
 			  objPass,
 			  aafUInt32,
@@ -242,8 +246,10 @@ AD_XFUNCTION4(AAFFileOpenNewModify,
 			  aafCharacter_constptr,
 			  pFileName,
 			  Null-terminated string containing name of filesystem file to be
-  /// opened for modification.  Filename must be in a form that would
-  /// be acceptable to StgOpenStorage\(\) for this platform.,
+  /// opened for modification. The file name has no restrictions other than those imposed by
+  /// the underlying file system. AAF files that use structured storage encoding typically
+  /// use the extension .aaf or .isr. AAF files that use XML encoding typically use the .xml
+  /// extension. AAF files that use KLV encoding typically use use the extension .mxf or .klv.,
 			[in],
 			  objPass,
 			  aafUInt32,
@@ -315,7 +321,10 @@ AD_XFUNCTION5(AAFFileOpenNewModifyEx,
 			  aafCharacter_constptr,
 			  pFileName,
 			  Null-terminated string containing name of filesystem file to be
-  /// opened for modification.,
+  /// opened for modification. The file name has no restrictions other than those imposed by
+  /// the underlying file system. AAF files that use structured storage encoding typically
+  /// use the extension .aaf or .isr. AAF files that use XML encoding typically use the .xml
+  /// extension. AAF files that use KLV encoding typically use use the extension .mxf or .klv.,
 			[in],
 			  objPass,
 			  aafUID_constptr,
