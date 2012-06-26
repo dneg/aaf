@@ -23,7 +23,7 @@
 // (http://www.amwa.tv/policies).
 //
 // Copyright Notices:
-// The Original Code of this file is Copyright 1998-2009, licensor of the
+// The Original Code of this file is Copyright 1998-2012, licensor of the
 // Advanced Media Workflow Association.  All rights reserved.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -52545,8 +52545,10 @@ DECLARE_INTERFACE_(IAAFTypeDefVariableArrayEx, IUnknown)
   ///   - The named file does not claim to be a valid AAF file.
   /// 
   /// @param pFileName [in, string] Null-terminated string containing name of filesystem file to be
-  /// opened for reading.  Filename must be in a form that would be
-  /// acceptable to StgOpenStorage() for this platform.
+  /// opened for reading. The file name has no restrictions other than those imposed by
+  /// the underlying file system. AAF files that use structured storage encoding typically
+  /// use the extension .aaf or .isr. AAF files that use XML encoding typically use the .xml
+  /// extension. AAF files that use KLV encoding typically use use the extension .mxf or .klv.
   /// @param modeFlags [in] File open mode flags.  May be any of the following ORed
   /// together.  All other bits must be set to zero.
   ///
@@ -52617,8 +52619,10 @@ DECLARE_INTERFACE_(IAAFTypeDefVariableArrayEx, IUnknown)
   ///   - The named file is not a valid AAF file.
   /// 
   /// @param pFileName [in, string] Null-terminated string containing name of filesystem file to be
-  /// opened for modification.  Filename must be in a form that would
-  /// be acceptable to StgOpenStorage() for this platform.
+  /// opened for modification. The file name has no restrictions other than those imposed by
+  /// the underlying file system. AAF files that use structured storage encoding typically
+  /// use the extension .aaf or .isr. AAF files that use XML encoding typically use the .xml
+  /// extension. AAF files that use KLV encoding typically use use the extension .mxf or .klv.
   /// @param modeFlags [in] File open mode flags.  May be any of the following ORed together.
   /// All other bits must be set to zero.
   ///
@@ -52684,8 +52688,10 @@ DECLARE_INTERFACE_(IAAFTypeDefVariableArrayEx, IUnknown)
   ///     file.
   /// 
   /// @param pFileName [in, string] Null-terminated string containing name of filesystem file to be
-  /// opened for modification.  Filename must be in a form that would
-  /// be acceptable to StgOpenStorage() for this platform.
+  /// opened for modification. The file name has no restrictions other than those imposed by
+  /// the underlying file system. AAF files that use structured storage encoding typically
+  /// use the extension .aaf or .isr. AAF files that use XML encoding typically use the .xml
+  /// extension. AAF files that use KLV encoding typically use use the extension .mxf or .klv.
   /// @param modeFlags [in] File open mode flags.  May be any of the following ORed together.
   /// All other bits must be set to zero.
   ///
@@ -52752,7 +52758,10 @@ DECLARE_INTERFACE_(IAAFTypeDefVariableArrayEx, IUnknown)
   ///     file.
   /// 
   /// @param pFileName [in, string] Null-terminated string containing name of filesystem file to be
-  /// opened for modification.
+  /// opened for modification. The file name has no restrictions other than those imposed by
+  /// the underlying file system. AAF files that use structured storage encoding typically
+  /// use the extension .aaf or .isr. AAF files that use XML encoding typically use the .xml
+  /// extension. AAF files that use KLV encoding typically use use the extension .mxf or .klv.
   /// @param pFileKind [in] kind of file to be created
   /// @param modeFlags [in] File open mode flags
   /// @param pIdent [in] Identification of the application which is creating this file.

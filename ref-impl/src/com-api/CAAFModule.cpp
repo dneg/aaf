@@ -25,7 +25,7 @@
 // (http://www.amwa.tv/policies).
 //
 // Copyright Notices:
-// The Original Code of this file is Copyright 1998-2009, licensor of the
+// The Original Code of this file is Copyright 1998-2012, licensor of the
 // Advanced Media Workflow Association.  All rights reserved.
 //
 // The Initial Developer of the Original Code of this file and the

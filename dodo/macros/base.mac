@@ -21,7 +21,7 @@
 #c (http://www.amwa.tv/policies).
 #c
 #c Copyright Notices:
-#c The Original Code of this file is Copyright 1998-2009, licensor of the
+#c The Original Code of this file is Copyright 1998-2012, licensor of the
 #c Advanced Media Workflow Association.  All rights reserved.
 #c
 #c The Initial Developer of the Original Code of this file and the
@@ -828,7 +828,7 @@ AD_XMETHOD1(Clone,
 // (http://www.amwa.tv/policies).
 //
 // Copyright Notices:
-// The Original Code of this file is Copyright 1998-2009, licensor of the
+// The Original Code of this file is Copyright 1998-2012, licensor of the
 // Advanced Media Workflow Association.  All rights reserved.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -872,7 +872,7 @@ cpp_quote("// to create and distribute AAF compliant products.")
 cpp_quote("// (http://www.amwa.tv/policies).")
 cpp_quote("//")
 cpp_quote("// Copyright Notices:")
-cpp_quote("// The Original Code of this file is Copyright 1998-2009, licensor of the")
+cpp_quote("// The Original Code of this file is Copyright 1998-2012, licensor of the")
 cpp_quote("// Advanced Media Workflow Association.  All rights reserved.")
 cpp_quote("//")
 cpp_quote("// The Initial Developer of the Original Code of this file and the")

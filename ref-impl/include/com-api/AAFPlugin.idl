@@ -23,7 +23,7 @@ cpp_quote("// to create and distribute AAF compliant products.")
 cpp_quote("// (http://www.amwa.tv/policies).")
 cpp_quote("//")
 cpp_quote("// Copyright Notices:")
-cpp_quote("// The Original Code of this file is Copyright 1998-2009, licensor of the")
+cpp_quote("// The Original Code of this file is Copyright 1998-2012, licensor of the")
 cpp_quote("// Advanced Media Workflow Association.  All rights reserved.")
 cpp_quote("//")
 cpp_quote("// The Initial Developer of the Original Code of this file and the")
@@ -157,6 +157,9 @@ interface IAAFClassExtension : IUnknown
 ///
 
 
+///
+/// Objects that implement IAAFEssenceCodec also implement the following interfaces:
+///  - IAAFPlugin
 [
     object,
     uuid(3631F7A2-9121-11d2-8088-006008143e6f),
@@ -1967,9 +1970,9 @@ interface IAAFEssenceCodec2 : IUnknown
 ///   - insufficient system memory is available to perform the
 ///     operation.
 ///
-
-
-
+///
+/// Objects that implement IAAFEssenceCodec3 also implement the following interfaces:
+///  - IAAFPlugin
 [
     object,
     uuid(F375A58F-EB6A-49C7-90A2-7937329AE0E4),
