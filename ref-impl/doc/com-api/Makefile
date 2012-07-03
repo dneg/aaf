@@ -221,20 +221,18 @@ $(PLUGIN_HTML_HELP_PROJ): $(COMAPI_PATH)/AAFPlugin.idl \
 	) | $(DOXYGEN) -
 
 # hhc.exe is required to build the MS Compiled Help File .chm files,
-# and is found in C:/Program Files/HTML Help Workshop/hhc.exe
-ifneq ($(wildcard C:/Program\ Files/HTML\ Help\ Workshop/hhc.exe),)
-  # 'hhc' returns 1 for success, 0 for failure, so invert exit status using !
-  HHC = ! C:/Program\ Files/HTML\ Help\ Workshop/hhc.exe
-else
-  HHC = @echo "*** hhc.exe not found (required to compile .chm files) ***" ; false
-endif
+# and must be in the PATH. Normally it installed in the following
+# location: C:/Program\ Files/HTML\ Help\ Workshop/hhc.exe.  Note that
+# hhc.exe command returns a non-zero exit status even when it
+# generates the chm file successfully. This is the reason from the
+# leading "-" character.
 
 $(AAF_HTML_HELP_MAN): $(AAF_HTML_HELP_PROJ)
-	$(HHC) $(AAF_HTML_HELP_PROJ)
+	-hhc $(AAF_HTML_HELP_PROJ)
 	mv $(AAF_HTML_HELP_DIR)/$(AAF_HTML_HELP_MAN_FILE) $(AAF_HTML_HELP_MAN)
 
 $(PLUGIN_HTML_HELP_MAN): $(PLUGIN_HTML_HELP_PROJ)
-	$(HHC) $(PLUGIN_HTML_HELP_PROJ)
+	-hhc $(PLUGIN_HTML_HELP_PROJ)
 	mv $(PLUGIN_HTML_HELP_DIR)/$(PLUGIN_HTML_HELP_MAN_FILE) $(PLUGIN_HTML_HELP_MAN)
 
 
@@ -271,7 +269,7 @@ $(PLUGIN_HTML_MAN_DIR)/aafDSlogo.gif \
 $(AAF_HTML_HELP_DIR)/aafDSlogo.gif \
 $(PLUGIN_HTML_HELP_DIR)/aafDSlogo.gif: aafDSlogo.gif
 	cp aafDSlogo.gif $@
-	
+
 
 
 
