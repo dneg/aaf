@@ -154,9 +154,11 @@ $(OUTPUT_DIR):
 
 
 $(OUTPUT_DIR)/AAF.idl: $(COMAPI_PATH)/AAF.idl
+	sed -e s/ROLE/Application/g -e s/APIIDL/AAF/g -e s/TYPESIDL/AAFTypes/g -e s/DOCNAME/aafapi/g frontCover.html \
+		> $(OUTPUT_DIR)/aafapiFrontCover.html
 	echo "/**" > $(OUTPUT_DIR)/AAF.idl
 	echo " * @mainpage notitle" >> $(OUTPUT_DIR)/AAF.idl
-	echo " * @htmlinclude frontCover.html" >> $(OUTPUT_DIR)/AAF.idl
+	echo " * @htmlinclude $(OUTPUT_DIR)/aafapiFrontCover.html" >> $(OUTPUT_DIR)/AAF.idl
 	echo " */" >> $(OUTPUT_DIR)/AAF.idl
 	cat $(COMAPI_PATH)/AAF.idl >> $(OUTPUT_DIR)/AAF.idl
 
@@ -173,20 +175,26 @@ $(AAF_HTML_MAN): $(OUTPUT_DIR)/AAF.idl \
 	) | $(DOXYGEN) -
 
 
-$(PLUGIN_HTML_MAN): $(COMAPI_PATH)/AAFPlugin.idl \
+$(OUTPUT_DIR)/AAFPlugin.idl: $(COMAPI_PATH)/AAFPlugin.idl 
+	sed -e s/ROLE/Plugin/g -e s/APIIDL/AAFPlugin/g -e s/TYPESIDL/AAFPluginTypes/g -e s/DOCNAME/pluginapi/g frontCover.html \
+		> $(OUTPUT_DIR)/pluginFrontCover.html
+	echo "/**" > $(OUTPUT_DIR)/AAFPlugin.idl
+	echo " * @mainpage notitle" >> $(OUTPUT_DIR)/AAFPlugin.idl
+	echo " * @htmlinclude $(OUTPUT_DIR)/pluginFrontCover.html" >> $(OUTPUT_DIR)/AAFPlugin.idl
+	echo " */" >> $(OUTPUT_DIR)/AAFPlugin.idl
+	cat $(COMAPI_PATH)/AAFPlugin.idl >> $(OUTPUT_DIR)/AAFPlugin.idl
+
+$(PLUGIN_HTML_MAN): $(OUTPUT_DIR)/AAFPlugin.idl \
                     $(COMAPI_PATH)/AAFPluginTypes.idl \
                     $(AAF_TAG_FILE) \
-                    doxygen.cfg
+                    frontCover.html doxygen.cfg
 	( \
 	  cat doxygen.cfg ; \
-	  echo INPUT=$(COMAPI_PATH)/AAFPlugin.idl $(COMAPI_PATH)/AAFPluginTypes.idl ; \
+	  echo INPUT=$(OUTPUT_DIR)/AAFPlugin.idl $(COMAPI_PATH)/AAFPluginTypes.idl ; \
 	  echo OUTPUT_DIRECTORY=$(PLUGIN_HTML_MAN_DIR) ; \
 	  echo TAGFILES=\"$(AAF_TAG_FILE)=../$(AAF_HTML_MAN_COMP)\" ; \
 	  echo PROJECT_NAME=\"$(PLUGIN_MAN_TITLE)\" \
 	) | $(DOXYGEN) -
-
-
-
 
 ##############################################################
 ####  Windows HTML Help doc generating targets
