@@ -93,6 +93,7 @@ check :
 	cd EssenceAccess && $(MAKE) $@
 	cd MultiGenTest && $(MAKE) $@
 	cd ComFileKindTest && $(MAKE) $@
+	cd ComFileExtensionTest && $(MAKE) $@
 	cd UTF8FileNameTest && $(MAKE) $@
 	cd OpenExistingModify && $(MAKE) $@
 	cd ScaleTest && $(MAKE) $@
@@ -107,6 +108,7 @@ valgrind-check :
 	cd EssenceAccess && $(MAKE) $@
 	cd MultiGenTest && $(MAKE) $@
 	cd ComFileKindTest && $(MAKE) $@
+	cd ComFileExtensionTest && $(MAKE) $@
 	cd UTF8FileNameTest && $(MAKE) $@
 	cd OpenExistingModify && $(MAKE) $@
 	cd ScaleTest && $(MAKE) $@
@@ -121,6 +123,7 @@ clean :
 	cd EssenceAccess && $(MAKE) GENDEPS=0 $@
 	cd MultiGenTest && $(MAKE) GENDEPS=0 $@
 	cd ComFileKindTest && $(MAKE) GENDEPS=0 $@
+	cd ComFileExtensionTest && $(MAKE) $@
 	cd UTF8FileNameTest && $(MAKE) GENDEPS=0 $@
 	cd OpenExistingModify && $(MAKE) GENDEPS=0 $@
 	cd ScaleTest && $(MAKE) GENDEPS=0 $@
@@ -135,6 +138,7 @@ realclean :
 	cd EssenceAccess && $(MAKE) GENDEPS=0 $@
 	cd MultiGenTest && $(MAKE) GENDEPS=0 $@
 	cd ComFileKindTest && $(MAKE) GENDEPS=0 $@
+	cd ComFileExtensionTest && $(MAKE) $@
 	cd UTF8FileNameTest && $(MAKE) GENDEPS=0 $@
 	cd OpenExistingModify && $(MAKE) GENDEPS=0 $@
 	cd ScaleTest && $(MAKE) GENDEPS=0 $@
