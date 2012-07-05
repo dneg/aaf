@@ -42,6 +42,7 @@ set -e
 # explicity.
 function errorTrap() {
     echo "$0 unexpected error"
+    echo "FAILED"
 }
 trap errorTrap ERR
 
@@ -134,6 +135,7 @@ do
   SanityTestFile_KlvOnly $f
 done
 
-
 # Cleanup
 rm $CFET_OUT
+
+echo "PASSED"
