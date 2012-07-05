@@ -214,13 +214,13 @@ $(AAF_HTML_HELP_PROJ): $(OUTPUT_DIR)/AAF.idl \
 	  echo CHM_FILE=$(AAF_HTML_HELP_MAN_FILE) \
 	) | $(DOXYGEN) -
 
-$(PLUGIN_HTML_HELP_PROJ): $(COMAPI_PATH)/AAFPlugin.idl \
+$(PLUGIN_HTML_HELP_PROJ): $(OUTPUT_DIR)/AAFPlugin.idl \
                           $(COMAPI_PATH)/AAFPluginTypes.idl \
                           $(AAF_TAG_FILE) \
                           doxygen.cfg
 	( \
 	  cat doxygen.cfg ; \
-	  echo INPUT=$(COMAPI_PATH)/AAFPlugin.idl $(COMAPI_PATH)/AAFPluginTypes.idl ; \
+	  echo INPUT=$(OUTPUT_DIR)/AAFPlugin.idl $(COMAPI_PATH)/AAFPluginTypes.idl ; \
 	  echo OUTPUT_DIRECTORY=$(PLUGIN_HTML_HELP_DIR) ; \
 	  echo PROJECT_NAME=\"$(PLUGIN_MAN_TITLE)\" ; \
 	  echo GENERATE_HTMLHELP=YES ; \
