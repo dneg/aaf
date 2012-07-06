@@ -87,8 +87,8 @@ test : install
 check : test
 	cd examples2 && $(MAKE) $@
 	cd examples && $(MAKE) $@
-	cd utilities && $(MAKE) $@
-	cd devutils && $(MAKE) $@
+	cd Utilities && $(MAKE) $@
+	cd DevUtils && $(MAKE) $@
 	cd test && $(MAKE) $@
 
 .PHONY : valgrind-check
@@ -149,4 +149,3 @@ realclean : uninstall
 	cd examples2 && $(MAKE) $@
 	cd test && $(MAKE) $@
 	cd dist && $(MAKE) $@
-
