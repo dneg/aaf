@@ -37,8 +37,8 @@
 # Exist on any error (non zero command exit status)
 set -e
 
-# This will capture errors that indicated by nonzero return values.
-# It saves the script from the need to test each return value
+# This will capture errors that are indicated by nonzero return
+# values.  It saves the script from the need to test each return value
 # explicity.
 function errorTrap() {
     echo "$0 unexpected error"
@@ -47,6 +47,12 @@ function errorTrap() {
 trap errorTrap ERR
 
 export LD_LIBRARY_PATH=.
+
+# The script runs utilities that it expects to find in the same
+# directory in which the script resides. We must cd to that directory
+# so that the relative paths used by this script work as
+# expected. (This is necessary for "make check" to work).
+cd $(dirname $0)
 
 # Sanity test of the aafdump utility (low level structured storage dumper)
 # See not above regarding possible absence of aafdump.

@@ -54,8 +54,9 @@ $(AAFSDKBINDIR)/ComFileExtDevUtilVerifyTest.sh : ComFileExtDevUtilVerifyTest.sh 
 	$(CP) ComFileExtDevUtilVerifyTest.sh $(AAFSDKBINDIR)/ComFileExtDevUtilVerifyTest.sh
 
 .PHONY : check
-check : $(AAFSDKBINDIR)/ComFileExtensionTest$(EXE)
+check : $(AAFSDKBINDIR)/ComFileExtensionTest$(EXE) $(AAFSDKBINDIR)/ComFileExtDevUtilVerifyTest.sh
 	$(APP_RUN_ENV) $(AAFSDKBINDIR)/ComFileExtensionTest$(EXE)
+	$(APP_RUN_ENV) $(AAFSDKBINDIR)/ComFileExtDevUtilVerifyTest.sh
 
 .PHONY : valgrind-check
 valgrind-check : $(AAFSDKBINDIR)/ComFileExtensionTest$(EXE)
