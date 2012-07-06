@@ -43,6 +43,13 @@ dump :
 MXFDump :
 	cd MXFDump && $(MAKE)
 
+# Check target builds utiltities that are required by other check
+# tests possibly outside of the utilitiy directory (originally this
+# was added for the ComFileExtDevUtilVerityTest.sh script).
+.PHONY : check
+check : MXFDump
+	echo DevUtils check dependencies build complete.
+
 .PHONY : clean
 clean :
 	cd Dump && $(MAKE) GENDEPS=0 $@

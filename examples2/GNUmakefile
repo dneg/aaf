@@ -63,6 +63,13 @@ axPlugin:
 axFileGen:
 	cd axFileGen && $(MAKE)
 
+# Check target builds utiltities that are required by other check
+# tests possibly outside of the utilitiy directory (originally this
+# was added for the ComFileExtDevUtilVerityTest.sh script).
+.PHONY : check
+check : axLib
+	echo examples2 check dependencies build complete
+
 .PHONY: clean
 clean:
 	cd axLib && $(MAKE) GENDEPS=0 $@

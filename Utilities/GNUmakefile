@@ -72,6 +72,13 @@ aaffmtconv:
 aafembed:
 	cd aafembed && $(MAKE)
 
+# Check target builds utiltities that are required by other check
+# tests possibly outside of the utilitiy directory (originally this
+# was added for the ComFileExtDevUtilVerityTest.sh script).
+.PHONY : check
+check : aafviewer aaffmtconv aafembed aafdump
+	echo Utilities check dependencies build complete.
+
 .PHONY : clean
 clean :
 	cd AafOmf && $(MAKE) GENDEPS=0 $@

@@ -85,8 +85,11 @@ test : install
 
 .PHONY : check
 check : test
-	cd test && $(MAKE) $@
+	cd examples2 && $(MAKE) $@
 	cd examples && $(MAKE) $@
+	cd utilities && $(MAKE) $@
+	cd devutils && $(MAKE) $@
+	cd test && $(MAKE) $@
 
 .PHONY : valgrind-check
 valgrind-check : test
