@@ -60,9 +60,9 @@ The primary addition is the ComFileExtensionTest test program and the
 ComFileExtDevUtilVerityTest.sh script.  These tests were added to
 ensure that the AAF is, and remains, independent of the file extension
 used to name AAF files. The script ensures that common development
-utilities to not have any built in assumptions that may frustrate
+utilities do not have any built in assumptions that may frustrate
 developers that use something other than ".aaf" as the extension of
-the structured storage encoded AAF files. Note, that no such
+their structured storage encoded AAF files. Note, that no such
 limitations were expected and none were found as part of the
 verification process undertaken for 1.1.6. The tests ensure that no
 such dependencies are created in the future, and provide a well known
@@ -74,14 +74,15 @@ The ComFileExtensionTest is now part of the RunModTestAndExamples.bash
 script used to test Microsoft Windows builds.
 
 The com-api documentation for each of the functions defined in
-AAFModule.dod was modified to: i) bring it up to date in general (it
-had never been updated to reflect the addition of klv and xml
-support), ii) explicitly note the extension independence file names,
-and iii) to clearly document that both .aaf and .isr are common
-extensions used for structured storage encoded AAF files.
+AAFModule.dod that take a filename argument was modified to: i) bring
+it up to date in general (it had never been updated to reflect the
+addition of klv and xml support), ii) explicitly note the extension
+independence file names, and iii) to clearly document that both .aaf
+and .isr are common extensions used for structured storage encoded AAF
+files.
 
 The online SDK API documentation was updated as part of this
-release. It may be found that following url:
+release. It may be found at following url:
 http://aaf.sourceforge.net/docs/aafapiman/
 
 Major Changes from v1.1.4 to v1.1.5
