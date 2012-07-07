@@ -1,4 +1,4 @@
-                        AAF SDK version 1.1.5 Release
+                        AAF SDK version 1.1.6 Release
                          http://aaf.sourceforge.net/
 
 Getting Started

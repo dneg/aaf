@@ -1,7 +1,7 @@
-AAF SDK v1.1.5
+AAF SDK v1.1.6
 ==============
 
-2012-05-18
+2012-07-7
 
 This SDK is the reference implementation of the Advanced
 Authoring Format (AAF) version 1.1. See doc/aafeditprotocol.pdf,
@@ -49,6 +49,40 @@ CREATE AND DISTRIBUTE AAF COMPLIANT PRODUCTS.  PLEASE CONTACT THE AAF
 ASSOCIATION, INC. FOR MORE INFORMATION ABOUT ANY ADDITIONAL LICENSES
 THAT MAY BE REQUIRED TO CREATE AND DISTRIBUTE AAF COMPLIANT PRODUCTS
 (HTTP://WWW.AAFASSOCIATION.ORG/POLICIES).
+
+Major Changes from v1.1.5 to v1.1.6
+-----------------------------------
+
+The 1.1.6 provides explicit support for the .isr file extension in the
+AAF SDK.
+
+The primary addition is the ComFileExtensionTest test program and the
+ComFileExtDevUtilVerityTest.sh script.  These tests were added to
+ensure that the AAF is, and remains, independent of the file extension
+used to name AAF files. The script ensures that common development
+utilities to not have any built in assumptions that may frustrate
+developers that use something other than ".aaf" as the extension of
+the structured storage encoded AAF files. Note, that no such
+limitations were expected and none were found as part of the
+verification process undertaken for 1.1.6. The tests ensure that no
+such dependencies are created in the future, and provide a well known
+place to test such limitations should any be detected in the future
+that affect .isr developers.
+
+These tests are now included in "make check" builds on unix platforms.
+The ComFileExtensionTest is now part of the RunModTestAndExamples.bash
+script used to test Microsoft Windows builds.
+
+The com-api documentation for each of the functions defined in
+AAFModule.dod was modified to: i) bring it up to date in general (it
+had never been updated to reflect the addition of klv and xml
+support), ii) explicitly note the extension independence file names,
+and iii) to clearly document that both .aaf and .isr are common
+extensions used for structured storage encoded AAF files.
+
+The online SDK API documentation was updated as part of this
+release. It may be found that following url:
+http://aaf.sourceforge.net/docs/aafapiman/
 
 Major Changes from v1.1.4 to v1.1.5
 -----------------------------------
