@@ -126,7 +126,7 @@ echo DIST_FILE_NAME = $DIST_FILE_NAME
 case ${AAFPLATFORM} in
 	Win)			create_win_distribution $AAFSDK $DIST_FILE_NAME $DIST_LIST ;;
 
-	i686Linux)		create_unix_distribution $AAFSDK $DIST_FILE_NAME $DIST_LIST ;;
+	i686Linux|x86_64Linux)	create_unix_distribution $AAFSDK $DIST_FILE_NAME $DIST_LIST ;;
 
 	MipsIrix)		create_unix_distribution $AAFSDK $DIST_FILE_NAME $DIST_LIST ;;
 
