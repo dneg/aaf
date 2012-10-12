@@ -52,7 +52,6 @@ namespace aafanalyzer
 {
     
 using namespace std;
-using namespace boost;
 
 FileLoad::FileLoad(wostream& os, const basic_string<wchar_t> AAFFile)
   : Test(os, GetTestInfo()),
@@ -64,14 +63,14 @@ FileLoad::~FileLoad()
 {
 }
 
-shared_ptr<TestLevelTestResult> FileLoad::Execute()
+boost::shared_ptr<TestLevelTestResult> FileLoad::Execute()
 {
 
   GraphBuilder graphBuild;
-  shared_ptr<NodeFactory> spFactory(new NodeFactoryImpl());
+  boost::shared_ptr<NodeFactory> spFactory(new NodeFactoryImpl());
 
   // Build the graph and initialize TestGraph.
-  shared_ptr<const AAFGraphInfo> spGraphInfo( graphBuild.CreateGraph(_File, spFactory) );
+  boost::shared_ptr<const AAFGraphInfo> spGraphInfo( graphBuild.CreateGraph(_File, spFactory) );
   SetTestGraph(spGraphInfo->GetGraph());
   _spGraphInfo = spGraphInfo;
   
@@ -94,7 +93,7 @@ AxString FileLoad::GetDescription() const
 
 const TestInfo FileLoad::GetTestInfo()
 {
-    shared_ptr<vector<AxString> > spReqIds(new vector<AxString>);
+    boost::shared_ptr<vector<AxString> > spReqIds(new vector<AxString>);
 
     // There are no requirements to associate with this test.  Either
     // it passes, and the program continues, or the graph builder
@@ -103,7 +102,7 @@ const TestInfo FileLoad::GetTestInfo()
     return TestInfo(L"FileLoad", spReqIds);
 }
 
-shared_ptr<const AAFGraphInfo> FileLoad::GetTestGraphInfo()
+boost::shared_ptr<const AAFGraphInfo> FileLoad::GetTestGraphInfo()
 {
   return _spGraphInfo;
 }

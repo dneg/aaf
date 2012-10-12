@@ -43,8 +43,6 @@ using namespace aafanalyzer;
 
 namespace aafanalyzer {
 
-using namespace boost;
-
 //static variable
 RequirementRegistry* RequirementRegistry::_pRequirementRegistry = NULL;
 
@@ -72,7 +70,7 @@ RequirementRegistry& RequirementRegistry::GetInstance()
     return *_pRequirementRegistry;
 }
 
-void RequirementRegistry::Register( const shared_ptr<const Requirement>& req )
+void RequirementRegistry::Register( const boost::shared_ptr<const Requirement>& req )
 {
     if ( _requirementSet.find( req->GetId() ) == _requirementSet.end() )
     {
@@ -85,7 +83,7 @@ void RequirementRegistry::Register( const shared_ptr<const Requirement>& req )
     }
 }
 
-const shared_ptr<const Requirement> RequirementRegistry::GetRequirement( const wstring& id ) const
+const boost::shared_ptr<const Requirement> RequirementRegistry::GetRequirement( const wstring& id ) const
 {
     Requirement::RequirementMap::const_iterator target = _requirementSet.find( id );
     if ( target == _requirementSet.end() )

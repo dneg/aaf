@@ -60,7 +60,7 @@ namespace aafanalyzer {
 using namespace std;
 
 EPContainedTrackTest::EPContainedTrackTest( wostream& log,
-                                            shared_ptr<const TestGraph> spGraph )
+                                            boost::shared_ptr<const TestGraph> spGraph )
   : Test( log, GetTestInfo() )
 {
     SetTestGraph(spGraph);
@@ -69,11 +69,11 @@ EPContainedTrackTest::EPContainedTrackTest( wostream& log,
 EPContainedTrackTest::~EPContainedTrackTest()
 {}
 
-shared_ptr<TestLevelTestResult> EPContainedTrackTest::Execute()
+boost::shared_ptr<TestLevelTestResult> EPContainedTrackTest::Execute()
 {
-  shared_ptr<TestLevelTestResult> spTestResult = CreateTestResult();
+  boost::shared_ptr<TestLevelTestResult> spTestResult = CreateTestResult();
 
-  shared_ptr<EPContainedTrackVisitor>
+  boost::shared_ptr<EPContainedTrackVisitor>
     spVisitor( new EPContainedTrackVisitor( GetOutStream(),
 					    GetTestGraph()->GetEdgeMap(),
 					    spTestResult ) );
@@ -96,7 +96,7 @@ AxString EPContainedTrackTest::GetDescription() const
 
 const TestInfo EPContainedTrackTest::GetTestInfo()
 {
-    shared_ptr<vector<AxString> > spReqIds(new vector<AxString>);
+    boost::shared_ptr<vector<AxString> > spReqIds(new vector<AxString>);
     spReqIds->push_back(L"REQ_EP_028");     //Top-Level Composition
     spReqIds->push_back(L"REQ_EP_037");     //Sub-Clip Composition
     spReqIds->push_back(L"REQ_EP_046");     //Adjusted Clip Composition

@@ -48,8 +48,6 @@ class AxMob;
 
 namespace aafanalyzer {
 
-using namespace boost;
-
 class TestLevelTestResult;
 
 class EPContainedTrackVisitor : public EPTypedVisitor
@@ -58,8 +56,8 @@ class EPContainedTrackVisitor : public EPTypedVisitor
  public:
 
   EPContainedTrackVisitor( wostream& log,
-			   shared_ptr<EdgeMap> spEdgeMap,
-			   shared_ptr<TestLevelTestResult> spTestResult );
+			   boost::shared_ptr<EdgeMap> spEdgeMap,
+			   boost::shared_ptr<TestLevelTestResult> spTestResult );
   
   virtual ~EPContainedTrackVisitor();
   
@@ -80,7 +78,7 @@ class EPContainedTrackVisitor : public EPTypedVisitor
   
   typedef map<aafUInt32, aafUInt32> TrackNumberMap;
   
-  shared_ptr<TrackNumberMap> CountTrackCodes( shared_ptr<EPTypedVisitor::MobSlotNodeSet> tracks,
+  boost::shared_ptr<TrackNumberMap> CountTrackCodes( boost::shared_ptr<EPTypedVisitor::MobSlotNodeSet> tracks,
 					      unsigned int& unnumberedTracks );
 
   // This is used to check top level composition, and tape source,
@@ -92,13 +90,13 @@ class EPContainedTrackVisitor : public EPTypedVisitor
   template<typename SegmentTypeSP>
     bool CheckForSingleSegment( Node& mobSlotNode );
 
-  bool CheckPrimaryTimecodeTracks( shared_ptr<EPTypedVisitor::MobSlotNodeSet> tracks,
+  bool CheckPrimaryTimecodeTracks( boost::shared_ptr<EPTypedVisitor::MobSlotNodeSet> tracks,
 				   Node& node );
   
   
   wostream& _log;
-  shared_ptr<EdgeMap> _spEdgeMap;
-  shared_ptr<TestLevelTestResult> _spTestResult;
+  boost::shared_ptr<EdgeMap> _spEdgeMap;
+  boost::shared_ptr<TestLevelTestResult> _spTestResult;
 };
 
 } // end of namespace diskstream

@@ -37,7 +37,6 @@
 
 namespace aafanalyzer {
 
-using namespace boost;
 using namespace std;
 
 class TestGraph;
@@ -47,10 +46,10 @@ class DecorateEPTest : public Test
  public:
 
   DecorateEPTest( wostream& log,
-		  shared_ptr<const TestGraph> spGraphInfo );
+		  boost::shared_ptr<const TestGraph> spGraphInfo );
   virtual ~DecorateEPTest();
 
-  virtual shared_ptr<TestLevelTestResult> Execute();
+  virtual boost::shared_ptr<TestLevelTestResult> Execute();
   virtual AxString GetName() const;
   virtual AxString GetDescription() const;
   static const TestInfo GetTestInfo();

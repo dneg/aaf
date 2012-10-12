@@ -49,9 +49,7 @@ using namespace aafanalyzer;
 namespace aafanalyzer 
 {
 
-using namespace boost;
-
-DepthFirstTraversal::DepthFirstTraversal(shared_ptr<EdgeMap> spEdgeMap, shared_ptr<Node> spStartNode)
+DepthFirstTraversal::DepthFirstTraversal(boost::shared_ptr<EdgeMap> spEdgeMap, boost::shared_ptr<Node> spStartNode)
   : _spEdgeMap( spEdgeMap ),
     _spStartNode( spStartNode )
 {}
@@ -59,7 +57,7 @@ DepthFirstTraversal::DepthFirstTraversal(shared_ptr<EdgeMap> spEdgeMap, shared_p
 DepthFirstTraversal::~DepthFirstTraversal()
 {}
 
-void DepthFirstTraversal::TraverseDown(shared_ptr<Visitor> spVisitor, shared_ptr<Node> spNode)
+void DepthFirstTraversal::TraverseDown(boost::shared_ptr<Visitor> spVisitor, boost::shared_ptr<Node> spNode)
 {
   if( !spNode->PreOrderVisit(spVisitor) )
   {
@@ -83,12 +81,12 @@ void DepthFirstTraversal::TraverseDown(shared_ptr<Visitor> spVisitor, shared_ptr
   spNode->PostOrderVisit(spVisitor);
 }
 
-void DepthFirstTraversal::TraverseDown(shared_ptr<Visitor> spVisitor )
+void DepthFirstTraversal::TraverseDown(boost::shared_ptr<Visitor> spVisitor )
 {
   TraverseDown( spVisitor, _spStartNode );
 }
 
-void DepthFirstTraversal::TraverseUp(shared_ptr<Visitor> spVisitor, shared_ptr<Node> spNode)
+void DepthFirstTraversal::TraverseUp(boost::shared_ptr<Visitor> spVisitor, boost::shared_ptr<Node> spNode)
 {
   if( !spNode->PreOrderVisit(spVisitor) )
   {
@@ -112,7 +110,7 @@ void DepthFirstTraversal::TraverseUp(shared_ptr<Visitor> spVisitor, shared_ptr<N
   spNode->PostOrderVisit(spVisitor);
 }
 
-void DepthFirstTraversal::TraverseUp(shared_ptr<Visitor> spVisitor )
+void DepthFirstTraversal::TraverseUp(boost::shared_ptr<Visitor> spVisitor )
 {
   TraverseUp( spVisitor, _spStartNode );
 }

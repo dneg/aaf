@@ -42,7 +42,6 @@ namespace aafanalyzer {
 
 class TestLevelTestResult;
 
-using namespace boost;
 using namespace std;
 
 class CompMobDependency : public Test
@@ -50,14 +49,14 @@ class CompMobDependency : public Test
  public:
 
   typedef AAFTypedObjNode<IAAFCompositionMob> CompMobNode;
-  typedef shared_ptr<CompMobNode> CompMobNodeSP;
+  typedef boost::shared_ptr<CompMobNode> CompMobNodeSP;
   typedef vector<CompMobNodeSP> CompMobNodeVector;
-  typedef shared_ptr<CompMobNodeVector> CompMobNodeVectorSP;
+  typedef boost::shared_ptr<CompMobNodeVector> CompMobNodeVectorSP;
 
-  CompMobDependency(wostream& os, shared_ptr<const TestGraph> spGraph);
+  CompMobDependency(wostream& os, boost::shared_ptr<const TestGraph> spGraph);
   virtual ~CompMobDependency();
 
-  virtual shared_ptr<TestLevelTestResult> Execute();
+  virtual boost::shared_ptr<TestLevelTestResult> Execute();
   virtual AxString GetName() const;
   virtual AxString GetDescription() const;
   static const TestInfo GetTestInfo();

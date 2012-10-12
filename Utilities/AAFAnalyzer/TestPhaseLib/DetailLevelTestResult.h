@@ -38,7 +38,6 @@
 namespace aafanalyzer {
 
 using namespace std;
-using namespace boost;
 
 // A detail level test result stores a result for a single requirement
 // (All others store a value that is aggregate result determine by
@@ -65,11 +64,11 @@ class DetailLevelTestResult : public LowLevelTestResult
   // and an explanation.
   // Pass a null spNode if this result cannot be associated with a
   // single node.
-  DetailLevelTestResult( const shared_ptr<const Test> associatedTest,
+  DetailLevelTestResult( const boost::shared_ptr<const Test> associatedTest,
                          const wstring& explain,
 			 const wstring& reqId,
                          Result result,
-			 shared_ptr<Node> _spNode );
+			 boost::shared_ptr<Node> _spNode );
 
   virtual ~DetailLevelTestResult();
 
@@ -85,7 +84,7 @@ class DetailLevelTestResult : public LowLevelTestResult
 
   // Returns ~0 if this result is not associated with any particular
   // node.
-  shared_ptr<Node> GetAssociatedNode() const;
+  boost::shared_ptr<Node> GetAssociatedNode() const;
 
   // Get the require id against which this result is being reported.
   const wstring& GetId() const;
@@ -96,7 +95,7 @@ class DetailLevelTestResult : public LowLevelTestResult
   DetailLevelTestResult( const DetailLevelTestResult& );
   DetailLevelTestResult& operator=( const DetailLevelTestResult& );
 
-  shared_ptr<const Requirement> GetRequirement() const;
+  boost::shared_ptr<const Requirement> GetRequirement() const;
 
   // This detail result is for the following requirement.
   // This is here primarily to aid debugging. We add test results
@@ -105,7 +104,7 @@ class DetailLevelTestResult : public LowLevelTestResult
   const wstring _reqId;
 
   // The node associated with the AAF object that caused the error.
-  shared_ptr<Node> _spNode;
+  boost::shared_ptr<Node> _spNode;
 };
 
 } // end of namespace diskstream

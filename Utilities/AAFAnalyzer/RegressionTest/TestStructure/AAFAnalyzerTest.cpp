@@ -94,23 +94,22 @@ namespace {
 
 using namespace aafanalyzer;
 using namespace std;
-using namespace boost;
 
 void BasicBuilderTest( const AxString& filename )
 {
   //Test the Graph Builder
   GraphBuilder graphBuild;
-  shared_ptr<NodeFactory> spFactory(new NodeFactoryImpl());
-  shared_ptr<const AAFGraphInfo> spGraphInfo( graphBuild.CreateGraph(filename, spFactory) );
-  shared_ptr<const TestGraph> spTestGraph( spGraphInfo->GetGraph() );
+  boost::shared_ptr<NodeFactory> spFactory(new NodeFactoryImpl());
+  boost::shared_ptr<const AAFGraphInfo> spGraphInfo( graphBuild.CreateGraph(filename, spFactory) );
+  boost::shared_ptr<const TestGraph> spTestGraph( spGraphInfo->GetGraph() );
 
   //Test the ResolveRefVisitor
-  shared_ptr<RefResolver> ref( new RefResolver( wcerr, spTestGraph ) );
+  boost::shared_ptr<RefResolver> ref( new RefResolver( wcerr, spTestGraph ) );
   ref->Execute();
 
   // Dump the full graph to std out so that it can be compared to a
   // known good result.
-  shared_ptr<DumpVisitor> spDumpVisitor(new DumpVisitor(Visitor::FOLLOW_ALL));
+  boost::shared_ptr<DumpVisitor> spDumpVisitor(new DumpVisitor(Visitor::FOLLOW_ALL));
   DepthFirstTraversal dfs(spTestGraph->GetEdgeMap(), spTestGraph->GetRootNode());
   dfs.TraverseDown(spDumpVisitor);
 }
@@ -133,16 +132,16 @@ void CheckRegistries()
 
     wcout << L"Test 1: Correct Requirement Registration" << endl;
 
-    shared_ptr<const Requirement> req01(new Requirement(L"TEST01", Requirement::APP, L"app", Requirement::ADHOC, L"adhoc", L"action", L"TEST01", L"description", L"annotation", L"note", L"document", L"version", L"section") );
-    shared_ptr<const Requirement> req02(new Requirement(L"TEST02", Requirement::APP, L"app", Requirement::ADHOC, L"adhoc", L"action", L"TEST02", L"description", L"annotation", L"note", L"document", L"version", L"section") );
-    shared_ptr<const Requirement> req03(new Requirement(L"TEST03", Requirement::APP, L"app", Requirement::ADHOC, L"adhoc", L"action", L"TEST03", L"description", L"annotation", L"note", L"document", L"version", L"section") );
-    shared_ptr<const Requirement> req04(new Requirement(L"TEST04", Requirement::APP, L"app", Requirement::ADHOC, L"adhoc", L"action", L"TEST04", L"description", L"annotation", L"note", L"document", L"version", L"section") );
-    shared_ptr<const Requirement> req05(new Requirement(L"TEST05", Requirement::APP, L"app", Requirement::ADHOC, L"adhoc", L"action", L"TEST05", L"description", L"annotation", L"note", L"document", L"version", L"section") );
-    shared_ptr<const Requirement> req06(new Requirement(L"TEST06", Requirement::APP, L"app", Requirement::ADHOC, L"adhoc", L"action", L"TEST06", L"description", L"annotation", L"note", L"document", L"version", L"section") );
-    shared_ptr<const Requirement> req07(new Requirement(L"TEST07", Requirement::APP, L"app", Requirement::ADHOC, L"adhoc", L"action", L"TEST07", L"description", L"annotation", L"note", L"document", L"version", L"section") );
-    shared_ptr<const Requirement> req08(new Requirement(L"TEST08", Requirement::APP, L"app", Requirement::ADHOC, L"adhoc", L"action", L"TEST08", L"description", L"annotation", L"note", L"document", L"version", L"section") );
-    shared_ptr<const Requirement> req09(new Requirement(L"TEST09", Requirement::APP, L"app", Requirement::ADHOC, L"adhoc", L"action", L"TEST09", L"description", L"annotation", L"note", L"document", L"version", L"section") );
-    shared_ptr<const Requirement> req10(new Requirement(L"TEST10", Requirement::APP, L"app", Requirement::ADHOC, L"adhoc", L"action", L"TEST10", L"description", L"annotation", L"note", L"document", L"version", L"section") );
+    boost::shared_ptr<const Requirement> req01(new Requirement(L"TEST01", Requirement::APP, L"app", Requirement::ADHOC, L"adhoc", L"action", L"TEST01", L"description", L"annotation", L"note", L"document", L"version", L"section") );
+    boost::shared_ptr<const Requirement> req02(new Requirement(L"TEST02", Requirement::APP, L"app", Requirement::ADHOC, L"adhoc", L"action", L"TEST02", L"description", L"annotation", L"note", L"document", L"version", L"section") );
+    boost::shared_ptr<const Requirement> req03(new Requirement(L"TEST03", Requirement::APP, L"app", Requirement::ADHOC, L"adhoc", L"action", L"TEST03", L"description", L"annotation", L"note", L"document", L"version", L"section") );
+    boost::shared_ptr<const Requirement> req04(new Requirement(L"TEST04", Requirement::APP, L"app", Requirement::ADHOC, L"adhoc", L"action", L"TEST04", L"description", L"annotation", L"note", L"document", L"version", L"section") );
+    boost::shared_ptr<const Requirement> req05(new Requirement(L"TEST05", Requirement::APP, L"app", Requirement::ADHOC, L"adhoc", L"action", L"TEST05", L"description", L"annotation", L"note", L"document", L"version", L"section") );
+    boost::shared_ptr<const Requirement> req06(new Requirement(L"TEST06", Requirement::APP, L"app", Requirement::ADHOC, L"adhoc", L"action", L"TEST06", L"description", L"annotation", L"note", L"document", L"version", L"section") );
+    boost::shared_ptr<const Requirement> req07(new Requirement(L"TEST07", Requirement::APP, L"app", Requirement::ADHOC, L"adhoc", L"action", L"TEST07", L"description", L"annotation", L"note", L"document", L"version", L"section") );
+    boost::shared_ptr<const Requirement> req08(new Requirement(L"TEST08", Requirement::APP, L"app", Requirement::ADHOC, L"adhoc", L"action", L"TEST08", L"description", L"annotation", L"note", L"document", L"version", L"section") );
+    boost::shared_ptr<const Requirement> req09(new Requirement(L"TEST09", Requirement::APP, L"app", Requirement::ADHOC, L"adhoc", L"action", L"TEST09", L"description", L"annotation", L"note", L"document", L"version", L"section") );
+    boost::shared_ptr<const Requirement> req10(new Requirement(L"TEST10", Requirement::APP, L"app", Requirement::ADHOC, L"adhoc", L"action", L"TEST10", L"description", L"annotation", L"note", L"document", L"version", L"section") );
 
     try
     {
@@ -362,16 +361,16 @@ void CheckTestResultRequirements()
 
     RequirementRegistry& rReg = RequirementRegistry::GetInstance();
 
-    shared_ptr<const Requirement> req01(rReg.GetRequirement(L"TEST01") );
-    shared_ptr<const Requirement> req02(rReg.GetRequirement(L"TEST02") );
-    shared_ptr<const Requirement> req03(rReg.GetRequirement(L"TEST03") );
-    shared_ptr<const Requirement> req04(rReg.GetRequirement(L"TEST04") );
-    shared_ptr<const Requirement> req05(rReg.GetRequirement(L"TEST05") );
-    shared_ptr<const Requirement> req06(rReg.GetRequirement(L"TEST06") );
-    shared_ptr<const Requirement> req07(rReg.GetRequirement(L"TEST07") );
-    shared_ptr<const Requirement> req08(rReg.GetRequirement(L"TEST08") );
-    shared_ptr<const Requirement> req09(rReg.GetRequirement(L"TEST09") );
-    shared_ptr<const Requirement> req10(rReg.GetRequirement(L"TEST10") );
+    boost::shared_ptr<const Requirement> req01(rReg.GetRequirement(L"TEST01") );
+    boost::shared_ptr<const Requirement> req02(rReg.GetRequirement(L"TEST02") );
+    boost::shared_ptr<const Requirement> req03(rReg.GetRequirement(L"TEST03") );
+    boost::shared_ptr<const Requirement> req04(rReg.GetRequirement(L"TEST04") );
+    boost::shared_ptr<const Requirement> req05(rReg.GetRequirement(L"TEST05") );
+    boost::shared_ptr<const Requirement> req06(rReg.GetRequirement(L"TEST06") );
+    boost::shared_ptr<const Requirement> req07(rReg.GetRequirement(L"TEST07") );
+    boost::shared_ptr<const Requirement> req08(rReg.GetRequirement(L"TEST08") );
+    boost::shared_ptr<const Requirement> req09(rReg.GetRequirement(L"TEST09") );
+    boost::shared_ptr<const Requirement> req10(rReg.GetRequirement(L"TEST10") );
 
     // JPT REVIEW - I modified the design of the TestResult classes to
     // an extent that rendered the tests that were implemented here
@@ -393,7 +392,7 @@ int main( int argc, char** argv )
   AxCmdLineArgs args( argc, argv );
 
   pair<bool,int> reqsArg = args.get( "-reqs" );
-  pair<bool, const char*> requirementsFile( false, 0 );
+  pair<bool, const char*> requirementsFile( false, reinterpret_cast<const char *>(0) );
   requirementsFile = args.get( reqsArg.second+1 );
   if ( !(reqsArg.first && requirementsFile.first) )
   {
@@ -402,7 +401,7 @@ int main( int argc, char** argv )
   }
 
   pair<bool,int> fileArg = args.get( "-file" );
-  pair<bool, const char*> aafTestFile( false, 0 );
+  pair<bool, const char*> aafTestFile( false, reinterpret_cast<const char *>(0) );
   aafTestFile = args.get( fileArg.second+1 );
   if ( !(fileArg.first && aafTestFile.first) )
   {
@@ -417,17 +416,17 @@ int main( int argc, char** argv )
   TestInfoRegistrar<RefResolver> registerRefResolver;
   TestInfoRegistrar<AcyclicAnalysis> acyclicAnalysis;
 
-  //shared_ptr<Node> parentOne(new AAFTypedObjNode<IAAFObject>(L"Header"));
-  shared_ptr<Node> parentOne(new Node());
-  shared_ptr<Node> parentTwo(new Node());
-  shared_ptr<Node> childOne(new Node());
-  shared_ptr<Node> childTwo(new Node());
-  shared_ptr<Edge> edgeOne(new Edge(parentOne, childOne));
-  shared_ptr<Edge> edgeTwo(new Edge(parentOne, childTwo));
-  shared_ptr<Edge> edgeThree(new Edge(parentTwo, childTwo));
+  //boost::shared_ptr<Node> parentOne(new AAFTypedObjNode<IAAFObject>(L"Header"));
+  boost::shared_ptr<Node> parentOne(new Node());
+  boost::shared_ptr<Node> parentTwo(new Node());
+  boost::shared_ptr<Node> childOne(new Node());
+  boost::shared_ptr<Node> childTwo(new Node());
+  boost::shared_ptr<Edge> edgeOne(new Edge(parentOne, childOne));
+  boost::shared_ptr<Edge> edgeTwo(new Edge(parentOne, childTwo));
+  boost::shared_ptr<Edge> edgeThree(new Edge(parentTwo, childTwo));
 
   //test the EdgeMap class
-  shared_ptr<EdgeMap> spEdgeMap(new EdgeMap());
+  boost::shared_ptr<EdgeMap> spEdgeMap(new EdgeMap());
 
   spEdgeMap->AddEdge(edgeOne);
   spEdgeMap->AddEdge(edgeTwo);
@@ -446,11 +445,11 @@ int main( int argc, char** argv )
   assert(theChildrenTwo->front()->GetChildNode()->GetLID() == childTwo->GetLID());//child of parentTwo
 
   //test the DepthFirstTraversal class
-  shared_ptr<DumpVisitor> spDumpVisitor(new DumpVisitor());
-  shared_ptr<Node> fooOne(new Node());
-  shared_ptr<Node> fooTwo(new Node());
-  spEdgeMap->AddEdge(shared_ptr<Edge>(new Edge(childTwo, fooOne)));
-  spEdgeMap->AddEdge(shared_ptr<Edge>(new Edge(childTwo, fooTwo)));
+  boost::shared_ptr<DumpVisitor> spDumpVisitor(new DumpVisitor());
+  boost::shared_ptr<Node> fooOne(new Node());
+  boost::shared_ptr<Node> fooTwo(new Node());
+  spEdgeMap->AddEdge(boost::shared_ptr<Edge>(new Edge(childTwo, fooOne)));
+  spEdgeMap->AddEdge(boost::shared_ptr<Edge>(new Edge(childTwo, fooTwo)));
 
   DepthFirstTraversal dfs(spEdgeMap, parentOne);
   wcout << L"Traverse Down Test Graph:" << endl;
@@ -458,20 +457,20 @@ int main( int argc, char** argv )
   wcout << L"Traverse Up Test Graph:" << endl;
   dfs.TraverseUp(spDumpVisitor, fooOne);
 
-  shared_ptr<TestGraph> spTestGraph( new TestGraph(spEdgeMap, parentOne) );
-  shared_ptr<AcyclicAnalysis> spAcyclicTest( new AcyclicAnalysis(wcout, spTestGraph) );
+  boost::shared_ptr<TestGraph> spTestGraph( new TestGraph(spEdgeMap, parentOne) );
+  boost::shared_ptr<AcyclicAnalysis> spAcyclicTest( new AcyclicAnalysis(wcout, spTestGraph) );
 
   //test the Acyclic Visitor without cycles
-  shared_ptr<TestLevelTestResult> spAcyclicResult( new TestLevelTestResult(spAcyclicTest) );
-  shared_ptr<AcyclicVisitor> spAcyclicVisitorA(new AcyclicVisitor(wcout, spAcyclicResult));
+  boost::shared_ptr<TestLevelTestResult> spAcyclicResult( new TestLevelTestResult(spAcyclicTest) );
+  boost::shared_ptr<AcyclicVisitor> spAcyclicVisitorA(new AcyclicVisitor(wcout, spAcyclicResult));
   dfs.TraverseDown(spAcyclicVisitorA, parentOne);
   spAcyclicResult->ConsolidateResults();
   assert( spAcyclicResult->GetResult() == TestResult::PASS );
 
   //test the Acyclic Visitor without cycles
-  shared_ptr<TestLevelTestResult> spCyclicResult( new TestLevelTestResult(spAcyclicTest) );
-  shared_ptr<AcyclicVisitor> spAcyclicVisitorB(new AcyclicVisitor(wcout,spCyclicResult));
-  spEdgeMap->AddEdge(shared_ptr<Edge>(new Edge(fooTwo, parentTwo)));//adds a cycle
+  boost::shared_ptr<TestLevelTestResult> spCyclicResult( new TestLevelTestResult(spAcyclicTest) );
+  boost::shared_ptr<AcyclicVisitor> spAcyclicVisitorB(new AcyclicVisitor(wcout,spCyclicResult));
+  spEdgeMap->AddEdge(boost::shared_ptr<Edge>(new Edge(fooTwo, parentTwo)));//adds a cycle
   dfs.TraverseDown(spAcyclicVisitorB, parentOne);
   spCyclicResult->ConsolidateResults();
   assert( spCyclicResult->GetResult() == TestResult::FAIL );

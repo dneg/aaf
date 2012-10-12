@@ -57,7 +57,6 @@
 namespace {
 
 using namespace aafanalyzer;
-using namespace boost;
 
 class TransitionInputVisitor : public TypedVisitor
 {
@@ -154,7 +153,7 @@ class AlphaEffectVisitor : public EPTypedVisitor
         AlphaEffectVisitor( const AxString& descriptorReq,
 			    const AxString& alphaReq,
 			    const AxString& slotName,
-			    shared_ptr<TestLevelTestResult> spTestResult )
+			    boost::shared_ptr<TestLevelTestResult> spTestResult )
             : _descriptorReq( descriptorReq ),
               _alphaReq( alphaReq ),
               _slotName( slotName ),
@@ -310,7 +309,7 @@ class AlphaEffectVisitor : public EPTypedVisitor
         const AxString _descriptorReq;
         const AxString _alphaReq;
         const AxString _slotName;
-        shared_ptr<TestLevelTestResult> _spTestResult;
+        boost::shared_ptr<TestLevelTestResult> _spTestResult;
         bool _testPassed;
 
         // prohibited
@@ -328,8 +327,8 @@ namespace aafanalyzer {
 using namespace boost;
 
 EPEffectVisitor::EPEffectVisitor( wostream& log,
-				  shared_ptr<EdgeMap> spEdgeMap,
-				  shared_ptr<TestLevelTestResult> spTestResult )
+				  boost::shared_ptr<EdgeMap> spEdgeMap,
+				  boost::shared_ptr<TestLevelTestResult> spTestResult )
     : _log(log),
       _spEdgeMap( spEdgeMap ),
       _spTestResult( spTestResult )
@@ -555,8 +554,8 @@ bool EPEffectVisitor::PreOrderVisit( EPTypedObjNode<IAAFOperationGroup, EPTwoPar
   }
   else
   {
-    shared_ptr<TransitionInputVisitor> spVisitor( new TransitionInputVisitor() );
-    shared_ptr<Node> spNode( node.GetSharedPointerToNode() );
+    boost::shared_ptr<TransitionInputVisitor> spVisitor( new TransitionInputVisitor() );
+    boost::shared_ptr<Node> spNode( node.GetSharedPointerToNode() );
     DepthFirstTraversal dft( _spEdgeMap, spNode );
     dft.TraverseUp( spVisitor );
 
@@ -771,7 +770,7 @@ void EPEffectVisitor::VerifyAlphaRequirements( Node& node,
       // accessing thild nodes directly. They should be references and
       // they should be valid.
 
-      shared_ptr<Node> spInputNode = MobNodeMap::GetInstance().GetMobNode(mobid);
+      boost::shared_ptr<Node> spInputNode = MobNodeMap::GetInstance().GetMobNode(mobid);
       if ( !spInputNode )
       {
 	// Out of File reference so warn.
@@ -797,7 +796,7 @@ void EPEffectVisitor::VerifyAlphaRequirements( Node& node,
 				      node );
 
       //Verify the Alpha Requirements.
-      shared_ptr<AlphaEffectVisitor<EPAlphaWithVideoKeyEffect> >
+      boost::shared_ptr<AlphaEffectVisitor<EPAlphaWithVideoKeyEffect> >
 	spVisitor( new AlphaEffectVisitor<EPAlphaWithVideoKeyEffect>( descriptorReq, alphaReq, slotName, _spTestResult ) );
       DepthFirstTraversal dft( _spEdgeMap, spInputNode );
       dft.TraverseDown( spVisitor );

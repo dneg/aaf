@@ -74,7 +74,6 @@ namespace aafanalyzer
 {
 
 using namespace std;
-using namespace boost;
 
 /*
  *
@@ -110,7 +109,7 @@ TestFileBuilder::TestFileBuilder( const char* outFile)
     AxHeader axHeader( _axFile.getHeader() );
     AxDictionary axDictionary( axHeader.GetDictionary() );
 
-    shared_ptr<AxDataDef> spAxDataDef( new AxDataDef( AxCreateInstance<IAAFDataDef>( axDictionary ) ) );
+    boost::shared_ptr<AxDataDef> spAxDataDef( new AxDataDef( AxCreateInstance<IAAFDataDef>( axDictionary ) ) );
     spAxDataDef->Initialize( kAAFDataDef_Unknown, L"Unknown", L"Unknown" );
     axDictionary.RegisterDataDef( *spAxDataDef );
 }
@@ -190,12 +189,12 @@ void TestFileBuilder::CreateOperationDefinition( const AxString& name, const AxS
  *
  */
 
-shared_ptr<AxMob> TestFileBuilder::AddTopLevel( const AxString& name, bool isNamed, aafRational_t ratNothing, aafUInt32 intNothing, bool boolNothing )
+boost::shared_ptr<AxMob> TestFileBuilder::AddTopLevel( const AxString& name, bool isNamed, aafRational_t ratNothing, aafUInt32 intNothing, bool boolNothing )
 {
     AxHeader axHeader( _axFile.getHeader() );
     AxDictionary axDictionary( axHeader.GetDictionary() );
 
-    shared_ptr<AxCompositionMob> spAxCompMob( new AxCompositionMob( AxCreateInstance<IAAFCompositionMob>( axDictionary ) ) );
+    boost::shared_ptr<AxCompositionMob> spAxCompMob( new AxCompositionMob( AxCreateInstance<IAAFCompositionMob>( axDictionary ) ) );
     if ( isNamed )
     {
         spAxCompMob->SetName( name );
@@ -208,12 +207,12 @@ shared_ptr<AxMob> TestFileBuilder::AddTopLevel( const AxString& name, bool isNam
     return spAxCompMob;
 }
 
-shared_ptr<AxMob> TestFileBuilder::AddLowerLevel( const AxString& name, bool isNamed, aafRational_t ratNothing, aafUInt32 intNothing, bool boolNothing )
+boost::shared_ptr<AxMob> TestFileBuilder::AddLowerLevel( const AxString& name, bool isNamed, aafRational_t ratNothing, aafUInt32 intNothing, bool boolNothing )
 {
     AxHeader axHeader( _axFile.getHeader() );
     AxDictionary axDictionary( axHeader.GetDictionary() );
 
-    shared_ptr<AxCompositionMob> spAxCompMob( new AxCompositionMob( AxCreateInstance<IAAFCompositionMob>( axDictionary ) ) );
+    boost::shared_ptr<AxCompositionMob> spAxCompMob( new AxCompositionMob( AxCreateInstance<IAAFCompositionMob>( axDictionary ) ) );
     if ( isNamed )
     {
         spAxCompMob->SetName( name );
@@ -226,12 +225,12 @@ shared_ptr<AxMob> TestFileBuilder::AddLowerLevel( const AxString& name, bool isN
     return spAxCompMob;
 }
 
-shared_ptr<AxMob> TestFileBuilder::AddSubClip( const AxString& name, bool isNamed, aafRational_t ratNothing, aafUInt32 intNothing, bool boolNothing )
+boost::shared_ptr<AxMob> TestFileBuilder::AddSubClip( const AxString& name, bool isNamed, aafRational_t ratNothing, aafUInt32 intNothing, bool boolNothing )
 {
     AxHeader axHeader( _axFile.getHeader() );
     AxDictionary axDictionary( axHeader.GetDictionary() );
 
-    shared_ptr<AxCompositionMob> spAxCompMob( new AxCompositionMob( AxCreateInstance<IAAFCompositionMob>( axDictionary ) ) );
+    boost::shared_ptr<AxCompositionMob> spAxCompMob( new AxCompositionMob( AxCreateInstance<IAAFCompositionMob>( axDictionary ) ) );
     if ( isNamed )
     {
         spAxCompMob->SetName( name );
@@ -244,12 +243,12 @@ shared_ptr<AxMob> TestFileBuilder::AddSubClip( const AxString& name, bool isName
     return spAxCompMob;
 }
 
-shared_ptr<AxMob> TestFileBuilder::AddAdjustedClip( const AxString& name, bool isNamed, aafRational_t ratNothing, aafUInt32 intNothing, bool boolNothing )
+boost::shared_ptr<AxMob> TestFileBuilder::AddAdjustedClip( const AxString& name, bool isNamed, aafRational_t ratNothing, aafUInt32 intNothing, bool boolNothing )
 {
     AxHeader axHeader( _axFile.getHeader() );
     AxDictionary axDictionary( axHeader.GetDictionary() );
 
-    shared_ptr<AxCompositionMob> spAxCompMob( new AxCompositionMob( AxCreateInstance<IAAFCompositionMob>( axDictionary ) ) );
+    boost::shared_ptr<AxCompositionMob> spAxCompMob( new AxCompositionMob( AxCreateInstance<IAAFCompositionMob>( axDictionary ) ) );
     if ( isNamed )
     {
         spAxCompMob->SetName( name );
@@ -262,12 +261,12 @@ shared_ptr<AxMob> TestFileBuilder::AddAdjustedClip( const AxString& name, bool i
     return spAxCompMob;
 }
 
-shared_ptr<AxMob> TestFileBuilder::AddTemplateClip( const AxString& name, bool isNamed, aafRational_t ratNothing, aafUInt32 intNothing, bool boolNothing )
+boost::shared_ptr<AxMob> TestFileBuilder::AddTemplateClip( const AxString& name, bool isNamed, aafRational_t ratNothing, aafUInt32 intNothing, bool boolNothing )
 {
     AxHeader axHeader( _axFile.getHeader() );
     AxDictionary axDictionary( axHeader.GetDictionary() );
 
-    shared_ptr<AxMasterMob> spAxMasterMob( new AxMasterMob( AxCreateInstance<IAAFMasterMob>( axDictionary ) ) );
+    boost::shared_ptr<AxMasterMob> spAxMasterMob( new AxMasterMob( AxCreateInstance<IAAFMasterMob>( axDictionary ) ) );
     spAxMasterMob->Initialize();
     if ( isNamed )
     {
@@ -281,12 +280,12 @@ shared_ptr<AxMob> TestFileBuilder::AddTemplateClip( const AxString& name, bool i
     return spAxMasterMob;
 }
 
-shared_ptr<AxMob> TestFileBuilder::AddClip( const AxString& name, bool isNamed, aafRational_t ratNothing, aafUInt32 intNothing, bool boolNothing )
+boost::shared_ptr<AxMob> TestFileBuilder::AddClip( const AxString& name, bool isNamed, aafRational_t ratNothing, aafUInt32 intNothing, bool boolNothing )
 {
     AxHeader axHeader( _axFile.getHeader() );
     AxDictionary axDictionary( axHeader.GetDictionary() );
 
-    shared_ptr<AxMasterMob> spAxMasterMob( new AxMasterMob( AxCreateInstance<IAAFMasterMob>( axDictionary ) ) );
+    boost::shared_ptr<AxMasterMob> spAxMasterMob( new AxMasterMob( AxCreateInstance<IAAFMasterMob>( axDictionary ) ) );
     spAxMasterMob->Initialize();
     if ( isNamed )
     {
@@ -299,13 +298,13 @@ shared_ptr<AxMob> TestFileBuilder::AddClip( const AxString& name, bool isNamed, 
     return spAxMasterMob;
 }
 
-shared_ptr<AxMob> TestFileBuilder::AddFileSource( const AxString& name, bool isNamed, aafRational_t sampleRate, aafUInt32 intNothing, bool boolNothing )
+boost::shared_ptr<AxMob> TestFileBuilder::AddFileSource( const AxString& name, bool isNamed, aafRational_t sampleRate, aafUInt32 intNothing, bool boolNothing )
 {
 	
     AxHeader axHeader( _axFile.getHeader() );
     AxDictionary axDictionary( axHeader.GetDictionary() );
 	
-    shared_ptr<AxSourceMob> spAxSrcMob( new AxSourceMob( AxCreateInstance<IAAFSourceMob>( axDictionary ) ) );
+    boost::shared_ptr<AxSourceMob> spAxSrcMob( new AxSourceMob( AxCreateInstance<IAAFSourceMob>( axDictionary ) ) );
     if ( isNamed )
     {
         spAxSrcMob->SetName( name );
@@ -334,12 +333,12 @@ shared_ptr<AxMob> TestFileBuilder::AddFileSource( const AxString& name, bool isN
     return spAxSrcMob;
 }
 
-shared_ptr<AxMob> TestFileBuilder::AddMonoAudioFileSource( const AxString& name, bool isNamed, aafRational_t sampleRate, aafUInt32 intNothing, bool boolNothing )
+boost::shared_ptr<AxMob> TestFileBuilder::AddMonoAudioFileSource( const AxString& name, bool isNamed, aafRational_t sampleRate, aafUInt32 intNothing, bool boolNothing )
 {
     AxHeader axHeader( _axFile.getHeader() );
     AxDictionary axDictionary( axHeader.GetDictionary() );
 
-    shared_ptr<AxSourceMob> spAxSrcMob( new AxSourceMob( AxCreateInstance<IAAFSourceMob>( axDictionary ) ) );
+    boost::shared_ptr<AxSourceMob> spAxSrcMob( new AxSourceMob( AxCreateInstance<IAAFSourceMob>( axDictionary ) ) );
     if ( isNamed )
     {
         spAxSrcMob->SetName( name );
@@ -356,12 +355,12 @@ shared_ptr<AxMob> TestFileBuilder::AddMonoAudioFileSource( const AxString& name,
     return spAxSrcMob;
 }
 
-shared_ptr<AxMob> TestFileBuilder::AddMultiChannelAudioFileSource( const AxString& name, bool isNamed, aafRational_t sampleRate, aafUInt32 intNothing, bool boolNothing )
+boost::shared_ptr<AxMob> TestFileBuilder::AddMultiChannelAudioFileSource( const AxString& name, bool isNamed, aafRational_t sampleRate, aafUInt32 intNothing, bool boolNothing )
 {
     AxHeader axHeader( _axFile.getHeader() );
     AxDictionary axDictionary( axHeader.GetDictionary() );
 
-    shared_ptr<AxSourceMob> spAxSrcMob( new AxSourceMob( AxCreateInstance<IAAFSourceMob>( axDictionary ) ) );
+    boost::shared_ptr<AxSourceMob> spAxSrcMob( new AxSourceMob( AxCreateInstance<IAAFSourceMob>( axDictionary ) ) );
     if ( isNamed )
     {
         spAxSrcMob->SetName( name );
@@ -378,12 +377,12 @@ shared_ptr<AxMob> TestFileBuilder::AddMultiChannelAudioFileSource( const AxStrin
     return spAxSrcMob;
 }
 
-shared_ptr<AxMob> TestFileBuilder::AddRGBAFileSource( const AxString& name, bool isNamed, aafRational_t sampleRate, aafUInt32 alphaVal, bool hasAlphaType )
+boost::shared_ptr<AxMob> TestFileBuilder::AddRGBAFileSource( const AxString& name, bool isNamed, aafRational_t sampleRate, aafUInt32 alphaVal, bool hasAlphaType )
 {
     AxHeader axHeader( _axFile.getHeader() );
     AxDictionary axDictionary( axHeader.GetDictionary() );
 
-    shared_ptr<AxSourceMob> spAxSrcMob( new AxSourceMob( AxCreateInstance<IAAFSourceMob>( axDictionary ) ) );
+    boost::shared_ptr<AxSourceMob> spAxSrcMob( new AxSourceMob( AxCreateInstance<IAAFSourceMob>( axDictionary ) ) );
     if ( isNamed )
     {
         spAxSrcMob->SetName( name );
@@ -404,12 +403,12 @@ shared_ptr<AxMob> TestFileBuilder::AddRGBAFileSource( const AxString& name, bool
     return spAxSrcMob;
 }
 
-shared_ptr<AxMob> TestFileBuilder::AddCDCIFileSource( const AxString& name, bool isNamed, aafRational_t sampleRate, aafUInt32 alphaVal, bool hasAlphaType )
+boost::shared_ptr<AxMob> TestFileBuilder::AddCDCIFileSource( const AxString& name, bool isNamed, aafRational_t sampleRate, aafUInt32 alphaVal, bool hasAlphaType )
 {
     AxHeader axHeader( _axFile.getHeader() );
     AxDictionary axDictionary( axHeader.GetDictionary() );
 
-    shared_ptr<AxSourceMob> spAxSrcMob( new AxSourceMob( AxCreateInstance<IAAFSourceMob>( axDictionary ) ) );
+    boost::shared_ptr<AxSourceMob> spAxSrcMob( new AxSourceMob( AxCreateInstance<IAAFSourceMob>( axDictionary ) ) );
     if ( isNamed )
     {
         spAxSrcMob->SetName( name );
@@ -430,12 +429,12 @@ shared_ptr<AxMob> TestFileBuilder::AddCDCIFileSource( const AxString& name, bool
     return spAxSrcMob;
 }
 
-shared_ptr<AxMob> TestFileBuilder::AddRecordingSource( const AxString& name, bool isNamed, aafRational_t ratNothing, aafUInt32 intNothing, bool boolNothing )
+boost::shared_ptr<AxMob> TestFileBuilder::AddRecordingSource( const AxString& name, bool isNamed, aafRational_t ratNothing, aafUInt32 intNothing, bool boolNothing )
 {
     AxHeader axHeader( _axFile.getHeader() );
     AxDictionary axDictionary( axHeader.GetDictionary() );
 
-    shared_ptr<AxSourceMob> spAxSrcMob( new AxSourceMob( AxCreateInstance<IAAFSourceMob>( axDictionary ) ) );
+    boost::shared_ptr<AxSourceMob> spAxSrcMob( new AxSourceMob( AxCreateInstance<IAAFSourceMob>( axDictionary ) ) );
     if ( isNamed )
     {
         spAxSrcMob->SetName( name );
@@ -451,12 +450,12 @@ shared_ptr<AxMob> TestFileBuilder::AddRecordingSource( const AxString& name, boo
     return spAxSrcMob;
 }
 
-shared_ptr<AxMob> TestFileBuilder::AddImportSource( const AxString& name, bool isNamed, aafRational_t ratNothing, aafUInt32 intNothing, bool boolNothing )
+boost::shared_ptr<AxMob> TestFileBuilder::AddImportSource( const AxString& name, bool isNamed, aafRational_t ratNothing, aafUInt32 intNothing, bool boolNothing )
 {
     AxHeader axHeader( _axFile.getHeader() );
     AxDictionary axDictionary( axHeader.GetDictionary() );
 
-    shared_ptr<AxSourceMob> spAxSrcMob( new AxSourceMob( AxCreateInstance<IAAFSourceMob>( axDictionary ) ) );
+    boost::shared_ptr<AxSourceMob> spAxSrcMob( new AxSourceMob( AxCreateInstance<IAAFSourceMob>( axDictionary ) ) );
     if ( isNamed )
     {
         spAxSrcMob->SetName( name );
@@ -472,12 +471,12 @@ shared_ptr<AxMob> TestFileBuilder::AddImportSource( const AxString& name, bool i
     return spAxSrcMob;
 }
 
-shared_ptr<AxMob> TestFileBuilder::AddTapeSource( const AxString& name, bool isNamed, aafRational_t ratNothing, aafUInt32 intNothing, bool boolNothing )
+boost::shared_ptr<AxMob> TestFileBuilder::AddTapeSource( const AxString& name, bool isNamed, aafRational_t ratNothing, aafUInt32 intNothing, bool boolNothing )
 {
     AxHeader axHeader( _axFile.getHeader() );
     AxDictionary axDictionary( axHeader.GetDictionary() );
 
-    shared_ptr<AxSourceMob> spAxSrcMob( new AxSourceMob( AxCreateInstance<IAAFSourceMob>( axDictionary ) ) );
+    boost::shared_ptr<AxSourceMob> spAxSrcMob( new AxSourceMob( AxCreateInstance<IAAFSourceMob>( axDictionary ) ) );
     if ( isNamed )
     {
         spAxSrcMob->SetName( name );
@@ -493,12 +492,12 @@ shared_ptr<AxMob> TestFileBuilder::AddTapeSource( const AxString& name, bool isN
     return spAxSrcMob;
 }
 
-shared_ptr<AxMob> TestFileBuilder::AddFilmSource( const AxString& name, bool isNamed, aafRational_t ratNothing, aafUInt32 intNothing, bool boolNothing )
+boost::shared_ptr<AxMob> TestFileBuilder::AddFilmSource( const AxString& name, bool isNamed, aafRational_t ratNothing, aafUInt32 intNothing, bool boolNothing )
 {
     AxHeader axHeader( _axFile.getHeader() );
     AxDictionary axDictionary( axHeader.GetDictionary() );
 
-    shared_ptr<AxSourceMob> spAxSrcMob( new AxSourceMob( AxCreateInstance<IAAFSourceMob>( axDictionary ) ) );
+    boost::shared_ptr<AxSourceMob> spAxSrcMob( new AxSourceMob( AxCreateInstance<IAAFSourceMob>( axDictionary ) ) );
     if ( isNamed )
     {
         spAxSrcMob->SetName( name );
@@ -513,12 +512,12 @@ shared_ptr<AxMob> TestFileBuilder::AddFilmSource( const AxString& name, bool isN
     return spAxSrcMob;
 }
 
-shared_ptr<AxMob> TestFileBuilder::AddAuxiliarySource( const AxString& name, bool isNamed, aafRational_t ratNothing, aafUInt32 intNothing, bool boolNothing )
+boost::shared_ptr<AxMob> TestFileBuilder::AddAuxiliarySource( const AxString& name, bool isNamed, aafRational_t ratNothing, aafUInt32 intNothing, bool boolNothing )
 {
     AxHeader axHeader( _axFile.getHeader() );
     AxDictionary axDictionary( axHeader.GetDictionary() );
 
-    shared_ptr<AxSourceMob> spAxSrcMob( new AxSourceMob( AxCreateInstance<IAAFSourceMob>( axDictionary ) ) );
+    boost::shared_ptr<AxSourceMob> spAxSrcMob( new AxSourceMob( AxCreateInstance<IAAFSourceMob>( axDictionary ) ) );
     spAxSrcMob->SetName( name );
 
     AxAuxiliaryDescriptor axAux( AxCreateInstance<IAAFAuxiliaryDescriptor>( axDictionary ) );
@@ -537,12 +536,12 @@ shared_ptr<AxMob> TestFileBuilder::AddAuxiliarySource( const AxString& name, boo
  *
  */
 
-shared_ptr<AxComponent> TestFileBuilder::CreateTimecode( TrackType essenceType, const AxString& strNothing, aafLength_t length, bool hasLength, int intNothing, bool boolNothing )
+boost::shared_ptr<AxComponent> TestFileBuilder::CreateTimecode( TrackType essenceType, const AxString& strNothing, aafLength_t length, bool hasLength, int intNothing, bool boolNothing )
 {
     AxHeader axHeader( _axFile.getHeader() );
     AxDictionary axDictionary( axHeader.GetDictionary() );
 
-    shared_ptr<AxTimecode> axTimecode( new AxTimecode( AxCreateInstance<IAAFTimecode>( axDictionary ) ) );
+    boost::shared_ptr<AxTimecode> axTimecode( new AxTimecode( AxCreateInstance<IAAFTimecode>( axDictionary ) ) );
 
     aafTimecode_t tc;
     tc.startFrame = 1;
@@ -560,12 +559,12 @@ shared_ptr<AxComponent> TestFileBuilder::CreateTimecode( TrackType essenceType, 
 
 }
 
-shared_ptr<AxComponent> TestFileBuilder::CreateEdgecode( TrackType essenceType, const AxString& strNothing, aafLength_t length, bool hasLength, int intNothing, bool boolNothing )
+boost::shared_ptr<AxComponent> TestFileBuilder::CreateEdgecode( TrackType essenceType, const AxString& strNothing, aafLength_t length, bool hasLength, int intNothing, bool boolNothing )
 {
     AxHeader axHeader( _axFile.getHeader() );
     AxDictionary axDictionary( axHeader.GetDictionary() );
 
-    shared_ptr<AxEdgecode> axEdgecode( new AxEdgecode( AxCreateInstance<IAAFEdgecode>( axDictionary ) ) );
+    boost::shared_ptr<AxEdgecode> axEdgecode( new AxEdgecode( AxCreateInstance<IAAFEdgecode>( axDictionary ) ) );
 
     aafEdgecode_t ec;
     ec.startFrame = 1;
@@ -591,12 +590,12 @@ shared_ptr<AxComponent> TestFileBuilder::CreateEdgecode( TrackType essenceType, 
 
 }
 
-shared_ptr<AxComponent> TestFileBuilder::CreateTimecodeStream12M( TrackType essenceType, const AxString& strNothing, aafLength_t length, bool hasLength, int intNothing, bool boolNothing )
+boost::shared_ptr<AxComponent> TestFileBuilder::CreateTimecodeStream12M( TrackType essenceType, const AxString& strNothing, aafLength_t length, bool hasLength, int intNothing, bool boolNothing )
 {
     AxHeader axHeader( _axFile.getHeader() );
     AxDictionary axDictionary( axHeader.GetDictionary() );
 
-    shared_ptr<AxTimecodeStream12M> axTimecodeStream( new AxTimecodeStream12M( AxCreateInstance<IAAFTimecodeStream12M>( axDictionary ) ) );
+    boost::shared_ptr<AxTimecodeStream12M> axTimecodeStream( new AxTimecodeStream12M( AxCreateInstance<IAAFTimecodeStream12M>( axDictionary ) ) );
 
     if ( hasLength )
     {
@@ -607,12 +606,12 @@ shared_ptr<AxComponent> TestFileBuilder::CreateTimecodeStream12M( TrackType esse
     return axTimecodeStream;
 }
 
-shared_ptr<AxComponent> TestFileBuilder::CreateEOC( TrackType essenceType, const AxString& strNothing, aafLength_t length, bool hasLength, int intNothing, bool boolNothing )
+boost::shared_ptr<AxComponent> TestFileBuilder::CreateEOC( TrackType essenceType, const AxString& strNothing, aafLength_t length, bool hasLength, int intNothing, bool boolNothing )
 {
     AxHeader axHeader( _axFile.getHeader() );
     AxDictionary axDictionary( axHeader.GetDictionary() );
 
-    shared_ptr<AxSourceClip> axSrcClip( new AxSourceClip( AxCreateInstance<IAAFSourceClip>( axDictionary ) ) );
+    boost::shared_ptr<AxSourceClip> axSrcClip( new AxSourceClip( AxCreateInstance<IAAFSourceClip>( axDictionary ) ) );
 
     aafSourceRef_t srcRef;
     srcRef.sourceID     = AxConstants::NULL_MOBID;
@@ -629,12 +628,12 @@ shared_ptr<AxComponent> TestFileBuilder::CreateEOC( TrackType essenceType, const
     return axSrcClip;
 }
 
-shared_ptr<AxComponent> TestFileBuilder::CreateOOF( TrackType essenceType, const AxString& strNothing, aafLength_t length, bool hasLength, int startTime, bool hasStartTime )
+boost::shared_ptr<AxComponent> TestFileBuilder::CreateOOF( TrackType essenceType, const AxString& strNothing, aafLength_t length, bool hasLength, int startTime, bool hasStartTime )
 {
     AxHeader axHeader( _axFile.getHeader() );
     AxDictionary axDictionary( axHeader.GetDictionary() );
 
-    shared_ptr<AxSourceClip> axSrcClip( new AxSourceClip( AxCreateInstance<IAAFSourceClip>( axDictionary ) ) );
+    boost::shared_ptr<AxSourceClip> axSrcClip( new AxSourceClip( AxCreateInstance<IAAFSourceClip>( axDictionary ) ) );
 
     aafSourceRef_t srcRef;
     srcRef.sourceID     = this->GenerateMobId(L"OOF");
@@ -654,12 +653,12 @@ shared_ptr<AxComponent> TestFileBuilder::CreateOOF( TrackType essenceType, const
     return axSrcClip;
 }
 
-shared_ptr<AxComponent> TestFileBuilder::CreateSourceClip( TrackType essenceType, const AxString& strNothing, aafLength_t length, bool hasLength, int startTime, bool hasStartTime)
+boost::shared_ptr<AxComponent> TestFileBuilder::CreateSourceClip( TrackType essenceType, const AxString& strNothing, aafLength_t length, bool hasLength, int startTime, bool hasStartTime)
 {
     AxHeader axHeader( _axFile.getHeader() );
     AxDictionary axDictionary( axHeader.GetDictionary() );
 
-    shared_ptr<AxSourceClip> axSrcClip( new AxSourceClip( AxCreateInstance<IAAFSourceClip>( axDictionary ) ) );
+    boost::shared_ptr<AxSourceClip> axSrcClip( new AxSourceClip( AxCreateInstance<IAAFSourceClip>( axDictionary ) ) );
 
     if ( hasLength )
     {
@@ -678,12 +677,12 @@ shared_ptr<AxComponent> TestFileBuilder::CreateSourceClip( TrackType essenceType
     return axSrcClip;
 }
 
-shared_ptr<AxComponent> TestFileBuilder::CreateTransition( TrackType essenceType, const AxString& strNothing, aafLength_t length, bool hasLength, int intNothing, bool boolNothing )
+boost::shared_ptr<AxComponent> TestFileBuilder::CreateTransition( TrackType essenceType, const AxString& strNothing, aafLength_t length, bool hasLength, int intNothing, bool boolNothing )
 {
     AxHeader axHeader( _axFile.getHeader() );
     AxDictionary axDictionary( axHeader.GetDictionary() );
 
-    shared_ptr<AxTransition> axTransition( new AxTransition( AxCreateInstance<IAAFTransition>( axDictionary ) ) );
+    boost::shared_ptr<AxTransition> axTransition( new AxTransition( AxCreateInstance<IAAFTransition>( axDictionary ) ) );
 
     AddDataDef( *axTransition, essenceType );
     if ( hasLength )
@@ -695,12 +694,12 @@ shared_ptr<AxComponent> TestFileBuilder::CreateTransition( TrackType essenceType
     return axTransition;
 }
 
-shared_ptr<AxComponent> TestFileBuilder::CreateSequence( TrackType essenceType, const AxString& strNothing, aafLength_t length, bool hasLength, int intNothing, bool boolNothing )
+boost::shared_ptr<AxComponent> TestFileBuilder::CreateSequence( TrackType essenceType, const AxString& strNothing, aafLength_t length, bool hasLength, int intNothing, bool boolNothing )
 {
     AxHeader axHeader( _axFile.getHeader() );
     AxDictionary axDictionary( axHeader.GetDictionary() );
 
-    shared_ptr<AxSequence> axSequence( new AxSequence( AxCreateInstance<IAAFSequence>( axDictionary ) ) );
+    boost::shared_ptr<AxSequence> axSequence( new AxSequence( AxCreateInstance<IAAFSequence>( axDictionary ) ) );
     if ( hasLength )
     {
         axSequence->SetLength( length );
@@ -710,12 +709,12 @@ shared_ptr<AxComponent> TestFileBuilder::CreateSequence( TrackType essenceType, 
     return axSequence;
 }
 
-shared_ptr<AxComponent> TestFileBuilder::CreateCommentMarker( TrackType essenceType, const AxString& strNothing, aafLength_t length, bool hasLength, int position, bool hasPosition )
+boost::shared_ptr<AxComponent> TestFileBuilder::CreateCommentMarker( TrackType essenceType, const AxString& strNothing, aafLength_t length, bool hasLength, int position, bool hasPosition )
 {
     AxHeader axHeader( _axFile.getHeader() );
     AxDictionary axDictionary( axHeader.GetDictionary() );
 
-    shared_ptr<AxCommentMarker> axCommentMarker( new AxCommentMarker( AxCreateInstance<IAAFCommentMarker>( axDictionary ) ) );
+    boost::shared_ptr<AxCommentMarker> axCommentMarker( new AxCommentMarker( AxCreateInstance<IAAFCommentMarker>( axDictionary ) ) );
 
     if ( hasLength )
     {
@@ -730,12 +729,12 @@ shared_ptr<AxComponent> TestFileBuilder::CreateCommentMarker( TrackType essenceT
     return axCommentMarker;
 }
 
-shared_ptr<AxComponent> TestFileBuilder::CreateDescriptiveMarker( TrackType essenceType, const AxString& strNothing, aafLength_t length, bool hasLength, int position, bool hasPosition )
+boost::shared_ptr<AxComponent> TestFileBuilder::CreateDescriptiveMarker( TrackType essenceType, const AxString& strNothing, aafLength_t length, bool hasLength, int position, bool hasPosition )
 {
     AxHeader axHeader( _axFile.getHeader() );
     AxDictionary axDictionary( axHeader.GetDictionary() );
 
-    shared_ptr<AxDescriptiveMarker> axDesMarker( new AxDescriptiveMarker( AxCreateInstance<IAAFDescriptiveMarker>( axDictionary ) ) );
+    boost::shared_ptr<AxDescriptiveMarker> axDesMarker( new AxDescriptiveMarker( AxCreateInstance<IAAFDescriptiveMarker>( axDictionary ) ) );
 
     if ( hasLength )
     {
@@ -750,12 +749,12 @@ shared_ptr<AxComponent> TestFileBuilder::CreateDescriptiveMarker( TrackType esse
     return axDesMarker;
 }
 
-shared_ptr<AxComponent> TestFileBuilder::CreateOperationGroup( TrackType essenceType, const AxString& opDef, aafLength_t length, bool hasLength, int intNothing, bool boolNothing )
+boost::shared_ptr<AxComponent> TestFileBuilder::CreateOperationGroup( TrackType essenceType, const AxString& opDef, aafLength_t length, bool hasLength, int intNothing, bool boolNothing )
 {
     AxHeader axHeader( _axFile.getHeader() );
     AxDictionary axDictionary( axHeader.GetDictionary() );
 
-    shared_ptr<AxOperationGroup> axOpGroup( new AxOperationGroup( AxCreateInstance<IAAFOperationGroup>( axDictionary ) ) );
+    boost::shared_ptr<AxOperationGroup> axOpGroup( new AxOperationGroup( AxCreateInstance<IAAFOperationGroup>( axDictionary ) ) );
 
     AddDataDef( *axOpGroup, essenceType );
     if ( hasLength )
@@ -773,10 +772,10 @@ shared_ptr<AxComponent> TestFileBuilder::CreateOperationGroup( TrackType essence
  *
  */
 
-void TestFileBuilder::InitializeSourceClip( shared_ptr<AxSourceReference> parent, AxMob& child, const AxString& source )
+void TestFileBuilder::InitializeSourceClip( boost::shared_ptr<AxSourceReference> parent, AxMob& child, const AxString& source )
 {
 
-    shared_ptr<AxSourceClip> axSrcClip = dynamic_pointer_cast<AxSourceClip>( parent );
+    boost::shared_ptr<AxSourceClip> axSrcClip = dynamic_pointer_cast<AxSourceClip>( parent );
 
     aafSourceRef_t srcRef = axSrcClip->GetSourceReference();
     if (mobIdMap.find(source)!=mobIdMap.end() && source!=L"")
@@ -796,34 +795,34 @@ void TestFileBuilder::InitializeSourceClip( shared_ptr<AxSourceReference> parent
 }
 
 
-void TestFileBuilder::AddToTransition( shared_ptr<AxComponent> parent, AxComponent& child )
+void TestFileBuilder::AddToTransition( boost::shared_ptr<AxComponent> parent, AxComponent& child )
 {
-    shared_ptr<AxTransition> axTransition = dynamic_pointer_cast<AxTransition>( parent );
+    boost::shared_ptr<AxTransition> axTransition = dynamic_pointer_cast<AxTransition>( parent );
 
-    shared_ptr<AxOperationGroup> axOpGroup( new AxOperationGroup( AxQueryInterface<IAAFComponent, IAAFOperationGroup>( child ) ) );
+    boost::shared_ptr<AxOperationGroup> axOpGroup( new AxOperationGroup( AxQueryInterface<IAAFComponent, IAAFOperationGroup>( child ) ) );
 
     axTransition->SetOperationGroup( *axOpGroup );
 }
 
-void TestFileBuilder::AddToSequence( shared_ptr<AxComponent> parent, AxComponent& child )
+void TestFileBuilder::AddToSequence( boost::shared_ptr<AxComponent> parent, AxComponent& child )
 {
-    shared_ptr<AxSequence> axSequence = dynamic_pointer_cast<AxSequence>( parent );
+    boost::shared_ptr<AxSequence> axSequence = dynamic_pointer_cast<AxSequence>( parent );
 
     axSequence->AppendComponent( child );
 }
 
-void TestFileBuilder::AddToCommentMarker( shared_ptr<AxComponent> parent, AxComponent& child )
+void TestFileBuilder::AddToCommentMarker( boost::shared_ptr<AxComponent> parent, AxComponent& child )
 {
-    shared_ptr<AxCommentMarker> axCommentMarker = dynamic_pointer_cast<AxCommentMarker>( parent );
+    boost::shared_ptr<AxCommentMarker> axCommentMarker = dynamic_pointer_cast<AxCommentMarker>( parent );
 
-    shared_ptr<AxSourceReference> axSrcRef( new AxSourceReference( AxQueryInterface<IAAFComponent, IAAFSourceReference>( child ) ) );
+    boost::shared_ptr<AxSourceReference> axSrcRef( new AxSourceReference( AxQueryInterface<IAAFComponent, IAAFSourceReference>( child ) ) );
 
     axCommentMarker->SetAnnotation( *axSrcRef );
 }
 
-void TestFileBuilder::AddToOperationGroup( shared_ptr<AxSegment> parent, AxSegment& child, int property )
+void TestFileBuilder::AddToOperationGroup( boost::shared_ptr<AxSegment> parent, AxSegment& child, int property )
 {
-    shared_ptr<AxOperationGroup> axOpGroup = dynamic_pointer_cast<AxOperationGroup>( parent );
+    boost::shared_ptr<AxOperationGroup> axOpGroup = dynamic_pointer_cast<AxOperationGroup>( parent );
 
     if ( property == INPUT_SEGMENT )
     {
@@ -838,12 +837,12 @@ void TestFileBuilder::AddToOperationGroup( shared_ptr<AxSegment> parent, AxSegme
  *
  */
 
-void TestFileBuilder::AddComment( shared_ptr<AxComponent> axComponent, const AxString& name, const AxString& value )
+void TestFileBuilder::AddComment( boost::shared_ptr<AxComponent> axComponent, const AxString& name, const AxString& value )
 {
     axComponent->AppendComment( name, value );
 }
 
-void TestFileBuilder::AddKLVData( shared_ptr<AxComponent> axComponent, const AxString& keyName, const AxString& value )
+void TestFileBuilder::AddKLVData( boost::shared_ptr<AxComponent> axComponent, const AxString& keyName, const AxString& value )
 {
 
     AxHeader axHeader( _axFile.getHeader() );
@@ -997,7 +996,7 @@ void TestFileBuilder::AttachVaryingRationalParameter( AxOperationGroup& axOpGrou
     axOpGroup.AddParameter( axParam );
 }
 
-void TestFileBuilder::AttachDescriptiveFramework( shared_ptr<AxDescriptiveMarker> axMarker )
+void TestFileBuilder::AttachDescriptiveFramework( boost::shared_ptr<AxDescriptiveMarker> axMarker )
 {
     AxHeader axHeader( _axFile.getHeader() );
     AxDictionary axDictionary( axHeader.GetDictionary() );
@@ -1095,7 +1094,7 @@ void TestFileBuilder::AddDataDef( AxComponent& axComponent, TrackType essenceTyp
     }
 }
 
-shared_ptr<AxOperationDef> TestFileBuilder::GetOperationDef( const AxString& opDef, AxDictionary& axDictionary )
+boost::shared_ptr<AxOperationDef> TestFileBuilder::GetOperationDef( const AxString& opDef, AxDictionary& axDictionary )
 {
     if ( _namedAUIDs.find( opDef ) == _namedAUIDs.end() )
     {
@@ -1517,12 +1516,12 @@ shared_ptr<AxOperationDef> TestFileBuilder::GetOperationDef( const AxString& opD
         axDictionary.RegisterOperationDef( axOpDef );
         _namedAUIDs[opDef] = opDefId;
     }
-    shared_ptr<AxOperationDef> spOpDef( new AxOperationDef( axDictionary.LookupOperationDef( _namedAUIDs[opDef] ) ) );
+    boost::shared_ptr<AxOperationDef> spOpDef( new AxOperationDef( axDictionary.LookupOperationDef( _namedAUIDs[opDef] ) ) );
 
     return spOpDef;
 }
 
-shared_ptr<AxParameterDef> TestFileBuilder::GetParameterDef( const aafUID_t& paramDefId, AxDictionary& axDictionary )
+boost::shared_ptr<AxParameterDef> TestFileBuilder::GetParameterDef( const aafUID_t& paramDefId, AxDictionary& axDictionary )
 {
     if ( !axDictionary.isKnownParameterDef( paramDefId ) )
     {
@@ -1542,12 +1541,12 @@ shared_ptr<AxParameterDef> TestFileBuilder::GetParameterDef( const aafUID_t& par
 
         axDictionary.RegisterParameterDef( axParamDef );
     }
-    shared_ptr<AxParameterDef> spParamDef( new AxParameterDef( axDictionary.LookupParameterDef( paramDefId ) ) );
+    boost::shared_ptr<AxParameterDef> spParamDef( new AxParameterDef( axDictionary.LookupParameterDef( paramDefId ) ) );
 
     return spParamDef;
 }
 
-shared_ptr<AxInterpolationDef> TestFileBuilder::GetInterpolationDef( const aafUID_t& interpolationDefId, AxDictionary& axDictionary )
+boost::shared_ptr<AxInterpolationDef> TestFileBuilder::GetInterpolationDef( const aafUID_t& interpolationDefId, AxDictionary& axDictionary )
 {
     if ( !axDictionary.isKnownInterpolationDef( interpolationDefId ) )
     {
@@ -1605,7 +1604,7 @@ shared_ptr<AxInterpolationDef> TestFileBuilder::GetInterpolationDef( const aafUI
 
         axDictionary.RegisterInterpolationDef( axIntDef );
     }
-    shared_ptr<AxInterpolationDef> spIntDef( new AxInterpolationDef( axDictionary.LookupInterpolationDef( interpolationDefId ) ) );
+    boost::shared_ptr<AxInterpolationDef> spIntDef( new AxInterpolationDef( axDictionary.LookupInterpolationDef( interpolationDefId ) ) );
 
     return spIntDef;
 }

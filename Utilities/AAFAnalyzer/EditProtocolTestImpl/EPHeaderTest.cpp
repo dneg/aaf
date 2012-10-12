@@ -56,7 +56,7 @@ namespace aafanalyzer {
 
 using namespace std;
 
-EPHeaderTest::EPHeaderTest( wostream& log, shared_ptr<const TestGraph> spGraph )
+EPHeaderTest::EPHeaderTest( wostream& log, boost::shared_ptr<const TestGraph> spGraph )
   : Test( log, GetTestInfo() )
 {
     SetTestGraph(spGraph);
@@ -65,11 +65,11 @@ EPHeaderTest::EPHeaderTest( wostream& log, shared_ptr<const TestGraph> spGraph )
 EPHeaderTest::~EPHeaderTest()
 {}
 
-shared_ptr<TestLevelTestResult> EPHeaderTest::Execute()
+boost::shared_ptr<TestLevelTestResult> EPHeaderTest::Execute()
 {
-   shared_ptr<TestLevelTestResult> spTestResult = CreateTestResult();
+   boost::shared_ptr<TestLevelTestResult> spTestResult = CreateTestResult();
     
-   shared_ptr<EPHeaderVisitor> spVisitor(new EPHeaderVisitor( GetOutStream(), spTestResult ) );
+   boost::shared_ptr<EPHeaderVisitor> spVisitor(new EPHeaderVisitor( GetOutStream(), spTestResult ) );
    
    DepthFirstTraversal dfs( GetTestGraph()->GetEdgeMap(), GetTestGraph()->GetRootNode() );
    dfs.TraverseDown( spVisitor, GetTestGraph()->GetRootNode() );
@@ -89,7 +89,7 @@ AxString EPHeaderTest::GetDescription() const
 
 const TestInfo EPHeaderTest::GetTestInfo()
 {
-    shared_ptr<vector<AxString> > spReqIds(new vector<AxString>);
+    boost::shared_ptr<vector<AxString> > spReqIds(new vector<AxString>);
     spReqIds->push_back(L"REQ_EP_255");     //Operational Pattern
     return TestInfo(L"EPHeaderTest", spReqIds);
 }

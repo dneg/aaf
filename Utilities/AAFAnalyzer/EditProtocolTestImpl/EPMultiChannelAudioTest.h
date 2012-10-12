@@ -42,18 +42,16 @@ namespace aafanalyzer {
 
 class TestLevelTestResult;
 
-using namespace boost;
-
 class EPMultiChannelAudioTest : public Test
 {
  public:
 
   EPMultiChannelAudioTest( wostream& log,
-			   shared_ptr<const TestGraph> spGraph,
+			   boost::shared_ptr<const TestGraph> spGraph,
 			   CompMobDependency::CompMobNodeVectorSP spTopLevelCompMobs );
   virtual ~EPMultiChannelAudioTest();
 
-  virtual shared_ptr<TestLevelTestResult> Execute();
+  virtual boost::shared_ptr<TestLevelTestResult> Execute();
   virtual AxString GetName() const;
   virtual AxString GetDescription() const;
   static const TestInfo GetTestInfo();

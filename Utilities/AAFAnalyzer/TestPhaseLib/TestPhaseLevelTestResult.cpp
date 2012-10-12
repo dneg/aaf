@@ -45,7 +45,6 @@ namespace aafanalyzer
 {
 
 using namespace std;
-using namespace boost;
 
 TestPhaseLevelTestResult::TestPhaseLevelTestResult()
   : HighLevelTestResult()
@@ -60,7 +59,7 @@ TestPhaseLevelTestResult:: TestPhaseLevelTestResult( const wstring& name,
 TestPhaseLevelTestResult::~TestPhaseLevelTestResult()
 {}
 
-void TestPhaseLevelTestResult::AppendSubtestResult( shared_ptr<TestLevelTestResult> subtestResult )
+void TestPhaseLevelTestResult::AppendSubtestResult( boost::shared_ptr<TestLevelTestResult> subtestResult )
 {
   this->AddSubtestResult( subtestResult );
 }

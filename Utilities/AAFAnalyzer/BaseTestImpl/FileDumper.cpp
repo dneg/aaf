@@ -52,11 +52,10 @@ namespace aafanalyzer
 {
     
 using namespace std;
-using namespace boost;
 
 FileDumper::FileDumper( wostream& os,
-			shared_ptr<const TestGraph> spGraph,
-			shared_ptr<Node> spRoot,
+			boost::shared_ptr<const TestGraph> spGraph,
+			boost::shared_ptr<Node> spRoot,
 			bool followReferences )
   : Test(os, GetTestInfo()),
     _spRoot(spRoot),
@@ -68,9 +67,9 @@ FileDumper::FileDumper( wostream& os,
 FileDumper::~FileDumper()
 {}
 
-shared_ptr<TestLevelTestResult> FileDumper::Execute()
+boost::shared_ptr<TestLevelTestResult> FileDumper::Execute()
 {
-  shared_ptr<DumpVisitor>
+  boost::shared_ptr<DumpVisitor>
     spVisitor( new DumpVisitor( _followReferences ? Visitor::FOLLOW_REFERENCES : Visitor::FOLLOW_CONTAINED ) );
 
   DepthFirstTraversal dfs(GetTestGraph()->GetEdgeMap(), _spRoot);
@@ -80,7 +79,7 @@ shared_ptr<TestLevelTestResult> FileDumper::Execute()
   // This is just a file dump. It can't fail. We don't really even
   // care about the return, since it is implemented as a test it is
   // necessary to return a result.
-  shared_ptr<TestLevelTestResult>
+  boost::shared_ptr<TestLevelTestResult>
     spResult( new TestLevelTestResult( GetName(),
 				       GetDescription(),
 				       L"",
@@ -101,7 +100,7 @@ AxString FileDumper::GetDescription() const
 
 const TestInfo FileDumper::GetTestInfo()
 {
-    shared_ptr<vector<AxString> > spReqIds(new vector<AxString>);
+    boost::shared_ptr<vector<AxString> > spReqIds(new vector<AxString>);
 
     // No requirements to register here. This is just a debug utility
     // that happens to be wrapped up as a test.

@@ -48,7 +48,6 @@ namespace aafanalyzer
 {
 
 using namespace std;
-using namespace boost;
 
 Test::Test(wostream& os, const TestInfo& info)
   : _os(os),
@@ -81,29 +80,29 @@ wostream& Test::GetOutStream() const
   return _os;
 }
 
-shared_ptr<const TestGraph> Test::GetTestGraph()
+boost::shared_ptr<const TestGraph> Test::GetTestGraph()
 {
   return _spGraph;
 }
 
-void Test::SetTestGraph(shared_ptr<const TestGraph> spGraph)
+void Test::SetTestGraph(boost::shared_ptr<const TestGraph> spGraph)
 {
   _spGraph = spGraph;
 }
 
-shared_ptr<TestLevelTestResult> Test::CreateTestResult() const
+boost::shared_ptr<TestLevelTestResult> Test::CreateTestResult() const
 {
-  shared_ptr<TestLevelTestResult>
+  boost::shared_ptr<TestLevelTestResult>
     spTestResult( new TestLevelTestResult( GetName(),
                                            GetDescription(),
                                            this->shared_from_this() ) );
   return spTestResult;
 }
 
-shared_ptr<TestLevelTestResult> Test::CreateTestResult( const wstring& explain,
+boost::shared_ptr<TestLevelTestResult> Test::CreateTestResult( const wstring& explain,
                                                         TestResult::Result result ) const
 {
-  shared_ptr<TestLevelTestResult>
+  boost::shared_ptr<TestLevelTestResult>
     spTestResult( new TestLevelTestResult( GetName(),
                                            GetDescription(),
                                            explain,
@@ -112,7 +111,7 @@ shared_ptr<TestLevelTestResult> Test::CreateTestResult( const wstring& explain,
   return spTestResult;
 }
 
-shared_ptr<TestLevelTestResult> Test::CreatePassTestResult() const
+boost::shared_ptr<TestLevelTestResult> Test::CreatePassTestResult() const
 {
   return CreateTestResult( L"", TestResult::PASS );
 }
@@ -124,7 +123,7 @@ const Requirement::RequirementMap& Test::GetCoveredRequirements() const
 
 // Get a single requirement that is registered against this test.
 // Throws xxx if reqId is not registered.
-shared_ptr<const Requirement> Test::GetRequirement( const wstring& reqId ) const
+boost::shared_ptr<const Requirement> Test::GetRequirement( const wstring& reqId ) const
 {
   Requirement::RequirementMap::const_iterator iter = _spCoveredRequirements->find(reqId);
   assert( iter != _spCoveredRequirements->end() );

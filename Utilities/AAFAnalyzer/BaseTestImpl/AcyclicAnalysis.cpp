@@ -58,9 +58,8 @@ namespace aafanalyzer
 {
 
 using namespace std;
-using namespace boost;
 
-AcyclicAnalysis::AcyclicAnalysis(wostream& os, shared_ptr<const TestGraph> spGraph)
+AcyclicAnalysis::AcyclicAnalysis(wostream& os, boost::shared_ptr<const TestGraph> spGraph)
   : Test(os, GetTestInfo()),
     _isCyclic(false)
 {
@@ -70,11 +69,11 @@ AcyclicAnalysis::AcyclicAnalysis(wostream& os, shared_ptr<const TestGraph> spGra
 AcyclicAnalysis::~AcyclicAnalysis()
 {}
 
-shared_ptr<TestLevelTestResult> AcyclicAnalysis::Execute()
+boost::shared_ptr<TestLevelTestResult> AcyclicAnalysis::Execute()
 {
-  shared_ptr<TestLevelTestResult> spTestResult = this->CreateTestResult();
+  boost::shared_ptr<TestLevelTestResult> spTestResult = this->CreateTestResult();
 
-  shared_ptr<AcyclicVisitor> spVisitor( new AcyclicVisitor(GetOutStream(), spTestResult) );
+  boost::shared_ptr<AcyclicVisitor> spVisitor( new AcyclicVisitor(GetOutStream(), spTestResult) );
   DepthFirstTraversal dfs(GetTestGraph()->GetEdgeMap(), GetTestGraph()->GetRootNode());
 
   dfs.TraverseDown(spVisitor, GetTestGraph()->GetRootNode()); 
@@ -98,7 +97,7 @@ AxString AcyclicAnalysis::GetDescription() const
 
 const TestInfo AcyclicAnalysis::GetTestInfo()
 {
-    shared_ptr<vector<AxString> > spReqIds(new vector<AxString>);
+    boost::shared_ptr<vector<AxString> > spReqIds(new vector<AxString>);
 
     // Acyclic Derivation Chain
     spReqIds->push_back(L"REQ_EP_256");  

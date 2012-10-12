@@ -60,7 +60,7 @@ namespace aafanalyzer {
 using namespace std;
 
 EPEffectTest::EPEffectTest( wostream& log,
-                              shared_ptr<const TestGraph> spGraph )
+                              boost::shared_ptr<const TestGraph> spGraph )
   : Test( log, GetTestInfo() )
 {
     SetTestGraph(spGraph);
@@ -69,11 +69,11 @@ EPEffectTest::EPEffectTest( wostream& log,
 EPEffectTest::~EPEffectTest()
 {}
 
-shared_ptr<TestLevelTestResult> EPEffectTest::Execute()
+boost::shared_ptr<TestLevelTestResult> EPEffectTest::Execute()
 {
-  shared_ptr<TestLevelTestResult> spTestResult = CreateTestResult();
+  boost::shared_ptr<TestLevelTestResult> spTestResult = CreateTestResult();
     
-  shared_ptr<EPEffectVisitor>
+  boost::shared_ptr<EPEffectVisitor>
     spVisitor( new EPEffectVisitor( GetOutStream(),
 				    GetTestGraph()->GetEdgeMap(),
 				    spTestResult ) );
@@ -96,7 +96,7 @@ AxString EPEffectTest::GetDescription() const
 
 const TestInfo EPEffectTest::GetTestInfo()
 {
-    shared_ptr<vector<AxString> > spReqIds(new vector<AxString>);
+    boost::shared_ptr<vector<AxString> > spReqIds(new vector<AxString>);
 
     spReqIds->push_back(L"REQ_EP_180");     //Video Dissolve only permitted in Transition.
     spReqIds->push_back(L"REQ_EP_183");     //SMPTE Video Wipe only permitted in Transition.

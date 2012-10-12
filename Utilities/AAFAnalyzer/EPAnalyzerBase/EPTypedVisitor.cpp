@@ -208,19 +208,19 @@ class ParentMobVisitor : public EPTypedVisitor
 
         bool PreOrderVisit( AAFTypedObjNode<IAAFTimelineMobSlot>& node )
         {
-            shared_ptr<AAFTypedObjNode<IAAFMobSlot> > spGeneric( node.DownCastToAAF<IAAFMobSlot>() );
+            boost::shared_ptr<AAFTypedObjNode<IAAFMobSlot> > spGeneric( node.DownCastToAAF<IAAFMobSlot>() );
             return this->PreOrderVisit( *spGeneric );
         }
 
         bool PreOrderVisit( AAFTypedObjNode<IAAFEventMobSlot>& node )
         {
-            shared_ptr<AAFTypedObjNode<IAAFMobSlot> > spGeneric( node.DownCastToAAF<IAAFMobSlot>() );
+            boost::shared_ptr<AAFTypedObjNode<IAAFMobSlot> > spGeneric( node.DownCastToAAF<IAAFMobSlot>() );
             return this->PreOrderVisit( *spGeneric );
         }
 
         bool PreOrderVisit( AAFTypedObjNode<IAAFStaticMobSlot>& node )
         {
-            shared_ptr<AAFTypedObjNode<IAAFMobSlot> > spGeneric( node.DownCastToAAF<IAAFMobSlot>() );
+            boost::shared_ptr<AAFTypedObjNode<IAAFMobSlot> > spGeneric( node.DownCastToAAF<IAAFMobSlot>() );
             return this->PreOrderVisit( *spGeneric );
         }
 
@@ -271,16 +271,16 @@ class ChildMobSlotVisitor : public EPTypedVisitor
 
         bool PreOrderVisit( EPTypedObjNode<IAAFTimelineMobSlot, EPEssenceTrack>& node )
         {
-            shared_ptr<Node> spNode = node.GetSharedPointerToNode();
-            shared_ptr<AAFObjNode> spAAFNode = dynamic_pointer_cast<AAFObjNode>( spNode );
+            boost::shared_ptr<Node> spNode = node.GetSharedPointerToNode();
+            boost::shared_ptr<AAFObjNode> spAAFNode = dynamic_pointer_cast<AAFObjNode>( spNode );
             _spEssenceTracks->insert( spAAFNode );
             return false;
         }
 
         bool PreOrderVisit( EPTypedObjNode<IAAFTimelineMobSlot, EPAudioTrack>& node )
         {
-            shared_ptr<Node> spNode = node.GetSharedPointerToNode();
-            shared_ptr<AAFObjNode> spAAFNode = dynamic_pointer_cast<AAFObjNode>( spNode );
+            boost::shared_ptr<Node> spNode = node.GetSharedPointerToNode();
+            boost::shared_ptr<AAFObjNode> spAAFNode = dynamic_pointer_cast<AAFObjNode>( spNode );
             _spEssenceTracks->insert( spAAFNode );
             _spAudioTracks->insert( spAAFNode );
             return false;
@@ -288,8 +288,8 @@ class ChildMobSlotVisitor : public EPTypedVisitor
 
         bool PreOrderVisit( EPTypedObjNode<IAAFTimelineMobSlot, EPVideoTrack>& node )
         {
-            shared_ptr<Node> spNode = node.GetSharedPointerToNode();
-            shared_ptr<AAFObjNode> spAAFNode = dynamic_pointer_cast<AAFObjNode>( spNode );
+            boost::shared_ptr<Node> spNode = node.GetSharedPointerToNode();
+            boost::shared_ptr<AAFObjNode> spAAFNode = dynamic_pointer_cast<AAFObjNode>( spNode );
             _spEssenceTracks->insert( spAAFNode );
             _spVideoTracks->insert( spAAFNode );
             return false;
@@ -297,32 +297,32 @@ class ChildMobSlotVisitor : public EPTypedVisitor
 
         bool PreOrderVisit( EPTypedObjNode<IAAFTimelineMobSlot, EPTimecodeTrack>& node )
         {
-            shared_ptr<Node> spNode = node.GetSharedPointerToNode();
-            shared_ptr<AAFObjNode> spAAFNode = dynamic_pointer_cast<AAFObjNode>( spNode );
+            boost::shared_ptr<Node> spNode = node.GetSharedPointerToNode();
+            boost::shared_ptr<AAFObjNode> spAAFNode = dynamic_pointer_cast<AAFObjNode>( spNode );
             _spTimecodeTracks->insert( spAAFNode );
             return false;
         }
 
         bool PreOrderVisit( EPTypedObjNode<IAAFTimelineMobSlot, EPEdgecodeTrack>& node )
         {
-            shared_ptr<Node> spNode = node.GetSharedPointerToNode();
-            shared_ptr<AAFObjNode> spAAFNode = dynamic_pointer_cast<AAFObjNode>( spNode );
+            boost::shared_ptr<Node> spNode = node.GetSharedPointerToNode();
+            boost::shared_ptr<AAFObjNode> spAAFNode = dynamic_pointer_cast<AAFObjNode>( spNode );
             _spEdgecodeTracks->insert( spAAFNode );
             return false;
         }
 
         bool PreOrderVisit( EPTypedObjNode<IAAFStaticMobSlot, EPEssenceTrack>& node )
         {
-            shared_ptr<Node> spNode = node.GetSharedPointerToNode();
-            shared_ptr<AAFObjNode> spAAFNode = dynamic_pointer_cast<AAFObjNode>( spNode );
+            boost::shared_ptr<Node> spNode = node.GetSharedPointerToNode();
+            boost::shared_ptr<AAFObjNode> spAAFNode = dynamic_pointer_cast<AAFObjNode>( spNode );
             _spEssenceTracks->insert( spAAFNode );
             return false;
         }
 
         bool PreOrderVisit( EPTypedObjNode<IAAFStaticMobSlot, EPAudioTrack>& node )
         {
-            shared_ptr<Node> spNode = node.GetSharedPointerToNode();
-            shared_ptr<AAFObjNode> spAAFNode = dynamic_pointer_cast<AAFObjNode>( spNode );
+            boost::shared_ptr<Node> spNode = node.GetSharedPointerToNode();
+            boost::shared_ptr<AAFObjNode> spAAFNode = dynamic_pointer_cast<AAFObjNode>( spNode );
             _spEssenceTracks->insert( spAAFNode );
             _spAudioTracks->insert( spAAFNode );
             return false;
@@ -330,8 +330,8 @@ class ChildMobSlotVisitor : public EPTypedVisitor
 
         bool PreOrderVisit( EPTypedObjNode<IAAFStaticMobSlot, EPVideoTrack>& node )
         {
-            shared_ptr<Node> spNode = node.GetSharedPointerToNode();
-            shared_ptr<AAFObjNode> spAAFNode = dynamic_pointer_cast<AAFObjNode>( spNode );
+            boost::shared_ptr<Node> spNode = node.GetSharedPointerToNode();
+            boost::shared_ptr<AAFObjNode> spAAFNode = dynamic_pointer_cast<AAFObjNode>( spNode );
             _spEssenceTracks->insert( spAAFNode );
             _spVideoTracks->insert( spAAFNode );
             return false;
@@ -339,32 +339,32 @@ class ChildMobSlotVisitor : public EPTypedVisitor
 
         bool PreOrderVisit( EPTypedObjNode<IAAFStaticMobSlot, EPTimecodeTrack>& node )
         {
-            shared_ptr<Node> spNode = node.GetSharedPointerToNode();
-            shared_ptr<AAFObjNode> spAAFNode = dynamic_pointer_cast<AAFObjNode>( spNode );
+            boost::shared_ptr<Node> spNode = node.GetSharedPointerToNode();
+            boost::shared_ptr<AAFObjNode> spAAFNode = dynamic_pointer_cast<AAFObjNode>( spNode );
             _spTimecodeTracks->insert( spAAFNode );
             return false;
         }
 
         bool PreOrderVisit( EPTypedObjNode<IAAFStaticMobSlot, EPEdgecodeTrack>& node )
         {
-            shared_ptr<Node> spNode = node.GetSharedPointerToNode();
-            shared_ptr<AAFObjNode> spAAFNode = dynamic_pointer_cast<AAFObjNode>( spNode );
+            boost::shared_ptr<Node> spNode = node.GetSharedPointerToNode();
+            boost::shared_ptr<AAFObjNode> spAAFNode = dynamic_pointer_cast<AAFObjNode>( spNode );
             _spEdgecodeTracks->insert( spAAFNode );
             return false;
         }
 
         bool PreOrderVisit( EPTypedObjNode<IAAFEventMobSlot, EPEssenceTrack>& node )
         {
-            shared_ptr<Node> spNode = node.GetSharedPointerToNode();
-            shared_ptr<AAFObjNode> spAAFNode = dynamic_pointer_cast<AAFObjNode>( spNode );
+            boost::shared_ptr<Node> spNode = node.GetSharedPointerToNode();
+            boost::shared_ptr<AAFObjNode> spAAFNode = dynamic_pointer_cast<AAFObjNode>( spNode );
             _spEssenceTracks->insert( spAAFNode );
             return false;
         }
 
         bool PreOrderVisit( EPTypedObjNode<IAAFEventMobSlot, EPAudioTrack>& node )
         {
-            shared_ptr<Node> spNode = node.GetSharedPointerToNode();
-            shared_ptr<AAFObjNode> spAAFNode = dynamic_pointer_cast<AAFObjNode>( spNode );
+            boost::shared_ptr<Node> spNode = node.GetSharedPointerToNode();
+            boost::shared_ptr<AAFObjNode> spAAFNode = dynamic_pointer_cast<AAFObjNode>( spNode );
             _spEssenceTracks->insert( spAAFNode );
             _spAudioTracks->insert( spAAFNode );
             return false;
@@ -372,8 +372,8 @@ class ChildMobSlotVisitor : public EPTypedVisitor
 
         bool PreOrderVisit( EPTypedObjNode<IAAFEventMobSlot, EPVideoTrack>& node )
         {
-            shared_ptr<Node> spNode = node.GetSharedPointerToNode();
-            shared_ptr<AAFObjNode> spAAFNode = dynamic_pointer_cast<AAFObjNode>( spNode );
+            boost::shared_ptr<Node> spNode = node.GetSharedPointerToNode();
+            boost::shared_ptr<AAFObjNode> spAAFNode = dynamic_pointer_cast<AAFObjNode>( spNode );
             _spEssenceTracks->insert( spAAFNode );
             _spVideoTracks->insert( spAAFNode );
             return false;
@@ -381,32 +381,32 @@ class ChildMobSlotVisitor : public EPTypedVisitor
 
         bool PreOrderVisit( EPTypedObjNode<IAAFEventMobSlot, EPTimecodeTrack>& node )
         {
-            shared_ptr<Node> spNode = node.GetSharedPointerToNode();
-            shared_ptr<AAFObjNode> spAAFNode = dynamic_pointer_cast<AAFObjNode>( spNode );
+            boost::shared_ptr<Node> spNode = node.GetSharedPointerToNode();
+            boost::shared_ptr<AAFObjNode> spAAFNode = dynamic_pointer_cast<AAFObjNode>( spNode );
             _spTimecodeTracks->insert( spAAFNode );
             return false;
         }
 
         bool PreOrderVisit( EPTypedObjNode<IAAFEventMobSlot, EPEdgecodeTrack>& node )
         {
-            shared_ptr<Node> spNode = node.GetSharedPointerToNode();
-            shared_ptr<AAFObjNode> spAAFNode = dynamic_pointer_cast<AAFObjNode>( spNode );
+            boost::shared_ptr<Node> spNode = node.GetSharedPointerToNode();
+            boost::shared_ptr<AAFObjNode> spAAFNode = dynamic_pointer_cast<AAFObjNode>( spNode );
             _spEdgecodeTracks->insert( spAAFNode );
             return false;
         }
 
         bool PreOrderVisit( EPTypedObjNode<IAAFMobSlot, EPEssenceTrack>& node )
         {
-            shared_ptr<Node> spNode = node.GetSharedPointerToNode();
-            shared_ptr<AAFObjNode> spAAFNode = dynamic_pointer_cast<AAFObjNode>( spNode );
+            boost::shared_ptr<Node> spNode = node.GetSharedPointerToNode();
+            boost::shared_ptr<AAFObjNode> spAAFNode = dynamic_pointer_cast<AAFObjNode>( spNode );
             _spEssenceTracks->insert( spAAFNode );
             return false;
         }
 
         bool PreOrderVisit( EPTypedObjNode<IAAFMobSlot, EPAudioTrack>& node )
         {
-            shared_ptr<Node> spNode = node.GetSharedPointerToNode();
-            shared_ptr<AAFObjNode> spAAFNode = dynamic_pointer_cast<AAFObjNode>( spNode );
+            boost::shared_ptr<Node> spNode = node.GetSharedPointerToNode();
+            boost::shared_ptr<AAFObjNode> spAAFNode = dynamic_pointer_cast<AAFObjNode>( spNode );
             _spEssenceTracks->insert( spAAFNode );
             _spAudioTracks->insert( spAAFNode );
             return false;
@@ -414,8 +414,8 @@ class ChildMobSlotVisitor : public EPTypedVisitor
 
         bool PreOrderVisit( EPTypedObjNode<IAAFMobSlot, EPVideoTrack>& node )
         {
-            shared_ptr<Node> spNode = node.GetSharedPointerToNode();
-            shared_ptr<AAFObjNode> spAAFNode = dynamic_pointer_cast<AAFObjNode>( spNode );
+            boost::shared_ptr<Node> spNode = node.GetSharedPointerToNode();
+            boost::shared_ptr<AAFObjNode> spAAFNode = dynamic_pointer_cast<AAFObjNode>( spNode );
             _spEssenceTracks->insert( spAAFNode );
             _spVideoTracks->insert( spAAFNode );
             return false;
@@ -423,52 +423,52 @@ class ChildMobSlotVisitor : public EPTypedVisitor
 
         bool PreOrderVisit( EPTypedObjNode<IAAFMobSlot, EPTimecodeTrack>& node )
         {
-            shared_ptr<Node> spNode = node.GetSharedPointerToNode();
-            shared_ptr<AAFObjNode> spAAFNode = dynamic_pointer_cast<AAFObjNode>( spNode );
+            boost::shared_ptr<Node> spNode = node.GetSharedPointerToNode();
+            boost::shared_ptr<AAFObjNode> spAAFNode = dynamic_pointer_cast<AAFObjNode>( spNode );
             _spTimecodeTracks->insert( spAAFNode );
             return false;
         }
 
         bool PreOrderVisit( EPTypedObjNode<IAAFMobSlot, EPEdgecodeTrack>& node )
         {
-            shared_ptr<Node> spNode = node.GetSharedPointerToNode();
-            shared_ptr<AAFObjNode> spAAFNode = dynamic_pointer_cast<AAFObjNode>( spNode );
+            boost::shared_ptr<Node> spNode = node.GetSharedPointerToNode();
+            boost::shared_ptr<AAFObjNode> spAAFNode = dynamic_pointer_cast<AAFObjNode>( spNode );
             _spEdgecodeTracks->insert( spAAFNode );
             return false;
         }
 
-        shared_ptr<EPTypedVisitor::MobSlotNodeSet> GetEssenceTracks()
+        boost::shared_ptr<EPTypedVisitor::MobSlotNodeSet> GetEssenceTracks()
         {
             return _spEssenceTracks;
         }
 
-        shared_ptr<EPTypedVisitor::MobSlotNodeSet> GetAudioTracks()
+        boost::shared_ptr<EPTypedVisitor::MobSlotNodeSet> GetAudioTracks()
         {
             return _spAudioTracks;
         }
 
-        shared_ptr<EPTypedVisitor::MobSlotNodeSet> GetVideoTracks()
+        boost::shared_ptr<EPTypedVisitor::MobSlotNodeSet> GetVideoTracks()
         {
             return _spVideoTracks;
         }
 
-        shared_ptr<EPTypedVisitor::MobSlotNodeSet> GetTimecodeTracks()
+        boost::shared_ptr<EPTypedVisitor::MobSlotNodeSet> GetTimecodeTracks()
         {
             return _spTimecodeTracks;
         }
 
-        shared_ptr<EPTypedVisitor::MobSlotNodeSet> GetEdgecodeTracks()
+        boost::shared_ptr<EPTypedVisitor::MobSlotNodeSet> GetEdgecodeTracks()
         {
             return _spEdgecodeTracks;
         }
 
     private:
 
-        shared_ptr<EPTypedVisitor::MobSlotNodeSet> _spEssenceTracks;
-        shared_ptr<EPTypedVisitor::MobSlotNodeSet> _spAudioTracks;
-        shared_ptr<EPTypedVisitor::MobSlotNodeSet> _spVideoTracks;
-        shared_ptr<EPTypedVisitor::MobSlotNodeSet> _spTimecodeTracks;
-        shared_ptr<EPTypedVisitor::MobSlotNodeSet> _spEdgecodeTracks;
+        boost::shared_ptr<EPTypedVisitor::MobSlotNodeSet> _spEssenceTracks;
+        boost::shared_ptr<EPTypedVisitor::MobSlotNodeSet> _spAudioTracks;
+        boost::shared_ptr<EPTypedVisitor::MobSlotNodeSet> _spVideoTracks;
+        boost::shared_ptr<EPTypedVisitor::MobSlotNodeSet> _spTimecodeTracks;
+        boost::shared_ptr<EPTypedVisitor::MobSlotNodeSet> _spEdgecodeTracks;
 
         // prohibited
         ChildMobSlotVisitor( const ChildMobSlotVisitor& );
@@ -525,71 +525,71 @@ AxString EPTypedVisitor::GetMobName( AxMob& axMob, const AxString& type )
 
 }
 
-AxString EPTypedVisitor::GetMobName( shared_ptr<EdgeMap> spEdgeMap, Node& node )
+AxString EPTypedVisitor::GetMobName( boost::shared_ptr<EdgeMap> spEdgeMap, Node& node )
 {
-    shared_ptr<Node> spNode = dynamic_pointer_cast<Node>( node.GetSharedPointerToNode() );
+    boost::shared_ptr<Node> spNode = dynamic_pointer_cast<Node>( node.GetSharedPointerToNode() );
     DepthFirstTraversal dfs( spEdgeMap, spNode );
-    shared_ptr<ParentMobVisitor> spVisitor( new ParentMobVisitor );
+    boost::shared_ptr<ParentMobVisitor> spVisitor( new ParentMobVisitor );
 
     dfs.TraverseUp( spVisitor );
     return spVisitor->GetParentMobName();
 }
 
-AxString EPTypedVisitor::GetMobSlotName( shared_ptr<EdgeMap> spEdgeMap, Node& node )
+AxString EPTypedVisitor::GetMobSlotName( boost::shared_ptr<EdgeMap> spEdgeMap, Node& node )
 {
-    shared_ptr<Node> spNode = dynamic_pointer_cast<Node>( node.GetSharedPointerToNode() );
+    boost::shared_ptr<Node> spNode = dynamic_pointer_cast<Node>( node.GetSharedPointerToNode() );
     DepthFirstTraversal dfs( spEdgeMap, spNode );
-    shared_ptr<ParentMobVisitor> spVisitor( new ParentMobVisitor );
+    boost::shared_ptr<ParentMobVisitor> spVisitor( new ParentMobVisitor );
 
     dfs.TraverseUp( spVisitor );
     return spVisitor->GetParentSlotName();
 }
 
-shared_ptr<EPTypedVisitor::MobSlotNodeSet> EPTypedVisitor::GetEssenceTracks( shared_ptr<EdgeMap> spEdgeMap, Node& node )
+boost::shared_ptr<EPTypedVisitor::MobSlotNodeSet> EPTypedVisitor::GetEssenceTracks( boost::shared_ptr<EdgeMap> spEdgeMap, Node& node )
 {
-    shared_ptr<Node> spNode = dynamic_pointer_cast<Node>( node.GetSharedPointerToNode() );
+    boost::shared_ptr<Node> spNode = dynamic_pointer_cast<Node>( node.GetSharedPointerToNode() );
     DepthFirstTraversal dfs( spEdgeMap, spNode );
-    shared_ptr<ChildMobSlotVisitor> spVisitor( new ChildMobSlotVisitor );
+    boost::shared_ptr<ChildMobSlotVisitor> spVisitor( new ChildMobSlotVisitor );
 
     dfs.TraverseDown( spVisitor );
     return spVisitor->GetEssenceTracks();
 }
 
-shared_ptr<EPTypedVisitor::MobSlotNodeSet> EPTypedVisitor::GetAudioTracks( shared_ptr<EdgeMap> spEdgeMap, Node& node )
+boost::shared_ptr<EPTypedVisitor::MobSlotNodeSet> EPTypedVisitor::GetAudioTracks( boost::shared_ptr<EdgeMap> spEdgeMap, Node& node )
 {
-    shared_ptr<Node> spNode = dynamic_pointer_cast<Node>( node.GetSharedPointerToNode() );
+    boost::shared_ptr<Node> spNode = dynamic_pointer_cast<Node>( node.GetSharedPointerToNode() );
     DepthFirstTraversal dfs( spEdgeMap, spNode );
-    shared_ptr<ChildMobSlotVisitor> spVisitor( new ChildMobSlotVisitor );
+    boost::shared_ptr<ChildMobSlotVisitor> spVisitor( new ChildMobSlotVisitor );
 
     dfs.TraverseDown( spVisitor );
     return spVisitor->GetAudioTracks();
 }
 
-shared_ptr<EPTypedVisitor::MobSlotNodeSet> EPTypedVisitor::GetVideoTracks( shared_ptr<EdgeMap> spEdgeMap, Node& node )
+boost::shared_ptr<EPTypedVisitor::MobSlotNodeSet> EPTypedVisitor::GetVideoTracks( boost::shared_ptr<EdgeMap> spEdgeMap, Node& node )
 {
-    shared_ptr<Node> spNode = dynamic_pointer_cast<Node>( node.GetSharedPointerToNode() );
+    boost::shared_ptr<Node> spNode = dynamic_pointer_cast<Node>( node.GetSharedPointerToNode() );
     DepthFirstTraversal dfs( spEdgeMap, spNode );
-    shared_ptr<ChildMobSlotVisitor> spVisitor( new ChildMobSlotVisitor );
+    boost::shared_ptr<ChildMobSlotVisitor> spVisitor( new ChildMobSlotVisitor );
 
     dfs.TraverseDown( spVisitor );
     return spVisitor->GetVideoTracks();
 }
 
-shared_ptr<EPTypedVisitor::MobSlotNodeSet> EPTypedVisitor::GetTimecodeTracks( shared_ptr<EdgeMap> spEdgeMap, Node& node )
+boost::shared_ptr<EPTypedVisitor::MobSlotNodeSet> EPTypedVisitor::GetTimecodeTracks( boost::shared_ptr<EdgeMap> spEdgeMap, Node& node )
 {
-    shared_ptr<Node> spNode = dynamic_pointer_cast<Node>( node.GetSharedPointerToNode() );
+    boost::shared_ptr<Node> spNode = dynamic_pointer_cast<Node>( node.GetSharedPointerToNode() );
     DepthFirstTraversal dfs( spEdgeMap, spNode );
-    shared_ptr<ChildMobSlotVisitor> spVisitor( new ChildMobSlotVisitor );
+    boost::shared_ptr<ChildMobSlotVisitor> spVisitor( new ChildMobSlotVisitor );
 
     dfs.TraverseDown( spVisitor );
     return spVisitor->GetTimecodeTracks();
 }
 
-shared_ptr<EPTypedVisitor::MobSlotNodeSet> EPTypedVisitor::GetEdgecodeTracks( shared_ptr<EdgeMap> spEdgeMap, Node& node )
+boost::shared_ptr<EPTypedVisitor::MobSlotNodeSet> EPTypedVisitor::GetEdgecodeTracks( boost::shared_ptr<EdgeMap> spEdgeMap, Node& node )
 {
-    shared_ptr<Node> spNode = dynamic_pointer_cast<Node>( node.GetSharedPointerToNode() );
+    boost::shared_ptr<Node> spNode = dynamic_pointer_cast<Node>( node.GetSharedPointerToNode() );
     DepthFirstTraversal dfs( spEdgeMap, spNode );
-    shared_ptr<ChildMobSlotVisitor> spVisitor( new ChildMobSlotVisitor );
+    boost::shared_ptr<ChildMobSlotVisitor> spVisitor( new ChildMobSlotVisitor );
 
     dfs.TraverseDown( spVisitor );
     return spVisitor->GetEdgecodeTracks();

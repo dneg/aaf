@@ -39,8 +39,6 @@ using namespace aafanalyzer;
 
 namespace aafanalyzer {
 
-using namespace boost;
-
 Section71TableEntry::Section71TableEntry(Section71TableEntry::TrackType_e t,
 					 int exactNum, int exactDen,
 					 int roundedNum, int roundedDen)

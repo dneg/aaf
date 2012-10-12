@@ -38,8 +38,6 @@
 
 namespace aafanalyzer {
 
-using namespace boost;
-
 class TestLevelTestResult;
 
 class EPMultiChannelAudioVisitor : public EPTypedVisitor
@@ -48,7 +46,7 @@ class EPMultiChannelAudioVisitor : public EPTypedVisitor
   public:
 
     EPMultiChannelAudioVisitor( wostream& log,
-				shared_ptr<TestLevelTestResult> spTestResult );
+				boost::shared_ptr<TestLevelTestResult> spTestResult );
     
     virtual ~EPMultiChannelAudioVisitor();
 
@@ -64,7 +62,7 @@ class EPMultiChannelAudioVisitor : public EPTypedVisitor
   private:
 
     wostream& _log;
-    shared_ptr<TestLevelTestResult> _spTestResult;
+    boost::shared_ptr<TestLevelTestResult> _spTestResult;
     aafUInt32 _level;
 
     // prohibited

@@ -40,7 +40,6 @@
 namespace aafanalyzer {
 
 using namespace std;
-using namespace boost;
 
 class DetailLevelTestResult;
 class TestLevelTestResult;
@@ -50,7 +49,7 @@ class AcyclicVisitor : public Visitor
  public:
 
   AcyclicVisitor(wostream& os,
-		 shared_ptr<TestLevelTestResult> spTestResult);
+		 boost::shared_ptr<TestLevelTestResult> spTestResult);
 
   virtual ~AcyclicVisitor();
 
@@ -69,14 +68,14 @@ class AcyclicVisitor : public Visitor
   void CreateCycleTestResult();
 
   //typedef vector<Node::LID> Vector;
-  typedef vector<shared_ptr<Node> > NodeVector;
+  typedef vector<boost::shared_ptr<Node> > NodeVector;
   typedef set<Node::LID> NodeSet;
  
   NodeVector _nodeVector;
   NodeSet _nodeSet;
 
   wostream& _os;
-  shared_ptr<TestLevelTestResult> _spTestResult;
+  boost::shared_ptr<TestLevelTestResult> _spTestResult;
 
   int _level;
   bool _cycleDetected;

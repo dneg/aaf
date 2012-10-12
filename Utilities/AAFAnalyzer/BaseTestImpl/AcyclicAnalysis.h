@@ -46,10 +46,10 @@ class TestGraph;
 class AcyclicAnalysis : public Test
 {
  public:
-  AcyclicAnalysis(wostream& os, shared_ptr<const TestGraph> spGraph);
+  AcyclicAnalysis(wostream& os, boost::shared_ptr<const TestGraph> spGraph);
   ~AcyclicAnalysis();
 
-  shared_ptr<TestLevelTestResult> Execute();
+  boost::shared_ptr<TestLevelTestResult> Execute();
   AxString GetName() const;
   AxString GetDescription() const;
   static const TestInfo GetTestInfo();

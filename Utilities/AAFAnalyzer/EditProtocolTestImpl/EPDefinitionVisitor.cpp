@@ -57,12 +57,10 @@ using namespace aafanalyzer;
 //======================================================================
 
 namespace aafanalyzer {
-
-using namespace boost;
  
 EPDefinitionVisitor::EPDefinitionVisitor( wostream& log,
-					  shared_ptr<EdgeMap> spEdgeMap,
-					  shared_ptr<TestLevelTestResult> spTestResult )
+					  boost::shared_ptr<EdgeMap> spEdgeMap,
+					  boost::shared_ptr<TestLevelTestResult> spTestResult )
     : _log(log),
       _spEdgeMap( spEdgeMap ),
       _spTestResult( spTestResult )
@@ -92,7 +90,7 @@ bool EPDefinitionVisitor::PreOrderVisit( EPTypedObjNode<IAAFOperationDef, EPEffe
         _opDataDefLegacy[msg + L"Legacy" + axDataDef.GetName()] = node.GetSharedPointerToNode();
     }
     
-    shared_ptr<AAFTypedObjNode<IAAFOperationDef> > spGeneric( node.DownCastToAAF<IAAFOperationDef>() );
+    boost::shared_ptr<AAFTypedObjNode<IAAFOperationDef> > spGeneric( node.DownCastToAAF<IAAFOperationDef>() );
     return this->PreOrderVisit( *spGeneric );
 }
 
@@ -164,7 +162,7 @@ void EPDefinitionVisitor::CheckForUnusedOperationDefinitions()
     }
     
     //Present a info message for every unused OperationDefinition.
-    map<aafUID_t, pair<AxString,shared_ptr<Node> > >::const_iterator mIter;
+    map<aafUID_t, pair<AxString,boost::shared_ptr<Node> > >::const_iterator mIter;
     for ( mIter = _registeredDefinitions.begin(); mIter != _registeredDefinitions.end(); mIter++ )
     {
       _spTestResult->AddSingleResult(
@@ -193,7 +191,7 @@ void EPDefinitionVisitor::CheckLegacyData()
   // definitions.  Warn if legacy values are found.  Pass if current
   // values are found.  The reverse is true for pre 11 files.
 
-  map<AxString, shared_ptr<Node> >::const_iterator iter;
+  map<AxString, boost::shared_ptr<Node> >::const_iterator iter;
   for ( iter = _opDataDefCurrent.begin(); iter != _opDataDefCurrent.end(); iter++ )
   {
     TestResult::Result result = TestResult::UNDEFINED;

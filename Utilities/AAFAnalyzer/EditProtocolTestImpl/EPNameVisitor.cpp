@@ -59,11 +59,9 @@ namespace {
 
 namespace aafanalyzer {
 
-using namespace boost;
-
 EPNameVisitor::EPNameVisitor( wostream& log,
-                              shared_ptr<EdgeMap> spEdgeMap,
-                              shared_ptr<TestLevelTestResult> spTestResult )
+                              boost::shared_ptr<EdgeMap> spEdgeMap,
+                              boost::shared_ptr<TestLevelTestResult> spTestResult )
     : EPTypedVisitor(),
       _log( log ),
       _spEdgeMap( spEdgeMap ),
@@ -228,55 +226,55 @@ void EPNameVisitor::CheckForUniqueSlotNamesInMob( Node& node, IAAFMobSP spMob )
  */
 bool EPNameVisitor::PreOrderVisit( AAFTypedObjNode<IAAFDataDef>& node )
 {
-    shared_ptr<AAFTypedObjNode<IAAFDefObject> > spGeneric( node.DownCastToAAF<IAAFDefObject>() );
+    boost::shared_ptr<AAFTypedObjNode<IAAFDefObject> > spGeneric( node.DownCastToAAF<IAAFDefObject>() );
     return this->PreOrderVisit( *spGeneric );
 }
 
 bool EPNameVisitor::PreOrderVisit( AAFTypedObjNode<IAAFParameterDef>& node )
 {
-    shared_ptr<AAFTypedObjNode<IAAFDefObject> > spGeneric( node.DownCastToAAF<IAAFDefObject>() );
+    boost::shared_ptr<AAFTypedObjNode<IAAFDefObject> > spGeneric( node.DownCastToAAF<IAAFDefObject>() );
     return this->PreOrderVisit( *spGeneric );
 }
 
 bool EPNameVisitor::PreOrderVisit( AAFTypedObjNode<IAAFPluginDef>& node )
 {
-    shared_ptr<AAFTypedObjNode<IAAFDefObject> > spGeneric( node.DownCastToAAF<IAAFDefObject>() );
+    boost::shared_ptr<AAFTypedObjNode<IAAFDefObject> > spGeneric( node.DownCastToAAF<IAAFDefObject>() );
     return this->PreOrderVisit( *spGeneric );
 }
 
 bool EPNameVisitor::PreOrderVisit( AAFTypedObjNode<IAAFContainerDef>& node )
 {
-    shared_ptr<AAFTypedObjNode<IAAFDefObject> > spGeneric( node.DownCastToAAF<IAAFDefObject>() );
+    boost::shared_ptr<AAFTypedObjNode<IAAFDefObject> > spGeneric( node.DownCastToAAF<IAAFDefObject>() );
     return this->PreOrderVisit( *spGeneric );
 }
 
 bool EPNameVisitor::PreOrderVisit( AAFTypedObjNode<IAAFInterpolationDef>& node )
 {
-    shared_ptr<AAFTypedObjNode<IAAFDefObject> > spGeneric( node.DownCastToAAF<IAAFDefObject>() );
+    boost::shared_ptr<AAFTypedObjNode<IAAFDefObject> > spGeneric( node.DownCastToAAF<IAAFDefObject>() );
     return this->PreOrderVisit( *spGeneric );
 }
 
 bool EPNameVisitor::PreOrderVisit( AAFTypedObjNode<IAAFTaggedValueDefinition>& node )
 {
-    shared_ptr<AAFTypedObjNode<IAAFDefObject> > spGeneric( node.DownCastToAAF<IAAFDefObject>() );
+    boost::shared_ptr<AAFTypedObjNode<IAAFDefObject> > spGeneric( node.DownCastToAAF<IAAFDefObject>() );
     return this->PreOrderVisit( *spGeneric );
 }
 
 bool EPNameVisitor::PreOrderVisit( AAFTypedObjNode<IAAFOperationDef>& node )
 {
-    shared_ptr<AAFTypedObjNode<IAAFDefObject> > spGeneric( node.DownCastToAAF<IAAFDefObject>() );
+    boost::shared_ptr<AAFTypedObjNode<IAAFDefObject> > spGeneric( node.DownCastToAAF<IAAFDefObject>() );
     return this->PreOrderVisit( *spGeneric );
 }
 
 bool EPNameVisitor::PreOrderVisit( AAFTypedObjNode<IAAFCodecDef>& node )
 {
-    shared_ptr<AAFTypedObjNode<IAAFDefObject> > spGeneric( node.DownCastToAAF<IAAFDefObject>() );
+    boost::shared_ptr<AAFTypedObjNode<IAAFDefObject> > spGeneric( node.DownCastToAAF<IAAFDefObject>() );
     return this->PreOrderVisit( *spGeneric );
 }
 
 bool EPNameVisitor::PreOrderVisit( AAFTypedObjNode<IAAFKLVDataDefinition>& node )
 {
-    shared_ptr<AAFTypedObjNode<IAAFDefObject> > spGeneric( node.DownCastToAAF<IAAFDefObject>() );
+    boost::shared_ptr<AAFTypedObjNode<IAAFDefObject> > spGeneric( node.DownCastToAAF<IAAFDefObject>() );
     return this->PreOrderVisit( *spGeneric );
 }
  
@@ -295,7 +293,7 @@ bool EPNameVisitor::PreOrderVisit( AAFTypedObjNode<IAAFDefObject>& node )
         {       
             AxString explain( L"DefinitionObject does not have a valid name." );
 
-            shared_ptr<DetailLevelTestResult>
+            boost::shared_ptr<DetailLevelTestResult>
               spFailure = _spTestResult->AddSingleResult( L"REQ_EP_161",
 							  explain,
 							  TestResult::FAIL,
@@ -329,7 +327,7 @@ bool EPNameVisitor::VisitComposition( Node& node,
         {
             AxString explain( type + L" does not have a valid name." );
 
-            shared_ptr<DetailLevelTestResult>
+            boost::shared_ptr<DetailLevelTestResult>
               spFailure = _spTestResult->AddSingleResult( reqId,
 							  explain,
 							  TestResult::FAIL,
@@ -372,7 +370,7 @@ bool EPNameVisitor::VisitNonComposition( Node& node, const AxString& type, const
         {
           AxString explain( type + L" does not have a valid name." );
 
-          shared_ptr<DetailLevelTestResult>
+          boost::shared_ptr<DetailLevelTestResult>
             spFailure = _spTestResult->AddSingleResult( reqId,
 							explain,
 							TestResult::FAIL,

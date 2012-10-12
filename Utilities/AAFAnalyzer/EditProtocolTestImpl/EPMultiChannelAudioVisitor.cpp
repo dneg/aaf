@@ -47,10 +47,9 @@ using namespace aafanalyzer;
 
 namespace aafanalyzer {
 
-using namespace boost;
  
 EPMultiChannelAudioVisitor::EPMultiChannelAudioVisitor( wostream& log,
-							shared_ptr<TestLevelTestResult> spTestResult )
+							boost::shared_ptr<TestLevelTestResult> spTestResult )
   : EPTypedVisitor( Visitor::FOLLOW_REFERENCES ),
     _log( log ),
     _spTestResult( spTestResult ),

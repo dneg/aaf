@@ -52,7 +52,6 @@ class AxSourceReference;
 namespace aafanalyzer {
 
 using namespace std;
-using namespace boost;
 
 class InputParser
 {
@@ -73,12 +72,12 @@ public:
 
  private:
 
-    typedef shared_ptr<AxMob>(TestFileBuilder::*ptrToAddFunction)( const AxString& name, bool isNamed, aafRational_t rationalParam, aafUInt32 optIntParam, bool hasOptIntParam );
-    typedef shared_ptr<AxComponent>(TestFileBuilder::*ptrToCreateFunction)( TestFileBuilder::TrackType essenceType, const AxString& strParam, aafLength_t length, bool hasLength, int intParam, bool hasIntParam );
+    typedef boost::shared_ptr<AxMob>(TestFileBuilder::*ptrToAddFunction)( const AxString& name, bool isNamed, aafRational_t rationalParam, aafUInt32 optIntParam, bool hasOptIntParam );
+    typedef boost::shared_ptr<AxComponent>(TestFileBuilder::*ptrToCreateFunction)( TestFileBuilder::TrackType essenceType, const AxString& strParam, aafLength_t length, bool hasLength, int intParam, bool hasIntParam );
     typedef void(TestFileBuilder::*ptrToAttachSlotFunction)( AxMob& parent, AxSegment& axSegment, aafRational_t editRate, const AxString& name, bool isNamed, int physicalTrackNum, bool isNumbered, int markedIn, bool isMarkedIn, int markedOut, bool isMarkedOut, int userPos, bool isUserPos, int origin );
     typedef void(TestFileBuilder::*ptrToAttachParameterFunction)( AxOperationGroup& axOpGroup, const aafUID_t& paramDefId, aafUInt32 intParam1, aafUInt32 intParam2, const aafUID_t& interpolationDefId );
     typedef void(TestFileBuilder::*ptrToCreateDefFunction)( const AxString& name, const AxString& description );
-    typedef void(TestFileBuilder::*ptrToAddAnnotationFunction)( shared_ptr<AxComponent> axComponent, const AxString& keyName, const AxString& value );
+    typedef void(TestFileBuilder::*ptrToAddAnnotationFunction)( boost::shared_ptr<AxComponent> axComponent, const AxString& keyName, const AxString& value );
 
     //Components can be divided into 4 distinct classes based upon the types of
     //objects that may be attached.  Each class has its own signature for attaching:
@@ -94,7 +93,7 @@ public:
 
     //Type B (One Mob Referenced)
     //SourceReference, SourceClip
-    typedef void(TestFileBuilder::*ptrToFillFunctionB) ( shared_ptr<AxSourceReference> parent, AxMob& child, const AxString& source );
+    typedef void(TestFileBuilder::*ptrToFillFunctionB) ( boost::shared_ptr<AxSourceReference> parent, AxMob& child, const AxString& source );
     //NOTE: SourceReference is an abstract class.  Although the general create
     //      function will be sufficient to create new descendant classes, a
     //      specialized fill function will be needed.  In many cases, that
@@ -104,16 +103,16 @@ public:
 
     //Type C (Interchange Objects can be attached (one or many in an array) )
     //Transition, Sequence, CommentMarker, DescriptiveMarker, Pulldown
-    typedef void(TestFileBuilder::*ptrToFillFunctionC) ( shared_ptr<AxComponent> parent, AxComponent& child );
+    typedef void(TestFileBuilder::*ptrToFillFunctionC) ( boost::shared_ptr<AxComponent> parent, AxComponent& child );
 
     //Type D (Multiple Segments assigned to different properties)
     //OperationGroup, Selector, EssenceGroups
-    typedef void(TestFileBuilder::*ptrToFillFunctionD) ( shared_ptr<AxSegment> parent, AxSegment& child, int property );
+    typedef void(TestFileBuilder::*ptrToFillFunctionD) ( boost::shared_ptr<AxSegment> parent, AxSegment& child, int property );
 
-    typedef pair<AxString, shared_ptr<AxComponent> > ComponentPair;
+    typedef pair<AxString, boost::shared_ptr<AxComponent> > ComponentPair;
     typedef pair<AxString, AxString> TypeDPair;
 
-    stack<shared_ptr<AxMob> > _mobStack;
+    stack<boost::shared_ptr<AxMob> > _mobStack;
     stack<ComponentPair> _componentStack;
     stack<SlotInfo> _slotStack;
 

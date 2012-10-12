@@ -37,7 +37,6 @@ namespace aafanalyzer {
 class Test;
 
 using namespace std;
-using namespace boost;
 
 // A LowLevelTestResult is test result that is associated with (i.e
 // reported against) as particular test.  TestLevelResult is an
@@ -53,13 +52,13 @@ class LowLevelTestResult : public TestResult
 
   virtual const enum ResultLevel GetResultType() const = 0;
 
-  const shared_ptr<const Test> GetAssociatedTest() const;
+  const boost::shared_ptr<const Test> GetAssociatedTest() const;
 
  protected:
 
-  LowLevelTestResult( const shared_ptr<const Test> associatedTest );
+  LowLevelTestResult( const boost::shared_ptr<const Test> associatedTest );
 
-  LowLevelTestResult( const shared_ptr<const Test> associatedTest,
+  LowLevelTestResult( const boost::shared_ptr<const Test> associatedTest,
 		      const wstring& name, const wstring& desc,
                       const wstring& explain ); 
  private:
@@ -68,9 +67,9 @@ class LowLevelTestResult : public TestResult
   LowLevelTestResult( const LowLevelTestResult& );
   LowLevelTestResult& operator=( const LowLevelTestResult& );
 
-  void SetRequirementStatus( TestResult::Result level, const shared_ptr<const Requirement>& req);
+  void SetRequirementStatus( TestResult::Result level, const boost::shared_ptr<const Requirement>& req);
 
-  const shared_ptr<const Test> _spAssociatedTest;
+  const boost::shared_ptr<const Test> _spAssociatedTest;
 };
 
 } // end of namespace diskstream

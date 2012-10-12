@@ -60,7 +60,7 @@ namespace aafanalyzer {
 using namespace std;
 
 EPNameTest::EPNameTest( wostream& log,
-                    shared_ptr<const TestGraph> spGraph )
+                    boost::shared_ptr<const TestGraph> spGraph )
   : Test( log, GetTestInfo() )
 {
     SetTestGraph(spGraph);
@@ -69,11 +69,11 @@ EPNameTest::EPNameTest( wostream& log,
 EPNameTest::~EPNameTest()
 {}
 
-shared_ptr<TestLevelTestResult> EPNameTest::Execute()
+boost::shared_ptr<TestLevelTestResult> EPNameTest::Execute()
 {
-  shared_ptr<TestLevelTestResult> spTestResult = CreateTestResult();
+  boost::shared_ptr<TestLevelTestResult> spTestResult = CreateTestResult();
 
-  shared_ptr<EPNameVisitor> spVisitor( new EPNameVisitor( GetOutStream(),
+  boost::shared_ptr<EPNameVisitor> spVisitor( new EPNameVisitor( GetOutStream(),
 									                      GetTestGraph()->GetEdgeMap(),
 														  spTestResult ) );
 
@@ -96,7 +96,7 @@ AxString EPNameTest::GetDescription() const
 
 const TestInfo EPNameTest::GetTestInfo()
 {
-    shared_ptr<vector<AxString> > spReqIds(new vector<AxString>);
+    boost::shared_ptr<vector<AxString> > spReqIds(new vector<AxString>);
     spReqIds->push_back(L"REQ_EP_027");     //Top-Level Composition
     spReqIds->push_back(L"REQ_EP_032");     //Lower-Level Composition
     spReqIds->push_back(L"REQ_EP_038");     //Sub-Clip Composition

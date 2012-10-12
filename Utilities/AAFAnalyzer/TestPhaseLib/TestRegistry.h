@@ -42,7 +42,6 @@
 namespace aafanalyzer {
 
 using namespace std;
-using namespace boost;
 
 class TestResult;
 class TopLevelTestResult;
@@ -57,17 +56,17 @@ class TestRegistry
 
   static TestRegistry& GetInstance();
   void Register( const TestInfo& info );
-  const shared_ptr<Requirement::RequirementMap> GetRequirementsForTest( const wstring& name ) const;
-  const shared_ptr<const Requirement::RequirementMap> GetConstRequirementsForTest( const wstring& name ) const;
+  const boost::shared_ptr<Requirement::RequirementMap> GetRequirementsForTest( const wstring& name ) const;
+  const boost::shared_ptr<const Requirement::RequirementMap> GetConstRequirementsForTest( const wstring& name ) const;
   const Requirement::RequirementMap& GetRequirementCoverage() const;
-  bool VerifyTestResultCoverage(const shared_ptr<TopLevelTestResult> results) const;
+  bool VerifyTestResultCoverage(const boost::shared_ptr<TopLevelTestResult> results) const;
 
  private:
 
-  typedef map< const wstring, shared_ptr<const Requirement::RequirementMap> > Map;
+  typedef map< const wstring, boost::shared_ptr<const Requirement::RequirementMap> > Map;
 
   TestRegistry();//using Singleton pattern to allow only one object
-  void VerifyTestResultCoverage(const shared_ptr<const TestResult> result, Requirement::RequirementMap& outstandingReqs) const;
+  void VerifyTestResultCoverage(const boost::shared_ptr<const TestResult> result, Requirement::RequirementMap& outstandingReqs) const;
 
   static TestRegistry* _pTestRegistry;
   Map _testSet;

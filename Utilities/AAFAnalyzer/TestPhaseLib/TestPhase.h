@@ -39,7 +39,6 @@
 namespace aafanalyzer {
 
 using namespace std;
-using namespace boost;
 
 class TestPhaseLevelTestResult;
 
@@ -51,7 +50,7 @@ class TestPhase
 
   virtual wstring GetDescription() const;
   virtual wstring GetName() const;
-  virtual shared_ptr<TestPhaseLevelTestResult> Execute() = 0; 
+  virtual boost::shared_ptr<TestPhaseLevelTestResult> Execute() = 0; 
   wostream& GetOutStream() const; 
 
  private:

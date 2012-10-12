@@ -55,13 +55,12 @@
 namespace {
 
 using namespace aafanalyzer;
-using namespace boost;
 
 class AuxiliarySlotVisitor : public EPTypedVisitor
 {
     public:
-        AuxiliarySlotVisitor( shared_ptr<EdgeMap> spEdgeMap,
-                              shared_ptr<TestLevelTestResult> spTestResult )
+        AuxiliarySlotVisitor( boost::shared_ptr<EdgeMap> spEdgeMap,
+                              boost::shared_ptr<TestLevelTestResult> spTestResult )
             : _spEdgeMap( spEdgeMap ),
               _spTestResult( spTestResult ),
               _testPassed( true )
@@ -72,19 +71,19 @@ class AuxiliarySlotVisitor : public EPTypedVisitor
 
         bool PreOrderVisit( AAFTypedObjNode<IAAFTimelineMobSlot>& node )
         {
-            shared_ptr<AAFTypedObjNode<IAAFMobSlot> > spGeneric( node.DownCastToAAF<IAAFMobSlot>() );
+            boost::shared_ptr<AAFTypedObjNode<IAAFMobSlot> > spGeneric( node.DownCastToAAF<IAAFMobSlot>() );
             return this->PreOrderVisit( *spGeneric );
         }
 
         bool PreOrderVisit( AAFTypedObjNode<IAAFEventMobSlot>& node )
         {
-            shared_ptr<AAFTypedObjNode<IAAFMobSlot> > spGeneric( node.DownCastToAAF<IAAFMobSlot>() );
+            boost::shared_ptr<AAFTypedObjNode<IAAFMobSlot> > spGeneric( node.DownCastToAAF<IAAFMobSlot>() );
             return this->PreOrderVisit( *spGeneric );
         }
 
         bool PreOrderVisit( AAFTypedObjNode<IAAFStaticMobSlot>& node )
         {
-            shared_ptr<AAFTypedObjNode<IAAFMobSlot> > spGeneric( node.DownCastToAAF<IAAFMobSlot>() );
+            boost::shared_ptr<AAFTypedObjNode<IAAFMobSlot> > spGeneric( node.DownCastToAAF<IAAFMobSlot>() );
             return this->PreOrderVisit( *spGeneric );
         }
 
@@ -112,8 +111,8 @@ class AuxiliarySlotVisitor : public EPTypedVisitor
 
     private:
 
-        shared_ptr<EdgeMap> _spEdgeMap;
-        shared_ptr<TestLevelTestResult> _spTestResult;
+        boost::shared_ptr<EdgeMap> _spEdgeMap;
+        boost::shared_ptr<TestLevelTestResult> _spTestResult;
         bool _testPassed;
 
         // prohibited
@@ -220,8 +219,8 @@ namespace aafanalyzer {
 using namespace boost;
 
 EPContainedTrackVisitor::EPContainedTrackVisitor( wostream& log,
-                                                  shared_ptr<EdgeMap> spEdgeMap,
-                                                  shared_ptr<TestLevelTestResult> spTestResult )
+                                                  boost::shared_ptr<EdgeMap> spEdgeMap,
+                                                  boost::shared_ptr<TestLevelTestResult> spTestResult )
     : _log(log),
       _spEdgeMap( spEdgeMap ),
       _spTestResult( spTestResult )
@@ -251,7 +250,7 @@ bool EPContainedTrackVisitor::PreOrderVisit( EPTypedObjNode<IAAFCompositionMob, 
     bool testPassed = true;
 
     AxCompositionMob axCompMob( node.GetAAFObjectOfType() );
-    shared_ptr<MobSlotNodeSet> spEssenceTrack = this->GetEssenceTracks( _spEdgeMap, node );
+    boost::shared_ptr<MobSlotNodeSet> spEssenceTrack = this->GetEssenceTracks( _spEdgeMap, node );
 
     MobSlotNodeSet::const_iterator iter;
     for ( iter = spEssenceTrack->begin(); iter != spEssenceTrack->end(); iter++ )
@@ -281,7 +280,7 @@ bool EPContainedTrackVisitor::PreOrderVisit( EPTypedObjNode<IAAFCompositionMob, 
     bool testPassed = true;
 
     AxCompositionMob axCompMob( node.GetAAFObjectOfType() );
-    shared_ptr<MobSlotNodeSet> spEssenceTrack = this->GetEssenceTracks( _spEdgeMap, node );
+    boost::shared_ptr<MobSlotNodeSet> spEssenceTrack = this->GetEssenceTracks( _spEdgeMap, node );
 
     MobSlotNodeSet::const_iterator iter;
     for ( iter = spEssenceTrack->begin(); iter != spEssenceTrack->end(); iter++ )
@@ -324,7 +323,7 @@ bool EPContainedTrackVisitor::PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPFil
     AxString nodeName = this->GetMobName( axSrcMob, EPFilmSource::GetName() );
 
     unsigned int unnumberedtracks;
-    shared_ptr<TrackNumberMap> spTrackNumMap( CountTrackCodes( this->GetEdgecodeTracks( _spEdgeMap, node ), unnumberedtracks ) );
+    boost::shared_ptr<TrackNumberMap> spTrackNumMap( CountTrackCodes( this->GetEdgecodeTracks( _spEdgeMap, node ), unnumberedtracks ) );
 
     TrackNumberMap::const_iterator mapIter;
     bool testPassed = true;
@@ -425,9 +424,9 @@ bool EPContainedTrackVisitor::PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPAux
      *  (2) Have auxiliary segments
      *
      */
-    shared_ptr<Node> spNode = dynamic_pointer_cast<Node>( node.GetSharedPointerToNode() );
+    boost::shared_ptr<Node> spNode = dynamic_pointer_cast<Node>( node.GetSharedPointerToNode() );
     DepthFirstTraversal dfs( _spEdgeMap, spNode );
-    shared_ptr<AuxiliarySlotVisitor> spVisitor( new AuxiliarySlotVisitor( _spEdgeMap, _spTestResult ) );
+    boost::shared_ptr<AuxiliarySlotVisitor> spVisitor( new AuxiliarySlotVisitor( _spEdgeMap, _spTestResult ) );
 
     dfs.TraverseDown( spVisitor );
     if ( !spVisitor->AreSlotsOk() )
@@ -444,9 +443,9 @@ bool EPContainedTrackVisitor::PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPAux
     return true;
 }
 
-shared_ptr<EPContainedTrackVisitor::TrackNumberMap> EPContainedTrackVisitor::CountTrackCodes( shared_ptr<EPTypedVisitor::MobSlotNodeSet> tracks, unsigned int& unnumberedTracks )
+boost::shared_ptr<EPContainedTrackVisitor::TrackNumberMap> EPContainedTrackVisitor::CountTrackCodes( boost::shared_ptr<EPTypedVisitor::MobSlotNodeSet> tracks, unsigned int& unnumberedTracks )
 {
-    shared_ptr<TrackNumberMap> spTrackMap( new TrackNumberMap );
+    boost::shared_ptr<TrackNumberMap> spTrackMap( new TrackNumberMap );
     unnumberedTracks = 0;
 
     EPTypedVisitor::MobSlotNodeSet::const_iterator iter;
@@ -490,13 +489,13 @@ bool EPContainedTrackVisitor::CheckForSingleSegment( Node& mobSlotNode )
 {
 
     //Get a shared pointer to the MobSlot node.
-    shared_ptr<Node> spNode = mobSlotNode.GetSharedPointerToNode();
+    boost::shared_ptr<Node> spNode = mobSlotNode.GetSharedPointerToNode();
 
     //Use a UniquelyTypedMobSlotVisitor to determine the if this node contains
     //a combination of Sequences and another type of Component, and if it does,
     //the number of components.
     DepthFirstTraversal dfs( _spEdgeMap, spNode );
-    shared_ptr<UniquelyTypedSegmentCounter<SegmentType> > spVisitor( new UniquelyTypedSegmentCounter<SegmentType>() );
+    boost::shared_ptr<UniquelyTypedSegmentCounter<SegmentType> > spVisitor( new UniquelyTypedSegmentCounter<SegmentType>() );
     dfs.TraverseDown( spVisitor );
 
     //Determine if there was a single node of the specified type.
@@ -505,7 +504,7 @@ bool EPContainedTrackVisitor::CheckForSingleSegment( Node& mobSlotNode )
 
 }
 
-bool EPContainedTrackVisitor::CheckPrimaryTimecodeTracks( shared_ptr<EPTypedVisitor::MobSlotNodeSet> tracks, Node& node )
+bool EPContainedTrackVisitor::CheckPrimaryTimecodeTracks( boost::shared_ptr<EPTypedVisitor::MobSlotNodeSet> tracks, Node& node )
 {
 
     bool testPassed = true;
@@ -552,10 +551,10 @@ bool EPContainedTrackVisitor::CheckTimecodeTrackPhysicalNumbers( Node& node,
   bool testPassed = true;
   
   unsigned int unnumberedtracks;
-  shared_ptr<MobSlotNodeSet> timecodeTracks = this->GetTimecodeTracks( _spEdgeMap, node );
+  boost::shared_ptr<MobSlotNodeSet> timecodeTracks = this->GetTimecodeTracks( _spEdgeMap, node );
   
   testPassed = this->CheckPrimaryTimecodeTracks( timecodeTracks, node );
-  shared_ptr<TrackNumberMap> spTrackNumMap( CountTrackCodes( timecodeTracks, unnumberedtracks ) );
+  boost::shared_ptr<TrackNumberMap> spTrackNumMap( CountTrackCodes( timecodeTracks, unnumberedtracks ) );
   
   //Ensure all tracks have a physical track number
   if (unnumberedtracks != 0)
@@ -582,7 +581,7 @@ bool EPContainedTrackVisitor::CheckTimecodeTrackPhysicalNumbers( Node& node,
     {
       wstringstream ss;
       ss << nodeName << L" has a timecode track with an illegal MobSlot::PhysicalTrackNumber value of " << mapIter->first;
-      shared_ptr<DetailLevelTestResult>
+      boost::shared_ptr<DetailLevelTestResult>
 	spDetailResult = _spTestResult->AddSingleResult( reqId, ss.str(), TestResult::FAIL, node );
       ss.str( L"" );
       ss << "Valid values are 1 <= PhysicalTrackNumber <= " << maxPhysTrackNum << L".";
@@ -598,7 +597,7 @@ bool EPContainedTrackVisitor::CheckTimecodeTrackPhysicalNumbers( Node& node,
       wstringstream ss;
       ss << nodeName << L" has " << mapIter->second
 	 << L" time code tracks with a MobSlot::PhysicalTrackNumber value of " << mapIter->first << L".";
-      shared_ptr<DetailLevelTestResult>
+      boost::shared_ptr<DetailLevelTestResult>
 	spDetailResult = _spTestResult->AddSingleResult( reqId, ss.str(), TestResult::FAIL, node );
       spDetailResult->AddDetail( L"Physical track number must be unique within a Mob." );
       testPassed = false;

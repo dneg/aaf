@@ -45,7 +45,6 @@ namespace aafanalyzer
 {
     
 using namespace std;
-using namespace boost;
     
 Node::LID Node::_counter = 1; //set initial value
 
@@ -71,12 +70,12 @@ Node::~Node()
 {
 }
 
-bool Node::PreOrderVisit(shared_ptr<Visitor> spVisitor)
+bool Node::PreOrderVisit(boost::shared_ptr<Visitor> spVisitor)
 {
   return spVisitor->PreOrderVisit(*this);
 }
 
-bool Node::PostOrderVisit(shared_ptr<Visitor> spVisitor)
+bool Node::PostOrderVisit(boost::shared_ptr<Visitor> spVisitor)
 {
   return spVisitor->PostOrderVisit(*this);
 }
@@ -86,7 +85,7 @@ Node::LID Node::GetLID() const
   return _lid;
 }
 
-shared_ptr<Node> Node::GetSharedPointerToNode()
+boost::shared_ptr<Node> Node::GetSharedPointerToNode()
 {
   return this->shared_from_this();
 }
@@ -96,7 +95,7 @@ const basic_string<wchar_t>& Node::GetName() const
   return _name;
 }
 
-void Node::Decorate( shared_ptr<Node> decoratedNode )
+void Node::Decorate( boost::shared_ptr<Node> decoratedNode )
 {
   //The default behaviour is to do nothing special when decorating a node.
 }

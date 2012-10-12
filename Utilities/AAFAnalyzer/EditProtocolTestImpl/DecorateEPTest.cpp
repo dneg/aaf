@@ -68,7 +68,6 @@
 namespace {
 
 using namespace aafanalyzer;
-using namespace boost;
 
 const wchar_t* TEST_NAME = L"Edit Protocol Decoration";
 const wchar_t* TEST_DESC = L"Decorate the nodes of the graph with their edit protocol material types.";
@@ -82,7 +81,7 @@ class EPDecoratorVisitor : public TypedVisitor
 {
 public:
   EPDecoratorVisitor( wostream& log,
-                      shared_ptr<const TestGraph> spTestGraph )
+                      boost::shared_ptr<const TestGraph> spTestGraph )
     : TypedVisitor(),
       _log( log ),
       _spGraph( spTestGraph )
@@ -426,8 +425,8 @@ private:
     if ( axDataDef.IsPictureKind() || axDataDef.IsSoundKind() )
     {
         
-      shared_ptr<EPAudioTrack> spAudio( EPAudioTrack::CreateAudioTrack( axMobSlot ) );
-      shared_ptr<EPVideoTrack> spVideo( EPVideoTrack::CreateVideoTrack( axMobSlot ) );
+      boost::shared_ptr<EPAudioTrack> spAudio( EPAudioTrack::CreateAudioTrack( axMobSlot ) );
+      boost::shared_ptr<EPVideoTrack> spVideo( EPVideoTrack::CreateVideoTrack( axMobSlot ) );
                 
       //Now check if it is an audio or video track.
       if ( spAudio )
@@ -465,15 +464,15 @@ private:
   void DecorateNode( AAFTypedObjNode<AAFObjectType>& node )
   {
     //Get a shared pointer to the node.
-    shared_ptr<AAFTypedObjNode<AAFObjectType> > spNode =
+    boost::shared_ptr<AAFTypedObjNode<AAFObjectType> > spNode =
         dynamic_pointer_cast<AAFTypedObjNode<AAFObjectType> >( 
             node.GetSharedPointerToNode() );
 
     //Create the EPObject
-    shared_ptr<EPObjectType> spEPObj( new EPObjectType() );
+    boost::shared_ptr<EPObjectType> spEPObj( new EPObjectType() );
 
     //Create a decorated node.
-    shared_ptr<EPTypedObjNode<AAFObjectType, EPObjectType> > 
+    boost::shared_ptr<EPTypedObjNode<AAFObjectType, EPObjectType> > 
         spDecorated( new EPTypedObjNode<AAFObjectType, EPObjectType>( spNode, spEPObj ) );
         
     //Decorate the node in the graph.
@@ -481,15 +480,15 @@ private:
   }
   
   template <typename AAFObjectType, typename EPObjectType>
-  void DecorateNode( AAFTypedObjNode<AAFObjectType>& node, shared_ptr<EPObjectType> spEPObj )
+  void DecorateNode( AAFTypedObjNode<AAFObjectType>& node, boost::shared_ptr<EPObjectType> spEPObj )
   {
     //Get a shared pointer to the node.
-    shared_ptr<AAFTypedObjNode<AAFObjectType> > spNode =
+    boost::shared_ptr<AAFTypedObjNode<AAFObjectType> > spNode =
         dynamic_pointer_cast<AAFTypedObjNode<AAFObjectType> >( 
             node.GetSharedPointerToNode() );
 
     //Create a decorated node.
-    shared_ptr<EPTypedObjNode<AAFObjectType, EPObjectType> > 
+    boost::shared_ptr<EPTypedObjNode<AAFObjectType, EPObjectType> > 
         spDecorated( new EPTypedObjNode<AAFObjectType, EPObjectType>( spNode, spEPObj ) );
         
     //Decorate the node in the graph.
@@ -497,7 +496,7 @@ private:
   }
 
   wostream& _log;
-  shared_ptr<const TestGraph> _spGraph;
+  boost::shared_ptr<const TestGraph> _spGraph;
   set<aafUID_t> _editProtocolEffects;
 
 };
@@ -513,7 +512,7 @@ namespace aafanalyzer {
 using namespace std;
 
 DecorateEPTest::DecorateEPTest( wostream& log,
-                                shared_ptr<const TestGraph> spGraph )
+                                boost::shared_ptr<const TestGraph> spGraph )
   : Test( log, GetTestInfo() )
 {
     SetTestGraph( spGraph );
@@ -522,9 +521,9 @@ DecorateEPTest::DecorateEPTest( wostream& log,
 DecorateEPTest::~DecorateEPTest()
 {}
 
-shared_ptr<TestLevelTestResult> DecorateEPTest::Execute()
+boost::shared_ptr<TestLevelTestResult> DecorateEPTest::Execute()
 {
-  shared_ptr<EPDecoratorVisitor> spVisitor(
+  boost::shared_ptr<EPDecoratorVisitor> spVisitor(
        new EPDecoratorVisitor( GetOutStream(), GetTestGraph() ) );
 
   DepthFirstTraversal dfs(GetTestGraph()->GetEdgeMap(), GetTestGraph()->GetRootNode());
@@ -546,7 +545,7 @@ AxString DecorateEPTest::GetDescription() const
 
 const TestInfo DecorateEPTest::GetTestInfo()
 {
-    shared_ptr<vector<AxString> > spReqIds(new vector<AxString>);
+    boost::shared_ptr<vector<AxString> > spReqIds(new vector<AxString>);
 
     // This test prepares the graph for later tests. It can't fail on
     // a requirement, hence non are registered.

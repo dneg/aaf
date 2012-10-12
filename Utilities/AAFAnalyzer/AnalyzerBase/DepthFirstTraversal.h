@@ -34,8 +34,6 @@
 
 namespace aafanalyzer {
 
-using namespace boost;
-
 class Node;
 class Visitor;
 class EdgeMap;
@@ -45,19 +43,19 @@ class DepthFirstTraversal
 {
  public:
 
-  DepthFirstTraversal(shared_ptr<EdgeMap> spEdgeMap, shared_ptr<Node> spStartNode);
+  DepthFirstTraversal(boost::shared_ptr<EdgeMap> spEdgeMap, boost::shared_ptr<Node> spStartNode);
   ~DepthFirstTraversal();
 
   // Depricated (there is no need to pass a start node here).
-  void TraverseDown(shared_ptr<Visitor> spVisitor, shared_ptr<Node> spNode);
-  void TraverseUp(shared_ptr<Visitor> spVisitor, shared_ptr<Node> spNode);
+  void TraverseDown(boost::shared_ptr<Visitor> spVisitor, boost::shared_ptr<Node> spNode);
+  void TraverseUp(boost::shared_ptr<Visitor> spVisitor, boost::shared_ptr<Node> spNode);
 
-  void TraverseDown(shared_ptr<Visitor> spVisitor );
-  void TraverseUp(shared_ptr<Visitor> spVisitor );
+  void TraverseDown(boost::shared_ptr<Visitor> spVisitor );
+  void TraverseUp(boost::shared_ptr<Visitor> spVisitor );
 
  private:
-  shared_ptr<EdgeMap> _spEdgeMap;
-  shared_ptr<Node> _spStartNode;  
+  boost::shared_ptr<EdgeMap> _spEdgeMap;
+  boost::shared_ptr<Node> _spStartNode;  
 
   // prohibited
   DepthFirstTraversal();

@@ -41,7 +41,6 @@
 
 namespace aafanalyzer {
 
-using namespace boost;
 using namespace std;
 
 class Section71TableEntry

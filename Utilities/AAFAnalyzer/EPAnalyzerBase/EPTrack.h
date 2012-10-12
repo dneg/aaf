@@ -198,7 +198,7 @@ class EPAudioTrack : public EPExtendedEssenceTrack
 {
     public:
 
-        static shared_ptr<EPAudioTrack> CreateAudioTrack( AxMobSlot& axMobSlot );
+        static boost::shared_ptr<EPAudioTrack> CreateAudioTrack( AxMobSlot& axMobSlot );
         static const AxString GetName();
 
     private:
@@ -225,7 +225,7 @@ class EPVideoTrack : public EPExtendedEssenceTrack
 {
     public:
 
-        static shared_ptr<EPVideoTrack> CreateVideoTrack( AxMobSlot& axMobSlot );
+        static boost::shared_ptr<EPVideoTrack> CreateVideoTrack( AxMobSlot& axMobSlot );
         static const AxString GetName();
 
     private:

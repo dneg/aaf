@@ -42,7 +42,6 @@ namespace aafanalyzer {
 
 class TestLevelTestResult;
 
-using namespace boost;
 using namespace std;
 
 class EPEffectVisitor : public EPTypedVisitor
@@ -51,8 +50,8 @@ class EPEffectVisitor : public EPTypedVisitor
   public:
   
     EPEffectVisitor( wostream& log,
-		     shared_ptr<EdgeMap> spEdgeMap,
-		     shared_ptr<TestLevelTestResult> spTestResult );
+		     boost::shared_ptr<EdgeMap> spEdgeMap,
+		     boost::shared_ptr<TestLevelTestResult> spTestResult );
     virtual ~EPEffectVisitor();
 
     virtual bool PreOrderVisit( EPTypedObjNode<IAAFOperationGroup, EPEffect>& node);
@@ -103,9 +102,9 @@ class EPEffectVisitor : public EPTypedVisitor
 				  const AxString& slotName );
 
     wostream& _log;
-    shared_ptr<EdgeMap> _spEdgeMap;
+    boost::shared_ptr<EdgeMap> _spEdgeMap;
     stack<bool> _isParentTransition;
-    shared_ptr<TestLevelTestResult> _spTestResult;
+    boost::shared_ptr<TestLevelTestResult> _spTestResult;
 };
 
 } // end of namespace aafanalyzer

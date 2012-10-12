@@ -63,7 +63,7 @@ class EPTypedVisitor : public TypedVisitor
 
   public:
 
-    typedef set<shared_ptr<AAFObjNode> > MobSlotNodeSet;
+    typedef set<boost::shared_ptr<AAFObjNode> > MobSlotNodeSet;
 
     // Default constructor traverse uses the default TypedVisitor also
     // (i.e. uses Visitor::FOLLOW_CONTAINED).
@@ -81,34 +81,34 @@ class EPTypedVisitor : public TypedVisitor
     //Functions commonly needed by EPTypedVisitors.  Put them in the base class
     //to avoid constantly re-implementing them.
     AxString GetMobName( AxMob& axMob, const AxString& type );
-    AxString GetMobName( shared_ptr<EdgeMap> spEdgeMap, Node& node );
-    AxString GetMobSlotName( shared_ptr<EdgeMap> spEdgeMap, Node& node );
+    AxString GetMobName( boost::shared_ptr<EdgeMap> spEdgeMap, Node& node );
+    AxString GetMobSlotName( boost::shared_ptr<EdgeMap> spEdgeMap, Node& node );
 
     //TODO: These are currently only used by EPContainedTrackVisitor, they may
     //      not be needed by any other class and therefore can be pushed down
     //      to EPContainedTrackVisitor.  They are being left here for the time
     //      being in case any future tests require them.
-    shared_ptr<MobSlotNodeSet> GetEssenceTracks( shared_ptr<EdgeMap> spEdgeMap, Node& node );
-    shared_ptr<MobSlotNodeSet> GetAudioTracks( shared_ptr<EdgeMap> spEdgeMap, Node& node );
-    shared_ptr<MobSlotNodeSet> GetVideoTracks( shared_ptr<EdgeMap> spEdgeMap, Node& node );
-    shared_ptr<MobSlotNodeSet> GetTimecodeTracks( shared_ptr<EdgeMap> spEdgeMap, Node& node );
-    shared_ptr<MobSlotNodeSet> GetEdgecodeTracks( shared_ptr<EdgeMap> spEdgeMap, Node& node );
+    boost::shared_ptr<MobSlotNodeSet> GetEssenceTracks( boost::shared_ptr<EdgeMap> spEdgeMap, Node& node );
+    boost::shared_ptr<MobSlotNodeSet> GetAudioTracks( boost::shared_ptr<EdgeMap> spEdgeMap, Node& node );
+    boost::shared_ptr<MobSlotNodeSet> GetVideoTracks( boost::shared_ptr<EdgeMap> spEdgeMap, Node& node );
+    boost::shared_ptr<MobSlotNodeSet> GetTimecodeTracks( boost::shared_ptr<EdgeMap> spEdgeMap, Node& node );
+    boost::shared_ptr<MobSlotNodeSet> GetEdgecodeTracks( boost::shared_ptr<EdgeMap> spEdgeMap, Node& node );
 
   private:
 
     template <typename AAFObjectType, typename EPObjectType>
     bool ForwardPreOrderVisit( EPTypedObjNode<AAFObjectType, EPObjectType>& node )
     {
-      shared_ptr<Node> spNode = node.GetSharedPointerToNode();
-      shared_ptr<AAFTypedObjNode<AAFObjectType> > spBaseNode = dynamic_pointer_cast<AAFTypedObjNode<AAFObjectType> >(spNode);
+      boost::shared_ptr<Node> spNode = node.GetSharedPointerToNode();
+      boost::shared_ptr<AAFTypedObjNode<AAFObjectType> > spBaseNode = dynamic_pointer_cast<AAFTypedObjNode<AAFObjectType> >(spNode);
       return this->PreOrderVisit( *spBaseNode );
     }
 
     template <typename AAFObjectType, typename EPObjectType>
     bool ForwardPostOrderVisit( EPTypedObjNode<AAFObjectType, EPObjectType>& node )
     {
-      shared_ptr<Node> spNode = node.GetSharedPointerToNode();
-      shared_ptr<AAFTypedObjNode<AAFObjectType> > spBaseNode = dynamic_pointer_cast<AAFTypedObjNode<AAFObjectType> >(spNode);
+      boost::shared_ptr<Node> spNode = node.GetSharedPointerToNode();
+      boost::shared_ptr<AAFTypedObjNode<AAFObjectType> > spBaseNode = dynamic_pointer_cast<AAFTypedObjNode<AAFObjectType> >(spNode);
       return this->PostOrderVisit( *spBaseNode );
     }
 

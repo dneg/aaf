@@ -249,7 +249,7 @@ void RequirementLoader::EndElement(const wstring& name)
 {
     if ( name == L"requirement" )
     {
-        shared_ptr<const Requirement> req(new Requirement(
+        boost::shared_ptr<const Requirement> req(new Requirement(
             _current.Id,
 	    _current.Type, _current.TypeAsString,
             _current.Category, _current.CategoryAsString,

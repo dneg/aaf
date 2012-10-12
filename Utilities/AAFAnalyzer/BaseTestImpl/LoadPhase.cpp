@@ -60,7 +60,6 @@ namespace aafanalyzer
 {
     
 using namespace std;
-using namespace boost;
 
 LoadPhase::LoadPhase(wostream& os, const basic_string<wchar_t> AAFFile) 
   : TestPhase(os),
@@ -72,28 +71,28 @@ LoadPhase::LoadPhase(wostream& os, const basic_string<wchar_t> AAFFile)
 LoadPhase::~LoadPhase()
 {}
 
-shared_ptr<const AAFGraphInfo> LoadPhase::GetTestGraphInfo()
+boost::shared_ptr<const AAFGraphInfo> LoadPhase::GetTestGraphInfo()
 {
   return _spGraphInfo;
 }
 
-shared_ptr<TestPhaseLevelTestResult> LoadPhase::Execute() 
+boost::shared_ptr<TestPhaseLevelTestResult> LoadPhase::Execute() 
 {
-  shared_ptr<TestPhaseLevelTestResult> spLoadTest(
+  boost::shared_ptr<TestPhaseLevelTestResult> spLoadTest(
                             new TestPhaseLevelTestResult( PHASE_NAME,
                                                           PHASE_DESC,
                                                           L"" ));   // explain
 
   // Load the AAF file and create the graph.
-  shared_ptr<FileLoad> load(new FileLoad(GetOutStream(), _FileName));
-  shared_ptr<TestLevelTestResult> spTestResult( load->Execute() );
+  boost::shared_ptr<FileLoad> load(new FileLoad(GetOutStream(), _FileName));
+  boost::shared_ptr<TestLevelTestResult> spTestResult( load->Execute() );
   spLoadTest->AppendSubtestResult(spTestResult);
 
   // Get the TestGraph object we need for other tests.
   _spGraphInfo = load->GetTestGraphInfo();
 
   // Resolve all the references in the AAF graph.
-  shared_ptr<RefResolver> ref(new RefResolver(GetOutStream(), _spGraphInfo->GetGraph()));
+  boost::shared_ptr<RefResolver> ref(new RefResolver(GetOutStream(), _spGraphInfo->GetGraph()));
   spTestResult = ref->Execute();
   spLoadTest->AppendSubtestResult(spTestResult);
 
@@ -103,7 +102,7 @@ shared_ptr<TestPhaseLevelTestResult> LoadPhase::Execute()
   // If it fails then there is a cycle and further processing cannot
   // continue (because subsequent visitor implementations are not
   // cycle aware. They will end up in an infinite loop.)
-  shared_ptr<AcyclicAnalysis> acy(new AcyclicAnalysis(GetOutStream(), _spGraphInfo->GetGraph()));
+  boost::shared_ptr<AcyclicAnalysis> acy(new AcyclicAnalysis(GetOutStream(), _spGraphInfo->GetGraph()));
   spTestResult = acy->Execute();
   spLoadTest->AppendSubtestResult(spTestResult);
 
@@ -116,7 +115,7 @@ shared_ptr<TestPhaseLevelTestResult> LoadPhase::Execute()
 
   // Perform dependency analysis to identify unreferenced (root)
   // composition mobs.
-  shared_ptr<CompMobDependency> depTest( new CompMobDependency(GetOutStream(), _spGraphInfo->GetGraph() ) );
+  boost::shared_ptr<CompMobDependency> depTest( new CompMobDependency(GetOutStream(), _spGraphInfo->GetGraph() ) );
   spLoadTest->AppendSubtestResult( depTest->Execute() );
 
   _spRootsVector = depTest->GetRootCompMobNodes();
@@ -124,9 +123,9 @@ shared_ptr<TestPhaseLevelTestResult> LoadPhase::Execute()
   return spLoadTest;
 }
 
-vector<shared_ptr<Node> > LoadPhase::GetRoots() const
+vector<boost::shared_ptr<Node> > LoadPhase::GetRoots() const
 {
-  vector<shared_ptr<Node> > roots;
+  vector<boost::shared_ptr<Node> > roots;
 
   for( size_t i = 0; i < _spRootsVector->size(); ++i )
   {

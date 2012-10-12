@@ -41,18 +41,17 @@
 namespace aafanalyzer {
 
 using namespace std;
-using namespace boost;
 
 class RequirementRegistry
 {
  public:
 
-  // dtor must be public so that shared_ptr class can access it
+  // dtor must be public so that boost::shared_ptr< class can access it
   ~RequirementRegistry();
 
   static RequirementRegistry& GetInstance();
-  void Register( const shared_ptr<const Requirement>& req );
-  const shared_ptr<const Requirement> GetRequirement( const wstring& id ) const;
+  void Register( const boost::shared_ptr<const Requirement>& req );
+  const boost::shared_ptr<const Requirement> GetRequirement( const wstring& id ) const;
   const Requirement::RequirementMap& GetAllRequirements() const;
 
  private:

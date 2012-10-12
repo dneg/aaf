@@ -50,7 +50,6 @@ namespace aafanalyzer
 {
 
 using namespace std;
-using namespace boost;
 
 Test2Stub::Test2Stub(wostream& os)
 : Test(os, GetTestInfo())
@@ -61,10 +60,10 @@ Test2Stub::~Test2Stub()
 {
 }
 
-shared_ptr<TestLevelTestResult> Test2Stub::Execute()
+boost::shared_ptr<TestLevelTestResult> Test2Stub::Execute()
 {
-  const shared_ptr<const Test> me = this->shared_from_this();
-  shared_ptr<TestLevelTestResult> spResult(new TestLevelTestResult(me));
+  const boost::shared_ptr<const Test> me = this->shared_from_this();
+  boost::shared_ptr<TestLevelTestResult> spResult(new TestLevelTestResult(me));
   spResult->SetName(GetName());
   spResult->SetDescription(GetDescription());
 
@@ -85,7 +84,7 @@ AxString Test2Stub::GetDescription() const
 
 const TestInfo Test2Stub::GetTestInfo()
 {
-    shared_ptr<vector<AxString> > spReqIds(new vector<AxString>);
+    boost::shared_ptr<vector<AxString> > spReqIds(new vector<AxString>);
     spReqIds->push_back(L"TEST01");
     spReqIds->push_back(L"TEST02");
     spReqIds->push_back(L"TEST03");

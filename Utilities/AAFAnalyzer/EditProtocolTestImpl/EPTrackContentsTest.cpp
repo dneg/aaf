@@ -60,7 +60,7 @@ namespace aafanalyzer {
 using namespace std;
 
 EPTrackContentsTest::EPTrackContentsTest( wostream& log,
-                                            shared_ptr<const TestGraph> spGraph )
+                                            boost::shared_ptr<const TestGraph> spGraph )
   : Test( log, GetTestInfo() )
 {
     SetTestGraph(spGraph);
@@ -69,11 +69,11 @@ EPTrackContentsTest::EPTrackContentsTest( wostream& log,
 EPTrackContentsTest::~EPTrackContentsTest()
 {}
 
-shared_ptr<TestLevelTestResult> EPTrackContentsTest::Execute()
+boost::shared_ptr<TestLevelTestResult> EPTrackContentsTest::Execute()
 {
-  shared_ptr<TestLevelTestResult> spTestResult = CreateTestResult();
+  boost::shared_ptr<TestLevelTestResult> spTestResult = CreateTestResult();
 
-  shared_ptr<EPTrackContentsVisitor>
+  boost::shared_ptr<EPTrackContentsVisitor>
     spVisitor(new EPTrackContentsVisitor( GetOutStream(),
 					  GetTestGraph()->GetEdgeMap(),
 					  spTestResult ) );
@@ -96,7 +96,7 @@ AxString EPTrackContentsTest::GetDescription() const
 
 const TestInfo EPTrackContentsTest::GetTestInfo()
 {
-    shared_ptr<vector<AxString> > spReqIds(new vector<AxString>);
+    boost::shared_ptr<vector<AxString> > spReqIds(new vector<AxString>);
     spReqIds->push_back(L"REQ_EP_103");       // Physical Track Numbers
     spReqIds->push_back(L"REQ_EP_108.1");     // Marked IN exists
     spReqIds->push_back(L"REQ_EP_108.2");     // Marked OUT exists

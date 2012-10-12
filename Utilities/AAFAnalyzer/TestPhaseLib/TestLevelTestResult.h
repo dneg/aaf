@@ -38,7 +38,6 @@
 namespace aafanalyzer {
 
 using namespace std;
-using namespace boost;
 
 class DetailLevelTestResult;
 class Test;
@@ -47,7 +46,7 @@ class TestLevelTestResult : public LowLevelTestResult
 {
  public:
 
-  TestLevelTestResult( const shared_ptr<const Test> associatedTest );
+  TestLevelTestResult( const boost::shared_ptr<const Test> associatedTest );
 
   // Use this constructor to create a test result that is not intended
   // to parent a set of sub results.  If detailed results are added
@@ -57,14 +56,14 @@ class TestLevelTestResult : public LowLevelTestResult
 		       const wstring& desc,
                        const wstring& explain,
 		       Result result,
-                       const shared_ptr<const Test> associatedTest );
+                       const boost::shared_ptr<const Test> associatedTest );
 
   // Use this constructor if you will be adding DetailLevelTestResult
   // objects (in which case this objects result is the aggregate of the 
   // sub results).
   TestLevelTestResult( const wstring& name,
 		       const wstring& desc,
-                       const shared_ptr<const Test> associatedTest );
+                       const boost::shared_ptr<const Test> associatedTest );
 
   ~TestLevelTestResult();
 
@@ -74,13 +73,13 @@ class TestLevelTestResult : public LowLevelTestResult
   // description are those of the requirment. Caller must explain the
   // result.
 
-  shared_ptr<DetailLevelTestResult> AddSingleResult( const wstring& reqId,
+  boost::shared_ptr<DetailLevelTestResult> AddSingleResult( const wstring& reqId,
                                                      const wstring& resultExplain,
                                                      Result result,
 						     Node& node );
 
   // Same as above, but not associated with any particular node.
-  shared_ptr<DetailLevelTestResult> AddUnassociatedSingleResult( const wstring& reqId,
+  boost::shared_ptr<DetailLevelTestResult> AddUnassociatedSingleResult( const wstring& reqId,
 								 const wstring& resultExplain,
 								 Result result );
 

@@ -47,53 +47,52 @@
 namespace aafanalyzer {
 
 using namespace std;
-using namespace boost;
 
 class TestGraph;
 
-class Test : public enable_shared_from_this<Test>
+class Test : public boost::enable_shared_from_this<Test>
 {
  public:
   Test(wostream& os, const TestInfo& info);
   virtual ~Test();
 
-  virtual shared_ptr<TestLevelTestResult> Execute() = 0;
+  virtual boost::shared_ptr<TestLevelTestResult> Execute() = 0;
   virtual wstring GetName() const;
   virtual wstring GetDescription() const;
   wostream& GetOutStream() const;
-  shared_ptr<const TestGraph> GetTestGraph();
+  boost::shared_ptr<const TestGraph> GetTestGraph();
 
   // Get the requirements registered against this test.
   const Requirement::RequirementMap& GetCoveredRequirements() const;
 
   // Get a single requirement that is registered against this test.
   // The call asserts that reqId is registered.
-  shared_ptr<const Requirement> GetRequirement( const wstring& reqId ) const;
+  boost::shared_ptr<const Requirement> GetRequirement( const wstring& reqId ) const;
 
   // Is reqId registered against this test.
   bool IsRequirementRegistered( const wstring& reqId ) const;
 
 protected:
 
-  void SetTestGraph(shared_ptr<const TestGraph> spGraph);
+  void SetTestGraph(boost::shared_ptr<const TestGraph> spGraph);
 
   // Create a result for the purpose of add sub results.
   // The result name and description come from this test.
   // The default result value is that provided by the TestResult
   // constructor.
-  shared_ptr<TestLevelTestResult> CreateTestResult() const;
+  boost::shared_ptr<TestLevelTestResult> CreateTestResult() const;
 
   // Create a result for tests that don't add sub results (hence must
   // provide the test result value and an explanation).
   // The result name and description come from this test.
-  shared_ptr<TestLevelTestResult> CreateTestResult( const wstring& explain,
+  boost::shared_ptr<TestLevelTestResult> CreateTestResult( const wstring& explain,
                                                     TestResult::Result result ) const;
 
   // Same as above, but the result is PASS and has no explanation.
   // This is common for test that are simply used to wrap up some processing
   // in a standard interface, can't fail on (and don't register any requirements),
   // either pass or fail fatally (throw an exception).
-  shared_ptr<TestLevelTestResult> CreatePassTestResult() const;
+  boost::shared_ptr<TestLevelTestResult> CreatePassTestResult() const;
 
  private:
   // prohibited
@@ -102,9 +101,9 @@ protected:
   Test& operator=( const Test& );
 
   wostream& _os;
-  shared_ptr<const TestGraph> _spGraph;
+  boost::shared_ptr<const TestGraph> _spGraph;
   
-  typedef shared_ptr<const Requirement::RequirementMap> ConstRequirementMapSP;
+  typedef boost::shared_ptr<const Requirement::RequirementMap> ConstRequirementMapSP;
   const ConstRequirementMapSP _spCoveredRequirements;
 
   const ConstRequirementMapSP InitializeRequirements(const wstring& name);

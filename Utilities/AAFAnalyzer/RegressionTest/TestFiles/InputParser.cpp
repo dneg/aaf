@@ -77,7 +77,6 @@ namespace aafanalyzer
 {
 
 using namespace std;
-using namespace boost;
 
 InputParser::InputParser( const char* outFile )
     : _testFile( outFile )
@@ -385,11 +384,11 @@ void InputParser::StartElement(const AxString& name, const char** attribs)
         }
 		//wcout<<"SUp3 "<<"ID: "<<sourceId.first<<" mobname: "<<mobName.first<<" ISNAMED: "<<mobName.second<<endl;
         //Call the appropriate add function.
-        shared_ptr<AxMob> spMob = (_testFile.*_materialTypeMap[name])( mobName.first, mobName.second, optRational, transType, alphaTransparency.second );
+        boost::shared_ptr<AxMob> spMob = (_testFile.*_materialTypeMap[name])( mobName.first, mobName.second, optRational, transType, alphaTransparency.second );
         if ( !_componentStack.empty() )
         {
             //Call the appropriate initialize/add function.
-            shared_ptr<AxSourceReference> axSrcRef = dynamic_pointer_cast<AxSourceReference>( _componentStack.top().second );
+            boost::shared_ptr<AxSourceReference> axSrcRef = dynamic_pointer_cast<AxSourceReference>( _componentStack.top().second );
             (_testFile.*_fillSegmentMapB[_componentStack.top().first])( axSrcRef, *spMob, sourceId.first );
         }
 		
@@ -413,7 +412,7 @@ void InputParser::StartElement(const AxString& name, const char** attribs)
         bool hasIntParam = startTime.second || position.second;
 
         //Create an empty segment and push it onto the segment stack
-        shared_ptr<AxComponent> spComponent = (_testFile.*_createSegmentMap[name])( _essenceMap[essenceType], _effectMap[effectType], length.first, length.second, intParam, hasIntParam );
+        boost::shared_ptr<AxComponent> spComponent = (_testFile.*_createSegmentMap[name])( _essenceMap[essenceType], _effectMap[effectType], length.first, length.second, intParam, hasIntParam );
 
         if ( !_slotStack.empty() )
         {
@@ -425,8 +424,8 @@ void InputParser::StartElement(const AxString& name, const char** attribs)
                 }
                 else if ( _fillSegmentMapD.find( _componentStack.top().first ) != _fillSegmentMapD.end() )
                 {
-                    shared_ptr<AxSegment> axParentSegment = dynamic_pointer_cast<AxSegment>( _componentStack.top().second );
-                    shared_ptr<AxSegment> axChildSegment = dynamic_pointer_cast<AxSegment>( spComponent );
+                    boost::shared_ptr<AxSegment> axParentSegment = dynamic_pointer_cast<AxSegment>( _componentStack.top().second );
+                    boost::shared_ptr<AxSegment> axChildSegment = dynamic_pointer_cast<AxSegment>( spComponent );
                     (_testFile.*_fillSegmentMapD[_componentStack.top().first])( axParentSegment, *axChildSegment, _typeDPropertyMap[TypeDPair( _componentStack.top().first, name )] );
                 }
             }
@@ -460,7 +459,7 @@ void InputParser::StartElement(const AxString& name, const char** attribs)
         aafUInt32 param2 = GetIntAtribValue( L"denominator", attribs, 6, 0 );
         AxString interpolator = GetStringAttribValue( L"interpolator", attribs, 6, L"none" );
 
-        shared_ptr<AxOperationGroup> axOpGroup = dynamic_pointer_cast<AxOperationGroup>( _componentStack.top().second );
+        boost::shared_ptr<AxOperationGroup> axOpGroup = dynamic_pointer_cast<AxOperationGroup>( _componentStack.top().second );
         (_testFile.*_attachParameterMap[name])( *axOpGroup, _parameterTypeMap[name], param1, param2, _interpolationTypeMap[interpolator] );
 
     }
@@ -478,7 +477,7 @@ void InputParser::StartElement(const AxString& name, const char** attribs)
     }
     else if ( name == L"descriptive-framework")
     {
-        shared_ptr<AxDescriptiveMarker> axMarker = dynamic_pointer_cast<AxDescriptiveMarker>( _componentStack.top().second );
+        boost::shared_ptr<AxDescriptiveMarker> axMarker = dynamic_pointer_cast<AxDescriptiveMarker>( _componentStack.top().second );
         _testFile.AttachDescriptiveFramework( axMarker );
     }
     else if ( name == L"aaf-file" )
@@ -512,7 +511,7 @@ void InputParser::EndElement(const AxString& name)
     else if ( _attachSlotMap.find( name ) != _attachSlotMap.end() )
     {
         //Call the appropriate attach function.
-        shared_ptr<AxSegment> axSegment = dynamic_pointer_cast<AxSegment>( _componentStack.top().second );
+        boost::shared_ptr<AxSegment> axSegment = dynamic_pointer_cast<AxSegment>( _componentStack.top().second );
         (_testFile.*_attachSlotMap[name])(
             *(_mobStack.top()),
             *axSegment,

@@ -38,7 +38,6 @@
 namespace aafanalyzer {
 
 using namespace std;
-using namespace boost;
 
 class TestLevelTestResult;
 class TestGraph;
@@ -46,11 +45,11 @@ class TestGraph;
 class RefResolver : public Test
 {
  public:
-  RefResolver(wostream& os, shared_ptr<const TestGraph> spGraph);
+  RefResolver(wostream& os, boost::shared_ptr<const TestGraph> spGraph);
 
   ~RefResolver();
 
-  shared_ptr<TestLevelTestResult> Execute();
+  boost::shared_ptr<TestLevelTestResult> Execute();
   AxString GetName() const;
   AxString GetDescription() const;
   static const TestInfo GetTestInfo();

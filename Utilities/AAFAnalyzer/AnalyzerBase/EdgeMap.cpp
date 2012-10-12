@@ -42,8 +42,6 @@ using namespace aafanalyzer;
 //======================================================================
 namespace aafanalyzer
 {
-    
-using namespace boost;
 
 EdgeMap::EdgeMap()
 {
@@ -54,7 +52,7 @@ EdgeMap::~EdgeMap()
 }
 
 
-EdgeMap::ConstEdgeVectorSP EdgeMap::GetParents(shared_ptr<Node> spNode) const
+EdgeMap::ConstEdgeVectorSP EdgeMap::GetParents(boost::shared_ptr<Node> spNode) const
 {
   if(!IsInMap(spNode->GetLID(), _children))
   {
@@ -64,7 +62,7 @@ EdgeMap::ConstEdgeVectorSP EdgeMap::GetParents(shared_ptr<Node> spNode) const
   return _children[spNode->GetLID()];   
 }
 
-EdgeMap::ConstEdgeVectorSP EdgeMap::GetChildren(shared_ptr<Node> spNode) const
+EdgeMap::ConstEdgeVectorSP EdgeMap::GetChildren(boost::shared_ptr<Node> spNode) const
 {
   if(!IsInMap(spNode->GetLID(), _parents))
   {
@@ -80,7 +78,7 @@ bool EdgeMap::IsInMap(LID lid, const Map& map) const
   return iter != map.end();
 }
 
-void EdgeMap::AddEdge(shared_ptr<Edge> spEdge)
+void EdgeMap::AddEdge(boost::shared_ptr<Edge> spEdge)
 {
   LID lidParent = spEdge->GetParentNode()->GetLID();
   LID lidChild = spEdge->GetChildNode()->GetLID();
@@ -101,7 +99,7 @@ void EdgeMap::AddEdge(shared_ptr<Edge> spEdge)
   _children[lidChild]->push_back(spEdge);
 }
 
-void EdgeMap::DecorateEdge(shared_ptr<Node> decoratedNode)
+void EdgeMap::DecorateEdge(boost::shared_ptr<Node> decoratedNode)
 {
 
     LID id = decoratedNode->GetLID();
@@ -111,18 +109,18 @@ void EdgeMap::DecorateEdge(shared_ptr<Node> decoratedNode)
     {
         for (unsigned int i = 0; i < _parents[id]->size(); i++)
         {
-            shared_ptr<Node> childNode = _parents[id]->at(i)->GetChildNode();
+            boost::shared_ptr<Node> childNode = _parents[id]->at(i)->GetChildNode();
             LID cid = childNode->GetLID();
             for (unsigned int j = 0; j < _children[cid]->size(); j++)
             {
                 if ( _children[cid]->at(j)->GetParentNode()->GetLID() == id )
                 {
-                    shared_ptr<Edge> decoratedChildEdge( _children[cid]->at(j)->CreateNewEdge( decoratedNode, childNode ) );
+                    boost::shared_ptr<Edge> decoratedChildEdge( _children[cid]->at(j)->CreateNewEdge( decoratedNode, childNode ) );
                     _children[cid]->at(j) = decoratedChildEdge;
                     break;
                 }
             }
-            shared_ptr<Edge> decoratedEdge( _parents[id]->at(i)->CreateNewEdge( decoratedNode, childNode ) );
+            boost::shared_ptr<Edge> decoratedEdge( _parents[id]->at(i)->CreateNewEdge( decoratedNode, childNode ) );
             _parents[id]->at(i) = decoratedEdge;
         }
 
@@ -133,18 +131,18 @@ void EdgeMap::DecorateEdge(shared_ptr<Node> decoratedNode)
     {
         for (unsigned int i = 0; i < _children[id]->size(); i++)
         {
-            shared_ptr<Node> parentNode = _children[id]->at(i)->GetParentNode();
+            boost::shared_ptr<Node> parentNode = _children[id]->at(i)->GetParentNode();
             LID pid = parentNode->GetLID();
             for (unsigned int j = 0; j < _parents[pid]->size(); j++)
             {
                 if ( _parents[pid]->at(j)->GetChildNode()->GetLID() == id )
                 {
-                      shared_ptr<Edge> decoratedParentEdge( _parents[pid]->at(j)->CreateNewEdge( parentNode, decoratedNode ) );
+                      boost::shared_ptr<Edge> decoratedParentEdge( _parents[pid]->at(j)->CreateNewEdge( parentNode, decoratedNode ) );
                     _parents[pid]->at(j) = decoratedParentEdge;
                     break;
                 }
             }
-              shared_ptr<Edge> decoratedEdge( _children[id]->at(i)->CreateNewEdge( parentNode, decoratedNode ) );
+              boost::shared_ptr<Edge> decoratedEdge( _children[id]->at(i)->CreateNewEdge( parentNode, decoratedNode ) );
             _children[id]->at(i) = decoratedEdge;
         }
     }

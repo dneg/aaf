@@ -58,7 +58,6 @@
 
 namespace aafanalyzer {
 
-using namespace boost;
 using namespace std;
 
 class TestGraph;
@@ -67,13 +66,13 @@ class EPMobDepPhase : public TestPhase
 {
  public:
   EPMobDepPhase( wostream& log,
-		 shared_ptr<const TestGraph> spGraph,
+		 boost::shared_ptr<const TestGraph> spGraph,
 		 CompMobDependency::CompMobNodeVectorSP spCompMobRoots );
   virtual ~EPMobDepPhase();
 
   virtual AxString GetDescription() const;
   virtual AxString GetName() const;
-  virtual shared_ptr<TestPhaseLevelTestResult> Execute();
+  virtual boost::shared_ptr<TestPhaseLevelTestResult> Execute();
 
  private:
 
@@ -83,7 +82,7 @@ class EPMobDepPhase : public TestPhase
   EPMobDepPhase& operator=( const EPMobDepPhase& );
 
   wostream& _log;
-  shared_ptr<const TestGraph> _spGraph;
+  boost::shared_ptr<const TestGraph> _spGraph;
   CompMobDependency::CompMobNodeVectorSP _spCompMobRoots;
 };
 
