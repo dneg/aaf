@@ -31,16 +31,16 @@
 
 # Windows Notes:
 #
-# The top level make target does not currently work under Win2K.
+# The top level make target does not currently work under Windows.
 # Instead, run the following from this directory:
 #
-#    make AAFPLATFORM=Win AAFSDK=../AAFWinSDK release-dist
-#    make AAFPLATFORM=Win AAFSDK=../AAFWinSDK sdk-dist
-#
+#    make AAFPLATFORM=Win AAFSDK=../AAFWinSDK/vs10 WINPLATFORM={Win32|x64} release-dist
+#    make AAFPLATFORM=Win AAFSDK=../AAFWinSDK/vs10 WINPLATFORM={Win32|x64} sdk-dist
+# 
 # It was tested using Cygwin.
 
-# Note, as of V102 the SDK no longer supports OS9.  The name of the OS X
-# target is PPCDarwin.
+# Note, as of V109 the SDK no longer supports OS9. As of V1.1.6 the officially supported
+# OSX targets are i386Darwin and x86_64Darwin.
 
 AAFBASE ?= ..
 
@@ -90,11 +90,11 @@ sdk-files :
 
 .PHONY : release-dist
 release-dist : release-files
-	./CreateDistribution.bash release Dist/release-files Dist/AAF-runtime-libs $(AAFSDK) $(AAFPLATFORM) $(AAFSDKBUILD_H)
+	./CreateDistribution.bash release Dist/release-files Dist/AAF-runtime-libs $(AAFSDK) $(AAFPLATFORM) $(AAFSDKBUILD_H) $(WINPLATFORM)
 
 .PHONY : sdk-dist
 sdk-dist : sdk-files
-	./CreateDistribution.bash sdk Dist/sdk-files Dist/AAF-devel-libs $(AAFSDK) $(AAFPLATFORM) $(AAFSDKBUILD_H)
+	./CreateDistribution.bash sdk Dist/sdk-files Dist/AAF-devel-libs $(AAFSDK) $(AAFPLATFORM) $(AAFSDKBUILD_H) $(WINPLATFORM)
 
 
 .PHONY : clean

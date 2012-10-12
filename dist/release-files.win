@@ -1,6 +1,9 @@
-# The dynamically loaded shared libraries required by an application.
+# File list for VS10 and higher.
 
-./Release/Refimpl/AAFCOAPI.dll
-./Release/Refimpl/aafext/AAFINTP.dll
-./Release/Refimpl/aafext/AAFPGAPI.dll
+# The dynamically loaded shared libraries required by an application.
+# See sdk-files.win comments for {PlatformDir} notes.
+
+./{PlatformDir}/Release/Refimpl/AAFCOAPI.dll
+./{PlatformDir}/Release/Refimpl/aafext/AAFINTP.dll
+./{PlatformDir}/Release/Refimpl/aafext/AAFPGAPI.dll
 

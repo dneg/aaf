@@ -29,7 +29,7 @@
 
 usage ()
 {
-	echo "Usage: $0 {release|sdk} dist_list dist_file AAFSDK AAFPLATFORM AAFSDKBUILD_H"
+	echo "Usage: $0 {release|sdk} dist_list dist_file AAFSDK AAFPLATFORM AAFSDKBUILD_H {WINPLATFORM}"
 	printf "\n";
 	printf "\tdist_list     - A file containing a list of files and directories\n";
 	printf "\t                that make up the distribution.  This file path, and the files\n";
@@ -40,6 +40,7 @@ usage ()
 	printf "\tAAFSDK        - The value of the AAFSDK build variable.\n";
 	printf "\tAAFPLATFORM   - The value of the AAFPLATFORM build variable.\n";
 	printf "\tAAFSDKBUILD_H - Path of AAFSDKBuild.h file.\n";
+        printf "\tWINPLATFORM   - Set to Win32 or x64 to identify the Windows build type.\n";
 	printf "\n";
 	printf "\tThis script is normally called by the \"release-dist\" and \"sdk-dist\"\n";
 	printf "\tmake targets.\n";
@@ -79,11 +80,11 @@ create_darwin_distribution ()
 
 create_win_distribution ()
 {
-	echo create_zip_distribution $1 $2 $3;
+	echo create_win_distribution $1 $2 $3 $4;
 
 	cd $1
-	filename=$2.zip
-	FileList=`grep -v \# $3`
+	filename=$2.$4.zip
+	FileList=$(grep -v \# $3 | sed "s/{PlatformDir}/${4}/g")
 	zip -r ${filename} ${FileList} || exit 1
 	echo "output file is: "
 	echo "  $1/${filename}"
@@ -94,7 +95,7 @@ create_win_distribution ()
 # main
 #
 
-if [ $# != 6 ]; then
+if [ $# -eq 0 ]; then
 	usage;
 fi
 
@@ -103,6 +104,7 @@ DIST_FILE=$3;
 AAFSDK=$4;
 AAFPLATFORM=$5;
 AAFSDKBUILD_H=$6;
+WINPLATFORM=$7;
 
 AAF_MAJOR_VERSION=`grep "define AAF_MAJOR_VERSION" ${AAFSDKBUILD_H} | awk '{print $3}'`;
 AAF_MINOR_VERSION=`grep "define AAF_MINOR_VERSION" ${AAFSDKBUILD_H} | awk '{print $3}'`;
@@ -124,17 +126,17 @@ echo VERSION_STRING = $VERSION_STRING
 echo DIST_FILE_NAME = $DIST_FILE_NAME
 
 case ${AAFPLATFORM} in
-	Win)			create_win_distribution $AAFSDK $DIST_FILE_NAME $DIST_LIST ;;
+	Win)                    create_win_distribution $AAFSDK $DIST_FILE_NAME $DIST_LIST ${WINPLATFORM};;
 
 	i686Linux|x86_64Linux)	create_unix_distribution $AAFSDK $DIST_FILE_NAME $DIST_LIST ;;
 
 	MipsIrix)		create_unix_distribution $AAFSDK $DIST_FILE_NAME $DIST_LIST ;;
 
-	SparcSolaris)	create_unix_distribution $AAFSDK $DIST_FILE_NAME $DIST_LIST ;;
+	SparcSolaris)	        create_unix_distribution $AAFSDK $DIST_FILE_NAME $DIST_LIST ;;
 
 	i386Darwin|UniversalDarwin)	create_unix_distribution $AAFSDK $DIST_FILE_NAME $DIST_LIST ;;
 
 	PPCDarwin)		create_darwin_distribution "$AAFSDK" "$DIST_FILE_NAME" "$DIST_LIST" "$AAFSDKBUILD_H" $1 ;;
 
-	*)				echo; echo "** Unknown AAFPLATFORM \"${AAFPLATFORM}\" **"; usage;;
+	*)			echo; echo "** Unknown AAFPLATFORM \"${AAFPLATFORM}\" **"; usage;;
 esac
