@@ -49,7 +49,7 @@ namespace aafanalyzer {
 using namespace boost;
 
 template<typename AAFObjType>
-AAFTypedObjNodeDecorator<AAFObjType>::AAFTypedObjNodeDecorator( const shared_ptr<AAFTypedObjNode<AAFObjType> > spNode )
+AAFTypedObjNodeDecorator<AAFObjType>::AAFTypedObjNodeDecorator( const boost::shared_ptr<AAFTypedObjNode<AAFObjType> > spNode )
   : AAFTypedObjNode<AAFObjType>( spNode->GetAAFObjectOfType(), spNode ),
     _spNode( spNode )
 {}
@@ -65,7 +65,7 @@ IAAFSmartPointer<AAFObjType> AAFTypedObjNodeDecorator<AAFObjType>::GetAAFObjectO
 }
 
 template<typename AAFObjType>
-void AAFTypedObjNodeDecorator<AAFObjType>::Decorate( shared_ptr<Node> decoratedNode )
+void AAFTypedObjNodeDecorator<AAFObjType>::Decorate( boost::shared_ptr<Node> decoratedNode )
 {
   return _spNode->Decorate( decoratedNode );
 }

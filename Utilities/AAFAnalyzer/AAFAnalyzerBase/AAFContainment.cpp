@@ -48,16 +48,16 @@ namespace aafanalyzer
 
 using namespace boost;
 
-AAFContainment::AAFContainment(shared_ptr<Node> spParent, shared_ptr<Node> spChild)
+AAFContainment::AAFContainment(boost::shared_ptr<Node> spParent, boost::shared_ptr<Node> spChild)
   : Edge(spParent, spChild, Edge::EDGE_KIND_CONTAINMENT, spParent->GetLID() )
 {}
 
 AAFContainment::~AAFContainment()
 {}
 
-bool AAFContainment::Visit(shared_ptr<Visitor> spVisitor)
+bool AAFContainment::Visit(boost::shared_ptr<Visitor> spVisitor)
 {
-  shared_ptr<TypedVisitor> spTypedVis = dynamic_pointer_cast<TypedVisitor>(spVisitor);
+  boost::shared_ptr<TypedVisitor> spTypedVis = dynamic_pointer_cast<TypedVisitor>(spVisitor);
   if(spTypedVis)
   {
     return spTypedVis->EdgeVisit(*this);
@@ -66,9 +66,9 @@ bool AAFContainment::Visit(shared_ptr<Visitor> spVisitor)
   return spVisitor->EdgeVisit(*this);
 }
 
-shared_ptr<Edge> AAFContainment::CreateNewEdge( shared_ptr<Node> spParent, shared_ptr<Node> spChild ) const
+boost::shared_ptr<Edge> AAFContainment::CreateNewEdge( boost::shared_ptr<Node> spParent, boost::shared_ptr<Node> spChild ) const
 {
-  shared_ptr<Edge> spNewEdge( new AAFContainment( spParent, spChild ) );
+  boost::shared_ptr<Edge> spNewEdge( new AAFContainment( spParent, spChild ) );
   return spNewEdge;
 }
 

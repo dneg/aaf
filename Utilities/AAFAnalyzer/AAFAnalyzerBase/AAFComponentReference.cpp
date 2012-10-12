@@ -46,16 +46,16 @@ namespace aafanalyzer
     
 using namespace boost;
 
-AAFComponentReference::AAFComponentReference(shared_ptr<Node> spParent, shared_ptr<Node> spChild, Node::LID tag, bool isLast)
+AAFComponentReference::AAFComponentReference(boost::shared_ptr<Node> spParent, boost::shared_ptr<Node> spChild, Node::LID tag, bool isLast)
   : Edge(spParent, spChild, (isLast ? Edge::EDGE_KIND_LAST_REFERENCE : Edge::EDGE_KIND_REFERENCE), tag)
 {}
 
 AAFComponentReference::~AAFComponentReference()
 {}
 
-bool AAFComponentReference::Visit(shared_ptr<Visitor> spVisitor)
+bool AAFComponentReference::Visit(boost::shared_ptr<Visitor> spVisitor)
 {
-  shared_ptr<TypedVisitor> spTypedVis = dynamic_pointer_cast<TypedVisitor>(spVisitor);
+  boost::shared_ptr<TypedVisitor> spTypedVis = dynamic_pointer_cast<TypedVisitor>(spVisitor);
   if(spTypedVis)
   {
     return spTypedVis->EdgeVisit(*this);
@@ -64,10 +64,10 @@ bool AAFComponentReference::Visit(shared_ptr<Visitor> spVisitor)
   return spVisitor->EdgeVisit(*this);
 }
 
-shared_ptr<Edge> AAFComponentReference::CreateNewEdge( shared_ptr<Node> spParent, shared_ptr<Node> spChild ) const
+boost::shared_ptr<Edge> AAFComponentReference::CreateNewEdge( boost::shared_ptr<Node> spParent, boost::shared_ptr<Node> spChild ) const
 {
 	bool isLast = GetKind() == EDGE_KIND_LAST_REFERENCE ? true : false;
-	shared_ptr<Edge> spNewEdge( new AAFComponentReference( spParent, spChild, GetTag(), isLast) );
+	boost::shared_ptr<Edge> spNewEdge( new AAFComponentReference( spParent, spChild, GetTag(), isLast) );
     return spNewEdge;
 }
 

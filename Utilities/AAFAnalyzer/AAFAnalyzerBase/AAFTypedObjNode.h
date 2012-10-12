@@ -81,7 +81,7 @@ class AAFTypedObjNode : public AAFObjNode
   //should not be stored anywhere unless it is acceptable to use the node
   //without complete type information.
   template<typename To>
-  shared_ptr<AAFTypedObjNode<To> > DownCastToAAF()
+  boost::shared_ptr<AAFTypedObjNode<To> > DownCastToAAF()
   {
 
     //Get the dictionary.
@@ -110,7 +110,7 @@ class AAFTypedObjNode : public AAFObjNode
   AAFTypedObjNode(IAAFSmartPointer<AAFObjType> ObjectType,
           const basic_string<wchar_t>& name );
   AAFTypedObjNode( IAAFSmartPointer<AAFObjType> ObjectType,
-          shared_ptr<Node> spExistingNode );
+          boost::shared_ptr<Node> spExistingNode );
 
  private:
 

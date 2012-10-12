@@ -46,7 +46,7 @@ namespace aafanalyzer
 
 using namespace boost;
 
-AAFSlotReference::AAFSlotReference(shared_ptr<Node> spParent, shared_ptr<Node> spChild, Node::LID tag)
+AAFSlotReference::AAFSlotReference(boost::shared_ptr<Node> spParent, boost::shared_ptr<Node> spChild, Node::LID tag)
   : Edge(spParent, spChild, Edge::EDGE_KIND_REFERENCE, tag)
 {
 }
@@ -55,9 +55,9 @@ AAFSlotReference::~AAFSlotReference()
 {
 }
 
-bool AAFSlotReference::Visit(shared_ptr<Visitor> spVisitor)
+bool AAFSlotReference::Visit(boost::shared_ptr<Visitor> spVisitor)
 {
-  shared_ptr<TypedVisitor> spTypedVis = dynamic_pointer_cast<TypedVisitor>(spVisitor);
+  boost::shared_ptr<TypedVisitor> spTypedVis = dynamic_pointer_cast<TypedVisitor>(spVisitor);
   if(spTypedVis)
   {
     return spTypedVis->EdgeVisit(*this);
@@ -66,9 +66,9 @@ bool AAFSlotReference::Visit(shared_ptr<Visitor> spVisitor)
   return spVisitor->EdgeVisit(*this);
 }
 
-shared_ptr<Edge> AAFSlotReference::CreateNewEdge( shared_ptr<Node> spParent, shared_ptr<Node> spChild ) const
+boost::shared_ptr<Edge> AAFSlotReference::CreateNewEdge( boost::shared_ptr<Node> spParent, boost::shared_ptr<Node> spChild ) const
 {
-  shared_ptr<Edge> spNewEdge( new AAFSlotReference( spParent, spChild, GetTag() ) );
+  boost::shared_ptr<Edge> spNewEdge( new AAFSlotReference( spParent, spChild, GetTag() ) );
   return spNewEdge;
 }
 

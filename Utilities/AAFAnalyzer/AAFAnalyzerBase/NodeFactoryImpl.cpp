@@ -58,11 +58,11 @@ NodeFactoryImpl::~NodeFactoryImpl()
 {
 }
 
-shared_ptr<Node> NodeFactoryImpl::CreateNode(IAAFObjectSP spObj)
+boost::shared_ptr<Node> NodeFactoryImpl::CreateNode(IAAFObjectSP spObj)
 {
   AxObject axObj(spObj);
   AxClassDef clsDef(axObj.GetDefinition());
-  shared_ptr<TypedNodeFactory> spNodeFactory;
+  boost::shared_ptr<TypedNodeFactory> spNodeFactory;
 
   spNodeFactory = TypedNodeFactoryRegistry::GetInstance().LookUp(clsDef);
 

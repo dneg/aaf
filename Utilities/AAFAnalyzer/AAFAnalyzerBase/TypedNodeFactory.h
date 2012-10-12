@@ -37,8 +37,6 @@
 
 namespace aafanalyzer {
 
-using namespace boost;
-
 class Node;
 class AAFObjNode;
 
@@ -48,8 +46,8 @@ class TypedNodeFactory
   TypedNodeFactory();
   virtual ~TypedNodeFactory();
 
-  virtual shared_ptr<Node> CreateNode(IAAFObjectSP spObj) = 0;
-  virtual shared_ptr<Node> CreateNodeFrom( shared_ptr<AAFObjNode> spNode ) =0;
+  virtual boost::shared_ptr<Node> CreateNode(IAAFObjectSP spObj) = 0;
+  virtual boost::shared_ptr<Node> CreateNodeFrom( boost::shared_ptr<AAFObjNode> spNode ) =0;
 
  private:
 

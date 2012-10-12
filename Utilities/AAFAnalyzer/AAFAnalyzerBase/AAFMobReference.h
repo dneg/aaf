@@ -34,21 +34,19 @@
 
 namespace aafanalyzer {
 
-using namespace boost;
-
 class AAFMobReference : public Edge
 {
  public:
 	 
   static const std::wstring typeName;
 
-  AAFMobReference(shared_ptr<Node> spParent, shared_ptr<Node> spChild, Node::LID tag);
+  AAFMobReference(boost::shared_ptr<Node> spParent, boost::shared_ptr<Node> spChild, Node::LID tag);
   ~AAFMobReference();
 
-  bool Visit(shared_ptr<Visitor> spVisitor);
+  bool Visit(boost::shared_ptr<Visitor> spVisitor);
 
   // uses the existing kind and tag
-  virtual shared_ptr<Edge> CreateNewEdge( shared_ptr<Node> spParent, shared_ptr<Node> spChild ) const;
+  virtual boost::shared_ptr<Edge> CreateNewEdge( boost::shared_ptr<Node> spParent, boost::shared_ptr<Node> spChild ) const;
 
   virtual const std::wstring& GetTypeName() const;
 

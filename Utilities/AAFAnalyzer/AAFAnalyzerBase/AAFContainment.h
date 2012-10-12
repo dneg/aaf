@@ -34,19 +34,17 @@
 
 namespace aafanalyzer {
 
-using namespace boost;
-
 class AAFContainment : public Edge
 {
  public:
 
   static const std::wstring typeName;
 
-  AAFContainment(shared_ptr<Node> spParent, shared_ptr<Node> spChild);
+  AAFContainment(boost::shared_ptr<Node> spParent, boost::shared_ptr<Node> spChild);
   ~AAFContainment();
 
-  bool Visit(shared_ptr<Visitor> spVisitor);
-  virtual shared_ptr<Edge> CreateNewEdge( shared_ptr<Node> spParent, shared_ptr<Node> spChild ) const;
+  bool Visit(boost::shared_ptr<Visitor> spVisitor);
+  virtual boost::shared_ptr<Edge> CreateNewEdge( boost::shared_ptr<Node> spParent, boost::shared_ptr<Node> spChild ) const;
 
   virtual const std::wstring& GetTypeName() const;
 

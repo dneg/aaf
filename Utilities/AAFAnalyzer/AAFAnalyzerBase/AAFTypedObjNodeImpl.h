@@ -35,7 +35,6 @@
 namespace aafanalyzer {
 
 using namespace std;
-using namespace boost;
 
 template<typename AAFObjType>
 class AAFTypedObjNodeImpl : public AAFTypedObjNode<AAFObjType>
@@ -45,13 +44,13 @@ class AAFTypedObjNodeImpl : public AAFTypedObjNode<AAFObjType>
   AAFTypedObjNodeImpl(IAAFSmartPointer<AAFObjType> ObjectType,
 		  const basic_string<wchar_t>& name );
   AAFTypedObjNodeImpl(IAAFSmartPointer<AAFObjType> ObjectType,
-          shared_ptr<Node> spNode );
+          boost::shared_ptr<Node> spNode );
   ~AAFTypedObjNodeImpl();
   
-  bool PreOrderVisit(shared_ptr<Visitor> spVisitor);
-  bool PostOrderVisit(shared_ptr<Visitor> spVisitor);
+  bool PreOrderVisit(boost::shared_ptr<Visitor> spVisitor);
+  bool PostOrderVisit(boost::shared_ptr<Visitor> spVisitor);
   IAAFSmartPointer<AAFObjType> GetAAFObjectOfType() const;
-  virtual void Decorate( shared_ptr<Node> decoratedNode );
+  virtual void Decorate( boost::shared_ptr<Node> decoratedNode );
 
  private:
 

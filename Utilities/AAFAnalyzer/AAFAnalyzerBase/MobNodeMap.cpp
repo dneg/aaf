@@ -76,7 +76,7 @@ bool MobNodeMap::IsPresent(aafMobID_t mobid)
   return iter != _Map.end();
 }
 
-void MobNodeMap::AddMobNode(aafMobID_t mobid, shared_ptr<Node> spNode)
+void MobNodeMap::AddMobNode(aafMobID_t mobid, boost::shared_ptr<Node> spNode)
 {
   //add mob to map if it is not already present
   if(!IsPresent(mobid))
@@ -85,7 +85,7 @@ void MobNodeMap::AddMobNode(aafMobID_t mobid, shared_ptr<Node> spNode)
   }
 }
 
-void MobNodeMap::DecorateMobNode(aafMobID_t mobid, shared_ptr<Node> decoratedNode)
+void MobNodeMap::DecorateMobNode(aafMobID_t mobid, boost::shared_ptr<Node> decoratedNode)
 {
   if(IsPresent(mobid))
   {
@@ -93,9 +93,9 @@ void MobNodeMap::DecorateMobNode(aafMobID_t mobid, shared_ptr<Node> decoratedNod
   }
 }
 
-shared_ptr<Node> MobNodeMap::GetMobNode(aafMobID_t mobid)
+boost::shared_ptr<Node> MobNodeMap::GetMobNode(aafMobID_t mobid)
 { 
-  shared_ptr<Node> spMobNode;
+  boost::shared_ptr<Node> spMobNode;
 
   if(IsPresent(mobid))
   {

@@ -43,7 +43,6 @@ class AxClassDef;
 namespace aafanalyzer {
 
 using namespace std;
-using namespace boost;
 
 class TypedNodeFactory;
 
@@ -51,12 +50,12 @@ class TypedNodeFactoryRegistry
 {
  public:
 
-  typedef map<aafUID_t, shared_ptr<TypedNodeFactory> > Map;
+  typedef map<aafUID_t, boost::shared_ptr<TypedNodeFactory> > Map;
 
   // dtor must be public so that shared_ptr class can access it
   ~TypedNodeFactoryRegistry();
 
-  shared_ptr<TypedNodeFactory> LookUp(AxClassDef& clsDef);
+  boost::shared_ptr<TypedNodeFactory> LookUp(AxClassDef& clsDef);
   static TypedNodeFactoryRegistry& GetInstance();
 
  private:
@@ -64,7 +63,7 @@ class TypedNodeFactoryRegistry
   TypedNodeFactoryRegistry();//using Singleton pattern to allow only one object
   bool IsPresent(aafUID_t AUID);
   bool Deregister(aafUID_t AUID);
-  void Register(aafUID_t AUID, shared_ptr<TypedNodeFactory> spFactory);
+  void Register(aafUID_t AUID, boost::shared_ptr<TypedNodeFactory> spFactory);
   void RegisterAAFObjects();
 
   static TypedNodeFactoryRegistry* _pFactory;

@@ -1,276 +1,294 @@
 IAAFObject* pIAAFObject = NULL;
-Register(AxAUID(pIAAFObject), shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFObject>()));
+Register(AxAUID(pIAAFObject), boost::shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFObject>()));
 
 IAAFComponent* pIAAFComponent = NULL;
-Register(AxAUID(pIAAFComponent), shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFComponent>()));
+Register(AxAUID(pIAAFComponent), boost::shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFComponent>()));
 
 IAAFSegment* pIAAFSegment = NULL;
-Register(AxAUID(pIAAFSegment), shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFSegment>()));
+Register(AxAUID(pIAAFSegment), boost::shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFSegment>()));
 
 IAAFEdgecode* pIAAFEdgecode = NULL;
-Register(AxAUID(pIAAFEdgecode), shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFEdgecode>()));
+Register(AxAUID(pIAAFEdgecode), boost::shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFEdgecode>()));
 
 IAAFEssenceGroup* pIAAFEssenceGroup = NULL;
-Register(AxAUID(pIAAFEssenceGroup), shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFEssenceGroup>()));
+Register(AxAUID(pIAAFEssenceGroup), boost::shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFEssenceGroup>()));
 
 IAAFEvent* pIAAFEvent = NULL;
-Register(AxAUID(pIAAFEvent), shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFEvent>()));
+Register(AxAUID(pIAAFEvent), boost::shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFEvent>()));
 
 IAAFGPITrigger* pIAAFGPITrigger = NULL;
-Register(AxAUID(pIAAFGPITrigger), shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFGPITrigger>()));
+Register(AxAUID(pIAAFGPITrigger), boost::shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFGPITrigger>()));
 
 IAAFCommentMarker* pIAAFCommentMarker = NULL;
-Register(AxAUID(pIAAFCommentMarker), shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFCommentMarker>()));
-
-IAAFDescriptiveMarker* pIAAFDescriptiveMarker = NULL;
-Register(AxAUID(pIAAFDescriptiveMarker), shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFDescriptiveMarker>()));
-
-IAAFDescriptiveFramework* pIAAFDescriptiveFramework = NULL;
-Register(AxAUID(pIAAFDescriptiveFramework), shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFDescriptiveFramework>()));
+Register(AxAUID(pIAAFCommentMarker), boost::shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFCommentMarker>()));
 
 IAAFFiller* pIAAFFiller = NULL;
-Register(AxAUID(pIAAFFiller), shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFFiller>()));
+Register(AxAUID(pIAAFFiller), boost::shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFFiller>()));
 
 IAAFOperationGroup* pIAAFOperationGroup = NULL;
-Register(AxAUID(pIAAFOperationGroup), shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFOperationGroup>()));
+Register(AxAUID(pIAAFOperationGroup), boost::shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFOperationGroup>()));
 
 IAAFNestedScope* pIAAFNestedScope = NULL;
-Register(AxAUID(pIAAFNestedScope), shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFNestedScope>()));
+Register(AxAUID(pIAAFNestedScope), boost::shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFNestedScope>()));
 
 IAAFPulldown* pIAAFPulldown = NULL;
-Register(AxAUID(pIAAFPulldown), shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFPulldown>()));
+Register(AxAUID(pIAAFPulldown), boost::shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFPulldown>()));
 
 IAAFScopeReference* pIAAFScopeReference = NULL;
-Register(AxAUID(pIAAFScopeReference), shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFScopeReference>()));
+Register(AxAUID(pIAAFScopeReference), boost::shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFScopeReference>()));
 
 IAAFSelector* pIAAFSelector = NULL;
-Register(AxAUID(pIAAFSelector), shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFSelector>()));
+Register(AxAUID(pIAAFSelector), boost::shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFSelector>()));
 
 IAAFSequence* pIAAFSequence = NULL;
-Register(AxAUID(pIAAFSequence), shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFSequence>()));
+Register(AxAUID(pIAAFSequence), boost::shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFSequence>()));
 
 IAAFSourceReference* pIAAFSourceReference = NULL;
-Register(AxAUID(pIAAFSourceReference), shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFSourceReference>()));
+Register(AxAUID(pIAAFSourceReference), boost::shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFSourceReference>()));
 
 IAAFSourceClip* pIAAFSourceClip = NULL;
-Register(AxAUID(pIAAFSourceClip), shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFSourceClip>()));
+Register(AxAUID(pIAAFSourceClip), boost::shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFSourceClip>()));
 
 IAAFTimecode* pIAAFTimecode = NULL;
-Register(AxAUID(pIAAFTimecode), shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFTimecode>()));
+Register(AxAUID(pIAAFTimecode), boost::shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFTimecode>()));
 
 IAAFTimecodeStream* pIAAFTimecodeStream = NULL;
-Register(AxAUID(pIAAFTimecodeStream), shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFTimecodeStream>()));
+Register(AxAUID(pIAAFTimecodeStream), boost::shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFTimecodeStream>()));
 
 IAAFTimecodeStream12M* pIAAFTimecodeStream12M = NULL;
-Register(AxAUID(pIAAFTimecodeStream12M), shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFTimecodeStream12M>()));
+Register(AxAUID(pIAAFTimecodeStream12M), boost::shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFTimecodeStream12M>()));
 
 IAAFTransition* pIAAFTransition = NULL;
-Register(AxAUID(pIAAFTransition), shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFTransition>()));
+Register(AxAUID(pIAAFTransition), boost::shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFTransition>()));
 
 IAAFContentStorage* pIAAFContentStorage = NULL;
-Register(AxAUID(pIAAFContentStorage), shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFContentStorage>()));
+Register(AxAUID(pIAAFContentStorage), boost::shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFContentStorage>()));
 
 IAAFControlPoint* pIAAFControlPoint = NULL;
-Register(AxAUID(pIAAFControlPoint), shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFControlPoint>()));
+Register(AxAUID(pIAAFControlPoint), boost::shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFControlPoint>()));
 
 IAAFDefObject* pIAAFDefObject = NULL;
-Register(AxAUID(pIAAFDefObject), shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFDefObject>()));
-
-IAAFClassDef* pIAAFClassDef = NULL;
-Register(AxAUID(pIAAFClassDef), shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFClassDef>()));
+Register(AxAUID(pIAAFDefObject), boost::shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFDefObject>()));
 
 IAAFDataDef* pIAAFDataDef = NULL;
-Register(AxAUID(pIAAFDataDef), shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFDataDef>()));
+Register(AxAUID(pIAAFDataDef), boost::shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFDataDef>()));
 
 IAAFOperationDef* pIAAFOperationDef = NULL;
-Register(AxAUID(pIAAFOperationDef), shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFOperationDef>()));
+Register(AxAUID(pIAAFOperationDef), boost::shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFOperationDef>()));
 
 IAAFParameterDef* pIAAFParameterDef = NULL;
-Register(AxAUID(pIAAFParameterDef), shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFParameterDef>()));
-
-IAAFPropertyDef* pIAAFPropertyDef = NULL;
-Register(AxAUID(pIAAFPropertyDef), shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFPropertyDef>()));
-
-IAAFTypeDef* pIAAFTypeDef = NULL;
-Register(AxAUID(pIAAFTypeDef), shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFTypeDef>()));
+Register(AxAUID(pIAAFParameterDef), boost::shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFParameterDef>()));
 
 IAAFPluginDef* pIAAFPluginDef = NULL;
-Register(AxAUID(pIAAFPluginDef), shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFPluginDef>()));
+Register(AxAUID(pIAAFPluginDef), boost::shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFPluginDef>()));
 
 IAAFCodecDef* pIAAFCodecDef = NULL;
-Register(AxAUID(pIAAFCodecDef), shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFCodecDef>()));
+Register(AxAUID(pIAAFCodecDef), boost::shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFCodecDef>()));
 
 IAAFContainerDef* pIAAFContainerDef = NULL;
-Register(AxAUID(pIAAFContainerDef), shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFContainerDef>()));
+Register(AxAUID(pIAAFContainerDef), boost::shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFContainerDef>()));
 
 IAAFInterpolationDef* pIAAFInterpolationDef = NULL;
-Register(AxAUID(pIAAFInterpolationDef), shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFInterpolationDef>()));
+Register(AxAUID(pIAAFInterpolationDef), boost::shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFInterpolationDef>()));
 
 IAAFDictionary* pIAAFDictionary = NULL;
-Register(AxAUID(pIAAFDictionary), shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFDictionary>()));
+Register(AxAUID(pIAAFDictionary), boost::shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFDictionary>()));
 
 IAAFEssenceData* pIAAFEssenceData = NULL;
-Register(AxAUID(pIAAFEssenceData), shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFEssenceData>()));
+Register(AxAUID(pIAAFEssenceData), boost::shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFEssenceData>()));
 
 IAAFEssenceDescriptor* pIAAFEssenceDescriptor = NULL;
-Register(AxAUID(pIAAFEssenceDescriptor), shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFEssenceDescriptor>()));
+Register(AxAUID(pIAAFEssenceDescriptor), boost::shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFEssenceDescriptor>()));
 
 IAAFFileDescriptor* pIAAFFileDescriptor = NULL;
-Register(AxAUID(pIAAFFileDescriptor), shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFFileDescriptor>()));
-
-IAAFAES3PCMDescriptor* pIAAFAES3PCMDescriptor = NULL;
-Register(AxAUID(pIAAFAES3PCMDescriptor), shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFAES3PCMDescriptor>()));
+Register(AxAUID(pIAAFFileDescriptor), boost::shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFFileDescriptor>()));
 
 IAAFAIFCDescriptor* pIAAFAIFCDescriptor = NULL;
-Register(AxAUID(pIAAFAIFCDescriptor), shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFAIFCDescriptor>()));
+Register(AxAUID(pIAAFAIFCDescriptor), boost::shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFAIFCDescriptor>()));
 
 IAAFDigitalImageDescriptor* pIAAFDigitalImageDescriptor = NULL;
-Register(AxAUID(pIAAFDigitalImageDescriptor), shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFDigitalImageDescriptor>()));
+Register(AxAUID(pIAAFDigitalImageDescriptor), boost::shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFDigitalImageDescriptor>()));
 
 IAAFCDCIDescriptor* pIAAFCDCIDescriptor = NULL;
-Register(AxAUID(pIAAFCDCIDescriptor), shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFCDCIDescriptor>()));
+Register(AxAUID(pIAAFCDCIDescriptor), boost::shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFCDCIDescriptor>()));
 
 IAAFRGBADescriptor* pIAAFRGBADescriptor = NULL;
-Register(AxAUID(pIAAFRGBADescriptor), shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFRGBADescriptor>()));
-
-IAAFSoundDescriptor* pIAAFSoundDescriptor = NULL;
-Register(AxAUID(pIAAFSoundDescriptor), shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFSoundDescriptor>()));
-
-IAAFPCMDescriptor* pIAAFPCMDescriptor = NULL;
-Register(AxAUID(pIAAFPCMDescriptor), shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFPCMDescriptor>()));
-
-IAAFMultipleDescriptor* pIAAFMultipleDescriptor = NULL;
-Register(AxAUID(pIAAFMultipleDescriptor), shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFMultipleDescriptor>()));
+Register(AxAUID(pIAAFRGBADescriptor), boost::shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFRGBADescriptor>()));
 
 IAAFTIFFDescriptor* pIAAFTIFFDescriptor = NULL;
-Register(AxAUID(pIAAFTIFFDescriptor), shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFTIFFDescriptor>()));
+Register(AxAUID(pIAAFTIFFDescriptor), boost::shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFTIFFDescriptor>()));
 
 IAAFWAVEDescriptor* pIAAFWAVEDescriptor = NULL;
-Register(AxAUID(pIAAFWAVEDescriptor), shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFWAVEDescriptor>()));
+Register(AxAUID(pIAAFWAVEDescriptor), boost::shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFWAVEDescriptor>()));
 
 IAAFFilmDescriptor* pIAAFFilmDescriptor = NULL;
-Register(AxAUID(pIAAFFilmDescriptor), shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFFilmDescriptor>()));
+Register(AxAUID(pIAAFFilmDescriptor), boost::shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFFilmDescriptor>()));
 
 IAAFTapeDescriptor* pIAAFTapeDescriptor = NULL;
-Register(AxAUID(pIAAFTapeDescriptor), shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFTapeDescriptor>()));
-
-IAAFPhysicalDescriptor* pIAAFPhysicalDescriptor = NULL;
-Register(AxAUID(pIAAFPhysicalDescriptor), shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFPhysicalDescriptor>()));
-
-IAAFImportDescriptor* pIAAFImportDescriptor = NULL;
-Register(AxAUID(pIAAFImportDescriptor), shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFImportDescriptor>()));
-
-IAAFRecordingDescriptor* pIAAFRecordingDescriptor = NULL;
-Register(AxAUID(pIAAFRecordingDescriptor), shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFRecordingDescriptor>()));
-
-IAAFAuxiliaryDescriptor* pIAAFAuxiliaryDescriptor = NULL;
-Register(AxAUID(pIAAFAuxiliaryDescriptor), shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFAuxiliaryDescriptor>()));
-
-IAAFTaggedValueDefinition* pIAAFTaggedValueDefinition = NULL;
-Register(AxAUID(pIAAFTaggedValueDefinition), shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFTaggedValueDefinition>()));
-
-IAAFKLVDataDefinition* pIAAFKLVDataDefinition = NULL;
-Register(AxAUID(pIAAFKLVDataDefinition), shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFKLVDataDefinition>()));
+Register(AxAUID(pIAAFTapeDescriptor), boost::shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFTapeDescriptor>()));
 
 IAAFHeader* pIAAFHeader = NULL;
-Register(AxAUID(pIAAFHeader), shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFHeader>()));
+Register(AxAUID(pIAAFHeader), boost::shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFHeader>()));
 
 IAAFIdentification* pIAAFIdentification = NULL;
-Register(AxAUID(pIAAFIdentification), shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFIdentification>()));
+Register(AxAUID(pIAAFIdentification), boost::shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFIdentification>()));
 
 IAAFLocator* pIAAFLocator = NULL;
-Register(AxAUID(pIAAFLocator), shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFLocator>()));
+Register(AxAUID(pIAAFLocator), boost::shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFLocator>()));
 
 IAAFNetworkLocator* pIAAFNetworkLocator = NULL;
-Register(AxAUID(pIAAFNetworkLocator), shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFNetworkLocator>()));
+Register(AxAUID(pIAAFNetworkLocator), boost::shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFNetworkLocator>()));
 
 IAAFTextLocator* pIAAFTextLocator = NULL;
-Register(AxAUID(pIAAFTextLocator), shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFTextLocator>()));
+Register(AxAUID(pIAAFTextLocator), boost::shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFTextLocator>()));
 
 IAAFMob* pIAAFMob = NULL;
-Register(AxAUID(pIAAFMob), shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFMob>()));
+Register(AxAUID(pIAAFMob), boost::shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFMob>()));
 
 IAAFCompositionMob* pIAAFCompositionMob = NULL;
-Register(AxAUID(pIAAFCompositionMob), shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFCompositionMob>()));
+Register(AxAUID(pIAAFCompositionMob), boost::shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFCompositionMob>()));
 
 IAAFMasterMob* pIAAFMasterMob = NULL;
-Register(AxAUID(pIAAFMasterMob), shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFMasterMob>()));
+Register(AxAUID(pIAAFMasterMob), boost::shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFMasterMob>()));
 
 IAAFSourceMob* pIAAFSourceMob = NULL;
-Register(AxAUID(pIAAFSourceMob), shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFSourceMob>()));
+Register(AxAUID(pIAAFSourceMob), boost::shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFSourceMob>()));
 
 IAAFMobSlot* pIAAFMobSlot = NULL;
-Register(AxAUID(pIAAFMobSlot), shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFMobSlot>()));
+Register(AxAUID(pIAAFMobSlot), boost::shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFMobSlot>()));
 
 IAAFEventMobSlot* pIAAFEventMobSlot = NULL;
-Register(AxAUID(pIAAFEventMobSlot), shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFEventMobSlot>()));
+Register(AxAUID(pIAAFEventMobSlot), boost::shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFEventMobSlot>()));
 
 IAAFStaticMobSlot* pIAAFStaticMobSlot = NULL;
-Register(AxAUID(pIAAFStaticMobSlot), shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFStaticMobSlot>()));
+Register(AxAUID(pIAAFStaticMobSlot), boost::shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFStaticMobSlot>()));
 
 IAAFTimelineMobSlot* pIAAFTimelineMobSlot = NULL;
-Register(AxAUID(pIAAFTimelineMobSlot), shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFTimelineMobSlot>()));
+Register(AxAUID(pIAAFTimelineMobSlot), boost::shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFTimelineMobSlot>()));
 
 IAAFParameter* pIAAFParameter = NULL;
-Register(AxAUID(pIAAFParameter), shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFParameter>()));
+Register(AxAUID(pIAAFParameter), boost::shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFParameter>()));
 
 IAAFConstantValue* pIAAFConstantValue = NULL;
-Register(AxAUID(pIAAFConstantValue), shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFConstantValue>()));
+Register(AxAUID(pIAAFConstantValue), boost::shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFConstantValue>()));
 
 IAAFVaryingValue* pIAAFVaryingValue = NULL;
-Register(AxAUID(pIAAFVaryingValue), shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFVaryingValue>()));
+Register(AxAUID(pIAAFVaryingValue), boost::shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFVaryingValue>()));
 
 IAAFTaggedValue* pIAAFTaggedValue = NULL;
-Register(AxAUID(pIAAFTaggedValue), shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFTaggedValue>()));
+Register(AxAUID(pIAAFTaggedValue), boost::shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFTaggedValue>()));
 
 IAAFKLVData* pIAAFKLVData = NULL;
-Register(AxAUID(pIAAFKLVData), shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFKLVData>()));
+Register(AxAUID(pIAAFKLVData), boost::shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFKLVData>()));
+
+IAAFDescriptiveMarker* pIAAFDescriptiveMarker = NULL;
+Register(AxAUID(pIAAFDescriptiveMarker), boost::shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFDescriptiveMarker>()));
+
+IAAFSoundDescriptor* pIAAFSoundDescriptor = NULL;
+Register(AxAUID(pIAAFSoundDescriptor), boost::shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFSoundDescriptor>()));
+
+IAAFDataEssenceDescriptor* pIAAFDataEssenceDescriptor = NULL;
+Register(AxAUID(pIAAFDataEssenceDescriptor), boost::shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFDataEssenceDescriptor>()));
+
+IAAFMultipleDescriptor* pIAAFMultipleDescriptor = NULL;
+Register(AxAUID(pIAAFMultipleDescriptor), boost::shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFMultipleDescriptor>()));
+
+IAAFDescriptiveClip* pIAAFDescriptiveClip = NULL;
+Register(AxAUID(pIAAFDescriptiveClip), boost::shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFDescriptiveClip>()));
+
+IAAFAES3PCMDescriptor* pIAAFAES3PCMDescriptor = NULL;
+Register(AxAUID(pIAAFAES3PCMDescriptor), boost::shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFAES3PCMDescriptor>()));
+
+IAAFPCMDescriptor* pIAAFPCMDescriptor = NULL;
+Register(AxAUID(pIAAFPCMDescriptor), boost::shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFPCMDescriptor>()));
+
+IAAFPhysicalDescriptor* pIAAFPhysicalDescriptor = NULL;
+Register(AxAUID(pIAAFPhysicalDescriptor), boost::shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFPhysicalDescriptor>()));
+
+IAAFImportDescriptor* pIAAFImportDescriptor = NULL;
+Register(AxAUID(pIAAFImportDescriptor), boost::shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFImportDescriptor>()));
+
+IAAFRecordingDescriptor* pIAAFRecordingDescriptor = NULL;
+Register(AxAUID(pIAAFRecordingDescriptor), boost::shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFRecordingDescriptor>()));
+
+IAAFTaggedValueDefinition* pIAAFTaggedValueDefinition = NULL;
+Register(AxAUID(pIAAFTaggedValueDefinition), boost::shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFTaggedValueDefinition>()));
+
+IAAFKLVDataDefinition* pIAAFKLVDataDefinition = NULL;
+Register(AxAUID(pIAAFKLVDataDefinition), boost::shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFKLVDataDefinition>()));
+
+IAAFAuxiliaryDescriptor* pIAAFAuxiliaryDescriptor = NULL;
+Register(AxAUID(pIAAFAuxiliaryDescriptor), boost::shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFAuxiliaryDescriptor>()));
+
+IAAFRIFFChunk* pIAAFRIFFChunk = NULL;
+Register(AxAUID(pIAAFRIFFChunk), boost::shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFRIFFChunk>()));
+
+IAAFBWFImportDescriptor* pIAAFBWFImportDescriptor = NULL;
+Register(AxAUID(pIAAFBWFImportDescriptor), boost::shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFBWFImportDescriptor>()));
+
+IAAFMPEGVideoDescriptor* pIAAFMPEGVideoDescriptor = NULL;
+Register(AxAUID(pIAAFMPEGVideoDescriptor), boost::shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFMPEGVideoDescriptor>()));
+
+IAAFClassDef* pIAAFClassDef = NULL;
+Register(AxAUID(pIAAFClassDef), boost::shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFClassDef>()));
+
+IAAFPropertyDef* pIAAFPropertyDef = NULL;
+Register(AxAUID(pIAAFPropertyDef), boost::shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFPropertyDef>()));
+
+IAAFTypeDef* pIAAFTypeDef = NULL;
+Register(AxAUID(pIAAFTypeDef), boost::shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFTypeDef>()));
 
 IAAFTypeDefInt* pIAAFTypeDefInt = NULL;
-Register(AxAUID(pIAAFTypeDefInt), shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFTypeDefInt>()));
+Register(AxAUID(pIAAFTypeDefInt), boost::shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFTypeDefInt>()));
 
 IAAFTypeDefStrongObjRef* pIAAFTypeDefStrongObjRef = NULL;
-Register(AxAUID(pIAAFTypeDefStrongObjRef), shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFTypeDefStrongObjRef>()));
+Register(AxAUID(pIAAFTypeDefStrongObjRef), boost::shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFTypeDefStrongObjRef>()));
 
 IAAFTypeDefWeakObjRef* pIAAFTypeDefWeakObjRef = NULL;
-Register(AxAUID(pIAAFTypeDefWeakObjRef), shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFTypeDefWeakObjRef>()));
+Register(AxAUID(pIAAFTypeDefWeakObjRef), boost::shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFTypeDefWeakObjRef>()));
 
 IAAFTypeDefEnum* pIAAFTypeDefEnum = NULL;
-Register(AxAUID(pIAAFTypeDefEnum), shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFTypeDefEnum>()));
+Register(AxAUID(pIAAFTypeDefEnum), boost::shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFTypeDefEnum>()));
 
 IAAFTypeDefFixedArray* pIAAFTypeDefFixedArray = NULL;
-Register(AxAUID(pIAAFTypeDefFixedArray), shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFTypeDefFixedArray>()));
+Register(AxAUID(pIAAFTypeDefFixedArray), boost::shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFTypeDefFixedArray>()));
 
 IAAFTypeDefVariableArray* pIAAFTypeDefVariableArray = NULL;
-Register(AxAUID(pIAAFTypeDefVariableArray), shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFTypeDefVariableArray>()));
+Register(AxAUID(pIAAFTypeDefVariableArray), boost::shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFTypeDefVariableArray>()));
 
 IAAFTypeDefSet* pIAAFTypeDefSet = NULL;
-Register(AxAUID(pIAAFTypeDefSet), shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFTypeDefSet>()));
+Register(AxAUID(pIAAFTypeDefSet), boost::shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFTypeDefSet>()));
 
 IAAFTypeDefString* pIAAFTypeDefString = NULL;
-Register(AxAUID(pIAAFTypeDefString), shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFTypeDefString>()));
+Register(AxAUID(pIAAFTypeDefString), boost::shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFTypeDefString>()));
 
 IAAFTypeDefStream* pIAAFTypeDefStream = NULL;
-Register(AxAUID(pIAAFTypeDefStream), shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFTypeDefStream>()));
+Register(AxAUID(pIAAFTypeDefStream), boost::shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFTypeDefStream>()));
 
 IAAFTypeDefRecord* pIAAFTypeDefRecord = NULL;
-Register(AxAUID(pIAAFTypeDefRecord), shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFTypeDefRecord>()));
+Register(AxAUID(pIAAFTypeDefRecord), boost::shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFTypeDefRecord>()));
 
 IAAFTypeDefRename* pIAAFTypeDefRename = NULL;
-Register(AxAUID(pIAAFTypeDefRename), shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFTypeDefRename>()));
+Register(AxAUID(pIAAFTypeDefRename), boost::shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFTypeDefRename>()));
 
 IAAFTypeDefExtEnum* pIAAFTypeDefExtEnum = NULL;
-Register(AxAUID(pIAAFTypeDefExtEnum), shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFTypeDefExtEnum>()));
+Register(AxAUID(pIAAFTypeDefExtEnum), boost::shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFTypeDefExtEnum>()));
 
 IAAFTypeDefIndirect* pIAAFTypeDefIndirect = NULL;
-Register(AxAUID(pIAAFTypeDefIndirect), shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFTypeDefIndirect>()));
+Register(AxAUID(pIAAFTypeDefIndirect), boost::shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFTypeDefIndirect>()));
 
 IAAFTypeDefOpaque* pIAAFTypeDefOpaque = NULL;
-Register(AxAUID(pIAAFTypeDefOpaque), shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFTypeDefOpaque>()));
+Register(AxAUID(pIAAFTypeDefOpaque), boost::shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFTypeDefOpaque>()));
 
 IAAFTypeDefCharacter* pIAAFTypeDefCharacter = NULL;
-Register(AxAUID(pIAAFTypeDefCharacter), shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFTypeDefCharacter>()));
+Register(AxAUID(pIAAFTypeDefCharacter), boost::shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFTypeDefCharacter>()));
 
 IAAFMetaDefinition* pIAAFMetaDefinition = NULL;
-Register(AxAUID(pIAAFMetaDefinition), shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFMetaDefinition>()));
+Register(AxAUID(pIAAFMetaDefinition), boost::shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFMetaDefinition>()));
+
+IAAFDescriptiveObject* pIAAFDescriptiveObject = NULL;
+Register(AxAUID(pIAAFDescriptiveObject), boost::shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFDescriptiveObject>()));
+
+IAAFDescriptiveFramework* pIAAFDescriptiveFramework = NULL;
+Register(AxAUID(pIAAFDescriptiveFramework), boost::shared_ptr<TypedNodeFactory>(new TypedNodeFactoryImpl<IAAFDescriptiveFramework>()));
 
