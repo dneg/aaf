@@ -1,0 +1,133 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{280BFDCC-DE41-4169-B2BB-1FBFBCA2281F}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\NoWarnings.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\NoWarnings.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.40219.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Debug\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Debug\</IntDir>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</LinkIncremental>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Release\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Release\</IntDir>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>.;../../../../Utilities/AAFAnalyzer/AnalyzerBase;../../../../Utilities/AAFAnalyzer/RequirementLib;../../../../Utilities/AAFAnalyzer/TestPhaseLib;../../../../Utilities/AAFAnalyzer/AAFAnalyzerBase;../../../../Utilities/AAFAnalyzer/BaseTestImpl;../../include;../../../../examples2/axLib;$(BOOSTINC);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>../AnalyzerBase/Debug/AnalyzerBase.lib;../RequirementLib/Debug/RequirementLib.lib;../TestPhaseLib/Debug/TestPhaseLib.lib;../AAFAnalyzerBase/Debug/AAFAnalyzerBase.lib;../BaseTestImpl/Debug/BaseTestImpl.lib;../../examples2/axLib/Win32/Debug/axLib.lib;../../Win32/Debug/RefImpl/AAFD.lib;../../Win32/Debug/RefImpl/AAFIIDD.lib;../../ref-impl/expat/Win32/Debug/expat.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(OutDir)RegressionTestStructure.exe</OutputFile>
+      <IgnoreSpecificDefaultLibraries>MSVCRT;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ProgramDatabaseFile>$(OutDir)RegressionTestStructure.pdb</ProgramDatabaseFile>
+      <SubSystem>Console</SubSystem>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention>
+      </DataExecutionPrevention>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>.;../../../../Utilities/AAFAnalyzer/AnalyzerBase;../../../../Utilities/AAFAnalyzer/RequirementLib;../../../../Utilities/AAFAnalyzer/TestPhaseLib;../../../../Utilities/AAFAnalyzer/AAFAnalyzerBase;../../../../Utilities/AAFAnalyzer/BaseTestImpl;../../include;../../../../examples2/axLib;$(BOOSTINC);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>../AnalyzerBase/Release/AnalyzerBase.lib;../RequirementLib/Release/RequirementLib.lib;../TestPhaseLib/Release/TestPhaseLib.lib;../AAFAnalyzerBase/Release/AAFAnalyzerBase.lib;../BaseTestImpl/Release/BaseTestImpl.lib;../../examples2/axLib/Win32/Release/axLib.lib;../../Win32/Release/RefImpl/AAF.lib;../../Win32/Release/RefImpl/AAFIID.lib;../../ref-impl/expat/Win32/Release/expat.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(OutDir)RegressionTestStructure.exe</OutputFile>
+      <IgnoreSpecificDefaultLibraries>MSVCRTd;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention>
+      </DataExecutionPrevention>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\..\Utilities\AAFAnalyzer\RegressionTest\TestStructure\AAFAnalyzerTest.cpp" />
+    <ClCompile Include="..\..\..\..\Utilities\AAFAnalyzer\RegressionTest\TestStructure\Test1Stub.cpp" />
+    <ClCompile Include="..\..\..\..\Utilities\AAFAnalyzer\RegressionTest\TestStructure\Test2Stub.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\..\Utilities\AAFAnalyzer\RegressionTest\TestStructure\Test1Stub.h" />
+    <ClInclude Include="..\..\..\..\Utilities\AAFAnalyzer\RegressionTest\TestStructure\Test2Stub.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AAFAnalyzerBase\AAFAnalyzerBase.vcxproj">
+      <Project>{9dd45964-642a-4d06-8263-674a87c5917c}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\AnalyzerBase\AnalyzerBase.vcxproj">
+      <Project>{a422f5e0-5c85-458a-bdcd-8975c1cf5367}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\BaseTestImpl\BaseTestImpl.vcxproj">
+      <Project>{9477cab1-75b0-4110-a7d6-0d1bd3ea81e0}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\RequirementLib\RequirementLib.vcxproj">
+      <Project>{1588f931-90d7-4b3d-810d-9b068268e628}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\TestPhaseLib\TestPhaseLib.vcxproj">
+      <Project>{8bb4cb71-479f-41c6-9117-27eb2d4afc15}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

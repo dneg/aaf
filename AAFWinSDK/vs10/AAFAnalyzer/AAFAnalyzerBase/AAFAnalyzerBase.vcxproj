@@ -1,0 +1,119 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{9DD45964-642A-4D06-8263-674A87C5917C}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\NoWarnings.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\NoWarnings.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.40219.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Debug\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Debug\</IntDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Release\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Release\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>.;../../../../Utilities/AAFAnalyzer/AnalyzerBase;../../../../Utilities/AAFAnalyzer/RequirementLib;../../../../Utilities/AAFAnalyzer/TestPhaseLib;../../../../Utilities/AAFAnalyzer/AAFAnalyzerBase;../../include;../../../../examples2/axLib;$(BOOSTINC);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <Lib>
+      <OutputFile>$(OutDir)AAFAnalyzerBase.lib</OutputFile>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>.;../../../../Utilities/AAFAnalyzer/AnalyzerBase;../../../../Utilities/AAFAnalyzer/RequirementLib;../../../../Utilities/AAFAnalyzer/TestPhaseLib;../../../../Utilities/AAFAnalyzer/AAFAnalyzerBase;../../include;../../../../examples2/axLib;$(BOOSTINC);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <Lib>
+      <OutputFile>$(OutDir)AAFAnalyzerBase.lib</OutputFile>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\..\Utilities\AAFAnalyzer\AAFAnalyzerBase\AAFComponentReference.cpp" />
+    <ClCompile Include="..\..\..\..\Utilities\AAFAnalyzer\AAFAnalyzerBase\AAFContainment.cpp" />
+    <ClCompile Include="..\..\..\..\Utilities\AAFAnalyzer\AAFAnalyzerBase\AAFGraphInfo.cpp" />
+    <ClCompile Include="..\..\..\..\Utilities\AAFAnalyzer\AAFAnalyzerBase\AAFMobReference.cpp" />
+    <ClCompile Include="..\..\..\..\Utilities\AAFAnalyzer\AAFAnalyzerBase\AAFObjNode.cpp" />
+    <ClCompile Include="..\..\..\..\Utilities\AAFAnalyzer\AAFAnalyzerBase\AAFSlotReference.cpp" />
+    <ClCompile Include="..\..\..\..\Utilities\AAFAnalyzer\AAFAnalyzerBase\AAFTypedObjNode.cpp" />
+    <ClCompile Include="..\..\..\..\Utilities\AAFAnalyzer\AAFAnalyzerBase\AAFTypedObjNodeDecorator.cpp" />
+    <ClCompile Include="..\..\..\..\Utilities\AAFAnalyzer\AAFAnalyzerBase\AAFTypedObjNodeImpl.cpp" />
+    <ClCompile Include="..\..\..\..\Utilities\AAFAnalyzer\AAFAnalyzerBase\GraphBuilder.cpp" />
+    <ClCompile Include="..\..\..\..\Utilities\AAFAnalyzer\AAFAnalyzerBase\MobNodeMap.cpp" />
+    <ClCompile Include="..\..\..\..\Utilities\AAFAnalyzer\AAFAnalyzerBase\NodeFactory.cpp" />
+    <ClCompile Include="..\..\..\..\Utilities\AAFAnalyzer\AAFAnalyzerBase\NodeFactoryImpl.cpp" />
+    <ClCompile Include="..\..\..\..\Utilities\AAFAnalyzer\AAFAnalyzerBase\TypedNodeFactory.cpp" />
+    <ClCompile Include="..\..\..\..\Utilities\AAFAnalyzer\AAFAnalyzerBase\TypedNodeFactoryImpl.cpp" />
+    <ClCompile Include="..\..\..\..\Utilities\AAFAnalyzer\AAFAnalyzerBase\TypedNodeFactoryRegistry.cpp" />
+    <ClCompile Include="..\..\..\..\Utilities\AAFAnalyzer\AAFAnalyzerBase\TypedVisitor.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\..\Utilities\AAFAnalyzer\AAFAnalyzerBase\AAFComponentReference.h" />
+    <ClInclude Include="..\..\..\..\Utilities\AAFAnalyzer\AAFAnalyzerBase\AAFContainment.h" />
+    <ClInclude Include="..\..\..\..\Utilities\AAFAnalyzer\AAFAnalyzerBase\AAFGraphInfo.h" />
+    <ClInclude Include="..\..\..\..\Utilities\AAFAnalyzer\AAFAnalyzerBase\AAFMobReference.h" />
+    <ClInclude Include="..\..\..\..\Utilities\AAFAnalyzer\AAFAnalyzerBase\AAFObjNode.h" />
+    <ClInclude Include="..\..\..\..\Utilities\AAFAnalyzer\AAFAnalyzerBase\AAFSlotReference.h" />
+    <ClInclude Include="..\..\..\..\Utilities\AAFAnalyzer\AAFAnalyzerBase\AAFTypedObjNode.h" />
+    <ClInclude Include="..\..\..\..\Utilities\AAFAnalyzer\AAFAnalyzerBase\AAFTypedObjNodeDecorator.h" />
+    <ClInclude Include="..\..\..\..\Utilities\AAFAnalyzer\AAFAnalyzerBase\AAFTypedObjNodeImpl.h" />
+    <ClInclude Include="..\..\..\..\Utilities\AAFAnalyzer\AAFAnalyzerBase\GraphBuilder.h" />
+    <ClInclude Include="..\..\..\..\Utilities\AAFAnalyzer\AAFAnalyzerBase\MobNodeMap.h" />
+    <ClInclude Include="..\..\..\..\Utilities\AAFAnalyzer\AAFAnalyzerBase\NodeFactory.h" />
+    <ClInclude Include="..\..\..\..\Utilities\AAFAnalyzer\AAFAnalyzerBase\NodeFactoryImpl.h" />
+    <ClInclude Include="..\..\..\..\Utilities\AAFAnalyzer\AAFAnalyzerBase\TypedNodeFactory.h" />
+    <ClInclude Include="..\..\..\..\Utilities\AAFAnalyzer\AAFAnalyzerBase\TypedNodeFactoryImpl.h" />
+    <ClInclude Include="..\..\..\..\Utilities\AAFAnalyzer\AAFAnalyzerBase\TypedNodeFactoryRegistry.h" />
+    <ClInclude Include="..\..\..\..\Utilities\AAFAnalyzer\AAFAnalyzerBase\TypedVisitor.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
