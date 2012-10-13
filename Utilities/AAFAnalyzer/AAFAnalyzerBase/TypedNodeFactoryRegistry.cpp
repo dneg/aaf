@@ -50,8 +50,6 @@ using namespace aafanalyzer;
 
 namespace aafanalyzer {
 
-using namespace boost;
-
 //static variable
 TypedNodeFactoryRegistry* TypedNodeFactoryRegistry::_pFactory = NULL;
 

@@ -64,4 +64,4 @@ class AAFTypedObjNodeImpl : public AAFTypedObjNode<AAFObjType>
 
 } // end of namespace diskstream
 
-#endif/*__TEMPLATE_h__*/
+#endif/*__AAFTypedObjNodeImpl_h__*/
