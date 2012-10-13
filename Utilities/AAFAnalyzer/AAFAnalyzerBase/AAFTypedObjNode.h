@@ -97,11 +97,11 @@ class AAFTypedObjNode : public AAFObjNode
     
     //Get a shared pointer to this node.
     boost::shared_ptr<AAFObjNode> spThis = 
-        dynamic_pointer_cast<AAFObjNode>( this->GetSharedPointerToNode() );
+      boost::dynamic_pointer_cast<AAFObjNode>( this->GetSharedPointerToNode() );
 
     //Return the casted node.  If the cast is not legal, the node factory will
     //throw an exception.
-    return dynamic_pointer_cast<AAFTypedObjNode<To> > ( spNodeFactory->CreateNodeFrom( spThis ) );
+    return boost::dynamic_pointer_cast<AAFTypedObjNode<To> > ( spNodeFactory->CreateNodeFrom( spThis ) );
 
   }
 

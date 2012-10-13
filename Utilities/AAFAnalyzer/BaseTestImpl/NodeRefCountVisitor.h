@@ -154,7 +154,7 @@ class NodeRefCountVisitor : public TypedVisitor
       {
 	boost::shared_ptr<Node> spNode = iter->first;
     
-	ReferencedNodeSP spRefNode = dynamic_pointer_cast<ReferencedNode>( spNode );
+	ReferencedNodeSP spRefNode = boost::dynamic_pointer_cast<ReferencedNode>( spNode );
 	assert( spRefNode );
 	spNodes->push_back( spRefNode );
       }

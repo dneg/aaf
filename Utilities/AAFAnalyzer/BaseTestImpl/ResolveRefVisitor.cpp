@@ -135,7 +135,7 @@ bool ResolveRefVisitor::PostOrderVisit(AAFTypedObjNode<IAAFSourceClip>& node)
     // our data structure is sane.)
     IAAFMobSP spIaafMob;
     boost::shared_ptr<AAFObjNode> spObjNode;
-    spObjNode = dynamic_pointer_cast<AAFObjNode>(spMobNode);
+    spObjNode = boost::dynamic_pointer_cast<AAFObjNode>(spMobNode);
     AxObject axObj(spObjNode->GetAAFObject());
     if ( !AxIsA(axObj, spIaafMob) )
     {
@@ -147,7 +147,7 @@ bool ResolveRefVisitor::PostOrderVisit(AAFTypedObjNode<IAAFSourceClip>& node)
     // source clip node that was passed to this method as a reference.
     boost::shared_ptr<AAFTypedObjNode<IAAFSourceClip> > spSrcClip;
     boost::shared_ptr<Node> temp = node.GetSharedPointerToNode();
-    spSrcClip = dynamic_pointer_cast<AAFTypedObjNode<IAAFSourceClip> >( temp );
+    spSrcClip = boost::dynamic_pointer_cast<AAFTypedObjNode<IAAFSourceClip> >( temp );
     assert( spSrcClip );
 
     if(spSrcClip)
@@ -276,7 +276,7 @@ boost::shared_ptr<Node> ResolveRefVisitor::ResolveChildSlotNode( boost::shared_p
   {
     // Recover the AAFMobSlot object from the child node and compare
     // its id.
-    boost::shared_ptr<AAFObjNode> spChildNode = dynamic_pointer_cast<AAFObjNode>( (*iter)->GetChildNode() );
+    boost::shared_ptr<AAFObjNode> spChildNode = boost::dynamic_pointer_cast<AAFObjNode>( (*iter)->GetChildNode() );
     AxObject axObj(spChildNode->GetAAFObject());
 
     IAAFMobSlotSP spMobSlot;

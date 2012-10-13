@@ -465,7 +465,7 @@ private:
   {
     //Get a shared pointer to the node.
     boost::shared_ptr<AAFTypedObjNode<AAFObjectType> > spNode =
-        dynamic_pointer_cast<AAFTypedObjNode<AAFObjectType> >( 
+        boost::dynamic_pointer_cast<AAFTypedObjNode<AAFObjectType> >( 
             node.GetSharedPointerToNode() );
 
     //Create the EPObject
@@ -484,7 +484,7 @@ private:
   {
     //Get a shared pointer to the node.
     boost::shared_ptr<AAFTypedObjNode<AAFObjectType> > spNode =
-        dynamic_pointer_cast<AAFTypedObjNode<AAFObjectType> >( 
+        boost::dynamic_pointer_cast<AAFTypedObjNode<AAFObjectType> >( 
             node.GetSharedPointerToNode() );
 
     //Create a decorated node.

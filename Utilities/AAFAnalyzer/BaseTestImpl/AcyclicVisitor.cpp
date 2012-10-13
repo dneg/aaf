@@ -102,7 +102,7 @@ void AcyclicVisitor::CreateCycleTestResult()
              wstring( _nodeVector.at(i)->GetName());
     spCycleResult->AddDetail( detail );
 
-    boost::shared_ptr<AAFObjNode> spAafNode = dynamic_pointer_cast<AAFObjNode>( _nodeVector.at(i) );
+    boost::shared_ptr<AAFObjNode> spAafNode = boost::dynamic_pointer_cast<AAFObjNode>( _nodeVector.at(i) );
     
     if ( spAafNode )
     {

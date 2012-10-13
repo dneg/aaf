@@ -313,7 +313,7 @@ bool EPTrackContentsVisitor::PreOrderVisit( EPTypedObjNode<IAAFMobSlot, EPEssenc
   // slot (or an unknown type), there is no requirement that it has a
   // PhysicalTrackNumber.
   
-  boost::shared_ptr<Node> spNode = dynamic_pointer_cast<Node>( node.GetSharedPointerToNode() );
+  boost::shared_ptr<Node> spNode = boost::dynamic_pointer_cast<Node>( node.GetSharedPointerToNode() );
   DepthFirstTraversal dfs( _spEdgeMap, spNode );
   boost::shared_ptr<ParentMobVisitor> spVisitor( new ParentMobVisitor );
   

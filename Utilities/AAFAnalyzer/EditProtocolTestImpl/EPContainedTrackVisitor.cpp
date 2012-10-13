@@ -424,7 +424,7 @@ bool EPContainedTrackVisitor::PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPAux
      *  (2) Have auxiliary segments
      *
      */
-    boost::shared_ptr<Node> spNode = dynamic_pointer_cast<Node>( node.GetSharedPointerToNode() );
+    boost::shared_ptr<Node> spNode = boost::dynamic_pointer_cast<Node>( node.GetSharedPointerToNode() );
     DepthFirstTraversal dfs( _spEdgeMap, spNode );
     boost::shared_ptr<AuxiliarySlotVisitor> spVisitor( new AuxiliarySlotVisitor( _spEdgeMap, _spTestResult ) );
 

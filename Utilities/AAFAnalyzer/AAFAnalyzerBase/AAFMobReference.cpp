@@ -55,7 +55,7 @@ AAFMobReference::~AAFMobReference()
 
 bool AAFMobReference::Visit(boost::shared_ptr<Visitor> spVisitor)
 {
-  boost::shared_ptr<TypedVisitor> spTypedVis = dynamic_pointer_cast<TypedVisitor>(spVisitor);
+  boost::shared_ptr<TypedVisitor> spTypedVis = boost::dynamic_pointer_cast<TypedVisitor>(spVisitor);
   if(spTypedVis)
   {
     return spTypedVis->EdgeVisit(*this);

@@ -775,7 +775,7 @@ boost::shared_ptr<AxComponent> TestFileBuilder::CreateOperationGroup( TrackType 
 void TestFileBuilder::InitializeSourceClip( boost::shared_ptr<AxSourceReference> parent, AxMob& child, const AxString& source )
 {
 
-    boost::shared_ptr<AxSourceClip> axSrcClip = dynamic_pointer_cast<AxSourceClip>( parent );
+    boost::shared_ptr<AxSourceClip> axSrcClip = boost::dynamic_pointer_cast<AxSourceClip>( parent );
 
     aafSourceRef_t srcRef = axSrcClip->GetSourceReference();
     if (mobIdMap.find(source)!=mobIdMap.end() && source!=L"")
@@ -797,7 +797,7 @@ void TestFileBuilder::InitializeSourceClip( boost::shared_ptr<AxSourceReference>
 
 void TestFileBuilder::AddToTransition( boost::shared_ptr<AxComponent> parent, AxComponent& child )
 {
-    boost::shared_ptr<AxTransition> axTransition = dynamic_pointer_cast<AxTransition>( parent );
+    boost::shared_ptr<AxTransition> axTransition = boost::dynamic_pointer_cast<AxTransition>( parent );
 
     boost::shared_ptr<AxOperationGroup> axOpGroup( new AxOperationGroup( AxQueryInterface<IAAFComponent, IAAFOperationGroup>( child ) ) );
 
@@ -806,14 +806,14 @@ void TestFileBuilder::AddToTransition( boost::shared_ptr<AxComponent> parent, Ax
 
 void TestFileBuilder::AddToSequence( boost::shared_ptr<AxComponent> parent, AxComponent& child )
 {
-    boost::shared_ptr<AxSequence> axSequence = dynamic_pointer_cast<AxSequence>( parent );
+    boost::shared_ptr<AxSequence> axSequence = boost::dynamic_pointer_cast<AxSequence>( parent );
 
     axSequence->AppendComponent( child );
 }
 
 void TestFileBuilder::AddToCommentMarker( boost::shared_ptr<AxComponent> parent, AxComponent& child )
 {
-    boost::shared_ptr<AxCommentMarker> axCommentMarker = dynamic_pointer_cast<AxCommentMarker>( parent );
+    boost::shared_ptr<AxCommentMarker> axCommentMarker = boost::dynamic_pointer_cast<AxCommentMarker>( parent );
 
     boost::shared_ptr<AxSourceReference> axSrcRef( new AxSourceReference( AxQueryInterface<IAAFComponent, IAAFSourceReference>( child ) ) );
 
@@ -822,7 +822,7 @@ void TestFileBuilder::AddToCommentMarker( boost::shared_ptr<AxComponent> parent,
 
 void TestFileBuilder::AddToOperationGroup( boost::shared_ptr<AxSegment> parent, AxSegment& child, int property )
 {
-    boost::shared_ptr<AxOperationGroup> axOpGroup = dynamic_pointer_cast<AxOperationGroup>( parent );
+    boost::shared_ptr<AxOperationGroup> axOpGroup = boost::dynamic_pointer_cast<AxOperationGroup>( parent );
 
     if ( property == INPUT_SEGMENT )
     {

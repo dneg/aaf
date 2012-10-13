@@ -171,7 +171,7 @@ void RecursiveOutputVerboseResultMsgs( boost::shared_ptr<TestResult> res,
 
     if ( res->GetResultType() == TestResult::DETAIL )
     {
-      boost::shared_ptr<DetailLevelTestResult> spDetailResult = dynamic_pointer_cast<DetailLevelTestResult>(res);
+      boost::shared_ptr<DetailLevelTestResult> spDetailResult = boost::dynamic_pointer_cast<DetailLevelTestResult>(res);
       assert( spDetailResult );
       boost::shared_ptr<Node> spNode = spDetailResult->GetAssociatedNode();
       if ( spNode )

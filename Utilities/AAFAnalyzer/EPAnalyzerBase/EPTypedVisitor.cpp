@@ -272,7 +272,7 @@ class ChildMobSlotVisitor : public EPTypedVisitor
         bool PreOrderVisit( EPTypedObjNode<IAAFTimelineMobSlot, EPEssenceTrack>& node )
         {
             boost::shared_ptr<Node> spNode = node.GetSharedPointerToNode();
-            boost::shared_ptr<AAFObjNode> spAAFNode = dynamic_pointer_cast<AAFObjNode>( spNode );
+            boost::shared_ptr<AAFObjNode> spAAFNode = boost::dynamic_pointer_cast<AAFObjNode>( spNode );
             _spEssenceTracks->insert( spAAFNode );
             return false;
         }
@@ -280,7 +280,7 @@ class ChildMobSlotVisitor : public EPTypedVisitor
         bool PreOrderVisit( EPTypedObjNode<IAAFTimelineMobSlot, EPAudioTrack>& node )
         {
             boost::shared_ptr<Node> spNode = node.GetSharedPointerToNode();
-            boost::shared_ptr<AAFObjNode> spAAFNode = dynamic_pointer_cast<AAFObjNode>( spNode );
+            boost::shared_ptr<AAFObjNode> spAAFNode = boost::dynamic_pointer_cast<AAFObjNode>( spNode );
             _spEssenceTracks->insert( spAAFNode );
             _spAudioTracks->insert( spAAFNode );
             return false;
@@ -289,7 +289,7 @@ class ChildMobSlotVisitor : public EPTypedVisitor
         bool PreOrderVisit( EPTypedObjNode<IAAFTimelineMobSlot, EPVideoTrack>& node )
         {
             boost::shared_ptr<Node> spNode = node.GetSharedPointerToNode();
-            boost::shared_ptr<AAFObjNode> spAAFNode = dynamic_pointer_cast<AAFObjNode>( spNode );
+            boost::shared_ptr<AAFObjNode> spAAFNode = boost::dynamic_pointer_cast<AAFObjNode>( spNode );
             _spEssenceTracks->insert( spAAFNode );
             _spVideoTracks->insert( spAAFNode );
             return false;
@@ -298,7 +298,7 @@ class ChildMobSlotVisitor : public EPTypedVisitor
         bool PreOrderVisit( EPTypedObjNode<IAAFTimelineMobSlot, EPTimecodeTrack>& node )
         {
             boost::shared_ptr<Node> spNode = node.GetSharedPointerToNode();
-            boost::shared_ptr<AAFObjNode> spAAFNode = dynamic_pointer_cast<AAFObjNode>( spNode );
+            boost::shared_ptr<AAFObjNode> spAAFNode = boost::dynamic_pointer_cast<AAFObjNode>( spNode );
             _spTimecodeTracks->insert( spAAFNode );
             return false;
         }
@@ -306,7 +306,7 @@ class ChildMobSlotVisitor : public EPTypedVisitor
         bool PreOrderVisit( EPTypedObjNode<IAAFTimelineMobSlot, EPEdgecodeTrack>& node )
         {
             boost::shared_ptr<Node> spNode = node.GetSharedPointerToNode();
-            boost::shared_ptr<AAFObjNode> spAAFNode = dynamic_pointer_cast<AAFObjNode>( spNode );
+            boost::shared_ptr<AAFObjNode> spAAFNode = boost::dynamic_pointer_cast<AAFObjNode>( spNode );
             _spEdgecodeTracks->insert( spAAFNode );
             return false;
         }

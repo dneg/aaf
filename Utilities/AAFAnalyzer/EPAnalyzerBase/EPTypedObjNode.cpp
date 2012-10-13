@@ -56,13 +56,13 @@ EPTypedObjNode<AAFObjType, EPObjType>::~EPTypedObjNode()
 template<typename AAFObjType, typename EPObjType>
 bool EPTypedObjNode<AAFObjType, EPObjType>::PreOrderVisit(boost::shared_ptr<Visitor> spVisitor)
 {
-  boost::shared_ptr<EPTypedVisitor> spEPTypedVis = dynamic_pointer_cast<EPTypedVisitor>(spVisitor);
+  boost::shared_ptr<EPTypedVisitor> spEPTypedVis = boost::dynamic_pointer_cast<EPTypedVisitor>(spVisitor);
   if (spEPTypedVis)
   {
     return spEPTypedVis->PreOrderVisit(*this);
   }
 
-  boost::shared_ptr<TypedVisitor> spTypedVis = dynamic_pointer_cast<TypedVisitor>(spVisitor);
+  boost::shared_ptr<TypedVisitor> spTypedVis = boost::dynamic_pointer_cast<TypedVisitor>(spVisitor);
   if(spTypedVis)
   {
     return spTypedVis->PreOrderVisit(*this);
@@ -74,12 +74,12 @@ bool EPTypedObjNode<AAFObjType, EPObjType>::PreOrderVisit(boost::shared_ptr<Visi
 template<typename AAFObjType, typename EPObjType>
 bool EPTypedObjNode<AAFObjType, EPObjType>::PostOrderVisit(boost::shared_ptr<Visitor> spVisitor)
 {
-  boost::shared_ptr<EPTypedVisitor> spEPTypedVis = dynamic_pointer_cast<EPTypedVisitor>(spVisitor);
+  boost::shared_ptr<EPTypedVisitor> spEPTypedVis = boost::dynamic_pointer_cast<EPTypedVisitor>(spVisitor);
   if (spEPTypedVis)
   {
     return spEPTypedVis->PostOrderVisit(*this);
   }
-  boost::shared_ptr<TypedVisitor> spTypedVis = dynamic_pointer_cast<TypedVisitor>(spVisitor);
+  boost::shared_ptr<TypedVisitor> spTypedVis = boost::dynamic_pointer_cast<TypedVisitor>(spVisitor);
   if(spTypedVis)
   {
     return spTypedVis->PostOrderVisit(*this);

@@ -388,7 +388,7 @@ void InputParser::StartElement(const AxString& name, const char** attribs)
         if ( !_componentStack.empty() )
         {
             //Call the appropriate initialize/add function.
-            boost::shared_ptr<AxSourceReference> axSrcRef = dynamic_pointer_cast<AxSourceReference>( _componentStack.top().second );
+  	    boost::shared_ptr<AxSourceReference> axSrcRef = boost::dynamic_pointer_cast<AxSourceReference>( _componentStack.top().second );
             (_testFile.*_fillSegmentMapB[_componentStack.top().first])( axSrcRef, *spMob, sourceId.first );
         }
 		
@@ -424,8 +424,8 @@ void InputParser::StartElement(const AxString& name, const char** attribs)
                 }
                 else if ( _fillSegmentMapD.find( _componentStack.top().first ) != _fillSegmentMapD.end() )
                 {
-                    boost::shared_ptr<AxSegment> axParentSegment = dynamic_pointer_cast<AxSegment>( _componentStack.top().second );
-                    boost::shared_ptr<AxSegment> axChildSegment = dynamic_pointer_cast<AxSegment>( spComponent );
+                    boost::shared_ptr<AxSegment> axParentSegment = boost::dynamic_pointer_cast<AxSegment>( _componentStack.top().second );
+                    boost::shared_ptr<AxSegment> axChildSegment = boost::dynamic_pointer_cast<AxSegment>( spComponent );
                     (_testFile.*_fillSegmentMapD[_componentStack.top().first])( axParentSegment, *axChildSegment, _typeDPropertyMap[TypeDPair( _componentStack.top().first, name )] );
                 }
             }
@@ -459,7 +459,7 @@ void InputParser::StartElement(const AxString& name, const char** attribs)
         aafUInt32 param2 = GetIntAtribValue( L"denominator", attribs, 6, 0 );
         AxString interpolator = GetStringAttribValue( L"interpolator", attribs, 6, L"none" );
 
-        boost::shared_ptr<AxOperationGroup> axOpGroup = dynamic_pointer_cast<AxOperationGroup>( _componentStack.top().second );
+        boost::shared_ptr<AxOperationGroup> axOpGroup = boost::dynamic_pointer_cast<AxOperationGroup>( _componentStack.top().second );
         (_testFile.*_attachParameterMap[name])( *axOpGroup, _parameterTypeMap[name], param1, param2, _interpolationTypeMap[interpolator] );
 
     }
@@ -477,7 +477,7 @@ void InputParser::StartElement(const AxString& name, const char** attribs)
     }
     else if ( name == L"descriptive-framework")
     {
-        boost::shared_ptr<AxDescriptiveMarker> axMarker = dynamic_pointer_cast<AxDescriptiveMarker>( _componentStack.top().second );
+        boost::shared_ptr<AxDescriptiveMarker> axMarker = boost::dynamic_pointer_cast<AxDescriptiveMarker>( _componentStack.top().second );
         _testFile.AttachDescriptiveFramework( axMarker );
     }
     else if ( name == L"aaf-file" )
@@ -511,7 +511,7 @@ void InputParser::EndElement(const AxString& name)
     else if ( _attachSlotMap.find( name ) != _attachSlotMap.end() )
     {
         //Call the appropriate attach function.
-        boost::shared_ptr<AxSegment> axSegment = dynamic_pointer_cast<AxSegment>( _componentStack.top().second );
+        boost::shared_ptr<AxSegment> axSegment = boost::dynamic_pointer_cast<AxSegment>( _componentStack.top().second );
         (_testFile.*_attachSlotMap[name])(
             *(_mobStack.top()),
             *axSegment,
