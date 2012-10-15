@@ -46,7 +46,6 @@ namespace aafanalyzer {
 
 class TestLevelTestResult;
 
-using namespace boost;
 using namespace std;
 
 class EPNameVisitor : public EPTypedVisitor
@@ -54,8 +53,8 @@ class EPNameVisitor : public EPTypedVisitor
   public:
   
     EPNameVisitor( wostream& log,
-		   shared_ptr<EdgeMap> spEdgeMap,
-		   shared_ptr<TestLevelTestResult> spTestResult );
+		   boost::shared_ptr<EdgeMap> spEdgeMap,
+		   boost::shared_ptr<TestLevelTestResult> spTestResult );
 
     virtual ~EPNameVisitor();
 
@@ -106,9 +105,9 @@ class EPNameVisitor : public EPTypedVisitor
     typedef set<AxString> NameSet;
 
     wostream& _log;
-    shared_ptr<EdgeMap> _spEdgeMap;
+    boost::shared_ptr<EdgeMap> _spEdgeMap;
     
-    shared_ptr<TestLevelTestResult> _spTestResult;
+    boost::shared_ptr<TestLevelTestResult> _spTestResult;
     NameMap _compositionNames;
     NameSet _topLevelNames;
     NameSet _lowerLevelNames;

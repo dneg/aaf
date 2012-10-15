@@ -50,8 +50,6 @@ using namespace aafanalyzer;
 
 namespace aafanalyzer {
 
-using namespace boost;
-
 //static variable
 TypedNodeFactoryRegistry* TypedNodeFactoryRegistry::_pFactory = NULL;
 
@@ -92,7 +90,7 @@ TypedNodeFactoryRegistry& TypedNodeFactoryRegistry::GetInstance()
   return *_pFactory;
 }
 
-shared_ptr<TypedNodeFactory> TypedNodeFactoryRegistry::LookUp(AxClassDef& clsDef)
+boost::shared_ptr<TypedNodeFactory> TypedNodeFactoryRegistry::LookUp(AxClassDef& clsDef)
 {
   //Find the Auid for the IAAFObject in question, if none exists look to its parent and continue
   //upwards until an Auid is found.  An exception will be thrown if no Auid is found at the
@@ -111,7 +109,7 @@ shared_ptr<TypedNodeFactory> TypedNodeFactoryRegistry::LookUp(AxClassDef& clsDef
   return LookUp(clsParent);//Use Tail Recursion to avoid potential problem of stack overflow
 }
 
-void TypedNodeFactoryRegistry::Register(aafUID_t AUID, shared_ptr<TypedNodeFactory> spFactory)
+void TypedNodeFactoryRegistry::Register(aafUID_t AUID, boost::shared_ptr<TypedNodeFactory> spFactory)
 {
   //only add a factory into Map if it is not already present
   if(!IsPresent(AUID))

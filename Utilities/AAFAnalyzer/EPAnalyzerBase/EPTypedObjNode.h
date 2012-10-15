@@ -48,19 +48,19 @@ class EPTypedObjNode : public AAFTypedObjNodeDecorator<AAFObjType>
 {
    
  public:
-  EPTypedObjNode( const shared_ptr<AAFTypedObjNode<AAFObjType> > spNode,
-                  shared_ptr<EPObjType> spEPObject );
+  EPTypedObjNode( const boost::shared_ptr<AAFTypedObjNode<AAFObjType> > spNode,
+                  boost::shared_ptr<EPObjType> spEPObject );
   ~EPTypedObjNode();
-  bool PreOrderVisit(shared_ptr<Visitor> spVisitor);
-  bool PostOrderVisit(shared_ptr<Visitor> spVisitor);
-  shared_ptr<EPObjType> GetEPObject();
+  bool PreOrderVisit(boost::shared_ptr<Visitor> spVisitor);
+  bool PostOrderVisit(boost::shared_ptr<Visitor> spVisitor);
+  boost::shared_ptr<EPObjType> GetEPObject();
 
   //This function will return a new node and all type information about the
   //actual type of the templated parameter will be lost.  Therefore, this node
   //should not be stored anywhere unless it is acceptable to use the node
   //without complete type information.
   template<typename AAFTo, typename EPTo>
-  shared_ptr<EPTypedObjNode<AAFTo, EPTo> > DownCast()
+  boost::shared_ptr<EPTypedObjNode<AAFTo, EPTo> > DownCast()
   {
 
     //First, get a parent node of the correct base type:
@@ -74,28 +74,28 @@ class EPTypedObjNode : public AAFTypedObjNodeDecorator<AAFObjType>
     AxClassDef clsDef( axDictionary.LookupClassDef( AxAUID(pAAFTo) ) );
 
     //Find the TypedNodeFactory for the class to cast to.
-    shared_ptr<TypedNodeFactory> spNodeFactory;
+    boost::shared_ptr<TypedNodeFactory> spNodeFactory;
     spNodeFactory = TypedNodeFactoryRegistry::GetInstance().LookUp(clsDef);
     
     //Get a shared pointer to this node.
-    shared_ptr<AAFObjNode> spThis = 
+    boost::shared_ptr<AAFObjNode> spThis = 
         dynamic_pointer_cast<AAFObjNode>( this->GetSharedPointerToNode() );
 
     //If the cast is not legal, the node factory will throw an exception.
-    shared_ptr<AAFTypedObjNode<AAFTo> >spNewNode = 
+    boost::shared_ptr<AAFTypedObjNode<AAFTo> >spNewNode = 
       dynamic_pointer_cast<AAFTypedObjNode<AAFTo> > ( 
         spNodeFactory->CreateNodeFrom( spThis ) );
     
     //Now, make sure the object can be cast to the appropriate type:
     
-    shared_ptr<EPTo> spEPTo( dynamic_pointer_cast<EPTo>( _spEPObject ) );
+    boost::shared_ptr<EPTo> spEPTo( dynamic_pointer_cast<EPTo>( _spEPObject ) );
     if ( !spEPTo )
     {
       wstring msg = L"Cannot cast from \"" + EPObjType::GetName() + L"\" to \"" + EPTo::GetName() + L".\"";
       throw EPCastException( msg.c_str() );
     }
     
-    shared_ptr<EPTypedObjNode<AAFTo, EPTo> > 
+    boost::shared_ptr<EPTypedObjNode<AAFTo, EPTo> > 
         spDecoratedNewNode( new EPTypedObjNode<AAFTo, EPTo>( spNewNode, spEPTo ) );
     
     return spDecoratedNewNode;
@@ -105,7 +105,7 @@ class EPTypedObjNode : public AAFTypedObjNodeDecorator<AAFObjType>
 
  private:
  
-  shared_ptr<EPObjType> _spEPObject;
+  boost::shared_ptr<EPObjType> _spEPObject;
 
   //prohibited
   EPTypedObjNode();

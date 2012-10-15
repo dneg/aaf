@@ -38,7 +38,6 @@
 namespace aafanalyzer {
     
 using namespace std;
-using namespace boost;
 
 class TestLevelTestResult;
 class AAFGraphInfo;
@@ -49,15 +48,15 @@ class FileLoad : public Test
   FileLoad(wostream& os, const basic_string<wchar_t> AAFFile);
   ~FileLoad();
 
-  shared_ptr<TestLevelTestResult> Execute();
+  boost::shared_ptr<TestLevelTestResult> Execute();
   AxString GetName() const;
   AxString GetDescription() const;
-  shared_ptr<const AAFGraphInfo> GetTestGraphInfo();
+  boost::shared_ptr<const AAFGraphInfo> GetTestGraphInfo();
   static const TestInfo GetTestInfo();
 
  private:
   const basic_string<wchar_t> _File;
-  shared_ptr<const AAFGraphInfo> _spGraphInfo;
+  boost::shared_ptr<const AAFGraphInfo> _spGraphInfo;
 
   // prohibited
   FileLoad();

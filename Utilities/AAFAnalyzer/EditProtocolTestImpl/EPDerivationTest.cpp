@@ -78,7 +78,6 @@
 namespace {
 
 using namespace aafanalyzer;
-using namespace boost;
 
 // JPT REVIEW - This should be reusable.
 AxString Indent( int l )
@@ -113,7 +112,7 @@ class MobChainVisitor : public EPTypedVisitor
 public:
 
   MobChainVisitor( wostream& log,
-                   shared_ptr<TestLevelTestResult> spTestResult )
+                   boost::shared_ptr<TestLevelTestResult> spTestResult )
     : EPTypedVisitor( Visitor::FOLLOW_REFERENCES ),
       _log( log ),
       _spTestResult( spTestResult ),
@@ -547,7 +546,7 @@ private:
     wstring explain = mobTypeName + L" named \"" + mob.GetName(L"<unnamed>")
                     + L"\" is out of place in the derrivation chain.";    
 
-    shared_ptr<DetailLevelTestResult>
+    boost::shared_ptr<DetailLevelTestResult>
       spFailure = _spTestResult->AddSingleResult( L"REQ_EP_258",
                                                   explain,
                                                   TestResult::FAIL,
@@ -583,7 +582,7 @@ private:
   }
 
   wostream& _log;
-  shared_ptr<TestLevelTestResult> _spTestResult;
+  boost::shared_ptr<TestLevelTestResult> _spTestResult;
 
   unsigned int _level;
   
@@ -591,7 +590,7 @@ private:
   {
     ParseArgs( DerivationChainParser::EventID e,
 	       AxString n,
-	       shared_ptr<Node> sp )
+	       boost::shared_ptr<Node> sp )
       : event(e),
 	nodeName(n),
 	spNode(sp)
@@ -599,19 +598,19 @@ private:
 
     DerivationChainParser::EventID event;
     AxString nodeName;
-    shared_ptr<Node> spNode;
+    boost::shared_ptr<Node> spNode;
   };
   
   deque<ParseArgs> _parseArgs;
-  shared_ptr<Node> _spLastPreVisitNode;
+  boost::shared_ptr<Node> _spLastPreVisitNode;
 };
 
 //======================================================================
 
 void AnalyzeMobChain( wostream& log,
-                      shared_ptr<const TestGraph> spGraph,
+                      boost::shared_ptr<const TestGraph> spGraph,
                       CompMobDependency::CompMobNodeSP spRootComposition,
-                      shared_ptr<TestLevelTestResult> spTestResult )
+                      boost::shared_ptr<TestLevelTestResult> spTestResult )
 {
   AxCompositionMob axCompMob( spRootComposition->GetAAFObjectOfType() );
   AxString mobName = axCompMob.GetName( L"<unnamed>" );
@@ -621,7 +620,7 @@ void AnalyzeMobChain( wostream& log,
   DepthFirstTraversal dft( spGraph->GetEdgeMap(),
                            spRootComposition );
 
-  shared_ptr<MobChainVisitor>  spVisitor( new MobChainVisitor(log, spTestResult) );
+  boost::shared_ptr<MobChainVisitor>  spVisitor( new MobChainVisitor(log, spTestResult) );
   dft.TraverseDown( spVisitor );
 }
 
@@ -631,8 +630,8 @@ class DerivationChainAnalyzer
 {
 public:
   DerivationChainAnalyzer( wostream& log,
-			   shared_ptr<const TestGraph> spGraph,
-			   shared_ptr<TestLevelTestResult> spTestResult )
+			   boost::shared_ptr<const TestGraph> spGraph,
+			   boost::shared_ptr<TestLevelTestResult> spTestResult )
     : _log( log ),
       _spGraph( spGraph ),
       _spTestResult( spTestResult )
@@ -650,8 +649,8 @@ private:
   DerivationChainAnalyzer& operator=( const DerivationChainAnalyzer& );
 
   wostream& _log;
-  shared_ptr<const TestGraph> _spGraph;
-  shared_ptr<TestLevelTestResult> _spTestResult;
+  boost::shared_ptr<const TestGraph> _spGraph;
+  boost::shared_ptr<TestLevelTestResult> _spTestResult;
 };
 
 //======================================================================
@@ -660,8 +659,8 @@ class VerifyNotTopLevel
 {
 public:
   VerifyNotTopLevel( wostream& log,
-		     shared_ptr<const TestGraph> spGraph,
-		     shared_ptr<TestLevelTestResult> spTestResult )
+		     boost::shared_ptr<const TestGraph> spGraph,
+		     boost::shared_ptr<TestLevelTestResult> spTestResult )
     : _log( log ),
       _spGraph( spGraph ),
       _spTestResult( spTestResult ),
@@ -704,8 +703,8 @@ private:
   VerifyNotTopLevel& operator=( const VerifyNotTopLevel& );
 
   wostream& _log;
-  shared_ptr<const TestGraph> _spGraph;
-  shared_ptr<TestLevelTestResult> _spTestResult;
+  boost::shared_ptr<const TestGraph> _spGraph;
+  boost::shared_ptr<TestLevelTestResult> _spTestResult;
   bool _fail;
 };
 
@@ -721,8 +720,8 @@ namespace aafanalyzer {
 using namespace std;
 
 EPDerivationTest::EPDerivationTest( wostream& log,
-                                    shared_ptr<const TestGraph> spGraph,
-                                    shared_ptr<CompMobDependency> spDepTest )
+                                    boost::shared_ptr<const TestGraph> spGraph,
+                                    boost::shared_ptr<CompMobDependency> spDepTest )
   : Test( log, GetTestInfo() ),
     _spDepTest( spDepTest )
 {
@@ -732,9 +731,9 @@ EPDerivationTest::EPDerivationTest( wostream& log,
 EPDerivationTest::~EPDerivationTest()
 {}
 
-shared_ptr<TestLevelTestResult> EPDerivationTest::Execute()
+boost::shared_ptr<TestLevelTestResult> EPDerivationTest::Execute()
 {
-  shared_ptr<TestLevelTestResult> spTestResult = CreateTestResult();
+  boost::shared_ptr<TestLevelTestResult> spTestResult = CreateTestResult();
 
   //
   // Verify non root mobs are not top level.
@@ -767,7 +766,7 @@ AxString EPDerivationTest::GetDescription() const
 
 const TestInfo EPDerivationTest::GetTestInfo()
 {
-    shared_ptr<vector<AxString> > spReqIds(new vector<AxString>);
+    boost::shared_ptr<vector<AxString> > spReqIds(new vector<AxString>);
 
     // * - Means the the requirement was reviewed and is being used correctly in this test.
     // (JPT - 21 Sept 2007).

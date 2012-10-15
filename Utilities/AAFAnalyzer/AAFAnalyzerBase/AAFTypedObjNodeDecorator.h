@@ -34,8 +34,6 @@
 
 namespace aafanalyzer {
 
-using namespace boost;
-
 template<typename AAFObjType>
 class AAFTypedObjNodeDecorator : public AAFTypedObjNode<AAFObjType>
 {
@@ -46,14 +44,14 @@ class AAFTypedObjNodeDecorator : public AAFTypedObjNode<AAFObjType>
   //requests to the contained node will cause the visitor to incorrectly
   //reslove the type of the node.
   IAAFSmartPointer<AAFObjType> GetAAFObjectOfType() const;
-  void Decorate( shared_ptr<Node> decoratedNode );
+  void Decorate( boost::shared_ptr<Node> decoratedNode );
 
  protected:
-  AAFTypedObjNodeDecorator( const shared_ptr<AAFTypedObjNode<AAFObjType> > spNode );
+  AAFTypedObjNodeDecorator( const boost::shared_ptr<AAFTypedObjNode<AAFObjType> > spNode );
 
  private:
 
-  const shared_ptr<AAFTypedObjNode<AAFObjType> > _spNode;
+  const boost::shared_ptr<AAFTypedObjNode<AAFObjType> > _spNode;
 
   //prohibited
   AAFTypedObjNodeDecorator();

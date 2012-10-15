@@ -43,7 +43,6 @@ using namespace aafanalyzer;
 namespace aafanalyzer {
 
 using namespace std;
-using namespace boost;
 
 template<typename AAFObjType>
 AAFTypedObjNode<AAFObjType>::AAFTypedObjNode(IAAFSmartPointer<AAFObjType> spObject,
@@ -54,7 +53,7 @@ AAFTypedObjNode<AAFObjType>::AAFTypedObjNode(IAAFSmartPointer<AAFObjType> spObje
 
 template<typename AAFObjType>
 AAFTypedObjNode<AAFObjType>::AAFTypedObjNode( IAAFSmartPointer<AAFObjType> spObject,
-                         shared_ptr<Node> spExistingNode )
+                         boost::shared_ptr<Node> spExistingNode )
   : AAFObjNode( AxQueryInterface<AAFObjType,IAAFObject>( spObject ),
                 spExistingNode->GetName(),
                 spExistingNode->GetLID() )

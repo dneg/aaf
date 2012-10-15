@@ -51,18 +51,17 @@ namespace aafanalyzer
 {
 
 using namespace std;
-using namespace boost;
 
-DetailLevelTestResult::DetailLevelTestResult( const shared_ptr<const Test> associatedTest,
+DetailLevelTestResult::DetailLevelTestResult( const boost::shared_ptr<const Test> associatedTest,
                                               const wstring& explain,
                                               const wstring& reqId,
                                               Result result,
-					      shared_ptr<Node> spNode )
+					      boost::shared_ptr<Node> spNode )
   : LowLevelTestResult( associatedTest, L"", L"", explain ),
     _reqId( reqId ),
     _spNode( spNode )
 {
-  shared_ptr<const Requirement> spReq = GetRequirement();
+  boost::shared_ptr<const Requirement> spReq = GetRequirement();
   SetName( spReq->GetName() );
   SetDescription( spReq->GetDescription() );
   SetResult( _reqId, result );
@@ -128,7 +127,7 @@ const enum TestResult::ResultLevel DetailLevelTestResult::GetResultType() const
   return TestResult::DETAIL;
 }
 
-shared_ptr<const Requirement> DetailLevelTestResult::GetRequirement() const
+boost::shared_ptr<const Requirement> DetailLevelTestResult::GetRequirement() const
 {
   // Confirm that reqId is registered against the associated test.  We
   // don't want to report test results for requirments that are not
@@ -147,7 +146,7 @@ shared_ptr<const Requirement> DetailLevelTestResult::GetRequirement() const
   return this->GetAssociatedTest()->GetRequirement( _reqId );
 }
 
-shared_ptr<Node> DetailLevelTestResult::GetAssociatedNode() const
+boost::shared_ptr<Node> DetailLevelTestResult::GetAssociatedNode() const
 {
   return _spNode;
 }

@@ -51,7 +51,6 @@ class AxMobSlot;
 namespace aafanalyzer {
 
 using namespace std;
-using namespace boost;
 
 class Edge;
 class EdgeMap;
@@ -61,31 +60,31 @@ class ResolveRefVisitor : public TypedVisitor
 {
  public:
   ResolveRefVisitor(wostream& os,
-		    shared_ptr<EdgeMap> spEdgeMap,
-		    shared_ptr<TestLevelTestResult> spTestLevelResult );
+		    boost::shared_ptr<EdgeMap> spEdgeMap,
+		    boost::shared_ptr<TestLevelTestResult> spTestLevelResult );
   virtual ~ResolveRefVisitor();
 
   virtual bool PostOrderVisit(AAFTypedObjNode<IAAFSourceClip>& node);
 
  private:
 
-  shared_ptr<Node> ResolveChildSlotNode( shared_ptr<EdgeMap> spEdgeMap,
-					 shared_ptr<Node> spParentMobNode,
+  boost::shared_ptr<Node> ResolveChildSlotNode( boost::shared_ptr<EdgeMap> spEdgeMap,
+					 boost::shared_ptr<Node> spParentMobNode,
 					 IAAFMobSP spParentIaafMob,
 					 const aafSlotID_t slotId );
 
-  shared_ptr<vector<shared_ptr<Node> > > GetContainedChildComponents( shared_ptr<Node> spMobSlotNode );
+  boost::shared_ptr<vector<boost::shared_ptr<Node> > > GetContainedChildComponents( boost::shared_ptr<Node> spMobSlotNode );
 
   wostream& _os;
-  shared_ptr<EdgeMap> _spEdgeMap;
-  shared_ptr<DetailLevelTestResult> _spResult;
+  boost::shared_ptr<EdgeMap> _spEdgeMap;
+  boost::shared_ptr<DetailLevelTestResult> _spResult;
 
   // prohibited
   ResolveRefVisitor();
   ResolveRefVisitor( const ResolveRefVisitor& );
   ResolveRefVisitor& operator=( const ResolveRefVisitor& );
 
-  shared_ptr<TestLevelTestResult> _spTestLevelResult;
+  boost::shared_ptr<TestLevelTestResult> _spTestLevelResult;
 };
 
 } // end of namespace diskstream

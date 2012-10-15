@@ -38,8 +38,6 @@
 
 namespace aafanalyzer {
 
-using namespace boost;
-
 class TestLevelTestResult;
 
 class EPHeaderVisitor : public TypedVisitor
@@ -47,7 +45,7 @@ class EPHeaderVisitor : public TypedVisitor
  public:
   
   EPHeaderVisitor( wostream& log,
-		   shared_ptr<TestLevelTestResult> spTestResult );
+		   boost::shared_ptr<TestLevelTestResult> spTestResult );
     
   virtual ~EPHeaderVisitor();
   
@@ -56,7 +54,7 @@ class EPHeaderVisitor : public TypedVisitor
  private:
    
   wostream& _log;
-  shared_ptr<TestLevelTestResult> _spTestResult;
+  boost::shared_ptr<TestLevelTestResult> _spTestResult;
   
   // prohibited
   EPHeaderVisitor();

@@ -34,8 +34,6 @@
 
 namespace aafanalyzer {
 
-using namespace boost;
-
 class Node;
 class EdgeMap;
 
@@ -44,16 +42,16 @@ class TestGraph
  public:
    
   // The default copy constructor is okay.
-  TestGraph(shared_ptr<EdgeMap> spEdgeMap, shared_ptr<Node> spRootNode);
+  TestGraph(boost::shared_ptr<EdgeMap> spEdgeMap, boost::shared_ptr<Node> spRootNode);
   ~TestGraph();
 
-  shared_ptr<EdgeMap> GetEdgeMap() const;
-  shared_ptr<Node> GetRootNode() const;
-  void Decorate( shared_ptr<Node> decoratedNode ) const;
+  boost::shared_ptr<EdgeMap> GetEdgeMap() const;
+  boost::shared_ptr<Node> GetRootNode() const;
+  void Decorate( boost::shared_ptr<Node> decoratedNode ) const;
 
  private:
-  shared_ptr<EdgeMap> _spEdgeMap;
-  mutable shared_ptr<Node> _spRootNode;
+  boost::shared_ptr<EdgeMap> _spEdgeMap;
+  mutable boost::shared_ptr<Node> _spRootNode;
 
   // prohibited
   TestGraph();

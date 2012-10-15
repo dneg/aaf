@@ -48,7 +48,7 @@ bool IsReferenceInFile( AxSourceClip& axSrcClip )
 {
     aafSourceRef_t srcRef = axSrcClip.GetSourceReference();
     aafMobID_t mobid = srcRef.sourceID;   
-    shared_ptr<Node> spNode;
+    boost::shared_ptr<Node> spNode;
     spNode = MobNodeMap::GetInstance().GetMobNode(mobid);
     return spNode != NULL;
 }
@@ -62,8 +62,6 @@ bool IsReferenceInFile( AxSourceClip& axSrcClip )
 
 namespace aafanalyzer {
     
-using namespace boost;
-
 EPTrackObject::EPTrackObject()
 {}
 
@@ -161,7 +159,7 @@ EPAudioTrack::EPAudioTrack( IAAFMobSlotSP mobSlot, IAAFSourceClipSP clip, IAAFMo
     : EPExtendedEssenceTrack( mobSlot, clip, mob )
 {}
 
-shared_ptr<EPAudioTrack> EPAudioTrack::CreateAudioTrack( AxMobSlot& axMobSlot )
+boost::shared_ptr<EPAudioTrack> EPAudioTrack::CreateAudioTrack( AxMobSlot& axMobSlot )
 {
 
     //1. Ensure the slot's data def is either picture or sound
@@ -189,7 +187,7 @@ shared_ptr<EPAudioTrack> EPAudioTrack::CreateAudioTrack( AxMobSlot& axMobSlot )
                     IAAFFileDescriptorSP spFileDes;
                     if ( AxIsA( descriptor, spFileDes ) )
                     {
-                        shared_ptr<EPAudioTrack> spTrack( new EPAudioTrack( axMobSlot, axSrcClip, axSrcMob ) );
+                        boost::shared_ptr<EPAudioTrack> spTrack( new EPAudioTrack( axMobSlot, axSrcClip, axSrcMob ) );
                         return spTrack;
                     }
                 }
@@ -199,7 +197,7 @@ shared_ptr<EPAudioTrack> EPAudioTrack::CreateAudioTrack( AxMobSlot& axMobSlot )
     
     //Return a null shared pointer if the mob slot does not contain an essence
     //track.
-    return shared_ptr<EPAudioTrack>();
+    return boost::shared_ptr<EPAudioTrack>();
     
 }
 
@@ -214,7 +212,7 @@ EPVideoTrack::EPVideoTrack( IAAFMobSlotSP mobSlot, IAAFSourceClipSP clip, IAAFMo
     : EPExtendedEssenceTrack( mobSlot, clip, mob )
 {}
 
-shared_ptr<EPVideoTrack> EPVideoTrack::CreateVideoTrack( AxMobSlot& axMobSlot )
+boost::shared_ptr<EPVideoTrack> EPVideoTrack::CreateVideoTrack( AxMobSlot& axMobSlot )
 {
 
     //1. Ensure the slot's data def is either picture or sound
@@ -242,7 +240,7 @@ shared_ptr<EPVideoTrack> EPVideoTrack::CreateVideoTrack( AxMobSlot& axMobSlot )
                     IAAFFileDescriptorSP spFileDes;
                     if ( AxIsA( descriptor, spFileDes ) )
                     {
-                        shared_ptr<EPVideoTrack> spTrack( new EPVideoTrack( axMobSlot, axSrcClip, axSrcMob ) );
+                        boost::shared_ptr<EPVideoTrack> spTrack( new EPVideoTrack( axMobSlot, axSrcClip, axSrcMob ) );
                         return spTrack;
                     }
                 }
@@ -252,7 +250,7 @@ shared_ptr<EPVideoTrack> EPVideoTrack::CreateVideoTrack( AxMobSlot& axMobSlot )
     
     //Return a null shared pointer if the mob slot does not contain an essence
     //track.
-    return shared_ptr<EPVideoTrack>();
+    return boost::shared_ptr<EPVideoTrack>();
     
 }
 

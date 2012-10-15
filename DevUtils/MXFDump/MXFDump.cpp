@@ -364,9 +364,6 @@ mxfUInt08 hostByteOrder(void);
 #if defined(MXF_OS_WINDOWS)
 #include <windows.h>
 typedef HANDLE mxfFile;
-#elif defined(MXF_OS_MACOSX)
-#include <CoreServices/CoreServices.h>
-typedef SInt16 mxfFile;
 #else
 typedef FILE* mxfFile;
 #endif
@@ -896,77 +893,6 @@ mxfUInt64 size(mxfFile infile)
   return result;
 }
 
-#elif defined(MXF_OS_MACOSX)
-mxfFile openExistingRead(char* fileName)
-{
-  const UInt8* name = reinterpret_cast<UInt8*>(fileName);
-  FSRef fref;
-  OSErr status = FSPathMakeRef(name, &fref, 0);
-  if (status != noErr) {
-    fatalError("FSPathMakeRef() failed (%d).\n", status);
-  }
-  HFSUniStr255 fkName;
-  status = FSGetDataForkName(&fkName);
-  if (status != noErr) {
-    fatalError("FSGetDataForkName() failed (%d).\n", status);
-  }
-  SInt16 result;
-  status = FSOpenFork(&fref, fkName.length, fkName.unicode, fsRdPerm, &result);
-  if (status != noErr) {
-    fatalError("FSOpenFork() failed (%d).\n", status);
-  }
-  return result;
-}
-
-void close(mxfFile infile)
-{
-  OSErr status = FSCloseFork(infile);
-  if (status != noErr) {
-    fatalError("FSCloseFork() failed (%d).\n", status);
-  }
-}
-
-void setPosition(mxfFile infile, const mxfUInt64 position)
-{
-  SInt64 pos = position;
-  OSErr status = FSSetForkPosition(infile, fsFromStart, pos);
-  if (status != noErr) {
-    fatalError("FSSetForkPosition() failed (%d).\n", status);
-  }
-}
-
-size_t read(mxfFile infile, void* buffer, size_t count)
-{
-  ByteCount bytesRead;
-  OSErr status = FSReadFork(infile, fsAtMark, 0, count, buffer, &bytesRead);
-  if ((status != eofErr) && (status != noErr)) {
-    fatalError("FSReadFork() failed (%d).\n", status);
-  }
-  return bytesRead;
-}
-
-mxfUInt64 position(mxfFile infile)
-{
-  SInt64 position;
-  OSErr status = FSGetForkPosition(infile, &position);
-  if (status != noErr) {
-    fatalError("FSGetForkPosition() failed (%d).\n", status);
-  }
-  mxfUInt64 result = position;
-  return result;
-}
-
-mxfUInt64 size(mxfFile infile)
-{
-  SInt64 size;
-  OSErr status = FSGetForkSize(infile, &size);
-  if (status != noErr) {
-    fatalError("FSGetForkSize() failed (%d).\n", status);
-  }
-  mxfUInt64 result = size;
-  return result;
-}
-
 #else
 
 #if defined(__GLIBC__) && defined(__GNUC_MINOR__)
@@ -975,7 +901,6 @@ mxfUInt64 size(mxfFile infile)
 #define MXF_SEEKO
 #endif
 #endif
-
 mxfFile openExistingRead(char* fileName)
 {
   return  fopen(fileName, "rb");

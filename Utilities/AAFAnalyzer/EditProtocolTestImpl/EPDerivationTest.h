@@ -36,7 +36,6 @@
 
 namespace aafanalyzer {
 
-using namespace boost;
 using namespace std;
 
 class TestGraph;
@@ -47,11 +46,11 @@ class EPDerivationTest : public Test
  public:
 
   EPDerivationTest( wostream& log,
-		    shared_ptr<const TestGraph> spGraph,
-		    shared_ptr<CompMobDependency> spDepTest );
+		    boost::shared_ptr<const TestGraph> spGraph,
+		    boost::shared_ptr<CompMobDependency> spDepTest );
   virtual ~EPDerivationTest();
 
-  virtual shared_ptr<TestLevelTestResult> Execute();
+  virtual boost::shared_ptr<TestLevelTestResult> Execute();
   virtual AxString GetName() const;
   virtual AxString GetDescription() const;
   static const TestInfo GetTestInfo();
@@ -63,7 +62,7 @@ class EPDerivationTest : public Test
   EPDerivationTest( const EPDerivationTest& );
   EPDerivationTest& operator=( const EPDerivationTest& );
 
-  shared_ptr<CompMobDependency> _spDepTest;
+  boost::shared_ptr<CompMobDependency> _spDepTest;
 };
 
 } // end of namespace aafanalyzer

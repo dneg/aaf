@@ -42,7 +42,6 @@
 namespace aafanalyzer {
 
 using namespace std;
-using namespace boost;
 
 class Edge;
 
@@ -51,19 +50,19 @@ class EdgeMap
  public:
 
   typedef unsigned int LID;
-  typedef vector<shared_ptr<Edge> > EdgeVector;
-  typedef shared_ptr<EdgeVector> EdgeVectorSP;
+  typedef vector<boost::shared_ptr<Edge> > EdgeVector;
+  typedef boost::shared_ptr<EdgeVector> EdgeVectorSP;
   typedef map<Node::LID, EdgeVectorSP> Map;
-  typedef shared_ptr<const EdgeVector> ConstEdgeVectorSP;
+  typedef boost::shared_ptr<const EdgeVector> ConstEdgeVectorSP;
 
   EdgeMap();
   ~EdgeMap();
 
-  ConstEdgeVectorSP GetParents(shared_ptr<Node> spNode) const;
-  ConstEdgeVectorSP GetChildren(shared_ptr<Node> spNode) const;
+  ConstEdgeVectorSP GetParents(boost::shared_ptr<Node> spNode) const;
+  ConstEdgeVectorSP GetChildren(boost::shared_ptr<Node> spNode) const;
 
-  void AddEdge(shared_ptr<Edge> spEdge);
-  void DecorateEdge(shared_ptr<Node> decoratedNode);
+  void AddEdge(boost::shared_ptr<Edge> spEdge);
+  void DecorateEdge(boost::shared_ptr<Node> decoratedNode);
 
  private:
  

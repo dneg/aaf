@@ -37,8 +37,6 @@
 
 namespace aafanalyzer {
 
-using namespace boost;
-
 class AAFGraphInfo;
 class NodeFactory;
 
@@ -49,7 +47,7 @@ class GraphBuilder
   GraphBuilder();
   ~GraphBuilder();
 
-  const shared_ptr<const AAFGraphInfo> CreateGraph(const AxString& fileName, shared_ptr<NodeFactory> spFactory );
+  const boost::shared_ptr<const AAFGraphInfo> CreateGraph(const AxString& fileName, boost::shared_ptr<NodeFactory> spFactory );
 
  private:  
 

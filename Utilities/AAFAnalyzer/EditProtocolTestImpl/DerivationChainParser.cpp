@@ -58,10 +58,9 @@ using namespace aafanalyzer;
 namespace aafanalyzer {
 
 using namespace std;
-using namespace boost;
 
 DerivationChainParser::DerivationChainParser( wostream& log,
-					      shared_ptr<TestLevelTestResult> spTestResult )
+					      boost::shared_ptr<TestLevelTestResult> spTestResult )
   : _log( log ),
     _spTestResult( spTestResult )
 {

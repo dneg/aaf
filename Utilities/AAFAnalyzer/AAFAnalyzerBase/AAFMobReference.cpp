@@ -46,16 +46,16 @@ namespace aafanalyzer
     
 using namespace boost;
 
-AAFMobReference::AAFMobReference(shared_ptr<Node> spParent, shared_ptr<Node> spChild, Node::LID tag )
+AAFMobReference::AAFMobReference(boost::shared_ptr<Node> spParent, boost::shared_ptr<Node> spChild, Node::LID tag )
   : Edge(spParent, spChild, Edge::EDGE_KIND_REFERENCE, tag)
 {}
 
 AAFMobReference::~AAFMobReference()
 {}
 
-bool AAFMobReference::Visit(shared_ptr<Visitor> spVisitor)
+bool AAFMobReference::Visit(boost::shared_ptr<Visitor> spVisitor)
 {
-  shared_ptr<TypedVisitor> spTypedVis = dynamic_pointer_cast<TypedVisitor>(spVisitor);
+  boost::shared_ptr<TypedVisitor> spTypedVis = boost::dynamic_pointer_cast<TypedVisitor>(spVisitor);
   if(spTypedVis)
   {
     return spTypedVis->EdgeVisit(*this);
@@ -64,9 +64,9 @@ bool AAFMobReference::Visit(shared_ptr<Visitor> spVisitor)
   return spVisitor->EdgeVisit(*this);
 }
 
-shared_ptr<Edge> AAFMobReference::CreateNewEdge( shared_ptr<Node> spParent, shared_ptr<Node> spChild ) const
+boost::shared_ptr<Edge> AAFMobReference::CreateNewEdge( boost::shared_ptr<Node> spParent, boost::shared_ptr<Node> spChild ) const
 {  
-  shared_ptr<Edge> spNewEdge( new AAFMobReference( spParent, spChild, GetTag() ) );
+  boost::shared_ptr<Edge> spNewEdge( new AAFMobReference( spParent, spChild, GetTag() ) );
   return spNewEdge;
 }
 

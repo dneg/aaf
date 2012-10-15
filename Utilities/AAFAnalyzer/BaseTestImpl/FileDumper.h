@@ -38,7 +38,6 @@
 namespace aafanalyzer {
     
 using namespace std;
-using namespace boost;
 
 class TestLevelTestResult;
 class TestGraph;
@@ -48,11 +47,11 @@ class FileDumper : public Test
 {
  public:
 
-  FileDumper(wostream& os, shared_ptr<const TestGraph> spGraph, shared_ptr<Node> spRoot, bool followReferences );
+  FileDumper(wostream& os, boost::shared_ptr<const TestGraph> spGraph, boost::shared_ptr<Node> spRoot, bool followReferences );
 
   ~FileDumper();
 
-  virtual shared_ptr<TestLevelTestResult> Execute();
+  virtual boost::shared_ptr<TestLevelTestResult> Execute();
   virtual AxString GetName() const;
   virtual AxString GetDescription() const;
   static const TestInfo GetTestInfo();
@@ -64,7 +63,7 @@ class FileDumper : public Test
   FileDumper(const FileDumper&);
   FileDumper& operator=( const FileDumper& );
 
-  shared_ptr<Node> _spRoot;
+  boost::shared_ptr<Node> _spRoot;
   bool _followReferences;
 };
 

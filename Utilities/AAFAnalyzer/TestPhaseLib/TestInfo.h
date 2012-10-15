@@ -39,22 +39,21 @@
 namespace aafanalyzer {
 
 using namespace std;
-using namespace boost;
 
 class TestInfo
 {
  public:
 
-  TestInfo(const wstring& name, const shared_ptr<const vector<wstring> >& requirements);
+  TestInfo(const wstring& name, const boost::shared_ptr<const vector<wstring> >& requirements);
   TestInfo(const TestInfo& other);
   ~TestInfo();
   const wstring GetName() const;
-  const shared_ptr<const vector<wstring> > GetRequirementIds() const;
+  const boost::shared_ptr<const vector<wstring> > GetRequirementIds() const;
 
  private:
 
   const wstring _name;
-  const shared_ptr<const vector<wstring> > _spRequirementIds;
+  const boost::shared_ptr<const vector<wstring> > _spRequirementIds;
 
    // prohibited
    TestInfo();

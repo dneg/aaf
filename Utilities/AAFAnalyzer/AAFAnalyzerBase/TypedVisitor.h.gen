@@ -124,8 +124,12 @@
     virtual bool PostOrderVisit( AAFTypedObjNode<IAAFDescriptiveMarker>& node){ return DefaultPostOrderBehaviour(); }
     virtual bool PreOrderVisit( AAFTypedObjNode<IAAFSoundDescriptor>& node) { return DefaultPreOrderBehaviour(); }
     virtual bool PostOrderVisit( AAFTypedObjNode<IAAFSoundDescriptor>& node){ return DefaultPostOrderBehaviour(); }
+    virtual bool PreOrderVisit( AAFTypedObjNode<IAAFDataEssenceDescriptor>& node) { return DefaultPreOrderBehaviour(); }
+    virtual bool PostOrderVisit( AAFTypedObjNode<IAAFDataEssenceDescriptor>& node){ return DefaultPostOrderBehaviour(); }
     virtual bool PreOrderVisit( AAFTypedObjNode<IAAFMultipleDescriptor>& node) { return DefaultPreOrderBehaviour(); }
     virtual bool PostOrderVisit( AAFTypedObjNode<IAAFMultipleDescriptor>& node){ return DefaultPostOrderBehaviour(); }
+    virtual bool PreOrderVisit( AAFTypedObjNode<IAAFDescriptiveClip>& node) { return DefaultPreOrderBehaviour(); }
+    virtual bool PostOrderVisit( AAFTypedObjNode<IAAFDescriptiveClip>& node){ return DefaultPostOrderBehaviour(); }
     virtual bool PreOrderVisit( AAFTypedObjNode<IAAFAES3PCMDescriptor>& node) { return DefaultPreOrderBehaviour(); }
     virtual bool PostOrderVisit( AAFTypedObjNode<IAAFAES3PCMDescriptor>& node){ return DefaultPostOrderBehaviour(); }
     virtual bool PreOrderVisit( AAFTypedObjNode<IAAFPCMDescriptor>& node) { return DefaultPreOrderBehaviour(); }
@@ -142,6 +146,12 @@
     virtual bool PostOrderVisit( AAFTypedObjNode<IAAFKLVDataDefinition>& node){ return DefaultPostOrderBehaviour(); }
     virtual bool PreOrderVisit( AAFTypedObjNode<IAAFAuxiliaryDescriptor>& node) { return DefaultPreOrderBehaviour(); }
     virtual bool PostOrderVisit( AAFTypedObjNode<IAAFAuxiliaryDescriptor>& node){ return DefaultPostOrderBehaviour(); }
+    virtual bool PreOrderVisit( AAFTypedObjNode<IAAFRIFFChunk>& node) { return DefaultPreOrderBehaviour(); }
+    virtual bool PostOrderVisit( AAFTypedObjNode<IAAFRIFFChunk>& node){ return DefaultPostOrderBehaviour(); }
+    virtual bool PreOrderVisit( AAFTypedObjNode<IAAFBWFImportDescriptor>& node) { return DefaultPreOrderBehaviour(); }
+    virtual bool PostOrderVisit( AAFTypedObjNode<IAAFBWFImportDescriptor>& node){ return DefaultPostOrderBehaviour(); }
+    virtual bool PreOrderVisit( AAFTypedObjNode<IAAFMPEGVideoDescriptor>& node) { return DefaultPreOrderBehaviour(); }
+    virtual bool PostOrderVisit( AAFTypedObjNode<IAAFMPEGVideoDescriptor>& node){ return DefaultPostOrderBehaviour(); }
     virtual bool PreOrderVisit( AAFTypedObjNode<IAAFClassDef>& node) { return DefaultPreOrderBehaviour(); }
     virtual bool PostOrderVisit( AAFTypedObjNode<IAAFClassDef>& node){ return DefaultPostOrderBehaviour(); }
     virtual bool PreOrderVisit( AAFTypedObjNode<IAAFPropertyDef>& node) { return DefaultPreOrderBehaviour(); }
@@ -180,6 +190,8 @@
     virtual bool PostOrderVisit( AAFTypedObjNode<IAAFTypeDefCharacter>& node){ return DefaultPostOrderBehaviour(); }
     virtual bool PreOrderVisit( AAFTypedObjNode<IAAFMetaDefinition>& node) { return DefaultPreOrderBehaviour(); }
     virtual bool PostOrderVisit( AAFTypedObjNode<IAAFMetaDefinition>& node){ return DefaultPostOrderBehaviour(); }
+    virtual bool PreOrderVisit( AAFTypedObjNode<IAAFDescriptiveObject>& node) { return DefaultPreOrderBehaviour(); }
+    virtual bool PostOrderVisit( AAFTypedObjNode<IAAFDescriptiveObject>& node){ return DefaultPostOrderBehaviour(); }
     virtual bool PreOrderVisit( AAFTypedObjNode<IAAFDescriptiveFramework>& node) { return DefaultPreOrderBehaviour(); }
     virtual bool PostOrderVisit( AAFTypedObjNode<IAAFDescriptiveFramework>& node){ return DefaultPostOrderBehaviour(); }
 

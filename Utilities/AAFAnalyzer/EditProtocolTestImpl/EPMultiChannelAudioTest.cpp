@@ -51,7 +51,6 @@
 namespace {
 
 using namespace std;
-using namespace boost;
 using namespace aafanalyzer;
 
 const wchar_t* TEST_NAME = L"Edit Protocol Multi-Channel Audio Test";
@@ -63,8 +62,8 @@ class Analyzer
 {
 public:
   Analyzer( wostream& os,
-            shared_ptr<const TestGraph> spGraph,
-            shared_ptr<TestLevelTestResult> spTestResult )
+            boost::shared_ptr<const TestGraph> spGraph,
+            boost::shared_ptr<TestLevelTestResult> spTestResult )
     : _os( os ),
       _spGraph( spGraph ),
       _spTestResult( spTestResult )
@@ -72,7 +71,7 @@ public:
 
   void operator () ( const CompMobDependency::CompMobNodeSP& spRootComposition )
   {
-    shared_ptr<EPMultiChannelAudioVisitor>
+    boost::shared_ptr<EPMultiChannelAudioVisitor>
       spVisitor( new EPMultiChannelAudioVisitor( _os, _spTestResult ) );
 
     DepthFirstTraversal dfs( _spGraph->GetEdgeMap(), spRootComposition );
@@ -81,8 +80,8 @@ public:
 
 private:
   wostream& _os;
-  shared_ptr<const TestGraph> _spGraph;
-  shared_ptr<TestLevelTestResult> _spTestResult;
+  boost::shared_ptr<const TestGraph> _spGraph;
+  boost::shared_ptr<TestLevelTestResult> _spTestResult;
   
   // prohibited
   Analyzer();
@@ -99,7 +98,7 @@ namespace aafanalyzer {
 using namespace std;
 
 EPMultiChannelAudioTest::EPMultiChannelAudioTest( wostream& log,
-						  shared_ptr<const TestGraph> spGraph,
+						  boost::shared_ptr<const TestGraph> spGraph,
 						  CompMobDependency::CompMobNodeVectorSP spTopLevelCompMobs )
   : Test( log, GetTestInfo() ),
     _spTopLevelCompMobs( spTopLevelCompMobs )
@@ -110,9 +109,9 @@ EPMultiChannelAudioTest::EPMultiChannelAudioTest( wostream& log,
 EPMultiChannelAudioTest::~EPMultiChannelAudioTest()
 {}
 
-shared_ptr<TestLevelTestResult> EPMultiChannelAudioTest::Execute()
+boost::shared_ptr<TestLevelTestResult> EPMultiChannelAudioTest::Execute()
 {
-  shared_ptr<TestLevelTestResult> spTestResult = CreateTestResult();
+  boost::shared_ptr<TestLevelTestResult> spTestResult = CreateTestResult();
 
   Analyzer analyzer( GetOutStream(), GetTestGraph(), spTestResult );
 
@@ -133,7 +132,7 @@ AxString EPMultiChannelAudioTest::GetDescription() const
 
 const TestInfo EPMultiChannelAudioTest::GetTestInfo()
 {
-    shared_ptr<vector<AxString> > spReqIds(new vector<AxString>);
+    boost::shared_ptr<vector<AxString> > spReqIds(new vector<AxString>);
     spReqIds->push_back(L"REQ_EP_110");     //Audio in a Composition or Master Mob
     return TestInfo(L"EPMultiChannelAudioTest", spReqIds);
 }

@@ -37,8 +37,6 @@
 
 namespace aafanalyzer {
 
-using namespace boost;
-
 class Node;
 
 class NodeFactoryImpl : public NodeFactory
@@ -47,7 +45,7 @@ class NodeFactoryImpl : public NodeFactory
   NodeFactoryImpl();
   virtual ~NodeFactoryImpl();
 
-  virtual shared_ptr<Node> CreateNode(IAAFObjectSP spObj);
+  virtual boost::shared_ptr<Node> CreateNode(IAAFObjectSP spObj);
   
  private:
 

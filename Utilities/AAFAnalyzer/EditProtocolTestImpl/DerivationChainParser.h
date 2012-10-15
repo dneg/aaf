@@ -46,7 +46,6 @@
 namespace aafanalyzer {
 
 using namespace std;
-using namespace boost;
 
 class TestLevelTestResult;
 class Node;
@@ -67,7 +66,7 @@ class DerivationChainParser
   static const EventID OOF_EVENT_ID;
 
   DerivationChainParser( wostream& log,
-			 shared_ptr<TestLevelTestResult> spTestResult );
+			 boost::shared_ptr<TestLevelTestResult> spTestResult );
   ~DerivationChainParser();
   
   static bool IsKnownEvent( const aafUID_t event );
@@ -150,7 +149,7 @@ private:
   stack<State> _currentState;
   stack<wstring> _objNameStack;
   wostream& _log;
-  shared_ptr<TestLevelTestResult> _spTestResult;
+  boost::shared_ptr<TestLevelTestResult> _spTestResult;
 };
 
 } // end of namespace aafanalyzer

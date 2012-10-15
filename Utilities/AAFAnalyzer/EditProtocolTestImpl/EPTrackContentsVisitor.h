@@ -46,8 +46,6 @@ class AxMobSlot;
 
 namespace aafanalyzer {
 
-using namespace boost;
-
 class TestLevelTestResult;
 
 class EPTrackContentsVisitor : public EPTypedVisitor
@@ -55,8 +53,8 @@ class EPTrackContentsVisitor : public EPTypedVisitor
   public:
   
     EPTrackContentsVisitor( wostream& log,
-			    shared_ptr<EdgeMap> spEdgeMap,
-			    shared_ptr<TestLevelTestResult> spTestResult );
+			    boost::shared_ptr<EdgeMap> spEdgeMap,
+			    boost::shared_ptr<TestLevelTestResult> spTestResult );
     
     virtual ~EPTrackContentsVisitor();
    
@@ -78,8 +76,8 @@ class EPTrackContentsVisitor : public EPTypedVisitor
   private:
    
     wostream& _log;
-    shared_ptr<EdgeMap> _spEdgeMap;
-    shared_ptr<TestLevelTestResult> _spTestResult;
+    boost::shared_ptr<EdgeMap> _spEdgeMap;
+    boost::shared_ptr<TestLevelTestResult> _spTestResult;
 
     // prohibited
     EPTrackContentsVisitor();

@@ -47,8 +47,6 @@ class AxMobSlot;
 
 namespace aafanalyzer {
 
-using namespace boost;
-
 class TestLevelTestResult;
 
 class EPDefinitionVisitor : public EPTypedVisitor
@@ -57,8 +55,8 @@ class EPDefinitionVisitor : public EPTypedVisitor
   public:
   
     EPDefinitionVisitor( wostream& log,
-			 shared_ptr<EdgeMap> spEdgeMap,
-			 shared_ptr<TestLevelTestResult> spTestResult );
+			 boost::shared_ptr<EdgeMap> spEdgeMap,
+			 boost::shared_ptr<TestLevelTestResult> spTestResult );
     
     virtual ~EPDefinitionVisitor();
    
@@ -81,12 +79,12 @@ class EPDefinitionVisitor : public EPTypedVisitor
     bool IsPre11();
 
     wostream& _log;
-    shared_ptr<EdgeMap> _spEdgeMap;
-    shared_ptr<TestLevelTestResult> _spTestResult;
+    boost::shared_ptr<EdgeMap> _spEdgeMap;
+    boost::shared_ptr<TestLevelTestResult> _spTestResult;
     set<aafUID_t> _usedDefinitions;
-    map<aafUID_t, pair<AxString,shared_ptr<Node> > > _registeredDefinitions;
-    map<AxString, shared_ptr<Node> > _opDataDefCurrent;
-    map<AxString, shared_ptr<Node> > _opDataDefLegacy;
+    map<aafUID_t, pair<AxString,boost::shared_ptr<Node> > > _registeredDefinitions;
+    map<AxString, boost::shared_ptr<Node> > _opDataDefCurrent;
+    map<AxString, boost::shared_ptr<Node> > _opDataDefLegacy;
     aafProductVersion_t _fileVersion;
 
   

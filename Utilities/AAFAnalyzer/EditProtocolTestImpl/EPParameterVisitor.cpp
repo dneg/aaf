@@ -57,11 +57,10 @@ using namespace aafanalyzer;
 
 namespace aafanalyzer {
 
-using namespace boost;
  
 EPParameterVisitor::EPParameterVisitor( wostream& log,
-                                        shared_ptr<EdgeMap> spEdgeMap,
-                                        shared_ptr<TestLevelTestResult> spTestResult )
+                                        boost::shared_ptr<EdgeMap> spEdgeMap,
+                                        boost::shared_ptr<TestLevelTestResult> spTestResult )
     : _log(log),
       _spEdgeMap( spEdgeMap ),
       _spTestResult( spTestResult )
@@ -107,7 +106,7 @@ bool EPParameterVisitor::PreOrderVisit( AAFTypedObjNode<IAAFVaryingValue>& node 
     {
         AxString name = this->GetMobSlotName( _spEdgeMap, node );
 
-        shared_ptr<DetailLevelTestResult> spFailure = _spTestResult->AddSingleResult(
+        boost::shared_ptr<DetailLevelTestResult> spFailure = _spTestResult->AddSingleResult(
             L"REQ_EP_175",
             L"VaryingValue object in " + name + L" has an illegal interpolation definition.",
             TestResult::FAIL,

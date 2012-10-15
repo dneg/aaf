@@ -42,7 +42,6 @@
 namespace aafanalyzer {
 
 using namespace std;
-using namespace boost;
 
 template<typename AAFObjType>
 class AAFTypedObjNode : public AAFObjNode
@@ -81,7 +80,7 @@ class AAFTypedObjNode : public AAFObjNode
   //should not be stored anywhere unless it is acceptable to use the node
   //without complete type information.
   template<typename To>
-  shared_ptr<AAFTypedObjNode<To> > DownCastToAAF()
+  boost::shared_ptr<AAFTypedObjNode<To> > DownCastToAAF()
   {
 
     //Get the dictionary.
@@ -93,16 +92,16 @@ class AAFTypedObjNode : public AAFObjNode
     AxClassDef clsDef( axDictionary.LookupClassDef( AxAUID(pTo) ) );
 
     //Find the TypedNodeFactory for the class to cast to.
-    shared_ptr<TypedNodeFactory> spNodeFactory;
+    boost::shared_ptr<TypedNodeFactory> spNodeFactory;
     spNodeFactory = TypedNodeFactoryRegistry::GetInstance().LookUp(clsDef);
     
     //Get a shared pointer to this node.
-    shared_ptr<AAFObjNode> spThis = 
-        dynamic_pointer_cast<AAFObjNode>( this->GetSharedPointerToNode() );
+    boost::shared_ptr<AAFObjNode> spThis = 
+      boost::dynamic_pointer_cast<AAFObjNode>( this->GetSharedPointerToNode() );
 
     //Return the casted node.  If the cast is not legal, the node factory will
     //throw an exception.
-    return dynamic_pointer_cast<AAFTypedObjNode<To> > ( spNodeFactory->CreateNodeFrom( spThis ) );
+    return boost::dynamic_pointer_cast<AAFTypedObjNode<To> > ( spNodeFactory->CreateNodeFrom( spThis ) );
 
   }
 
@@ -110,7 +109,7 @@ class AAFTypedObjNode : public AAFObjNode
   AAFTypedObjNode(IAAFSmartPointer<AAFObjType> ObjectType,
           const basic_string<wchar_t>& name );
   AAFTypedObjNode( IAAFSmartPointer<AAFObjType> ObjectType,
-          shared_ptr<Node> spExistingNode );
+          boost::shared_ptr<Node> spExistingNode );
 
  private:
 

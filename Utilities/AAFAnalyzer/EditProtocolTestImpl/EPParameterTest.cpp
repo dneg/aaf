@@ -60,7 +60,7 @@ namespace aafanalyzer {
 using namespace std;
 
 EPParameterTest::EPParameterTest( wostream& log,
-                              shared_ptr<const TestGraph> spGraph )
+                              boost::shared_ptr<const TestGraph> spGraph )
   : Test( log, GetTestInfo() )
 {
     SetTestGraph(spGraph);
@@ -69,11 +69,11 @@ EPParameterTest::EPParameterTest( wostream& log,
 EPParameterTest::~EPParameterTest()
 {}
 
-shared_ptr<TestLevelTestResult> EPParameterTest::Execute()
+boost::shared_ptr<TestLevelTestResult> EPParameterTest::Execute()
 {
-  shared_ptr<TestLevelTestResult> spTestResult = CreateTestResult();
+  boost::shared_ptr<TestLevelTestResult> spTestResult = CreateTestResult();
 
-  shared_ptr<EPParameterVisitor> spVisitor(new EPParameterVisitor( GetOutStream(),
+  boost::shared_ptr<EPParameterVisitor> spVisitor(new EPParameterVisitor( GetOutStream(),
 								   GetTestGraph()->GetEdgeMap(),
 								   spTestResult ) );
 
@@ -95,7 +95,7 @@ AxString EPParameterTest::GetDescription() const
 
 const TestInfo EPParameterTest::GetTestInfo()
 {
-    shared_ptr<vector<AxString> > spReqIds(new vector<AxString>);
+    boost::shared_ptr<vector<AxString> > spReqIds(new vector<AxString>);
     spReqIds->push_back(L"REQ_EP_174");     //Must be constant or varying.
     spReqIds->push_back(L"REQ_EP_175");     //Valid Interpolators.
     return TestInfo(L"EPParameterTest", spReqIds);

@@ -68,10 +68,9 @@ using namespace aafanalyzer;
 namespace aafanalyzer {
 
 using namespace std;
-using namespace boost;
 
 AcyclicVisitor::AcyclicVisitor( wostream& os,
-                                shared_ptr<TestLevelTestResult> spTestResult )
+                                boost::shared_ptr<TestLevelTestResult> spTestResult )
   : Visitor(FOLLOW_REFERENCES),
     _os(os),
     _spTestResult( spTestResult ),
@@ -86,7 +85,7 @@ void AcyclicVisitor::CreateCycleTestResult()
 {
   // Else, a cycle was detected, add a failure result and add details
   // showing the location in the chain of references.
-  shared_ptr<DetailLevelTestResult>
+  boost::shared_ptr<DetailLevelTestResult>
     spCycleResult = _spTestResult->AddUnassociatedSingleResult( L"REQ_EP_256",
 								L"A cycle was detected amoung the referenced objects in the file.",
 								TestResult::FAIL );
@@ -103,7 +102,7 @@ void AcyclicVisitor::CreateCycleTestResult()
              wstring( _nodeVector.at(i)->GetName());
     spCycleResult->AddDetail( detail );
 
-    shared_ptr<AAFObjNode> spAafNode = dynamic_pointer_cast<AAFObjNode>( _nodeVector.at(i) );
+    boost::shared_ptr<AAFObjNode> spAafNode = boost::dynamic_pointer_cast<AAFObjNode>( _nodeVector.at(i) );
     
     if ( spAafNode )
     {

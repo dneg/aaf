@@ -39,17 +39,15 @@ namespace aafanalyzer {
 
 class TestLevelTestResult;
 
-using namespace boost;
-
 class EPLocatorTest : public Test
 {
  public:
 
   EPLocatorTest( wostream& log,
-                 shared_ptr<const TestGraph> spGraph );
+                 boost::shared_ptr<const TestGraph> spGraph );
   virtual ~EPLocatorTest();
 
-  virtual shared_ptr<TestLevelTestResult> Execute();
+  virtual boost::shared_ptr<TestLevelTestResult> Execute();
   virtual AxString GetName() const;
   virtual AxString GetDescription() const;
   static const TestInfo GetTestInfo();

@@ -267,6 +267,14 @@ AXSP_TDEF_B( TimelineMobSlot2 )
 AXSP_TDEF_C( IEnumAAFKLVDataDefs )
 AXSP_TDEF_C( IEnumAAFTaggedValueDefs )
 
+// New additions for the 1.1.6 release (added since 1.1).
+AXSP_TDEF_A( BWFImportDescriptor )
+AXSP_TDEF_A( DataEssenceDescriptor )
+AXSP_TDEF_A( DescriptiveClip )
+AXSP_TDEF_A( DescriptiveObject )
+AXSP_TDEF_A( MPEGVideoDescriptor )
+AXSP_TDEF_A( RIFFChunk )
+
 // plugin interfaces
 AXSP_TDEF_C( IAAFPlugin )
 AXSP_TDEF_C( IAAFClassExtension )

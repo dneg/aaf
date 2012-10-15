@@ -35,7 +35,6 @@
 namespace aafanalyzer {
 
 using namespace std;
-using namespace boost;
 
 class TestPhaseLevelTestResult;
 
@@ -50,7 +49,7 @@ class TopLevelTestResult : public HighLevelTestResult
 
   virtual ~TopLevelTestResult();
 
-  void AppendSubtestResult( shared_ptr<TestPhaseLevelTestResult> subtestResult );
+  void AppendSubtestResult( boost::shared_ptr<TestPhaseLevelTestResult> subtestResult );
 
   const enum ResultLevel GetResultType() const;
 

@@ -67,7 +67,6 @@ namespace aafanalyzer
 {
 
 using namespace std;
-using namespace boost;
 
 map<TestResult::Result,wstring> TestResult::_resultToString;
 
@@ -207,7 +206,7 @@ const vector<wstring>& TestResult::GetDetails() const
   return _details;
 }
 
-void TestResult::AddSubtestResult( shared_ptr<TestResult> subtestResult )
+void TestResult::AddSubtestResult( boost::shared_ptr<TestResult> subtestResult )
 {
   //Don't allow a test result to append itself
   assert( subtestResult.get() != this );
@@ -295,7 +294,7 @@ void TestResult::ClearRequirements()
     _result = UNDEFINED;
 }
 
-void TestResult::AddRequirement( Result type, const shared_ptr<const Requirement>& req )
+void TestResult::AddRequirement( Result type, const boost::shared_ptr<const Requirement>& req )
 {
     Requirement::RequirementMapSP spMap = this->GetMyRequirements( type );
     (*spMap)[req->GetId()] = req;
@@ -363,7 +362,7 @@ void TestResult::ConsolidateResults()
        iter != _spSubtestResults->end();
        ++iter )
   {
-    shared_ptr<TestResult> spSubTestResult = *iter;
+    boost::shared_ptr<TestResult> spSubTestResult = *iter;
     
     spSubTestResult->ConsolidateResults();
 

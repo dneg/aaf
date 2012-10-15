@@ -60,7 +60,7 @@ namespace aafanalyzer {
 using namespace std;
 
 EPEditRateTest::EPEditRateTest( wostream& log,
-                              shared_ptr<const TestGraph> spGraph )
+                              boost::shared_ptr<const TestGraph> spGraph )
   : Test( log, GetTestInfo() )
 {
     SetTestGraph(spGraph);
@@ -69,11 +69,11 @@ EPEditRateTest::EPEditRateTest( wostream& log,
 EPEditRateTest::~EPEditRateTest()
 {}
 
-shared_ptr<TestLevelTestResult> EPEditRateTest::Execute()
+boost::shared_ptr<TestLevelTestResult> EPEditRateTest::Execute()
 {
-  shared_ptr<TestLevelTestResult> spTestResult = CreateTestResult();
+  boost::shared_ptr<TestLevelTestResult> spTestResult = CreateTestResult();
     
-  shared_ptr<EPEditRateVisitor>
+  boost::shared_ptr<EPEditRateVisitor>
     spVisitor( new EPEditRateVisitor( GetOutStream(),
 	                                  GetTestGraph()->GetEdgeMap(),
 									  spTestResult ) );
@@ -97,7 +97,7 @@ AxString EPEditRateTest::GetDescription() const
 
 const TestInfo EPEditRateTest::GetTestInfo()
 {
-    shared_ptr<vector<AxString> > spReqIds(new vector<AxString>);
+    boost::shared_ptr<vector<AxString> > spReqIds(new vector<AxString>);
     spReqIds->push_back(L"REQ_EP_091");     //In table
     spReqIds->push_back(L"REQ_EP_092");     //Numerator/Denominator > 0
     spReqIds->push_back(L"REQ_EP_099");     //Audio Tracks

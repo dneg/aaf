@@ -51,7 +51,6 @@
 namespace aafanalyzer {
 
 using namespace std;
-using namespace boost;
 
 // NodeRefCountVisitor is used to references to any single type of
 // node in a graph. Simply instantiate it on the desired node type and
@@ -73,16 +72,16 @@ class NodeRefCountVisitor : public TypedVisitor
  public:
 
   // Map node instance pointer to a reference count for that node.
-  typedef map<shared_ptr<Node>, int> NodeMap;
+  typedef map<boost::shared_ptr<Node>, int> NodeMap;
 
   // Map a reference count value to a vector of all nodes with that
   // reference count.
   typedef map<int, vector<Node::LID> > RefCountMap;
 
   typedef AAFTypedObjNode<AAFObjType> ReferencedNode;
-  typedef shared_ptr<ReferencedNode> ReferencedNodeSP;
+  typedef boost::shared_ptr<ReferencedNode> ReferencedNodeSP;
   typedef vector<ReferencedNodeSP> ReferencedNodeVector;
-  typedef shared_ptr<ReferencedNodeVector> ReferencedNodeVectorSP;
+  typedef boost::shared_ptr<ReferencedNodeVector> ReferencedNodeVectorSP;
 
   NodeRefCountVisitor( wostream& os )
     : TypedVisitor( Visitor::FOLLOW_REFERENCES ),
@@ -94,7 +93,7 @@ class NodeRefCountVisitor : public TypedVisitor
 
   bool PreOrderVisit( AAFTypedObjNode<AAFObjType>& node )
   {
-    shared_ptr<Node> spNode = node.GetSharedPointerToNode();
+    boost::shared_ptr<Node> spNode = node.GetSharedPointerToNode();
     
     if ( IsPresent( spNode ) )
     {
@@ -118,9 +117,9 @@ class NodeRefCountVisitor : public TypedVisitor
   // i.e. map[1] = vector<Node::LID> // a vector of unreferenced nodes
   // i.e. map[2] = vector<Node::LID> // a vector of nodes with one reference
   // i.e. map[3] = vector<Node::LID> // a vector of nodes with three references
-  shared_ptr<RefCountMap> GetRefCountMap()
+  boost::shared_ptr<RefCountMap> GetRefCountMap()
   {
-    shared_ptr<RefCountMap> spRefCountMap( new RefCountMap );
+    boost::shared_ptr<RefCountMap> spRefCountMap( new RefCountMap );
     
     NodeMap::const_iterator iter;
     for( iter = _nodeMap.begin(); iter != _nodeMap.end(); ++iter )
@@ -153,9 +152,9 @@ class NodeRefCountVisitor : public TypedVisitor
     {
       if ( CompareFunc(iter->second, refCount) )
       {
-	shared_ptr<Node> spNode = iter->first;
+	boost::shared_ptr<Node> spNode = iter->first;
     
-	ReferencedNodeSP spRefNode = dynamic_pointer_cast<ReferencedNode>( spNode );
+	ReferencedNodeSP spRefNode = boost::dynamic_pointer_cast<ReferencedNode>( spNode );
 	assert( spRefNode );
 	spNodes->push_back( spRefNode );
       }
@@ -185,7 +184,7 @@ class NodeRefCountVisitor : public TypedVisitor
   NodeRefCountVisitor( const NodeRefCountVisitor& );
   NodeRefCountVisitor& operator=( const NodeRefCountVisitor& );
 
-  bool IsPresent(shared_ptr<Node>& spNode)
+  bool IsPresent(boost::shared_ptr<Node>& spNode)
   {
     NodeMap::const_iterator iter = _nodeMap.find(spNode);
     return iter != _nodeMap.end();

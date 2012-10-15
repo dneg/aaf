@@ -39,11 +39,10 @@
 namespace aafanalyzer {
 
 using namespace std;
-using namespace boost;
 
 class Visitor;
 
-class Node : public enable_shared_from_this<Node>
+class Node : public boost::enable_shared_from_this<Node>
 {
  public:
   typedef unsigned int LID;
@@ -52,12 +51,12 @@ class Node : public enable_shared_from_this<Node>
   Node( const basic_string<wchar_t>& name );
   virtual ~Node();
 
-  virtual bool PreOrderVisit(shared_ptr<Visitor> spVisitor);
-  virtual bool PostOrderVisit(shared_ptr<Visitor> spVisitor);
+  virtual bool PreOrderVisit(boost::shared_ptr<Visitor> spVisitor);
+  virtual bool PostOrderVisit(boost::shared_ptr<Visitor> spVisitor);
   LID GetLID() const;
-  shared_ptr<Node> GetSharedPointerToNode();
+  boost::shared_ptr<Node> GetSharedPointerToNode();
   const basic_string<wchar_t>& GetName() const;
-  virtual void Decorate( shared_ptr<Node> decoratedNode );
+  virtual void Decorate( boost::shared_ptr<Node> decoratedNode );
 
  protected:
   Node( const basic_string<wchar_t>& name, LID lid );

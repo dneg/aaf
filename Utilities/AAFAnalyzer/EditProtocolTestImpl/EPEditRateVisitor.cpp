@@ -63,11 +63,9 @@ namespace {
 
 namespace aafanalyzer {
 
-using namespace boost;
-
 EPEditRateVisitor::EPEditRateVisitor( wostream& log,
-				      shared_ptr<EdgeMap> spEdgeMap,
-				      shared_ptr<TestLevelTestResult> spTestResult )
+				      boost::shared_ptr<EdgeMap> spEdgeMap,
+				      boost::shared_ptr<TestLevelTestResult> spTestResult )
     : _log(log),
       _spEdgeMap( spEdgeMap ),
       _spTestResult( spTestResult ),
@@ -85,7 +83,7 @@ bool EPEditRateVisitor::PreOrderVisit( EPTypedObjNode<IAAFTimelineMobSlot, EPAud
     VisitAudioTrack( node.GetEPObject(), editRate, node );
 
     //General Processing
-    shared_ptr<EPTypedObjNode<IAAFTimelineMobSlot, EPEssenceTrack> > spGeneric( node.DownCast<IAAFTimelineMobSlot, EPEssenceTrack>() );
+    boost::shared_ptr<EPTypedObjNode<IAAFTimelineMobSlot, EPEssenceTrack> > spGeneric( node.DownCast<IAAFTimelineMobSlot, EPEssenceTrack>() );
     return this->PreOrderVisit( *spGeneric );
 }
 
@@ -94,7 +92,7 @@ bool EPEditRateVisitor::PreOrderVisit( EPTypedObjNode<IAAFTimelineMobSlot, EPVid
     bool testPassed = true;
 
     //General Processing
-    shared_ptr<EPTypedObjNode<IAAFTimelineMobSlot, EPEssenceTrack> > spGeneric( node.DownCast<IAAFTimelineMobSlot, EPEssenceTrack>() );
+    boost::shared_ptr<EPTypedObjNode<IAAFTimelineMobSlot, EPEssenceTrack> > spGeneric( node.DownCast<IAAFTimelineMobSlot, EPEssenceTrack>() );
     testPassed = this->PreOrderVisit( *spGeneric );
 
     //Video Specific Processing
@@ -119,7 +117,7 @@ bool EPEditRateVisitor::PreOrderVisit( EPTypedObjNode<IAAFEventMobSlot, EPAudioT
     VisitAudioTrack( node.GetEPObject(), editRate, node );
 
     //General Processing
-    shared_ptr<EPTypedObjNode<IAAFEventMobSlot, EPEssenceTrack> > spGeneric( node.DownCast<IAAFEventMobSlot, EPEssenceTrack>() );
+    boost::shared_ptr<EPTypedObjNode<IAAFEventMobSlot, EPEssenceTrack> > spGeneric( node.DownCast<IAAFEventMobSlot, EPEssenceTrack>() );
     return this->PreOrderVisit( *spGeneric );
 }
 
@@ -128,7 +126,7 @@ bool EPEditRateVisitor::PreOrderVisit( EPTypedObjNode<IAAFEventMobSlot, EPVideoT
     bool testPassed = true;
 
     //General Processing
-    shared_ptr<EPTypedObjNode<IAAFEventMobSlot, EPEssenceTrack> > spGeneric( node.DownCast<IAAFEventMobSlot, EPEssenceTrack>() );
+    boost::shared_ptr<EPTypedObjNode<IAAFEventMobSlot, EPEssenceTrack> > spGeneric( node.DownCast<IAAFEventMobSlot, EPEssenceTrack>() );
     testPassed = this->PreOrderVisit( *spGeneric );
 
     //Video Specific Processing
@@ -148,7 +146,7 @@ bool EPEditRateVisitor::PreOrderVisit( EPTypedObjNode<IAAFEventMobSlot, EPEssenc
 bool EPEditRateVisitor::PreOrderVisit( EPTypedObjNode<IAAFMobSlot, EPAudioTrack>& node )
 {
     //General Processing
-    shared_ptr<EPTypedObjNode<IAAFMobSlot, EPEssenceTrack> > spGeneric( node.DownCast<IAAFMobSlot, EPEssenceTrack>() );
+    boost::shared_ptr<EPTypedObjNode<IAAFMobSlot, EPEssenceTrack> > spGeneric( node.DownCast<IAAFMobSlot, EPEssenceTrack>() );
     return this->PreOrderVisit( *spGeneric );
 }
 
@@ -166,7 +164,7 @@ bool EPEditRateVisitor::PreOrderVisit( EPTypedObjNode<IAAFMobSlot, EPVideoTrack>
     _spTestResult->AddSingleResult( L"REQ_EP_100", ss.str().c_str(), TestResult::FAIL, node );
 
     //General Processing
-    shared_ptr<EPTypedObjNode<IAAFMobSlot, EPEssenceTrack> > spGeneric( node.DownCast<IAAFMobSlot, EPEssenceTrack>() );
+    boost::shared_ptr<EPTypedObjNode<IAAFMobSlot, EPEssenceTrack> > spGeneric( node.DownCast<IAAFMobSlot, EPEssenceTrack>() );
     return this->PreOrderVisit( *spGeneric );
 }
 
@@ -247,7 +245,7 @@ bool EPEditRateVisitor::TestEditRate( aafRational_t editRate, AxMobSlot& axMobSl
     return true;
 }
 
-void EPEditRateVisitor::VisitAudioTrack( shared_ptr<EPAudioTrack> spTrack, aafRational_t editRate, Node& node )
+void EPEditRateVisitor::VisitAudioTrack( boost::shared_ptr<EPAudioTrack> spTrack, aafRational_t editRate, Node& node )
 {
 
     RationalKey erKey( editRate.numerator, editRate.denominator );
@@ -277,7 +275,7 @@ void EPEditRateVisitor::VisitAudioTrack( shared_ptr<EPAudioTrack> spTrack, aafRa
 
 }
 
-bool EPEditRateVisitor::VisitVideoTrack( shared_ptr<EPVideoTrack> spTrack, aafRational_t editRate, Node& node )
+bool EPEditRateVisitor::VisitVideoTrack( boost::shared_ptr<EPVideoTrack> spTrack, aafRational_t editRate, Node& node )
 {
     AxSourceMob axSrcMob( AxQueryInterface<IAAFMob, IAAFSourceMob>( spTrack->GetMob() ) );
     AxFileDescriptor axFileDes( AxQueryInterface<IAAFEssenceDescriptor, IAAFFileDescriptor>( axSrcMob.GetEssenceDescriptor() ) );
@@ -317,7 +315,7 @@ void EPEditRateVisitor::CheckAudioSampleRates()
        ( _unknownAudioTracks > 0 )
        )
   {
-    shared_ptr<DetailLevelTestResult> spSubResult =
+    boost::shared_ptr<DetailLevelTestResult> spSubResult =
       _spTestResult->AddUnassociatedSingleResult( L"REQ_EP_099",
 						  L"All audio tracks within the file do not have the same edit rate.",
 						  TestResult::FAIL );
@@ -340,7 +338,7 @@ void EPEditRateVisitor::CheckAudioSampleRates()
   }
   else if ( _audioSampleRates.size() > 1 )
   {
-    shared_ptr<DetailLevelTestResult> spSubResult =
+    boost::shared_ptr<DetailLevelTestResult> spSubResult =
       _spTestResult->AddUnassociatedSingleResult( L"REQ_EP_099",
 						  L"All audio tracks within the file do not have the same sample rate.",
 						  TestResult::FAIL );

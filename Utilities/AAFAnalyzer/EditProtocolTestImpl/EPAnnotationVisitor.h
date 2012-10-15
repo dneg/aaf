@@ -45,7 +45,6 @@ namespace aafanalyzer {
 class TestLevelTestResult;
 class Node;
 
-using namespace boost;
 using namespace std;
 
 class EPAnnotationVisitor : public EPTypedVisitor
@@ -54,8 +53,8 @@ class EPAnnotationVisitor : public EPTypedVisitor
   public:
   
     EPAnnotationVisitor( wostream& log,
-			 shared_ptr<EdgeMap> spEdgeMap,
-			 shared_ptr<TestLevelTestResult> _spTestResult );
+			 boost::shared_ptr<EdgeMap> spEdgeMap,
+			 boost::shared_ptr<TestLevelTestResult> _spTestResult );
     virtual ~EPAnnotationVisitor();
 
     virtual bool PreOrderVisit( AAFTypedObjNode<IAAFComponent>& node );
@@ -143,16 +142,16 @@ class EPAnnotationVisitor : public EPTypedVisitor
   private:
   
     wostream& _log;
-    shared_ptr<EdgeMap> _spEdgeMap;
-    shared_ptr<TestLevelTestResult> _spTestResult;
+    boost::shared_ptr<EdgeMap> _spEdgeMap;
+    boost::shared_ptr<TestLevelTestResult> _spTestResult;
     
     stack<bool> _isAncestorEssenceTrack;
     stack<bool> _isAncestorEventMobSlot;
     stack<bool> _isParentMobSlot;
     
-    map<AxString, shared_ptr<Node> > _taggedValueNames;
+    map<AxString, boost::shared_ptr<Node> > _taggedValueNames;
     set<AxString> _taggedValueDefs;
-    map<aafUID_t, shared_ptr<Node> > _klvDataKeys;
+    map<aafUID_t, boost::shared_ptr<Node> > _klvDataKeys;
     set<aafUID_t> _klvDataDefs;
     
     bool PopStacks();

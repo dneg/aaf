@@ -51,7 +51,6 @@ using namespace aafanalyzer;
 namespace aafanalyzer {
 
 using namespace std;
-using namespace boost;
 
 //static variable
 TestRegistry* TestRegistry::_pTestRegistry = NULL;
@@ -89,14 +88,14 @@ void TestRegistry::Register( const TestInfo& info )
     RequirementRegistry& reqRegistry = RequirementRegistry::GetInstance();
     //Get all requirements matching the list of requirement ids.  An
     //exception is thrown if the requirement is not registered.
-    const shared_ptr<const vector<wstring> > spRequirements = info.GetRequirementIds();
+    const boost::shared_ptr<const vector<wstring> > spRequirements = info.GetRequirementIds();
     vector<wstring>::const_iterator iter;
     
     for ( iter = spRequirements->begin(); iter != spRequirements->end(); iter++)
     {
       wstring id = *iter;
       
-      shared_ptr<const Requirement> req(reqRegistry.GetRequirement(id));
+      boost::shared_ptr<const Requirement> req(reqRegistry.GetRequirement(id));
       
       if ( coveredByTest->find(id) == coveredByTest->end() )
       {
@@ -117,14 +116,14 @@ void TestRegistry::Register( const TestInfo& info )
   }
 }
 
-const shared_ptr<Requirement::RequirementMap> TestRegistry::GetRequirementsForTest( const wstring& name ) const
+const boost::shared_ptr<Requirement::RequirementMap> TestRegistry::GetRequirementsForTest( const wstring& name ) const
 {
-    shared_ptr<const Requirement::RequirementMap> spConstReqs = this->GetConstRequirementsForTest( name );
+    boost::shared_ptr<const Requirement::RequirementMap> spConstReqs = this->GetConstRequirementsForTest( name );
     Requirement::RequirementMapSP spReqs( new Requirement::RequirementMap( *spConstReqs) );
     return spReqs;
 }
 
-const shared_ptr<const Requirement::RequirementMap> TestRegistry::GetConstRequirementsForTest( const wstring& name ) const
+const boost::shared_ptr<const Requirement::RequirementMap> TestRegistry::GetConstRequirementsForTest( const wstring& name ) const
 {
     Map::const_iterator target = _testSet.find( name );
     if ( target == _testSet.end() )
@@ -141,7 +140,7 @@ const Requirement::RequirementMap& TestRegistry::GetRequirementCoverage() const
     return _coveredRequirements;
 }
 
-bool TestRegistry::VerifyTestResultCoverage(const shared_ptr<TopLevelTestResult> results) const
+bool TestRegistry::VerifyTestResultCoverage(const boost::shared_ptr<TopLevelTestResult> results) const
 {
     //Given a top level result, make sure that all that are supposed to be
     //covered have been covered.
@@ -151,7 +150,7 @@ bool TestRegistry::VerifyTestResultCoverage(const shared_ptr<TopLevelTestResult>
     return (outstandingReqs.size() == 0);
 }
 
-void TestRegistry::VerifyTestResultCoverage(const shared_ptr<const TestResult> result, Requirement::RequirementMap& outstandingReqs) const
+void TestRegistry::VerifyTestResultCoverage(const boost::shared_ptr<const TestResult> result, Requirement::RequirementMap& outstandingReqs) const
 {
     //Given a test result and a requirement map, remove all requirements covered
     //by the result and child results from the map.

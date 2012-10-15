@@ -39,8 +39,6 @@
 
 namespace aafanalyzer {
 
-using namespace boost;
-
 template<typename AAFObjType>
 class TypedNodeFactoryImpl : public TypedNodeFactory
 {
@@ -51,7 +49,7 @@ class TypedNodeFactoryImpl : public TypedNodeFactory
   ~TypedNodeFactoryImpl()
   {}
 
-  shared_ptr<Node> CreateNode(IAAFObjectSP spObj)
+  boost::shared_ptr<Node> CreateNode(IAAFObjectSP spObj)
   {
     IAAFSmartPointer<AAFObjType> spObjOfType;
 
@@ -61,12 +59,12 @@ class TypedNodeFactoryImpl : public TypedNodeFactory
     // if the cast fails.
     AxQueryInterface( spObj, spObjOfType );
 
-    shared_ptr<Node> spNode(new AAFTypedObjNodeImpl<AAFObjType>(spObjOfType,
+    boost::shared_ptr<Node> spNode(new AAFTypedObjNodeImpl<AAFObjType>(spObjOfType,
 								   AxObject(spObj).GetClassName()));
     return spNode;
   }
   
- shared_ptr<Node> CreateNodeFrom( shared_ptr<AAFObjNode> spNode )
+ boost::shared_ptr<Node> CreateNodeFrom( boost::shared_ptr<AAFObjNode> spNode )
  {
     IAAFObjectSP spObj = spNode->GetAAFObject();
     IAAFSmartPointer<AAFObjType> spObjOfType;
@@ -77,7 +75,7 @@ class TypedNodeFactoryImpl : public TypedNodeFactory
     // if the cast fails.
     AxQueryInterface( spObj, spObjOfType );
 
-    shared_ptr<Node> spNewNode( new AAFTypedObjNodeImpl<AAFObjType>( spObjOfType, spNode ) );
+    boost::shared_ptr<Node> spNewNode( new AAFTypedObjNodeImpl<AAFObjType>( spObjOfType, spNode ) );
     return spNewNode;
  }
 

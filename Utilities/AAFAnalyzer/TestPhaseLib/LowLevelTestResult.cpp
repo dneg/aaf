@@ -45,14 +45,13 @@ namespace aafanalyzer
 {
 
 using namespace std;
-using namespace boost;
 
-LowLevelTestResult::LowLevelTestResult( const shared_ptr<const Test> associatedTest )
+LowLevelTestResult::LowLevelTestResult( const boost::shared_ptr<const Test> associatedTest )
   : TestResult(),
     _spAssociatedTest( associatedTest )
 {}
 
-LowLevelTestResult::LowLevelTestResult( const shared_ptr<const Test> associatedTest,
+LowLevelTestResult::LowLevelTestResult( const boost::shared_ptr<const Test> associatedTest,
                                         const wstring& name, const wstring& desc,
                                         const wstring& explain )
   : TestResult( name, desc, explain ),
@@ -62,7 +61,7 @@ LowLevelTestResult::LowLevelTestResult( const shared_ptr<const Test> associatedT
 LowLevelTestResult::~LowLevelTestResult()
 {}
 
-const shared_ptr<const Test> LowLevelTestResult::GetAssociatedTest() const
+const boost::shared_ptr<const Test> LowLevelTestResult::GetAssociatedTest() const
 {
   return _spAssociatedTest;
 }

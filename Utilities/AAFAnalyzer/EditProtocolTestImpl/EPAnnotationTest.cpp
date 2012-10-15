@@ -60,7 +60,7 @@ namespace aafanalyzer {
 using namespace std;
 
 EPAnnotationTest::EPAnnotationTest( wostream& log,
-                              shared_ptr<const TestGraph> spGraph )
+                              boost::shared_ptr<const TestGraph> spGraph )
   : Test( log, GetTestInfo() )
 {
     SetTestGraph(spGraph);
@@ -69,11 +69,11 @@ EPAnnotationTest::EPAnnotationTest( wostream& log,
 EPAnnotationTest::~EPAnnotationTest()
 {}
 
-shared_ptr<TestLevelTestResult> EPAnnotationTest::Execute()
+boost::shared_ptr<TestLevelTestResult> EPAnnotationTest::Execute()
 {
-  shared_ptr<TestLevelTestResult> spTestResult = CreateTestResult();
+  boost::shared_ptr<TestLevelTestResult> spTestResult = CreateTestResult();
 
-  shared_ptr<EPAnnotationVisitor>
+  boost::shared_ptr<EPAnnotationVisitor>
     spVisitor(new EPAnnotationVisitor( GetOutStream(),
 				       GetTestGraph()->GetEdgeMap(),
 				       spTestResult ) );
@@ -98,7 +98,7 @@ AxString EPAnnotationTest::GetDescription() const
 
 const TestInfo EPAnnotationTest::GetTestInfo()
 {
-    shared_ptr<vector<AxString> > spReqIds(new vector<AxString>);
+    boost::shared_ptr<vector<AxString> > spReqIds(new vector<AxString>);
     spReqIds->push_back(L"REQ_EP_147");     //UserComments property.
     spReqIds->push_back(L"REQ_EP_150");     //CommentMarker in EventMob Slots.
     spReqIds->push_back(L"REQ_EP_151");     //TaggedValues registered.

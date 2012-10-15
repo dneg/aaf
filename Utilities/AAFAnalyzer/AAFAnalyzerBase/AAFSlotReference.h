@@ -36,19 +36,17 @@
 
 namespace aafanalyzer {
 
-using namespace boost;
-
 class AAFSlotReference : public Edge
 {
  public:
   
   static const std::wstring typeName;
 
-  AAFSlotReference(shared_ptr<Node> spParent, shared_ptr<Node> spChild, Node::LID tag);
+  AAFSlotReference(boost::shared_ptr<Node> spParent, boost::shared_ptr<Node> spChild, Node::LID tag);
   ~AAFSlotReference();
 
-  bool Visit(shared_ptr<Visitor> spVisitor);
-  virtual shared_ptr<Edge> CreateNewEdge( shared_ptr<Node> spParent, shared_ptr<Node> spChild ) const;
+  bool Visit(boost::shared_ptr<Visitor> spVisitor);
+  virtual boost::shared_ptr<Edge> CreateNewEdge( boost::shared_ptr<Node> spParent, boost::shared_ptr<Node> spChild ) const;
 
   virtual const std::wstring& GetTypeName() const;
 

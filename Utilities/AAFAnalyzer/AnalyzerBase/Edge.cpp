@@ -44,16 +44,14 @@ using namespace aafanalyzer;
 
 namespace aafanalyzer {
 
-using namespace boost;
-
-Edge::Edge(shared_ptr<Node> spParent, shared_ptr<Node> spChild )
+Edge::Edge(boost::shared_ptr<Node> spParent, boost::shared_ptr<Node> spChild )
   : _spParentNode( spParent ),
     _spChildNode( spChild ),
     _kind( EDGE_KIND_CONTAINMENT ),
     _tag( spParent->GetLID() )
 {}
 
-Edge::Edge(shared_ptr<Node> spParent, shared_ptr<Node> spChild,
+Edge::Edge(boost::shared_ptr<Node> spParent, boost::shared_ptr<Node> spChild,
 	   EdgeKind_e kind, Node::LID tag)
   : _spParentNode( spParent ),
     _spChildNode( spChild ),
@@ -64,24 +62,24 @@ Edge::Edge(shared_ptr<Node> spParent, shared_ptr<Node> spChild,
 Edge::~Edge()
 {}
 
-bool Edge::Visit(shared_ptr<Visitor> spVisitor)
+bool Edge::Visit(boost::shared_ptr<Visitor> spVisitor)
 {
   return spVisitor->EdgeVisit(*this);
 }
 
-shared_ptr<Node> Edge::GetParentNode() const
+boost::shared_ptr<Node> Edge::GetParentNode() const
 {
   return _spParentNode;
 }
 
-shared_ptr<Node> Edge::GetChildNode() const
+boost::shared_ptr<Node> Edge::GetChildNode() const
 {
   return _spChildNode;
 }
 
-shared_ptr<Edge> Edge::CreateNewEdge( shared_ptr<Node> spParent, shared_ptr<Node> spChild ) const
+boost::shared_ptr<Edge> Edge::CreateNewEdge( boost::shared_ptr<Node> spParent, boost::shared_ptr<Node> spChild ) const
 {
-  shared_ptr<Edge> spNewEdge( new Edge( spParent, spChild, _kind, _tag ) );
+  boost::shared_ptr<Edge> spNewEdge( new Edge( spParent, spChild, _kind, _tag ) );
   return spNewEdge;
 }
 

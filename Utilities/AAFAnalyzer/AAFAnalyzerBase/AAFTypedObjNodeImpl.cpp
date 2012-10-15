@@ -52,7 +52,6 @@ using namespace aafanalyzer;
 namespace aafanalyzer {
 
 using namespace std;
-using namespace boost;
 
 template<typename AAFObjType>
 AAFTypedObjNodeImpl<AAFObjType>::AAFTypedObjNodeImpl(IAAFSmartPointer<AAFObjType> spObject)
@@ -69,7 +68,7 @@ AAFTypedObjNodeImpl<AAFObjType>::AAFTypedObjNodeImpl(IAAFSmartPointer<AAFObjType
 
 template<typename AAFObjType>
 AAFTypedObjNodeImpl<AAFObjType>::AAFTypedObjNodeImpl(IAAFSmartPointer<AAFObjType> spObject,
-                         shared_ptr<Node> spNode )
+                         boost::shared_ptr<Node> spNode )
   : AAFTypedObjNode<AAFObjType>( spObject, spNode ),
     _spTypedObj( spObject )
 {}
@@ -79,9 +78,9 @@ AAFTypedObjNodeImpl<AAFObjType>::~AAFTypedObjNodeImpl()
 {}
 
 template<typename AAFObjType>
-bool AAFTypedObjNodeImpl<AAFObjType>::PreOrderVisit(shared_ptr<Visitor> spVisitor)
+bool AAFTypedObjNodeImpl<AAFObjType>::PreOrderVisit(boost::shared_ptr<Visitor> spVisitor)
 {
-  shared_ptr<TypedVisitor> spTypedVis = dynamic_pointer_cast<TypedVisitor>(spVisitor);
+  boost::shared_ptr<TypedVisitor> spTypedVis = boost::dynamic_pointer_cast<TypedVisitor>(spVisitor);
   if(spTypedVis)
   {
     return spTypedVis->PreOrderVisit(*this);
@@ -91,9 +90,9 @@ bool AAFTypedObjNodeImpl<AAFObjType>::PreOrderVisit(shared_ptr<Visitor> spVisito
 }
 
 template<typename AAFObjType>
-bool AAFTypedObjNodeImpl<AAFObjType>::PostOrderVisit(shared_ptr<Visitor> spVisitor)
+bool AAFTypedObjNodeImpl<AAFObjType>::PostOrderVisit(boost::shared_ptr<Visitor> spVisitor)
 {
-  shared_ptr<TypedVisitor> spTypedVis = dynamic_pointer_cast<TypedVisitor>(spVisitor);
+  boost::shared_ptr<TypedVisitor> spTypedVis = boost::dynamic_pointer_cast<TypedVisitor>(spVisitor);
   if(spTypedVis)
   {
     return spTypedVis->PostOrderVisit(*this);
@@ -109,9 +108,9 @@ IAAFSmartPointer<AAFObjType> AAFTypedObjNodeImpl<AAFObjType>::GetAAFObjectOfType
 }
 
 template<typename AAFObjType>
-void AAFTypedObjNodeImpl<AAFObjType>::Decorate( shared_ptr<Node> decoratedNode )
+void AAFTypedObjNodeImpl<AAFObjType>::Decorate( boost::shared_ptr<Node> decoratedNode )
 {
-    shared_ptr<AAFObjNode> spMob = dynamic_pointer_cast<AAFObjNode>( this->GetSharedPointerToNode() );
+    boost::shared_ptr<AAFObjNode> spMob = boost::dynamic_pointer_cast<AAFObjNode>( this->GetSharedPointerToNode() );
     if ( spMob )
     {
         AxObject axObject( spMob->GetAAFObject() );

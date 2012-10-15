@@ -40,7 +40,6 @@ namespace aafanalyzer {
 
 class TestLevelTestResult;
 
-using namespace boost;
 using namespace std;
 
 class EPParameterVisitor : public EPTypedVisitor
@@ -49,8 +48,8 @@ class EPParameterVisitor : public EPTypedVisitor
   public:
   
     EPParameterVisitor( wostream& log,
-			shared_ptr<EdgeMap> spEdgeMap,
-			shared_ptr<TestLevelTestResult> spTestResult );
+			boost::shared_ptr<EdgeMap> spEdgeMap,
+			boost::shared_ptr<TestLevelTestResult> spTestResult );
 
     virtual ~EPParameterVisitor();
 
@@ -65,8 +64,8 @@ class EPParameterVisitor : public EPTypedVisitor
     EPParameterVisitor& operator=( const EPParameterVisitor& );
 
     wostream& _log;
-    shared_ptr<EdgeMap> _spEdgeMap;
-    shared_ptr<TestLevelTestResult> _spTestResult;
+    boost::shared_ptr<EdgeMap> _spEdgeMap;
+    boost::shared_ptr<TestLevelTestResult> _spTestResult;
     set<aafUID_t> _validInterpolationDefs;         
 };
 

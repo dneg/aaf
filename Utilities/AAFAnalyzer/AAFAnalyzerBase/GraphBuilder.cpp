@@ -61,7 +61,7 @@ namespace {
 using namespace aafanalyzer;
 using namespace std;
 
-void UpdateNodeMap( IAAFObjectSP spObj, shared_ptr<Node> spNode )
+void UpdateNodeMap( IAAFObjectSP spObj, boost::shared_ptr<Node> spNode )
 {
   IAAFMobSP spMob;
   AxObject axObj(spObj);
@@ -76,17 +76,17 @@ void UpdateNodeMap( IAAFObjectSP spObj, shared_ptr<Node> spNode )
 }
 
 void BuildTree( AxBaseObjRecIter& recIter,
-          shared_ptr<Node> spRootParent,
+          boost::shared_ptr<Node> spRootParent,
           NodeFactory& nodeFactory,
     EdgeMap& edgeMap )
 {
   auto_ptr<AxBaseObj> nextPtr;
-  stack< pair<int, shared_ptr<Node> > > parentStack;  
+  stack< pair<int, boost::shared_ptr<Node> > > parentStack;  
   int level = 0;
 
   // Initialize the parent stack with the root node passed as an
   // argument to this function.
-  parentStack.push(pair<int, shared_ptr<Node> >(level, spRootParent));
+  parentStack.push(pair<int, boost::shared_ptr<Node> >(level, spRootParent));
 
   // Ignore the first object returned by the recursive iterator because it
   // is the root object (ie. spRootParent).
@@ -110,18 +110,18 @@ void BuildTree( AxBaseObjRecIter& recIter,
 
        // Used the supplied factory to create a node for the
        // containment graph we are bulding.
-       shared_ptr<Node> spChildNode( nodeFactory.CreateNode( spObj ) );
+       boost::shared_ptr<Node> spChildNode( nodeFactory.CreateNode( spObj ) );
 
        // Add to the node map (if necessary)
        UpdateNodeMap( spObj, spChildNode );
 
        // We now have a parent, and a child. Create a containment edge
        // and add it to the edge map.
-       shared_ptr<Edge> spEdge( new AAFContainment( parentStack.top().second, spChildNode ) );
+       boost::shared_ptr<Edge> spEdge( new AAFContainment( parentStack.top().second, spChildNode ) );
        edgeMap.AddEdge( spEdge );
         
        // The child node becomes the new parent for lower level objects.
-       parentStack.push( pair<int, shared_ptr<Node> >(level, spChildNode) );
+       parentStack.push( pair<int, boost::shared_ptr<Node> >(level, spChildNode) );
      }
 
      else if ( dynamic_cast<AxProperty*>( nextPtr.get() ) ) {
@@ -196,17 +196,17 @@ GraphBuilder::~GraphBuilder()
 {
 }
 
-const shared_ptr<const AAFGraphInfo> GraphBuilder::CreateGraph(const AxString& fileName, shared_ptr<NodeFactory> spFactory)
+const boost::shared_ptr<const AAFGraphInfo> GraphBuilder::CreateGraph(const AxString& fileName, boost::shared_ptr<NodeFactory> spFactory)
 {
   
-  shared_ptr<AxFile> axFile( new AxFile );
+  boost::shared_ptr<AxFile> axFile( new AxFile );
 
   axFile->OpenExistingRead(fileName.c_str(), 0);
   
   AxHeader axHeader(axFile->getHeader());
   
   //create the root node
-  shared_ptr<Node> spRootNode = spFactory->CreateNode(axHeader);
+  boost::shared_ptr<Node> spRootNode = spFactory->CreateNode(axHeader);
 
   // Initialize the recursive iterator.
   AxObject axRootObject( axHeader );
@@ -214,12 +214,12 @@ const shared_ptr<const AAFGraphInfo> GraphBuilder::CreateGraph(const AxString& f
     axRootObjectIter( new AxBaseSolitaryObjIter<AxObject>(axRootObject) );
   AxBaseObjRecIter recIter( axRootObjectIter );
   
-  shared_ptr<EdgeMap> spEdgeMap( new EdgeMap );
+  boost::shared_ptr<EdgeMap> spEdgeMap( new EdgeMap );
   
   BuildTree( recIter, spRootNode, *spFactory, *spEdgeMap );
 
-  shared_ptr<const TestGraph> spGraph( new TestGraph( spEdgeMap, spRootNode ) );
-  shared_ptr<const AAFGraphInfo> spInfo( new AAFGraphInfo( spGraph, axFile ) );
+  boost::shared_ptr<const TestGraph> spGraph( new TestGraph( spEdgeMap, spRootNode ) );
+  boost::shared_ptr<const AAFGraphInfo> spInfo( new AAFGraphInfo( spGraph, axFile ) );
 
   return spInfo;
 }

@@ -53,9 +53,8 @@ namespace aafanalyzer
 {
 
 using namespace std;
-using namespace boost;
 
-TestLevelTestResult::TestLevelTestResult( const shared_ptr<const Test> associatedTest )
+TestLevelTestResult::TestLevelTestResult( const boost::shared_ptr<const Test> associatedTest )
   : LowLevelTestResult( associatedTest )
 {
   ProtectedSetResult(PASS);
@@ -65,7 +64,7 @@ TestLevelTestResult::TestLevelTestResult( const wstring& name,
                                           const wstring& desc,
                                           const wstring& explain,
                                           Result result,
-                                          const shared_ptr<const Test> associatedTest )
+                                          const boost::shared_ptr<const Test> associatedTest )
   : LowLevelTestResult( associatedTest, name, desc, explain )
 {
   ProtectedSetResult(result);
@@ -73,7 +72,7 @@ TestLevelTestResult::TestLevelTestResult( const wstring& name,
 
 TestLevelTestResult::TestLevelTestResult( const wstring& name,
                                           const wstring& desc,
-                                          const shared_ptr<const Test> associatedTest )
+                                          const boost::shared_ptr<const Test> associatedTest )
   : LowLevelTestResult( associatedTest, name, desc, L"" )
 {
   ProtectedSetResult(PASS);
@@ -88,12 +87,12 @@ const enum TestResult::ResultLevel TestLevelTestResult::GetResultType() const
 }
 
 
-shared_ptr<DetailLevelTestResult> TestLevelTestResult::AddSingleResult( const wstring& reqId,
+boost::shared_ptr<DetailLevelTestResult> TestLevelTestResult::AddSingleResult( const wstring& reqId,
                                                                         const wstring& explain,
                                                                         Result result,
 									Node& node )
 {
-  shared_ptr<DetailLevelTestResult>
+  boost::shared_ptr<DetailLevelTestResult>
     spResult( new DetailLevelTestResult( this->GetAssociatedTest(),
                                          explain,
                                          reqId,
@@ -105,16 +104,16 @@ shared_ptr<DetailLevelTestResult> TestLevelTestResult::AddSingleResult( const ws
   return spResult;
 }
 
-shared_ptr<DetailLevelTestResult> TestLevelTestResult::AddUnassociatedSingleResult( const wstring& reqId,
+boost::shared_ptr<DetailLevelTestResult> TestLevelTestResult::AddUnassociatedSingleResult( const wstring& reqId,
 										    const wstring& explain,
 										    Result result )
 {
-  shared_ptr<DetailLevelTestResult>
+  boost::shared_ptr<DetailLevelTestResult>
     spResult( new DetailLevelTestResult( this->GetAssociatedTest(),
                                          explain,
                                          reqId,
                                          result,
-					 shared_ptr<Node>() ) );
+					 boost::shared_ptr<Node>() ) );
 
   this->AddSubtestResult( spResult );
 

@@ -48,7 +48,6 @@
 namespace aafanalyzer {
 
 using namespace std;
-using namespace boost;
 
 class AAFGraphInfo;
 
@@ -58,12 +57,12 @@ class LoadPhase : public TestPhase
   LoadPhase(wostream& os, const basic_string<wchar_t> AAFFile);
   virtual ~LoadPhase();
 
-  shared_ptr<const AAFGraphInfo> GetTestGraphInfo();
-  virtual shared_ptr<TestPhaseLevelTestResult> Execute();  
+  boost::shared_ptr<const AAFGraphInfo> GetTestGraphInfo();
+  virtual boost::shared_ptr<TestPhaseLevelTestResult> Execute();  
 
   // Get the (unreferenced) root nodes identified by the dependendency
   // analysis that is executed at the start of this test phase.
-  vector<shared_ptr<Node> > GetRoots() const;
+  vector<boost::shared_ptr<Node> > GetRoots() const;
 
   // The same set of roots, but returned as as ComMobNodeVector (to
   // pass on to the EPMobDepPhase).  Returns and empty vector
@@ -82,7 +81,7 @@ class LoadPhase : public TestPhase
   LoadPhase( const LoadPhase& );
   LoadPhase& operator=( const LoadPhase& );
 
-  shared_ptr<const AAFGraphInfo> _spGraphInfo;
+  boost::shared_ptr<const AAFGraphInfo> _spGraphInfo;
   const basic_string<wchar_t> _FileName;
 
   CompMobDependency::CompMobNodeVectorSP _spRootsVector;

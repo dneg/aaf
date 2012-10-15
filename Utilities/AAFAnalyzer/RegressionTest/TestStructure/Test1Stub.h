@@ -38,7 +38,6 @@
 namespace aafanalyzer {
 
 using namespace std;
-using namespace boost;
 
 class TestLevelTestResult;
 
@@ -48,7 +47,7 @@ class Test1Stub : public Test
   Test1Stub(wostream& os);
   ~Test1Stub();
 
-  shared_ptr<TestLevelTestResult> Execute();
+  boost::shared_ptr<TestLevelTestResult> Execute();
   AxString GetName() const;
   AxString GetDescription() const;
   static const TestInfo GetTestInfo();

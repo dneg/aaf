@@ -68,11 +68,9 @@ namespace {
 //======================================================================
 
 namespace aafanalyzer {
-
-using namespace boost;
  
 EPLocatorVisitor::EPLocatorVisitor( wostream& log,
-                                    shared_ptr<TestLevelTestResult> spTestResult )
+                                    boost::shared_ptr<TestLevelTestResult> spTestResult )
   : _log(log),
     _spTestResult( spTestResult )
 {}
@@ -82,31 +80,31 @@ EPLocatorVisitor::~EPLocatorVisitor()
 
 bool EPLocatorVisitor::PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPRGBAImageFileSource>& node )
 {
-    shared_ptr<EPTypedObjNode<IAAFSourceMob, EPFileSource> > spGeneric( node.DownCast<IAAFSourceMob, EPFileSource>() );
+    boost::shared_ptr<EPTypedObjNode<IAAFSourceMob, EPFileSource> > spGeneric( node.DownCast<IAAFSourceMob, EPFileSource>() );
     return this->PreOrderVisit( *spGeneric );
 }
 
 bool EPLocatorVisitor::PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPCDCIImageFileSource>& node )
 {
-    shared_ptr<EPTypedObjNode<IAAFSourceMob, EPFileSource> > spGeneric( node.DownCast<IAAFSourceMob, EPFileSource>() );
+    boost::shared_ptr<EPTypedObjNode<IAAFSourceMob, EPFileSource> > spGeneric( node.DownCast<IAAFSourceMob, EPFileSource>() );
     return this->PreOrderVisit( *spGeneric );
 }
 
 bool EPLocatorVisitor::PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPImageFileSource>& node )
 {
-    shared_ptr<EPTypedObjNode<IAAFSourceMob, EPFileSource> > spGeneric( node.DownCast<IAAFSourceMob, EPFileSource>() );
+    boost::shared_ptr<EPTypedObjNode<IAAFSourceMob, EPFileSource> > spGeneric( node.DownCast<IAAFSourceMob, EPFileSource>() );
     return this->PreOrderVisit( *spGeneric );
 }
 
 bool EPLocatorVisitor::PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPMonoAudioFileSource>& node )
 {
-    shared_ptr<EPTypedObjNode<IAAFSourceMob, EPFileSource> > spGeneric( node.DownCast<IAAFSourceMob, EPFileSource>() );
+    boost::shared_ptr<EPTypedObjNode<IAAFSourceMob, EPFileSource> > spGeneric( node.DownCast<IAAFSourceMob, EPFileSource>() );
     return this->PreOrderVisit( *spGeneric );
 }
   
 bool EPLocatorVisitor::PreOrderVisit( EPTypedObjNode<IAAFSourceMob, EPMultiChannelAudioFileSource>& node )
 {
-    shared_ptr<EPTypedObjNode<IAAFSourceMob, EPFileSource> > spGeneric( node.DownCast<IAAFSourceMob, EPFileSource>() );
+    boost::shared_ptr<EPTypedObjNode<IAAFSourceMob, EPFileSource> > spGeneric( node.DownCast<IAAFSourceMob, EPFileSource>() );
     return this->PreOrderVisit( *spGeneric );
 }
 

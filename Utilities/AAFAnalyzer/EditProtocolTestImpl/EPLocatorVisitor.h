@@ -45,8 +45,6 @@ class AxNetworkLocator;
 
 namespace aafanalyzer {
 
-using namespace boost;
-
 class TestLevelTestResult;
 
 class EPLocatorVisitor : public EPTypedVisitor
@@ -55,7 +53,7 @@ class EPLocatorVisitor : public EPTypedVisitor
   public:
   
   EPLocatorVisitor( wostream& log,
-		    shared_ptr<TestLevelTestResult> spTestResult );
+		    boost::shared_ptr<TestLevelTestResult> spTestResult );
     
     virtual ~EPLocatorVisitor();
 
@@ -70,7 +68,7 @@ class EPLocatorVisitor : public EPTypedVisitor
   private:
    
     wostream& _log;
-    shared_ptr<TestLevelTestResult> _spTestResult;
+    boost::shared_ptr<TestLevelTestResult> _spTestResult;
 
     bool CheckNetworkLocator( AxNetworkLocator& axNetLocator );
 

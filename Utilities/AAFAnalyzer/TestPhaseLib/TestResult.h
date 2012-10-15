@@ -44,14 +44,13 @@
 namespace aafanalyzer {
 
 using namespace std;
-using namespace boost;
 
 class TestResult
 {
  public:
 
-  typedef vector< shared_ptr<TestResult> > SubtestResultVector;
-  typedef shared_ptr<SubtestResultVector> SubtestResultsSP;
+  typedef vector< boost::shared_ptr<TestResult> > SubtestResultVector;
+  typedef boost::shared_ptr<SubtestResultVector> SubtestResultsSP;
 
   // The actual test result.  UNDEFINED is the default result when no
   // result value is provided by the constructor.  The left most
@@ -125,7 +124,7 @@ class TestResult
   // A child of this test. The specialized TestResult implementations
   // have interfaces that ensure only child of the correct type
   // can be added to a particular specialized type.
-  void AddSubtestResult( shared_ptr<TestResult> subtestResult);
+  void AddSubtestResult( boost::shared_ptr<TestResult> subtestResult);
 
   // Returns true if reqID (e.g. REQ_EP_123) is contain in any one of
   // the result maps.
@@ -140,7 +139,7 @@ class TestResult
   // Clear/Add/Remove - used to implement consolidate.
   // Used to implement consolidate.
   // JPT REVIEW - Remove when the deprecated LowLevelResult::SetRequirementStatus is removed.
-  void AddRequirement( Result type, const shared_ptr<const Requirement>& req );
+  void AddRequirement( Result type, const boost::shared_ptr<const Requirement>& req );
   void RemoveRequirement( const wstring& id );
 
  private:
@@ -154,7 +153,7 @@ class TestResult
 
   // Add requirement if it doesn't exist in the status maps. If it
   // does exist then replace it with the new status.
-  void SetRequirementStatus( Result type, const shared_ptr<const Requirement>& req );
+  void SetRequirementStatus( Result type, const boost::shared_ptr<const Requirement>& req );
 
   
   // This called before sub results are consildated. It gives them a

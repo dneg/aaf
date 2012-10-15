@@ -90,7 +90,6 @@ namespace {
 
 using namespace aafanalyzer;
 using namespace std;
-using namespace boost;
 namespace fs = boost::filesystem;
 
 basic_string<wchar_t> LevelToIndent(unsigned int l)
@@ -155,7 +154,7 @@ void ListRequirements( const AxString& title, const Requirement::RequirementMap&
 // caller is responsible for consolidating results before calling this
 // function.
 
-void RecursiveOutputVerboseResultMsgs( shared_ptr<TestResult> res,
+void RecursiveOutputVerboseResultMsgs( boost::shared_ptr<TestResult> res,
                                        unsigned int level,
                                        const wstring& filter,
                                        bool active )
@@ -172,9 +171,9 @@ void RecursiveOutputVerboseResultMsgs( shared_ptr<TestResult> res,
 
     if ( res->GetResultType() == TestResult::DETAIL )
     {
-      shared_ptr<DetailLevelTestResult> spDetailResult = dynamic_pointer_cast<DetailLevelTestResult>(res);
+      boost::shared_ptr<DetailLevelTestResult> spDetailResult = boost::dynamic_pointer_cast<DetailLevelTestResult>(res);
       assert( spDetailResult );
-      shared_ptr<Node> spNode = spDetailResult->GetAssociatedNode();
+      boost::shared_ptr<Node> spNode = spDetailResult->GetAssociatedNode();
       if ( spNode )
       {
 	wcout << LevelToIndent(level) << "Node:   " << spNode->GetLID() << L" (" << spNode->GetName() << L")" << endl;
@@ -241,7 +240,7 @@ void RecursiveOutputVerboseResultMsgs( shared_ptr<TestResult> res,
 }
 
 
-void OutputVerboseResultMsgs( shared_ptr<TestResult> res,
+void OutputVerboseResultMsgs( boost::shared_ptr<TestResult> res,
                               unsigned int level,
                               const wstring& filter,
                               bool active )
@@ -249,14 +248,14 @@ void OutputVerboseResultMsgs( shared_ptr<TestResult> res,
   RecursiveOutputVerboseResultMsgs( res, level, filter, active );
 }
 
-void OutputVerboseResultMsgs( shared_ptr<TestResult> res,
+void OutputVerboseResultMsgs( boost::shared_ptr<TestResult> res,
                               unsigned int level )
 {
   wstring empty;
   RecursiveOutputVerboseResultMsgs( res,level, empty, true );
 }
 
-void OutputVerboseResultMsgs( shared_ptr<TestResult> res,
+void OutputVerboseResultMsgs( boost::shared_ptr<TestResult> res,
                               unsigned int level,
                               wstring filter )
 {
@@ -286,7 +285,7 @@ wstring Esc( const wstring& in )
   return out;
 }
 
-void OutputFileCoverage(shared_ptr<const TestResult> res, const basic_string<wchar_t> fileName, unsigned int level)
+void OutputFileCoverage(boost::shared_ptr<const TestResult> res, const basic_string<wchar_t> fileName, unsigned int level)
 {
   wcout  << "File Name: " << fileName << endl; 
   wcout  << "Name:      " << res->GetName() << endl;
@@ -341,7 +340,7 @@ void OutputFileCoverage(shared_ptr<const TestResult> res, const basic_string<wch
   wcout << endl;
 }
 
-void CollectReasons( shared_ptr<const TestResult> res,
+void CollectReasons( boost::shared_ptr<const TestResult> res,
                      const wstring& reqId,
                      TestResult::Result result,
                      set<wstring>& reasonSet )
@@ -368,7 +367,7 @@ void CollectReasons( shared_ptr<const TestResult> res,
   }
 }
 
-void OutputReasons( shared_ptr<const TestResult> res,
+void OutputReasons( boost::shared_ptr<const TestResult> res,
                     const wstring& reqId,
                     TestResult::Result result )
 {
@@ -382,14 +381,14 @@ void OutputReasons( shared_ptr<const TestResult> res,
         }
 }
 
-void OutputSimpleResultMsgs( shared_ptr<const TestResult> res )
+void OutputSimpleResultMsgs( boost::shared_ptr<const TestResult> res )
 {
   Requirement::RequirementMap::const_iterator iter;
 
   const Requirement::RequirementMap& failures = res->GetRequirements( TestResult::FAIL );
   for ( iter = failures.begin(); iter != failures.end(); ++iter )
   {
-    shared_ptr<const Requirement> req = iter->second;
+    boost::shared_ptr<const Requirement> req = iter->second;
     wcout << "FAIL   : " << req->GetId() << L", " << req->GetName() << endl;
     wcout << L"Desc   : " << req->GetDescription() << endl;
 
@@ -407,7 +406,7 @@ void OutputSimpleResultMsgs( shared_ptr<const TestResult> res )
   const Requirement::RequirementMap& warnings = res->GetRequirements( TestResult::WARN );
   for ( iter = warnings.begin(); iter != warnings.end(); iter++ )
   {
-    shared_ptr<const Requirement> req = iter->second;
+    boost::shared_ptr<const Requirement> req = iter->second;
     wcout << "WARN   : " << req->GetId() << L", " << req->GetName() << endl;
         wcout << L"Desc   : " << req->GetDescription() << endl;
 
@@ -436,7 +435,7 @@ void WriteXMLResult(const wstring& id, const wstring& result, const wstring& exp
   os << "\t</result>" << endl;
 }
 
-void WriteXMLRequirements(shared_ptr<const TestResult> spTestResult,
+void WriteXMLRequirements(boost::shared_ptr<const TestResult> spTestResult,
 			  TestResult::Result result,
 			  set<wstring>& coveredReqIds,
 			  wostream& os)
@@ -444,7 +443,7 @@ void WriteXMLRequirements(shared_ptr<const TestResult> spTestResult,
   const Requirement::RequirementMap& reqMap = spTestResult->GetRequirements(result);
   for(Requirement::RequirementMap::const_iterator iter = reqMap.begin(); iter != reqMap.end(); ++iter)
   {
-    shared_ptr<const Requirement> req = iter->second;    
+    boost::shared_ptr<const Requirement> req = iter->second;    
     coveredReqIds.erase(req->GetId());
     set<wstring> reasonSet;
     CollectReasons(spTestResult, req->GetId(), result, reasonSet);
@@ -455,7 +454,7 @@ void WriteXMLRequirements(shared_ptr<const TestResult> spTestResult,
   }
 }
 
-void OutputXMLResults(shared_ptr<const TestResult> res, wostream& os)
+void OutputXMLResults(boost::shared_ptr<const TestResult> res, wostream& os)
 {
   os << "<aafanalyzer_results version=\"" << AAFANALYZER_VERSION << "\">" << endl;
 
@@ -463,7 +462,7 @@ void OutputXMLResults(shared_ptr<const TestResult> res, wostream& os)
   set<wstring> coveredReqIds;
   for(Requirement::RequirementMap::const_iterator iter = coveredReqs.begin(); iter != coveredReqs.end(); ++iter)
   {
-    shared_ptr<const Requirement> req = iter->second;    
+    boost::shared_ptr<const Requirement> req = iter->second;    
     coveredReqIds.insert(req->GetId());
   }
 
@@ -524,7 +523,7 @@ public:
   ~PrintRequirement()
   {}
 
-  void operator()( pair<const AxString, shared_ptr<const Requirement> > entry )
+  void operator()( pair<const AxString, boost::shared_ptr<const Requirement> > entry )
   {
     if ( _type == L"all" ||
              _type == entry.second->GetRequirementTypeAsString() )
@@ -555,7 +554,7 @@ public:
   ~PrintRequirementDetails()
   {}
 
-  void operator()( pair<const AxString, shared_ptr<const Requirement> > entry )
+  void operator()( pair<const AxString, boost::shared_ptr<const Requirement> > entry )
   {
     if ( _type == L"all" ||
          _type == entry.second->GetRequirementTypeAsString() )
@@ -645,7 +644,7 @@ public:
     return result;
   }
 
-  void operator()( pair<const AxString, shared_ptr<const Requirement> > entry )
+  void operator()( pair<const AxString, boost::shared_ptr<const Requirement> > entry )
   {
     static wstring stnd_stmnt
       = L"INSERT INTO Standard (doc_title, doc_version) VALUES ";
@@ -846,7 +845,7 @@ int main( int argc, char** argv )
 
     // Dump option
     pair<bool,int> dumpArg = args.get( "-dump" );
-    pair<bool,const char*> dumpOption( false, 0 );
+    pair<bool,const char*> dumpOption( false, reinterpret_cast<const char *>(0) );
     if ( dumpArg.first )
     {
       dumpOption = args.get( dumpArg.second + 1 );
@@ -908,7 +907,7 @@ int main( int argc, char** argv )
 
     // Filter output by result name.
     pair<bool, int> filterByNameOpt = args.get( "-filter" );
-    pair<bool, const char*> filterByNameArg( false, 0 );
+    pair<bool, const char*> filterByNameArg( false, reinterpret_cast<const char *>(0) );
     if ( filterByNameOpt.first )
     {
       filterByNameArg = args.get( filterByNameOpt.second + 1 );
@@ -920,7 +919,7 @@ int main( int argc, char** argv )
         
     // Requirements filename
     pair<bool,int> reqsArg = args.get( "-reqs" );
-    pair<bool, const char*> requirementsFile( false, 0 );
+    pair<bool, const char*> requirementsFile( false, reinterpret_cast<const char *>(0) );
     if ( reqsArg.first )
     {
       requirementsFile = args.get( reqsArg.second+1 );
@@ -931,7 +930,7 @@ int main( int argc, char** argv )
     }
 
     // AAF Filename is the last argument if requirements report not requested.
-    pair<bool,const char*> fileNameArg(false,0);
+    pair<bool,const char*> fileNameArg(false, reinterpret_cast<const char *>(0));
     if ( !reportArg.first )
     {
       if ( args.IsFetched( argc-1, 1 ) )
@@ -1014,24 +1013,24 @@ int main( int argc, char** argv )
     const basic_string<wchar_t> fileName = AxStringUtil::mbtowc( fileNameArg.second );
 
     // Create the result object.
-    shared_ptr<TopLevelTestResult> spResult(new TopLevelTestResult());
+    boost::shared_ptr<TopLevelTestResult> spResult(new TopLevelTestResult());
     spResult->SetName( L"AAF Analyzer" );
     spResult->SetDescription( L"AAF Edit Protocol compliance test." );
 
     // First phase - load all objects and resolve references.
     LoadPhase load( wcerr, fileName );
-    shared_ptr<TestPhaseLevelTestResult> spSubResult( load.Execute() );
+    boost::shared_ptr<TestPhaseLevelTestResult> spSubResult( load.Execute() );
     spResult->AppendSubtestResult(spSubResult);
     
     // Store the test graph info so the AAF file is not inadvertantley
     // closed.
-    shared_ptr<const AAFGraphInfo> graphInfo = load.GetTestGraphInfo();
+    boost::shared_ptr<const AAFGraphInfo> graphInfo = load.GetTestGraphInfo();
 
     // The source references are resolved as part of the LoadPhase
     // test. We can dump the composition after that test runs.  This
     // tells us what the data structure looks like going into the more
     // detailed edit protocol (e.g. mob dependency) tests.
-    vector<shared_ptr<Node> > roots = load.GetRoots();
+    vector<boost::shared_ptr<Node> > roots = load.GetRoots();
     if ( dumpArg.first )
     {
       if ( dumpOption.second == string("header") )

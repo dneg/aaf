@@ -38,8 +38,6 @@
 
 namespace aafanalyzer {
 
-using namespace boost;
-
 class Visitor;
 
 class Edge
@@ -52,20 +50,20 @@ class Edge
                     EDGE_KIND_UNDEFINED };
 
   // containment kind and tag value equal to parent lid
-  Edge( shared_ptr<Node> spParent, shared_ptr<Node> spChild );
+  Edge( boost::shared_ptr<Node> spParent, boost::shared_ptr<Node> spChild );
 
-  Edge( shared_ptr<Node> spParent, shared_ptr<Node> spChild,
+  Edge( boost::shared_ptr<Node> spParent, boost::shared_ptr<Node> spChild,
         EdgeKind_e kind, Node::LID tag );
 
   virtual ~Edge();
 
-  virtual bool Visit(shared_ptr<Visitor> spVisitor);
-  shared_ptr<Node> GetParentNode() const;
-  shared_ptr<Node> GetChildNode() const;
+  virtual bool Visit(boost::shared_ptr<Visitor> spVisitor);
+  boost::shared_ptr<Node> GetParentNode() const;
+  boost::shared_ptr<Node> GetChildNode() const;
 
   // virtual constructor
   // uses the existing kind and tag values
-  virtual shared_ptr<Edge> CreateNewEdge( shared_ptr<Node> spParent, shared_ptr<Node> spChild ) const;
+  virtual boost::shared_ptr<Edge> CreateNewEdge( boost::shared_ptr<Node> spParent, boost::shared_ptr<Node> spChild ) const;
 
   // custom type information
   virtual const std::wstring& GetTypeName() const;
@@ -80,8 +78,8 @@ class Edge
   Edge( const Edge& );
   Edge& operator=( const Edge& );
 
-  shared_ptr<Node> _spParentNode;
-  shared_ptr<Node> _spChildNode;
+  boost::shared_ptr<Node> _spParentNode;
+  boost::shared_ptr<Node> _spChildNode;
   EdgeKind_e _kind;
   Node::LID _tag;
 };

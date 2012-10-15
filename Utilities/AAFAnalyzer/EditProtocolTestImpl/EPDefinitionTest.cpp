@@ -60,7 +60,7 @@ namespace aafanalyzer {
 using namespace std;
 
 EPDefinitionTest::EPDefinitionTest( wostream& log,
-				    shared_ptr<const TestGraph> spGraph )
+				    boost::shared_ptr<const TestGraph> spGraph )
   : Test( log, GetTestInfo() )
 {
     SetTestGraph(spGraph);
@@ -69,11 +69,11 @@ EPDefinitionTest::EPDefinitionTest( wostream& log,
 EPDefinitionTest::~EPDefinitionTest()
 {}
 
-shared_ptr<TestLevelTestResult> EPDefinitionTest::Execute()
+boost::shared_ptr<TestLevelTestResult> EPDefinitionTest::Execute()
 {
-  shared_ptr<TestLevelTestResult> spTestResult = CreateTestResult();
+  boost::shared_ptr<TestLevelTestResult> spTestResult = CreateTestResult();
     
-  shared_ptr<EPDefinitionVisitor> spVisitor(new EPDefinitionVisitor( GetOutStream(),
+  boost::shared_ptr<EPDefinitionVisitor> spVisitor(new EPDefinitionVisitor( GetOutStream(),
 								     GetTestGraph()->GetEdgeMap(),
 								     spTestResult ) );
   
@@ -98,7 +98,7 @@ AxString EPDefinitionTest::GetDescription() const
 
 const TestInfo EPDefinitionTest::GetTestInfo()
 {
-    shared_ptr<vector<AxString> > spReqIds(new vector<AxString>);
+    boost::shared_ptr<vector<AxString> > spReqIds(new vector<AxString>);
     spReqIds->push_back(L"REQ_EP_162");     //Operation Group/Definition.
     spReqIds->push_back(L"REQ_EP_163");     //Legacy Data Defs in Operation Definitions.
     return TestInfo(L"EPDefinitionTest", spReqIds);

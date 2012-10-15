@@ -44,9 +44,8 @@ namespace aafanalyzer
 {
 
 using namespace std;
-using namespace boost;
 
-TestInfo::TestInfo(const wstring& name, const shared_ptr<const vector<wstring> >& requirements)
+TestInfo::TestInfo(const wstring& name, const boost::shared_ptr<const vector<wstring> >& requirements)
     : _name(name), _spRequirementIds(requirements)
 {
 }
@@ -65,7 +64,7 @@ const wstring TestInfo::GetName() const
     return _name;
 }
 
-const shared_ptr<const vector<wstring> > TestInfo::GetRequirementIds() const
+const boost::shared_ptr<const vector<wstring> > TestInfo::GetRequirementIds() const
 {
     return _spRequirementIds;
 }

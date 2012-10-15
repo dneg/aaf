@@ -44,15 +44,15 @@ class TestGraph;
 class AAFGraphInfo
 {
  public:
-  AAFGraphInfo(shared_ptr<const TestGraph> spGraph, shared_ptr<AxFile> spFile);
+  AAFGraphInfo(boost::shared_ptr<const TestGraph> spGraph, boost::shared_ptr<AxFile> spFile);
   virtual ~AAFGraphInfo();
 
-  shared_ptr<const TestGraph> GetGraph() const;
+  boost::shared_ptr<const TestGraph> GetGraph() const;
   AxFile& GetFile() const;
 
  private:
-  shared_ptr<const TestGraph> _spGraph;
-  shared_ptr<AxFile> _spFile;
+  boost::shared_ptr<const TestGraph> _spGraph;
+  boost::shared_ptr<AxFile> _spFile;
 
   // prohibited
   AAFGraphInfo();

@@ -53,9 +53,8 @@ namespace aafanalyzer
 {
 
 using namespace std;
-using namespace boost;
 
-RefResolver::RefResolver(wostream& os, shared_ptr<const TestGraph> spGraph)
+RefResolver::RefResolver(wostream& os, boost::shared_ptr<const TestGraph> spGraph)
 : Test(os, GetTestInfo())
 {
   SetTestGraph(spGraph);
@@ -65,11 +64,11 @@ RefResolver::~RefResolver()
 {
 }
 
-shared_ptr<TestLevelTestResult> RefResolver::Execute()
+boost::shared_ptr<TestLevelTestResult> RefResolver::Execute()
 {
-  shared_ptr<TestLevelTestResult> spTestResult = this->CreateTestResult();
+  boost::shared_ptr<TestLevelTestResult> spTestResult = this->CreateTestResult();
 
-  shared_ptr<ResolveRefVisitor>
+  boost::shared_ptr<ResolveRefVisitor>
     spVisitor(new ResolveRefVisitor(GetOutStream(),
                                     GetTestGraph()->GetEdgeMap(),
                                     spTestResult ));
@@ -98,7 +97,7 @@ AxString RefResolver::GetDescription() const
 
 const TestInfo RefResolver::GetTestInfo()
 {
-    shared_ptr<vector<AxString> > spReqIds(new vector<AxString>);
+    boost::shared_ptr<vector<AxString> > spReqIds(new vector<AxString>);
 
     // Export Mobs for Entire Derivation Chain
     // (Warn if source references exists for mobs that are not in the

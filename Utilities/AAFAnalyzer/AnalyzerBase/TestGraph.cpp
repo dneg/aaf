@@ -44,10 +44,8 @@ using namespace aafanalyzer;
 
 namespace aafanalyzer
 {
-    
-using namespace boost;
 
-TestGraph::TestGraph(shared_ptr<EdgeMap> spEdgeMap, shared_ptr<Node> spRootNode)
+TestGraph::TestGraph(boost::shared_ptr<EdgeMap> spEdgeMap, boost::shared_ptr<Node> spRootNode)
   : _spEdgeMap( spEdgeMap ),
     _spRootNode( spRootNode )
 {
@@ -68,18 +66,18 @@ TestGraph::~TestGraph()
 {
 }
 
-shared_ptr<EdgeMap> TestGraph::GetEdgeMap() const
+boost::shared_ptr<EdgeMap> TestGraph::GetEdgeMap() const
 {
   return _spEdgeMap;
 }
 
-shared_ptr<Node> TestGraph::GetRootNode() const
+boost::shared_ptr<Node> TestGraph::GetRootNode() const
 {
   return _spRootNode;
 }
 
 //Update the node with the decorated node in all maps.
-void TestGraph::Decorate( shared_ptr<Node> decoratedNode ) const
+void TestGraph::Decorate( boost::shared_ptr<Node> decoratedNode ) const
 {
   //1. If the decorated node is the root of the tree
   if ( _spRootNode->GetLID() == decoratedNode->GetLID() )

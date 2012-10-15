@@ -8,6 +8,10 @@
         Info Requirements: None
         Warning Requirements: None
         Failing Requirements: REQ_EP_025.2; REQ_EP_026; REQ_EP_031; REQ_EP_036; REQ_EP_045; REQ_EP_050; REQ_EP_055; REQ_EP_063; REQ_EP_072; REQ_EP_076; REQ_EP_083; REQ_EP_259; REQ_EP_260; REQ_EP_262
+        Detail: Analyzing root composition mob "Invalid out of Adjusted Clip: Top Level G"
+        Detail: OK   - Valid object Top-Level Composition "Invalid out of Adjusted Clip: Top Level G" transitioning from state INITIAL to state TOP_LEVEL
+        Detail: OK   -   Valid object Adjusted-Clip Composition "Invalid out of Adjusted Clip: Adjusted Clip G" transitioning from state TOP_LEVEL to state ADJUSTED_CLIP
+        Detail: FAIL  -     Invalid object Import Source "Adjusted Clip->Import Source" while in state ADJUSTED_CLIP
         Detail: Analyzing root composition mob "Initial->Lower-Level"
         Detail: FAIL  - Invalid object Lower-Level Composition "Initial->Lower-Level" while in state INITIAL
         Detail: Analyzing root composition mob "Invalid out of Import Source: Top Level D"
@@ -276,10 +280,6 @@
         Detail: OK   -   Valid object Clip "Invalid out of Film Source: Clip G" transitioning from state TOP_LEVEL to state CLIP
         Detail: OK   -     Valid object Film Source "Invalid out of Film Source: Film Source G" transitioning from state CLIP to state FILM_SOURCE
         Detail: FAIL  -       Invalid object File Source "Film Source->File Source" while in state FILM_SOURCE
-        Detail: Analyzing root composition mob "Invalid out of Adjusted Clip: Top Level G"
-        Detail: OK   - Valid object Top-Level Composition "Invalid out of Adjusted Clip: Top Level G" transitioning from state INITIAL to state TOP_LEVEL
-        Detail: OK   -   Valid object Adjusted-Clip Composition "Invalid out of Adjusted Clip: Adjusted Clip G" transitioning from state TOP_LEVEL to state ADJUSTED_CLIP
-        Detail: FAIL  -     Invalid object Import Source "Adjusted Clip->Import Source" while in state ADJUSTED_CLIP
         Detail: Analyzing root composition mob "Invalid out of Adjusted Clip: Top Level H"
         Detail: OK   - Valid object Top-Level Composition "Invalid out of Adjusted Clip: Top Level H" transitioning from state INITIAL to state TOP_LEVEL
         Detail: OK   -   Valid object Adjusted-Clip Composition "Invalid out of Adjusted Clip: Adjusted Clip H" transitioning from state TOP_LEVEL to state ADJUSTED_CLIP
@@ -664,6 +664,42 @@
             Info Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_025.2
+
+            Name:   Start Of Derivation Chain
+            Desc:   A Top-Level CompositionMob is always the first mob in a derivation chain.
+            Node:   653 (CompositionMob)
+            Result: Noted
+            Reason: Top-Level Composition "Invalid out of Adjusted Clip: Top Level G" following INITIAL is valid.
+            Covered Requirements: None
+            Noted Requirements: REQ_EP_260
+            Passing Requirements: None
+            Info Requirements: None
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Top-level Composition May Reference
+            Desc:   A top-level composition shall only reference the following kinds of material: a lower-level composition, a sub-clip composition, an adjusted-clip composition, a template clip, or a clip.
+            Node:   659 (CompositionMob)
+            Result: Noted
+            Reason: Adjusted-Clip Composition "Invalid out of Adjusted Clip: Adjusted Clip G" following TOP_LEVEL is valid.
+            Covered Requirements: None
+            Noted Requirements: REQ_EP_026
+            Passing Requirements: None
+            Info Requirements: None
+            Warning Requirements: None
+            Failing Requirements: None
+
+            Name:   Adjusted-clip Composition May Reference
+            Desc:   An adjusted-clip composition shall only reference the following kinds of material: a template clip or a clip.
+            Node:   666 (SourceMob)
+            Result: Failed
+            Reason: Import Source "Adjusted Clip->Import Source" following ADJUSTED_CLIP is not a valid.
+            Covered Requirements: None
+            Noted Requirements: None
+            Passing Requirements: None
+            Info Requirements: None
+            Warning Requirements: None
+            Failing Requirements: REQ_EP_045
 
             Name:   Start Of Derivation Chain
             Desc:   A Top-Level CompositionMob is always the first mob in a derivation chain.
@@ -3124,42 +3160,6 @@
             Info Requirements: None
             Warning Requirements: None
             Failing Requirements: REQ_EP_259
-
-            Name:   Start Of Derivation Chain
-            Desc:   A Top-Level CompositionMob is always the first mob in a derivation chain.
-            Node:   653 (CompositionMob)
-            Result: Noted
-            Reason: Top-Level Composition "Invalid out of Adjusted Clip: Top Level G" following INITIAL is valid.
-            Covered Requirements: None
-            Noted Requirements: REQ_EP_260
-            Passing Requirements: None
-            Info Requirements: None
-            Warning Requirements: None
-            Failing Requirements: None
-
-            Name:   Top-level Composition May Reference
-            Desc:   A top-level composition shall only reference the following kinds of material: a lower-level composition, a sub-clip composition, an adjusted-clip composition, a template clip, or a clip.
-            Node:   659 (CompositionMob)
-            Result: Noted
-            Reason: Adjusted-Clip Composition "Invalid out of Adjusted Clip: Adjusted Clip G" following TOP_LEVEL is valid.
-            Covered Requirements: None
-            Noted Requirements: REQ_EP_026
-            Passing Requirements: None
-            Info Requirements: None
-            Warning Requirements: None
-            Failing Requirements: None
-
-            Name:   Adjusted-clip Composition May Reference
-            Desc:   An adjusted-clip composition shall only reference the following kinds of material: a template clip or a clip.
-            Node:   666 (SourceMob)
-            Result: Failed
-            Reason: Import Source "Adjusted Clip->Import Source" following ADJUSTED_CLIP is not a valid.
-            Covered Requirements: None
-            Noted Requirements: None
-            Passing Requirements: None
-            Info Requirements: None
-            Warning Requirements: None
-            Failing Requirements: REQ_EP_045
 
             Name:   Start Of Derivation Chain
             Desc:   A Top-Level CompositionMob is always the first mob in a derivation chain.

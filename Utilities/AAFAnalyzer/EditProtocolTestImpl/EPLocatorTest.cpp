@@ -60,7 +60,7 @@ namespace aafanalyzer {
 using namespace std;
 
 EPLocatorTest::EPLocatorTest( wostream& log,
-                              shared_ptr<const TestGraph> spGraph )
+                              boost::shared_ptr<const TestGraph> spGraph )
   : Test( log, GetTestInfo() )
 {
     SetTestGraph(spGraph);
@@ -69,11 +69,11 @@ EPLocatorTest::EPLocatorTest( wostream& log,
 EPLocatorTest::~EPLocatorTest()
 {}
 
-shared_ptr<TestLevelTestResult> EPLocatorTest::Execute()
+boost::shared_ptr<TestLevelTestResult> EPLocatorTest::Execute()
 {
-  shared_ptr<TestLevelTestResult> spTestResult = CreateTestResult();
+  boost::shared_ptr<TestLevelTestResult> spTestResult = CreateTestResult();
 
-  shared_ptr<EPLocatorVisitor>
+  boost::shared_ptr<EPLocatorVisitor>
     spVisitor(new EPLocatorVisitor( GetOutStream(),
 				    spTestResult ) );
 
@@ -95,7 +95,7 @@ AxString EPLocatorTest::GetDescription() const
 
 const TestInfo EPLocatorTest::GetTestInfo()
 {
-    shared_ptr<vector<AxString> > spReqIds(new vector<AxString>);
+    boost::shared_ptr<vector<AxString> > spReqIds(new vector<AxString>);
     spReqIds->push_back(L"REQ_EP_059");
     spReqIds->push_back(L"REQ_EP_060");
     spReqIds->push_back(L"REQ_EP_061");

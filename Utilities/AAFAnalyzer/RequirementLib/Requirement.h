@@ -39,14 +39,13 @@
 namespace aafanalyzer {
 
 using namespace std;
-using namespace boost;
 
 class Requirement
 {
 public:
 
-    typedef map< const wstring, shared_ptr<const Requirement> > RequirementMap;
-    typedef shared_ptr<RequirementMap> RequirementMapSP;
+    typedef map< const wstring, boost::shared_ptr<const Requirement> > RequirementMap;
+    typedef boost::shared_ptr<RequirementMap> RequirementMapSP;
 
     enum RequirementType {REQ_TYPE_UNDEFINED, FILE, APP, DEFINITION};
 

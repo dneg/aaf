@@ -39,17 +39,15 @@ namespace aafanalyzer {
 
 class TestLevelTestResult;
 
-using namespace boost;
-
 class EPEffectTest : public Test
 {
  public:
 
   EPEffectTest( wostream& log,
-                 shared_ptr<const TestGraph> spGraph );
+                 boost::shared_ptr<const TestGraph> spGraph );
   virtual ~EPEffectTest();
 
-  virtual shared_ptr<TestLevelTestResult> Execute();
+  virtual boost::shared_ptr<TestLevelTestResult> Execute();
   virtual AxString GetName() const;
   virtual AxString GetDescription() const;
   static const TestInfo GetTestInfo();
