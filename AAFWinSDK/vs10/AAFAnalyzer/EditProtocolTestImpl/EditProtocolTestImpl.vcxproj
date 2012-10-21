@@ -1,0 +1,142 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{DEEB28F0-92D4-494F-A2CD-06E48B93C67F}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\NoWarnings.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\NoWarnings.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.40219.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Debug\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Debug\</IntDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Release\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Release\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>.;../../../../Utilities/AAFAnalyzer/AnalyzerBase;../../../../Utilities/AAFAnalyzer/RequirementLib;../../../../Utilities/AAFAnalyzer/TestPhaseLib;../../../../Utilities/AAFAnalyzer/AAFAnalyzerBase;../../../../Utilities/AAFAnalyzer/EPAnalyzerBase;../../../../Utilities/AAFAnalyzer/EditProtocolTestImpl;../../../../Utilities/AAFAnalyzer/BaseTestImpl;../../include;../../../../examples2/axLib;$(BOOSTINC);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <DisableSpecificWarnings>4267;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+    </ClCompile>
+    <Lib>
+      <OutputFile>$(OutDir)EditProtocolTestImpl.lib</OutputFile>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>.;../../../../Utilities/AAFAnalyzer/AnalyzerBase;../../../../Utilities/AAFAnalyzer/RequirementLib;../../../../Utilities/AAFAnalyzer/TestPhaseLib;../../../../Utilities/AAFAnalyzer/AAFAnalyzerBase;../../../../Utilities/AAFAnalyzer/EPAnalyzerBase;../../../../Utilities/AAFAnalyzer/EditProtocolTestImpl;../../../../Utilities/AAFAnalyzer/BaseTestImpl;../../include;../../../../examples2/axLib;$(BOOSTINC);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <Lib>
+      <OutputFile>$(OutDir)EditProtocolTestImpl.lib</OutputFile>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\..\Utilities\AAFAnalyzer\EditProtocolTestImpl\AllowedEditRateTable.cpp" />
+    <ClCompile Include="..\..\..\..\Utilities\AAFAnalyzer\EditProtocolTestImpl\DecorateEPTest.cpp" />
+    <ClCompile Include="..\..\..\..\Utilities\AAFAnalyzer\EditProtocolTestImpl\DerivationChainParser.cpp" />
+    <ClCompile Include="..\..\..\..\Utilities\AAFAnalyzer\EditProtocolTestImpl\DerivationChainParserException.cpp" />
+    <ClCompile Include="..\..\..\..\Utilities\AAFAnalyzer\EditProtocolTestImpl\EPAnnotationTest.cpp" />
+    <ClCompile Include="..\..\..\..\Utilities\AAFAnalyzer\EditProtocolTestImpl\EPAnnotationVisitor.cpp" />
+    <ClCompile Include="..\..\..\..\Utilities\AAFAnalyzer\EditProtocolTestImpl\EPContainedTrackTest.cpp" />
+    <ClCompile Include="..\..\..\..\Utilities\AAFAnalyzer\EditProtocolTestImpl\EPContainedTrackVisitor.cpp" />
+    <ClCompile Include="..\..\..\..\Utilities\AAFAnalyzer\EditProtocolTestImpl\EPDefinitionTest.cpp" />
+    <ClCompile Include="..\..\..\..\Utilities\AAFAnalyzer\EditProtocolTestImpl\EPDefinitionVisitor.cpp" />
+    <ClCompile Include="..\..\..\..\Utilities\AAFAnalyzer\EditProtocolTestImpl\EPDerivationTest.cpp" />
+    <ClCompile Include="..\..\..\..\Utilities\AAFAnalyzer\EditProtocolTestImpl\EPEditRateTest.cpp" />
+    <ClCompile Include="..\..\..\..\Utilities\AAFAnalyzer\EditProtocolTestImpl\EPEditRateVisitor.cpp" />
+    <ClCompile Include="..\..\..\..\Utilities\AAFAnalyzer\EditProtocolTestImpl\EPEffectTest.cpp" />
+    <ClCompile Include="..\..\..\..\Utilities\AAFAnalyzer\EditProtocolTestImpl\EPEffectVisitor.cpp" />
+    <ClCompile Include="..\..\..\..\Utilities\AAFAnalyzer\EditProtocolTestImpl\EPHeaderTest.cpp" />
+    <ClCompile Include="..\..\..\..\Utilities\AAFAnalyzer\EditProtocolTestImpl\EPHeaderVisitor.cpp" />
+    <ClCompile Include="..\..\..\..\Utilities\AAFAnalyzer\EditProtocolTestImpl\EPLocatorTest.cpp" />
+    <ClCompile Include="..\..\..\..\Utilities\AAFAnalyzer\EditProtocolTestImpl\EPLocatorVisitor.cpp" />
+    <ClCompile Include="..\..\..\..\Utilities\AAFAnalyzer\EditProtocolTestImpl\EPMobDepPhase.cpp" />
+    <ClCompile Include="..\..\..\..\Utilities\AAFAnalyzer\EditProtocolTestImpl\EPMultiChannelAudioTest.cpp" />
+    <ClCompile Include="..\..\..\..\Utilities\AAFAnalyzer\EditProtocolTestImpl\EPMultiChannelAudioVisitor.cpp" />
+    <ClCompile Include="..\..\..\..\Utilities\AAFAnalyzer\EditProtocolTestImpl\EPNameTest.cpp" />
+    <ClCompile Include="..\..\..\..\Utilities\AAFAnalyzer\EditProtocolTestImpl\EPNameVisitor.cpp" />
+    <ClCompile Include="..\..\..\..\Utilities\AAFAnalyzer\EditProtocolTestImpl\EPParameterTest.cpp" />
+    <ClCompile Include="..\..\..\..\Utilities\AAFAnalyzer\EditProtocolTestImpl\EPParameterVisitor.cpp" />
+    <ClCompile Include="..\..\..\..\Utilities\AAFAnalyzer\EditProtocolTestImpl\EPTrackContentsTest.cpp" />
+    <ClCompile Include="..\..\..\..\Utilities\AAFAnalyzer\EditProtocolTestImpl\EPTrackContentsVisitor.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\..\Utilities\AAFAnalyzer\EditProtocolTestImpl\AllowedEditRateTable.h" />
+    <ClInclude Include="..\..\..\..\Utilities\AAFAnalyzer\EditProtocolTestImpl\DecorateEPTest.h" />
+    <ClInclude Include="..\..\..\..\Utilities\AAFAnalyzer\EditProtocolTestImpl\DerivationChainParser.h" />
+    <ClInclude Include="..\..\..\..\Utilities\AAFAnalyzer\EditProtocolTestImpl\DerivationChainParserException.h" />
+    <ClInclude Include="..\..\..\..\Utilities\AAFAnalyzer\EditProtocolTestImpl\EPAnnotationTest.h" />
+    <ClInclude Include="..\..\..\..\Utilities\AAFAnalyzer\EditProtocolTestImpl\EPAnnotationVisitor.h" />
+    <ClInclude Include="..\..\..\..\Utilities\AAFAnalyzer\EditProtocolTestImpl\EPContainedTrackTest.h" />
+    <ClInclude Include="..\..\..\..\Utilities\AAFAnalyzer\EditProtocolTestImpl\EPContainedTrackVisitor.h" />
+    <ClInclude Include="..\..\..\..\Utilities\AAFAnalyzer\EditProtocolTestImpl\EPDefinitionTest.h" />
+    <ClInclude Include="..\..\..\..\Utilities\AAFAnalyzer\EditProtocolTestImpl\EPDefinitionVisitor.h" />
+    <ClInclude Include="..\..\..\..\Utilities\AAFAnalyzer\EditProtocolTestImpl\EPDerivationTest.h" />
+    <ClInclude Include="..\..\..\..\Utilities\AAFAnalyzer\EditProtocolTestImpl\EPEditRateTest.h" />
+    <ClInclude Include="..\..\..\..\Utilities\AAFAnalyzer\EditProtocolTestImpl\EPEditRateVisitor.h" />
+    <ClInclude Include="..\..\..\..\Utilities\AAFAnalyzer\EditProtocolTestImpl\EPEffectTest.h" />
+    <ClInclude Include="..\..\..\..\Utilities\AAFAnalyzer\EditProtocolTestImpl\EPEffectVisitor.h" />
+    <ClInclude Include="..\..\..\..\Utilities\AAFAnalyzer\EditProtocolTestImpl\EPHeaderTest.h" />
+    <ClInclude Include="..\..\..\..\Utilities\AAFAnalyzer\EditProtocolTestImpl\EPHeaderVisitor.h" />
+    <ClInclude Include="..\..\..\..\Utilities\AAFAnalyzer\EditProtocolTestImpl\EPLocatorTest.h" />
+    <ClInclude Include="..\..\..\..\Utilities\AAFAnalyzer\EditProtocolTestImpl\EPLocatorVisitor.h" />
+    <ClInclude Include="..\..\..\..\Utilities\AAFAnalyzer\EditProtocolTestImpl\EPMobDepPhase.h" />
+    <ClInclude Include="..\..\..\..\Utilities\AAFAnalyzer\EditProtocolTestImpl\EPMultiChannelAudioTest.h" />
+    <ClInclude Include="..\..\..\..\Utilities\AAFAnalyzer\EditProtocolTestImpl\EPMultiChannelAudioVisitor.h" />
+    <ClInclude Include="..\..\..\..\Utilities\AAFAnalyzer\EditProtocolTestImpl\EPNameTest.h" />
+    <ClInclude Include="..\..\..\..\Utilities\AAFAnalyzer\EditProtocolTestImpl\EPNameVisitor.h" />
+    <ClInclude Include="..\..\..\..\Utilities\AAFAnalyzer\EditProtocolTestImpl\EPParameterTest.h" />
+    <ClInclude Include="..\..\..\..\Utilities\AAFAnalyzer\EditProtocolTestImpl\EPParameterVisitor.h" />
+    <ClInclude Include="..\..\..\..\Utilities\AAFAnalyzer\EditProtocolTestImpl\EPTrackContentsTest.h" />
+    <ClInclude Include="..\..\..\..\Utilities\AAFAnalyzer\EditProtocolTestImpl\EPTrackContentsVisitor.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
