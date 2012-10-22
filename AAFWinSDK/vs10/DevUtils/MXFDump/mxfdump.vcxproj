@@ -91,7 +91,6 @@
       <Optimization>MaxSpeed</Optimization>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
       <AdditionalIncludeDirectories>../../include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -123,7 +122,6 @@
       <Optimization>MaxSpeed</Optimization>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
       <AdditionalIncludeDirectories>../../include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -153,7 +151,6 @@
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>../../include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <PrecompiledHeader>
       </PrecompiledHeader>
@@ -184,7 +181,6 @@
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>../../include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <PrecompiledHeader>
       </PrecompiledHeader>

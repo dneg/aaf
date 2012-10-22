@@ -82,7 +82,7 @@
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>../../../../ref-impl/src/OM;../../../../ref-impl/include/Om;../../../../ref-impl/include;../../../../sss-impl/include;../../../../ref-impl/expat;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_DEBUG;OM_DEBUG;OM_STACK_TRACE_ON_ASSERT;OM_USE_SCHEMASOFT_SS;OM_USE_WINDOWS_SS;OM_STRUCTURED_STORAGE;_WIN32;WIN32;_WINDOWS;UNICODE;OM_USE_STORAGE_EX;XML_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>OM_DEBUG;OM_STACK_TRACE_ON_ASSERT;OM_USE_SCHEMASOFT_SS;OM_USE_WINDOWS_SS;OM_STRUCTURED_STORAGE;OM_USE_STORAGE_EX;XML_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <PrecompiledHeader>
@@ -104,7 +104,7 @@
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>../../../../ref-impl/src/OM;../../../../ref-impl/include/Om;../../../../ref-impl/include;../../../../sss-impl/include;../../../../ref-impl/expat;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_DEBUG;OM_DEBUG;OM_STACK_TRACE_ON_ASSERT;OM_USE_SCHEMASOFT_SS;OM_USE_WINDOWS_SS;OM_STRUCTURED_STORAGE;_WIN32;WIN32;_WINDOWS;UNICODE;OM_USE_STORAGE_EX;XML_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>OM_DEBUG;OM_STACK_TRACE_ON_ASSERT;OM_USE_SCHEMASOFT_SS;OM_USE_WINDOWS_SS;OM_STRUCTURED_STORAGE;OM_USE_STORAGE_EX;XML_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <PrecompiledHeader>
@@ -127,7 +127,7 @@
       <Optimization>MaxSpeed</Optimization>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
       <AdditionalIncludeDirectories>../../../../ref-impl/src/OM;../../../../ref-impl/include/Om;../../../../ref-impl/include;../../../../sss-impl/include;../../../../ref-impl/expat;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>NDEBUG;OM_USE_SCHEMASOFT_SS;OM_USE_WINDOWS_SS;OM_STRUCTURED_STORAGE;_WIN32;WIN32;_WINDOWS;UNICODE;XML_STATIC;OM_USE_STORAGE_EX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>OM_USE_SCHEMASOFT_SS;OM_USE_WINDOWS_SS;OM_STRUCTURED_STORAGE;XML_STATIC;OM_USE_STORAGE_EX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -150,7 +150,7 @@
       <Optimization>MaxSpeed</Optimization>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
       <AdditionalIncludeDirectories>../../../../ref-impl/src/OM;../../../../ref-impl/include/Om;../../../../ref-impl/include;../../../../sss-impl/include;../../../../ref-impl/expat;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>NDEBUG;OM_USE_SCHEMASOFT_SS;OM_USE_WINDOWS_SS;OM_STRUCTURED_STORAGE;_WIN32;WIN32;_WINDOWS;UNICODE;XML_STATIC;OM_USE_STORAGE_EX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>OM_USE_SCHEMASOFT_SS;OM_USE_WINDOWS_SS;OM_STRUCTURED_STORAGE;XML_STATIC;OM_USE_STORAGE_EX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>

@@ -90,7 +90,6 @@
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>..\..\..\include;../../../../../ref-impl/src/impl;..\..\..\..\..\test\com\MultiGenTest;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
@@ -125,7 +124,6 @@
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>..\..\..\include;../../../../../ref-impl/src/impl;..\..\..\..\..\test\com\MultiGenTest;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
@@ -160,7 +158,6 @@
       <Optimization>MaxSpeed</Optimization>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
       <AdditionalIncludeDirectories>..\..\..\include;../../../../../ref-impl/src/impl;..\..\..\..\..\test\com\MultiGenTest;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -197,7 +194,6 @@
       <Optimization>MaxSpeed</Optimization>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
       <AdditionalIncludeDirectories>..\..\..\include;../../../../../ref-impl/src/impl;..\..\..\..\..\test\com\MultiGenTest;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>

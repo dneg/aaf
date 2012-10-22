@@ -81,7 +81,6 @@
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>../../include;..\..\..\..\examples2/axLib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
@@ -103,7 +102,6 @@
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>../../include;..\..\..\..\examples2/axLib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
@@ -126,7 +124,6 @@
       <Optimization>MaxSpeed</Optimization>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
       <AdditionalIncludeDirectories>../../include;..\..\..\..\examples2/axLib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -150,7 +147,6 @@
       <Optimization>MaxSpeed</Optimization>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
       <AdditionalIncludeDirectories>../../include;..\..\..\..\examples2/axLib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>

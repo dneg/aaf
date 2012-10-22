@@ -6,6 +6,7 @@
   <ItemDefinitionGroup>
     <ClCompile>
       <TreatWarningAsError>true</TreatWarningAsError>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup />

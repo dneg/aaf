@@ -91,7 +91,6 @@
       <Optimization>MaxSpeed</Optimization>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
       <AdditionalIncludeDirectories>..\..\..\..\Utilities\aafdump\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -125,7 +124,6 @@
       <Optimization>MaxSpeed</Optimization>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
       <AdditionalIncludeDirectories>..\..\..\..\Utilities\aafdump\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -157,7 +155,6 @@
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>..\..\..\..\Utilities\aafdump\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <PrecompiledHeader>
@@ -191,7 +188,6 @@
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>..\..\..\..\Utilities\aafdump\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <PrecompiledHeader>

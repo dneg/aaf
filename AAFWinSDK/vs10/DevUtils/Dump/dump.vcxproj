@@ -90,7 +90,6 @@
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -121,7 +120,6 @@
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -150,7 +148,6 @@
     </Midl>
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <PrecompiledHeader>
       </PrecompiledHeader>
@@ -180,7 +177,6 @@
     </Midl>
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <PrecompiledHeader>
       </PrecompiledHeader>

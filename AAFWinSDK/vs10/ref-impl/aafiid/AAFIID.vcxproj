@@ -81,7 +81,6 @@
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>..\..\..\..\ref-impl\include;..\..\..\..\ref-impl\include\com-api;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_DEBUG;WIN32;UNICODE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <PrecompiledHeader>
@@ -103,7 +102,6 @@
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>..\..\..\..\ref-impl\include;..\..\..\..\ref-impl\include\com-api;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_DEBUG;WIN32;UNICODE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <PrecompiledHeader>
@@ -126,7 +124,6 @@
       <Optimization>MaxSpeed</Optimization>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
       <AdditionalIncludeDirectories>..\..\..\..\ref-impl\include;..\..\..\..\ref-impl\include\com-api;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>NDEBUG;WIN32;UNICODE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -149,7 +146,6 @@
       <Optimization>MaxSpeed</Optimization>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
       <AdditionalIncludeDirectories>..\..\..\..\ref-impl\include;..\..\..\..\ref-impl\include\com-api;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>NDEBUG;WIN32;UNICODE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>

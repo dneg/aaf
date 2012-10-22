@@ -99,7 +99,6 @@
       <Optimization>MaxSpeed</Optimization>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
       <AdditionalIncludeDirectories>..\..\..\include;..\..\..\..\..\examples\com-api\ComExtension;..\..\..\..\..\ref-impl\src\com-api\com-dll;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>NDEBUG;WIN32;_WIN32;_WINDOWS;UNICODE;_USRDLL;COMPERSONNELEXTENSION_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -138,7 +137,6 @@
       <Optimization>MaxSpeed</Optimization>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
       <AdditionalIncludeDirectories>..\..\..\include;..\..\..\..\..\examples\com-api\ComExtension;..\..\..\..\..\ref-impl\src\com-api\com-dll;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>NDEBUG;WIN32;_WIN32;_WINDOWS;UNICODE;_USRDLL;COMPERSONNELEXTENSION_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -176,7 +174,6 @@
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>..\..\..\include;..\..\..\..\..\examples\com-api\ComExtension;..\..\..\..\..\ref-impl\src\com-api\com-dll;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_DEBUG;WIN32;_WIN32;_WINDOWS;UNICODE;_USRDLL;COMPERSONNELEXTENSION_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
@@ -215,7 +212,6 @@
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>..\..\..\include;..\..\..\..\..\examples\com-api\ComExtension;..\..\..\..\..\ref-impl\src\com-api\com-dll;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_DEBUG;WIN32;_WIN32;_WINDOWS;UNICODE;_USRDLL;COMPERSONNELEXTENSION_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
