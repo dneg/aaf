@@ -123,7 +123,7 @@ void RequirementLoader::ParseXML( const char* filename ) const
         inp.read(buffer, BUF_SIZE);
         const std::streamsize len = inp.gcount();
 
-        done = len < sizeof(buffer);
+        done = static_cast<size_t>(len) < sizeof(buffer);
 
         if ( !XML_Parse(parser, buffer, static_cast<int>(len), done) )
         {
