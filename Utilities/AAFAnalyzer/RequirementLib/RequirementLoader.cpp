@@ -121,7 +121,7 @@ void RequirementLoader::ParseXML( const char* filename ) const
     {
 
         inp.read(buffer, BUF_SIZE);
-        const size_t len = inp.gcount();
+        const std::streamsize len = inp.gcount();
 
         done = len < sizeof(buffer);
 
