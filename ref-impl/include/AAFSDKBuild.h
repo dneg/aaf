@@ -48,6 +48,10 @@
 #define AAF_MINOR_VERSION 1
 #define AAF_MAINT_RELEASE 6
 
+
+// release stage is one of the enumerated aafProductReleaseType_e
+// values. See AAFTypes.h.
+
 #define AAF_RELEASE_STAGE kAAFVersionBeta
  
 // these next two lines are monitored/incremented by newbuild.pl

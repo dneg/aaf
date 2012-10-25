@@ -441,7 +441,7 @@ RunMainScript ()
 		cat ComPersonnelPluginWrite.txt | grep -v 'extensionPlugin\.aaf' > ComPersonnelPluginWrite1.txt
 		diff ComExtensionWrite1.txt ComPersonnelPluginWrite1.txt
 		Stat=$?
-		if [ Stat -ne 0 ]; then
+		if [ $Stat -ne 0 ]; then
 		    CheckExitCode $Stat "diff ComExtensionWrite1.txt ComPersonnelPluginWrite1.txt"
 		    echo "Edit sources in ComExtensionWrite and ComPersonnelPluginWrite"
 		    echo "until diff ComExtensionWrite1.txt ComPersonnelPluginWrite1.txt"

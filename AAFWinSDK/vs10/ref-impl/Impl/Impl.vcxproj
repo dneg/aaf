@@ -82,15 +82,15 @@
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>../../../../ref-impl/src/Impl;../../../../ref-impl/include/Om;../../../../ref-impl/include/com-api/;../../../../ref-impl/src/OM;../../../../ref-impl/include/;../../../../ref-impl/aaflib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_DEBUG;OM_DEBUG;OM_USE_SCHEMASOFT_SS;OM_STRUCTURED_STORAGE;OM_USE_WINDOWS_SS;COM_NO_WINDOWS_H;_WIN32;_WINDOWS;UNICODE;WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>OM_DEBUG;OM_USE_SCHEMASOFT_SS;OM_STRUCTURED_STORAGE;OM_USE_WINDOWS_SS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
-      <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <CompileAs>Default</CompileAs>
       <ForcedIncludeFiles>stdafx.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <PrecompiledHeader>Use</PrecompiledHeader>
     </ClCompile>
     <ResourceCompile>
       <Culture>0x0409</Culture>
@@ -103,15 +103,15 @@
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>../../../../ref-impl/src/Impl;../../../../ref-impl/include/Om;../../../../ref-impl/include/com-api/;../../../../ref-impl/src/OM;../../../../ref-impl/include/;../../../../ref-impl/aaflib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_DEBUG;OM_DEBUG;OM_USE_SCHEMASOFT_SS;OM_STRUCTURED_STORAGE;OM_USE_WINDOWS_SS;COM_NO_WINDOWS_H;_WIN32;_WINDOWS;UNICODE;WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>OM_DEBUG;OM_USE_SCHEMASOFT_SS;OM_STRUCTURED_STORAGE;OM_USE_WINDOWS_SS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
-      <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <CompileAs>Default</CompileAs>
       <ForcedIncludeFiles>stdafx.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <PrecompiledHeader>Use</PrecompiledHeader>
     </ClCompile>
     <ResourceCompile>
       <Culture>0x0409</Culture>
@@ -125,16 +125,16 @@
       <Optimization>MaxSpeed</Optimization>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
       <AdditionalIncludeDirectories>../../../../ref-impl/src/Impl;../../../../ref-impl/include/Om;../../../../ref-impl/include/com-api/;../../../../ref-impl/src/OM;../../../../ref-impl/include/;../../../../ref-impl/aaflib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>NDEBUG;OM_USE_SCHEMASOFT_SS;OM_USE_WINDOWS_SS;OM_STRUCTURED_STORAGE;COM_NO_WINDOWS_H;_WIN32;_WINDOWS;UNICODE;WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>OM_USE_SCHEMASOFT_SS;OM_USE_WINDOWS_SS;OM_STRUCTURED_STORAGE;COM_NO_WINDOWS_H;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
-      <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <CompileAs>Default</CompileAs>
       <ForcedIncludeFiles>stdafx.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <PrecompiledHeader>Use</PrecompiledHeader>
     </ClCompile>
     <ResourceCompile>
       <Culture>0x0409</Culture>
@@ -148,16 +148,16 @@
       <Optimization>MaxSpeed</Optimization>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
       <AdditionalIncludeDirectories>../../../../ref-impl/src/Impl;../../../../ref-impl/include/Om;../../../../ref-impl/include/com-api/;../../../../ref-impl/src/OM;../../../../ref-impl/include/;../../../../ref-impl/aaflib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>NDEBUG;OM_USE_SCHEMASOFT_SS;OM_USE_WINDOWS_SS;OM_STRUCTURED_STORAGE;COM_NO_WINDOWS_H;_WIN32;_WINDOWS;UNICODE;WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>OM_USE_SCHEMASOFT_SS;OM_USE_WINDOWS_SS;OM_STRUCTURED_STORAGE;COM_NO_WINDOWS_H;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
-      <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <CompileAs>Default</CompileAs>
       <ForcedIncludeFiles>stdafx.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <PrecompiledHeader>Use</PrecompiledHeader>
     </ClCompile>
     <ResourceCompile>
       <Culture>0x0409</Culture>
