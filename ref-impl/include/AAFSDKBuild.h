@@ -52,7 +52,7 @@
 // release stage is one of the enumerated aafProductReleaseType_e
 // values. See AAFTypes.h.
 
-#define AAF_RELEASE_STAGE kAAFVersionBeta
+#define AAF_RELEASE_STAGE kAAFVersionReleased
  
 // these next two lines are monitored/incremented by newbuild.pl
 
