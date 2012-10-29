@@ -61,12 +61,17 @@ ifeq ($(AAFPLATFORM),i386Darwin)
 RELEASE_FILES_SRC = ./release-files.darwin
 SDK_FILES_SRC = ./sdk-files.darwin
 else
+ifeq ($(AAFPLATFORM),x86_64Darwin)
+RELEASE_FILES_SRC = ./release-files.darwin
+SDK_FILES_SRC = ./sdk-files.darwin
+else
 ifeq ($(AAFPLATFORM),UniversalDarwin)
 RELEASE_FILES_SRC = ./release-files.darwin
 SDK_FILES_SRC = ./sdk-files.darwin
 else
 RELEASE_FILES_SRC = ./release-files.unix
 SDK_FILES_SRC = ./sdk-files.unix
+endif
 endif
 endif
 endif
