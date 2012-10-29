@@ -23,6 +23,13 @@ Getting Started
       and running client applications require AAFCOAPI.dll so PATH must include:
         AAFWinSDK/vs10/{Win32,x86_64}/{Debug,Release}/RefImpl
 
+      Note: There is a known issue with the VisualStudio 2010 build.
+      If the ComPersonnelPluginWrite project build fails because
+      AAFPersonnelExtension.lib is not found then it is necessary to
+      directly rebuild the ComPersonnelExtension project (right click
+      ComPersonnelExtenino, then select "Project Only"->"Rebuild Only
+      ComPersonnelExtension").
+
 (b) Using GNU make
     - To build the library, tests and all the examples and utilities run
         make everything
