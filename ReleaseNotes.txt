@@ -1,7 +1,7 @@
 AAF SDK v1.1.6
 ==============
 
-2012-07-7
+2012-10-29
 
 This SDK is the reference implementation of the Advanced
 Authoring Format (AAF) version 1.1. See doc/aafeditprotocol.pdf,
@@ -13,11 +13,10 @@ Supported platforms
 
 This release has been tested on the following platforms:
 
-  MacOS X 10.6.8 Intel (32 and 64 bit builds, 64-bit OS)
-    (xcode 4.0.2, gcc 4.2.1 Apple build 5666)
+  MacOS X 10.8.3 Intel (32 and 64 bit builds, 64-bit OS)
+    (gcc 4.2.1 Apple build 5658)
   x86-Linux: 
-    Centos 5.8 (32 bit, gcc 4.1.2, glibc 2.5 kernel 2.6)
-    Ubuntu 10.10 (64 bit, gcc 4.4.5, glibc 2.12, kernel 2.6)
+    Centos 6.3 (32 bit, gcc 4.4.6 glibc 2.12 kernel 2.6)
   Windows 7/64
     Visual Studio 2008 (32 and 64 bit builds)
     Visual Studio 2010 (32 and 64 bit builds)
@@ -27,6 +26,8 @@ were supported by the prior release and no changes in this release are
 expected to affect them:
 
   Solaris 10 (gcc 4.3.3)
+  MacOS X 10.6.8 Intel (32 and 64 bit builds, 64-bit OS)
+    (xcode 4.0.2, gcc 4.2.1 Apple build 5666)
   MacOS X 10.5.8 PowerPC (Xcode 3.1.3, gcc 4.0.1 Apple build 5593)
   Windows 2000 SP4 32-bit (Microsoft Visual C++ 7.1)
   Windows XP SP2 32-bit (Microsoft Visual C++ 7.1, 8.0 and 9.0)
