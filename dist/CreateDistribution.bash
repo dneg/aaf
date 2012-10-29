@@ -134,7 +134,7 @@ case ${AAFPLATFORM} in
 
 	SparcSolaris)	        create_unix_distribution $AAFSDK $DIST_FILE_NAME $DIST_LIST ;;
 
-	i386Darwin|UniversalDarwin)	create_unix_distribution $AAFSDK $DIST_FILE_NAME $DIST_LIST ;;
+	i386Darwin|x86_64Darwin|UniversalDarwin)	create_unix_distribution $AAFSDK $DIST_FILE_NAME $DIST_LIST ;;
 
 	PPCDarwin)		create_darwin_distribution "$AAFSDK" "$DIST_FILE_NAME" "$DIST_LIST" "$AAFSDKBUILD_H" $1 ;;
 
