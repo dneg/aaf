@@ -52,9 +52,12 @@ using namespace std;
 
 static const aafWChar *slotNames[5] = { L"SLOT1", L"SLOT2", L"SLOT3", L"SLOT4", L"SLOT5" };
 
-static aafPosition_t markInTestData[5] = { 0, 1, -3, AAFCONSTINT64(0x7ffffffffffffffd), AAFCONSTINT64(0x8000000000000000) };
-static aafPosition_t userPosTestData[5] = { 0, 2, -2, AAFCONSTINT64(0x7ffffffffffffffe), AAFCONSTINT64(0x8000000000000001) };
-static aafPosition_t markOutTestData[5] = { 0, 3, -1, AAFCONSTINT64(0x7fffffffffffffff), AAFCONSTINT64(0x8000000000000002) };
+static const aafPosition_t maxPosition = AAFCONSTINT64(0x7fffffffffffffff);
+static const aafPosition_t minPosition = AAFCONSTINT64(0x8000000000000000);
+
+static aafPosition_t markInTestData[5]  = { 0, 1, -3, maxPosition - 2, minPosition     };
+static aafPosition_t userPosTestData[5] = { 0, 2, -2, maxPosition - 1, minPosition + 1 };
+static aafPosition_t markOutTestData[5] = { 0, 3, -1, maxPosition,     minPosition + 2 };
 
 static const 	aafMobID_t	TEST_MobID =
 {{0x06, 0x0c, 0x2b, 0x34, 0x02, 0x05, 0x11, 0x01, 0x01, 0x00, 0x10, 0x00},
