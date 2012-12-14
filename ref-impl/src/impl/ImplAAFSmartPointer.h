@@ -130,7 +130,7 @@ ImplAAFSmartPointer<ReferencedType>::operator = (ReferencedType * ptr)
   *ppRep = ptr;
 
   if (*ppRep)
-	acquire(*ppRep);
+	this->acquire(*ppRep);
 
   return *this;
 }

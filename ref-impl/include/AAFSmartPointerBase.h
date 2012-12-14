@@ -196,7 +196,7 @@ AAFSmartPointerBase (ReferencedType* p)
   : _rep (p)
 {
   if (_rep)
-    acquire(_rep);
+    this->acquire(_rep);
 }
 
 template <typename ReferencedType, typename RefCountType>
@@ -207,7 +207,7 @@ AAFSmartPointerBase
           _rep (src._rep)
 {
   if (_rep)
-	acquire(_rep);
+	this->acquire(_rep);
 }  
 
 
@@ -217,7 +217,7 @@ AAFSmartPointerBase<ReferencedType, RefCountType>::
 {
   if (_rep)
 	{
-	  release (_rep);
+	  this->release (_rep);
 	  _rep = 0;
 	}
 }
@@ -231,13 +231,13 @@ operator=
 {
   if (_rep)
 	{
-	  release (_rep);
+	  this->release (_rep);
 	  _rep = 0;
 	}
 
   _rep = src._rep;
   if (_rep)
-	acquire(_rep);
+	this->acquire(_rep);
 
   return *this;
 }
@@ -249,7 +249,7 @@ operator & ()
 {
   if (_rep)
 	{
-	  release (_rep);
+	  this->release (_rep);
 	  _rep = 0;
 	}
   return &_rep;

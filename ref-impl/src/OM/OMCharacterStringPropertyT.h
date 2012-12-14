@@ -90,7 +90,7 @@ void OMCharacterStringProperty<CharacterType>::assign(
   }
   ASSERT("String not too long",
    ((stringLength(source) + 1) * sizeof(CharacterType)) <= OMPROPERTYSIZE_MAX);
-  setValue(source, static_cast<OMPropertySize>(
+  this->setValue(source, static_cast<OMPropertySize>(
                           (stringLength(source) + 1) * sizeof(CharacterType)));
 }
 
