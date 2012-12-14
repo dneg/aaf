@@ -55,6 +55,9 @@ class OMContainerIterator {
 public:
   // @access Public members.
 
+    // @cmember Destroy this <c OMContainerIterator>.
+  virtual ~OMContainerIterator(void) {}
+
     // @cmember Reset this <c OMContainerIterator> to the given
     //          <p initialPosition>.
     //          If <p initialPosition> is specified as
