@@ -122,7 +122,7 @@ class AxVaryingValue : public AxParameter {
   void GetValue( aafRational_t inputValue, ParamType& val )
   {
     ParamType tmp;
-    aafUInt32 bytesRead;
+    aafInt32 bytesRead;
     GetInterpolatedValue( inputValue, sizeof(tmp), reinterpret_cast<aafDataBuffer_t>(&tmp), &bytesRead );
     if ( sizeof(tmp) == bytesRead ) {
       val = tmp;
