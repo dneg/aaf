@@ -262,6 +262,12 @@ static int bitrate_for_flavour(aafUID_constref flavour)
 	const FlavourParameters_t *p = lookupFlavourParams(flavour);
 	return p->storedSize * p->sampleRate * 8;
 }
+#if LIBAVCODEC_VERSION_INT <= ((52<<16)+(25<<8)+0)
+	typedef AVCodecID CodecID;
+	typedef AVMEDIA_TYPE_VIDEO CODEC_TYPE_VIDEO;
+	typedef AV_CODEC_ID_DVVIDEO CODEC_ID_DVVIDEO;
+	typedef AV_CODEC_ID_MPEG2VIDEO CODEC_ID_MPEG2VIDEO
+#endif
 #endif
 
 inline bool operator == (const aafRational_t a, const aafRational_t b)
@@ -1396,6 +1402,27 @@ HRESULT STDMETHODCALLTYPE CAAFCDCICodec::WriteSamples(
 							_encoder->codec_context->height);
 			}
 
+#if LIBAVCODEC_VERSION_INT >= ((52<<16)+(25<<8)+0)
+			// avcodec_encode_video was deprecated in favour of avcodec_encode_video2
+			AVPacket packet;
+			av_init_packet(&packet);
+			packet.data = _encoder->outputBuffer;
+			packet.size = _encoder->bufferSize;
+
+			int got_output;
+			int ret = avcodec_encode_video2(_encoder->codec_context,
+							&packet,
+							_encoder->inputFrame,
+							&got_output);
+			if (ret < 0 || !got_output)
+			{
+				fprintf(stderr, "avcodec_encode_video2() failed\n");
+				throw HRESULT( AAFRESULT_INVALID_OP_CODEC );
+			}
+			int size = packet.size;
+
+			av_free_packet(&packet);
+#else
 			// Encode one frame
 			int size = avcodec_encode_video(_encoder->codec_context,
 							_encoder->outputBuffer,
@@ -1406,6 +1433,7 @@ HRESULT STDMETHODCALLTYPE CAAFCDCICodec::WriteSamples(
 				fprintf(stderr, "avcodec_encode_video() failed\n");
 				throw HRESULT( AAFRESULT_INVALID_OP_CODEC );
 			}
+#endif
 
 		    sampleBytesWritten = 0;
 			checkResult(_stream->Write(size, _encoder->outputBuffer, &sampleBytesWritten));
@@ -1539,14 +1567,18 @@ HRESULT STDMETHODCALLTYPE CAAFCDCICodec::ReadSamples(
 			// Setup decoder first time through
 			if (_decoder->codec == NULL)
 			{
-				enum CodecID codecId = CODEC_ID_DVVIDEO;
+				enum AVCodecID codecId = AV_CODEC_ID_DVVIDEO;
 				if (params->codecFamily == codecMPEG)
-					codecId = CODEC_ID_MPEG2VIDEO;
+					codecId = AV_CODEC_ID_MPEG2VIDEO;
 
 				_decoder->codec = avcodec_find_decoder(codecId);
 				checkExpression( _decoder->codec, AAFRESULT_DECOMPRESS );
 
+#if LIBAVCODEC_VERSION_INT >= ((52<<16)+(25<<8)+0)
+				_decoder->codec_context = avcodec_alloc_context3(_decoder->codec);
+#else
 				_decoder->codec_context = avcodec_alloc_context();
+#endif
 				checkExpression( _decoder->codec_context, AAFRESULT_DECOMPRESS );
 
 				// Setup outputFrame's dimensions and format
@@ -1559,7 +1591,12 @@ HRESULT STDMETHODCALLTYPE CAAFCDCICodec::ReadSamples(
 					_decoder->codec_context->pix_fmt = PIX_FMT_YUV422P;
 		
 				// Open codec
-				if (avcodec_open(_decoder->codec_context, _decoder->codec) < 0) {
+#if LIBAVCODEC_VERSION_INT >= ((52<<16)+(25<<8)+0)
+				if (avcodec_open2(_decoder->codec_context, _decoder->codec, NULL) < 0)
+#else
+				if (avcodec_open(_decoder->codec_context, _decoder->codec) < 0)
+#endif
+				{
 					printf("ReadSamples(): avcodec_open() failed\n");
 					throw HRESULT( AAFRESULT_DECOMPRESS );
 				}
@@ -2023,9 +2060,9 @@ void CAAFCDCICodec::SetCodecState(void)
 #if defined(USE_FFMPEG)
 		const FlavourParameters_t *params = lookupFlavourParams(_flavour);
 
-		CodecID codec_id = CODEC_ID_DVVIDEO;
+		AVCodecID codec_id = AV_CODEC_ID_DVVIDEO;
 		if (params->codecFamily == codecMPEG)
-			codec_id = CODEC_ID_MPEG2VIDEO;
+			codec_id = AV_CODEC_ID_MPEG2VIDEO;
 
 		if (! (_encoder->codec = avcodec_find_encoder(codec_id)))
 		{
@@ -2034,7 +2071,11 @@ void CAAFCDCICodec::SetCodecState(void)
 			throw HRESULT( AAFRESULT_INVALID_OP_CODEC );
 		}
 
+#if LIBAVCODEC_VERSION_INT >= ((52<<16)+(25<<8)+0)
+		if (! (_encoder->codec_context = avcodec_alloc_context3(_encoder->codec)))
+#else
 		if (! (_encoder->codec_context = avcodec_alloc_context()))
+#endif
 		{
 			fprintf(stderr, "Could not allocate encoder context\n");
 			throw HRESULT( AAFRESULT_INVALID_OP_CODEC );
@@ -2044,7 +2085,7 @@ void CAAFCDCICodec::SetCodecState(void)
 		_encoder->codec_context->time_base.num = _sampleRate.denominator;
 		_encoder->codec_context->time_base.den = _sampleRate.numerator;
 
-		_encoder->codec_context->codec_type = CODEC_TYPE_VIDEO;
+		_encoder->codec_context->codec_type = AVMEDIA_TYPE_VIDEO;
 		_encoder->codec_context->sample_aspect_ratio.num = _imageAspectRatio.numerator;
 		_encoder->codec_context->sample_aspect_ratio.den = _imageAspectRatio.denominator;
 
@@ -2067,8 +2108,13 @@ void CAAFCDCICodec::SetCodecState(void)
 			_encoder->codec_context->lmax = 3 * FF_QP2LAMBDA;
 			_encoder->codec_context->flags |= CODEC_FLAG_INTERLACED_DCT | CODEC_FLAG_LOW_DELAY;
 			_encoder->codec_context->intra_dc_precision = 2;
+#if LIBAVCODEC_VERSION_INT >= ((52<<16)+(25<<8)+0)
+			av_opt_set(_encoder->codec_context->priv_data, "intra_vlc", "1", 0);
+			av_opt_set(_encoder->codec_context->priv_data, "non_linear_quant", "1", 0);
+#else
 			_encoder->codec_context->flags2 |= CODEC_FLAG2_NON_LINEAR_QUANT;
 			_encoder->codec_context->flags2 |= CODEC_FLAG2_INTRA_VLC;
+#endif
 
 			_encoder->tmpFrame = (AVPicture*)av_mallocz(sizeof(AVPicture));
 			_encoder->inputBuffer = (unsigned char*)av_mallocz(params->storedWidth * params->storedHeight * 2);
@@ -2084,7 +2130,11 @@ void CAAFCDCICodec::SetCodecState(void)
 		// storedHeight includes 32 lines of padding for IMX format
 		avcodec_set_dimensions(_encoder->codec_context, params->storedWidth, params->storedHeight);
 
+#if LIBAVCODEC_VERSION_INT >= ((52<<16)+(25<<8)+0)
+		if (avcodec_open2(_encoder->codec_context, _encoder->codec, NULL) < 0)
+#else
 		if (avcodec_open(_encoder->codec_context, _encoder->codec) < 0)
+#endif
 		{
 			fprintf(stderr, "Could not open encoder\n");
 			throw HRESULT( AAFRESULT_INVALID_OP_CODEC );
