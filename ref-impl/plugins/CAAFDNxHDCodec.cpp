@@ -728,8 +728,9 @@ HRESULT STDMETHODCALLTYPE
 	aafUInt32 max = 0;
 	for (size_t i = 0; i < sizeof(kSupportedFlavours); i++)
 	{
+		FlavourInfo &fi = kSupportedFlavours[i];
 		// compute length of name in bytes including terminating NUL
-		aafUInt32 len = (wcsu8slen(kSupportedFlavours[i].name) + 1) *
+		aafUInt32 len = (wcsu8slen(fi.name) + 1) *
 									sizeof(aafCharacter);
 		if (len > max)
 			max = len;
@@ -752,14 +753,15 @@ HRESULT STDMETHODCALLTYPE
 
 	for (size_t i = 0; i < sizeof(kSupportedFlavours); i++)
 	{
-		if (flavour == kSupportedFlavours[i].flavour)
+		FlavourInfo &fi = kSupportedFlavours[i];
+		if (flavour == fi.flavour)
 		{
 			// compute length of name in bytes including terminating NUL
-			aafUInt32 len = (wcsu8slen(kSupportedFlavours[i].name) + 1) *
+			aafUInt32 len = (wcsu8slen(fi.name) + 1) *
 										sizeof(aafCharacter);
 			if(len > bufSize)
 				len = bufSize;
-			memcpy(pName, kSupportedFlavours[i].name, len);
+			memcpy(pName, fi.name, len);
 			return AAFRESULT_SUCCESS;
 		}
 	}
