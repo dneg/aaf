@@ -184,7 +184,7 @@ aafErr_t AAFConvertEditRate(
 		{
 			*destPosition = destPos;
 			if(remainder != 0)
-				*destPosition++;
+				*destPosition = *destPosition + 1;
 		}
 	} /* XPROTECT */
 	XEXCEPT
