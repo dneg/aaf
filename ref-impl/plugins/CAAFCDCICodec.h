@@ -62,6 +62,9 @@ EXTERN_C const CLSID CLSID_AAFCDCICodec;
 extern "C" {
 #include <libavcodec/avcodec.h>
 #include <libavformat/avformat.h>
+#if LIBAVCODEC_VERSION_INT >= ((52<<16)+(25<<8)+0)
+#include <libavutil/opt.h>
+#endif
 }
 
 typedef struct 
